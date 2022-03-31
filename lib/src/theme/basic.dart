@@ -1,0 +1,25 @@
+/// 字体宽高数据
+class Font {
+  late double size;
+  late double height;
+
+  Font({required int size, required int lineHeight}) {
+    this.size = size.toDouble();
+    this.height = lineHeight.toDouble() / size;
+  }
+
+  factory Font.fromJson(Map<String, dynamic> map) =>
+      Font(size: map['size'], lineHeight: map['lineHeight']);
+}
+
+/// 字体样式
+class FontFamily {
+  late String fontFamily;
+
+  FontFamily({required String fontFamily}) {
+    this.fontFamily = fontFamily;
+  }
+
+  factory FontFamily.fromJson(Map<String, dynamic> map) =>
+      FontFamily(fontFamily: map['fontFamily']);
+}
