@@ -9,15 +9,24 @@ import 'td_item_widget.dart';
 typedef MultiPickerCallback = void Function(List<int> selected);
 
 /// 项之间无联动的多项选择器
-// ignore: must_be_immutable
 class TDMultiPicker extends StatelessWidget {
-  final String? title; // 选择器标题
-  final MultiPickerCallback? onConfirm; // 选择器确认按钮回调
-  final MultiPickerCallback? onCancel; // 选择器取消按钮回调
-  final List<List<String>> data; // 选择器的数据源
-  final double pickerHeight; // 选择器List的视窗高度，默认200
-  final int
-      pickerItemCount; // 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
+  /// 选择器标题
+  final String? title;
+
+  /// 选择器确认按钮回调
+  final MultiPickerCallback? onConfirm;
+
+  /// 选择器取消按钮回调
+  final MultiPickerCallback? onCancel;
+
+  /// 选择器的数据源
+  final List<List<String>> data;
+
+  /// 选择器List的视窗高度，默认200
+  final double pickerHeight;
+
+  /// 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
+  final int pickerItemCount;
   final Color? leftButtonColor;
   final Color? rightButtonColor;
   final double? titleHeight;
@@ -28,7 +37,9 @@ class TDMultiPicker extends StatelessWidget {
   final Color? backgroundColor;
   final double? topRadius;
   final ItemDistanceCalculator? itemDistanceCalculator;
-  List<int>? initialIndexes; // 若为null表示全部从零开始
+
+  /// 若为null表示全部从零开始
+  List<int>? initialIndexes;
 
   late List<FixedExtentScrollController> controllers;
 
@@ -123,7 +134,9 @@ class TDMultiPicker extends StatelessWidget {
     return Container(
       padding:
           EdgeInsets.only(left: leftPadding ?? 16, right: rightPadding ?? 16),
-      height: getTitleHeight() - 0.5, // 减去分割线的空间
+
+      /// 减去分割线的空间
+      height: getTitleHeight() - 0.5,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -218,14 +231,26 @@ class TDMultiPicker extends StatelessWidget {
 
 /// 多项联动选择器
 class TDMultiLinkedPicker extends StatefulWidget {
-  final String? title; // 选择器标题
-  final MultiPickerCallback? onConfirm; // 选择器确认按钮回调
-  final MultiPickerCallback? onCancel; // 选择器取消按钮回调
-  final List<int>? initialIndexes; // 若为null表示全部从零开始
-  final List<dynamic> data; // 选择器的数据源
-  final double pickerHeight; // 选择器List的视窗高度，默认270
-  final int
-      pickerItemCount; // 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
+  /// 选择器标题
+  final String? title;
+
+  /// 选择器确认按钮回调
+  final MultiPickerCallback? onConfirm;
+
+  /// 选择器取消按钮回调
+  final MultiPickerCallback? onCancel;
+
+  /// 若为null表示全部从零开始
+  final List<int>? initialIndexes;
+
+  /// 选择器的数据源
+  final List<dynamic> data;
+
+  /// 选择器List的视窗高度
+  final double pickerHeight;
+
+  /// 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
+  final int pickerItemCount;
   final Color? leftButtonColor;
   final Color? rightButtonColor;
   final double? titleHeight;
@@ -335,7 +360,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
   }
 
   Widget buildList(context, int whichLine) {
-    // whichLine参数表示这个第几列
+    /// whichLine参数表示这个第几列
     double maxWidth = MediaQuery.of(context).size.width;
     return MediaQuery.removePadding(
         context: context,
@@ -349,10 +374,11 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               physics: const FixedExtentScrollPhysics(),
               onSelectedItemChanged: (index) {
                 setState(() {
-                  // 刷新此列右边的所有数据
+                  /// 刷新此列右边的所有数据
                   model.refreshPresentDataAndController(whichLine);
-                  // 使用动态高度，强制列表组件的state刷新，以展现更新的数据，详见下方链接
-                  // FIX:https://github.com/flutter/flutter/issues/22999
+
+                  /// 使用动态高度，强制列表组件的state刷新，以展现更新的数据，详见下方链接
+                  /// FIX:https://github.com/flutter/flutter/issues/22999
                   pickerHeight =
                       pickerHeight - Random().nextDouble() / 100000000;
                 });
@@ -381,7 +407,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
     return Container(
       padding: EdgeInsets.only(
           left: widget.leftPadding ?? 16, right: widget.rightPadding ?? 16),
-      height: getTitleHeight() - 0.5, // 减去分割线的空间
+      height: getTitleHeight() - 0.5,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -446,10 +472,13 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
 }
 
 class MultiLinkedPickerModel {
-  late List<dynamic> data; // 总的数据
+  /// 总的数据
+  late List<dynamic> data;
   late List<int>? initialIndexes;
   late List<FixedExtentScrollController> controllers;
-  late List<List<String>> presentData; // 每一列展示的数据
+
+  /// 每一列展示的数据
+  late List<List<String>> presentData;
 
   MultiLinkedPickerModel({
     required this.data,
@@ -479,14 +508,15 @@ class MultiLinkedPickerModel {
   }
 
   void refreshPresentDataAndController(int whichline) {
-    // 一列变动，这一列右边所有数据都要变动
+    /// 一列变动，这一列右边所有数据都要变动
     for (int i = whichline + 1; i < data.length; i++) {
       var temp = data[i];
       for (int j = 0; j < i; j++) {
         temp = temp[controllers[j].selectedItem];
       }
       presentData[i] = temp;
-      // 改变数据后立刻改变controller的指向位置，保证下一列在更新数据时获取到正确的位置
+
+      /// 改变数据后立刻改变controller的指向位置，保证下一列在更新数据时获取到正确的位置
       controllers[i].jumpToItem(
           controllers[i].selectedItem > presentData[i].length - 1
               ? presentData[i].length - 1

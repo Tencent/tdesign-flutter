@@ -173,7 +173,7 @@ class _TDTabBarIndicatorPainter extends BoxPainter {
         TDTheme.of(decoration.context).brandNormalColor,
       ]);
     } else {
-      // 下标颜色
+      /// 下标颜色
       _paint.color = TDTheme.of(decoration.context).brandNormalColor;
     }
     _paint.strokeCap = StrokeCap.round;

@@ -35,7 +35,6 @@ class TDPicker {
               useSecond: useSecond,
               dateStart: dateStart,
               dateEnd: dateEnd,
-              // duration: duration,
               pickerHeight: pickerHeight,
               pickerItemCount: pickerItemCount);
         });
@@ -85,7 +84,6 @@ class TDPicker {
             onCancel: onCancel,
             data: data,
             initialIndexes: initialIndexes,
-            // duration: duration,
             pickerHeight: pickerHeight,
             pickerItemCount: pickerItemCount,
           );

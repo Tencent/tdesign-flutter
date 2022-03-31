@@ -1,6 +1,7 @@
-// 所有选择器的子项组件
 import 'package:flutter/material.dart';
 import 'package:flutter_component/td_export.dart';
+
+/// 所有选择器的子项组件
 
 class TDItemWidget extends StatefulWidget {
   final String content;
@@ -23,7 +24,7 @@ class TDItemWidget extends StatefulWidget {
 }
 
 class _TDItemWidgetState extends State<TDItemWidget> {
-  // 子项监听滚动，从而刷新自身的颜色
+  /// 子项监听滚动，从而刷新自身的颜色
   VoidCallback? listener;
   ItemDistanceCalculator? _itemDistanceCalculator;
 
@@ -32,15 +33,16 @@ class _TDItemWidgetState extends State<TDItemWidget> {
     super.initState();
     listener = () => setState(() {});
     _itemDistanceCalculator == widget.itemDistanceCalculator;
-    // 子项注册滚动监听
+
+    /// 子项注册滚动监听
     widget.fixedExtentScrollController.addListener(listener!);
   }
 
   @override
   Widget build(BuildContext context) {
-    // 子项此时离中心的距离
-    // 不要使用widget.fixedExtentScrollController.selectedItem
-    // 其中selectedItem会报错，原因是一开始minScrollExtent为空
+    /// 子项此时离中心的距离
+    /// 不要使用widget.fixedExtentScrollController.selectedItem
+    /// 其中selectedItem会报错，原因是一开始minScrollExtent为空
     double distance =
         (widget.fixedExtentScrollController.offset / widget.itemHeight -
                 widget.index)
@@ -56,7 +58,7 @@ class _TDItemWidgetState extends State<TDItemWidget> {
 
   @override
   void dispose() {
-    // 在销毁前完成监听注销
+    /// 在销毁前完成监听注销
     widget.fixedExtentScrollController.removeListener(listener!);
     super.dispose();
   }
@@ -64,7 +66,7 @@ class _TDItemWidgetState extends State<TDItemWidget> {
 
 class ItemDistanceCalculator {
   Color calculateColor(BuildContext context, double distance) {
-    // 线性插值
+    /// 线性插值
     if (distance < 0.5) {
       return TDTheme.of(context).fontGyColor1;
     } else {

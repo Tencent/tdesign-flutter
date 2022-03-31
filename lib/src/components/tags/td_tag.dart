@@ -149,7 +149,7 @@ class TDTag extends StatelessWidget {
   }
 
   EdgeInsets _getPadding() {
-    // 为了文本居中，修改了padding的值
+    /// 为了文本居中，修改了padding的值
     switch (size) {
       case TDTagSize.LARGE:
         return const EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 4);
@@ -157,7 +157,6 @@ class TDTag extends StatelessWidget {
         return const EdgeInsets.only(left: 8, right: 8, top: 0, bottom: 3);
       default:
         return const EdgeInsets.only(left: 12, right: 12, top: 0, bottom: 3);
-        ;
     }
   }
 }

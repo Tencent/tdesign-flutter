@@ -43,4 +43,4 @@ TDesign Flutter技术栈组件库，适合在移动端项目中使用。
 
 # 开源协议
 
-TDesign 遵循 MIT 协议
+TDesign 遵循 [MIT 协议](https://github.com/TDesignOteam/tdesign-flutter/blob/main/LICENSE)
