@@ -31,9 +31,11 @@ class TDDatePicker extends StatefulWidget {
   final Color? leftButtonColor;
   final Color? rightButtonColor;
 
-  final double pickerHeight; // 选择器List的视窗高度，默认200
-  final int
-      pickerItemCount; // 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
+  /// 选择器List的视窗高度，默认200
+  final double pickerHeight;
+
+  /// 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
+  final int pickerItemCount;
 
   const TDDatePicker(
       {required this.title,
@@ -157,7 +159,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
   }
 
   Widget buildList(context, int whichline) {
-    // whichline参数表示这个列表表示的是年，还是月还是日......
+    /// whichline参数表示这个列表表示的是年，还是月还是日......
     double maxWidth = MediaQuery.of(context).size.width;
     return MediaQuery.removePadding(
         context: context,
@@ -177,8 +179,9 @@ class _TDDatePickerState extends State<TDDatePicker> {
                       model.refreshMonthDataAndController();
                     }
                     model.refreshDayDataAndController();
-                    // 使用动态高度，强制列表组件的state刷新，以展现更新的数据，详见下方链接
-                    // FIX:https://github.com/flutter/flutter/issues/22999
+
+                    /// 使用动态高度，强制列表组件的state刷新，以展现更新的数据，详见下方链接
+                    /// FIX:https://github.com/flutter/flutter/issues/22999
                     pickerHeight =
                         pickerHeight - Random().nextDouble() / 100000000;
                   });
@@ -207,7 +210,9 @@ class _TDDatePickerState extends State<TDDatePicker> {
     return Container(
       padding: EdgeInsets.only(
           left: widget.leftPadding ?? 16, right: widget.rightPadding ?? 16),
-      height: getTitleHeight() - 0.5, // 减去分割线的空间
+
+      /// 减去分割线的空间
+      height: getTitleHeight() - 0.5,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -326,7 +331,7 @@ class DatePickerModel {
 
   late DateTime initialTime;
 
-  // 这三项随滑动而更新，注意初始化
+  /// 这三项随滑动而更新，注意初始化
   late int yearIndex;
   late int monthIndex;
   late int dayIndex;
@@ -416,7 +421,7 @@ class DatePickerModel {
   }
 
   void setControllers() {
-    // 初始化Index
+    /// 初始化Index
     yearIndex = initialTime.year - data[0][0];
     monthIndex = initialTime.month - data[1][0];
     dayIndex = initialTime.day - data[2][0];
@@ -437,7 +442,7 @@ class DatePickerModel {
   }
 
   void addListener() {
-    // 给年月日加上监控
+    /// 给年月日加上监控
     yearFixedExtentScrollController.addListener(() {
       yearIndex = yearFixedExtentScrollController.selectedItem;
     });
@@ -467,7 +472,7 @@ class DatePickerModel {
   }
 
   void refreshDayDataAndController() {
-    // 在刷新日数据时，年月数据已经是最新的
+    /// 在刷新日数据时，年月数据已经是最新的
     int selectedYear = yearIndex + data[0][0];
     int selectedMonth = monthIndex + data[1][0];
     if (dateEnd[0] == dateStart[0] && dateEnd[1] == dateStart[1]) {
