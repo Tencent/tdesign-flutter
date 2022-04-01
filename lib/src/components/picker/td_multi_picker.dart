@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_component/td_export.dart';
+import 'package:tdesign_flutter/td_export.dart';
 
 import 'no_wave_behavior.dart';
 import 'td_item_widget.dart';

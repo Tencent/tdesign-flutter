@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_component/td_export.dart';
-import 'package:flutter_component/src/util/string_util.dart';
-import 'package:flutter_component/src/components/image/image_widget.dart';
+import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter/src/util/string_util.dart';
+import 'package:tdesign_flutter/src/components/image/image_widget.dart';
 
 enum TDImageSize {
   /// 120*120px
