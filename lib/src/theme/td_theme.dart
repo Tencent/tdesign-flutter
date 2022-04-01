@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_component/src/theme/td_default_theme.dart';
-import 'package:flutter_component/src/theme/td_font_family.dart';
-import 'package:flutter_component/src/theme/td_fonts.dart';
-import 'package:flutter_component/src/util/string_util.dart';
-import 'package:flutter_component/src/util/log.dart';
+import 'package:tdesign_flutter/src/theme/td_default_theme.dart';
+import 'package:tdesign_flutter/src/theme/td_font_family.dart';
+import 'package:tdesign_flutter/src/theme/td_fonts.dart';
+import 'package:tdesign_flutter/src/util/string_util.dart';
+import 'package:tdesign_flutter/src/util/log.dart';
 
 import 'basic.dart';
 

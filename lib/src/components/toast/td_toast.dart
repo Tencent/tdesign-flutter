@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_component/td_export.dart';
+import 'package:tdesign_flutter/td_export.dart';
 
 class TDToast {
   static showText(BuildContext context, String text,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_component/td_export.dart';
-import 'package:flutter_component/src/util/string_util.dart';
+import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter/src/util/string_util.dart';
 
 class TdTagPage extends StatelessWidget {
   const TdTagPage({Key? key}) : super(key: key);

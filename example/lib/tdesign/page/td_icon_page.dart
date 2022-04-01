@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_component/td_export.dart';
+import 'package:tdesign_flutter/td_export.dart';
 
 // ignore: use_key_in_widget_constructors
 class IconPage extends StatefulWidget {
