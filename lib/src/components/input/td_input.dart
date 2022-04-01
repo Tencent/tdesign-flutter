@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_component/td_export.dart';
+import 'package:tdesign_flutter/td_export.dart';
 
 import 'input_view.dart';
 

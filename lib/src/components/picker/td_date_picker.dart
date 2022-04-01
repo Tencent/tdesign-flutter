@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_component/src/components/picker/no_wave_behavior.dart';
-import 'package:flutter_component/td_export.dart';
-import 'package:flutter_component/src/util/string_util.dart';
+import 'package:tdesign_flutter/src/components/picker/no_wave_behavior.dart';
+import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter/src/util/string_util.dart';
 
 import 'td_item_widget.dart';
 
