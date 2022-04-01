@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_component/src/theme/td_theme.dart';
+import 'package:tdesign_flutter/src/theme/td_theme.dart';
 
 ///
 /// 业务使用时有两种方法替换主题：

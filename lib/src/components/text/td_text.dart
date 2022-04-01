@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_component/td_export.dart';
+import 'package:tdesign_flutter/td_export.dart';
 
 /// 文本控件
 class TDText extends StatelessWidget {

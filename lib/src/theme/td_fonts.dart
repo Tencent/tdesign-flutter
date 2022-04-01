@@ -1,4 +1,4 @@
-import 'package:flutter_component/src/theme/td_theme.dart';
+import 'package:tdesign_flutter/src/theme/td_theme.dart';
 
 import 'basic.dart';
 
