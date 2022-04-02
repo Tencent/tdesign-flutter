@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_component_example/tdesign/page/td_image_page.dart';
-import 'package:flutter_component_example/tdesign/page/td_avatar_page.dart';
-import 'package:flutter_component_example/tdesign/page/td_badge_page.dart';
-import 'package:flutter_component_example/tdesign/page/td_empty_page.dart';
-import 'package:flutter_component_example/tdesign/page/td_icon_page.dart';
-import 'package:flutter_component_example/tdesign/page/td_input_view_pager.dart';
-import 'package:flutter_component_example/tdesign/page/td_picker_page.dart';
-import 'package:flutter_component_example/tdesign/page/td_tab_bar_page.dart';
-import 'package:flutter_component_example/tdesign/page/td_tag_page.dart';
-import 'package:flutter_component_example/tdesign/page/td_toast_page.dart';
-import 'package:flutter_component_example/tdesign/page/td_button_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_image_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_avatar_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_badge_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_empty_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_icon_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_input_view_pager.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_picker_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_tab_bar_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_tag_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_toast_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_button_page.dart';
 
 import 'page/td_picker_page.dart';
 import 'page/td_tab_bar_page.dart';

@@ -1,4 +1,4 @@
-package com.tdesign.flutter_component_example
+package com.tdesign.tdesign_flutter_example
 
 import io.flutter.embedding.android.FlutterActivity
 
