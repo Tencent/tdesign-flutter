@@ -48,7 +48,7 @@ class TDText extends StatelessWidget {
           fontSize: textFont.size,
           height: showHeight ? textFont.height : null,
           fontWeight: fontWeight,
-          package: 'flutter_component',
+          package: 'tdesign_flutter',
           fontFamily: fontFamily?.fontFamily,
           decoration:
               isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none,

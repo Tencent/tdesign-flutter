@@ -36,13 +36,6 @@ flutter:
       fonts:
         - asset: assets/tdesign/td_icons.ttf
 
-  plugin:
-    platforms:
-      android:
-        package: com.tdesign.flutter_component
-        pluginClass: FlutterComponentPlugin
-      ios:
-        pluginClass: FlutterComponentPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
