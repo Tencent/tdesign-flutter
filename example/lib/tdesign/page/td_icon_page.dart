@@ -19,7 +19,7 @@ class _IconPageState extends State<IconPage> {
           alignment: Alignment.center,
           child: Wrap(
             children: [
-              for (var iconData in TDIcons.all.values) TDIcon(iconData)
+              for (var iconData in TDIcons.all.values) Icon(iconData)
             ],
           ),
         ));

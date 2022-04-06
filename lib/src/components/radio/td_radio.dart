@@ -52,18 +52,18 @@ class _TDRadioState extends State<TDRadio> {
     Widget? icon;
     switch (widget.type) {
       case TDRadioType.Circle:
-        icon = TDIcon(selected ? TDIcons.check_circle_filled : TDIcons.circle,
+        icon = Icon(selected ? TDIcons.check_circle_filled : TDIcons.circle,
             size: 24, color: _getIconColor(context));
         break;
       case TDRadioType.Square:
-        icon = TDIcon(
+        icon = Icon(
             selected ? TDIcons.check_rectangle_filled : TDIcons.rectangle,
             size: 24,
             color: _getIconColor(context));
         break;
       case TDRadioType.Check:
         icon = selected
-            ? TDIcon(TDIcons.check, size: 24, color: _getIconColor(context))
+            ? Icon(TDIcons.check, size: 24, color: _getIconColor(context))
             : const SizedBox(
                 width: 0,
                 height: 0,

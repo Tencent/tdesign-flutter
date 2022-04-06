@@ -132,7 +132,7 @@ class _TDBadgeState extends State<TDBadge> {
               decoration: BoxDecoration(
                   color: widget.color ?? TDTheme.of(context).errorColor6,
                   borderRadius: BorderRadius.circular(8)),
-              child: TDIcon(
+              child: Icon(
                 TDIcons.ellipsis,
                 color: widget.textColor ?? TDTheme.of(context).whiteColor1,
                 size: 12,

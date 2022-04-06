@@ -96,7 +96,7 @@ class TDAvatar extends StatelessWidget {
         return CircleAvatar(
           radius: _getAvatarWidth() / 2,
           backgroundColor: TDTheme.of(context).brandColor2,
-          child: TDIcon(TDIcons.user,
+          child: Icon(TDIcons.user,
               size: _getIconWidth(), color: TDTheme.of(context).brandColor8),
         );
       case TDAvatarType.User:

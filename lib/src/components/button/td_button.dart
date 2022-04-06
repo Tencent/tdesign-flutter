@@ -252,7 +252,7 @@ class _TDButtonState extends State<TDButton>
           child: Container(
             width: 14,
             height: 14,
-            child: const TDIcon(
+            child: const Icon(
               TDIcons.loading,
               size: 14,
             ),

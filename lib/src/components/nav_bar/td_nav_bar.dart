@@ -152,7 +152,7 @@ class _TDNavBarState extends State<TDNavBar> {
 }
 
 class TDNavBarItem {
-  TDIcon? icon;
+  Icon? icon;
   String? title;
   Color? titleColor;
   Color? iconColor;
