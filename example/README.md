@@ -1,6 +1,6 @@
-# flutter_component_example
+# tdesign_flutter_example
 
-Demonstrates how to use the flutter_component plugin.
+A new Flutter application.
 
 ## Getting Started
 
