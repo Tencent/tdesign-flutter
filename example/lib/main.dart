@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter_example/tdesign/example_route.dart';
 
-import 'tdesign/example_route.dart';
+
 
 void main() {
   runApp(MyApp());
