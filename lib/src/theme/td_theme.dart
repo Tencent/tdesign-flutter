@@ -74,20 +74,20 @@ class TDThemeData {
   static TDThemeData? _defaultThemeData;
 
   late String name;
-  late Map<String, Color> colors;
-  late Map<String, Font> fonts;
-  late Map<String, double> corners;
-  late Map<String, FontFamily> fontFamilies;
-  late Map<String, List<BoxShadow>> shadows;
+  late Map<String, Color> colorMap;
+  late Map<String, Font> fontMap;
+  late Map<String, double> cornerMap;
+  late Map<String, FontFamily> fontFamilyMap;
+  late Map<String, List<BoxShadow>> shadowMap;
   late TDExtraThemeData? extraThemeData;
 
   TDThemeData(
       {required this.name,
-      required this.colors,
-      required this.fonts,
-      required this.corners,
-      required this.fontFamilies,
-      required this.shadows,
+      required this.colorMap,
+      required this.fontMap,
+      required this.cornerMap,
+      required this.fontFamilyMap,
+      required this.shadowMap,
       this.extraThemeData,
       bool recoverDefault = false});
 
@@ -113,11 +113,11 @@ class TDThemeData {
   }) {
     var result = TDThemeData(
         name: name,
-        colors: _copyMap<Color>(this.colors, colors),
-        fonts: _copyMap<Font>(this.fonts, fonts),
-        corners: _copyMap<double>(this.corners, corners),
-        fontFamilies: _copyMap<FontFamily>(this.fontFamilies, fontFamilies),
-        shadows: _copyMap<List<BoxShadow>>(this.shadows, shadows),
+        colorMap: _copyMap<Color>(this.colorMap, colors),
+        fontMap: _copyMap<Font>(this.fontMap, fonts),
+        cornerMap: _copyMap<double>(this.cornerMap, corners),
+        fontFamilyMap: _copyMap<FontFamily>(this.fontFamilyMap, fontFamilies),
+        shadowMap: _copyMap<List<BoxShadow>>(this.shadowMap, shadows),
         extraThemeData: extraThemeData ?? this.extraThemeData);
 
     return result;
@@ -140,11 +140,11 @@ class TDThemeData {
       {TDExtraThemeData? extraThemeData}) {
     return TDThemeData(
         name: name,
-        colors: {},
-        fonts: {},
-        corners: {},
-        fontFamilies: {},
-        shadows: {});
+        colorMap: {},
+        fontMap: {},
+        cornerMap: {},
+        fontFamilyMap: {},
+        shadowMap: {});
   }
 
   /// 解析配置的json文件为主题数据
@@ -164,26 +164,26 @@ class TDThemeData {
         /// 设置颜色
         Map<String, dynamic>? colorsMap = curThemeMap['colors'];
         colorsMap?.forEach((key, value) {
-          theme.colors[key] = toColor(value);
+          theme.colorMap[key] = toColor(value);
         });
 
         /// 设置字体尺寸
         Map<String, dynamic>? fontsMap = curThemeMap['fonts'];
         fontsMap?.forEach((key, value) {
-          theme.fonts[key] =
+          theme.fontMap[key] =
               Font(size: value['size'], lineHeight: value['lineHeight']);
         });
 
         /// 设置圆角
         Map<String, dynamic>? cornersMap = curThemeMap['corners'];
         cornersMap?.forEach((key, value) {
-          theme.corners[key] = value.toDouble();
+          theme.cornerMap[key] = value.toDouble();
         });
 
         /// 设置字体
         Map<String, dynamic>? fontFamilyMap = curThemeMap['fontFamily'];
         fontFamilyMap?.forEach((key, value) {
-          theme.fontFamilies[key] = FontFamily(fontFamily: value['fontFamily']);
+          theme.fontFamilyMap[key] = FontFamily(fontFamily: value['fontFamily']);
         });
 
         /// 设置阴影
@@ -200,7 +200,7 @@ class TDThemeData {
             ));
           });
 
-          theme.shadows[key] = list;
+          theme.shadowMap[key] = list;
         });
         if (extraThemeData != null) {
           extraThemeData.parse(name, curThemeMap);
@@ -224,29 +224,29 @@ class TDThemeData {
   Color? ofColor(
     String? key,
   ) {
-    return colors[key];
+    return colorMap[key];
   }
 
   Font? ofFont(String? key) {
-    return fonts[key];
+    return fontMap[key];
   }
 
   double? ofCorner(
     String? key,
   ) {
-    return corners[key];
+    return cornerMap[key];
   }
 
   FontFamily? ofFontFamily(
     String? key,
   ) {
-    return fontFamilies[key];
+    return fontFamilyMap[key];
   }
 
   List<BoxShadow>? ofShadow(
     String? key,
   ) {
-    return shadows[key];
+    return shadowMap[key];
   }
 
   T? ofExtra<T extends TDExtraThemeData>() {
