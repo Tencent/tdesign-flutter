@@ -44,9 +44,9 @@ class _TdThemePageState extends State<TdThemePage> {
               /// 此处替换主题
               TDTheme(
                   // 替换fonts和colors，其他主题从父类拷贝
-                  data: TDTheme.of(context).copyWith('custom', fonts: {
+                  data: TDTheme.of(context).copyWith('custom', fontMap: {
                     'fontM': Font(size: 40, lineHeight: 80),
-                  }, colors: {
+                  }, colorMap: {
                     'brandNormalColor': Colors.red
                   }),
                   // 不能直接在此处使用contxt，这里虽然被包裹在TGTheme中，但是context未更新，因此阿不到最新数据

@@ -3,7 +3,7 @@ class TDDefaultTheme {
   static String defaultThemeConfig = '''
   {
 	"default": {
-		"colors": {
+		"color": {
 			"brandColor1": "#ECF2FE",
 			"brandColor2": "#D4E3FC",
 			"brandColor3": "#BBD3FB",
@@ -92,7 +92,7 @@ class TDDefaultTheme {
 			"grayColor13": "#242424",
 			"grayColor14": "#181818"
 		},
-		"fonts": {
+		"font": {
 			"fontXL": {
 				"size": 36,
 				"lineHeight": 44
@@ -123,7 +123,7 @@ class TDDefaultTheme {
 				"fontFamily": "DINAlternate-B"
 			}
 		},
-		"corners": {
+		"corner": {
 			"baseBorderRadius": 8
 		},
 		"shadow": {

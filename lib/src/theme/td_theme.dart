@@ -104,18 +104,18 @@ class TDThemeData {
   /// 从父类拷贝
   TDThemeData copyWith(
     String name, {
-    Map<String, Color>? colors,
-    Map<String, Font>? fonts,
-    Map<String, double>? corners,
+    Map<String, Color>? colorMap,
+    Map<String, Font>? fontMap,
+    Map<String, double>? cornerMap,
     Map<String, FontFamily>? fontFamilies,
     Map<String, List<BoxShadow>>? shadows,
     TDExtraThemeData? extraThemeData,
   }) {
     var result = TDThemeData(
         name: name,
-        colorMap: _copyMap<Color>(this.colorMap, colors),
-        fontMap: _copyMap<Font>(this.fontMap, fonts),
-        cornerMap: _copyMap<double>(this.cornerMap, corners),
+        colorMap: _copyMap<Color>(this.colorMap, colorMap),
+        fontMap: _copyMap<Font>(this.fontMap, fontMap),
+        cornerMap: _copyMap<double>(this.cornerMap, cornerMap),
         fontFamilyMap: _copyMap<FontFamily>(this.fontFamilyMap, fontFamilies),
         shadowMap: _copyMap<List<BoxShadow>>(this.shadowMap, shadows),
         extraThemeData: extraThemeData ?? this.extraThemeData);
@@ -162,20 +162,20 @@ class TDThemeData {
         Map<String, dynamic> curThemeMap = themeConfig['$name'];
 
         /// 设置颜色
-        Map<String, dynamic>? colorsMap = curThemeMap['colors'];
+        Map<String, dynamic>? colorsMap = curThemeMap['color'];
         colorsMap?.forEach((key, value) {
           theme.colorMap[key] = toColor(value);
         });
 
         /// 设置字体尺寸
-        Map<String, dynamic>? fontsMap = curThemeMap['fonts'];
+        Map<String, dynamic>? fontsMap = curThemeMap['font'];
         fontsMap?.forEach((key, value) {
           theme.fontMap[key] =
               Font(size: value['size'], lineHeight: value['lineHeight']);
         });
 
         /// 设置圆角
-        Map<String, dynamic>? cornersMap = curThemeMap['corners'];
+        Map<String, dynamic>? cornersMap = curThemeMap['corner'];
         cornersMap?.forEach((key, value) {
           theme.cornerMap[key] = value.toDouble();
         });
