@@ -71,7 +71,7 @@ class _TDSearchBarState extends State<TDSearchBar> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Padding(padding: const EdgeInsets.only(left: 6)),
-                  TDIcon(
+                  Icon(
                     TDIcons.search,
                     size: 24,
                     color: TDTheme.of(context).fontGyColor3,
@@ -104,7 +104,7 @@ class _TDSearchBarState extends State<TDSearchBar> {
                     offstage: clearBtnHide,
                     child: GestureDetector(
                         onTap: () => {controller.clear()},
-                        child: TDIcon(
+                        child: Icon(
                           TDIcons.close_circle_filled,
                           size: 24,
                           color: TDTheme.of(context).fontGyColor3,
