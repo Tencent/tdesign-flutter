@@ -107,8 +107,8 @@ class TDThemeData {
     Map<String, Color>? colorMap,
     Map<String, Font>? fontMap,
     Map<String, double>? cornerMap,
-    Map<String, FontFamily>? fontFamilies,
-    Map<String, List<BoxShadow>>? shadows,
+    Map<String, FontFamily>? fontFamilyMap,
+    Map<String, List<BoxShadow>>? shadowMap,
     TDExtraThemeData? extraThemeData,
   }) {
     var result = TDThemeData(
@@ -116,8 +116,8 @@ class TDThemeData {
         colorMap: _copyMap<Color>(this.colorMap, colorMap),
         fontMap: _copyMap<Font>(this.fontMap, fontMap),
         cornerMap: _copyMap<double>(this.cornerMap, cornerMap),
-        fontFamilyMap: _copyMap<FontFamily>(this.fontFamilyMap, fontFamilies),
-        shadowMap: _copyMap<List<BoxShadow>>(this.shadowMap, shadows),
+        fontFamilyMap: _copyMap<FontFamily>(this.fontFamilyMap, fontFamilyMap),
+        shadowMap: _copyMap<List<BoxShadow>>(this.shadowMap, shadowMap),
         extraThemeData: extraThemeData ?? this.extraThemeData);
 
     return result;
