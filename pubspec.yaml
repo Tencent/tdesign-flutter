@@ -10,11 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_html: ^2.0.0
-  provider: 5.0.0
-  flutter_svg: ^0.22.0
-  flutter_easyrefresh: ^2.2.1
-  icon_font_generator: ^3.2.0
 
 dev_dependencies:
   flutter_lints: ^1.0.4
