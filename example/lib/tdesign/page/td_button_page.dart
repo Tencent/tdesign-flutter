@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 // ignore: use_key_in_widget_constructors
-class ButtonPage extends StatefulWidget {
+class TdButtonPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _ButtonPageState();
+  State<StatefulWidget> createState() => _TdButtonPageState();
 }
 
-class _ButtonPageState extends State<ButtonPage> {
+class _TdButtonPageState extends State<TdButtonPage> {
   final GlobalKey _btnKey = GlobalKey();
 
   void onClick() {

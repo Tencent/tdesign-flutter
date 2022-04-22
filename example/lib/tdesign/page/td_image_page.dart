@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 // ignore: use_key_in_widget_constructors
-class ImagePage extends StatefulWidget {
+class TdImagePage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _ImagePageState();
+  State<StatefulWidget> createState() => _TdImagePageState();
 }
 
-class _ImagePageState extends State<ImagePage> {
+class _TdImagePageState extends State<TdImagePage> {
   @override
   Widget build(BuildContext context) {
     var url =

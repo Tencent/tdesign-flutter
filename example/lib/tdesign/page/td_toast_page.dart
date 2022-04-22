@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 // ignore: use_key_in_widget_constructors
-class ToastPage extends StatefulWidget {
+class TdToastPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _ToastPageState();
+  State<StatefulWidget> createState() => _TdToastPageState();
 }
 
-class _ToastPageState extends State<ToastPage> {
+class _TdToastPageState extends State<TdToastPage> {
   void _showToast() {
     TDToast.showText(context, "我是Toast");
   }
