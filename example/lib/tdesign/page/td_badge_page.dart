@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 // ignore: use_key_in_widget_constructors
-class BadgePage extends StatefulWidget {
+class TdBadgePage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _BadgePageState();
+  State<StatefulWidget> createState() => _TdBadgePageState();
 }
 
-class _BadgePageState extends State<BadgePage> {
+class _TdBadgePageState extends State<TdBadgePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

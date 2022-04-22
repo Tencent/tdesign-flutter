@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 // ignore: use_key_in_widget_constructors
-class EmptyPage extends StatefulWidget {
+class TdEmptyPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _EmptyPageState();
+  State<StatefulWidget> createState() => _TdEmptyPageState();
 }
 
-class _EmptyPageState extends State<EmptyPage> {
+class _TdEmptyPageState extends State<TdEmptyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

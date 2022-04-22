@@ -1,8 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter_example/tdesign/example_base.dart';
 import 'package:tdesign_flutter_example/tdesign/example_route.dart';
 
+
+import 'package:tdesign_flutter_example/tdesign/page/td_image_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_avatar_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_badge_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_empty_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_icon_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_input_view_pager.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_picker_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_tab_bar_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_tag_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_text_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_theme_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_toast_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_button_page.dart';
+
+
+/// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TdTextPage()
+List<ExamplePageModel> examplePatList = [
+  ExamplePageModel(text: "文本控件", path: "TdTextPage", pageBuilder: (context)=> TdTextPage()),
+  ExamplePageModel(text: "圆形图片组件（头像）", path: "TdAvatarPage", pageBuilder: (context)=> TdAvatarPage()),
+  ExamplePageModel(text: "红点", path: "TdBadgePage", pageBuilder: (context)=> TdBadgePage()),
+  ExamplePageModel(text: "标签栏", path: "TdTabBarPage", pageBuilder: (context)=> TdTabBarPage()),
+  ExamplePageModel(text: "轻提示", path: "TdToastPage", pageBuilder: (context)=> TdToastPage()),
+  ExamplePageModel(text: "按钮", path: "TdButtonPage", pageBuilder: (context)=> TdButtonPage()),
+  ExamplePageModel(text: "输入框", path: "TdInputViewPag", pageBuilder: (context)=> TdInputViewPage()),
+  ExamplePageModel(text: "标签", path: "TdTagPage", pageBuilder: (context)=> TdTagPage()),
+  ExamplePageModel(text: "Picker", path: "TdPickerPage", pageBuilder: (context)=> TdPickerPage()),
+  ExamplePageModel(text: "图标", path: "TdIconPage", pageBuilder: (context)=> TdIconPage()),
+  ExamplePageModel(text: "空白页面", path: "TdEmptyPage", pageBuilder: (context)=> TdEmptyPage()),
+  ExamplePageModel(text: "主题页面", path: "TdThemePage", pageBuilder: (context)=> TdThemePage()),
+  ExamplePageModel(text: "图片组件", path: "TdImagePage", pageBuilder: (context)=> TdImagePage()),
+];
 
 
 void main() {
@@ -65,6 +98,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool useConch = false;
+  
+  @override
+  void initState() {
+    super.initState();
+    TdExampleRoute.init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,94 +125,24 @@ class _MyHomePageState extends State<MyHomePage> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'AvatarPage');
-                    },
-                    child: const Text(
-                      '圆形图片组件（头像）',
-                    )),
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'BadgePage');
-                    },
-                    child: const Text(
-                      '红点',
-                    )),
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'TabBarPage');
-                    },
-                    child: const Text(
-                      '标签栏',
-                    )),
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'ToastPage');
-                    },
-                    child: const Text(
-                      '轻提示',
-                    )),
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'ButtonPage');
-                    },
-                    child: const Text(
-                      '按钮',
-                    )),
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'InputViewPage');
-                    },
-                    child: const Text(
-                      '输入框',
-                    )),
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'TagPage');
-                    },
-                    child: const Text(
-                      '标签',
-                    )),
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'PickerPage');
-                    },
-                    child: const Text(
-                      'Picker',
-                    )),
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'IconPage');
-                    },
-                    child: const Text(
-                      '图标',
-                    )),
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'EmptyPage');
-                    },
-                    child: const Text(
-                      '空白页面',
-                    )),
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'ThemePage');
-                    },
-                    child: const Text(
-                      '主题页面',
-                    )),
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'ImagePage');
-                    },
-                    child: const Text(
-                      '图片组件',
-                    )),
-              ],
+              children: _buildChildren(context),
             ),
           ),
         ));
   }
+
+  List<Widget> _buildChildren(BuildContext context) {
+    return <Widget>[
+      for(var model in examplePatList)
+        OutlinedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, model.path);
+            },
+            child: Text(
+              model.text,
+            ))
+    ];
+  }
 }
+
+

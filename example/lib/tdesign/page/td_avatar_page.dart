@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 // ignore: use_key_in_widget_constructors
-class AvatarPage extends StatefulWidget {
+class TdAvatarPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _AvatarPageState();
+  State<StatefulWidget> createState() => _TdAvatarPageState();
 }
 
-class _AvatarPageState extends State<AvatarPage> {
+class _TdAvatarPageState extends State<TdAvatarPage> {
   @override
   Widget build(BuildContext context) {
     String imgUrl = 'https://photo.16pic.com/00/53/26/16pic_5326745_b.jpg';
