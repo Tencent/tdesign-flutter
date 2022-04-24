@@ -13,17 +13,18 @@ class ExamplePageModel{
 }
 
 class ExampleWidget extends StatelessWidget {
-  const ExampleWidget({Key? key, required this.title, required this.children}) : super(key: key);
+  const ExampleWidget({Key? key, required this.title, required this.children, this.padding}) : super(key: key);
 
   final String title;
   final List<ExampleItem> children;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
     var list = <Widget>[
       for(var item in children)
         Container(
-          margin: EdgeInsets.all(16),
+          padding: padding ?? EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -34,7 +35,7 @@ class ExampleWidget extends StatelessWidget {
         )
     ];
     return Scaffold(
-      appBar: AppBar(title: Text(title),),
+      appBar: AppBar(title: Text("$title示例页"),),
       body: Center(child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,

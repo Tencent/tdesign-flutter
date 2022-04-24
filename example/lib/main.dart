@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import 'package:tdesign_flutter_example/tdesign/example_base.dart';
 import 'package:tdesign_flutter_example/tdesign/example_route.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_divider_page.dart';
 
 
 import 'package:tdesign_flutter_example/tdesign/page/td_image_page.dart';
@@ -23,6 +24,7 @@ import 'package:tdesign_flutter_example/tdesign/page/td_button_page.dart';
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TdTextPage()
 List<ExamplePageModel> examplePatList = [
   ExamplePageModel(text: "文本控件", path: "TdTextPage", pageBuilder: (context)=> TdTextPage()),
+  ExamplePageModel(text: "分割线", path: "TdDividerPage", pageBuilder: (context)=> TdDividerPage()),
   ExamplePageModel(text: "圆形图片组件（头像）", path: "TdAvatarPage", pageBuilder: (context)=> TdAvatarPage()),
   ExamplePageModel(text: "红点", path: "TdBadgePage", pageBuilder: (context)=> TdBadgePage()),
   ExamplePageModel(text: "标签栏", path: "TdTabBarPage", pageBuilder: (context)=> TdTabBarPage()),
