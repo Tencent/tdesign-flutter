@@ -27,7 +27,7 @@ class ExampleWidget extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("用例——${item.desc}", style: TextStyle(color: Colors.black45),),
+              Text("示例——${item.desc}", style: TextStyle(color: Colors.black45),),
               item.builder(context),
             ],
           ),
@@ -35,10 +35,12 @@ class ExampleWidget extends StatelessWidget {
     ];
     return Scaffold(
       appBar: AppBar(title: Text(title),),
-      body: Center(child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: list,
-      ),),
+      body: Center(child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: list,
+        ),),
+      ),
     );
   }
 }
