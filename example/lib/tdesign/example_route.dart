@@ -7,7 +7,7 @@ class TdExampleRoute {
   static final Map<String, Function> _routes = {};
 
   static void init(){
-    for(var model in examplePatList){
+    for(var model in examplePageList){
       _routes[model.path] = model.pageBuilder;
     }
   }

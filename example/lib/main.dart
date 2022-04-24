@@ -22,7 +22,7 @@ import 'package:tdesign_flutter_example/tdesign/page/td_button_page.dart';
 
 
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TdTextPage()
-List<ExamplePageModel> examplePatList = [
+List<ExamplePageModel> examplePageList = [
   ExamplePageModel(text: "文本控件", path: "TdTextPage", pageBuilder: (context)=> TdTextPage()),
   ExamplePageModel(text: "分割线", path: "TdDividerPage", pageBuilder: (context)=> TdDividerPage()),
   ExamplePageModel(text: "圆形图片组件（头像）", path: "TdAvatarPage", pageBuilder: (context)=> TdAvatarPage()),
@@ -135,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Widget> _buildChildren(BuildContext context) {
     return <Widget>[
-      for(var model in examplePatList)
+      for(var model in examplePageList)
         OutlinedButton(
             onPressed: () {
               Navigator.pushNamed(context, model.path);
