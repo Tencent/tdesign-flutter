@@ -42,6 +42,9 @@ class TDText extends StatelessWidget {
   /// 文本颜色
   final Color textColor;
 
+  /// 背景颜色
+  final Color? backgroundColor;
+
   /// 字体包名
   final String package;
 
@@ -95,6 +98,7 @@ class TDText extends StatelessWidget {
         this.fontWeight = FontWeight.w500,
         this.fontFamily,
         this.textColor = Colors.black,
+        this.backgroundColor,
         this.padding = EdgeInsets.zero,
         this.isTextThrough = false,
         this.lineThroughColor = Colors.white,
@@ -123,6 +127,7 @@ class TDText extends StatelessWidget {
         this.fontWeight = FontWeight.w500,
         this.fontFamily,
         this.textColor = Colors.black,
+        this.backgroundColor,
         this.padding = EdgeInsets.zero,
         this.isTextThrough = false,
         this.lineThroughColor = Colors.white,
@@ -149,6 +154,7 @@ class TDText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: padding,
+      color: backgroundColor,
       child: textSpan == null ? Text(
         data,
         key: this.key,
