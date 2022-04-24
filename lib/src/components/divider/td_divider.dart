@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 /// 分割线
+/// 对于非flutter原有的控件，则只需满足TDesign规范即可；
+/// 如果有业务在实际使用，还需兼容实际业务场景。
 class TDDivider extends StatelessWidget {
   const TDDivider({Key? key,
   this.color,
