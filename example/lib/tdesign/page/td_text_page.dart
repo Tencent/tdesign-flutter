@@ -10,7 +10,7 @@ class TdTextPage extends StatelessWidget {
   Widget build(BuildContext context) {
     String exampleTxt = "文本Text";
     return ExampleWidget(
-      title: "TDText示例页",
+      title: "TDText",
       children: [
         ExampleItem(
             desc: "系统Text:",
@@ -32,11 +32,6 @@ class TdTextPage extends StatelessWidget {
               return TDText(
                 exampleTxt,
                 font: TDTheme.of(context).fontXL,
-                isTextThrough: true,
-                lineThroughColor: TDTheme.of(context).brandNormalColor,
-                customStyle: TextStyle(
-                  color: TDTheme.of(context).errorNormalColor,
-                ),
               );
             }),
         ExampleItem(
