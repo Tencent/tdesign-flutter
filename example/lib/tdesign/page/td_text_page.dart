@@ -84,6 +84,14 @@ class TdTextPage extends StatelessWidget {
                     color: TDTheme.of(context).errorNormalColor, fontSize: 32),
               );
             }),
+        ExampleItem(
+            desc: "设置背景颜色:",
+            builder: (_) {
+              return TDText(
+                exampleTxt,
+                backgroundColor: TDTheme.of(context).successHoverColor,
+              );
+            }),
       ],
     );
   }
