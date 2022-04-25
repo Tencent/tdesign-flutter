@@ -27,11 +27,13 @@ class TdTextPage extends StatelessWidget {
               );
             }),
         ExampleItem(
-            desc: "指定fontXL:",
+            desc: "指定常用属性:",
             builder: (_) {
               return TDText(
                 exampleTxt,
                 font: TDTheme.of(context).fontXL,
+                textColor: TDTheme.of(context).brandNormalColor,
+                backgroundColor: TDTheme.of(context).successHoverColor,
               );
             }),
         ExampleItem(
@@ -85,12 +87,12 @@ class TdTextPage extends StatelessWidget {
               );
             }),
         ExampleItem(
-            desc: "设置背景颜色:",
+            desc: "获取系统Text,padding和background将失效:",
             builder: (_) {
               return TDText(
                 exampleTxt,
                 backgroundColor: TDTheme.of(context).successHoverColor,
-              );
+              ).getRawText(context: context);
             }),
       ],
     );

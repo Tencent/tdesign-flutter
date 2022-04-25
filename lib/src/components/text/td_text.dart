@@ -34,7 +34,7 @@ class TDText extends StatelessWidget {
   final Font? font;
 
   /// 字体粗细
-  final FontWeight fontWeight;
+  final FontWeight? fontWeight;
 
   /// 字体ttf
   final FontFamily? fontFamily;
@@ -95,7 +95,7 @@ class TDText extends StatelessWidget {
   const TDText(this.data,
       {
         this.font,
-        this.fontWeight = FontWeight.w500,
+        this.fontWeight = FontWeight.w400,
         this.fontFamily,
         this.textColor = Colors.black,
         this.backgroundColor,
@@ -155,41 +155,13 @@ class TDText extends StatelessWidget {
     return Container(
       padding: padding,
       color: backgroundColor,
-      child: textSpan == null ? Text(
-        data,
-        key: this.key,
-        style: _getTextStyle(context),
-        strutStyle: this.strutStyle,
-        textAlign: this.textAlign,
-        textDirection: this.textDirection,
-        locale: this.locale,
-        softWrap: this.softWrap,
-        overflow: this.overflow,
-        textScaleFactor: this.textScaleFactor,
-        maxLines: this.maxLines,
-        semanticsLabel: this.semanticsLabel,
-        textWidthBasis: this.textWidthBasis,
-        textHeightBehavior: this.textHeightBehavior,
-      ) : Text.rich(this.textSpan!,
-        style: this.customStyle,
-        strutStyle: this.strutStyle,
-        textAlign: this.textAlign,
-        textDirection: this.textDirection,
-        locale: this.locale,
-        softWrap: this.softWrap,
-        overflow: this.overflow,
-        textScaleFactor: this.textScaleFactor,
-        maxLines: this.maxLines,
-        semanticsLabel: this.semanticsLabel,
-        textWidthBasis: this.textWidthBasis,
-        textHeightBehavior: this.textHeightBehavior,
-      ),
+      child: getRawText(context: context),
     );
   }
 
 
 
-  TextStyle? _getTextStyle(BuildContext context) {
+  TextStyle? _getTextStyle(BuildContext? context) {
     var textFont =
         font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
     return TextStyle(
@@ -218,6 +190,40 @@ class TDText extends StatelessWidget {
       fontFamilyFallback: this.customStyle?.fontFamilyFallback,
       package: this.package,
         );
+  }
+
+  /// 获取系统原始Text，以便使用到只能接收系统Text组件的地方
+  /// 转化为系统原始Text后，将失去padding和background属性
+  Text getRawText({BuildContext? context}){
+    return textSpan == null ? Text(
+      data,
+      key: this.key,
+      style: _getTextStyle(context),
+      strutStyle: this.strutStyle,
+      textAlign: this.textAlign,
+      textDirection: this.textDirection,
+      locale: this.locale,
+      softWrap: this.softWrap,
+      overflow: this.overflow,
+      textScaleFactor: this.textScaleFactor,
+      maxLines: this.maxLines,
+      semanticsLabel: this.semanticsLabel,
+      textWidthBasis: this.textWidthBasis,
+      textHeightBehavior: this.textHeightBehavior,
+    ) : Text.rich(this.textSpan!,
+      style: this.customStyle,
+      strutStyle: this.strutStyle,
+      textAlign: this.textAlign,
+      textDirection: this.textDirection,
+      locale: this.locale,
+      softWrap: this.softWrap,
+      overflow: this.overflow,
+      textScaleFactor: this.textScaleFactor,
+      maxLines: this.maxLines,
+      semanticsLabel: this.semanticsLabel,
+      textWidthBasis: this.textWidthBasis,
+      textHeightBehavior: this.textHeightBehavior,
+    );
   }
 }
 
