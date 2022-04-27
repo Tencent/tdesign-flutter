@@ -83,6 +83,7 @@ class TDInputView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      inputFormatters: inputFormatters,
       readOnly: readOnly,
       keyboardType: inputType,
       autofocus: autofocus,
