@@ -59,6 +59,9 @@ class TDTabBar extends StatefulWidget {
   /// 是否展示引导控件
   final bool showIndicator;
 
+  /// 自定义滑动
+  final ScrollPhysics? physics;
+
   @override
   const TDTabBar(
       {Key? key,
@@ -78,6 +81,7 @@ class TDTabBar extends StatefulWidget {
       this.height,
       this.indicatorPadding,
       this.indicator,
+      this.physics,
       this.showIndicator = false})
       : assert(
           backgroundColor == null || decoration == null,
@@ -100,6 +104,7 @@ class _TDTabBarState extends State<TDTabBar> {
       decoration:
           widget.decoration ?? BoxDecoration(color: widget.backgroundColor),
       child: TabBar(
+        physics: widget.physics,
         isScrollable: widget.isScrollable,
         indicator: widget.indicator ?? _getIndicator(context),
         indicatorColor:
