@@ -9,6 +9,10 @@ class TDItemWidget extends StatefulWidget {
   final int index;
   final double itemHeight;
   final ItemDistanceCalculator? itemDistanceCalculator;
+  final FontWeight? fontWeight;
+  final double? fontSize;
+  final Color? textColor;
+  final Color? lightTextColor;
 
   const TDItemWidget(
       {required this.fixedExtentScrollController,
@@ -16,6 +20,10 @@ class TDItemWidget extends StatefulWidget {
       required this.content,
       required this.itemHeight,
       this.itemDistanceCalculator,
+      this.fontWeight,
+      this.textColor,
+      this.lightTextColor,
+      this.fontSize,
       Key? key})
       : super(key: key);
 
@@ -48,12 +56,16 @@ class _TDItemWidgetState extends State<TDItemWidget> {
                 widget.index)
             .abs()
             .toDouble();
-    _itemDistanceCalculator ??= ItemDistanceCalculator();
+    _itemDistanceCalculator ??= ItemDistanceCalculator(
+        fontWeight: widget.fontWeight,
+        fontSize: widget.fontSize,
+        textColor: widget.textColor);
     return TDText(widget.content,
-        fontWeight:
-            _itemDistanceCalculator!.calculateFontWeight(context, distance),
-        font: _itemDistanceCalculator!.calculateFont(context, distance),
-        textColor: _itemDistanceCalculator!.calculateColor(context, distance));
+        customStyle: TextStyle(
+          fontWeight: _itemDistanceCalculator!.calculateFontWeight(context, distance),
+          fontSize: _itemDistanceCalculator!.calculateFont(context, distance),
+          color: _itemDistanceCalculator!.calculateColor(context, distance)
+        ));
   }
 
   @override
@@ -65,20 +77,27 @@ class _TDItemWidgetState extends State<TDItemWidget> {
 }
 
 class ItemDistanceCalculator {
+  final FontWeight? fontWeight;
+  final double? fontSize;
+  final Color? textColor;
+  final Color? lightColor;
+
+  ItemDistanceCalculator({this.fontSize, this.textColor, this.fontWeight, this.lightColor});
+
   Color calculateColor(BuildContext context, double distance) {
     /// 线性插值
     if (distance < 0.5) {
-      return TDTheme.of(context).fontGyColor1;
+      return textColor ?? TDTheme.of(context).fontGyColor1;
     } else {
-      return TDTheme.of(context).fontGyColor4;
+      return lightColor ?? TDTheme.of(context).fontGyColor4;
     }
   }
 
   FontWeight calculateFontWeight(BuildContext context, double distance) {
-    return FontWeight.w400;
+    return fontWeight ?? FontWeight.w400;
   }
 
-  Font? calculateFont(BuildContext context, double distance) {
-    return TDTheme.of(context).fontM;
+  double? calculateFont(BuildContext context, double distance) {
+    return fontSize ?? TDTheme.of(context).fontM!.size;
   }
 }

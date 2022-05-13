@@ -114,7 +114,6 @@ class TDMultiPicker extends StatelessWidget {
             children: [
               customSelectWidget?? Container(
                 height: 40,
-                margin: const EdgeInsets.only(bottom: 14),
                 decoration: BoxDecoration(
                     border: Border(
                   top: BorderSide(
@@ -126,7 +125,6 @@ class TDMultiPicker extends StatelessWidget {
 
               /// 列表
               Container(
-                  padding: const EdgeInsets.only(bottom: 14),
                   height: pickerHeight,
                   width: maxWidth,
                   child: Row(
@@ -359,7 +357,6 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               children: [
                 widget.customSelectWidget ?? Container(
                   height: 40,
-                  margin: const EdgeInsets.only(bottom: 14),
                   decoration: BoxDecoration(
                       border: Border(
                     top: BorderSide(
@@ -371,7 +368,6 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
 
                 /// 列表
                 Container(
-                    padding: const EdgeInsets.only(bottom: 14),
                     height: pickerHeight,
                     width: maxWidth,
                     child: Row(
