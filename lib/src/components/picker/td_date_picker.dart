@@ -44,6 +44,9 @@ class TDDatePicker extends StatefulWidget {
   /// 自定义右侧文案样式
   final TextStyle? rightTextStyle;
 
+  /// 自定义中间文案样式
+  final TextStyle? centerTextStyle;
+
   const TDDatePicker(
       {required this.title,
       required this.onConfirm,
@@ -56,6 +59,7 @@ class TDDatePicker extends StatefulWidget {
       this.rightPadding,
       this.leftTextStyle,
       this.rightTextStyle,
+      this.centerTextStyle,
       this.customSelectWidget,
       required this.useYear,
       required this.useMonth,
@@ -271,9 +275,11 @@ class _TDDatePickerState extends State<TDDatePicker> {
                 : Center(
                     child: TDText(
                       widget.title,
-                      font: TDTheme.of(context).fontM,
-                      fontWeight: FontWeight.w600,
-                      textColor: TDTheme.of(context).fontGyColor1,
+                      customStyle: widget.centerTextStyle ?? TextStyle(
+                        fontSize: TDTheme.of(context).fontM!.size,
+                        fontWeight: FontWeight.w600,
+                        color: TDTheme.of(context).fontGyColor1,
+                      ),
                     ),
                   ),
           ),

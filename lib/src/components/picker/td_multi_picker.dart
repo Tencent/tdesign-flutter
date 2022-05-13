@@ -37,6 +37,9 @@ class TDMultiPicker extends StatelessWidget {
   /// 自定义右侧文案样式
   final TextStyle? rightTextStyle;
 
+  /// 自定义中间文案样式
+  final TextStyle? centerTextStyle;
+
   final double? titleHeight;
   final double? topPadding;
   final double? leftPadding;
@@ -62,6 +65,7 @@ class TDMultiPicker extends StatelessWidget {
       this.initialIndexes,
       this.leftTextStyle,
       this.rightTextStyle,
+      this.centerTextStyle,
       this.titleHeight,
       this.topPadding,
       this.leftPadding,
@@ -177,9 +181,11 @@ class TDMultiPicker extends StatelessWidget {
                 : Center(
                     child: TDText(
                       title,
-                      font: TDTheme.of(context).fontM,
-                      fontWeight: FontWeight.w600,
-                      textColor: TDTheme.of(context).fontGyColor1,
+                      customStyle: centerTextStyle ?? TextStyle(
+                        fontSize: TDTheme.of(context).fontM!.size,
+                        fontWeight: FontWeight.w600,
+                        color: TDTheme.of(context).fontGyColor1
+                      ),
                     ),
                   ),
           ),
@@ -273,6 +279,9 @@ class TDMultiLinkedPicker extends StatefulWidget {
   /// 自定义右侧文案样式
   final TextStyle? rightTextStyle;
 
+  /// 自定义中间文案样式
+  final TextStyle? centerTextStyle;
+
   final double? titleHeight;
   final double? topPadding;
   final double? leftPadding;
@@ -293,6 +302,7 @@ class TDMultiLinkedPicker extends StatefulWidget {
     this.customSelectWidget,
     this.leftTextStyle,
     this.rightTextStyle,
+    this.centerTextStyle,
     this.titleHeight,
     this.topPadding,
     this.leftPadding,
@@ -459,9 +469,11 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                 : Center(
                     child: TDText(
                       widget.title,
-                      font: TDTheme.of(context).fontM,
-                      fontWeight: FontWeight.w600,
-                      textColor: TDTheme.of(context).fontGyColor1,
+                      customStyle: widget.centerTextStyle ?? TextStyle(
+                        fontSize: TDTheme.of(context).fontM!.size,
+                        fontWeight: FontWeight.w600,
+                        color: TDTheme.of(context).fontGyColor1
+                      ),
                     ),
                   ),
           ),
