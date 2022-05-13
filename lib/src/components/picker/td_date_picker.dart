@@ -50,6 +50,9 @@ class TDDatePicker extends StatefulWidget {
   /// 自定义中间文案样式
   final TextStyle? centerTextStyle;
 
+  /// 适配padding
+  final EdgeInsets? padding;
+
   const TDDatePicker(
       {required this.title,
       required this.onConfirm,
@@ -58,6 +61,7 @@ class TDDatePicker extends StatefulWidget {
       this.titleDividerColor,
       this.topRadius,
       this.titleHeight,
+      this.padding,
       this.leftPadding,
       this.rightPadding,
       this.leftTextStyle,
@@ -108,7 +112,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
     double maxHeight = MediaQuery.of(context).size.height;
     return Container(
       width: maxWidth,
-      height: getTitleHeight() + pickerHeight,
+      padding: widget.padding ?? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
         color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
         borderRadius: BorderRadius.only(
@@ -126,6 +130,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
             color: widget.titleDividerColor ?? TDTheme.of(context).fontGyColor3,
           ),
           Container(
+            height: pickerHeight,
             child: Stack(
               alignment: Alignment.center,
               children: [
