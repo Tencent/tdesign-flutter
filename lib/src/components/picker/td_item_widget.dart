@@ -33,7 +33,7 @@ class _TDItemWidgetState extends State<TDItemWidget> {
   void initState() {
     super.initState();
     listener = () => setState(() {});
-    _itemDistanceCalculator == widget.itemDistanceCalculator;
+    _itemDistanceCalculator = widget.itemDistanceCalculator;
 
     /// 子项注册滚动监听
     widget.fixedExtentScrollController.addListener(listener!);
