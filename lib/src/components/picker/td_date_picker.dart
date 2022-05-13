@@ -127,7 +127,6 @@ class _TDDatePickerState extends State<TDDatePicker> {
               children: [
                 widget.customSelectWidget ?? Container(
                   height: 40,
-                  margin: const EdgeInsets.only(bottom: 14),
                   decoration: BoxDecoration(
                       border: Border(
                     top: BorderSide(
@@ -138,7 +137,6 @@ class _TDDatePickerState extends State<TDDatePicker> {
                 ),
                 Container(
                     height: pickerHeight,
-                    padding: EdgeInsets.only(bottom: 14),
                     width: maxWidth,
                     child: Row(
                       children: [
