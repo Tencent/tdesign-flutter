@@ -27,8 +27,16 @@ class TDMultiPicker extends StatelessWidget {
 
   /// 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
   final int pickerItemCount;
-  final Color? leftButtonColor;
-  final Color? rightButtonColor;
+
+  /// 自定义选择框样式
+  final Widget? customSelectWidget;
+
+  /// 自定义左侧文案样式
+  final TextStyle? leftTextStyle;
+
+  /// 自定义右侧文案样式
+  final TextStyle? rightTextStyle;
+
   final double? titleHeight;
   final double? topPadding;
   final double? leftPadding;
@@ -37,6 +45,7 @@ class TDMultiPicker extends StatelessWidget {
   final Color? backgroundColor;
   final double? topRadius;
   final ItemDistanceCalculator? itemDistanceCalculator;
+
 
   /// 若为null表示全部从零开始
   List<int>? initialIndexes;
@@ -51,8 +60,8 @@ class TDMultiPicker extends StatelessWidget {
       required this.pickerHeight,
       required this.pickerItemCount,
       this.initialIndexes,
-      this.leftButtonColor,
-      this.rightButtonColor,
+      this.leftTextStyle,
+      this.rightTextStyle,
       this.titleHeight,
       this.topPadding,
       this.leftPadding,
@@ -61,6 +70,7 @@ class TDMultiPicker extends StatelessWidget {
       this.backgroundColor,
       this.topRadius,
       this.itemDistanceCalculator,
+      this.customSelectWidget,
       Key? key})
       : super(key: key) {
     int lines = data.length;
@@ -98,7 +108,7 @@ class TDMultiPicker extends StatelessWidget {
           Stack(
             alignment: Alignment.center,
             children: [
-              Container(
+              customSelectWidget?? Container(
                 height: 40,
                 margin: const EdgeInsets.only(bottom: 14),
                 decoration: BoxDecoration(
@@ -154,8 +164,10 @@ class TDMultiPicker extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               child: TDText(
                 "取消",
-                font: TDTheme.of(context).fontM,
-                textColor: leftButtonColor ?? TDTheme.of(context).fontGyColor2,
+                customStyle: leftTextStyle?? TextStyle(
+                  fontSize: TDTheme.of(context).fontM!.size,
+                  color: TDTheme.of(context).fontGyColor2
+                ),
               )),
 
           /// 中间title
@@ -186,10 +198,10 @@ class TDMultiPicker extends StatelessWidget {
             behavior: HitTestBehavior.opaque,
             child: TDText(
               "确定",
-              font: TDTheme.of(context).fontS,
-              textColor:
-                  rightButtonColor ?? TDTheme.of(context).brandNormalColor,
-              fontWeight: FontWeight.w600,
+              customStyle: rightTextStyle?? TextStyle(
+                  fontSize: TDTheme.of(context).fontM!.size,
+                  color: TDTheme.of(context).brandNormalColor
+              ),
             ),
           ),
         ],
@@ -251,8 +263,16 @@ class TDMultiLinkedPicker extends StatefulWidget {
 
   /// 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
   final int pickerItemCount;
-  final Color? leftButtonColor;
-  final Color? rightButtonColor;
+
+  /// 自定义选择框样式
+  final Widget? customSelectWidget;
+
+  /// 自定义左侧文案样式
+  final TextStyle? leftTextStyle;
+
+  /// 自定义右侧文案样式
+  final TextStyle? rightTextStyle;
+
   final double? titleHeight;
   final double? topPadding;
   final double? leftPadding;
@@ -270,8 +290,9 @@ class TDMultiLinkedPicker extends StatefulWidget {
     required this.data,
     this.pickerHeight = 200,
     this.pickerItemCount = 5,
-    this.leftButtonColor,
-    this.rightButtonColor,
+    this.customSelectWidget,
+    this.leftTextStyle,
+    this.rightTextStyle,
     this.titleHeight,
     this.topPadding,
     this.leftPadding,
@@ -326,7 +347,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Container(
+                widget.customSelectWidget ?? Container(
                   height: 40,
                   margin: const EdgeInsets.only(bottom: 14),
                   decoration: BoxDecoration(
@@ -425,9 +446,10 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               behavior: HitTestBehavior.opaque,
               child: TDText(
                 "取消",
-                font: TDTheme.of(context).fontM,
-                textColor:
-                    widget.leftButtonColor ?? TDTheme.of(context).fontGyColor2,
+                customStyle: widget.leftTextStyle ?? TextStyle(
+                  fontSize: TDTheme.of(context).fontM!.size,
+                  color: TDTheme.of(context).fontGyColor2,
+                ),
               )),
 
           /// 中间title
@@ -458,9 +480,10 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
             behavior: HitTestBehavior.opaque,
             child: TDText(
               "确定",
-              font: TDTheme.of(context).fontS,
-              textColor: widget.rightButtonColor ??
-                  TDTheme.of(context).brandNormalColor,
+              customStyle: widget.rightTextStyle ?? TextStyle(
+                fontSize: TDTheme.of(context).fontM!.size,
+                color: TDTheme.of(context).brandNormalColor,
+              ),
             ),
           ),
         ],
