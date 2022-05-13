@@ -28,14 +28,21 @@ class TDDatePicker extends StatefulWidget {
   final double? titleHeight;
   final double? leftPadding;
   final double? rightPadding;
-  final Color? leftButtonColor;
-  final Color? rightButtonColor;
 
   /// 选择器List的视窗高度，默认200
   final double pickerHeight;
 
   /// 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
   final int pickerItemCount;
+
+  /// 自定义选择框样式
+  final Widget? customSelectWidget;
+
+  /// 自定义左侧文案样式
+  final TextStyle? leftTextStyle;
+
+  /// 自定义右侧文案样式
+  final TextStyle? rightTextStyle;
 
   const TDDatePicker(
       {required this.title,
@@ -47,8 +54,9 @@ class TDDatePicker extends StatefulWidget {
       this.titleHeight,
       this.leftPadding,
       this.rightPadding,
-      this.leftButtonColor,
-      this.rightButtonColor,
+      this.leftTextStyle,
+      this.rightTextStyle,
+      this.customSelectWidget,
       required this.useYear,
       required this.useMonth,
       required this.useDay,
@@ -113,7 +121,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Container(
+                widget.customSelectWidget ?? Container(
                   height: 40,
                   margin: const EdgeInsets.only(bottom: 14),
                   decoration: BoxDecoration(
@@ -250,9 +258,10 @@ class _TDDatePickerState extends State<TDDatePicker> {
               behavior: HitTestBehavior.opaque,
               child: TDText(
                 "取消",
-                font: TDTheme.of(context).fontS,
-                textColor:
-                    widget.leftButtonColor ?? TDTheme.of(context).fontGyColor2,
+                  customStyle: widget.leftTextStyle?? TextStyle(
+                      fontSize: TDTheme.of(context).fontM!.size,
+                      color: TDTheme.of(context).fontGyColor2
+                  )
               )),
 
           /// 中间title
@@ -303,9 +312,10 @@ class _TDDatePickerState extends State<TDDatePicker> {
             behavior: HitTestBehavior.opaque,
             child: TDText(
               "确认",
-              font: TDTheme.of(context).fontS,
-              textColor: widget.rightButtonColor ??
-                  TDTheme.of(context).brandNormalColor,
+              customStyle: widget.rightTextStyle?? TextStyle(
+                  fontSize: TDTheme.of(context).fontM!.size,
+                  color: TDTheme.of(context).brandNormalColor
+              ),
             ),
           ),
         ],
