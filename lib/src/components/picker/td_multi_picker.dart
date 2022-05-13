@@ -49,6 +49,8 @@ class TDMultiPicker extends StatelessWidget {
   final double? topRadius;
   final ItemDistanceCalculator? itemDistanceCalculator;
 
+  /// 适配padding
+  final EdgeInsets? padding;
 
   /// 若为null表示全部从零开始
   List<int>? initialIndexes;
@@ -73,6 +75,7 @@ class TDMultiPicker extends StatelessWidget {
       this.titleDividerColor,
       this.backgroundColor,
       this.topRadius,
+      this.padding,
       this.itemDistanceCalculator,
       this.customSelectWidget,
       Key? key})
@@ -92,7 +95,7 @@ class TDMultiPicker extends StatelessWidget {
     double maxWidth = MediaQuery.of(context).size.width;
     return Container(
       width: maxWidth,
-      height: getTitleHeight() + pickerHeight,
+      padding: padding ?? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
         color: backgroundColor ?? TDTheme.of(context).whiteColor1,
         borderRadius: BorderRadius.only(
@@ -280,6 +283,9 @@ class TDMultiLinkedPicker extends StatefulWidget {
   /// 自定义中间文案样式
   final TextStyle? centerTextStyle;
 
+  /// 适配padding
+  final EdgeInsets? padding;
+
   final double? titleHeight;
   final double? topPadding;
   final double? leftPadding;
@@ -308,6 +314,7 @@ class TDMultiLinkedPicker extends StatefulWidget {
     this.titleDividerColor,
     this.backgroundColor,
     this.topRadius,
+    this.padding,
     this.itemDistanceCalculator,
     Key? key,
   }) : super(key: key);
@@ -334,7 +341,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
     double maxWidth = MediaQuery.of(context).size.width;
     return Container(
       width: maxWidth,
-      height: getTitleHeight() + pickerHeight,
+      padding: widget.padding ?? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
         color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
         borderRadius: BorderRadius.only(
@@ -352,6 +359,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
             color: widget.titleDividerColor ?? TDTheme.of(context).fontGyColor3,
           ),
           Container(
+            height: widget.pickerHeight,
             child: Stack(
               alignment: Alignment.center,
               children: [
