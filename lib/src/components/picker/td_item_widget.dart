@@ -9,10 +9,7 @@ class TDItemWidget extends StatefulWidget {
   final int index;
   final double itemHeight;
   final ItemDistanceCalculator? itemDistanceCalculator;
-  final FontWeight? fontWeight;
-  final double? fontSize;
-  final Color? textColor;
-  final Color? lightTextColor;
+
 
   const TDItemWidget(
       {required this.fixedExtentScrollController,
@@ -20,10 +17,6 @@ class TDItemWidget extends StatefulWidget {
       required this.content,
       required this.itemHeight,
       this.itemDistanceCalculator,
-      this.fontWeight,
-      this.textColor,
-      this.lightTextColor,
-      this.fontSize,
       Key? key})
       : super(key: key);
 
@@ -56,10 +49,7 @@ class _TDItemWidgetState extends State<TDItemWidget> {
                 widget.index)
             .abs()
             .toDouble();
-    _itemDistanceCalculator ??= ItemDistanceCalculator(
-        fontWeight: widget.fontWeight,
-        fontSize: widget.fontSize,
-        textColor: widget.textColor);
+    _itemDistanceCalculator ??= ItemDistanceCalculator();
     return TDText(widget.content,
         customStyle: TextStyle(
           fontWeight: _itemDistanceCalculator!.calculateFontWeight(context, distance),
@@ -77,27 +67,23 @@ class _TDItemWidgetState extends State<TDItemWidget> {
 }
 
 class ItemDistanceCalculator {
-  final FontWeight? fontWeight;
-  final double? fontSize;
-  final Color? textColor;
-  final Color? lightColor;
 
-  ItemDistanceCalculator({this.fontSize, this.textColor, this.fontWeight, this.lightColor});
+  ItemDistanceCalculator();
 
   Color calculateColor(BuildContext context, double distance) {
     /// 线性插值
     if (distance < 0.5) {
-      return textColor ?? TDTheme.of(context).fontGyColor1;
+      return TDTheme.of(context).fontGyColor1;
     } else {
-      return lightColor ?? TDTheme.of(context).fontGyColor4;
+      return TDTheme.of(context).fontGyColor4;
     }
   }
 
   FontWeight calculateFontWeight(BuildContext context, double distance) {
-    return fontWeight ?? FontWeight.w400;
+    return FontWeight.w400;
   }
 
-  double? calculateFont(BuildContext context, double distance) {
-    return fontSize ?? TDTheme.of(context).fontM!.size;
+  double calculateFont(BuildContext context, double distance) {
+    return TDTheme.of(context).fontM!.size;
   }
 }
