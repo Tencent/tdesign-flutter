@@ -29,6 +29,9 @@ class TDDatePicker extends StatefulWidget {
   final double? leftPadding;
   final double? rightPadding;
 
+  /// 根据距离计算字体颜色、透明度、粗细
+  final ItemDistanceCalculator? itemDistanceCalculator;
+
   /// 选择器List的视窗高度，默认200
   final double pickerHeight;
 
@@ -61,6 +64,7 @@ class TDDatePicker extends StatefulWidget {
       this.rightTextStyle,
       this.centerTextStyle,
       this.customSelectWidget,
+      this.itemDistanceCalculator,
       required this.useYear,
       required this.useMonth,
       required this.useDay,
@@ -211,6 +215,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                               model.mapping[whichline],
                           fixedExtentScrollController:
                               model.controllers[whichline],
+                          itemDistanceCalculator: widget.itemDistanceCalculator,
                         ));
                   })),
         ));
