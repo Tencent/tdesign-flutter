@@ -241,6 +241,7 @@ class TDMultiPicker extends StatelessWidget {
                           index: index,
                           itemHeight: pickerHeight / pickerItemCount,
                           content: data[whichLine][index],
+                          itemDistanceCalculator: itemDistanceCalculator,
                           fixedExtentScrollController: controllers[whichLine],
                         ));
                   })),
