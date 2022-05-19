@@ -16,6 +16,7 @@ class TDPicker {
       bool useSecond = false,
       List<int> dateStart = const [1900, 1, 1],
       List<int> dateEnd = const [2100, 12, 31],
+      List<int> initialDate = const [2000, 1, 1],
       Duration duration = const Duration(milliseconds: 100),
       double pickerHeight = 270,
       int pickerItemCount = 7}) {
@@ -27,14 +28,17 @@ class TDPicker {
               title: title,
               onConfirm: onConfirm,
               onCancel: onCancel,
-              useYear: useYear,
-              useMonth: useMonth,
-              useDay: useDay,
-              useHour: useHour,
-              useMinute: useMinute,
-              useSecond: useSecond,
-              dateStart: dateStart,
-              dateEnd: dateEnd,
+              model: DatePickerModel(
+                useYear: useYear,
+                useMonth: useMonth,
+                useDay: useDay,
+                useHour: useHour,
+                useMinute: useMinute,
+                useSecond: useSecond,
+                dateStart: dateStart,
+                dateEnd: dateEnd,
+                dateInitial: initialDate
+              ),
               pickerHeight: pickerHeight,
               pickerItemCount: pickerItemCount);
         });
