@@ -62,6 +62,9 @@ class TDTabBar extends StatefulWidget {
   /// 自定义滑动
   final ScrollPhysics? physics;
 
+  /// 点击事件
+  final Function(int)? onTap;
+
   @override
   const TDTabBar(
       {Key? key,
@@ -82,6 +85,7 @@ class TDTabBar extends StatefulWidget {
       this.indicatorPadding,
       this.indicator,
       this.physics,
+      this.onTap,
       this.showIndicator = false})
       : assert(
           backgroundColor == null || decoration == null,
@@ -118,6 +122,9 @@ class _TDTabBarState extends State<TDTabBar> {
         tabs: widget.tabs,
         indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
         controller: widget.controller,
+        onTap: (index){
+          if (widget.onTap != null) widget.onTap!(index);
+        },
       ),
     );
   }
