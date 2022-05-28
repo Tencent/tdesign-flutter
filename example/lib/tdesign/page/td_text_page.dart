@@ -103,9 +103,51 @@ class TdTextPage extends StatelessWidget {
                 backgroundColor: Colors.orange,
               );
             }),
+        ExampleItem(
+            desc: "自定义内部padding:",
+            builder: (_) {
+              return TDTextConfiguration(
+                paddingConfig: CustomTextPaddingConfig(),
+                child: CustomPaddingText(),
+              );
+            }),
       ],
     );
   }
 }
 
+/// 自定义控件，内部的context可拿到外部TDTextConfiguration的配置信息
+class CustomPaddingText extends StatelessWidget {
+  const CustomPaddingText({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TDText(
+        "中华人民共和国腾讯科技fgjpqy",
+        // font: Font(size: 100, lineHeight: 100),
+        forceVerticalCenter: true,
+        backgroundColor: Colors.orange,
+      ),
+        TDText(
+        "English",
+        font: TDTheme.of(context).fontXL,
+        forceVerticalCenter: true,
+        backgroundColor: Colors.orange,
+      ),
+      ],
+    );
+  }
+}
+
+/// 重写内部padding方法
+class CustomTextPaddingConfig extends TDTextPaddingConfig {
+  @override
+  EdgeInsetsGeometry getPadding(String data, double fontSize, double height) {
+    var supperPadding =  super.getPadding(data, fontSize, height);
+    return EdgeInsets.only(left: 30, top: supperPadding.vertical.toDouble());
+  }
+}
 
