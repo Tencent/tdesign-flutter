@@ -14,22 +14,15 @@ class TDDatePicker extends StatefulWidget {
   final String title; // 选择器标题
   final DatePickerCallback? onConfirm; // 选择器确认按钮回调
   final DatePickerCallback? onCancel; // 选择器取消按钮回调
-  final bool useYear;
-  final bool useMonth;
-  final bool useDay;
-  final bool useHour;
-  final bool useMinute;
-  final bool useSecond;
-  final List<int> dateStart;
-  final List<int> dateEnd;
   final Color? backgroundColor;
   final Color? titleDividerColor;
   final double? topRadius;
   final double? titleHeight;
   final double? leftPadding;
   final double? rightPadding;
-  final Color? leftButtonColor;
-  final Color? rightButtonColor;
+
+  /// 根据距离计算字体颜色、透明度、粗细
+  final ItemDistanceCalculator? itemDistanceCalculator;
 
   /// 选择器List的视窗高度，默认200
   final double pickerHeight;
@@ -37,7 +30,28 @@ class TDDatePicker extends StatefulWidget {
   /// 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
   final int pickerItemCount;
 
-  const TDDatePicker(
+  /// 自定义选择框样式
+  final Widget? customSelectWidget;
+
+  /// 自定义左侧文案样式
+  final TextStyle? leftTextStyle;
+
+  /// 自定义右侧文案样式
+  final TextStyle? rightTextStyle;
+
+  /// 自定义中间文案样式
+  final TextStyle? centerTextStyle;
+
+  /// 适配padding
+  final EdgeInsets? padding;
+
+  /// 是否展示标题
+  final bool showTitle;
+
+  final DatePickerModel model;
+
+
+   const TDDatePicker(
       {required this.title,
       required this.onConfirm,
       this.onCancel,
@@ -45,20 +59,18 @@ class TDDatePicker extends StatefulWidget {
       this.titleDividerColor,
       this.topRadius,
       this.titleHeight,
+      this.padding,
       this.leftPadding,
       this.rightPadding,
-      this.leftButtonColor,
-      this.rightButtonColor,
-      required this.useYear,
-      required this.useMonth,
-      required this.useDay,
-      required this.useHour,
-      required this.useMinute,
-      required this.useSecond,
+      this.leftTextStyle,
+      this.rightTextStyle,
+      this.centerTextStyle,
+      this.customSelectWidget,
+      this.itemDistanceCalculator,
+      required this.model,
+      this.showTitle = true,
       this.pickerHeight = 200,
       required this.pickerItemCount,
-      required this.dateStart,
-      required this.dateEnd,
       Key? key})
       : super(key: key);
 
@@ -67,7 +79,6 @@ class TDDatePicker extends StatefulWidget {
 }
 
 class _TDDatePickerState extends State<TDDatePicker> {
-  late DatePickerModel model;
 
   double pickerHeight = 0;
 
@@ -75,24 +86,14 @@ class _TDDatePickerState extends State<TDDatePicker> {
   void initState() {
     super.initState();
     pickerHeight = widget.pickerHeight;
-    model = DatePickerModel(
-        useYear: widget.useYear,
-        useMonth: widget.useMonth,
-        useDay: widget.useDay,
-        useHour: widget.useHour,
-        useMinute: widget.useMinute,
-        useSecond: widget.useSecond,
-        dateStart: widget.dateStart,
-        dateEnd: widget.dateEnd);
   }
 
   @override
   Widget build(BuildContext context) {
     double maxWidth = MediaQuery.of(context).size.width;
-    double maxHeight = MediaQuery.of(context).size.height;
     return Container(
       width: maxWidth,
-      height: getTitleHeight() + pickerHeight,
+      padding: widget.padding ?? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
         color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
         borderRadius: BorderRadius.only(
@@ -103,19 +104,19 @@ class _TDDatePickerState extends State<TDDatePicker> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          buildTitle(context),
+          Visibility(child: buildTitle(context), visible: widget.showTitle == true,),
           Container(
             width: maxWidth,
             height: 0.5,
             color: widget.titleDividerColor ?? TDTheme.of(context).fontGyColor3,
           ),
           Container(
+            height: pickerHeight,
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Container(
+                widget.customSelectWidget ?? Container(
                   height: 40,
-                  margin: const EdgeInsets.only(bottom: 14),
                   decoration: BoxDecoration(
                       border: Border(
                     top: BorderSide(
@@ -126,26 +127,25 @@ class _TDDatePickerState extends State<TDDatePicker> {
                 ),
                 Container(
                     height: pickerHeight,
-                    padding: EdgeInsets.only(bottom: 14),
                     width: maxWidth,
                     child: Row(
                       children: [
-                        model.useYear
+                        widget.model.useYear
                             ? Expanded(child: buildList(context, 0))
                             : Container(),
-                        model.useMonth
+                        widget.model.useMonth
                             ? Expanded(child: buildList(context, 1))
                             : Container(),
-                        model.useDay
+                        widget.model.useDay
                             ? Expanded(child: buildList(context, 2))
                             : Container(),
-                        model.useHour
+                        widget.model.useHour
                             ? Expanded(child: buildList(context, 3))
                             : Container(),
-                        model.useMinute
+                        widget.model.useMinute
                             ? Expanded(child: buildList(context, 4))
                             : Container(),
-                        model.useSecond
+                        widget.model.useSecond
                             ? Expanded(child: buildList(context, 5))
                             : Container(),
                       ],
@@ -169,16 +169,17 @@ class _TDDatePickerState extends State<TDDatePicker> {
           child: ListWheelScrollView.useDelegate(
               itemExtent: pickerHeight / widget.pickerItemCount,
               diameterRatio: 100,
-              controller: model.controllers[whichline],
-              physics: FixedExtentScrollPhysics(),
+              controller: widget.model.controllers[whichline],
+              physics: const FixedExtentScrollPhysics(),
               onSelectedItemChanged: (index) {
+                print(widget.model.getSelectedMap().toString());
                 if (whichline == 0 || whichline == 1) {
                   // 年月的改变会引起日的改变, 年的改变会引起月的改变
                   setState(() {
                     if (whichline == 0) {
-                      model.refreshMonthDataAndController();
+                      widget.model.refreshMonthDataAndController();
                     }
-                    model.refreshDayDataAndController();
+                    widget.model.refreshDayDataAndController();
 
                     /// 使用动态高度，强制列表组件的state刷新，以展现更新的数据，详见下方链接
                     /// FIX:https://github.com/flutter/flutter/issues/22999
@@ -188,7 +189,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                 }
               },
               childDelegate: ListWheelChildBuilderDelegate(
-                  childCount: model.data[whichline].length,
+                  childCount: widget.model.data[whichline].length,
                   builder: (context, index) {
                     return Container(
                         alignment: Alignment.center,
@@ -197,10 +198,11 @@ class _TDDatePickerState extends State<TDDatePicker> {
                         child: TDItemWidget(
                           index: index,
                           itemHeight: pickerHeight / widget.pickerItemCount,
-                          content: model.data[whichline][index].toString() +
-                              model.mapping[whichline],
+                          content: widget.model.data[whichline][index].toString() +
+                              widget.model.mapping[whichline],
                           fixedExtentScrollController:
-                              model.controllers[whichline],
+                              widget.model.controllers[whichline],
+                          itemDistanceCalculator: widget.itemDistanceCalculator,
                         ));
                   })),
         ));
@@ -221,26 +223,26 @@ class _TDDatePickerState extends State<TDDatePicker> {
               onTap: () {
                 if (widget.onCancel != null) {
                   Map<String, int> selected = {
-                    "year": widget.useYear
-                        ? model.yearFixedExtentScrollController.selectedItem +
-                            model.data[0][0]
+                    "year": widget.model.useYear
+                        ? widget.model.yearFixedExtentScrollController.selectedItem +
+                            widget.model.data[0][0]
                         : -1,
-                    "month": widget.useMonth
-                        ? model.monthFixedExtentScrollController.selectedItem +
-                            model.data[1][0]
+                    "month": widget.model.useMonth
+                        ? widget.model.monthFixedExtentScrollController.selectedItem +
+                            widget.model.data[1][0]
                         : -1,
-                    "day": widget.useDay
-                        ? model.dayFixedExtentScrollController.selectedItem +
-                            model.data[2][0]
+                    "day": widget.model.useDay
+                        ? widget.model.dayFixedExtentScrollController.selectedItem +
+                            widget.model.data[2][0]
                         : -1,
-                    "hour": widget.useHour
-                        ? model.hourFixedExtentScrollController.selectedItem
+                    "hour": widget.model.useHour
+                        ? widget.model.hourFixedExtentScrollController.selectedItem
                         : -1,
-                    "minute": widget.useMinute
-                        ? model.minuteFixedExtentScrollController.selectedItem
+                    "minute": widget.model.useMinute
+                        ? widget.model.minuteFixedExtentScrollController.selectedItem
                         : -1,
-                    "second": widget.useSecond
-                        ? model.secondFixedExtentScrollController.selectedItem
+                    "second": widget.model.useSecond
+                        ? widget.model.secondFixedExtentScrollController.selectedItem
                         : -1,
                   };
                   widget.onCancel!(selected);
@@ -250,9 +252,10 @@ class _TDDatePickerState extends State<TDDatePicker> {
               behavior: HitTestBehavior.opaque,
               child: TDText(
                 "取消",
-                font: TDTheme.of(context).fontS,
-                textColor:
-                    widget.leftButtonColor ?? TDTheme.of(context).fontGyColor2,
+                  customStyle: widget.leftTextStyle?? TextStyle(
+                      fontSize: TDTheme.of(context).fontM!.size,
+                      color: TDTheme.of(context).fontGyColor2
+                  )
               )),
 
           /// 中间title
@@ -262,9 +265,11 @@ class _TDDatePickerState extends State<TDDatePicker> {
                 : Center(
                     child: TDText(
                       widget.title,
-                      font: TDTheme.of(context).fontM,
-                      fontWeight: FontWeight.w600,
-                      textColor: TDTheme.of(context).fontGyColor1,
+                      customStyle: widget.centerTextStyle ?? TextStyle(
+                        fontSize: TDTheme.of(context).fontM!.size,
+                        fontWeight: FontWeight.w600,
+                        color: TDTheme.of(context).fontGyColor1,
+                      ),
                     ),
                   ),
           ),
@@ -274,26 +279,26 @@ class _TDDatePickerState extends State<TDDatePicker> {
             onTap: () {
               if (widget.onConfirm != null) {
                 Map<String, int> selected = {
-                  "year": widget.useYear
-                      ? model.yearFixedExtentScrollController.selectedItem +
-                          model.data[0][0]
+                  "year": widget.model.useYear
+                      ? widget.model.yearFixedExtentScrollController.selectedItem +
+                          widget.model.data[0][0]
                       : -1,
-                  "month": widget.useMonth
-                      ? model.monthFixedExtentScrollController.selectedItem +
-                          model.data[1][0]
+                  "month": widget.model.useMonth
+                      ? widget.model.monthFixedExtentScrollController.selectedItem +
+                          widget.model.data[1][0]
                       : -1,
-                  "day": widget.useDay
-                      ? model.dayFixedExtentScrollController.selectedItem +
-                          model.data[2][0]
+                  "day": widget.model.useDay
+                      ? widget.model.dayFixedExtentScrollController.selectedItem +
+                          widget.model.data[2][0]
                       : -1,
-                  "hour": widget.useHour
-                      ? model.hourFixedExtentScrollController.selectedItem
+                  "hour": widget.model.useHour
+                      ? widget.model.hourFixedExtentScrollController.selectedItem
                       : -1,
-                  "minute": widget.useMinute
-                      ? model.minuteFixedExtentScrollController.selectedItem
+                  "minute": widget.model.useMinute
+                      ? widget.model.minuteFixedExtentScrollController.selectedItem
                       : -1,
-                  "second": widget.useSecond
-                      ? model.secondFixedExtentScrollController.selectedItem
+                  "second": widget.model.useSecond
+                      ? widget.model.secondFixedExtentScrollController.selectedItem
                       : -1,
                 };
                 widget.onConfirm!(selected);
@@ -303,9 +308,10 @@ class _TDDatePickerState extends State<TDDatePicker> {
             behavior: HitTestBehavior.opaque,
             child: TDText(
               "确认",
-              font: TDTheme.of(context).fontS,
-              textColor: widget.rightButtonColor ??
-                  TDTheme.of(context).brandNormalColor,
+              customStyle: widget.rightTextStyle?? TextStyle(
+                  fontSize: TDTheme.of(context).fontM!.size,
+                  color: TDTheme.of(context).brandNormalColor
+              ),
             ),
           ),
         ],
@@ -326,6 +332,7 @@ class DatePickerModel {
   bool useSecond;
   List<int> dateStart;
   List<int> dateEnd;
+  List<int>? dateInitial;
 
   final mapping = ['年', '月', '日', '时', '分', '秒'];
 
@@ -362,6 +369,7 @@ class DatePickerModel {
     required this.useSecond,
     required this.dateStart,
     required this.dateEnd,
+    this.dateInitial
   }) {
     setInitialTime();
     setInitialMonthData();
@@ -371,6 +379,17 @@ class DatePickerModel {
   }
 
   void setInitialTime() {
+    var startTime = DateTime(dateStart[0], dateStart[1], dateStart[2], 0, 0, 0);
+    var endTime = DateTime(dateEnd[0], dateEnd[1], dateEnd[2], 0, 0, 0);
+    if (dateInitial != null) {
+      initialTime = DateTime(dateInitial![0], dateInitial![1], dateInitial![2], 0, 0, 0);
+      if (initialTime.isBefore(startTime)) {
+        initialTime = startTime;
+      } else if (initialTime.isAfter(endTime)) {
+        initialTime = endTime;
+      }
+      return;
+    }
     DateTime now = DateTime.now();
     if (now.year * 500 + now.month * 40 + now.day <
         dateStart[0] * 500 + dateStart[1] * 40 + dateStart[2]) {
@@ -491,4 +510,15 @@ class DatePickerModel {
     dayFixedExtentScrollController.jumpToItem(
         dayIndex > data[2].length - 1 ? data[2].length - 1 : dayIndex);
   }
+
+  Map<String, int> getSelectedMap() {
+    Map<String, int> map = {
+      'year': yearIndex + data[0][0],
+      'month': monthIndex + data[1][0],
+      'day' : dayIndex + data[2][0],
+    };
+    return map;
+  }
+
 }
+

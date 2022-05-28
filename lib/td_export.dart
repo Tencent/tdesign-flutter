@@ -11,6 +11,7 @@ export 'src/components/input/td_input.dart';
 export 'src/components/input/td_input.dart';
 export 'src/components/nav_bar/td_nav_bar.dart';
 export 'src/components/picker/td_date_picker.dart';
+export 'src/components/picker/td_item_widget.dart';
 export 'src/components/picker/td_multi_picker.dart';
 export 'src/components/picker/td_picker.dart';
 export 'src/components/tabbar/td_tab.dart';

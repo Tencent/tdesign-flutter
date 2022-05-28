@@ -10,6 +10,7 @@ class TDItemWidget extends StatefulWidget {
   final double itemHeight;
   final ItemDistanceCalculator? itemDistanceCalculator;
 
+
   const TDItemWidget(
       {required this.fixedExtentScrollController,
       required this.index,
@@ -32,7 +33,7 @@ class _TDItemWidgetState extends State<TDItemWidget> {
   void initState() {
     super.initState();
     listener = () => setState(() {});
-    _itemDistanceCalculator == widget.itemDistanceCalculator;
+    _itemDistanceCalculator = widget.itemDistanceCalculator;
 
     /// 子项注册滚动监听
     widget.fixedExtentScrollController.addListener(listener!);
@@ -50,10 +51,11 @@ class _TDItemWidgetState extends State<TDItemWidget> {
             .toDouble();
     _itemDistanceCalculator ??= ItemDistanceCalculator();
     return TDText(widget.content,
-        fontWeight:
-            _itemDistanceCalculator!.calculateFontWeight(context, distance),
-        font: _itemDistanceCalculator!.calculateFont(context, distance),
-        textColor: _itemDistanceCalculator!.calculateColor(context, distance));
+        customStyle: TextStyle(
+          fontWeight: _itemDistanceCalculator!.calculateFontWeight(context, distance),
+          fontSize: _itemDistanceCalculator!.calculateFont(context, distance),
+          color: _itemDistanceCalculator!.calculateColor(context, distance)
+        ));
   }
 
   @override
@@ -65,6 +67,9 @@ class _TDItemWidgetState extends State<TDItemWidget> {
 }
 
 class ItemDistanceCalculator {
+
+  ItemDistanceCalculator();
+
   Color calculateColor(BuildContext context, double distance) {
     /// 线性插值
     if (distance < 0.5) {
@@ -78,7 +83,7 @@ class ItemDistanceCalculator {
     return FontWeight.w400;
   }
 
-  Font? calculateFont(BuildContext context, double distance) {
-    return TDTheme.of(context).fontM;
+  double calculateFont(BuildContext context, double distance) {
+    return TDTheme.of(context).fontM!.size;
   }
 }
