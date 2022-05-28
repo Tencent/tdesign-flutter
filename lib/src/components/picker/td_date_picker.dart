@@ -252,7 +252,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
               behavior: HitTestBehavior.opaque,
               child: TDText(
                 "取消",
-                  customStyle: widget.leftTextStyle?? TextStyle(
+                  style: widget.leftTextStyle?? TextStyle(
                       fontSize: TDTheme.of(context).fontM!.size,
                       color: TDTheme.of(context).fontGyColor2
                   )
@@ -265,7 +265,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                 : Center(
                     child: TDText(
                       widget.title,
-                      customStyle: widget.centerTextStyle ?? TextStyle(
+                      style: widget.centerTextStyle ?? TextStyle(
                         fontSize: TDTheme.of(context).fontM!.size,
                         fontWeight: FontWeight.w600,
                         color: TDTheme.of(context).fontGyColor1,
@@ -308,7 +308,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
             behavior: HitTestBehavior.opaque,
             child: TDText(
               "确认",
-              customStyle: widget.rightTextStyle?? TextStyle(
+              style: widget.rightTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontM!.size,
                   color: TDTheme.of(context).brandNormalColor
               ),

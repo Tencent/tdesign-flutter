@@ -169,7 +169,7 @@ class TDMultiPicker extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               child: TDText(
                 "取消",
-                customStyle: leftTextStyle?? TextStyle(
+                style: leftTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontM!.size,
                   color: TDTheme.of(context).fontGyColor2
                 ),
@@ -182,7 +182,7 @@ class TDMultiPicker extends StatelessWidget {
                 : Center(
                     child: TDText(
                       title,
-                      customStyle: centerTextStyle ?? TextStyle(
+                      style: centerTextStyle ?? TextStyle(
                         fontSize: TDTheme.of(context).fontM!.size,
                         fontWeight: FontWeight.w600,
                         color: TDTheme.of(context).fontGyColor1
@@ -205,7 +205,7 @@ class TDMultiPicker extends StatelessWidget {
             behavior: HitTestBehavior.opaque,
             child: TDText(
               "确定",
-              customStyle: rightTextStyle?? TextStyle(
+              style: rightTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontM!.size,
                   color: TDTheme.of(context).brandNormalColor
               ),
@@ -461,7 +461,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               behavior: HitTestBehavior.opaque,
               child: TDText(
                 "取消",
-                customStyle: widget.leftTextStyle ?? TextStyle(
+                style: widget.leftTextStyle ?? TextStyle(
                   fontSize: TDTheme.of(context).fontM!.size,
                   color: TDTheme.of(context).fontGyColor2,
                 ),
@@ -474,7 +474,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                 : Center(
                     child: TDText(
                       widget.title,
-                      customStyle: widget.centerTextStyle ?? TextStyle(
+                      style: widget.centerTextStyle ?? TextStyle(
                         fontSize: TDTheme.of(context).fontM!.size,
                         fontWeight: FontWeight.w600,
                         color: TDTheme.of(context).fontGyColor1
@@ -497,7 +497,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
             behavior: HitTestBehavior.opaque,
             child: TDText(
               "确定",
-              customStyle: widget.rightTextStyle ?? TextStyle(
+              style: widget.rightTextStyle ?? TextStyle(
                 fontSize: TDTheme.of(context).fontM!.size,
                 color: TDTheme.of(context).brandNormalColor,
               ),
