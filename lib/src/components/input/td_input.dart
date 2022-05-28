@@ -115,11 +115,13 @@ class TDInput extends StatelessWidget {
         children: <Widget>[
           Visibility(
             visible: leftLabel != null,
-            child: TDText(
-              leftLabel,
+            child: Padding(
               padding: const EdgeInsets.only(left: 16, right: 16),
-              maxLines: 2,
-              fontWeight: FontWeight.w400,
+              child: TDText(
+                leftLabel,
+                maxLines: 2,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
           Visibility(

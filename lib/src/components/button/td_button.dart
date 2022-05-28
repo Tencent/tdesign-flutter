@@ -240,9 +240,10 @@ class _TDButtonState extends State<TDButton>
     Widget? typedWidget;
     switch (widget.type) {
       case TDButtonType.Normal:
-        typedWidget = Text(
-          widget.content ?? "",
+        typedWidget = TDText(
+          widget.content ?? '',
           style: _getButtonTextStyle(),
+          forceVerticalCenter: true,
         );
         break;
       case TDButtonType.Loading:
@@ -279,9 +280,10 @@ class _TDButtonState extends State<TDButton>
                   ])),
                 ),
               ),
-              Text(
+              TDText(
                 "${(progress * 100).toStringAsFixed(2)}%",
                 style: _getButtonTextStyle(),
+                forceVerticalCenter: true,
               ),
             ],
           ),

@@ -75,7 +75,7 @@ class _StateImageWidget extends State<ImageWidget> {
         color: TDTheme.of(context).grayColor2,
         child: TDText(
           widget.loadingText,
-          showHeight: false,
+          forceVerticalCenter: true,
           font: Font(size: 10, lineHeight: 16),
           textColor: TDTheme.of(context).fontGyColor3,
         ),
@@ -86,7 +86,7 @@ class _StateImageWidget extends State<ImageWidget> {
         color: TDTheme.of(context).grayColor2,
         child: TDText(
           widget.failedText,
-          showHeight: false,
+          forceVerticalCenter: true,
           font: Font(size: 10, lineHeight: 16),
           textColor: TDTheme.of(context).fontGyColor3,
         ),
