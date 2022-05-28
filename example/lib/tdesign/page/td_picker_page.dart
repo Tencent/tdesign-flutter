@@ -77,7 +77,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
               setState(() {
                 selected_2 = "时间: $selected";
               });
-            }, dateStart: [2021, 12, 29], dateEnd: [2022, 2, 28]),
+            }, dateStart: [2010, 12, 20], dateEnd: [2022, 2, 28],initialDate: [2012,1,1]),
           ),
           TDText(
             selected_2,
