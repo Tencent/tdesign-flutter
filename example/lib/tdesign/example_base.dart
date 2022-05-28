@@ -12,11 +12,12 @@ class ExamplePageModel{
   final WidgetBuilder pageBuilder;
 }
 
+/// 示例页面控件，建议每个页面返回一个ExampleWidget即可，不用独自封装
 class ExampleWidget extends StatelessWidget {
   const ExampleWidget({Key? key, required this.title, required this.children, this.padding}) : super(key: key);
 
   final String title;
-  final List<ExampleItem> children;
+  final List<Widget> children;
   final EdgeInsetsGeometry? padding;
 
   @override
@@ -24,14 +25,8 @@ class ExampleWidget extends StatelessWidget {
     var list = <Widget>[
       for(var item in children)
         Container(
-          padding: padding ?? EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("示例——${item.desc}", style: TextStyle(color: Colors.black45),),
-              item.builder(context),
-            ],
-          ),
+          padding: padding ?? const EdgeInsets.all(16),
+          child: item,
         )
     ];
     return Scaffold(
@@ -46,11 +41,24 @@ class ExampleWidget extends StatelessWidget {
   }
 }
 
-/// 示例样例
-class ExampleItem{
+/// 示例样例，建议尽量使用该控件，写清晰说明内容
+class ExampleItem extends StatelessWidget{
+  // ignore: use_key_in_widget_constructors
   const ExampleItem({required this.desc, required this.builder});
 
   final String desc;
 
   final WidgetBuilder builder;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text("示例——${desc}", style: TextStyle(color: Colors.black45),),
+        builder(context),
+      ],
+    );
+  }
 }
+

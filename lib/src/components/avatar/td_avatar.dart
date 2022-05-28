@@ -130,7 +130,7 @@ class TDAvatar extends StatelessWidget {
           backgroundColor: TDTheme.of(context).brandColor8,
           child: TDText(
             text,
-            showHeight: false,
+            forceVerticalCenter: true,
             textAlign: TextAlign.center,
             font: _getTextFont(),
             textColor: TDTheme.of(context).whiteColor1,

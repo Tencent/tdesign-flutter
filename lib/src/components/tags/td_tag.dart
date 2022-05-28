@@ -66,8 +66,8 @@ class TDTag extends StatelessWidget {
   /// 自定义模式下的线框粗细
   final double border;
 
-  /// 是否显示设置行高
-  final bool showHeight;
+  /// 是否强制中文文字居中
+  final bool forceVerticalCenter;
 
   const TDTag(this.text,
       {this.type = TDTagType.NORMAL,
@@ -80,7 +80,7 @@ class TDTag extends StatelessWidget {
         this.padding,
         this.borderRadius = 2,
         this.border = 1,
-        this.showHeight = true,
+        this.forceVerticalCenter = true,
         Key? key})
       : super(key: key);
 
@@ -96,7 +96,7 @@ class TDTag extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(borderRadius))),
       child: TDText(
         this.text,
-        showHeight: showHeight,
+        forceVerticalCenter: forceVerticalCenter,
         textColor: textColor ?? _getTextColor(context),
         font: font ?? _getFont(context),
         fontWeight: fontWeight,
@@ -162,11 +162,11 @@ class TDTag extends StatelessWidget {
     /// 为了文本居中，修改了padding的值
     switch (size) {
       case TDTagSize.LARGE:
-        return const EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 4);
+        return const EdgeInsets.only(left: 15, right: 15, top: 3, bottom: 3);
       case TDTagSize.SMALL:
-        return const EdgeInsets.only(left: 8, right: 8, top: 0, bottom: 3);
+        return const EdgeInsets.only(left: 7, right: 7, top: 1, bottom: 1);
       default:
-        return const EdgeInsets.only(left: 12, right: 12, top: 0, bottom: 3);
+        return const EdgeInsets.only(left: 11, right: 11, top: 1, bottom: 1);
     }
   }
 }

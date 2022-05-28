@@ -97,6 +97,10 @@ class TDDivider extends StatelessWidget {
 
   /// 构建中间控件
   _buildMiddleWidget(BuildContext context) {
-    return widget ?? TDText(text, font: TDTheme.of(context).fontXS, textColor: TDTheme.of(context).fontGyColor3, showHeight: false,);
+    return widget ?? TDText(text,
+      font: TDTheme.of(context).fontXS,
+      textColor: TDTheme.of(context).fontGyColor3,
+      forceVerticalCenter: true,
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import '../example_base.dart';
@@ -43,7 +44,7 @@ class TdTextPage extends StatelessWidget {
                 exampleTxt,
                 font: TDTheme.of(context).fontM,
                 textColor: TDTheme.of(context).brandNormalColor,
-                customStyle:
+                style:
                     TextStyle(color: TDTheme.of(context).errorNormalColor),
               );
             }),
@@ -54,8 +55,6 @@ class TdTextPage extends StatelessWidget {
                 exampleTxt,
                 font: TDTheme.of(context).fontM,
                 textColor: TDTheme.of(context).brandNormalColor,
-                customStyle: TextStyle(
-                    color: TDTheme.of(context).errorNormalColor, fontSize: 32),
               );
             }),
         ExampleItem(
@@ -64,8 +63,8 @@ class TdTextPage extends StatelessWidget {
               return TDText.rich(
                 TextSpan(children: [
                   TDTextSpan(
-                      text: "TextSpan1",
-                      font: TDTheme.of(context).fontXL,
+                      text: "TDTextSpan1",
+                      font: TDTheme.of(context).fontL,
                       textColor: TDTheme.of(context).warningNormalColor,
                       isTextThrough: true,
                       lineThroughColor: TDTheme.of(context).brandNormalColor,
@@ -74,7 +73,7 @@ class TdTextPage extends StatelessWidget {
                   TextSpan(
                       text: "TextSpan2",
                       style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 14,
                           color: TDTheme.of(context).brandNormalColor)),
                   WidgetSpan(
                     child: Icon(TDIcons.setting, size: 24,)
@@ -82,7 +81,7 @@ class TdTextPage extends StatelessWidget {
                 ]),
                 font: TDTheme.of(context).fontM,
                 textColor: TDTheme.of(context).brandNormalColor,
-                customStyle: TextStyle(
+                style: TextStyle(
                     color: TDTheme.of(context).errorNormalColor, fontSize: 32),
               );
             }),
@@ -93,6 +92,16 @@ class TdTextPage extends StatelessWidget {
                 exampleTxt,
                 backgroundColor: TDTheme.of(context).successHoverColor,
               ).getRawText(context: context);
+            }),
+        ExampleItem(
+            desc: "中文居中:",
+            builder: (_) {
+              return TDText(
+                "中华人民共和国腾讯科技fgjpqy",
+                // font: Font(size: 100, lineHeight: 100),
+                forceVerticalCenter: true,
+                backgroundColor: Colors.orange,
+              );
             }),
       ],
     );

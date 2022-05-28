@@ -150,7 +150,7 @@ class _TDBadgeState extends State<TDBadge> {
               ),
               child: TDText(
                 widget.isNew ? 'New' : '$badgeNum',
-                showHeight: false,
+                forceVerticalCenter: true,
                 font: Font(size: 10, lineHeight: 16),
                 fontWeight: FontWeight.w500,
                 textColor: widget.textColor ?? TDTheme.of(context).whiteColor1,

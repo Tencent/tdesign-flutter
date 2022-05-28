@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui' as ui show TextHeightBehavior;
 
 import 'package:flutter/gestures.dart';
@@ -48,20 +49,14 @@ class TDText extends StatelessWidget {
   /// 字体包名
   final String package;
 
-  /// 文本周围填充
-  final EdgeInsets? padding;
-
   /// 是否是横线穿过样式(删除线)
   final bool? isTextThrough;
 
   /// 删除线颜色，对应TestStyle的decorationColor
   final Color? lineThroughColor;
 
-  /// 是否设置行高，如果有遇到使用自带行高的主题Font，导致的文本不居中，可以设置showHeight为false不使用过Font的height
-  final bool showHeight;
-
   /// 自定义的TextStyle，其中指定的属性，将覆盖扩展的外层属性
-  final TextStyle? customStyle;
+  final TextStyle? style;
 
   /// 以下系统text属性，释义请参考系统[Text]中注释
   final data;
@@ -90,6 +85,8 @@ class TDText extends StatelessWidget {
 
   final InlineSpan? textSpan;
 
+  final bool forceVerticalCenter;
+
 
   /// 普通文本
   const TDText(this.data,
@@ -99,12 +96,10 @@ class TDText extends StatelessWidget {
         this.fontFamily,
         this.textColor = Colors.black,
         this.backgroundColor,
-        this.padding = EdgeInsets.zero,
         this.isTextThrough = false,
         this.lineThroughColor = Colors.white,
-        this.showHeight = true,
         this.package = "tdesign_flutter",
-        this.customStyle,
+        this.style,
         this.strutStyle,
         this.textAlign,
         this.textDirection,
@@ -116,6 +111,7 @@ class TDText extends StatelessWidget {
         this.semanticsLabel,
         this.textWidthBasis,
         this.textHeightBehavior,
+        this.forceVerticalCenter = false,
         Key? key,})
       : textSpan = null,
         super(key: key);
@@ -128,13 +124,11 @@ class TDText extends StatelessWidget {
         this.fontFamily,
         this.textColor = Colors.black,
         this.backgroundColor,
-        this.padding = EdgeInsets.zero,
         this.isTextThrough = false,
         this.lineThroughColor = Colors.white,
-        this.showHeight = true,
         this.package = "tdesign_flutter",
         Key? key,
-        this.customStyle,
+        this.style,
         this.strutStyle,
         this.textAlign,
         this.textDirection,
@@ -146,48 +140,68 @@ class TDText extends StatelessWidget {
         this.semanticsLabel,
         this.textWidthBasis,
         this.textHeightBehavior,
+        this.forceVerticalCenter = false,
       }) :
         data = null,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if(forceVerticalCenter){
+      var config = context.dependOnInheritedWidgetOfExactType<TDTextConfiguration>();
+      var paddingConfig = config?.paddingConfig;
+
+      var textFont =
+          font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
+      var fontSize = this.style?.fontSize ?? textFont.size;
+      var height = this.style?.height ?? textFont.height;
+      
+      paddingConfig ??= TDTextPaddingConfig.getDefaultConfig();
+      return Container(
+        color: this.style?.backgroundColor ?? backgroundColor,
+        height: fontSize * height,
+        padding: paddingConfig.getPadding(data,fontSize, height),
+        child: _getRawText(context: context, textStyle: _getTextStyle(context, height: 1)),
+      );
+    }
     return Container(
-      padding: padding,
-      color: backgroundColor,
-      child: getRawText(context: context),
+      color: this.style?.backgroundColor ?? backgroundColor,
+      child: _getRawText(context: context),
     );
   }
+  
+  
 
 
 
-  TextStyle? _getTextStyle(BuildContext? context) {
+  TextStyle? _getTextStyle(BuildContext? context,{ double? height}) {
     var textFont =
         font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
     return TextStyle(
-      inherit: this.customStyle?.inherit ?? true,
-      color: this.customStyle?.color ?? textColor,
-      backgroundColor: this.customStyle?.backgroundColor,
-      fontSize: this.customStyle?.fontSize ?? textFont.size,
-      fontWeight: this.customStyle?.fontWeight ?? fontWeight,
-      fontStyle: this.customStyle?.fontStyle,
-      letterSpacing: this.customStyle?.letterSpacing,
-      wordSpacing: this.customStyle?.wordSpacing,
-      textBaseline: this.customStyle?.textBaseline,
-      height: this.customStyle?.height ?? (showHeight ? textFont.height : null),
-      leadingDistribution: this.customStyle?.leadingDistribution,
-      locale: this.customStyle?.locale,
-      foreground: this.customStyle?.foreground,
-      background: this.customStyle?.background,
-      shadows: this.customStyle?.shadows,
-      fontFeatures: this.customStyle?.fontFeatures,
-      decoration: this.customStyle?.decoration ?? (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
-      decorationColor: this.customStyle?.decorationColor ?? lineThroughColor,
-      decorationStyle: this.customStyle?.decorationStyle,
-      decorationThickness: this.customStyle?.decorationThickness,
-      debugLabel: this.customStyle?.debugLabel,
-      fontFamily: this.customStyle?.fontFamily ?? fontFamily?.fontFamily,
-      fontFamilyFallback: this.customStyle?.fontFamilyFallback,
+      inherit: this.style?.inherit ?? true,
+      color: this.style?.color ?? textColor,
+      /// 不使用系统本身的背景色，因为系统属性存在中英文是，会导致颜色出现阶梯状
+      // backgroundColor: this.style?.backgroundColor ?? backgroundColor,
+      fontSize: this.style?.fontSize ?? textFont.size,
+      fontWeight: this.style?.fontWeight ?? fontWeight,
+      fontStyle: this.style?.fontStyle,
+      letterSpacing: this.style?.letterSpacing,
+      wordSpacing: this.style?.wordSpacing,
+      textBaseline: this.style?.textBaseline,
+      height: height ?? this.style?.height ?? textFont.height,
+      leadingDistribution: this.style?.leadingDistribution,
+      locale: this.style?.locale,
+      foreground: this.style?.foreground,
+      background: this.style?.background,
+      shadows: this.style?.shadows,
+      fontFeatures: this.style?.fontFeatures,
+      decoration: this.style?.decoration ?? (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
+      decorationColor: this.style?.decorationColor ?? lineThroughColor,
+      decorationStyle: this.style?.decorationStyle,
+      decorationThickness: this.style?.decorationThickness,
+      debugLabel: this.style?.debugLabel,
+      fontFamily: this.style?.fontFamily ?? fontFamily?.fontFamily,
+      fontFamilyFallback: this.style?.fontFamilyFallback,
       package: this.package,
         );
   }
@@ -195,10 +209,14 @@ class TDText extends StatelessWidget {
   /// 获取系统原始Text，以便使用到只能接收系统Text组件的地方
   /// 转化为系统原始Text后，将失去padding和background属性
   Text getRawText({BuildContext? context}){
+    return _getRawText(context: context);
+  }
+  
+  Text _getRawText({BuildContext? context, TextStyle? textStyle}){
     return textSpan == null ? Text(
       data,
       key: this.key,
-      style: _getTextStyle(context),
+      style: textStyle ?? _getTextStyle(context),
       strutStyle: this.strutStyle,
       textAlign: this.textAlign,
       textDirection: this.textDirection,
@@ -211,7 +229,7 @@ class TDText extends StatelessWidget {
       textWidthBasis: this.textWidthBasis,
       textHeightBehavior: this.textHeightBehavior,
     ) : Text.rich(this.textSpan!,
-      style: this.customStyle,
+      style: this.style,
       strutStyle: this.strutStyle,
       textAlign: this.textAlign,
       textDirection: this.textDirection,
@@ -312,4 +330,45 @@ class TDTextSpan extends TextSpan{
       package: package,
     );
   }
+}
+
+/// 存储可以自定义TDText居中算法数据的内部控件
+class TDTextConfiguration extends InheritedWidget {
+  final TDTextPaddingConfig? paddingConfig;
+
+  const TDTextConfiguration(
+      {this.paddingConfig, Key? key, required Widget child})
+      : super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(covariant TDTextConfiguration oldWidget) {
+    return paddingConfig != oldWidget.paddingConfig;
+  }
+
+
+}
+
+/// 通过Padding自定义TDText居中算法
+class TDTextPaddingConfig {
+
+  static TDTextPaddingConfig? _defaultConfig;
+
+  /// 获取默认配置
+  static TDTextPaddingConfig getDefaultConfig(){
+    _defaultConfig ??= TDTextPaddingConfig();
+    return _defaultConfig!;
+  }
+
+  /// 获取padding
+  EdgeInsetsGeometry getPadding(String data, double fontSize, double height){
+    var paddingFont = fontSize * paddingRate;
+    var paddingLeading = height < 1 ? 0 : (height - 1) / 2 * fontSize;
+    var paddingTop = paddingFont + paddingLeading;
+    print("text padding data: $data fontSize: $fontSize height: $height paddingRate:$paddingRate paddingTop:$paddingTop");
+    return EdgeInsets.only(top: paddingTop);
+  }
+
+  /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
+  double get paddingRate => Platform.isAndroid? 0.063 : 0.072;
+
 }
