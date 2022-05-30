@@ -10,6 +10,7 @@ class TdTextPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String exampleTxt = "文本Text";
+    // debugPaintBaselinesEnabled = true;
     return ExampleWidget(
       title: "TDText",
       children: [
