@@ -377,7 +377,7 @@ class TDTextPaddingConfig {
       paddingTop = 0;
     }
     print("text padding data: $data fontSize: $fontSize height: $height paddingRate:$paddingRate paddingTop:$paddingTop paddingLeading: $paddingLeading");
-    return EdgeInsets.only(top: 0);
+    return EdgeInsets.only(top: paddingTop);
   }
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
