@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui' as ui show TextHeightBehavior;
 
 import 'package:flutter/gestures.dart';
@@ -158,11 +159,12 @@ class TDText extends StatelessWidget {
       var height = this.style?.height ?? textFont.height;
       
       paddingConfig ??= TDTextPaddingConfig.getDefaultConfig();
+      var showHeight = min(paddingConfig.heightRate, height);
       return Container(
         color: this.style?.backgroundColor ?? backgroundColor,
         height: fontSize * height,
-        padding: paddingConfig.getPadding(data,fontSize, height),
-        child: _getRawText(context: context, textStyle: _getTextStyle(context, height: 1)),
+        padding: paddingConfig.getPadding(data, fontSize, height),
+        child: _getRawText(context: context, textStyle: _getTextStyle(context, height: showHeight)),
       );
     }
     return Container(
@@ -360,13 +362,31 @@ class TDTextPaddingConfig {
   /// 获取padding
   EdgeInsetsGeometry getPadding(String data, double fontSize, double height){
     var paddingFont = fontSize * paddingRate;
-    var paddingLeading = height < 1 ? 0 : (height - 1) / 2 * fontSize;
+    var paddingLeading ;
+    if(height < heightRate){
+      paddingLeading = 0;
+    } else {
+      if(PlatformUtil.isIOS || PlatformUtil.isAndroid){
+        paddingLeading = (height * 0.5 - paddingExtraRate) * fontSize;
+      } else {
+        paddingLeading = 0;
+      }
+    }
     var paddingTop = paddingFont + paddingLeading;
-    print("text padding data: $data fontSize: $fontSize height: $height paddingRate:$paddingRate paddingTop:$paddingTop");
-    return EdgeInsets.only(top: paddingTop);
+    if(paddingTop < 0) {
+      paddingTop = 0;
+    }
+    print("text padding data: $data fontSize: $fontSize height: $height paddingRate:$paddingRate paddingTop:$paddingTop paddingLeading: $paddingLeading");
+    return EdgeInsets.only(top: 0);
   }
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
-  double get paddingRate => PlatformUtil.isAndroid? 0.063 : 0.072;
+  double get paddingRate => PlatformUtil.isAndroid? - 7/128 : 0;
+
+  /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
+  double get paddingExtraRate => PlatformUtil.isAndroid? 115/256 : 97/240;
+
+  /// height比率，因为设置1时，Android文字可能显示不全，默认为1.1
+  double get heightRate => PlatformUtil.isAndroid ? 1.1 : 1;
 
 }
