@@ -4,6 +4,7 @@ import 'dart:ui' as ui show TextHeightBehavior;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tdesign_flutter/src/util/platform_util.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 /// 文本控件
@@ -366,6 +367,6 @@ class TDTextPaddingConfig {
   }
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
-  double get paddingRate => Platform.isAndroid? 0.063 : 0.072;
+  double get paddingRate => PlatformUtil.isAndroid? 0.063 : 0.072;
 
 }
