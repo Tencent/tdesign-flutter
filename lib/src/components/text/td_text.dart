@@ -150,7 +150,7 @@ class TDText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if(forceVerticalCenter){
-      var config = context.dependOnInheritedWidgetOfExactType<TDTextConfiguration>();
+      var config = getConfiguration(context);
       var paddingConfig = config?.paddingConfig;
 
       var textFont =
@@ -172,8 +172,11 @@ class TDText extends StatelessWidget {
       child: _getRawText(context: context),
     );
   }
-  
-  
+
+  /// 提取成方法，允许业务定义自己的TDTextConfiguration
+  TDTextConfiguration? getConfiguration(BuildContext context){
+    return context.dependOnInheritedWidgetOfExactType<TDTextConfiguration>();
+  }
 
 
 
