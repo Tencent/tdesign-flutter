@@ -68,7 +68,7 @@ class TdTextPage extends StatelessWidget {
                       textColor: TDTheme.of(context).warningNormalColor,
                       isTextThrough: true,
                       lineThroughColor: TDTheme.of(context).brandNormalColor,
-                      customStyle: TextStyle(
+                      style: TextStyle(
                           color: TDTheme.of(context).errorNormalColor)),
                   TextSpan(
                       text: "TextSpan2",
