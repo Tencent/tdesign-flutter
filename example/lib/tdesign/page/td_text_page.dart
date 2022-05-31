@@ -95,10 +95,10 @@ class TdTextPage extends StatelessWidget {
               ).getRawText(context: context);
             }),
         ExampleItem(
-            desc: "中文居中:",
+            desc: "中文居中:（带有英文可能不居中）",
             builder: (_) {
               return TDText(
-                "中华人民共和国腾讯科技fgjpqy",
+                "中华人民共和国腾讯科技",
                 // font: Font(size: 100, lineHeight: 100),
                 forceVerticalCenter: true,
                 backgroundColor: Colors.orange,
