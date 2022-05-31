@@ -180,14 +180,14 @@ class TDText extends StatelessWidget {
 
 
 
-  TextStyle? _getTextStyle(BuildContext? context,{ double? height}) {
+  TextStyle? _getTextStyle(BuildContext? context,{ double? height, Color? backgroundColor}) {
     var textFont =
         font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
     return TextStyle(
       inherit: this.style?.inherit ?? true,
       color: this.style?.color ?? textColor,
       /// 不使用系统本身的背景色，因为系统属性存在中英文是，会导致颜色出现阶梯状
-      // backgroundColor: this.style?.backgroundColor ?? backgroundColor,
+      backgroundColor: backgroundColor,
       fontSize: this.style?.fontSize ?? textFont.size,
       fontWeight: this.style?.fontWeight ?? fontWeight,
       fontStyle: this.style?.fontStyle,
@@ -215,14 +215,14 @@ class TDText extends StatelessWidget {
   /// 获取系统原始Text，以便使用到只能接收系统Text组件的地方
   /// 转化为系统原始Text后，将失去padding和background属性
   Text getRawText({BuildContext? context}){
-    return _getRawText(context: context);
+    return _getRawText(context: context, backgroundColor: backgroundColor);
   }
   
-  Text _getRawText({BuildContext? context, TextStyle? textStyle}){
+  Text _getRawText({BuildContext? context, TextStyle? textStyle, Color? backgroundColor}){
     return textSpan == null ? Text(
       data,
       key: this.key,
-      style: textStyle ?? _getTextStyle(context),
+      style: textStyle ?? _getTextStyle(context, backgroundColor: backgroundColor),
       strutStyle: this.strutStyle,
       textAlign: this.textAlign,
       textDirection: this.textDirection,
@@ -235,7 +235,7 @@ class TDText extends StatelessWidget {
       textWidthBasis: this.textWidthBasis,
       textHeightBehavior: this.textHeightBehavior,
     ) : Text.rich(this.textSpan!,
-      style: this.style,
+      style: textStyle ?? _getTextStyle(context, backgroundColor: backgroundColor),
       strutStyle: this.strutStyle,
       textAlign: this.textAlign,
       textDirection: this.textDirection,
