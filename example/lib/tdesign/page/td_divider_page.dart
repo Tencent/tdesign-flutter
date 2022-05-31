@@ -25,11 +25,8 @@ class TdDividerPage extends StatelessWidget {
           ExampleItem(desc: "自定义左侧间距", builder: (_){
             return TDDivider(margin: EdgeInsets.only(left: 76, ),);
           }),
-          ExampleItem(desc: "左右间(虚线)", builder: (_){
+          ExampleItem(desc: "左右间距(虚线)", builder: (_){
             return TDDivider(margin: EdgeInsets.only(left: 16, right: 16),isDashed: true,);
-          }),
-          ExampleItem(desc: "左侧拉通(虚线)", builder: (_){
-            return TDDivider(margin: EdgeInsets.only(left: 16, ),isDashed: true,);
           }),
           ExampleItem(desc: "自定义左侧间距(虚线)", builder: (_){
             return TDDivider(margin: EdgeInsets.only(left: 76, ),isDashed: true,);

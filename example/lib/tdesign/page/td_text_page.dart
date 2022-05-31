@@ -12,6 +12,7 @@ class TdTextPage extends StatelessWidget {
     String exampleTxt = "文本Text";
     // debugPaintBaselinesEnabled = true;
     return ExampleWidget(
+      padding: EdgeInsets.all(8),
       title: "TDText",
       children: [
         ExampleItem(
@@ -87,7 +88,7 @@ class TdTextPage extends StatelessWidget {
               );
             }),
         ExampleItem(
-            desc: "获取系统Text,padding和background将失效:",
+            desc: "获取系统Text:",
             builder: (_) {
               return TDText(
                 exampleTxt,
