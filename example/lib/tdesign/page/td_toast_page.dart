@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter_example/tdesign/example_base.dart';
 
 // ignore: use_key_in_widget_constructors
 class TdToastPage extends StatefulWidget {
@@ -8,21 +9,38 @@ class TdToastPage extends StatefulWidget {
 }
 
 class _TdToastPageState extends State<TdToastPage> {
-  void _showToast() {
-    TDToast.showText(context, "我是Toast");
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Toast组件'),
-        ),
-        body: Container(
-            padding: const EdgeInsets.only(top: 100),
-            color: Colors.white,
-            alignment: Alignment.center,
-            child: ElevatedButton(
-                onPressed: _showToast, child: const Text('点击弹出toast'))));
+    return ExampleWidget(title: "Toast组件", children: [
+      ElevatedButton(
+          onPressed: (){
+            TDToast.showText(context, "我是Toast");
+          },
+          child: const Text('普通toast')),
+
+      ElevatedButton(
+          onPressed: (){
+            var sb = StringBuffer("我是");
+            for(var i = 0; i < 20; i++){
+              sb.write("很长$i");
+            }
+            sb.write("toast");
+            TDToast.showText(context, sb.toString());
+          },
+          child: const Text('超长toast')),
+
+      ElevatedButton(
+          onPressed: (){
+            var sb = StringBuffer("我是");
+            for(var i = 0; i < 20; i++){
+              sb.write("很长$i");
+            }
+            sb.write("toast");
+            TDToast.showText(context, sb.toString(),duration: Duration(seconds: 10));
+          },
+          child: const Text('10秒再消失toast')),
+
+    ]);
   }
 }
