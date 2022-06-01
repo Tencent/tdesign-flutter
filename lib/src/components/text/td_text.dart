@@ -379,7 +379,6 @@ class TDTextPaddingConfig {
     if(paddingTop < 0) {
       paddingTop = 0;
     }
-    print("text padding data: $data fontSize: $fontSize height: $height paddingRate:$paddingRate paddingTop:$paddingTop paddingLeading: $paddingLeading");
     return EdgeInsets.only(top: paddingTop);
   }
 
