@@ -45,7 +45,7 @@ class TDPicker {
   }
 
   static void showMultiPicker(context,
-      {required String title,
+      {String? title,
       required MultiPickerCallback? onConfirm,
       MultiPickerCallback? onCancel,
       required List<List<String>> data,
