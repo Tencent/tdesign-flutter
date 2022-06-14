@@ -14,12 +14,22 @@ class TDPicker {
       bool useHour = false,
       bool useMinute = false,
       bool useSecond = false,
-      List<int> dateStart = const [1900, 1, 1],
-      List<int> dateEnd = const [2100, 12, 31],
-      List<int> initialDate = const [2000, 1, 1],
+      List<int> dateStart = const [1970, 1, 1],
+      List<int>? dateEnd,
+      List<int>? initialDate,
       Duration duration = const Duration(milliseconds: 100),
       double pickerHeight = 270,
       int pickerItemCount = 7}) {
+    if (dateEnd == null || initialDate == null) {
+      var now = DateTime.now();
+      // 如果未指定结束时间，则取当前时间
+      if (dateEnd == null) {
+        dateEnd = [now.year, now.month, now.day];
+      }
+      if (initialDate == null) {
+        initialDate = [now.year, now.month, now.day];
+      }
+    }
     showModalBottomSheet(
         context: context,
         barrierColor: Colors.transparent,
@@ -36,7 +46,7 @@ class TDPicker {
                 useMinute: useMinute,
                 useSecond: useSecond,
                 dateStart: dateStart,
-                dateEnd: dateEnd,
+                dateEnd: dateEnd!,
                 dateInitial: initialDate
               ),
               pickerHeight: pickerHeight,
