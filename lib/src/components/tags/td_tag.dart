@@ -3,31 +3,31 @@ import 'package:tdesign_flutter/td_export.dart';
 
 enum TDTagType {
   /// 基础标签
-  NORMAL,
+  normal,
 
   /// 基础标签
-  SUCCESS,
+  success,
 
   /// 基础标签
-  WARNING,
+  warning,
 
   /// 基础标签
-  ERROR,
+  error,
 
   /// 基础标签
-  MESSAGE,
+  message,
 
   ///
-  WIREFRAME,
+  wireframe,
 
   /// 浅底色标签
-  LIGHT_BACKGROUND,
+  lightBackground,
 
   /// 前底色标签自定义
-  WIREFRAME_LIGHT_BACKGROUND,
+  wireframeLightBackground,
 }
 
-enum TDTagSize { LARGE, MIDDLE, SMALL, CUSTOM }
+enum TDTagSize { large, middle, small, custom }
 
 /// 标签组件
 /// 已完成：展示型方形标签
@@ -70,8 +70,8 @@ class TDTag extends StatelessWidget {
   final bool forceVerticalCenter;
 
   const TDTag(this.text,
-      {this.type = TDTagType.NORMAL,
-        this.size = TDTagSize.MIDDLE,
+      {this.type = TDTagType.normal,
+        this.size = TDTagSize.middle,
         this.textColor,
         this.font,
         this.wireFrameColor,
@@ -106,11 +106,11 @@ class TDTag extends StatelessWidget {
 
   Color _getTextColor(BuildContext context) {
     switch (type) {
-      case TDTagType.NORMAL:
-      case TDTagType.SUCCESS:
-      case TDTagType.WARNING:
-      case TDTagType.ERROR:
-      case TDTagType.MESSAGE:
+      case TDTagType.normal:
+      case TDTagType.success:
+      case TDTagType.warning:
+      case TDTagType.error:
+      case TDTagType.message:
         return TDTheme.of(context).fontWhColor1;
       default:
         return TDTheme.of(context).brandNormalColor;
@@ -119,18 +119,18 @@ class TDTag extends StatelessWidget {
 
   _getBackgroundColor(BuildContext context) {
     switch (type) {
-      case TDTagType.NORMAL:
+      case TDTagType.normal:
         return TDTheme.of(context).brandNormalColor;
-      case TDTagType.SUCCESS:
+      case TDTagType.success:
         return TDTheme.of(context).successNormalColor;
-      case TDTagType.WARNING:
+      case TDTagType.warning:
         return TDTheme.of(context).warningNormalColor;
-      case TDTagType.ERROR:
+      case TDTagType.error:
         return TDTheme.of(context).errorNormalColor;
-      case TDTagType.MESSAGE:
+      case TDTagType.message:
         return TDTheme.of(context).grayColor7;
-      case TDTagType.LIGHT_BACKGROUND:
-      case TDTagType.WIREFRAME_LIGHT_BACKGROUND:
+      case TDTagType.lightBackground:
+      case TDTagType.wireframeLightBackground:
         return TDTheme.of(context).brandColor2;
       default:
         return TDTheme.of(context).whiteColor1;
@@ -139,8 +139,8 @@ class TDTag extends StatelessWidget {
 
   _getWireFrameColor(BuildContext context) {
     switch (type) {
-      case TDTagType.WIREFRAME:
-      case TDTagType.WIREFRAME_LIGHT_BACKGROUND:
+      case TDTagType.wireframe:
+      case TDTagType.wireframeLightBackground:
         return TDTheme.of(context).brandNormalColor;
       default:
         return Colors.transparent;
@@ -149,9 +149,9 @@ class TDTag extends StatelessWidget {
 
   _getFont(BuildContext context) {
     switch (size) {
-      case TDTagSize.LARGE:
+      case TDTagSize.large:
         return TDTheme.of(context).fontS;
-      case TDTagSize.SMALL:
+      case TDTagSize.small:
         return TDTheme.of(context).fontXXS;
       default:
         return TDTheme.of(context).fontXS;
@@ -161,9 +161,9 @@ class TDTag extends StatelessWidget {
   EdgeInsets _getPadding() {
     /// 为了文本居中，修改了padding的值
     switch (size) {
-      case TDTagSize.LARGE:
+      case TDTagSize.large:
         return const EdgeInsets.only(left: 15, right: 15, top: 3, bottom: 3);
-      case TDTagSize.SMALL:
+      case TDTagSize.small:
         return const EdgeInsets.only(left: 7, right: 7, top: 1, bottom: 1);
       default:
         return const EdgeInsets.only(left: 11, right: 11, top: 1, bottom: 1);
