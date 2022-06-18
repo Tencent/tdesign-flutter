@@ -18,33 +18,22 @@ class _TdPickerPageState extends State<TdPickerPage> {
     ['1', '2', '3']
   ];
   String selected_4 = "组合: ";
-  List<dynamic> data_4 = [
-    ['广东省', '重庆市', '四川省', '浙江省'],
-    [
-      ['深圳市', '佛山市', '广州市'],
-      ['重庆市'],
-      ['成都市', '广安市'],
-      ['杭州市', '金华市']
-    ],
-    [
-      [
-        ['南山区', '宝安区', '罗湖区', '福田区'],
-        [''],
-        ['花都区']
-      ],
-      [
-        ['九龙坡区', '江北区']
-      ],
-      [
-        ['天府新区'],
-        ['岳池县', '武胜县']
-      ],
-      [
-        ['西湖区', '余杭区'],
-        ['义乌市', '兰溪市', '武义县']
-      ]
-    ],
-  ];
+  Map data_4 = {
+    '广东省':{
+      '深圳市':['南山区', '宝安区', '罗湖区', '福田区'],
+      '佛山市':[''],
+      '广州市':['花都区']},
+    '重庆市':{
+      '重庆市':['九龙坡区', '江北区']
+    },
+    '浙江省':{
+      '杭州市':['西湖区', '余杭区', '萧山区'],
+      '宁波市':['江东区', '北仑区', '奉化市']
+    },
+    '香港':{
+      '香港':['九龙城区', '黄大仙区', '离岛区', '湾仔区']
+    }
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -105,13 +94,12 @@ class _TdPickerPageState extends State<TdPickerPage> {
                 onConfirm: (selected) {
               setState(() {
                 selected_4 =
-                    "组合: ${data_4[0][selected[0]] as String} ${(data_4[1][selected[0]] as List)[selected[1]] as String} ${(data_4[2][selected[0]] as List)[selected[1]][selected[2]] as String}";
+                    "组合: ${selected[0]} ${selected[1]} ${selected[2]}";
               });
             },
-                data: data_4,
-                initialIndexes: [1, 0, 1],
                 pickerHeight: 168,
-                pickerItemCount: 4),
+                data: data_4,
+                pickerItemCount: 4, columnNum: 3, initialData: ['浙江省','杭州市','西湖区']),
           ),
           TDText(
             selected_4,

@@ -83,8 +83,9 @@ class TDPicker {
       {String? title,
       required MultiPickerCallback? onConfirm,
       MultiPickerCallback? onCancel,
-      required List<dynamic> data,
-      List<int>? initialIndexes,
+      required Map data,
+      required int columnNum,
+      required List initialData,
       Duration duration = const Duration(milliseconds: 100),
       double pickerHeight = 248,
       int pickerItemCount = 7}) {
@@ -97,9 +98,10 @@ class TDPicker {
             onConfirm: onConfirm,
             onCancel: onCancel,
             data: data,
-            initialIndexes: initialIndexes,
             pickerHeight: pickerHeight,
             pickerItemCount: pickerItemCount,
+            columnNum: columnNum,
+            selectedData: initialData,
           );
         });
   }
