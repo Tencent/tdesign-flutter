@@ -172,7 +172,6 @@ class _TDDatePickerState extends State<TDDatePicker> {
               controller: widget.model.controllers[whichline],
               physics: const FixedExtentScrollPhysics(),
               onSelectedItemChanged: (index) {
-                print(widget.model.getSelectedMap().toString());
                 if (whichline == 0 || whichline == 1) {
                   // 年月的改变会引起日的改变, 年的改变会引起月的改变
                   setState(() {
