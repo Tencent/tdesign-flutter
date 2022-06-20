@@ -122,7 +122,7 @@ class TDText extends StatelessWidget {
   const TDText.rich(
       InlineSpan this.textSpan, {
         this.font,
-        this.fontWeight = FontWeight.w500,
+        this.fontWeight = FontWeight.w400,
         this.fontFamily,
         this.textColor = Colors.black,
         this.backgroundColor,
@@ -258,7 +258,7 @@ class TDTextSpan extends TextSpan{
   TDTextSpan({
     BuildContext? context, // 如果未设置font，且不想使用默认的fontM尺寸时，需设置context，否则可省略
     Font? font,
-    FontWeight fontWeight = FontWeight.w500,
+    FontWeight fontWeight = FontWeight.w400,
     FontFamily? fontFamily,
     Color textColor = Colors.black,
     bool? isTextThrough = false,
