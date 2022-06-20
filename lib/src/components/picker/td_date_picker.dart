@@ -7,7 +7,7 @@ import 'package:tdesign_flutter/src/util/string_util.dart';
 
 import 'td_item_widget.dart';
 
-typedef void DatePickerCallback(Map<String, int> selected);
+typedef DatePickerCallback = void Function(Map<String, int> selected);
 
 /// 时间选择器
 class TDDatePicker extends StatefulWidget {
@@ -172,7 +172,6 @@ class _TDDatePickerState extends State<TDDatePicker> {
               controller: widget.model.controllers[whichline],
               physics: const FixedExtentScrollPhysics(),
               onSelectedItemChanged: (index) {
-                print(widget.model.getSelectedMap().toString());
                 if (whichline == 0 || whichline == 1) {
                   // 年月的改变会引起日的改变, 年的改变会引起月的改变
                   setState(() {
@@ -222,7 +221,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
           GestureDetector(
               onTap: () {
                 if (widget.onCancel != null) {
-                  Map<String, int> selected = {
+                  var selected = <String, int>{
                     'year': widget.model.useYear
                         ? widget.model.yearFixedExtentScrollController.selectedItem +
                             widget.model.data[0][0]
@@ -278,7 +277,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
           GestureDetector(
             onTap: () {
               if (widget.onConfirm != null) {
-                Map<String, int> selected = {
+                var selected = <String, int>{
                   'year': widget.model.useYear
                       ? widget.model.yearFixedExtentScrollController.selectedItem +
                           widget.model.data[0][0]
@@ -512,7 +511,7 @@ class DatePickerModel {
   }
 
   Map<String, int> getSelectedMap() {
-    Map<String, int> map = {
+    var map = <String, int>{
       'year': yearIndex + data[0][0],
       'month': monthIndex + data[1][0],
       'day' : dayIndex + data[2][0],

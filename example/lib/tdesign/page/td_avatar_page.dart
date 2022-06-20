@@ -10,7 +10,7 @@ class TdAvatarPage extends StatefulWidget {
 class _TdAvatarPageState extends State<TdAvatarPage> {
   @override
   Widget build(BuildContext context) {
-    String imgUrl = 'https://photo.16pic.com/00/53/26/16pic_5326745_b.jpg';
+    var imgUrl = 'https://photo.16pic.com/00/53/26/16pic_5326745_b.jpg';
     return Scaffold(
         appBar: AppBar(
           title: const Text('avatar组件'),

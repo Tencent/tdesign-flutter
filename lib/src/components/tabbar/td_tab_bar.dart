@@ -176,7 +176,7 @@ class _TDTabBarIndicatorPainter extends BoxPainter {
 
   final TDTabBarIndicator decoration;
 
-  Paint _paint = Paint();
+  final _paint = Paint();
 
   _TDTabBarIndicatorPainter(this.decoration, VoidCallback onChanged) {
     if (isCustomStyle) {

@@ -45,7 +45,7 @@ class _TdTabBarPageState extends State<TdTabBarPage>
 
   //初始化tab
   void _initTabController(BuildContext context) {
-    int tabNum = _getTabs().length;
+    var tabNum = _getTabs().length;
     _tabController = TabController(length: tabNum, vsync: this);
   }
 
@@ -59,7 +59,7 @@ class _TdTabBarPageState extends State<TdTabBarPage>
         title: const Text('Tabbar组件'),
       ),
       body: NestedScrollView(
-        headerSliverBuilder: (context, bool) {
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             SliverToBoxAdapter(
                 child: TDTabBar(

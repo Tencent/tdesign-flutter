@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 class TDToast {
-  static showText(BuildContext context, String text,
+  static void showText(BuildContext context, String text,
       {Duration duration = TDToast._defaultDisPlayDuration}) {
     _cancel();
     _showing = true;

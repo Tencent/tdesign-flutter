@@ -81,11 +81,9 @@ class TDMultiPicker extends StatelessWidget {
       Key? key})
       : super(key: key) {
     int lines = data.length;
-    if (initialIndexes == null) {
-      initialIndexes = [for (int i = 0; i < lines; i++) 0];
-    }
+    initialIndexes ??= [for (var i = 0; i < lines; i++) 0];
     controllers = [
-      for (int i = 0; i < lines; i++)
+      for (var i = 0; i < lines; i++)
         FixedExtentScrollController(initialItem: initialIndexes![i])
     ];
   }
@@ -132,7 +130,7 @@ class TDMultiPicker extends StatelessWidget {
                   width: maxWidth,
                   child: Row(
                     children: [
-                      for (int i = 0; i < data.length; i++)
+                      for (var i = 0; i < data.length; i++)
                         Expanded(
                           child: buildList(context, i),
                         )
@@ -160,7 +158,7 @@ class TDMultiPicker extends StatelessWidget {
               onTap: () {
                 if (onCancel != null) {
                   onCancel!([
-                    for (int i = 0; i < controllers.length; i++)
+                    for (var i = 0; i < controllers.length; i++)
                       controllers[i].selectedItem
                   ]);
                 }
@@ -196,7 +194,7 @@ class TDMultiPicker extends StatelessWidget {
             onTap: () {
               if (onConfirm != null) {
                 onConfirm!([
-                  for (int i = 0; i < controllers.length; i++)
+                  for (var i = 0; i < controllers.length; i++)
                     controllers[i].selectedItem
                 ]);
               }
@@ -381,7 +379,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                     width: maxWidth,
                     child: Row(
                       children: [
-                        for (int i = 0; i < widget.data.length; i++)
+                        for (var i = 0; i < widget.data.length; i++)
                           Expanded(
                             child: buildList(context, i),
                           )
@@ -452,7 +450,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               onTap: () {
                 if (widget.onCancel != null) {
                   widget.onCancel!([
-                    for (int i = 0; i < model.controllers.length; i++)
+                    for (var i = 0; i < model.controllers.length; i++)
                       model.controllers[i].selectedItem
                   ]);
                 }
@@ -488,7 +486,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
             onTap: () {
               if (widget.onConfirm != null) {
                 widget.onConfirm!([
-                  for (int i = 0; i < model.controllers.length; i++)
+                  for (var i = 0; i < model.controllers.length; i++)
                     model.controllers[i].selectedItem
                 ]);
               }
@@ -525,11 +523,9 @@ class MultiLinkedPickerModel {
     this.initialIndexes,
   }) {
     int lines = data.length;
-    if (initialIndexes == null) {
-      initialIndexes = [for (int i = 0; i < lines; i++) 0];
-    }
+    initialIndexes ??= [for (var i = 0; i < lines; i++) 0];
     controllers = [
-      for (int i = 0; i < lines; i++)
+      for (var i = 0; i < lines; i++)
         FixedExtentScrollController(initialItem: initialIndexes![i])
     ];
     setInitialData();
@@ -538,9 +534,9 @@ class MultiLinkedPickerModel {
   void setInitialData() {
     presentData = [];
     presentData.add(data[0]);
-    for (int i = 1; i < data.length; i++) {
+    for (var i = 1; i < data.length; i++) {
       var temp = data[i];
-      for (int j = 0; j < i; j++) {
+      for (var j = 0; j < i; j++) {
         temp = temp[initialIndexes![j]];
       }
       presentData.add(temp);
@@ -549,9 +545,9 @@ class MultiLinkedPickerModel {
 
   void refreshPresentDataAndController(int whichline) {
     /// 一列变动，这一列右边所有数据都要变动
-    for (int i = whichline + 1; i < data.length; i++) {
+    for (var i = whichline + 1; i < data.length; i++) {
       var temp = data[i];
-      for (int j = 0; j < i; j++) {
+      for (var j = 0; j < i; j++) {
         temp = temp[controllers[j].selectedItem];
       }
       presentData[i] = temp;

@@ -5,7 +5,7 @@ class Font {
 
   Font({required int size, required int lineHeight}) {
     this.size = size.toDouble();
-    this.height = lineHeight.toDouble() / size;
+    height = lineHeight.toDouble() / size;
   }
 
   factory Font.fromJson(Map<String, dynamic> map) =>

@@ -135,25 +135,23 @@ class _TDButtonState extends State<TDButton>
   void _setAnimation() {
     if (widget.type != TDButtonType.Loading) return;
 
-    if (_animationController == null) {
-      _animationController =
-          AnimationController(duration: Duration(seconds: 300), vsync: this);
-    }
-    if (_animation == null) {
-      _animation =
-          Tween<double>(begin: 1, end: 300).animate(_animationController!)
-            ..addStatusListener((status) {
-              if (status == AnimationStatus.completed) {
-                _animationController?.reverse();
-              } else if (status == AnimationStatus.dismissed) {
-                _animationController?.forward();
-              }
-            });
-    }
+
+    _animationController ??=
+        AnimationController(duration: Duration(seconds: 300), vsync: this);
+
+    _animation ??=
+    Tween<double>(begin: 1, end: 300).animate(_animationController!)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _animationController?.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          _animationController?.forward();
+        }
+      });
   }
 
   double _getButtonHeight() {
-    double height = 28;
+    var height = 28.0;
     switch (widget.size) {
       case TDButtonSize.Small:
         height = 36;
@@ -184,7 +182,7 @@ class _TDButtonState extends State<TDButton>
 
   TextStyle _getButtonTextStyle() {
     TextStyle style = TextStyle();
-    Map fontMap = {
+    var fontMap = <TDButtonSize, dynamic>{
       TDButtonSize.Small: [TDTheme.of(context).fontS, FontWeight.w400],
       TDButtonSize.Medium: [TDTheme.of(context).fontS, FontWeight.w400],
       TDButtonSize.Large: [TDTheme.of(context).fontM, FontWeight.w400]
@@ -330,7 +328,7 @@ class _TDButtonState extends State<TDButton>
 
   @override
   Widget build(BuildContext context) {
-    double height = _getButtonHeight();
+    var height = _getButtonHeight();
     if (widget.type == TDButtonType.Progress) {
       WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
         double btnW = _globalKey.currentContext?.size?.width ?? 0;
@@ -352,7 +350,7 @@ class _TDButtonState extends State<TDButton>
         width: widget.width,
         height: height,
         child: Center(
-          child: widget.child != null ? widget.child! : _getButtonTypeWidget(),
+          child: widget.child ?? _getButtonTypeWidget(),
         ),
       ),
       onTap: () {
