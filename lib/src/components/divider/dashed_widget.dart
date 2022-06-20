@@ -31,7 +31,7 @@ class DashedWidget extends StatelessWidget {
           painter: DashedPainter(
               color: color,
               strokeWidth: height ?? 1,
-              direction: this.direction),
+              direction: direction),
         ),
       );
     } else {
@@ -40,7 +40,7 @@ class DashedWidget extends StatelessWidget {
         height: height ?? MediaQuery.of(context).size.height,
         child: CustomPaint(
           painter: DashedPainter(
-              color: color, strokeWidth: width ?? 1, direction: this.direction),
+              color: color, strokeWidth: width ?? 1, direction: direction),
         ),
       );
     }

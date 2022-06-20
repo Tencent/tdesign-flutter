@@ -83,7 +83,7 @@ class TDButton extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    _btnState = _TDButtonState(this.opacity!);
+    _btnState = _TDButtonState(opacity!);
     return _btnState!;
   }
 }
@@ -110,7 +110,7 @@ class _TDButtonState extends State<TDButton>
 
     progress = min(1, max(progress, 0));
     setState(() {
-      this.progress = progress;
+      progress = progress;
     });
   }
 
@@ -123,7 +123,7 @@ class _TDButtonState extends State<TDButton>
       _animationController?.stop();
     }
     setState(() {
-      this.isLoading = isLoading;
+      isLoading = isLoading;
     });
   }
 

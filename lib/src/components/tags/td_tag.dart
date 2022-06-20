@@ -95,7 +95,7 @@ class TDTag extends StatelessWidget {
               color: wireFrameColor ?? _getWireFrameColor(context)),
           borderRadius: BorderRadius.all(Radius.circular(borderRadius))),
       child: TDText(
-        this.text,
+        text,
         forceVerticalCenter: forceVerticalCenter,
         textColor: textColor ?? _getTextColor(context),
         font: font ?? _getFont(context),
