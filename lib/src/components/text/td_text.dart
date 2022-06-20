@@ -155,20 +155,20 @@ class TDText extends StatelessWidget {
 
       var textFont =
           font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
-      var fontSize = this.style?.fontSize ?? textFont.size;
-      var height = this.style?.height ?? textFont.height;
+      var fontSize = style?.fontSize ?? textFont.size;
+      var height = style?.height ?? textFont.height;
       
       paddingConfig ??= TDTextPaddingConfig.getDefaultConfig();
       var showHeight = min(paddingConfig.heightRate, height);
       return Container(
-        color: this.style?.backgroundColor ?? backgroundColor,
+        color: style?.backgroundColor ?? backgroundColor,
         height: fontSize * height,
         padding: paddingConfig.getPadding(data, fontSize, height),
         child: _getRawText(context: context, textStyle: _getTextStyle(context, height: showHeight)),
       );
     }
     return Container(
-      color: this.style?.backgroundColor ?? backgroundColor,
+      color: style?.backgroundColor ?? backgroundColor,
       child: _getRawText(context: context),
     );
   }
@@ -184,31 +184,31 @@ class TDText extends StatelessWidget {
     var textFont =
         font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
     return TextStyle(
-      inherit: this.style?.inherit ?? true,
-      color: this.style?.color ?? textColor,
+      inherit: style?.inherit ?? true,
+      color: style?.color ?? textColor,
       /// 不使用系统本身的背景色，因为系统属性存在中英文是，会导致颜色出现阶梯状
       backgroundColor: backgroundColor,
-      fontSize: this.style?.fontSize ?? textFont.size,
-      fontWeight: this.style?.fontWeight ?? fontWeight,
-      fontStyle: this.style?.fontStyle,
-      letterSpacing: this.style?.letterSpacing,
-      wordSpacing: this.style?.wordSpacing,
-      textBaseline: this.style?.textBaseline,
-      height: height ?? this.style?.height ?? textFont.height,
-      leadingDistribution: this.style?.leadingDistribution,
-      locale: this.style?.locale,
-      foreground: this.style?.foreground,
-      background: this.style?.background,
-      shadows: this.style?.shadows,
-      fontFeatures: this.style?.fontFeatures,
-      decoration: this.style?.decoration ?? (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
-      decorationColor: this.style?.decorationColor ?? lineThroughColor,
-      decorationStyle: this.style?.decorationStyle,
-      decorationThickness: this.style?.decorationThickness,
-      debugLabel: this.style?.debugLabel,
-      fontFamily: this.style?.fontFamily ?? fontFamily?.fontFamily,
-      fontFamilyFallback: this.style?.fontFamilyFallback,
-      package: this.package,
+      fontSize: style?.fontSize ?? textFont.size,
+      fontWeight: style?.fontWeight ?? fontWeight,
+      fontStyle: style?.fontStyle,
+      letterSpacing: style?.letterSpacing,
+      wordSpacing: style?.wordSpacing,
+      textBaseline: style?.textBaseline,
+      height: height ?? style?.height ?? textFont.height,
+      leadingDistribution: style?.leadingDistribution,
+      locale: style?.locale,
+      foreground: style?.foreground,
+      background: style?.background,
+      shadows: style?.shadows,
+      fontFeatures: style?.fontFeatures,
+      decoration: style?.decoration ?? (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
+      decorationColor: style?.decorationColor ?? lineThroughColor,
+      decorationStyle: style?.decorationStyle,
+      decorationThickness: style?.decorationThickness,
+      debugLabel: style?.debugLabel,
+      fontFamily: style?.fontFamily ?? fontFamily?.fontFamily,
+      fontFamilyFallback: style?.fontFamilyFallback,
+      package: package,
         );
   }
 
@@ -221,32 +221,32 @@ class TDText extends StatelessWidget {
   Text _getRawText({BuildContext? context, TextStyle? textStyle, Color? backgroundColor}){
     return textSpan == null ? Text(
       data,
-      key: this.key,
+      key: key,
       style: textStyle ?? _getTextStyle(context, backgroundColor: backgroundColor),
-      strutStyle: this.strutStyle,
-      textAlign: this.textAlign,
-      textDirection: this.textDirection,
-      locale: this.locale,
-      softWrap: this.softWrap,
-      overflow: this.overflow,
-      textScaleFactor: this.textScaleFactor,
-      maxLines: this.maxLines,
-      semanticsLabel: this.semanticsLabel,
-      textWidthBasis: this.textWidthBasis,
-      textHeightBehavior: this.textHeightBehavior,
-    ) : Text.rich(this.textSpan!,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      textDirection: textDirection,
+      locale: locale,
+      softWrap: softWrap,
+      overflow: overflow,
+      textScaleFactor: textScaleFactor,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textWidthBasis: textWidthBasis,
+      textHeightBehavior: textHeightBehavior,
+    ) : Text.rich(textSpan!,
       style: textStyle ?? _getTextStyle(context, backgroundColor: backgroundColor),
-      strutStyle: this.strutStyle,
-      textAlign: this.textAlign,
-      textDirection: this.textDirection,
-      locale: this.locale,
-      softWrap: this.softWrap,
-      overflow: this.overflow,
-      textScaleFactor: this.textScaleFactor,
-      maxLines: this.maxLines,
-      semanticsLabel: this.semanticsLabel,
-      textWidthBasis: this.textWidthBasis,
-      textHeightBehavior: this.textHeightBehavior,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      textDirection: textDirection,
+      locale: locale,
+      softWrap: softWrap,
+      overflow: overflow,
+      textScaleFactor: textScaleFactor,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textWidthBasis: textWidthBasis,
+      textHeightBehavior: textHeightBehavior,
     );
   }
 }
