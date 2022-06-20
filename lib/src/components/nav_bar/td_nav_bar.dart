@@ -71,7 +71,9 @@ class _TDNavBarState extends State<TDNavBar> {
               : item.icon,
         ),
         onTap: () {
-          if (item.action == null) return;
+          if (item.action == null){
+            return;
+          }
           item.action!();
         },
       ));
