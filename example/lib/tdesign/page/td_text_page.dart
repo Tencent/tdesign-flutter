@@ -9,28 +9,28 @@ class TdTextPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String exampleTxt = "文本Text";
+    String exampleTxt = '文本Text';
     // debugPaintBaselinesEnabled = true;
     return ExampleWidget(
       padding: EdgeInsets.all(8),
-      title: "TDText",
+      title: 'TDText',
       children: [
         ExampleItem(
-            desc: "系统Text:",
+            desc: '系统Text:',
             builder: (_) {
               return Text(
                 exampleTxt,
               );
             }),
         ExampleItem(
-            desc: "普通TDText:",
+            desc: '普通TDText:',
             builder: (_) {
               return TDText(
                 exampleTxt,
               );
             }),
         ExampleItem(
-            desc: "指定常用属性:",
+            desc: '指定常用属性:',
             builder: (_) {
               return TDText(
                 exampleTxt,
@@ -40,7 +40,7 @@ class TdTextPage extends StatelessWidget {
               );
             }),
         ExampleItem(
-            desc: "style覆盖textColor,不覆盖font:",
+            desc: 'style覆盖textColor,不覆盖font:',
             builder: (_) {
               return TDText(
                 exampleTxt,
@@ -51,7 +51,7 @@ class TdTextPage extends StatelessWidget {
               );
             }),
         ExampleItem(
-            desc: "style覆盖textColor和font:",
+            desc: 'style覆盖textColor和font:',
             builder: (_) {
               return TDText(
                 exampleTxt,
@@ -60,12 +60,12 @@ class TdTextPage extends StatelessWidget {
               );
             }),
         ExampleItem(
-            desc: "TDText.rich测试:",
+            desc: 'TDText.rich测试:',
             builder: (_) {
               return TDText.rich(
                 TextSpan(children: [
                   TDTextSpan(
-                      text: "TDTextSpan1",
+                      text: 'TDTextSpan1',
                       font: TDTheme.of(context).fontL,
                       textColor: TDTheme.of(context).warningNormalColor,
                       isTextThrough: true,
@@ -73,7 +73,7 @@ class TdTextPage extends StatelessWidget {
                       style: TextStyle(
                           color: TDTheme.of(context).errorNormalColor)),
                   TextSpan(
-                      text: "TextSpan2",
+                      text: 'TextSpan2',
                       style: TextStyle(
                           fontSize: 14,
                           color: TDTheme.of(context).brandNormalColor)),
@@ -88,7 +88,7 @@ class TdTextPage extends StatelessWidget {
               );
             }),
         ExampleItem(
-            desc: "获取系统Text:",
+            desc: '获取系统Text:',
             builder: (_) {
               return TDText(
                 exampleTxt,
@@ -96,17 +96,17 @@ class TdTextPage extends StatelessWidget {
               ).getRawText(context: context);
             }),
         ExampleItem(
-            desc: "中文居中:（带有英文可能不居中）",
+            desc: '中文居中:（带有英文可能不居中）',
             builder: (_) {
               return TDText(
-                "中华人民共和国腾讯科技",
+                '中华人民共和国腾讯科技',
                 // font: Font(size: 100, lineHeight: 100),
                 forceVerticalCenter: true,
                 backgroundColor: Colors.orange,
               );
             }),
         ExampleItem(
-            desc: "自定义内部padding:",
+            desc: '自定义内部padding:',
             builder: (_) {
               return TDTextConfiguration(
                 paddingConfig: CustomTextPaddingConfig(),
@@ -128,13 +128,13 @@ class CustomPaddingText extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         TDText(
-        "中华人民共和国腾讯科技fgjpqy",
+        '中华人民共和国腾讯科技fgjpqy',
         // font: Font(size: 100, lineHeight: 100),
         forceVerticalCenter: true,
         backgroundColor: Colors.orange,
       ),
         TDText(
-        "English",
+        'English',
         font: TDTheme.of(context).fontXL,
         forceVerticalCenter: true,
         backgroundColor: Colors.orange,

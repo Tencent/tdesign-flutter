@@ -23,20 +23,20 @@ import 'package:tdesign_flutter_example/tdesign/page/td_button_page.dart';
 
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TdTextPage()
 List<ExamplePageModel> examplePageList = [
-  ExamplePageModel(text: "文本控件", path: "TdTextPage", pageBuilder: (context)=> TdTextPage()),
-  ExamplePageModel(text: "分割线", path: "TdDividerPage", pageBuilder: (context)=> TdDividerPage()),
-  ExamplePageModel(text: "圆形图片组件（头像）", path: "TdAvatarPage", pageBuilder: (context)=> TdAvatarPage()),
-  ExamplePageModel(text: "红点", path: "TdBadgePage", pageBuilder: (context)=> TdBadgePage()),
-  ExamplePageModel(text: "标签栏", path: "TdTabBarPage", pageBuilder: (context)=> TdTabBarPage()),
-  ExamplePageModel(text: "轻提示", path: "TdToastPage", pageBuilder: (context)=> TdToastPage()),
-  ExamplePageModel(text: "按钮", path: "TdButtonPage", pageBuilder: (context)=> TdButtonPage()),
-  ExamplePageModel(text: "输入框", path: "TdInputViewPag", pageBuilder: (context)=> TdInputViewPage()),
-  ExamplePageModel(text: "标签", path: "TdTagPage", pageBuilder: (context)=> TdTagPage()),
-  ExamplePageModel(text: "Picker", path: "TdPickerPage", pageBuilder: (context)=> TdPickerPage()),
-  ExamplePageModel(text: "图标", path: "TdIconPage", pageBuilder: (context)=> TdIconPage()),
-  ExamplePageModel(text: "空白页面", path: "TdEmptyPage", pageBuilder: (context)=> TdEmptyPage()),
-  ExamplePageModel(text: "主题页面", path: "TdThemePage", pageBuilder: (context)=> TdThemePage()),
-  ExamplePageModel(text: "图片组件", path: "TdImagePage", pageBuilder: (context)=> TdImagePage()),
+  ExamplePageModel(text: '文本控件', path: 'TdTextPage', pageBuilder: (context)=> TdTextPage()),
+  ExamplePageModel(text: '分割线', path: 'TdDividerPage', pageBuilder: (context)=> TdDividerPage()),
+  ExamplePageModel(text: '圆形图片组件（头像）', path: 'TdAvatarPage', pageBuilder: (context)=> TdAvatarPage()),
+  ExamplePageModel(text: '红点', path: 'TdBadgePage', pageBuilder: (context)=> TdBadgePage()),
+  ExamplePageModel(text: '标签栏', path: 'TdTabBarPage', pageBuilder: (context)=> TdTabBarPage()),
+  ExamplePageModel(text: '轻提示', path: 'TdToastPage', pageBuilder: (context)=> TdToastPage()),
+  ExamplePageModel(text: '按钮', path: 'TdButtonPage', pageBuilder: (context)=> TdButtonPage()),
+  ExamplePageModel(text: '输入框', path: 'TdInputViewPag', pageBuilder: (context)=> TdInputViewPage()),
+  ExamplePageModel(text: '标签', path: 'TdTagPage', pageBuilder: (context)=> TdTagPage()),
+  ExamplePageModel(text: 'Picker', path: 'TdPickerPage', pageBuilder: (context)=> TdPickerPage()),
+  ExamplePageModel(text: '图标', path: 'TdIconPage', pageBuilder: (context)=> TdIconPage()),
+  ExamplePageModel(text: '空白页面', path: 'TdEmptyPage', pageBuilder: (context)=> TdEmptyPage()),
+  ExamplePageModel(text: '主题页面', path: 'TdThemePage', pageBuilder: (context)=> TdThemePage()),
+  ExamplePageModel(text: '图片组件', path: 'TdImagePage', pageBuilder: (context)=> TdImagePage()),
 ];
 
 
@@ -63,11 +63,11 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           // This is the theme of your application.
           //
-          // Try running your application with "flutter run". You'll see the
+          // Try running your application with 'flutter run'. You'll see the
           // application has a blue toolbar. Then, without quitting the app, try
           // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // 'hot reload' (press 'r' in the console where you ran 'flutter run',
+          // or simply save your changes to 'hot reload' in a Flutter IDE).
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
           primarySwatch: Colors.blue,
@@ -90,7 +90,7 @@ class MyHomePage extends StatefulWidget {
   // This class is the configuration for the state. It holds the values (in this
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  // always marked 'final'.
 
   final String title;
 

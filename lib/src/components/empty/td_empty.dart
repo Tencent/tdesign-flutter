@@ -32,7 +32,7 @@ class TDEmpty extends StatelessWidget {
           image ?? Container(),
           const Padding(padding: EdgeInsets.only(top: 30)),
           TDText(
-            emptyText ?? "",
+            emptyText ?? '',
             fontWeight: FontWeight.w400,
             font: TDTheme.of(context).fontS,
             textColor: TDTheme.of(context).fontGyColor3,
@@ -41,7 +41,7 @@ class TDEmpty extends StatelessWidget {
               ? Padding(
                   padding: const EdgeInsets.only(top: 24),
                   child: TDButton(
-                    content: operationText ?? "",
+                    content: operationText ?? '',
                     size: TDButtonSize.Small,
                     width: 160,
                     click: () {
