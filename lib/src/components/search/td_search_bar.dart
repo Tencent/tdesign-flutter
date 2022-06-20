@@ -123,7 +123,7 @@ class _TDSearchBarState extends State<TDSearchBar> {
               },
               child: Container(
                 padding: const EdgeInsets.only(left: 16),
-                child: Text("取消",
+                child: Text('取消',
                     style: TextStyle(
                         fontSize: TDTheme.of(context).fontM?.size,
                         color: TDTheme.of(context).brandColor8)),

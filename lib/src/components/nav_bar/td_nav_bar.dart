@@ -109,7 +109,7 @@ class _TDNavBarState extends State<TDNavBar> {
             fontWeight: widget.titleFontWeight ?? FontWeight.w500,
             decoration: TextDecoration.none,
             fontFamily: widget.titleFontFamily!.fontFamily,
-            package: "tdesign_flutter");
+            package: 'tdesign_flutter');
   }
 
   Widget _getTitleWidget(BuildContext context) {
@@ -117,7 +117,7 @@ class _TDNavBarState extends State<TDNavBar> {
       alignment: widget.titleAlignment,
       child: widget.titleWidget != null
           ? widget.titleWidget!
-          : Text(widget.title ?? "",
+          : Text(widget.title ?? '',
               maxLines: 1,
               textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis,

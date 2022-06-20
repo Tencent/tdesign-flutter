@@ -76,7 +76,7 @@ class _TDTextToastState extends State<_TDTextToast> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        widget.text ?? "",
+        widget.text ?? '',
         maxLines: 3,
         style: const TextStyle(
             fontSize: 14,

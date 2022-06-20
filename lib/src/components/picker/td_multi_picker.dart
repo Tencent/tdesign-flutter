@@ -168,7 +168,7 @@ class TDMultiPicker extends StatelessWidget {
               },
               behavior: HitTestBehavior.opaque,
               child: TDText(
-                "取消",
+                '取消',
                 style: leftTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontM!.size,
                   color: TDTheme.of(context).fontGyColor2
@@ -204,7 +204,7 @@ class TDMultiPicker extends StatelessWidget {
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
-              "确定",
+              '确定',
               style: rightTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontM!.size,
                   color: TDTheme.of(context).brandNormalColor
@@ -460,7 +460,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               },
               behavior: HitTestBehavior.opaque,
               child: TDText(
-                "取消",
+                '取消',
                 style: widget.leftTextStyle ?? TextStyle(
                   fontSize: TDTheme.of(context).fontM!.size,
                   color: TDTheme.of(context).fontGyColor2,
@@ -496,7 +496,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
-              "确定",
+              '确定',
               style: widget.rightTextStyle ?? TextStyle(
                 fontSize: TDTheme.of(context).fontM!.size,
                 color: TDTheme.of(context).brandNormalColor,

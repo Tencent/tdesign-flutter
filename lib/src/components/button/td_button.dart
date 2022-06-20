@@ -281,7 +281,7 @@ class _TDButtonState extends State<TDButton>
                 ),
               ),
               TDText(
-                "${(progress * 100).toStringAsFixed(2)}%",
+                '${(progress * 100).toStringAsFixed(2)}%',
                 style: _getButtonTextStyle(),
                 forceVerticalCenter: true,
               ),

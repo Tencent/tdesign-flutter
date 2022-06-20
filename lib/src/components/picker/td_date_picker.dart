@@ -223,25 +223,25 @@ class _TDDatePickerState extends State<TDDatePicker> {
               onTap: () {
                 if (widget.onCancel != null) {
                   Map<String, int> selected = {
-                    "year": widget.model.useYear
+                    'year': widget.model.useYear
                         ? widget.model.yearFixedExtentScrollController.selectedItem +
                             widget.model.data[0][0]
                         : -1,
-                    "month": widget.model.useMonth
+                    'month': widget.model.useMonth
                         ? widget.model.monthFixedExtentScrollController.selectedItem +
                             widget.model.data[1][0]
                         : -1,
-                    "day": widget.model.useDay
+                    'day': widget.model.useDay
                         ? widget.model.dayFixedExtentScrollController.selectedItem +
                             widget.model.data[2][0]
                         : -1,
-                    "hour": widget.model.useHour
+                    'hour': widget.model.useHour
                         ? widget.model.hourFixedExtentScrollController.selectedItem
                         : -1,
-                    "minute": widget.model.useMinute
+                    'minute': widget.model.useMinute
                         ? widget.model.minuteFixedExtentScrollController.selectedItem
                         : -1,
-                    "second": widget.model.useSecond
+                    'second': widget.model.useSecond
                         ? widget.model.secondFixedExtentScrollController.selectedItem
                         : -1,
                   };
@@ -251,7 +251,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
               },
               behavior: HitTestBehavior.opaque,
               child: TDText(
-                "取消",
+                '取消',
                   style: widget.leftTextStyle?? TextStyle(
                       fontSize: TDTheme.of(context).fontM!.size,
                       color: TDTheme.of(context).fontGyColor2
@@ -279,25 +279,25 @@ class _TDDatePickerState extends State<TDDatePicker> {
             onTap: () {
               if (widget.onConfirm != null) {
                 Map<String, int> selected = {
-                  "year": widget.model.useYear
+                  'year': widget.model.useYear
                       ? widget.model.yearFixedExtentScrollController.selectedItem +
                           widget.model.data[0][0]
                       : -1,
-                  "month": widget.model.useMonth
+                  'month': widget.model.useMonth
                       ? widget.model.monthFixedExtentScrollController.selectedItem +
                           widget.model.data[1][0]
                       : -1,
-                  "day": widget.model.useDay
+                  'day': widget.model.useDay
                       ? widget.model.dayFixedExtentScrollController.selectedItem +
                           widget.model.data[2][0]
                       : -1,
-                  "hour": widget.model.useHour
+                  'hour': widget.model.useHour
                       ? widget.model.hourFixedExtentScrollController.selectedItem
                       : -1,
-                  "minute": widget.model.useMinute
+                  'minute': widget.model.useMinute
                       ? widget.model.minuteFixedExtentScrollController.selectedItem
                       : -1,
-                  "second": widget.model.useSecond
+                  'second': widget.model.useSecond
                       ? widget.model.secondFixedExtentScrollController.selectedItem
                       : -1,
                 };
@@ -307,7 +307,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
-              "确认",
+              '确认',
               style: widget.rightTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontM!.size,
                   color: TDTheme.of(context).brandNormalColor
