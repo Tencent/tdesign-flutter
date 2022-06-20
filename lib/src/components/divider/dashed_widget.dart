@@ -85,22 +85,22 @@ class DashedPainter extends CustomPainter {
     Size size = Size(end.dx - start.dx, end.dy - start.dy);
     Path path = Path();
     path.moveTo(start.dx, start.dy);
-    bool shouldDraw = true;
-    Offset currentOffset = Offset(start.dx, start.dy);
+    var shouldDraw = true;
+    var currentOffset = Offset(start.dx, start.dy);
 
-    double radians = atan(size.height / size.width);
+    var radians = atan(size.height / size.width);
 
-    double gapDx =
+    var gapDx =
         cos(radians) * gap < 0 ? cos(radians) * gap * -1 : cos(radians) * gap;
 
-    double gapDy =
+    var gapDy =
         sin(radians) * gap < 0 ? sin(radians) * gap * -1 : sin(radians) * gap;
 
-    double solidDx = cos(radians) * solidLength < 0
+    var solidDx = cos(radians) * solidLength < 0
         ? cos(radians) * solidLength * -1
         : cos(radians) * solidLength;
 
-    double solidDy = sin(radians) * solidLength < 0
+    var solidDy = sin(radians) * solidLength < 0
         ? sin(radians) * solidLength * -1
         : sin(radians) * solidLength;
 

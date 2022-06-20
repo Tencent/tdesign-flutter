@@ -26,8 +26,8 @@ class TDTabBarView extends TabBarView {
 
   Widget build(BuildContext context) {
     return TabBarView(
-      children: this.children,
-      controller: this.controller,
+      children: children,
+      controller: controller,
     );
   }
 }

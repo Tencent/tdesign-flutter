@@ -29,11 +29,11 @@ class TDTab extends Tab {
 
   Widget build(BuildContext context) {
     return Tab(
-      key: this.key,
-      text: this.text,
-      child: this.child,
-      icon: this.icon,
-      iconMargin: this.iconMargin,
+      key: key,
+      text: text,
+      child: child,
+      icon: icon,
+      iconMargin: iconMargin,
     );
   }
 }

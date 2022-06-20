@@ -115,9 +115,7 @@ class _TDNavBarState extends State<TDNavBar> {
   Widget _getTitleWidget(BuildContext context) {
     return Container(
       alignment: widget.titleAlignment,
-      child: widget.titleWidget != null
-          ? widget.titleWidget!
-          : Text(widget.title ?? '',
+      child: widget.titleWidget ?? Text(widget.title ?? '',
               maxLines: 1,
               textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis,

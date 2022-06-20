@@ -23,12 +23,8 @@ class TDPicker {
     if (dateEnd == null || initialDate == null) {
       var now = DateTime.now();
       // 如果未指定结束时间，则取当前时间
-      if (dateEnd == null) {
-        dateEnd = [now.year, now.month, now.day];
-      }
-      if (initialDate == null) {
-        initialDate = [now.year, now.month, now.day];
-      }
+      dateEnd ??= [now.year, now.month, now.day];
+      initialDate ??= [now.year, now.month, now.day];
     }
     showModalBottomSheet(
         context: context,
