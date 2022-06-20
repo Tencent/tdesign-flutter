@@ -123,7 +123,7 @@ class _TDTabBarState extends State<TDTabBar> {
         indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
         controller: widget.controller,
         onTap: (index){
-          if (widget.onTap != null) widget.onTap!(index);
+          widget.onTap?.call(index);
         },
       ),
     );

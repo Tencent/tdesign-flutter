@@ -40,7 +40,7 @@ typedef TDButtonEvent = void Function();
 class TDButton extends StatefulWidget {
   final Widget? child;
   final String? content;
-  final bool? disabled;
+  final bool disabled;
   final double? opacity;
   final double? width;
   final TDButtonSize? size;
@@ -106,7 +106,9 @@ class _TDButtonState extends State<TDButton>
   }
 
   void updateProgress(double progress) {
-    if (widget.type != TDButtonType.Progress) return;
+    if (widget.type != TDButtonType.Progress){
+      return;
+    }
 
     progress = min(1, max(progress, 0));
     setState(() {
@@ -115,7 +117,9 @@ class _TDButtonState extends State<TDButton>
   }
 
   void setIsLoading(bool isLoading) {
-    if (widget.type != TDButtonType.Loading) return;
+    if (widget.type != TDButtonType.Loading){
+      return;
+    }
 
     if (isLoading) {
       _animationController?.forward();
@@ -133,7 +137,9 @@ class _TDButtonState extends State<TDButton>
   }
 
   void _setAnimation() {
-    if (widget.type != TDButtonType.Loading) return;
+    if (widget.type != TDButtonType.Loading){
+      return;
+    }
 
 
     _animationController ??=
@@ -354,19 +360,25 @@ class _TDButtonState extends State<TDButton>
         ),
       ),
       onTap: () {
-        if (widget.disabled == true) return;
+        if (widget.disabled == true){
+          return;
+        }
         if (widget.click != null) {
           widget.click!();
         }
       },
       onLongPressUp: () {
-        if (widget.disabled == true) return;
+        if (widget.disabled == true){
+          return;
+        }
         if (widget.longClick != null) {
           widget.longClick!();
         }
       },
       onTapDown: (TapDownDetails details) {
-        if (widget.disabled == true) return;
+        if (widget.disabled == true){
+          return;
+        }
         setState(() {
           widget.timer?.cancel();
           widget.timer = null;
@@ -374,7 +386,9 @@ class _TDButtonState extends State<TDButton>
         });
       },
       onTapUp: (TapUpDetails details) {
-        if (widget.disabled == true) return;
+        if (widget.disabled == true){
+          return;
+        }
         widget.timer = Timer(const Duration(milliseconds: 100), () {
           widget.timer?.cancel();
           widget.timer = null;
@@ -384,7 +398,9 @@ class _TDButtonState extends State<TDButton>
         });
       },
       onLongPressEnd: (LongPressEndDetails details) {
-        if (widget.disabled == true) return;
+        if (widget.disabled == true){
+          return;
+        }
         setState(() {
           _opacity = _originOp;
         });
