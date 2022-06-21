@@ -123,7 +123,7 @@ class _TDTabBarState extends State<TDTabBar> {
         indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
         controller: widget.controller,
         onTap: (index){
-          if (widget.onTap != null) widget.onTap!(index);
+          widget.onTap?.call(index);
         },
       ),
     );
@@ -176,7 +176,7 @@ class _TDTabBarIndicatorPainter extends BoxPainter {
 
   final TDTabBarIndicator decoration;
 
-  Paint _paint = Paint();
+  final _paint = Paint();
 
   _TDTabBarIndicatorPainter(this.decoration, VoidCallback onChanged) {
     if (isCustomStyle) {

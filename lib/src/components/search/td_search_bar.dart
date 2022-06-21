@@ -70,13 +70,13 @@ class _TDSearchBarState extends State<TDSearchBar> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Padding(padding: const EdgeInsets.only(left: 6)),
+                  const Padding(padding: EdgeInsets.only(left: 6)),
                   Icon(
                     TDIcons.search,
                     size: 24,
                     color: TDTheme.of(context).fontGyColor3,
                   ),
-                  const Padding(padding: const EdgeInsets.only(left: 3)),
+                  const Padding(padding: EdgeInsets.only(left: 3)),
                   Expanded(
                     flex: 1,
                     child: TextField(
@@ -99,7 +99,7 @@ class _TDSearchBarState extends State<TDSearchBar> {
                       maxLines: 1,
                     ),
                   ),
-                  const Padding(padding: const EdgeInsets.only(right: 8)),
+                  const Padding(padding: EdgeInsets.only(right: 8)),
                   Offstage(
                     offstage: clearBtnHide,
                     child: GestureDetector(
@@ -110,7 +110,7 @@ class _TDSearchBarState extends State<TDSearchBar> {
                           color: TDTheme.of(context).fontGyColor3,
                         )),
                   ),
-                  const Padding(padding: const EdgeInsets.only(right: 8)),
+                  const Padding(padding: EdgeInsets.only(right: 8)),
                 ],
               ),
             ),
@@ -123,7 +123,7 @@ class _TDSearchBarState extends State<TDSearchBar> {
               },
               child: Container(
                 padding: const EdgeInsets.only(left: 16),
-                child: Text("取消",
+                child: Text('取消',
                     style: TextStyle(
                         fontSize: TDTheme.of(context).fontM?.size,
                         color: TDTheme.of(context).brandColor8)),

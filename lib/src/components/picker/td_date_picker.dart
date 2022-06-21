@@ -7,7 +7,7 @@ import 'package:tdesign_flutter/src/util/string_util.dart';
 
 import 'td_item_widget.dart';
 
-typedef void DatePickerCallback(Map<String, int> selected);
+typedef DatePickerCallback = void Function(Map<String, int> selected);
 
 /// 时间选择器
 class TDDatePicker extends StatefulWidget {
@@ -221,26 +221,26 @@ class _TDDatePickerState extends State<TDDatePicker> {
           GestureDetector(
               onTap: () {
                 if (widget.onCancel != null) {
-                  Map<String, int> selected = {
-                    "year": widget.model.useYear
+                  var selected = <String, int>{
+                    'year': widget.model.useYear
                         ? widget.model.yearFixedExtentScrollController.selectedItem +
                             widget.model.data[0][0]
                         : -1,
-                    "month": widget.model.useMonth
+                    'month': widget.model.useMonth
                         ? widget.model.monthFixedExtentScrollController.selectedItem +
                             widget.model.data[1][0]
                         : -1,
-                    "day": widget.model.useDay
+                    'day': widget.model.useDay
                         ? widget.model.dayFixedExtentScrollController.selectedItem +
                             widget.model.data[2][0]
                         : -1,
-                    "hour": widget.model.useHour
+                    'hour': widget.model.useHour
                         ? widget.model.hourFixedExtentScrollController.selectedItem
                         : -1,
-                    "minute": widget.model.useMinute
+                    'minute': widget.model.useMinute
                         ? widget.model.minuteFixedExtentScrollController.selectedItem
                         : -1,
-                    "second": widget.model.useSecond
+                    'second': widget.model.useSecond
                         ? widget.model.secondFixedExtentScrollController.selectedItem
                         : -1,
                   };
@@ -250,7 +250,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
               },
               behavior: HitTestBehavior.opaque,
               child: TDText(
-                "取消",
+                '取消',
                   style: widget.leftTextStyle?? TextStyle(
                       fontSize: TDTheme.of(context).fontM!.size,
                       color: TDTheme.of(context).fontGyColor2
@@ -277,26 +277,26 @@ class _TDDatePickerState extends State<TDDatePicker> {
           GestureDetector(
             onTap: () {
               if (widget.onConfirm != null) {
-                Map<String, int> selected = {
-                  "year": widget.model.useYear
+                var selected = <String, int>{
+                  'year': widget.model.useYear
                       ? widget.model.yearFixedExtentScrollController.selectedItem +
                           widget.model.data[0][0]
                       : -1,
-                  "month": widget.model.useMonth
+                  'month': widget.model.useMonth
                       ? widget.model.monthFixedExtentScrollController.selectedItem +
                           widget.model.data[1][0]
                       : -1,
-                  "day": widget.model.useDay
+                  'day': widget.model.useDay
                       ? widget.model.dayFixedExtentScrollController.selectedItem +
                           widget.model.data[2][0]
                       : -1,
-                  "hour": widget.model.useHour
+                  'hour': widget.model.useHour
                       ? widget.model.hourFixedExtentScrollController.selectedItem
                       : -1,
-                  "minute": widget.model.useMinute
+                  'minute': widget.model.useMinute
                       ? widget.model.minuteFixedExtentScrollController.selectedItem
                       : -1,
-                  "second": widget.model.useSecond
+                  'second': widget.model.useSecond
                       ? widget.model.secondFixedExtentScrollController.selectedItem
                       : -1,
                 };
@@ -306,7 +306,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
-              "确认",
+              '确认',
               style: widget.rightTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontM!.size,
                   color: TDTheme.of(context).brandNormalColor
@@ -511,7 +511,7 @@ class DatePickerModel {
   }
 
   Map<String, int> getSelectedMap() {
-    Map<String, int> map = {
+    var map = <String, int>{
       'year': yearIndex + data[0][0],
       'month': monthIndex + data[1][0],
       'day' : dayIndex + data[2][0],

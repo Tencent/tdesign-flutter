@@ -29,16 +29,16 @@ class _TdInputViewPageState extends State<TdInputViewPage> {
               width: 300,
               height: 48,
               child: TDInput(
-                leftLabel: "QQ登录",
+                leftLabel: 'QQ登录',
                 controller: controller,
                 backgroundColor: Colors.white,
                 textStyle: TextStyle(
                   color: TDTheme.of(context).fontGyColor1,
                   fontSize: TDTheme.of(context).fontS?.size,
                 ),
-                hitText: "说点什么吧",
+                hitText: '说点什么吧',
                 onChanged: (txt) => setState(() {
-                  inputText = "输入内容为：$txt";
+                  inputText = '输入内容为：$txt';
                 }),
                 rightBtn: GestureDetector(
                     onTap: () => controller.clear(),

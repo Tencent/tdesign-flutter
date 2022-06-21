@@ -9,7 +9,7 @@ class _TDIconsData extends IconData {
       : super(
           codePoint,
           fontFamily: 'TDIcons',
-          fontPackage: "tdesign_flutter",
+          fontPackage: 'tdesign_flutter',
         );
 
   final String name;

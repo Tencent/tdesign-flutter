@@ -84,9 +84,9 @@ class TDMultiPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int lines = data.length;
-    List indexes = initialIndexes ?? [for (int i = 0; i < lines; i++) 0];
+    List indexes = initialIndexes ?? [for (var i = 0; i < lines; i++) 0];
     List<FixedExtentScrollController> controllers = [
-      for (int i = 0; i < lines; i++)
+      for (var i = 0; i < lines; i++)
         FixedExtentScrollController(initialItem: indexes[i])
     ];
     double maxWidth = MediaQuery.of(context).size.width;
@@ -129,7 +129,7 @@ class TDMultiPicker extends StatelessWidget {
                   width: maxWidth,
                   child: Row(
                     children: [
-                      for (int i = 0; i < data.length; i++)
+                      for (var i = 0; i < data.length; i++)
                         Expanded(
                           child: buildList(context, i, controllers),
                         )
@@ -157,7 +157,7 @@ class TDMultiPicker extends StatelessWidget {
               onTap: () {
                 if (onCancel != null) {
                   onCancel!([
-                    for (int i = 0; i < controllers.length; i++)
+                    for (var i = 0; i < controllers.length; i++)
                       controllers[i].selectedItem
                   ]);
                 }
@@ -165,7 +165,7 @@ class TDMultiPicker extends StatelessWidget {
               },
               behavior: HitTestBehavior.opaque,
               child: TDText(
-                "取消",
+                '取消',
                 style: leftTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontM!.size,
                   color: TDTheme.of(context).fontGyColor2
@@ -193,7 +193,7 @@ class TDMultiPicker extends StatelessWidget {
             onTap: () {
               if (onConfirm != null) {
                 onConfirm!([
-                  for (int i = 0; i < controllers.length; i++)
+                  for (var i = 0; i < controllers.length; i++)
                     controllers[i].selectedItem
                 ]);
               }
@@ -201,7 +201,7 @@ class TDMultiPicker extends StatelessWidget {
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
-              "确定",
+              '确定',
               style: rightTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontM!.size,
                   color: TDTheme.of(context).brandNormalColor
@@ -382,7 +382,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                     width: maxWidth,
                     child: Row(
                       children: [
-                        for (int i = 0; i < widget.columnNum; i++)
+                        for (var i = 0; i < widget.columnNum; i++)
                           Expanded(
                             child: buildList(context, i),
                           )
@@ -458,7 +458,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               },
               behavior: HitTestBehavior.opaque,
               child: TDText(
-                "取消",
+                '取消',
                 style: widget.leftTextStyle ?? TextStyle(
                   fontSize: TDTheme.of(context).fontM!.size,
                   color: TDTheme.of(context).fontGyColor2,
@@ -491,7 +491,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
-              "确定",
+              '确定',
               style: widget.rightTextStyle ?? TextStyle(
                 fontSize: TDTheme.of(context).fontM!.size,
                 color: TDTheme.of(context).brandNormalColor,

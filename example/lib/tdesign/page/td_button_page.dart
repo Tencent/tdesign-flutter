@@ -11,11 +11,11 @@ class _TdButtonPageState extends State<TdButtonPage> {
   final GlobalKey _btnKey = GlobalKey();
 
   void onClick() {
-    TDToast.showText(context, "点击了按钮");
+    TDToast.showText(context, '点击了按钮');
   }
 
   void onLongClick() {
-    TDToast.showText(context, "长按了按钮");
+    TDToast.showText(context, '长按了按钮');
   }
 
   @override
@@ -35,7 +35,7 @@ class _TdButtonPageState extends State<TdButtonPage> {
               Column(
                 children: [
                   TDButton(
-                    content: "常规S",
+                    content: '常规S',
                     width: 80,
                     theme: TDButtonTheme.Primary,
                     shape: TDButtonShape.Round,
@@ -45,7 +45,7 @@ class _TdButtonPageState extends State<TdButtonPage> {
                   ),
                   const Padding(padding: EdgeInsets.only(top: 20)),
                   TDButton(
-                    content: "常规M",
+                    content: '常规M',
                     width: 200,
                     theme: TDButtonTheme.Default,
                     shape: TDButtonShape.Round,
@@ -55,7 +55,7 @@ class _TdButtonPageState extends State<TdButtonPage> {
                   ),
                   const Padding(padding: EdgeInsets.only(top: 20)),
                   TDButton(
-                    content: "常规L",
+                    content: '常规L',
                     width: 300,
                     theme: TDButtonTheme.Default,
                     shape: TDButtonShape.Round,
@@ -70,7 +70,7 @@ class _TdButtonPageState extends State<TdButtonPage> {
               Column(
                 children: [
                   TDButton(
-                    content: "强调S",
+                    content: '强调S',
                     width: 80,
                     theme: TDButtonTheme.Primary,
                     shape: TDButtonShape.Round,
@@ -80,7 +80,7 @@ class _TdButtonPageState extends State<TdButtonPage> {
                   ),
                   const Padding(padding: EdgeInsets.only(top: 20)),
                   TDButton(
-                    content: "强调M",
+                    content: '强调M',
                     width: 200,
                     theme: TDButtonTheme.Primary,
                     shape: TDButtonShape.Round,
@@ -91,7 +91,7 @@ class _TdButtonPageState extends State<TdButtonPage> {
                   const Padding(padding: EdgeInsets.only(top: 20)),
                   TDButton(
                     key: _btnKey,
-                    content: "强调L",
+                    content: '强调L',
                     theme: TDButtonTheme.Primary,
                     shape: TDButtonShape.Round,
                     size: TDButtonSize.Large,
@@ -106,7 +106,7 @@ class _TdButtonPageState extends State<TdButtonPage> {
               Column(
                 children: [
                   TDButton(
-                    content: "不可点击",
+                    content: '不可点击',
                     width: 200,
                     theme: TDButtonTheme.Default,
                     shape: TDButtonShape.Round,
