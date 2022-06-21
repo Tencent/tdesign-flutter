@@ -16,7 +16,7 @@ class Font {
 class FontFamily {
   late String fontFamily;
 
-  FontFamily({required  this.fontFamily});
+  FontFamily({required this.fontFamily});
 
   factory FontFamily.fromJson(Map<String, dynamic> map) =>
       FontFamily(fontFamily: map['fontFamily']);
