@@ -82,7 +82,7 @@ class TDMultiPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int lines = data.length;
+    var lines = data.length;
     var indexes = initialIndexes ?? [for (var i = 0; i < lines; i++) 0];
     var controllers = <FixedExtentScrollController>[
       for (var i = 0; i < lines; i++)
@@ -544,7 +544,7 @@ class MultiLinkedPickerModel {
     _init(initialData);
   }
 
-  _init(List initialData) {
+  void _init(List initialData) {
     int pIndex;
     controllers.clear();
     presentData.clear();
