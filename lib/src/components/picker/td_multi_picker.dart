@@ -78,18 +78,17 @@ class TDMultiPicker extends StatelessWidget {
       this.itemDistanceCalculator,
       this.customSelectWidget,
       Key? key})
-      : super(key: key) {
-  }
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     int lines = data.length;
-    List indexes = initialIndexes ?? [for (var i = 0; i < lines; i++) 0];
-    List<FixedExtentScrollController> controllers = [
+    var indexes = initialIndexes ?? [for (var i = 0; i < lines; i++) 0];
+    var controllers = <FixedExtentScrollController>[
       for (var i = 0; i < lines; i++)
         FixedExtentScrollController(initialItem: indexes[i])
     ];
-    double maxWidth = MediaQuery.of(context).size.width;
+    var maxWidth = MediaQuery.of(context).size.width;
     return Container(
       width: maxWidth,
       padding: padding ?? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
@@ -532,15 +531,15 @@ class MultiLinkedPickerModel {
     required this.columnNum,
     required List initialData,
   }) {
-    this.selectedData = [];
-    this.selectedIndexes = [];
+    selectedData = [];
+    selectedIndexes = [];
     for (int i = 0; i < columnNum; ++i) {
       if (i >= initialData.length) {
-        this.selectedData.add('');
+        selectedData.add('');
       } else {
-        this.selectedData.add(initialData[i]);
+        selectedData.add(initialData[i]);
       }
-      this.selectedIndexes.add(0);
+      selectedIndexes.add(0);
     }
     _init(initialData);
   }
