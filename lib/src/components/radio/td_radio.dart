@@ -84,7 +84,9 @@ class _TDRadioState extends State<TDRadio> {
         child: _getRadioIcon(context),
       ),
       onTap: () {
-        if (widget.disabled == true) return;
+        if (widget.disabled == true){
+          return;
+        }
 
         setState(() {
           selected = !selected;

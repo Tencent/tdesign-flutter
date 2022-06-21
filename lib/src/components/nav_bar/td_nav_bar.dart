@@ -71,7 +71,9 @@ class _TDNavBarState extends State<TDNavBar> {
               : item.icon,
         ),
         onTap: () {
-          if (item.action == null) return;
+          if (item.action == null){
+            return;
+          }
           item.action!();
         },
       ));
@@ -109,15 +111,13 @@ class _TDNavBarState extends State<TDNavBar> {
             fontWeight: widget.titleFontWeight ?? FontWeight.w500,
             decoration: TextDecoration.none,
             fontFamily: widget.titleFontFamily!.fontFamily,
-            package: "tdesign_flutter");
+            package: 'tdesign_flutter');
   }
 
   Widget _getTitleWidget(BuildContext context) {
     return Container(
       alignment: widget.titleAlignment,
-      child: widget.titleWidget != null
-          ? widget.titleWidget!
-          : Text(widget.title ?? "",
+      child: widget.titleWidget ?? Text(widget.title ?? '',
               maxLines: 1,
               textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis,
