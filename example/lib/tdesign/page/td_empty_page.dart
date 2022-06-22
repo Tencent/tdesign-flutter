@@ -21,7 +21,7 @@ class _TdEmptyPageState extends State<TdEmptyPage> {
             children: const [
               TDEmpty(
                 type: TDEmptyType.operation,
-                operationText: "操作按钮",
+                operationText: '操作按钮',
                 image: Icon(
                   TDIcons.info_circle_filled,
                   size: 84,

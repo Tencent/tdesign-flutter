@@ -95,7 +95,7 @@ class TDTag extends StatelessWidget {
               color: wireFrameColor ?? _getWireFrameColor(context)),
           borderRadius: BorderRadius.all(Radius.circular(borderRadius))),
       child: TDText(
-        this.text,
+        text,
         forceVerticalCenter: forceVerticalCenter,
         textColor: textColor ?? _getTextColor(context),
         font: font ?? _getFont(context),
@@ -117,7 +117,7 @@ class TDTag extends StatelessWidget {
     }
   }
 
-  _getBackgroundColor(BuildContext context) {
+  Color _getBackgroundColor(BuildContext context) {
     switch (type) {
       case TDTagType.normal:
         return TDTheme.of(context).brandNormalColor;
@@ -137,7 +137,7 @@ class TDTag extends StatelessWidget {
     }
   }
 
-  _getWireFrameColor(BuildContext context) {
+  Color _getWireFrameColor(BuildContext context) {
     switch (type) {
       case TDTagType.wireframe:
       case TDTagType.wireframeLightBackground:
@@ -147,7 +147,7 @@ class TDTag extends StatelessWidget {
     }
   }
 
-  _getFont(BuildContext context) {
+  Font? _getFont(BuildContext context) {
     switch (size) {
       case TDTagSize.large:
         return TDTheme.of(context).fontS;

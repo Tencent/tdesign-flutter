@@ -126,7 +126,7 @@ class TDDivider extends StatelessWidget {
   }
 
   /// 构建中间控件
-  _buildMiddleWidget(BuildContext context) {
+  Widget _buildMiddleWidget(BuildContext context) {
     return widget ??
         TDText(
           text,

@@ -23,12 +23,8 @@ class TDPicker {
     if (dateEnd == null || initialDate == null) {
       var now = DateTime.now();
       // 如果未指定结束时间，则取当前时间
-      if (dateEnd == null) {
-        dateEnd = [now.year, now.month, now.day];
-      }
-      if (initialDate == null) {
-        initialDate = [now.year, now.month, now.day];
-      }
+      dateEnd ??= [now.year, now.month, now.day];
+      initialDate ??= [now.year, now.month, now.day];
     }
     showModalBottomSheet(
         context: context,
@@ -83,8 +79,9 @@ class TDPicker {
       {String? title,
       required MultiPickerCallback? onConfirm,
       MultiPickerCallback? onCancel,
-      required List<dynamic> data,
-      List<int>? initialIndexes,
+      required Map data,
+      required int columnNum,
+      required List initialData,
       Duration duration = const Duration(milliseconds: 100),
       double pickerHeight = 248,
       int pickerItemCount = 7}) {
@@ -97,9 +94,10 @@ class TDPicker {
             onConfirm: onConfirm,
             onCancel: onCancel,
             data: data,
-            initialIndexes: initialIndexes,
             pickerHeight: pickerHeight,
             pickerItemCount: pickerItemCount,
+            columnNum: columnNum,
+            selectedData: initialData,
           );
         });
   }

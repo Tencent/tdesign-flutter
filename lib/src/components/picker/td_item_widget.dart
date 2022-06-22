@@ -51,6 +51,8 @@ class _TDItemWidgetState extends State<TDItemWidget> {
             .toDouble();
     _itemDistanceCalculator ??= ItemDistanceCalculator();
     return TDText(widget.content,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontWeight: _itemDistanceCalculator!.calculateFontWeight(context, distance),
           fontSize: _itemDistanceCalculator!.calculateFont(context, distance),
