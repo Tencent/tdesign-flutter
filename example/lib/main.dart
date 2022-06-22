@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import 'package:tdesign_flutter_example/tdesign/example_base.dart';
 import 'package:tdesign_flutter_example/tdesign/example_route.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_dialog_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_divider_page.dart';
 
 
@@ -37,6 +38,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(text: "空白页面", path: "TdEmptyPage", pageBuilder: (context)=> TdEmptyPage()),
   ExamplePageModel(text: "主题页面", path: "TdThemePage", pageBuilder: (context)=> TdThemePage()),
   ExamplePageModel(text: "图片组件", path: "TdImagePage", pageBuilder: (context)=> TdImagePage()),
+  ExamplePageModel(text: "Dialog弹窗", path: "TdDialogPage", pageBuilder: (context)=> TdDialogPage()),
 ];
 
 
