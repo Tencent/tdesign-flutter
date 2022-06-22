@@ -37,7 +37,7 @@ class TDTag extends StatelessWidget {
   final String text;
 
   /// 标签类型
-  final TDTagType? type;
+  final TDTagType type;
 
   /// 标签大小
   final TDTagSize size;
@@ -63,6 +63,9 @@ class TDTag extends StatelessWidget {
   /// 自定义模式下的圆角宽度
   final double borderRadius;
 
+  /// 自定义模式下的圆角宽度
+  final BorderRadiusGeometry? customBorderRadius;
+
   /// 自定义模式下的线框粗细
   final double border;
 
@@ -79,6 +82,7 @@ class TDTag extends StatelessWidget {
         this.fontWeight = FontWeight.normal,
         this.padding,
         this.borderRadius = 2,
+        this.customBorderRadius,
         this.border = 1,
         this.forceVerticalCenter = true,
         Key? key})
@@ -93,7 +97,7 @@ class TDTag extends StatelessWidget {
           border: Border.all(
               width: border,
               color: wireFrameColor ?? _getWireFrameColor(context)),
-          borderRadius: BorderRadius.all(Radius.circular(borderRadius))),
+          borderRadius: customBorderRadius ?? BorderRadius.all(Radius.circular(borderRadius))),
       child: TDText(
         text,
         forceVerticalCenter: forceVerticalCenter,
