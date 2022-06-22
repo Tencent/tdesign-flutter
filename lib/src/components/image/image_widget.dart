@@ -69,29 +69,41 @@ class _StateImageWidget extends State<ImageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (error == false && loading == true)
+    if (error == false && loading == true) {
       return Container(
         alignment: Alignment.center,
-        color: TDTheme.of(context).grayColor2,
+        color: TDTheme
+            .of(context)
+            .grayColor2,
         child: TDText(
           widget.loadingText,
           forceVerticalCenter: true,
           font: Font(size: 10, lineHeight: 16),
-          textColor: TDTheme.of(context).fontGyColor3,
+          textColor: TDTheme
+              .of(context)
+              .fontGyColor3,
         ),
       );
-    if (error == true && loading == false)
+    }
+    if (error == true && loading == false) {
       return Container(
         alignment: Alignment.center,
-        color: TDTheme.of(context).grayColor2,
+        color: TDTheme
+            .of(context)
+            .grayColor2,
         child: TDText(
           widget.failedText,
           forceVerticalCenter: true,
           font: Font(size: 10, lineHeight: 16),
-          textColor: TDTheme.of(context).fontGyColor3,
+          textColor: TDTheme
+              .of(context)
+              .fontGyColor3,
         ),
       );
-    if (loading == false && error == false) return _image;
+    }
+    if (loading == false && error == false) {
+      return _image;
+    }
     return Container();
   }
 }

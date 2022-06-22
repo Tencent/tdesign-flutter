@@ -30,7 +30,7 @@ class ExampleWidget extends StatelessWidget {
         )
     ];
     return Scaffold(
-      appBar: AppBar(title: Text("$title示例页"),),
+      appBar: AppBar(title: Text('$title示例页'),),
       body: Center(child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -55,7 +55,7 @@ class ExampleItem extends StatelessWidget{
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text("示例——${desc}", style: TextStyle(color: Colors.black45),),
+        Text('示例——${desc}', style: TextStyle(color: Colors.black45),),
         builder(context),
       ],
     );
