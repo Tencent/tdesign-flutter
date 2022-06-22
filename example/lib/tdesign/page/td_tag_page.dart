@@ -10,24 +10,87 @@ class TdTagPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExampleWidget(title: '标签',
         // padding: EdgeInsets.zero,
-        children: const[
-      TDTag('标签', type: TDTagType.NORMAL),
-      TDTag('成功', type: TDTagType.SUCCESS),
-      TDTag('警告', type: TDTagType.WARNING),
-      TDTag('危险', type: TDTagType.ERROR),
-      TDTag('信息', type: TDTagType.MESSAGE),
-      TDTag('描边', type: TDTagType.WIREFRAME),
-      TDTag('浅色', type: TDTagType.LIGHT_BACKGROUND),
-      TDTag('描边浅色', type: TDTagType.WIREFRAME_LIGHT_BACKGROUND),
-      TDTag('English', type: TDTagType.LIGHT_BACKGROUND),
-      TDTag('English', type: TDTagType.WIREFRAME_LIGHT_BACKGROUND),
-      TDTag('ABC', type: TDTagType.LIGHT_BACKGROUND),
-      TDTag('ABC', type: TDTagType.WIREFRAME_LIGHT_BACKGROUND),
-      TDTag('中English混合', type: TDTagType.LIGHT_BACKGROUND),
-      TDTag('中English混合', type: TDTagType.WIREFRAME_LIGHT_BACKGROUND),
-      TDTag('标签', size: TDTagSize.LARGE,),
-      TDTag('标签', size: TDTagSize.SMALL,),
-
-    ]);
+        children: [
+          ExampleItem(
+              desc: "展示标签",
+              builder: (context) {
+                return Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  children: [
+                    TDTag('标签', type: TDTagType.normal),
+                    TDTag('成功', type: TDTagType.success),
+                    TDTag('警告', type: TDTagType.warning),
+                    TDTag('危险', type: TDTagType.error),
+                    TDTag('信息', type: TDTagType.message),
+                    TDTag('描边', type: TDTagType.wireframe),
+                    TDTag('浅色', type: TDTagType.lightBackground),
+                    TDTag('描边浅色', type: TDTagType.wireframeLightBackground),
+                    TDTag('English', type: TDTagType.lightBackground),
+                    TDTag('English', type: TDTagType.wireframeLightBackground),
+                    TDTag('ABC', type: TDTagType.lightBackground),
+                    TDTag('ABC', type: TDTagType.wireframeLightBackground),
+                    TDTag('中English混合', type: TDTagType.lightBackground),
+                    TDTag('中English混合',
+                        type: TDTagType.wireframeLightBackground),
+                    TDTag('圆角', borderRadius: 12,),
+                    TDTag('半圆', customBorderRadius: BorderRadius.horizontal(right: Radius.circular(12)),),
+                  ],
+                );
+              }),
+          ExampleItem(
+              desc: "尺寸规格-大，正常，小",
+              builder: (context) {
+                return Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  children: [
+                    TDTag(
+                      '标签',
+                      size: TDTagSize.large,
+                    ),
+                    TDTag('标签', size: TDTagSize.middle),
+                    TDTag(
+                      '标签',
+                      size: TDTagSize.small,
+                    ),
+                  ],
+                );
+              }),
+          ExampleItem(
+              desc: "圆角尺寸规格-大，正常，小",
+              builder: (context) {
+                return Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  children: [
+                    TDTag('圆角', borderRadius: 15,
+                      size: TDTagSize.large,
+                    ),
+                    TDTag('圆角', borderRadius: 12,),
+                    TDTag('圆角', borderRadius: 12,
+                      size: TDTagSize.small,
+                    ),
+                  ],
+                );
+              }),
+          ExampleItem(
+              desc: "半圆尺寸规格-大，正常，小",
+              builder: (context) {
+                return Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  children: [
+                    TDTag('半圆', customBorderRadius: BorderRadius.horizontal(right: Radius.circular(15)),
+                      size: TDTagSize.large,
+                    ),
+                    TDTag('半圆', customBorderRadius: BorderRadius.horizontal(right: Radius.circular(12)),),
+                    TDTag('半圆', customBorderRadius: BorderRadius.horizontal(right: Radius.circular(12)),
+                      size: TDTagSize.small,
+                    ),
+                  ],
+                );
+              }),
+        ]);
   }
 }
