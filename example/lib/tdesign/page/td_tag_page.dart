@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter/src/util/string_util.dart';
 import 'package:tdesign_flutter_example/tdesign/example_base.dart';
 
 class TdTagPage extends StatelessWidget {
@@ -18,23 +17,143 @@ class TdTagPage extends StatelessWidget {
                   spacing: 16,
                   runSpacing: 16,
                   children: [
-                    TDTag('标签', type: TDTagType.normal),
-                    TDTag('成功', type: TDTagType.success),
-                    TDTag('警告', type: TDTagType.warning),
-                    TDTag('危险', type: TDTagType.error),
-                    TDTag('信息', type: TDTagType.message),
-                    TDTag('描边', type: TDTagType.wireframe),
-                    TDTag('浅色', type: TDTagType.lightBackground),
-                    TDTag('描边浅色', type: TDTagType.wireframeLightBackground),
-                    TDTag('English', type: TDTagType.lightBackground),
-                    TDTag('English', type: TDTagType.wireframeLightBackground),
-                    TDTag('ABC', type: TDTagType.lightBackground),
-                    TDTag('ABC', type: TDTagType.wireframeLightBackground),
-                    TDTag('中English混合', type: TDTagType.lightBackground),
+                    TDTag(
+                      '标签',
+                    ),
+                    TDTag('成功',
+                        style: RoundRectTagStyle(type: TDTagType.success)),
+                    TDTag('警告',
+                        style: RoundRectTagStyle(type: TDTagType.warning)),
+                    TDTag('危险',
+                        style: RoundRectTagStyle(type: TDTagType.error)),
+                    TDTag('信息',
+                        style: RoundRectTagStyle(type: TDTagType.message)),
+                    TDTag('浅色', style: RoundRectTagStyle(isLight: true)),
+                    TDTag('描边', style: WireframeRoundRectTagStyle()),
+                    TDTag('浅色描边',
+                        style: WireframeRoundRectTagStyle(isLight: true)),
+                    TDTag(
+                      'English',
+                    ),
+                    TDTag('English',
+                        style: WireframeRoundRectTagStyle(isLight: true)),
+                    TDTag(
+                      'ABC',
+                    ),
+                    TDTag('ABC',
+                        style: WireframeRoundRectTagStyle(isLight: true)),
+                    TDTag(
+                      '中English混合',
+                    ),
                     TDTag('中English混合',
-                        type: TDTagType.wireframeLightBackground),
-                    TDTag('圆角', borderRadius: 12,),
-                    TDTag('半圆', customBorderRadius: BorderRadius.horizontal(right: Radius.circular(12)),),
+                        style: WireframeRoundRectTagStyle(isLight: true)),
+                    TDTag(
+                      '圆角',
+                      style: CircleRectTagStyle(),
+                    ),
+                    TDTag(
+                      '半圆',
+                      style: SemicircleRectTagStyle(),
+                    ),
+                    TDTag(
+                      '标签',
+                      needCloseIcon: true,
+                      onCloseTap: () {
+                        TDToast.showText(context, "点击了关闭图标");
+                      },
+                    ),
+                  ],
+                );
+              }),
+          ExampleItem(
+              desc: "点击控件",
+              builder: (context) {
+                return Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  children: [
+                    TDSelectTag(
+                      '标签',
+                      isSelected: true,
+                      onSelectChanged: (isSelect) {
+                        TDToast.showText(context, "标签选中:$isSelect");
+                      },
+                    ),
+                    TDSelectTag(
+                      '标签',
+                      onSelectChanged: (isSelect) {
+                        TDToast.showText(context, "标签选中:$isSelect");
+                      },
+                    ),
+                    TDSelectTag(
+                      '标签',
+                      style: CircleRectTagStyle(),
+                      unSelectStyle: CircleRectTagStyle(
+                        textColor: TDTheme.of(context).fontGyColor1,
+                        backgroundColor: TDTheme.of(context).grayColor3,
+                      ),
+                      onSelectChanged: (isSelect) {
+                        TDToast.showText(context, "标签选中:$isSelect");
+                      },
+                    ),
+                    TDSelectTag(
+                      '标签',
+                      style: SemicircleRectTagStyle(),
+                      unSelectStyle: SemicircleRectTagStyle(
+                        textColor: TDTheme.of(context).fontGyColor1,
+                        backgroundColor: TDTheme.of(context).grayColor3,
+                      ),
+                      onSelectChanged: (isSelect) {
+                        TDToast.showText(context, "标签选中:$isSelect");
+                      },
+                    ),
+                    TDSelectTag(
+                      '标签',
+                      onSelectChanged: (isSelect) {
+                        TDToast.showText(context, "标签选中:$isSelect");
+                      },
+                      enableSelect: false,
+                    ),
+                    TDSelectTag(
+                      '标签',
+                      style: CircleRectTagStyle(),
+                      unSelectStyle: CircleRectTagStyle(
+                        textColor: TDTheme.of(context).fontGyColor1,
+                        backgroundColor: TDTheme.of(context).grayColor3,
+                      ),
+                      unEnableSelectStyle: CircleRectTagStyle(
+                        textColor: TDTheme.of(context).fontGyColor4,
+                        backgroundColor: TDTheme.of(context).grayColor3,
+                      ),
+                      enableSelect: false,
+                    ),
+
+                    TDSelectTag(
+                      '标签',
+                      onSelectChanged: (isSelect) {
+                        TDToast.showText(context, "标签选中:$isSelect");
+                      },
+                      needCloseIcon: true,
+                      onCloseTap: (){
+                        TDToast.showText(context, "点击关闭标签");
+                      },
+                    ),
+                    TDSelectTag(
+                      '标签',
+                      style: CircleRectTagStyle(),
+                      unSelectStyle: CircleRectTagStyle(
+                        textColor: TDTheme.of(context).fontGyColor1,
+                        backgroundColor: TDTheme.of(context).grayColor3,
+                      ),
+                      unEnableSelectStyle: CircleRectTagStyle(
+                        textColor: TDTheme.of(context).fontGyColor4,
+                        backgroundColor: TDTheme.of(context).grayColor3,
+                      ),
+                      needCloseIcon: true,
+                      onCloseTap: (){
+                        TDToast.showText(context, "点击关闭标签");
+                      },
+                    ),
                   ],
                 );
               }),
@@ -64,11 +183,18 @@ class TdTagPage extends StatelessWidget {
                   spacing: 16,
                   runSpacing: 16,
                   children: [
-                    TDTag('圆角', borderRadius: 15,
+                    TDTag(
+                      '圆角',
+                      style: CircleRectTagStyle(),
                       size: TDTagSize.large,
                     ),
-                    TDTag('圆角', borderRadius: 12,),
-                    TDTag('圆角', borderRadius: 12,
+                    TDTag(
+                      '圆角',
+                      style: CircleRectTagStyle(),
+                    ),
+                    TDTag(
+                      '圆角',
+                      style: CircleRectTagStyle(),
                       size: TDTagSize.small,
                     ),
                   ],
@@ -81,11 +207,18 @@ class TdTagPage extends StatelessWidget {
                   spacing: 16,
                   runSpacing: 16,
                   children: [
-                    TDTag('半圆', customBorderRadius: BorderRadius.horizontal(right: Radius.circular(15)),
+                    TDTag(
+                      '半圆',
+                      style: SemicircleRectTagStyle(),
                       size: TDTagSize.large,
                     ),
-                    TDTag('半圆', customBorderRadius: BorderRadius.horizontal(right: Radius.circular(12)),),
-                    TDTag('半圆', customBorderRadius: BorderRadius.horizontal(right: Radius.circular(12)),
+                    TDTag(
+                      '半圆',
+                      style: SemicircleRectTagStyle(),
+                    ),
+                    TDTag(
+                      '半圆',
+                      style: SemicircleRectTagStyle(),
                       size: TDTagSize.small,
                     ),
                   ],
