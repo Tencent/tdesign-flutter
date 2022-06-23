@@ -18,6 +18,7 @@ export 'src/components/tabbar/td_tab.dart';
 export 'src/components/tabbar/td_tab_bar.dart';
 export 'src/components/tabbar/td_tab_bar_view.dart';
 export 'src/components/tags/td_tag.dart';
+export 'src/components/tags/td_tag_styles.dart';
 export 'src/components/text/td_text.dart';
 export 'src/components/toast/td_toast.dart';
 export 'src/theme/basic.dart';
