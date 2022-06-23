@@ -11,7 +11,7 @@ class TdTagPage extends StatelessWidget {
         // padding: EdgeInsets.zero,
         children: [
           ExampleItem(
-              desc: "展示标签",
+              desc: '展示标签',
               builder: (context) {
                 return Wrap(
                   spacing: 16,
@@ -59,14 +59,14 @@ class TdTagPage extends StatelessWidget {
                       '标签',
                       needCloseIcon: true,
                       onCloseTap: () {
-                        TDToast.showText(context, "点击了关闭图标");
+                        TDToast.showText(context, '点击了关闭图标');
                       },
                     ),
                   ],
                 );
               }),
           ExampleItem(
-              desc: "点击控件",
+              desc: '点击控件',
               builder: (context) {
                 return Wrap(
                   spacing: 16,
@@ -76,13 +76,13 @@ class TdTagPage extends StatelessWidget {
                       '标签',
                       isSelected: true,
                       onSelectChanged: (isSelect) {
-                        TDToast.showText(context, "标签选中:$isSelect");
+                        TDToast.showText(context, '标签选中:$isSelect');
                       },
                     ),
                     TDSelectTag(
                       '标签',
                       onSelectChanged: (isSelect) {
-                        TDToast.showText(context, "标签选中:$isSelect");
+                        TDToast.showText(context, '标签选中:$isSelect');
                       },
                     ),
                     TDSelectTag(
@@ -93,7 +93,7 @@ class TdTagPage extends StatelessWidget {
                         backgroundColor: TDTheme.of(context).grayColor3,
                       ),
                       onSelectChanged: (isSelect) {
-                        TDToast.showText(context, "标签选中:$isSelect");
+                        TDToast.showText(context, '标签选中:$isSelect');
                       },
                     ),
                     TDSelectTag(
@@ -104,13 +104,13 @@ class TdTagPage extends StatelessWidget {
                         backgroundColor: TDTheme.of(context).grayColor3,
                       ),
                       onSelectChanged: (isSelect) {
-                        TDToast.showText(context, "标签选中:$isSelect");
+                        TDToast.showText(context, '标签选中:$isSelect');
                       },
                     ),
                     TDSelectTag(
                       '标签',
                       onSelectChanged: (isSelect) {
-                        TDToast.showText(context, "标签选中:$isSelect");
+                        TDToast.showText(context, '标签选中:$isSelect');
                       },
                       enableSelect: false,
                     ),
@@ -131,11 +131,11 @@ class TdTagPage extends StatelessWidget {
                     TDSelectTag(
                       '标签',
                       onSelectChanged: (isSelect) {
-                        TDToast.showText(context, "标签选中:$isSelect");
+                        TDToast.showText(context, '标签选中:$isSelect');
                       },
                       needCloseIcon: true,
                       onCloseTap: (){
-                        TDToast.showText(context, "点击关闭标签");
+                        TDToast.showText(context, '点击关闭标签');
                       },
                     ),
                     TDSelectTag(
@@ -151,14 +151,14 @@ class TdTagPage extends StatelessWidget {
                       ),
                       needCloseIcon: true,
                       onCloseTap: (){
-                        TDToast.showText(context, "点击关闭标签");
+                        TDToast.showText(context, '点击关闭标签');
                       },
                     ),
                   ],
                 );
               }),
           ExampleItem(
-              desc: "尺寸规格-大，正常，小",
+              desc: '尺寸规格-大，正常，小',
               builder: (context) {
                 return Wrap(
                   spacing: 16,
@@ -177,7 +177,7 @@ class TdTagPage extends StatelessWidget {
                 );
               }),
           ExampleItem(
-              desc: "圆角尺寸规格-大，正常，小",
+              desc: '圆角尺寸规格-大，正常，小',
               builder: (context) {
                 return Wrap(
                   spacing: 16,
@@ -201,7 +201,7 @@ class TdTagPage extends StatelessWidget {
                 );
               }),
           ExampleItem(
-              desc: "半圆尺寸规格-大，正常，小",
+              desc: '半圆尺寸规格-大，正常，小',
               builder: (context) {
                 return Wrap(
                   spacing: 16,
