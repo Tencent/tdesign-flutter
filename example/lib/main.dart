@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import 'package:tdesign_flutter_example/tdesign/example_base.dart';
 import 'package:tdesign_flutter_example/tdesign/example_route.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_checkbox_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_divider_page.dart';
 
 
@@ -13,6 +14,7 @@ import 'package:tdesign_flutter_example/tdesign/page/td_empty_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_icon_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_input_view_pager.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_picker_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_radio_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_tab_bar_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_tag_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_text_page.dart';
@@ -37,6 +39,8 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(text: '空白页面', path: 'TdEmptyPage', pageBuilder: (context)=> TdEmptyPage()),
   ExamplePageModel(text: '主题页面', path: 'TdThemePage', pageBuilder: (context)=> TdThemePage()),
   ExamplePageModel(text: '图片组件', path: 'TdImagePage', pageBuilder: (context)=> TdImagePage()),
+  ExamplePageModel(text: 'Checkbox复选框', path: 'TdCheckboxPage', pageBuilder: (context)=> TdCheckboxPage()),
+  ExamplePageModel(text: 'Radio单框', path: 'TdRadioPage', pageBuilder: (context)=> TdRadioPage()),
 ];
 
 
