@@ -211,9 +211,6 @@ class RoundRectTagStyle extends WireframeRoundRectTagStyle {
   }
 
   @override
-  BorderRadiusGeometry get getBorderRadius => BorderRadius.circular(radius);
-
-  @override
   Color get getTextColor {
     if (textColor != null) {
       return textColor!;
