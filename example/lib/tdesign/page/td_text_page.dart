@@ -9,7 +9,7 @@ class TdTextPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var exampleTxt = "文本Text";
+    var exampleTxt = "文本Text123";
     // debugPaintBaselinesEnabled = true;
     return ExampleWidget(
       padding: EdgeInsets.all(8),
