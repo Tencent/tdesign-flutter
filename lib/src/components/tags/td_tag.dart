@@ -11,6 +11,18 @@ class TDTag extends StatelessWidget {
   /// 标签内容
   final String text;
 
+  /// 文字颜色, 优先级高于style的textColor
+  final Color? textColor;
+
+  /// 背景颜色, 优先级高于style的backgroundColor
+  final Color? backgroundColor;
+
+  /// 字体尺寸, 优先级高于style的font
+  final Font? font;
+
+  /// 字体粗细, 优先级高于style的fontWeight
+  final FontWeight? fontWeight;
+
   /// 标签样式
   final TDTagStyle? style;
 
@@ -31,6 +43,10 @@ class TDTag extends StatelessWidget {
 
   const TDTag(this.text,
       {
+        this.textColor,
+        this.backgroundColor,
+        this.font,
+        this.fontWeight,
         this.style,
         this.size = TDTagSize.middle,
         this.padding,
@@ -47,9 +63,9 @@ class TDTag extends StatelessWidget {
     Widget child = TDText(
       text,
       forceVerticalCenter: forceVerticalCenter,
-      textColor: innerStyle.getTextColor,
-      font: innerStyle.font ?? _getFont(context),
-      fontWeight: innerStyle.fontWeight,
+      textColor: textColor ?? innerStyle.getTextColor,
+      font: font ?? innerStyle.font ?? _getFont(context),
+      fontWeight: fontWeight ?? innerStyle.fontWeight,
     );
 
     if(needCloseIcon){
@@ -70,7 +86,7 @@ class TDTag extends StatelessWidget {
     return Container(
       padding: padding ?? _getPadding(),
       decoration: BoxDecoration(
-          color: innerStyle.getBackgroundColor,
+          color: backgroundColor ?? innerStyle.getBackgroundColor,
           border: Border.all(
               width: innerStyle.border,
               color: innerStyle.getWireFrameColor),
