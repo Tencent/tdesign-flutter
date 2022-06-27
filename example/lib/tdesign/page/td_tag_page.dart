@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter/src/util/string_util.dart';
 import 'package:tdesign_flutter_example/tdesign/example_base.dart';
 
 class TdTagPage extends StatelessWidget {
@@ -8,26 +7,223 @@ class TdTagPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: "标签",
+    return ExampleWidget(title: '标签',
         // padding: EdgeInsets.zero,
-        children: const[
-      TDTag("标签", type: TDTagType.NORMAL),
-      TDTag("成功", type: TDTagType.SUCCESS),
-      TDTag("警告", type: TDTagType.WARNING),
-      TDTag("危险", type: TDTagType.ERROR),
-      TDTag("信息", type: TDTagType.MESSAGE),
-      TDTag("描边", type: TDTagType.WIREFRAME),
-      TDTag("浅色", type: TDTagType.LIGHT_BACKGROUND),
-      TDTag("描边浅色", type: TDTagType.WIREFRAME_LIGHT_BACKGROUND),
-      TDTag("English", type: TDTagType.LIGHT_BACKGROUND),
-      TDTag("English", type: TDTagType.WIREFRAME_LIGHT_BACKGROUND),
-      TDTag("ABC", type: TDTagType.LIGHT_BACKGROUND),
-      TDTag("ABC", type: TDTagType.WIREFRAME_LIGHT_BACKGROUND),
-      TDTag("中English混合", type: TDTagType.LIGHT_BACKGROUND),
-      TDTag("中English混合", type: TDTagType.WIREFRAME_LIGHT_BACKGROUND),
-      TDTag("标签", size: TDTagSize.LARGE,),
-      TDTag("标签", size: TDTagSize.SMALL,),
+        children: [
+          ExampleItem(
+              desc: '展示标签',
+              builder: (context) {
+                return Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  children: [
+                    TDTag(
+                      '标签',
+                    ),
+                    TDTag('成功',
+                        style: RoundRectTagStyle(type: TDTagType.success)),
+                    TDTag('警告',
+                        style: RoundRectTagStyle(type: TDTagType.warning)),
+                    TDTag('危险',
+                        style: RoundRectTagStyle(type: TDTagType.error)),
+                    TDTag('信息',
+                        style: RoundRectTagStyle(type: TDTagType.message)),
+                    TDTag('浅色', style: RoundRectTagStyle(isLight: true)),
+                    TDTag('描边', style: WireframeRoundRectTagStyle()),
+                    TDTag('浅色描边',
+                        style: WireframeRoundRectTagStyle(isLight: true)),
+                    TDTag(
+                      'English',
+                    ),
+                    TDTag('English',
+                        style: WireframeRoundRectTagStyle(isLight: true)),
+                    TDTag(
+                      'ABC',
+                    ),
+                    TDTag('ABC',
+                        style: WireframeRoundRectTagStyle(isLight: true)),
+                    TDTag(
+                      '中English混合',
+                    ),
+                    TDTag('中English混合',
+                        style: WireframeRoundRectTagStyle(isLight: true)),
+                    TDTag(
+                      '圆角',
+                      style: CircleRectTagStyle(),
+                    ),
+                    TDTag(
+                      '半圆',
+                      style: SemicircleRectTagStyle(),
+                    ),
+                    TDTag(
+                      '标签',
+                      needCloseIcon: true,
+                      onCloseTap: () {
+                        TDToast.showText(context, '点击了关闭图标');
+                      },
+                    ),
+                  ],
+                );
+              }),
+          ExampleItem(
+              desc: '点击控件',
+              builder: (context) {
+                return Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  children: [
+                    TDSelectTag(
+                      '标签',
+                      isSelected: true,
+                      onSelectChanged: (isSelect) {
+                        TDToast.showText(context, '标签选中:$isSelect');
+                      },
+                    ),
+                    TDSelectTag(
+                      '标签',
+                      onSelectChanged: (isSelect) {
+                        TDToast.showText(context, '标签选中:$isSelect');
+                      },
+                    ),
+                    TDSelectTag(
+                      '标签',
+                      style: CircleRectTagStyle(),
+                      unSelectStyle: CircleRectTagStyle(
+                        textColor: TDTheme.of(context).fontGyColor1,
+                        backgroundColor: TDTheme.of(context).grayColor3,
+                      ),
+                      onSelectChanged: (isSelect) {
+                        TDToast.showText(context, '标签选中:$isSelect');
+                      },
+                    ),
+                    TDSelectTag(
+                      '标签',
+                      style: SemicircleRectTagStyle(),
+                      unSelectStyle: SemicircleRectTagStyle(
+                        textColor: TDTheme.of(context).fontGyColor1,
+                        backgroundColor: TDTheme.of(context).grayColor3,
+                      ),
+                      onSelectChanged: (isSelect) {
+                        TDToast.showText(context, '标签选中:$isSelect');
+                      },
+                    ),
+                    TDSelectTag(
+                      '标签',
+                      onSelectChanged: (isSelect) {
+                        TDToast.showText(context, '标签选中:$isSelect');
+                      },
+                      enableSelect: false,
+                    ),
+                    TDSelectTag(
+                      '标签',
+                      style: CircleRectTagStyle(),
+                      unSelectStyle: CircleRectTagStyle(
+                        textColor: TDTheme.of(context).fontGyColor1,
+                        backgroundColor: TDTheme.of(context).grayColor3,
+                      ),
+                      unEnableSelectStyle: CircleRectTagStyle(
+                        textColor: TDTheme.of(context).fontGyColor4,
+                        backgroundColor: TDTheme.of(context).grayColor3,
+                      ),
+                      enableSelect: false,
+                    ),
 
-    ]);
+                    TDSelectTag(
+                      '标签',
+                      onSelectChanged: (isSelect) {
+                        TDToast.showText(context, '标签选中:$isSelect');
+                      },
+                      needCloseIcon: true,
+                      onCloseTap: (){
+                        TDToast.showText(context, '点击关闭标签');
+                      },
+                    ),
+                    TDSelectTag(
+                      '标签',
+                      style: CircleRectTagStyle(),
+                      unSelectStyle: CircleRectTagStyle(
+                        textColor: TDTheme.of(context).fontGyColor1,
+                        backgroundColor: TDTheme.of(context).grayColor3,
+                      ),
+                      unEnableSelectStyle: CircleRectTagStyle(
+                        textColor: TDTheme.of(context).fontGyColor4,
+                        backgroundColor: TDTheme.of(context).grayColor3,
+                      ),
+                      needCloseIcon: true,
+                      onCloseTap: (){
+                        TDToast.showText(context, '点击关闭标签');
+                      },
+                    ),
+                  ],
+                );
+              }),
+          ExampleItem(
+              desc: '尺寸规格-大，正常，小',
+              builder: (context) {
+                return Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  children: [
+                    TDTag(
+                      '标签',
+                      size: TDTagSize.large,
+                    ),
+                    TDTag('标签', size: TDTagSize.middle),
+                    TDTag(
+                      '标签',
+                      size: TDTagSize.small,
+                    ),
+                  ],
+                );
+              }),
+          ExampleItem(
+              desc: '圆角尺寸规格-大，正常，小',
+              builder: (context) {
+                return Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  children: [
+                    TDTag(
+                      '圆角',
+                      style: CircleRectTagStyle(),
+                      size: TDTagSize.large,
+                    ),
+                    TDTag(
+                      '圆角',
+                      style: CircleRectTagStyle(),
+                    ),
+                    TDTag(
+                      '圆角',
+                      style: CircleRectTagStyle(),
+                      size: TDTagSize.small,
+                    ),
+                  ],
+                );
+              }),
+          ExampleItem(
+              desc: '半圆尺寸规格-大，正常，小',
+              builder: (context) {
+                return Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  children: [
+                    TDTag(
+                      '半圆',
+                      style: SemicircleRectTagStyle(),
+                      size: TDTagSize.large,
+                    ),
+                    TDTag(
+                      '半圆',
+                      style: SemicircleRectTagStyle(),
+                    ),
+                    TDTag(
+                      '半圆',
+                      style: SemicircleRectTagStyle(),
+                      size: TDTagSize.small,
+                    ),
+                  ],
+                );
+              }),
+        ]);
   }
 }
