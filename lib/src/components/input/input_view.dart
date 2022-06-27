@@ -105,10 +105,10 @@ class TDInputView extends StatelessWidget {
             fillColor: textInputBackgroundColor,
             contentPadding: contentPadding,
             enabledBorder: const UnderlineInputBorder(
-              borderSide: const BorderSide(color: Colors.transparent),
+              borderSide: BorderSide(color: Colors.transparent),
             ),
             focusedBorder: const UnderlineInputBorder(
-              borderSide: const BorderSide(color: Colors.transparent),
+              borderSide: BorderSide(color: Colors.transparent),
             ),
           ),
     );

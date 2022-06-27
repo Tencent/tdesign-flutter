@@ -40,7 +40,7 @@ typedef TDButtonEvent = void Function();
 class TDButton extends StatefulWidget {
   final Widget? child;
   final String? content;
-  final bool? disabled;
+  final bool disabled;
   final double? opacity;
   final double? width;
   final TDButtonSize? size;
@@ -83,7 +83,7 @@ class TDButton extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    _btnState = _TDButtonState(this.opacity!);
+    _btnState = _TDButtonState(opacity!);
     return _btnState!;
   }
 }
@@ -106,16 +106,20 @@ class _TDButtonState extends State<TDButton>
   }
 
   void updateProgress(double progress) {
-    if (widget.type != TDButtonType.Progress) return;
+    if (widget.type != TDButtonType.Progress){
+      return;
+    }
 
     progress = min(1, max(progress, 0));
     setState(() {
-      this.progress = progress;
+      progress = progress;
     });
   }
 
   void setIsLoading(bool isLoading) {
-    if (widget.type != TDButtonType.Loading) return;
+    if (widget.type != TDButtonType.Loading){
+      return;
+    }
 
     if (isLoading) {
       _animationController?.forward();
@@ -123,7 +127,7 @@ class _TDButtonState extends State<TDButton>
       _animationController?.stop();
     }
     setState(() {
-      this.isLoading = isLoading;
+      isLoading = isLoading;
     });
   }
 
@@ -133,27 +137,27 @@ class _TDButtonState extends State<TDButton>
   }
 
   void _setAnimation() {
-    if (widget.type != TDButtonType.Loading) return;
+    if (widget.type != TDButtonType.Loading){
+      return;
+    }
 
-    if (_animationController == null) {
-      _animationController =
-          AnimationController(duration: Duration(seconds: 300), vsync: this);
-    }
-    if (_animation == null) {
-      _animation =
-          Tween<double>(begin: 1, end: 300).animate(_animationController!)
-            ..addStatusListener((status) {
-              if (status == AnimationStatus.completed) {
-                _animationController?.reverse();
-              } else if (status == AnimationStatus.dismissed) {
-                _animationController?.forward();
-              }
-            });
-    }
+
+    _animationController ??=
+        AnimationController(duration: Duration(seconds: 300), vsync: this);
+
+    _animation ??=
+    Tween<double>(begin: 1, end: 300).animate(_animationController!)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _animationController?.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          _animationController?.forward();
+        }
+      });
   }
 
   double _getButtonHeight() {
-    double height = 28;
+    var height = 28.0;
     switch (widget.size) {
       case TDButtonSize.Small:
         height = 36;
@@ -184,7 +188,7 @@ class _TDButtonState extends State<TDButton>
 
   TextStyle _getButtonTextStyle() {
     TextStyle style = TextStyle();
-    Map fontMap = {
+    var fontMap = <TDButtonSize, dynamic>{
       TDButtonSize.Small: [TDTheme.of(context).fontS, FontWeight.w400],
       TDButtonSize.Medium: [TDTheme.of(context).fontS, FontWeight.w400],
       TDButtonSize.Large: [TDTheme.of(context).fontM, FontWeight.w400]
@@ -281,7 +285,7 @@ class _TDButtonState extends State<TDButton>
                 ),
               ),
               TDText(
-                "${(progress * 100).toStringAsFixed(2)}%",
+                '${(progress * 100).toStringAsFixed(2)}%',
                 style: _getButtonTextStyle(),
                 forceVerticalCenter: true,
               ),
@@ -330,7 +334,7 @@ class _TDButtonState extends State<TDButton>
 
   @override
   Widget build(BuildContext context) {
-    double height = _getButtonHeight();
+    var height = _getButtonHeight();
     if (widget.type == TDButtonType.Progress) {
       WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
         double btnW = _globalKey.currentContext?.size?.width ?? 0;
@@ -352,23 +356,29 @@ class _TDButtonState extends State<TDButton>
         width: widget.width,
         height: height,
         child: Center(
-          child: widget.child != null ? widget.child! : _getButtonTypeWidget(),
+          child: widget.child ?? _getButtonTypeWidget(),
         ),
       ),
       onTap: () {
-        if (widget.disabled == true) return;
+        if (widget.disabled == true){
+          return;
+        }
         if (widget.click != null) {
           widget.click!();
         }
       },
       onLongPressUp: () {
-        if (widget.disabled == true) return;
+        if (widget.disabled == true){
+          return;
+        }
         if (widget.longClick != null) {
           widget.longClick!();
         }
       },
       onTapDown: (TapDownDetails details) {
-        if (widget.disabled == true) return;
+        if (widget.disabled == true){
+          return;
+        }
         setState(() {
           widget.timer?.cancel();
           widget.timer = null;
@@ -376,7 +386,9 @@ class _TDButtonState extends State<TDButton>
         });
       },
       onTapUp: (TapUpDetails details) {
-        if (widget.disabled == true) return;
+        if (widget.disabled == true){
+          return;
+        }
         widget.timer = Timer(const Duration(milliseconds: 100), () {
           widget.timer?.cancel();
           widget.timer = null;
@@ -386,7 +398,9 @@ class _TDButtonState extends State<TDButton>
         });
       },
       onLongPressEnd: (LongPressEndDetails details) {
-        if (widget.disabled == true) return;
+        if (widget.disabled == true){
+          return;
+        }
         setState(() {
           _opacity = _originOp;
         });

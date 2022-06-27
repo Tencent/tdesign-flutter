@@ -78,10 +78,11 @@ class _TDBadgeState extends State<TDBadge> {
   TDBadgeSize size = TDBadgeSize.S;
 
   void updateBadgeNum(int? newCount) {
-    if (newCount == null) return;
+    if (newCount == null){
+      return;
+    }
     setState(() {
-      if (newCount <= 0) {
-      } else if (newCount > 0 && newCount <= 9) {
+      if (newCount > 0 && newCount <= 9) {
         size = TDBadgeSize.S;
         badgeNum = newCount.toString();
       } else if (newCount >= 10 && newCount <= 99) {
@@ -95,7 +96,7 @@ class _TDBadgeState extends State<TDBadge> {
   }
 
   double _getBadgeWidth() {
-    double width = 0;
+    var width = 0.0;
     switch (size) {
       case TDBadgeSize.S:
         width = 16;

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 class TDToast {
-  static showText(BuildContext context, String text,
+  static void showText(BuildContext context, String text,
       {Duration duration = TDToast._defaultDisPlayDuration}) {
     _cancel();
     _showing = true;
@@ -76,7 +76,7 @@ class _TDTextToastState extends State<_TDTextToast> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        widget.text ?? "",
+        widget.text ?? '',
         maxLines: 3,
         style: const TextStyle(
             fontSize: 14,

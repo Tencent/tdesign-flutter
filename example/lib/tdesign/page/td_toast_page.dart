@@ -12,31 +12,31 @@ class _TdToastPageState extends State<TdToastPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: "Toast组件", children: [
+    return ExampleWidget(title: 'Toast组件', children: [
       ElevatedButton(
           onPressed: (){
-            TDToast.showText(context, "我是Toast");
+            TDToast.showText(context, '我是Toast');
           },
           child: const Text('普通toast')),
 
       ElevatedButton(
           onPressed: (){
-            var sb = StringBuffer("我是");
+            var sb = StringBuffer('我是');
             for(var i = 0; i < 20; i++){
-              sb.write("很长$i");
+              sb.write('很长$i');
             }
-            sb.write("toast");
+            sb.write('toast');
             TDToast.showText(context, sb.toString());
           },
           child: const Text('超长toast')),
 
       ElevatedButton(
           onPressed: (){
-            var sb = StringBuffer("我是");
+            var sb = StringBuffer('我是');
             for(var i = 0; i < 20; i++){
-              sb.write("很长$i");
+              sb.write('很长$i');
             }
-            sb.write("toast");
+            sb.write('toast');
             TDToast.showText(context, sb.toString(),duration: Duration(seconds: 10));
           },
           child: const Text('10秒再消失toast')),
