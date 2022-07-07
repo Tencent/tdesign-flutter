@@ -214,7 +214,13 @@ class TDDefaultTheme {
 			       }
 			    }
 			  ]
-		}
+		},
+		"margin": {
+			"small": 5,
+			"normal": 8,
+			"medium": 16,
+			"large": 24,
+		},
 	}
 }
 
