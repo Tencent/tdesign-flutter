@@ -102,6 +102,16 @@ class _TDNavBarState extends State<TDNavBar> {
     );
   }
 
+  Widget get backButton {
+    return TDNavBarItem(
+      icon: Icons.arrow_back_ios,
+      action: () {
+        widget.onBack?.call();
+        Navigator.maybePop(context);
+      },
+    ).toWidget(context);
+  }
+
   Widget _buildTitleBarItems(bool isLeft) {
     List<TDNavBarItem> barItems =
         (isLeft ? widget.leftBarItems : widget.rightBarItems) ?? [];
@@ -114,7 +124,7 @@ class _TDNavBarState extends State<TDNavBar> {
     return Row(
       children: [
         if (isLeft && widget.useDefaultBack)
-          BackButton(onPressed: widget.onBack),
+          backButton,
         if (children.isNotEmpty)
           widget.useBorderStyle
               ? _addBorder(children)
