@@ -13,7 +13,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
   final Font? titleFont;
   final FontWeight? titleFontWeight;
   final FontFamily? titleFontFamily;
-  final Alignment? titleAlignment;
+  final bool centerTitle;
   final double opacity;
   final Color? backgroundColor;
   final EdgeInsetsGeometry? padding;
@@ -47,7 +47,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.titleFont,
     this.titleFontFamily,
     this.titleFontWeight = FontWeight.w500,
-    this.titleAlignment = Alignment.center,
+    this.centerTitle = true,
     this.opacity = 1.0,
     this.backgroundColor,
     this.titleMargin = 16,
@@ -199,7 +199,7 @@ class _TDNavBarState extends State<TDNavBar> {
         middle: _getTitleWidget(context),
         trailing: _buildTitleBarItems(false),
         middleSpacing: widget.titleMargin,
-        centerMiddle: widget.titleWidget == null,
+        centerMiddle: widget.centerTitle,
       ),
     );
   }
