@@ -149,13 +149,18 @@ class _TDNavBarState extends State<TDNavBar> {
   }
 
   Widget _getTitleWidget(BuildContext context) {
-    return Container(
-      alignment: widget.titleAlignment,
-      child: widget.titleWidget ?? Text(widget.title ?? '',
+    /// 使用Row使得宽度最小
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        widget.titleWidget ??
+            Text(
+              widget.title ?? '',
               maxLines: 1,
-              textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis,
-              style: _getTitleStyle(context)),
+              style: _getTitleStyle(context),
+            ),
+      ],
     );
   }
 
