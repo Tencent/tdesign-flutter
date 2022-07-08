@@ -159,19 +159,13 @@ class _TDNavBarState extends State<TDNavBar> {
   }
 
   Widget _getTitleWidget(BuildContext context) {
-    /// 使用Row使得宽度最小
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        widget.titleWidget ??
-            Text(
-              widget.title ?? '',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: _getTitleStyle(context),
-            ),
-      ],
-    );
+    return widget.titleWidget ??
+        Text(
+          widget.title ?? '',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: _getTitleStyle(context),
+        );
   }
 
   late final top = MediaQuery.of(context).padding.top;
