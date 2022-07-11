@@ -13,7 +13,7 @@ extension MapExt<K, V> on Map<K, V> {
 
   /// 获取整形值
   int getInt(String key, {int defaultValue = 0}) {
-    num r =  this.getNum(key, defaultValue: defaultValue);
+    var r =  getNum(key, defaultValue: defaultValue);
     if (r is int) {
       return r;
     }
@@ -69,8 +69,8 @@ extension MapExt<K, V> on Map<K, V> {
         }
       }
 
-      if ("true" == value) return true;
-      if ("false" == value) return false;
+      if ('true' == value) return true;
+      if ('false' == value) return false;
 
 
     } catch (e) {
@@ -85,7 +85,7 @@ extension MapExt<K, V> on Map<K, V> {
   String? getString(String key, {String? defaultValue}) {
     try {
       final value = this[key];
-      // print("getStringValue:key :$key, value:$value, valueType:${value.runtimeType}");
+      // print('getStringValue:key :$key, value:$value, valueType:${value.runtimeType}');
       if (value == null) {
         return defaultValue;
       }
@@ -99,10 +99,10 @@ extension MapExt<K, V> on Map<K, V> {
   /// 从map中获取一个字符串,默认返回空字符串。
   /// 用于解决getString函数返回值可空而导致调用端代码不简洁的问题。
   ///
-  String optString(String key, [String defaultValue = ""]) {
+  String optString(String key, [String defaultValue = '']) {
     try {
       final value = this[key];
-      // print("getStringValue:key :$key, value:$value, valueType:${value.runtimeType}");
+      // print('getStringValue:key :$key, value:$value, valueType:${value.runtimeType}');
       if (value == null) {
         return defaultValue;
       }
@@ -123,7 +123,7 @@ extension MapExt<K, V> on Map<K, V> {
     if (value is List) {
       // 如果是数字，需要逐个转换
       return value.map((e) {
-        // print("e is num:${e is num}, T is double:${T is double}");
+        // print('e is num:${e is num}, T is double:${T is double}');
 
         if (e is num) {
           if (T == double) {
@@ -164,7 +164,7 @@ extension MapExt<K, V> on Map<K, V> {
 
   /// 获取一个value值
   T? getValue<T>(String? key, {T? defaultValue}) {
-    T? r = defaultValue;
+    var r = defaultValue;
     try {
       dynamic value = this[key];
       if (value is T) {
@@ -183,18 +183,18 @@ extension MapExt<K, V> on Map<K, V> {
   /// -  divider 分割符
   /// -
   ///
-  String join2({String divider = ", ", String? prefix, String? suffix , String Function(K key, V? value)? convert}){
-    StringBuffer sb = StringBuffer();
+  String join2({String divider = ', ', String? prefix, String? suffix , String Function(K key, V? value)? convert}){
+    var sb = StringBuffer();
     if (prefix != null) {
       sb.write(prefix);
     }
 
     final keys = this.keys;
-    for (int i=0; i<keys.length; i++) {
+    for (var i=0; i<keys.length; i++) {
       final key = keys.elementAt(i);
       final value = this[key];
       sb.write(convert != null ? convert(key, value) : value.toString());
-      if (i != this.length - 1) {
+      if (i != length - 1) {
         sb.write(divider);
       }
     }
@@ -211,9 +211,9 @@ extension MapExt<K, V> on Map<K, V> {
   ///
   /// 获取字典中满足条件的元素的个数
   ///
-  int count(bool test(K k, V v)) {
-    int count = 0;
-    this.forEach((key, value) {
+  int count(bool Function(K k, V v) test) {
+    var count = 0;
+    forEach((key, value) {
       if (test(key, value)) {
         count ++;
       }
@@ -224,9 +224,9 @@ extension MapExt<K, V> on Map<K, V> {
   ///
   ///  条件过滤
   ///
-  Map<K, V> where(bool test(K k, V v)) {
-    Map<K, V> r = {};
-    this.forEach((key, value) {
+  Map<K, V> where(bool Function(K k, V v) test) {
+    var r = <K, V>{};
+    forEach((key, value) {
       if (test(key, value)) {
         r[key] = value;
       }
@@ -237,7 +237,7 @@ extension MapExt<K, V> on Map<K, V> {
   ///
   /// 可中断遍历，如果action返回true，表示中断遍历
   ///
-  void forEachCanBreak(bool action(K k, V v)) {
+  void forEachCanBreak(bool Function(K k, V v) action) {
     final it = keys.iterator;
     while (it.moveNext()) {
       final k = it.current;
