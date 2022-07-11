@@ -13,6 +13,7 @@ import 'package:tdesign_flutter_example/tdesign/page/td_badge_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_empty_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_icon_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_input_view_pager.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_loading_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_picker_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_tab_bar_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_tag_page.dart';
@@ -39,6 +40,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(text: "主题页面", path: "TdThemePage", pageBuilder: (context)=> TdThemePage()),
   ExamplePageModel(text: "图片组件", path: "TdImagePage", pageBuilder: (context)=> TdImagePage()),
   ExamplePageModel(text: "Dialog弹窗", path: "TdDialogPage", pageBuilder: (context)=> TdDialogPage()),
+  ExamplePageModel(text: "Loading加载中", path: "TdLoadingPage", pageBuilder: (context)=> TdLoadingPage()),
 ];
 
 
