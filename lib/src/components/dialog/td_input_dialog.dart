@@ -95,8 +95,8 @@ class TDInputDialog extends StatelessWidget {
   }
 
   Widget _horizontalButtons(BuildContext context) {
-    TDDialogButton left = leftBtn ?? TDDialogButton(title: '取消', action: () {});
-    TDDialogButton right =
+    final TDDialogButton left = leftBtn ?? TDDialogButton(title: '取消', action: () {});
+    final TDDialogButton right =
         rightBtn ?? TDDialogButton(title: '好的', action: () {});
     return HorizontalButtons(
       leftBtn: left,
