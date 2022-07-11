@@ -45,10 +45,10 @@ class TdRadio extends TdCheckbox {
     if (groupState is TdRadioGroupState) {
       style = (groupState.widget as TdRadioGroup).radioStyle;
     }
-    if (style == null) {
-      style = radioStyle;
-    }
-    double size = 24;
+
+    style = style ?? radioStyle;
+
+    var size = 24.0;
     final theme = TDTheme.of(context);
     IconData? iconData;
     switch (style) {
