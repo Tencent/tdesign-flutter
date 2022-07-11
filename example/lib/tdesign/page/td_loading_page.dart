@@ -25,7 +25,7 @@ class _TdLoadingPageState extends State<TdLoadingPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _dividerWidget("类型"),
+              _dividerWidget('类型'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -64,7 +64,7 @@ class _TdLoadingPageState extends State<TdLoadingPage> {
               ElevatedButton(
                   onPressed: () {
                     TDLoading.show(
-                        context: context, duration: 2, text: "加载中...");
+                        context: context, duration: 2, text: '加载中...');
                   },
                   child: const Text('纯文字')),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -73,7 +73,7 @@ class _TdLoadingPageState extends State<TdLoadingPage> {
                       TDLoading.show(
                           context: context,
                           duration: 2,
-                          text: "加载中...",
+                          text: '加载中...',
                           icon: TDLoadingIcon.activity);
                     },
                     child: const Text('图标+文字 竖排')),
@@ -85,13 +85,13 @@ class _TdLoadingPageState extends State<TdLoadingPage> {
                       TDLoading.show(
                           context: context,
                           duration: 2,
-                          text: "加载中...",
+                          text: '加载中...',
                           icon: TDLoadingIcon.activity,
                           style: TDLoadingStyle.horizontal);
                     },
                     child: const Text('图标+文字 横排')),
               ]),
-              _dividerWidget("规格"),
+              _dividerWidget('规格'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -102,7 +102,7 @@ class _TdLoadingPageState extends State<TdLoadingPage> {
                           duration: 2,
                           icon: TDLoadingIcon.circle,
                           size: TDLoadingSize.large,
-                          text: "加载中...",
+                          text: '加载中...',
                         );
                       },
                       child: const Text('大')),
@@ -116,7 +116,7 @@ class _TdLoadingPageState extends State<TdLoadingPage> {
                             duration: 2,
                             icon: TDLoadingIcon.circle,
                             size: TDLoadingSize.medium,
-                            text: "加载中...");
+                            text: '加载中...');
                       },
                       child: const Text('中')),
                   const SizedBox(
@@ -129,7 +129,7 @@ class _TdLoadingPageState extends State<TdLoadingPage> {
                             duration: 2,
                             icon: TDLoadingIcon.circle,
                             size: TDLoadingSize.small,
-                            text: "加载中...");
+                            text: '加载中...');
                       },
                       child: const Text('小')),
                 ],

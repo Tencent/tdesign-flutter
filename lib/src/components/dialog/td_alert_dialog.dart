@@ -100,9 +100,9 @@ class TDAlertDialog extends StatelessWidget {
   }
 
   Widget _horizontalButtons(BuildContext context) {
-    TDDialogButton left = leftBtn ?? TDDialogButton(title: "取消", action: () {});
-    TDDialogButton right =
-        rightBtn ?? TDDialogButton(title: "好的", action: () {});
+    final left = leftBtn ?? TDDialogButton(title: '取消', action: () {});
+    final right =
+        rightBtn ?? TDDialogButton(title: '好的', action: () {});
     return HorizontalButtons(
       leftBtn: left,
       rightBtn: right,
