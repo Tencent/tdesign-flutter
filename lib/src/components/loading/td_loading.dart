@@ -55,7 +55,7 @@ class TDLoading {
     /// 文字颜色
     Color textColor = Colors.black,
   }) {
-    assert((text != null || icon != null), "文字和图标不能同时为空");
+    assert((text != null || icon != null), '文字和图标不能同时为空');
     _buildContext = context;
     _showLoading(TDContentLoading(
       size: size,

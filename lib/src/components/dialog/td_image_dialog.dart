@@ -17,7 +17,7 @@ class TDImageDialog extends StatelessWidget {
     required this.image,
     this.backgroundColor = Colors.white,
     this.radius = 8.0,
-    this.title = "对话框标题",
+    this.title = '对话框标题',
     this.titleColor = Colors.black,
     this.content,
     this.contentColor,
@@ -87,9 +87,9 @@ class TDImageDialog extends StatelessWidget {
   }
 
   Widget _horizontalButtons(BuildContext context) {
-    TDDialogButton left = leftBtn ?? TDDialogButton(title: "取消", action: () {});
+    TDDialogButton left = leftBtn ?? TDDialogButton(title: '取消', action: () {});
     TDDialogButton right =
-        rightBtn ?? TDDialogButton(title: "好的", action: () {});
+        rightBtn ?? TDDialogButton(title: '好的', action: () {});
     return HorizontalButtons(
       leftBtn: left,
       rightBtn: right,

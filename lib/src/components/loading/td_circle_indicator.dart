@@ -73,7 +73,7 @@ class _CirclePaint extends CustomPainter {
 
   _CirclePaint({required this.color, required this.width});
 
-  Paint _paint = Paint()..style = PaintingStyle.stroke;
+  final _paint = Paint()..style = PaintingStyle.stroke;
 
   @override
   void paint(Canvas canvas, Size size) {

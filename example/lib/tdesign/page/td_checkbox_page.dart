@@ -45,7 +45,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
       alignment: Alignment.centerLeft,
       child: Text(
         title,
-        style: TextStyle(fontSize: 12, color: TDTheme.of().grayColor6),
+        style: TextStyle(fontSize: 12, color: TDTheme.of(context).grayColor6),
       ),
     );
   }
