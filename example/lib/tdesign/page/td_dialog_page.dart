@@ -145,7 +145,7 @@ class _TdDialogPageState extends State<TdDialogPage> {
         ]);
   }
 
-  _showDialog(Widget dialog) {
+  void _showDialog(Widget dialog) {
     showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation,

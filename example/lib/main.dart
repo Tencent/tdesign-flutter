@@ -82,7 +82,7 @@ List<ExamplePageModel> examplePageList = [
       pageBuilder: (context) => TdRadioPage()),
   ExamplePageModel(
       text: 'Dialog弹窗',
-      path: "TdDialogPage",
+      path: 'TdDialogPage',
       pageBuilder: (context) => TdDialogPage()),
   ExamplePageModel(
       text: 'Loading加载中',

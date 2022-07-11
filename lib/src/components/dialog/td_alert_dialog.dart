@@ -110,7 +110,7 @@ class TDAlertDialog extends StatelessWidget {
   }
 
   Widget _verticalButtons(BuildContext context) {
-    List<Widget> widgets = [];
+    late List<Widget> widgets = [];
     _buttons!.asMap().forEach((index, value) {
       Widget btn = TDDialogTextButton(
         buttonText: value.title,
