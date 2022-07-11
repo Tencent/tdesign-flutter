@@ -12,7 +12,7 @@ export 'src/components/image/image_widget.dart';
 export 'src/components/image/td_image.dart';
 export 'src/components/input/input_view.dart';
 export 'src/components/input/td_input.dart';
-export 'src/components/input/td_input.dart';
+export 'src/components/loading/td_loading.dart';
 export 'src/components/nav_bar/td_nav_bar.dart';
 export 'src/components/picker/td_date_picker.dart';
 export 'src/components/picker/td_item_widget.dart';
