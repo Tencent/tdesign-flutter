@@ -54,27 +54,27 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
   Widget build(BuildContext context) {
     Widget current = ListView(
       children: [
-        _title("基础多选框"),
+        _title('基础多选框'),
         Container(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const TdCheckbox(
-                title: "多选",
+                title: '多选',
               ),
               _divider(),
               const TdCheckbox(
-                title: "多选",
+                title: '多选',
               ),
               _divider(),
               const TdCheckbox(
-                title: "禁用状态",
+                title: '禁用状态',
                 enable: false,
                 checked: true,
               ),
               _divider(),
               const TdCheckbox(
-                title: "多选多选多选多选多选多选多选多选多选多选多选多选",
+                title: '多选多选多选多选多选多选多选多选多选多选多选多选',
                 enable: false,
               ),
             ],
@@ -83,31 +83,31 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
           color: Colors.white,
         ),
 
-        _title("右侧多选框"),
+        _title('右侧多选框'),
         Container(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const TdCheckbox(
                 contentDirection: TdContentDirection.left,
-                title: "多选",
+                title: '多选',
               ),
               _divider(),
               const TdCheckbox(
                 contentDirection: TdContentDirection.left,
-                title: "多选",
+                title: '多选',
                 checked: true,
               ),
               _divider(),
               const TdCheckbox(
                 contentDirection: TdContentDirection.left,
-                title: "多选",
+                title: '多选',
                 checked: true,
               ),
               _divider(),
               const TdCheckbox(
                 contentDirection: TdContentDirection.left,
-                title: "多选",
+                title: '多选',
               ),
             ],
           ),
@@ -115,25 +115,25 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
           color: Colors.white,
         ),
 
-        _title("自定义图标多框类型"),
+        _title('自定义图标多框类型'),
         Container(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const TdCheckbox(
                 style: TdCheckboxStyle.square,
-                title: "多选",
+                title: '多选',
               ),
               _divider(),
               const TdCheckbox(
                 style: TdCheckboxStyle.square,
-                title: "多选",
+                title: '多选',
                 checked: true,
               ),
               _divider(),
               const TdCheckbox(
                 style: TdCheckboxStyle.square,
-                title: "多选",
+                title: '多选',
                 checked: true,
               ),
             ],
@@ -143,42 +143,40 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
         ),
 
 
-        _title("分组控制"),
+        _title('分组控制'),
         _desc(
-            "通过TdCheckBoxGroup可以把多个TdCheckbox组成一个分组，TdCheckBox的布局和样式自由，只需要拥有同一个FdCheckboxGroup祖宗节点即可，可以通过TdCheckboxGroupController实现对分组的统一控制。"),
+            '通过TdCheckBoxGroup可以把多个TdCheckbox组成一个分组，TdCheckBox的布局和样式自由，只需要拥有同一个FdCheckboxGroup祖宗节点即可，可以通过TdCheckboxGroupController实现对分组的统一控制。'),
 
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Container(
-            child: Row(
-              children: [
-                const Text("控制器:"),
-                const SizedBox(
-                  width: 10,
-                ),
-                MaterialButton(
-                    child: const Text("勾选1和3"),
-                    onPressed: () {
-                      controller?.toggle("1", true);
-                      controller?.toggle("3", true);
-                    }),
-                MaterialButton(
-                    child: const Text("全选"),
-                    onPressed: () {
-                      controller?.toggleAll(true);
-                    }),
-                MaterialButton(
-                    child: const Text("全部取消"),
-                    onPressed: () {
-                      controller?.toggleAll(false);
-                    }),
-                MaterialButton(
-                    child: const Text("反选"),
-                    onPressed: () {
-                      controller?.reverseAll();
-                    }),
-              ],
-            ),
+          child: Row(
+            children: [
+              const Text('控制器:'),
+              const SizedBox(
+                width: 10,
+              ),
+              MaterialButton(
+                  child: const Text('勾选1和3'),
+                  onPressed: () {
+                    controller?.toggle('1', true);
+                    controller?.toggle('3', true);
+                  }),
+              MaterialButton(
+                  child: const Text('全选'),
+                  onPressed: () {
+                    controller?.toggleAll(true);
+                  }),
+              MaterialButton(
+                  child: const Text('全部取消'),
+                  onPressed: () {
+                    controller?.toggleAll(false);
+                  }),
+              MaterialButton(
+                  child: const Text('反选'),
+                  onPressed: () {
+                    controller?.reverseAll();
+                  }),
+            ],
           ),
         ),
 
@@ -191,7 +189,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
             },
             checkedIds: checkIds,
             onOverloadChecked: () {
-              TDToast.showText(context, "最大只能勾选3个选项");
+              TDToast.showText(context, '最大只能勾选3个选项');
             },
             child: Container(
               child: GridView.builder(
@@ -205,15 +203,15 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: 6,
                 itemBuilder: (BuildContext context, int index) => TdCheckbox(
-                  id: "$index",
-                  title: "选项$index",
+                  id: '$index',
+                  title: '选项$index',
                 ),
               ),
               padding: const EdgeInsets.all(16),
               color: Colors.white,
             )),
 
-        _title("完全自定义样式"),
+        _title('完全自定义样式'),
 
         TdCheckboxGroup(
             controller: controller,
@@ -237,7 +235,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
             },
             checkedIds: checkIds,
             onOverloadChecked: () {
-              TDToast.showText(context, "最大只能勾选3个选项");
+              TDToast.showText(context, '最大只能勾选3个选项');
             },
             child: Container(
               child: GridView.builder(
@@ -251,8 +249,8 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: 6,
                 itemBuilder: (BuildContext context, int index) => TdCheckbox(
-                  id: "2$index",
-                  title: "选项$index",
+                  id: '2$index',
+                  title: '选项$index',
                 ),
               ),
               padding: const EdgeInsets.all(16),
@@ -269,7 +267,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
 
     current = Scaffold(
       appBar: AppBar(
-        title: const Text("CheckBox演示"),
+        title: const Text('CheckBox演示'),
       ),
       body: current,
     );

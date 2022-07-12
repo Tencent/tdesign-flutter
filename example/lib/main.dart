@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/tdesign/example_base.dart';
-import 'package:tdesign_flutter_example/tdesign/example_route.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_checkbox_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_dialog_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_divider_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_image_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_avatar_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_badge_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_empty_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_icon_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_input_view_pager.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_loading_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_picker_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_radio_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_tab_bar_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_tag_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_text_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_theme_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_toast_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_button_page.dart';
+
+import 'tdesign/example_base.dart';
+import 'tdesign/example_route.dart';
+import 'tdesign/page/td_avatar_page.dart';
+import 'tdesign/page/td_badge_page.dart';
+import 'tdesign/page/td_button_page.dart';
+import 'tdesign/page/td_checkbox_page.dart';
+import 'tdesign/page/td_dialog_page.dart';
+import 'tdesign/page/td_divider_page.dart';
+import 'tdesign/page/td_empty_page.dart';
+import 'tdesign/page/td_icon_page.dart';
+import 'tdesign/page/td_image_page.dart';
+import 'tdesign/page/td_input_view_pager.dart';
+import 'tdesign/page/td_loading_page.dart';
+import 'tdesign/page/td_picker_page.dart';
+import 'tdesign/page/td_radio_page.dart';
+import 'tdesign/page/td_tab_bar_page.dart';
+import 'tdesign/page/td_tag_page.dart';
+import 'tdesign/page/td_text_page.dart';
+import 'tdesign/page/td_theme_page.dart';
+import 'tdesign/page/td_toast_page.dart';
 
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TdTextPage()
 List<ExamplePageModel> examplePageList = [
@@ -87,11 +88,11 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: 'Loading加载中',
       path: 'TdLoadingPage',
-      pageBuilder: (context) => TdLoadingPage()),
+      pageBuilder: (context) => const TdLoadingPage()),
 ];
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
@@ -101,6 +102,9 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
+  const MyApp({Key? key}):super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

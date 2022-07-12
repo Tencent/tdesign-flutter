@@ -30,8 +30,8 @@ class TdImageState extends State<TdImagePage> with SingleTickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    String loadingUrl = 'https://images7.alphacoders.com/691/thumbbig-691004.webp';
-    String url = 'http://www.zmaomao.com/uploads/201204/11-20120416014B36.jpg';
+    var loadingUrl = 'https://images7.alphacoders.com/691/thumbbig-691004.webp';
+    var url = 'http://www.zmaomao.com/uploads/201204/11-20120416014B36.jpg';
     return ExampleWidget(
       title: 'TDImage',
       children: [

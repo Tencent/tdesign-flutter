@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter_example/tdesign/example_base.dart';
 import 'package:tdesign_flutter/td_export.dart';
+
+import '../example_base.dart';
 
 class TdDividerPage extends StatelessWidget {
   const TdDividerPage({Key? key}) : super(key: key);
