@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/src/theme/td_spacers.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 typedef TDBarItemAction = void Function();
 
-class TDNavBar extends StatefulWidget {
+class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
   final List<TDNavBarItem>? leftBarItems;
   final List<TDNavBarItem>? rightBarItems;
   final Widget? titleWidget;
@@ -12,15 +13,10 @@ class TDNavBar extends StatefulWidget {
   final Font? titleFont;
   final FontWeight? titleFontWeight;
   final FontFamily? titleFontFamily;
-  final Alignment? titleAlignment;
+  final bool centerTitle;
   final double opacity;
   final Color? backgroundColor;
-
-  /// 左边按钮间间距
-  final double leftItemMargin;
-
-  /// 右边按钮间间距
-  final double rightItemMargin;
+  final EdgeInsetsGeometry? padding;
 
   /// 中间文案左右两边间距
   final double titleMargin;
@@ -28,6 +24,18 @@ class TDNavBar extends StatefulWidget {
 
   /// 是否进行屏幕适配，默认true
   final bool screenAdaptation;
+
+  /// 是否使用默认的返回
+  final bool useDefaultBack;
+
+  /// 返回事件
+  final VoidCallback? onBack;
+
+  /// 是否使用边框模式
+  final bool useBorderStyle;
+
+  /// 边框
+  final TDNavBarItemBorder? border;
 
   const TDNavBar({
     Key? key,
@@ -39,58 +47,94 @@ class TDNavBar extends StatefulWidget {
     this.titleFont,
     this.titleFontFamily,
     this.titleFontWeight = FontWeight.w500,
-    this.titleAlignment = Alignment.center,
+    this.centerTitle = true,
     this.opacity = 1.0,
     this.backgroundColor,
-    this.leftItemMargin = 16,
-    this.rightItemMargin = 16,
     this.titleMargin = 16,
+    this.padding,
     this.height = 44,
     this.screenAdaptation = true,
+    this.useDefaultBack = true,
+    this.onBack,
+    this.useBorderStyle = false,
+    this.border,
   }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TDNavBarState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(height);
 }
 
 class _TDNavBarState extends State<TDNavBar> {
-  Widget? _buildTitleBarItems(BuildContext context, bool isLeft) {
-    var leading = <Widget>[];
-    List<TDNavBarItem>? barItems =
-        isLeft ? widget.leftBarItems : widget.rightBarItems ?? [];
-
-    var padding = isLeft
-        ? EdgeInsets.only(left: widget.leftItemMargin)
-        : EdgeInsets.only(right: widget.rightItemMargin);
-    barItems?.forEach((item) {
-      leading.add(GestureDetector(
-        child: Container(
-          padding: padding,
-          child: item.title != null
-              ? Text(item.title!, style: _getItemTitleStyle(context))
-              : item.icon,
+  Widget _addBorder(List<Widget> items) {
+    var border = widget.border ?? TDNavBarItemBorder();
+    var borderColor = border.color ?? TDTheme.of(context).grayColor3;
+    List<Widget> children = [];
+    for (int i = 0; i < items.length; i++) {
+      children.add(items[i]);
+      if (widget.useBorderStyle && i != items.length - 1) {
+        children.add(
+          Container(
+            width: border.width,
+            height: 16.0,
+            color: borderColor,
+          ),
+        );
+      }
+    }
+    var child = Row(
+      children: children,
+      mainAxisSize: MainAxisSize.min,
+    );
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(border.radius),
+        border: Border.all(
+          color: borderColor,
+          width: border.width,
         ),
-        onTap: () {
-          if (item.action == null){
-            return;
-          }
-          item.action!();
-        },
-      ));
-    });
-    return leading.isNotEmpty
-        ? Row(
-            children: leading,
-            mainAxisSize: MainAxisSize.min,
-          )
-        : null;
+      ),
+      padding: border.padding ??
+          EdgeInsets.symmetric(horizontal: TDTheme.of(context).spacer4),
+      child: child,
+    );
   }
 
-  TextStyle _getItemTitleStyle(BuildContext context) {
-    return TextStyle(
-        fontSize: TDTheme.of(context).fontM?.size,
-        color: TDTheme.of(context).fontGyColor1,
-        decoration: TextDecoration.none);
+  Widget get backButton {
+    return TDNavBarItem(
+      icon: Icons.arrow_back_ios,
+      action: () {
+        widget.onBack?.call();
+        Navigator.maybePop(context);
+      },
+    ).toWidget(context);
+  }
+
+  Widget _buildTitleBarItems(bool isLeft) {
+    List<TDNavBarItem> barItems =
+        (isLeft ? widget.leftBarItems : widget.rightBarItems) ?? [];
+    List<Widget> children = barItems
+        .map(
+          (e) => e.toWidget(context),
+        )
+        .toList();
+
+    return Row(
+      children: [
+        if (isLeft && widget.useDefaultBack)
+          backButton,
+        if (children.isNotEmpty)
+          widget.useBorderStyle
+              ? _addBorder(children)
+              : Row(
+                  children: children,
+                  mainAxisSize: MainAxisSize.min,
+                ),
+      ],
+      mainAxisSize: MainAxisSize.min,
+    );
   }
 
   TextStyle _getTitleStyle(BuildContext context) {
@@ -115,14 +159,13 @@ class _TDNavBarState extends State<TDNavBar> {
   }
 
   Widget _getTitleWidget(BuildContext context) {
-    return Container(
-      alignment: widget.titleAlignment,
-      child: widget.titleWidget ?? Text(widget.title ?? '',
-              maxLines: 1,
-              textAlign: TextAlign.left,
-              overflow: TextOverflow.ellipsis,
-              style: _getTitleStyle(context)),
-    );
+    return widget.titleWidget ??
+        Text(
+          widget.title ?? '',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: _getTitleStyle(context),
+        );
   }
 
   late final top = MediaQuery.of(context).padding.top;
@@ -134,38 +177,71 @@ class _TDNavBarState extends State<TDNavBar> {
       bcc = bcc.withOpacity(widget.opacity);
     }
 
-    var padding = widget.screenAdaptation ? top : 0.0;
+    var paddingTop = widget.screenAdaptation ? top : 0.0;
+    var padding = widget.padding ??
+        EdgeInsets.symmetric(
+          horizontal: TDTheme.of(context).spacer16,
+          vertical: TDTheme.of(context).spacer4,
+        );
 
     return Container(
       color: bcc,
-      height: widget.height + padding,
-      padding: EdgeInsets.only(top: padding),
+      height: widget.height + paddingTop,
+      padding: padding.add(EdgeInsets.only(top: paddingTop)),
       child: NavigationToolbar(
-        leading: _buildTitleBarItems(context, true),
+        leading: _buildTitleBarItems(true),
         middle: _getTitleWidget(context),
-        trailing: _buildTitleBarItems(context, false),
+        trailing: _buildTitleBarItems(false),
         middleSpacing: widget.titleMargin,
-        centerMiddle: widget.titleWidget == null,
+        centerMiddle: widget.centerTitle,
       ),
     );
   }
 }
 
 class TDNavBarItem {
-  Icon? icon;
-  String? title;
-  Color? titleColor;
+  IconData? icon;
   Color? iconColor;
   TDBarItemAction? action;
-  double? iconWidth;
-  double? iconHeight;
+  double? iconSize;
+  EdgeInsetsGeometry? padding;
+  Widget? iconWidget;
 
   TDNavBarItem({
     this.icon,
-    this.title,
-    this.titleColor,
+    this.iconColor,
     this.action,
-    this.iconWidth = 24,
-    this.iconHeight = 24,
+    this.iconSize = 16.0,
+    this.padding,
+    this.iconWidget,
+  });
+
+  Widget toWidget(BuildContext context) => GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: this.action,
+        child: Padding(
+          padding:
+              this.padding ?? EdgeInsets.all(TDTheme.of(context).spacer8),
+          child: this.iconWidget ??
+              Icon(
+                this.icon,
+                size: this.iconSize,
+                color: this.iconColor,
+              ),
+        ),
+      );
+}
+
+class TDNavBarItemBorder {
+  double width;
+  double radius;
+  Color? color;
+  EdgeInsetsGeometry? padding;
+
+  TDNavBarItemBorder({
+    this.width = 1.0,
+    this.radius = 22.0,
+    this.color,
+    this.padding,
   });
 }
