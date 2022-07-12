@@ -103,7 +103,7 @@ class TdCheckbox extends StatefulWidget {
   /// 默认的checkBox icon
   Widget buildDefaultIcon(BuildContext context, TdCheckboxGroupState? groupState, bool isChecked) {
     Widget current;
-    double size = 24;
+    var size = 24.0;
     final style = this.style ?? groupState?.widget.style ?? TdCheckboxStyle.circle;
     final theme = TDTheme.of(context);
     current = Icon(
@@ -162,7 +162,7 @@ class TdCheckboxState extends State<TdCheckbox> {
 
 
     if (icon == null && content == null) {
-      throw Exception("Icon and content cannot both be null!");
+      throw Exception('Icon and content cannot both be null!');
     }
 
     Widget? current ;

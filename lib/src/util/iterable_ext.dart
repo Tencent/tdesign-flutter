@@ -12,14 +12,14 @@ extension IterableExt<T> on Iterable<T> {
   /// 获取集合的前n个元素
   ///
   Iterable<T> firstCount(int count) {
-    int c = count < length ? count : length;
+    var c = count < length ? count : length;
     return Iterable.generate(c, elementAt);
   }
 
   ///
   /// 在列表中查找特定的值，如果找不到返回null
   ///
-  T? firstWhereOrNull(bool test(T element)) {
+  T? firstWhereOrNull(bool Function(T element) test) {
     try {
       return firstWhere(test);
     } catch (e) {
@@ -30,9 +30,9 @@ extension IterableExt<T> on Iterable<T> {
   ///
   /// 带index参数的map方法
   ///
-  Iterable<E> mapWidthIndex<E>(E f(T e, int index)) {
-    int index = 0;
-    return this.map((e) {
+  Iterable<E> mapWidthIndex<E>(E Function(T e, int index) f) {
+    var index = 0;
+    return map((e) {
       return f(e, index++);
     });
   }
@@ -40,9 +40,9 @@ extension IterableExt<T> on Iterable<T> {
   ///
   /// 带index参数的forEach方法
   ///
-  void forEachWidthIndex(void f(T e, int index)) {
-    int index = 0;
-    this.forEach((e) {
+  void forEachWidthIndex(void Function(T e, int index) f) {
+    var index = 0;
+    forEach((e) {
       return f(e, index++);
     });
   }
@@ -55,15 +55,15 @@ extension IterableExt<T> on Iterable<T> {
   /// - suffix 后缀
   /// - convert 元素格式化成字符串
   String join2({String divider = ", ", String? prefix, String? suffix , String Function(T element)? convert}){
-    StringBuffer sb = StringBuffer();
+    var sb = StringBuffer();
     if (prefix != null) {
       sb.write(prefix);
     }
 
-    for (int i=0; i<this.length; i++) {
-      final e = this.elementAt(i);
+    for (var i=0; i<length; i++) {
+      final e = elementAt(i);
       sb.write(convert != null ? convert(e) : e.toString());
-      if (i != this.length - 1) {
+      if (i != length - 1) {
         sb.write(divider);
       }
     }

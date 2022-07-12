@@ -214,7 +214,7 @@ class TdCheckboxGroupState extends State<TdCheckboxGroup> {
 
   /// 操作所有CheckBox
   void toggleAll(bool check, [bool notify = true]) {
-    bool isChanged = false;
+    var isChanged = false;
     checkBoxStates.forEachCanBreak((k, v) {
       if (check) {
         if (!toggle(k, check)) {
@@ -243,7 +243,7 @@ class TdCheckboxGroupState extends State<TdCheckboxGroup> {
       checkBoxStates[key] = false;
     });
     checkBoxStates.forEach((k, v) {
-      bool check = reverseValue[k] ?? false;
+      var check = reverseValue[k] ?? false;
       toggle(k, check);
     });
     setState(() {});
@@ -253,6 +253,7 @@ class TdCheckboxGroupState extends State<TdCheckboxGroup> {
   void _notifyChange() {
     final change = widget.onChangeGroup;
     if (change != null) {
+      // checkBoxStates.where((k, v) => v).keys.toList();
       final checkedIds = checkBoxStates.where((k, v) => v).keys.toList();
       change.call(checkedIds);
     }
@@ -278,8 +279,8 @@ class TdCheckBoxGroupInherited extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant TdCheckBoxGroupInherited oldWidget) {
-    bool notify =
-        oldWidget.state.checkBoxStates.keys != this.state.checkBoxStates.keys;
+    var notify =
+        oldWidget.state.checkBoxStates.keys != state.checkBoxStates.keys;
     print("FuiCheckBoxGroupInherited shouldNotify:$notify");
     return true;
   }
