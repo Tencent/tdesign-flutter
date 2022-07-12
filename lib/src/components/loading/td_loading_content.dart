@@ -55,7 +55,6 @@ class TDContentLoading extends Dialog {
             radius: size == TDLoadingSize.small
                 ? 10
                 : (size == TDLoadingSize.medium ? 11 : 13),
-            color: iconColor,
           );
           break;
         case TDLoadingIcon.circle:
@@ -75,6 +74,13 @@ class TDContentLoading extends Dialog {
             size: size == TDLoadingSize.small
                 ? 12
                 : (size == TDLoadingSize.medium ? 16 : 20),
+          );
+          break;
+        default:
+          indicator = CupertinoActivityIndicator(
+            radius: size == TDLoadingSize.small
+                ? 10
+                : (size == TDLoadingSize.medium ? 11 : 13),
           );
           break;
       }
