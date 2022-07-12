@@ -18,10 +18,10 @@ class _TdDialogPageState extends State<TdDialogPage> {
   @override
   Widget build(BuildContext context) {
     return ExampleWidget(
-        title: "Dialog组件",
+        title: 'Dialog组件',
         padding: const EdgeInsets.all(3),
         children: [
-          _dividerWidget("确认弹框"),
+          _dividerWidget('确认弹框'),
           ElevatedButton(
               onPressed: () {
                 _showDialog(const TDConfirmDialog(
@@ -66,7 +66,7 @@ class _TdDialogPageState extends State<TdDialogPage> {
                 ));
               },
               child: const Text('标题+可滚动内容')),
-          _dividerWidget("多选项弹窗"),
+          _dividerWidget('多选项弹窗'),
           ElevatedButton(
               onPressed: () {
                 _showDialog(TDAlertDialog(
@@ -74,9 +74,9 @@ class _TdDialogPageState extends State<TdDialogPage> {
                   content:
                       '告知当前状态、信息和解决方法，等内容。描述文案尽可能控制在三行内,告知当前状态、信息和解决方法，等内容。',
                   rightBtn: TDDialogButton(
-                      title: "确定",
+                      title: '确定',
                       action: () {
-                        print("点击了确定按钮");
+                        print('点击了确定按钮');
                       }),
                 ));
               },
@@ -89,17 +89,17 @@ class _TdDialogPageState extends State<TdDialogPage> {
                       '告知当前状态、信息和解决方法，等内容。描述文案尽可能控制在三行内,告知当前状态、信息和解决方法，等内容。',
                   buttons: [
                     TDDialogButton(
-                        title: "第一行",
+                        title: '第一行',
                         action: () {
                           print('点击了第一行');
                         }),
                     TDDialogButton(
-                        title: "第二行",
+                        title: '第二行',
                         action: () {
                           print('点击了第二行');
                         }),
                     TDDialogButton(
-                        title: "取消",
+                        title: '取消',
                         action: () {
                           print('点击了取消');
                         },
@@ -109,7 +109,7 @@ class _TdDialogPageState extends State<TdDialogPage> {
                 ));
               },
               child: const Text('上下选择')),
-          _dividerWidget("输入类弹窗"),
+          _dividerWidget('输入类弹窗'),
           ElevatedButton(
               onPressed: () {
                 _showDialog(TDInputDialog(
@@ -117,14 +117,14 @@ class _TdDialogPageState extends State<TdDialogPage> {
                   content: '告知当前状态、信息和解决方法',
                   textEditingController: TextEditingController(),
                   rightBtn: TDDialogButton(
-                      title: "确定",
+                      title: '确定',
                       action: () {
-                        print("点击了确定按钮");
+                        print('点击了确定按钮');
                       }),
                 ));
               },
               child: const Text('输入类对话框')),
-          _dividerWidget("带图片弹窗"),
+          _dividerWidget('带图片弹窗'),
           ElevatedButton(
               onPressed: () {
                 _showDialog(TDImageDialog(
@@ -135,9 +135,9 @@ class _TdDialogPageState extends State<TdDialogPage> {
                     // fit: BoxFit.cover,
                   ),
                   rightBtn: TDDialogButton(
-                      title: "确定",
+                      title: '确定',
                       action: () {
-                        print("点击了确定按钮");
+                        print('点击了确定按钮');
                       }),
                 ));
               },
@@ -145,7 +145,7 @@ class _TdDialogPageState extends State<TdDialogPage> {
         ]);
   }
 
-  _showDialog(Widget dialog) {
+  void _showDialog(Widget dialog) {
     showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
