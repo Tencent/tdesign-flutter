@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:tdesign_flutter/src/components/checkbox/td_check_box.dart';
-import 'package:tdesign_flutter/src/util/map_ext.dart';
+
+import '../../util/map_ext.dart';
+import 'td_check_box.dart';
 
 ///
 /// CheckBoxGroup变化监听器
@@ -172,6 +173,7 @@ class TdCheckboxGroupState extends State<TdCheckboxGroup> {
   }
 
 
+  @override
   void didUpdateWidget(TdCheckboxGroup oldWidget) {
     super.didUpdateWidget(oldWidget);
     final  oldCheckIds = oldWidget.checkedIds;
@@ -281,7 +283,7 @@ class TdCheckBoxGroupInherited extends InheritedWidget {
   bool updateShouldNotify(covariant TdCheckBoxGroupInherited oldWidget) {
     var notify =
         oldWidget.state.checkBoxStates.keys != state.checkBoxStates.keys;
-    print("FuiCheckBoxGroupInherited shouldNotify:$notify");
+    print('FuiCheckBoxGroupInherited shouldNotify:$notify');
     return true;
   }
 }

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 class TDTabBarView extends TabBarView {
   /// 子widget列表
+  @override
   final List<Widget> children;
 
   /// 控制器
+  @override
   final TabController? controller;
 
   /// 是否可以滑动切换

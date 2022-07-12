@@ -1,12 +1,12 @@
-import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui show TextHeightBehavior;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tdesign_flutter/src/util/platform_util.dart';
-import 'package:tdesign_flutter/td_export.dart';
+
+import '../../../td_export.dart';
+import '../../util/platform_util.dart';
 
 /// 文本控件
 /// 设计原则：

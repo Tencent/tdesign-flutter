@@ -5,8 +5,9 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/util/auto_size.dart';
+
 import '../../../td_export.dart';
+import '../../util/auto_size.dart';
 import 'td_dialog_widget.dart';
 
 /// 弹窗控件
@@ -110,7 +111,7 @@ class TDAlertDialog extends StatelessWidget {
   }
 
   Widget _verticalButtons(BuildContext context) {
-     List<Widget> widgets = [];
+     var widgets = <Widget>[];
     _buttons!.asMap().forEach((index, value) {
       Widget btn = TDDialogTextButton(
         buttonText: value.title,

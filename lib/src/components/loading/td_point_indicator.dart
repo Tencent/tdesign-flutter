@@ -8,7 +8,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 class TDPointBounceIndicator extends StatefulWidget {
-  TDPointBounceIndicator({
+  const TDPointBounceIndicator({
     Key? key,
     this.color,
     this.size = 20.0,

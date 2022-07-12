@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import '../../../td_export.dart';
 
-enum TDAvatarSize { Large, Medium, Small }
+enum TDAvatarSize { large, medium, small }
 
 enum TDAvatarType {
-  Default,
-  User,
-  Circle,
-  Square,
-  CustomText,
+  normal,
+  user,
+  circle,
+  square,
+  customText,
 }
 
 /// 用于头像显示
@@ -33,8 +33,8 @@ class TDAvatar extends StatelessWidget {
 
   const TDAvatar(
       {Key? key,
-      this.size = TDAvatarSize.Medium,
-      this.type = TDAvatarType.Default,
+      this.size = TDAvatarSize.medium,
+      this.type = TDAvatarType.normal,
       this.text,
       this.avatarUrl,
       this.avatarSize,
@@ -44,13 +44,13 @@ class TDAvatar extends StatelessWidget {
   double _getAvatarWidth() {
     double width;
     switch (size) {
-      case TDAvatarSize.Large:
+      case TDAvatarSize.large:
         width = 64;
         break;
-      case TDAvatarSize.Medium:
+      case TDAvatarSize.medium:
         width = 48;
         break;
-      case TDAvatarSize.Small:
+      case TDAvatarSize.small:
         width = 32;
         break;
     }
@@ -60,13 +60,13 @@ class TDAvatar extends StatelessWidget {
   Font _getTextFont() {
     Font font;
     switch (size) {
-      case TDAvatarSize.Large:
+      case TDAvatarSize.large:
         font = Font(size: 16, lineHeight: 24);
         break;
-      case TDAvatarSize.Medium:
+      case TDAvatarSize.medium:
         font = Font(size: 14, lineHeight: 22);
         break;
-      case TDAvatarSize.Small:
+      case TDAvatarSize.small:
         font = Font(size: 12, lineHeight: 20);
         break;
     }
@@ -76,13 +76,13 @@ class TDAvatar extends StatelessWidget {
   double _getIconWidth() {
     double width;
     switch (size) {
-      case TDAvatarSize.Large:
+      case TDAvatarSize.large:
         width = 26;
         break;
-      case TDAvatarSize.Medium:
+      case TDAvatarSize.medium:
         width = 19.5;
         break;
-      case TDAvatarSize.Small:
+      case TDAvatarSize.small:
         width = 13;
         break;
     }
@@ -92,28 +92,28 @@ class TDAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (type) {
-      case TDAvatarType.Default:
+      case TDAvatarType.normal:
         return CircleAvatar(
           radius: _getAvatarWidth() / 2,
           backgroundColor: TDTheme.of(context).brandColor2,
           child: Icon(TDIcons.user,
               size: _getIconWidth(), color: TDTheme.of(context).brandColor8),
         );
-      case TDAvatarType.User:
+      case TDAvatarType.user:
         return CircleAvatar(
             radius: _getAvatarWidth() / 2,
             backgroundColor: TDTheme.of(context).brandColor2,
             backgroundImage: avatarUrl != null
                 ? NetworkImage(avatarUrl!)
                 : NetworkImage(defaultUrl));
-      case TDAvatarType.Circle:
+      case TDAvatarType.circle:
         return CircleAvatar(
             radius: _getAvatarWidth() / 2,
             backgroundColor: TDTheme.of(context).brandColor2,
             backgroundImage: avatarUrl != null
                 ? NetworkImage(avatarUrl!)
                 : NetworkImage(defaultUrl));
-      case TDAvatarType.Square:
+      case TDAvatarType.square:
         return Container(
           width: _getAvatarWidth(),
           height: _getAvatarWidth(),
@@ -124,7 +124,7 @@ class TDAvatar extends StatelessWidget {
                       ? NetworkImage(avatarUrl!)
                       : NetworkImage(defaultUrl))),
         );
-      case TDAvatarType.CustomText:
+      case TDAvatarType.customText:
         return CircleAvatar(
           radius: _getAvatarWidth() / 2,
           backgroundColor: TDTheme.of(context).brandColor8,

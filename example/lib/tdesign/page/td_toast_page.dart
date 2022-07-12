@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/tdesign/example_base.dart';
+import '../example_base.dart';
 
 // ignore: use_key_in_widget_constructors
 class TdToastPage extends StatefulWidget {
@@ -37,7 +37,7 @@ class _TdToastPageState extends State<TdToastPage> {
               sb.write('很长$i');
             }
             sb.write('toast');
-            TDToast.showText(context, sb.toString(),duration: Duration(seconds: 10));
+            TDToast.showText(context, sb.toString(),duration: const Duration(seconds: 10));
           },
           child: const Text('10秒再消失toast')),
 

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/util/platform_util.dart';
+import '../../util/platform_util.dart';
 
 /// 去掉ListView上下滑动的波纹
 class NoWaveBehavior extends ScrollBehavior {

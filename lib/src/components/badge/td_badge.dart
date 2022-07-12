@@ -1,8 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/util/string_util.dart';
-import 'package:tdesign_flutter/td_export.dart';
-import 'dart:math';
+
+import '../../../td_export.dart';
 
 enum TDBadgeType {
   /// 红点样式
@@ -72,6 +73,7 @@ class TDBadge extends StatefulWidget {
     this.padding
   }) : super(key: key);
 
+  @override
   State<StatefulWidget> createState() => _TDBadgeState();
 }
 

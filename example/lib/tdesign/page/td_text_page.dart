@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import '../example_base.dart';
@@ -12,7 +11,7 @@ class TdTextPage extends StatelessWidget {
     var exampleTxt = '文本Text';
     // debugPaintBaselinesEnabled = true;
     return ExampleWidget(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       title: 'TDText',
       children: [
         ExampleItem(
@@ -77,7 +76,7 @@ class TdTextPage extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 14,
                           color: TDTheme.of(context).brandNormalColor)),
-                  WidgetSpan(
+                  const WidgetSpan(
                     child: Icon(TDIcons.setting, size: 24,)
                   ),
                 ]),
@@ -98,7 +97,7 @@ class TdTextPage extends StatelessWidget {
         ExampleItem(
             desc: '中文居中:（带有英文可能不居中）',
             builder: (_) {
-              return TDText(
+              return const TDText(
                 '中华人民共和国腾讯科技',
                 // font: Font(size: 100, lineHeight: 100),
                 forceVerticalCenter: true,
@@ -110,7 +109,7 @@ class TdTextPage extends StatelessWidget {
             builder: (_) {
               return TDTextConfiguration(
                 paddingConfig: CustomTextPaddingConfig(),
-                child: CustomPaddingText(),
+                child: const CustomPaddingText(),
               );
             }),
       ],
@@ -127,7 +126,7 @@ class CustomPaddingText extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        TDText(
+        const TDText(
         '中华人民共和国腾讯科技fgjpqy',
         // font: Font(size: 100, lineHeight: 100),
         forceVerticalCenter: true,

@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import '../../../td_export.dart';
 
 int currentIndex = 0;
 bool isCustomStyle = false;
@@ -94,6 +94,7 @@ class TDTabBar extends StatefulWidget {
         ),
         super(key: key);
 
+  @override
   State<StatefulWidget> createState() => _TDTabBarState();
 }
 
@@ -101,6 +102,7 @@ class _TDTabBarState extends State<TDTabBar> {
   /// 默认高度
   static const double _defaultHeight = 46;
 
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: widget.width ?? MediaQuery.of(context).size.width,

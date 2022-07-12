@@ -51,7 +51,7 @@ class _TDCircleIndicatorState extends State<TDCircleIndicator>
 
   @override
   Widget build(BuildContext context) {
-    double value = (_animation1.value) * 2 * pi;
+    var value = (_animation1.value) * 2 * pi;
     return Center(
       child: Transform(
         transform: Matrix4.identity()..rotateZ(value),
