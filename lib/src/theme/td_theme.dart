@@ -41,7 +41,7 @@ class TDTheme extends StatelessWidget {
 
   /// 获取主题数据，如果未传context则获取全局唯一的默认数据,
   /// 传了context，则获取最近的主题，取不到则会获取全局唯一默认数据
-  static TDThemeData of(BuildContext? context) {
+  static TDThemeData of([BuildContext? context]) {
     if (context != null) {
       // 如果传了context，则从其中获取最近主题
       final _TDInheritedTheme? inheritedTheme =

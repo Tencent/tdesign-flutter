@@ -3,10 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import 'package:tdesign_flutter_example/tdesign/example_base.dart';
 import 'package:tdesign_flutter_example/tdesign/example_route.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_checkbox_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_dialog_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_divider_page.dart';
-
-
 import 'package:tdesign_flutter_example/tdesign/page/td_image_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_avatar_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_badge_page.dart';
@@ -14,7 +13,9 @@ import 'package:tdesign_flutter_example/tdesign/page/td_empty_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_icon_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_input_view_pager.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_navbar_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_loading_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_picker_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_radio_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_tab_bar_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_tag_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_text_page.dart';
@@ -22,27 +23,74 @@ import 'package:tdesign_flutter_example/tdesign/page/td_theme_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_toast_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_button_page.dart';
 
-
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TdTextPage()
 List<ExamplePageModel> examplePageList = [
-  ExamplePageModel(text: "文本控件", path: "TdTextPage", pageBuilder: (context)=> TdTextPage()),
-  ExamplePageModel(text: "分割线", path: "TdDividerPage", pageBuilder: (context)=> TdDividerPage()),
-  ExamplePageModel(text: "圆形图片组件（头像）", path: "TdAvatarPage", pageBuilder: (context)=> TdAvatarPage()),
-  ExamplePageModel(text: "红点", path: "TdBadgePage", pageBuilder: (context)=> TdBadgePage()),
-  ExamplePageModel(text: "标签栏", path: "TdTabBarPage", pageBuilder: (context)=> TdTabBarPage()),
-  ExamplePageModel(text: "轻提示", path: "TdToastPage", pageBuilder: (context)=> TdToastPage()),
-  ExamplePageModel(text: "按钮", path: "TdButtonPage", pageBuilder: (context)=> TdButtonPage()),
-  ExamplePageModel(text: "输入框", path: "TdInputViewPag", pageBuilder: (context)=> TdInputViewPage()),
-  ExamplePageModel(text: "标签", path: "TdTagPage", pageBuilder: (context)=> TdTagPage()),
-  ExamplePageModel(text: "Picker", path: "TdPickerPage", pageBuilder: (context)=> TdPickerPage()),
-  ExamplePageModel(text: "图标", path: "TdIconPage", pageBuilder: (context)=> TdIconPage()),
-  ExamplePageModel(text: "空白页面", path: "TdEmptyPage", pageBuilder: (context)=> TdEmptyPage()),
-  ExamplePageModel(text: "主题页面", path: "TdThemePage", pageBuilder: (context)=> TdThemePage()),
-  ExamplePageModel(text: "图片组件", path: "TdImagePage", pageBuilder: (context)=> TdImagePage()),
-  ExamplePageModel(text: "Dialog弹窗", path: "TdDialogPage", pageBuilder: (context)=> TdDialogPage()),
-  ExamplePageModel(text: "导航栏组件", path: "TdNavBarPage", pageBuilder: (context)=> TdNavBarPage()),
+  ExamplePageModel(
+      text: '文本控件', path: 'TdTextPage', pageBuilder: (context) => TdTextPage()),
+  ExamplePageModel(
+      text: '分割线',
+      path: 'TdDividerPage',
+      pageBuilder: (context) => TdDividerPage()),
+  ExamplePageModel(
+      text: '圆形图片组件（头像）',
+      path: 'TdAvatarPage',
+      pageBuilder: (context) => TdAvatarPage()),
+  ExamplePageModel(
+      text: '红点', path: 'TdBadgePage', pageBuilder: (context) => TdBadgePage()),
+  ExamplePageModel(
+      text: '标签栏',
+      path: 'TdTabBarPage',
+      pageBuilder: (context) => TdTabBarPage()),
+  ExamplePageModel(
+      text: '轻提示',
+      path: 'TdToastPage',
+      pageBuilder: (context) => TdToastPage()),
+  ExamplePageModel(
+      text: '按钮',
+      path: 'TdButtonPage',
+      pageBuilder: (context) => TdButtonPage()),
+  ExamplePageModel(
+      text: '输入框',
+      path: 'TdInputViewPag',
+      pageBuilder: (context) => TdInputViewPage()),
+  ExamplePageModel(
+      text: '标签', path: 'TdTagPage', pageBuilder: (context) => TdTagPage()),
+  ExamplePageModel(
+      text: 'Picker',
+      path: 'TdPickerPage',
+      pageBuilder: (context) => TdPickerPage()),
+  ExamplePageModel(
+      text: '图标', path: 'TdIconPage', pageBuilder: (context) => TdIconPage()),
+  ExamplePageModel(
+      text: '空白页面',
+      path: 'TdEmptyPage',
+      pageBuilder: (context) => TdEmptyPage()),
+  ExamplePageModel(
+      text: '主题页面',
+      path: 'TdThemePage',
+      pageBuilder: (context) => TdThemePage()),
+  ExamplePageModel(
+      text: '图片组件',
+      path: 'TdImagePage',
+      pageBuilder: (context) => TdImagePage()),
+  ExamplePageModel(
+      text: 'Checkbox复选框',
+      path: 'TdCheckboxPage',
+      pageBuilder: (context) => TdCheckboxPage()),
+  ExamplePageModel(
+      text: 'Radio单框',
+      path: 'TdRadioPage',
+      pageBuilder: (context) => TdRadioPage()),
+  ExamplePageModel(
+      text: 'Dialog弹窗',
+      path: 'TdDialogPage',
+      pageBuilder: (context) => TdDialogPage()),
+  ExamplePageModel(
+      text: 'Loading加载中',
+      path: 'TdLoadingPage',
+      pageBuilder: (context) => TdLoadingPage()),
+  ExamplePageModel(text: ‘导航栏组件’, path: "TdNavBarPage", pageBuilder: (context)=> TdNavBarPage()),
 ];
-
 
 void main() {
   runApp(MyApp());
@@ -104,7 +152,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool useConch = false;
-  
+
   @override
   void initState() {
     super.initState();
@@ -139,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Widget> _buildChildren(BuildContext context) {
     return <Widget>[
-      for(var model in examplePageList)
+      for (var model in examplePageList)
         OutlinedButton(
             onPressed: () {
               Navigator.pushNamed(context, model.path);
@@ -150,5 +198,3 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
   }
 }
-
-

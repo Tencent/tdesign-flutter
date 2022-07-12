@@ -12,7 +12,7 @@ import '../../../td_export.dart';
 class TDDialogTitle extends StatelessWidget {
   const TDDialogTitle({
     Key? key,
-    this.title = "对话框标题",
+    this.title = '对话框标题',
     this.titleColor = Colors.black,
   }) : super(key: key);
 
@@ -39,7 +39,7 @@ class TDDialogTitle extends StatelessWidget {
 class TDDialogContent extends StatelessWidget {
   const TDDialogContent({
     Key? key,
-    this.content = "当前弹窗内容",
+    this.content = '当前弹窗内容',
     this.contentColor = const Color(0x66000000),
   }) : super(key: key);
 
@@ -183,7 +183,7 @@ class HorizontalButtons extends StatelessWidget {
 class TDDialogTextButton extends StatelessWidget {
   const TDDialogTextButton({
     Key? key,
-    this.buttonText = "按钮",
+    this.buttonText = '按钮',
     this.buttonTextColor,
     required this.onPressed,
     this.height = 56.0,
