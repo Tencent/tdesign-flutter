@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../td_export.dart';
-import 'package:tdesign_flutter/src/theme/td_spacers.dart';
+import '../../theme/td_spacers.dart';
 
 typedef TDBarItemAction = void Function();
 
@@ -71,8 +71,8 @@ class _TDNavBarState extends State<TDNavBar> {
   Widget _addBorder(List<Widget> items) {
     var border = widget.border ?? TDNavBarItemBorder();
     var borderColor = border.color ?? TDTheme.of(context).grayColor3;
-    List<Widget> children = [];
-    for (int i = 0; i < items.length; i++) {
+    var children = <Widget>[];
+    for (var i = 0; i < items.length; i++) {
       children.add(items[i]);
       if (widget.useBorderStyle && i != items.length - 1) {
         children.add(
@@ -113,9 +113,9 @@ class _TDNavBarState extends State<TDNavBar> {
   }
 
   Widget _buildTitleBarItems(bool isLeft) {
-    List<TDNavBarItem> barItems =
+    var barItems =
         (isLeft ? widget.leftBarItems : widget.rightBarItems) ?? [];
-    List<Widget> children = barItems
+    var children = barItems
         .map(
           (e) => e.toWidget(context),
         )
@@ -218,15 +218,15 @@ class TDNavBarItem {
 
   Widget toWidget(BuildContext context) => GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: this.action,
+        onTap: action,
         child: Padding(
           padding:
-              this.padding ?? EdgeInsets.all(TDTheme.of(context).spacer8),
-          child: this.iconWidget ??
+              padding ?? EdgeInsets.all(TDTheme.of(context).spacer8),
+          child: iconWidget ??
               Icon(
-                this.icon,
-                size: this.iconSize,
-                color: this.iconColor,
+                icon,
+                size: iconSize,
+                color: iconColor,
               ),
         ),
       );

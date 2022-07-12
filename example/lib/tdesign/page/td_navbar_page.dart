@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/tdesign/example_base.dart';
+import '../example_base.dart';
 
 class TdNavBarPage extends StatelessWidget {
   const TdNavBarPage({Key? key}) : super(key: key);

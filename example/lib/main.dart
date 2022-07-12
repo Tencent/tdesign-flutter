@@ -15,6 +15,7 @@ import 'tdesign/page/td_icon_page.dart';
 import 'tdesign/page/td_image_page.dart';
 import 'tdesign/page/td_input_view_pager.dart';
 import 'tdesign/page/td_loading_page.dart';
+import 'tdesign/page/td_navbar_page.dart';
 import 'tdesign/page/td_picker_page.dart';
 import 'tdesign/page/td_radio_page.dart';
 import 'tdesign/page/td_tab_bar_page.dart';
@@ -22,7 +23,6 @@ import 'tdesign/page/td_tag_page.dart';
 import 'tdesign/page/td_text_page.dart';
 import 'tdesign/page/td_theme_page.dart';
 import 'tdesign/page/td_toast_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_navbar_page.dart';
 
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TdTextPage()
 List<ExamplePageModel> examplePageList = [
@@ -90,7 +90,7 @@ List<ExamplePageModel> examplePageList = [
       text: 'Loading加载中',
       path: 'TdLoadingPage',
       pageBuilder: (context) => const TdLoadingPage()),
-  ExamplePageModel(text: '导航栏组件', path: "TdNavBarPage", pageBuilder: (context)=> TdNavBarPage()),
+  ExamplePageModel(text: '导航栏组件', path: 'TdNavBarPage', pageBuilder: (context)=> const TdNavBarPage()),
 ];
 
 void main() {
