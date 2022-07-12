@@ -1,4 +1,4 @@
-import 'package:tdesign_flutter/src/theme/td_theme.dart';
+import 'td_theme.dart';
 
 /// 常用的Margin，一般以8为倍数
 extension TDSpacers on TDThemeData {

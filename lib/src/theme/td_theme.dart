@@ -119,7 +119,7 @@ class TDThemeData {
         cornerMap: _copyMap<double>(this.cornerMap, cornerMap),
         fontFamilyMap: _copyMap<FontFamily>(this.fontFamilyMap, fontFamilyMap),
         shadowMap: _copyMap<List<BoxShadow>>(this.shadowMap, shadowMap),
-        spacerMap: _copyMap<double>(this.spacerMap, marginMap),
+        spacerMap: _copyMap<double>(spacerMap, marginMap),
         extraThemeData: extraThemeData ?? this.extraThemeData);
 
     return result;
