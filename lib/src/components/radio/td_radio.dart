@@ -72,7 +72,7 @@ class TdRadio extends TdCheckbox {
           size: size,
           color: isSelected ? theme.brandColor8 : theme.grayColor4);
     } else {
-      return SizedBox.square(dimension: size,);
+      return SizedBox(width: size, height: size,);
     }
 
   }
