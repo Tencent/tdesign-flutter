@@ -214,6 +214,19 @@ class TDDefaultTheme {
 			       }
 			    }
 			  ]
+		},
+		"spacer": {
+			"spacer4": 4,
+			"spacer8": 8,
+			"spacer12": 12,
+			"spacer16": 16,
+			"spacer24": 24,
+			"spacer32": 32,
+			"spacer40": 40,
+			"spacer48": 48,
+			"spacer64": 64,
+			"spacer96": 96,
+			"spacer160": 160
 		}
 	}
 }
