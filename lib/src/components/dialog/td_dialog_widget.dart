@@ -5,7 +5,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/util/auto_size.dart';
+
 import '../../../td_export.dart';
 
 /// 弹窗标题

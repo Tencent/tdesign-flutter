@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/theme/td_theme.dart';
+import 'td_theme.dart';
 
 /// 内置投影
 extension TDBoxShadows on TDThemeData {

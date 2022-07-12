@@ -1,6 +1,5 @@
-import 'package:tdesign_flutter/src/theme/td_theme.dart';
-
 import 'basic.dart';
+import 'td_theme.dart';
 
 extension TDFontFamilies on TDThemeData {
   FontFamily? get numberFontFamily => fontFamilyMap['numberFontFamily'];

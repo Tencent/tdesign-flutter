@@ -69,8 +69,12 @@ extension MapExt<K, V> on Map<K, V> {
         }
       }
 
-      if ('true' == value) return true;
-      if ('false' == value) return false;
+      if ('true' == value){
+        return true;
+      }
+      if ('false' == value) {
+        return false;
+      }
 
 
     } catch (e) {
@@ -137,7 +141,7 @@ extension MapExt<K, V> on Map<K, V> {
     }
 
     if (value is String) {
-      final json = jsonDecode(value);
+      final json = jsonDecode(value as String);
       if (json is List<T>) {
         return json;
       }
@@ -154,7 +158,7 @@ extension MapExt<K, V> on Map<K, V> {
       return value;
     }
     if (value is String) {
-      final json = jsonDecode(value);
+      final json = jsonDecode(value as String);
       if (json is Map) {
         return json;
       }

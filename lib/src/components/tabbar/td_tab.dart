@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 
 class TDTab extends Tab {
   /// 文字内容
+  @override
   final String? text;
 
   /// 子widget
+  @override
   final Widget? child;
 
   /// 图标
+  @override
   final Widget? icon;
 
   /// 图标间距
+  @override
   final EdgeInsetsGeometry iconMargin;
 
   @override
@@ -27,6 +31,7 @@ class TDTab extends Tab {
             icon: icon,
             iconMargin: iconMargin);
 
+  @override
   Widget build(BuildContext context) {
     return Tab(
       key: key,

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import '../../../td_export.dart';
 
-import 'input_view.dart';
 
 class TDInput extends StatelessWidget {
   /// 输入框背景色

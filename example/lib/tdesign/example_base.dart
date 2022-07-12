@@ -55,7 +55,7 @@ class ExampleItem extends StatelessWidget{
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text('示例——${desc}', style: TextStyle(color: Colors.black45),),
+        Text('示例——$desc', style: const TextStyle(color: Colors.black45),),
         builder(context),
       ],
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import '../../../td_export.dart';
 
 ///封装图片加载控件，增加图片加载失败时加载默认图片
 class ImageWidget extends StatefulWidget {

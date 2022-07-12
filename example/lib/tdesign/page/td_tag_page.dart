@@ -17,35 +17,35 @@ class TdTagPage extends StatelessWidget {
                   spacing: 16,
                   runSpacing: 16,
                   children: [
-                    TDTag(
+                    const TDTag(
                       '标签',
                     ),
-                    TDTag('成功',
+                    const TDTag('成功',
                         style: RoundRectTagStyle(type: TDTagType.success)),
-                    TDTag('警告',
+                    const TDTag('警告',
                         style: RoundRectTagStyle(type: TDTagType.warning)),
-                    TDTag('危险',
+                    const TDTag('危险',
                         style: RoundRectTagStyle(type: TDTagType.error)),
-                    TDTag('信息',
+                    const TDTag('信息',
                         style: RoundRectTagStyle(type: TDTagType.message)),
-                    TDTag('浅色', style: RoundRectTagStyle(isLight: true)),
-                    TDTag('描边', style: WireframeRoundRectTagStyle()),
-                    TDTag('浅色描边',
+                    const TDTag('浅色', style: RoundRectTagStyle(isLight: true)),
+                    const TDTag('描边', style: WireframeRoundRectTagStyle()),
+                    const TDTag('浅色描边',
                         style: WireframeRoundRectTagStyle(isLight: true)),
-                    TDTag(
+                    const TDTag(
                       'English',
                     ),
-                    TDTag('English',
+                    const TDTag('English',
                         style: WireframeRoundRectTagStyle(isLight: true)),
-                    TDTag(
+                    const TDTag(
                       'ABC',
                     ),
-                    TDTag('ABC',
+                    const TDTag('ABC',
                         style: WireframeRoundRectTagStyle(isLight: true)),
-                    TDTag(
+                    const TDTag(
                       '中English混合',
                     ),
-                    TDTag('中English混合',
+                    const TDTag('中English混合',
                         style: WireframeRoundRectTagStyle(isLight: true)),
                     TDTag(
                       '圆角',
@@ -163,7 +163,7 @@ class TdTagPage extends StatelessWidget {
                 return Wrap(
                   spacing: 16,
                   runSpacing: 16,
-                  children: [
+                  children: const [
                     TDTag(
                       '标签',
                       size: TDTagSize.large,

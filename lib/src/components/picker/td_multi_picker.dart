@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import '../../../td_export.dart';
 
 import 'no_wave_behavior.dart';
 
@@ -56,7 +56,7 @@ class TDMultiPicker extends StatelessWidget {
 
 
 
-  TDMultiPicker(
+  const TDMultiPicker(
       {required this.title,
       required this.onConfirm,
       this.onCancel,
@@ -215,7 +215,7 @@ class TDMultiPicker extends StatelessWidget {
   double getTitleHeight() => titleHeight ?? 48;
 
   Widget buildList(context, int position, List<FixedExtentScrollController> controllers) {
-    double maxWidth = MediaQuery.of(context).size.width;
+    var maxWidth = MediaQuery.of(context).size.width;
     return MediaQuery.removePadding(
         context: context,
         removeTop: true,
@@ -339,7 +339,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
 
   @override
   Widget build(BuildContext context) {
-    double maxWidth = MediaQuery.of(context).size.width;
+    var maxWidth = MediaQuery.of(context).size.width;
     return Container(
       width: maxWidth,
       padding: widget.padding ?? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
@@ -397,7 +397,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
 
   Widget buildList(context, int position) {
     // position参数表示这个第几列
-    double maxWidth = MediaQuery.of(context).size.width;
+    var maxWidth = MediaQuery.of(context).size.width;
     return MediaQuery.removePadding(
         context: context,
         removeTop: true,
@@ -533,7 +533,7 @@ class MultiLinkedPickerModel {
   }) {
     selectedData = [];
     selectedIndexes = [];
-    for (int i = 0; i < columnNum; ++i) {
+    for (var i = 0; i < columnNum; ++i) {
       if (i >= initialData.length) {
         selectedData.add('');
       } else {
@@ -548,7 +548,7 @@ class MultiLinkedPickerModel {
     int pIndex;
     controllers.clear();
     presentData.clear();
-    for (int i = 0; i < columnNum; ++i) {
+    for (var i = 0; i < columnNum; ++i) {
       pIndex = 0;
       if (i == 0) {
         // 第一列
@@ -589,7 +589,7 @@ class MultiLinkedPickerModel {
   /// 对应位置的下一列数据
   dynamic findNextData(int position) {
     dynamic nextData;
-    for (int i = 0; i < position; i++) {
+    for (var i = 0; i < position; i++) {
       if (i == 0) {
         nextData = data[selectedData[0]];
       } else {
@@ -635,7 +635,7 @@ class MultiLinkedPickerModel {
   /// 寻找对应位置数据
   List findColumnData(int position) {
     dynamic nextData;
-    for (int i = 0; i < position; i++) {
+    for (var i = 0; i < position; i++) {
       if (i == 0) {
         nextData = data[selectedData[0]];
       } else {

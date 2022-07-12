@@ -5,10 +5,10 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/components/dialog/td_dialog_widget.dart';
-import 'package:tdesign_flutter/src/util/auto_size.dart';
 
 import '../../../td_export.dart';
+import '../../util/auto_size.dart';
+import 'td_dialog_widget.dart';
 
 /// 弹窗控件
 class TDInputDialog extends StatelessWidget {
@@ -75,12 +75,12 @@ class TDInputDialog extends StatelessWidget {
                 controller: textEditingController,
                 autofocus: true,
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(3),
                       borderSide: BorderSide.none),
                   hintText: '请输入',
-                  fillColor: Color(0xfff0f0f0),
+                  fillColor: const Color(0xfff0f0f0),
                   filled: true,
                   // labelText: '左上角',
                 ),

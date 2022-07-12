@@ -4,10 +4,8 @@
  * 
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import '../example_base.dart';
 
 class TdLoadingPage extends StatefulWidget {
   @override

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
@@ -45,7 +44,7 @@ class TdRadioPageState extends State<TdRadioPage> {
           child: Container(
             child: ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   child: TdRadio(
@@ -58,7 +57,7 @@ class TdRadioPageState extends State<TdRadioPage> {
               },
               itemCount: 4,
             ),
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             color: Colors.white,
           ),
         ),
@@ -69,7 +68,7 @@ class TdRadioPageState extends State<TdRadioPage> {
           child: Container(
             child: ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   child: TdRadio(
@@ -82,7 +81,7 @@ class TdRadioPageState extends State<TdRadioPage> {
               },
               itemCount: 4,
             ),
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             color: Colors.white,
           ),
         ),
@@ -93,7 +92,7 @@ class TdRadioPageState extends State<TdRadioPage> {
           child: Container(
             child: ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   child: TdRadio(
@@ -106,7 +105,7 @@ class TdRadioPageState extends State<TdRadioPage> {
               },
               itemCount: 4,
             ),
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             color: Colors.white,
           ),
         ),
@@ -118,7 +117,7 @@ class TdRadioPageState extends State<TdRadioPage> {
           child: Container(
             child: ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   child: TdRadio(
@@ -131,7 +130,7 @@ class TdRadioPageState extends State<TdRadioPage> {
               },
               itemCount: 4,
             ),
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             color: Colors.white,
           ),
         ),
@@ -165,7 +164,7 @@ class TdRadioPageState extends State<TdRadioPage> {
                 ),
               ],
             ),
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             color: Colors.white,
           ),
         ),
@@ -182,7 +181,7 @@ class TdRadioPageState extends State<TdRadioPage> {
                 ),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    borderRadius: const BorderRadius.all(Radius.circular(6)),
                     border: Border.all(
                         color: check ? theme.brandColor7 : theme.grayColor5),
                     color: check ? theme.brandColor7 : Colors.transparent),
@@ -197,7 +196,7 @@ class TdRadioPageState extends State<TdRadioPage> {
                   mainAxisSpacing: 7,
                   mainAxisExtent: 35,
                 ),
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: 6,
                 itemBuilder: (BuildContext context, int index) => TdRadio(
                   id: "2$index",
