@@ -341,7 +341,7 @@ class _TDButtonState extends State<TDButton>
   Widget build(BuildContext context) {
     var height = _getButtonHeight();
     if (widget.type == TDButtonType.progress) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
         var btnW = _globalKey.currentContext?.size?.width ?? 0;
         if (_btnWidth <= 0 && btnW > 0) {
           _btnWidth = btnW;
