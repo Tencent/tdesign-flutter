@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 class TdLoadingPage extends StatefulWidget {
+
+  const TdLoadingPage({Key? key}):super(key: key);
+
   @override
   State<StatefulWidget> createState() => _TdLoadingPageState();
 }
