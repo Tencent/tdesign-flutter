@@ -21,7 +21,7 @@ class TDConfirmDialog extends StatelessWidget {
     this.content,
     this.contentColor,
     this.contentMaxHeight = 0,
-    this.buttonText = "知道了",
+    this.buttonText = '知道了',
     this.buttonTextColor,
   }) : super(key: key);
 
