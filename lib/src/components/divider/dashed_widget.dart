@@ -64,11 +64,11 @@ class DashedPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
+    var paint = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth;
-    Offset start = const Offset(0, 0);
+    var start = const Offset(0, 0);
     Offset end;
     if (direction == Axis.horizontal) {
       end = Offset(size.width, 0);
@@ -76,14 +76,14 @@ class DashedPainter extends CustomPainter {
       // 不能为0，防止除0错误
       end = Offset(0.00001, size.height);
     }
-    Path path = getDashedPath(start, end);
+    var path = getDashedPath(start, end);
 
     canvas.drawPath(path, paint);
   }
 
   Path getDashedPath(Offset start, Offset end) {
-    Size size = Size(end.dx - start.dx, end.dy - start.dy);
-    Path path = Path();
+    var size = Size(end.dx - start.dx, end.dy - start.dy);
+    var path = Path();
     path.moveTo(start.dx, start.dy);
     var shouldDraw = true;
     var currentOffset = Offset(start.dx, start.dy);

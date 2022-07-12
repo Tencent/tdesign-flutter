@@ -6,12 +6,13 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../../../td_export.dart';
-import 'td_point_indicator.dart';
 import 'td_circle_indicator.dart';
+import 'td_point_indicator.dart';
 
 class TDContentLoading extends Dialog {
-  TDContentLoading(
+  const TDContentLoading(
       {Key? key,
       required this.size,
       this.icon,

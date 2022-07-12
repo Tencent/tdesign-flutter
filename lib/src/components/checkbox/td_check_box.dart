@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/components/icon/td_icons.dart';
-import 'package:tdesign_flutter/src/theme/td_colors.dart';
-import 'package:tdesign_flutter/src/theme/td_fonts.dart';
-import 'package:tdesign_flutter/src/theme/td_theme.dart';
 
+import '../../theme/td_colors.dart';
+import '../../theme/td_fonts.dart';
+import '../../theme/td_theme.dart';
+import '../icon/td_icons.dart';
 import 'td_check_box_group.dart';
 
 ///
@@ -155,10 +155,10 @@ class TdCheckboxState extends State<TdCheckbox> {
     }
 
     // 构建icon
-    Widget? icon = _buildCheckboxIcon(context, groupState, checked);
+    var icon = _buildCheckboxIcon(context, groupState, checked);
 
     // 内容
-    Widget? content = _buildContent(context, groupState, checked);
+    var content = _buildContent(context, groupState, checked);
 
 
     if (icon == null && content == null) {
@@ -175,7 +175,7 @@ class TdCheckboxState extends State<TdCheckbox> {
 
       if (content != null) {
         final spacing = _spacing(groupState);
-        var contentDirection = groupState?.widget?.contentDirection ?? widget.contentDirection;
+        var contentDirection = groupState?.widget.contentDirection ?? widget.contentDirection;
         switch (contentDirection) {
           case TdContentDirection.top:
             current = Column(

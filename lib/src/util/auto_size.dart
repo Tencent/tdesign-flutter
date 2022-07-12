@@ -4,7 +4,6 @@
  * 
  */
 
-import 'package:flutter/material.dart';
 import 'dart:ui';
 
 /// 宽高屏幕自动适配，使用举例：100.as

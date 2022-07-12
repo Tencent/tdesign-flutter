@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import '../../../td_export.dart';
 
 typedef TDTapEvent = void Function();
 
@@ -42,7 +42,7 @@ class TDEmpty extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 24),
                   child: TDButton(
                     content: operationText ?? '',
-                    size: TDButtonSize.Small,
+                    size: TDButtonSize.small,
                     width: 160,
                     click: () {
                       if (onTapEvent != null) {

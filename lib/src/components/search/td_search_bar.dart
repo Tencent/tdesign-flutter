@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import '../../../td_export.dart';
 
 typedef TDSearchBarEvent = void Function(String value);
 typedef TDSearchBarCallBack = void Function();
@@ -31,10 +30,11 @@ class _TDSearchBarState extends State<TDSearchBar> {
   bool clearBtnHide = true;
   bool cancelBtnHide = true;
 
+  @override
   void initState() {
     super.initState();
     controller.addListener(() {
-      bool clearVisible = controller.text.isNotEmpty;
+      var clearVisible = controller.text.isNotEmpty;
       _updateClearBtnVisible(clearVisible);
     });
     focusNode.addListener(() {
@@ -118,9 +118,7 @@ class _TDSearchBarState extends State<TDSearchBar> {
           Offstage(
             offstage: cancelBtnHide,
             child: GestureDetector(
-              onTap: () {
-                focusNode.unfocus();
-              },
+              onTap: focusNode.unfocus,
               child: Container(
                 padding: const EdgeInsets.only(left: 16),
                 child: Text('取消',

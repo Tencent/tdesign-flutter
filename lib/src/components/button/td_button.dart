@@ -1,38 +1,37 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import '../../../td_export.dart';
 
-enum TDButtonSize { Small, Medium, Large }
+enum TDButtonSize { small, medium, large }
 
 enum TDButtonTheme {
   /// 常规
-  Default,
+  normal,
 
   /// 强调
-  Primary,
+  primary,
 
   ///轻度
-  Light,
-  Danger,
+  light,
+  danger,
 }
 
 enum TDButtonShape {
-  Square,
-  Round,
+  square,
+  round,
 }
 
 enum TDButtonType {
   ///常规
-  Normal,
+  normal,
 
   ///加载按钮
-  Loading,
+  loading,
 
   ///进度条按钮
-  Progress,
+  progress,
 }
 
 typedef TDButtonEvent = void Function();
@@ -67,14 +66,14 @@ class TDButton extends StatefulWidget {
       {Key? key,
       this.reportKey,
       required this.content,
-      this.size = TDButtonSize.Medium,
+      this.size = TDButtonSize.medium,
       this.child,
       this.disabled = false,
       this.opacity = 1.0,
       this.width,
-      this.theme = TDButtonTheme.Default,
-      this.shape = TDButtonShape.Square,
-      this.type = TDButtonType.Normal,
+      this.theme = TDButtonTheme.normal,
+      this.shape = TDButtonShape.square,
+      this.type = TDButtonType.normal,
       this.click,
       this.longClick})
       : super(key: key);
@@ -106,7 +105,7 @@ class _TDButtonState extends State<TDButton>
   }
 
   void updateProgress(double progress) {
-    if (widget.type != TDButtonType.Progress){
+    if (widget.type != TDButtonType.progress){
       return;
     }
 
@@ -117,7 +116,7 @@ class _TDButtonState extends State<TDButton>
   }
 
   void setIsLoading(bool isLoading) {
-    if (widget.type != TDButtonType.Loading){
+    if (widget.type != TDButtonType.loading){
       return;
     }
 
@@ -131,19 +130,20 @@ class _TDButtonState extends State<TDButton>
     });
   }
 
+  @override
   void initState() {
     super.initState();
     _setAnimation();
   }
 
   void _setAnimation() {
-    if (widget.type != TDButtonType.Loading){
+    if (widget.type != TDButtonType.loading){
       return;
     }
 
 
     _animationController ??=
-        AnimationController(duration: Duration(seconds: 300), vsync: this);
+        AnimationController(duration: const Duration(seconds: 300), vsync: this);
 
     _animation ??=
     Tween<double>(begin: 1, end: 300).animate(_animationController!)
@@ -159,43 +159,45 @@ class _TDButtonState extends State<TDButton>
   double _getButtonHeight() {
     var height = 28.0;
     switch (widget.size) {
-      case TDButtonSize.Small:
+      case TDButtonSize.small:
         height = 36;
         break;
-      case TDButtonSize.Medium:
+      case TDButtonSize.medium:
         height = 40;
         break;
-      case TDButtonSize.Large:
+      case TDButtonSize.large:
         height = 44;
         break;
+      default:
     }
     return height;
   }
 
   Color? _getButtonColor() {
     switch (widget.theme) {
-      case TDButtonTheme.Primary:
+      case TDButtonTheme.primary:
         return widget.disabled == true
             ? TDTheme.of(context).brandColor3
             : TDTheme.of(context).brandColor8;
-      case TDButtonTheme.Danger:
+      case TDButtonTheme.danger:
         return widget.disabled == true
             ? TDTheme.of(context).errorColor3
             : TDTheme.of(context).errorColor6;
+      default:
     }
     return null;
   }
 
   TextStyle _getButtonTextStyle() {
-    TextStyle style = TextStyle();
+    var style = const TextStyle();
     var fontMap = <TDButtonSize, dynamic>{
-      TDButtonSize.Small: [TDTheme.of(context).fontS, FontWeight.w400],
-      TDButtonSize.Medium: [TDTheme.of(context).fontS, FontWeight.w400],
-      TDButtonSize.Large: [TDTheme.of(context).fontM, FontWeight.w400]
+      TDButtonSize.small: [TDTheme.of(context).fontS, FontWeight.w400],
+      TDButtonSize.medium: [TDTheme.of(context).fontS, FontWeight.w400],
+      TDButtonSize.large: [TDTheme.of(context).fontM, FontWeight.w400]
     };
 
     switch (widget.theme) {
-      case TDButtonTheme.Default:
+      case TDButtonTheme.normal:
         style = TextStyle(
             fontSize: fontMap[widget.size][0].size,
             height: fontMap[widget.size][0].height,
@@ -205,7 +207,7 @@ class _TDButtonState extends State<TDButton>
                 ? TDTheme.of(context).brandColor3
                 : TDTheme.of(context).brandColor8);
         break;
-      case TDButtonTheme.Primary:
+      case TDButtonTheme.primary:
         style = TextStyle(
             fontSize: fontMap[widget.size][0].size,
             height: fontMap[widget.size][0].height,
@@ -215,7 +217,7 @@ class _TDButtonState extends State<TDButton>
                 ? TDTheme.of(context).whiteColor1
                 : TDTheme.of(context).whiteColor1);
         break;
-      case TDButtonTheme.Light:
+      case TDButtonTheme.light:
         style = TextStyle(
             fontSize: fontMap[widget.size][0].size,
             height: fontMap[widget.size][0].height,
@@ -225,7 +227,7 @@ class _TDButtonState extends State<TDButton>
                 ? TDTheme.of(context).fontGyColor4
                 : TDTheme.of(context).fontGyColor1);
         break;
-      case TDButtonTheme.Danger:
+      case TDButtonTheme.danger:
         style = TextStyle(
             fontSize: fontMap[widget.size][0].size,
             height: fontMap[widget.size][0].height,
@@ -235,6 +237,7 @@ class _TDButtonState extends State<TDButton>
                 ? TDTheme.of(context).whiteColor1
                 : TDTheme.of(context).whiteColor1);
         break;
+      default:
     }
 
     return style;
@@ -243,29 +246,29 @@ class _TDButtonState extends State<TDButton>
   Widget? _getButtonTypeWidget() {
     Widget? typedWidget;
     switch (widget.type) {
-      case TDButtonType.Normal:
+      case TDButtonType.normal:
         typedWidget = TDText(
           widget.content ?? '',
           style: _getButtonTextStyle(),
           forceVerticalCenter: true,
         );
         break;
-      case TDButtonType.Loading:
+      case TDButtonType.loading:
         typedWidget = RotationTransition(
           alignment: Alignment.center,
           turns: _animation!,
-          child: Container(
+          child: const SizedBox(
             width: 14,
             height: 14,
-            child: const Icon(
+            child: Icon(
               TDIcons.loading,
               size: 14,
             ),
           ),
         );
         break;
-      case TDButtonType.Progress:
-        typedWidget = Container(
+      case TDButtonType.progress:
+        typedWidget = SizedBox(
           width: _btnWidth,
           height: _getButtonHeight(),
           child: Stack(
@@ -293,41 +296,43 @@ class _TDButtonState extends State<TDButton>
           ),
         );
         break;
+      default:
     }
     return typedWidget;
   }
 
   BoxDecoration? _getButtonDecoration() {
     switch (widget.theme) {
-      case TDButtonTheme.Default:
+      case TDButtonTheme.normal:
         return BoxDecoration(
             border: Border.all(
                 color: widget.disabled == true
                     ? TDTheme.of(context).brandColor3
                     : TDTheme.of(context).brandColor8,
                 width: 0.5),
-            borderRadius: widget.shape == TDButtonShape.Round
+            borderRadius: widget.shape == TDButtonShape.round
                 ? BorderRadius.circular(4)
                 : null);
-      case TDButtonTheme.Primary:
+      case TDButtonTheme.primary:
         return BoxDecoration(
             color: _getButtonColor(),
-            borderRadius: widget.shape == TDButtonShape.Round
+            borderRadius: widget.shape == TDButtonShape.round
                 ? BorderRadius.circular(4)
                 : null);
-      case TDButtonTheme.Light:
+      case TDButtonTheme.light:
         return BoxDecoration(
             border:
                 Border.all(color: TDTheme.of(context).grayColor4, width: 0.5),
-            borderRadius: widget.shape == TDButtonShape.Round
+            borderRadius: widget.shape == TDButtonShape.round
                 ? BorderRadius.circular(4)
                 : null);
-      case TDButtonTheme.Danger:
+      case TDButtonTheme.danger:
         return BoxDecoration(
             color: _getButtonColor(),
-            borderRadius: widget.shape == TDButtonShape.Round
+            borderRadius: widget.shape == TDButtonShape.round
                 ? BorderRadius.circular(4)
                 : null);
+      default:
     }
     return null;
   }
@@ -335,9 +340,9 @@ class _TDButtonState extends State<TDButton>
   @override
   Widget build(BuildContext context) {
     var height = _getButtonHeight();
-    if (widget.type == TDButtonType.Progress) {
-      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-        double btnW = _globalKey.currentContext?.size?.width ?? 0;
+    if (widget.type == TDButtonType.progress) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        var btnW = _globalKey.currentContext?.size?.width ?? 0;
         if (_btnWidth <= 0 && btnW > 0) {
           _btnWidth = btnW;
           updateProgress(progress);
@@ -350,7 +355,7 @@ class _TDButtonState extends State<TDButton>
       child: Container(
         key: _globalKey,
         decoration: _getButtonDecoration(),
-        padding: (widget.type == TDButtonType.Progress)
+        padding: (widget.type == TDButtonType.progress)
             ? EdgeInsets.zero
             : const EdgeInsets.only(left: 16, right: 16),
         width: widget.width,

@@ -25,19 +25,19 @@ class _TdTabBarPageState extends State<TdTabBarPage>
   List<Widget> _getTabViews() {
     return [
       ListView.builder(
-        itemBuilder: (context, index) => Text('123'),
+        itemBuilder: (context, index) => const Text('123'),
         itemCount: 50,
       ),
       ListView.builder(
-        itemBuilder: (context, index) => Text('123'),
+        itemBuilder: (context, index) => const Text('123'),
         itemCount: 50,
       ),
       ListView.builder(
-        itemBuilder: (context, index) => Text('123'),
+        itemBuilder: (context, index) => const Text('123'),
         itemCount: 50,
       ),
       ListView.builder(
-        itemBuilder: (context, index) => Text('123'),
+        itemBuilder: (context, index) => const Text('123'),
         itemCount: 50,
       ),
     ];

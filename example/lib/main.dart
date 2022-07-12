@@ -25,11 +25,11 @@ import 'package:tdesign_flutter_example/tdesign/page/td_button_page.dart';
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TdTextPage()
 List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
-      text: '文本控件', path: 'TdTextPage', pageBuilder: (context) => TdTextPage()),
+      text: '文本控件', path: 'TdTextPage', pageBuilder: (context) => const TdTextPage()),
   ExamplePageModel(
       text: '分割线',
       path: 'TdDividerPage',
-      pageBuilder: (context) => TdDividerPage()),
+      pageBuilder: (context) => const TdDividerPage()),
   ExamplePageModel(
       text: '圆形图片组件（头像）',
       path: 'TdAvatarPage',
@@ -51,9 +51,9 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '输入框',
       path: 'TdInputViewPag',
-      pageBuilder: (context) => TdInputViewPage()),
+      pageBuilder: (context) => const TdInputViewPage()),
   ExamplePageModel(
-      text: '标签', path: 'TdTagPage', pageBuilder: (context) => TdTagPage()),
+      text: '标签', path: 'TdTagPage', pageBuilder: (context) => const TdTagPage()),
   ExamplePageModel(
       text: 'Picker',
       path: 'TdPickerPage',
@@ -71,15 +71,15 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '图片组件',
       path: 'TdImagePage',
-      pageBuilder: (context) => TdImagePage()),
+      pageBuilder: (context) => const TdImagePage()),
   ExamplePageModel(
       text: 'Checkbox复选框',
       path: 'TdCheckboxPage',
-      pageBuilder: (context) => TdCheckboxPage()),
+      pageBuilder: (context) => const TdCheckboxPage()),
   ExamplePageModel(
       text: 'Radio单框',
       path: 'TdRadioPage',
-      pageBuilder: (context) => TdRadioPage()),
+      pageBuilder: (context) => const TdRadioPage()),
   ExamplePageModel(
       text: 'Dialog弹窗',
       path: 'TdDialogPage',

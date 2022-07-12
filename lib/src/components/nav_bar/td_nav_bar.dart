@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import '../../../td_export.dart';
 
 typedef TDBarItemAction = void Function();
 
@@ -56,7 +56,7 @@ class TDNavBar extends StatefulWidget {
 class _TDNavBarState extends State<TDNavBar> {
   Widget? _buildTitleBarItems(BuildContext context, bool isLeft) {
     var leading = <Widget>[];
-    List<TDNavBarItem>? barItems =
+    var barItems =
         isLeft ? widget.leftBarItems : widget.rightBarItems ?? [];
 
     var padding = isLeft

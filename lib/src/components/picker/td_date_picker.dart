@@ -1,11 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/components/picker/no_wave_behavior.dart';
-import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter/src/util/string_util.dart';
 
-import 'td_item_widget.dart';
+import '../../../td_export.dart';
+import 'no_wave_behavior.dart';
 
 typedef DatePickerCallback = void Function(Map<String, int> selected);
 
@@ -90,7 +88,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
 
   @override
   Widget build(BuildContext context) {
-    double maxWidth = MediaQuery.of(context).size.width;
+    var maxWidth = MediaQuery.of(context).size.width;
     return Container(
       width: maxWidth,
       padding: widget.padding ?? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
@@ -110,7 +108,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
             height: 0.5,
             color: widget.titleDividerColor ?? TDTheme.of(context).fontGyColor3,
           ),
-          Container(
+          SizedBox(
             height: pickerHeight,
             child: Stack(
               alignment: Alignment.center,
@@ -125,7 +123,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                         color: TDTheme.of(context).fontGyColor3, width: 0.5),
                   )),
                 ),
-                Container(
+                SizedBox(
                     height: pickerHeight,
                     width: maxWidth,
                     child: Row(
@@ -160,7 +158,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
 
   Widget buildList(context, int whichline) {
     /// whichline参数表示这个列表表示的是年，还是月还是日......
-    double maxWidth = MediaQuery.of(context).size.width;
+    var maxWidth = MediaQuery.of(context).size.width;
     return MediaQuery.removePadding(
         context: context,
         removeTop: true,
@@ -259,9 +257,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
 
           /// 中间title
           Expanded(
-            child: widget.title == null
-                ? Container()
-                : Center(
+            child: Center(
                     child: TDText(
                       widget.title,
                       style: widget.centerTextStyle ?? TextStyle(
@@ -389,7 +385,7 @@ class DatePickerModel {
       }
       return;
     }
-    DateTime now = DateTime.now();
+    var now = DateTime.now();
     if (now.year * 500 + now.month * 40 + now.day <
         dateStart[0] * 500 + dateStart[1] * 40 + dateStart[2]) {
       initialTime = DateTime(dateStart[0], dateStart[1], dateStart[2], now.hour,
@@ -473,7 +469,7 @@ class DatePickerModel {
   }
 
   void refreshMonthDataAndController() {
-    int selectedYear = yearIndex + data[0][0];
+    var selectedYear = yearIndex + data[0][0];
     if (dateEnd[0] == dateStart[0]) {
       data[1] = List.generate(
           dateEnd[1] - dateStart[1] + 1, (index) => index + dateStart[1]);
@@ -491,8 +487,8 @@ class DatePickerModel {
 
   void refreshDayDataAndController() {
     /// 在刷新日数据时，年月数据已经是最新的
-    int selectedYear = yearIndex + data[0][0];
-    int selectedMonth = monthIndex + data[1][0];
+    var selectedYear = yearIndex + data[0][0];
+    var selectedMonth = monthIndex + data[1][0];
     if (dateEnd[0] == dateStart[0] && dateEnd[1] == dateStart[1]) {
       data[2] = List.generate(
           dateEnd[2] - dateStart[2] + 1, (index) => index + dateStart[2]);

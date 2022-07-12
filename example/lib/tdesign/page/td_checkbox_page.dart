@@ -59,27 +59,27 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TdCheckbox(
+              const TdCheckbox(
                 title: "多选",
               ),
               _divider(),
-              TdCheckbox(
+              const TdCheckbox(
                 title: "多选",
               ),
               _divider(),
-              TdCheckbox(
+              const TdCheckbox(
                 title: "禁用状态",
                 enable: false,
                 checked: true,
               ),
               _divider(),
-              TdCheckbox(
+              const TdCheckbox(
                 title: "多选多选多选多选多选多选多选多选多选多选多选多选",
                 enable: false,
               ),
             ],
           ),
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           color: Colors.white,
         ),
 
@@ -88,24 +88,24 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TdCheckbox(
+              const TdCheckbox(
                 contentDirection: TdContentDirection.left,
                 title: "多选",
               ),
               _divider(),
-              TdCheckbox(
-                contentDirection: TdContentDirection.left,
-                title: "多选",
-                checked: true,
-              ),
-              _divider(),
-              TdCheckbox(
+              const TdCheckbox(
                 contentDirection: TdContentDirection.left,
                 title: "多选",
                 checked: true,
               ),
               _divider(),
-              TdCheckbox(
+              const TdCheckbox(
+                contentDirection: TdContentDirection.left,
+                title: "多选",
+                checked: true,
+              ),
+              _divider(),
+              const TdCheckbox(
                 contentDirection: TdContentDirection.left,
                 title: "多选",
               ),
@@ -120,18 +120,18 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TdCheckbox(
+              const TdCheckbox(
                 style: TdCheckboxStyle.square,
                 title: "多选",
               ),
               _divider(),
-              TdCheckbox(
+              const TdCheckbox(
                 style: TdCheckboxStyle.square,
                 title: "多选",
                 checked: true,
               ),
               _divider(),
-              TdCheckbox(
+              const TdCheckbox(
                 style: TdCheckboxStyle.square,
                 title: "多选",
                 checked: true,
@@ -202,7 +202,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
                   mainAxisSpacing: 7,
                   mainAxisExtent: 35,
                 ),
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: 6,
                 itemBuilder: (BuildContext context, int index) => TdCheckbox(
                   id: "$index",
@@ -229,7 +229,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
                 child: Text(title!, style: TextStyle(color: check ? Colors.white : Colors.black),),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  borderRadius: const BorderRadius.all(Radius.circular(6)),
                   border: Border.all(color: check ? theme.brandColor7 : theme.grayColor5),
                   color: check ? theme.brandColor7 : Colors.transparent
                 ),
@@ -248,7 +248,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
                   mainAxisSpacing: 7,
                   mainAxisExtent: 35,
                 ),
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: 6,
                 itemBuilder: (BuildContext context, int index) => TdCheckbox(
                   id: "2$index",
@@ -269,7 +269,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
 
     current = Scaffold(
       appBar: AppBar(
-        title: Text("CheckBox演示"),
+        title: const Text("CheckBox演示"),
       ),
       body: current,
     );
