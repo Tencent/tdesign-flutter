@@ -77,6 +77,7 @@ class TDThemeData {
   late Map<String, double> cornerMap;
   late Map<String, FontFamily> fontFamilyMap;
   late Map<String, List<BoxShadow>> shadowMap;
+  late Map<String, double> spacerMap;
   late TDExtraThemeData? extraThemeData;
 
   TDThemeData(
@@ -86,6 +87,7 @@ class TDThemeData {
       required this.cornerMap,
       required this.fontFamilyMap,
       required this.shadowMap,
+      required this.spacerMap,
       this.extraThemeData,
       bool recoverDefault = false});
 
@@ -107,6 +109,7 @@ class TDThemeData {
     Map<String, double>? cornerMap,
     Map<String, FontFamily>? fontFamilyMap,
     Map<String, List<BoxShadow>>? shadowMap,
+    Map<String, double>? marginMap,
     TDExtraThemeData? extraThemeData,
   }) {
     var result = TDThemeData(
@@ -116,6 +119,7 @@ class TDThemeData {
         cornerMap: _copyMap<double>(this.cornerMap, cornerMap),
         fontFamilyMap: _copyMap<FontFamily>(this.fontFamilyMap, fontFamilyMap),
         shadowMap: _copyMap<List<BoxShadow>>(this.shadowMap, shadowMap),
+        spacerMap: _copyMap<double>(this.spacerMap, marginMap),
         extraThemeData: extraThemeData ?? this.extraThemeData);
 
     return result;
@@ -142,7 +146,8 @@ class TDThemeData {
         fontMap: {},
         cornerMap: {},
         fontFamilyMap: {},
-        shadowMap: {});
+        shadowMap: {},
+        spacerMap: {});
   }
 
   /// 解析配置的json文件为主题数据
@@ -200,6 +205,13 @@ class TDThemeData {
 
           theme.shadowMap[key] = list;
         });
+
+        /// 设置Margin
+        Map<String, dynamic>? marginsMap = curThemeMap['margin'];
+        marginsMap?.forEach((key, value) {
+          theme.spacerMap[key] = value.toDouble();
+        });
+
         if (extraThemeData != null) {
           extraThemeData.parse(name, curThemeMap);
           theme.extraThemeData = extraThemeData;
