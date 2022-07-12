@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/theme/td_margins.dart';
+import 'package:tdesign_flutter/src/theme/td_spacers.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 typedef TDBarItemAction = void Function();
@@ -97,7 +97,7 @@ class _TDNavBarState extends State<TDNavBar> {
         ),
       ),
       padding: border.padding ??
-          EdgeInsets.symmetric(horizontal: TDTheme.of(context).marginSmall),
+          EdgeInsets.symmetric(horizontal: TDTheme.of(context).spacer4),
       child: child,
     );
   }
@@ -180,8 +180,8 @@ class _TDNavBarState extends State<TDNavBar> {
     var paddingTop = widget.screenAdaptation ? top : 0.0;
     var padding = widget.padding ??
         EdgeInsets.symmetric(
-          horizontal: TDTheme.of(context).marginMedium,
-          vertical: TDTheme.of(context).marginSmall,
+          horizontal: TDTheme.of(context).spacer16,
+          vertical: TDTheme.of(context).spacer4,
         );
 
     return Container(
@@ -221,7 +221,7 @@ class TDNavBarItem {
         onTap: this.action,
         child: Padding(
           padding:
-              this.padding ?? EdgeInsets.all(TDTheme.of(context).marginNormal),
+              this.padding ?? EdgeInsets.all(TDTheme.of(context).spacer8),
           child: this.iconWidget ??
               Icon(
                 this.icon,
