@@ -1,6 +1,5 @@
-import 'package:tdesign_flutter/src/theme/td_theme.dart';
-
 import 'basic.dart';
+import 'td_theme.dart';
 
 /// 内置字体数据
 extension TDFonts on TDThemeData {

@@ -54,7 +54,7 @@ extension IterableExt<T> on Iterable<T> {
   /// - prefix 前缀
   /// - suffix 后缀
   /// - convert 元素格式化成字符串
-  String join2({String divider = ", ", String? prefix, String? suffix , String Function(T element)? convert}){
+  String join2({String divider = ', ', String? prefix, String? suffix , String Function(T element)? convert}){
     var sb = StringBuffer();
     if (prefix != null) {
       sb.write(prefix);

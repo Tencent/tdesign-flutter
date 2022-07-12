@@ -1,29 +1,208 @@
-# This file configures the analyzer, which statically analyzes Dart code to
-# check for errors, warnings, and lints.
-#
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
-
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
-include: package:flutter_lints/flutter.yaml
+analyzer:
+  enable-experiment:
+    - extension-methods
+  errors:
+    unused_import: ignore
+    camel_case_types: warning
+    missing_required_param: error
+    missing_return: warning
+    todo: ignore
+    non_constant_identifier_names: warning
+    constant_identifier_names: warning
+    library_names: warning
+    file_names: warning
+    avoid_setters_without_getters: warning
+    avoid_return_types_on_setters: warning
+    avoid_returning_null: warning
+    avoid_returning_this: warning
+    prefer_generic_function_type_aliases: warning
+    always_declare_return_types: warning
+    hash_and_equals: warning
+    avoid_equals_and_hash_code_on_mutable_classes: warning
+    avoid_null_checks_in_equality_operators: warning
+    prefer_interpolation_to_compose_strings: warning
+    prefer_collection_literals: warning
+    prefer_is_empty: warning
+    unnecessary_lambdas: warning
+    prefer_equal_for_default_values: warning
+    avoid_init_to_null: warning
 
 linter:
-  # The lint rules applied to this project can be customized in the
-  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
-  # included above or to enable additional rules. A list of all available lints
-  # and their documentation is published at
-  # https://dart-lang.github.io/linter/lints/index.html.
-  #
-  # Instead of disabling a lint rule for the entire project in the
-  # section below, it can also be suppressed for a single line of code
-  # or a specific dart file by using the `// ignore: name_of_lint` and
-  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
-  # producing the lint.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
-
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+    - avoid_unnecessary_containers
+    - no_logic_in_create_state
+    - prefer_const_constructors
+    - prefer_const_constructors_in_immutables
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables
+    - sized_box_for_whitespace
+    - use_full_hex_values_for_flutter_colors
+    - use_key_in_widget_constructors
+    # 1.11 使用大驼峰命名类型
+    - camel_case_types
+    # 1.11 使用大驼峰命名拓展
+    - camel_case_extensions
+    # 1.12 类成员，顶级定义，变量，参数，命名参数和命名构造函数
+    - non_constant_identifier_names
+    # 1.12 常量变量，包括枚举的名称规范
+    - constant_identifier_names
+    #倒入import library的名字规范
+    - library_names
+    #1.13 import dart文件的规范
+    - file_names
+    #1.21 【可选】顺序
+    - directives_ordering
+    #2.22 【推荐】 公开接口要有注释
+    - package_api_docs
+    #3.32【必须】组合字符串统一使用插值的形式${param}，并避免在字符串插值中使用不必要的大括号
+    - prefer_interpolation_to_compose_strings
+    #3.41 【必须】尽可能使用字面量初始化集合
+    - prefer_collection_literals
+    #3.42【必须】使用.isEmpty/.isNotEmpty判空
+    - prefer_is_empty
+    #3.51 【必须】不要使用lambda表达式来替代tear-off
+    - unnecessary_lambdas
+    #3.61 【必须】参数默认值用=号
+    - prefer_equal_for_default_values
+    #3.71 【必须】不要把变量初始化为null
+    - avoid_init_to_null
+    #3.82 【必须】去掉不必要的setter和getter
+    - unnecessary_getters_setters
+    #4.35 mixin的使用规范
+    - prefer_mixin
+    #4.54【必须】避免单独使用setter或者getters
+    - avoid_setters_without_getters
+    #4.55【必须】不给setter方法指定返回值
+    - avoid_return_types_on_setters
+    #4.56【必须】基础数据类型的返回值不要返回null
+    - avoid_returning_null
+    #4.57 【必须】不要返回this来实现链式调用
+    - avoid_returning_this
+    #4.61 【必须】添加必要的类型注解 TODO 讨论是否有替代方案
+    #    - type_annotate_public_apis
+    #4.66 【必须】不要使用旧的typedef语法
+    - prefer_generic_function_type_aliases
+    #4.67 【必须】正确使用Future返回值 TODO 这个lint是说所有方法都必须需要返回类型而不是仅仅Future
+    #    - always_declare_return_types
+    #4.81 【必须】必须重写 hashCode 方法
+    - hash_and_equals
+    #4.83 【必须】可变类不要重载==
+    - avoid_equals_and_hash_code_on_mutable_classes
+    #4.84 【必须】重载==时不必判空
+    - avoid_null_checks_in_equality_operators
+    # 声明返回类型 TODO============ 以下规则对齐codecc代码扫描 =====================================
+    #    - always_declare_return_types
+    # separate the control structure expression from its statement
+    - always_put_control_body_on_new_line
+    # 声明了@required的参数，需要有assert(param != null)
+    - always_require_non_null_named_parameters
+    # 注释重写的方法和参数
+    - annotate_overrides
+    # 避免空的else
+    - avoid_empty_else
+    # 避免使用print方法
+    #    - avoid_print
+    # 避免以相对路径方式引入文件
+    - avoid_relative_lib_imports
+    # 避免返回null给future
+    - avoid_returning_null_for_future
+    # 避免复写相同的参数类型
+    - avoid_shadowing_type_parameters
+    # 避免使用同步的文件操作
+    - avoid_slow_async_io
+    # 避免参数名和类型名相同
+    - avoid_types_as_parameter_names
+    # 避免使用web的库在flutter终端中，这些库不支持在web以外使用
+    - avoid_web_libraries_in_flutter
+    # dart.async.StreamSubscription的实例不用时，触发cancel方法
+    - cancel_subscriptions
+    # dart.core.Sink的实例不用时,触发cancel方法
+    - close_sinks
+    # 评论只引用在作用域的变量
+    - comment_references
+    # 避免在finally语句中结束控制流
+    - control_flow_in_finally
+    # 控制结构用大括号来区分,除非没有else语句且可放在一行的
+    - curly_braces_in_flow_control_structures
+    # 在debug方法中引用所有的公共属性
+    #    - diagnostic_describe_all_properties
+    # 避免空的catch
+    - empty_catches
+    # 用;替代空的构造方法体
+    - empty_constructor_bodies
+    # 避免使用空语句
+    - empty_statements
+    # 不要出现可以在编译阶段推算出恒true或者false的条件判断
+    - invariant_booleans
+    # 当containns方法的参数和可枚举的类型不同，不要触发可枚举类型的contains方法
+    - iterable_contains_unrelated_type
+    # 用小写加下划线做库的命名
+    - library_prefixes
+    # 当remove方法的参数和List的类型不同，不要触发remove方法
+    - list_remove_unrelated_type
+    # 不要出现只有一种情况的boolean表达式
+    - literal_only_boolean_expressions
+    # 不要在list内用临近字符串方式
+    - no_adjacent_strings_in_list
+    # 不要用重复值的case语句
+    - no_duplicate_case_values
+    # 不要传null值给闭包语句
+    - null_closures
+    # 省略对本地参数的类型声明
+    - omit_local_variable_types
+    # 用相邻的string去减少string操作符
+    - prefer_adjacent_string_concatenation
+    # 尽量用??=来判定null
+    - prefer_conditional_assignment
+    # 不要用indexOf来判定一个集合是否包含某元素
+    - prefer_contains
+    # 用final来声明在类中不会被改变的私有参数
+    - prefer_final_fields
+    # 当由iterables构建map时，用for语句
+    - prefer_for_elements_to_map_fromIterable
+    # 用?? 替代null的检查
+    - prefer_if_null_operators
+    # 用isNotEmpty替代!isEmpty
+    - prefer_is_not_empty
+    # 用iterable.whereType<T>() 替代 iterable.where((e) => e is T).
+    - prefer_iterable_whereType
+    # 在lib路径下，建议使用相对路径引入
+    - prefer_relative_imports
+    # 用单引号替代双引号
+    - prefer_single_quotes
+    # 尽量用扩展符
+    - prefer_spread_collections
+    # 在void可以的时候不要用null
+    - prefer_void_to_null
+    # 多余的getter
+    - recursive_getters
+    # 用/// 作为注释
+    - slash_for_doc_comments
+    # 在重载==运算符时，判定入参的类型
+    - test_types_in_equals
+    # 避免在finally语句中抛出错误
+    - throw_in_finally
+    # 不要对已申明类型的变量在初始化时再声明
+    - type_init_formals
+    # 在async的方法中await返回为future的方法
+    - unawaited_futures
+    # 避免重复的const语句
+    - unnecessary_const
+    # 避免在创建对象时用new
+    - unnecessary_new
+    # 避免在if null语句中用null
+    - unnecessary_null_in_if_null_operators
+    # 避免不必要的语句
+    - unnecessary_statements
+    # 当不需要避免重复时不要用this
+    - unnecessary_this
+    # 避免无关类型的相等检查
+    - unrelated_type_equality_checks
+    # 避免直接插入html
+    - unsafe_html
+    # 用类函数语法作为参数
+    - use_function_type_syntax_for_parameters
+    # 用rethrow去重新抛出错误
+    - use_rethrow_when_possible
+    # 用正确的正则去创建正则
+    - valid_regexps

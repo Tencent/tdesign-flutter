@@ -1,13 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/theme/td_default_theme.dart';
-import 'package:tdesign_flutter/src/theme/td_font_family.dart';
-import 'package:tdesign_flutter/src/theme/td_fonts.dart';
-import 'package:tdesign_flutter/src/util/string_util.dart';
-import 'package:tdesign_flutter/src/util/log.dart';
 
+import '../util/log.dart';
+import '../util/string_util.dart';
 import 'basic.dart';
+import 'td_default_theme.dart';
 
 /// 主题控件
 class TDTheme extends StatelessWidget {
@@ -44,7 +42,7 @@ class TDTheme extends StatelessWidget {
   static TDThemeData of([BuildContext? context]) {
     if (context != null) {
       // 如果传了context，则从其中获取最近主题
-      final _TDInheritedTheme? inheritedTheme =
+      final inheritedTheme =
           context.dependOnInheritedWidgetOfExactType<_TDInheritedTheme>();
       return inheritedTheme?.theme.data ?? TDThemeData.defaultData();
     } else {
@@ -121,7 +119,7 @@ class TDThemeData {
         cornerMap: _copyMap<double>(this.cornerMap, cornerMap),
         fontFamilyMap: _copyMap<FontFamily>(this.fontFamilyMap, fontFamilyMap),
         shadowMap: _copyMap<List<BoxShadow>>(this.shadowMap, shadowMap),
-        spacerMap: _copyMap<double>(this.spacerMap, marginMap),
+        spacerMap: _copyMap<double>(spacerMap, marginMap),
         extraThemeData: extraThemeData ?? this.extraThemeData);
 
     return result;
@@ -129,7 +127,7 @@ class TDThemeData {
 
   /// 拷贝Map,防止内层
   Map<String, T> _copyMap<T>(Map<String, T> src, Map<String, T>? add) {
-    Map<String, T> map = {};
+    var map = <String, T>{};
     src.forEach((key, value) {
       map[key] = value;
     });

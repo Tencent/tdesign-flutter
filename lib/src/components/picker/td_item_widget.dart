@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import '../../../td_export.dart';
 
 /// 所有选择器的子项组件
 
@@ -44,7 +44,7 @@ class _TDItemWidgetState extends State<TDItemWidget> {
     /// 子项此时离中心的距离
     /// 不要使用widget.fixedExtentScrollController.selectedItem
     /// 其中selectedItem会报错，原因是一开始minScrollExtent为空
-    double distance =
+    var distance =
         (widget.fixedExtentScrollController.offset / widget.itemHeight -
                 widget.index)
             .abs()

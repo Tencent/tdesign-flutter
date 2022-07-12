@@ -5,8 +5,9 @@
  */
 
 import 'package:flutter/material.dart';
-import '../example_base.dart';
 import 'package:tdesign_flutter/td_export.dart';
+
+import '../example_base.dart';
 
 // ignore: use_key_in_widget_constructors
 class TdDialogPage extends StatefulWidget {

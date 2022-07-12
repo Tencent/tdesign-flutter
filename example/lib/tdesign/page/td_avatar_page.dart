@@ -23,58 +23,58 @@ class _TdAvatarPageState extends State<TdAvatarPage> {
               children: [
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                   TDAvatar(
-                      size: TDAvatarSize.Large,
-                      type: TDAvatarType.Default,
+                      size: TDAvatarSize.large,
+                      type: TDAvatarType.normal,
                       avatarUrl: imgUrl),
                   TDAvatar(
-                      size: TDAvatarSize.Large,
-                      type: TDAvatarType.Circle,
+                      size: TDAvatarSize.large,
+                      type: TDAvatarType.circle,
                       avatarUrl: imgUrl),
                   TDAvatar(
-                      size: TDAvatarSize.Large,
-                      type: TDAvatarType.Square,
+                      size: TDAvatarSize.large,
+                      type: TDAvatarType.square,
                       avatarUrl: imgUrl),
                   const TDAvatar(
-                    size: TDAvatarSize.Large,
-                    type: TDAvatarType.CustomText,
+                    size: TDAvatarSize.large,
+                    type: TDAvatarType.customText,
                     text: 'W',
                   ),
                 ]),
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                   TDAvatar(
-                      size: TDAvatarSize.Medium,
-                      type: TDAvatarType.Default,
+                      size: TDAvatarSize.medium,
+                      type: TDAvatarType.normal,
                       avatarUrl: imgUrl),
                   TDAvatar(
-                      size: TDAvatarSize.Medium,
-                      type: TDAvatarType.Circle,
+                      size: TDAvatarSize.medium,
+                      type: TDAvatarType.circle,
                       avatarUrl: imgUrl),
                   TDAvatar(
-                      size: TDAvatarSize.Medium,
-                      type: TDAvatarType.Square,
+                      size: TDAvatarSize.medium,
+                      type: TDAvatarType.square,
                       avatarUrl: imgUrl),
                   const TDAvatar(
-                    size: TDAvatarSize.Medium,
-                    type: TDAvatarType.CustomText,
+                    size: TDAvatarSize.medium,
+                    type: TDAvatarType.customText,
                     text: 'A',
                   ),
                 ]),
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                   TDAvatar(
-                      size: TDAvatarSize.Small,
-                      type: TDAvatarType.Default,
+                      size: TDAvatarSize.small,
+                      type: TDAvatarType.normal,
                       avatarUrl: imgUrl),
                   TDAvatar(
-                      size: TDAvatarSize.Small,
-                      type: TDAvatarType.Circle,
+                      size: TDAvatarSize.small,
+                      type: TDAvatarType.circle,
                       avatarUrl: imgUrl),
                   TDAvatar(
-                      size: TDAvatarSize.Small,
-                      type: TDAvatarType.Square,
+                      size: TDAvatarSize.small,
+                      type: TDAvatarType.square,
                       avatarUrl: imgUrl),
                   const TDAvatar(
-                    size: TDAvatarSize.Small,
-                    type: TDAvatarType.CustomText,
+                    size: TDAvatarSize.small,
+                    type: TDAvatarType.customText,
                     text: 'T',
                   ),
                 ]),

@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter_example/main.dart';
+import '../main.dart';
 
 
 class TdExampleRoute {

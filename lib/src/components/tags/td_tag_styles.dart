@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import '../../../td_export.dart';
 
 /// 标签样式
 class TDTagStyle {

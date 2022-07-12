@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import '../../../td_export.dart';
 
 class TDToast {
   static void showText(BuildContext context, String text,
       {Duration duration = TDToast._defaultDisPlayDuration}) {
     _cancel();
     _showing = true;
-    OverlayState? overlayState = Overlay.of(context);
+    var overlayState = Overlay.of(context);
     _overlayEntry = OverlayEntry(
         builder: (BuildContext context) => Center(
               child: AnimatedOpacity(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/components/divider/dashed_widget.dart';
-import 'package:tdesign_flutter/td_export.dart';
+
+import '../../../td_export.dart';
+import 'dashed_widget.dart';
 
 /// 分割线
 /// 对于非flutter原有的控件，则只需满足TDesign规范即可；

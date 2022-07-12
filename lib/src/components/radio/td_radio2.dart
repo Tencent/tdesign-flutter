@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import '../../../td_export.dart';
 
 typedef OnCheckValueChanged = void Function(bool selected);
 
 enum TDRadioType {
-  Circle,
-  Square,
-  Check,
+  circle,
+  square,
+  check,
 }
 
 // ignore: must_be_immutable
@@ -19,7 +18,7 @@ class TDRadio extends StatefulWidget {
 
   TDRadio(
       {Key? key,
-      this.type = TDRadioType.Circle,
+      this.type = TDRadioType.circle,
       this.selected = false,
       this.disabled = false,
       this.onCheckValueChanged})
@@ -51,17 +50,17 @@ class _TDRadioState extends State<TDRadio> {
   Widget? _getRadioIcon(BuildContext context) {
     Widget? icon;
     switch (widget.type) {
-      case TDRadioType.Circle:
+      case TDRadioType.circle:
         icon = Icon(selected ? TDIcons.check_circle_filled : TDIcons.circle,
             size: 24, color: _getIconColor(context));
         break;
-      case TDRadioType.Square:
+      case TDRadioType.square:
         icon = Icon(
             selected ? TDIcons.check_rectangle_filled : TDIcons.rectangle,
             size: 24,
             color: _getIconColor(context));
         break;
-      case TDRadioType.Check:
+      case TDRadioType.check:
         icon = selected
             ? Icon(TDIcons.check, size: 24, color: _getIconColor(context))
             : const SizedBox(
