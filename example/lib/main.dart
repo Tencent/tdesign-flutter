@@ -12,6 +12,7 @@ import 'package:tdesign_flutter_example/tdesign/page/td_badge_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_empty_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_icon_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_input_view_pager.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_navbar_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_loading_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_picker_page.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_radio_page.dart';
@@ -88,6 +89,7 @@ List<ExamplePageModel> examplePageList = [
       text: 'Loading加载中',
       path: 'TdLoadingPage',
       pageBuilder: (context) => TdLoadingPage()),
+  ExamplePageModel(text: ‘导航栏组件’, path: "TdNavBarPage", pageBuilder: (context)=> TdNavBarPage()),
 ];
 
 void main() {
