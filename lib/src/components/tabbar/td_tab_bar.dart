@@ -65,6 +65,9 @@ class TDTabBar extends StatefulWidget {
   /// 点击事件
   final Function(int)? onTap;
 
+  /// tab间距
+  final EdgeInsetsGeometry? labelPadding;
+
   @override
   const TDTabBar(
       {Key? key,
@@ -83,6 +86,7 @@ class TDTabBar extends StatefulWidget {
       this.width,
       this.height,
       this.indicatorPadding,
+      this.labelPadding,
       this.indicator,
       this.physics,
       this.onTap,
@@ -119,6 +123,7 @@ class _TDTabBarState extends State<TDTabBar> {
             widget.unselectedLabelColor ?? TDTheme.of(context).fontGyColor2,
         labelColor: widget.labelColor ?? TDTheme.of(context).brandNormalColor,
         labelStyle: widget.labelStyle ?? _getLabelStyle(context),
+        labelPadding: widget.labelPadding,
         unselectedLabelStyle:
             widget.unselectedLabelStyle ?? _getUnSelectLabelStyle(context),
         tabs: widget.tabs,
