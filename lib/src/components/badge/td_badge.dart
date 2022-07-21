@@ -29,7 +29,7 @@ enum TDBadgeBorder {
 
 class TDBadge extends StatefulWidget {
   /// 红点数量
-  final int? count;
+  final String? count;
 
   /// 红点样式
   final TDBadgeType type;
@@ -80,12 +80,12 @@ class TDBadge extends StatefulWidget {
 class _TDBadgeState extends State<TDBadge> {
   String badgeNum = '';
 
-  void updateBadgeNum(int? newCount) {
+  void updateBadgeNum(String? newCount) {
     if (newCount == null) {
       return;
     }
     setState(() {
-      badgeNum = newCount.toString();
+      badgeNum = newCount;
     });
   }
 
