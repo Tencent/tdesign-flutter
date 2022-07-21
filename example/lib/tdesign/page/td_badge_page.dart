@@ -33,18 +33,18 @@ class _TdBadgePageState extends State<TdBadgePage> {
             builder: (_) {
               return const TDBadge(
                 TDBadgeType.message,
-                count: 2,
+                count: '2',
               );
             }),
         ExampleItem(
             desc: '消息徽标-两位数',
             builder: (_) {
-              return const TDBadge(TDBadgeType.message, count: 16);
+              return const TDBadge(TDBadgeType.message, count: '16');
             }),
         ExampleItem(
             desc: '消息徽标-三位数',
             builder: (_) {
-              return const TDBadge(TDBadgeType.message, count: 128);
+              return const TDBadge(TDBadgeType.message, count: '128');
             }),
         ExampleItem(
             desc: '消息徽标-自定义内容',
