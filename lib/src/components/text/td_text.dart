@@ -383,7 +383,7 @@ class TDTextPaddingConfig {
   }
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
-  double get paddingRate => PlatformUtil.isAndroid? - 7/128 : 0;
+  double get paddingRate => PlatformUtil.isWeb? 3/8 : PlatformUtil.isAndroid? - 7/128 : 0;
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
   double get paddingExtraRate => PlatformUtil.isAndroid? 115/256 : 97/240;
