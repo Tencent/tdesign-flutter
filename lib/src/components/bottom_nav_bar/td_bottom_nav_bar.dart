@@ -137,6 +137,10 @@ class TDBottomNavBar extends StatefulWidget {
     this.showTopBorder = true,
     this.topBorder,
   })  : assert(() {
+          if (navigationTabs.isEmpty) {
+            throw FlutterError(
+                '[TDBottomNavigationBar] please set at least one tab!');
+          }
           if (type == TDBottomNavBarType.customLayout) {
             for (final item in navigationTabs) {
               if (item.selectWidget == null || item.unSelectWidget == null) {
