@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_bottom_navigation_bar_page.dart';
 
 import 'tdesign/example_base.dart';
 import 'tdesign/example_route.dart';
@@ -90,7 +91,14 @@ List<ExamplePageModel> examplePageList = [
       text: 'Loading加载中',
       path: 'TdLoadingPage',
       pageBuilder: (context) => const TdLoadingPage()),
-  ExamplePageModel(text: '导航栏组件', path: 'TdNavBarPage', pageBuilder: (context)=> const TdNavBarPage()),
+  ExamplePageModel(
+      text: '导航栏组件',
+      path: 'TdNavBarPage',
+      pageBuilder: (context) => const TdNavBarPage()),
+  ExamplePageModel(
+      text: '底部导航组件',
+      path: 'TDBottomNavBarPage',
+      pageBuilder: (context) => const TDBottomNavBarPage()),
 ];
 
 void main() {
