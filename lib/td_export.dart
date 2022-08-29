@@ -19,6 +19,7 @@ export 'src/components/picker/td_item_widget.dart';
 export 'src/components/picker/td_multi_picker.dart';
 export 'src/components/picker/td_picker.dart';
 export 'src/components/radio/td_radio.dart';
+export 'src/components/swiper/td_swiper.dart';
 export 'src/components/tabbar/td_tab.dart';
 export 'src/components/tabbar/td_tab_bar.dart';
 export 'src/components/tabbar/td_tab_bar_view.dart';
