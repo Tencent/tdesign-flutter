@@ -19,6 +19,7 @@ import 'tdesign/page/td_loading_page.dart';
 import 'tdesign/page/td_navbar_page.dart';
 import 'tdesign/page/td_picker_page.dart';
 import 'tdesign/page/td_radio_page.dart';
+import 'tdesign/page/td_swiper_page.dart';
 import 'tdesign/page/td_tab_bar_page.dart';
 import 'tdesign/page/td_tag_page.dart';
 import 'tdesign/page/td_text_page.dart';
@@ -28,7 +29,9 @@ import 'tdesign/page/td_toast_page.dart';
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TdTextPage()
 List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
-      text: '文本控件', path: 'TdTextPage', pageBuilder: (context) => const TdTextPage()),
+      text: '文本控件',
+      path: 'TdTextPage',
+      pageBuilder: (context) => const TdTextPage()),
   ExamplePageModel(
       text: '分割线',
       path: 'TdDividerPage',
@@ -56,7 +59,9 @@ List<ExamplePageModel> examplePageList = [
       path: 'TdInputViewPag',
       pageBuilder: (context) => const TdInputViewPage()),
   ExamplePageModel(
-      text: '标签', path: 'TdTagPage', pageBuilder: (context) => const TdTagPage()),
+      text: '标签',
+      path: 'TdTagPage',
+      pageBuilder: (context) => const TdTagPage()),
   ExamplePageModel(
       text: 'Picker',
       path: 'TdPickerPage',
@@ -99,6 +104,10 @@ List<ExamplePageModel> examplePageList = [
       text: '底部导航组件',
       path: 'TDBottomNavBarPage',
       pageBuilder: (context) => const TDBottomNavBarPage()),
+  ExamplePageModel(
+      text: '轮播图组件',
+      path: 'TDSwiperPage',
+      pageBuilder: (context) => const TDSwiperPage()),
 ];
 
 void main() {
@@ -112,8 +121,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
-  const MyApp({Key? key}):super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
