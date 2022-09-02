@@ -7,7 +7,7 @@ class TDBottomNavBarPage extends StatelessWidget {
   const TDBottomNavBarPage({Key? key}) : super(key: key);
 
   void onTapTab(BuildContext context, String tabName) {
-    TDToast.showText(context, '点击了 $tabName');
+    TDToast.showText('点击了 $tabName', context: context);
   }
 
   @override
@@ -572,7 +572,7 @@ class TDBottomNavBarPage extends StatelessWidget {
                                 ))
                             .toList(),
                         onChanged: (v) {
-                          TDToast.showText(context, '点击了 $v');
+                          TDToast.showText('点击了 $v', context: context);
                         })),
               ],
             );
