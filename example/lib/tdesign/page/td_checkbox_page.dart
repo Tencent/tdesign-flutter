@@ -189,7 +189,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
             },
             checkedIds: checkIds,
             onOverloadChecked: () {
-              TDToast.showText(context, '最大只能勾选3个选项');
+              TDToast.showText('最大只能勾选3个选项', context: context);
             },
             child: Container(
               child: GridView.builder(
@@ -235,7 +235,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
             },
             checkedIds: checkIds,
             onOverloadChecked: () {
-              TDToast.showText(context, '最大只能勾选3个选项');
+              TDToast.showText('最大只能勾选3个选项', context: context);
             },
             child: Container(
               child: GridView.builder(

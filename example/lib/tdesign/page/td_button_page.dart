@@ -11,11 +11,11 @@ class _TdButtonPageState extends State<TdButtonPage> {
   final GlobalKey _btnKey = GlobalKey();
 
   void onClick() {
-    TDToast.showText(context, '点击了按钮');
+    TDToast.showText('点击了按钮', context: context);
   }
 
   void onLongClick() {
-    TDToast.showText(context, '长按了按钮');
+    TDToast.showText('长按了按钮', context: context);
   }
 
   @override

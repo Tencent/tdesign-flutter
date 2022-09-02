@@ -15,9 +15,46 @@ class _TdToastPageState extends State<TdToastPage> {
     return ExampleWidget(title: 'Toast组件', children: [
       ElevatedButton(
           onPressed: (){
-            TDToast.showText(context, '我是Toast');
+            TDToast.showText('我是Toast', context: context);
           },
           child: const Text('普通toast')),
+
+      ElevatedButton(
+          onPressed: (){
+            TDToast.showIconText('带图标横向', icon: TDIcons.check_circle, context: context);
+          },
+          child: const Text('带图标横向')),
+
+      ElevatedButton(
+          onPressed: (){
+            TDToast.showIconText('带图标竖向', icon: TDIcons.check_circle, direction: IconTextDirection.vertical, context: context);
+          },
+          child: const Text('带图标竖向')),
+
+      ElevatedButton(
+          onPressed: (){
+            TDToast.showSuccess('成功文案', direction: IconTextDirection.vertical, context: context);
+          },
+          child: const Text('成功文案')),
+
+      ElevatedButton(
+          onPressed: (){
+            TDToast.showWarning('警告文案', direction: IconTextDirection.horizontal, context: context);
+          },
+          child: const Text('警告文案')),
+
+      ElevatedButton(
+          onPressed: (){
+            TDToast.showLoading(context: context);
+          },
+          child: const Text('加载中...')),
+
+      ElevatedButton(
+          onPressed: (){
+            TDToast.dismissLoading();
+          },
+          child: const Text('停止loading')),
+
 
       ElevatedButton(
           onPressed: (){
@@ -26,7 +63,7 @@ class _TdToastPageState extends State<TdToastPage> {
               sb.write('很长$i');
             }
             sb.write('toast');
-            TDToast.showText(context, sb.toString());
+            TDToast.showText(sb.toString(), context: context);
           },
           child: const Text('超长toast')),
 
@@ -37,7 +74,7 @@ class _TdToastPageState extends State<TdToastPage> {
               sb.write('很长$i');
             }
             sb.write('toast');
-            TDToast.showText(context, sb.toString(),duration: const Duration(seconds: 10));
+            TDToast.showText(sb.toString(), context:  context, duration: const Duration(seconds: 10));
           },
           child: const Text('10秒再消失toast')),
 
