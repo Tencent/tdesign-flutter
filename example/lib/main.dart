@@ -37,7 +37,7 @@ List<ExamplePageModel> examplePageList = [
       path: 'TdDividerPage',
       pageBuilder: (context) => const TdDividerPage()),
   ExamplePageModel(
-      text: '圆形图片组件（头像）',
+      text: 'Avatar头像',
       path: 'TdAvatarPage',
       pageBuilder: (context) => TdAvatarPage()),
   ExamplePageModel(
