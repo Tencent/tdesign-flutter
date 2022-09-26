@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import '../../../td_export.dart';
 
@@ -7,6 +9,7 @@ typedef TDSearchBarCallBack = void Function();
 class TDSearchBar extends StatefulWidget {
   final String? placeHolder;
   final Color? backgroundColor;
+  final bool autoFocus;
   final TDSearchBarEvent? onTextChanged;
   final TDSearchBarEvent? onSubmitted;
   final TDSearchBarCallBack? onEditComplete;
@@ -17,6 +20,7 @@ class TDSearchBar extends StatefulWidget {
     this.onTextChanged,
     this.onSubmitted,
     this.onEditComplete,
+    this.autoFocus = true,
     this.backgroundColor = Colors.white,
   }) : super(key: key);
 
@@ -66,11 +70,11 @@ class _TDSearchBarState extends State<TDSearchBar> {
             flex: 1,
             child: Container(
               height: double.infinity,
-              color: TDTheme.of(context).grayColor1,
+              decoration: BoxDecoration(color:TDTheme.of(context).grayColor1, borderRadius: BorderRadius.circular(4) ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Padding(padding: EdgeInsets.only(left: 6)),
+                  const SizedBox(width: 12,),
                   Icon(
                     TDIcons.search,
                     size: 24,
@@ -81,11 +85,16 @@ class _TDSearchBarState extends State<TDSearchBar> {
                     flex: 1,
                     child: TextField(
                       controller: controller,
-                      autofocus: true,
+                      autofocus: widget.autoFocus,
+                      cursorColor: TDTheme.of(context).brandColor8,
+                      cursorWidth: 1,
+                      cursorHeight: 18,
                       focusNode: focusNode,
+                      onChanged: widget.onTextChanged,
+                      onSubmitted: widget.onSubmitted,
                       style: TextStyle(
                           fontSize: TDTheme.of(context).fontM?.size,
-                          color: TDTheme.of(context).fontGyColor3),
+                          color: TDTheme.of(context).fontGyColor1),
                       decoration: InputDecoration(
                         hintText: widget.placeHolder,
                         hintStyle: TextStyle(
@@ -99,18 +108,23 @@ class _TDSearchBarState extends State<TDSearchBar> {
                       maxLines: 1,
                     ),
                   ),
-                  const Padding(padding: EdgeInsets.only(right: 8)),
+                  const Padding(padding: EdgeInsets.only(right: 9)),
                   Offstage(
                     offstage: clearBtnHide,
                     child: GestureDetector(
-                        onTap: () => {controller.clear()},
+                        onTap: () {
+                          controller.clear();
+                          if(widget.onTextChanged != null) {
+                            widget.onTextChanged!('');
+                          }
+                        },
                         child: Icon(
                           TDIcons.close_circle_filled,
-                          size: 24,
+                          size: 21,
                           color: TDTheme.of(context).fontGyColor3,
                         )),
                   ),
-                  const Padding(padding: EdgeInsets.only(right: 8)),
+                  const Padding(padding: EdgeInsets.only(right: 9)),
                 ],
               ),
             ),
