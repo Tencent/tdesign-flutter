@@ -15,7 +15,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
   String selected_2 = '';
   String selected_3 = '';
   List<List<String>> data_3 = [];
-  String selected_4 = '组合: ';
+  String selected_4 = '';
   Map data_4 = {
     '广东省': {
       '深圳市': ['南山区', '宝安区', '罗湖区', '福田区'],
