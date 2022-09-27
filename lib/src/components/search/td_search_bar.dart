@@ -46,7 +46,6 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
   bool clearBtnHide = true;
   bool cancelBtnHide = true;
   late _TDSearchBarStatus _status;
-
   @override
   void initState() {
     super.initState();
@@ -255,8 +254,8 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
                 color: TDTheme.of(context).fontGyColor3,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 5),
-                child: ConstrainedBox(constraints: BoxConstraints(maxWidth: box.maxWidth - 52,), child: TDText(
+                padding: const EdgeInsets.only(left: 3),
+                child: ConstrainedBox(constraints: BoxConstraints(maxWidth: box.maxWidth - 51,), child: TDText(
                   widget.placeHolder,
                   font: TDTheme.of(context).fontM,
                   textColor: TDTheme.of(context).fontGyColor3,
@@ -276,8 +275,8 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
               color: TDTheme.of(context).fontGyColor3,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 5),
-              child: ConstrainedBox(constraints: BoxConstraints(maxWidth: box.maxWidth - 52,), child: TDText(
+              padding: const EdgeInsets.only(left: 3),
+              child: ConstrainedBox(constraints: BoxConstraints(maxWidth: box.maxWidth - 51,), child: TDText(
                 widget.placeHolder,
                 font: TDTheme.of(context).fontM,
                 textColor: TDTheme.of(context).fontGyColor3,
