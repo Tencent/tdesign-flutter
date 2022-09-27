@@ -20,6 +20,7 @@ import 'tdesign/page/td_loading_page.dart';
 import 'tdesign/page/td_navbar_page.dart';
 import 'tdesign/page/td_picker_page.dart';
 import 'tdesign/page/td_radio_page.dart';
+import 'tdesign/page/td_search_bar_page.dart';
 import 'tdesign/page/td_swiper_page.dart';
 import 'tdesign/page/td_tab_bar_page.dart';
 import 'tdesign/page/td_tag_page.dart';
@@ -50,6 +51,17 @@ List<ExamplePageModel> examplePageList = [
       path: 'TdTabBarPage',
       pageBuilder: (context) => TdTabBarPage()),
   ExamplePageModel(
+      text: '轻提示',
+      path: 'TdToastPage',
+      pageBuilder: (context) => TdToastPage()),
+  ExamplePageModel(
+      text: '搜索框',
+      path: 'TdSearchBarPage',
+      pageBuilder: (context) => TdSearchBarPage()),
+  ExamplePageModel(
+      text: '按钮',
+      path: 'TdButtonPage',
+      pageBuilder: (context) => TdButtonPage()),
       text: '复选框 Checkbox',
       path: 'TdCheckboxPage',
       pageBuilder: (context) => const TdCheckboxPage()),
