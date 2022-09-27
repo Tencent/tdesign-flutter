@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import 'package:tdesign_flutter_example/tdesign/page/td_bottom_navigation_bar_page.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_date_picker_page.dart';
 
 import 'tdesign/example_base.dart';
 import 'tdesign/example_route.dart';
@@ -56,6 +57,10 @@ List<ExamplePageModel> examplePageList = [
       text: '输入框 Input',
       path: 'TdInputViewPag',
       pageBuilder: (context) => const TdInputViewPage()),
+  ExamplePageModel(
+      text: '日期选择器 DatePicker',
+      path: 'TdDatePickerPage',
+      pageBuilder: (context) => TdDatePickerPage()),
   ExamplePageModel(
       text: '选择器 Picker',
       path: 'TdPickerPage',
