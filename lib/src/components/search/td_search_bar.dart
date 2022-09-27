@@ -78,7 +78,7 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
       var phBox = _phKey.currentContext?.findRenderObject() as RenderBox?;
       if (box != null && phBox != null) {
         setState(() {
-          var dx = (box.size.width / 2 - 12 - phBox.size.width / 2) / phBox.size.width;
+          var dx = (box.size.width / 2 + 16.5 - phBox.size.width / 2) / phBox.size.width;
           if(dx < 0) {
             return;
           }
@@ -200,7 +200,7 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
                       _status = _TDSearchBarStatus.animatingToUnFocus;
                     });
                     focusNode.unfocus();
-                    _animationController.reverse();
+                    _animationController.reverse(from: _animationController.upperBound);
                   },
                   child: Container(
                     padding: const EdgeInsets.only(left: 16),
