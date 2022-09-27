@@ -62,6 +62,7 @@ List<ExamplePageModel> examplePageList = [
       text: '按钮',
       path: 'TdButtonPage',
       pageBuilder: (context) => TdButtonPage()),
+  ExamplePageModel(
       text: '复选框 Checkbox',
       path: 'TdCheckboxPage',
       pageBuilder: (context) => const TdCheckboxPage()),
@@ -79,10 +80,6 @@ List<ExamplePageModel> examplePageList = [
       pageBuilder: (context) => TdPickerPage()),
   ExamplePageModel(
       text: '单选框 Radio',
-      path: 'TdRadioPage',
-      pageBuilder: (context) => const TdRadioPage()),
-  ExamplePageModel(
-      text: '搜索框 Search',
       path: 'TdRadioPage',
       pageBuilder: (context) => const TdRadioPage()),
   ExamplePageModel(
