@@ -47,7 +47,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
           TDButton(
             width: 200,
             content: '单项选择测试',
-            click: () => TDPicker.showMultiPicker(context, title: '选择渠道',
+            onTap: () => TDPicker.showMultiPicker(context, title: '选择渠道',
                 onConfirm: (selected) {
               setState(() {
                 selected_1 = '渠道: ${data_1[selected[0]]}';
@@ -61,7 +61,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
           TDButton(
             width: 200,
             content: '时间选择测试',
-            click: () => TDPicker.showDatePicker(context, title: '选择时间',
+            onTap: () => TDPicker.showDatePicker(context, title: '选择时间',
                 onConfirm: (selected) {
               setState(() {
                 selected_2 = '时间: $selected';
@@ -75,7 +75,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
           TDButton(
             width: 200,
             content: '多项选择测试',
-            click: () => TDPicker.showMultiPicker(context, title: '选择组合',
+            onTap: () => TDPicker.showMultiPicker(context, title: '选择组合',
                 onConfirm: (selected) {
               setState(() {
                 selected_3 =
@@ -90,7 +90,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
           TDButton(
             width: 200,
             content: '多项联动选择测试',
-            click: () => TDPicker.showMultiLinkedPicker(context, title: '选择组合',
+            onTap: () => TDPicker.showMultiLinkedPicker(context, title: '选择组合',
                 onConfirm: (selected) {
               setState(() {
                 selected_4 =
