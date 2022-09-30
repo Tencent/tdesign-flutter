@@ -46,7 +46,7 @@ class TDEmpty extends StatelessWidget {
                     content: operationText ?? '',
                     size: TDButtonSize.small,
                     width: 160,
-                    click: () {
+                    onTap: () {
                       if (onTapEvent != null) {
                         onTapEvent!();
                       }

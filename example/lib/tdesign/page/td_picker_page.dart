@@ -64,7 +64,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
                     TDButton(
                       width: 200,
                       content: '选择城市',
-                      click: () => TDPicker.showMultiPicker(context, title: '',
+                      onTap: () => TDPicker.showMultiPicker(context, title: '',
                           onConfirm: (selected) {
                         setState(() {
                           selected_1 = '城市: ${data_1[selected[0]]}';
@@ -83,7 +83,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
                 TDButton(
                   width: 200,
                   content: '选择年份和季节',
-                  click: () => TDPicker.showMultiPicker(context, title: '',
+                  onTap: () => TDPicker.showMultiPicker(context, title: '',
                       onConfirm: (selected) {
                         setState(() {
                           selected_3 =
@@ -103,7 +103,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
                 TDButton(
                   width: 200,
                   content: '选择日期',
-                  click: () => TDPicker.showDatePicker(context, title: '',
+                  onTap: () => TDPicker.showDatePicker(context, title: '',
                       onConfirm: (selected) {
                         setState(() {
                           selected_2 = '日期: $selected';
@@ -125,7 +125,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
                 TDButton(
                   width: 200,
                   content: '选择地区',
-                  click: () => TDPicker.showMultiLinkedPicker(context, title: '',
+                  onTap: () => TDPicker.showMultiLinkedPicker(context, title: '',
                       onConfirm: (selected) {
                         setState(() {
                           selected_4 = '组合: ${selected[0]} ${selected[1]} ${selected[2]}';
@@ -151,7 +151,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
                     TDButton(
                       width: 200,
                       content: '带标题-选择城市',
-                      click: () => TDPicker.showMultiPicker(context, title: '选择城市',
+                      onTap: () => TDPicker.showMultiPicker(context, title: '选择城市',
                           onConfirm: (selected) {
                             setState(() {
                               selected_5 = '城市: ${data_1[selected[0]]}';
@@ -170,7 +170,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
                 TDButton(
                   width: 200,
                   content: '带标题-年份和季节',
-                  click: () => TDPicker.showMultiPicker(context, title: '选择年份和季节',
+                  onTap: () => TDPicker.showMultiPicker(context, title: '选择年份和季节',
                       onConfirm: (selected) {
                         setState(() {
                           selected_6 =
@@ -190,7 +190,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
                 TDButton(
                   width: 200,
                   content: '带标题-选择日期',
-                  click: () => TDPicker.showDatePicker(context, title: '选择日期',
+                  onTap: () => TDPicker.showDatePicker(context, title: '选择日期',
                       onConfirm: (selected) {
                         setState(() {
                           selected_7 = '日期: $selected';
@@ -212,7 +212,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
                 TDButton(
                   width: 200,
                   content: '带标题-选择地区',
-                  click: () => TDPicker.showMultiLinkedPicker(context, title: '选择地区',
+                  onTap: () => TDPicker.showMultiLinkedPicker(context, title: '选择地区',
                       onConfirm: (selected) {
                         setState(() {
                           selected_8 = '组合: ${selected[0]} ${selected[1]} ${selected[2]}';
