@@ -51,17 +51,9 @@ List<ExamplePageModel> examplePageList = [
       path: 'TdTabBarPage',
       pageBuilder: (context) => TdTabBarPage()),
   ExamplePageModel(
-      text: '轻提示',
-      path: 'TdToastPage',
-      pageBuilder: (context) => TdToastPage()),
-  ExamplePageModel(
-      text: '搜索框',
+      text: '搜索框 Search',
       path: 'TdSearchBarPage',
       pageBuilder: (context) => TdSearchBarPage()),
-  ExamplePageModel(
-      text: '按钮',
-      path: 'TdButtonPage',
-      pageBuilder: (context) => TdButtonPage()),
   ExamplePageModel(
       text: '复选框 Checkbox',
       path: 'TdCheckboxPage',

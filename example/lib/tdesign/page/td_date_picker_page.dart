@@ -35,7 +35,7 @@ class _TdDatePickerPageState extends State<TdDatePickerPage> {
                 TDButton(
                   width: 200,
                   content: '选择日期',
-                  click: () => TDPicker.showDatePicker(context, title: '选择时间',
+                  onTap: () => TDPicker.showDatePicker(context, title: '选择时间',
                       onConfirm: (selected) {
                         setState(() {
                           selected_1 = '日期: $selected';
@@ -57,7 +57,7 @@ class _TdDatePickerPageState extends State<TdDatePickerPage> {
                 TDButton(
                   width: 200,
                   content: '选择日期',
-                  click: () => TDPicker.showDatePicker(context, title: '选择时间',
+                  onTap: () => TDPicker.showDatePicker(context, title: '选择时间',
                       onConfirm: (selected) {
                         setState(() {
                           selected_2 = '日期: $selected';
@@ -80,7 +80,7 @@ class _TdDatePickerPageState extends State<TdDatePickerPage> {
                 TDButton(
                   width: 200,
                   content: '选择日期',
-                  click: () => TDPicker.showDatePicker(context, title: '选择时间',
+                  onTap: () => TDPicker.showDatePicker(context, title: '选择时间',
                       onConfirm: (selected) {
                         setState(() {
                           selected_3 = '日期: $selected';
@@ -103,7 +103,7 @@ class _TdDatePickerPageState extends State<TdDatePickerPage> {
                 TDButton(
                   width: 200,
                   content: '选择日期',
-                  click: () => TDPicker.showDatePicker(context, title: '选择时间',
+                  onTap: () => TDPicker.showDatePicker(context, title: '选择时间',
                       onConfirm: (selected) {
                         setState(() {
                           selected_4 = '日期: $selected';
@@ -131,7 +131,7 @@ class _TdDatePickerPageState extends State<TdDatePickerPage> {
                 TDButton(
                   width: 200,
                   content: '选择日期',
-                  click: () => TDPicker.showDatePicker(context, title: '选择时间',
+                  onTap: () => TDPicker.showDatePicker(context, title: '选择时间',
                       onConfirm: (selected) {
                         setState(() {
                           selected_5 = '日期: $selected';
