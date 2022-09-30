@@ -1,9 +1,8 @@
-import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'td_button_style.dart';
+
 import '../../../td_export.dart';
+import 'td_button_style.dart';
 
 enum TDButtonSize { small, medium, large }
 
