@@ -1,415 +1,293 @@
-import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
+
 import '../../../td_export.dart';
+import 'td_button_style.dart';
 
 enum TDButtonSize { small, medium, large }
 
-enum TDButtonTheme {
-  /// 常规
-  normal,
-
-  /// 强调
-  primary,
-
-  ///轻度
-  light,
-  danger,
-}
-
-enum TDButtonShape {
-  square,
-  round,
-}
-
-enum TDButtonType {
-  ///常规
-  normal,
-
-  ///加载按钮
-  loading,
-
-  ///进度条按钮
-  progress,
-}
-
 typedef TDButtonEvent = void Function();
 
+/// TD常规按钮
 class TDButton extends StatefulWidget {
   final Widget? child;
   final String? content;
   final bool disabled;
-  final double? opacity;
   final double? width;
-  final TDButtonSize? size;
-  final TDButtonTheme? theme;
-  final TDButtonShape? shape;
-  final TDButtonType? type;
-  final TDButtonEvent? click;
-  final TDButtonEvent? longClick;
-  final Key? reportKey;
+  final double? height;
+  final TDButtonSize size;
+  final TDButtonStyle? style;
+  final TextStyle? textStyle;
+  final TextStyle? disableTextStyle;
+  final TDButtonEvent? onTap;
+  final TDButtonEvent? onLongPress;
+  final IconData? icon;
+  final EdgeInsetsGeometry? padding;
 
-  Timer? timer;
-
-  ///设置下载进度, type 为Progress 生效
-  double get progress => _btnState?.progress ?? 0;
-
-  set progress(double p) => _btnState?.updateProgress(p);
-
-  ///loading动画, true 开启动画，false停止, type 为Loading 生效
-  bool get isLoading => _btnState?.isLoading ?? false;
-
-  set isLoading(bool loading) => _btnState?.setIsLoading(loading);
-
-  TDButton(
+  const TDButton(
       {Key? key,
-      this.reportKey,
       required this.content,
       this.size = TDButtonSize.medium,
       this.child,
       this.disabled = false,
-      this.opacity = 1.0,
+      this.style,
+      this.textStyle,
+      this.disableTextStyle,
       this.width,
-      this.theme = TDButtonTheme.normal,
-      this.shape = TDButtonShape.square,
-      this.type = TDButtonType.normal,
-      this.click,
-      this.longClick})
+      this.height,
+      this.onTap,
+      this.icon,
+      this.onLongPress,
+      this.padding})
       : super(key: key);
 
-  _TDButtonState? _btnState;
-
   @override
-  State<StatefulWidget> createState() {
-    _btnState = _TDButtonState(opacity!);
-    return _btnState!;
-  }
+  State<StatefulWidget> createState() => _TDButtonState();
 }
 
-class _TDButtonState extends State<TDButton>
-    with SingleTickerProviderStateMixin {
-  bool isLoading = false;
-  double progress = 0;
-  AnimationController? _animationController;
-  Animation<double>? _animation;
-  double _opacity = 1.0;
-  double _originOp = 1.0;
-  double _btnWidth = 0;
+class _TDButtonState extends State<TDButton> {
 
-  final GlobalKey _globalKey = GlobalKey();
+  TDButtonStyle? _innerStyle;
 
-  _TDButtonState(double op) {
-    _opacity = op;
-    _originOp = op;
-  }
-
-  void updateProgress(double progress) {
-    if (widget.type != TDButtonType.progress){
-      return;
+  TDButtonStyle get style {
+    if(_innerStyle != null){
+      return _innerStyle!;
     }
-
-    progress = min(1, max(progress, 0));
-    setState(() {
-      progress = progress;
-    });
-  }
-
-  void setIsLoading(bool isLoading) {
-    if (widget.type != TDButtonType.loading){
-      return;
-    }
-
-    if (isLoading) {
-      _animationController?.forward();
-    } else {
-      _animationController?.stop();
-    }
-    setState(() {
-      isLoading = isLoading;
-    });
+    _innerStyle = widget.style ?? TDButtonStyle.primary(context: context);
+    return _innerStyle!;
   }
 
   @override
   void initState() {
     super.initState();
-    _setAnimation();
-  }
-
-  void _setAnimation() {
-    if (widget.type != TDButtonType.loading){
-      return;
-    }
-
-
-    _animationController ??=
-        AnimationController(duration: const Duration(seconds: 300), vsync: this);
-
-    _animation ??=
-    Tween<double>(begin: 1, end: 300).animate(_animationController!)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _animationController?.reverse();
-        } else if (status == AnimationStatus.dismissed) {
-          _animationController?.forward();
-        }
-      });
-  }
-
-  double _getButtonHeight() {
-    var height = 28.0;
-    switch (widget.size) {
-      case TDButtonSize.small:
-        height = 36;
-        break;
-      case TDButtonSize.medium:
-        height = 40;
-        break;
-      case TDButtonSize.large:
-        height = 44;
-        break;
-      default:
-    }
-    return height;
-  }
-
-  Color? _getButtonColor() {
-    switch (widget.theme) {
-      case TDButtonTheme.primary:
-        return widget.disabled == true
-            ? TDTheme.of(context).brandColor3
-            : TDTheme.of(context).brandColor8;
-      case TDButtonTheme.danger:
-        return widget.disabled == true
-            ? TDTheme.of(context).errorColor3
-            : TDTheme.of(context).errorColor6;
-      default:
-    }
-    return null;
-  }
-
-  TextStyle _getButtonTextStyle() {
-    var style = const TextStyle();
-    var fontMap = <TDButtonSize, dynamic>{
-      TDButtonSize.small: [TDTheme.of(context).fontS, FontWeight.w400],
-      TDButtonSize.medium: [TDTheme.of(context).fontS, FontWeight.w400],
-      TDButtonSize.large: [TDTheme.of(context).fontM, FontWeight.w400]
-    };
-
-    switch (widget.theme) {
-      case TDButtonTheme.normal:
-        style = TextStyle(
-            fontSize: fontMap[widget.size][0].size,
-            height: fontMap[widget.size][0].height,
-            fontWeight: fontMap[widget.size][1],
-            decoration: TextDecoration.none,
-            color: widget.disabled == true
-                ? TDTheme.of(context).brandColor3
-                : TDTheme.of(context).brandColor8);
-        break;
-      case TDButtonTheme.primary:
-        style = TextStyle(
-            fontSize: fontMap[widget.size][0].size,
-            height: fontMap[widget.size][0].height,
-            fontWeight: fontMap[widget.size][1],
-            decoration: TextDecoration.none,
-            color: widget.disabled == true
-                ? TDTheme.of(context).whiteColor1
-                : TDTheme.of(context).whiteColor1);
-        break;
-      case TDButtonTheme.light:
-        style = TextStyle(
-            fontSize: fontMap[widget.size][0].size,
-            height: fontMap[widget.size][0].height,
-            fontWeight: fontMap[widget.size][1],
-            decoration: TextDecoration.none,
-            color: widget.disabled == true
-                ? TDTheme.of(context).fontGyColor4
-                : TDTheme.of(context).fontGyColor1);
-        break;
-      case TDButtonTheme.danger:
-        style = TextStyle(
-            fontSize: fontMap[widget.size][0].size,
-            height: fontMap[widget.size][0].height,
-            fontWeight: fontMap[widget.size][1],
-            decoration: TextDecoration.none,
-            color: widget.disabled == true
-                ? TDTheme.of(context).whiteColor1
-                : TDTheme.of(context).whiteColor1);
-        break;
-      default:
-    }
-
-    return style;
-  }
-
-  Widget? _getButtonTypeWidget() {
-    Widget? typedWidget;
-    switch (widget.type) {
-      case TDButtonType.normal:
-        typedWidget = TDText(
-          widget.content ?? '',
-          style: _getButtonTextStyle(),
-          forceVerticalCenter: true,
-        );
-        break;
-      case TDButtonType.loading:
-        typedWidget = RotationTransition(
-          alignment: Alignment.center,
-          turns: _animation!,
-          child: const SizedBox(
-            width: 14,
-            height: 14,
-            child: Icon(
-              TDIcons.loading,
-              size: 14,
-            ),
-          ),
-        );
-        break;
-      case TDButtonType.progress:
-        typedWidget = SizedBox(
-          width: _btnWidth,
-          height: _getButtonHeight(),
-          child: Stack(
-            alignment: AlignmentDirectional.center,
-            children: [
-              Positioned(
-                left: 0,
-                top: 0,
-                child: Container(
-                  width: _btnWidth * progress,
-                  height: _getButtonHeight(),
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                    Colors.white.withOpacity(0),
-                    Colors.white.withOpacity(0.45)
-                  ])),
-                ),
-              ),
-              TDText(
-                '${(progress * 100).toStringAsFixed(2)}%',
-                style: _getButtonTextStyle(),
-                forceVerticalCenter: true,
-              ),
-            ],
-          ),
-        );
-        break;
-      default:
-    }
-    return typedWidget;
-  }
-
-  BoxDecoration? _getButtonDecoration() {
-    switch (widget.theme) {
-      case TDButtonTheme.normal:
-        return BoxDecoration(
-            border: Border.all(
-                color: widget.disabled == true
-                    ? TDTheme.of(context).brandColor3
-                    : TDTheme.of(context).brandColor8,
-                width: 0.5),
-            borderRadius: widget.shape == TDButtonShape.round
-                ? BorderRadius.circular(4)
-                : null);
-      case TDButtonTheme.primary:
-        return BoxDecoration(
-            color: _getButtonColor(),
-            borderRadius: widget.shape == TDButtonShape.round
-                ? BorderRadius.circular(4)
-                : null);
-      case TDButtonTheme.light:
-        return BoxDecoration(
-            border:
-                Border.all(color: TDTheme.of(context).grayColor4, width: 0.5),
-            borderRadius: widget.shape == TDButtonShape.round
-                ? BorderRadius.circular(4)
-                : null);
-      case TDButtonTheme.danger:
-        return BoxDecoration(
-            color: _getButtonColor(),
-            borderRadius: widget.shape == TDButtonShape.round
-                ? BorderRadius.circular(4)
-                : null);
-      default:
-    }
-    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    var height = _getButtonHeight();
-    if (widget.type == TDButtonType.progress) {
-      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-        var btnW = _globalKey.currentContext?.size?.width ?? 0;
-        if (_btnWidth <= 0 && btnW > 0) {
-          _btnWidth = btnW;
-          updateProgress(progress);
-        }
-        _btnWidth = btnW;
-      });
+    var width = widget.width ?? _getWidth();
+
+    Widget  display = Container(
+      width:  width,
+      height:  widget.height ?? _getHeight(),
+      alignment: width != null || style.isFullWidth ? Alignment.center : null,
+      padding: _getPadding(),
+      decoration: BoxDecoration(
+        color: style.getBackgroundColor(context:context, disable: widget.disabled),
+        border: _getBorder(context),
+        borderRadius: BorderRadius.all(style.radius ?? Radius.zero),
+      ),
+      child: widget.child ?? _getChild(),
+    );
+
+    if(widget.disabled){
+      return display;
     }
     return GestureDetector(
-      key: widget.reportKey,
-      child: Container(
-        key: _globalKey,
-        decoration: _getButtonDecoration(),
-        padding: (widget.type == TDButtonType.progress)
-            ? EdgeInsets.zero
-            : const EdgeInsets.only(left: 16, right: 16),
-        width: widget.width,
-        height: height,
-        child: Center(
-          child: widget.child ?? _getButtonTypeWidget(),
-        ),
-      ),
-      onTap: () {
-        if (widget.disabled == true){
-          return;
-        }
-        if (widget.click != null) {
-          widget.click!();
-        }
-      },
-      onLongPressUp: () {
-        if (widget.disabled == true){
-          return;
-        }
-        if (widget.longClick != null) {
-          widget.longClick!();
-        }
-      },
-      onTapDown: (TapDownDetails details) {
-        if (widget.disabled == true){
-          return;
-        }
-        setState(() {
-          widget.timer?.cancel();
-          widget.timer = null;
-          _opacity = 0.6 * _originOp;
-        });
-      },
-      onTapUp: (TapUpDetails details) {
-        if (widget.disabled == true){
-          return;
-        }
-        widget.timer = Timer(const Duration(milliseconds: 100), () {
-          widget.timer?.cancel();
-          widget.timer = null;
-          setState(() {
-            _opacity = _originOp;
-          });
-        });
-      },
-      onLongPressEnd: (LongPressEndDetails details) {
-        if (widget.disabled == true){
-          return;
-        }
-        setState(() {
-          _opacity = _originOp;
-        });
-      },
+      child: display,
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
     );
   }
+
+  Border? _getBorder(BuildContext context) {
+    if( style.frameWidth != null && style.frameWidth != 0){
+      return Border.all(color: style.getFrameColor(context:context, disable: widget.disabled), width: style.frameWidth!);
+    }
+  }
+
+  Widget _getChild() {
+    if(widget.content == null && widget.icon == null){
+      return Container();
+    }
+    TDText? text;
+    if(widget.content != null){
+      text = TDText(widget.content!,
+        font: _getTextFont(),
+        textColor: style.getTextColor(context: context, disable: widget.disabled),
+        style: widget.disabled ? widget.disableTextStyle : widget.textStyle,
+        forceVerticalCenter: true,
+      );
+    }
+    if(widget.icon == null){
+      return text!;
+    }
+
+    // 系统Icon会导致不居中，因此自绘icon指定height
+    var icon =  RichText(
+      overflow: TextOverflow.visible,
+      text: TextSpan(
+        text: String.fromCharCode(widget.icon!.codePoint),
+        style: TextStyle(
+          inherit: false,
+          color: style.getTextColor(context: context, disable: widget.disabled),
+          height: 1,
+          fontSize: _getIconSize(),
+          fontFamily:widget.icon!.fontFamily,
+          package: widget.icon!.fontPackage,
+        ),
+      ),
+    );
+    if(widget.content == null){
+      return icon;
+    }
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        icon,
+        const SizedBox(width: 8,),
+        text!
+      ],
+    );
+  }
+
+  Font _getTextFont() {
+    switch(widget.size){
+      case TDButtonSize.large:
+        return TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
+      case TDButtonSize.medium:
+        return TDTheme.of(context).fontS ?? Font(size: 14, lineHeight: 22);
+      case TDButtonSize.small:
+        return TDTheme.of(context).fontS ?? Font(size: 14, lineHeight: 22);
+    }
+  }
+
+  double? _getWidth() {
+    if(!style.isFullWidth){
+      switch(widget.size){
+        case TDButtonSize.large:
+          return 343;
+        case TDButtonSize.medium:
+          return 343;
+        case TDButtonSize.small:
+        default:
+      }
+    }
+  }
+
+  double _getHeight() {
+    switch(widget.size){
+      case TDButtonSize.large:
+        return 44;
+      case TDButtonSize.medium:
+        return 40;
+      case TDButtonSize.small:
+        return 36;
+    }
+  }
+
+  double _getIconSize() {
+    switch(widget.size){
+      case TDButtonSize.large:
+        return 24;
+      case TDButtonSize.medium:
+        return 22;
+      case TDButtonSize.small:
+        return 20;
+    }
+  }
+
+
+  EdgeInsetsGeometry? _getPadding() {
+    if(widget.padding != null){
+      return widget.padding;
+    }
+    double topBottomPadding;
+    switch(widget.size){
+      case TDButtonSize.large:
+        topBottomPadding = 10;
+        break;
+      case TDButtonSize.medium:
+        topBottomPadding = 9;
+        break;
+      case TDButtonSize.small:
+        topBottomPadding = 7;
+        break;
+    }
+    return EdgeInsets.only(left: 16,right: 16,bottom: topBottomPadding,top: topBottomPadding);
+  }
+
+  @override
+  void didUpdateWidget(covariant TDButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _innerStyle = widget.style ?? _innerStyle ;
+  }
+
 }
+
+/// TD文字按钮
+class TDTextButton extends StatefulWidget {
+  final TDButtonSize size;
+  final String? content;
+  final bool disabled;
+  final double? width;
+  final double? height;
+  final TextStyle? style;
+  final TextStyle? disableStyle;
+  final TDButtonEvent? onTap;
+  final TDButtonEvent? onLongPress;
+
+  const TDTextButton(
+  this.content,{
+    Key? key,
+    this.size = TDButtonSize.medium,
+    this.disabled = false,
+    this.style,
+    this.disableStyle,
+    this.width,
+    this.height,
+    this.onTap,
+    this.onLongPress
+}) : super(key: key);
+
+  @override
+  State<TDTextButton> createState() => _TDTextButtonState();
+}
+
+class _TDTextButtonState extends State<TDTextButton> {
+
+
+  late TextStyle? style;
+  late TextStyle? disableStyle;
+
+  @override
+  void initState() {
+    super.initState();
+    style = widget.style ?? TextStyle(color: TDTheme.of().brandNormalColor);
+    disableStyle = widget.disableStyle ?? TextStyle(color: TDTheme.of().brandDisabledColor);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    Widget  display = Container(
+      width:  widget.width,
+      height:  widget.height ,
+      child: TDText(widget.content!,
+        font: _getTextFont(),
+        style: widget.disabled ? disableStyle : style,
+        forceVerticalCenter: true,
+      ),
+    );
+
+    if(widget.disabled){
+      return display;
+    }
+    return GestureDetector(
+      child: display,
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
+    );
+  }
+
+  Font _getTextFont() {
+    switch(widget.size){
+      case TDButtonSize.large:
+        return TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
+      case TDButtonSize.medium:
+        return TDTheme.of(context).fontS ?? Font(size: 14, lineHeight: 22);
+      case TDButtonSize.small:
+        return TDTheme.of(context).fontS ?? Font(size: 14, lineHeight: 22);
+    }
+  }
+}
+

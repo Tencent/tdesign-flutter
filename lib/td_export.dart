@@ -2,6 +2,7 @@ export 'src/components/avatar/td_avatar.dart';
 export 'src/components/badge/td_badge.dart';
 export 'src/components/bottom_nav_bar/td_bottom_nav_bar.dart';
 export 'src/components/button/td_button.dart';
+export 'src/components/button/td_button_style.dart';
 export 'src/components/checkbox/td_check_box.dart';
 export 'src/components/checkbox/td_check_box_group.dart';
 export 'src/components/dialog/td_dialog.dart';
