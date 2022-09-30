@@ -2,7 +2,6 @@ export 'src/components/avatar/td_avatar.dart';
 export 'src/components/badge/td_badge.dart';
 export 'src/components/button/td_button.dart';
 export 'src/components/button/td_button_style.dart';
-
 export 'src/components/checkbox/td_check_box.dart';
 export 'src/components/checkbox/td_check_box_group.dart';
 export 'src/components/dialog/td_dialog.dart';
@@ -19,6 +18,7 @@ export 'src/components/picker/td_date_picker.dart';
 export 'src/components/picker/td_item_widget.dart';
 export 'src/components/picker/td_multi_picker.dart';
 export 'src/components/picker/td_picker.dart';
+export 'src/components/popup/td_popup_route.dart';
 export 'src/components/radio/td_radio.dart';
 export 'src/components/tabbar/td_tab.dart';
 export 'src/components/tabbar/td_tab_bar.dart';
