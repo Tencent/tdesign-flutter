@@ -13,7 +13,7 @@ class _TdSearchBarPageState extends State<TdSearchBarPage> {
   @override
   Widget build(BuildContext context) {
     return ExampleWidget(title: '搜索框', children: [
-      TDSearchBar(placeHolder: '搜索内容', onTextChanged: (String text) {
+      TDSearchBar(placeHolder: '搜索预设文案', onTextChanged: (String text) {
         setState(() {
           inputText = text;
         });
