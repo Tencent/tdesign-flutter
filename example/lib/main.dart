@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_bottom_navigation_bar_page.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_date_picker_page.dart';
 
 import 'tdesign/example_base.dart';
 import 'tdesign/example_route.dart';
 import 'tdesign/page/td_avatar_page.dart';
 import 'tdesign/page/td_badge_page.dart';
+import 'tdesign/page/td_bottom_navigation_bar_page.dart';
 import 'tdesign/page/td_button_page.dart';
 import 'tdesign/page/td_checkbox_page.dart';
+import 'tdesign/page/td_date_picker_page.dart';
 import 'tdesign/page/td_dialog_page.dart';
 import 'tdesign/page/td_divider_page.dart';
 import 'tdesign/page/td_empty_page.dart';
@@ -25,11 +25,16 @@ import 'tdesign/page/td_swiper_page.dart';
 import 'tdesign/page/td_tab_bar_page.dart';
 import 'tdesign/page/td_tag_page.dart';
 import 'tdesign/page/td_text_page.dart';
-import 'tdesign/page/td_theme_page.dart';
 import 'tdesign/page/td_toast_page.dart';
 
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TdTextPage()
 List<ExamplePageModel> examplePageList = [
+  ExamplePageModel(
+      text: '文本控件--基础',
+      path: 'TdTextPage',
+      pageBuilder: (context) => const TdTextPage()),
+  ExamplePageModel(
+      text: '图标--基础', path: 'TdIconPage', pageBuilder: (context) => TdIconPage()),
   ExamplePageModel(
       text: '按钮 Button',
       path: 'TdButtonPage',
@@ -38,46 +43,6 @@ List<ExamplePageModel> examplePageList = [
       text: '分割线 Divider',
       path: 'TdDividerPage',
       pageBuilder: (context) => const TdDividerPage()),
-  ExamplePageModel(
-      text: '导航栏 NavBar',
-      path: 'TdNavBarPage',
-      pageBuilder: (context) => const TdNavBarPage()),
-  ExamplePageModel(
-      text: '标签栏 TabBar',
-      path: 'TDBottomNavBarPage',
-      pageBuilder: (context) => const TDBottomNavBarPage()),
-  ExamplePageModel(
-      text: '选项卡 Tabs',
-      path: 'TdTabBarPage',
-      pageBuilder: (context) => TdTabBarPage()),
-  ExamplePageModel(
-      text: '搜索框 Search',
-      path: 'TdSearchBarPage',
-      pageBuilder: (context) => TdSearchBarPage()),
-  ExamplePageModel(
-      text: '复选框 Checkbox',
-      path: 'TdCheckboxPage',
-      pageBuilder: (context) => const TdCheckboxPage()),
-  ExamplePageModel(
-      text: '输入框 Input',
-      path: 'TdInputViewPag',
-      pageBuilder: (context) => const TdInputViewPage()),
-  ExamplePageModel(
-      text: '日期选择器 DatePicker',
-      path: 'TdDatePickerPage',
-      pageBuilder: (context) => TdDatePickerPage()),
-  ExamplePageModel(
-      text: '选择器 Picker',
-      path: 'TdPickerPage',
-      pageBuilder: (context) => TdPickerPage()),
-  ExamplePageModel(
-      text: '单选框 Radio',
-      path: 'TdRadioPage',
-      pageBuilder: (context) => const TdRadioPage()),
-  ExamplePageModel(
-      text: '开关 Switch',
-      path: 'TdRadioPage',
-      pageBuilder: (context) => const TdRadioPage()),
   ExamplePageModel(
       text: '头像 Avatar',
       path: 'TdAvatarPage',
@@ -103,6 +68,46 @@ List<ExamplePageModel> examplePageList = [
       path: 'TdTagPage',
       pageBuilder: (context) => const TdTagPage()),
   ExamplePageModel(
+      text: '多选框 Checkbox',
+      path: 'TdCheckboxPage',
+      pageBuilder: (context) => const TdCheckboxPage()),
+  ExamplePageModel(
+      text: '时间选择器 DatePicker',
+      path: 'TdDatePickerPage',
+      pageBuilder: (context) => TdDatePickerPage()),
+  ExamplePageModel(
+      text: '输入框 Input',
+      path: 'TdInputViewPag',
+      pageBuilder: (context) => const TdInputViewPage()),
+  ExamplePageModel(
+      text: '选择器 Picker',
+      path: 'TdPickerPage',
+      pageBuilder: (context) => TdPickerPage()),
+  ExamplePageModel(
+      text: '单选框 Radio',
+      path: 'TdRadioPage',
+      pageBuilder: (context) => const TdRadioPage()),
+  ExamplePageModel(
+      text: '搜索框 Search',
+      path: 'TdSearchBarPage',
+      pageBuilder: (context) => TdSearchBarPage()),
+  ExamplePageModel(
+      text: '开关 Switch',
+      path: 'TdRadioPage',
+      pageBuilder: (context) => const TdRadioPage()),
+  ExamplePageModel(
+      text: '导航栏 NavBar',
+      path: 'TdNavBarPage',
+      pageBuilder: (context) => const TdNavBarPage()),
+  ExamplePageModel(
+      text: '标签栏 TabBar',
+      path: 'TDBottomNavBarPage',
+      pageBuilder: (context) => const TDBottomNavBarPage()),
+  ExamplePageModel(
+      text: '选项卡 Tabs',
+      path: 'TdTabBarPage',
+      pageBuilder: (context) => TdTabBarPage()),
+  ExamplePageModel(
       text: '对话框 Dialog',
       path: 'TdDialogPage',
       pageBuilder: (context) => TdDialogPage()),
@@ -114,12 +119,6 @@ List<ExamplePageModel> examplePageList = [
       text: '轻提示 Toast',
       path: 'TdToastPage',
       pageBuilder: (context) => TdToastPage()),
-  ExamplePageModel(
-      text: '文本控件--基础',
-      path: 'TdTextPage',
-      pageBuilder: (context) => const TdTextPage()),
-  ExamplePageModel(
-      text: '图标--基础', path: 'TdIconPage', pageBuilder: (context) => TdIconPage()),
 ];
 
 void main() {

@@ -46,10 +46,14 @@ class TdRadioPageState extends State<TdRadioPage> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
+                var title = '单选$index';
+                if(index == 2){
+                  title = '单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选';
+                }
                 return Container(
                   child: TdRadio(
                     id: 'index:$index',
-                    title: '单选$index',
+                    title: title,
                   ),
                   height: 40,
                   alignment: Alignment.centerLeft,
@@ -70,10 +74,14 @@ class TdRadioPageState extends State<TdRadioPage> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
+                var title = '单选$index';
+                if(index == 2){
+                  title = '单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选';
+                }
                 return Container(
                   child: TdRadio(
                     id: 'index:$index',
-                    title: '单选$index',
+                    title: title,
                   ),
                   height: 40,
                   alignment: Alignment.centerLeft,
