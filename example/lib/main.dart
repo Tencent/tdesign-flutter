@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_popup_page.dart';
 
 import 'tdesign/example_base.dart';
 import 'tdesign/example_route.dart';
@@ -18,6 +19,7 @@ import 'tdesign/page/td_loading_page.dart';
 import 'tdesign/page/td_navbar_page.dart';
 import 'tdesign/page/td_picker_page.dart';
 import 'tdesign/page/td_radio_page.dart';
+import 'tdesign/page/td_swich_page.dart';
 import 'tdesign/page/td_tab_bar_page.dart';
 import 'tdesign/page/td_tag_page.dart';
 import 'tdesign/page/td_text_page.dart';
@@ -91,6 +93,10 @@ List<ExamplePageModel> examplePageList = [
       path: 'TdLoadingPage',
       pageBuilder: (context) => const TdLoadingPage()),
   ExamplePageModel(text: '导航栏组件', path: 'TdNavBarPage', pageBuilder: (context)=> const TdNavBarPage()),
+  ExamplePageModel(text: 'Popup弹窗',
+      path: 'TdPopupPage',
+      pageBuilder: (context)=> const TdPopupPage()),
+
 ];
 
 void main() {

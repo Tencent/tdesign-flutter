@@ -76,7 +76,7 @@ extension IterableExt<T> on Iterable<T> {
   }
 
   ///
-  /// 是否包含某个特定条件的颜色
+  /// 是否包含某个特定条件的元素
   ///
   bool isContains(bool Function(T e) test) {
     return firstWhereOrNull((element) => test(element)) != null;
