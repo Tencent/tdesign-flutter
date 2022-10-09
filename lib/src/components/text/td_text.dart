@@ -49,7 +49,7 @@ class TDText extends StatelessWidget {
   final Color? backgroundColor;
 
   /// 字体包名
-  final String package;
+  final String? package;
 
   /// 是否是横线穿过样式(删除线)
   final bool? isTextThrough;
@@ -100,7 +100,7 @@ class TDText extends StatelessWidget {
         this.backgroundColor,
         this.isTextThrough = false,
         this.lineThroughColor = Colors.white,
-        this.package = 'tdesign_flutter',
+        this.package,
         this.style,
         this.strutStyle,
         this.textAlign,
@@ -157,14 +157,14 @@ class TDText extends StatelessWidget {
           font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
       var fontSize = style?.fontSize ?? textFont.size;
       var height = style?.height ?? textFont.height;
-      
+
       paddingConfig ??= TDTextPaddingConfig.getDefaultConfig();
       var showHeight = min(paddingConfig.heightRate, height);
       return Container(
         color: style?.backgroundColor ?? backgroundColor,
         height: fontSize * height,
         padding: paddingConfig.getPadding(data, fontSize, height),
-        child: _getRawText(context: context, textStyle: _getTextStyle(context, height: showHeight)),
+        child: _getRawText(context: context, textStyle: getTextStyle(context, height: showHeight)),
       );
     }
     return Container(
@@ -180,7 +180,7 @@ class TDText extends StatelessWidget {
 
 
 
-  TextStyle? _getTextStyle(BuildContext? context,{ double? height, Color? backgroundColor}) {
+  TextStyle? getTextStyle(BuildContext? context,{ double? height, Color? backgroundColor}) {
     var textFont =
         font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
     return TextStyle(
@@ -209,7 +209,7 @@ class TDText extends StatelessWidget {
       fontFamily: style?.fontFamily ?? fontFamily?.fontFamily,
       fontFamilyFallback: style?.fontFamilyFallback,
       package: package,
-        );
+    );
   }
 
   /// 获取系统原始Text，以便使用到只能接收系统Text组件的地方
@@ -217,12 +217,12 @@ class TDText extends StatelessWidget {
   Text getRawText({BuildContext? context}){
     return _getRawText(context: context, backgroundColor: backgroundColor);
   }
-  
+
   Text _getRawText({BuildContext? context, TextStyle? textStyle, Color? backgroundColor}){
     return textSpan == null ? Text(
       data,
       key: key,
-      style: textStyle ?? _getTextStyle(context, backgroundColor: backgroundColor),
+      style: textStyle ?? getTextStyle(context, backgroundColor: backgroundColor),
       strutStyle: strutStyle,
       textAlign: textAlign,
       textDirection: textDirection,
@@ -235,7 +235,7 @@ class TDText extends StatelessWidget {
       textWidthBasis: textWidthBasis,
       textHeightBehavior: textHeightBehavior,
     ) : Text.rich(textSpan!,
-      style: textStyle ?? _getTextStyle(context, backgroundColor: backgroundColor),
+      style: textStyle ?? getTextStyle(context, backgroundColor: backgroundColor),
       strutStyle: strutStyle,
       textAlign: textAlign,
       textDirection: textDirection,
@@ -273,36 +273,36 @@ class TDTextSpan extends TextSpan{
     PointerExitEventListener? onExit,
     String? semanticsLabel,
   }) : super(
-          text: text,
-          children: children,
-          style: _getTextStyle(
-              context,
-              style,
-              font,
-              fontWeight,
-              fontFamily,
-              textColor,
-              isTextThrough,
-              lineThroughColor,
-              package),
-          recognizer: recognizer,
-          mouseCursor: mouseCursor,
-          onEnter: onEnter,
-          onExit: onExit,
-          semanticsLabel: semanticsLabel,
-        );
+    text: text,
+    children: children,
+    style: _getTextStyle(
+        context,
+        style,
+        font,
+        fontWeight,
+        fontFamily,
+        textColor,
+        isTextThrough,
+        lineThroughColor,
+        package),
+    recognizer: recognizer,
+    mouseCursor: mouseCursor,
+    onEnter: onEnter,
+    onExit: onExit,
+    semanticsLabel: semanticsLabel,
+  );
 
   static TextStyle? _getTextStyle(
-    BuildContext? context,
-    TextStyle? style,
-    Font? font,
-    FontWeight fontWeight,
-    FontFamily? fontFamily,
-    Color textColor,
-    bool? isTextThrough,
-    Color? lineThroughColor,
-    String package,
-  ) {
+      BuildContext? context,
+      TextStyle? style,
+      Font? font,
+      FontWeight fontWeight,
+      FontFamily? fontFamily,
+      Color textColor,
+      bool? isTextThrough,
+      Color? lineThroughColor,
+      String package,
+      ) {
     var textFont =
         font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
     return TextStyle(
