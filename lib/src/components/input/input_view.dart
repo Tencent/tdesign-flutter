@@ -6,7 +6,7 @@ class TDInputView extends StatelessWidget {
   final bool readOnly;
 
   /// 提示文案
-  final String? hitText;
+  final String? hintText;
 
   /// 键盘类型，数字、字母
   final TextInputType? inputType;
@@ -45,7 +45,7 @@ class TDInputView extends StatelessWidget {
   final TextStyle textStyle;
 
   /// 提示文本颜色，默认为文本颜色
-  final TextStyle? hitTextStyle;
+  final TextStyle? hintTextStyle;
 
   /// 文本框背景色
   final Color? textInputBackgroundColor;
@@ -56,6 +56,11 @@ class TDInputView extends StatelessWidget {
   /// textInput内边距
   final EdgeInsetsGeometry contentPadding;
 
+  final bool isCollapsed;
+
+  /// 文本对齐方向
+  final TextAlign? textAlign;
+
   const TDInputView(
       {Key? key,
       required this.textStyle,
@@ -64,17 +69,19 @@ class TDInputView extends StatelessWidget {
       this.obscureText = false,
       this.onEditingComplete,
       this.onSubmitted,
-      this.hitText = '',
+      this.hintText = '',
       this.inputType,
       this.onChanged,
       this.inputFormatters,
       this.inputDecoration,
       this.maxLines,
       this.focusNode,
-      this.hitTextStyle,
+      this.hintTextStyle,
       this.cursorColor,
       this.textInputBackgroundColor,
       this.contentPadding = EdgeInsets.zero,
+      this.isCollapsed = false,
+      this.textAlign,
       this.controller})
       : super(
           key: key,
@@ -96,14 +103,16 @@ class TDInputView extends StatelessWidget {
       cursorColor: cursorColor,
       maxLines: maxLines,
       style: textStyle,
+      textAlign: textAlign ?? TextAlign.start,
       decoration: inputDecoration ??
           InputDecoration(
-            hintText: hitText,
-            hintStyle: hitTextStyle ?? textStyle,
+            hintText: hintText,
+            hintStyle: hintTextStyle ?? textStyle,
             floatingLabelBehavior: FloatingLabelBehavior.never,
             filled: textInputBackgroundColor != null,
             fillColor: textInputBackgroundColor,
             contentPadding: contentPadding,
+            isCollapsed: isCollapsed,
             enabledBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.transparent),
             ),
