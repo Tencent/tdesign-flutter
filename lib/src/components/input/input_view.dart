@@ -58,6 +58,9 @@ class TDInputView extends StatelessWidget {
 
   final bool isCollapsed;
 
+  /// 文本对齐方向
+  final TextAlign? textAlign;
+
   const TDInputView(
       {Key? key,
       required this.textStyle,
@@ -78,6 +81,7 @@ class TDInputView extends StatelessWidget {
       this.textInputBackgroundColor,
       this.contentPadding = EdgeInsets.zero,
       this.isCollapsed = false,
+      this.textAlign,
       this.controller})
       : super(
           key: key,
@@ -99,6 +103,7 @@ class TDInputView extends StatelessWidget {
       cursorColor: cursorColor,
       maxLines: maxLines,
       style: textStyle,
+      textAlign: textAlign ?? TextAlign.start,
       decoration: inputDecoration ??
           InputDecoration(
             hintText: hintText,
