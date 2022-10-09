@@ -22,6 +22,7 @@ class _TdEmptyPageState extends State<TdEmptyPage> {
               TDEmpty(
                 type: TDEmptyType.operation,
                 operationText: '操作按钮',
+                emptyText: '描述文字',
                 image: Icon(
                   TDIcons.info_circle_filled,
                   size: 84,
