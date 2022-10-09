@@ -23,10 +23,10 @@ class TdNavBarPage extends StatelessWidget {
               title: '标题',
               useDefaultBack: false,
               leftBarItems: [
-                TDNavBarItem(icon: Icons.arrow_back_ios),
-                TDNavBarItem(icon: Icons.close),
+                TDNavBarItem(icon: TDIcons.chevron_left),
+                TDNavBarItem(icon: TDIcons.close),
               ],
-              rightBarItems: [TDNavBarItem(icon: Icons.more_horiz)],
+              rightBarItems: [TDNavBarItem(icon: TDIcons.ellipsis)],
             );
           },
         ),
@@ -36,8 +36,8 @@ class TdNavBarPage extends StatelessWidget {
             return TDNavBar(
               title: '标题',
               rightBarItems: [
-                TDNavBarItem(icon: Icons.add_alert_outlined),
-                TDNavBarItem(icon: Icons.more_horiz),
+                TDNavBarItem(icon: TDIcons.notification),
+                TDNavBarItem(icon: TDIcons.ellipsis),
               ],
             );
           },
@@ -50,8 +50,8 @@ class TdNavBarPage extends StatelessWidget {
               useDefaultBack: false,
               useBorderStyle: true,
               rightBarItems: [
-                TDNavBarItem(icon: Icons.more_horiz),
-                TDNavBarItem(icon: Icons.dangerous_outlined),
+                TDNavBarItem(icon: TDIcons.ellipsis),
+                TDNavBarItem(icon: TDIcons.add_circle),
               ],
             );
           },
@@ -63,8 +63,8 @@ class TdNavBarPage extends StatelessWidget {
               title: '标题',
               useBorderStyle: true,
               rightBarItems: [
-                TDNavBarItem(icon: Icons.more_horiz),
-                TDNavBarItem(icon: Icons.dangerous_outlined),
+                TDNavBarItem(icon: TDIcons.ellipsis),
+                TDNavBarItem(icon: TDIcons.add_circle),
               ],
             );
           },
@@ -77,12 +77,12 @@ class TdNavBarPage extends StatelessWidget {
               useDefaultBack: false,
               useBorderStyle: true,
               leftBarItems: [
-                TDNavBarItem(icon: Icons.arrow_back_ios),
-                TDNavBarItem(icon: Icons.home),
+                TDNavBarItem(icon: TDIcons.chevron_left),
+                TDNavBarItem(icon: TDIcons.home),
               ],
               rightBarItems: [
-                TDNavBarItem(icon: Icons.more_horiz),
-                TDNavBarItem(icon: Icons.dangerous_outlined),
+                TDNavBarItem(icon: TDIcons.ellipsis),
+                TDNavBarItem(icon: TDIcons.add_circle),
               ],
             );
           },
@@ -97,8 +97,8 @@ class TdNavBarPage extends StatelessWidget {
               centerTitle: false,
               titleFontWeight: FontWeight.w600,
               rightBarItems: [
-                TDNavBarItem(icon: Icons.more_horiz),
-                TDNavBarItem(icon: Icons.dangerous_outlined),
+                TDNavBarItem(icon: TDIcons.ellipsis),
+                TDNavBarItem(icon: TDIcons.add_circle),
               ],
             );
           },
@@ -116,8 +116,8 @@ class TdNavBarPage extends StatelessWidget {
               useBorderStyle: true,
               centerTitle: false,
               rightBarItems: [
-                TDNavBarItem(icon: Icons.more_horiz),
-                TDNavBarItem(icon: Icons.dangerous_outlined),
+                TDNavBarItem(icon: TDIcons.ellipsis),
+                TDNavBarItem(icon: TDIcons.add_circle),
               ],
             );
           },
@@ -132,8 +132,8 @@ class TdNavBarPage extends StatelessWidget {
               centerTitle: false,
               titleFontWeight: FontWeight.w600,
               rightBarItems: [
-                TDNavBarItem(icon: Icons.more_horiz),
-                TDNavBarItem(icon: Icons.dangerous_outlined),
+                TDNavBarItem(icon: TDIcons.ellipsis),
+                TDNavBarItem(icon: TDIcons.add_circle),
               ],
             );
           },

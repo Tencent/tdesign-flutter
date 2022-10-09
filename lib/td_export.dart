@@ -1,5 +1,6 @@
 export 'src/components/avatar/td_avatar.dart';
 export 'src/components/badge/td_badge.dart';
+export 'src/components/bottom_nav_bar/td_bottom_nav_bar.dart';
 export 'src/components/button/td_button.dart';
 export 'src/components/button/td_button_style.dart';
 export 'src/components/checkbox/td_check_box.dart';
@@ -20,6 +21,8 @@ export 'src/components/picker/td_multi_picker.dart';
 export 'src/components/picker/td_picker.dart';
 export 'src/components/popup/td_popup_route.dart';
 export 'src/components/radio/td_radio.dart';
+export 'src/components/search/td_search_bar.dart';
+export 'src/components/swiper/td_swiper.dart';
 export 'src/components/tabbar/td_tab.dart';
 export 'src/components/tabbar/td_tab_bar.dart';
 export 'src/components/tabbar/td_tab_bar_view.dart';
