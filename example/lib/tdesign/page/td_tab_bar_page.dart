@@ -43,7 +43,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
   }
 
   @override
-  initState() {
+  void initState() {
     _initTabController();
     _getTabs();
     super.initState();
