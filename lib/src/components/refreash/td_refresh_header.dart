@@ -8,6 +8,8 @@ class TDRefreshHeader extends Header {
   /// Key
   final Key? key;
 
+  final TDLoadingIcon loadingIcon;
+
   TDRefreshHeader({
     this.key,
     double extent = 48.0,
@@ -17,6 +19,7 @@ class TDRefreshHeader extends Header {
     bool enableHapticFeedback = true,
     bool enableInfiniteRefresh = false,
     bool overScroll = true,
+    this.loadingIcon = TDLoadingIcon.circle,
   }) : super(
           extent: extent,
           triggerDistance: triggerDistance,
@@ -49,7 +52,7 @@ class TDRefreshHeader extends Header {
     return TDLoadingWidget(
       key: key,
       size: TDLoadingSize.medium,
-      icon: TDLoadingIcon.circle,
+      icon: loadingIcon,
       iconColor: TDTheme.of(context).brandColor8,
     );
   }
