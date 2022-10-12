@@ -10,7 +10,7 @@ class TDSwiperPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExampleWidget(
-      title: '轮播图组件',
+      title: '轮播图 Swiper',
       children: [
         ExampleItem(
             desc: '圆点指示器',

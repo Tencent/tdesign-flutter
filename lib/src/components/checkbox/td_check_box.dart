@@ -10,7 +10,7 @@ import 'td_check_box_group.dart';
 ///
 /// 选择框的样式
 ///
-enum TdCheckboxStyle {
+enum TDCheckboxStyle {
   circle, // 圆形
   square, // 方形
 }
@@ -18,7 +18,7 @@ enum TdCheckboxStyle {
 ///
 /// 内容相对icon的位置，上、下、左、右，默认内容在icon的右边
 ///
-enum TdContentDirection {
+enum TDContentDirection {
   top, // content在icon的上面
   left, // content在icon的左边
   right, // content在icon的右边
@@ -45,7 +45,7 @@ typedef OnCheckValueChanged = void Function(bool selected);
 /// 容选项，内容包含一个主标题和副标题，并且支持完全自定义内容，支持指定内容的方向等等
 ///
 ///
-class TdCheckbox extends StatefulWidget {
+class TDCheckbox extends StatefulWidget {
   /// id
   /// 当FuiCheckBox嵌入到FuiCheckBoxGroup内时，这个值需要赋值，否则不会被纳入Group管理
   final String? id;
@@ -67,12 +67,12 @@ class TdCheckbox extends StatefulWidget {
   final double? spacing;
 
   /// 复选框样式：圆形或方形
-  final TdCheckboxStyle? style;
+  final TDCheckboxStyle? style;
 
   ///
   /// 文字相对icon的方位
   ///
-  final TdContentDirection contentDirection;
+  final TDContentDirection contentDirection;
 
   /// 切换监听
   final OnCheckValueChanged? onCheckBoxChanged;
@@ -83,7 +83,7 @@ class TdCheckbox extends StatefulWidget {
   /// 完全自定义内容
   final ContentBuilder? customContentBuilder;
 
-  const TdCheckbox(
+  const TDCheckbox(
       {this.id,
         Key? key,
       this.title,
@@ -94,20 +94,20 @@ class TdCheckbox extends StatefulWidget {
       this.customContentBuilder,
       this.style,
       this.spacing,
-      this.contentDirection = TdContentDirection.right,
+      this.contentDirection = TDContentDirection.right,
       this.onCheckBoxChanged}): super(key: key);
 
   @override
-  State createState() => TdCheckboxState();
+  State createState() => TDCheckboxState();
 
   /// 默认的checkBox icon
-  Widget buildDefaultIcon(BuildContext context, TdCheckboxGroupState? groupState, bool isChecked) {
+  Widget buildDefaultIcon(BuildContext context, TDCheckboxGroupState? groupState, bool isChecked) {
     Widget current;
     var size = 24.0;
-    final style = this.style ?? groupState?.widget.style ?? TdCheckboxStyle.circle;
+    final style = this.style ?? groupState?.widget.style ?? TDCheckboxStyle.circle;
     final theme = TDTheme.of(context);
     current = Icon(
-      style == TdCheckboxStyle.circle
+      style == TDCheckboxStyle.circle
           ? isChecked  ? TDIcons.check_circle_filled : TDIcons.check_circle
           : isChecked ? TDIcons.check_rectangle_filled :  TDIcons.check_rectangle,
       size: size,
@@ -117,7 +117,7 @@ class TdCheckbox extends StatefulWidget {
   }
 }
 
-class TdCheckboxState extends State<TdCheckbox> {
+class TDCheckboxState extends State<TDCheckbox> {
   bool checked = false;
   bool _pressed = false;
 
@@ -131,19 +131,19 @@ class TdCheckboxState extends State<TdCheckbox> {
   }
 
   @override
-  void didUpdateWidget(TdCheckbox oldWidget) {
+  void didUpdateWidget(TDCheckbox oldWidget) {
     checked = widget.checked;
     super.didUpdateWidget(oldWidget);
   }
 
-  double _spacing(TdCheckboxGroupState? groupState) {
+  double _spacing(TDCheckboxGroupState? groupState) {
     return widget.spacing ?? groupState?.widget.spacing ?? 5;
   }
 
   @override
   Widget build(BuildContext context) {
     // 检查是否包含在FuiCheckBoxGroup内，如果是的话，状态由Group管理
-    final groupState = TdCheckBoxGroupInherited.of(context)?.state;
+    final groupState = TDCheckboxGroupInherited.of(context)?.state;
     final id = widget.id;
     //  只有设置了id的CheckBox才会纳入Group管理
     if (groupState != null && id != null) {
@@ -177,7 +177,7 @@ class TdCheckboxState extends State<TdCheckbox> {
         final spacing = _spacing(groupState);
         var contentDirection = groupState?.widget.contentDirection ?? widget.contentDirection;
         switch (contentDirection) {
-          case TdContentDirection.top:
+          case TDContentDirection.top:
             current = Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -188,7 +188,7 @@ class TdCheckboxState extends State<TdCheckbox> {
               ],
             );
             break;
-          case TdContentDirection.left:
+          case TDContentDirection.left:
             current = Row(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -199,7 +199,7 @@ class TdCheckboxState extends State<TdCheckbox> {
               ],
             );
             break;
-          case TdContentDirection.right:
+          case TDContentDirection.right:
             current = Row(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -210,7 +210,7 @@ class TdCheckboxState extends State<TdCheckbox> {
               ],
             );
             break;
-          case TdContentDirection.bottom:
+          case TDContentDirection.bottom:
             current = Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -271,7 +271,7 @@ class TdCheckboxState extends State<TdCheckbox> {
   void onValueChange(
     String? id,
     bool value,
-    TdCheckboxGroupState? groupState,
+    TDCheckboxGroupState? groupState,
   ) {
     setState(() {
       checked = value;
@@ -287,7 +287,7 @@ class TdCheckboxState extends State<TdCheckbox> {
   ///
   Widget? _buildContent(
       BuildContext context,
-      TdCheckboxGroupState? groupState,
+      TDCheckboxGroupState? groupState,
       bool checked,
       ) {
 
@@ -313,7 +313,7 @@ class TdCheckboxState extends State<TdCheckbox> {
   }
 
   /// 构建icon
-  Widget? _buildCheckboxIcon(BuildContext context, TdCheckboxGroupState? groupState, bool isCheck) {
+  Widget? _buildCheckboxIcon(BuildContext context, TDCheckboxGroupState? groupState, bool isCheck) {
     final iconBuilder = widget.customIconBuilder ?? groupState?.widget.customIconBuilder;
     if (iconBuilder != null) {
       return iconBuilder.call(context, isCheck);

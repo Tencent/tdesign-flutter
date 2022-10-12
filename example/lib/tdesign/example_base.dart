@@ -32,7 +32,7 @@ class ExampleWidget extends StatelessWidget {
     ];
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: AppBar(title: Text("$title示例页"),),
+      appBar: AppBar(title: Text('$title示例页'),),
       body: Center(child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -45,8 +45,8 @@ class ExampleWidget extends StatelessWidget {
 
 /// 示例样例，建议尽量使用该控件，写清晰说明内容
 class ExampleItem extends StatelessWidget{
-  // ignore: use_key_in_widget_constructors
-  const ExampleItem({required this.desc, required this.builder});
+  
+  const ExampleItem({Key? key, required this.desc, required this.builder}) : super(key: key);
 
   final String desc;
 

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-// ignore: use_key_in_widget_constructors
-class TdIconPage extends StatefulWidget {
+
+class TDIconPage extends StatefulWidget {
+  const TDIconPage({Key? key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => _TdIconPageState();
+  State<StatefulWidget> createState() => _TDIconPageState();
 }
 
-class _TdIconPageState extends State<TdIconPage> {
+class _TDIconPageState extends State<TDIconPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
