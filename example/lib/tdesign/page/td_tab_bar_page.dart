@@ -3,12 +3,12 @@ import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
 // ignore: use_key_in_widget_constructors
-class TdTabBarPage extends StatefulWidget {
+class TDTabBarPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _TdTabBarPageState();
+  State<StatefulWidget> createState() => _TDTabBarPageState();
 }
 
-class _TdTabBarPageState extends State<TdTabBarPage>
+class _TDTabBarPageState extends State<TDTabBarPage>
     with TickerProviderStateMixin {
   TabController? _tabController;
   TabController? _tabController1;
@@ -68,7 +68,7 @@ class _TdTabBarPageState extends State<TdTabBarPage>
   @override
   Widget build(BuildContext context) {
     return ExampleWidget(
-      title: 'Tabs组件',
+      title: '选项卡 Tabs TDTabBar',
       padding: const EdgeInsets.symmetric(vertical: 16),
       children: [
         ExampleItem(

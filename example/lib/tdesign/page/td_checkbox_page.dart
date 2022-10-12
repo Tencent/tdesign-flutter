@@ -2,28 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 ///
-/// TdCheckbox演示
+/// TDCheckbox演示
 ///
-class TdCheckboxPage extends StatefulWidget {
-  const TdCheckboxPage({Key? key}) : super(key: key);
+class TDCheckboxPage extends StatefulWidget {
+  const TDCheckboxPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TdCheckboxPageState();
+    return TDCheckboxPageState();
   }
 }
 
-class TdCheckboxPageState extends State<TdCheckboxPage> {
+class TDCheckboxPageState extends State<TDCheckboxPage> {
   bool isChecked = false;
 
   List<String>? checkIds;
 
-  TdCheckBoxGroupController? controller;
+  TDCheckboxGroupController? controller;
 
   @override
   void initState() {
     super.initState();
-    controller = TdCheckBoxGroupController();
+    controller = TDCheckboxGroupController();
   }
 
   Widget _divider() {
@@ -59,21 +59,21 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const TdCheckbox(
+              const TDCheckbox(
                 title: '多选',
               ),
               _divider(),
-              const TdCheckbox(
+              const TDCheckbox(
                 title: '多选',
               ),
               _divider(),
-              const TdCheckbox(
+              const TDCheckbox(
                 title: '禁用状态',
                 enable: false,
                 checked: true,
               ),
               _divider(),
-              const TdCheckbox(
+              const TDCheckbox(
                 title: '多选多选多选多选多选多选多选多选多选多选多选多选',
                 enable: false,
               ),
@@ -88,25 +88,25 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const TdCheckbox(
-                contentDirection: TdContentDirection.left,
+              const TDCheckbox(
+                contentDirection: TDContentDirection.left,
                 title: '多选',
               ),
               _divider(),
-              const TdCheckbox(
-                contentDirection: TdContentDirection.left,
-                title: '多选',
-                checked: true,
-              ),
-              _divider(),
-              const TdCheckbox(
-                contentDirection: TdContentDirection.left,
+              const TDCheckbox(
+                contentDirection: TDContentDirection.left,
                 title: '多选',
                 checked: true,
               ),
               _divider(),
-              const TdCheckbox(
-                contentDirection: TdContentDirection.left,
+              const TDCheckbox(
+                contentDirection: TDContentDirection.left,
+                title: '多选',
+                checked: true,
+              ),
+              _divider(),
+              const TDCheckbox(
+                contentDirection: TDContentDirection.left,
                 title: '多选',
               ),
             ],
@@ -120,19 +120,19 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const TdCheckbox(
-                style: TdCheckboxStyle.square,
+              const TDCheckbox(
+                style: TDCheckboxStyle.square,
                 title: '多选',
               ),
               _divider(),
-              const TdCheckbox(
-                style: TdCheckboxStyle.square,
+              const TDCheckbox(
+                style: TDCheckboxStyle.square,
                 title: '多选',
                 checked: true,
               ),
               _divider(),
-              const TdCheckbox(
-                style: TdCheckboxStyle.square,
+              const TDCheckbox(
+                style: TDCheckboxStyle.square,
                 title: '多选',
                 checked: true,
               ),
@@ -145,7 +145,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
 
         _title('分组控制'),
         _desc(
-            '通过TdCheckBoxGroup可以把多个TdCheckbox组成一个分组，TdCheckBox的布局和样式自由，只需要拥有同一个FdCheckboxGroup祖宗节点即可，可以通过TdCheckboxGroupController实现对分组的统一控制。'),
+            '通过TDCheckboxGroup可以把多个TDCheckbox组成一个分组，TDCheckbox的布局和样式自由，只需要拥有同一个FdCheckboxGroup祖宗节点即可，可以通过TDCheckboxGroupController实现对分组的统一控制。'),
 
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -180,7 +180,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
           ),
         ),
 
-        TdCheckboxGroup(
+        TDCheckboxGroup(
             controller: controller,
             onChangeGroup: (checkedId) {
               checkIds = checkedId;
@@ -202,7 +202,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
                 ),
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: 6,
-                itemBuilder: (BuildContext context, int index) => TdCheckbox(
+                itemBuilder: (BuildContext context, int index) => TDCheckbox(
                   id: '$index',
                   title: '选项$index',
                 ),
@@ -213,7 +213,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
 
         _title('完全自定义样式'),
 
-        TdCheckboxGroup(
+        TDCheckboxGroup(
             controller: controller,
             onChangeGroup: (checkedId) {
               checkIds = checkedId;
@@ -248,7 +248,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
                 ),
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: 6,
-                itemBuilder: (BuildContext context, int index) => TdCheckbox(
+                itemBuilder: (BuildContext context, int index) => TDCheckbox(
                   id: '2$index',
                   title: '选项$index',
                 ),
@@ -267,7 +267,7 @@ class TdCheckboxPageState extends State<TdCheckboxPage> {
 
     current = Scaffold(
       appBar: AppBar(
-        title: const Text('CheckBox演示'),
+        title: const Text('多选框 Checkbox'),
       ),
       body: current,
     );

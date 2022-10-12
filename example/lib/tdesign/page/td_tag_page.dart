@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
-class TdTagPage extends StatelessWidget {
-  const TdTagPage({Key? key}) : super(key: key);
+class TDTagPage extends StatelessWidget {
+  const TDTagPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: '标签',
+    return ExampleWidget(title: '标签 Tag',
         // padding: EdgeInsets.zero,
         children: [
           ExampleItem(

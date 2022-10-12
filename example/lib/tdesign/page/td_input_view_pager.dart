@@ -3,14 +3,14 @@ import 'package:tdesign_flutter/td_export.dart';
 
 import '../example_base.dart';
 
-class TdInputViewPage extends StatefulWidget {
-  const TdInputViewPage({Key? key}) : super(key: key);
+class TDInputViewPage extends StatefulWidget {
+  const TDInputViewPage({Key? key}) : super(key: key);
 
   @override
-  _TdInputViewPageState createState() => _TdInputViewPageState();
+  _TDInputViewPageState createState() => _TDInputViewPageState();
 }
 
-class _TdInputViewPageState extends State<TdInputViewPage> {
+class _TDInputViewPageState extends State<TDInputViewPage> {
   String inputText = '请输入...';
   var controller = TextEditingController();
 
