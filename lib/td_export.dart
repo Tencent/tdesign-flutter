@@ -25,6 +25,7 @@ export 'src/components/search/td_search_bar.dart';
 export 'src/components/swiper/td_swiper.dart';
 export 'src/components/tabbar/td_tab.dart';
 export 'src/components/tabbar/td_tab_bar.dart';
+export 'src/components/tabbar/td_tab_bar_vertical_view.dart';
 export 'src/components/tabbar/td_tab_bar_view.dart';
 export 'src/components/tags/td_tag.dart';
 export 'src/components/tags/td_tag_styles.dart';

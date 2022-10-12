@@ -3,18 +3,21 @@ import 'package:tdesign_flutter/td_export.dart';
 
 import '../example_base.dart';
 
-// ignore: use_key_in_widget_constructors
-class TdAvatarPage extends StatefulWidget {
+
+class TDAvatarPage extends StatefulWidget {
+  const TDAvatarPage({Key? key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => _TdAvatarPageState();
+  State<StatefulWidget> createState() => _TDAvatarPageState();
 }
 
-class _TdAvatarPageState extends State<TdAvatarPage> {
+class _TDAvatarPageState extends State<TDAvatarPage> {
   @override
   Widget build(BuildContext context) {
     var imgUrl = 'https://photo.16pic.com/00/53/26/16pic_5326745_b.jpg';
     return ExampleWidget(
-      title: 'Badge组件',
+      backgroundColor: TDTheme.of(context).whiteColor1,
+      title: '头像 Avatar',
       children: [
         ExampleItem(
             desc: '类型--默认',

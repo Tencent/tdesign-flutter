@@ -11,8 +11,8 @@ typedef OnGroupChange = void Function(List<String> checkedIds);
 ///
 /// 控制CheckBoxGroup
 ///
-class TdCheckBoxGroupController {
-  TdCheckboxGroupState? _state;
+class TDCheckboxGroupController {
+  TDCheckboxGroupState? _state;
 
   ///
   /// 选择全部
@@ -49,13 +49,13 @@ class TdCheckBoxGroupController {
 ///
 /// child的属性可以是任意包含FuiCheckBox的容器组件，例如：
 /// ```dart
-/// TdCheckboxGroup(
+/// TDCheckboxGroup(
 ///   child: Row(
 ///     children: [
-///       TdCheckBox(),
+///       TDCheckBox(),
 ///       Column(
 ///         children: [
-///           TdCheckBox()
+///           TDCheckBox()
 ///           ...
 ///         ]
 ///       )
@@ -66,7 +66,7 @@ class TdCheckBoxGroupController {
 /// ```
 ///
 ///
-class TdCheckboxGroup extends StatefulWidget {
+class TDCheckboxGroup extends StatefulWidget {
   ///
   /// 可以是任意包含FuiCheckBox的容器，比如：
   /// ```
@@ -89,7 +89,7 @@ class TdCheckboxGroup extends StatefulWidget {
   ///
   /// 可以通过控制器操作勾选状态
   ///
-  final TdCheckBoxGroupController? controller;
+  final TDCheckboxGroupController? controller;
 
   ///
   /// 最多可以勾选多少
@@ -117,17 +117,17 @@ class TdCheckboxGroup extends StatefulWidget {
   final double? spacing;
 
   /// CheckBox复选框样式：圆形或方形
-  final TdCheckboxStyle? style;
+  final TDCheckboxStyle? style;
 
   ///
   /// 文字相对icon的方位
   ///
-  final TdContentDirection? contentDirection;
+  final TDContentDirection? contentDirection;
 
   /// 自定义选择icon的样式
   final IconBuilder? customIconBuilder;
 
-  const TdCheckboxGroup(
+  const TDCheckboxGroup(
       {required this.child,
         Key? key,
       this.onChangeGroup,
@@ -144,12 +144,12 @@ class TdCheckboxGroup extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return TdCheckboxGroupState();
+    return TDCheckboxGroupState();
   }
 }
 
 
-class TdCheckboxGroupState extends State<TdCheckboxGroup> {
+class TDCheckboxGroupState extends State<TDCheckboxGroup> {
   ///
   /// 管理所有子CheckBox的状态
   ///
@@ -174,7 +174,7 @@ class TdCheckboxGroupState extends State<TdCheckboxGroup> {
 
 
   @override
-  void didUpdateWidget(TdCheckboxGroup oldWidget) {
+  void didUpdateWidget(TDCheckboxGroup oldWidget) {
     super.didUpdateWidget(oldWidget);
     final  oldCheckIds = oldWidget.checkedIds;
     final newCheckIds = widget.checkedIds;
@@ -263,24 +263,24 @@ class TdCheckboxGroupState extends State<TdCheckboxGroup> {
 
   @override
   Widget build(BuildContext context) {
-    return TdCheckBoxGroupInherited(this, widget.child);
+    return TDCheckboxGroupInherited(this, widget.child);
   }
 }
 
-class TdCheckBoxGroupInherited extends InheritedWidget {
-  final TdCheckboxGroupState state;
+class TDCheckboxGroupInherited extends InheritedWidget {
+  final TDCheckboxGroupState state;
 
   ///
   /// 获取树上的Group节点
   ///
-  static TdCheckBoxGroupInherited? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TdCheckBoxGroupInherited>();
+  static TDCheckboxGroupInherited? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<TDCheckboxGroupInherited>();
   }
 
-  const TdCheckBoxGroupInherited(this.state, Widget child, {Key? key}) : super(child: child, key: key);
+  const TDCheckboxGroupInherited(this.state, Widget child, {Key? key}) : super(child: child, key: key);
 
   @override
-  bool updateShouldNotify(covariant TdCheckBoxGroupInherited oldWidget) {
+  bool updateShouldNotify(covariant TDCheckboxGroupInherited oldWidget) {
     var notify =
         oldWidget.state.checkBoxStates.keys != state.checkBoxStates.keys;
     print('FuiCheckBoxGroupInherited shouldNotify:$notify');

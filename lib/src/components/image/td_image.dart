@@ -6,22 +6,22 @@ import 'image_widget.dart';
 
 enum TDImageSize {
   /// 120*120px
-  XL,
+  xl,
 
   /// 72*72
-  L,
+  l,
 
   /// 56*56
-  M,
+  m,
 
   /// 48*48
-  SM,
+  s,
 
   /// 32*32
-  S,
+  xs,
 
   /// 24*24
-  XS
+  xxs
 }
 
 enum TDImageType {
@@ -106,7 +106,7 @@ class TDImage extends StatefulWidget {
   const TDImage(
     this.imgUrl, {
     Key? key,
-    this.size = TDImageSize.L,
+    this.size = TDImageSize.l,
     this.type = TDImageType.roundedSquare,
     this.errorWidget,
     this.loadingWidget,
@@ -139,22 +139,22 @@ class _TDImageState extends State<TDImage> {
   double _getImageWidth() {
     double width;
     switch (widget.size) {
-      case TDImageSize.XL:
+      case TDImageSize.xl:
         width = 120;
         break;
-      case TDImageSize.L:
+      case TDImageSize.l:
         width = 72;
         break;
-      case TDImageSize.M:
+      case TDImageSize.m:
         width = 56;
         break;
-      case TDImageSize.SM:
+      case TDImageSize.s:
         width = 48;
         break;
-      case TDImageSize.S:
+      case TDImageSize.xs:
         width = 32;
         break;
-      case TDImageSize.XS:
+      case TDImageSize.xxs:
         width = 24;
         break;
       default:
