@@ -1,6 +1,6 @@
 /*
  * Created by haozhicao@tencent.com on 6/29/22.
- * td_loading_content.dart
+ * td_loading_widget.dart
  * 
  */
 
@@ -11,37 +11,47 @@ import '../../../td_export.dart';
 import 'td_circle_indicator.dart';
 import 'td_point_indicator.dart';
 
-class TDContentLoading extends Dialog {
-  const TDContentLoading(
+/// Loading 尺寸
+enum TDLoadingSize {
+  small,
+  medium,
+  large,
+}
+
+/// Loading的图标
+enum TDLoadingIcon {
+  circle,
+  point,
+  activity,
+}
+
+class TDLoadingWidget extends StatelessWidget {
+  const TDLoadingWidget(
       {Key? key,
       required this.size,
       this.icon,
-      required this.iconColor,
-      required this.style,
+        this.iconColor,
+        this.axis = Axis.vertical,
       this.text,
       this.textColor = Colors.black})
       : super(key: key);
 
   final TDLoadingSize size;
   final TDLoadingIcon? icon;
-  final Color iconColor;
+  final Color? iconColor;
   final String? text;
   final Color textColor;
-  final TDLoadingStyle style;
+  final Axis axis;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        child: Material(
-          type: MaterialType.transparency, //透明类型
-          child: Center(
-            //保证控件居中效果
-            child: _contentWidget(),
-          ),
-        ),
-        onWillPop: () async {
-          return Future.value(false);
-        });
+    return Material(
+      type: MaterialType.transparency, //透明类型
+      child: Center(
+        //保证控件居中效果
+        child: _contentWidget(),
+      ),
+    );
   }
 
   Widget _contentWidget() {
@@ -61,11 +71,8 @@ class TDContentLoading extends Dialog {
           indicator = TDCircleIndicator(
             color: iconColor,
             size: size == TDLoadingSize.small
-                ? 16
-                : (size == TDLoadingSize.medium ? 18 : 20),
-            lineWidth: size == TDLoadingSize.small
-                ? 2.5
-                : (size == TDLoadingSize.medium ? 2.5 : 3.0),
+                ? 24
+                : (size == TDLoadingSize.medium ? 28 : 32),
           );
           break;
         case TDLoadingIcon.point:
@@ -87,7 +94,7 @@ class TDContentLoading extends Dialog {
 
       if (text == null) {
         return indicator;
-      } else if (style == TDLoadingStyle.vertical) {
+      } else if (axis == Axis.vertical) {
         return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           indicator,
           SizedBox(

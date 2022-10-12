@@ -177,7 +177,7 @@ class _TDToastLoading extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          TDCircleIndicator(color: TDTheme.of(context).whiteColor1, size: 40, lineWidth: 6,),
+          TDCircleIndicator(color: TDTheme.of(context).whiteColor1, size: 40,),
           const SizedBox(height: 15,),
           TDText(text ?? '加载中...',
             font: TDTheme.of(context).fontS,
