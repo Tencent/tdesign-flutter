@@ -12,14 +12,12 @@ import 'package:flutter/material.dart';
 class TDCircleIndicator extends StatefulWidget {
   const TDCircleIndicator({
     Key? key,
-    this.color = const Color(0xff0052d9),
-    this.lineWidth = 3.0,
+    this.color,
     this.size = 20.0,
   }) : super(key: key);
 
-  final Color color;
+  final Color? color;
   final double size;
-  final double lineWidth;
 
   @override
   _TDCircleIndicatorState createState() => _TDCircleIndicatorState();
@@ -52,40 +50,13 @@ class _TDCircleIndicatorState extends State<TDCircleIndicator>
   @override
   Widget build(BuildContext context) {
     var value = (_animation1.value) * 2 * pi;
-    return Center(
-      child: Transform(
-        transform: Matrix4.identity()..rotateZ(value),
-        alignment: FractionalOffset.center,
-        child: SizedBox.fromSize(
-          size: Size.square(widget.size),
-          child: CustomPaint(
-            painter: _CirclePaint(color: widget.color, width: widget.lineWidth),
-          ),
-        ),
+    return Transform(
+      transform: Matrix4.identity()..rotateZ(value),
+      alignment: FractionalOffset.center,
+      child: SizedBox.fromSize(
+        size: Size.square(widget.size),
+        child: Image.asset('assets/loading_blue.png',package: 'tdesign_flutter',),
       ),
     );
-  }
-}
-
-class _CirclePaint extends CustomPainter {
-  final Color color;
-  final double width;
-
-  _CirclePaint({required this.color, required this.width});
-
-  final _paint = Paint()..style = PaintingStyle.stroke;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    _paint.strokeWidth = width;
-    _paint.shader = ui.Gradient.sweep(Offset(size.width / 2, size.height / 2),
-        [const Color(0x01ffffff), color]);
-    canvas.drawArc(
-        Rect.fromLTWH(0, 0, size.width, size.height), 0, pi * 2, false, _paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
   }
 }

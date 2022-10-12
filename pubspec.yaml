@@ -14,6 +14,9 @@ dependencies:
   #轮播图组件
   flutter_swiper_null_safety: ^1.0.2
 
+  #下拉刷新组件
+  flutter_easyrefresh: ^2.2.1
+
 dev_dependencies:
   flutter_lints: ^1.0.4
   flutter_test:
@@ -35,10 +38,10 @@ flutter:
         - asset: assets/tdesign/td_icons.ttf
 
 
+
   # To add assets to your plugin package, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/loading_blue.png
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages
