@@ -11,8 +11,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  #轮播图组件
+  # 轮播图组件
   flutter_swiper_null_safety: ^1.0.2
+
+  # 下拉刷新组件
+  flutter_easyrefresh: ^2.2.1
 
 dev_dependencies:
   flutter_lints: ^1.0.4
