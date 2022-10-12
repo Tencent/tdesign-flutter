@@ -3,16 +3,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
-class TdSearchBarPage extends StatefulWidget {
+class TDSearchBarPage extends StatefulWidget {
+  const TDSearchBarPage({Key? key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => _TdSearchBarPageState();
+  State<StatefulWidget> createState() => _TDSearchBarPageState();
 }
 
-class _TdSearchBarPageState extends State<TdSearchBarPage> {
+class _TDSearchBarPageState extends State<TDSearchBarPage> {
   String? inputText;
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: '搜索框', children: [
+    return ExampleWidget(title: '搜索框 Search', children: [
       TDSearchBar(placeHolder: '搜索预设文案', onTextChanged: (String text) {
         setState(() {
           inputText = text;

@@ -245,7 +245,7 @@ class TDInput extends StatelessWidget {
                 child: GestureDetector(
                   onTap: onTapBtn,
                   child: Container(
-                    margin: EdgeInsets.only(left: 17.5, right: 17.5),
+                    margin: const EdgeInsets.only(left: 17.5, right: 17.5),
                     child: rightBtn,
                   ),
                 ),

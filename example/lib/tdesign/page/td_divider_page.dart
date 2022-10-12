@@ -3,12 +3,12 @@ import 'package:tdesign_flutter/td_export.dart';
 
 import '../example_base.dart';
 
-class TdDividerPage extends StatelessWidget {
-  const TdDividerPage({Key? key}) : super(key: key);
+class TDDividerPage extends StatelessWidget {
+  const TDDividerPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: 'TDDivider',
+    return ExampleWidget(title: '分割线 Divider',
         padding: const EdgeInsets.only(top: 16, bottom: 16),
         children: [
       ExampleItem(desc: '直线拉通', builder: (_){

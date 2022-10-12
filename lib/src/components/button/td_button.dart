@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../td_export.dart';
-import 'td_button_style.dart';
 
 enum TDButtonSize { small, medium, large }
 
@@ -169,7 +168,7 @@ class _TDButtonState extends State<TDButton> {
       case TDButtonSize.medium:
         return 40;
       case TDButtonSize.small:
-        return 28;
+        return 36;
     }
   }
 
@@ -257,7 +256,7 @@ class _TDTextButtonState extends State<TDTextButton> {
   @override
   Widget build(BuildContext context) {
 
-    Widget  display = Container(
+    Widget  display = SizedBox(
       width:  widget.width,
       height:  widget.height ,
       child: TDText(widget.content!,
