@@ -6,6 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter_example/tdesign/example_base.dart';
 
 class TdLoadingPage extends StatefulWidget {
 
@@ -18,149 +19,169 @@ class TdLoadingPage extends StatefulWidget {
 class _TdLoadingPageState extends State<TdLoadingPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Loading示例页'),
-        ),
-        body: SizedBox.expand(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _dividerWidget('类型'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        TDLoading.show(
-                            context: context,
-                            duration: 2,
-                            icon: TDLoadingIcon.circle);
-                      },
-                      child: const Text('纯图标-转圈')),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        TDLoading.show(
-                            context: context,
-                            duration: 2,
-                            icon: TDLoadingIcon.activity);
-                      },
-                      child: const Text('纯图标-菊花')),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        TDLoading.show(
-                            context: context,
-                            duration: 2,
-                            icon: TDLoadingIcon.point);
-                      },
-                      child: const Text('纯图标-点')),
-                ],
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    TDLoading.show(
-                        context: context, duration: 2, text: '加载中...');
-                  },
-                  child: const Text('纯文字')),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                ElevatedButton(
-                    onPressed: () {
-                      TDLoading.show(
-                          context: context,
-                          duration: 2,
-                          text: '加载中...',
-                          icon: TDLoadingIcon.activity);
-                    },
-                    child: const Text('图标+文字 竖排')),
-                const SizedBox(
-                  width: 10,
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      TDLoading.show(
-                          context: context,
-                          duration: 2,
-                          text: '加载中...',
-                          icon: TDLoadingIcon.activity,
-                          style: TDLoadingStyle.horizontal);
-                    },
-                    child: const Text('图标+文字 横排')),
-              ]),
-              _dividerWidget('规格'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        TDLoading.show(
-                          context: context,
-                          duration: 2,
-                          icon: TDLoadingIcon.circle,
-                          size: TDLoadingSize.large,
-                          text: '加载中...',
-                        );
-                      },
-                      child: const Text('大')),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        TDLoading.show(
-                            context: context,
-                            duration: 2,
-                            icon: TDLoadingIcon.circle,
-                            size: TDLoadingSize.medium,
-                            text: '加载中...');
-                      },
-                      child: const Text('中')),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        TDLoading.show(
-                            context: context,
-                            duration: 2,
-                            icon: TDLoadingIcon.circle,
-                            size: TDLoadingSize.small,
-                            text: '加载中...');
-                      },
-                      child: const Text('小')),
-                ],
-              ),
-            ],
-          ),
-        ));
-  }
+    return ExampleWidget(title: 'Loading', children: [
 
-  Widget _dividerWidget(String title) {
-    return Row(
-      children: [
-        const Spacer(),
-        const TDDivider(
-          height: 1,
-          width: 100,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        TDText(title),
-        const SizedBox(
-          width: 10,
-        ),
-        const TDDivider(
-          height: 1,
-          width: 100,
-        ),
-        const Spacer(),
-      ],
-    );
+      TDText('类型', font: TDTheme.of(context).fontXL,),
+      ExampleItem(desc: '纯图标', builder: (_){
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const TDLoadingWidget(
+              size: TDLoadingSize.medium,
+              icon: TDLoadingIcon.circle,
+            ),
+            const TDLoadingWidget(
+              size: TDLoadingSize.medium,
+              icon: TDLoadingIcon.activity,
+            ),
+            TDLoadingWidget(
+              size: TDLoadingSize.medium,
+              icon: TDLoadingIcon.point,
+              iconColor: TDTheme.of(context).brandColor8,
+            ),
+          ],
+        );
+      }),
+      ExampleItem(desc: '图标加文字横向', builder: (_){
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const TDLoadingWidget(
+              size: TDLoadingSize.medium,
+              icon: TDLoadingIcon.circle,
+              text: '加载中…',
+              axis: Axis.horizontal,
+            ),
+            const TDLoadingWidget(
+              size: TDLoadingSize.medium,
+              icon: TDLoadingIcon.activity,
+              text: '加载中…',
+              axis: Axis.horizontal,
+            ),
+            TDLoadingWidget(
+              size: TDLoadingSize.medium,
+              icon: TDLoadingIcon.circle,
+              text: '加载中…',
+              axis: Axis.horizontal,
+              textColor: TDTheme.of(context).brandHoverColor,
+            ),
+          ],
+        );
+      }),
+      ExampleItem(desc: '图标加文字竖向', builder: (_){
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const TDLoadingWidget(
+              size: TDLoadingSize.medium,
+              icon: TDLoadingIcon.circle,
+              text: '加载中…',
+              axis: Axis.vertical,
+            ),
+            const TDLoadingWidget(
+              size: TDLoadingSize.medium,
+              icon: TDLoadingIcon.activity,
+              text: '加载中…',
+              axis: Axis.vertical,
+            ),
+            TDLoadingWidget(
+              size: TDLoadingSize.medium,
+              icon: TDLoadingIcon.circle,
+              text: '加载中…',
+              axis: Axis.vertical,
+              textColor: TDTheme.of(context).brandHoverColor,
+            ),
+          ],
+        );
+      }),
+      ExampleItem(desc: '纯文字', builder: (_){
+        // TODO: 加载失败和刷新
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: const [
+             TDLoadingWidget(
+              size: TDLoadingSize.medium,
+              text: '加载中…',
+            ),
+          ],
+        );
+      }),
+
+      TDText('规格', font: TDTheme.of(context).fontXL,),
+
+      ExampleItem(desc: '图标加文字横向-circle', builder: (_){
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: const [
+             TDLoadingWidget(
+              size: TDLoadingSize.large,
+              icon: TDLoadingIcon.circle,
+              text: '加载中(大)…',
+              axis: Axis.horizontal,
+            ),
+             TDLoadingWidget(
+              size: TDLoadingSize.medium,
+              icon: TDLoadingIcon.circle,
+              text: '加载中(中)…',
+              axis: Axis.horizontal,
+            ),
+             TDLoadingWidget(
+              size: TDLoadingSize.small,
+              icon: TDLoadingIcon.circle,
+              text: '加载中(小)…',
+              axis: Axis.horizontal,
+            ),
+          ],
+        );
+      }),
+      ExampleItem(desc: '图标加文字横向-activity', builder: (_){
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: const [
+             TDLoadingWidget(
+              size: TDLoadingSize.large,
+              icon: TDLoadingIcon.activity,
+              text: '加载中(大)…',
+              axis: Axis.horizontal,
+            ),
+             TDLoadingWidget(
+              size: TDLoadingSize.medium,
+              icon: TDLoadingIcon.activity,
+              text: '加载中(中)…',
+              axis: Axis.horizontal,
+            ),
+             TDLoadingWidget(
+              size: TDLoadingSize.small,
+              icon: TDLoadingIcon.activity,
+              text: '加载中(小)…',
+              axis: Axis.horizontal,
+            ),
+          ],
+        );
+      }),
+
+      ExampleItem(desc: '图标加文字竖向', builder: (_){
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: const [
+            TDLoadingWidget(
+              size: TDLoadingSize.large,
+              icon: TDLoadingIcon.circle,
+              text: '加载中(大)…',
+            ),
+            TDLoadingWidget(
+              size: TDLoadingSize.medium,
+              icon: TDLoadingIcon.circle,
+              text: '加载中(中)…',
+            ),
+            TDLoadingWidget(
+              size: TDLoadingSize.small,
+              icon: TDLoadingIcon.circle,
+              text: '加载中(小)…',
+            ),
+          ],
+        );
+      }),
+    ]);
   }
 }
