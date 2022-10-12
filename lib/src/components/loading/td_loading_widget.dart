@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../td_export.dart';
+import 'td_activity_indicator.dart';
 import 'td_circle_indicator.dart';
 import 'td_point_indicator.dart';
 
@@ -30,9 +31,10 @@ class TDLoadingWidget extends StatelessWidget {
       {Key? key,
       required this.size,
       this.icon,
-        this.iconColor,
-        this.axis = Axis.vertical,
+      this.iconColor,
+      this.axis = Axis.vertical,
       this.text,
+      this.customIcon,
       this.textColor = Colors.black})
       : super(key: key);
 
@@ -42,6 +44,7 @@ class TDLoadingWidget extends StatelessWidget {
   final String? text;
   final Color textColor;
   final Axis axis;
+  final Widget? customIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -58,22 +61,21 @@ class TDLoadingWidget extends StatelessWidget {
     if (icon == null) {
       return textWidget();
     } else {
+      if(customIcon != null){
+        return customIcon!;
+      }
       Widget? indicator;
       switch (icon!) {
         case TDLoadingIcon.activity:
-          indicator = CupertinoActivityIndicator(
+          indicator = TDCupertinoActivityIndicator(
+            activeColor: iconColor,
             radius: size == TDLoadingSize.small
                 ? 10
                 : (size == TDLoadingSize.medium ? 11 : 13),
           );
           break;
         case TDLoadingIcon.circle:
-          indicator = TDCircleIndicator(
-            color: iconColor,
-            size: size == TDLoadingSize.small
-                ? 24
-                : (size == TDLoadingSize.medium ? 28 : 32),
-          );
+          indicator = _getCircleIndicator();
           break;
         case TDLoadingIcon.point:
           indicator = TDPointBounceIndicator(
@@ -84,11 +86,7 @@ class TDLoadingWidget extends StatelessWidget {
           );
           break;
         default:
-          indicator = CupertinoActivityIndicator(
-            radius: size == TDLoadingSize.small
-                ? 10
-                : (size == TDLoadingSize.medium ? 11 : 13),
-          );
+          indicator = _getCircleIndicator();
           break;
       }
 
@@ -98,9 +96,7 @@ class TDLoadingWidget extends StatelessWidget {
         return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           indicator,
           SizedBox(
-            height: size == TDLoadingSize.small
-                ? 6
-                : (size == TDLoadingSize.medium ? 8 : 10),
+            height: _getPaddingWidth(),
           ),
           textWidget(),
         ]);
@@ -108,9 +104,7 @@ class TDLoadingWidget extends StatelessWidget {
         return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           indicator,
           SizedBox(
-            width: size == TDLoadingSize.small
-                ? 6
-                : (size == TDLoadingSize.medium ? 8 : 10),
+            width: _getPaddingWidth(),
           ),
           textWidget()
         ]);
@@ -118,12 +112,49 @@ class TDLoadingWidget extends StatelessWidget {
     }
   }
 
+  Widget _getCircleIndicator() {
+    switch(size){
+      case TDLoadingSize.large:
+        return TDCircleIndicator(
+          color: iconColor,
+          size: 24,
+          lineWidth: 3 * 4/3, // 根据small等等比缩放
+        );
+      case TDLoadingSize.medium:
+        return TDCircleIndicator(
+          color: iconColor,
+          size: 21,
+          lineWidth: 3 * 7/6, // 根据small等等比缩放
+        );
+      case TDLoadingSize.small:
+        return TDCircleIndicator(
+          color: iconColor,
+          size: 18, // 设计稿框位24，图形宽位19.5,推导lineWidth为3时，size位18
+          lineWidth: 3,
+        );
+    }
+  }
+
+  double _getPaddingWidth() {
+    switch(size){
+      case TDLoadingSize.large:
+        return 10;
+      case TDLoadingSize.medium:
+        return 8;
+      case TDLoadingSize.small:
+        return 6;
+    }
+  }
+
   Font fitFont() {
-    return size == TDLoadingSize.small
-        ? Font(size: 12, lineHeight: 20)
-        : (size == TDLoadingSize.medium
-            ? Font(size: 14, lineHeight: 22)
-            : Font(size: 16, lineHeight: 24));
+    switch(size){
+      case TDLoadingSize.large:
+        return TDTheme.of().fontM ?? Font(size: 16, lineHeight: 24);
+      case TDLoadingSize.medium:
+        return TDTheme.of().fontS ?? Font(size: 14, lineHeight: 22);
+      case TDLoadingSize.small:
+        return TDTheme.of().fontXS ?? Font(size: 12, lineHeight: 20);
+    }
   }
 
   Widget textWidget() {

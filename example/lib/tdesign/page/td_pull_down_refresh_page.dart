@@ -21,19 +21,20 @@ class TdPullDownRefreshPage extends StatefulWidget {
 class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
   var itemCount = 10;
 
-  var datas = List.generate(10, (index) => '首页$index');
+  var dataList = List.generate(10, (index) => '首页$index');
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('下拉刷新'),),
       body: EasyRefresh(
         // 下拉样式
         header: TDRefreshHeader(),
-        child: ListView.builder(itemBuilder: (context,index)=>Text("${datas[index]}"),itemCount: datas.length,),
+        child: ListView.builder(itemBuilder: (context,index)=>Text('${dataList[index]}'),itemCount: dataList.length,),
         // 下拉刷新回调
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2), () {
-            datas.addAll(List.generate(10, (index) => ' 下拉添加的第$index个item'));
+            dataList.addAll(List.generate(10, (index) => ' 下拉添加的第$index个item'));
             setState(() {});
           });
         },

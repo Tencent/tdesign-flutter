@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/tdesign/example_base.dart';
+import '../example_base.dart';
 
 class TDLoadingPage extends StatefulWidget {
 
@@ -137,23 +137,26 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
       ExampleItem(desc: '图标加文字横向-activity', builder: (_){
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
+          children: [
              TDLoadingWidget(
               size: TDLoadingSize.large,
               icon: TDLoadingIcon.activity,
               text: '加载中(大)…',
+               iconColor: TDTheme.of(context).brandColor8 ,
               axis: Axis.horizontal,
             ),
              TDLoadingWidget(
               size: TDLoadingSize.medium,
               icon: TDLoadingIcon.activity,
               text: '加载中(中)…',
+              iconColor: TDTheme.of(context).brandColor8 ,
               axis: Axis.horizontal,
             ),
              TDLoadingWidget(
               size: TDLoadingSize.small,
               icon: TDLoadingIcon.activity,
               text: '加载中(小)…',
+               iconColor: TDTheme.of(context).brandColor8 ,
               axis: Axis.horizontal,
             ),
           ],
