@@ -168,7 +168,7 @@ class _TDButtonState extends State<TDButton> {
       case TDButtonSize.medium:
         return 40;
       case TDButtonSize.small:
-        return 28;
+        return 36;
     }
   }
 
