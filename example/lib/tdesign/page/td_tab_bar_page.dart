@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
-// ignore: use_key_in_widget_constructors
+
 class TDTabBarPage extends StatefulWidget {
+  const TDTabBarPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _TDTabBarPageState();
 }
@@ -119,7 +121,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         ExampleItem(
           desc: '竖向选项卡',
           builder: (BuildContext context) {
-            return Container(
+            return SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 4 * 54,
               child: Row(

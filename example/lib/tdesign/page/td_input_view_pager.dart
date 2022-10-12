@@ -17,7 +17,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
   @override
   Widget build(BuildContext context) {
     return ExampleWidget(
-      backgroundColor: Color(0xFFF0F2F5),
+      backgroundColor: const Color(0xFFF0F2F5),
       title: '输入框 Input',
       children: [
         ExampleItem(

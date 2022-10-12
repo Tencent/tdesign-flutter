@@ -8,9 +8,7 @@ class TDTabBarVerticalView extends StatefulWidget {
     this.controller,
     this.physics,
     this.dragStartBehavior = DragStartBehavior.start,
-  }) : assert(children != null),
-        assert(dragStartBehavior != null),
-        super(key: key);
+  }) : super(key: key);
 
   final TabController? controller;
 
@@ -38,7 +36,7 @@ class _TDTabBarVerticalViewState extends State<TDTabBarVerticalView> {
   bool get _controllerIsValid => _controller?.animation != null;
 
   void _updateTabController() {
-    final TabController? newController = widget.controller ?? DefaultTabController.of(context);
+    final newController = widget.controller ?? DefaultTabController.of(context);
     assert(() {
       if (newController == null) {
         throw FlutterError(
@@ -52,14 +50,17 @@ class _TDTabBarVerticalViewState extends State<TDTabBarVerticalView> {
       return true;
     }());
 
-    if (newController == _controller)
+    if (newController == _controller) {
       return;
+    }
 
-    if (_controllerIsValid)
+    if (_controllerIsValid) {
       _controller!.animation!.removeListener(_handleTabControllerAnimationTick);
+    }
     _controller = newController;
-    if (_controller != null)
+    if (_controller != null) {
       _controller!.animation!.addListener(_handleTabControllerAnimationTick);
+    }
   }
 
   @override
@@ -79,16 +80,19 @@ class _TDTabBarVerticalViewState extends State<TDTabBarVerticalView> {
   @override
   void didUpdateWidget(TDTabBarVerticalView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.controller != oldWidget.controller)
+    if (widget.controller != oldWidget.controller) {
       _updateTabController();
-    if (widget.children != oldWidget.children && _warpUnderwayCount == 0)
+    }
+    if (widget.children != oldWidget.children && _warpUnderwayCount == 0) {
       _updateChildren();
+    }
   }
 
   @override
   void dispose() {
-    if (_controllerIsValid)
+    if (_controllerIsValid) {
       _controller!.animation!.removeListener(_handleTabControllerAnimationTick);
+    }
     _controller = null;
     // We don't own the _controller Animation, so it's not disposed here.
     super.dispose();
@@ -100,8 +104,9 @@ class _TDTabBarVerticalViewState extends State<TDTabBarVerticalView> {
   }
 
   void _handleTabControllerAnimationTick() {
-    if (_warpUnderwayCount > 0 || !_controller!.indexIsChanging)
-      return; // This widget is driving the controller's animation.
+    if (_warpUnderwayCount > 0 || !_controller!.indexIsChanging) {
+      return;
+    } // This widget is driving the controller's animation.
 
     if (_controller!.index != _currentIndex) {
       _currentIndex = _controller!.index;
@@ -110,13 +115,15 @@ class _TDTabBarVerticalViewState extends State<TDTabBarVerticalView> {
   }
 
   Future<void> _warpToCurrentIndex() async {
-    if (!mounted)
+    if (!mounted) {
       return Future<void>.value();
+    }
 
-    if (_pageController.page == _currentIndex!.toDouble())
+    if (_pageController.page == _currentIndex!.toDouble()) {
       return Future<void>.value();
+    }
 
-    final int previousIndex = _controller!.previousIndex;
+    final previousIndex = _controller!.previousIndex;
     if ((_currentIndex! - previousIndex).abs() == 1) {
       _warpUnderwayCount += 1;
       await _pageController.animateToPage(_currentIndex!, duration: kTabScrollDuration, curve: Curves.ease);
@@ -125,23 +132,24 @@ class _TDTabBarVerticalViewState extends State<TDTabBarVerticalView> {
     }
 
     assert((_currentIndex! - previousIndex).abs() > 1);
-    final int initialPage = _currentIndex! > previousIndex
+    final initialPage = _currentIndex! > previousIndex
         ? _currentIndex! - 1
         : _currentIndex! + 1;
-    final List<Widget> originalChildren = _childrenWithKey;
+    final originalChildren = _childrenWithKey;
     setState(() {
       _warpUnderwayCount += 1;
 
       _childrenWithKey = List<Widget>.from(_childrenWithKey, growable: false);
-      final Widget temp = _childrenWithKey[initialPage];
+      final temp = _childrenWithKey[initialPage];
       _childrenWithKey[initialPage] = _childrenWithKey[previousIndex];
       _childrenWithKey[previousIndex] = temp;
     });
     _pageController.jumpToPage(initialPage);
 
     await _pageController.animateToPage(_currentIndex!, duration: kTabScrollDuration, curve: Curves.ease);
-    if (!mounted)
+    if (!mounted) {
       return Future<void>.value();
+    }
     setState(() {
       _warpUnderwayCount -= 1;
       if (widget.children != _children) {
@@ -154,11 +162,13 @@ class _TDTabBarVerticalViewState extends State<TDTabBarVerticalView> {
 
   // Called when the PageView scrolls
   bool _handleScrollNotification(ScrollNotification notification) {
-    if (_warpUnderwayCount > 0)
+    if (_warpUnderwayCount > 0) {
       return false;
+    }
 
-    if (notification.depth != 0)
+    if (notification.depth != 0) {
       return false;
+    }
 
     _warpUnderwayCount += 1;
     if (notification is ScrollUpdateNotification && !_controller!.indexIsChanging) {
@@ -170,8 +180,9 @@ class _TDTabBarVerticalViewState extends State<TDTabBarVerticalView> {
     } else if (notification is ScrollEndNotification) {
       _controller!.index = _pageController.page!.round();
       _currentIndex = _controller!.index;
-      if (!_controller!.indexIsChanging)
+      if (!_controller!.indexIsChanging) {
         _controller!.offset = (_pageController.page! - _controller!.index).clamp(-1.0, 1.0);
+      }
     }
     _warpUnderwayCount -= 1;
 

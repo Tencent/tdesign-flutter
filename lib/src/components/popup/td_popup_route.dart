@@ -53,7 +53,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
         builder: (context, child) {
           return CustomSingleChildLayout(
             delegate:
-                SlideTransitionLayout(animValue, this.slideTransitionFrom),
+                SlideTransitionLayout(animValue, slideTransitionFrom),
             child: child,
           );
         });

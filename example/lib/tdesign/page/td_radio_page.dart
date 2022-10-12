@@ -26,14 +26,6 @@ class TDRadioPageState extends State<TDRadioPage> {
     return const Divider();
   }
 
-  Widget _title(String title) {
-    return Container(
-      height: 40,
-      padding: const EdgeInsets.only(left: 10),
-      alignment: Alignment.centerLeft,
-      child: Text(title),
-    );
-  }
 
 
   @override

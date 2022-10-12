@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
-// ignore: use_key_in_widget_constructors
 class TDButtonPage extends StatefulWidget {
+  const TDButtonPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _TDButtonPageState();
 }
 
 class _TDButtonPageState extends State<TDButtonPage> {
-  final GlobalKey _btnKey = GlobalKey();
 
   void onTap() {
     TDToast.showText('点击了按钮',context: context);
@@ -142,7 +142,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
             ExampleItem(desc: '不可点击', builder: (context){
               return Container(
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 color: Colors.black12,
                 child: Stack(
                   alignment: Alignment.center,
@@ -211,7 +211,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
 
 
             ExampleItem(desc: '尺寸', builder: (context){
-              return Container(
+              return SizedBox(
                 height: 50,
                 child: TDText(
                   '下方是尺寸示例',

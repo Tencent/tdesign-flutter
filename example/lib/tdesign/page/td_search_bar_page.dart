@@ -4,6 +4,8 @@ import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
 class TDSearchBarPage extends StatefulWidget {
+  const TDSearchBarPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _TDSearchBarPageState();
 }

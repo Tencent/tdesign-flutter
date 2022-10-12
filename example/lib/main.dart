@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_popup_page.dart';
 
 import 'tdesign/example_base.dart';
 import 'tdesign/example_route.dart';
@@ -20,6 +19,7 @@ import 'tdesign/page/td_input_view_pager.dart';
 import 'tdesign/page/td_loading_page.dart';
 import 'tdesign/page/td_navbar_page.dart';
 import 'tdesign/page/td_picker_page.dart';
+import 'tdesign/page/td_popup_page.dart';
 import 'tdesign/page/td_radio_page.dart';
 import 'tdesign/page/td_search_bar_page.dart';
 import 'tdesign/page/td_swiper_page.dart';
@@ -35,11 +35,13 @@ List<ExamplePageModel> examplePageList = [
       path: 'TDTextPage',
       pageBuilder: (context) => const TDTextPage()),
   ExamplePageModel(
-      text: '图标--基础', path: 'TDIconPage', pageBuilder: (context) => TDIconPage()),
+      text: '图标--基础',
+      path: 'TDIconPage',
+      pageBuilder: (context) => const TDIconPage()),
   ExamplePageModel(
       text: '按钮 Button',
       path: 'TDButtonPage',
-      pageBuilder: (context) => TDButtonPage()),
+      pageBuilder: (context) => const TDButtonPage()),
   ExamplePageModel(
       text: '分割线 Divider',
       path: 'TDDividerPage',
@@ -47,15 +49,15 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '头像 Avatar',
       path: 'TDAvatarPage',
-      pageBuilder: (context) => TDAvatarPage()),
+      pageBuilder: (context) => const TDAvatarPage()),
   ExamplePageModel(
       text: '徽标 Badge',
       path: 'TDBadgePage',
-      pageBuilder: (context) => TDBadgePage()),
+      pageBuilder: (context) => const TDBadgePage()),
   ExamplePageModel(
       text: '空状态 Empty',
       path: 'TDEmptyPage',
-      pageBuilder: (context) => TDEmptyPage()),
+      pageBuilder: (context) => const TDEmptyPage()),
   ExamplePageModel(
       text: '图片 Image',
       path: 'TDImagePage',
@@ -75,7 +77,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '时间选择器 DatePicker',
       path: 'TDDatePickerPage',
-      pageBuilder: (context) => TDDatePickerPage()),
+      pageBuilder: (context) => const TDDatePickerPage()),
   ExamplePageModel(
       text: '输入框 Input',
       path: 'TDInputViewPag',
@@ -83,7 +85,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '选择器 Picker',
       path: 'TDPickerPage',
-      pageBuilder: (context) => TDPickerPage()),
+      pageBuilder: (context) => const TDPickerPage()),
   ExamplePageModel(
       text: '单选框 Radio',
       path: 'TDRadioPage',
@@ -91,7 +93,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '搜索框 Search',
       path: 'TDSearchBarPage',
-      pageBuilder: (context) => TDSearchBarPage()),
+      pageBuilder: (context) => const TDSearchBarPage()),
   ExamplePageModel(
       text: '开关 Switch',
       path: 'TDRadioPage',
@@ -107,11 +109,11 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '选项卡 Tabs',
       path: 'TDTabBarPage',
-      pageBuilder: (context) => TDTabBarPage()),
+      pageBuilder: (context) => const TDTabBarPage()),
   ExamplePageModel(
       text: '对话框 Dialog',
       path: 'TDDialogPage',
-      pageBuilder: (context) => TDDialogPage()),
+      pageBuilder: (context) => const TDDialogPage()),
   ExamplePageModel(
       text: '加载 Loading',
       path: 'TDLoadingPage',
@@ -123,7 +125,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '轻提示 Toast',
       path: 'TDToastPage',
-      pageBuilder: (context) => TDToastPage()),
+      pageBuilder: (context) => const TDToastPage()),
 ];
 
 void main() {
@@ -149,17 +151,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with 'flutter run'. You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // 'hot reload' (press 'r' in the console where you ran 'flutter run',
-          // or simply save your changes to 'hot reload' in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
-          accentColor: Colors.red,
+          colorScheme: ColorScheme.light(primary: TDTheme.of(context).brandNormalColor)
         ),
         home: const MyHomePage(title: 'flutter原子组件库demo'),
         onGenerateRoute: TDExampleRoute.onGenerateRoute,
@@ -170,15 +162,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked 'final'.
 
   final String title;
 
@@ -224,13 +207,16 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> _buildChildren(BuildContext context) {
     return <Widget>[
       for (var model in examplePageList)
-        OutlinedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, model.path);
-            },
-            child: Text(
-              model.text,
-            ))
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TDButton(
+              style: TDButtonStyle.weakly(),
+              size: TDButtonSize.small,
+              onTap: () {
+                Navigator.pushNamed(context, model.path);
+              },
+              content: model.text),
+        )
     ];
   }
 }
