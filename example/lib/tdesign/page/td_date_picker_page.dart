@@ -4,12 +4,12 @@ import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
 // ignore: use_key_in_widget_constructors
-class TdDatePickerPage extends StatefulWidget {
+class TDDatePickerPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _TdDatePickerPageState();
+  State<StatefulWidget> createState() => _TDDatePickerPageState();
 }
 
-class _TdDatePickerPageState extends State<TdDatePickerPage> {
+class _TDDatePickerPageState extends State<TDDatePickerPage> {
   String selected_1 = '';
   String selected_2 = '';
   String selected_3 = '';
@@ -26,7 +26,7 @@ class _TdDatePickerPageState extends State<TdDatePickerPage> {
   @override
   Widget build(BuildContext context) {
     return ExampleWidget(
-      title: 'Datepicker组件',
+      title: '时间选择器 DatePicker',
       children: [
         ExampleItem(desc: '年月日', builder: (_) {
           return Column(

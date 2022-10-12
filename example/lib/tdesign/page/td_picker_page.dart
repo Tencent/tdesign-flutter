@@ -4,12 +4,12 @@ import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
 // ignore: use_key_in_widget_constructors
-class TdPickerPage extends StatefulWidget {
+class TDPickerPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _TdPickerPageState();
+  State<StatefulWidget> createState() => _TDPickerPageState();
 }
 
-class _TdPickerPageState extends State<TdPickerPage> {
+class _TDPickerPageState extends State<TDPickerPage> {
   String selected_1 = '';
   List<String> data_1 = ['广州市', '韶关市', '深圳市', '珠海区', '汕头市'];
   String selected_2 = '';
@@ -53,7 +53,7 @@ class _TdPickerPageState extends State<TdPickerPage> {
   @override
   Widget build(BuildContext context) {
     return ExampleWidget(
-      title: 'picker组件',
+      title: '选择器 Picker',
       children: [
         ExampleItem(
             desc: '基础选择器--城市',

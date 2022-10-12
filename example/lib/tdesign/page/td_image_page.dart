@@ -3,13 +3,13 @@ import 'package:tdesign_flutter/td_export.dart';
 
 import '../example_base.dart';
 
-class TdImagePage extends StatefulWidget {
-  const TdImagePage({Key? key}) : super(key: key);
+class TDImagePage extends StatefulWidget {
+  const TDImagePage({Key? key}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => TdImageState();
+  State<StatefulWidget> createState() => TDImageState();
 }
 
-class TdImageState extends State<TdImagePage> with SingleTickerProviderStateMixin {
+class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
 
@@ -33,7 +33,7 @@ class TdImageState extends State<TdImagePage> with SingleTickerProviderStateMixi
     var loadingUrl = 'https://images7.alphacoders.com/691/thumbbig-691004.webp';
     var url = 'http://www.zmaomao.com/uploads/201204/11-20120416014B36.jpg';
     return ExampleWidget(
-      title: 'TDImage',
+      title: '图片 Image',
       children: [
         ExampleItem(
             desc: '状态-加载默认',

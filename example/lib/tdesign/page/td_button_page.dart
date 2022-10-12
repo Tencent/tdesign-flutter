@@ -3,12 +3,12 @@ import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
 // ignore: use_key_in_widget_constructors
-class TdButtonPage extends StatefulWidget {
+class TDButtonPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _TdButtonPageState();
+  State<StatefulWidget> createState() => _TDButtonPageState();
 }
 
-class _TdButtonPageState extends State<TdButtonPage> {
+class _TDButtonPageState extends State<TDButtonPage> {
   final GlobalKey _btnKey = GlobalKey();
 
   void onTap() {
@@ -23,7 +23,7 @@ class _TdButtonPageState extends State<TdButtonPage> {
   Widget build(BuildContext context) {
     return Container(
       color: TDTheme.of(context).grayColor2,
-      child: ExampleWidget(title: '按钮',
+      child: ExampleWidget(title: '按钮 Button',
           padding: const EdgeInsets.only(top: 8,bottom: 8),
           children: [
             ExampleItem(desc: '可点击', builder: (context){

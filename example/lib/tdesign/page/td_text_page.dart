@@ -3,8 +3,8 @@ import 'package:tdesign_flutter/td_export.dart';
 
 import '../example_base.dart';
 
-class TdTextPage extends StatelessWidget {
-  const TdTextPage({Key? key}) : super(key: key);
+class TDTextPage extends StatelessWidget {
+  const TDTextPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

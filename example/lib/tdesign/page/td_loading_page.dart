@@ -7,20 +7,20 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-class TdLoadingPage extends StatefulWidget {
+class TDLoadingPage extends StatefulWidget {
 
-  const TdLoadingPage({Key? key}):super(key: key);
+  const TDLoadingPage({Key? key}):super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TdLoadingPageState();
+  State<StatefulWidget> createState() => _TDLoadingPageState();
 }
 
-class _TdLoadingPageState extends State<TdLoadingPage> {
+class _TDLoadingPageState extends State<TDLoadingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Loading示例页'),
+          title: const Text('加载 Loading'),
         ),
         body: SizedBox.expand(
           child: Column(

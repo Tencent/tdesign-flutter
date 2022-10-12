@@ -10,16 +10,16 @@ import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
 // ignore: use_key_in_widget_constructors
-class TdDialogPage extends StatefulWidget {
+class TDDialogPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _TdDialogPageState();
+  State<StatefulWidget> createState() => _TDDialogPageState();
 }
 
-class _TdDialogPageState extends State<TdDialogPage> {
+class _TDDialogPageState extends State<TDDialogPage> {
   @override
   Widget build(BuildContext context) {
     return ExampleWidget(
-        title: 'Dialog组件',
+        title: '对话框 Dialog',
         padding: const EdgeInsets.all(3),
         children: [
           _dividerWidget('确认弹框'),

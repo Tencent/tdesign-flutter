@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 ///
-/// TdRadio演示
+/// TDRadio演示
 ///
-class TdRadioPage extends StatefulWidget {
-  const TdRadioPage({Key? key}) : super(key: key);
+class TDRadioPage extends StatefulWidget {
+  const TDRadioPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TdRadioPageState();
+    return TDRadioPageState();
   }
 }
 
-class TdRadioPageState extends State<TdRadioPage> {
+class TDRadioPageState extends State<TDRadioPage> {
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class TdRadioPageState extends State<TdRadioPage> {
     Widget current = ListView(
       children: [
         _title('基础单选框'),
-        TdRadioGroup(
+        TDRadioGroup(
           selectId: 'index:0',
           child: Container(
             child: ListView.builder(
@@ -51,7 +51,7 @@ class TdRadioPageState extends State<TdRadioPage> {
                   title = '单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选';
                 }
                 return Container(
-                  child: TdRadio(
+                  child: TDRadio(
                     id: 'index:$index',
                     title: title,
                   ),
@@ -66,8 +66,8 @@ class TdRadioPageState extends State<TdRadioPage> {
           ),
         ),
         _title('左边勾选样式'),
-        TdRadioGroup(
-          radioStyle: TdRadioStyle.check,
+        TDRadioGroup(
+          radioStyle: TDRadioStyle.check,
           selectId: 'index:1',
           child: Container(
             child: ListView.builder(
@@ -79,7 +79,7 @@ class TdRadioPageState extends State<TdRadioPage> {
                   title = '单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选单选';
                 }
                 return Container(
-                  child: TdRadio(
+                  child: TDRadio(
                     id: 'index:$index',
                     title: title,
                   ),
@@ -94,8 +94,8 @@ class TdRadioPageState extends State<TdRadioPage> {
           ),
         ),
         _title('右边单选框'),
-        TdRadioGroup(
-          contentDirection: TdContentDirection.left,
+        TDRadioGroup(
+          contentDirection: TDContentDirection.left,
           selectId: 'index:0',
           child: Container(
             child: ListView.builder(
@@ -103,7 +103,7 @@ class TdRadioPageState extends State<TdRadioPage> {
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  child: TdRadio(
+                  child: TDRadio(
                     id: 'index:$index',
                     title: '单选$index',
                   ),
@@ -118,9 +118,9 @@ class TdRadioPageState extends State<TdRadioPage> {
           ),
         ),
         _title('右边勾选样式'),
-        TdRadioGroup(
-          radioStyle: TdRadioStyle.check,
-          contentDirection: TdContentDirection.left,
+        TDRadioGroup(
+          radioStyle: TDRadioStyle.check,
+          contentDirection: TDContentDirection.left,
           selectId: 'index:0',
           child: Container(
             child: ListView.builder(
@@ -128,7 +128,7 @@ class TdRadioPageState extends State<TdRadioPage> {
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  child: TdRadio(
+                  child: TDRadio(
                     id: 'index:$index',
                     title: '单选$index',
                   ),
@@ -143,29 +143,29 @@ class TdRadioPageState extends State<TdRadioPage> {
           ),
         ),
         _title('各种状态和样式'),
-        TdRadioGroup(
-          contentDirection: TdContentDirection.left,
+        TDRadioGroup(
+          contentDirection: TDContentDirection.left,
           child: Container(
             child: Column(
               children: [
-                const TdRadio(
+                const TDRadio(
                   id: '0',
                   title: '勾选样式',
-                  radioStyle: TdRadioStyle.check,
+                  radioStyle: TDRadioStyle.check,
                 ),
                 _divider(),
-                const TdRadio(
+                const TDRadio(
                   id: '1',
                   title: '矩形',
-                  radioStyle: TdRadioStyle.square,
+                  radioStyle: TDRadioStyle.square,
                 ),
                 _divider(),
-                const TdRadio(
+                const TDRadio(
                   id: '3',
                   title: '圆形',
                 ),
                 _divider(),
-                const TdRadio(
+                const TDRadio(
                   enable: false,
                   id: '2',
                   title: '不可选',
@@ -177,7 +177,7 @@ class TdRadioPageState extends State<TdRadioPage> {
           ),
         ),
         _title('完全自定义样式'),
-        TdRadioGroup(
+        TDRadioGroup(
             selectId: '20',
             customIconBuilder: (context, check) => null,
             customContentBuilder: (context, check, title) {
@@ -206,7 +206,7 @@ class TdRadioPageState extends State<TdRadioPage> {
                 ),
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: 6,
-                itemBuilder: (BuildContext context, int index) => TdRadio(
+                itemBuilder: (BuildContext context, int index) => TDRadio(
                   id: '2$index',
                   title: '选项$index',
                 ),
@@ -224,7 +224,7 @@ class TdRadioPageState extends State<TdRadioPage> {
 
     current = Scaffold(
       appBar: AppBar(
-        title: const Text('Radio演示'),
+        title: const Text('单选框 Radio'),
       ),
       body: current,
     );

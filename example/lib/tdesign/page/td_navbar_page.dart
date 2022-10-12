@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
-class TdNavBarPage extends StatelessWidget {
-  const TdNavBarPage({Key? key}) : super(key: key);
+class TDNavBarPage extends StatelessWidget {
+  const TDNavBarPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ExampleWidget(
-      title: 'TDNavBar',
+      title: '导航栏 NavBar',
       children: [
         ExampleItem(
           desc: '基础导航栏',

@@ -13,7 +13,7 @@ class TDBottomNavBarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExampleWidget(
-      title: 'TDBottomNavBar组件',
+      title: '标签栏 TDBottomNavBar',
       padding: const EdgeInsets.symmetric(vertical: 16),
       children: [
         ExampleItem(
