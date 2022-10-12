@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 /// 主题示例页
-// ignore: use_key_in_widget_constructors
+
 class TDThemePage extends StatefulWidget {
+  const TDThemePage({Key? key}) : super(key: key);
+
   @override
   _TDThemePageState createState() => _TDThemePageState();
 }

@@ -148,7 +148,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
             builder: (_) {
               return TDImage(
                 url,
-                size: TDImageSize.XL,
+                size: TDImageSize.xl,
                 type: TDImageType.roundedSquare,
               );
             }
@@ -158,7 +158,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
             builder: (_) {
               return TDImage(
                 url,
-                size: TDImageSize.L,
+                size: TDImageSize.l,
                 type: TDImageType.roundedSquare,
               );
             }
@@ -168,7 +168,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
             builder: (_) {
               return TDImage(
                 url,
-                size: TDImageSize.M,
+                size: TDImageSize.m,
                 type: TDImageType.roundedSquare,
               );
             }
@@ -178,7 +178,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
             builder: (_) {
               return TDImage(
                 url,
-                size: TDImageSize.SM,
+                size: TDImageSize.s,
                 type: TDImageType.roundedSquare,
               );
             }
@@ -188,7 +188,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
             builder: (_) {
               return TDImage(
                 url,
-                size: TDImageSize.S,
+                size: TDImageSize.xs,
                 type: TDImageType.roundedSquare,
               );
             }
@@ -198,7 +198,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
             builder: (_) {
               return TDImage(
                 url,
-                size: TDImageSize.XS,
+                size: TDImageSize.xxs,
                 type: TDImageType.roundedSquare,
               );
             }

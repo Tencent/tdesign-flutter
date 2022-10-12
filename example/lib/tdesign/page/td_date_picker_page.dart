@@ -3,8 +3,10 @@ import 'package:tdesign_flutter/td_export.dart';
 
 import '../example_base.dart';
 
-// ignore: use_key_in_widget_constructors
+
 class TDDatePickerPage extends StatefulWidget {
+  const TDDatePickerPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _TDDatePickerPageState();
 }
@@ -19,7 +21,6 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @override
   void initState() {
-    var list = <String>[];
     super.initState();
   }
 

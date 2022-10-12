@@ -1,8 +1,9 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/components/tabbar/td_vertical_tab_bar.dart';
+
 import '../../../td_export.dart';
+import 'td_vertical_tab_bar.dart';
 
 bool isCustomStyle = false;
 

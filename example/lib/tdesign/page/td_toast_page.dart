@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
-// ignore: use_key_in_widget_constructors
+
 class TDToastPage extends StatefulWidget {
+  const TDToastPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _TDToastPageState();
 }
@@ -49,11 +51,9 @@ class _TDToastPageState extends State<TDToastPage> {
           },
           child: const Text('加载中...')),
 
-      ElevatedButton(
-          onPressed: (){
-            TDToast.dismissLoading();
-          },
-          child: const Text('停止loading')),
+      const ElevatedButton(
+          onPressed: TDToast.dismissLoading,
+          child: Text('停止loading')),
 
 
       ElevatedButton(

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
-// ignore: use_key_in_widget_constructors
+
 class TDBadgePage extends StatefulWidget {
+  const TDBadgePage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _TDBadgePageState();
 }

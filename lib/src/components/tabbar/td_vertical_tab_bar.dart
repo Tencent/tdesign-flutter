@@ -174,9 +174,7 @@ class _TabLabelBarRenderer extends RenderFlex {
     required TextDirection textDirection,
     required VerticalDirection verticalDirection,
     required this.onPerformLayout,
-  }) : assert(onPerformLayout != null),
-        assert(textDirection != null),
-        super(
+  }) : super(
         children: children,
         direction: direction,
         mainAxisSize: mainAxisSize,
@@ -269,9 +267,7 @@ class _IndicatorPainter extends CustomPainter {
     required this.tabKeys,
     required _IndicatorPainter? old,
     required this.indicatorPadding,
-  }) : assert(controller != null),
-        assert(indicator != null),
-        super(repaint: controller.animation) {
+  }) : super(repaint: controller.animation) {
     if (old != null) {
       saveTabOffsets(old._currentTabOffsets, old._currentTextDirection);
     }
@@ -461,7 +457,6 @@ class _TabBarScrollPosition extends ScrollPositionWithSingleContext {
   bool applyContentDimensions(double minScrollExtent, double maxScrollExtent) {
     var result = true;
     if (_initialViewportDimensionWasZero != true) {
-      assert(viewportDimension != null);
       _initialViewportDimensionWasZero = viewportDimension != 0.0;
       correctPixels(tabBar._initialScrollOffset(viewportDimension, minScrollExtent, maxScrollExtent));
       result = false;
@@ -512,11 +507,7 @@ class VerticalTabBar extends StatefulWidget implements PreferredSizeWidget {
     this.enableFeedback,
     this.onTap,
     this.physics,
-  }) : assert(tabs != null),
-        assert(isScrollable != null),
-        assert(dragStartBehavior != null),
-        assert(indicator != null || (indicatorWeight != null && indicatorWeight > 0.0)),
-        assert(indicator != null || (indicatorPadding != null)),
+  }) : assert(indicator != null || (indicatorWeight > 0.0)),
         super(key: key);
 
   final Color? selectedBackgroundColor;
