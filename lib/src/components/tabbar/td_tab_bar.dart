@@ -1,11 +1,10 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/src/components/tabbar/td_vertical_tab_bar.dart';
 import '../../../td_export.dart';
 
-int currentIndex = 0;
 bool isCustomStyle = false;
-bool lastCustomStyle = false;
 
 class TDTabBar extends StatefulWidget {
   /// tab数组
@@ -68,6 +67,9 @@ class TDTabBar extends StatefulWidget {
   /// tab间距
   final EdgeInsetsGeometry? labelPadding;
 
+  /// 是否是竖向
+  final bool isVertical;
+
   @override
   const TDTabBar(
       {Key? key,
@@ -90,6 +92,7 @@ class TDTabBar extends StatefulWidget {
       this.indicator,
       this.physics,
       this.onTap,
+      this.isVertical = false,
       this.showIndicator = false})
       : assert(
           backgroundColor == null || decoration == null,
@@ -105,34 +108,61 @@ class TDTabBar extends StatefulWidget {
 class _TDTabBarState extends State<TDTabBar> {
   /// 默认高度
   static const double _defaultHeight = 46;
+  static const double _defaultVerticalHeight = 54;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: widget.width ?? MediaQuery.of(context).size.width,
-      height: widget.height ?? _defaultHeight,
+      height: widget.isVertical
+          ? widget.height ?? _defaultVerticalHeight * widget.tabs.length
+          : widget.height ?? _defaultHeight,
       decoration:
           widget.decoration ?? BoxDecoration(color: widget.backgroundColor),
-      child: TabBar(
-        physics: widget.physics,
-        isScrollable: widget.isScrollable,
-        indicator: widget.indicator ?? _getIndicator(context),
-        indicatorColor:
-            widget.indicatorColor ?? TDTheme.of(context).brandNormalColor,
-        unselectedLabelColor:
-            widget.unselectedLabelColor ?? TDTheme.of(context).fontGyColor2,
-        labelColor: widget.labelColor ?? TDTheme.of(context).brandNormalColor,
-        labelStyle: widget.labelStyle ?? _getLabelStyle(context),
-        labelPadding: widget.labelPadding,
-        unselectedLabelStyle:
-            widget.unselectedLabelStyle ?? _getUnSelectLabelStyle(context),
-        tabs: widget.tabs,
-        indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
-        controller: widget.controller,
-        onTap: (index){
-          widget.onTap?.call(index);
-        },
-      ),
+      child: widget.isVertical
+          ? VerticalTabBar(
+              selectedBackgroundColor: TDTheme.of(context).whiteColor1,
+              physics: widget.physics,
+              isScrollable: widget.isScrollable,
+              indicator: widget.indicator ?? _getIndicator(context),
+              indicatorColor:
+                  widget.indicatorColor ?? TDTheme.of(context).brandNormalColor,
+              unselectedLabelColor: widget.unselectedLabelColor ??
+                  TDTheme.of(context).fontGyColor2,
+              labelColor:
+                  widget.labelColor ?? TDTheme.of(context).brandNormalColor,
+              labelStyle: widget.labelStyle ?? _getLabelStyle(context),
+              labelPadding: widget.labelPadding,
+              unselectedLabelStyle: widget.unselectedLabelStyle ??
+                  _getUnSelectLabelStyle(context),
+              tabs: widget.tabs,
+              indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
+              controller: widget.controller,
+              onTap: (index) {
+                widget.onTap?.call(index);
+              },
+            )
+          : TabBar(
+              physics: widget.physics,
+              isScrollable: widget.isScrollable,
+              indicator: widget.indicator ?? _getIndicator(context),
+              indicatorColor:
+                  widget.indicatorColor ?? TDTheme.of(context).brandNormalColor,
+              unselectedLabelColor: widget.unselectedLabelColor ??
+                  TDTheme.of(context).fontGyColor2,
+              labelColor:
+                  widget.labelColor ?? TDTheme.of(context).brandNormalColor,
+              labelStyle: widget.labelStyle ?? _getLabelStyle(context),
+              labelPadding: widget.labelPadding,
+              unselectedLabelStyle: widget.unselectedLabelStyle ??
+                  _getUnSelectLabelStyle(context),
+              tabs: widget.tabs,
+              indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
+              controller: widget.controller,
+              onTap: (index) {
+                widget.onTap?.call(index);
+              },
+            ),
     );
   }
 
@@ -152,10 +182,15 @@ class _TDTabBarState extends State<TDTabBar> {
 
   Decoration _getIndicator(BuildContext context) {
     return widget.showIndicator
-        ? TDTabBarIndicator(
-            context: context,
-            indicatorHeight: widget.indicatorHeight,
-            indicatorWidth: widget.indicatorWidth)
+        ? widget.isVertical
+            ? TDTabBarVerticalIndicator(
+                context: context,
+                indicatorHeight: widget.indicatorHeight,
+                indicatorWidth: widget.indicatorWidth)
+            : TDTabBarIndicator(
+                context: context,
+                indicatorHeight: widget.indicatorHeight,
+                indicatorWidth: widget.indicatorWidth)
         : TDNoneIndicator();
   }
 }
@@ -206,6 +241,66 @@ class _TDTabBarIndicatorPainter extends BoxPainter {
         Offset(offset.dx + (configuration.size!.width + _indicatorWidth()) / 2,
             configuration.size!.height - _indicatorHeight()),
         _paint..strokeWidth = _indicatorHeight());
+  }
+
+  double _indicatorHeight() =>
+      decoration.indicatorHeight ?? _defaultIndicatorHeight;
+
+  double _indicatorWidth() =>
+      decoration.indicatorWidth ?? _defaultIndicatorWidth;
+}
+
+/// TDesign自定义下标 竖向
+class TDTabBarVerticalIndicator extends Decoration {
+  final BuildContext? context;
+  final double? indicatorWidth;
+  final double? indicatorHeight;
+
+  const TDTabBarVerticalIndicator(
+      {this.context, this.indicatorWidth, this.indicatorHeight});
+
+  @override
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
+      _TDTabBarVerticalIndicatorPainter(this, onChanged!);
+}
+
+class _TDTabBarVerticalIndicatorPainter extends BoxPainter {
+  /// 下标宽度
+  static const double _defaultIndicatorWidth = 1.5;
+
+  /// 下标高度
+  static const double _defaultIndicatorHeight = 54;
+
+  final TDTabBarVerticalIndicator decoration;
+
+  final _paint = Paint();
+
+  _TDTabBarVerticalIndicatorPainter(this.decoration, VoidCallback onChanged) {
+    if (isCustomStyle) {
+      _paint.shader = ui.Gradient.linear(Offset.zero, Offset.zero, <Color>[
+        TDTheme.of(decoration.context).brandNormalColor,
+        TDTheme.of(decoration.context).brandNormalColor,
+      ]);
+    } else {
+      /// 下标颜色
+      _paint.color = TDTheme.of(decoration.context).brandNormalColor;
+    }
+    _paint.strokeCap = StrokeCap.round;
+  }
+
+  @override
+  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
+
+    canvas.drawLine(
+        Offset(
+          0 + _indicatorWidth() / 2,
+          offset.dx + (configuration.size!.width - _indicatorHeight()) / 2,
+        ),
+        Offset(
+          0 + _indicatorWidth() / 2,
+          offset.dx + (configuration.size!.width + _indicatorHeight()) / 2,
+        ),
+        _paint..strokeWidth = _indicatorWidth());
   }
 
   double _indicatorHeight() =>
