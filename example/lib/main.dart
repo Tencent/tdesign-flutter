@@ -19,6 +19,7 @@ import 'tdesign/page/td_input_view_pager.dart';
 import 'tdesign/page/td_loading_page.dart';
 import 'tdesign/page/td_navbar_page.dart';
 import 'tdesign/page/td_picker_page.dart';
+import 'tdesign/page/td_pull_down_refresh_page.dart';
 import 'tdesign/page/td_radio_page.dart';
 import 'tdesign/page/td_search_bar_page.dart';
 import 'tdesign/page/td_swiper_page.dart';
@@ -115,6 +116,10 @@ List<ExamplePageModel> examplePageList = [
       text: '加载 Loading',
       path: 'TdLoadingPage',
       pageBuilder: (context) => const TdLoadingPage()),
+  ExamplePageModel(
+      text: '下拉刷新 PullDownRefresh',
+      path: 'TdPullDownRefreshPage',
+      pageBuilder: (context) => const TdPullDownRefreshPage()),
   ExamplePageModel(
       text: '轻提示 Toast',
       path: 'TdToastPage',
