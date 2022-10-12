@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 
 
-class TdExampleRoute {
+class TDExampleRoute {
   static final Map<String, Function> _routes = {};
 
   static void init(){

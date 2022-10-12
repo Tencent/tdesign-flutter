@@ -19,6 +19,7 @@ import 'tdesign/page/td_input_view_pager.dart';
 import 'tdesign/page/td_loading_page.dart';
 import 'tdesign/page/td_navbar_page.dart';
 import 'tdesign/page/td_picker_page.dart';
+import 'tdesign/page/td_popup_page.dart';
 import 'tdesign/page/td_radio_page.dart';
 import 'tdesign/page/td_search_bar_page.dart';
 import 'tdesign/page/td_swiper_page.dart';
@@ -27,98 +28,104 @@ import 'tdesign/page/td_tag_page.dart';
 import 'tdesign/page/td_text_page.dart';
 import 'tdesign/page/td_toast_page.dart';
 
-/// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TdTextPage()
+/// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TDTextPage()
 List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '文本控件--基础',
-      path: 'TdTextPage',
-      pageBuilder: (context) => const TdTextPage()),
+      path: 'TDTextPage',
+      pageBuilder: (context) => const TDTextPage()),
   ExamplePageModel(
-      text: '图标--基础', path: 'TdIconPage', pageBuilder: (context) => TdIconPage()),
+      text: '图标--基础',
+      path: 'TDIconPage',
+      pageBuilder: (context) => const TDIconPage()),
   ExamplePageModel(
       text: '按钮 Button',
-      path: 'TdButtonPage',
-      pageBuilder: (context) => TdButtonPage()),
+      path: 'TDButtonPage',
+      pageBuilder: (context) => const TDButtonPage()),
   ExamplePageModel(
       text: '分割线 Divider',
-      path: 'TdDividerPage',
-      pageBuilder: (context) => const TdDividerPage()),
+      path: 'TDDividerPage',
+      pageBuilder: (context) => const TDDividerPage()),
   ExamplePageModel(
       text: '头像 Avatar',
-      path: 'TdAvatarPage',
-      pageBuilder: (context) => TdAvatarPage()),
+      path: 'TDAvatarPage',
+      pageBuilder: (context) => const TDAvatarPage()),
   ExamplePageModel(
       text: '徽标 Badge',
-      path: 'TdBadgePage',
-      pageBuilder: (context) => TdBadgePage()),
+      path: 'TDBadgePage',
+      pageBuilder: (context) => const TDBadgePage()),
   ExamplePageModel(
       text: '空状态 Empty',
-      path: 'TdEmptyPage',
-      pageBuilder: (context) => TdEmptyPage()),
+      path: 'TDEmptyPage',
+      pageBuilder: (context) => const TDEmptyPage()),
   ExamplePageModel(
       text: '图片 Image',
-      path: 'TdImagePage',
-      pageBuilder: (context) => const TdImagePage()),
+      path: 'TDImagePage',
+      pageBuilder: (context) => const TDImagePage()),
   ExamplePageModel(
       text: '轮播图 Swiper',
       path: 'TDSwiperPage',
       pageBuilder: (context) => const TDSwiperPage()),
   ExamplePageModel(
       text: '标签 Tag',
-      path: 'TdTagPage',
-      pageBuilder: (context) => const TdTagPage()),
+      path: 'TDTagPage',
+      pageBuilder: (context) => const TDTagPage()),
   ExamplePageModel(
       text: '多选框 Checkbox',
-      path: 'TdCheckboxPage',
-      pageBuilder: (context) => const TdCheckboxPage()),
+      path: 'TDCheckboxPage',
+      pageBuilder: (context) => const TDCheckboxPage()),
   ExamplePageModel(
       text: '时间选择器 DatePicker',
-      path: 'TdDatePickerPage',
-      pageBuilder: (context) => TdDatePickerPage()),
+      path: 'TDDatePickerPage',
+      pageBuilder: (context) => const TDDatePickerPage()),
   ExamplePageModel(
       text: '输入框 Input',
-      path: 'TdInputViewPag',
-      pageBuilder: (context) => const TdInputViewPage()),
+      path: 'TDInputViewPag',
+      pageBuilder: (context) => const TDInputViewPage()),
   ExamplePageModel(
       text: '选择器 Picker',
-      path: 'TdPickerPage',
-      pageBuilder: (context) => TdPickerPage()),
+      path: 'TDPickerPage',
+      pageBuilder: (context) => const TDPickerPage()),
   ExamplePageModel(
       text: '单选框 Radio',
-      path: 'TdRadioPage',
-      pageBuilder: (context) => const TdRadioPage()),
+      path: 'TDRadioPage',
+      pageBuilder: (context) => const TDRadioPage()),
   ExamplePageModel(
       text: '搜索框 Search',
-      path: 'TdSearchBarPage',
-      pageBuilder: (context) => TdSearchBarPage()),
+      path: 'TDSearchBarPage',
+      pageBuilder: (context) => const TDSearchBarPage()),
   ExamplePageModel(
       text: '开关 Switch',
-      path: 'TdRadioPage',
-      pageBuilder: (context) => const TdRadioPage()),
+      path: 'TDRadioPage',
+      pageBuilder: (context) => const TDRadioPage()),
   ExamplePageModel(
       text: '导航栏 NavBar',
-      path: 'TdNavBarPage',
-      pageBuilder: (context) => const TdNavBarPage()),
+      path: 'TDNavBarPage',
+      pageBuilder: (context) => const TDNavBarPage()),
   ExamplePageModel(
       text: '标签栏 TabBar',
       path: 'TDBottomNavBarPage',
       pageBuilder: (context) => const TDBottomNavBarPage()),
   ExamplePageModel(
       text: '选项卡 Tabs',
-      path: 'TdTabBarPage',
-      pageBuilder: (context) => TdTabBarPage()),
+      path: 'TDTabBarPage',
+      pageBuilder: (context) => const TDTabBarPage()),
   ExamplePageModel(
       text: '对话框 Dialog',
-      path: 'TdDialogPage',
-      pageBuilder: (context) => TdDialogPage()),
+      path: 'TDDialogPage',
+      pageBuilder: (context) => const TDDialogPage()),
   ExamplePageModel(
       text: '加载 Loading',
-      path: 'TdLoadingPage',
-      pageBuilder: (context) => const TdLoadingPage()),
+      path: 'TDLoadingPage',
+      pageBuilder: (context) => const TDLoadingPage()),
+  ExamplePageModel(
+      text: '弹出层 PopUp',
+      path: 'TDPopUpPage',
+      pageBuilder: (context) => const TDPopupPage()),
   ExamplePageModel(
       text: '轻提示 Toast',
-      path: 'TdToastPage',
-      pageBuilder: (context) => TdToastPage()),
+      path: 'TDToastPage',
+      pageBuilder: (context) => const TDToastPage()),
 ];
 
 void main() {
@@ -144,20 +151,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with 'flutter run'. You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // 'hot reload' (press 'r' in the console where you ran 'flutter run',
-          // or simply save your changes to 'hot reload' in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
-          accentColor: Colors.red,
+          colorScheme: ColorScheme.light(primary: TDTheme.of(context).brandNormalColor)
         ),
         home: const MyHomePage(title: 'flutter原子组件库demo'),
-        onGenerateRoute: TdExampleRoute.onGenerateRoute,
+        onGenerateRoute: TDExampleRoute.onGenerateRoute,
       ),
     );
   }
@@ -165,15 +162,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked 'final'.
 
   final String title;
 
@@ -187,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    TdExampleRoute.init();
+    TDExampleRoute.init();
   }
 
   @override
@@ -219,13 +207,16 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> _buildChildren(BuildContext context) {
     return <Widget>[
       for (var model in examplePageList)
-        OutlinedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, model.path);
-            },
-            child: Text(
-              model.text,
-            ))
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TDButton(
+              style: TDButtonStyle.weakly(),
+              size: TDButtonSize.small,
+              onTap: () {
+                Navigator.pushNamed(context, model.path);
+              },
+              content: model.text),
+        )
     ];
   }
 }

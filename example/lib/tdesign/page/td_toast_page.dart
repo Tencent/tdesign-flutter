@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
-// ignore: use_key_in_widget_constructors
-class TdToastPage extends StatefulWidget {
+
+class TDToastPage extends StatefulWidget {
+  const TDToastPage({Key? key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => _TdToastPageState();
+  State<StatefulWidget> createState() => _TDToastPageState();
 }
 
-class _TdToastPageState extends State<TdToastPage> {
+class _TDToastPageState extends State<TDToastPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: 'Toast组件', children: [
+    return ExampleWidget(title: '轻提示 Toast', children: [
       ElevatedButton(
           onPressed: (){
             TDToast.showText('我是Toast', context: context);
@@ -49,11 +51,9 @@ class _TdToastPageState extends State<TdToastPage> {
           },
           child: const Text('加载中...')),
 
-      ElevatedButton(
-          onPressed: (){
-            TDToast.dismissLoading();
-          },
-          child: const Text('停止loading')),
+      const ElevatedButton(
+          onPressed: TDToast.dismissLoading,
+          child: Text('停止loading')),
 
 
       ElevatedButton(
