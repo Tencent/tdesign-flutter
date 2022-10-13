@@ -1,1 +1,2 @@
 bin/demo_tool generate --file ../lib/src/components/text/td_text.dart --name TDText --folder-name text --output ../example/assets/api/ --only-api
+bin/demo_tool generate --file ../lib/src/components/tags/td_tag.dart --name TDTag --folder-name tag --output ../example/assets/api/ --only-api
