@@ -24,7 +24,7 @@ class _ApiWidgetState extends State<ApiWidget> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Markdown(
               padding: EdgeInsets.zero,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               selectable: true,
               data: snapshot.data ?? '',
@@ -34,7 +34,7 @@ class _ApiWidgetState extends State<ApiWidget> {
               ),
             );
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         },
       ),
