@@ -42,12 +42,20 @@ class TDCheckboxGroupController {
   List<String> allChecked() {
     return _state?.checkBoxStates.where((k, v) => v).keys.toList() ?? [];
   }
+
+  ///
+  /// 某一项的选中状态
+  ///
+  bool checked(String id) {
+    var list = allChecked();
+    return list.contains(id);
+  }
 }
 
 ///
 /// CheckBox组，可以通过控制器控制组内的多个CheckBox的选择状态
 ///
-/// child的属性可以是任意包含FuiCheckBox的容器组件，例如：
+/// child的属性可以是任意包含TDCheckBox的容器组件，例如：
 /// ```dart
 /// TDCheckboxGroup(
 ///   child: Row(
@@ -68,12 +76,12 @@ class TDCheckboxGroupController {
 ///
 class TDCheckboxGroup extends StatefulWidget {
   ///
-  /// 可以是任意包含FuiCheckBox的容器，比如：
+  /// 可以是任意包含TDCheckBox的容器，比如：
   /// ```
   /// Row(
   ///   children: [
-  ///     FuiCheckBox(),
-  ///     FuiCheckBox(),
+  ///     TDCheckBox(),
+  ///     TDCheckBox(),
   ///     ...
   ///   ]
   /// )
@@ -176,7 +184,7 @@ class TDCheckboxGroupState extends State<TDCheckboxGroup> {
   @override
   void didUpdateWidget(TDCheckboxGroup oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final  oldCheckIds = oldWidget.checkedIds;
+    final oldCheckIds = oldWidget.checkedIds;
     final newCheckIds = widget.checkedIds;
     if (oldCheckIds != newCheckIds) {
       _syncCheckState(newCheckIds);
@@ -189,7 +197,6 @@ class TDCheckboxGroupState extends State<TDCheckboxGroup> {
   ///
   ///
   bool getCheckBoxStateById(String id, bool checked) {
-    // print("getCheckBoxStateById:$id， checked:$checked, ch:${checkBoxStates[id]}");
     if (checkBoxStates[id] == null) {
       // checkBox本身的状态
       checkBoxStates[id] = checked;
@@ -231,7 +238,6 @@ class TDCheckboxGroupState extends State<TDCheckboxGroup> {
     });
 
     if (isChanged && notify) {
-      // print("FuiCheckBoxGroupState changed");
       setState(() {});
       _notifyChange();
     }
@@ -255,7 +261,6 @@ class TDCheckboxGroupState extends State<TDCheckboxGroup> {
   void _notifyChange() {
     final change = widget.onChangeGroup;
     if (change != null) {
-      // checkBoxStates.where((k, v) => v).keys.toList();
       final checkedIds = checkBoxStates.where((k, v) => v).keys.toList();
       change.call(checkedIds);
     }
@@ -283,7 +288,6 @@ class TDCheckboxGroupInherited extends InheritedWidget {
   bool updateShouldNotify(covariant TDCheckboxGroupInherited oldWidget) {
     var notify =
         oldWidget.state.checkBoxStates.keys != state.checkBoxStates.keys;
-    print('FuiCheckBoxGroupInherited shouldNotify:$notify');
     return true;
   }
 }

@@ -24,6 +24,6 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
         TDText('输入文案：', font: TDTheme.of(context).fontM, textColor: TDTheme.of(context).fontGyColor1,),
         TDText('${inputText ?? ''}', font: TDTheme.of(context).fontM, textColor: TDTheme.of(context).fontGyColor1,),
       ],)
-    ],);
+    ], backgroundColor: TDTheme.of(context).whiteColor1,);
   }
 }
