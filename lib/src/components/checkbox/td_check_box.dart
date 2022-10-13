@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import '../../theme/td_colors.dart';
 import '../../theme/td_fonts.dart';
 import '../../theme/td_theme.dart';
+import '../divider/td_divider.dart';
 import '../icon/td_icons.dart';
+import '../text/td_text.dart';
 import 'td_check_box_group.dart';
 
 ///
@@ -19,10 +21,13 @@ enum TDCheckboxStyle {
 /// 内容相对icon的位置，上、下、左、右，默认内容在icon的右边
 ///
 enum TDContentDirection {
-  top, // content在icon的上面
   left, // content在icon的左边
   right, // content在icon的右边
-  bottom // content在icon的下边
+}
+
+enum TDCheckBoxSize {
+  large, // 大 高度56
+  small, // 小 高度48
 }
 
 ///
@@ -53,6 +58,9 @@ class TDCheckbox extends StatefulWidget {
   /// 文本
   final String? title;
 
+  /// 辅助文字
+  final String? subTitle;
+
   /// 不可用
   final bool enable;
 
@@ -63,15 +71,19 @@ class TDCheckbox extends StatefulWidget {
   /// 标题的行数
   final int? titleMaxLine;
 
+  /// 辅助文字的行数
+  final int? subTitleMaxLine;
+
   /// icon和文字的距离
   final double? spacing;
 
   /// 复选框样式：圆形或方形
   final TDCheckboxStyle? style;
 
-  ///
+  /// 复选框大小
+  final TDCheckBoxSize size;
+
   /// 文字相对icon的方位
-  ///
   final TDContentDirection contentDirection;
 
   /// 切换监听
@@ -83,17 +95,24 @@ class TDCheckbox extends StatefulWidget {
   /// 完全自定义内容
   final ContentBuilder? customContentBuilder;
 
+  /// 背景颜色
+  final Color? backgroundColor;
+
   const TDCheckbox(
       {this.id,
         Key? key,
       this.title,
+      this.subTitle,
       this.enable = true,
       this.checked = false,
       this.titleMaxLine,
+      this.subTitleMaxLine = 1,
       this.customIconBuilder,
       this.customContentBuilder,
       this.style,
       this.spacing,
+      this.backgroundColor,
+      this.size = TDCheckBoxSize.small,
       this.contentDirection = TDContentDirection.right,
       this.onCheckBoxChanged}): super(key: key);
 
@@ -108,10 +127,10 @@ class TDCheckbox extends StatefulWidget {
     final theme = TDTheme.of(context);
     current = Icon(
       style == TDCheckboxStyle.circle
-          ? isChecked  ? TDIcons.check_circle_filled : TDIcons.check_circle
-          : isChecked ? TDIcons.check_rectangle_filled :  TDIcons.check_rectangle,
+          ? isChecked ? TDIcons.check_circle_filled : TDIcons.circle
+          : isChecked ? TDIcons.check_rectangle_filled :  TDIcons.rectangle,
       size: size,
-      color: isChecked ? theme.brandColor8 : theme.grayColor4
+      color: isChecked && enable ? theme.brandColor8 : theme.grayColor4
     );
     return current;
   }
@@ -137,7 +156,16 @@ class TDCheckboxState extends State<TDCheckbox> {
   }
 
   double _spacing(TDCheckboxGroupState? groupState) {
-    return widget.spacing ?? groupState?.widget.spacing ?? 5;
+    return widget.spacing ?? groupState?.widget.spacing ?? 8;
+  }
+
+  EdgeInsets _getPadding(TDCheckBoxSize size) {
+    switch(size) {
+      case TDCheckBoxSize.small:
+        return const EdgeInsets.only(top: 12, bottom: 12);
+      case TDCheckBoxSize.large:
+        return const EdgeInsets.only(top: 16, bottom: 16);
+    }
   }
 
   @override
@@ -177,47 +205,91 @@ class TDCheckboxState extends State<TDCheckbox> {
         final spacing = _spacing(groupState);
         var contentDirection = groupState?.widget.contentDirection ?? widget.contentDirection;
         switch (contentDirection) {
-          case TDContentDirection.top:
-            current = Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(child: content),
-                SizedBox(height: spacing,),
-                icon,
-              ],
-            );
-            break;
           case TDContentDirection.left:
-            current = Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            current = Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                Expanded(child: content),
-                SizedBox(width: spacing,),
-                icon,
+                Padding(
+                  padding: _getPadding(widget.size),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(child: Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: content,
+                          )),
+                          SizedBox(width: spacing,),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16),
+                            child: icon,
+                          ),
+                        ],
+                      ),
+                      Visibility(
+                        visible: widget.subTitle != null && widget.subTitle != '',
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          child: TDText(
+                              widget.subTitle ?? '',
+                              maxLines:
+                              widget.subTitleMaxLine,
+                              overflow: TextOverflow.ellipsis,
+                              textColor: widget.enable ? TDTheme.of(context).fontGyColor3 : TDTheme.of(context).fontGyColor4,
+                              font:TDTheme.of(context).fontS),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const TDDivider(margin: EdgeInsets.only(left: 16),)
               ],
             );
             break;
           case TDContentDirection.right:
-            current = Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            current = Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                icon,
-                SizedBox(width: spacing,),
-                Expanded(child: content),
-              ],
-            );
-            break;
-          case TDContentDirection.bottom:
-            current = Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                icon,
-                SizedBox(height: spacing,),
-                Expanded(child: content),
+                Padding(
+                  padding: _getPadding(widget.size),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: icon,
+                          ),
+                          SizedBox(width: spacing,),
+                          Expanded(child: Padding(
+                            padding: const EdgeInsets.only(right: 16),
+                            child: content,
+                          )),
+                        ],
+                      ),
+                      Visibility(
+                        visible: widget.subTitle != null && widget.subTitle != '',
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 48, right: 16),
+                          child: TDText(
+                              widget.subTitle ?? '',
+                              maxLines:
+                              widget.subTitleMaxLine,
+                              overflow: TextOverflow.ellipsis,
+                              textColor: widget.enable ? TDTheme.of(context).fontGyColor3 : TDTheme.of(context).fontGyColor4,
+                              font:TDTheme.of(context).fontS),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const TDDivider(margin: EdgeInsets.only(left: 48),)
               ],
             );
             break;
@@ -225,12 +297,7 @@ class TDCheckboxState extends State<TDCheckbox> {
       }
     }
 
-    if (widget.enable == false) {
-      current = Opacity(
-        opacity: 0.5,
-        child: current,
-      );
-    } else if (!(canNotCancel && checked)) {
+    if (!(canNotCancel && checked)) {
       if (_pressed) {
         // 点击效果
         current = Opacity(
@@ -258,11 +325,14 @@ class TDCheckboxState extends State<TDCheckbox> {
       );
     }
 
-    return current;
+    return Container(child: current, color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,);
   }
 
   /// 点击效果
   void _pressState(bool pressed) {
+    if(!widget.enable) {
+      return;
+    }
     _pressed = pressed;
     setState(() {});
   }
@@ -273,12 +343,15 @@ class TDCheckboxState extends State<TDCheckbox> {
     bool value,
     TDCheckboxGroupState? groupState,
   ) {
+    if(!widget.enable) {
+      return;
+    }
     setState(() {
       checked = value;
-      widget.onCheckBoxChanged?.call(checked);
       if (groupState != null && id != null) {
         groupState.toggle(id, checked);
       }
+      widget.onCheckBoxChanged?.call(checked);
     });
   }
 
@@ -298,15 +371,13 @@ class TDCheckboxState extends State<TDCheckbox> {
     var content = customContent?.call(context, checked, title);
     if (content == null) {
       if (title != null || customContent != null && title != null) {
-        content = Text(
+        content = TDText(
             title,
             maxLines:
             widget.titleMaxLine ?? groupState?.widget.titleMaxLine,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: TDTheme.of(context).fontGyColor1,
-              fontSize: TDTheme.of(context).fontS?.size,
-            ));
+            textColor: widget.enable ? TDTheme.of(context).fontGyColor1 : TDTheme.of(context).fontGyColor4,
+            font:TDTheme.of(context).fontM);
       }
     }
     return content;
