@@ -1,0 +1,1 @@
+bin/demo_tool generate --file ../lib/src/components/text/td_text.dart --name TDText --folder-name text --output ../example/assets/api/ --only-api
