@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import '../api/api_widget.dart';
+import 'api_widget.dart';
 
 
 
@@ -70,7 +70,7 @@ class _ExampleWidgetState extends State<ExampleWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Visibility(visible:apiVisible,child: ApiWidget(apiName: widget.apiPath ?? 'empty',)), ...list,
+            Visibility(visible:apiVisible,child: ApiWidget(apiName: widget.apiPath ?? 'default',)), ...list,
           ],
         ),),
       ),
