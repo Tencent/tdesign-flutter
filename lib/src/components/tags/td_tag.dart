@@ -8,6 +8,23 @@ enum TDTagSize { large, middle, small, custom }
 /// 支持样式：方形/圆角/半圆/带关闭图标
 ///
 class TDTag extends StatelessWidget {
+
+  const TDTag(this.text,
+      {
+        this.textColor,
+        this.backgroundColor,
+        this.font,
+        this.fontWeight,
+        this.style,
+        this.size = TDTagSize.middle,
+        this.padding,
+        this.forceVerticalCenter = true,
+        this.needCloseIcon = false,
+        this.onCloseTap,
+        this.overflow,
+        Key? key})
+      : super(key: key);
+
   /// 标签内容
   final String text;
 
@@ -43,22 +60,6 @@ class TDTag extends StatelessWidget {
 
   /// 关闭图标点击事件
   final GestureTapCallback? onCloseTap;
-
-  const TDTag(this.text,
-      {
-        this.textColor,
-        this.backgroundColor,
-        this.font,
-        this.fontWeight,
-        this.style,
-        this.size = TDTagSize.middle,
-        this.padding,
-        this.forceVerticalCenter = true,
-        this.needCloseIcon = false,
-        this.onCloseTap,
-        this.overflow,
-        Key? key})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

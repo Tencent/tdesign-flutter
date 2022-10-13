@@ -8,6 +8,7 @@ class TDTagPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExampleWidget(title: '标签 Tag',
+        apiPath: 'tag',
         // padding: EdgeInsets.zero,
         children: [
           ExampleItem(
