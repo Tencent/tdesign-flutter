@@ -15,6 +15,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
   Widget build(BuildContext context) {
     return ExampleWidget(
       title: '徽标 Badge',
+      apiPath: 'badge',
       children: [
         ExampleItem(
             desc: '红点徽标',

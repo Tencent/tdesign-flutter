@@ -9,6 +9,24 @@ typedef TDButtonEvent = void Function();
 
 /// TD常规按钮
 class TDButton extends StatefulWidget {
+
+  const TDButton(
+      {Key? key,
+        required this.content,
+        this.size = TDButtonSize.medium,
+        this.child,
+        this.disabled = false,
+        this.style,
+        this.textStyle,
+        this.disableTextStyle,
+        this.width,
+        this.height,
+        this.onTap,
+        this.icon,
+        this.onLongPress,
+        this.padding})
+      : super(key: key);
+
   final Widget? child;
   final String? content;
   final bool disabled;
@@ -22,23 +40,6 @@ class TDButton extends StatefulWidget {
   final TDButtonEvent? onLongPress;
   final IconData? icon;
   final EdgeInsetsGeometry? padding;
-
-  const TDButton(
-      {Key? key,
-      required this.content,
-      this.size = TDButtonSize.medium,
-      this.child,
-      this.disabled = false,
-      this.style,
-      this.textStyle,
-      this.disableTextStyle,
-      this.width,
-      this.height,
-      this.onTap,
-      this.icon,
-      this.onLongPress,
-      this.padding})
-      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TDButtonState();

@@ -70,7 +70,7 @@ class _ExampleWidgetState extends State<ExampleWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Visibility(visible:apiVisible,child: ApiWidget(apiName: widget.apiPath ?? 'default',)), ...list,
+            ApiWidget(apiName: widget.apiPath ?? 'default',visible: apiVisible,), ...list,
           ],
         ),),
       ),

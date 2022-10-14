@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter_example/tdesign/page/td_theme_page.dart';
 
 import 'tdesign/example_base.dart';
 import 'tdesign/example_route.dart';
@@ -39,6 +40,10 @@ List<ExamplePageModel> examplePageList = [
       text: '图标--基础',
       path: 'TDIconPage',
       pageBuilder: (context) => const TDIconPage()),
+  ExamplePageModel(
+      text: '主题--基础',
+      path: 'TDThemePage',
+      pageBuilder: (context) => const TDThemePage()),
   ExamplePageModel(
       text: '按钮 Button',
       path: 'TDButtonPage',
