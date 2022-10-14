@@ -71,6 +71,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
   Widget build(BuildContext context) {
     return ExampleWidget(
       title: '选项卡 Tabs TDTabBar',
+      apiPath: 'tabbar',
       padding: const EdgeInsets.symmetric(vertical: 16),
       children: [
         ExampleItem(

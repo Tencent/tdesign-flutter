@@ -11,6 +11,7 @@ class TDSwiperPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExampleWidget(
       title: '轮播图 Swiper',
+      apiPath: 'swiper',
       children: [
         ExampleItem(
             desc: '圆点指示器',

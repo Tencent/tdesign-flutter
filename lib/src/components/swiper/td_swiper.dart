@@ -7,6 +7,14 @@ import '../../theme/td_theme.dart';
 const _kAminatedDuration = 100;
 
 class TDSwiperPagination extends SwiperPlugin {
+
+
+  const TDSwiperPagination(
+      {this.alignment,
+        this.key,
+        this.margin = const EdgeInsets.all(10.0),
+        this.builder = TDSwiperPagination.dots});
+
   /// 圆点样式
   static const SwiperPlugin dots = TDSwiperDotsPagination();
 
@@ -32,11 +40,6 @@ class TDSwiperPagination extends SwiperPlugin {
 
   final Key? key;
 
-  const TDSwiperPagination(
-      {this.alignment,
-      this.key,
-      this.margin = const EdgeInsets.all(10.0),
-      this.builder = TDSwiperPagination.dots});
 
   @override
   Widget build(BuildContext context, SwiperPluginConfig config) {
