@@ -84,6 +84,11 @@ List<ExamplePageModel> examplePageList = [
       text: 'Radio单框',
       path: 'TdRadioPage',
       pageBuilder: (context) => const TdRadioPage()),
+
+  ExamplePageModel(text: 'Switch开关',
+      path: 'TdSwitch',
+      pageBuilder: (context)=> const TDSwitchPage()),
+
   ExamplePageModel(
       text: 'Dialog弹窗',
       path: 'TdDialogPage',
