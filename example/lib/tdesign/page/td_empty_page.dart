@@ -20,7 +20,7 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
           color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               TDEmpty(
                 type: TDEmptyType.operation,
                 operationText: '操作按钮',
@@ -28,6 +28,7 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
                 image: Icon(
                   TDIcons.info_circle_filled,
                   size: 84,
+                  color: TDTheme.of(context).fontGyColor3,
                 ),
               ),
             ],
