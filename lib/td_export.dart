@@ -24,6 +24,7 @@ export 'src/components/radio/td_radio.dart';
 export 'src/components/refresh/td_refresh_header.dart';
 export 'src/components/search/td_search_bar.dart';
 export 'src/components/swiper/td_swiper.dart';
+export 'src/components/switch/td_switch.dart';
 export 'src/components/tabbar/td_tab.dart';
 export 'src/components/tabbar/td_tab_bar.dart';
 export 'src/components/tabbar/td_tab_bar_vertical_view.dart';

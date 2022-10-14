@@ -24,6 +24,7 @@ import 'tdesign/page/td_popup_page.dart';
 import 'tdesign/page/td_pull_down_refresh_page.dart';
 import 'tdesign/page/td_radio_page.dart';
 import 'tdesign/page/td_search_bar_page.dart';
+import 'tdesign/page/td_swich_page.dart';
 import 'tdesign/page/td_swiper_page.dart';
 import 'tdesign/page/td_tab_bar_page.dart';
 import 'tdesign/page/td_tag_page.dart';
@@ -102,14 +103,14 @@ List<ExamplePageModel> examplePageList = [
       pageBuilder: (context) => const TDSearchBarPage()),
   ExamplePageModel(
       text: '开关 Switch',
-      path: 'TDRadioPage',
-      pageBuilder: (context) => const TDRadioPage()),
+      path: 'TDSwitchPage',
+      pageBuilder: (context) => const TDSwitchPage()),
   ExamplePageModel(
       text: '导航栏 NavBar',
       path: 'TDNavBarPage',
       pageBuilder: (context) => const TDNavBarPage()),
-  ExamplePageModel(
-      text: '标签栏 TabBar',
+
+  ExamplePageModel(text: '标签栏 TabBar',
       path: 'TDBottomNavBarPage',
       pageBuilder: (context) => const TDBottomNavBarPage()),
   ExamplePageModel(
