@@ -3,13 +3,6 @@ import 'package:flutter/cupertino.dart';
 import '../../../td_export.dart';
 
 class TDSwitch extends StatefulWidget {
-  final bool enable;
-
-  final bool isOn;
-
-  final Color? onColor;
-  final Color? offColor;
-  final ValueChanged<bool>? onChanged;
 
   const TDSwitch({
     Key? key,
@@ -19,6 +12,21 @@ class TDSwitch extends StatefulWidget {
     this.offColor,
     this.onChanged,
   }): super(key: key);
+
+  /// 是否可点击
+  final bool enable;
+
+  /// 是否打开
+  final bool isOn;
+
+  /// 开启颜色
+  final Color? onColor;
+
+  /// 关闭颜色
+  final Color? offColor;
+
+  ///改变事件
+  final ValueChanged<bool>? onChanged;
 
   @override
   State<StatefulWidget> createState() {
