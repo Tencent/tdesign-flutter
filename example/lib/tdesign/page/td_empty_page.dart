@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter_example/tdesign/example_base.dart';
 
 
 class TDEmptyPage extends StatefulWidget {
@@ -12,27 +13,28 @@ class TDEmptyPage extends StatefulWidget {
 class _TDEmptyPageState extends State<TDEmptyPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('空状态 Empty'),
-        ),
-        body: Container(
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TDEmpty(
-                type: TDEmptyType.operation,
-                operationText: '操作按钮',
-                emptyText: '描述文字',
-                image: Icon(
-                  TDIcons.info_circle_filled,
-                  size: 84,
-                  color: TDTheme.of(context).fontGyColor3,
+    return ExampleWidget(
+        title: '空状态 Empty',
+        apiPath: 'empty',
+        children: [
+          Container(
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TDEmpty(
+                  type: TDEmptyType.operation,
+                  operationText: '操作按钮',
+                  emptyText: '描述文字',
+                  image: Icon(
+                    TDIcons.info_circle_filled,
+                    size: 84,
+                    color: TDTheme.of(context).fontGyColor3,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ));
+              ],
+            ),
+          )
+        ]);
   }
 }

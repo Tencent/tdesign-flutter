@@ -1,6 +1,6 @@
 /*
  * Created by haozhicao@tencent.com on 6/29/22.
- * td_loading_widget.dart
+ * td_loading.dart
  * 
  */
 
@@ -26,8 +26,8 @@ enum TDLoadingIcon {
   activity,
 }
 
-class TDLoadingWidget extends StatelessWidget {
-  const TDLoadingWidget(
+class TDLoading extends StatelessWidget {
+  const TDLoading(
       {Key? key,
       required this.size,
       this.icon,

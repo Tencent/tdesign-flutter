@@ -5,10 +5,6 @@ import '../../../td_export.dart';
 
 /// TDesign刷新头部
 class TDRefreshHeader extends Header {
-  /// Key
-  final Key? key;
-
-  final TDLoadingIcon loadingIcon;
 
   TDRefreshHeader({
     this.key,
@@ -21,14 +17,20 @@ class TDRefreshHeader extends Header {
     bool overScroll = true,
     this.loadingIcon = TDLoadingIcon.circle,
   }) : super(
-          extent: extent,
-          triggerDistance: triggerDistance,
-          float: float,
-          completeDuration: completeDuration,
-          enableHapticFeedback: enableHapticFeedback,
-          enableInfiniteRefresh: enableInfiniteRefresh,
-          overScroll: overScroll,
-        );
+    extent: extent,
+    triggerDistance: triggerDistance,
+    float: float,
+    completeDuration: completeDuration,
+    enableHapticFeedback: enableHapticFeedback,
+    enableInfiniteRefresh: enableInfiniteRefresh,
+    overScroll: overScroll,
+  );
+
+  /// Key
+  final Key? key;
+
+  /// loading样式
+  final TDLoadingIcon loadingIcon;
 
   @override
   Widget contentBuilder(
@@ -49,7 +51,7 @@ class TDRefreshHeader extends Header {
             axisDirection == AxisDirection.up,
         'Widget cannot be horizontal');
 
-    return TDLoadingWidget(
+    return TDLoading(
       key: key,
       size: TDLoadingSize.medium,
       icon: loadingIcon,

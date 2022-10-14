@@ -40,6 +40,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
 
     return ExampleWidget(
       title: '多选框 Checkbox',
+      apiPath: 'checkbox',
       children: [
         ExampleItem(desc: '基础多选框', builder: (context){
           return Column(
