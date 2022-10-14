@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter_example/tdesign/example_base.dart';
 
 ///
 /// TdSwitchPage演示
@@ -18,6 +19,8 @@ class TDSwitchPageState extends State<TDSwitchPage> {
   @override
   Widget build(BuildContext context) {
     Widget current = ListView(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         _title('基础开关'),
         Container(
@@ -84,11 +87,13 @@ class TDSwitchPageState extends State<TDSwitchPage> {
       color: TDTheme.of(context).grayColor1,
     );
 
-    current = Scaffold(
-      appBar: AppBar(
-        title: const Text('Switch演示'),
-      ),
-      body: current,
+
+    current =  ExampleWidget(
+      title: '开关 Switch',
+      apiPath: 'switch',
+      children: [
+        current
+      ],
     );
     return current;
   }
