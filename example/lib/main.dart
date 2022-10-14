@@ -98,20 +98,12 @@ List<ExamplePageModel> examplePageList = [
       pageBuilder: (context) => const TDSearchBarPage()),
   ExamplePageModel(
       text: '开关 Switch',
-      path: 'TDRadioPage',
-      pageBuilder: (context) => const TDRadioPage()),
+      path: 'TDSwitchPage',
+      pageBuilder: (context) => const TDSwitchPage()),
   ExamplePageModel(
       text: '导航栏 NavBar',
       path: 'TDNavBarPage',
       pageBuilder: (context) => const TDNavBarPage()),
-  ExamplePageModel(
-      text: 'Radio单框',
-      path: 'TdRadioPage',
-      pageBuilder: (context) => const TDRadioPage()),
-
-  ExamplePageModel(text: 'Switch开关',
-      path: 'TdSwitch',
-      pageBuilder: (context)=> const TDSwitchPage()),
 
   ExamplePageModel(text: '标签栏 TabBar',
       path: 'TDBottomNavBarPage',
