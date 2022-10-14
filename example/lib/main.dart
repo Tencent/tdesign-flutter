@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_theme_page.dart';
+import 'package:tdesign_flutter/src/util/platform_util.dart';
 
 import 'tdesign/example_base.dart';
 import 'tdesign/example_route.dart';
@@ -29,6 +29,7 @@ import 'tdesign/page/td_swiper_page.dart';
 import 'tdesign/page/td_tab_bar_page.dart';
 import 'tdesign/page/td_tag_page.dart';
 import 'tdesign/page/td_text_page.dart';
+import 'tdesign/page/td_theme_page.dart';
 import 'tdesign/page/td_toast_page.dart';
 
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TDTextPage()
@@ -164,7 +165,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.light(primary: TDTheme.of(context).brandNormalColor)
         ),
-        home: const MyHomePage(title: 'flutter原子组件库demo'),
+        home: const MyHomePage(title: 'TDesgin Flutter 组件库'),
         onGenerateRoute: TDExampleRoute.onGenerateRoute,
       ),
     );
@@ -203,16 +204,49 @@ class _MyHomePageState extends State<MyHomePage> {
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
         ),
-        body: Center(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: _buildChildren(context),
+        body: _buildBody(context));
+  }
+
+  Widget _buildBody(BuildContext context) {
+    Widget menu = SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: _buildChildren(context),
+      ),
+    );
+    if(PlatformUtil.isWeb){
+      return Container(
+        color: TDTheme.of().grayColor2,
+        child: Row(
+          children: [
+            Container(
+              width: 300,
+              color: TDTheme.of().whiteColor1,
+              child: menu,
             ),
-          ),
-        ));
+            Expanded(child: GridView.builder(
+              padding: const EdgeInsets.all(32),
+              itemCount: examplePageList.length,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 520,
+                  crossAxisSpacing:74,
+                  mainAxisSpacing: 50,
+                  mainAxisExtent: 640
+              ),
+              itemBuilder: (context,index){
+                return examplePageList[index].pageBuilder(context);
+              },
+            )),
+
+          ],
+        ),
+      );
+    }
+    return Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: menu,
+      );
   }
 
   List<Widget> _buildChildren(BuildContext context) {
@@ -227,6 +261,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pushNamed(context, model.path);
               },
               content: model.text),
+        )
+    ];
+  }
+
+  List<Widget> _buildPageChildren(BuildContext context) {
+    return <Widget>[
+      for (var model in examplePageList)
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: model.pageBuilder(context),
         )
     ];
   }
