@@ -122,31 +122,34 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         ExampleItem(
           desc: '竖向选项卡',
           builder: (BuildContext context) {
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 4 * 54,
-              child: Row(
-                children: [
-                  TDTabBar(
-                      width: 104,
-                      tabs: subList(4),
-                      controller: _tabController5,
-                      showIndicator: true,
-                      backgroundColor: Colors.white,
-                      isScrollable: false,
-                      isVertical: true
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width - 104,
-                    color: Colors.white,
-                    child: TDTabBarVerticalView(
-                      children: _getTabViews(),
-                      controller: _tabController5,
+            return LayoutBuilder(builder: (context, constraints){
+
+              return SizedBox(
+                width: constraints.maxWidth,
+                height: 4 * 54,
+                child: Row(
+                  children: [
+                    TDTabBar(
+                        width: 104,
+                        tabs: subList(4),
+                        controller: _tabController5,
+                        showIndicator: true,
+                        backgroundColor: Colors.white,
+                        isScrollable: false,
+                        isVertical: true
                     ),
-                  )
-                ],
-              ),
-            );
+                    Container(
+                      width: constraints.maxWidth - 104,
+                      color: Colors.white,
+                      child: TDTabBarVerticalView(
+                        children: _getTabViews(),
+                        controller: _tabController5,
+                      ),
+                    )
+                  ],
+                ),
+              );
+            });
           },
         ),
       ],
