@@ -23,6 +23,7 @@
 ./bin/demo_tool generate --file ../lib/src/components/search/td_search_bar.dart --name TDSearchBar --folder-name search --output ../example/assets/api/ --only-api
 # 有三方组件
 #./bin/demo_tool generate --file ../lib/src/components/swiper/td_swiper.dart --name TDSwiperPagination --folder-name swiper --output ../example/assets/api/ --only-api
+./bin/demo_tool generate --file ../lib/src/components/switch/td_switch.dart --name TDSwitch --folder-name switch --output ../example/assets/api/ --only-api
 # 多个类生成一个api, 注释未生效
 ./bin/demo_tool generate --file ../lib/src/components/tabbar/td_tab_bar.dart --name TDTabBar --folder-name tabbar --output ../example/assets/api/ --only-api
 ./bin/demo_tool generate --file ../lib/src/components/tag/td_tag.dart --name TDTag --folder-name tag --output ../example/assets/api/ --only-api
