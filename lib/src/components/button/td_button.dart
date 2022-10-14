@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../td_export.dart';
-import 'td_button_style.dart';
 
 enum TDButtonSize { small, medium, large }
 
@@ -69,7 +68,7 @@ class _TDButtonState extends State<TDButton> {
     Widget  display = Container(
       width:  width,
       height:  widget.height ?? _getHeight(),
-      alignment: width != null || style.isFullWidth ? Alignment.center : null,
+      alignment: style.isFullWidth ? Alignment.center : null,
       padding: _getPadding(),
       decoration: BoxDecoration(
         color: style.getBackgroundColor(context:context, disable: widget.disabled),
@@ -99,44 +98,42 @@ class _TDButtonState extends State<TDButton> {
     if(widget.content == null && widget.icon == null){
       return Container();
     }
-    TDText? text;
+    var children = <Widget>[];
+    // 系统Icon会导致不居中，因此自绘icon指定height
+    if (widget.icon != null) {
+      var icon =  RichText(
+        overflow: TextOverflow.visible,
+        text: TextSpan(
+          text: String.fromCharCode(widget.icon!.codePoint),
+          style: TextStyle(
+            inherit: false,
+            color: style.getTextColor(context: context, disable: widget.disabled),
+            height: 1,
+            fontSize: _getIconSize(),
+            fontFamily:widget.icon!.fontFamily,
+            package: widget.icon!.fontPackage,
+          ),
+        ),
+      );
+      children.add(icon);
+    }
     if(widget.content != null){
-      text = TDText(widget.content!,
+      var text = TDText(widget.content!,
         font: _getTextFont(),
         textColor: style.getTextColor(context: context, disable: widget.disabled),
         style: widget.disabled ? widget.disableTextStyle : widget.textStyle,
         forceVerticalCenter: true,
       );
-    }
-    if(widget.icon == null){
-      return text!;
+      children.add(text);
     }
 
-    // 系统Icon会导致不居中，因此自绘icon指定height
-    var icon =  RichText(
-      overflow: TextOverflow.visible,
-      text: TextSpan(
-        text: String.fromCharCode(widget.icon!.codePoint),
-        style: TextStyle(
-          inherit: false,
-          color: style.getTextColor(context: context, disable: widget.disabled),
-          height: 1,
-          fontSize: _getIconSize(),
-          fontFamily:widget.icon!.fontFamily,
-          package: widget.icon!.fontPackage,
-        ),
-      ),
-    );
-    if(widget.content == null){
-      return icon;
+    if(children.length == 2){
+      children.insert(1, const SizedBox(width: 8,),);
     }
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        icon,
-        const SizedBox(width: 8,),
-        text!
-      ],
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: children,
     );
   }
 
@@ -259,7 +256,7 @@ class _TDTextButtonState extends State<TDTextButton> {
   @override
   Widget build(BuildContext context) {
 
-    Widget  display = Container(
+    Widget  display = SizedBox(
       width:  widget.width,
       height:  widget.height ,
       child: TDText(widget.content!,

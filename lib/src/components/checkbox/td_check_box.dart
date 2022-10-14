@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import '../../theme/td_colors.dart';
 import '../../theme/td_fonts.dart';
 import '../../theme/td_theme.dart';
+import '../divider/td_divider.dart';
 import '../icon/td_icons.dart';
+import '../text/td_text.dart';
 import 'td_check_box_group.dart';
 
 ///
 /// 选择框的样式
 ///
-enum TdCheckboxStyle {
+enum TDCheckboxStyle {
   circle, // 圆形
   square, // 方形
 }
@@ -18,11 +20,14 @@ enum TdCheckboxStyle {
 ///
 /// 内容相对icon的位置，上、下、左、右，默认内容在icon的右边
 ///
-enum TdContentDirection {
-  top, // content在icon的上面
+enum TDContentDirection {
   left, // content在icon的左边
   right, // content在icon的右边
-  bottom // content在icon的下边
+}
+
+enum TDCheckBoxSize {
+  large, // 大 高度56
+  small, // 小 高度48
 }
 
 ///
@@ -45,13 +50,16 @@ typedef OnCheckValueChanged = void Function(bool selected);
 /// 容选项，内容包含一个主标题和副标题，并且支持完全自定义内容，支持指定内容的方向等等
 ///
 ///
-class TdCheckbox extends StatefulWidget {
+class TDCheckbox extends StatefulWidget {
   /// id
   /// 当FuiCheckBox嵌入到FuiCheckBoxGroup内时，这个值需要赋值，否则不会被纳入Group管理
   final String? id;
 
   /// 文本
   final String? title;
+
+  /// 辅助文字
+  final String? subTitle;
 
   /// 不可用
   final bool enable;
@@ -63,16 +71,20 @@ class TdCheckbox extends StatefulWidget {
   /// 标题的行数
   final int? titleMaxLine;
 
+  /// 辅助文字的行数
+  final int? subTitleMaxLine;
+
   /// icon和文字的距离
   final double? spacing;
 
   /// 复选框样式：圆形或方形
-  final TdCheckboxStyle? style;
+  final TDCheckboxStyle? style;
 
-  ///
+  /// 复选框大小
+  final TDCheckBoxSize size;
+
   /// 文字相对icon的方位
-  ///
-  final TdContentDirection contentDirection;
+  final TDContentDirection contentDirection;
 
   /// 切换监听
   final OnCheckValueChanged? onCheckBoxChanged;
@@ -83,41 +95,48 @@ class TdCheckbox extends StatefulWidget {
   /// 完全自定义内容
   final ContentBuilder? customContentBuilder;
 
-  const TdCheckbox(
+  /// 背景颜色
+  final Color? backgroundColor;
+
+  const TDCheckbox(
       {this.id,
         Key? key,
       this.title,
+      this.subTitle,
       this.enable = true,
       this.checked = false,
       this.titleMaxLine,
+      this.subTitleMaxLine = 1,
       this.customIconBuilder,
       this.customContentBuilder,
       this.style,
       this.spacing,
-      this.contentDirection = TdContentDirection.right,
+      this.backgroundColor,
+      this.size = TDCheckBoxSize.small,
+      this.contentDirection = TDContentDirection.right,
       this.onCheckBoxChanged}): super(key: key);
 
   @override
-  State createState() => TdCheckboxState();
+  State createState() => TDCheckboxState();
 
   /// 默认的checkBox icon
-  Widget buildDefaultIcon(BuildContext context, TdCheckboxGroupState? groupState, bool isChecked) {
+  Widget buildDefaultIcon(BuildContext context, TDCheckboxGroupState? groupState, bool isChecked) {
     Widget current;
     var size = 24.0;
-    final style = this.style ?? groupState?.widget.style ?? TdCheckboxStyle.circle;
+    final style = this.style ?? groupState?.widget.style ?? TDCheckboxStyle.circle;
     final theme = TDTheme.of(context);
     current = Icon(
-      style == TdCheckboxStyle.circle
-          ? isChecked  ? TDIcons.check_circle_filled : TDIcons.check_circle
-          : isChecked ? TDIcons.check_rectangle_filled :  TDIcons.check_rectangle,
+      style == TDCheckboxStyle.circle
+          ? isChecked ? TDIcons.check_circle_filled : TDIcons.circle
+          : isChecked ? TDIcons.check_rectangle_filled :  TDIcons.rectangle,
       size: size,
-      color: isChecked ? theme.brandColor8 : theme.grayColor4
+      color: isChecked && enable ? theme.brandColor8 : theme.grayColor4
     );
     return current;
   }
 }
 
-class TdCheckboxState extends State<TdCheckbox> {
+class TDCheckboxState extends State<TDCheckbox> {
   bool checked = false;
   bool _pressed = false;
 
@@ -131,19 +150,28 @@ class TdCheckboxState extends State<TdCheckbox> {
   }
 
   @override
-  void didUpdateWidget(TdCheckbox oldWidget) {
+  void didUpdateWidget(TDCheckbox oldWidget) {
     checked = widget.checked;
     super.didUpdateWidget(oldWidget);
   }
 
-  double _spacing(TdCheckboxGroupState? groupState) {
-    return widget.spacing ?? groupState?.widget.spacing ?? 5;
+  double _spacing(TDCheckboxGroupState? groupState) {
+    return widget.spacing ?? groupState?.widget.spacing ?? 8;
+  }
+
+  EdgeInsets _getPadding(TDCheckBoxSize size) {
+    switch(size) {
+      case TDCheckBoxSize.small:
+        return const EdgeInsets.only(top: 12, bottom: 12);
+      case TDCheckBoxSize.large:
+        return const EdgeInsets.only(top: 16, bottom: 16);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     // 检查是否包含在FuiCheckBoxGroup内，如果是的话，状态由Group管理
-    final groupState = TdCheckBoxGroupInherited.of(context)?.state;
+    final groupState = TDCheckboxGroupInherited.of(context)?.state;
     final id = widget.id;
     //  只有设置了id的CheckBox才会纳入Group管理
     if (groupState != null && id != null) {
@@ -177,47 +205,91 @@ class TdCheckboxState extends State<TdCheckbox> {
         final spacing = _spacing(groupState);
         var contentDirection = groupState?.widget.contentDirection ?? widget.contentDirection;
         switch (contentDirection) {
-          case TdContentDirection.top:
-            current = Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
+          case TDContentDirection.left:
+            current = Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                Expanded(child: content),
-                SizedBox(height: spacing,),
-                icon,
+                Padding(
+                  padding: _getPadding(widget.size),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(child: Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: content,
+                          )),
+                          SizedBox(width: spacing,),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16),
+                            child: icon,
+                          ),
+                        ],
+                      ),
+                      Visibility(
+                        visible: widget.subTitle != null && widget.subTitle != '',
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          child: TDText(
+                              widget.subTitle ?? '',
+                              maxLines:
+                              widget.subTitleMaxLine,
+                              overflow: TextOverflow.ellipsis,
+                              textColor: widget.enable ? TDTheme.of(context).fontGyColor3 : TDTheme.of(context).fontGyColor4,
+                              font:TDTheme.of(context).fontS),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const TDDivider(margin: EdgeInsets.only(left: 16),)
               ],
             );
             break;
-          case TdContentDirection.left:
-            current = Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
+          case TDContentDirection.right:
+            current = Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                Expanded(child: content),
-                SizedBox(width: spacing,),
-                icon,
-              ],
-            );
-            break;
-          case TdContentDirection.right:
-            current = Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                icon,
-                SizedBox(width: spacing,),
-                Expanded(child: content),
-              ],
-            );
-            break;
-          case TdContentDirection.bottom:
-            current = Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                icon,
-                SizedBox(height: spacing,),
-                Expanded(child: content),
+                Padding(
+                  padding: _getPadding(widget.size),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: icon,
+                          ),
+                          SizedBox(width: spacing,),
+                          Expanded(child: Padding(
+                            padding: const EdgeInsets.only(right: 16),
+                            child: content,
+                          )),
+                        ],
+                      ),
+                      Visibility(
+                        visible: widget.subTitle != null && widget.subTitle != '',
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 48, right: 16),
+                          child: TDText(
+                              widget.subTitle ?? '',
+                              maxLines:
+                              widget.subTitleMaxLine,
+                              overflow: TextOverflow.ellipsis,
+                              textColor: widget.enable ? TDTheme.of(context).fontGyColor3 : TDTheme.of(context).fontGyColor4,
+                              font:TDTheme.of(context).fontS),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const TDDivider(margin: EdgeInsets.only(left: 48),)
               ],
             );
             break;
@@ -225,12 +297,7 @@ class TdCheckboxState extends State<TdCheckbox> {
       }
     }
 
-    if (widget.enable == false) {
-      current = Opacity(
-        opacity: 0.5,
-        child: current,
-      );
-    } else if (!(canNotCancel && checked)) {
+    if (!(canNotCancel && checked)) {
       if (_pressed) {
         // 点击效果
         current = Opacity(
@@ -258,11 +325,14 @@ class TdCheckboxState extends State<TdCheckbox> {
       );
     }
 
-    return current;
+    return Container(child: current, color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,);
   }
 
   /// 点击效果
   void _pressState(bool pressed) {
+    if(!widget.enable) {
+      return;
+    }
     _pressed = pressed;
     setState(() {});
   }
@@ -271,14 +341,17 @@ class TdCheckboxState extends State<TdCheckbox> {
   void onValueChange(
     String? id,
     bool value,
-    TdCheckboxGroupState? groupState,
+    TDCheckboxGroupState? groupState,
   ) {
+    if(!widget.enable) {
+      return;
+    }
     setState(() {
       checked = value;
-      widget.onCheckBoxChanged?.call(checked);
       if (groupState != null && id != null) {
         groupState.toggle(id, checked);
       }
+      widget.onCheckBoxChanged?.call(checked);
     });
   }
 
@@ -287,7 +360,7 @@ class TdCheckboxState extends State<TdCheckbox> {
   ///
   Widget? _buildContent(
       BuildContext context,
-      TdCheckboxGroupState? groupState,
+      TDCheckboxGroupState? groupState,
       bool checked,
       ) {
 
@@ -298,22 +371,20 @@ class TdCheckboxState extends State<TdCheckbox> {
     var content = customContent?.call(context, checked, title);
     if (content == null) {
       if (title != null || customContent != null && title != null) {
-        content = Text(
+        content = TDText(
             title,
             maxLines:
             widget.titleMaxLine ?? groupState?.widget.titleMaxLine,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: TDTheme.of(context).fontGyColor1,
-              fontSize: TDTheme.of(context).fontS?.size,
-            ));
+            textColor: widget.enable ? TDTheme.of(context).fontGyColor1 : TDTheme.of(context).fontGyColor4,
+            font:TDTheme.of(context).fontM);
       }
     }
     return content;
   }
 
   /// 构建icon
-  Widget? _buildCheckboxIcon(BuildContext context, TdCheckboxGroupState? groupState, bool isCheck) {
+  Widget? _buildCheckboxIcon(BuildContext context, TDCheckboxGroupState? groupState, bool isCheck) {
     final iconBuilder = widget.customIconBuilder ?? groupState?.widget.customIconBuilder;
     if (iconBuilder != null) {
       return iconBuilder.call(context, isCheck);

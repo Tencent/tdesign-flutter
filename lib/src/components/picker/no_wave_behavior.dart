@@ -6,12 +6,12 @@ import '../../util/platform_util.dart';
 /// 去掉ListView上下滑动的波纹
 class NoWaveBehavior extends ScrollBehavior {
   @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
     if (PlatformUtil.isAndroid || PlatformUtil.isFuchsia) {
       return child;
     } else {
-      return super.buildViewportChrome(context, child, axisDirection);
+      return super.buildOverscrollIndicator(context, child, details);
     }
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../td_export.dart';
 
-enum TdRadioStyle {
+enum TDRadioStyle {
   circle, // 圆形
   square, // 方形
   check, // 对号样式
@@ -10,26 +10,32 @@ enum TdRadioStyle {
 ///
 /// 单选框按钮
 ///
-class TdRadio extends TdCheckbox {
-  final TdRadioStyle radioStyle;
+class TDRadio extends TDCheckbox {
+  final TDRadioStyle radioStyle;
 
-  const TdRadio({
+  const TDRadio({
     String? id,
     Key? key,
     String? title,
+    String? subTitle,
     bool enable = true,
+    int subTitleMaxLine = 1,
     int titleMaxLine = 1,
     Color? checkedColor,
     ContentBuilder? customContentBuilder,
     double? spacing,
-    this.radioStyle = TdRadioStyle.circle,
-    TdContentDirection contentDirection = TdContentDirection.right,
+    TDCheckBoxSize size = TDCheckBoxSize.small,
+    this.radioStyle = TDRadioStyle.circle,
+    TDContentDirection contentDirection = TDContentDirection.right,
     IconBuilder? customIconBuilder,
   }) : super(
           id: id,
           key: key,
           title: title,
+          subTitle: subTitle,
+          subTitleMaxLine: subTitleMaxLine,
           enable: enable,
+          size: size,
           titleMaxLine: titleMaxLine,
           customContentBuilder: customContentBuilder,
           contentDirection: contentDirection,
@@ -39,11 +45,11 @@ class TdRadio extends TdCheckbox {
 
   @override
   Widget buildDefaultIcon(
-      BuildContext context, TdCheckboxGroupState? groupState, bool isSelected) {
+      BuildContext context, TDCheckboxGroupState? groupState, bool isSelected) {
 
-    TdRadioStyle? style ;
-    if (groupState is TdRadioGroupState) {
-      style = (groupState.widget as TdRadioGroup).radioStyle;
+    TDRadioStyle? style ;
+    if (groupState is TDRadioGroupState) {
+      style = (groupState.widget as TDRadioGroup).radioStyle;
     }
 
     style = style ?? radioStyle;
@@ -52,25 +58,25 @@ class TdRadio extends TdCheckbox {
     final theme = TDTheme.of(context);
     IconData? iconData;
     switch (style) {
-      case TdRadioStyle.check:
+      case TDRadioStyle.check:
         iconData = isSelected ? TDIcons.check : null;
         break;
-      case TdRadioStyle.square:
+      case TDRadioStyle.square:
         iconData = isSelected
             ? TDIcons.check_rectangle_filled
-            : TDIcons.check_rectangle;
+            : TDIcons.rectangle;
         break;
       default:
         iconData = isSelected
             ? TDIcons.check_circle_filled
-            : TDIcons.check_circle;
+            : TDIcons.circle;
         break;
     }
     if (iconData != null) {
       return Icon(
           iconData,
           size: size,
-          color: isSelected ? theme.brandColor8 : theme.grayColor4);
+          color: !enable ? theme.grayColor4 : isSelected ? theme.brandColor8 : theme.grayColor4);
     } else {
       return SizedBox(width: size, height: size,);
     }
@@ -79,17 +85,17 @@ class TdRadio extends TdCheckbox {
 
   @override
   State<StatefulWidget> createState() {
-    return TdRadioState();
+    return TDRadioState();
   }
 }
 
-class TdRadioState extends TdCheckboxState {
+class TDRadioState extends TDCheckboxState {
   @override
   Widget build(BuildContext context) {
     // 检查是否包含在FuiCheckBoxGroup内，如果是的话，状态由Group管理
-    final groupState = TdCheckBoxGroupInherited.of(context)?.state;
-    if (groupState is TdRadioGroupState) {
-      final strictMode = (groupState.widget as TdRadioGroup).strictMode;
+    final groupState = TDCheckboxGroupInherited.of(context)?.state;
+    if (groupState is TDRadioGroupState) {
+      final strictMode = (groupState.widget as TDRadioGroup).strictMode;
       // 严格模式下不能取消选项，只能切换
       if (strictMode == true) {
         canNotCancel = true;
@@ -106,14 +112,14 @@ class TdRadioState extends TdCheckboxState {
 ///
 ///
 ///
-class TdRadioGroup extends TdCheckboxGroup {
+class TDRadioGroup extends TDCheckboxGroup {
   ///
   /// 严格模式下，用户不能取消勾选，只能切换选择项，
   ///
   final bool strictMode;
-  final TdRadioStyle? radioStyle;
+  final TDRadioStyle? radioStyle;
 
-  TdRadioGroup(
+  TDRadioGroup(
       {required Widget child,
       Key? key,
       String? selectId, // 默认选择项的id
@@ -123,7 +129,7 @@ class TdRadioGroup extends TdCheckboxGroup {
       IconBuilder? customIconBuilder,
       ContentBuilder? customContentBuilder,
       double? spacing, // icon和文字距离
-      TdContentDirection? contentDirection,
+      TDContentDirection? contentDirection,
       OnRadioGroupChange? onRadioGroupChange}) // 切换监听
       : super(
           child: child,
@@ -144,11 +150,11 @@ class TdRadioGroup extends TdCheckboxGroup {
 
   @override
   State<StatefulWidget> createState() {
-    return TdRadioGroupState();
+    return TDRadioGroupState();
   }
 }
 
-class TdRadioGroupState extends TdCheckboxGroupState {
+class TDRadioGroupState extends TDCheckboxGroupState {
   @override
   bool toggle(String id, bool check, [bool notify = false]) {
     checkBoxStates.forEach((key, value) {

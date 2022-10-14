@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 ///
-/// TdPopup掩饰
+/// TDPopup掩饰
 ///
-class TdPopupPage extends StatefulWidget {
-  const TdPopupPage({Key? key}) : super(key: key);
+class TDPopupPage extends StatefulWidget {
+  const TDPopupPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TdPopupPageState();
+    return TDPopupPageState();
   }
 }
 
-class TdPopupPageState extends State<TdPopupPage> {
+class TDPopupPageState extends State<TDPopupPage> {
   @override
   void initState() {
     super.initState();
@@ -26,7 +26,7 @@ class TdPopupPageState extends State<TdPopupPage> {
         TDButton(
           content: '顶部Popup',
           onTap: () {
-            Navigator.of(context).push(TdSlidePopupRoute(
+            Navigator.of(context).push(TDSlidePopupRoute(
                 slideTransitionFrom: SlideTransitionFrom.top,
                 builder: (context) {
                   return Container(
@@ -42,7 +42,7 @@ class TdPopupPageState extends State<TdPopupPage> {
         TDButton(
           content: '底部Popup',
           onTap: () {
-            Navigator.of(context).push(TdSlidePopupRoute(
+            Navigator.of(context).push(TDSlidePopupRoute(
                 slideTransitionFrom: SlideTransitionFrom.bottom,
                 builder: (context) {
                   return Container(
@@ -58,7 +58,7 @@ class TdPopupPageState extends State<TdPopupPage> {
         TDButton(
           content: '左侧Popup',
           onTap: () {
-            Navigator.of(context).push(TdSlidePopupRoute(
+            Navigator.of(context).push(TDSlidePopupRoute(
                 slideTransitionFrom: SlideTransitionFrom.left,
                 builder: (context) {
                   return Container(
@@ -75,7 +75,7 @@ class TdPopupPageState extends State<TdPopupPage> {
         TDButton(
           content: '右侧Popup',
           onTap: () {
-            Navigator.of(context).push(TdSlidePopupRoute(
+            Navigator.of(context).push(TDSlidePopupRoute(
                 slideTransitionFrom: SlideTransitionFrom.right,
                 builder: (context) {
                   return Container(
@@ -95,7 +95,7 @@ class TdPopupPageState extends State<TdPopupPage> {
 
     current = Scaffold(
       appBar: AppBar(
-        title: const Text('CheckBox演示'),
+        title: const Text('弹出层 PopUp'),
       ),
       body: current,
     );

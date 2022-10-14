@@ -38,6 +38,9 @@ class TDTag extends StatelessWidget {
   /// 关闭图标
   final bool needCloseIcon;
 
+  /// 文字溢出处理
+  final TextOverflow? overflow;
+
   /// 关闭图标点击事件
   final GestureTapCallback? onCloseTap;
 
@@ -53,6 +56,7 @@ class TDTag extends StatelessWidget {
         this.forceVerticalCenter = true,
         this.needCloseIcon = false,
         this.onCloseTap,
+        this.overflow,
         Key? key})
       : super(key: key);
 
@@ -62,6 +66,7 @@ class TDTag extends StatelessWidget {
 
     Widget child = TDText(
       text,
+      overflow: overflow,
       forceVerticalCenter: forceVerticalCenter,
       textColor: textColor ?? innerStyle.getTextColor,
       font: font ?? innerStyle.font ?? _getFont(context),
