@@ -27,18 +27,31 @@ class TDButton extends StatefulWidget {
         this.padding})
       : super(key: key);
 
+  /// 自控件
   final Widget? child;
+  /// 文本内容
   final String? content;
+  /// 禁止点击
   final bool disabled;
+  /// 自定义宽度
   final double? width;
+  /// 自定义高度
   final double? height;
+  /// 尺寸
   final TDButtonSize size;
+  /// 样式，强按钮，弱按钮，警告按钮等
   final TDButtonStyle? style;
+  /// 自定义可点击状态文本样式
   final TextStyle? textStyle;
+  /// 自定义不可点击状态文本样式
   final TextStyle? disableTextStyle;
+  /// 点击事件
   final TDButtonEvent? onTap;
+  /// 长按事件
   final TDButtonEvent? onLongPress;
+  /// 图标icon
   final IconData? icon;
+  /// 自定义padding
   final EdgeInsetsGeometry? padding;
 
   @override
