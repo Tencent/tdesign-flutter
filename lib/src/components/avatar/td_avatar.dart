@@ -9,6 +9,8 @@ enum TDAvatarType {
   circle,
   square,
   customText,
+  display,
+  operation
 }
 
 /// 用于头像显示
@@ -31,6 +33,15 @@ class TDAvatar extends StatelessWidget {
   /// 默认图片
   final String defaultUrl;
 
+  /// 带操作\展示的头像列表
+  final List<String>? avatarDisplayList;
+
+  /// 纯展示类型末尾文字
+  final String? displayText;
+
+  /// 操作点击事件
+  final Function()? onTap;
+
   const TDAvatar(
       {Key? key,
       this.size = TDAvatarSize.medium,
@@ -38,6 +49,9 @@ class TDAvatar extends StatelessWidget {
       this.text,
       this.avatarUrl,
       this.avatarSize,
+      this.avatarDisplayList,
+      this.displayText,
+      this.onTap,
       this.defaultUrl = ''})
       : super(key: key);
 
@@ -77,13 +91,13 @@ class TDAvatar extends StatelessWidget {
     double width;
     switch (size) {
       case TDAvatarSize.large:
-        width = 26;
+        width = 32;
         break;
       case TDAvatarSize.medium:
-        width = 19.5;
+        width = 24;
         break;
       case TDAvatarSize.small:
-        width = 13;
+        width = 16;
         break;
     }
     return width;
@@ -136,6 +150,156 @@ class TDAvatar extends StatelessWidget {
             textColor: TDTheme.of(context).whiteColor1,
           ),
         );
+      case TDAvatarType.display:
+        return buildDisplayAvatar(context);
+      case TDAvatarType.operation:
+        return buildOperationAvatar(context);
     }
+  }
+
+  double _getDisplayPadding() {
+    double padding;
+    switch (size) {
+      case TDAvatarSize.large:
+        padding = 10;
+        break;
+      case TDAvatarSize.medium:
+        padding = 8;
+        break;
+      case TDAvatarSize.small:
+        padding = 6;
+        break;
+    }
+    return padding;
+  }
+
+  Widget buildOperationAvatar(BuildContext context) {
+    var list = <Widget>[];
+    if(avatarDisplayList == null || avatarDisplayList!.isEmpty) {
+      return Container();
+    }
+
+    for(var i = 0; i < avatarDisplayList!.length + 1; i ++) {
+      var left = (_getAvatarWidth() - _getDisplayPadding()) * i;
+      if(i == avatarDisplayList!.length) {
+        list.add(
+            Positioned(
+                left: left,
+                child:
+                GestureDetector(
+                  onTap: () {
+                    if(onTap != null) {
+                      onTap!();
+                    }
+                  },
+                  child: Container(
+                      child: Center(
+                        child: Icon(TDIcons.user_add,
+                            size: _getIconWidth(), color: TDTheme.of(context).brandColor8),
+                      ),
+                      width: _getAvatarWidth(),
+                      height: _getAvatarWidth(),
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                          color: TDTheme.of(context).brandColor2,
+                          borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
+                          border: Border.all(color: Colors.white, width: _getDisplayPadding() / 2)
+                      )
+                  ),
+                )
+            )
+        );
+      } else {
+        list.add(
+            Positioned(
+                left: left,
+                child: Container(
+                    width: _getAvatarWidth(),
+                    height: _getAvatarWidth(),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
+                        side: BorderSide(color: Colors.white, width: _getDisplayPadding() / 2)
+                      ),
+                      image: DecorationImage(image: NetworkImage(avatarDisplayList![i]), fit: BoxFit.cover)
+                    )
+                )
+            )
+        );
+      }
+    }
+    return SizedBox(
+      height: _getAvatarWidth(),
+      width: _getAvatarWidth() * ((avatarDisplayList?.length ?? 0) + 1)
+          - (avatarDisplayList?.length ?? 0) * _getDisplayPadding(),
+      child: Stack(
+        children: list
+      ),
+    );
+  }
+
+  Widget buildDisplayAvatar(BuildContext context) {
+    var list = <Widget>[];
+    if(avatarDisplayList == null || avatarDisplayList!.isEmpty) {
+      return Container();
+    }
+
+    for(var i = avatarDisplayList!.length; i >= 0; i --) {
+      var left = (_getAvatarWidth() - _getDisplayPadding()) * i;
+      if(i == avatarDisplayList!.length) {
+        list.add(
+            Positioned(
+                left: left,
+                child:
+                Container(
+                    child: Center(
+                      child: TDText(
+                        displayText,
+                        forceVerticalCenter: true,
+                        textAlign: TextAlign.center,
+                        font: _getTextFont(),
+                        textColor: TDTheme.of(context).brandColor8,
+                      ),
+                    ),
+                    width: _getAvatarWidth(),
+                    height: _getAvatarWidth(),
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(
+                        color: TDTheme.of(context).brandColor2,
+                        borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
+                        border: Border.all(color: Colors.white, width: _getDisplayPadding() / 2)
+                    )
+                )
+            )
+        );
+      } else {
+        list.add(
+            Positioned(
+                left: left,
+                child: Container(
+                    width: _getAvatarWidth(),
+                    height: _getAvatarWidth(),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: ShapeDecoration(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
+                            side: BorderSide(color: Colors.white, width: _getDisplayPadding() / 2)
+                        ),
+                        image: DecorationImage(image: NetworkImage(avatarDisplayList![i]), fit: BoxFit.cover)
+                    )
+                )
+            )
+        );
+      }
+    }
+    return SizedBox(
+      height: _getAvatarWidth(),
+      width: _getAvatarWidth() * ((avatarDisplayList?.length ?? 0) + 1)
+          - (avatarDisplayList?.length ?? 0) * _getDisplayPadding(),
+      child: Stack(
+          children: list
+      ),
+    );
   }
 }

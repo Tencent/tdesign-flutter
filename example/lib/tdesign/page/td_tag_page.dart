@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
-class TdTagPage extends StatelessWidget {
-  const TdTagPage({Key? key}) : super(key: key);
+class TDTagPage extends StatelessWidget {
+  const TDTagPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: '标签',
+    return ExampleWidget(title: '标签 Tag',
         // padding: EdgeInsets.zero,
         children: [
           ExampleItem(
@@ -59,7 +59,7 @@ class TdTagPage extends StatelessWidget {
                       '标签',
                       needCloseIcon: true,
                       onCloseTap: () {
-                        TDToast.showText(context, '点击了关闭图标');
+                        TDToast.showText('点击了关闭图标', context: context);
                       },
                     ),
                   ],
@@ -76,13 +76,13 @@ class TdTagPage extends StatelessWidget {
                       '标签',
                       isSelected: true,
                       onSelectChanged: (isSelect) {
-                        TDToast.showText(context, '标签选中:$isSelect');
+                        TDToast.showText('标签选中:$isSelect', context: context);
                       },
                     ),
                     TDSelectTag(
                       '标签',
                       onSelectChanged: (isSelect) {
-                        TDToast.showText(context, '标签选中:$isSelect');
+                        TDToast.showText('标签选中:$isSelect', context: context);
                       },
                     ),
                     TDSelectTag(
@@ -93,7 +93,7 @@ class TdTagPage extends StatelessWidget {
                         backgroundColor: TDTheme.of(context).grayColor3,
                       ),
                       onSelectChanged: (isSelect) {
-                        TDToast.showText(context, '标签选中:$isSelect');
+                        TDToast.showText('标签选中:$isSelect', context: context);
                       },
                     ),
                     TDSelectTag(
@@ -104,13 +104,13 @@ class TdTagPage extends StatelessWidget {
                         backgroundColor: TDTheme.of(context).grayColor3,
                       ),
                       onSelectChanged: (isSelect) {
-                        TDToast.showText(context, '标签选中:$isSelect');
+                        TDToast.showText('标签选中:$isSelect', context: context);
                       },
                     ),
                     TDSelectTag(
                       '标签',
                       onSelectChanged: (isSelect) {
-                        TDToast.showText(context, '标签选中:$isSelect');
+                        TDToast.showText('标签选中:$isSelect', context: context);
                       },
                       enableSelect: false,
                     ),
@@ -131,11 +131,11 @@ class TdTagPage extends StatelessWidget {
                     TDSelectTag(
                       '标签',
                       onSelectChanged: (isSelect) {
-                        TDToast.showText(context, '标签选中:$isSelect');
+                        TDToast.showText('标签选中:$isSelect', context: context);
                       },
                       needCloseIcon: true,
                       onCloseTap: (){
-                        TDToast.showText(context, '点击关闭标签');
+                        TDToast.showText('点击关闭标签', context: context);
                       },
                     ),
                     TDSelectTag(
@@ -151,7 +151,7 @@ class TdTagPage extends StatelessWidget {
                       ),
                       needCloseIcon: true,
                       onCloseTap: (){
-                        TDToast.showText(context, '点击关闭标签');
+                        TDToast.showText('点击关闭标签', context: context);
                       },
                     ),
                   ],

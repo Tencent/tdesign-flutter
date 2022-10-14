@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import '../example_base.dart';
 
-// ignore: use_key_in_widget_constructors
-class TdBadgePage extends StatefulWidget {
+
+class TDBadgePage extends StatefulWidget {
+  const TDBadgePage({Key? key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => _TdBadgePageState();
+  State<StatefulWidget> createState() => _TDBadgePageState();
 }
 
-class _TdBadgePageState extends State<TdBadgePage> {
+class _TDBadgePageState extends State<TDBadgePage> {
   @override
   Widget build(BuildContext context) {
     return ExampleWidget(
-      title: 'Badge组件',
+      title: '徽标 Badge',
       children: [
         ExampleItem(
             desc: '红点徽标',

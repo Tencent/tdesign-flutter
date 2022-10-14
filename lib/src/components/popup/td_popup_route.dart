@@ -9,8 +9,8 @@ enum SlideTransitionFrom { top, right, left, bottom }
 ///
 /// 从屏幕的某个方向滑动弹出的Dialog框的路由，比如从顶部、底部、左、右滑出页面
 ///
-class TdSlidePopupRoute<T> extends PopupRoute<T> {
-  TdSlidePopupRoute(
+class TDSlidePopupRoute<T> extends PopupRoute<T> {
+  TDSlidePopupRoute(
       {required this.builder,
       this.barrierLabel,
       this.modalBarrierColor,
@@ -53,7 +53,7 @@ class TdSlidePopupRoute<T> extends PopupRoute<T> {
         builder: (context, child) {
           return CustomSingleChildLayout(
             delegate:
-                SlideTransitionLayout(animValue, this.slideTransitionFrom),
+                SlideTransitionLayout(animValue, slideTransitionFrom),
             child: child,
           );
         });

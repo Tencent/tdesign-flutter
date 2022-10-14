@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/tdesign/page/td_popup_page.dart';
 
 import 'tdesign/example_base.dart';
 import 'tdesign/example_route.dart';
 import 'tdesign/page/td_avatar_page.dart';
 import 'tdesign/page/td_badge_page.dart';
+import 'tdesign/page/td_bottom_navigation_bar_page.dart';
 import 'tdesign/page/td_button_page.dart';
 import 'tdesign/page/td_checkbox_page.dart';
+import 'tdesign/page/td_date_picker_page.dart';
 import 'tdesign/page/td_dialog_page.dart';
 import 'tdesign/page/td_divider_page.dart';
 import 'tdesign/page/td_empty_page.dart';
@@ -18,90 +19,127 @@ import 'tdesign/page/td_input_view_pager.dart';
 import 'tdesign/page/td_loading_page.dart';
 import 'tdesign/page/td_navbar_page.dart';
 import 'tdesign/page/td_picker_page.dart';
+import 'tdesign/page/td_popup_page.dart';
+import 'tdesign/page/td_pull_down_refresh_page.dart';
 import 'tdesign/page/td_radio_page.dart';
+import 'tdesign/page/td_search_bar_page.dart';
 import 'tdesign/page/td_swich_page.dart';
+import 'tdesign/page/td_swiper_page.dart';
 import 'tdesign/page/td_tab_bar_page.dart';
 import 'tdesign/page/td_tag_page.dart';
 import 'tdesign/page/td_text_page.dart';
-import 'tdesign/page/td_theme_page.dart';
 import 'tdesign/page/td_toast_page.dart';
 
-/// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TdTextPage()
+/// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TDTextPage()
 List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
-      text: '文本控件', path: 'TdTextPage', pageBuilder: (context) => const TdTextPage()),
+      text: '文本控件--基础',
+      path: 'TDTextPage',
+      pageBuilder: (context) => const TDTextPage()),
   ExamplePageModel(
-      text: '分割线',
-      path: 'TdDividerPage',
-      pageBuilder: (context) => const TdDividerPage()),
+      text: '图标--基础',
+      path: 'TDIconPage',
+      pageBuilder: (context) => const TDIconPage()),
   ExamplePageModel(
-      text: '圆形图片组件（头像）',
-      path: 'TdAvatarPage',
-      pageBuilder: (context) => TdAvatarPage()),
+      text: '按钮 Button',
+      path: 'TDButtonPage',
+      pageBuilder: (context) => const TDButtonPage()),
   ExamplePageModel(
-      text: '红点', path: 'TdBadgePage', pageBuilder: (context) => TdBadgePage()),
+      text: '分割线 Divider',
+      path: 'TDDividerPage',
+      pageBuilder: (context) => const TDDividerPage()),
   ExamplePageModel(
-      text: '标签栏',
-      path: 'TdTabBarPage',
-      pageBuilder: (context) => TdTabBarPage()),
+      text: '头像 Avatar',
+      path: 'TDAvatarPage',
+      pageBuilder: (context) => const TDAvatarPage()),
   ExamplePageModel(
-      text: '轻提示',
-      path: 'TdToastPage',
-      pageBuilder: (context) => TdToastPage()),
+      text: '徽标 Badge',
+      path: 'TDBadgePage',
+      pageBuilder: (context) => const TDBadgePage()),
   ExamplePageModel(
-      text: '按钮',
-      path: 'TdButtonPage',
-      pageBuilder: (context) => TdButtonPage()),
+      text: '空状态 Empty',
+      path: 'TDEmptyPage',
+      pageBuilder: (context) => const TDEmptyPage()),
   ExamplePageModel(
-      text: '输入框',
-      path: 'TdInputViewPag',
-      pageBuilder: (context) => const TdInputViewPage()),
+      text: '图片 Image',
+      path: 'TDImagePage',
+      pageBuilder: (context) => const TDImagePage()),
   ExamplePageModel(
-      text: '标签', path: 'TdTagPage', pageBuilder: (context) => const TdTagPage()),
+      text: '轮播图 Swiper',
+      path: 'TDSwiperPage',
+      pageBuilder: (context) => const TDSwiperPage()),
   ExamplePageModel(
-      text: 'Picker',
-      path: 'TdPickerPage',
-      pageBuilder: (context) => TdPickerPage()),
+      text: '标签 Tag',
+      path: 'TDTagPage',
+      pageBuilder: (context) => const TDTagPage()),
   ExamplePageModel(
-      text: '图标', path: 'TdIconPage', pageBuilder: (context) => TdIconPage()),
+      text: '多选框 Checkbox',
+      path: 'TDCheckboxPage',
+      pageBuilder: (context) => const TDCheckboxPage()),
   ExamplePageModel(
-      text: '空白页面',
-      path: 'TdEmptyPage',
-      pageBuilder: (context) => TdEmptyPage()),
+      text: '时间选择器 DatePicker',
+      path: 'TDDatePickerPage',
+      pageBuilder: (context) => const TDDatePickerPage()),
   ExamplePageModel(
-      text: '主题页面',
-      path: 'TdThemePage',
-      pageBuilder: (context) => TdThemePage()),
+      text: '输入框 Input',
+      path: 'TDInputViewPag',
+      pageBuilder: (context) => const TDInputViewPage()),
   ExamplePageModel(
-      text: '图片组件',
-      path: 'TdImagePage',
-      pageBuilder: (context) => const TdImagePage()),
+      text: '选择器 Picker',
+      path: 'TDPickerPage',
+      pageBuilder: (context) => const TDPickerPage()),
   ExamplePageModel(
-      text: 'Checkbox复选框',
-      path: 'TdCheckboxPage',
-      pageBuilder: (context) => const TdCheckboxPage()),
+      text: '单选框 Radio',
+      path: 'TDRadioPage',
+      pageBuilder: (context) => const TDRadioPage()),
+  ExamplePageModel(
+      text: '搜索框 Search',
+      path: 'TDSearchBarPage',
+      pageBuilder: (context) => const TDSearchBarPage()),
+  ExamplePageModel(
+      text: '开关 Switch',
+      path: 'TDRadioPage',
+      pageBuilder: (context) => const TDRadioPage()),
+  ExamplePageModel(
+      text: '导航栏 NavBar',
+      path: 'TDNavBarPage',
+      pageBuilder: (context) => const TDNavBarPage()),
   ExamplePageModel(
       text: 'Radio单框',
       path: 'TdRadioPage',
-      pageBuilder: (context) => const TdRadioPage()),
+      pageBuilder: (context) => const TDRadioPage()),
 
   ExamplePageModel(text: 'Switch开关',
       path: 'TdSwitch',
       pageBuilder: (context)=> const TDSwitchPage()),
 
+  ExamplePageModel(text: '标签栏 TabBar',
+      path: 'TDBottomNavBarPage',
+      pageBuilder: (context) => const TDBottomNavBarPage()),
   ExamplePageModel(
-      text: 'Dialog弹窗',
-      path: 'TdDialogPage',
-      pageBuilder: (context) => TdDialogPage()),
+      text: '选项卡 Tabs',
+      path: 'TDTabBarPage',
+      pageBuilder: (context) => const TDTabBarPage()),
   ExamplePageModel(
-      text: 'Loading加载中',
-      path: 'TdLoadingPage',
-      pageBuilder: (context) => const TdLoadingPage()),
-  ExamplePageModel(text: '导航栏组件', path: 'TdNavBarPage', pageBuilder: (context)=> const TdNavBarPage()),
-  ExamplePageModel(text: 'Popup弹窗',
-      path: 'TdPopupPage',
-      pageBuilder: (context)=> const TdPopupPage()),
-
+      text: '对话框 Dialog',
+      path: 'TDDialogPage',
+      pageBuilder: (context) => const TDDialogPage()),
+  ExamplePageModel(
+      text: '加载 Loading',
+      path: 'TDLoadingPage',
+      pageBuilder: (context) => const TDLoadingPage()),
+  ExamplePageModel(
+      text: '弹出层 PopUp',
+      path: 'TDPopUpPage',
+      pageBuilder: (context) => const TDPopupPage()),
+  ExamplePageModel(
+      text: '下拉刷新 PullDownRefresh',
+      path: 'TdPullDownRefreshPage',
+      pageBuilder: (context) => const TdPullDownRefreshPage()),
+  ExamplePageModel(
+      text: '轻提示 Toast',
+      path: 'TDToastPage',
+      pageBuilder: (context) => const TDToastPage()),
 ];
 
 void main() {
@@ -115,8 +153,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
-  const MyApp({Key? key}):super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -128,20 +165,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with 'flutter run'. You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // 'hot reload' (press 'r' in the console where you ran 'flutter run',
-          // or simply save your changes to 'hot reload' in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
-          accentColor: Colors.red,
+          colorScheme: ColorScheme.light(primary: TDTheme.of(context).brandNormalColor)
         ),
         home: const MyHomePage(title: 'flutter原子组件库demo'),
-        onGenerateRoute: TdExampleRoute.onGenerateRoute,
+        onGenerateRoute: TDExampleRoute.onGenerateRoute,
       ),
     );
   }
@@ -149,15 +176,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked 'final'.
 
   final String title;
 
@@ -171,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    TdExampleRoute.init();
+    TDExampleRoute.init();
   }
 
   @override
@@ -203,13 +221,16 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> _buildChildren(BuildContext context) {
     return <Widget>[
       for (var model in examplePageList)
-        OutlinedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, model.path);
-            },
-            child: Text(
-              model.text,
-            ))
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TDButton(
+              style: TDButtonStyle.weakly(),
+              size: TDButtonSize.small,
+              onTap: () {
+                Navigator.pushNamed(context, model.path);
+              },
+              content: model.text),
+        )
     ];
   }
 }
