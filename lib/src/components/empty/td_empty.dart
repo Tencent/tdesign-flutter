@@ -7,20 +7,21 @@ typedef TDTapEvent = void Function();
 enum TDEmptyType { plain, operation }
 
 class TDEmpty extends StatelessWidget {
-  final TDTapEvent? onTapEvent; //点击事件
+  const TDEmpty(
+      {this.type = TDEmptyType.plain,
+        this.image,
+        this.emptyText,
+        this.operationText,
+        this.onTapEvent,
+        Key? key})
+      : super(key: key);
+
+  /// 点击事件
+  final TDTapEvent? onTapEvent;
   final Widget? image;
   final String? emptyText;
   final String? operationText;
   final TDEmptyType type;
-
-  const TDEmpty(
-      {this.type = TDEmptyType.plain,
-      this.image,
-      this.emptyText,
-      this.operationText,
-      this.onTapEvent,
-      Key? key})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -35,40 +35,40 @@ enum TDBottomNavBarType {
 }
 
 class TDBottomNavBarTabConfig {
-  // 自定义未选中状态widget
+  /// 自定义未选中状态widget
   final Widget? unSelectWidget;
 
-  // 自定义选中状态widget
+  /// 自定义选中状态widget
   final Widget? selectWidget;
 
-  // 图标
+  /// 图标
   final Widget? selectedIcon;
 
-  // 未选中图标
+  /// 未选中图标
   final Widget? unselectedIcon;
 
-  // 选中文本
+  /// 选中文本
   final Text? selectedText;
 
-  // 未选中文本
+  /// 未选中文本
   final Text? unselectedText;
 
-  // 点击事件
+  /// 点击事件
   final GestureTapCallback? onTap;
 
-  // 是否展示消息样式
+  /// 是否展示消息样式
   final bool? showBadge;
 
-  // 自定义消息样式
+  /// 自定义消息样式
   final Widget? customBadgeWidget;
 
-  // 使用TDBadge消息样式
+  /// 使用TDBadge消息样式
   final TDBadge? tdBadge;
 
-  // 消息顶部偏移量
+  /// 消息顶部偏移量
   final double? badgeTopOffset;
 
-  // 消息右侧偏移量
+  /// 消息右侧偏移量
   final double? badgeRightOffset;
 
   final TDBottomNavBarPopUpBtnConfig? popUpButtonConfig;
@@ -99,89 +99,90 @@ class TDBottomNavBarTabConfig {
 }
 
 class TDBottomNavBar extends StatefulWidget {
-  final TDBottomNavBarType type;
-
-  // tab
-  final List<TDBottomNavBarTabConfig> navigationTabs;
-
-  // tab高度
-  final double? barHeight;
-
-  // 是否使用竖线分隔
-  final bool? useVerticalDivider;
-
-  // 分割线高度（可选）
-  final double? dividerHeight;
-
-  // 分割线厚度（可选）
-  final double? dividerThickness;
-
-  // 分割线颜色（可选）
-  final Color? dividerColor;
-
-  // 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值）
-  final bool? showTopBorder;
-
-  // 上边线样式
-  final BorderSide? topBorder;
 
   TDBottomNavBar(
-    this.type, {
-    Key? key,
-    required this.navigationTabs,
-    this.barHeight = _kDefaultNavBarHeight,
-    this.useVerticalDivider,
-    this.dividerHeight,
-    this.dividerThickness,
-    this.dividerColor,
-    this.showTopBorder = true,
-    this.topBorder,
-  })  : assert(() {
-          if (navigationTabs.isEmpty) {
-            throw FlutterError(
-                '[TDBottomNavigationBar] please set at least one tab!');
-          }
-          if (type == TDBottomNavBarType.customLayout) {
-            for (final item in navigationTabs) {
-              if (item.selectWidget == null || item.unSelectWidget == null) {
-                throw FlutterError(
-                    '[TDBottomNavigationBar] customLayout request selectWidget and unSelectWidget,'
-                    'but get null.');
-              }
-            }
-          }
-          if (type == TDBottomNavBarType.text) {
-            for (final item in navigationTabs) {
-              if (item.selectedText == null || item.unselectedText == null) {
-                throw FlutterError(
-                    '[TDBottomNavigationBar] type is TDBottomBarType.text, but not set text.');
-              }
-            }
-          }
-          if (type == TDBottomNavBarType.icon) {
-            for (final item in navigationTabs) {
-              if (item.selectedIcon == null || item.unselectedIcon == null) {
-                throw FlutterError(
-                    '[TDBottomNavigationBar] type is TDBottomBarType.icon,'
-                    'but not set icon.');
-              }
-            }
-          }
-          if (type == TDBottomNavBarType.iconText) {
-            for (final item in navigationTabs) {
-              if (item.selectedIcon == null ||
-                  item.unselectedIcon == null ||
-                  item.selectedText == null ||
-                  item.unselectedText == null) {
-                throw FlutterError(
-                    '[TDBottomNavigationBar] type is TDBottomBarType.iconText,'
-                    'but not set icon or text.');
-              }
-            }
-          }
-          return true;
-        }()),
+      this.type, {
+        Key? key,
+        required this.navigationTabs,
+        this.barHeight = _kDefaultNavBarHeight,
+        this.useVerticalDivider,
+        this.dividerHeight,
+        this.dividerThickness,
+        this.dividerColor,
+        this.showTopBorder = true,
+        this.topBorder,
+      })  : assert(() {
+    if (navigationTabs.isEmpty) {
+      throw FlutterError(
+          '[TDBottomNavigationBar] please set at least one tab!');
+    }
+    if (type == TDBottomNavBarType.customLayout) {
+      for (final item in navigationTabs) {
+        if (item.selectWidget == null || item.unSelectWidget == null) {
+          throw FlutterError(
+              '[TDBottomNavigationBar] customLayout request selectWidget and unSelectWidget,'
+                  'but get null.');
+        }
+      }
+    }
+    if (type == TDBottomNavBarType.text) {
+      for (final item in navigationTabs) {
+        if (item.selectedText == null || item.unselectedText == null) {
+          throw FlutterError(
+              '[TDBottomNavigationBar] type is TDBottomBarType.text, but not set text.');
+        }
+      }
+    }
+    if (type == TDBottomNavBarType.icon) {
+      for (final item in navigationTabs) {
+        if (item.selectedIcon == null || item.unselectedIcon == null) {
+          throw FlutterError(
+              '[TDBottomNavigationBar] type is TDBottomBarType.icon,'
+                  'but not set icon.');
+        }
+      }
+    }
+    if (type == TDBottomNavBarType.iconText) {
+      for (final item in navigationTabs) {
+        if (item.selectedIcon == null ||
+            item.unselectedIcon == null ||
+            item.selectedText == null ||
+            item.unselectedText == null) {
+          throw FlutterError(
+              '[TDBottomNavigationBar] type is TDBottomBarType.iconText,'
+                  'but not set icon or text.');
+        }
+      }
+    }
+    return true;
+  }()),
         super(key: key);
+
+  final TDBottomNavBarType type;
+
+  /// tab
+  final List<TDBottomNavBarTabConfig> navigationTabs;
+
+  /// tab高度
+  final double? barHeight;
+
+  /// 是否使用竖线分隔
+  final bool? useVerticalDivider;
+
+  /// 分割线高度（可选）
+  final double? dividerHeight;
+
+  /// 分割线厚度（可选）
+  final double? dividerThickness;
+
+  /// 分割线颜色（可选）
+  final Color? dividerColor;
+
+  /// 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值）
+  final bool? showTopBorder;
+
+  /// 上边线样式
+  final BorderSide? topBorder;
 
   @override
   State<TDBottomNavBar> createState() => _TDBottomNavBarState();
