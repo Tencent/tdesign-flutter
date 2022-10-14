@@ -17,11 +17,14 @@ class TDRadio extends TDCheckbox {
     String? id,
     Key? key,
     String? title,
+    String? subTitle,
     bool enable = true,
+    int subTitleMaxLine = 1,
     int titleMaxLine = 1,
     Color? checkedColor,
     ContentBuilder? customContentBuilder,
     double? spacing,
+    TDCheckBoxSize size = TDCheckBoxSize.small,
     this.radioStyle = TDRadioStyle.circle,
     TDContentDirection contentDirection = TDContentDirection.right,
     IconBuilder? customIconBuilder,
@@ -29,7 +32,10 @@ class TDRadio extends TDCheckbox {
           id: id,
           key: key,
           title: title,
+          subTitle: subTitle,
+          subTitleMaxLine: subTitleMaxLine,
           enable: enable,
+          size: size,
           titleMaxLine: titleMaxLine,
           customContentBuilder: customContentBuilder,
           contentDirection: contentDirection,
@@ -58,19 +64,19 @@ class TDRadio extends TDCheckbox {
       case TDRadioStyle.square:
         iconData = isSelected
             ? TDIcons.check_rectangle_filled
-            : TDIcons.check_rectangle;
+            : TDIcons.rectangle;
         break;
       default:
         iconData = isSelected
             ? TDIcons.check_circle_filled
-            : TDIcons.check_circle;
+            : TDIcons.circle;
         break;
     }
     if (iconData != null) {
       return Icon(
           iconData,
           size: size,
-          color: isSelected ? theme.brandColor8 : theme.grayColor4);
+          color: !enable ? theme.grayColor4 : isSelected ? theme.brandColor8 : theme.grayColor4);
     } else {
       return SizedBox(width: size, height: size,);
     }
