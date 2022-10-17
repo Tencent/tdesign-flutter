@@ -148,13 +148,14 @@ class _TDDialogPageState extends State<TDDialogPage> {
         ]);
   }
 
-  void _showDialog(Widget dialog) {
+  void _showDialog(Widget dialog,{bool useRootNavigator = false}) {
     showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
           Animation<double> secondaryAnimation) {
         return dialog;
       },
+      useRootNavigator: useRootNavigator,
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black54,

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/src/util/platform_util.dart';
 import 'package:tdesign_flutter/td_export.dart';
+
+import '../web.dart';
 import 'api_widget.dart';
 
 
@@ -37,6 +40,8 @@ class _ExampleWidgetState extends State<ExampleWidget> {
   void initState() {
     super.initState();
 
+    WebApiController.setApiPath(apiPath: widget.apiPath);
+
     list = <Widget>[
       for(var item in widget.children)
         Container(
@@ -48,11 +53,11 @@ class _ExampleWidgetState extends State<ExampleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController _controller = ScrollController();
+    var _controller = ScrollController();
     return Scaffold(
       backgroundColor: widget.backgroundColor,
       appBar: AppBar(title: Text('${widget.title}示例页'),
-        actions: [
+        actions: PlatformUtil.isWeb ? null : [
           GestureDetector(
             child:  Container(
               alignment: Alignment.centerRight,
@@ -76,7 +81,7 @@ class _ExampleWidgetState extends State<ExampleWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ApiWidget(apiName: widget.apiPath ?? 'default',visible: apiVisible,), ...list,
+                ApiWidget(apiName: widget.apiPath,visible: apiVisible,), ...list,
               ],
             ),
           ),),
