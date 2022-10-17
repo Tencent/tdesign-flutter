@@ -20,7 +20,17 @@ class _TDIconPageState extends State<TDIconPage> {
         alignment: Alignment.center,
         child: Wrap(
           children: [
-            for (var iconData in TDIcons.all.values) Icon(iconData)
+            for (var iconData in TDIcons.all.values) Container(
+              height: 100,
+              width: 175,
+
+              child: Column(
+                children: [
+                  Icon(iconData),
+                  TDText(iconData.name)
+                ],
+              ),
+            )
           ],
         ),
       )
