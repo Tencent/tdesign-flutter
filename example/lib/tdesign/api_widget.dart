@@ -10,7 +10,7 @@ class ApiWidget extends StatefulWidget {
 
   final bool visible;
 
-  final String apiName;
+  final String? apiName;
 
   @override
   State<ApiWidget> createState() => _ApiWidgetState();
@@ -19,6 +19,7 @@ class ApiWidget extends StatefulWidget {
 class _ApiWidgetState extends State<ApiWidget> {
 
   String? result;
+  String? lastApiName;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class _ApiWidgetState extends State<ApiWidget> {
           );
         } else {
           return  Container(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.topLeft,
             child: const TDText('加载中…'),
           );
         }
@@ -51,11 +52,13 @@ class _ApiWidgetState extends State<ApiWidget> {
 
   Future<String> getApiData() async {
     const defaultResult = '加载失败';
-    if(result != null && result != defaultResult){
+    if(widget.apiName == lastApiName && result != null && result != defaultResult){
       return result!;
     }
     try {
-      result =  await rootBundle.loadString('assets/api/${widget.apiName}_api.md');
+      var apiName = widget.apiName ?? 'default';
+      result =  await rootBundle.loadString('assets/api/${apiName}_api.md');
+      lastApiName = widget.apiName;
     } catch (e) {
       print('getApiData error: $e');
     }

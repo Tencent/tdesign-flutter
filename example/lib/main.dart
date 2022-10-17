@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tdesign_flutter/td_export.dart';
 import 'package:tdesign_flutter/src/util/platform_util.dart';
+import 'package:tdesign_flutter/td_export.dart';
 
 import 'tdesign/example_base.dart';
 import 'tdesign/example_route.dart';
@@ -31,6 +31,7 @@ import 'tdesign/page/td_tag_page.dart';
 import 'tdesign/page/td_text_page.dart';
 import 'tdesign/page/td_theme_page.dart';
 import 'tdesign/page/td_toast_page.dart';
+import 'web.dart';
 
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TDTextPage()
 List<ExamplePageModel> examplePageList = [
@@ -110,8 +111,8 @@ List<ExamplePageModel> examplePageList = [
       text: '导航栏 NavBar',
       path: 'TDNavBarPage',
       pageBuilder: (context) => const TDNavBarPage()),
-
-  ExamplePageModel(text: '标签栏 TabBar',
+  ExamplePageModel(
+      text: '标签栏 TabBar',
       path: 'TDBottomNavBarPage',
       pageBuilder: (context) => const TDBottomNavBarPage()),
   ExamplePageModel(
@@ -163,8 +164,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          colorScheme: ColorScheme.light(primary: TDTheme.of(context).brandNormalColor)
-        ),
+            colorScheme: ColorScheme.light(
+                primary: TDTheme.of(context).brandNormalColor)),
         home: const MyHomePage(title: 'TDesgin Flutter 组件库'),
         onGenerateRoute: TDExampleRoute.onGenerateRoute,
       ),
@@ -203,14 +204,17 @@ class _MyHomePageState extends State<MyHomePage> {
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
-          actions: [
+          actions: PlatformUtil.isWeb ? null : [
             GestureDetector(
               child: Container(
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 16,),
-                  child: TDText('关于', textColor: TDTheme
-                      .of(context)
-                      .whiteColor1,),
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(
+                  right: 16,
+                ),
+                child: TDText(
+                  '关于',
+                  textColor: TDTheme.of(context).whiteColor1,
+                ),
               ),
               onTap: () {
                 Navigator.pushNamed(context, TDExampleRoute.aboutPath);
@@ -222,45 +226,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    Widget menu = SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: _buildChildren(context),
-      ),
-    );
-    if(PlatformUtil.isWeb){
-      return Container(
-        color: TDTheme.of().grayColor2,
-        child: Row(
-          children: [
-            Container(
-              width: 300,
-              color: TDTheme.of().whiteColor1,
-              child: menu,
-            ),
-            Expanded(child: GridView.builder(
-              padding: const EdgeInsets.all(32),
-              itemCount: examplePageList.length,
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 520,
-                  crossAxisSpacing:74,
-                  mainAxisSpacing: 50,
-                  mainAxisExtent: 640
-              ),
-              itemBuilder: (context,index){
-                return examplePageList[index].pageBuilder(context);
-              },
-            )),
-
-          ],
-        ),
-      );
+    if (PlatformUtil.isWeb) {
+      return const WebMainBody();
     }
     return Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: menu,
-      );
+      // Center is a layout widget. It takes a single child and positions it
+      // in the middle of the parent.
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _buildChildren(context),
+        ),
+      ),
+    );
   }
 
   List<Widget> _buildChildren(BuildContext context) {
@@ -272,19 +250,10 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TDButtonStyle.weakly(),
               size: TDButtonSize.small,
               onTap: () {
-                Navigator.pushNamed(context, model.path);
+                var navigator = WebHome.navigator ?? Navigator.of(context);
+                navigator.pushNamed(model.path);
               },
               content: model.text),
-        )
-    ];
-  }
-
-  List<Widget> _buildPageChildren(BuildContext context) {
-    return <Widget>[
-      for (var model in examplePageList)
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: model.pageBuilder(context),
         )
     ];
   }
