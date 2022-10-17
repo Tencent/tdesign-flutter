@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import '../../../td_export.dart';
@@ -7,12 +6,6 @@ typedef TDSearchBarEvent = void Function(String value);
 typedef TDSearchBarCallBack = void Function();
 
 class TDSearchBar extends StatefulWidget {
-  final String? placeHolder;
-  final Color? backgroundColor;
-  final bool autoFocus;
-  final TDSearchBarEvent? onTextChanged;
-  final TDSearchBarEvent? onSubmitted;
-  final TDSearchBarCallBack? onEditComplete;
 
   const TDSearchBar({
     Key? key,
@@ -23,6 +16,13 @@ class TDSearchBar extends StatefulWidget {
     this.autoFocus = false,
     this.backgroundColor = Colors.white,
   }) : super(key: key);
+
+  final String? placeHolder;
+  final Color? backgroundColor;
+  final bool autoFocus;
+  final TDSearchBarEvent? onTextChanged;
+  final TDSearchBarEvent? onSubmitted;
+  final TDSearchBarCallBack? onEditComplete;
 
   @override
   State<StatefulWidget> createState() => _TDSearchBarState();

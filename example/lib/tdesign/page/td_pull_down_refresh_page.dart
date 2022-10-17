@@ -11,8 +11,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import '../example_base.dart';
 
 class TdPullDownRefreshPage extends StatefulWidget {
-
-  const TdPullDownRefreshPage({Key? key}):super(key: key);
+  const TdPullDownRefreshPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TdPullDownRefreshPageState();
@@ -25,22 +24,33 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('下拉刷新'),),
-      body: EasyRefresh(
-        // 下拉样式
-        header: TDRefreshHeader(),
-        child: ListView.builder(itemBuilder: (context,index)=>Text('${dataList[index]}'),itemCount: dataList.length,),
-        // 下拉刷新回调
-        onRefresh: () async {
-          await Future.delayed(const Duration(seconds: 2), () {
-            dataList.addAll(List.generate(10, (index) => ' 下拉添加的第$index个item'));
-            setState(() {});
-          });
-        },
-      ),
-    );
+    return ExampleWidget(
+        title: '下拉刷新 PullDownRefresh',
+        apiPath: 'refresh',
+        children: [
+          SizedBox(
+            height: 1000,
+            child: Stack(
+              children: [
+                EasyRefresh(
+                  // 下拉样式
+                  header: TDRefreshHeader(),
+                  child: ListView.builder(
+                    itemBuilder: (context, index) => Text('${dataList[index]}'),
+                    itemCount: dataList.length,
+                  ),
+                  // 下拉刷新回调
+                  onRefresh: () async {
+                    await Future.delayed(const Duration(seconds: 2), () {
+                      dataList.addAll(
+                          List.generate(10, (index) => ' 下拉添加的第$index个item'));
+                      setState(() {});
+                    });
+                  },
+                )
+              ],
+            ),
+          )
+        ]);
   }
-
 }
-

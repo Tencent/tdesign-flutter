@@ -34,6 +34,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
     var url = 'http://www.zmaomao.com/uploads/201204/11-20120416014B36.jpg';
     return ExampleWidget(
       title: '图片 Image',
+      apiPath: 'image',
       children: [
         ExampleItem(
             desc: '状态-加载默认',

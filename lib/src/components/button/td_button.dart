@@ -9,36 +9,50 @@ typedef TDButtonEvent = void Function();
 
 /// TD常规按钮
 class TDButton extends StatefulWidget {
-  final Widget? child;
-  final String? content;
-  final bool disabled;
-  final double? width;
-  final double? height;
-  final TDButtonSize size;
-  final TDButtonStyle? style;
-  final TextStyle? textStyle;
-  final TextStyle? disableTextStyle;
-  final TDButtonEvent? onTap;
-  final TDButtonEvent? onLongPress;
-  final IconData? icon;
-  final EdgeInsetsGeometry? padding;
 
   const TDButton(
       {Key? key,
-      required this.content,
-      this.size = TDButtonSize.medium,
-      this.child,
-      this.disabled = false,
-      this.style,
-      this.textStyle,
-      this.disableTextStyle,
-      this.width,
-      this.height,
-      this.onTap,
-      this.icon,
-      this.onLongPress,
-      this.padding})
+        required this.content,
+        this.size = TDButtonSize.medium,
+        this.child,
+        this.disabled = false,
+        this.style,
+        this.textStyle,
+        this.disableTextStyle,
+        this.width,
+        this.height,
+        this.onTap,
+        this.icon,
+        this.onLongPress,
+        this.padding})
       : super(key: key);
+
+  /// 自控件
+  final Widget? child;
+  /// 文本内容
+  final String? content;
+  /// 禁止点击
+  final bool disabled;
+  /// 自定义宽度
+  final double? width;
+  /// 自定义高度
+  final double? height;
+  /// 尺寸
+  final TDButtonSize size;
+  /// 样式，强按钮，弱按钮，警告按钮等
+  final TDButtonStyle? style;
+  /// 自定义可点击状态文本样式
+  final TextStyle? textStyle;
+  /// 自定义不可点击状态文本样式
+  final TextStyle? disableTextStyle;
+  /// 点击事件
+  final TDButtonEvent? onTap;
+  /// 长按事件
+  final TDButtonEvent? onLongPress;
+  /// 图标icon
+  final IconData? icon;
+  /// 自定义padding
+  final EdgeInsetsGeometry? padding;
 
   @override
   State<StatefulWidget> createState() => _TDButtonState();

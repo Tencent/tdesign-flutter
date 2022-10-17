@@ -19,22 +19,25 @@ class TDLoadingPage extends StatefulWidget {
 class _TDLoadingPageState extends State<TDLoadingPage> {
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: '加载 Loading', children: [
+    return ExampleWidget(
+        title: '加载 Loading',
+        apiPath: 'loading',
+        children: [
 
       TDText('类型', font: TDTheme.of(context).fontXL,),
       ExampleItem(desc: '纯图标', builder: (_){
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const TDLoadingWidget(
+            const TDLoading(
               size: TDLoadingSize.medium,
               icon: TDLoadingIcon.circle,
             ),
-            const TDLoadingWidget(
+            const TDLoading(
               size: TDLoadingSize.medium,
               icon: TDLoadingIcon.activity,
             ),
-            TDLoadingWidget(
+            TDLoading(
               size: TDLoadingSize.medium,
               icon: TDLoadingIcon.point,
               iconColor: TDTheme.of(context).brandColor8,
@@ -46,19 +49,19 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const TDLoadingWidget(
+            const TDLoading(
               size: TDLoadingSize.medium,
               icon: TDLoadingIcon.circle,
               text: '加载中…',
               axis: Axis.horizontal,
             ),
-            const TDLoadingWidget(
+            const TDLoading(
               size: TDLoadingSize.medium,
               icon: TDLoadingIcon.activity,
               text: '加载中…',
               axis: Axis.horizontal,
             ),
-            TDLoadingWidget(
+            TDLoading(
               size: TDLoadingSize.medium,
               icon: TDLoadingIcon.circle,
               text: '加载中…',
@@ -72,19 +75,19 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const TDLoadingWidget(
+            const TDLoading(
               size: TDLoadingSize.medium,
               icon: TDLoadingIcon.circle,
               text: '加载中…',
               axis: Axis.vertical,
             ),
-            const TDLoadingWidget(
+            const TDLoading(
               size: TDLoadingSize.medium,
               icon: TDLoadingIcon.activity,
               text: '加载中…',
               axis: Axis.vertical,
             ),
-            TDLoadingWidget(
+            TDLoading(
               size: TDLoadingSize.medium,
               icon: TDLoadingIcon.circle,
               text: '加载中…',
@@ -99,7 +102,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: const [
-             TDLoadingWidget(
+             TDLoading(
               size: TDLoadingSize.medium,
               text: '加载中…',
             ),
@@ -113,19 +116,19 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: const [
-             TDLoadingWidget(
+             TDLoading(
               size: TDLoadingSize.large,
               icon: TDLoadingIcon.circle,
               text: '加载中(大)…',
               axis: Axis.horizontal,
             ),
-             TDLoadingWidget(
+             TDLoading(
               size: TDLoadingSize.medium,
               icon: TDLoadingIcon.circle,
               text: '加载中(中)…',
               axis: Axis.horizontal,
             ),
-             TDLoadingWidget(
+             TDLoading(
               size: TDLoadingSize.small,
               icon: TDLoadingIcon.circle,
               text: '加载中(小)…',
@@ -138,21 +141,21 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-             TDLoadingWidget(
+             TDLoading(
               size: TDLoadingSize.large,
               icon: TDLoadingIcon.activity,
               text: '加载中(大)…',
                iconColor: TDTheme.of(context).brandColor8 ,
               axis: Axis.horizontal,
             ),
-             TDLoadingWidget(
+             TDLoading(
               size: TDLoadingSize.medium,
               icon: TDLoadingIcon.activity,
               text: '加载中(中)…',
               iconColor: TDTheme.of(context).brandColor8 ,
               axis: Axis.horizontal,
             ),
-             TDLoadingWidget(
+             TDLoading(
               size: TDLoadingSize.small,
               icon: TDLoadingIcon.activity,
               text: '加载中(小)…',
@@ -167,17 +170,17 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: const [
-            TDLoadingWidget(
+            TDLoading(
               size: TDLoadingSize.large,
               icon: TDLoadingIcon.circle,
               text: '加载中(大)…',
             ),
-            TDLoadingWidget(
+            TDLoading(
               size: TDLoadingSize.medium,
               icon: TDLoadingIcon.circle,
               text: '加载中(中)…',
             ),
-            TDLoadingWidget(
+            TDLoading(
               size: TDLoadingSize.small,
               icon: TDLoadingIcon.circle,
               text: '加载中(小)…',

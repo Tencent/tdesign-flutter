@@ -8,6 +8,37 @@ import 'td_vertical_tab_bar.dart';
 bool isCustomStyle = false;
 
 class TDTabBar extends StatefulWidget {
+
+  const TDTabBar(
+      {Key? key,
+        required this.tabs,
+        this.controller,
+        this.decoration,
+        this.backgroundColor,
+        this.indicatorColor,
+        this.indicatorWidth,
+        this.indicatorHeight,
+        this.labelColor,
+        this.unselectedLabelColor,
+        this.isScrollable = false,
+        this.unselectedLabelStyle,
+        this.labelStyle,
+        this.width,
+        this.height,
+        this.indicatorPadding,
+        this.labelPadding,
+        this.indicator,
+        this.physics,
+        this.onTap,
+        this.isVertical = false,
+        this.showIndicator = false})
+      : assert(
+  backgroundColor == null || decoration == null,
+  'Cannot provide both a backgroundColor and a decoration\n'
+      'To provide both, use "decoration: BoxDecoration(color: color)".',
+  ),
+        super(key: key);
+
   /// tab数组
   final List<TDTab> tabs;
 
@@ -70,37 +101,6 @@ class TDTabBar extends StatefulWidget {
 
   /// 是否是竖向
   final bool isVertical;
-
-  @override
-  const TDTabBar(
-      {Key? key,
-      required this.tabs,
-      this.controller,
-      this.decoration,
-      this.backgroundColor,
-      this.indicatorColor,
-      this.indicatorWidth,
-      this.indicatorHeight,
-      this.labelColor,
-      this.unselectedLabelColor,
-      this.isScrollable = false,
-      this.unselectedLabelStyle,
-      this.labelStyle,
-      this.width,
-      this.height,
-      this.indicatorPadding,
-      this.labelPadding,
-      this.indicator,
-      this.physics,
-      this.onTap,
-      this.isVertical = false,
-      this.showIndicator = false})
-      : assert(
-          backgroundColor == null || decoration == null,
-          'Cannot provide both a backgroundColor and a decoration\n'
-          'To provide both, use "decoration: BoxDecoration(color: color)".',
-        ),
-        super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TDTabBarState();

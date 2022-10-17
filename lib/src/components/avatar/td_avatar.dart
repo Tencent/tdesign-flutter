@@ -15,6 +15,19 @@ enum TDAvatarType {
 
 /// 用于头像显示
 class TDAvatar extends StatelessWidget {
+  const TDAvatar(
+      {Key? key,
+        this.size = TDAvatarSize.medium,
+        this.type = TDAvatarType.normal,
+        this.text,
+        this.avatarUrl,
+        this.avatarSize,
+        this.avatarDisplayList,
+        this.displayText,
+        this.onTap,
+        this.defaultUrl = ''})
+      : super(key: key);
+
   /// 头像地址
   final String? avatarUrl;
 
@@ -42,18 +55,6 @@ class TDAvatar extends StatelessWidget {
   /// 操作点击事件
   final Function()? onTap;
 
-  const TDAvatar(
-      {Key? key,
-      this.size = TDAvatarSize.medium,
-      this.type = TDAvatarType.normal,
-      this.text,
-      this.avatarUrl,
-      this.avatarSize,
-      this.avatarDisplayList,
-      this.displayText,
-      this.onTap,
-      this.defaultUrl = ''})
-      : super(key: key);
 
   double _getAvatarWidth() {
     double width;
