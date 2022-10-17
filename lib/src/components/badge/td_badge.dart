@@ -28,6 +28,21 @@ enum TDBadgeBorder {
 }
 
 class TDBadge extends StatefulWidget {
+
+  const TDBadge(
+      this.type, {
+        Key? key,
+        this.count,
+        this.border = TDBadgeBorder.large,
+        this.color,
+        this.textColor,
+        this.redPointSize = 10,
+        this.message,
+        this.widthLarge = 32,
+        this.widthSmall = 12,
+        this.padding
+      }) : super(key: key);
+
   /// 红点数量
   final String? count;
 
@@ -57,21 +72,6 @@ class TDBadge extends StatefulWidget {
 
   /// 角标自定义padding
   final EdgeInsetsGeometry? padding;
-
-  @override
-  const TDBadge(
-    this.type, {
-    Key? key,
-    this.count,
-    this.border = TDBadgeBorder.large,
-    this.color,
-    this.textColor,
-    this.redPointSize = 10,
-    this.message,
-    this.widthLarge = 32,
-    this.widthSmall = 12,
-    this.padding
-  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TDBadgeState();

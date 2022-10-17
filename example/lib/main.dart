@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter/src/util/platform_util.dart';
 
 import 'tdesign/example_base.dart';
 import 'tdesign/example_route.dart';
@@ -23,10 +24,12 @@ import 'tdesign/page/td_popup_page.dart';
 import 'tdesign/page/td_pull_down_refresh_page.dart';
 import 'tdesign/page/td_radio_page.dart';
 import 'tdesign/page/td_search_bar_page.dart';
+import 'tdesign/page/td_swich_page.dart';
 import 'tdesign/page/td_swiper_page.dart';
 import 'tdesign/page/td_tab_bar_page.dart';
 import 'tdesign/page/td_tag_page.dart';
 import 'tdesign/page/td_text_page.dart';
+import 'tdesign/page/td_theme_page.dart';
 import 'tdesign/page/td_toast_page.dart';
 
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TDTextPage()
@@ -39,6 +42,10 @@ List<ExamplePageModel> examplePageList = [
       text: '图标--基础',
       path: 'TDIconPage',
       pageBuilder: (context) => const TDIconPage()),
+  ExamplePageModel(
+      text: '主题--基础',
+      path: 'TDThemePage',
+      pageBuilder: (context) => const TDThemePage()),
   ExamplePageModel(
       text: '按钮 Button',
       path: 'TDButtonPage',
@@ -97,14 +104,14 @@ List<ExamplePageModel> examplePageList = [
       pageBuilder: (context) => const TDSearchBarPage()),
   ExamplePageModel(
       text: '开关 Switch',
-      path: 'TDRadioPage',
-      pageBuilder: (context) => const TDRadioPage()),
+      path: 'TDSwitchPage',
+      pageBuilder: (context) => const TDSwitchPage()),
   ExamplePageModel(
       text: '导航栏 NavBar',
       path: 'TDNavBarPage',
       pageBuilder: (context) => const TDNavBarPage()),
-  ExamplePageModel(
-      text: '标签栏 TabBar',
+
+  ExamplePageModel(text: '标签栏 TabBar',
       path: 'TDBottomNavBarPage',
       pageBuilder: (context) => const TDBottomNavBarPage()),
   ExamplePageModel(
@@ -158,7 +165,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.light(primary: TDTheme.of(context).brandNormalColor)
         ),
-        home: const MyHomePage(title: 'flutter原子组件库demo'),
+        home: const MyHomePage(title: 'TDesgin Flutter 组件库'),
         onGenerateRoute: TDExampleRoute.onGenerateRoute,
       ),
     );
@@ -197,16 +204,49 @@ class _MyHomePageState extends State<MyHomePage> {
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
         ),
-        body: Center(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: _buildChildren(context),
+        body: _buildBody(context));
+  }
+
+  Widget _buildBody(BuildContext context) {
+    Widget menu = SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: _buildChildren(context),
+      ),
+    );
+    if(PlatformUtil.isWeb){
+      return Container(
+        color: TDTheme.of().grayColor2,
+        child: Row(
+          children: [
+            Container(
+              width: 300,
+              color: TDTheme.of().whiteColor1,
+              child: menu,
             ),
-          ),
-        ));
+            Expanded(child: GridView.builder(
+              padding: const EdgeInsets.all(32),
+              itemCount: examplePageList.length,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 520,
+                  crossAxisSpacing:74,
+                  mainAxisSpacing: 50,
+                  mainAxisExtent: 640
+              ),
+              itemBuilder: (context,index){
+                return examplePageList[index].pageBuilder(context);
+              },
+            )),
+
+          ],
+        ),
+      );
+    }
+    return Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: menu,
+      );
   }
 
   List<Widget> _buildChildren(BuildContext context) {
@@ -221,6 +261,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pushNamed(context, model.path);
               },
               content: model.text),
+        )
+    ];
+  }
+
+  List<Widget> _buildPageChildren(BuildContext context) {
+    return <Widget>[
+      for (var model in examplePageList)
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: model.pageBuilder(context),
         )
     ];
   }

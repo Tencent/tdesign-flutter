@@ -9,16 +9,17 @@ import 'td_default_theme.dart';
 
 /// 主题控件
 class TDTheme extends StatelessWidget {
+
+  const TDTheme(
+      {required this.data, required this.child, this.systemData, Key? key})
+      : super(key: key);
+
   final Widget child;
 
   final TDThemeData data;
 
   /// Flutter系统主题数据
   final ThemeData? systemData;
-
-  const TDTheme(
-      {required this.data, required this.child, this.systemData, Key? key})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -15,6 +15,42 @@ enum TDInputSize {
 }
 
 class TDInput extends StatelessWidget {
+  const TDInput({
+    Key? key,
+    this.width,
+    this.textStyle,
+    this.backgroundColor,
+    this.decoration,
+    this.leftLabel,
+    this.readOnly = false,
+    this.autofocus = false,
+    this.obscureText = false,
+    this.onEditingComplete,
+    this.onSubmitted,
+    this.hintText,
+    this.inputType,
+    this.onChanged,
+    this.inputFormatters,
+    this.inputDecoration,
+    this.maxLines = 1,
+    this.focusNode,
+    this.controller,
+    this.cursorColor,
+    this.rightBtn,
+    this.hintTextStyle,
+    this.onTapBtn,
+    this.labelWidget,
+    this.textInputBackgroundColor,
+    this.contentPadding,
+    this.type = TDInputType.normal,
+    this.size = TDInputSize.small,
+    this.inputWidth = 81,
+    this.maxNum = 500,
+    this.errorText = '',
+    this.textAlign,
+    this.rightWidget
+  }) : super(key: key);
+
   /// 输入框宽度
   final double? width;
 
@@ -111,42 +147,6 @@ class TDInput extends StatelessWidget {
   /// 右侧自定义组件 特殊类型时生效
   final Widget? rightWidget;
 
-
-  const TDInput({
-    Key? key,
-    this.width,
-    this.textStyle,
-    this.backgroundColor,
-    this.decoration,
-    this.leftLabel,
-    this.readOnly = false,
-    this.autofocus = false,
-    this.obscureText = false,
-    this.onEditingComplete,
-    this.onSubmitted,
-    this.hintText,
-    this.inputType,
-    this.onChanged,
-    this.inputFormatters,
-    this.inputDecoration,
-    this.maxLines = 1,
-    this.focusNode,
-    this.controller,
-    this.cursorColor,
-    this.rightBtn,
-    this.hintTextStyle,
-    this.onTapBtn,
-    this.labelWidget,
-    this.textInputBackgroundColor,
-    this.contentPadding,
-    this.type = TDInputType.normal,
-    this.size = TDInputSize.small,
-    this.inputWidth = 81,
-    this.maxNum = 500,
-    this.errorText = '',
-    this.textAlign,
-    this.rightWidget
-  }) : super(key: key);
 
   /// 获取输入框规格
   double getInputPadding() {
