@@ -10,10 +10,8 @@
 	<string>enterprise</string>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>com.tencent.tgclub.db</key>
-		<string>com.tencent.tgclub.db InHouse 1636598745</string>
-		<key>com.tencent.tgclub.db.TGPNSService</key>
-		<string>com.tencent.tgclub.db.TGPNSService InHouse 1636598857</string>
+		<key>com.tencent.tdesign.db</key>
+		<string>* InHouse</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>iPhone Distribution: Tencent Technology (Shenzhen) Co., Ltd</string>
