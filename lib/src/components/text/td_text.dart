@@ -33,6 +33,61 @@ import '../../util/platform_util.dart';
 ///
 class TDText extends StatelessWidget {
 
+  const TDText(this.data,
+      {
+        this.font,
+        this.fontWeight = FontWeight.w400,
+        this.fontFamily,
+        this.textColor = Colors.black,
+        this.backgroundColor,
+        this.isTextThrough = false,
+        this.lineThroughColor = Colors.white,
+        this.package,
+        this.style,
+        this.strutStyle,
+        this.textAlign,
+        this.textDirection,
+        this.locale,
+        this.softWrap,
+        this.overflow,
+        this.textScaleFactor,
+        this.maxLines,
+        this.semanticsLabel,
+        this.textWidthBasis,
+        this.textHeightBehavior,
+        this.forceVerticalCenter = false,
+        Key? key,})
+      : textSpan = null,
+        super(key: key);
+
+  const TDText.rich(
+      InlineSpan this.textSpan, {
+        this.font,
+        this.fontWeight = FontWeight.w400,
+        this.fontFamily,
+        this.textColor = Colors.black,
+        this.backgroundColor,
+        this.isTextThrough = false,
+        this.lineThroughColor = Colors.white,
+        this.package = 'tdesign_flutter',
+        Key? key,
+        this.style,
+        this.strutStyle,
+        this.textAlign,
+        this.textDirection,
+        this.locale,
+        this.softWrap,
+        this.overflow,
+        this.textScaleFactor,
+        this.maxLines,
+        this.semanticsLabel,
+        this.textWidthBasis,
+        this.textHeightBehavior,
+        this.forceVerticalCenter = false,
+      }) :
+        data = null,
+        super(key: key);
+
   /// 字体尺寸，包含大小size和行高height
   final Font? font;
 
@@ -90,62 +145,7 @@ class TDText extends StatelessWidget {
   final bool forceVerticalCenter;
 
 
-  /// 普通文本
-  const TDText(this.data,
-      {
-        this.font,
-        this.fontWeight = FontWeight.w400,
-        this.fontFamily,
-        this.textColor = Colors.black,
-        this.backgroundColor,
-        this.isTextThrough = false,
-        this.lineThroughColor = Colors.white,
-        this.package,
-        this.style,
-        this.strutStyle,
-        this.textAlign,
-        this.textDirection,
-        this.locale,
-        this.softWrap,
-        this.overflow,
-        this.textScaleFactor,
-        this.maxLines,
-        this.semanticsLabel,
-        this.textWidthBasis,
-        this.textHeightBehavior,
-        this.forceVerticalCenter = false,
-        Key? key,})
-      : textSpan = null,
-        super(key: key);
 
-  /// 支持分段TextSpan的文本
-  const TDText.rich(
-      InlineSpan this.textSpan, {
-        this.font,
-        this.fontWeight = FontWeight.w400,
-        this.fontFamily,
-        this.textColor = Colors.black,
-        this.backgroundColor,
-        this.isTextThrough = false,
-        this.lineThroughColor = Colors.white,
-        this.package = 'tdesign_flutter',
-        Key? key,
-        this.style,
-        this.strutStyle,
-        this.textAlign,
-        this.textDirection,
-        this.locale,
-        this.softWrap,
-        this.overflow,
-        this.textScaleFactor,
-        this.maxLines,
-        this.semanticsLabel,
-        this.textWidthBasis,
-        this.textHeightBehavior,
-        this.forceVerticalCenter = false,
-      }) :
-        data = null,
-        super(key: key);
 
   @override
   Widget build(BuildContext context) {

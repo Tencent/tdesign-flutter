@@ -9,6 +9,7 @@ class TDNavBarPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExampleWidget(
       title: '导航栏 NavBar',
+      apiPath: 'nav_bar',
       children: [
         ExampleItem(
           desc: '基础导航栏',

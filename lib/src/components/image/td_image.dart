@@ -45,6 +45,35 @@ enum TDImageType {
 }
 
 class TDImage extends StatefulWidget {
+
+  const TDImage(
+      this.imgUrl, {
+        Key? key,
+        this.size = TDImageSize.l,
+        this.type = TDImageType.roundedSquare,
+        this.errorWidget,
+        this.loadingWidget,
+        this.width,
+        this.height,
+        this.frameBuilder,
+        this.loadingBuilder,
+        this.errorBuilder,
+        this.semanticLabel,
+        this.excludeFromSemantics = false,
+        this.color,
+        this.opacity,
+        this.colorBlendMode,
+        this.alignment = Alignment.center,
+        this.repeat = ImageRepeat.noRepeat,
+        this.centerSlice,
+        this.matchTextDirection = false,
+        this.gaplessPlayback = false,
+        this.isAntiAlias = false,
+        this.filterQuality = FilterQuality.low,
+        this.cacheHeight,
+        this.cacheWidth,
+      }) : super(key: key);
+
   /// 图片地址
   final String imgUrl;
 
@@ -101,35 +130,6 @@ class TDImage extends StatefulWidget {
   final int? cacheHeight;
 
   final int? cacheWidth;
-
-  @override
-  const TDImage(
-    this.imgUrl, {
-    Key? key,
-    this.size = TDImageSize.l,
-    this.type = TDImageType.roundedSquare,
-    this.errorWidget,
-    this.loadingWidget,
-    this.width,
-    this.height,
-    this.frameBuilder,
-    this.loadingBuilder,
-    this.errorBuilder,
-    this.semanticLabel,
-    this.excludeFromSemantics = false,
-    this.color,
-    this.opacity,
-    this.colorBlendMode,
-    this.alignment = Alignment.center,
-    this.repeat = ImageRepeat.noRepeat,
-    this.centerSlice,
-    this.matchTextDirection = false,
-    this.gaplessPlayback = false,
-    this.isAntiAlias = false,
-    this.filterQuality = FilterQuality.low,
-    this.cacheHeight,
-    this.cacheWidth,
-  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TDImageState();

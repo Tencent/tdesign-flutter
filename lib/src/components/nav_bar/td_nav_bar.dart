@@ -5,6 +5,30 @@ import '../../theme/td_spacers.dart';
 typedef TDBarItemAction = void Function();
 
 class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
+
+  const TDNavBar({
+    Key? key,
+    this.leftBarItems,
+    this.rightBarItems,
+    this.titleWidget,
+    this.title,
+    this.titleColor,
+    this.titleFont,
+    this.titleFontFamily,
+    this.titleFontWeight = FontWeight.w500,
+    this.centerTitle = true,
+    this.opacity = 1.0,
+    this.backgroundColor,
+    this.titleMargin = 16,
+    this.padding,
+    this.height = 44,
+    this.screenAdaptation = true,
+    this.useDefaultBack = true,
+    this.onBack,
+    this.useBorderStyle = false,
+    this.border,
+  }) : super(key: key);
+
   final List<TDNavBarItem>? leftBarItems;
   final List<TDNavBarItem>? rightBarItems;
   final Widget? titleWidget;
@@ -36,29 +60,6 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
 
   /// 边框
   final TDNavBarItemBorder? border;
-
-  const TDNavBar({
-    Key? key,
-    this.leftBarItems,
-    this.rightBarItems,
-    this.titleWidget,
-    this.title,
-    this.titleColor,
-    this.titleFont,
-    this.titleFontFamily,
-    this.titleFontWeight = FontWeight.w500,
-    this.centerTitle = true,
-    this.opacity = 1.0,
-    this.backgroundColor,
-    this.titleMargin = 16,
-    this.padding,
-    this.height = 44,
-    this.screenAdaptation = true,
-    this.useDefaultBack = true,
-    this.onBack,
-    this.useBorderStyle = false,
-    this.border,
-  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TDNavBarState();
