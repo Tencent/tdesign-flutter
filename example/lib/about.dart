@@ -20,14 +20,8 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   Future<void> _getVersion() async {
-    try {
-      version = await rootBundle.loadString('assets/version');
-      print("zflyTest version:$version");
-    } catch (e) {
-      print('zflyTest error: $e');
-    }
-    setState(()  {
-    });
+    version = await rootBundle.loadString('assets/version');
+    setState(() {});
   }
   
   
