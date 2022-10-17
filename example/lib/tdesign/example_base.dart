@@ -53,7 +53,6 @@ class _ExampleWidgetState extends State<ExampleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var _controller = ScrollController();
     return Scaffold(
       backgroundColor: widget.backgroundColor,
       appBar: AppBar(title: Text('${widget.title}示例页'),
@@ -72,20 +71,19 @@ class _ExampleWidgetState extends State<ExampleWidget> {
           )
         ],
       ),
-      body: Center(child: Scrollbar(
-        isAlwaysShown: true,
-        controller: _controller,
-        child: SingleChildScrollView(
-          controller: _controller,
-          child: Center(
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: ScrollbarTheme(
+          data: ScrollbarThemeData(trackVisibility: MaterialStateProperty.all(true)),
+          child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ApiWidget(apiName: widget.apiPath,visible: apiVisible,), ...list,
               ],
-            ),
-          ),),
-      ),
+            ),),
+        ),
       ),
     );
   }
