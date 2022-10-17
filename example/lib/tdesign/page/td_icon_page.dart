@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
+import '../example_base.dart';
+
 
 class TDIconPage extends StatefulWidget {
   const TDIconPage({Key? key}) : super(key: key);
@@ -12,18 +14,17 @@ class TDIconPage extends StatefulWidget {
 class _TDIconPageState extends State<TDIconPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('icon图标'),
+    return ExampleWidget(title: 'icon图标', children: [
+      Container(
+        color: Colors.white,
+        alignment: Alignment.center,
+        child: Wrap(
+          children: [
+            for (var iconData in TDIcons.all.values) Icon(iconData)
+          ],
         ),
-        body: Container(
-          color: Colors.white,
-          alignment: Alignment.center,
-          child: Wrap(
-            children: [
-              for (var iconData in TDIcons.all.values) Icon(iconData)
-            ],
-          ),
-        ));
+      )
+    ]);
+
   }
 }
