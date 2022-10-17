@@ -203,6 +203,20 @@ class _MyHomePageState extends State<MyHomePage> {
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
+          actions: [
+            GestureDetector(
+              child: Container(
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 16,),
+                  child: TDText('关于', textColor: TDTheme
+                      .of(context)
+                      .whiteColor1,),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, TDExampleRoute.aboutPath);
+              },
+            )
+          ],
         ),
         body: _buildBody(context));
   }
