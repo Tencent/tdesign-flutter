@@ -1,3 +1,5 @@
+apply from: "version.gradle"
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -38,8 +40,8 @@ android {
         applicationId "com.tdesign.tdesign_flutter_example"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode createVersionCode()
+        versionName createVersionName()
     }
 
     buildTypes {
