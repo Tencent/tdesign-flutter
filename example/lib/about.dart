@@ -68,6 +68,7 @@ class _AboutPageState extends State<AboutPage> {
         TDText(
           desc ?? '',
           textColor: theme.grayColor6,
+          forceVerticalCenter: true,
         ),
       ],
     );
