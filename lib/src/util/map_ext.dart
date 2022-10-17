@@ -140,7 +140,7 @@ extension MapExt<K, V> on Map<K, V> {
       }).toList();
     }
 
-    if (value is String) {
+    if (value != null && value is String) {
       final json = jsonDecode(value);
       if (json is List<T>) {
         return json;
@@ -157,7 +157,7 @@ extension MapExt<K, V> on Map<K, V> {
     if (value is Map) {
       return value;
     }
-    if (value is String) {
+    if (value != null && value is String) {
       final json = jsonDecode(value);
       if (json is Map) {
         return json;

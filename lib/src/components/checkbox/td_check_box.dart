@@ -51,6 +51,25 @@ typedef OnCheckValueChanged = void Function(bool selected);
 ///
 ///
 class TDCheckbox extends StatefulWidget {
+
+  const TDCheckbox(
+      {this.id,
+        Key? key,
+        this.title,
+        this.subTitle,
+        this.enable = true,
+        this.checked = false,
+        this.titleMaxLine,
+        this.subTitleMaxLine = 1,
+        this.customIconBuilder,
+        this.customContentBuilder,
+        this.style,
+        this.spacing,
+        this.backgroundColor,
+        this.size = TDCheckBoxSize.small,
+        this.contentDirection = TDContentDirection.right,
+        this.onCheckBoxChanged}): super(key: key);
+
   /// id
   /// 当FuiCheckBox嵌入到FuiCheckBoxGroup内时，这个值需要赋值，否则不会被纳入Group管理
   final String? id;
@@ -97,24 +116,6 @@ class TDCheckbox extends StatefulWidget {
 
   /// 背景颜色
   final Color? backgroundColor;
-
-  const TDCheckbox(
-      {this.id,
-        Key? key,
-      this.title,
-      this.subTitle,
-      this.enable = true,
-      this.checked = false,
-      this.titleMaxLine,
-      this.subTitleMaxLine = 1,
-      this.customIconBuilder,
-      this.customContentBuilder,
-      this.style,
-      this.spacing,
-      this.backgroundColor,
-      this.size = TDCheckBoxSize.small,
-      this.contentDirection = TDContentDirection.right,
-      this.onCheckBoxChanged}): super(key: key);
 
   @override
   State createState() => TDCheckboxState();

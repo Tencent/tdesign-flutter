@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 /// 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类
 import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter_example/tdesign/example_base.dart';
 
 /// 主题示例页
 
@@ -15,11 +16,8 @@ class TDThemePage extends StatefulWidget {
 class _TDThemePageState extends State<TDThemePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('主题示例'),
-      ),
-      body: Container(
+    return ExampleWidget(title: '主题示例', apiPath: 'theme', children: [
+      Container(
           color: Colors.white,
           alignment: Alignment.center,
           child: Column(
@@ -54,8 +52,8 @@ class _TDThemePageState extends State<TDThemePage> {
                   // 不能直接在此处使用contxt，这里虽然被包裹在TGTheme中，但是context未更新，因此阿不到最新数据
                   child: const TestWidget()),
             ],
-          )),
-    );
+          ))
+    ]);
   }
 }
 
