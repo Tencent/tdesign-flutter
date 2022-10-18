@@ -4,6 +4,7 @@ import 'package:tdesign_flutter/td_export.dart';
 
 import 'main.dart';
 import 'tdesign/api_widget.dart';
+import 'tdesign/code_widget.dart';
 import 'tdesign/example_route.dart';
 
 class WebMainBody extends StatefulWidget {
@@ -26,6 +27,7 @@ class _WebMainBodyState extends State<WebMainBody> {
 
   String version = 'unknown';
   String? apiPath;
+  String? codePath;
 
   @override
   void initState() {
@@ -45,10 +47,11 @@ class _WebMainBodyState extends State<WebMainBody> {
     super.dispose();
   }
 
-  void setApiPath({required String? apiPath}){
+  void setApiPath({required String? apiPath, codePath}){
     Future.delayed(const Duration(milliseconds: 500,), (){
       setState(() {
         this.apiPath = apiPath;
+        this.codePath = codePath;
       });
     });
   }
@@ -182,7 +185,7 @@ class _WebMainBodyState extends State<WebMainBody> {
                     color: TDTheme.of(context).whiteColor1,
                     alignment: Alignment.topLeft,
                     padding: const EdgeInsets.only(left: 32,top: 32),
-                    child: ApiWidget(apiName: apiPath,visible: true,),
+                    child: DetailLayout(apiPath: apiPath, codePath: codePath,),
                   )),
                 ],
               ),
@@ -245,10 +248,69 @@ class WebHome extends StatelessWidget {
   }
 }
 
+class DetailLayout extends StatefulWidget {
+  const DetailLayout({Key? key, required this.apiPath, this.codePath}) : super(key: key);
+
+  final String? apiPath;
+  final String? codePath;
+
+  @override
+  State<DetailLayout> createState() => _DetailLayoutState();
+}
+
+class _DetailLayoutState extends State<DetailLayout> with TickerProviderStateMixin {
+
+
+  TabController? _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TDTabBar(
+          tabs: _getTabs(),
+          controller: _tabController,
+          backgroundColor: Colors.white,
+          showIndicator: true,
+          isScrollable: true,
+        ),
+        Expanded(child: TDTabBarView(
+          children: _getTabViews(),
+          controller: _tabController,
+        ))
+      ],
+    );
+  }
+
+  List<TDTab> _getTabs() {
+    var tabs = const [
+      TDTab(text: 'Api'),
+      TDTab(text: 'Code'),
+    ];
+    return tabs;
+  }
+
+  List<Widget> _getTabViews() {
+    var tabViews = [
+      ApiWidget(apiName: widget.apiPath,visible: true,),
+      CodeWidget(codePath: widget.codePath,),
+    ];
+    return tabViews;
+  }
+}
+
+
 class WebApiController {
   static _WebMainBodyState? _state;
 
-  static setApiPath({required String? apiPath}){
-    _state?.setApiPath(apiPath: apiPath);
+  static setApiPath({required String? apiPath, String? codePath}){
+    _state?.setApiPath(apiPath: apiPath, codePath: codePath);
   }
 }
