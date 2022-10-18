@@ -26,7 +26,6 @@ class TDRadioPageState extends State<TDRadioPage> {
   Widget build(BuildContext context) {
     return ExampleWidget(
         title: '单选框 Radio',
-        apiPath: 'radio',
         children: [
           ExampleItem(desc: '基础文本框', builder: (context){
             return TDRadioGroup(

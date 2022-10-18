@@ -56,7 +56,6 @@ class _TDPickerPageState extends State<TDPickerPage> {
   Widget build(BuildContext context) {
     return ExampleWidget(
       title: '选择器 Picker',
-      apiPath: 'picker',
       children: [
         ExampleItem(
             desc: '基础选择器--城市',

@@ -21,7 +21,6 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   Widget build(BuildContext context) {
     return ExampleWidget(
         title: '加载 Loading',
-        apiPath: 'loading',
         children: [
 
       TDText('类型', font: TDTheme.of(context).fontXL,),

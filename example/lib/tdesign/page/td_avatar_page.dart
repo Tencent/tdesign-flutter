@@ -18,7 +18,6 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
     return ExampleWidget(
       backgroundColor: TDTheme.of(context).whiteColor1,
       title: '头像 Avatar',
-      apiPath: 'avatar',
       children: [
         ExampleItem(
             desc: '类型--默认',

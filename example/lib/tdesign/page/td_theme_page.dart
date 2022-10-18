@@ -16,7 +16,7 @@ class TDThemePage extends StatefulWidget {
 class _TDThemePageState extends State<TDThemePage> {
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: '主题示例', apiPath: 'theme', children: [
+    return ExampleWidget(title: '主题示例', children: [
       Container(
           color: Colors.white,
           alignment: Alignment.center,
