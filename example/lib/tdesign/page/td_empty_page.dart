@@ -18,6 +18,7 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
         apiPath: 'empty',
         children: [
           Container(
+            height: 720,
             color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
