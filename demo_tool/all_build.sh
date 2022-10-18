@@ -11,7 +11,7 @@
 ./bin/demo_tool generate --file ../lib/src/components/image/td_image.dart --name TDImage --folder-name image --output ../example/assets/api/ --only-api
 ./bin/demo_tool generate --file ../lib/src/components/input/td_input.dart --name TDInput --folder-name input --output ../example/assets/api/ --only-api
 ./bin/demo_tool generate --file ../lib/src/components/loading/td_loading.dart --name TDLoading --folder-name loading --output ../example/assets/api/ --only-api
-./bin/demo_tool generate --file ../lib/src/components/nav_bar/td_nav_bar.dart --name TDNavBar --folder-name nav_bar --output ../example/assets/api/ --only-api
+./bin/demo_tool generate --file ../lib/src/components/navbar/td_nav_bar.dart --name TDNavBar --folder-name navbar --output ../example/assets/api/ --only-api
 # picker需多个文件生成一个api
 #./bin/demo_tool generate --file ../lib/src/components/picker/td_nav_bar.dart --name TDNavBar --folder-name nav_bar --output ../example/assets/api/ --only-api
 
