@@ -16,8 +16,6 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
   Widget build(BuildContext context) {
     return ExampleWidget(
       title: '搜索框 Search',
-      apiPath: 'search',
-      codePath: 'search_bar',
       children: [
         TDSearchBar(
           placeHolder: '搜索预设文案',

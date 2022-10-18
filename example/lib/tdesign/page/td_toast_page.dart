@@ -12,7 +12,7 @@ class TDToastPage extends StatefulWidget {
 class _TDToastPageState extends State<TDToastPage> {
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: '轻提示 Toast', apiPath: 'toast', children: [
+    return ExampleWidget(title: '轻提示 Toast', children: [
       ElevatedButton(
           onPressed: () {
             TDToast.showText('我是Toast', context: context);

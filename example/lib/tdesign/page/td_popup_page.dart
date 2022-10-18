@@ -96,7 +96,6 @@ class TDPopupPageState extends State<TDPopupPage> {
 
     current = ExampleWidget(
       title: '弹出层 PopUp',
-      apiPath: 'popup',
       children: [
         current,
       ],

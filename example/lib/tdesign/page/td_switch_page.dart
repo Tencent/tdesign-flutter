@@ -90,7 +90,6 @@ class TDSwitchPageState extends State<TDSwitchPage> {
 
     current =  ExampleWidget(
       title: '开关 Switch',
-      apiPath: 'switch',
       children: [
         current
       ],

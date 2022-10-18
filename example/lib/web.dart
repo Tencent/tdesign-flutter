@@ -1,3 +1,6 @@
+import 'dart:html';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
@@ -16,8 +19,6 @@ class WebMainBody extends StatefulWidget {
 }
 
 class _WebMainBodyState extends State<WebMainBody> {
-  double screenWidth = 520;
-  double screenHeight = 1080;
   static const menuWidth = 300.0;
 
   var screenSizeList = <Size>[
@@ -26,8 +27,10 @@ class _WebMainBodyState extends State<WebMainBody> {
   ];
 
   String version = 'unknown';
-  String? apiPath;
-  String? codePath;
+  String? apiPath = 'text';
+  String? codePath = 'text';
+  String? mobilePath;
+
 
   @override
   void initState() {
@@ -47,10 +50,11 @@ class _WebMainBodyState extends State<WebMainBody> {
     super.dispose();
   }
 
-  void setApiPath({required String? apiPath, codePath}){
+  void setApiPath({required String? apiPath,required String? mobilePath,String? codePath}){
     Future.delayed(const Duration(milliseconds: 500,), (){
       setState(() {
         this.apiPath = apiPath;
+        this.mobilePath = mobilePath;
         this.codePath = codePath;
       });
     });
@@ -64,111 +68,6 @@ class _WebMainBodyState extends State<WebMainBody> {
           color: TDTheme.of().grayColor2,
           child: Stack(
             children: [
-              Container(
-                constraints: BoxConstraints(maxWidth: screenWidth + 200),
-                margin: const EdgeInsets.only(left: menuWidth),
-                child: LayoutBuilder(
-                  builder: (context, constraint) {
-                    var screenTop = (constraint.maxHeight - screenHeight) / 2;
-                    var screenLeft = (constraint.maxWidth - screenWidth) / 2;
-                    return Stack(
-                      children: [
-                        Positioned(
-                            top: screenTop,
-                            left: screenLeft,
-                            width: screenWidth,
-                            height: screenHeight,
-                            child: MaterialApp(
-                              title: 'Flutter Demo',
-                              theme: ThemeData(
-                                  colorScheme: ColorScheme.light(
-                                      primary: TDTheme.of(context)
-                                          .brandNormalColor)),
-                              home: const WebHome(),
-                              onGenerateRoute: TDExampleRoute.onGenerateRoute,
-                            )),
-
-                        // 构建遮挡, 防止看到视图从屏幕外进入
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          bottom: screenTop + screenHeight,
-                          right: 0,
-                          child: Container(
-                            color: TDTheme.of(context).grayColor2,
-                          ),
-                        ),
-                        // 构建遮挡
-                        Positioned(
-                          top: screenTop + screenHeight,
-                          left: 0,
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            color: TDTheme.of(context).grayColor2,
-                          ),
-                        ),
-                        // 构建遮挡
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          bottom: 0,
-                          right: screenLeft + screenWidth,
-                          child: Container(
-                            color: TDTheme.of(context).grayColor2,
-                          ),
-                        ),
-                        // 构建遮挡
-                        Positioned(
-                          top: 0,
-                          left: screenLeft + screenWidth,
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            color: TDTheme.of(context).grayColor2,
-                          ),
-                        ),
-
-                        // 选择屏幕规格
-                        Positioned(
-                            top: 0,
-                            left: 0,
-                            child: SizedBox(
-                                height:50,
-                                child:  ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: screenSizeList.length + 1,
-                                    itemBuilder: (context,index){
-                                      if(index == 0){
-                                        return Container(
-                                          margin: const EdgeInsets.all(10),
-                                          child: const TDText('屏幕尺寸:'),
-                                        );
-                                      }
-                                      index--;
-                                      return Container(
-                                        margin: const EdgeInsets.all(5),
-                                        child: GestureDetector(
-                                          child: TDButton(content: '${screenSizeList[index].width} * ${screenSizeList[index].height}',
-                                            style: TDButtonStyle.warningWeakly(),
-                                            size: TDButtonSize.small,),
-                                          onTap: (){
-                                            setState(() {
-                                              screenWidth = screenSizeList[index].width;
-                                              screenHeight = screenSizeList[index].height;
-                                            });
-                                          },
-                                        ),
-                                      );
-                                    })
-                            ))
-
-                      ],
-                    );
-                  },
-                ),
-              ),
 
               // 菜单放到最上方，防止被屏幕外内容遮挡
               Row(
@@ -178,15 +77,17 @@ class _WebMainBodyState extends State<WebMainBody> {
                     color: TDTheme.of(context).whiteColor1,
                     child: _buildMenu(),
                   ),
-                  Container(
-                    width:  screenWidth + 200,
-                  ),
                   Expanded(child: Container(
                     color: TDTheme.of(context).whiteColor1,
                     alignment: Alignment.topLeft,
                     padding: const EdgeInsets.only(left: 32,top: 32),
                     child: DetailLayout(apiPath: apiPath, codePath: codePath,),
                   )),
+
+                  Container(
+                    margin: const EdgeInsets.only(left:32, top: 32,right: 32),
+                    child: MobieWidget(src: "http://localhost:53549/#${mobilePath ?? 'TDTextPage'}",),
+                  )
                 ],
               ),
 
@@ -204,6 +105,7 @@ class _WebMainBodyState extends State<WebMainBody> {
       ],
     );
   }
+
 
   Widget _buildMenu(){
     return SingleChildScrollView(
@@ -223,8 +125,10 @@ class _WebMainBodyState extends State<WebMainBody> {
               style: TDButtonStyle.weakly(),
               size: TDButtonSize.small,
               onTap: () {
-                var navigator = WebHome.navigator ?? Navigator.of(context);
-                navigator.pushNamed(model.path);
+                // var navigator = WebHome.navigator ?? Navigator.of(context);
+                // navigator.pushNamed(model.path);
+
+                WebApiController.setApiPath(apiPath: model.apiPath,mobilePath: model.path, codePath: model.codePath ?? model.apiPath, );
               },
               content: model.text),
         )
@@ -306,11 +210,79 @@ class _DetailLayoutState extends State<DetailLayout> with TickerProviderStateMix
   }
 }
 
+class MobieWidget extends StatefulWidget {
+  const MobieWidget({Key? key,required this.src}) : super(key: key);
+
+  final String src;
+
+  @override
+  State<MobieWidget> createState() => _MobieWidgetState();
+}
+
+class _MobieWidgetState extends State<MobieWidget> {
+
+  double screenWidth = 520;
+  double screenHeight = 1080;
+  String? lastSrc;
+
+  Widget? lastWidget;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return getWebView();
+  }
+
+  Widget getWebView() {
+    if(widget.src == lastSrc && lastWidget != null){
+      return lastWidget!;
+    }
+    lastSrc = widget.src;
+    var _iframeElement = IFrameElement();
+    // ignore: unsafe_html
+    _iframeElement.src = lastSrc;
+    _iframeElement.style.border = 'none';
+    var id = 'iframeElement$lastSrc';
+// ignore: undefined_prefixed_name
+    ui.platformViewRegistry.registerViewFactory(
+      id,
+          (int viewId) => _iframeElement,
+    );
+    Widget _iframeWidget;
+    _iframeWidget = HtmlElementView(
+      key: UniqueKey(),
+      viewType: id,
+    );
+
+
+    lastWidget =   SizedBox(
+      width: screenWidth,
+      height: screenHeight,
+      child: Stack(
+        children: <Widget>[
+          IgnorePointer(
+            ignoring: true,
+            child: Center(
+              child: _iframeWidget,
+            ),
+          ),
+        ],
+      ),
+    );
+    return lastWidget!;
+  }
+}
+
+
 
 class WebApiController {
   static _WebMainBodyState? _state;
 
-  static setApiPath({required String? apiPath, String? codePath}){
-    _state?.setApiPath(apiPath: apiPath, codePath: codePath);
+  static setApiPath({required String? apiPath,required String? mobilePath, String? codePath}){
+    _state?.setApiPath(apiPath: apiPath, mobilePath:mobilePath, codePath: codePath);
   }
 }
