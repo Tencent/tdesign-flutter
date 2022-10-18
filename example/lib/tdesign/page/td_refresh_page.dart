@@ -6,8 +6,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:tdesign_flutter/td_export.dart';
+
 import '../example_base.dart';
 
 class TdPullDownRefreshPage extends StatefulWidget {
