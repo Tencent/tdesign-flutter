@@ -28,6 +28,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
   Widget build(BuildContext context) {
     return ExampleWidget(
       title: '时间选择器 DatePicker',
+      apiPath: 'date_picker',
       children: [
         ExampleItem(desc: '年月日', builder: (_) {
           return Column(
