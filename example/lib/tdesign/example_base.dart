@@ -19,13 +19,14 @@ class ExamplePageModel{
 
 /// 示例页面控件，建议每个页面返回一个ExampleWidget即可，不用独自封装
 class ExampleWidget extends StatefulWidget {
-  const ExampleWidget({Key? key, required this.title, required this.children, this.padding, this.backgroundColor, this.apiPath}) : super(key: key);
+  const ExampleWidget({Key? key, required this.title, required this.children, this.padding, this.backgroundColor, this.apiPath, this.codePath}) : super(key: key);
 
   final String title;
   final List<Widget> children;
   final EdgeInsetsGeometry? padding;
   final Color? backgroundColor;
   final String? apiPath;
+  final String? codePath;
 
   @override
   State<ExampleWidget> createState() => _ExampleWidgetState();
@@ -40,7 +41,7 @@ class _ExampleWidgetState extends State<ExampleWidget> {
   void initState() {
     super.initState();
 
-    WebApiController.setApiPath(apiPath: widget.apiPath);
+    WebApiController.setApiPath(apiPath: widget.apiPath, codePath: widget.codePath ?? widget.apiPath);
 
     list = <Widget>[
       for(var item in widget.children)
