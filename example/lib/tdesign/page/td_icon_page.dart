@@ -15,7 +15,6 @@ class _TDIconPageState extends State<TDIconPage> {
   @override
   Widget build(BuildContext context) {
     return ExampleWidget(title: 'icon图标',
-        codePath: 'icon',
         children: [
       Container(
         color: Colors.white,

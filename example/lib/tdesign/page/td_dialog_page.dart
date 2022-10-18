@@ -22,7 +22,6 @@ class _TDDialogPageState extends State<TDDialogPage> {
   Widget build(BuildContext context) {
     return ExampleWidget(
         title: '对话框 Dialog',
-        apiPath: 'dialog',
         padding: const EdgeInsets.all(3),
         children: [
           _dividerWidget('确认弹框'),

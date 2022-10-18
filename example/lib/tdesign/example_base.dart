@@ -6,27 +6,28 @@ import '../web.dart';
 import 'api_widget.dart';
 
 
+typedef PageBuilder = Widget Function(BuildContext context, ExamplePageModel model);
 
 /// 示例页面数据
 class ExamplePageModel{
 
-  ExamplePageModel({required this.text,required this.path,required this.pageBuilder,});
+  ExamplePageModel({required this.text,required this.path, this.apiPath, this.codePath,required this.pageBuilder,});
 
   final String text;
   final String path;
-  final WidgetBuilder pageBuilder;
+  final String? apiPath;
+  final String? codePath;
+  final PageBuilder pageBuilder;
 }
 
 /// 示例页面控件，建议每个页面返回一个ExampleWidget即可，不用独自封装
 class ExampleWidget extends StatefulWidget {
-  const ExampleWidget({Key? key, required this.title, required this.children, this.padding, this.backgroundColor, this.apiPath, this.codePath}) : super(key: key);
+  const ExampleWidget({Key? key, required this.title, required this.children, this.padding, this.backgroundColor,}) : super(key: key);
 
   final String title;
   final List<Widget> children;
   final EdgeInsetsGeometry? padding;
   final Color? backgroundColor;
-  final String? apiPath;
-  final String? codePath;
 
   @override
   State<ExampleWidget> createState() => _ExampleWidgetState();
@@ -36,13 +37,17 @@ class _ExampleWidgetState extends State<ExampleWidget> {
 
   late var list;
   bool apiVisible = false;
+  ExamplePageModel? model;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
 
-    WebApiController.setApiPath(apiPath: widget.apiPath, codePath: widget.codePath ?? widget.apiPath);
+      var modelTheme = context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
+      model = modelTheme?.model;
 
+    });
     list = <Widget>[
       for(var item in widget.children)
         Container(
@@ -81,7 +86,7 @@ class _ExampleWidgetState extends State<ExampleWidget> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ApiWidget(apiName: widget.apiPath,visible: apiVisible,), ...list,
+                ApiWidget(apiName: model?.apiPath,visible: apiVisible,), ...list,
               ],
             ),),
         ),
@@ -109,6 +114,20 @@ class ExampleItem extends StatelessWidget{
         builder(context),
       ],
     );
+  }
+}
+
+/// 存储主题数据的内部控件
+class ExamplePageInheritedTheme extends InheritedWidget {
+  final ExamplePageModel model;
+
+  const ExamplePageInheritedTheme(
+      {required this.model, Key? key, required Widget child})
+      : super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(covariant ExamplePageInheritedTheme oldWidget) {
+    return model != oldWidget.model;
   }
 }
 

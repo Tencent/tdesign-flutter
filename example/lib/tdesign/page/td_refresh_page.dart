@@ -27,7 +27,6 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
   Widget build(BuildContext context) {
     return ExampleWidget(
         title: '下拉刷新 PullDownRefresh',
-        apiPath: 'refresh',
         children: [
           SizedBox(
             height: 1000,

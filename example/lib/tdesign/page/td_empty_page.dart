@@ -15,7 +15,6 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
   Widget build(BuildContext context) {
     return ExampleWidget(
         title: '空状态 Empty',
-        apiPath: 'empty',
         children: [
           Container(
             height: 720,

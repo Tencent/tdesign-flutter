@@ -13,7 +13,6 @@ class TDTextPage extends StatelessWidget {
     return ExampleWidget(
       padding: const EdgeInsets.all(8),
       title: 'TDText',
-      apiPath: 'text',
       children: [
         ExampleItem(
             desc: '系统Text:',
