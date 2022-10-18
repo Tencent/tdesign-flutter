@@ -16,7 +16,7 @@ import 'tdesign/page/td_divider_page.dart';
 import 'tdesign/page/td_empty_page.dart';
 import 'tdesign/page/td_icon_page.dart';
 import 'tdesign/page/td_image_page.dart';
-import 'tdesign/page/td_input_view_pager.dart';
+import 'tdesign/page/td_input_page.dart';
 import 'tdesign/page/td_loading_page.dart';
 import 'tdesign/page/td_navbar_page.dart';
 import 'tdesign/page/td_picker_page.dart';
@@ -168,6 +168,11 @@ class MyApp extends StatelessWidget {
                 primary: TDTheme.of(context).brandNormalColor)),
         home: const MyHomePage(title: 'TDesgin Flutter 组件库'),
         onGenerateRoute: TDExampleRoute.onGenerateRoute,
+        // TODO:所有路径指向首页，需区分
+        routes: {
+          for(var model in examplePageList)
+            model.path: (c)=>const MyApp()
+        },
       ),
     );
   }
