@@ -25,7 +25,6 @@ class _TDButtonPageState extends State<TDButtonPage> {
       color: TDTheme.of(context).grayColor2,
       child: ExampleWidget(
           title: '按钮 Button',
-          apiPath: 'button',
           padding: const EdgeInsets.only(top: 8,bottom: 8),
           children: [
             ExampleItem(desc: '可点击', builder: (context){

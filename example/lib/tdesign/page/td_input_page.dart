@@ -19,7 +19,6 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
     return ExampleWidget(
       backgroundColor: const Color(0xFFF0F2F5),
       title: '输入框 Input',
-      apiPath: 'input',
       children: [
         ExampleItem(
             desc: '基础文本框',

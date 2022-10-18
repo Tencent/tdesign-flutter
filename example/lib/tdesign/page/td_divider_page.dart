@@ -10,7 +10,6 @@ class TDDividerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExampleWidget(
         title: '分割线 Divider',
-        apiPath: 'divider',
         padding: const EdgeInsets.only(top: 16, bottom: 16),
         children: [
       ExampleItem(desc: '直线拉通', builder: (_){
