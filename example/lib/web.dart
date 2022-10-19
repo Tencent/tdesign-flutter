@@ -86,7 +86,7 @@ class _WebMainBodyState extends State<WebMainBody> {
 
                   Container(
                     margin: const EdgeInsets.only(left:32, top: 32,right: 32),
-                    child: MobieWidget(src: "http://${html.window.location.host}/#${mobilePath ?? 'TDTextPage'}",),
+                    child: MobileWidget(page: mobilePath ?? 'TDTextPage',),
                   )
                 ],
               ),
@@ -210,20 +210,20 @@ class _DetailLayoutState extends State<DetailLayout> with TickerProviderStateMix
   }
 }
 
-class MobieWidget extends StatefulWidget {
-  const MobieWidget({Key? key,required this.src}) : super(key: key);
+class MobileWidget extends StatefulWidget {
+  const MobileWidget({Key? key,required this.page}) : super(key: key);
 
-  final String src;
+  final String page;
 
   @override
-  State<MobieWidget> createState() => _MobieWidgetState();
+  State<MobileWidget> createState() => _MobileWidgetState();
 }
 
-class _MobieWidgetState extends State<MobieWidget> {
+class _MobileWidgetState extends State<MobileWidget> {
 
   double screenWidth = 520;
   double screenHeight = 1080;
-  String? lastSrc;
+  String? lastPage;
 
   Widget? lastWidget;
 
@@ -238,16 +238,16 @@ class _MobieWidgetState extends State<MobieWidget> {
   }
 
   Widget getWebView() {
-    // print('zflyTest ip:${html.window}')
-    if(widget.src == lastSrc && lastWidget != null){
+    print('zflyTest ip:${html.window.location.href}');
+    if(widget.page == lastPage && lastWidget != null){
       return lastWidget!;
     }
-    lastSrc = widget.src;
+    lastPage = widget.page;
     var _iframeElement = html.IFrameElement();
     // ignore: unsafe_html
-    _iframeElement.src = lastSrc;
+    _iframeElement.src = _getSrc();
     _iframeElement.style.border = 'none';
-    var id = 'iframeElement$lastSrc';
+    var id = 'iframeElement$lastPage';
 // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(
       id,
@@ -275,6 +275,11 @@ class _MobieWidgetState extends State<MobieWidget> {
       ),
     );
     return lastWidget!;
+  }
+
+  String? _getSrc() {
+    var href = html.window.location.href;
+    return href.replaceFirst('#/', '#$lastPage');
   }
 }
 
