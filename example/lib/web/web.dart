@@ -1,14 +1,13 @@
-import 'dart:html' as html;
+import 'dart:html' if(dart.library.io) 'web_replace.dart' as html;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import 'main.dart';
-import 'tdesign/api_widget.dart';
-import 'tdesign/code_widget.dart';
-import 'tdesign/example_route.dart';
+import '../main.dart';
+import '../tdesign/api_widget.dart';
+import 'code_widget.dart';
 
 class WebMainBody extends StatefulWidget {
   const WebMainBody({Key? key}) : super(key: key);
@@ -238,7 +237,6 @@ class _MobileWidgetState extends State<MobileWidget> {
   }
 
   Widget getWebView() {
-    print('zflyTest ip:${html.window.location.href}');
     if(widget.page == lastPage && lastWidget != null){
       return lastWidget!;
     }
