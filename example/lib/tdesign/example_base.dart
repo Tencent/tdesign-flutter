@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/src/util/platform_util.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../web.dart';
 import 'api_widget.dart';
 
 

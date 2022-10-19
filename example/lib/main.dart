@@ -31,7 +31,7 @@ import 'tdesign/page/td_tag_page.dart';
 import 'tdesign/page/td_text_page.dart';
 import 'tdesign/page/td_theme_page.dart';
 import 'tdesign/page/td_toast_page.dart';
-import 'web.dart';
+import 'web/web.dart' if(dart.library.io) 'web/web_replace.dart' as web;
 
 PageBuilder _wrapInheritedTheme(WidgetBuilder builder){
   return (context, model){
@@ -265,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildBody(BuildContext context) {
     if (PlatformUtil.isWeb) {
-      return const WebMainBody();
+      return const web.WebMainBody();
     }
     return Center(
       // Center is a layout widget. It takes a single child and positions it
@@ -288,8 +288,7 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TDButtonStyle.weakly(),
               size: TDButtonSize.small,
               onTap: () {
-                var navigator = WebHome.navigator ?? Navigator.of(context);
-                navigator.pushNamed(model.path);
+                Navigator.pushNamed(context, model.path);
               },
               content: model.text),
         )
