@@ -49,7 +49,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '图标--基础',
       path: 'TDIconPage',
-      apiPath: 'icon',
+      codePath: 'icon',
       pageBuilder: _wrapInheritedTheme((context) => const TDIconPage())),
   ExamplePageModel(
       text: '主题--基础',
@@ -104,7 +104,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '时间选择器 DatePicker',
       path: 'TDDatePickerPage',
-      apiPath: 'date_picker',
+      codePath: 'date_picker',
       pageBuilder: _wrapInheritedTheme((context) => const TDDatePickerPage())),
   ExamplePageModel(
       text: '输入框 Input',
@@ -114,7 +114,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '选择器 Picker',
       path: 'TDPickerPage',
-      apiPath: 'picker',
+      codePath: 'picker',
       pageBuilder: _wrapInheritedTheme((context) => const TDPickerPage())),
   ExamplePageModel(
       text: '单选框 Radio',
@@ -160,7 +160,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '弹出层 PopUp',
       path: 'TDPopUpPage',
-      apiPath: 'popup',
+      codePath: 'popup',
       pageBuilder: _wrapInheritedTheme((context) => const TDPopupPage())),
   ExamplePageModel(
       text: '下拉刷新 PullDownRefresh',
@@ -170,7 +170,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '轻提示 Toast',
       path: 'TDToastPage',
-      apiPath: 'toast',
+      codePath: 'toast',
       pageBuilder: _wrapInheritedTheme((context) => const TDToastPage())),
 ];
 
