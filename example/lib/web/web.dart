@@ -7,6 +7,7 @@ import 'package:tdesign_flutter/td_export.dart';
 
 import '../main.dart';
 import '../tdesign/api_widget.dart';
+import '../tdesign/example_base.dart';
 import 'code_widget.dart';
 
 class WebMainBody extends StatefulWidget {
@@ -18,7 +19,7 @@ class WebMainBody extends StatefulWidget {
 }
 
 class _WebMainBodyState extends State<WebMainBody> {
-  static const menuWidth = 300.0;
+  static const menuWidth = 260.0;
 
   var screenSizeList = <Size>[
     const Size(520, 1080),
@@ -70,10 +71,11 @@ class _WebMainBodyState extends State<WebMainBody> {
 
               // 菜单放到最上方，防止被屏幕外内容遮挡
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: menuWidth,
-                    color: TDTheme.of(context).whiteColor1,
+                    color: TDTheme.of(context).brandColor1,
                     child: _buildMenu(),
                   ),
                   Expanded(child: Container(
@@ -107,32 +109,49 @@ class _WebMainBodyState extends State<WebMainBody> {
 
 
   Widget _buildMenu(){
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: _buildChildren(context),
-      ),
+    return Column(
+      children: [
+        Container(
+          height: 75,
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.only(left: 16),
+          color: TDTheme.of(context).brandHoverColor,
+          child: TDText('TDesign 组件', textColor: TDTheme.of(context).whiteColor1,font: TDTheme.of(context).fontXL,),
+        ) ,
+        Expanded(child: ListView.builder(
+            itemCount: examplePageList.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              var model = examplePageList[index];
+              return Container(
+                padding: const EdgeInsets.only(
+                    left: 16, right: 16, top: 8, bottom: 8),
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(color: TDTheme
+                        .of(context)
+                        .grayColor4, width: 0.5))),
+                child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      WebApiController.setApiPath(apiPath: model.apiPath,mobilePath: model.path, codePath: model.codePath ?? model.apiPath, );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TDText(model.text),
+                        Icon(TDIcons.chevron_right, color: TDTheme
+                            .of(context)
+                            .brandHoverColor,)
+                      ],
+                    )),
+              );
+            }))
+
+      ],
     );
   }
 
-  List<Widget> _buildChildren(BuildContext context) {
-    return <Widget>[
-      for (var model in examplePageList)
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TDButton(
-              style: TDButtonStyle.weakly(),
-              size: TDButtonSize.small,
-              onTap: () {
-                // var navigator = WebHome.navigator ?? Navigator.of(context);
-                // navigator.pushNamed(model.path);
-
-                WebApiController.setApiPath(apiPath: model.apiPath,mobilePath: model.path, codePath: model.codePath ?? model.apiPath, );
-              },
-              content: model.text),
-        )
-    ];
-  }
 }
 
 class WebHome extends StatelessWidget {
