@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'dart:html' as html;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -86,7 +86,7 @@ class _WebMainBodyState extends State<WebMainBody> {
 
                   Container(
                     margin: const EdgeInsets.only(left:32, top: 32,right: 32),
-                    child: MobieWidget(src: "http://localhost:53549/#${mobilePath ?? 'TDTextPage'}",),
+                    child: MobieWidget(src: "http://${html.window.location.host}/#${mobilePath ?? 'TDTextPage'}",),
                   )
                 ],
               ),
@@ -238,11 +238,12 @@ class _MobieWidgetState extends State<MobieWidget> {
   }
 
   Widget getWebView() {
+    // print('zflyTest ip:${html.window}')
     if(widget.src == lastSrc && lastWidget != null){
       return lastWidget!;
     }
     lastSrc = widget.src;
-    var _iframeElement = IFrameElement();
+    var _iframeElement = html.IFrameElement();
     // ignore: unsafe_html
     _iframeElement.src = lastSrc;
     _iframeElement.style.border = 'none';
