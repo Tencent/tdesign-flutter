@@ -40,3 +40,4 @@ export 'src/theme/td_font_family.dart';
 export 'src/theme/td_fonts.dart';
 export 'src/theme/td_shadows.dart';
 export 'src/theme/td_theme.dart';
+export 'src/util/platform_util.dart';
