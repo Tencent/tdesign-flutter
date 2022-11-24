@@ -34,6 +34,7 @@ class TDTab extends Tab {
             text: text,
             child: child,
             icon: icon,
+            height: height,
             iconMargin: iconMargin);
 
   @override
