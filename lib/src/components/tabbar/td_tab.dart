@@ -17,12 +17,17 @@ class TDTab extends Tab {
   @override
   final EdgeInsetsGeometry iconMargin;
 
+  /// tab高度
+  @override
+  final double? height;
+
   @override
   const TDTab(
       {Key? key,
       this.text,
       this.child,
       this.icon,
+      this.height,
       this.iconMargin = const EdgeInsets.only(bottom: 10.0)})
       : super(
             key: key,
@@ -39,6 +44,7 @@ class TDTab extends Tab {
       child: child,
       icon: icon,
       iconMargin: iconMargin,
+      height: height,
     );
   }
 }
