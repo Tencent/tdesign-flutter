@@ -30,7 +30,7 @@ issue label 需要设置为 help wanted，发起招募
 
 如果你想要认领组件开发，请在本 issue 中评论认领并预估提交 PR 时间，例：
 
-> “我认领这个组件 tdesign-vue 仓库的实现任务，预计 x 日后提交”
+> “我认领这个组件 tdesign-flutter 仓库的实现任务，预计 x 日后提交”
 请尽量在预期时间内完成，超期后 PMC 同学可能会联系其他同学接手实现。
 
 详细提交过程请参考：[如何贡献](https://github.com/TDesignOteam/tdesign-flutter)。
