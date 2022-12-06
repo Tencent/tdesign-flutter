@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import '../example_base.dart';
+import '../example_widget.dart';
 
 class TDButtonPage extends StatefulWidget {
   const TDButtonPage({Key? key}) : super(key: key);
@@ -23,18 +23,18 @@ class _TDButtonPageState extends State<TDButtonPage> {
   Widget build(BuildContext context) {
     return Container(
       color: TDTheme.of(context).grayColor2,
-      child: ExampleWidget(
+      child: ExamplePage(
           title: '按钮 Button',
           padding: const EdgeInsets.only(top: 8,bottom: 8),
           children: [
-            ExampleItem(desc: '可点击', builder: (context){
+            ExampleModule(desc: '可点击', builder: (context){
               return TDButton(content: '强按钮',
                 style: TDButtonStyle.primary(),
                 onTap: onTap,
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '不可点击', builder: (context){
+            ExampleModule(desc: '不可点击', builder: (context){
               return TDButton(content: '强按钮',
                 style: TDButtonStyle.primary(),
                 disabled: true,
@@ -43,14 +43,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
             }),
 
 
-            ExampleItem(desc: '可点击', builder: (context){
+            ExampleModule(desc: '可点击', builder: (context){
               return TDButton(content: '弱按钮',
                 style: TDButtonStyle.weakly(),
                 onTap: onTap,
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '不可点击', builder: (context){
+            ExampleModule(desc: '不可点击', builder: (context){
               return TDButton(content: '弱按钮',
                 style: TDButtonStyle.weakly(),
                 disabled: true,
@@ -59,14 +59,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
             }),
 
 
-            ExampleItem(desc: '可点击', builder: (context){
+            ExampleModule(desc: '可点击', builder: (context){
               return TDButton(content: '次按钮',
                 style: TDButtonStyle.secondary(),
                 onTap: onTap,
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '不可点击', builder: (context){
+            ExampleModule(desc: '不可点击', builder: (context){
               return TDButton(content: '次按钮',
                 style: TDButtonStyle.secondary(),
                 disabled: true,
@@ -75,7 +75,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
             }),
 
 
-            ExampleItem(desc: '可点击', builder: (context){
+            ExampleModule(desc: '可点击', builder: (context){
               return TDButton(content: '带图标按钮',
                 style: TDButtonStyle.weakly(),
                 icon: TDIcons.app,
@@ -83,7 +83,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '不可点击', builder: (context){
+            ExampleModule(desc: '不可点击', builder: (context){
               return TDButton(content: '带图标按钮',
                 style: TDButtonStyle.weakly(),
                 icon: TDIcons.app,
@@ -92,14 +92,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 onLongPress: onLongPress,);
             }),
 
-            ExampleItem(desc: '可点击', builder: (context){
+            ExampleModule(desc: '可点击', builder: (context){
               return TDButton(content: '强警告按钮',
                 style: TDButtonStyle.warningPrimary(),
                 onTap: onTap,
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '不可点击', builder: (context){
+            ExampleModule(desc: '不可点击', builder: (context){
               return TDButton(content: '强警告按钮',
                 style: TDButtonStyle.warningPrimary(),
                 disabled: true,
@@ -108,14 +108,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
             }),
 
 
-            ExampleItem(desc: '可点击', builder: (context){
+            ExampleModule(desc: '可点击', builder: (context){
               return TDButton(content: '弱警告按钮',
                 style: TDButtonStyle.warningWeakly(),
                 onTap: onTap,
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '不可点击', builder: (context){
+            ExampleModule(desc: '不可点击', builder: (context){
               return TDButton(content: '弱警告按钮',
                 style: TDButtonStyle.warningWeakly(),
                 disabled: true,
@@ -124,7 +124,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
             }),
 
 
-            ExampleItem(desc: '可点击', builder: (context){
+            ExampleModule(desc: '可点击', builder: (context){
               return Container(
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.all(10),
@@ -140,7 +140,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                   ],),
               );
             }),
-            ExampleItem(desc: '不可点击', builder: (context){
+            ExampleModule(desc: '不可点击', builder: (context){
               return Container(
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.all(10),
@@ -159,13 +159,13 @@ class _TDButtonPageState extends State<TDButtonPage> {
             }),
 
 
-            ExampleItem(desc: '可点击', builder: (context){
+            ExampleModule(desc: '可点击', builder: (context){
               return TDTextButton('文字按钮',
                 onTap: onTap,
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '不可点击', builder: (context){
+            ExampleModule(desc: '不可点击', builder: (context){
               return TDTextButton('文字按钮',
                 onTap: onTap,
                 onLongPress: onLongPress,
@@ -174,14 +174,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
             }),
 
 
-            ExampleItem(desc: '可点击', builder: (context){
+            ExampleModule(desc: '可点击', builder: (context){
               return TDButton(content: '通栏按钮',
                 style: TDButtonStyle.full(),
                 onTap: onTap,
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '不可点击', builder: (context){
+            ExampleModule(desc: '不可点击', builder: (context){
               return TDButton(content: '通栏按钮',
                 style: TDButtonStyle.full(),
                 disabled: true,
@@ -190,7 +190,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
             }),
 
 
-            ExampleItem(desc: '两个按钮', builder: (context){
+            ExampleModule(desc: '两个按钮', builder: (context){
               return Row(
                 children: [
                   Expanded(child: TDButton(content: '次按钮',
@@ -211,7 +211,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
 
 
 
-            ExampleItem(desc: '尺寸', builder: (context){
+            ExampleModule(desc: '尺寸', builder: (context){
               return SizedBox(
                 height: 50,
                 child: TDText(
@@ -223,7 +223,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
             }),
 
 
-            ExampleItem(desc: '大', builder: (context){
+            ExampleModule(desc: '大', builder: (context){
               return TDButton(content: '强按钮',
                 style: TDButtonStyle.primary(),
                 size: TDButtonSize.large,
@@ -231,7 +231,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '中(默认)', builder: (context){
+            ExampleModule(desc: '中(默认)', builder: (context){
               return TDButton(content: '强按钮',
                 size: TDButtonSize.medium,
                 style: TDButtonStyle.primary(),
@@ -239,7 +239,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
+            ExampleModule(desc: '小(宽度自适应)', builder: (context){
               return TDButton(content: '强按钮',
                 size: TDButtonSize.small,
                 style: TDButtonStyle.primary(),
@@ -247,7 +247,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
+            ExampleModule(desc: '小(宽度自适应)', builder: (context){
               return TDButton(content: '弱按钮',
                 size: TDButtonSize.small,
                 style: TDButtonStyle.weakly(),
@@ -255,7 +255,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
+            ExampleModule(desc: '小(宽度自适应)', builder: (context){
               return TDButton(content: '次按钮',
                 size: TDButtonSize.small,
                 style: TDButtonStyle.secondary(),
@@ -263,7 +263,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
+            ExampleModule(desc: '小(宽度自适应)', builder: (context){
               return TDButton(content: '带图标按钮',
                 size: TDButtonSize.small,
                 style: TDButtonStyle.weakly(),
@@ -272,7 +272,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
+            ExampleModule(desc: '小(宽度自适应)', builder: (context){
               return TDButton(content: '强警告按钮',
                 size: TDButtonSize.small,
                 style: TDButtonStyle.warningPrimary(),
@@ -280,7 +280,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
+            ExampleModule(desc: '小(宽度自适应)', builder: (context){
               return TDButton(content: '弱警告按钮',
                 size: TDButtonSize.small,
                 style: TDButtonStyle.warningWeakly(),
@@ -288,7 +288,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 onLongPress: onLongPress,
               );
             }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
+            ExampleModule(desc: '小(宽度自适应)', builder: (context){
               return Container(
                 width: 200,
                 padding: const EdgeInsets.all(10),

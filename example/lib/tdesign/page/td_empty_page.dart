@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/tdesign/example_base.dart';
+import 'package:tdesign_flutter_example/tdesign/example_widget.dart';
 
 
 class TDEmptyPage extends StatefulWidget {
@@ -13,7 +13,7 @@ class TDEmptyPage extends StatefulWidget {
 class _TDEmptyPageState extends State<TDEmptyPage> {
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(
+    return ExamplePage(
         title: '空状态 Empty',
         children: [
           Container(

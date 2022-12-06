@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../example_base.dart';
+import '../example_widget.dart';
 
 class TDInputViewPage extends StatefulWidget {
   const TDInputViewPage({Key? key}) : super(key: key);
@@ -16,11 +16,11 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(
+    return ExamplePage(
       backgroundColor: const Color(0xFFF0F2F5),
       title: '输入框 Input',
       children: [
-        ExampleItem(
+        ExampleModule(
             desc: '基础文本框',
             builder: (_) {
               return TDInput(
@@ -30,7 +30,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 hintText: '请输入文字',
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '无标题文本框',
             builder: (_) {
               return TDInput(
@@ -39,7 +39,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 hintText: '请输入文字',
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '带提示信息文本框',
             builder: (_) {
               return TDInput(
@@ -53,7 +53,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 ),
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '两行样式文本框',
             builder: (_) {
               return TDInput(
@@ -64,7 +64,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 hintText: '请输入文字',
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '长标题文本框',
             builder: (_) {
               return TDInput(
@@ -74,7 +74,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 hintText: '请输入文字',
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '长文本输入文本框-无标题',
             builder: (_) {
               return TDInput(
@@ -85,7 +85,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 maxLines: 8,
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '长文本输入文本框',
             builder: (_) {
               return TDInput(
@@ -97,7 +97,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 maxLines: 8,
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '状态--不可编辑文字',
             builder: (_) {
               return TDInput(
@@ -110,7 +110,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 backgroundColor: Colors.white,
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '状态--一段错误填写的内容',
             builder: (_) {
               return TDInput(
@@ -124,7 +124,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 backgroundColor: Colors.white,
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '小规格H48',
             builder: (_) {
               return TDInput(
@@ -135,7 +135,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 backgroundColor: Colors.white,
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '大规格H56',
             builder: (_) {
               return TDInput(
@@ -147,7 +147,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 backgroundColor: Colors.white,
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '特殊类型',
             builder: (_) {
               return TDInput(
@@ -167,7 +167,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 },
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '特殊类型',
             builder: (_) {
               return TDInput(
@@ -190,7 +190,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 },
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '特殊类型',
             builder: (_) {
               return TDInput(
@@ -206,7 +206,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 },
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '特殊类型',
             builder: (_) {
               return TDInput(
@@ -219,7 +219,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 rightWidget: TDText('元', textColor: TDTheme.of(context).fontGyColor1),
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '特殊类型',
             builder: (_) {
               return TDInput(

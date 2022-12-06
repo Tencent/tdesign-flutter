@@ -4,6 +4,7 @@ import 'package:tdesign_flutter/src/util/platform_util.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import 'tdesign/example_base.dart';
+import 'tdesign/example_widget.dart';
 import 'tdesign/example_route.dart';
 import 'tdesign/page/td_avatar_page.dart';
 import 'tdesign/page/td_badge_page.dart';

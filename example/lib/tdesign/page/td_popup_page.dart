@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/tdesign/example_base.dart';
+import 'package:tdesign_flutter_example/tdesign/example_widget.dart';
 
 ///
 /// TDPopup掩饰
@@ -94,7 +94,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       child: current,
     );
 
-    current = ExampleWidget(
+    current = ExamplePage(
       title: '弹出层 PopUp',
       children: [
         current,

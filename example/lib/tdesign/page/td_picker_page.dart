@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../example_base.dart';
+import '../example_widget.dart';
 
 
 class TDPickerPage extends StatefulWidget {
@@ -54,10 +54,10 @@ class _TDPickerPageState extends State<TDPickerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(
+    return ExamplePage(
       title: '选择器 Picker',
       children: [
-        ExampleItem(
+        ExampleModule(
             desc: '基础选择器--城市',
             builder: (_) {
               return Column(
@@ -78,7 +78,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                     ),
                   ]);
             }),
-        ExampleItem(desc: '基础选择器--年份和季节', builder: (_) {
+        ExampleModule(desc: '基础选择器--年份和季节', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -98,7 +98,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                 ),
               ]);
         }),
-        ExampleItem(desc: '基础选择器--日期', builder: (_) {
+        ExampleModule(desc: '基础选择器--日期', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -120,7 +120,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                 ),
               ]);
         }),
-        ExampleItem(desc: '基础选择器--地区--联动', builder: (_) {
+        ExampleModule(desc: '基础选择器--地区--联动', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -144,7 +144,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                 ),
               ]);
         }),
-        ExampleItem(
+        ExampleModule(
             desc: '带标题--城市',
             builder: (_) {
               return Column(
@@ -165,7 +165,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                     ),
                   ]);
             }),
-        ExampleItem(desc: '带标题--年份和四季', builder: (_) {
+        ExampleModule(desc: '带标题--年份和四季', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -185,7 +185,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                 ),
               ]);
         }),
-        ExampleItem(desc: '带标题--日期', builder: (_) {
+        ExampleModule(desc: '带标题--日期', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -207,7 +207,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                 ),
               ]);
         }),
-        ExampleItem(desc: '基础选择器--地区--联动', builder: (_) {
+        ExampleModule(desc: '基础选择器--地区--联动', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
