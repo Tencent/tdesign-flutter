@@ -16,8 +16,10 @@ class TDThemePage extends StatefulWidget {
 class _TDThemePageState extends State<TDThemePage> {
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(title: '主题示例', children: [
-      Container(
+    return ExamplePage(title: '主题示例',
+        children: [
+        ExampleModule(title: '默认',children: [
+          ExampleItem(builder: (_) => Container(
           color: Colors.white,
           alignment: Alignment.center,
           child: Column(
@@ -27,7 +29,7 @@ class _TDThemePageState extends State<TDThemePage> {
               TDText(
                 '使用外层待赋值主题',
                 font:
-                    TDTheme.of(context).fontM, // 业务方使用时，如果明确跟随全局主题，可以不传context
+                    TDTheme.of(context).fontBodyLarge, // 业务方使用时，如果明确跟随全局主题，可以不传context
                 textColor:
                     TDTheme.of(context).brandNormalColor, // 点击颜色可查看具体设置和显示效果
               ),
@@ -36,7 +38,7 @@ class _TDThemePageState extends State<TDThemePage> {
               TDText(
                 '使用外层不赋值主题',
                 font:
-                    TDTheme.of(context).fontL, // 业务方使用时，如果明确跟随全局主题，可以不传context
+                    TDTheme.of(context).fontTitleExtraLarge, // 业务方使用时，如果明确跟随全局主题，可以不传context
                 textColor:
                     TDTheme.of(context).successNormalColor, // 点击颜色可查看具体设置和显示效果
               ),
@@ -52,8 +54,8 @@ class _TDThemePageState extends State<TDThemePage> {
                   // 不能直接在此处使用contxt，这里虽然被包裹在TGTheme中，但是context未更新，因此阿不到最新数据
                   child: const TestWidget()),
             ],
-          ))
-    ]);
+          )))
+    ])]);
   }
 }
 
@@ -70,19 +72,19 @@ class TestWidget extends StatelessWidget {
         children: [
           TDText(
             '使用内层赋值主题',
-            font: TDTheme.of(context).fontM, //明确使用内层主题，必须传context
+            font: TDTheme.of(context).fontBodyLarge, //明确使用内层主题，必须传context
             textColor:
                 TDTheme.of(context).brandNormalColor, // 明确使用内层主题，必须传context
           ),
           TDText(
             '使用内层不赋值主题',
-            font: TDTheme.of(context).fontL, //明确使用内层主题，必须传context
+            font: TDTheme.of(context).fontTitleExtraLarge, //明确使用内层主题，必须传context
             textColor:
                 TDTheme.of(context).successNormalColor, // 明确使用内层主题，必须传context
           ),
           TDText(
             '使用默认主题',
-            font: TDTheme.defaultData().fontM, //不传context，使用默认主题，此处是外层的主题
+            font: TDTheme.defaultData().fontBodyLarge, //不传context，使用默认主题，此处是外层的主题
             textColor: TDTheme.defaultData().brandNormalColor,
           ),
         ],

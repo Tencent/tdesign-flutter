@@ -57,7 +57,9 @@ class _TDPickerPageState extends State<TDPickerPage> {
     return ExamplePage(
       title: '选择器 Picker',
       children: [
-        ExampleModule(
+      ExampleModule(title: '默认',
+      children: [
+        ExampleItem(
             desc: '基础选择器--城市',
             builder: (_) {
               return Column(
@@ -78,7 +80,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                     ),
                   ]);
             }),
-        ExampleModule(desc: '基础选择器--年份和季节', builder: (_) {
+        ExampleItem(desc: '基础选择器--年份和季节', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -98,7 +100,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                 ),
               ]);
         }),
-        ExampleModule(desc: '基础选择器--日期', builder: (_) {
+        ExampleItem(desc: '基础选择器--日期', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -120,7 +122,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                 ),
               ]);
         }),
-        ExampleModule(desc: '基础选择器--地区--联动', builder: (_) {
+        ExampleItem(desc: '基础选择器--地区--联动', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -144,7 +146,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                 ),
               ]);
         }),
-        ExampleModule(
+        ExampleItem(
             desc: '带标题--城市',
             builder: (_) {
               return Column(
@@ -165,7 +167,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                     ),
                   ]);
             }),
-        ExampleModule(desc: '带标题--年份和四季', builder: (_) {
+        ExampleItem(desc: '带标题--年份和四季', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -185,7 +187,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                 ),
               ]);
         }),
-        ExampleModule(desc: '带标题--日期', builder: (_) {
+        ExampleItem(desc: '带标题--日期', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -207,7 +209,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                 ),
               ]);
         }),
-        ExampleModule(desc: '基础选择器--地区--联动', builder: (_) {
+        ExampleItem(desc: '基础选择器--地区--联动', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -232,6 +234,6 @@ class _TDPickerPageState extends State<TDPickerPage> {
               ]);
         }),
       ],
-    );
+    )]);
   }
 }

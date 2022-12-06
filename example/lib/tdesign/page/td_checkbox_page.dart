@@ -40,8 +40,10 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
 
     return ExamplePage(
       title: '多选框 Checkbox',
-      children: [
-        ExampleModule(desc: '基础多选框', builder: (context){
+        children: [
+        ExampleModule(title: '默认',
+        children: [
+        ExampleItem(desc: '基础多选框', builder: (context){
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
@@ -72,7 +74,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             ],
           );
         }),
-        ExampleModule(desc: '右侧多选框', builder: (context){
+        ExampleItem(desc: '右侧多选框', builder: (context){
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
@@ -98,7 +100,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             ],
           );
         }),
-        ExampleModule(desc: '自定义图标多框类型', builder: (context){
+        ExampleItem(desc: '自定义图标多框类型', builder: (context){
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
@@ -119,7 +121,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             ],
           );
         }),
-        ExampleModule(desc: '规格', builder: (context){
+        ExampleItem(desc: '规格', builder: (context){
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
@@ -134,7 +136,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             ],
           );
         }),
-        ExampleModule(desc: '带全选多选框', builder: (context){
+        ExampleItem(desc: '带全选多选框', builder: (context){
           return TDCheckboxGroup(
               controller: controller,
               onChangeGroup: (checkedId) {
@@ -192,6 +194,6 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
               ));
         })
       ]
-    );
+    )]);
   }
 }

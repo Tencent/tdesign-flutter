@@ -12,7 +12,9 @@ class TDSwiperPage extends StatelessWidget {
     return ExamplePage(
       title: '轮播图 Swiper',
       children: [
-        ExampleModule(
+      ExampleModule(title: '默认',
+      children: [
+        ExampleItem(
             desc: '圆点指示器',
             builder: (_) {
               return Container(
@@ -35,7 +37,7 @@ class TDSwiperPage extends StatelessWidget {
                 ),
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '圆角矩形指示器（默认100ms动画）',
             builder: (_) {
               return Container(
@@ -58,7 +60,7 @@ class TDSwiperPage extends StatelessWidget {
                 ),
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '数字指示器',
             builder: (_) {
               return Container(
@@ -81,7 +83,7 @@ class TDSwiperPage extends StatelessWidget {
                 ),
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '数字指示器指定位置',
             builder: (_) {
               return Container(
@@ -104,7 +106,7 @@ class TDSwiperPage extends StatelessWidget {
                 ),
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '箭头指示器',
             builder: (_) {
               return Container(
@@ -127,7 +129,7 @@ class TDSwiperPage extends StatelessWidget {
                 ),
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '箭头指示器非循环，边界箭头隐藏',
             builder: (_) {
               return Container(
@@ -151,6 +153,6 @@ class TDSwiperPage extends StatelessWidget {
               );
             }),
       ],
-    );
+    )]);
   }
 }
