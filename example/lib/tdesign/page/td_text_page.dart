@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
+import '../../annotation/demo.dart';
 import '../example_base.dart';
 
 class TDTextPage extends StatelessWidget {
   const TDTextPage({Key? key}) : super(key: key);
 
+  final exampleTxt = '文本Text';
   @override
   Widget build(BuildContext context) {
-    var exampleTxt = '文本Text';
     // debugPaintBaselinesEnabled = true;
     return ExampleWidget(
       padding: const EdgeInsets.all(8),
@@ -23,11 +24,7 @@ class TDTextPage extends StatelessWidget {
             }),
         ExampleItem(
             desc: '普通TDText:',
-            builder: (_) {
-              return TDText(
-                exampleTxt,
-              );
-            }),
+            builder: _buildNormalTDText),
         ExampleItem(
             desc: '指定常用属性:',
             builder: (_) {
@@ -113,6 +110,13 @@ class TDTextPage extends StatelessWidget {
               );
             }),
       ],
+    );
+  }
+
+  @Demo()
+  Widget _buildNormalTDText(BuildContext context) {
+    return TDText(
+      exampleTxt,
     );
   }
 }
