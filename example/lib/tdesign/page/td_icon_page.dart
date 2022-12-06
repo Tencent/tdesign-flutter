@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../example_base.dart';
+import '../example_widget.dart';
 
 
 class TDIconPage extends StatefulWidget {
@@ -14,7 +14,7 @@ class TDIconPage extends StatefulWidget {
 class _TDIconPageState extends State<TDIconPage> {
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: 'icon图标',
+    return ExamplePage(title: 'icon图标',
         children: [
       Container(
         color: Colors.white,

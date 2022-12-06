@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import '../example_base.dart';
+import '../example_widget.dart';
 
 class TDToastPage extends StatefulWidget {
   const TDToastPage({Key? key}) : super(key: key);
@@ -12,7 +12,7 @@ class TDToastPage extends StatefulWidget {
 class _TDToastPageState extends State<TDToastPage> {
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: '轻提示 Toast', children: [
+    return ExamplePage(title: '轻提示 Toast', children: [
       ElevatedButton(
           onPressed: () {
             TDToast.showText('我是Toast', context: context);

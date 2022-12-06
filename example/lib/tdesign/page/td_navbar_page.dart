@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import '../example_base.dart';
+import '../example_widget.dart';
 
 class TDNavBarPage extends StatelessWidget {
   const TDNavBarPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(
+    return ExamplePage(
       title: '导航栏 NavBar',
       children: [
-        ExampleItem(
+        ExampleModule(
           desc: '基础导航栏',
           builder: (_) {
             return const TDNavBar(title: '标题');
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '左侧双操作导航栏',
           builder: (_) {
             return TDNavBar(
@@ -30,7 +30,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '右侧双操作导航栏',
           builder: (_) {
             return TDNavBar(
@@ -42,7 +42,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '基础小程序导航栏',
           builder: (_) {
             return TDNavBar(
@@ -56,7 +56,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '带返回导航栏',
           builder: (_) {
             return TDNavBar(
@@ -69,7 +69,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '带返回、主页按钮导航栏',
           builder: (_) {
             return TDNavBar(
@@ -87,7 +87,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '自定义品牌导航栏',
           builder: (_) {
             return TDNavBar(
@@ -103,7 +103,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '自定义图片导航栏',
           builder: (_) {
             return TDNavBar(
@@ -122,7 +122,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '品牌超长文字导航栏',
           builder: (_) {
             return TDNavBar(
@@ -138,7 +138,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '自定义背景色',
           builder: (_) {
             return TDNavBar(
