@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../example_base.dart';
+import '../example_widget.dart';
 
 class TDSwiperPage extends StatelessWidget {
   const TDSwiperPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(
+    return ExamplePage(
       title: '轮播图 Swiper',
       children: [
-        ExampleItem(
+        ExampleModule(
             desc: '圆点指示器',
             builder: (_) {
               return Container(
@@ -35,7 +35,7 @@ class TDSwiperPage extends StatelessWidget {
                 ),
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '圆角矩形指示器（默认100ms动画）',
             builder: (_) {
               return Container(
@@ -58,7 +58,7 @@ class TDSwiperPage extends StatelessWidget {
                 ),
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '数字指示器',
             builder: (_) {
               return Container(
@@ -81,7 +81,7 @@ class TDSwiperPage extends StatelessWidget {
                 ),
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '数字指示器指定位置',
             builder: (_) {
               return Container(
@@ -104,7 +104,7 @@ class TDSwiperPage extends StatelessWidget {
                 ),
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '箭头指示器',
             builder: (_) {
               return Container(
@@ -127,7 +127,7 @@ class TDSwiperPage extends StatelessWidget {
                 ),
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '箭头指示器非循环，边界箭头隐藏',
             builder: (_) {
               return Container(

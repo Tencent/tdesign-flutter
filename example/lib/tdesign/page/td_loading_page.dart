@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import '../example_base.dart';
+import '../example_widget.dart';
 
 class TDLoadingPage extends StatefulWidget {
 
@@ -19,12 +19,12 @@ class TDLoadingPage extends StatefulWidget {
 class _TDLoadingPageState extends State<TDLoadingPage> {
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(
+    return ExamplePage(
         title: '加载 Loading',
         children: [
 
       TDText('类型', font: TDTheme.of(context).fontXL,),
-      ExampleItem(desc: '纯图标', builder: (_){
+      ExampleModule(desc: '纯图标', builder: (_){
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -44,7 +44,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
           ],
         );
       }),
-      ExampleItem(desc: '图标加文字横向', builder: (_){
+      ExampleModule(desc: '图标加文字横向', builder: (_){
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -70,7 +70,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
           ],
         );
       }),
-      ExampleItem(desc: '图标加文字竖向', builder: (_){
+      ExampleModule(desc: '图标加文字竖向', builder: (_){
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -96,7 +96,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
           ],
         );
       }),
-      ExampleItem(desc: '纯文字', builder: (_){
+      ExampleModule(desc: '纯文字', builder: (_){
         // TODO: 加载失败和刷新
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -111,7 +111,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
 
       TDText('规格', font: TDTheme.of(context).fontXL,),
 
-      ExampleItem(desc: '图标加文字横向-circle', builder: (_){
+      ExampleModule(desc: '图标加文字横向-circle', builder: (_){
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: const [
@@ -136,7 +136,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
           ],
         );
       }),
-      ExampleItem(desc: '图标加文字横向-activity', builder: (_){
+      ExampleModule(desc: '图标加文字横向-activity', builder: (_){
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -165,7 +165,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
         );
       }),
 
-      ExampleItem(desc: '图标加文字竖向', builder: (_){
+      ExampleModule(desc: '图标加文字竖向', builder: (_){
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: const [

@@ -7,7 +7,7 @@ import 'package:tdesign_flutter/td_export.dart';
 
 import '../main.dart';
 import '../tdesign/api_widget.dart';
-import '../tdesign/example_base.dart';
+import '../tdesign/example_widget.dart';
 import 'code_widget.dart';
 
 class WebMainBody extends StatefulWidget {

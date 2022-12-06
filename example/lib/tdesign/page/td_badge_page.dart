@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import '../example_base.dart';
+import '../example_widget.dart';
 
 
 class TDBadgePage extends StatefulWidget {
@@ -13,24 +13,24 @@ class TDBadgePage extends StatefulWidget {
 class _TDBadgePageState extends State<TDBadgePage> {
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(
+    return ExamplePage(
       title: '徽标 Badge',
       children: [
-        ExampleItem(
+        ExampleModule(
             desc: '红点徽标',
             builder: (_) {
               return const TDBadge(
                 TDBadgeType.redPoint,
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '提醒徽标',
             builder: (_) {
               return const TDBadge(
                 TDBadgeType.remind,
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '消息徽标-个位数',
             builder: (_) {
               return const TDBadge(
@@ -38,17 +38,17 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 count: '2',
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '消息徽标-两位数',
             builder: (_) {
               return const TDBadge(TDBadgeType.message, count: '16');
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '消息徽标-三位数',
             builder: (_) {
               return const TDBadge(TDBadgeType.message, count: '128');
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '消息徽标-自定义内容',
             builder: (_) {
               return const TDBadge(
@@ -56,7 +56,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 message: '新消息提醒',
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '消息徽标-自定义内容-方形',
             builder: (_) {
               return const TDBadge(
@@ -65,7 +65,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 border: TDBadgeBorder.small,
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '消息徽标-自定义内容-角标',
             builder: (_) {
               return Stack(

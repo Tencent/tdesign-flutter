@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import '../../annotation/demo.dart';
-import '../example_base.dart';
+import '../example_widget.dart';
 
 class TDTextPage extends StatelessWidget {
   const TDTextPage({Key? key}) : super(key: key);
@@ -11,21 +11,21 @@ class TDTextPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // debugPaintBaselinesEnabled = true;
-    return ExampleWidget(
+    return ExamplePage(
       padding: const EdgeInsets.all(8),
       title: 'TDText',
       children: [
-        ExampleItem(
+        ExampleModule(
             desc: '系统Text:',
             builder: (_) {
               return Text(
                 exampleTxt,
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '普通TDText:',
             builder: _buildNormalTDText),
-        ExampleItem(
+        ExampleModule(
             desc: '指定常用属性:',
             builder: (_) {
               return TDText(
@@ -35,7 +35,7 @@ class TDTextPage extends StatelessWidget {
                 backgroundColor: TDTheme.of(context).successHoverColor,
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: 'style覆盖textColor,不覆盖font:',
             builder: (_) {
               return TDText(
@@ -46,7 +46,7 @@ class TDTextPage extends StatelessWidget {
                     TextStyle(color: TDTheme.of(context).errorNormalColor),
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: 'style覆盖textColor和font:',
             builder: (_) {
               return TDText(
@@ -55,7 +55,7 @@ class TDTextPage extends StatelessWidget {
                 textColor: TDTheme.of(context).brandNormalColor,
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: 'TDText.rich测试:',
             builder: (_) {
               return TDText.rich(
@@ -83,7 +83,7 @@ class TDTextPage extends StatelessWidget {
                     color: TDTheme.of(context).errorNormalColor, fontSize: 32),
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '获取系统Text:',
             builder: (_) {
               return TDText(
@@ -91,7 +91,7 @@ class TDTextPage extends StatelessWidget {
                 backgroundColor: TDTheme.of(context).successHoverColor,
               ).getRawText(context: context);
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '中文居中:（带有英文可能不居中）',
             builder: (_) {
               return const TDText(
@@ -101,7 +101,7 @@ class TDTextPage extends StatelessWidget {
                 backgroundColor: Colors.orange,
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '自定义内部padding:',
             builder: (_) {
               return TDTextConfiguration(
