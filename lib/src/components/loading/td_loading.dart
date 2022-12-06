@@ -149,11 +149,11 @@ class TDLoading extends StatelessWidget {
   Font fitFont() {
     switch(size){
       case TDLoadingSize.large:
-        return TDTheme.of().fontM ?? Font(size: 16, lineHeight: 24);
+        return TDTheme.of().fontBodyLarge ?? Font(size: 16, lineHeight: 24);
       case TDLoadingSize.medium:
-        return TDTheme.of().fontS ?? Font(size: 14, lineHeight: 22);
+        return TDTheme.of().fontBodyMedium ?? Font(size: 14, lineHeight: 22);
       case TDLoadingSize.small:
-        return TDTheme.of().fontXS ?? Font(size: 12, lineHeight: 20);
+        return TDTheme.of().fontBodySmall ?? Font(size: 12, lineHeight: 20);
     }
   }
 
