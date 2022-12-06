@@ -35,7 +35,9 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
     return ExamplePage(
       title: '图片 Image',
       children: [
-        ExampleModule(
+      ExampleModule(title: '默认',
+      children: [
+        ExampleItem(
             desc: '状态-加载默认',
             builder: (_) {
               return TDImage(
@@ -44,7 +46,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '状态-加载自定义',
             builder: (_) {
               return TDImage(
@@ -58,7 +60,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '状态-失败默认',
             builder: (_) {
               return const TDImage(
@@ -67,7 +69,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '状态-失败自定义',
             builder: (_) {
               return TDImage(
@@ -75,7 +77,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
                 errorWidget: TDText(
                   '加载失败',
                   forceVerticalCenter: true,
-                  font: TDTheme.of(context).fontXXS,
+                  font: TDTheme.of(context).fontBodyExtraSmall,
                   fontWeight: FontWeight.w500,
                   textColor: TDTheme
                       .of(context)
@@ -85,7 +87,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '类型-裁剪',
             builder: (_) {
               return TDImage(
@@ -94,7 +96,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '类型-适应高',
             builder: (_) {
               return TDImage(
@@ -105,7 +107,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '类型-拉伸',
             builder: (_) {
               return TDImage(
@@ -116,7 +118,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '类型-方形',
             builder: (_) {
               return TDImage(
@@ -125,7 +127,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '类型-圆角方形',
             builder: (_) {
               return TDImage(
@@ -134,7 +136,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '类型-圆形',
             builder: (_) {
               return TDImage(
@@ -143,7 +145,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '规格-图片120',
             builder: (_) {
               return TDImage(
@@ -153,7 +155,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '规格-图片72',
             builder: (_) {
               return TDImage(
@@ -163,7 +165,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '规格-图片56',
             builder: (_) {
               return TDImage(
@@ -173,7 +175,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '规格-图片48',
             builder: (_) {
               return TDImage(
@@ -183,7 +185,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '规格-图片32',
             builder: (_) {
               return TDImage(
@@ -193,7 +195,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
               );
             }
         ),
-        ExampleModule(
+        ExampleItem(
             desc: '规格-图片24',
             builder: (_) {
               return TDImage(
@@ -205,7 +207,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
         ),
         
       ],
-    );
+    )]);
   }
 }
 

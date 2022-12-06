@@ -10,13 +10,15 @@ class TDNavBarPage extends StatelessWidget {
     return ExamplePage(
       title: '导航栏 NavBar',
       children: [
-        ExampleModule(
+      ExampleModule(title: '默认',
+      children: [
+        ExampleItem(
           desc: '基础导航栏',
           builder: (_) {
             return const TDNavBar(title: '标题');
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '左侧双操作导航栏',
           builder: (_) {
             return TDNavBar(
@@ -30,7 +32,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '右侧双操作导航栏',
           builder: (_) {
             return TDNavBar(
@@ -42,7 +44,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '基础小程序导航栏',
           builder: (_) {
             return TDNavBar(
@@ -56,7 +58,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '带返回导航栏',
           builder: (_) {
             return TDNavBar(
@@ -69,7 +71,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '带返回、主页按钮导航栏',
           builder: (_) {
             return TDNavBar(
@@ -87,7 +89,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '自定义品牌导航栏',
           builder: (_) {
             return TDNavBar(
@@ -103,7 +105,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '自定义图片导航栏',
           builder: (_) {
             return TDNavBar(
@@ -122,7 +124,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '品牌超长文字导航栏',
           builder: (_) {
             return TDNavBar(
@@ -138,7 +140,7 @@ class TDNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '自定义背景色',
           builder: (_) {
             return TDNavBar(
@@ -150,6 +152,6 @@ class TDNavBarPage extends StatelessWidget {
           },
         ),
       ],
-    );
+    )]);
   }
 }

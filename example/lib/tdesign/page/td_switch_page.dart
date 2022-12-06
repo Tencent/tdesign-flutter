@@ -18,82 +18,77 @@ class TDSwitchPage extends StatefulWidget {
 class TDSwitchPageState extends State<TDSwitchPage> {
   @override
   Widget build(BuildContext context) {
-    Widget current = ListView(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      children: [
-        _title('基础开关'),
-        Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              demoRow(context, '开关', on: true),
-              _divider(),
-              demoRow(context, '开关', on: false),
-              _divider(),
-              demoRow(context, '自定义颜色', on: true, onColor: Colors.green),
-              _divider(),
-              demoRow(context, '自定义颜色',
-                  on: false, onColor: Colors.green, offColor: Colors.brown),
-              _divider(),
-              demoRow(context, '异步操作', on: true),
-            ],
-          ),
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          color: Colors.white,
-        ),
-        _title('带描述状态开关'),
-        Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              demoRow(context, '开关', desc: '描述信息', on: true),
-              _divider(),
-              demoRow(context, '开关', desc: '描述信息', on: false),
-              _divider(),
-              demoRow(context, '自定义颜色',
-                  desc: '描述信息', on: true, onColor: Colors.green),
-            ],
-          ),
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          color: Colors.white,
-        ),
-        _title('状态'),
-        Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              demoRow(context, '开关开启禁用', on: true, enable: false),
-              _divider(),
-              demoRow(context, '开关开启禁用', on: false, enable: false),
-              _divider(),
-              demoRow(context, '开关开启禁用',
-                  on: true, onColor: Colors.green, enable: false),
-              _divider(),
-              demoRow(context, '开关开启禁用',
-                  desc: '描述信息', on: false, enable: false),
-              _divider(),
-              demoRow(context, '开关开启禁用', desc: '描述信息', on: true, enable: false),
-            ],
-          ),
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          color: Colors.white,
-        ),
-      ],
-    );
-
-    current = Container(
-      child: current,
-      color: TDTheme.of(context).grayColor1,
-    );
-
-
-    current =  ExamplePage(
-      title: '开关 Switch',
-      children: [
-        current
-      ],
-    );
+    var current = ExamplePage(title: '开关 Switch', children: [
+      ExampleModule(
+        title: '默认',
+        children: [
+          ExampleItem(builder: (_) => _title('基础开关')),
+          ExampleItem(
+              builder: (_) => Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        demoRow(context, '开关', on: true),
+                        _divider(),
+                        demoRow(context, '开关', on: false),
+                        _divider(),
+                        demoRow(context, '自定义颜色',
+                            on: true, onColor: Colors.green),
+                        _divider(),
+                        demoRow(context, '自定义颜色',
+                            on: false,
+                            onColor: Colors.green,
+                            offColor: Colors.brown),
+                        _divider(),
+                        demoRow(context, '异步操作', on: true),
+                      ],
+                    ),
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    color: Colors.white,
+                  )),
+          ExampleItem(builder: (_) => _title('带描述状态开关')),
+          ExampleItem(
+              builder: (_) => Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        demoRow(context, '开关', desc: '描述信息', on: true),
+                        _divider(),
+                        demoRow(context, '开关', desc: '描述信息', on: false),
+                        _divider(),
+                        demoRow(context, '自定义颜色',
+                            desc: '描述信息', on: true, onColor: Colors.green),
+                      ],
+                    ),
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    color: Colors.white,
+                  )),
+          ExampleItem(builder: (_) => _title('状态')),
+          ExampleItem(
+              builder: (_) => Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        demoRow(context, '开关开启禁用', on: true, enable: false),
+                        _divider(),
+                        demoRow(context, '开关开启禁用', on: false, enable: false),
+                        _divider(),
+                        demoRow(context, '开关开启禁用',
+                            on: true, onColor: Colors.green, enable: false),
+                        _divider(),
+                        demoRow(context, '开关开启禁用',
+                            desc: '描述信息', on: false, enable: false),
+                        _divider(),
+                        demoRow(context, '开关开启禁用',
+                            desc: '描述信息', on: true, enable: false),
+                      ],
+                    ),
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    color: Colors.white,
+                  )),
+        ],
+      )
+    ]);
     return current;
   }
 

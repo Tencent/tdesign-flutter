@@ -22,84 +22,71 @@ class TDPopupPageState extends State<TDPopupPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget current = Column(
-      children: [
-        TDButton(
-          content: '顶部Popup',
-          onTap: () {
-            Navigator.of(context).push(TDSlidePopupRoute(
-                slideTransitionFrom: SlideTransitionFrom.top,
-                builder: (context) {
-                  return Container(
-                    color: Colors.white,
-                    height: 300,
-                  );
-                }));
-          },
-        ),
-
-        const SizedBox(height: 10,),
-
-        TDButton(
-          content: '底部Popup',
-          onTap: () {
-            Navigator.of(context).push(TDSlidePopupRoute(
-                slideTransitionFrom: SlideTransitionFrom.bottom,
-                builder: (context) {
-                  return Container(
-                    color: Colors.white,
-                    height: 300,
-                  );
-                }));
-          },
-        ),
-
-        const SizedBox(height: 10,),
-
-        TDButton(
-          content: '左侧Popup',
-          onTap: () {
-            Navigator.of(context).push(TDSlidePopupRoute(
-                slideTransitionFrom: SlideTransitionFrom.left,
-                builder: (context) {
-                  return Container(
-                    color: Colors.white,
-                    width: 300,
-                  );
-                }));
-          },
-        ),
-
-
-        const SizedBox(height: 10,),
-
-        TDButton(
-          content: '右侧Popup',
-          onTap: () {
-            Navigator.of(context).push(TDSlidePopupRoute(
-                slideTransitionFrom: SlideTransitionFrom.right,
-                builder: (context) {
-                  return Container(
-                    color: Colors.white,
-                    width: 300,
-                  );
-                }));
-          },
-        ),
-      ],
-    );
-
-    current = Padding(
-      padding: const EdgeInsets.all(20),
-      child: current,
-    );
-
-    current = ExamplePage(
-      title: '弹出层 PopUp',
-      children: [
-        current,
-      ],
-    );
+    var current = ExamplePage(title: '弹出层 PopUp',
+        padding: const EdgeInsets.only(top: 16),
+        children: [
+      ExampleModule(
+        title: '默认',
+        children: [
+          ExampleItem(
+              builder: (_) => TDButton(
+                    content: '顶部Popup',
+                    onTap: () {
+                      Navigator.of(context).push(TDSlidePopupRoute(
+                          slideTransitionFrom: SlideTransitionFrom.top,
+                          builder: (context) {
+                            return Container(
+                              color: Colors.white,
+                              height: 300,
+                            );
+                          }));
+                    },
+                  )),
+          ExampleItem(
+              builder: (_) => TDButton(
+                    content: '底部Popup',
+                    onTap: () {
+                      Navigator.of(context).push(TDSlidePopupRoute(
+                          slideTransitionFrom: SlideTransitionFrom.bottom,
+                          builder: (context) {
+                            return Container(
+                              color: Colors.white,
+                              height: 300,
+                            );
+                          }));
+                    },
+                  )),
+          ExampleItem(
+              builder: (_) => TDButton(
+                    content: '左侧Popup',
+                    onTap: () {
+                      Navigator.of(context).push(TDSlidePopupRoute(
+                          slideTransitionFrom: SlideTransitionFrom.left,
+                          builder: (context) {
+                            return Container(
+                              color: Colors.white,
+                              width: 300,
+                            );
+                          }));
+                    },
+                  )),
+          ExampleItem(
+              builder: (_) => TDButton(
+                    content: '右侧Popup',
+                    onTap: () {
+                      Navigator.of(context).push(TDSlidePopupRoute(
+                          slideTransitionFrom: SlideTransitionFrom.right,
+                          builder: (context) {
+                            return Container(
+                              color: Colors.white,
+                              width: 300,
+                            );
+                          }));
+                    },
+                  )),
+        ],
+      )
+    ]);
     return current;
   }
 }

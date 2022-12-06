@@ -10,7 +10,9 @@ class TDTagPage extends StatelessWidget {
     return ExamplePage(title: '标签 Tag',
         // padding: EdgeInsets.zero,
         children: [
-          ExampleModule(
+        ExampleModule(title: '默认',
+        children: [
+          ExampleItem(
               desc: '展示标签',
               builder: (context) {
                 return Wrap(
@@ -65,7 +67,7 @@ class TDTagPage extends StatelessWidget {
                   ],
                 );
               }),
-          ExampleModule(
+          ExampleItem(
               desc: '点击控件',
               builder: (context) {
                 return Wrap(
@@ -157,7 +159,7 @@ class TDTagPage extends StatelessWidget {
                   ],
                 );
               }),
-          ExampleModule(
+          ExampleItem(
               desc: '尺寸规格-大，正常，小',
               builder: (context) {
                 return Wrap(
@@ -176,7 +178,7 @@ class TDTagPage extends StatelessWidget {
                   ],
                 );
               }),
-          ExampleModule(
+          ExampleItem(
               desc: '圆角尺寸规格-大，正常，小',
               builder: (context) {
                 return Wrap(
@@ -200,7 +202,7 @@ class TDTagPage extends StatelessWidget {
                   ],
                 );
               }),
-          ExampleModule(
+          ExampleItem(
               desc: '半圆尺寸规格-大，正常，小',
               builder: (context) {
                 return Wrap(
@@ -224,6 +226,6 @@ class TDTagPage extends StatelessWidget {
                   ],
                 );
               }),
-        ]);
+        ])]);
   }
 }
