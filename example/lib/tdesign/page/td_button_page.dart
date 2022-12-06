@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import '../../annotation/demo.dart';
 import '../example_widget.dart';
 
 class TDButtonPage extends StatefulWidget {
@@ -26,17 +27,12 @@ class _TDButtonPageState extends State<TDButtonPage> {
       child: ExamplePage(
           title: '按钮 Button',
           desc: '用于开启一个闭环的操作任务，如“删除”对象、“购买”商品等。',
+          exampleCodeGroup:'button',
           padding: const EdgeInsets.only(top: 8,bottom: 8),
           children: [
           ExampleModule(title: '默认',
           children: [
-            ExampleItem(desc: '可点击', builder: (context){
-              return TDButton(content: '强按钮',
-                style: TDButtonStyle.primary(),
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
+            ExampleItem(desc: '可点击', builder: _buildNormalClickButton),
             ExampleItem(desc: '不可点击', builder: (context){
               return TDButton(content: '强按钮',
                 style: TDButtonStyle.primary(),
@@ -339,5 +335,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
             ])
       ]
     ));
+  }
+
+  @Demo(group: 'button')
+  TDButton _buildNormalClickButton(BuildContext context) {
+    return TDButton(content: '强按钮',
+      style: TDButtonStyle.primary(),
+      onTap: onTap,
+      onLongPress: onLongPress,
+    );
   }
 }
