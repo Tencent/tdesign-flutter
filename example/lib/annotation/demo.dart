@@ -1,8 +1,8 @@
 /// 生成代码的注解
 class Demo {
-  final String? desc;
+  final String? group;
 
-  const factory Demo({String? desc}) = Demo._;
+  const factory Demo({String? group}) = Demo._;
 
-  const Demo._({this.desc});
+  const Demo._({this.group});
 }
