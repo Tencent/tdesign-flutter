@@ -93,30 +93,6 @@ class TDDefaultTheme {
 			"grayColor14": "#181818"
 		},
 		"font": {
-			"fontXL": {
-				"size": 36,
-				"lineHeight": 44
-			},
-			"fontL": {
-				"size": 20,
-				"lineHeight": 28
-			},
-			"fontM": {
-				"size": 16,
-				"lineHeight": 24
-			},
-			"fontS": {
-				"size": 14,
-				"lineHeight": 22
-			},
-			"fontXS": {
-				"size": 12,
-				"lineHeight": 20
-			},
-			"fontXXS": {
-				"size": 10,
-				"lineHeight": 16
-			},
 			"fontDisplayLarge": {
 				"size": 64,
 				"lineHeight": 72

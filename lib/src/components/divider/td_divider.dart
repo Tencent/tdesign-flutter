@@ -131,7 +131,7 @@ class TDDivider extends StatelessWidget {
     return widget ??
         TDText(
           text,
-          font: TDTheme.of(context).fontXS,
+          font: TDTheme.of(context).fontBodySmall,
           textColor: TDTheme.of(context).fontGyColor3,
           forceVerticalCenter: true,
         );
