@@ -116,7 +116,7 @@ class _WebMainBodyState extends State<WebMainBody> {
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.only(left: 16),
           color: TDTheme.of(context).brandHoverColor,
-          child: TDText('TDesign 组件', textColor: TDTheme.of(context).whiteColor1,font: TDTheme.of(context).fontXL,),
+          child: TDText('TDesign 组件', textColor: TDTheme.of(context).whiteColor1,font: TDTheme.of(context).fontHeadlineLarge,),
         ) ,
         Expanded(child: ListView.builder(
             itemCount: examplePageList.length,

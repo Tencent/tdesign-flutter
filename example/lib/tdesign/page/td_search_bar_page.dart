@@ -16,31 +16,33 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: '搜索框 Search',
+        backgroundColor: TDTheme.of(context).whiteColor1,
       children: [
-        TDSearchBar(
+      ExampleModule(title: '默认',
+      children: [
+        ExampleItem(builder: (_) => TDSearchBar(
           placeHolder: '搜索预设文案',
           onTextChanged: (String text) {
             setState(() {
               inputText = text;
             });
           },
-        ),
-        Row(
+        )),
+        ExampleItem(builder: (_) => Row(
           children: [
             TDText(
               '输入文案：',
-              font: TDTheme.of(context).fontM,
+              font: TDTheme.of(context).fontBodyLarge,
               textColor: TDTheme.of(context).fontGyColor1,
             ),
             TDText(
               '${inputText ?? ''}',
-              font: TDTheme.of(context).fontM,
+              font: TDTheme.of(context).fontBodyLarge,
               textColor: TDTheme.of(context).fontGyColor1,
             ),
           ],
-        )
+        ))
       ],
-      backgroundColor: TDTheme.of(context).whiteColor1,
-    );
+    )]);
   }
 }

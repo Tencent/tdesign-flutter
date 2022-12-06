@@ -16,7 +16,9 @@ class TDBottomNavBarPage extends StatelessWidget {
       title: '标签栏 TDBottomNavBar',
       padding: const EdgeInsets.symmetric(vertical: 16),
       children: [
-        ExampleModule(
+      ExampleModule(title: '默认',
+      children: [
+        ExampleItem(
           desc: '单层级纯文本标签栏',
           builder: (BuildContext context) {
             return TDBottomNavBar(
@@ -54,7 +56,7 @@ class TDBottomNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '单层级纯文本标签栏',
           builder: (BuildContext context) {
             return TDBottomNavBar(
@@ -106,7 +108,7 @@ class TDBottomNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '文本加图标标签栏',
           builder: (BuildContext context) {
             return TDBottomNavBar(
@@ -187,7 +189,7 @@ class TDBottomNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '文本加图标标签栏',
           builder: (BuildContext context) {
             return TDBottomNavBar(
@@ -291,7 +293,7 @@ class TDBottomNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '纯图标标签栏',
           builder: (BuildContext context) {
             return TDBottomNavBar(
@@ -373,7 +375,7 @@ class TDBottomNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '底部导航栏自定义布局',
           builder: (BuildContext context) {
             return TDBottomNavBar(
@@ -579,6 +581,6 @@ class TDBottomNavBarPage extends StatelessWidget {
           },
         ),
       ],
-    );
+    )]);
   }
 }

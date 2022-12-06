@@ -27,7 +27,9 @@ class TDRadioPageState extends State<TDRadioPage> {
     return ExamplePage(
         title: '单选框 Radio',
         children: [
-          ExampleModule(desc: '基础文本框', builder: (context){
+        ExampleModule(title: '默认',
+        children: [
+          ExampleItem(desc: '基础文本框', builder: (context){
             return TDRadioGroup(
               selectId: 'index:0',
               child: ListView.builder(
@@ -54,7 +56,7 @@ class TDRadioPageState extends State<TDRadioPage> {
               ),
             );
           }),
-          ExampleModule(desc: '左边勾选样式', builder: (context){
+          ExampleItem(desc: '左边勾选样式', builder: (context){
             return TDRadioGroup(
               radioStyle: TDRadioStyle.check,
               selectId: 'index:1',
@@ -82,7 +84,7 @@ class TDRadioPageState extends State<TDRadioPage> {
               ),
             );
           }),
-          ExampleModule(desc: '右侧勾选样式', builder: (context) {
+          ExampleItem(desc: '右侧勾选样式', builder: (context) {
             return TDRadioGroup(
               radioStyle: TDRadioStyle.check,
               contentDirection: TDContentDirection.left,
@@ -100,7 +102,7 @@ class TDRadioPageState extends State<TDRadioPage> {
               ),
             );
           }),
-          ExampleModule(desc: '右侧圆形单选框', builder: (context){
+          ExampleItem(desc: '右侧圆形单选框', builder: (context){
             return TDRadioGroup(
               contentDirection: TDContentDirection.left,
               selectId: 'index:0',
@@ -117,7 +119,7 @@ class TDRadioPageState extends State<TDRadioPage> {
               ),
             );
           }),
-          ExampleModule(desc: '自定义图标单选框', builder: (context){
+          ExampleItem(desc: '自定义图标单选框', builder: (context){
             return TDRadioGroup(
               contentDirection: TDContentDirection.right,
               child: Column(
@@ -136,7 +138,7 @@ class TDRadioPageState extends State<TDRadioPage> {
               ),
             );
           }),
-          ExampleModule(desc: '规格', builder: (context){
+          ExampleItem(desc: '规格', builder: (context){
             return TDRadioGroup(
               contentDirection: TDContentDirection.right,
               child: Column(
@@ -156,7 +158,7 @@ class TDRadioPageState extends State<TDRadioPage> {
               ),
             );
           }),
-          ExampleModule(desc: '状态', builder: (context){
+          ExampleItem(desc: '状态', builder: (context){
             return TDRadioGroup(
               contentDirection: TDContentDirection.right,
               selectId: '0',
@@ -178,7 +180,7 @@ class TDRadioPageState extends State<TDRadioPage> {
               ),
             );
           }),
-          ExampleModule(desc: '状态', builder: (context){
+          ExampleItem(desc: '状态', builder: (context){
             return TDRadioGroup(
               contentDirection: TDContentDirection.right,
               selectId: '0',
@@ -200,7 +202,7 @@ class TDRadioPageState extends State<TDRadioPage> {
               ),
             );
           }),
-          ExampleModule(desc: '状态', builder: (context){
+          ExampleItem(desc: '状态', builder: (context){
             return TDRadioGroup(
               contentDirection: TDContentDirection.left,
               selectId: '0',
@@ -222,7 +224,7 @@ class TDRadioPageState extends State<TDRadioPage> {
               ),
             );
           }),
-          ExampleModule(desc: '状态', builder: (context){
+          ExampleItem(desc: '状态', builder: (context){
             return TDRadioGroup(
               contentDirection: TDContentDirection.left,
               selectId: '0',
@@ -245,6 +247,6 @@ class TDRadioPageState extends State<TDRadioPage> {
             );
           }),
         ]
-    );
+    )]);
   }
 }

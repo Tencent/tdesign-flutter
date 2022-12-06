@@ -16,21 +16,23 @@ class _TDBadgePageState extends State<TDBadgePage> {
     return ExamplePage(
       title: '徽标 Badge',
       children: [
-        ExampleModule(
+      ExampleModule(title: '默认',
+      children: [
+        ExampleItem(
             desc: '红点徽标',
             builder: (_) {
               return const TDBadge(
                 TDBadgeType.redPoint,
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '提醒徽标',
             builder: (_) {
               return const TDBadge(
                 TDBadgeType.remind,
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '消息徽标-个位数',
             builder: (_) {
               return const TDBadge(
@@ -38,17 +40,17 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 count: '2',
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '消息徽标-两位数',
             builder: (_) {
               return const TDBadge(TDBadgeType.message, count: '16');
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '消息徽标-三位数',
             builder: (_) {
               return const TDBadge(TDBadgeType.message, count: '128');
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '消息徽标-自定义内容',
             builder: (_) {
               return const TDBadge(
@@ -56,7 +58,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 message: '新消息提醒',
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '消息徽标-自定义内容-方形',
             builder: (_) {
               return const TDBadge(
@@ -65,7 +67,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 border: TDBadgeBorder.small,
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '消息徽标-自定义内容-角标',
             builder: (_) {
               return Stack(
@@ -77,7 +79,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                     child: TDText(
                       '单行标题',
                       textColor: TDTheme.of(context).fontGyColor1,
-                      font: TDTheme.of(context).fontM,
+                      font: TDTheme.of(context).fontBodyLarge,
                     ),
                     color: Colors.white,
                     height: 48,
@@ -91,6 +93,6 @@ class _TDBadgePageState extends State<TDBadgePage> {
               );
             }),
       ],
-    );
+    )]);
   }
 }

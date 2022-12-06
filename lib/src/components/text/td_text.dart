@@ -256,7 +256,7 @@ class TDTextSpan extends TextSpan{
 
   /// 构造参数，扩展参数释义可参考[TDText]中字段注释
   TDTextSpan({
-    BuildContext? context, // 如果未设置font，且不想使用默认的fontM尺寸时，需设置context，否则可省略
+    BuildContext? context, // 如果未设置font，且不想使用默认的fontBodyLarge尺寸时，需设置context，否则可省略
     Font? font,
     FontWeight fontWeight = FontWeight.w400,
     FontFamily? fontFamily,
