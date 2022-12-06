@@ -33,13 +33,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
           ExampleModule(title: '默认',
           children: [
             ExampleItem(desc: '可点击', builder: _buildNormalClickButton),
-            ExampleItem(desc: '不可点击', builder: (context){
-              return TDButton(content: '强按钮',
-                style: TDButtonStyle.primary(),
-                disabled: true,
-                onTap: onTap,
-                onLongPress: onLongPress,);
-            }),
+            ExampleItem(desc: '不可点击', builder: _buildNormalUnClickButton),
 
 
             ExampleItem(desc: '可点击', builder: (context){
@@ -344,5 +338,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
       onTap: onTap,
       onLongPress: onLongPress,
     );
+  }
+
+  @Demo(group: 'button')
+  Widget _buildNormalUnClickButton(BuildContext context) {
+    return TDButton(content: '强按钮',
+      style: TDButtonStyle.primary(),
+      disabled: true,
+      onTap: onTap,
+      onLongPress: onLongPress,);
   }
 }
