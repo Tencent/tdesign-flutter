@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/src/util/platform_util.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
@@ -14,6 +15,7 @@ class ExamplePage extends StatefulWidget {
     required this.children,
     this.padding,
     this.backgroundColor,
+    this.exampleCodeGroup,
   }) : super(key: key);
 
   final String title;
@@ -21,6 +23,7 @@ class ExamplePage extends StatefulWidget {
   final List<ExampleModule> children;
   final EdgeInsetsGeometry? padding;
   final Color? backgroundColor;
+  final String? exampleCodeGroup;
 
   @override
   State<ExamplePage> createState() => _ExamplePageState();
@@ -50,77 +53,99 @@ class _ExamplePageState extends State<ExamplePage> {
                 trackVisibility: MaterialStateProperty.all(true)),
             child: Column(
               children: [
-                TDNavBar(
-                  title: widget.title,
-                  rightBarItems: [
-                    TDNavBarItem(
-                        icon: TDIcons.info_circle,
-                        action: () {
-                          setState(() {
-                            apiVisible = !apiVisible;
-                          });
-                        })
-                  ],
-                ),
-                Expanded(child: ListView.builder(
+                _buildNavBar(),
+                Expanded(
+                    child: ListView.builder(
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.only(top: 16, bottom: 16),
                   itemCount: widget.children.length + 1,
                   itemBuilder: (context, index) {
                     if (index == 0) {
-                      return Container(
-                        margin: const EdgeInsets.all(16),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ApiWidget(
-                              apiName: model?.apiPath,
-                              visible: apiVisible,
-                            ),
-                            TDText(
-                              widget.title,
-                              font: TDTheme.of(context).fontHeadlineSmall,
-                              textColor: TDTheme.of(context).fontGyColor1,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 4,),
-                              child: TDText(
-                                widget.desc,
-                                font: TDTheme.of(context).fontBodyMedium,
-                                textColor: TDTheme.of(context).fontGyColor2,
-                              ),
-                            ),
-                            // Expanded(child: ),
-                          ],
-                        ),
-                      );
+                      return _buildHeader(context);
                     }
                     var data = widget.children[index - 1];
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(margin: const EdgeInsets.only(left: 16,right: 16,top: 16),
-                          child: TDText(
-                          '${index < 10 ? "0$index" : index} ${data.title}',
-                          font: TDTheme.of(context).fontTitleLarge,
-                          textColor: TDTheme.of(context).fontGyColor1,
-                        ),)
-                        ,
-                        for(var item in data.children)
-                          Container(
-                            margin: widget.padding,
-                            child: item,
-                          )
-                      ],
-                    );
+                    return _buildModule(index, data, context);
                   },
                 ))
-
               ],
             )));
+  }
+
+  Widget _buildNavBar() {
+    return TDNavBar(
+      title: widget.title,
+      rightBarItems: [
+        TDNavBarItem(
+            icon: TDIcons.info_circle,
+            action: () {
+              setState(() {
+                apiVisible = !apiVisible;
+              });
+            })
+      ],
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ApiWidget(
+            apiName: model?.apiPath,
+            visible: apiVisible,
+          ),
+          TDText(
+            widget.title,
+            font: TDTheme.of(context).fontHeadlineSmall,
+            textColor: TDTheme.of(context).fontGyColor1,
+          ),
+          Container(
+            margin: const EdgeInsets.only(
+              top: 4,
+            ),
+            child: TDText(
+              widget.desc,
+              font: TDTheme.of(context).fontBodyMedium,
+              textColor: TDTheme.of(context).fontGyColor2,
+            ),
+          ),
+          // Expanded(child: ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildModule(int index, ExampleModule data, BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
+          child: TDText(
+            '${index < 10 ? "0$index" : index} ${data.title}',
+            font: TDTheme.of(context).fontTitleLarge,
+            textColor: TDTheme.of(context).fontGyColor1,
+          ),
+        ),
+        for (var item in data.children) _buildExampleItem(item)
+      ],
+    );
+  }
+
+  Widget _buildExampleItem(ExampleItem data) {
+    return Container(
+      margin: widget.padding,
+      child: ExampleItemWidget(
+        data: data,
+        apiVisible: apiVisible,
+        exampleCodeGroup: widget.exampleCodeGroup,
+      ),
+    );
   }
 }
 
@@ -133,33 +158,139 @@ class ExampleModule {
   final List<ExampleItem> children;
 }
 
-/// 示例样例，建议尽量使用该控件，写清晰说明内容
-class ExampleItem extends StatelessWidget {
-  const ExampleItem({Key? key, this.desc = '', required this.builder, this.center = true})
-      : super(key: key);
+/// 示例样例数据
+class ExampleItem {
+  const ExampleItem(
+      {Key? key, this.desc = '', required this.builder, this.center = true});
 
   final String desc;
 
   final WidgetBuilder builder;
 
   final bool center;
+}
+
+/// 组件示例
+class ExampleItemWidget extends StatefulWidget {
+  const ExampleItemWidget(
+      {required this.data,
+      required this.apiVisible,
+      this.exampleCodeGroup,
+      Key? key})
+      : super(key: key);
+
+  final ExampleItem data;
+
+  final bool apiVisible;
+
+  final String? exampleCodeGroup;
 
   @override
+  State<ExampleItemWidget> createState() => _ExampleItemWidgetState();
+}
+
+class _ExampleItemWidgetState extends State<ExampleItemWidget> {
+  @override
   Widget build(BuildContext context) {
-    var child = builder(context);
-    if(center){
-      child =  Center(child: builder(context),);
+    var child = widget.data.builder(context);
+    if (widget.data.center) {
+      child = Center(
+        child: widget.data.builder(context),
+      );
     }
-    return Column(
+    if (widget.apiVisible) {
+      child = Stack(
+        children: [
+          child,
+          Positioned(
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: GestureDetector(
+                onTap: _showCodePanel,
+                child: Container(
+                  color: Colors.black.withOpacity(0.4),
+                  alignment: Alignment.center,
+                  child: TDText(
+                    'code',
+                    textColor: TDTheme.of(context).whiteColor1,
+                  ),
+                ),
+              ))
+        ],
+      );
+    }
+    child = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        desc.isEmpty ? Container() : Container(
-          alignment: Alignment.topLeft,
-          margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-          child: TDText(desc, font: TDTheme.of(context).fontBodyMedium, textColor: TDTheme.of(context).fontGyColor2,),
-        ),
+        widget.data.desc.isEmpty
+            ? Container()
+            : Container(
+                alignment: Alignment.topLeft,
+                margin: const EdgeInsets.only(
+                    left: 16, right: 16, top: 8, bottom: 8),
+                child: TDText(
+                  widget.data.desc,
+                  font: TDTheme.of(context).fontBodyMedium,
+                  textColor: TDTheme.of(context).fontGyColor2,
+                ),
+              ),
         child
       ],
     );
+    return child;
+  }
+
+  String _getCodeAssetsPath() {
+    var methodName = '';
+    var builderString = widget.data.builder.toString();
+    if (builderString.contains('\'')) {
+      var strings = builderString.split('\'');
+      if (strings.length > 1) {
+        methodName = strings[1];
+        if (methodName.isNotEmpty && methodName.contains('@')) {
+          methodName = methodName.split('@')[0];
+        }
+      }
+    }
+    if (methodName.isNotEmpty) {
+      print('example code methodName: $methodName');
+      return '${widget.exampleCodeGroup}/$methodName.txt';
+    }
+    return '';
+  }
+
+  void _showCodePanel() async {
+    var assetsPath = _getCodeAssetsPath();
+    var codeString = '';
+    if (assetsPath.isNotEmpty) {
+      try {
+        codeString = await rootBundle.loadString(assetsPath);
+      } catch (e) {
+        print(e);
+      }
+    }
+    await showModalBottomSheet(
+        isScrollControlled: true,
+        barrierColor: Colors.black.withOpacity(0.5),
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (_) {
+          if (codeString.isEmpty) {
+            return Container(
+              color: Colors.white,
+              alignment: Alignment.center,
+              height: 300,
+              child: const TDText('暂无演示代码'),
+            );
+          }
+          return Container(
+            color: Colors.white,
+            alignment: Alignment.center,
+            height: 300,
+            child: TDText(codeString),
+          );
+        });
   }
 }
