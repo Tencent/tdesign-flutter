@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../example_base.dart';
+import '../example_widget.dart';
 
 class TDBottomNavBarPage extends StatelessWidget {
   const TDBottomNavBarPage({Key? key}) : super(key: key);
@@ -12,11 +12,11 @@ class TDBottomNavBarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(
+    return ExamplePage(
       title: '标签栏 TDBottomNavBar',
       padding: const EdgeInsets.symmetric(vertical: 16),
       children: [
-        ExampleItem(
+        ExampleModule(
           desc: '单层级纯文本标签栏',
           builder: (BuildContext context) {
             return TDBottomNavBar(
@@ -54,7 +54,7 @@ class TDBottomNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '单层级纯文本标签栏',
           builder: (BuildContext context) {
             return TDBottomNavBar(
@@ -106,7 +106,7 @@ class TDBottomNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '文本加图标标签栏',
           builder: (BuildContext context) {
             return TDBottomNavBar(
@@ -187,7 +187,7 @@ class TDBottomNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '文本加图标标签栏',
           builder: (BuildContext context) {
             return TDBottomNavBar(
@@ -291,7 +291,7 @@ class TDBottomNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '纯图标标签栏',
           builder: (BuildContext context) {
             return TDBottomNavBar(
@@ -373,7 +373,7 @@ class TDBottomNavBarPage extends StatelessWidget {
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '底部导航栏自定义布局',
           builder: (BuildContext context) {
             return TDBottomNavBar(

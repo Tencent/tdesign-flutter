@@ -5,18 +5,18 @@ packages:
     dependency: "direct overridden"
     description:
       path: "pkg/kernel"
-      ref: "stable/3.0.5"
-      resolved-ref: "8d4a8fef20070681f1def93ef6d7c97497ee7df1"
-      url: "https://github.com/skylerpfli/DartSdkHook.git"
+      ref: "conch/stable/3.0.5"
+      resolved-ref: "97522785231bb6fd3cbe7685f1dd8a4ba2a5a273"
+      url: "https://tgclub_app:xyApp2017@git.woa.com/flutter_components/FlutterDynamic/dart-sdk.git"
     source: git
     version: "0.0.0"
   meta:
     dependency: "direct overridden"
     description:
       path: "pkg/meta"
-      ref: "stable/3.0.5"
-      resolved-ref: "8d4a8fef20070681f1def93ef6d7c97497ee7df1"
-      url: "https://github.com/skylerpfli/DartSdkHook.git"
+      ref: "conch/stable/3.0.5"
+      resolved-ref: "97522785231bb6fd3cbe7685f1dd8a4ba2a5a273"
+      url: "https://tgclub_app:xyApp2017@git.woa.com/flutter_components/FlutterDynamic/dart-sdk.git"
     source: git
     version: "1.7.1-dev"
 sdks:

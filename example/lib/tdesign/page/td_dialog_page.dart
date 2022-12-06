@@ -7,7 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../example_base.dart';
+import '../example_widget.dart';
 
 
 class TDDialogPage extends StatefulWidget {
@@ -20,7 +20,7 @@ class TDDialogPage extends StatefulWidget {
 class _TDDialogPageState extends State<TDDialogPage> {
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(
+    return ExamplePage(
         title: '对话框 Dialog',
         padding: const EdgeInsets.all(3),
         children: [

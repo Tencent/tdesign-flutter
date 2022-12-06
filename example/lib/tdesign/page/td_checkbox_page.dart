@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../example_base.dart';
+import '../example_widget.dart';
 
 ///
 /// TDCheckbox演示
@@ -38,10 +38,10 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
       );
     }
 
-    return ExampleWidget(
+    return ExamplePage(
       title: '多选框 Checkbox',
       children: [
-        ExampleItem(desc: '基础多选框', builder: (context){
+        ExampleModule(desc: '基础多选框', builder: (context){
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
@@ -72,7 +72,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             ],
           );
         }),
-        ExampleItem(desc: '右侧多选框', builder: (context){
+        ExampleModule(desc: '右侧多选框', builder: (context){
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
@@ -98,7 +98,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             ],
           );
         }),
-        ExampleItem(desc: '自定义图标多框类型', builder: (context){
+        ExampleModule(desc: '自定义图标多框类型', builder: (context){
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
@@ -119,7 +119,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             ],
           );
         }),
-        ExampleItem(desc: '规格', builder: (context){
+        ExampleModule(desc: '规格', builder: (context){
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
@@ -134,7 +134,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             ],
           );
         }),
-        ExampleItem(desc: '带全选多选框', builder: (context){
+        ExampleModule(desc: '带全选多选框', builder: (context){
           return TDCheckboxGroup(
               controller: controller,
               onChangeGroup: (checkedId) {

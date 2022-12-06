@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/tdesign/example_base.dart';
+import 'package:tdesign_flutter_example/tdesign/example_widget.dart';
 
 ///
 /// TdSwitchPage演示
@@ -88,7 +88,7 @@ class TDSwitchPageState extends State<TDSwitchPage> {
     );
 
 
-    current =  ExampleWidget(
+    current =  ExamplePage(
       title: '开关 Switch',
       children: [
         current

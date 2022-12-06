@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import '../example_base.dart';
+import '../example_widget.dart';
 
 class TDTagPage extends StatelessWidget {
   const TDTagPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: '标签 Tag',
+    return ExamplePage(title: '标签 Tag',
         // padding: EdgeInsets.zero,
         children: [
-          ExampleItem(
+          ExampleModule(
               desc: '展示标签',
               builder: (context) {
                 return Wrap(
@@ -65,7 +65,7 @@ class TDTagPage extends StatelessWidget {
                   ],
                 );
               }),
-          ExampleItem(
+          ExampleModule(
               desc: '点击控件',
               builder: (context) {
                 return Wrap(
@@ -157,7 +157,7 @@ class TDTagPage extends StatelessWidget {
                   ],
                 );
               }),
-          ExampleItem(
+          ExampleModule(
               desc: '尺寸规格-大，正常，小',
               builder: (context) {
                 return Wrap(
@@ -176,7 +176,7 @@ class TDTagPage extends StatelessWidget {
                   ],
                 );
               }),
-          ExampleItem(
+          ExampleModule(
               desc: '圆角尺寸规格-大，正常，小',
               builder: (context) {
                 return Wrap(
@@ -200,7 +200,7 @@ class TDTagPage extends StatelessWidget {
                   ],
                 );
               }),
-          ExampleItem(
+          ExampleModule(
               desc: '半圆尺寸规格-大，正常，小',
               builder: (context) {
                 return Wrap(
