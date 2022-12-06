@@ -15,54 +15,56 @@ class TDTextPage extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       title: 'TDText',
       children: [
-        ExampleModule(
+      ExampleModule(title: '默认',
+      children: [
+        ExampleItem(
             desc: '系统Text:',
             builder: (_) {
               return Text(
                 exampleTxt,
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '普通TDText:',
             builder: _buildNormalTDText),
-        ExampleModule(
+        ExampleItem(
             desc: '指定常用属性:',
             builder: (_) {
               return TDText(
                 exampleTxt,
-                font: TDTheme.of(context).fontXL,
+                font: TDTheme.of(context).fontHeadlineLarge,
                 textColor: TDTheme.of(context).brandNormalColor,
                 backgroundColor: TDTheme.of(context).successHoverColor,
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: 'style覆盖textColor,不覆盖font:',
             builder: (_) {
               return TDText(
                 exampleTxt,
-                font: TDTheme.of(context).fontM,
+                font: TDTheme.of(context).fontBodyLarge,
                 textColor: TDTheme.of(context).brandNormalColor,
                 style:
                     TextStyle(color: TDTheme.of(context).errorNormalColor),
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: 'style覆盖textColor和font:',
             builder: (_) {
               return TDText(
                 exampleTxt,
-                font: TDTheme.of(context).fontM,
+                font: TDTheme.of(context).fontBodyLarge,
                 textColor: TDTheme.of(context).brandNormalColor,
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: 'TDText.rich测试:',
             builder: (_) {
               return TDText.rich(
                 TextSpan(children: [
                   TDTextSpan(
                       text: 'TDTextSpan1',
-                      font: TDTheme.of(context).fontL,
+                      font: TDTheme.of(context).fontTitleExtraLarge,
                       textColor: TDTheme.of(context).warningNormalColor,
                       isTextThrough: true,
                       lineThroughColor: TDTheme.of(context).brandNormalColor,
@@ -77,13 +79,13 @@ class TDTextPage extends StatelessWidget {
                     child: Icon(TDIcons.setting, size: 24,)
                   ),
                 ]),
-                font: TDTheme.of(context).fontM,
+                font: TDTheme.of(context).fontBodyLarge,
                 textColor: TDTheme.of(context).brandNormalColor,
                 style: TextStyle(
                     color: TDTheme.of(context).errorNormalColor, fontSize: 32),
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '获取系统Text:',
             builder: (_) {
               return TDText(
@@ -91,7 +93,7 @@ class TDTextPage extends StatelessWidget {
                 backgroundColor: TDTheme.of(context).successHoverColor,
               ).getRawText(context: context);
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '中文居中:（带有英文可能不居中）',
             builder: (_) {
               return const TDText(
@@ -101,7 +103,7 @@ class TDTextPage extends StatelessWidget {
                 backgroundColor: Colors.orange,
               );
             }),
-        ExampleModule(
+        ExampleItem(
             desc: '自定义内部padding:',
             builder: (_) {
               return TDTextConfiguration(
@@ -110,7 +112,7 @@ class TDTextPage extends StatelessWidget {
               );
             }),
       ],
-    );
+    )]);
   }
 
   @Demo()
@@ -138,7 +140,7 @@ class CustomPaddingText extends StatelessWidget {
       ),
         TDText(
         'English',
-        font: TDTheme.of(context).fontXL,
+        font: TDTheme.of(context).fontHeadlineLarge,
         forceVerticalCenter: true,
         backgroundColor: Colors.orange,
       ),

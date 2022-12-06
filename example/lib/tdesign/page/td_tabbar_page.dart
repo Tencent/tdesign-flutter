@@ -73,7 +73,9 @@ class _TDTabBarPageState extends State<TDTabBarPage>
       title: '选项卡 Tabs TDTabBar',
       padding: const EdgeInsets.symmetric(vertical: 16),
       children: [
-        ExampleModule(
+      ExampleModule(title: '默认',
+      children: [
+        ExampleItem(
           desc: '横向选项卡',
           builder: (BuildContext context) {
             return Column(
@@ -107,7 +109,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '无下划线横向选项卡',
           builder: (BuildContext context) {
             return TDTabBar(
@@ -118,7 +120,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
             );
           },
         ),
-        ExampleModule(
+        ExampleItem(
           desc: '竖向选项卡',
           builder: (BuildContext context) {
             return LayoutBuilder(builder: (context, constraints){
@@ -152,6 +154,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
           },
         ),
       ],
-    );
+    )]);
   }
 }

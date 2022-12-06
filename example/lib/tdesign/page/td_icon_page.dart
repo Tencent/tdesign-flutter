@@ -16,7 +16,9 @@ class _TDIconPageState extends State<TDIconPage> {
   Widget build(BuildContext context) {
     return ExamplePage(title: 'icon图标',
         children: [
-      Container(
+        ExampleModule(title: '默认',
+        children: [
+          ExampleItem(builder: (_) => Container(
         color: Colors.white,
         alignment: Alignment.center,
         child: Wrap(
@@ -34,8 +36,8 @@ class _TDIconPageState extends State<TDIconPage> {
             )
           ],
         ),
-      )
-    ]);
+      ))
+    ])]);
 
   }
 }

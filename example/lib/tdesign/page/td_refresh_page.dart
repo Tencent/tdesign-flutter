@@ -28,7 +28,9 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
     return ExamplePage(
         title: '下拉刷新 PullDownRefresh',
         children: [
-          SizedBox(
+        ExampleModule(title: '默认',
+        children: [
+          ExampleItem(builder: (_) => SizedBox(
             height: 1000,
             child: Stack(
               children: [
@@ -50,7 +52,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
                 )
               ],
             ),
-          )
-        ]);
+          ))
+        ])]);
   }
 }

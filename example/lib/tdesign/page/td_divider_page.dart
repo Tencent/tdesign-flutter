@@ -12,28 +12,30 @@ class TDDividerPage extends StatelessWidget {
         title: '分割线 Divider',
         padding: const EdgeInsets.only(top: 16, bottom: 16),
         children: [
-      ExampleModule(desc: '直线拉通', builder: (_){
+        ExampleModule(title: '默认',
+        children: [
+      ExampleItem(desc: '直线拉通', builder: (_){
         return const TDDivider();
       }),
-      ExampleModule(desc: '虚线拉通', builder: (_){
+      ExampleItem(desc: '虚线拉通', builder: (_){
         return const TDDivider(isDashed: true,);
       }),
-          ExampleModule(desc: '左右间距', builder: (_){
+          ExampleItem(desc: '左右间距', builder: (_){
             return const TDDivider(margin: EdgeInsets.only(left: 16, right: 16),);
           }),
-          ExampleModule(desc: '左侧拉通', builder: (_){
+          ExampleItem(desc: '左侧拉通', builder: (_){
             return const TDDivider(margin: EdgeInsets.only(left: 16, ),);
           }),
-          ExampleModule(desc: '自定义左侧间距', builder: (_){
+          ExampleItem(desc: '自定义左侧间距', builder: (_){
             return const TDDivider(margin: EdgeInsets.only(left: 76, ),);
           }),
-          ExampleModule(desc: '左右间距(虚线)', builder: (_){
+          ExampleItem(desc: '左右间距(虚线)', builder: (_){
             return const TDDivider(margin: EdgeInsets.only(left: 16, right: 16),isDashed: true,);
           }),
-          ExampleModule(desc: '自定义左侧间距(虚线)', builder: (_){
+          ExampleItem(desc: '自定义左侧间距(虚线)', builder: (_){
             return const TDDivider(margin: EdgeInsets.only(left: 76, ),isDashed: true,);
           }),
-          ExampleModule(desc: '垂直分割', builder: (_){
+          ExampleItem(desc: '垂直分割', builder: (_){
             return Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -45,16 +47,16 @@ class TDDividerPage extends StatelessWidget {
               ],
             );
           }),
-          ExampleModule(desc: '文字+直线', builder: (_){
+          ExampleItem(desc: '文字+直线', builder: (_){
             return const TDDivider(margin: EdgeInsets.only(left: 16, right: 16), text: '文字信息',);
           }),
-          ExampleModule(desc: '文字+虚线', builder: (_){
+          ExampleItem(desc: '文字+虚线', builder: (_){
             return const TDDivider(margin: EdgeInsets.only(left: 16, right: 16), text: '文字信息',isDashed: true,);
           }),
-          ExampleModule(desc: '纯文字', builder: (_){
+          ExampleItem(desc: '纯文字', builder: (_){
             return const TDDivider(hideLine: true, text: '文字信息',);
           }),
-    ]);
+    ])]);
   }
 }
 

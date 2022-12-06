@@ -16,7 +16,9 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
     return ExamplePage(
         title: '空状态 Empty',
         children: [
-          Container(
+        ExampleModule(title: '默认',
+        children: [
+          ExampleItem(builder: (_) => Container(
             height: 720,
             color: Colors.white,
             child: Column(
@@ -34,7 +36,7 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
                 ),
               ],
             ),
-          )
-        ]);
+          ))
+        ])]);
   }
 }

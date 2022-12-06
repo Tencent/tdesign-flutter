@@ -29,7 +29,9 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return ExamplePage(
       title: '时间选择器 DatePicker',
       children: [
-        ExampleModule(desc: '年月日', builder: (_) {
+      ExampleModule(title: '默认',
+      children: [
+        ExampleItem(desc: '年月日', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -51,7 +53,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                 ),
               ]);
         }),
-        ExampleModule(desc: '年月', builder: (_) {
+        ExampleItem(desc: '年月', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -74,7 +76,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                 ),
               ]);
         }),
-        ExampleModule(desc: '月日', builder: (_) {
+        ExampleItem(desc: '月日', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -97,7 +99,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                 ),
               ]);
         }),
-        ExampleModule(desc: '时分秒', builder: (_) {
+        ExampleItem(desc: '时分秒', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -125,7 +127,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                 ),
               ]);
         }),
-        ExampleModule(desc: '年月日时分秒', builder: (_) {
+        ExampleItem(desc: '年月日时分秒', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -151,6 +153,6 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
               ]);
         }),
       ],
-    );
+    )]);
   }
 }
