@@ -35,7 +35,7 @@ class TDEmpty extends StatelessWidget {
           TDText(
             emptyText ?? '',
             fontWeight: FontWeight.w400,
-            font: TDTheme.of(context).fontS,
+            font: TDTheme.of(context).fontBodyMedium,
             textColor: TDTheme.of(context).fontGyColor3,
           ),
           (type == TDEmptyType.operation)
