@@ -154,7 +154,7 @@ class TDText extends StatelessWidget {
       var paddingConfig = config?.paddingConfig;
 
       var textFont =
-          font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
+          font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
       var fontSize = style?.fontSize ?? textFont.size;
       var height = style?.height ?? textFont.height;
 
@@ -182,7 +182,7 @@ class TDText extends StatelessWidget {
 
   TextStyle? getTextStyle(BuildContext? context,{ double? height, Color? backgroundColor}) {
     var textFont =
-        font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
+        font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
     return TextStyle(
       inherit: style?.inherit ?? true,
       color: style?.color ?? textColor,
@@ -304,7 +304,7 @@ class TDTextSpan extends TextSpan{
       String package,
       ) {
     var textFont =
-        font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
+        font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
     return TextStyle(
       inherit: style?.inherit ?? true,
       color: style?.color ?? textColor,
