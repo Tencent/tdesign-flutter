@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tdesign_flutter/src/util/platform_util.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'package:tdesign_flutter/td_export.dart';
 
+import '../web/syntax_highlighter.dart';
 import 'api_widget.dart';
 import 'example_base.dart';
 
@@ -256,7 +258,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
     }
     if (methodName.isNotEmpty) {
       print('example code methodName: $methodName');
-      return '${widget.exampleCodeGroup}/$methodName.txt';
+      return 'assets/code/${widget.exampleCodeGroup}.$methodName.txt';
     }
     return '';
   }
@@ -279,17 +281,40 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
         builder: (_) {
           if (codeString.isEmpty) {
             return Container(
-              color: Colors.white,
               alignment: Alignment.center,
-              height: 300,
+              decoration: BoxDecoration(
+                  color: TDTheme.of(context).grayColor1,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(TDTheme.of(context).baseBorderRadius ?? 6))),
+              height: 500,
               child: const TDText('暂无演示代码'),
             );
           }
           return Container(
-            color: Colors.white,
             alignment: Alignment.center,
-            height: 300,
-            child: TDText(codeString),
+            decoration: BoxDecoration(
+                color: TDTheme.of(context).grayColor1,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(TDTheme.of(context).baseBorderRadius ?? 6))),
+            height: 500,
+            child: SingleChildScrollView(
+              child: Markdown(
+                padding: EdgeInsets.zero,
+                selectable: true,
+                shrinkWrap: true,
+                syntaxHighlighter: DartSyntaxHighlighter(),
+                data: '''
+```dart
+${codeString}
+```
+                  ''',
+                extensionSet: md.ExtensionSet(
+                  md.ExtensionSet.gitHubWeb.blockSyntaxes,
+                  [
+                    md.EmojiSyntax(),
+                    ...md.ExtensionSet.gitHubWeb.inlineSyntaxes
+                  ],
+                ),
+              ),
+            ),
           );
         });
   }
