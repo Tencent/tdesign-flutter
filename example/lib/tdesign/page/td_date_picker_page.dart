@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../example_base.dart';
+import '../example_widget.dart';
 
 
 class TDDatePickerPage extends StatefulWidget {
@@ -26,10 +26,10 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(
+    return ExamplePage(
       title: '时间选择器 DatePicker',
       children: [
-        ExampleItem(desc: '年月日', builder: (_) {
+        ExampleModule(desc: '年月日', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -51,7 +51,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                 ),
               ]);
         }),
-        ExampleItem(desc: '年月', builder: (_) {
+        ExampleModule(desc: '年月', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -74,7 +74,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                 ),
               ]);
         }),
-        ExampleItem(desc: '月日', builder: (_) {
+        ExampleModule(desc: '月日', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -97,7 +97,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                 ),
               ]);
         }),
-        ExampleItem(desc: '时分秒', builder: (_) {
+        ExampleModule(desc: '时分秒', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -125,7 +125,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                 ),
               ]);
         }),
-        ExampleItem(desc: '年月日时分秒', builder: (_) {
+        ExampleModule(desc: '年月日时分秒', builder: (_) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

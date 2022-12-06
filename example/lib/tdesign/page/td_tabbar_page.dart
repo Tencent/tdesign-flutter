@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import '../example_base.dart';
+import '../example_widget.dart';
 
 
 class TDTabBarPage extends StatefulWidget {
@@ -69,11 +69,11 @@ class _TDTabBarPageState extends State<TDTabBarPage>
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(
+    return ExamplePage(
       title: '选项卡 Tabs TDTabBar',
       padding: const EdgeInsets.symmetric(vertical: 16),
       children: [
-        ExampleItem(
+        ExampleModule(
           desc: '横向选项卡',
           builder: (BuildContext context) {
             return Column(
@@ -107,7 +107,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '无下划线横向选项卡',
           builder: (BuildContext context) {
             return TDTabBar(
@@ -118,7 +118,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
             );
           },
         ),
-        ExampleItem(
+        ExampleModule(
           desc: '竖向选项卡',
           builder: (BuildContext context) {
             return LayoutBuilder(builder: (context, constraints){

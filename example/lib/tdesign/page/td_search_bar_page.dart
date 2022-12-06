@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import '../example_base.dart';
+import '../example_widget.dart';
 
 class TDSearchBarPage extends StatefulWidget {
   const TDSearchBarPage({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(
+    return ExamplePage(
       title: '搜索框 Search',
       children: [
         TDSearchBar(

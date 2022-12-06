@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../example_base.dart';
+import '../example_widget.dart';
 
 
 class TDAvatarPage extends StatefulWidget {
@@ -15,11 +15,11 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
   @override
   Widget build(BuildContext context) {
     var imgUrl = 'https://photo.16pic.com/00/53/26/16pic_5326745_b.jpg';
-    return ExampleWidget(
+    return ExamplePage(
       backgroundColor: TDTheme.of(context).whiteColor1,
       title: '头像 Avatar',
       children: [
-        ExampleItem(
+        ExampleModule(
             desc: '类型--默认',
             builder: (_) {
               return Row(
@@ -40,7 +40,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
                 ],
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '类型-圆形',
             builder: (_) {
               return Row(
@@ -61,7 +61,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
                 ],
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '类型-方形',
             builder: (_) {
               return Row(
@@ -82,7 +82,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
                 ],
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '类型-自定义文字',
             builder: (_) {
               return Row(
@@ -106,7 +106,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
                 ],
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '特殊类型-带操作',
             builder: (_) {
               return Column(
@@ -151,7 +151,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
                 ],
               );
             }),
-        ExampleItem(
+        ExampleModule(
             desc: '特殊类型-纯展示',
             builder: (_) {
               return Column(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/tdesign/example_base.dart';
+import 'package:tdesign_flutter_example/tdesign/example_widget.dart';
 
 /// 主题示例页
 
@@ -16,7 +16,7 @@ class TDThemePage extends StatefulWidget {
 class _TDThemePageState extends State<TDThemePage> {
   @override
   Widget build(BuildContext context) {
-    return ExampleWidget(title: '主题示例', children: [
+    return ExamplePage(title: '主题示例', children: [
       Container(
           color: Colors.white,
           alignment: Alignment.center,
