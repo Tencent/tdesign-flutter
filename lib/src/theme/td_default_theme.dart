@@ -116,6 +116,86 @@ class TDDefaultTheme {
 			"fontXXS": {
 				"size": 10,
 				"lineHeight": 16
+			},
+			"fontDisplayLarge": {
+				"size": 64,
+				"lineHeight": 72
+			},
+			"fontDisplayMedium": {
+				"size": 48,
+				"lineHeight": 56
+			},
+			"fontHeadlineLarge": {
+				"size": 36,
+				"lineHeight": 44
+			},
+			"fontHeadlineMedium": {
+				"size": 28,
+				"lineHeight": 36
+			},
+			"fontHeadlineSmall": {
+				"size": 24,
+				"lineHeight": 32
+			},
+			"fontTitleExtraLarge": {
+				"size": 20,
+				"lineHeight": 28
+			},
+			"fontTitleLarge": {
+				"size": 18,
+				"lineHeight": 26
+			},
+			"fontTitleMedium": {
+				"size": 16,
+				"lineHeight": 24
+			},
+			"fontTitleSmall": {
+				"size": 14,
+				"lineHeight": 22
+			},
+			"fontBodyLarge": {
+				"size": 16,
+				"lineHeight": 24
+			},
+			"fontBodyMedium": {
+				"size": 14,
+				"lineHeight": 22
+			},
+			"fontBodySmall": {
+				"size": 12,
+				"lineHeight": 20
+			},
+			"fontBodyExtraSmall": {
+				"size": 10,
+				"lineHeight": 16
+			},
+			"fontMarkLarge": {
+				"size": 16,
+				"lineHeight": 24
+			},
+			"fontMarkMedium": {
+				"size": 14,
+				"lineHeight": 22
+			},
+			"fontMarkSmall": {
+				"size": 12,
+				"lineHeight": 20
+			},
+			"fontMarkExtraSmall": {
+				"size": 10,
+				"lineHeight": 16
+			},
+			"fontLinkLarge": {
+				"size": 16,
+				"lineHeight": 24
+			},
+			"fontLinkMedium": {
+				"size": 14,
+				"lineHeight": 22
+			},
+			"fontLinkSmall": {
+				"size": 12,
+				"lineHeight": 20
 			}
 		},
 		"fontFamily": {
