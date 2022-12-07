@@ -36,13 +36,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
             ExampleItem(desc: '不可点击', builder: _buildNormalUnClickButton),
 
 
-            ExampleItem(desc: '可点击', builder: (context){
-              return TDButton(content: '弱按钮',
-                style: TDButtonStyle.weakly(),
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
+            ExampleItem(desc: '可点击', builder: _buildWeeklyClickButton),
             ExampleItem(desc: '不可点击', builder: (context){
               return TDButton(content: '弱按钮',
                 style: TDButtonStyle.weakly(),
@@ -347,5 +341,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
       disabled: true,
       onTap: onTap,
       onLongPress: onLongPress,);
+  }
+
+  @Demo(group: 'button')
+  Widget _buildWeeklyClickButton(BuildContext context) {
+    return TDButton(content: '弱按钮',
+      style: TDButtonStyle.weakly(),
+      onTap: onTap,
+      onLongPress: onLongPress,
+    );
   }
 }
