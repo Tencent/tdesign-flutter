@@ -1,25 +1,5 @@
 
   Widget _buildNormalUnClickButton(BuildContext context) {
-    TDButton(content: '强按钮',
-    style: TDButtonStyle.primary(),
-    disabled: true,
-    onTap: onTap,
-    onLongPress: onLongPress,);
-    TDButton(content: '强按钮',
-      style: TDButtonStyle.primary(),
-      disabled: true,
-      onTap: onTap,
-      onLongPress: onLongPress,);
-    TDButton(content: '强按钮',
-      style: TDButtonStyle.primary(),
-      disabled: true,
-      onTap: onTap,
-      onLongPress: onLongPress,);
-    TDButton(content: '强按钮',
-      style: TDButtonStyle.primary(),
-      disabled: true,
-      onTap: onTap,
-      onLongPress: onLongPress,);
     return TDButton(content: '强按钮',
       style: TDButtonStyle.primary(),
       disabled: true,
