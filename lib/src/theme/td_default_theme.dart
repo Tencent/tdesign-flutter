@@ -93,29 +93,85 @@ class TDDefaultTheme {
 			"grayColor14": "#181818"
 		},
 		"font": {
-			"fontXL": {
+			"fontDisplayLarge": {
+				"size": 64,
+				"lineHeight": 72
+			},
+			"fontDisplayMedium": {
+				"size": 48,
+				"lineHeight": 56
+			},
+			"fontHeadlineLarge": {
 				"size": 36,
 				"lineHeight": 44
 			},
-			"fontL": {
+			"fontHeadlineMedium": {
+				"size": 28,
+				"lineHeight": 36
+			},
+			"fontHeadlineSmall": {
+				"size": 24,
+				"lineHeight": 32
+			},
+			"fontTitleExtraLarge": {
 				"size": 20,
 				"lineHeight": 28
 			},
-			"fontM": {
+			"fontTitleLarge": {
+				"size": 18,
+				"lineHeight": 26
+			},
+			"fontTitleMedium": {
 				"size": 16,
 				"lineHeight": 24
 			},
-			"fontS": {
+			"fontTitleSmall": {
 				"size": 14,
 				"lineHeight": 22
 			},
-			"fontXS": {
+			"fontBodyLarge": {
+				"size": 16,
+				"lineHeight": 24
+			},
+			"fontBodyMedium": {
+				"size": 14,
+				"lineHeight": 22
+			},
+			"fontBodySmall": {
 				"size": 12,
 				"lineHeight": 20
 			},
-			"fontXXS": {
+			"fontBodyExtraSmall": {
 				"size": 10,
 				"lineHeight": 16
+			},
+			"fontMarkLarge": {
+				"size": 16,
+				"lineHeight": 24
+			},
+			"fontMarkMedium": {
+				"size": 14,
+				"lineHeight": 22
+			},
+			"fontMarkSmall": {
+				"size": 12,
+				"lineHeight": 20
+			},
+			"fontMarkExtraSmall": {
+				"size": 10,
+				"lineHeight": 16
+			},
+			"fontLinkLarge": {
+				"size": 16,
+				"lineHeight": 24
+			},
+			"fontLinkMedium": {
+				"size": 14,
+				"lineHeight": 22
+			},
+			"fontLinkSmall": {
+				"size": 12,
+				"lineHeight": 20
 			}
 		},
 		"fontFamily": {
@@ -123,11 +179,16 @@ class TDDefaultTheme {
 				"fontFamily": "DINAlternate-B"
 			}
 		},
-		"corner": {
-			"baseBorderRadius": 8
+		"radius": {
+			"radiusSmall": 3,
+			"radiusDefault": 6,
+			"radiusLarge": 9,
+			"radiusExtraLarge": 12,
+			"radiusRound": 9999,
+			"radiusCircle": 9999
 		},
 		"shadow": {
-			"baseShadows": [
+			"shadowsBase": [
 			    {
 			      "color": "#0D000000",
 			      "blurRadius": 10,
@@ -156,7 +217,7 @@ class TDDefaultTheme {
 			       }
 			    }
 			  ],
-			"middleShadows": [
+			"shadowsMiddle": [
 			    {
 			      "color": "#0D000000",
 			      "blurRadius": 14,
@@ -185,7 +246,7 @@ class TDDefaultTheme {
 			       }
 			    }
 			  ],
-			"topShadows": [
+			"shadowsTop": [
 			    {
 			      "color": "#0D000000",
 			      "blurRadius": 30,

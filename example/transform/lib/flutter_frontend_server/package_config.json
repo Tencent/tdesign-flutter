@@ -1,0 +1,284 @@
+{
+  "configVersion": 2,
+  "packages": [
+    {
+      "name": "flutter_frontend_server",
+      "rootUri": "../",
+      "packageUri": "lib/",
+      "languageVersion": "2.6"
+    },
+    {
+      "name": "_fe_analyzer_shared",
+      "rootUri": "../../../third_party/dart/pkg/_fe_analyzer_shared",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "_js_interop_checks",
+      "rootUri": "../../../third_party/dart/pkg/_js_interop_checks",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "args",
+      "rootUri": "../../../third_party/dart/third_party/pkg/args",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "async",
+      "rootUri": "../../../third_party/dart/third_party/pkg/async",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "async_helper",
+      "rootUri": "../../../third_party/dart/pkg/async_helper",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "bazel_worker",
+      "rootUri": "../../../third_party/dart/third_party/pkg/bazel_worker",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "build_integration",
+      "rootUri": "../../../third_party/dart/pkg/build_integration",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "charcode",
+      "rootUri": "../../../third_party/dart/third_party/pkg/charcode",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "cli_util",
+      "rootUri": "../../../third_party/dart/third_party/pkg/cli_util",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "collection",
+      "rootUri": "../../../third_party/dart/third_party/pkg/collection",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "compiler",
+      "rootUri": "../../../third_party/dart/pkg/compiler",
+      "packageUri": "lib/",
+      "languageVersion": "2.6"
+    },
+    {
+      "name": "convert",
+      "rootUri": "../../../third_party/dart/third_party/pkg/convert",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "crypto",
+      "rootUri": "../../../third_party/dart/third_party/pkg/crypto",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "dart2js_info",
+      "rootUri": "../../../third_party/dart/pkg/dart2js_info",
+      "packageUri": "lib/",
+      "languageVersion": "2.11"
+    },
+    {
+      "name": "dev_compiler",
+      "rootUri": "../../../third_party/dart/pkg/dev_compiler",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "expect",
+      "rootUri": "../../../third_party/dart/pkg/expect",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "fixnum",
+      "rootUri": "../../../third_party/dart/third_party/pkg/fixnum",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "front_end",
+      "rootUri": "../../../third_party/dart/pkg/front_end",
+      "packageUri": "lib/",
+      "languageVersion": "2.13"
+    },
+    {
+      "name": "frontend_server",
+      "rootUri": "../../../third_party/dart/pkg/frontend_server",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "http_parser",
+      "rootUri": "../../../third_party/dart/third_party/pkg/http_parser",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "js_ast",
+      "rootUri": "../../../third_party/dart/pkg/js_ast",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "js_runtime",
+      "rootUri": "../../../third_party/dart/pkg/js_runtime",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "kernel",
+      "rootUri": "../../../third_party/dart/pkg/kernel",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "litetest",
+      "rootUri": "../../testing/litetest",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "logging",
+      "rootUri": "../../../third_party/dart/third_party/pkg/logging",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "matcher",
+      "rootUri": "../../../third_party/dart/third_party/pkg/matcher",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "meta",
+      "rootUri": "../../../third_party/dart/pkg/meta",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "mime",
+      "rootUri": "../../../third_party/dart/third_party/pkg/mime",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "package_config",
+      "rootUri": "../../../third_party/dart/third_party/pkg_tested/package_config",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "path",
+      "rootUri": "../../../third_party/dart/third_party/pkg/path",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "pedantic",
+      "rootUri": "../../../third_party/dart/third_party/pkg/pedantic",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "protobuf",
+      "rootUri": "../../../third_party/dart/third_party/pkg/protobuf/protobuf",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "shelf",
+      "rootUri": "../../../third_party/dart/third_party/pkg/shelf",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "shelf_static",
+      "rootUri": "../../../third_party/dart/third_party/pkg/shelf_static",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "smith",
+      "rootUri": "../../../third_party/dart/pkg/smith",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "source_maps",
+      "rootUri": "../../../third_party/dart/third_party/pkg/source_maps",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "source_span",
+      "rootUri": "../../../third_party/dart/third_party/pkg/source_span",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "stack_trace",
+      "rootUri": "../../../third_party/dart/third_party/pkg/stack_trace",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "stream_channel",
+      "rootUri": "../../../third_party/dart/third_party/pkg/stream_channel",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "string_scanner",
+      "rootUri": "../../../third_party/dart/third_party/pkg/string_scanner",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "term_glyph",
+      "rootUri": "../../../third_party/dart/third_party/pkg/term_glyph",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "typed_data",
+      "rootUri": "../../../third_party/dart/third_party/pkg/typed_data",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "usage",
+      "rootUri": "../../../third_party/dart/third_party/pkg/usage",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "vm",
+      "rootUri": "../../../third_party/dart/pkg/vm",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "yaml",
+      "rootUri": "../../../third_party/dart/third_party/pkg/yaml",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    }
+  ],
+  "generated": "2022-08-17T11:10:02.896188Z",
+  "generator": "pub",
+  "generatorVersion": "2.16.2"
+}

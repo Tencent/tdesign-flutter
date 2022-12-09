@@ -286,8 +286,6 @@ class TDCheckboxGroupInherited extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant TDCheckboxGroupInherited oldWidget) {
-    var notify =
-        oldWidget.state.checkBoxStates.keys != state.checkBoxStates.keys;
     return true;
   }
 }

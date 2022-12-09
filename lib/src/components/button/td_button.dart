@@ -106,6 +106,7 @@ class _TDButtonState extends State<TDButton> {
     if( style.frameWidth != null && style.frameWidth != 0){
       return Border.all(color: style.getFrameColor(context:context, disable: widget.disabled), width: style.frameWidth!);
     }
+    return null;
   }
 
   Widget _getChild() {
@@ -154,11 +155,11 @@ class _TDButtonState extends State<TDButton> {
   Font _getTextFont() {
     switch(widget.size){
       case TDButtonSize.large:
-        return TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
+        return TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
       case TDButtonSize.medium:
-        return TDTheme.of(context).fontS ?? Font(size: 14, lineHeight: 22);
+        return TDTheme.of(context).fontBodyMedium ?? Font(size: 14, lineHeight: 22);
       case TDButtonSize.small:
-        return TDTheme.of(context).fontS ?? Font(size: 14, lineHeight: 22);
+        return TDTheme.of(context).fontBodyMedium ?? Font(size: 14, lineHeight: 22);
     }
   }
 
@@ -173,6 +174,7 @@ class _TDButtonState extends State<TDButton> {
         default:
       }
     }
+    return null;
   }
 
   double _getHeight() {
@@ -293,11 +295,11 @@ class _TDTextButtonState extends State<TDTextButton> {
   Font _getTextFont() {
     switch(widget.size){
       case TDButtonSize.large:
-        return TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
+        return TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
       case TDButtonSize.medium:
-        return TDTheme.of(context).fontS ?? Font(size: 14, lineHeight: 22);
+        return TDTheme.of(context).fontBodyMedium ?? Font(size: 14, lineHeight: 22);
       case TDButtonSize.small:
-        return TDTheme.of(context).fontS ?? Font(size: 14, lineHeight: 22);
+        return TDTheme.of(context).fontBodyMedium ?? Font(size: 14, lineHeight: 22);
     }
   }
 }

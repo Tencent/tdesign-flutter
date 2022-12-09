@@ -97,4 +97,5 @@ flutter:
 
   assets:
     - assets/api/
+    - assets/code/
     - assets/version
