@@ -1,0 +1,11 @@
+
+  Widget _buildRadiusRound(BuildContext context) {
+    // 胶囊型，数值设置较大
+    return Container(
+      width: 100,
+      height: 50,
+      decoration: BoxDecoration(
+          color: TDTheme.of(context).brandNormalColor,
+          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusRound)),
+    );
+  }

@@ -1,0 +1,18 @@
+
+  Widget _buildDefaultTheme(BuildContext context) {
+    // 通过TDTheme.of(context).xxx使用公共主题属性
+    return Container(
+      margin: EdgeInsets.all(TDTheme.of(context).spacer8), // 间隔
+      decoration: BoxDecoration(
+        color: TDTheme.of(context).grayColor1, // 颜色
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault), // 圆角
+        boxShadow: TDTheme.of(context).shadowsBase, // 阴影
+      ),
+      child: TDText(
+        '使用外层默认主题',
+        font:
+            TDTheme.of(context).fontBodyLarge, // 字体，业务方使用时，
+        textColor: TDTheme.of(context).brandNormalColor, // 颜色，AS中点击颜色可查看具体设置和显示效果
+      ),
+    );
+  }
