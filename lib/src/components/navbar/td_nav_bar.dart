@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../td_export.dart';
-import '../../theme/td_spacers.dart';
 
 typedef TDBarItemAction = void Function();
 
@@ -141,7 +140,7 @@ class _TDNavBarState extends State<TDNavBar> {
   TextStyle _getTitleStyle(BuildContext context) {
     var titleColor = widget.titleColor ?? TDTheme.of(context).fontGyColor1;
 
-    var titleFont = widget.titleFont ?? TDTheme.of(context).fontM;
+    var titleFont = widget.titleFont ?? TDTheme.of(context).fontBodyLarge;
 
     return widget.titleFontFamily == null
         ? TextStyle(

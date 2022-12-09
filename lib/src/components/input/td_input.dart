@@ -191,13 +191,13 @@ class TDInput extends StatelessWidget {
                     child: TDText(
                       leftLabel,
                       maxLines: 1,
-                      font: TDTheme.of(context).fontM,
+                      font: TDTheme.of(context).fontBodyLarge,
                       fontWeight: FontWeight.w400,
                     ),
                   ) : TDText(
                     leftLabel,
                     maxLines: 1,
-                    font: TDTheme.of(context).fontM,
+                    font: TDTheme.of(context).fontBodyLarge,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -235,7 +235,7 @@ class TDInput extends StatelessWidget {
                     ),
                     Visibility(child: Padding(
                       padding: EdgeInsets.only(left: 16, bottom: getInputPadding()),
-                      child: TDText(errorText, font: TDTheme.of(context).fontXS, textColor: TDTheme.of(context).fontGyColor3,),
+                      child: TDText(errorText, font: TDTheme.of(context).fontBodySmall, textColor: TDTheme.of(context).fontGyColor3,),
                     ), visible: errorText != '',)
                   ],
                 ),
@@ -278,13 +278,13 @@ class TDInput extends StatelessWidget {
                     child: TDText(
                       leftLabel,
                       maxLines: 1,
-                      font: TDTheme.of(context).fontS,
+                      font: TDTheme.of(context).fontBodyMedium,
                       fontWeight: FontWeight.w400,
                     ),
                   ) : TDText(
                     leftLabel,
                     maxLines: 1,
-                    font: TDTheme.of(context).fontS,
+                    font: TDTheme.of(context).fontBodyMedium,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -401,7 +401,7 @@ class TDInput extends StatelessWidget {
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
             child: TDText(
               '${controller?.text.length}/${maxNum}',
-              font: TDTheme.of(context).fontXS,
+              font: TDTheme.of(context).fontBodySmall,
               textColor: TDTheme.of(context).fontGyColor3,
             ),
           ),
@@ -430,13 +430,13 @@ class TDInput extends StatelessWidget {
                       child: TDText(
                         leftLabel,
                         maxLines: 1,
-                        font: TDTheme.of(context).fontM,
+                        font: TDTheme.of(context).fontBodyLarge,
                         fontWeight: FontWeight.w400,
                       ),
                     ) : TDText(
                       leftLabel,
                       maxLines: 1,
-                      font: TDTheme.of(context).fontM,
+                      font: TDTheme.of(context).fontBodyLarge,
                       fontWeight: FontWeight.w400,
                     ),
                 ),

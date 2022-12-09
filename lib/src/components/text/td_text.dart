@@ -154,7 +154,7 @@ class TDText extends StatelessWidget {
       var paddingConfig = config?.paddingConfig;
 
       var textFont =
-          font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
+          font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
       var fontSize = style?.fontSize ?? textFont.size;
       var height = style?.height ?? textFont.height;
 
@@ -182,7 +182,7 @@ class TDText extends StatelessWidget {
 
   TextStyle? getTextStyle(BuildContext? context,{ double? height, Color? backgroundColor}) {
     var textFont =
-        font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
+        font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
     return TextStyle(
       inherit: style?.inherit ?? true,
       color: style?.color ?? textColor,
@@ -256,7 +256,7 @@ class TDTextSpan extends TextSpan{
 
   /// 构造参数，扩展参数释义可参考[TDText]中字段注释
   TDTextSpan({
-    BuildContext? context, // 如果未设置font，且不想使用默认的fontM尺寸时，需设置context，否则可省略
+    BuildContext? context, // 如果未设置font，且不想使用默认的fontBodyLarge尺寸时，需设置context，否则可省略
     Font? font,
     FontWeight fontWeight = FontWeight.w400,
     FontFamily? fontFamily,
@@ -304,7 +304,7 @@ class TDTextSpan extends TextSpan{
       String package,
       ) {
     var textFont =
-        font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
+        font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
     return TextStyle(
       inherit: style?.inherit ?? true,
       color: style?.color ?? textColor,

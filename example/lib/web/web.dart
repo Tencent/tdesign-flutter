@@ -1,3 +1,4 @@
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' if(dart.library.io) 'web_replace.dart' as html;
 import 'dart:ui' as ui;
 
@@ -5,9 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
+import '../base/api_widget.dart';
 import '../main.dart';
-import '../tdesign/api_widget.dart';
-import '../tdesign/example_base.dart';
 import 'code_widget.dart';
 
 class WebMainBody extends StatefulWidget {
@@ -116,7 +116,7 @@ class _WebMainBodyState extends State<WebMainBody> {
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.only(left: 16),
           color: TDTheme.of(context).brandHoverColor,
-          child: TDText('TDesign 组件', textColor: TDTheme.of(context).whiteColor1,font: TDTheme.of(context).fontXL,),
+          child: TDText('TDesign 组件', textColor: TDTheme.of(context).whiteColor1,font: TDTheme.of(context).fontHeadlineLarge,),
         ) ,
         Expanded(child: ListView.builder(
             itemCount: examplePageList.length,
