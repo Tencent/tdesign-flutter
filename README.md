@@ -32,7 +32,7 @@ TDesign Flutter技术栈组件库，适合在移动端项目中使用。
     使用示例：
     TDIcon(TDIcons.activity)
     
-- 使用示例：example/lib/page
+- 使用示例：example/lib/page/
 
 # 开发规范
 - 组件命名规范：以TD为前缀，组件名称、API名称参考TDesign现有组件和API命名，可以根据flutter原生Widget的特点进行修改。组件API以满足设计要求和使用为准，可根据flutter特点做精简或定制。
@@ -46,7 +46,7 @@ TDesign Flutter技术栈组件库，适合在移动端项目中使用。
 - 拉取开发分支：建议将项目fork到自己github,每个组件从main分支拉取对应开发分支，命名为feature/组件名小写_下划线
 - 实现组件：组件中的属性请尽量使用TDTheme提供的公共属性，使用方法参考'主题-基础'页面
 - 编写示例页：示例页请尽量使用ExamplePage+ExampleModule+ExampleItem组合，参考示例稿布局实现。
-- 演示代码：每个组件示例，尽量将原子性代码提取成独立方法，并添加@Demo注解，方便生成演示代码。写法参考'圆角-基础'页。
+- 演示代码：每个组件示例，尽量将原子性代码提取成独立方法，并添加@Demo注解，方便生成演示代码。其中，@Demo注解的'group'参数需与ExamplePage的'exampleCodeGroup'参数一致。写法请参考'圆角-基础'页。
 - flutterAOP: 如果可以，建议切换到flutter 3.0.5分支，并添加AOP补丁，生成演示代码。如果不方便切3.0.5分支，后续会搭建流水线生成演示代码。
 - API文档：目前生成api工具不完善，不要求必须生成api文档，但请尽量添加字段的详细注释。
 - 代码规范：开发完成后，请检查'Dart Analysis'下的提示，尽量符合代码规范。
