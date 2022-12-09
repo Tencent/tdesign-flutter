@@ -188,7 +188,7 @@ class TDDefaultTheme {
 			"radiusCircle": 9999
 		},
 		"shadow": {
-			"baseShadows": [
+			"shadowsBase": [
 			    {
 			      "color": "#0D000000",
 			      "blurRadius": 10,
@@ -217,7 +217,7 @@ class TDDefaultTheme {
 			       }
 			    }
 			  ],
-			"middleShadows": [
+			"shadowsMiddle": [
 			    {
 			      "color": "#0D000000",
 			      "blurRadius": 14,
@@ -246,7 +246,7 @@ class TDDefaultTheme {
 			       }
 			    }
 			  ],
-			"topShadows": [
+			"shadowsTop": [
 			    {
 			      "color": "#0D000000",
 			      "blurRadius": 30,
