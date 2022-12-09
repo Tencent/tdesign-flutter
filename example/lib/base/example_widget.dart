@@ -289,30 +289,30 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
               child: const TDText('暂无演示代码'),
             );
           }
+          var mdText = '''
+```dart
+${codeString}
+```
+                  ''';
           return Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 color: TDTheme.of(context).grayColor1,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(TDTheme.of(context).radiusDefault))),
-            height: 500,
-            child: SingleChildScrollView(
-              child: Markdown(
-                padding: EdgeInsets.zero,
-                selectable: true,
-                shrinkWrap: true,
-                syntaxHighlighter: DartSyntaxHighlighter(),
-                data: '''
-```dart
-${codeString}
-```
-                  ''',
-                extensionSet: md.ExtensionSet(
-                  md.ExtensionSet.gitHubWeb.blockSyntaxes,
-                  [
-                    md.EmojiSyntax(),
-                    ...md.ExtensionSet.gitHubWeb.inlineSyntaxes
-                  ],
-                ),
+            height:700,
+            child: Markdown(
+              physics: const BouncingScrollPhysics(),
+              padding: EdgeInsets.zero,
+              selectable: true,
+              shrinkWrap: true,
+              syntaxHighlighter: DartSyntaxHighlighter(),
+              data: mdText,
+              extensionSet: md.ExtensionSet(
+                md.ExtensionSet.gitHubWeb.blockSyntaxes,
+                [
+                  md.EmojiSyntax(),
+                  ...md.ExtensionSet.gitHubWeb.inlineSyntaxes
+                ],
               ),
             ),
           );

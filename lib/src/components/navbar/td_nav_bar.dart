@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../td_export.dart';
-import '../../theme/td_spacers.dart';
 
 typedef TDBarItemAction = void Function();
 

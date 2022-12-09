@@ -4,11 +4,11 @@ import 'td_theme.dart';
 /// 内置投影
 extension TDBoxShadows on TDThemeData {
   /// 基础投影
-  List<BoxShadow>? get baseShadows => shadowMap['baseShadows'];
+  List<BoxShadow>? get shadowsBase => shadowMap['shadowsBase'];
 
   /// 中层投影
-  List<BoxShadow>? get middleShadows => shadowMap['middleShadows'];
+  List<BoxShadow>? get shadowsMiddle => shadowMap['shadowsMiddle'];
 
   /// 上层投影
-  List<BoxShadow>? get topShadows => shadowMap['topShadows'];
+  List<BoxShadow>? get shadowsTop => shadowMap['shadowsTop'];
 }
