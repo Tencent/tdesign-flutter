@@ -5,8 +5,8 @@
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).brandNormalColor,
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle)
-      ),
+          color: TDTheme.of(context).brandNormalColor,
+          borderRadius:
+              BorderRadius.circular(TDTheme.of(context).radiusCircle)),
     );
   }
