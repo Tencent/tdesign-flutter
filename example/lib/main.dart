@@ -4,7 +4,6 @@ import 'package:tdesign_flutter/src/util/platform_util.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import 'tdesign/example_base.dart';
-import 'tdesign/example_widget.dart';
 import 'tdesign/example_route.dart';
 import 'tdesign/page/td_avatar_page.dart';
 import 'tdesign/page/td_badge_page.dart';
@@ -23,6 +22,7 @@ import 'tdesign/page/td_navbar_page.dart';
 import 'tdesign/page/td_picker_page.dart';
 import 'tdesign/page/td_popup_page.dart';
 import 'tdesign/page/td_radio_page.dart';
+import 'tdesign/page/td_radius_page.dart';
 import 'tdesign/page/td_refresh_page.dart';
 import 'tdesign/page/td_search_bar_page.dart';
 import 'tdesign/page/td_swiper_page.dart';
@@ -52,6 +52,11 @@ List<ExamplePageModel> examplePageList = [
       path: 'TDIconPage',
       codePath: 'icon',
       pageBuilder: _wrapInheritedTheme((context) => const TDIconPage())),
+  ExamplePageModel(
+      text: '圆角--基础',
+      path: 'TDRadiusPage',
+      codePath: 'icon',
+      pageBuilder: _wrapInheritedTheme((context) => const TDRadiusPage())),
   ExamplePageModel(
       text: '主题--基础',
       path: 'TDThemePage',
