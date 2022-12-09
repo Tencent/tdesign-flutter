@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tdesign_flutter/src/util/platform_util.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import 'base/example_base.dart';
