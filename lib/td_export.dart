@@ -35,7 +35,7 @@ export 'src/components/text/td_text.dart';
 export 'src/components/toast/td_toast.dart';
 export 'src/theme/basic.dart';
 export 'src/theme/td_colors.dart';
-export 'src/theme/td_corners.dart';
+export 'src/theme/td_radius.dart';
 export 'src/theme/td_font_family.dart';
 export 'src/theme/td_fonts.dart';
 export 'src/theme/td_shadows.dart';

@@ -179,8 +179,13 @@ class TDDefaultTheme {
 				"fontFamily": "DINAlternate-B"
 			}
 		},
-		"corner": {
-			"baseBorderRadius": 8
+		"radius": {
+			"radiusSmall": 3,
+			"radiusDefault": 6,
+			"radiusLarge": 9,
+			"radiusExtraLarge": 12,
+			"radiusRound": 9999,
+			"radiusCircle": 9999
 		},
 		"shadow": {
 			"baseShadows": [

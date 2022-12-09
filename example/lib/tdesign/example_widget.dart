@@ -284,7 +284,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   color: TDTheme.of(context).grayColor1,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(TDTheme.of(context).baseBorderRadius ?? 6))),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(TDTheme.of(context).radiusDefault ?? 6))),
               height: 500,
               child: const TDText('暂无演示代码'),
             );
@@ -293,7 +293,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 color: TDTheme.of(context).grayColor1,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(TDTheme.of(context).baseBorderRadius ?? 6))),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(TDTheme.of(context).radiusDefault ?? 6))),
             height: 500,
             child: SingleChildScrollView(
               child: Markdown(
