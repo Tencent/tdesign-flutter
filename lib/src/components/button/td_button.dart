@@ -106,6 +106,7 @@ class _TDButtonState extends State<TDButton> {
     if( style.frameWidth != null && style.frameWidth != 0){
       return Border.all(color: style.getFrameColor(context:context, disable: widget.disabled), width: style.frameWidth!);
     }
+    return null;
   }
 
   Widget _getChild() {
@@ -173,6 +174,7 @@ class _TDButtonState extends State<TDButton> {
         default:
       }
     }
+    return null;
   }
 
   double _getHeight() {

@@ -1,3 +1,4 @@
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' if(dart.library.io) 'web_replace.dart' as html;
 import 'dart:ui' as ui;
 
@@ -5,9 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
+import '../base/api_widget.dart';
 import '../main.dart';
-import '../tdesign/api_widget.dart';
-import '../tdesign/example_widget.dart';
 import 'code_widget.dart';
 
 class WebMainBody extends StatefulWidget {
