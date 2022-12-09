@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../example_widget.dart';
+import '../../base/example_widget.dart';
 
 class TdPullDownRefreshPage extends StatefulWidget {
   const TdPullDownRefreshPage({Key? key}) : super(key: key);

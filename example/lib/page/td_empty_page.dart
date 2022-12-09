@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/tdesign/example_widget.dart';
+
+import '../base/example_widget.dart';
 
 
 class TDEmptyPage extends StatefulWidget {

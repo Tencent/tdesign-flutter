@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../example_widget.dart';
+import '../../base/example_widget.dart';
 
 
 class TDIconPage extends StatefulWidget {
@@ -23,7 +23,7 @@ class _TDIconPageState extends State<TDIconPage> {
         alignment: Alignment.center,
         child: Wrap(
           children: [
-            for (var iconData in TDIcons.all.values) Container(
+            for (var iconData in TDIcons.all.values) SizedBox(
               height: 100,
               width: 175,
 

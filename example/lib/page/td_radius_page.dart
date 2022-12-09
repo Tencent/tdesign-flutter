@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import '../../annotation/demo.dart';
-import '../example_widget.dart';
+import '../../base/example_widget.dart';
 
 /// 圆角示例页面
 class TDRadiusPage extends StatelessWidget {
