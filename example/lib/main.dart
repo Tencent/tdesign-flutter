@@ -43,6 +43,16 @@ PageBuilder _wrapInheritedTheme(WidgetBuilder builder){
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TDTextPage()
 List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
+      text: '主题--基础',
+      path: 'TDThemePage',
+      apiPath: 'theme',
+      pageBuilder: _wrapInheritedTheme((context) => const TDThemePage())),
+  ExamplePageModel(
+      text: '圆角--基础',
+      path: 'TDRadiusPage',
+      codePath: 'icon',
+      pageBuilder: _wrapInheritedTheme((context) => const TDRadiusPage())),
+  ExamplePageModel(
       text: '文本控件--基础',
       path: 'TDTextPage',
       apiPath: 'text',
@@ -52,16 +62,6 @@ List<ExamplePageModel> examplePageList = [
       path: 'TDIconPage',
       codePath: 'icon',
       pageBuilder: _wrapInheritedTheme((context) => const TDIconPage())),
-  ExamplePageModel(
-      text: '圆角--基础',
-      path: 'TDRadiusPage',
-      codePath: 'icon',
-      pageBuilder: _wrapInheritedTheme((context) => const TDRadiusPage())),
-  ExamplePageModel(
-      text: '主题--基础',
-      path: 'TDThemePage',
-      apiPath: 'theme',
-      pageBuilder: _wrapInheritedTheme((context) => const TDThemePage())),
   ExamplePageModel(
       text: '按钮 Button',
       path: 'TDButtonPage',
