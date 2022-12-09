@@ -5,9 +5,11 @@
 // @dart=2.8
 library frontend_server;
 
-import 'package:vm/target/flutter.dart';
 import 'dart:io';
+
 import 'package:frontend_server/frontend_server.dart';
+import 'package:vm/target/flutter.dart';
+
 import '../hook/demo_transformer.dart';
 
 final DemoTransformer typeTransformer = DemoTransformer();
@@ -18,7 +20,7 @@ void main(List<String> args) async {
     FlutterTarget.flutterProgramTransformers.add(typeTransformer);
   }
 
-  final int exitCode = await starter(args);
+  final exitCode = await starter(args);
   if (exitCode != 0) {
     exit(exitCode);
   }
