@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../td_export.dart';
-import '../../util/platform_util.dart';
 
 /// 文本控件
 /// 设计原则：
