@@ -75,7 +75,7 @@ class TDThemeData {
   late String name;
   late Map<String, Color> colorMap;
   late Map<String, Font> fontMap;
-  late Map<String, double> cornerMap;
+  late Map<String, double> radiusMap;
   late Map<String, FontFamily> fontFamilyMap;
   late Map<String, List<BoxShadow>> shadowMap;
   late Map<String, double> spacerMap;
@@ -85,7 +85,7 @@ class TDThemeData {
       {required this.name,
       required this.colorMap,
       required this.fontMap,
-      required this.cornerMap,
+      required this.radiusMap,
       required this.fontFamilyMap,
       required this.shadowMap,
       required this.spacerMap,
@@ -107,7 +107,7 @@ class TDThemeData {
     String name, {
     Map<String, Color>? colorMap,
     Map<String, Font>? fontMap,
-    Map<String, double>? cornerMap,
+    Map<String, double>? radiusMap,
     Map<String, FontFamily>? fontFamilyMap,
     Map<String, List<BoxShadow>>? shadowMap,
     Map<String, double>? marginMap,
@@ -117,7 +117,7 @@ class TDThemeData {
         name: name,
         colorMap: _copyMap<Color>(this.colorMap, colorMap),
         fontMap: _copyMap<Font>(this.fontMap, fontMap),
-        cornerMap: _copyMap<double>(this.cornerMap, cornerMap),
+        radiusMap: _copyMap<double>(this.radiusMap, radiusMap),
         fontFamilyMap: _copyMap<FontFamily>(this.fontFamilyMap, fontFamilyMap),
         shadowMap: _copyMap<List<BoxShadow>>(this.shadowMap, shadowMap),
         spacerMap: _copyMap<double>(spacerMap, marginMap),
@@ -145,7 +145,7 @@ class TDThemeData {
         name: name,
         colorMap: {},
         fontMap: {},
-        cornerMap: {},
+        radiusMap: {},
         fontFamilyMap: {},
         shadowMap: {},
         spacerMap: {});
@@ -179,9 +179,9 @@ class TDThemeData {
         });
 
         /// 设置圆角
-        Map<String, dynamic>? cornersMap = curThemeMap['corner'];
+        Map<String, dynamic>? cornersMap = curThemeMap['radius'];
         cornersMap?.forEach((key, value) {
-          theme.cornerMap[key] = value.toDouble();
+          theme.radiusMap[key] = value.toDouble();
         });
 
         /// 设置字体
@@ -245,7 +245,7 @@ class TDThemeData {
   double? ofCorner(
     String? key,
   ) {
-    return cornerMap[key];
+    return radiusMap[key];
   }
 
   FontFamily? ofFontFamily(

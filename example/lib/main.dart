@@ -3,34 +3,35 @@ import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/src/util/platform_util.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import 'tdesign/example_base.dart';
-import 'tdesign/example_route.dart';
-import 'tdesign/page/td_avatar_page.dart';
-import 'tdesign/page/td_badge_page.dart';
-import 'tdesign/page/td_bottom_nav_bar_page.dart';
-import 'tdesign/page/td_button_page.dart';
-import 'tdesign/page/td_checkbox_page.dart';
-import 'tdesign/page/td_date_picker_page.dart';
-import 'tdesign/page/td_dialog_page.dart';
-import 'tdesign/page/td_divider_page.dart';
-import 'tdesign/page/td_empty_page.dart';
-import 'tdesign/page/td_icon_page.dart';
-import 'tdesign/page/td_image_page.dart';
-import 'tdesign/page/td_input_page.dart';
-import 'tdesign/page/td_loading_page.dart';
-import 'tdesign/page/td_navbar_page.dart';
-import 'tdesign/page/td_picker_page.dart';
-import 'tdesign/page/td_popup_page.dart';
-import 'tdesign/page/td_radio_page.dart';
-import 'tdesign/page/td_refresh_page.dart';
-import 'tdesign/page/td_search_bar_page.dart';
-import 'tdesign/page/td_swiper_page.dart';
-import 'tdesign/page/td_switch_page.dart';
-import 'tdesign/page/td_tabbar_page.dart';
-import 'tdesign/page/td_tag_page.dart';
-import 'tdesign/page/td_text_page.dart';
-import 'tdesign/page/td_theme_page.dart';
-import 'tdesign/page/td_toast_page.dart';
+import 'base/example_base.dart';
+import 'base/example_route.dart';
+import 'page/td_avatar_page.dart';
+import 'page/td_badge_page.dart';
+import 'page/td_bottom_nav_bar_page.dart';
+import 'page/td_button_page.dart';
+import 'page/td_checkbox_page.dart';
+import 'page/td_date_picker_page.dart';
+import 'page/td_dialog_page.dart';
+import 'page/td_divider_page.dart';
+import 'page/td_empty_page.dart';
+import 'page/td_icon_page.dart';
+import 'page/td_image_page.dart';
+import 'page/td_input_page.dart';
+import 'page/td_loading_page.dart';
+import 'page/td_navbar_page.dart';
+import 'page/td_picker_page.dart';
+import 'page/td_popup_page.dart';
+import 'page/td_radio_page.dart';
+import 'page/td_radius_page.dart';
+import 'page/td_refresh_page.dart';
+import 'page/td_search_bar_page.dart';
+import 'page/td_swiper_page.dart';
+import 'page/td_switch_page.dart';
+import 'page/td_tabbar_page.dart';
+import 'page/td_tag_page.dart';
+import 'page/td_text_page.dart';
+import 'page/td_theme_page.dart';
+import 'page/td_toast_page.dart';
 import 'web/web.dart' if(dart.library.io) 'web/web_replace.dart' as web;
 
 PageBuilder _wrapInheritedTheme(WidgetBuilder builder){
@@ -42,6 +43,16 @@ PageBuilder _wrapInheritedTheme(WidgetBuilder builder){
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TDTextPage()
 List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
+      text: '主题--基础',
+      path: 'TDThemePage',
+      apiPath: 'theme',
+      pageBuilder: _wrapInheritedTheme((context) => const TDThemePage())),
+  ExamplePageModel(
+      text: '圆角--基础',
+      path: 'TDRadiusPage',
+      codePath: 'icon',
+      pageBuilder: _wrapInheritedTheme((context) => const TDRadiusPage())),
+  ExamplePageModel(
       text: '文本控件--基础',
       path: 'TDTextPage',
       apiPath: 'text',
@@ -51,11 +62,6 @@ List<ExamplePageModel> examplePageList = [
       path: 'TDIconPage',
       codePath: 'icon',
       pageBuilder: _wrapInheritedTheme((context) => const TDIconPage())),
-  ExamplePageModel(
-      text: '主题--基础',
-      path: 'TDThemePage',
-      apiPath: 'theme',
-      pageBuilder: _wrapInheritedTheme((context) => const TDThemePage())),
   ExamplePageModel(
       text: '按钮 Button',
       path: 'TDButtonPage',

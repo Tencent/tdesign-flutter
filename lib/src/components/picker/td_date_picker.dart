@@ -250,7 +250,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
               child: TDText(
                 '取消',
                   style: widget.leftTextStyle?? TextStyle(
-                      fontSize: TDTheme.of(context).fontM!.size,
+                      fontSize: TDTheme.of(context).fontBodyLarge!.size,
                       color: TDTheme.of(context).fontGyColor2
                   )
               )),
@@ -261,7 +261,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                     child: TDText(
                       widget.title,
                       style: widget.centerTextStyle ?? TextStyle(
-                        fontSize: TDTheme.of(context).fontM!.size,
+                        fontSize: TDTheme.of(context).fontBodyLarge!.size,
                         fontWeight: FontWeight.w600,
                         color: TDTheme.of(context).fontGyColor1,
                       ),
@@ -304,7 +304,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
             child: TDText(
               '确认',
               style: widget.rightTextStyle?? TextStyle(
-                  fontSize: TDTheme.of(context).fontM!.size,
+                  fontSize: TDTheme.of(context).fontBodyLarge!.size,
                   color: TDTheme.of(context).brandNormalColor
               ),
             ),

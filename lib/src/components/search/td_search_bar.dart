@@ -73,7 +73,7 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
         });
       }
     });
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var box = _textFieldKey.currentContext?.findRenderObject() as RenderBox?;
       var phBox = _phKey.currentContext?.findRenderObject() as RenderBox?;
       if (box != null && phBox != null) {
@@ -148,12 +148,12 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
                           onChanged: widget.onTextChanged,
                           onSubmitted: widget.onSubmitted,
                           style: TextStyle(
-                              fontSize: TDTheme.of(context).fontM?.size,
+                              fontSize: TDTheme.of(context).fontBodyLarge?.size,
                               color: TDTheme.of(context).fontGyColor1),
                           decoration: InputDecoration(
                             hintText:(_status != _TDSearchBarStatus.focused) ? '' : widget.placeHolder,
                             hintStyle: TextStyle(
-                                fontSize: TDTheme.of(context).fontM?.size,
+                                fontSize: TDTheme.of(context).fontBodyLarge?.size,
                                 color: TDTheme.of(context).fontGyColor3),
                             border: InputBorder.none,
                             isCollapsed: true,
@@ -206,7 +206,7 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
                     padding: const EdgeInsets.only(left: 16),
                     child: Text('取消',
                         style: TextStyle(
-                            fontSize: TDTheme.of(context).fontM?.size,
+                            fontSize: TDTheme.of(context).fontBodyLarge?.size,
                             color: TDTheme.of(context).brandColor8)),
                   ),),),
             ],
@@ -257,7 +257,7 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
                 padding: const EdgeInsets.only(left: 3),
                 child: ConstrainedBox(constraints: BoxConstraints(maxWidth: box.maxWidth - 51,), child: TDText(
                   widget.placeHolder,
-                  font: TDTheme.of(context).fontM,
+                  font: TDTheme.of(context).fontBodyLarge,
                   textColor: TDTheme.of(context).fontGyColor3,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -278,7 +278,7 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
               padding: const EdgeInsets.only(left: 3),
               child: ConstrainedBox(constraints: BoxConstraints(maxWidth: box.maxWidth - 51,), child: TDText(
                 widget.placeHolder,
-                font: TDTheme.of(context).fontM,
+                font: TDTheme.of(context).fontBodyLarge,
                 textColor: TDTheme.of(context).fontGyColor3,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

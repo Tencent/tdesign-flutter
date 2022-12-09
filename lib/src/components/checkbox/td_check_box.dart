@@ -240,7 +240,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                               widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
                               textColor: widget.enable ? TDTheme.of(context).fontGyColor3 : TDTheme.of(context).fontGyColor4,
-                              font:TDTheme.of(context).fontS),
+                              font:TDTheme.of(context).fontBodyMedium),
                         ),
                       )
                     ],
@@ -284,7 +284,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                               widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
                               textColor: widget.enable ? TDTheme.of(context).fontGyColor3 : TDTheme.of(context).fontGyColor4,
-                              font:TDTheme.of(context).fontS),
+                              font:TDTheme.of(context).fontBodyMedium),
                         ),
                       )
                     ],
@@ -378,7 +378,7 @@ class TDCheckboxState extends State<TDCheckbox> {
             widget.titleMaxLine ?? groupState?.widget.titleMaxLine,
             overflow: TextOverflow.ellipsis,
             textColor: widget.enable ? TDTheme.of(context).fontGyColor1 : TDTheme.of(context).fontGyColor4,
-            font:TDTheme.of(context).fontM);
+            font:TDTheme.of(context).fontBodyLarge);
       }
     }
     return content;

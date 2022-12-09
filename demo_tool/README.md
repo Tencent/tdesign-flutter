@@ -59,3 +59,33 @@ dart tools/smart_cli/bin/main.dart generate
 
 默认采用词法分析，如果想采用语法分析的方式生成代码，那么在上述初始化的命令之后增加参数 `--use-grammar` 即可
 `
+
+# 演示代码
+## 生成逻辑
+演示代码依赖FlutterAOP能力，通过解析@Demo注解所在的方法自动生成。因此组件示例的写法，要求将可显示的部份提取成独立方法，并添加@Demo注解，示例：
+```
+  @override
+  Widget build(BuildContext context) {
+    return ExamplePage(
+          exampleCodeGroup:'button',
+          children: [
+          ExampleModule(title: '默认',
+          children: [
+            ExampleItem(desc: '可点击', builder: _buildNormalClickButton)
+          ])
+    ]);
+  }
+  
+  @Demo(group: 'button')
+  TDButton _buildNormalClickButton(BuildContext context) {
+    return TDButton(content: '强按钮',
+      style: TDButtonStyle.primary(),
+      onTap: onTap,
+      onLongPress: onLongPress,
+    );
+  }
+```
+其中，`group`参数需与`exampleCodeGroup`参数一致，为直接的字符串赋值，不能是变量引用或者字符串拼接。
+
+## Flutter AOP
+请设置`flutter_aop.sh`的`flutterDir`和`exampleDir`,运行后会将flutter SDK 切换至3.0.5版本，并支持AOP能力。
