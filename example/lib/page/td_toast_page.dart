@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import '../example_widget.dart';
+import '../../base/example_widget.dart';
 
 class TDToastPage extends StatefulWidget {
   const TDToastPage({Key? key}) : super(key: key);

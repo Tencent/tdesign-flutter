@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import '../../annotation/demo.dart';
-import '../example_widget.dart';
+import '../../base/example_widget.dart';
 
 class TDButtonPage extends StatefulWidget {
   const TDButtonPage({Key? key}) : super(key: key);
