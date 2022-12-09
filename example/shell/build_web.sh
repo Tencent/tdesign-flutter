@@ -1,3 +1,5 @@
 # 构建web应用
 cd ..
-flutter build web --web-renderer html --base-href /tdesign_example/ --source-maps
+~/tools/flutter1/bin/flutter clean
+~/tools/flutter1/bin/flutter pub get
+~/tools/flutter1/bin/flutter build web --base-href /tdesign_example/ --source-maps

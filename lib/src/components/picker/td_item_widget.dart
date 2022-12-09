@@ -86,6 +86,6 @@ class ItemDistanceCalculator {
   }
 
   double calculateFont(BuildContext context, double distance) {
-    return TDTheme.of(context).fontM!.size;
+    return TDTheme.of(context).fontBodyLarge!.size;
   }
 }
