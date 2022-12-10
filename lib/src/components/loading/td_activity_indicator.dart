@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 
 import '../../../td_export.dart';
 
-
 const double _kDefaultIndicatorRadius = 10.0;
 
 /// An iOS-style activity indicator that spins clockwise.
@@ -21,6 +20,7 @@ class TDCupertinoActivityIndicator extends StatefulWidget {
     this.animating = true,
     this.radius = _kDefaultIndicatorRadius,
     this.activeColor,
+    this.duration = 2000,
   })  : assert(radius > 0.0),
         progress = 1.0,
         super(key: key);
@@ -45,12 +45,15 @@ class TDCupertinoActivityIndicator extends StatefulWidget {
 
   final Color? activeColor;
 
+  final int duration;
+
   @override
   _TDCupertinoActivityIndicatorState createState() =>
       _TDCupertinoActivityIndicatorState();
 }
 
-class _TDCupertinoActivityIndicatorState extends State<TDCupertinoActivityIndicator>
+class _TDCupertinoActivityIndicatorState
+    extends State<TDCupertinoActivityIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -58,7 +61,7 @@ class _TDCupertinoActivityIndicatorState extends State<TDCupertinoActivityIndica
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 1),
+      duration: Duration(milliseconds: widget.duration),
       vsync: this,
     );
 
@@ -93,7 +96,7 @@ class _TDCupertinoActivityIndicatorState extends State<TDCupertinoActivityIndica
       child: CustomPaint(
         painter: _CupertinoActivityIndicatorPainter(
           position: _controller,
-          activeColor:widget.activeColor ?? const Color(0xB4807E7E),
+          activeColor: widget.activeColor ?? const Color(0xB4807E7E),
           radius: widget.radius,
           progress: widget.progress,
         ),
@@ -131,13 +134,13 @@ class _CupertinoActivityIndicatorPainter extends CustomPainter {
     required this.radius,
     required this.progress,
   })  : tickFundamentalRRect = RRect.fromLTRBXY(
-    -radius / _kDefaultIndicatorRadius,
-    -radius / 3.0,
-    radius / _kDefaultIndicatorRadius,
-    -radius,
-    radius / _kDefaultIndicatorRadius,
-    radius / _kDefaultIndicatorRadius,
-  ),
+          -radius / _kDefaultIndicatorRadius,
+          -radius / 3.0,
+          radius / _kDefaultIndicatorRadius,
+          -radius,
+          radius / _kDefaultIndicatorRadius,
+          radius / _kDefaultIndicatorRadius,
+        ),
         super(repaint: position);
 
   final Animation<double> position;
