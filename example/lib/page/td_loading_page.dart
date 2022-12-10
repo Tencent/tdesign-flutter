@@ -16,14 +16,16 @@ class TDLoadingPage extends StatefulWidget {
 }
 
 class _TDLoadingPageState extends State<TDLoadingPage> {
+  double _currentSliderValue = 20;
   @override
   Widget build(BuildContext context) {
     return ExamplePage(title: '加载 Loading', children: [
       ExampleModule(title: '默认', children: [
-        ExampleItem(builder: (_)=>TDText(
-          '类型',
-          font: TDTheme.of(context).fontHeadlineLarge,
-        )),
+        ExampleItem(
+            builder: (_) => TDText(
+                  '类型',
+                  font: TDTheme.of(context).fontHeadlineLarge,
+                )),
         ExampleItem(
             desc: '纯图标',
             builder: (_) {
@@ -198,6 +200,33 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
                     size: TDLoadingSize.small,
                     icon: TDLoadingIcon.circle,
                     text: '加载中(小)…',
+                  ),
+                ],
+              );
+            }),
+        ExampleItem(
+            desc: '自定义加载速度',
+            builder: (_) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TDLoading(
+                    key: Key(_currentSliderValue.toString()), // 加上动态key才会更新。。
+                    size: TDLoadingSize.large,
+                    icon: TDLoadingIcon.circle,
+                    text: '加载中(大)…',
+                    duration: _currentSliderValue.round(),
+                  ),
+                  Slider(
+                    value: _currentSliderValue,
+                    max: 2000,
+                    divisions: 100,
+                    label: _currentSliderValue.round().toString(),
+                    onChanged: (double value) {
+                      setState(() {
+                        _currentSliderValue = value;
+                      });
+                    },
                   ),
                 ],
               );
