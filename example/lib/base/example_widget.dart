@@ -132,6 +132,7 @@ class _ExamplePageState extends State<ExamplePage> {
             '${index < 10 ? "0$index" : index} ${data.title}',
             font: TDTheme.of(context).fontTitleLarge,
             textColor: TDTheme.of(context).fontGyColor1,
+            fontWeight: FontWeight.bold,
           ),
         ),
         for (var item in data.children) _buildExampleItem(item)
