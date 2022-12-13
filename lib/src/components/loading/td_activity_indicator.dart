@@ -73,11 +73,12 @@ class _TDCupertinoActivityIndicatorState
   @override
   void didUpdateWidget(TDCupertinoActivityIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.animating != oldWidget.animating) {
-      if (widget.animating) {
-        _controller.repeat();
-      } else {
+    if (widget.animating != oldWidget.animating || widget.duration != oldWidget.duration) {
+      if (!widget.animating) {
         _controller.stop();
+      } else {
+        _controller.duration = Duration(milliseconds: widget.duration);
+        _controller.repeat();
       }
     }
   }
