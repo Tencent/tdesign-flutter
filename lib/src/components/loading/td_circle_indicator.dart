@@ -47,6 +47,15 @@ class _TDCircleIndicatorState extends State<TDCircleIndicator>
   }
 
   @override
+  void didUpdateWidget(covariant TDCircleIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.duration != oldWidget.duration) {
+      _controller.duration = Duration(milliseconds: widget.duration);
+      _controller.repeat();
+    }
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();

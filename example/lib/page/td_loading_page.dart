@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import '../../base/example_widget.dart';
+import '../annotation/demo.dart';
 
 class TDLoadingPage extends StatefulWidget {
   const TDLoadingPage({Key? key}) : super(key: key);
@@ -19,7 +20,9 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   double _currentSliderValue = 20;
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(title: '加载 Loading', children: [
+    return ExamplePage(title: '加载 Loading',
+        exampleCodeGroup: 'loading',
+        children: [
       ExampleModule(title: '默认', children: [
         ExampleItem(
             builder: (_) => TDText(
@@ -180,58 +183,85 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
                 ],
               );
             }),
+
+      ]),
+      ExampleModule(title: '组件尺寸', children: [
+
         ExampleItem(
-            desc: '图标加文字竖向',
-            builder: (_) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: const [
-                  TDLoading(
-                    size: TDLoadingSize.large,
-                    icon: TDLoadingIcon.circle,
-                    text: '加载中(大)…',
-                  ),
-                  TDLoading(
-                    size: TDLoadingSize.medium,
-                    icon: TDLoadingIcon.circle,
-                    text: '加载中(中)…',
-                  ),
-                  TDLoading(
-                    size: TDLoadingSize.small,
-                    icon: TDLoadingIcon.circle,
-                    text: '加载中(小)…',
-                  ),
-                ],
-              );
-            }),
+            desc: '大尺寸',
+            center: false,
+            builder: _buildSizeLarge),
         ExampleItem(
-            desc: '自定义加载速度',
-            builder: (_) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TDLoading(
-                    key: Key(_currentSliderValue.toString()), // 加上动态key才会更新。。
-                    size: TDLoadingSize.large,
-                    icon: TDLoadingIcon.circle,
-                    text: '加载中(大)…',
-                    duration: _currentSliderValue.round(),
-                  ),
-                  Slider(
-                    value: _currentSliderValue,
-                    max: 2000,
-                    divisions: 100,
-                    label: _currentSliderValue.round().toString(),
-                    onChanged: (double value) {
-                      setState(() {
-                        _currentSliderValue = value;
-                      });
-                    },
-                  ),
-                ],
-              );
-            }),
+            desc: '中尺寸',
+            center: false,
+            builder: _buildSizeMedium),
+        ExampleItem(
+            desc: '小尺寸',
+            center: false,
+            builder: _buildSizeSmall),
+      ]),
+      ExampleModule(title: '加载速度', children: [
+        ExampleItem(
+            desc: '加载速度调整',
+            builder: _buildCustomLoadingSpeed)
       ])
     ]);
+  }
+
+  @Demo(group: 'loading')
+  Widget _buildSizeLarge(BuildContext context) {
+    return const TDLoading(
+      size: TDLoadingSize.large,
+      icon: TDLoadingIcon.circle,
+      text: '加载中…',
+    );
+  }
+
+  @Demo(group: 'loading')
+  Widget _buildSizeMedium(BuildContext context) {
+    return const TDLoading(
+      size: TDLoadingSize.medium,
+      icon: TDLoadingIcon.circle,
+      text: '加载中…',
+    );
+  }
+
+  @Demo(group: 'loading')
+  Widget _buildSizeSmall(BuildContext context) {
+    return const TDLoading(
+      size: TDLoadingSize.small,
+      icon: TDLoadingIcon.circle,
+      text: '加载中…',
+    );
+  }
+
+  @Demo(group: 'loading')
+  Widget _buildCustomLoadingSpeed(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            TDLoading(
+              size: TDLoadingSize.large,
+              icon: TDLoadingIcon.circle,
+              text: '加载中(大)…',
+              duration: _currentSliderValue.round(),
+            ),
+          ],
+        ),
+        Slider(
+          value: _currentSliderValue,
+          max: 2000,
+          divisions: 100,
+          label: _currentSliderValue.round().toString(),
+          onChanged: (double value) {
+            setState(() {
+              _currentSliderValue = value;
+            });
+          },
+        )
+      ],
+    );
   }
 }
