@@ -18,6 +18,7 @@ class ExamplePage extends StatefulWidget {
     this.padding,
     this.backgroundColor,
     this.exampleCodeGroup,
+    this.test = const [],
   }) : super(key: key);
 
   final String title;
@@ -26,6 +27,7 @@ class ExamplePage extends StatefulWidget {
   final EdgeInsetsGeometry? padding;
   final Color? backgroundColor;
   final String? exampleCodeGroup;
+  final List<ExampleItem> test;
 
   @override
   State<ExamplePage> createState() => _ExamplePageState();
@@ -61,18 +63,30 @@ class _ExamplePageState extends State<ExamplePage> {
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.only(top: 16, bottom: 16),
-                  itemCount: widget.children.length + 1,
+                  itemCount: widget.children.length + 2,
                   itemBuilder: (context, index) {
                     if (index == 0) {
                       return _buildHeader(context);
                     }
-                    var data = widget.children[index - 1];
+                    ExampleModule data;
+                    if (index <= widget.children.length) {
+                      data = widget.children[index - 1];
+                    } else {
+                      data = ExampleModule(title: '单元测试', children: [
+                        _buildTestExampleItem(),
+                        ...widget.test]);
+                    }
                     return _buildModule(index, data, context);
                   },
                 ))
               ],
             )));
   }
+
+  ExampleItem _buildTestExampleItem() => ExampleItem(desc:
+  '''未在示例稿中体现，但有必要验证的组件样式，请添加到'test'参数中。以下情景必须有测试：
+  1.参数为数字。需测试数字为负数、0、较大数值的场景。
+  2.参数为枚举，需测试所有枚举组合（示例已有的可不写）''',builder: (_)=>const TDDivider());
 
   Widget _buildNavBar() {
     return TDNavBar(
