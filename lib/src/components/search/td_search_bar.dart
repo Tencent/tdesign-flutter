@@ -2,6 +2,22 @@
 import 'package:flutter/material.dart';
 import '../../../td_export.dart';
 
+///
+/// 搜索框的样式
+///
+enum TDSearchStyle {
+  square, // 方形
+  round, // 圆形
+}
+
+///
+/// 搜索框对齐方式
+///
+enum TDSearchAlignment {
+  left,    // 默认头部对齐
+  center,  // 居中
+}
+
 typedef TDSearchBarEvent = void Function(String value);
 typedef TDSearchBarCallBack = void Function();
 
@@ -10,6 +26,8 @@ class TDSearchBar extends StatefulWidget {
   const TDSearchBar({
     Key? key,
     this.placeHolder,
+    this.style = TDSearchStyle.square,
+    this.alignment = TDSearchAlignment.left,
     this.onTextChanged,
     this.onSubmitted,
     this.onEditComplete,
@@ -18,6 +36,8 @@ class TDSearchBar extends StatefulWidget {
   }) : super(key: key);
 
   final String? placeHolder;
+  final TDSearchStyle? style;
+  final TDSearchAlignment? alignment;
   final Color? backgroundColor;
   final bool autoFocus;
   final TDSearchBarEvent? onTextChanged;
@@ -119,7 +139,7 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
                   height: double.infinity,
                   decoration: BoxDecoration(
                       color: TDTheme.of(context).grayColor1,
-                      borderRadius: BorderRadius.circular(4)),
+                      borderRadius: BorderRadius.circular(widget.style == TDSearchStyle.square ? 4 : 28)),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -230,8 +250,15 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
               });
             },
             child: Stack(children: [
-              Container(color: TDTheme.of(context).grayColor1,),
-              Center(child: _getPlaceHolderWidgets(),)
+              Container(
+                decoration: BoxDecoration(
+                  color: TDTheme.of(context).grayColor1,
+                  borderRadius: BorderRadius.circular(widget.style == TDSearchStyle.square ? 4 : 28),
+              ),),
+              Container(
+                margin: const EdgeInsets.only(left: 12, right: 12),
+                alignment: widget.alignment == TDSearchAlignment.left ? Alignment.centerLeft : Alignment.center,
+                child: _getPlaceHolderWidgets(),)
             ],)
           ),),
       ]),
