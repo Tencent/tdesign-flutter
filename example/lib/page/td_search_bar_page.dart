@@ -15,34 +15,58 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: '搜索框 Search',
-        backgroundColor: TDTheme.of(context).whiteColor1,
-      children: [
-      ExampleModule(title: '默认',
-      children: [
-        ExampleItem(builder: (_) => TDSearchBar(
-          placeHolder: '搜索预设文案',
-          onTextChanged: (String text) {
-            setState(() {
-              inputText = text;
-            });
-          },
-        )),
-        ExampleItem(builder: (_) => Row(
-          children: [
-            TDText(
-              '输入文案：',
-              font: TDTheme.of(context).fontBodyLarge,
-              textColor: TDTheme.of(context).fontGyColor1,
-            ),
-            TDText(
-              '${inputText ?? ''}',
-              font: TDTheme.of(context).fontBodyLarge,
-              textColor: TDTheme.of(context).fontGyColor1,
-            ),
-          ],
-        ))
-      ],
-    )]);
+        title: '搜索框 Search',
+        desc: '用于一组预设数据中的选择。',
+        backgroundColor: TDTheme.of(context).grayColor2,
+        children: [
+          ExampleModule(
+            title: '组件类型',
+            children: [
+              ExampleItem(
+                  desc: '基础搜索框',
+                  builder: (_) => TDSearchBar(
+                        placeHolder: '搜索预设文案',
+                        onTextChanged: (String text) {
+                          setState(() {
+                            inputText = text;
+                          });
+                        },
+                      )),
+            ],
+          ),
+          ExampleModule(title: '组件样式', children: [
+            ExampleItem(
+                desc: '搜索框形状',
+                builder: (_) => TDSearchBar(
+                      placeHolder: '搜索预设文案',
+                      onTextChanged: (String text) {
+                        setState(() {
+                          inputText = text;
+                        });
+                      },
+                    )),
+            ExampleItem(
+                builder: (_) => TDSearchBar(
+                      style: TDSearchStyle.round,
+                      placeHolder: '搜索预设文案',
+                      onTextChanged: (String text) {
+                        setState(() {
+                          inputText = text;
+                        });
+                      },
+                    )),
+            ExampleItem(
+                desc: '默认状态其他对齐方式',
+                builder: (_) => TDSearchBar(
+                      alignment: TDSearchAlignment.center,
+                      placeHolder: '搜索预设文案',
+                      onTextChanged: (String text) {
+                        setState(() {
+                          inputText = text;
+                        });
+                      },
+                    )),
+          ])
+        ]);
   }
 }
