@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../../../td_export.dart';
 
-// 向下箭头宽高
+// 展开项 向下箭头宽
 const double _kArrowWidth = 13.5;
-// 向下箭头宽高
+// 展开项  向下箭头高
 const double _kArrowHeight = 8;
-// 选项弹窗 单个item最低高度
+// 展开项选项弹窗 单个item最低高度
 const double _kMenuItemMinHeight = 23;
-// 选项弹窗 单个item默认高度
+// 展开项弹窗 单个item默认高度
 const double _kDefaultMenuItemHeight = 48;
-// 选项弹窗 单个item默认宽度为按钮宽度-20
+// 展开项弹窗 单个item默认宽度为按钮宽度-20
 const double _kDefaultMenuItemWidthShrink = 20;
-// 底部弹窗默认高度
-const double _kDefaultNavBarHeight = 48;
-// 弹窗弹出动画时间
+// 导航栏默认高度
+const double _kDefaultNavBarHeight = 56;
+// 展开项弹窗弹出动画时间
 const Duration _kPopupMenuDuration = Duration(milliseconds: 10);
 
-enum TDBottomNavBarType {
+enum TDBottomNavBarBasicType {
   /// 单层级纯文本标签栏
   text,
 
@@ -29,40 +29,88 @@ enum TDBottomNavBarType {
 
   /// 双层级纯文本标签栏
   expansionPanel,
-
-  // 自定义布局
-  customLayout,
 }
 
-class TDBottomNavBarTabConfig {
-  /// 自定义未选中状态widget
-  final Widget? unSelectWidget;
+enum TDBottomNavBarComponentType {
+  // 普通样式
+  normal,
+  // 带胶囊背景的item选中样式
+  label
+}
 
-  /// 自定义选中状态widget
-  final Widget? selectWidget;
+enum TDBottomNavBarOutlineType {
+  // 填充样式
+  filled,
+  // 胶囊样式
+  capsule
+}
 
-  /// 图标
+// 图标加文本标签栏配置
+class IconTextTypeConfig {
+  IconTextTypeConfig(
+      {required this.tabText,
+      this.selectedIcon,
+      this.unselectedIcon,
+      this.useDefaultIcon})
+      : assert(() {
+          if ((!(useDefaultIcon ?? false) &&
+              (selectedIcon == null || unselectedIcon == null))) {
+            throw FlutterError(
+                '[IconTextTypeConfig] you should set useDefaultIcon true'
+                ' when not set selectedIcon or unselectedIcon');
+          }
+          return true;
+        }());
+
+  // tab文本
+  final String tabText;
+
+  // 选中时图标
   final Widget? selectedIcon;
 
-  /// 未选中图标
+  // 未选中时图标
   final Widget? unselectedIcon;
 
-  /// 选中文本
-  final Text? selectedText;
+  // 使用TDESIGN 默认icon
+  final bool? useDefaultIcon;
+}
 
-  /// 未选中文本
-  final Text? unselectedText;
+// 纯图标标签栏配置
+class IconTypeConfig {
+  IconTypeConfig({this.selectedIcon, this.unselectedIcon, this.useDefaultIcon})
+      : assert(() {
+          if ((!(useDefaultIcon ?? false) &&
+              (selectedIcon == null || unselectedIcon == null))) {
+            throw FlutterError(
+                '[IconTypeConfig] you should set useDefaultIcon true'
+                ' when not set selectedIcon or unselectedIcon');
+          }
+          return true;
+        }());
 
-  /// 点击事件
-  final GestureTapCallback? onTap;
+  // 选中时图标
+  final Widget? selectedIcon;
 
-  /// 是否展示消息样式
-  final bool? showBadge;
+  // 未选中时图标
+  final Widget? unselectedIcon;
 
-  /// 自定义消息样式
-  final Widget? customBadgeWidget;
+  // 使用TDESIGN 默认icon
+  final bool? useDefaultIcon;
+}
 
-  /// 使用TDBadge消息样式
+// 飘新配置
+class BadgeConfig {
+  BadgeConfig(
+      {required this.showBage,
+      TDBadge? tdBadge,
+      this.badgeTopOffset,
+      this.badgeRightOffset})
+      : tdBadge = tdBadge ?? const TDBadge(TDBadgeType.redPoint);
+
+  /// 是否展示消息
+  final bool showBage;
+
+  /// 消息样式(未设置但showBage为true，则默认使用红点)
   final TDBadge? tdBadge;
 
   /// 消息顶部偏移量
@@ -70,103 +118,111 @@ class TDBottomNavBarTabConfig {
 
   /// 消息右侧偏移量
   final double? badgeRightOffset;
+}
 
-  final TDBottomNavBarPopUpBtnConfig? popUpButtonConfig;
-
+// 单个tab配置
+class TDBottomNavBarTabConfig {
   TDBottomNavBarTabConfig({
     required this.onTap,
-    this.unSelectWidget,
-    this.selectWidget,
-    this.selectedIcon,
-    this.unselectedIcon,
-    this.selectedText,
-    this.unselectedText,
-    this.showBadge,
-    this.customBadgeWidget,
-    this.tdBadge,
-    this.badgeTopOffset,
-    this.badgeRightOffset,
+    this.iconTextTypeConfig,
+    this.iconTypeConfig,
+    this.tabText,
+    this.badgeConfig,
     this.popUpButtonConfig,
   }) : assert(() {
-          if (showBadge != null && showBadge) {
-            if (customBadgeWidget == null && tdBadge == null) {
+          if (badgeConfig?.showBage ?? false) {
+            if (badgeConfig?.tdBadge == null) {
               throw FlutterError('[NavigationTab] if set showBadge = true, '
-                  'you must set customBadgeWidget or tdBadge');
+                  'you must set a tdBadge instance');
             }
           }
           return true;
         }());
+
+  /// 图标+文本样式 basicType为iconText时必填
+  final IconTextTypeConfig? iconTextTypeConfig;
+
+  /// 纯图标样式 basicType为icon时必填
+  final IconTypeConfig? iconTypeConfig;
+
+  /// 纯文本样式 basicType为text时必填
+  final String? tabText;
+
+  /// tab点击事件
+  final GestureTapCallback? onTap;
+
+  /// 消息配置
+  final BadgeConfig? badgeConfig;
+
+  // 弹窗配置
+  final TDBottomNavBarPopUpBtnConfig? popUpButtonConfig;
 }
 
 class TDBottomNavBar extends StatefulWidget {
-
   TDBottomNavBar(
-      this.type, {
-        Key? key,
-        required this.navigationTabs,
-        this.barHeight = _kDefaultNavBarHeight,
-        this.useVerticalDivider,
-        this.dividerHeight,
-        this.dividerThickness,
-        this.dividerColor,
-        this.showTopBorder = true,
-        this.topBorder,
-      })  : assert(() {
-    if (navigationTabs.isEmpty) {
-      throw FlutterError(
-          '[TDBottomNavigationBar] please set at least one tab!');
-    }
-    if (type == TDBottomNavBarType.customLayout) {
-      for (final item in navigationTabs) {
-        if (item.selectWidget == null || item.unSelectWidget == null) {
-          throw FlutterError(
-              '[TDBottomNavigationBar] customLayout request selectWidget and unSelectWidget,'
-                  'but get null.');
-        }
-      }
-    }
-    if (type == TDBottomNavBarType.text) {
-      for (final item in navigationTabs) {
-        if (item.selectedText == null || item.unselectedText == null) {
-          throw FlutterError(
-              '[TDBottomNavigationBar] type is TDBottomBarType.text, but not set text.');
-        }
-      }
-    }
-    if (type == TDBottomNavBarType.icon) {
-      for (final item in navigationTabs) {
-        if (item.selectedIcon == null || item.unselectedIcon == null) {
-          throw FlutterError(
-              '[TDBottomNavigationBar] type is TDBottomBarType.icon,'
-                  'but not set icon.');
-        }
-      }
-    }
-    if (type == TDBottomNavBarType.iconText) {
-      for (final item in navigationTabs) {
-        if (item.selectedIcon == null ||
-            item.unselectedIcon == null ||
-            item.selectedText == null ||
-            item.unselectedText == null) {
-          throw FlutterError(
-              '[TDBottomNavigationBar] type is TDBottomBarType.iconText,'
-                  'but not set icon or text.');
-        }
-      }
-    }
-    return true;
-  }()),
+    this.basicType, {
+    Key? key,
+    this.componentType = TDBottomNavBarComponentType.label,
+    this.outlineType = TDBottomNavBarOutlineType.filled,
+    required this.navigationTabs,
+    this.barHeight = _kDefaultNavBarHeight,
+    this.useVerticalDivider,
+    this.dividerHeight,
+    this.dividerThickness,
+    this.dividerColor,
+    this.showTopBorder = true,
+    this.topBorder,
+  })  : assert(() {
+          if (navigationTabs.isEmpty) {
+            throw FlutterError(
+                '[TDBottomNavigationBar] please set at least one tab!');
+          }
+          if (basicType == TDBottomNavBarBasicType.text) {
+            for (final item in navigationTabs) {
+              if (item.tabText == null) {
+                throw FlutterError(
+                    '[TDBottomNavigationBar] type is TDBottomBarType.text, but not set text.');
+              }
+            }
+          }
+          if (basicType == TDBottomNavBarBasicType.icon) {
+            for (final item in navigationTabs) {
+              if (item.iconTypeConfig == null) {
+                throw FlutterError(
+                    '[TDBottomNavigationBar] type is TDBottomBarType.icon,'
+                    'but has no iconTypeConfig instance.');
+              }
+            }
+          }
+          if (basicType == TDBottomNavBarBasicType.iconText) {
+            for (final item in navigationTabs) {
+              if (item.iconTextTypeConfig == null) {
+                throw FlutterError(
+                    '[TDBottomNavigationBar] type is TDBottomBarType.iconText,'
+                    'but has no iconTextConfig instance.');
+              }
+            }
+          }
+          return true;
+        }()),
         super(key: key);
 
-  final TDBottomNavBarType type;
+  // 基本样式（纯文本、纯图标、图标+文本）
+  final TDBottomNavBarBasicType basicType;
 
-  /// tab
+  // 选项样式 默认label
+  final TDBottomNavBarComponentType? componentType;
+
+  // 标签栏样式 默认filled
+  final TDBottomNavBarOutlineType? outlineType;
+
+  /// tabs配置
   final List<TDBottomNavBarTabConfig> navigationTabs;
 
   /// tab高度
   final double? barHeight;
 
-  /// 是否使用竖线分隔
+  /// 是否使用竖线分隔(如果选项样式为label则强制为false)
   final bool? useVerticalDivider;
 
   /// 分割线高度（可选）
@@ -189,24 +245,37 @@ class TDBottomNavBar extends StatefulWidget {
 }
 
 class _TDBottomNavBarState extends State<TDBottomNavBar> {
-  int selectedIndex = 0;
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    var isCapsuleOutlineType =
+        widget.outlineType == TDBottomNavBarOutlineType.capsule;
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
+        // -2 是为了增加边框
         var maxWidth =
-            double.parse(constraints.biggest.width.toStringAsFixed(1));
+            double.parse(constraints.biggest.width.toStringAsFixed(1)) - 2;
+        // 胶囊样式 比正常样式宽度要小32
+        if (isCapsuleOutlineType) {
+          maxWidth -= 32;
+        }
         var itemWidth = maxWidth / widget.navigationTabs.length;
         return Container(
-            decoration: widget.showTopBorder!
-                ? BoxDecoration(
-                    border: Border(
-                        top: widget.topBorder ??
-                            BorderSide(
-                                width: 0.5,
-                                color: TDTheme.of(context).grayColor3)))
+            alignment: Alignment.center,
+            margin: isCapsuleOutlineType
+                ? const EdgeInsets.symmetric(horizontal: 16)
                 : null,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius:
+                    isCapsuleOutlineType ? BorderRadius.circular(56) : null,
+                border: widget.showTopBorder!
+                    ? Border.all(color: TDTheme.of(context).grayColor3)
+                    : null,
+                boxShadow: isCapsuleOutlineType
+                    ? TDTheme.of(context).shadowsTop
+                    : null),
             child: Stack(alignment: Alignment.center, children: [
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -222,84 +291,41 @@ class _TDBottomNavBarState extends State<TDBottomNavBar> {
 
   void _onTap(int index) {
     setState(() {
-      if (selectedIndex != index) {
-        selectedIndex = index;
+      if (_selectedIndex != index) {
+        _selectedIndex = index;
         widget.navigationTabs[index].onTap?.call();
       }
     });
   }
 
   Widget _item(int index, double itemWidth) {
+    var tabItemConfig = widget.navigationTabs[index];
     return Container(
         height: widget.barHeight ?? _kDefaultNavBarHeight,
         width: itemWidth,
         alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(vertical: 7),
         child: TDBottomNavBarItemWithBadge(
-          item: _constructItem(index),
+          basiceType: widget.basicType,
+          componentType:
+              widget.componentType ?? TDBottomNavBarComponentType.label,
+          outlineType: widget.outlineType ?? TDBottomNavBarOutlineType.filled,
+          itemConfig: tabItemConfig,
+          isSelected: index == _selectedIndex,
           itemHeight: widget.barHeight ?? _kDefaultNavBarHeight,
           itemWidth: itemWidth,
+          tabsLength: widget.navigationTabs.length,
           onTap: () {
             _onTap(index);
           },
-          showBage: widget.navigationTabs[index].showBadge ?? false,
-          badge: _badge(index),
-          rightOffset: widget.navigationTabs[index].badgeRightOffset,
-          topOffset: widget.navigationTabs[index].badgeTopOffset,
-          popUpButtonConfig: widget.navigationTabs[index].popUpButtonConfig,
         ));
   }
 
-  Widget _constructItem(int index) {
-    if (widget.type == TDBottomNavBarType.customLayout) {
-      return index == selectedIndex
-          ? widget.navigationTabs[index].selectWidget!
-          : widget.navigationTabs[index].unSelectWidget!;
-    }
-    if (widget.type == TDBottomNavBarType.text) {
-      return index == selectedIndex
-          ? widget.navigationTabs[index].selectedText!
-          : widget.navigationTabs[index].unselectedText!;
-    }
-    if (widget.type == TDBottomNavBarType.icon) {
-      return index == selectedIndex
-          ? widget.navigationTabs[index].selectedIcon!
-          : widget.navigationTabs[index].unselectedIcon!;
-    }
-
-    if (widget.type == TDBottomNavBarType.iconText) {
-      return index == selectedIndex
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                widget.navigationTabs[index].selectedIcon!,
-                widget.navigationTabs[index].selectedText!
-              ],
-            )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                widget.navigationTabs[index].unselectedIcon!,
-                widget.navigationTabs[index].unselectedText!
-              ],
-            );
-    }
-    return Container();
-  }
-
-  Widget _badge(int index) {
-    if (widget.navigationTabs[index].showBadge ?? false) {
-      if (widget.navigationTabs[index].tdBadge != null) {
-        return widget.navigationTabs[index].tdBadge!;
-      } else if (widget.navigationTabs[index].customBadgeWidget != null) {
-        return widget.navigationTabs[index].customBadgeWidget!;
-      }
-    }
-    return Container();
-  }
-
   Widget _verticalDivider() {
+    if (widget.componentType == TDBottomNavBarComponentType.label) {}
     return Visibility(
-      visible: widget.useVerticalDivider ?? false,
+      visible: widget.componentType != TDBottomNavBarComponentType.label &&
+          (widget.useVerticalDivider ?? false),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: List.generate(widget.navigationTabs.length - 1, (index) {
@@ -318,36 +344,58 @@ class _TDBottomNavBarState extends State<TDBottomNavBar> {
 }
 
 class TDBottomNavBarItemWithBadge extends StatelessWidget {
-  final Widget item;
-  final double itemHeight;
-  final double itemWidth;
-  final GestureTapCallback onTap;
-  final bool showBage;
-  final Widget badge;
-  final double? rightOffset;
-  final double? topOffset;
-  final TDBottomNavBarPopUpBtnConfig? popUpButtonConfig;
+  const TDBottomNavBarItemWithBadge(
+      {Key? key,
+      required this.basiceType,
+      required this.componentType,
+      required this.outlineType,
+      required this.itemConfig,
+      required this.isSelected,
+      required this.itemHeight,
+      required this.itemWidth,
+      required this.onTap,
+      required this.tabsLength})
+      : super(key: key);
 
-  const TDBottomNavBarItemWithBadge({
-    Key? key,
-    required this.item,
-    required this.itemHeight,
-    required this.itemWidth,
-    required this.onTap,
-    required this.showBage,
-    required this.badge,
-    this.rightOffset,
-    this.topOffset,
-    this.popUpButtonConfig,
-  }) : super(key: key);
+  // tab基本类型
+  final TDBottomNavBarBasicType basiceType;
+
+  // tab选中背景类型
+  final TDBottomNavBarComponentType componentType;
+
+  //
+  final TDBottomNavBarOutlineType outlineType;
+
+  // 单个tab的属性配置
+  final TDBottomNavBarTabConfig itemConfig;
+
+  // 选中状态
+  final bool isSelected;
+
+  // tab高度
+  final double itemHeight;
+
+  // tab宽度
+  final double itemWidth;
+
+  // 点击事件
+  final GestureTapCallback onTap;
+
+  // tab总个数
+  final int tabsLength;
 
   @override
   Widget build(BuildContext context) {
+    var popUpButtonConfig = itemConfig.popUpButtonConfig;
+    var badgeConfig = itemConfig.badgeConfig;
+    bool isInOrOutCapsule =
+        componentType == TDBottomNavBarComponentType.label ||
+            outlineType == TDBottomNavBarOutlineType.capsule;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
         onTap.call();
-        if (popUpButtonConfig != null) {
+        if (itemConfig.popUpButtonConfig != null) {
           Navigator.push(
               context,
               PopRoute(
@@ -355,9 +403,9 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
                   itemWidth - _kDefaultMenuItemWidthShrink,
                   btnContext: context,
                   config: popUpButtonConfig!.popUpDialogConfig,
-                  items: popUpButtonConfig!.items,
+                  items: popUpButtonConfig.items,
                   onClickMenu: (value) {
-                    popUpButtonConfig!.onChanged(value);
+                    popUpButtonConfig.onChanged(value);
                   },
                 ),
               ));
@@ -370,30 +418,150 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
           alignment: Alignment.center,
           clipBehavior: Clip.none,
           children: [
-            item,
             Visibility(
-              visible: showBage,
-              child: Positioned(
-                  top: topOffset ?? -5,
-                  right: rightOffset ?? -10,
-                  child: badge),
-            )
+                visible: componentType == TDBottomNavBarComponentType.label &&
+                    isSelected,
+                child: Container(
+                  // 设计稿上 tab个数大于3时，左右边距为8，小于等于3时，左右边距为12
+                  width: itemWidth - (tabsLength > 3 ? 16 : 24),
+                  decoration: BoxDecoration(
+                      color: TDTheme.of(context).brandColor1,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(24))),
+                )),
+            Container(
+                padding: EdgeInsets.only(
+                    top: isInOrOutCapsule ? 3.0 : 2.0,
+                    bottom: isInOrOutCapsule ? 1.0 : 0.0),
+                child: _constructItem(context, badgeConfig, isInOrOutCapsule)),
+            // )
           ],
         ),
       ),
     );
   }
+
+  Widget _badge(BadgeConfig? badgeConfig) {
+    if (badgeConfig?.showBage ?? false) {
+      if (badgeConfig?.tdBadge != null) {
+        return badgeConfig!.tdBadge!;
+      }
+    }
+    return Container();
+  }
+
+  Widget _constructItem(
+      BuildContext context, BadgeConfig? badgeConfig, bool isInOrOutCapsule) {
+    Widget child = Container();
+    if (basiceType == TDBottomNavBarBasicType.text) {
+      child = _textItem(context, itemConfig.tabText!, isSelected,
+          TDTheme.of(context).fontTitleMedium!);
+    }
+    if (basiceType == TDBottomNavBarBasicType.expansionPanel) {
+      if (itemConfig.popUpButtonConfig != null) {
+        child = Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              TDIcons.view_list,
+              size: 16.0,
+              color: isSelected
+                  ? TDTheme.of(context).brandColor8
+                  : TDTheme.of(context).fontGyColor1,
+            ),
+            const SizedBox(width: 5),
+            _textItem(context, itemConfig.tabText!, isSelected,
+                TDTheme.of(context).fontTitleMedium!)
+          ],
+        );
+      } else {
+        child = _textItem(context, itemConfig.tabText!, isSelected,
+            TDTheme.of(context).fontTitleMedium!);
+      }
+    }
+    if (basiceType == TDBottomNavBarBasicType.icon) {
+      var selectedIcon = itemConfig.iconTypeConfig!.selectedIcon;
+      var unSelectedIcon = itemConfig.iconTypeConfig!.unselectedIcon;
+      if (itemConfig.iconTypeConfig!.useDefaultIcon ?? false) {
+        // selectedIcon = const TabIcon(isSelected: true, isPureIcon: true);
+        selectedIcon = Icon(
+          TDIcons.app,
+          size: 24,
+          color: TDTheme.of(context).brandColor8,
+        );
+        unSelectedIcon = Icon(
+          TDIcons.app,
+          size: 24,
+          color: TDTheme.of(context).fontGyColor1,
+        );
+      }
+      child = isSelected ? selectedIcon! : unSelectedIcon!;
+    }
+
+    if (basiceType == TDBottomNavBarBasicType.iconText) {
+      var selectedIcon = itemConfig.iconTextTypeConfig!.selectedIcon;
+      var unSelectedIcon = itemConfig.iconTextTypeConfig!.unselectedIcon;
+      if (itemConfig.iconTextTypeConfig!.useDefaultIcon ?? false) {
+        var size = 24.0;
+        if (isInOrOutCapsule) {
+          size = 20.0;
+        }
+        selectedIcon = Icon(
+          TDIcons.app,
+          size: size,
+          color: TDTheme.of(context).brandColor8,
+        );
+        unSelectedIcon = Icon(
+          TDIcons.app,
+          size: size,
+          color: TDTheme.of(context).fontGyColor1,
+        );
+      }
+      child = Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          isSelected ? selectedIcon! : unSelectedIcon!,
+          _textItem(
+            context,
+            itemConfig.iconTextTypeConfig!.tabText,
+            isSelected,
+            TDTheme.of(context).fontBodyExtraSmall!,
+          )
+        ],
+      );
+    }
+
+    var top = badgeConfig?.badgeTopOffset ?? -2;
+    var right = badgeConfig?.badgeRightOffset ?? -10;
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        child,
+        Visibility(
+            visible: badgeConfig?.showBage ?? false,
+            child:
+                Positioned(top: top, right: right, child: _badge(badgeConfig))),
+      ],
+    );
+  }
+
+  Widget _textItem(
+      BuildContext context, String text, bool isSelected, Font font) {
+    return Text(
+      text,
+      style: TextStyle(
+          color: isSelected
+              ? TDTheme.of(context).brandColor8
+              : TDTheme.of(context).fontGyColor1,
+          fontSize: font.size,
+          height: font.height,
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal),
+    );
+  }
 }
 
 class TDBottomNavBarPopUpBtnConfig {
-  // 选项list
-  final List<PopUpMenuItem> items;
-
-  // 统一在 onChanged 中处理各item点击事件
-  final ValueChanged<String> onChanged;
-
-  final TDBottomNavBarPopUpShapeConfig? popUpDialogConfig;
-
   TDBottomNavBarPopUpBtnConfig(
       {required this.items, required this.onChanged, this.popUpDialogConfig})
       : assert(() {
@@ -409,27 +577,18 @@ class TDBottomNavBarPopUpBtnConfig {
           }
           return true;
         }());
+
+  // 选项list
+  final List<PopUpMenuItem> items;
+
+  // 统一在 onChanged 中处理各item点击事件
+  final ValueChanged<String> onChanged;
+
+  // 弹窗UI配置
+  final TDBottomNavBarPopUpShapeConfig? popUpDialogConfig;
 }
 
 class TDBottomNavBarPopUpShapeConfig {
-  // 弹窗宽度（不设置，默认为按钮宽度 - 20）
-  final double? popUpWidth;
-
-  // 单个选项高度 所有选项等高 不设置则使用默认值 48
-  final double? popUpitemHeight;
-
-  // 弹窗背景颜色
-  Color? backgroundColor;
-
-  /// pannel圆角 默认0
-  double? radius;
-
-  /// 箭头宽度 默认13.5
-  double? arrowWidth;
-
-  // 箭头高度 默认8
-  double? arrowHeight;
-
   TDBottomNavBarPopUpShapeConfig(
       {this.popUpWidth,
       this.popUpitemHeight = _kDefaultMenuItemHeight,
@@ -437,9 +596,34 @@ class TDBottomNavBarPopUpShapeConfig {
       this.radius,
       this.arrowWidth,
       this.arrowHeight});
+
+  // 弹窗宽度（不设置，默认为按钮宽度 - 20）
+  final double? popUpWidth;
+
+  // 单个选项高度 所有选项等高 不设置则使用默认值 48
+  final double? popUpitemHeight;
+
+  // 弹窗背景颜色
+  final Color? backgroundColor;
+
+  /// pannel圆角 默认0
+  final double? radius;
+
+  /// 箭头宽度 默认13.5
+  final double? arrowWidth;
+
+  // 箭头高度 默认8
+  final double? arrowHeight;
 }
 
 class PopUpMenuItem extends StatelessWidget {
+  const PopUpMenuItem({
+    Key? key,
+    this.itemWidget,
+    required this.value,
+    this.alignment = AlignmentDirectional.center,
+  }) : super(key: key);
+
   // 选项widget
   final Widget? itemWidget;
 
@@ -448,13 +632,6 @@ class PopUpMenuItem extends StatelessWidget {
 
   // 对齐方式
   final AlignmentGeometry alignment;
-
-  const PopUpMenuItem({
-    Key? key,
-    this.itemWidget,
-    required this.value,
-    this.alignment = AlignmentDirectional.center,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -574,14 +751,20 @@ class PopupDialogState extends State<PopupDialog> {
               color: Colors.transparent,
             ),
             Positioned(
+                // 这里 -8 是因为widget.btnContext是TDBottomNavBarItemWithBadge的，它在父widget内有8dp的padding
+                // -4 是设计稿上箭头和tab有4dp的距离
                 top: position!.top -
                     (popUpitemHeight * widget.items.length +
-                        (widget.config?.arrowHeight ?? _kArrowHeight)),
+                        (widget.config?.arrowHeight ?? _kArrowHeight)) -
+                    8 -
+                    4,
                 right: position!.right - (popUpItemWidth + size!.width) / 2,
-                child: SizedBox(
+                child: Container(
                   width: popUpItemWidth,
                   height: popUpitemHeight * widget.items.length +
                       (widget.config?.arrowHeight ?? _kArrowHeight),
+                  decoration:
+                      BoxDecoration(boxShadow: TDTheme.of(context).shadowsTop),
                   child: CustomPaint(
                     painter: PannelWithDownArrow(config: widget.config),
                     child: Container(
