@@ -17,147 +17,115 @@ class TDDialogPage extends StatefulWidget {
 }
 
 class _TDDialogPageState extends State<TDDialogPage> {
+  final _dialogTitle = '对话框标题';
+  final _commonContent = '告知当前状态、信息和解决方法，等内容。描述尽可能控制在三行内。';
+  final _longContent = '这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案。\n\n' * 4;
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
         title: '对话框 Dialog',
-        padding: const EdgeInsets.all(3),
+        desc: '用于显示重要提示或请求用户进行重要操作，一种打断当前操作的模态视图。',
+        padding: const EdgeInsets.only(top: 8, bottom: 8),
         children: [
-          ExampleModule(title: '默认', children: [
+          ExampleModule(title: '组件类型', children: [
             ExampleItem(
-              builder: (_) => _dividerWidget('确认弹框'),
-            ),
+                desc: '反馈类对话框',
+                builder: (_) => _buildButton(
+                    '反馈类-带标题',
+                    TDConfirmDialog(
+                      title: _dialogTitle,
+                      content: _commonContent,
+                    ))),
             ExampleItem(
-                builder: (_) => ElevatedButton(
-                    onPressed: () {
-                      _showDialog(const TDConfirmDialog(
-                        title: '对话框标题',
-                      ));
-                    },
-                    child: const Text('只有标题'))),
+                builder: (_) => _buildButton(
+                    '反馈类-无标题',
+                    TDConfirmDialog(
+                      content: _commonContent,
+                    ))),
             ExampleItem(
-                builder: (_) => ElevatedButton(
-                    onPressed: () {
-                      _showDialog(const TDConfirmDialog(
-                        title: '对话框标题长，对话框标题长，对话框标题长长长长长长长长',
-                      ));
-                    },
-                    child: const Text('长标题'))),
+                builder: (_) => _buildButton(
+                    '反馈类-纯标题',
+                    TDConfirmDialog(
+                      title: _dialogTitle,
+                    ))),
             ExampleItem(
-                builder: (_) => ElevatedButton(
-                    onPressed: () {
-                      _showDialog(const TDConfirmDialog(
-                        content:
-                            '告知当前状态、信息和解决方法，等内容。描述文案尽可能控制在三行内,告知当前状态、信息和解决方法，等内容。描述文案尽可能控制在三行内告知当前状态、信息和解决方法，等内容。描述文案尽可能控制在三行内',
-                      ));
-                    },
-                    child: const Text('只有内容'))),
+                builder: (_) => _buildButton(
+                    '反馈类-内容超长',
+                    TDConfirmDialog(
+                      title: _dialogTitle,
+                      content: _longContent,
+                      contentMaxHeight: 300,
+                    ))),
             ExampleItem(
-                builder: (_) => ElevatedButton(
-                    onPressed: () {
-                      _showDialog(TDConfirmDialog(
-                        title: '对话框标题',
-                        content:
-                            '告知当前状态、信息和解决方法，等内容。描述文案尽可能控制在三行内,告知当前状态、信息和解决方法，等内容。',
-                        action: () {
-                          print('知道了');
-                        },
-                      ));
-                    },
-                    child: const Text('标题+内容'))),
+                desc: '确认类对话框',
+                builder: (_) =>
+                    _buildButton('确认类-带标题', TDAlertDialog(
+                      title: _dialogTitle,
+                      content: _commonContent,
+                    ))),
             ExampleItem(
-                builder: (_) => ElevatedButton(
-                    onPressed: () {
-                      _showDialog(const TDConfirmDialog(
-                        contentMaxHeight: 100,
-                        title: '对话框标题',
-                        content:
-                            '告知当前状态、信息和解决方法，等内容。描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很多描述文案很',
-                      ));
-                    },
-                    child: const Text('标题+可滚动内容'))),
-            ExampleItem(builder: (_) => _dividerWidget('多选项弹窗')),
+                builder: (_) =>
+                    _buildButton('确认类-无标题', const TDConfirmDialog())),
             ExampleItem(
-                builder: (_) => ElevatedButton(
-                    onPressed: () {
-                      _showDialog(TDAlertDialog(
-                        title: '对话框标题',
-                        content:
-                            '告知当前状态、信息和解决方法，等内容。描述文案尽可能控制在三行内,告知当前状态、信息和解决方法，等内容。',
-                        rightBtn: TDDialogButton(
-                            title: '确定',
-                            action: () {
-                              print('点击了确定按钮');
-                            }),
-                      ));
-                    },
-                    child: const Text('左右选择'))),
+                builder: (_) =>
+                    _buildButton('确认类-纯标题', const TDConfirmDialog())),
             ExampleItem(
-                builder: (_) => ElevatedButton(
-                    onPressed: () {
-                      _showDialog(TDAlertDialog.vertical(
-                        title: '对话框标题',
-                        content:
-                            '告知当前状态、信息和解决方法，等内容。描述文案尽可能控制在三行内,告知当前状态、信息和解决方法，等内容。',
-                        buttons: [
-                          TDDialogButton(
-                              title: '第一行',
-                              action: () {
-                                print('点击了第一行');
-                              }),
-                          TDDialogButton(
-                              title: '第二行',
-                              action: () {
-                                print('点击了第二行');
-                              }),
-                          TDDialogButton(
-                              title: '取消',
-                              action: () {
-                                print('点击了取消');
-                              },
-                              titleColor: Colors.black87,
-                              fontWeight: FontWeight.w400)
-                        ],
-                      ));
-                    },
-                    child: const Text('上下选择'))),
-            ExampleItem(builder: (_) => _dividerWidget('输入类弹窗')),
+                desc: '输入类对话框',
+                builder: (_) =>
+                    _buildButton('输入类-带描述', const TDConfirmDialog())),
             ExampleItem(
-                builder: (_) => ElevatedButton(
-                    onPressed: () {
-                      _showDialog(TDInputDialog(
-                        title: '对话框标题',
-                        content: '告知当前状态、信息和解决方法',
-                        textEditingController: TextEditingController(),
-                        rightBtn: TDDialogButton(
-                            title: '确定',
-                            action: () {
-                              print('点击了确定按钮');
-                            }),
-                      ));
-                    },
-                    child: const Text('输入类对话框'))),
-            ExampleItem(builder: (_) => _dividerWidget('带图片弹窗')),
+                builder: (_) =>
+                    _buildButton('输入类-无描述', const TDConfirmDialog())),
             ExampleItem(
-                builder: (_) => ElevatedButton(
-                    onPressed: () {
-                      _showDialog(TDImageDialog(
-                        title: '对话框标题',
-                        content: '告知当前状态、信息和解决方法',
-                        image: Image.network(
-                          'http://static.runoob.com/images/demo/demo2.jpg',
-                          // fit: BoxFit.cover,
-                        ),
-                        rightBtn: TDDialogButton(
-                            title: '确定',
-                            action: () {
-                              print('点击了确定按钮');
-                            }),
-                      ));
-                    },
-                    child: const Text('带图片弹窗'))),
-          ])
+                desc: '带图片的对话框',
+                builder: (_) =>
+                    _buildButton('图片置顶-带标题描述', const TDConfirmDialog())),
+            ExampleItem(
+                builder: (_) =>
+                    _buildButton('图片置顶-无标题', const TDConfirmDialog())),
+            ExampleItem(
+                builder: (_) =>
+                    _buildButton('图片置顶-纯标题', const TDConfirmDialog())),
+            ExampleItem(
+                builder: (_) =>
+                    _buildButton('图片居中-带标题描述', const TDConfirmDialog())),
+            ExampleItem(
+                builder: (_) =>
+                    _buildButton('图片居中-纯标题', const TDConfirmDialog())),
+            ExampleItem(
+                builder: (_) =>
+                    _buildButton('图片居中-纯图片', const TDConfirmDialog())),
+          ]),
+          ExampleModule(title: '组件类型', children: [
+            ExampleItem(
+                desc: '文字按钮',
+                builder: (_) => _buildButton('文字按钮', const TDConfirmDialog())),
+            ExampleItem(
+                desc: '横向基础按钮',
+                builder: (_) =>
+                    _buildButton('横向基础按钮', const TDConfirmDialog())),
+            ExampleItem(
+                desc: '纵向基础按钮',
+                builder: (_) =>
+                    _buildButton('纵向基础按钮', const TDConfirmDialog())),
+            ExampleItem(
+                desc: '带关闭按钮的对话框',
+                builder: (_) =>
+                    _buildButton('带关闭按钮的对话框', const TDConfirmDialog())),
+          ]),
         ]);
+  }
+
+  Widget _buildButton(String title, Widget dialog) {
+    return TDButton(
+      content: title,
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      onTap: () {
+        _showDialog(dialog);
+      },
+    );
   }
 
   void _showDialog(Widget dialog, {bool useRootNavigator = false}) {
@@ -172,30 +140,6 @@ class _TDDialogPageState extends State<TDDialogPage> {
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black54,
       transitionDuration: const Duration(milliseconds: 100),
-    );
-  }
-
-  Widget _dividerWidget(String title) {
-    return Row(
-      children: [
-        const Spacer(),
-        const TDDivider(
-          height: 1,
-          width: 100,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        TDText(title),
-        const SizedBox(
-          width: 10,
-        ),
-        const TDDivider(
-          height: 1,
-          width: 100,
-        ),
-        const Spacer(),
-      ],
     );
   }
 }
