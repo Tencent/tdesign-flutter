@@ -21,6 +21,9 @@ class _TDDialogPageState extends State<TDDialogPage> {
   final _commonContent = '告知当前状态、信息和解决方法，等内容。描述尽可能控制在三行内。';
   final _longContent = '这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案。\n\n' * 4;
   final _inputHint = '请输入文字';
+  final _demoImage = Image.asset(
+    'assets/img/brand.png',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -89,31 +92,55 @@ class _TDDialogPageState extends State<TDDialogPage> {
                       hintText: _inputHint,
                     ))),
             ExampleItem(
-                builder: (_) =>
-                    _buildButton('输入类-无描述', TDInputDialog(
+                builder: (_) => _buildButton(
+                    '输入类-无描述',
+                    TDInputDialog(
                       textEditingController: TextEditingController(),
                       title: _dialogTitle,
                       hintText: _inputHint,
                     ))),
             ExampleItem(
                 desc: '带图片的对话框',
-                builder: (_) =>
-                    _buildButton('图片置顶-带标题描述', const TDConfirmDialog())),
+                builder: (_) => _buildButton(
+                    '图片置顶-带标题描述',
+                    TDImageDialog(
+                      image: _demoImage,
+                      title: _dialogTitle,
+                      content: _commonContent,
+                    ))),
             ExampleItem(
                 builder: (_) =>
-                    _buildButton('图片置顶-无标题', const TDConfirmDialog())),
+                    _buildButton('图片置顶-无标题', TDImageDialog(
+                      image: _demoImage,
+                      content: _commonContent,
+                    ))),
             ExampleItem(
                 builder: (_) =>
-                    _buildButton('图片置顶-纯标题', const TDConfirmDialog())),
+                    _buildButton('图片置顶-纯标题', TDImageDialog(
+                      image: _demoImage,
+                      title: _dialogTitle,
+                    ))),
             ExampleItem(
                 builder: (_) =>
-                    _buildButton('图片居中-带标题描述', const TDConfirmDialog())),
+                    _buildButton('图片居中-带标题描述', TDImageDialog(
+                      image: _demoImage,
+                      title: _dialogTitle,
+                      content: _commonContent,
+                      imagePosition: TDDialogImagePosition.middle,
+                    ))),
             ExampleItem(
                 builder: (_) =>
-                    _buildButton('图片居中-纯标题', const TDConfirmDialog())),
+                    _buildButton('图片居中-纯标题', TDImageDialog(
+                      image: _demoImage,
+                      title: _dialogTitle,
+                      imagePosition: TDDialogImagePosition.middle,
+                    ))),
             ExampleItem(
                 builder: (_) =>
-                    _buildButton('图片居中-纯图片', const TDConfirmDialog())),
+                    _buildButton('图片居中-纯图片', TDImageDialog(
+                      image: _demoImage,
+                      imagePosition: TDDialogImagePosition.middle,
+                    ))),
           ]),
           ExampleModule(title: '组件类型', children: [
             ExampleItem(
