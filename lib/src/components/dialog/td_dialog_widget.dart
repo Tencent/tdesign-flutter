@@ -91,38 +91,41 @@ class TDDialogInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
     assert((title != null || content != null));
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        title != null
-            ? TDText(
-                title,
-                textColor: titleColor,
-                fontWeight: FontWeight.w600,
-                font: Font(size: 16, lineHeight: 24),
-                textAlign: TextAlign.center,
-              )
-            : Container(),
-        content == null
-            ? Container()
-            : Container(
-                padding: EdgeInsets.fromLTRB(
-                    0, (title != null && content != null) ? 8.0 : 0, 0, 0),
-                constraints: contentMaxHeight > 0
-                    ? BoxConstraints(
-                        maxHeight: contentMaxHeight,
-                      )
-                    : null,
-                child: Scrollbar(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: TDDialogContent(
-                      content: content!,
-                    ),
-                  ),
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          title != null
+              ? TDText(
+            title,
+            textColor: titleColor,
+            fontWeight: FontWeight.w600,
+            font: Font(size: 16, lineHeight: 24),
+            textAlign: TextAlign.center,
+          )
+              : Container(),
+          content == null
+              ? Container()
+              : Container(
+            padding: EdgeInsets.fromLTRB(
+                0, (title != null && content != null) ? 8.0 : 0, 0, 0),
+            constraints: contentMaxHeight > 0
+                ? BoxConstraints(
+              maxHeight: contentMaxHeight,
+            )
+                : null,
+            child: Scrollbar(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: TDDialogContent(
+                  content: content!,
                 ),
               ),
-      ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -144,40 +147,43 @@ class HorizontalNormalButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: TDDialogTextButton(
-            buttonText: leftBtn.title,
-            buttonTextColor:
-                leftBtn.titleColor ?? TDTheme.of(context).brandColor8,
-            buttonStyle: leftBtn.style ?? TDButtonStyle.secondary(),
-            height: leftBtn.height,
-            onPressed: () {
-              Navigator.pop(context);
-              leftBtn.action();
-            },
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: TDDialogTextButton(
+              buttonText: leftBtn.title,
+              buttonTextColor:
+              leftBtn.titleColor ?? TDTheme.of(context).brandColor8,
+              buttonStyle: leftBtn.style ?? TDButtonStyle.secondary(),
+              height: leftBtn.height,
+              onPressed: () {
+                Navigator.pop(context);
+                leftBtn.action();
+              },
+            ),
           ),
-        ),
-        const TDDivider(
-          width: 20,
-          color: Colors.transparent,
-        ),
-        Expanded(
-          child: TDDialogTextButton(
-            buttonText: rightBtn.title,
-            buttonTextColor:
-                rightBtn.titleColor ?? TDTheme.of(context).whiteColor1,
-            buttonStyle: rightBtn.style ?? TDButtonStyle.primary(),
-            height: rightBtn.height,
-            onPressed: () {
-              Navigator.pop(context);
-              rightBtn.action();
-            },
+          const TDDivider(
+            width: 20,
+            color: Colors.transparent,
           ),
-        ),
-      ],
+          Expanded(
+            child: TDDialogTextButton(
+              buttonText: rightBtn.title,
+              buttonTextColor:
+              rightBtn.titleColor ?? TDTheme.of(context).whiteColor1,
+              buttonStyle: rightBtn.style ?? TDButtonStyle.primary(),
+              height: rightBtn.height,
+              onPressed: () {
+                Navigator.pop(context);
+                rightBtn.action();
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -67,7 +67,6 @@ class TDConfirmDialog extends StatelessWidget {
               color: backgroundColor, // 底色
               borderRadius: BorderRadius.all(Radius.circular(radius)),
             ),
-            padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               TDDialogInfoWidget(
                 title: title,
@@ -76,20 +75,19 @@ class TDConfirmDialog extends StatelessWidget {
                 contentColor: contentColor,
                 contentMaxHeight: contentMaxHeight,
               ),
-              const TDDivider(
-                height: 32,
-                color: Colors.transparent,
-              ),
-              TDDialogTextButton(
-                buttonText: buttonText,
-                buttonTextColor: buttonTextColor,
-                onPressed: () {
-                  Navigator.pop(context);
-                  if (action != null) {
-                    action!();
-                  }
-                },
-              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+                child: TDDialogTextButton(
+                  buttonText: buttonText,
+                  buttonTextColor: buttonTextColor,
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if (action != null) {
+                      action!();
+                    }
+                  },
+                ),
+              )
             ])));
   }
 }
