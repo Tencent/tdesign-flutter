@@ -65,36 +65,30 @@ class TDInputDialog extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(radius)),
           ),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
+            TDDialogInfoWidget(
+              title: title,
+              titleColor: titleColor,
+              content: content,
+              contentColor: contentColor,
+            ),
             Container(
-              padding: const EdgeInsets.fromLTRB(24, 32, 24, 31),
-              child: Column(
-                children: [
-                  TDDialogInfoWidget(
-                    title: title,
-                    titleColor: titleColor,
-                    content: content,
-                    contentColor: contentColor,
-                  ),
-                  const TDDivider(height: 8, color: Colors.transparent),
-                  Container(
-                    color: Colors.white,
-                    height: 48,
-                    child: TextField(
-                      controller: textEditingController,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(3),
-                            borderSide: BorderSide.none),
-                        hintText: hintText,
-                        fillColor: const Color(0xfff0f0f0),
-                        filled: true,
-                        // labelText: '左上角',
-                      ),
-                    ),
-                  ),
-                ],
+              color: Colors.white,
+              height: 48,
+              margin: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: TextField(
+                controller: textEditingController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(3),
+                      borderSide: BorderSide.none),
+                  hintText: hintText,
+                  fillColor: const Color(0xfff0f0f0),
+                  filled: true,
+                  // labelText: '左上角',
+                ),
               ),
             ),
             const TDDivider(height: 1),
