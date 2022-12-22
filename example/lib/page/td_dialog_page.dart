@@ -20,6 +20,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
   final _dialogTitle = '对话框标题';
   final _commonContent = '告知当前状态、信息和解决方法，等内容。描述尽可能控制在三行内。';
   final _longContent = '这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案。\n\n' * 4;
+  final _inputHint = '请输入文字';
 
   @override
   Widget build(BuildContext context) {
@@ -59,28 +60,41 @@ class _TDDialogPageState extends State<TDDialogPage> {
                     ))),
             ExampleItem(
                 desc: '确认类对话框',
-                builder: (_) =>
-                    _buildButton('确认类-带标题', TDAlertDialog(
+                builder: (_) => _buildButton(
+                    '确认类-带标题',
+                    TDAlertDialog(
                       title: _dialogTitle,
                       content: _commonContent,
                     ))),
             ExampleItem(
-                builder: (_) =>
-                    _buildButton('确认类-无标题', TDAlertDialog(
+                builder: (_) => _buildButton(
+                    '确认类-无标题',
+                    TDAlertDialog(
                       content: _commonContent,
                     ))),
             ExampleItem(
-                builder: (_) =>
-                    _buildButton('确认类-纯标题', TDAlertDialog(
+                builder: (_) => _buildButton(
+                    '确认类-纯标题',
+                    TDAlertDialog(
                       title: _dialogTitle,
                     ))),
             ExampleItem(
                 desc: '输入类对话框',
-                builder: (_) =>
-                    _buildButton('输入类-带描述', const TDConfirmDialog())),
+                builder: (_) => _buildButton(
+                    '输入类-带描述',
+                    TDInputDialog(
+                      textEditingController: TextEditingController(),
+                      title: _dialogTitle,
+                      content: _commonContent,
+                      hintText: _inputHint,
+                    ))),
             ExampleItem(
                 builder: (_) =>
-                    _buildButton('输入类-无描述', const TDConfirmDialog())),
+                    _buildButton('输入类-无描述', TDInputDialog(
+                      textEditingController: TextEditingController(),
+                      title: _dialogTitle,
+                      hintText: _inputHint,
+                    ))),
             ExampleItem(
                 desc: '带图片的对话框',
                 builder: (_) =>

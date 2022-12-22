@@ -128,8 +128,8 @@ class TDDialogInfoWidget extends StatelessWidget {
 }
 
 /// 水平按钮
-class HorizontalButtons extends StatelessWidget {
-  const HorizontalButtons({
+class HorizontalNormalButtons extends StatelessWidget {
+  const HorizontalNormalButtons({
     Key? key,
     required this.leftBtn,
     required this.rightBtn,
@@ -152,7 +152,8 @@ class HorizontalButtons extends StatelessWidget {
             buttonText: leftBtn.title,
             buttonTextColor:
                 leftBtn.titleColor ?? TDTheme.of(context).brandColor8,
-            buttonStyle: TDButtonStyle.secondary(),
+            buttonStyle: leftBtn.style ?? TDButtonStyle.secondary(),
+            height: leftBtn.height,
             onPressed: () {
               Navigator.pop(context);
               leftBtn.action();
@@ -168,7 +169,63 @@ class HorizontalButtons extends StatelessWidget {
             buttonText: rightBtn.title,
             buttonTextColor:
                 rightBtn.titleColor ?? TDTheme.of(context).whiteColor1,
-            buttonStyle: TDButtonStyle.primary(),
+            buttonStyle: rightBtn.style ?? TDButtonStyle.primary(),
+            height: rightBtn.height,
+            onPressed: () {
+              Navigator.pop(context);
+              rightBtn.action();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// 横向文字按钮，中间有分割线
+class HorizontalTextButtons extends StatelessWidget {
+  const HorizontalTextButtons({
+    Key? key,
+    required this.leftBtn,
+    required this.rightBtn,
+  }) : super(key: key);
+
+  /// 标题颜色
+  final TDDialogButton leftBtn;
+
+  /// 标题文字
+  final TDDialogButton rightBtn;
+
+  @override
+  Widget build(BuildContext context) {
+    // 标题和内容不能同时为空
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: TDDialogTextButton(
+            buttonText: leftBtn.title,
+            buttonTextColor:
+            leftBtn.titleColor ?? TDTheme.of(context).fontGyColor2,
+            buttonStyle: leftBtn.style ?? TDButtonStyle.text(),
+            height: leftBtn.height,
+            onPressed: () {
+              Navigator.pop(context);
+              leftBtn.action();
+            },
+          ),
+        ),
+        const TDDivider(
+          width: 1,
+          height: 56,
+        ),
+        Expanded(
+          child: TDDialogTextButton(
+            buttonText: rightBtn.title,
+            buttonTextColor:
+            rightBtn.titleColor ?? TDTheme.of(context).brandColor8,
+            buttonStyle: rightBtn.style ?? TDButtonStyle.text(),
+            height: rightBtn.height,
             onPressed: () {
               Navigator.pop(context);
               rightBtn.action();

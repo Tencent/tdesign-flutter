@@ -20,6 +20,7 @@ class TDInputDialog extends StatelessWidget {
     this.title = '输入框标题',
     this.titleColor = Colors.black,
     this.content,
+    this.hintText = '',
     this.contentColor,
     this.leftBtn,
     this.rightBtn,
@@ -41,6 +42,9 @@ class TDInputDialog extends StatelessWidget {
   /// 内容
   final String? content;
 
+  /// 输入提示
+  final String? hintText;
+
   /// 内容颜色
   final Color? contentColor;
 
@@ -61,44 +65,50 @@ class TDInputDialog extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(radius)),
           ),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            TDDialogInfoWidget(
-              title: title,
-              titleColor: titleColor,
-              content: content,
-              contentColor: contentColor,
-            ),
             Container(
-              color: Colors.white,
-              height: 80,
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-              child: TextField(
-                controller: textEditingController,
-                autofocus: true,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(3),
-                      borderSide: BorderSide.none),
-                  hintText: '请输入',
-                  fillColor: const Color(0xfff0f0f0),
-                  filled: true,
-                  // labelText: '左上角',
-                ),
+              padding: const EdgeInsets.fromLTRB(24, 32, 24, 31),
+              child: Column(
+                children: [
+                  TDDialogInfoWidget(
+                    title: title,
+                    titleColor: titleColor,
+                    content: content,
+                    contentColor: contentColor,
+                  ),
+                  const TDDivider(height: 8, color: Colors.transparent),
+                  Container(
+                    color: Colors.white,
+                    height: 48,
+                    child: TextField(
+                      controller: textEditingController,
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(3),
+                            borderSide: BorderSide.none),
+                        hintText: hintText,
+                        fillColor: const Color(0xfff0f0f0),
+                        filled: true,
+                        // labelText: '左上角',
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            const TDDivider(
-              height: 1,
-            ),
+            const TDDivider(height: 1),
             _horizontalButtons(context),
           ])),
     );
   }
 
   Widget _horizontalButtons(BuildContext context) {
-    final left = leftBtn ?? TDDialogButton(title: '取消', action: () {});
+    final left =
+        leftBtn ?? TDDialogButton(title: '取消', action: () {}, height: 56);
     final right =
-        rightBtn ?? TDDialogButton(title: '好的', action: () {});
-    return HorizontalButtons(
+        rightBtn ?? TDDialogButton(title: '好的', action: () {}, height: 56);
+    return HorizontalTextButtons(
       leftBtn: left,
       rightBtn: right,
     );
