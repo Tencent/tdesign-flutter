@@ -150,7 +150,9 @@ class HorizontalButtons extends StatelessWidget {
         Expanded(
           child: TDDialogTextButton(
             buttonText: leftBtn.title,
-            buttonTextColor: leftBtn.titleColor ?? const Color(0xe6000000),
+            buttonTextColor:
+                leftBtn.titleColor ?? TDTheme.of(context).brandColor8,
+            buttonStyle: TDButtonStyle.secondary(),
             onPressed: () {
               Navigator.pop(context);
               leftBtn.action();
@@ -165,7 +167,8 @@ class HorizontalButtons extends StatelessWidget {
           child: TDDialogTextButton(
             buttonText: rightBtn.title,
             buttonTextColor:
-                rightBtn.titleColor ?? TDTheme.of(context).brandColor8,
+                rightBtn.titleColor ?? TDTheme.of(context).whiteColor1,
+            buttonStyle: TDButtonStyle.primary(),
             onPressed: () {
               Navigator.pop(context);
               rightBtn.action();
@@ -183,8 +186,9 @@ class TDDialogTextButton extends StatelessWidget {
     Key? key,
     this.buttonText = '按钮',
     this.buttonTextColor,
+    this.buttonStyle,
     required this.onPressed,
-    this.height = 38.0,
+    this.height = 40.0,
     this.width,
   }) : super(key: key);
 
@@ -193,6 +197,8 @@ class TDDialogTextButton extends StatelessWidget {
 
   /// 按钮文字颜色
   final Color? buttonTextColor;
+
+  final TDButtonStyle? buttonStyle;
 
   /// 按钮宽度
   final double? width;
@@ -207,15 +213,11 @@ class TDDialogTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TDButton(
       onTap: onPressed,
-      style: TDButtonStyle.primary(),
-      content: '',
+      style: buttonStyle ?? TDButtonStyle.primary(),
+      content: buttonText,
+      textStyle: TextStyle(fontWeight: FontWeight.w600, color: buttonTextColor),
       width: width,
       height: height,
-      child: TDText(
-        buttonText,
-        textColor: buttonTextColor ?? TDTheme.of(context).brandColor8,
-        fontWeight: FontWeight.w600,
-      ),
     );
   }
 }
