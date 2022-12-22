@@ -62,8 +62,8 @@ class TDDialogContent extends StatelessWidget {
 }
 
 /// 弹窗信息
-class TDInfoWidget extends StatelessWidget {
-  const TDInfoWidget({
+class TDDialogInfoWidget extends StatelessWidget {
+  const TDDialogInfoWidget({
     Key? key,
     this.title,
     this.titleColor = Colors.black,
@@ -91,41 +91,39 @@ class TDInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
     assert((title != null || content != null));
-    return Container(
-        padding: const EdgeInsets.fromLTRB(24, 32, 24, 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            title != null
-                ? TDText(
-                    title,
-                    textColor: titleColor,
-                    fontWeight: FontWeight.w600,
-                    font: Font(size: 16, lineHeight: 24),
-                    textAlign: TextAlign.center,
-                  )
-                : Container(),
-            content == null
-                ? Container()
-                : Container(
-                    padding: EdgeInsets.fromLTRB(
-                        0, (title != null && content != null) ? 8.0 : 0, 0, 0),
-                    constraints: contentMaxHeight > 0
-                        ? BoxConstraints(
-                            maxHeight: contentMaxHeight,
-                          )
-                        : null,
-                    child: Scrollbar(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: TDDialogContent(
-                          content: content!,
-                        ),
-                      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        title != null
+            ? TDText(
+                title,
+                textColor: titleColor,
+                fontWeight: FontWeight.w600,
+                font: Font(size: 16, lineHeight: 24),
+                textAlign: TextAlign.center,
+              )
+            : Container(),
+        content == null
+            ? Container()
+            : Container(
+                padding: EdgeInsets.fromLTRB(
+                    0, (title != null && content != null) ? 8.0 : 0, 0, 0),
+                constraints: contentMaxHeight > 0
+                    ? BoxConstraints(
+                        maxHeight: contentMaxHeight,
+                      )
+                    : null,
+                child: Scrollbar(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: TDDialogContent(
+                      content: content!,
                     ),
                   ),
-          ],
-        ));
+                ),
+              ),
+      ],
+    );
   }
 }
 
@@ -147,6 +145,7 @@ class HorizontalButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
           child: TDDialogTextButton(
@@ -159,9 +158,8 @@ class HorizontalButtons extends StatelessWidget {
           ),
         ),
         const TDDivider(
-          height: 57,
-          width: 1,
-          direction: Axis.vertical,
+          width: 20,
+          color: Colors.transparent,
         ),
         Expanded(
           child: TDDialogTextButton(
@@ -186,7 +184,7 @@ class TDDialogTextButton extends StatelessWidget {
     this.buttonText = '按钮',
     this.buttonTextColor,
     required this.onPressed,
-    this.height = 56.0,
+    this.height = 38.0,
     this.width,
   }) : super(key: key);
 
@@ -207,22 +205,16 @@ class TDDialogTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
-      style: TextButton.styleFrom(
-        primary: buttonTextColor ?? TDTheme.of(context).brandColor8,
-        padding: const EdgeInsets.all(0),
-      ),
-      child: SizedBox(
-        height: height,
-        width: width,
-        child: Center(
-          child: TDText(
-            buttonText,
-            textColor: buttonTextColor ?? TDTheme.of(context).brandColor8,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+    return TDButton(
+      onTap: onPressed,
+      style: TDButtonStyle.primary(),
+      content: '',
+      width: width,
+      height: height,
+      child: TDText(
+        buttonText,
+        textColor: buttonTextColor ?? TDTheme.of(context).brandColor8,
+        fontWeight: FontWeight.w600,
       ),
     );
   }
