@@ -72,7 +72,7 @@ class TDImageDialog extends StatelessWidget {
                 ),
               ),
             ),
-            TDInfoWidget(
+            TDDialogInfoWidget(
               title: title,
               titleColor: titleColor,
               content: content,
