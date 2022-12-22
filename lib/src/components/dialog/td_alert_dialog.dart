@@ -83,7 +83,6 @@ class TDAlertDialog extends StatelessWidget {
               color: backgroundColor, // 底色
               borderRadius: BorderRadius.all(Radius.circular(radius)),
             ),
-            padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               TDDialogInfoWidget(
                 title: title,
@@ -92,10 +91,7 @@ class TDAlertDialog extends StatelessWidget {
                 contentColor: contentColor,
                 contentMaxHeight: contentMaxHeight,
               ),
-              const TDDivider(
-                height: 32,
-                color: Colors.transparent,
-              ),
+              TDDivider(height: 24.scale, color: Colors.transparent),
               _vertical
                   ? _verticalButtons(context)
                   : _horizontalButtons(context),

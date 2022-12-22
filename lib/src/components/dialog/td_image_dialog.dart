@@ -10,21 +10,26 @@ import '../../../td_export.dart';
 import '../../util/auto_size.dart';
 import 'td_dialog_widget.dart';
 
+enum TDDialogImagePosition {
+  top,
+  middle,
+}
+
 /// 弹窗控件
 class TDImageDialog extends StatelessWidget {
   const TDImageDialog({
     Key? key,
     required this.image,
+    this.imagePosition = TDDialogImagePosition.top,
     this.backgroundColor = Colors.white,
     this.radius = 8.0,
-    this.title = '对话框标题',
+    this.title,
     this.titleColor = Colors.black,
     this.content,
     this.contentColor,
     this.leftBtn,
     this.rightBtn,
-  })  : assert((title != null || content != null)),
-        super(key: key);
+  }) : super(key: key);
 
   /// 背景颜色
   final Color backgroundColor;
@@ -49,6 +54,81 @@ class TDImageDialog extends StatelessWidget {
 
   final Image image;
 
+  /// 图片位置
+  final TDDialogImagePosition? imagePosition;
+
+  Widget _buildImage(BuildContext context) {
+    return SizedBox(
+      width: 320.scale,
+      height: 140.scale,
+      child: FittedBox(
+        fit: BoxFit.cover,
+        child: image,
+      ),
+    );
+  }
+  
+  Widget _buildTopImage(BuildContext context) {
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      ClipRRect(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(radius),
+            topRight: Radius.circular(radius)),
+        child: _buildImage(context),
+      ),
+      TDDialogInfoWidget(
+        title: title,
+        titleColor: titleColor,
+        content: content,
+        contentColor: contentColor,
+      ),
+      TDDivider(height: 24.scale, color: Colors.transparent),
+      _horizontalButtons(context),
+    ]);
+  }
+  
+  Widget _buildMiddleImage(BuildContext context) {
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      TDDialogInfoWidget(
+        title: title,
+        titleColor: titleColor,
+        content: content,
+        contentColor: contentColor,
+      ),
+      Container(
+        padding: EdgeInsets.only(top: 24.scale),
+        child: ClipRRect(
+          child: _buildImage(context),
+        ),
+      ),
+      TDDivider(height: 24.scale, color: Colors.transparent),
+      _horizontalButtons(context),
+    ]);
+  }
+
+  Widget _buildOnlyImage(BuildContext context) {
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      ClipRRect(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(radius),
+            topRight: Radius.circular(radius)),
+        child: _buildImage(context),
+      ),
+      TDDivider(height: 24.scale, color: Colors.transparent),
+      _horizontalButtons(context),
+    ]);
+  }
+  
+  Widget _buildBody(BuildContext context) {
+    if (title == null && content == null) {
+      return _buildOnlyImage(context);
+    } else if (imagePosition == TDDialogImagePosition.middle) {
+      return _buildMiddleImage(context);
+    } else {
+      return _buildTopImage(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -58,38 +138,13 @@ class TDImageDialog extends StatelessWidget {
             color: backgroundColor, // 底色
             borderRadius: BorderRadius.all(Radius.circular(radius)),
           ),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(radius),
-                  topRight: Radius.circular(radius)),
-              child: SizedBox(
-                width: 320.scale,
-                height: 140.scale,
-                child: FittedBox(
-                  fit: BoxFit.cover,
-                  child: image,
-                ),
-              ),
-            ),
-            TDDialogInfoWidget(
-              title: title,
-              titleColor: titleColor,
-              content: content,
-              contentColor: contentColor,
-            ),
-            const TDDivider(
-              height: 1,
-            ),
-            _horizontalButtons(context),
-          ])),
+          child: _buildBody(context)),
     );
   }
 
   Widget _horizontalButtons(BuildContext context) {
     final left = leftBtn ?? TDDialogButton(title: '取消', action: () {});
-    final right =
-        rightBtn ?? TDDialogButton(title: '好的', action: () {});
+    final right = rightBtn ?? TDDialogButton(title: '好的', action: () {});
     return HorizontalNormalButtons(
       leftBtn: left,
       rightBtn: right,
