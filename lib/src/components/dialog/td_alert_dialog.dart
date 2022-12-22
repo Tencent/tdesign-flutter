@@ -106,7 +106,7 @@ class TDAlertDialog extends StatelessWidget {
     final left = leftBtn ?? TDDialogButton(title: '取消', action: () {});
     final right =
         rightBtn ?? TDDialogButton(title: '好的', action: () {});
-    return HorizontalButtons(
+    return HorizontalNormalButtons(
       leftBtn: left,
       rightBtn: right,
     );
@@ -134,6 +134,8 @@ class TDAlertDialog extends StatelessWidget {
 /// 弹窗按钮
 class TDDialogButton {
   Color? titleColor;
+  final TDButtonStyle? style;
+  final double? height;
   FontWeight? fontWeight;
   final String title;
   final Function() action;
@@ -142,6 +144,8 @@ class TDDialogButton {
     required this.title,
     required this.action,
     this.titleColor,
+    this.style,
+    this.height,
     this.fontWeight,
   });
 }

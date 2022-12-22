@@ -90,7 +90,7 @@ class TDImageDialog extends StatelessWidget {
     final left = leftBtn ?? TDDialogButton(title: '取消', action: () {});
     final right =
         rightBtn ?? TDDialogButton(title: '好的', action: () {});
-    return HorizontalButtons(
+    return HorizontalNormalButtons(
       leftBtn: left,
       rightBtn: right,
     );
