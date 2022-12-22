@@ -83,8 +83,9 @@ class TDAlertDialog extends StatelessWidget {
               color: backgroundColor, // 底色
               borderRadius: BorderRadius.all(Radius.circular(radius)),
             ),
+            padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-              TDInfoWidget(
+              TDDialogInfoWidget(
                 title: title,
                 titleColor: titleColor,
                 content: content,
@@ -92,7 +93,8 @@ class TDAlertDialog extends StatelessWidget {
                 contentMaxHeight: contentMaxHeight,
               ),
               const TDDivider(
-                height: 1,
+                height: 32,
+                color: Colors.transparent,
               ),
               _vertical
                   ? _verticalButtons(context)
@@ -122,13 +124,6 @@ class TDAlertDialog extends StatelessWidget {
         },
       );
       widgets.add(btn);
-      if (index != _buttons!.length - 1) {
-        widgets.add(
-          const TDDivider(
-            height: 1,
-          ),
-        );
-      }
     });
     return Column(
       children: widgets,
