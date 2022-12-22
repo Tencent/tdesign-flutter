@@ -66,10 +66,14 @@ class _TDDialogPageState extends State<TDDialogPage> {
                     ))),
             ExampleItem(
                 builder: (_) =>
-                    _buildButton('确认类-无标题', const TDConfirmDialog())),
+                    _buildButton('确认类-无标题', TDAlertDialog(
+                      content: _commonContent,
+                    ))),
             ExampleItem(
                 builder: (_) =>
-                    _buildButton('确认类-纯标题', const TDConfirmDialog())),
+                    _buildButton('确认类-纯标题', TDAlertDialog(
+                      title: _dialogTitle,
+                    ))),
             ExampleItem(
                 desc: '输入类对话框',
                 builder: (_) =>
