@@ -21,6 +21,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
   final _commonContent = '告知当前状态、信息和解决方法，等内容。描述尽可能控制在三行内。';
   final _longContent = '这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案。\n\n' * 4;
   final _inputHint = '请输入文字';
+
+  // TODO 换成设计稿的图
   final _demoImage = Image.asset(
     'assets/img/brand.png',
   );

@@ -68,6 +68,7 @@ class TDInputDialog extends StatelessWidget {
       backgroundColor: backgroundColor,
       radius: radius,
       body: Material(
+        borderRadius: BorderRadius.all(Radius.circular(radius)),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           TDDialogInfoWidget(
             title: title,
