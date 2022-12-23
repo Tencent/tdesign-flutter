@@ -49,8 +49,8 @@ class TDImageDialog extends StatelessWidget {
   /// 内容颜色
   final Color? contentColor;
 
-  final TDDialogButton? leftBtn;
-  final TDDialogButton? rightBtn;
+  final TDDialogButtonOptions? leftBtn;
+  final TDDialogButtonOptions? rightBtn;
 
   final Image image;
 
@@ -143,8 +143,8 @@ class TDImageDialog extends StatelessWidget {
   }
 
   Widget _horizontalButtons(BuildContext context) {
-    final left = leftBtn ?? TDDialogButton(title: '取消', action: () {});
-    final right = rightBtn ?? TDDialogButton(title: '好的', action: () {});
+    final left = leftBtn ?? TDDialogButtonOptions(title: '取消', action: () {});
+    final right = rightBtn ?? TDDialogButtonOptions(title: '好的', action: () {});
     return HorizontalNormalButtons(
       leftBtn: left,
       rightBtn: right,
