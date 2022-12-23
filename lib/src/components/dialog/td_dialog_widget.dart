@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import '../../../td_export.dart';
 import '../../util/auto_size.dart';
 
+/// TDDialog手脚架
 class TDDialogScaffold extends StatelessWidget {
   const TDDialogScaffold({
     Key? key,
@@ -18,9 +19,16 @@ class TDDialogScaffold extends StatelessWidget {
     this.radius = 8.0,
   }) : super(key: key);
 
+  /// Dialog主体
   final Widget body;
+
+  /// 显示右上角关闭按钮
   final bool? showCloseButton;
+
+  /// 背景色
   final Color backgroundColor;
+
+  /// 圆角
   final double radius;
 
   @override
@@ -185,7 +193,7 @@ class TDDialogInfoWidget extends StatelessWidget {
   }
 }
 
-/// 水平按钮
+/// 横向排列的两个按钮
 class HorizontalNormalButtons extends StatelessWidget {
   const HorizontalNormalButtons({
     Key? key,
@@ -193,10 +201,10 @@ class HorizontalNormalButtons extends StatelessWidget {
     required this.rightBtn,
   }) : super(key: key);
 
-  /// 标题颜色
+  /// 左按钮
   final TDDialogButtonOptions leftBtn;
 
-  /// 标题文字
+  /// 右按钮
   final TDDialogButtonOptions rightBtn;
 
   @override
@@ -212,6 +220,7 @@ class HorizontalNormalButtons extends StatelessWidget {
               buttonText: leftBtn.title,
               buttonTextColor:
                   leftBtn.titleColor ?? TDTheme.of(context).brandColor8,
+              // TODO 更换为设计稿的按钮style
               buttonStyle: leftBtn.style ?? TDButtonStyle.secondary(),
               height: leftBtn.height,
               buttonTextFontWeight: leftBtn.fontWeight,
@@ -253,10 +262,10 @@ class HorizontalTextButtons extends StatelessWidget {
     required this.rightBtn,
   }) : super(key: key);
 
-  /// 标题颜色
+  /// 左按钮
   final TDDialogButtonOptions leftBtn;
 
-  /// 标题文字
+  /// 右按钮
   final TDDialogButtonOptions rightBtn;
 
   @override
