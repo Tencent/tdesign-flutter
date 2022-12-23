@@ -139,10 +139,10 @@ class HorizontalNormalButtons extends StatelessWidget {
   }) : super(key: key);
 
   /// 标题颜色
-  final TDDialogButton leftBtn;
+  final TDDialogButtonOptions leftBtn;
 
   /// 标题文字
-  final TDDialogButton rightBtn;
+  final TDDialogButtonOptions rightBtn;
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +153,7 @@ class HorizontalNormalButtons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: TDDialogTextButton(
+            child: TDDialogButton(
               buttonText: leftBtn.title,
               buttonTextColor:
               leftBtn.titleColor ?? TDTheme.of(context).brandColor8,
@@ -170,7 +170,7 @@ class HorizontalNormalButtons extends StatelessWidget {
             color: Colors.transparent,
           ),
           Expanded(
-            child: TDDialogTextButton(
+            child: TDDialogButton(
               buttonText: rightBtn.title,
               buttonTextColor:
               rightBtn.titleColor ?? TDTheme.of(context).whiteColor1,
@@ -197,10 +197,10 @@ class HorizontalTextButtons extends StatelessWidget {
   }) : super(key: key);
 
   /// 标题颜色
-  final TDDialogButton leftBtn;
+  final TDDialogButtonOptions leftBtn;
 
   /// 标题文字
-  final TDDialogButton rightBtn;
+  final TDDialogButtonOptions rightBtn;
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +209,7 @@ class HorizontalTextButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: TDDialogTextButton(
+          child: TDDialogButton(
             buttonText: leftBtn.title,
             buttonTextColor:
             leftBtn.titleColor ?? TDTheme.of(context).fontGyColor2,
@@ -226,7 +226,7 @@ class HorizontalTextButtons extends StatelessWidget {
           height: 56,
         ),
         Expanded(
-          child: TDDialogTextButton(
+          child: TDDialogButton(
             buttonText: rightBtn.title,
             buttonTextColor:
             rightBtn.titleColor ?? TDTheme.of(context).brandColor8,
@@ -244,8 +244,8 @@ class HorizontalTextButtons extends StatelessWidget {
 }
 
 /// 弹窗标题
-class TDDialogTextButton extends StatelessWidget {
-  const TDDialogTextButton({
+class TDDialogButton extends StatelessWidget {
+  const TDDialogButton({
     Key? key,
     this.buttonText = '按钮',
     this.buttonTextColor,
