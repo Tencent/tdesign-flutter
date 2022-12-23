@@ -24,6 +24,7 @@ class TDConfirmDialog extends StatelessWidget {
     this.contentMaxHeight = 0,
     this.buttonText = '知道了',
     this.buttonTextColor,
+    this.buttonStyle = TDDialogButtonStyle.normal,
   }) : super(key: key);
 
   /// 标题
@@ -53,8 +54,48 @@ class TDConfirmDialog extends StatelessWidget {
   /// 背景颜色
   final Color backgroundColor;
 
+  /// 按钮样式
+  final TDDialogButtonStyle buttonStyle;
+
   /// 圆角
   final double radius;
+
+  Widget _buildButton(BuildContext context) {
+    if (buttonStyle == TDDialogButtonStyle.text) {
+      return Column(
+        children: [
+          TDDivider(height: 23.scale, color: Colors.transparent),
+          const TDDivider(height: 1),
+          TDDialogButton(
+            buttonText: buttonText,
+            buttonTextColor: buttonTextColor,
+            buttonStyle: TDButtonStyle.text(),
+            height: 56.scale,
+            onPressed: () {
+              Navigator.pop(context);
+              if (action != null) {
+                action!();
+              }
+            },
+          )
+        ],
+      );
+    } else {
+      return Container(
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+        child: TDDialogButton(
+          buttonText: buttonText,
+          buttonTextColor: buttonTextColor,
+          onPressed: () {
+            Navigator.pop(context);
+            if (action != null) {
+              action!();
+            }
+          },
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,19 +116,7 @@ class TDConfirmDialog extends StatelessWidget {
                 contentColor: contentColor,
                 contentMaxHeight: contentMaxHeight,
               ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-                child: TDDialogTextButton(
-                  buttonText: buttonText,
-                  buttonTextColor: buttonTextColor,
-                  onPressed: () {
-                    Navigator.pop(context);
-                    if (action != null) {
-                      action!();
-                    }
-                  },
-                ),
-              )
+              _buildButton(context),
             ])));
   }
 }

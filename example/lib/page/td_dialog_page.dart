@@ -109,35 +109,40 @@ class _TDDialogPageState extends State<TDDialogPage> {
                       content: _commonContent,
                     ))),
             ExampleItem(
-                builder: (_) =>
-                    _buildButton('图片置顶-无标题', TDImageDialog(
+                builder: (_) => _buildButton(
+                    '图片置顶-无标题',
+                    TDImageDialog(
                       image: _demoImage,
                       content: _commonContent,
                     ))),
             ExampleItem(
-                builder: (_) =>
-                    _buildButton('图片置顶-纯标题', TDImageDialog(
+                builder: (_) => _buildButton(
+                    '图片置顶-纯标题',
+                    TDImageDialog(
                       image: _demoImage,
                       title: _dialogTitle,
                     ))),
             ExampleItem(
-                builder: (_) =>
-                    _buildButton('图片居中-带标题描述', TDImageDialog(
+                builder: (_) => _buildButton(
+                    '图片居中-带标题描述',
+                    TDImageDialog(
                       image: _demoImage,
                       title: _dialogTitle,
                       content: _commonContent,
                       imagePosition: TDDialogImagePosition.middle,
                     ))),
             ExampleItem(
-                builder: (_) =>
-                    _buildButton('图片居中-纯标题', TDImageDialog(
+                builder: (_) => _buildButton(
+                    '图片居中-纯标题',
+                    TDImageDialog(
                       image: _demoImage,
                       title: _dialogTitle,
                       imagePosition: TDDialogImagePosition.middle,
                     ))),
             ExampleItem(
-                builder: (_) =>
-                    _buildButton('图片居中-纯图片', TDImageDialog(
+                builder: (_) => _buildButton(
+                    '图片居中-纯图片',
+                    TDImageDialog(
                       image: _demoImage,
                       imagePosition: TDDialogImagePosition.middle,
                     ))),
@@ -145,7 +150,13 @@ class _TDDialogPageState extends State<TDDialogPage> {
           ExampleModule(title: '组件类型', children: [
             ExampleItem(
                 desc: '文字按钮',
-                builder: (_) => _buildButton('文字按钮', const TDConfirmDialog())),
+                builder: (_) => _buildButton(
+                    '文字按钮',
+                    TDConfirmDialog(
+                      title: _dialogTitle,
+                      content: _commonContent,
+                      buttonStyle: TDDialogButtonStyle.text,
+                    ))),
             ExampleItem(
                 desc: '横向基础按钮',
                 builder: (_) =>

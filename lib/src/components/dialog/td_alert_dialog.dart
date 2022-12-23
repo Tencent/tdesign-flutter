@@ -52,14 +52,14 @@ class TDAlertDialog extends StatelessWidget {
   // 选项是否是垂直排布，默认是左右排布
   final bool _vertical;
   // 垂直排布的按钮列表
-  final List<TDDialogButton>? _buttons;
+  final List<TDDialogButtonOptions>? _buttons;
 
-  final TDDialogButton? leftBtn;
-  final TDDialogButton? rightBtn;
+  final TDDialogButtonOptions? leftBtn;
+  final TDDialogButtonOptions? rightBtn;
 
   const TDAlertDialog.vertical({
     Key? key,
-    required List<TDDialogButton> buttons,
+    required List<TDDialogButtonOptions> buttons,
     this.backgroundColor = Colors.white,
     this.radius = 8.0,
     this.title,
@@ -99,9 +99,9 @@ class TDAlertDialog extends StatelessWidget {
   }
 
   Widget _horizontalButtons(BuildContext context) {
-    final left = leftBtn ?? TDDialogButton(title: '取消', action: () {});
+    final left = leftBtn ?? TDDialogButtonOptions(title: '取消', action: () {});
     final right =
-        rightBtn ?? TDDialogButton(title: '好的', action: () {});
+        rightBtn ?? TDDialogButtonOptions(title: '好的', action: () {});
     return HorizontalNormalButtons(
       leftBtn: left,
       rightBtn: right,
@@ -111,7 +111,7 @@ class TDAlertDialog extends StatelessWidget {
   Widget _verticalButtons(BuildContext context) {
      var widgets = <Widget>[];
     _buttons!.asMap().forEach((index, value) {
-      Widget btn = TDDialogTextButton(
+      Widget btn = TDDialogButton(
         buttonText: value.title,
         buttonTextColor: value.titleColor,
         onPressed: (){
@@ -125,23 +125,4 @@ class TDAlertDialog extends StatelessWidget {
       children: widgets,
     );
   }
-}
-
-/// 弹窗按钮
-class TDDialogButton {
-  Color? titleColor;
-  final TDButtonStyle? style;
-  final double? height;
-  FontWeight? fontWeight;
-  final String title;
-  final Function() action;
-
-  TDDialogButton({
-    required this.title,
-    required this.action,
-    this.titleColor,
-    this.style,
-    this.height,
-    this.fontWeight,
-  });
 }
