@@ -151,20 +151,78 @@ class _TDDialogPageState extends State<TDDialogPage> {
             ExampleItem(
                 desc: '文字按钮',
                 builder: (_) => _buildButton(
-                    '文字按钮',
+                    '单个文字按钮',
                     TDConfirmDialog(
                       title: _dialogTitle,
                       content: _commonContent,
                       buttonStyle: TDDialogButtonStyle.text,
                     ))),
             ExampleItem(
+                builder: (_) => _buildButton(
+                    '左右文字按钮',
+                    TDAlertDialog(
+                      title: _dialogTitle,
+                      content: _commonContent,
+                      buttonStyle: TDDialogButtonStyle.text,
+                    ))),
+            ExampleItem(
                 desc: '横向基础按钮',
-                builder: (_) =>
-                    _buildButton('横向基础按钮', const TDConfirmDialog())),
+                builder: (_) => _buildButton(
+                    '单个横向基础按钮',
+                    TDConfirmDialog(
+                      title: _dialogTitle,
+                      content: _commonContent,
+                    ))),
+            ExampleItem(
+                builder: (_) => _buildButton(
+                    '左右横向基础按钮',
+                    TDAlertDialog(
+                      title: _dialogTitle,
+                      content: _commonContent,
+                    ))),
             ExampleItem(
                 desc: '纵向基础按钮',
-                builder: (_) =>
-                    _buildButton('纵向基础按钮', const TDConfirmDialog())),
+                builder: (_) => _buildButton(
+                    '两个纵向基础按钮',
+                    TDAlertDialog.vertical(
+                        title: _dialogTitle,
+                        content: _commonContent,
+                        buttons: [
+                          TDDialogButtonOptions(
+                              title: '主要按钮',
+                              action: () {},
+                              style: TDButtonStyle.primary()),
+                          TDDialogButtonOptions(
+                              title: '次要按钮',
+                              titleColor: TDTheme.of(context).brandColor8,
+                              action: () {},
+                              style: TDButtonStyle.secondary()
+                          ),
+                        ]))),
+            ExampleItem(
+                builder: (_) => _buildButton(
+                    '三个纵向基础按钮',
+                    TDAlertDialog.vertical(
+                        title: _dialogTitle,
+                        content: _commonContent,
+                        buttons: [
+                          TDDialogButtonOptions(
+                              title: '主要按钮',
+                              action: () {},
+                              style: TDButtonStyle.primary()),
+                          TDDialogButtonOptions(
+                              title: '次要按钮',
+                              titleColor: TDTheme.of(context).brandColor8,
+                              action: () {},
+                              style: TDButtonStyle.secondary()
+                          ),
+                          TDDialogButtonOptions(
+                              title: '次要按钮',
+                              titleColor: TDTheme.of(context).brandColor8,
+                              action: () {},
+                              style: TDButtonStyle.secondary()
+                          ),
+                        ]))),
             ExampleItem(
                 desc: '带关闭按钮的对话框',
                 builder: (_) =>

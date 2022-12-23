@@ -91,7 +91,6 @@ class TDInputDialog extends StatelessWidget {
                 ),
               ),
             ),
-            const TDDivider(height: 1),
             _horizontalButtons(context),
           ])),
     );
