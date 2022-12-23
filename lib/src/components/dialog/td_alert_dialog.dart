@@ -23,6 +23,7 @@ class TDAlertDialog extends StatelessWidget {
     this.contentMaxHeight = 0,
     this.leftBtn,
     this.rightBtn,
+    this.showCloseButton,
     TDDialogButtonStyle buttonStyle = TDDialogButtonStyle.normal,
   })  : assert((title != null || content != null)),
         _vertical = false,
@@ -51,6 +52,9 @@ class TDAlertDialog extends StatelessWidget {
   /// 内容的最大高度，默认为0，也就是不限制高度
   final double contentMaxHeight;
 
+  /// 显示右上角关闭按钮
+  final bool? showCloseButton;
+
   // 选项是否是垂直排布，默认是左右排布
   final bool _vertical;
 
@@ -72,6 +76,7 @@ class TDAlertDialog extends StatelessWidget {
     this.content,
     this.contentColor,
     this.contentMaxHeight = 0,
+    this.showCloseButton,
   })  : _vertical = true,
         leftBtn = null,
         rightBtn = null,
@@ -82,26 +87,21 @@ class TDAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
-    return Center(
-        child: Container(
-            width: 320.scale,
-            decoration: BoxDecoration(
-              color: backgroundColor, // 底色
-              borderRadius: BorderRadius.all(Radius.circular(radius)),
-            ),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              TDDialogInfoWidget(
-                title: title,
-                titleColor: titleColor,
-                content: content,
-                contentColor: contentColor,
-                contentMaxHeight: contentMaxHeight,
-              ),
-              TDDivider(height: 24.scale, color: Colors.transparent),
-              _vertical
-                  ? _verticalButtons(context)
-                  : _horizontalButtons(context),
-            ])));
+    return TDDialogScaffold(
+        showCloseButton: showCloseButton,
+        backgroundColor: backgroundColor,
+        radius: radius,
+        body: Column(mainAxisSize: MainAxisSize.min, children: [
+          TDDialogInfoWidget(
+            title: title,
+            titleColor: titleColor,
+            content: content,
+            contentColor: contentColor,
+            contentMaxHeight: contentMaxHeight,
+          ),
+          TDDivider(height: 24.scale, color: Colors.transparent),
+          _vertical ? _verticalButtons(context) : _horizontalButtons(context),
+        ]));
   }
 
   Widget _horizontalButtons(BuildContext context) {
