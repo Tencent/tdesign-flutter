@@ -51,8 +51,8 @@ class TDInputDialog extends StatelessWidget {
   /// 输入controller
   final TextEditingController textEditingController;
 
-  final TDDialogButton? leftBtn;
-  final TDDialogButton? rightBtn;
+  final TDDialogButtonOptions? leftBtn;
+  final TDDialogButtonOptions? rightBtn;
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +99,9 @@ class TDInputDialog extends StatelessWidget {
 
   Widget _horizontalButtons(BuildContext context) {
     final left =
-        leftBtn ?? TDDialogButton(title: '取消', action: () {}, height: 56);
+        leftBtn ?? TDDialogButtonOptions(title: '取消', action: () {}, height: 56);
     final right =
-        rightBtn ?? TDDialogButton(title: '好的', action: () {}, height: 56);
+        rightBtn ?? TDDialogButtonOptions(title: '好的', action: () {}, height: 56);
     return HorizontalTextButtons(
       leftBtn: left,
       rightBtn: right,
