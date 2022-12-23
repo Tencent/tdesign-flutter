@@ -24,6 +24,7 @@ class TDInputDialog extends StatelessWidget {
     this.contentColor,
     this.leftBtn,
     this.rightBtn,
+    this.showCloseButton,
   })  : assert((title != null || content != null)),
         super(key: key);
 
@@ -54,53 +55,54 @@ class TDInputDialog extends StatelessWidget {
   final TDDialogButtonOptions? leftBtn;
   final TDDialogButtonOptions? rightBtn;
 
+  /// 显示右上角关闭按钮
+  final bool? showCloseButton;
+
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      contentPadding: EdgeInsets.zero,
-      content: Container(
-          width: 320.scale,
-          decoration: BoxDecoration(
-            color: backgroundColor, // 底色
-            borderRadius: BorderRadius.all(Radius.circular(radius)),
+    return TDDialogScaffold(
+      showCloseButton: showCloseButton,
+      backgroundColor: backgroundColor,
+      radius: radius,
+      body: Material(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          TDDialogInfoWidget(
+            title: title,
+            titleColor: titleColor,
+            content: content,
+            contentColor: contentColor,
           ),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            TDDialogInfoWidget(
-              title: title,
-              titleColor: titleColor,
-              content: content,
-              contentColor: contentColor,
-            ),
-            Container(
-              color: Colors.white,
-              height: 48,
-              margin: const EdgeInsets.fromLTRB(0, 8, 0, 24),
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: TextField(
-                controller: textEditingController,
-                autofocus: true,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(3),
-                      borderSide: BorderSide.none),
-                  hintText: hintText,
-                  fillColor: const Color(0xfff0f0f0),
-                  filled: true,
-                  // labelText: '左上角',
-                ),
+          Container(
+            color: Colors.white,
+            height: 48,
+            margin: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: TextField(
+              controller: textEditingController,
+              autofocus: true,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(3),
+                    borderSide: BorderSide.none),
+                hintText: hintText,
+                fillColor: const Color(0xfff0f0f0),
+                filled: true,
+                // labelText: '左上角',
               ),
             ),
-            _horizontalButtons(context),
-          ])),
+          ),
+          _horizontalButtons(context),
+        ]),
+      ),
     );
   }
 
   Widget _horizontalButtons(BuildContext context) {
-    final left =
-        leftBtn ?? TDDialogButtonOptions(title: '取消', action: () {}, height: 56);
-    final right =
-        rightBtn ?? TDDialogButtonOptions(title: '好的', action: () {}, height: 56);
+    final left = leftBtn ??
+        TDDialogButtonOptions(title: '取消', action: () {}, height: 56);
+    final right = rightBtn ??
+        TDDialogButtonOptions(title: '好的', action: () {}, height: 56);
     return HorizontalTextButtons(
       leftBtn: left,
       rightBtn: right,

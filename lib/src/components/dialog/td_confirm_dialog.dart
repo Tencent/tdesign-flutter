@@ -25,6 +25,7 @@ class TDConfirmDialog extends StatelessWidget {
     this.buttonText = '知道了',
     this.buttonTextColor,
     this.buttonStyle = TDDialogButtonStyle.normal,
+    this.showCloseButton,
   }) : super(key: key);
 
   /// 标题
@@ -60,9 +61,13 @@ class TDConfirmDialog extends StatelessWidget {
   /// 圆角
   final double radius;
 
+  /// 右上角关闭按钮
+  final bool? showCloseButton;
+
   Widget _buildButton(BuildContext context) {
     if (buttonStyle == TDDialogButtonStyle.text) {
       return Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           TDDivider(height: 23.scale, color: Colors.transparent),
           const TDDivider(height: 1),
@@ -101,22 +106,19 @@ class TDConfirmDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
     assert((title != null || content != null));
-    return Center(
-        child: Container(
-            width: 320.scale,
-            decoration: BoxDecoration(
-              color: backgroundColor, // 底色
-              borderRadius: BorderRadius.all(Radius.circular(radius)),
-            ),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              TDDialogInfoWidget(
-                title: title,
-                titleColor: titleColor,
-                content: content,
-                contentColor: contentColor,
-                contentMaxHeight: contentMaxHeight,
-              ),
-              _buildButton(context),
-            ])));
+    return TDDialogScaffold(
+        showCloseButton: showCloseButton,
+        backgroundColor: backgroundColor,
+        radius: radius,
+        body: Column(mainAxisSize: MainAxisSize.min, children: [
+          TDDialogInfoWidget(
+            title: title,
+            titleColor: titleColor,
+            content: content,
+            contentColor: contentColor,
+            contentMaxHeight: contentMaxHeight,
+          ),
+          _buildButton(context),
+        ]));
   }
 }
