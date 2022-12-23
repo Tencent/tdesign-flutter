@@ -29,6 +29,7 @@ class TDImageDialog extends StatelessWidget {
     this.contentColor,
     this.leftBtn,
     this.rightBtn,
+    this.showCloseButton,
   }) : super(key: key);
 
   /// 背景颜色
@@ -56,6 +57,9 @@ class TDImageDialog extends StatelessWidget {
 
   /// 图片位置
   final TDDialogImagePosition? imagePosition;
+
+  /// 显示右上角关闭按钮
+  final bool? showCloseButton;
 
   Widget _buildImage(BuildContext context) {
     return SizedBox(
@@ -131,15 +135,11 @@ class TDImageDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-          width: 320.scale,
-          decoration: BoxDecoration(
-            color: backgroundColor, // 底色
-            borderRadius: BorderRadius.all(Radius.circular(radius)),
-          ),
-          child: _buildBody(context)),
-    );
+    return TDDialogScaffold(
+        showCloseButton: showCloseButton,
+        backgroundColor: backgroundColor,
+        radius: radius,
+        body: _buildBody(context));
   }
 
   Widget _horizontalButtons(BuildContext context) {

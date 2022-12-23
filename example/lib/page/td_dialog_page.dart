@@ -196,8 +196,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
                               title: '次要按钮',
                               titleColor: TDTheme.of(context).brandColor8,
                               action: () {},
-                              style: TDButtonStyle.secondary()
-                          ),
+                              style: TDButtonStyle.secondary()),
                         ]))),
             ExampleItem(
                 builder: (_) => _buildButton(
@@ -214,19 +213,22 @@ class _TDDialogPageState extends State<TDDialogPage> {
                               title: '次要按钮',
                               titleColor: TDTheme.of(context).brandColor8,
                               action: () {},
-                              style: TDButtonStyle.secondary()
-                          ),
+                              style: TDButtonStyle.secondary()),
                           TDDialogButtonOptions(
                               title: '次要按钮',
                               titleColor: TDTheme.of(context).brandColor8,
                               action: () {},
-                              style: TDButtonStyle.secondary()
-                          ),
+                              style: TDButtonStyle.secondary()),
                         ]))),
             ExampleItem(
                 desc: '带关闭按钮的对话框',
-                builder: (_) =>
-                    _buildButton('带关闭按钮的对话框', const TDConfirmDialog())),
+                builder: (_) => _buildButton(
+                    '带关闭按钮的对话框',
+                    TDConfirmDialog(
+                      title: _dialogTitle,
+                      content: _commonContent,
+                      showCloseButton: true,
+                    ))),
           ]),
         ]);
   }

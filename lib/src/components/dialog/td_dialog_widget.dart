@@ -7,6 +7,61 @@
 import 'package:flutter/material.dart';
 
 import '../../../td_export.dart';
+import '../../util/auto_size.dart';
+
+class TDDialogScaffold extends StatelessWidget {
+  const TDDialogScaffold({
+    Key? key,
+    required this.body,
+    this.showCloseButton,
+    this.backgroundColor = Colors.white,
+    this.radius = 8.0,
+  }) : super(key: key);
+
+  final Widget body;
+  final bool? showCloseButton;
+  final Color backgroundColor;
+  final double radius;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 320.scale,
+        decoration: BoxDecoration(
+          color: backgroundColor, // 底色
+          borderRadius: BorderRadius.all(Radius.circular(radius)),
+        ),
+        child: Stack(
+          children: [
+            body,
+            showCloseButton ?? false
+                ? Positioned(
+                    top: 5,
+                    right: 5,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: SizedBox(
+                        width: 30.scale,
+                        height: 30.scale,
+                        child: Center(
+                          child: Icon(
+                            TDIcons.close,
+                            size: 20.scale,
+                            color: TDTheme.of(context).fontGyColor3,
+                          ),
+                        ),
+                      ),
+                    ))
+                : Container(height: 0)
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 /// 弹窗标题
 class TDDialogTitle extends StatelessWidget {
