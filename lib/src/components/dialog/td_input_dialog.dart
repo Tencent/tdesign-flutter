@@ -10,14 +10,14 @@ import '../../../td_export.dart';
 import '../../util/auto_size.dart';
 import 'td_dialog_widget.dart';
 
-/// 弹窗控件
+/// 带有输入框的弹窗
 class TDInputDialog extends StatelessWidget {
   const TDInputDialog({
     Key? key,
     required this.textEditingController,
     this.backgroundColor = Colors.white,
     this.radius = 8.0,
-    this.title = '输入框标题',
+    this.title,
     this.titleColor = Colors.black,
     this.content,
     this.hintText = '',
@@ -52,7 +52,10 @@ class TDInputDialog extends StatelessWidget {
   /// 输入controller
   final TextEditingController textEditingController;
 
+  /// 左侧按钮配置
   final TDDialogButtonOptions? leftBtn;
+
+  /// 右侧按钮配置
   final TDDialogButtonOptions? rightBtn;
 
   /// 显示右上角关闭按钮
