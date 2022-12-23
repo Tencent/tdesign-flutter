@@ -23,9 +23,11 @@ class TDAlertDialog extends StatelessWidget {
     this.contentMaxHeight = 0,
     this.leftBtn,
     this.rightBtn,
+    TDDialogButtonStyle buttonStyle = TDDialogButtonStyle.normal,
   })  : assert((title != null || content != null)),
         _vertical = false,
         _buttons = null,
+        _buttonStyle = buttonStyle,
         super(key: key);
 
   /// 背景颜色
@@ -51,11 +53,14 @@ class TDAlertDialog extends StatelessWidget {
 
   // 选项是否是垂直排布，默认是左右排布
   final bool _vertical;
+
   // 垂直排布的按钮列表
   final List<TDDialogButtonOptions>? _buttons;
 
   final TDDialogButtonOptions? leftBtn;
   final TDDialogButtonOptions? rightBtn;
+
+  final TDDialogButtonStyle _buttonStyle;
 
   const TDAlertDialog.vertical({
     Key? key,
@@ -71,6 +76,7 @@ class TDAlertDialog extends StatelessWidget {
         leftBtn = null,
         rightBtn = null,
         _buttons = buttons,
+        _buttonStyle = TDDialogButtonStyle.normal,
         super(key: key);
 
   @override
@@ -100,29 +106,41 @@ class TDAlertDialog extends StatelessWidget {
 
   Widget _horizontalButtons(BuildContext context) {
     final left = leftBtn ?? TDDialogButtonOptions(title: '取消', action: () {});
-    final right =
-        rightBtn ?? TDDialogButtonOptions(title: '好的', action: () {});
-    return HorizontalNormalButtons(
-      leftBtn: left,
-      rightBtn: right,
-    );
+    final right = rightBtn ?? TDDialogButtonOptions(title: '好的', action: () {});
+    return _buttonStyle == TDDialogButtonStyle.text
+        ? HorizontalTextButtons(leftBtn: left, rightBtn: right)
+        : HorizontalNormalButtons(
+            leftBtn: left,
+            rightBtn: right,
+          );
   }
 
   Widget _verticalButtons(BuildContext context) {
-     var widgets = <Widget>[];
+    var widgets = <Widget>[];
     _buttons!.asMap().forEach((index, value) {
       Widget btn = TDDialogButton(
         buttonText: value.title,
         buttonTextColor: value.titleColor,
-        onPressed: (){
+        height: value.height,
+        buttonTextFontWeight: value.fontWeight,
+        buttonStyle: value.style,
+        onPressed: () {
           Navigator.pop(context);
           value.action();
         },
       );
       widgets.add(btn);
+      if (index < _buttons!.length - 1) {
+        widgets.add(TDDivider(height: 12.scale, color: Colors.transparent));
+      }
     });
-    return Column(
-      children: widgets,
+
+    return Container(
+      padding:
+          EdgeInsets.only(left: 24.scale, right: 24.scale, bottom: 24.scale),
+      child: Column(
+        children: widgets,
+      ),
     );
   }
 }
