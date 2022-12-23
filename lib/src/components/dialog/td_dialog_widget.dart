@@ -98,32 +98,32 @@ class TDDialogInfoWidget extends StatelessWidget {
         children: [
           title != null
               ? TDText(
-            title,
-            textColor: titleColor,
-            fontWeight: FontWeight.w600,
-            font: Font(size: 16, lineHeight: 24),
-            textAlign: TextAlign.center,
-          )
+                  title,
+                  textColor: titleColor,
+                  fontWeight: FontWeight.w600,
+                  font: Font(size: 16, lineHeight: 24),
+                  textAlign: TextAlign.center,
+                )
               : Container(),
           content == null
               ? Container()
               : Container(
-            padding: EdgeInsets.fromLTRB(
-                0, (title != null && content != null) ? 8.0 : 0, 0, 0),
-            constraints: contentMaxHeight > 0
-                ? BoxConstraints(
-              maxHeight: contentMaxHeight,
-            )
-                : null,
-            child: Scrollbar(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: TDDialogContent(
-                  content: content!,
+                  padding: EdgeInsets.fromLTRB(
+                      0, (title != null && content != null) ? 8.0 : 0, 0, 0),
+                  constraints: contentMaxHeight > 0
+                      ? BoxConstraints(
+                          maxHeight: contentMaxHeight,
+                        )
+                      : null,
+                  child: Scrollbar(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: TDDialogContent(
+                        content: content!,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -156,9 +156,10 @@ class HorizontalNormalButtons extends StatelessWidget {
             child: TDDialogButton(
               buttonText: leftBtn.title,
               buttonTextColor:
-              leftBtn.titleColor ?? TDTheme.of(context).brandColor8,
+                  leftBtn.titleColor ?? TDTheme.of(context).brandColor8,
               buttonStyle: leftBtn.style ?? TDButtonStyle.secondary(),
               height: leftBtn.height,
+              buttonTextFontWeight: leftBtn.fontWeight,
               onPressed: () {
                 Navigator.pop(context);
                 leftBtn.action();
@@ -173,9 +174,10 @@ class HorizontalNormalButtons extends StatelessWidget {
             child: TDDialogButton(
               buttonText: rightBtn.title,
               buttonTextColor:
-              rightBtn.titleColor ?? TDTheme.of(context).whiteColor1,
+                  rightBtn.titleColor ?? TDTheme.of(context).whiteColor1,
               buttonStyle: rightBtn.style ?? TDButtonStyle.primary(),
               height: rightBtn.height,
+              buttonTextFontWeight: rightBtn.fontWeight,
               onPressed: () {
                 Navigator.pop(context);
                 rightBtn.action();
@@ -188,7 +190,7 @@ class HorizontalNormalButtons extends StatelessWidget {
   }
 }
 
-/// 横向文字按钮，中间有分割线
+/// 左右横向文字按钮，顶部和中间有分割线
 class HorizontalTextButtons extends StatelessWidget {
   const HorizontalTextButtons({
     Key? key,
@@ -205,39 +207,46 @@ class HorizontalTextButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
-        Expanded(
-          child: TDDialogButton(
-            buttonText: leftBtn.title,
-            buttonTextColor:
-            leftBtn.titleColor ?? TDTheme.of(context).fontGyColor2,
-            buttonStyle: leftBtn.style ?? TDButtonStyle.text(),
-            height: leftBtn.height,
-            onPressed: () {
-              Navigator.pop(context);
-              leftBtn.action();
-            },
-          ),
-        ),
-        const TDDivider(
-          width: 1,
-          height: 56,
-        ),
-        Expanded(
-          child: TDDialogButton(
-            buttonText: rightBtn.title,
-            buttonTextColor:
-            rightBtn.titleColor ?? TDTheme.of(context).brandColor8,
-            buttonStyle: rightBtn.style ?? TDButtonStyle.text(),
-            height: rightBtn.height,
-            onPressed: () {
-              Navigator.pop(context);
-              rightBtn.action();
-            },
-          ),
-        ),
+        const TDDivider(height: 1),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: TDDialogButton(
+                buttonText: leftBtn.title,
+                buttonTextColor:
+                    leftBtn.titleColor ?? TDTheme.of(context).fontGyColor2,
+                buttonStyle: leftBtn.style ?? TDButtonStyle.text(),
+                height: leftBtn.height,
+                buttonTextFontWeight: leftBtn.fontWeight,
+                onPressed: () {
+                  Navigator.pop(context);
+                  leftBtn.action();
+                },
+              ),
+            ),
+            const TDDivider(
+              width: 1,
+              height: 56,
+            ),
+            Expanded(
+              child: TDDialogButton(
+                buttonText: rightBtn.title,
+                buttonTextColor:
+                    rightBtn.titleColor ?? TDTheme.of(context).brandColor8,
+                buttonStyle: rightBtn.style ?? TDButtonStyle.text(),
+                height: rightBtn.height,
+                buttonTextFontWeight: rightBtn.fontWeight,
+                onPressed: () {
+                  Navigator.pop(context);
+                  rightBtn.action();
+                },
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
@@ -249,6 +258,7 @@ class TDDialogButton extends StatelessWidget {
     Key? key,
     this.buttonText = '按钮',
     this.buttonTextColor,
+    this.buttonTextFontWeight = FontWeight.w600,
     this.buttonStyle,
     required this.onPressed,
     this.height = 40.0,
@@ -260,6 +270,8 @@ class TDDialogButton extends StatelessWidget {
 
   /// 按钮文字颜色
   final Color? buttonTextColor;
+
+  final FontWeight? buttonTextFontWeight;
 
   final TDButtonStyle? buttonStyle;
 

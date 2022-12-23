@@ -27,7 +27,7 @@ class TDDialogButtonOptions {
   Color? titleColor;
   final TDButtonStyle? style;
   final double? height;
-  FontWeight? fontWeight;
+  final FontWeight? fontWeight;
   final String title;
   final Function() action;
 
