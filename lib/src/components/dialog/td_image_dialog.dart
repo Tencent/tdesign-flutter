@@ -15,7 +15,7 @@ enum TDDialogImagePosition {
   middle,
 }
 
-/// 弹窗控件
+/// 带有图片的弹窗控件
 class TDImageDialog extends StatelessWidget {
   const TDImageDialog({
     Key? key,
@@ -50,9 +50,13 @@ class TDImageDialog extends StatelessWidget {
   /// 内容颜色
   final Color? contentColor;
 
+  /// 左侧按钮配置
   final TDDialogButtonOptions? leftBtn;
+
+  /// 右侧按钮配置
   final TDDialogButtonOptions? rightBtn;
 
+  /// 图片
   final Image image;
 
   /// 图片位置
@@ -71,7 +75,7 @@ class TDImageDialog extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildTopImage(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       ClipRRect(
@@ -90,7 +94,7 @@ class TDImageDialog extends StatelessWidget {
       _horizontalButtons(context),
     ]);
   }
-  
+
   Widget _buildMiddleImage(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       TDDialogInfoWidget(
@@ -122,7 +126,7 @@ class TDImageDialog extends StatelessWidget {
       _horizontalButtons(context),
     ]);
   }
-  
+
   Widget _buildBody(BuildContext context) {
     if (title == null && content == null) {
       return _buildOnlyImage(context);
