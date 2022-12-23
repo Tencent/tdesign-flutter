@@ -11,7 +11,13 @@ import '../../util/auto_size.dart';
 import 'td_dialog_widget.dart';
 
 /// 弹窗控件
+///
+/// 支持横向或竖向摆放按钮
+/// 横向最多摆放两个按钮
 class TDAlertDialog extends StatelessWidget {
+  /// 横向按钮排列的对话框
+  ///
+  /// [leftBtn]和[rightBtn]不传style参数会应用默认样式，左侧弱按钮，右侧强按钮
   const TDAlertDialog({
     Key? key,
     this.backgroundColor = Colors.white,
@@ -29,6 +35,27 @@ class TDAlertDialog extends StatelessWidget {
         _vertical = false,
         _buttons = null,
         _buttonStyle = buttonStyle,
+        super(key: key);
+
+  /// 纵向按钮排列的对话框
+  ///
+  /// [buttons]参数是必须的，纵向按钮默认样式都是[TDButtonStyle.primary]
+  const TDAlertDialog.vertical({
+    Key? key,
+    required List<TDDialogButtonOptions> buttons,
+    this.backgroundColor = Colors.white,
+    this.radius = 8.0,
+    this.title,
+    this.titleColor = Colors.black,
+    this.content,
+    this.contentColor,
+    this.contentMaxHeight = 0,
+    this.showCloseButton,
+  })  : _vertical = true,
+        leftBtn = null,
+        rightBtn = null,
+        _buttons = buttons,
+        _buttonStyle = TDDialogButtonStyle.normal,
         super(key: key);
 
   /// 背景颜色
@@ -52,37 +79,27 @@ class TDAlertDialog extends StatelessWidget {
   /// 内容的最大高度，默认为0，也就是不限制高度
   final double contentMaxHeight;
 
+  /// 左侧按钮配置
+  final TDDialogButtonOptions? leftBtn;
+
+  /// 右侧按钮配置
+  final TDDialogButtonOptions? rightBtn;
+
   /// 显示右上角关闭按钮
   final bool? showCloseButton;
 
-  // 选项是否是垂直排布，默认是左右排布
+  /// 选项是否是垂直排布，默认是左右排布
   final bool _vertical;
 
-  // 垂直排布的按钮列表
+  /// 垂直排布的按钮列表
   final List<TDDialogButtonOptions>? _buttons;
 
-  final TDDialogButtonOptions? leftBtn;
-  final TDDialogButtonOptions? rightBtn;
-
+  /// 按钮样式
+  ///
+  /// 支持普通类型和文字类型按钮
+  /// 文字类型仅支持横向排列
+  /// [leftBtn]和[rightBtn]中的style会覆盖此配置
   final TDDialogButtonStyle _buttonStyle;
-
-  const TDAlertDialog.vertical({
-    Key? key,
-    required List<TDDialogButtonOptions> buttons,
-    this.backgroundColor = Colors.white,
-    this.radius = 8.0,
-    this.title,
-    this.titleColor = Colors.black,
-    this.content,
-    this.contentColor,
-    this.contentMaxHeight = 0,
-    this.showCloseButton,
-  })  : _vertical = true,
-        leftBtn = null,
-        rightBtn = null,
-        _buttons = buttons,
-        _buttonStyle = TDDialogButtonStyle.normal,
-        super(key: key);
 
   @override
   Widget build(BuildContext context) {

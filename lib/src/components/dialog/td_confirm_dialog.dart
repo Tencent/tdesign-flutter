@@ -10,7 +10,9 @@ import '../../../td_export.dart';
 import '../../util/auto_size.dart';
 import 'td_dialog_widget.dart';
 
-/// 弹窗控件
+/// 只有一个按钮的弹窗控件
+///
+/// 按钮样式支持普通和文字
 class TDConfirmDialog extends StatelessWidget {
   const TDConfirmDialog({
     Key? key,
