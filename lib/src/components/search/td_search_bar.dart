@@ -98,6 +98,9 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
       var phBox = _phKey.currentContext?.findRenderObject() as RenderBox?;
       if (box != null && phBox != null) {
         setState(() {
+          if (widget.alignment != TDSearchAlignment.center) {
+            return;
+          }
           var dx = (box.size.width / 2 + 16.5 - phBox.size.width / 2) / phBox.size.width;
           if(dx < 0) {
             return;
