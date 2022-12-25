@@ -1,11 +1,11 @@
-# 首次运行时放开，替换成自己的flutter路径
-flutterPath="~/tools/flutter"
-export PATH="$PATH":"$flutterPath/bin/"
-export PATH="$PATH":"~/tools/flutter/bin/cache/dart-sdk/bin/"
-export PATH="$PATH":"~/.pub-cache/bin"
-export PATH="$PATH":"~/.pub-cache/bin/icon_font_generator"
-
-flutter pub global activate icon_font_generator
+# 首次运行时放开，替换成自己的flutter路径,建议以flutter 2.2.0允许，该库未适配flutter 3.+
+#flutterPath="~/tools/flutter"
+#export PATH="$PATH":"$flutterPath/bin/"
+#export PATH="$PATH":"~/tools/flutter/bin/cache/dart-sdk/bin/"
+#export PATH="$PATH":"~/.pub-cache/bin"
+#export PATH="$PATH":"~/.pub-cache/bin/icon_font_generator"
+#
+#flutter pub global activate icon_font_generator
 
 #----- 以上注释，首次允许时放开 --------
 
