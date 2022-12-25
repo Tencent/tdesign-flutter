@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+
 import '../../../td_export.dart';
+import '../../util/auto_size.dart';
 
 enum TDRadioStyle {
   circle, // 圆形
   square, // 方形
   check, // 对号样式
+  hollowCircle, // 镂空圆点样式
 }
 
 ///
@@ -24,6 +27,7 @@ class TDRadio extends TDCheckbox {
     Color? checkedColor,
     ContentBuilder? customContentBuilder,
     double? spacing,
+    bool? cardMode,
     TDCheckBoxSize size = TDCheckBoxSize.small,
     this.radioStyle = TDRadioStyle.circle,
     TDContentDirection contentDirection = TDContentDirection.right,
@@ -36,6 +40,7 @@ class TDRadio extends TDCheckbox {
           subTitleMaxLine: subTitleMaxLine,
           enable: enable,
           size: size,
+          cardMode: cardMode ?? false,
           titleMaxLine: titleMaxLine,
           customContentBuilder: customContentBuilder,
           contentDirection: contentDirection,
@@ -46,41 +51,61 @@ class TDRadio extends TDCheckbox {
   @override
   Widget buildDefaultIcon(
       BuildContext context, TDCheckboxGroupState? groupState, bool isSelected) {
-
-    TDRadioStyle? style ;
+    if (cardMode == true) {
+      return Container();
+    }
+    TDRadioStyle? style;
     if (groupState is TDRadioGroupState) {
-      style = (groupState.widget as TDRadioGroup).radioStyle;
+      style = (groupState.widget as TDRadioGroup).radioCheckStyle;
     }
 
     style = style ?? radioStyle;
 
     var size = 24.0;
     final theme = TDTheme.of(context);
+
+    // 由于镂空圆没有现成icon，因而自己画一个`
+    if (style == TDRadioStyle.hollowCircle) {
+      return SizedBox(
+        width: size,
+        height: size,
+        child: CustomPaint(
+          painter: HollowCircle(!enable
+              ? (isSelected ? theme.brandColor3 : theme.grayColor4)
+              : isSelected
+                  ? theme.brandColor8
+                  : theme.grayColor4),
+        ),
+      );
+    }
+
     IconData? iconData;
     switch (style) {
       case TDRadioStyle.check:
         iconData = isSelected ? TDIcons.check : null;
         break;
       case TDRadioStyle.square:
-        iconData = isSelected
-            ? TDIcons.check_rectangle_filled
-            : TDIcons.rectangle;
+        iconData =
+            isSelected ? TDIcons.check_rectangle_filled : TDIcons.rectangle;
         break;
       default:
-        iconData = isSelected
-            ? TDIcons.check_circle_filled
-            : TDIcons.circle;
+        iconData = isSelected ? TDIcons.check_circle_filled : TDIcons.circle;
         break;
     }
     if (iconData != null) {
-      return Icon(
-          iconData,
+      return Icon(iconData,
           size: size,
-          color: !enable ? theme.grayColor4 : isSelected ? theme.brandColor8 : theme.grayColor4);
+          color: !enable
+              ? (isSelected ? theme.brandColor3 : theme.grayColor4)
+              : isSelected
+                  ? theme.brandColor8
+                  : theme.grayColor4);
     } else {
-      return SizedBox(width: size, height: size,);
+      return SizedBox(
+        width: size,
+        height: size,
+      );
     }
-
   }
 
   @override
@@ -105,34 +130,179 @@ class TDRadioState extends TDCheckboxState {
   }
 }
 
-///
+class HollowCircle extends CustomPainter {
+  HollowCircle(this.color);
+
+  // 绘制颜色
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..color = color
+      ..strokeWidth = 1.5
+      ..style = PaintingStyle.stroke;
+    canvas.drawCircle(const Offset(10.5, 10.5), 10.5, paint);
+    paint.style = PaintingStyle.fill;
+    canvas.drawCircle(const Offset(10.5, 10.5), 6, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
 /// RadioGroup分组对象
-///
 /// RadioGroup应该嵌套在RadioGroup内，所有在RadioGroup的RadioButton只能有一个被选中
 ///
-///
-///
+/// cardMode: 使用卡片样式，需要配合direction 和 directionalTdRadios 使用，
+/// 组合为横向、纵向卡片，同时需要在每个TDRadio上设置cardMode参数。
 class TDRadioGroup extends TDCheckboxGroup {
-  ///
-  /// 严格模式下，用户不能取消勾选，只能切换选择项，
-  ///
+  // 严格模式下，用户不能取消勾选，只能切换选择项，
   final bool strictMode;
-  final TDRadioStyle? radioStyle;
 
-  TDRadioGroup(
-      {required Widget child,
-      Key? key,
-      String? selectId, // 默认选择项的id
-      this.strictMode = true,
-      this.radioStyle,
-      int? titleMaxLine, // item的行数
-      IconBuilder? customIconBuilder,
-      ContentBuilder? customContentBuilder,
-      double? spacing, // icon和文字距离
-      TDContentDirection? contentDirection,
-      OnRadioGroupChange? onRadioGroupChange}) // 切换监听
-      : super(
-          child: child,
+  // 勾选样式
+  final TDRadioStyle? radioCheckStyle;
+
+  TDRadioGroup({
+    Key? key,
+    Widget? child, // 使用child 则请勿设置direction
+    Axis? direction, // direction 对 directionalTdRadios 起作用
+    List<TDRadio>? directionalTdRadios,
+    String? selectId, // 默认选择项的id
+    bool? passThrough, // 非通栏单选样式 用于使用child 或 direction == Axis.vertical 场景
+    bool cardMode = false,
+    this.strictMode = true,
+    this.radioCheckStyle,
+    int? titleMaxLine, // item的行数
+    IconBuilder? customIconBuilder,
+    ContentBuilder? customContentBuilder,
+    double? spacing, // icon和文字距离
+    TDContentDirection? contentDirection,
+    OnRadioGroupChange? onRadioGroupChange, // 切换监听
+  })  : assert(() {
+          // 使用direction属性则必须配合directionalTdRadios，child字段无效
+          if (direction != null && directionalTdRadios == null) {
+            throw FlutterError(
+                '[TDRadioGroup] direction and tdRadios must set at the same time');
+          }
+          // 未使用direction则必须设置child
+          if (direction == null && child == null) {
+            throw FlutterError(
+                '[TDRadioGroup] direction means use child as the exact one, but child is null');
+          }
+          // 横向单选框 每个选项有字数限制
+          if (direction == Axis.horizontal && directionalTdRadios != null) {
+            directionalTdRadios.forEach((element) {
+              if (element.subTitle != null) {
+                throw FlutterError(
+                    'horizontal radios style should not have subTilte, '
+                    'because there left no room for it');
+              }
+            });
+            var maxWordCount = 2;
+            var tips =
+                '[TDRadioGroup] radio title please not exceed $maxWordCount words.\n'
+                '2tabs: 7words maximum\n'
+                '3tabs: 4words maximum\n'
+                '4tabs: 2words maximum';
+            if (directionalTdRadios.length == 2) {
+              maxWordCount = 7;
+            }
+            if (directionalTdRadios.length == 3) {
+              maxWordCount = 4;
+            }
+            if (directionalTdRadios.length == 4) {
+              maxWordCount = 2;
+            }
+            directionalTdRadios.forEach((radio) {
+              if ((radio.title?.length ?? 0) > maxWordCount) {
+                throw FlutterError(tips);
+              }
+            });
+          }
+          // 卡片模式要求每个TDRadio必须设置cardMode属性为true，且不能有子标题（空间不够）
+          if (cardMode == true) {
+            assert(direction != null && directionalTdRadios != null);
+            directionalTdRadios!.forEach((element) {
+              // if use cardMode at TDRadioGroup, then every TDRadio should
+              // set it's own carMode to true.
+              if (element.cardMode == false) {
+                throw FlutterError(
+                    'if use cardMode at TDRadioGroup, then every '
+                    'TDRadio should set it\'s own carMode to true.');
+              }
+              if (element.subTitle != null && direction == Axis.horizontal) {
+                throw FlutterError(
+                    'horizontal card style should not have subTilte, '
+                    'because there left no room for it');
+              }
+            });
+          }
+          return true;
+        }()),
+        super(
+          child: Container(
+            clipBehavior: (passThrough ?? false) && direction != Axis.horizontal
+                ? Clip.hardEdge
+                : Clip.none,
+            decoration: (passThrough ?? false) && direction != Axis.horizontal
+                ? BoxDecoration(borderRadius: BorderRadius.circular(10))
+                : null,
+            margin: (passThrough ?? false) && direction != Axis.horizontal
+                ? const EdgeInsets.symmetric(horizontal: 16)
+                : null,
+            child: direction == null
+                ? child!
+                : (direction == Axis.vertical
+                    ? ListView.separated(
+                        padding: const EdgeInsets.all(0),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            margin: cardMode
+                                ? const EdgeInsets.symmetric(horizontal: 16)
+                                : null,
+                            height: cardMode ? 82 : null,
+                            child: directionalTdRadios![index],
+                          );
+                        },
+                        itemCount: directionalTdRadios!.length,
+                        separatorBuilder: (BuildContext context, int index) {
+                          if (cardMode) {
+                            return const SizedBox(
+                              height: 12,
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      )
+                    : Container(
+                        margin: cardMode
+                            ? EdgeInsets.symmetric(horizontal: 16.scale)
+                            : null,
+                        alignment: cardMode ? Alignment.topLeft : null,
+                        child: cardMode
+                            ? Wrap(
+                                spacing: 12.scale,
+                                runSpacing: 12,
+                                runAlignment: WrapAlignment.spaceEvenly,
+                                children: directionalTdRadios!.map((element) {
+                                  return SizedBox(
+                                    width: 106.3.scale,
+                                    height: 56,
+                                    child: element,
+                                  );
+                                }).toList(),
+                              )
+                            : Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: directionalTdRadios!
+                                    .map((e) => Expanded(child: e))
+                                    .toList(),
+                              ),
+                      )),
+          ),
           key: key,
           onChangeGroup: (ids) {
             onRadioGroupChange?.call(ids.isNotEmpty ? ids[0] : null);
