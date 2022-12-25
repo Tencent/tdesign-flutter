@@ -18,7 +18,9 @@ class _TDIconPageState extends State<TDIconPage> {
         children: [
         ExampleModule(title: '默认',
         children: [
-          ExampleItem(builder: (_) => Container(
+          ExampleItem(
+              desc: 'icon数量: ${TDIcons.all.length}',
+              builder: (_) => Container(
         color: Colors.white,
         alignment: Alignment.center,
         child: Wrap(
