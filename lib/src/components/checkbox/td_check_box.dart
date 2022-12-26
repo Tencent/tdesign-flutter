@@ -385,7 +385,7 @@ class TDCheckboxState extends State<TDCheckbox> {
               ? Border.all(width: 1.5, color: TDTheme.of(context).brandColor8)
               : Border.all(width: 1.5, color: Colors.transparent) : null,
           borderRadius: widget.cardMode
-              ? const BorderRadius.all(Radius.circular(10))
+              ? const BorderRadius.all(Radius.circular(6))
               : null),
       child: Stack(
         children: [
@@ -397,7 +397,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                   visible: widget.cardMode && checked,
                   child: const RadioCornerIcon(
                     length: 28,
-                    radius: 5,
+                    radius: 4,
                   ))),
         ],
       ),
@@ -522,7 +522,6 @@ class RadioCorner extends CustomPainter {
       ..style = PaintingStyle.fill;
     var rect = Rect.fromCircle(center: Offset(radius, radius), radius: radius);
     var pi = 3.1415;
-    // canvas.drawArc(rect, 180 * (pi / 180.0), 90 * (pi / 180.0), false, paint);
     var path = Path();
     path.moveTo(0, radius);
     path.addArc(
