@@ -15,6 +15,7 @@ import 'td_check_box_group.dart';
 enum TDCheckboxStyle {
   circle, // 圆形
   square, // 方形
+  check, // 无背景勾选样式
 }
 
 ///
@@ -127,21 +128,31 @@ class TDCheckbox extends StatefulWidget {
   /// 默认的checkBox icon
   Widget buildDefaultIcon(
       BuildContext context, TDCheckboxGroupState? groupState, bool isChecked) {
+    if (cardMode == true) {
+      return Container();
+    }
     Widget current;
     var size = 24.0;
     final style =
         this.style ?? groupState?.widget.style ?? TDCheckboxStyle.circle;
     final theme = TDTheme.of(context);
+    final deSelectedColor = style == TDCheckboxStyle.check ? Colors.transparent : theme.grayColor4;
     current = Icon(
-        style == TDCheckboxStyle.circle
-            ? isChecked
-                ? TDIcons.check_circle_filled
-                : TDIcons.circle
-            : isChecked
-                ? TDIcons.check_rectangle_filled
-                : TDIcons.rectangle,
-        size: size,
-        color: isChecked && enable ? theme.brandColor8 : theme.grayColor4);
+      style == TDCheckboxStyle.circle
+          ? isChecked
+          ? TDIcons.check_circle_filled
+          : TDIcons.circle :
+      style == TDCheckboxStyle.square
+          ? isChecked
+          ? TDIcons.check_rectangle_filled
+          : TDIcons.rectangle : isChecked
+          ? TDIcons.check
+          : TDIcons.check,
+      size: size,
+      color: !enable ?
+      (isChecked ? theme.brandColor3 : deSelectedColor) :
+      isChecked ? theme.brandColor8 : deSelectedColor,
+    );
     return current;
   }
 }
