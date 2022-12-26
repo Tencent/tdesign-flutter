@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import '../../base/example_widget.dart';
+import '../annotation/demo.dart';
 
 ///
 /// TDCheckbox演示
@@ -17,7 +18,7 @@ class TDCheckboxPage extends StatefulWidget {
 
 class TDCheckboxPageState extends State<TDCheckboxPage> {
 
-  List<String>? checkIds;
+  List<String>? checkIds = ['index:1','index:2','index:3',];
 
   TDCheckboxGroupController? controller;
 
@@ -29,171 +30,321 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
 
   @override
   Widget build(BuildContext context) {
-    const itemCount = 4;
-    Widget getAllIcon(bool checked, bool halfSelected) {
-      return Icon(
-          checked ? TDIcons.check_circle_filled : halfSelected ? TDIcons.minus_circle_filled : TDIcons.circle,
-          size: 24,
-          color: (checked || halfSelected) ? TDTheme.of(context).brandColor8 : TDTheme.of(context).grayColor4
-      );
-    }
 
     return ExamplePage(
-      title: '多选框 Checkbox',
+        title: '多选框 Checkbox',
         children: [
-        ExampleModule(title: '默认',
-        children: [
-        ExampleItem(desc: '基础多选框', builder: (context){
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              TDCheckbox(
-                title: '多选',
-                checked: true,
-              ),
-              TDCheckbox(
-                title: '多选',
-              ),
-              TDCheckbox(
-                title: '禁用状态',
-                enable: false,
-                checked: true,
-              ),
-              TDCheckbox(
-                title: '多选多选多选多选多选多选多选多选多选多选多选多选',
-                titleMaxLine: 2,
-                subTitleMaxLine: 2,
-                enable: false,
-              ),
-              TDCheckbox(
-                title: '多选',
-                subTitle: '单选单选单选单选单选单选单选单选单选单选单选单选',
-                titleMaxLine: 2,
-                subTitleMaxLine: 2,
-              ),
-            ],
+          ExampleModule(title: '组件类型', children: [
+            ExampleItem(desc: '纵向多选框', builder: _verticleCheckbox),
+            ExampleItem(desc: '横向多选框', builder: _horizontalCheckbox),
+            ExampleItem(desc: '带全选多选框', builder: _checkAllSelected)
+          ]),
+          ExampleModule(title: '组件状态', children: [
+            ExampleItem(desc: '多选框状态', builder: _checkboxStatus),
+          ]),
+          ExampleModule(title: '组件样式', children: [
+            ExampleItem(desc: '勾选样式', builder: _checkStyle),
+            ExampleItem(desc: '勾选显示位置', builder: _checkPosition),
+            ExampleItem(desc: '非通栏多选样式', builder: _passThroughStyle),
+          ]),
+          ExampleModule(title: '特殊样式', children: [
+            ExampleItem(desc: '纵向卡片单选框', builder: _verticalCardStyle),
+            ExampleItem(desc: '横向卡片单选框', builder: _horizontalCardStyle),
+          ]),
+        ]);
+  }
+
+  @Demo(group: 'checkbox')
+  Widget _verticleCheckbox(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      selectIds: const ['index:1'],
+      child: ListView.builder(
+        padding: const EdgeInsets.all(0),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (BuildContext context, int index) {
+          var title = '多选';
+          var subTitle = '';
+          if (index == 2) {
+            title = '多选标题多行多选标题多行多选标题多行多选标题多行多选标题多行多选标题多行';
+          }
+          if (index == 3) {
+            subTitle = '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息';
+          }
+          return TDCheckbox(
+            id: 'index:$index',
+            title: title,
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            subTitle: subTitle,
           );
-        }),
-        ExampleItem(desc: '右侧多选框', builder: (context){
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              TDCheckbox(
-                contentDirection: TDContentDirection.left,
-                title: '多选',
-                checked: true,
-              ),
-              TDCheckbox(
-                contentDirection: TDContentDirection.left,
-                title: '多选',
-                checked: true,
-              ),
-              TDCheckbox(
-                contentDirection: TDContentDirection.left,
-                title: '多选多选多选多选多选多选多选多选多选多选多选多选多选',
-              ),
-              TDCheckbox(
-                contentDirection: TDContentDirection.left,
-                title: '多选',
-                subTitle: '单选单选单选单选单选单选单选单选单选单选单选单选',
-              ),
-            ],
-          );
-        }),
-        ExampleItem(desc: '自定义图标多框类型', builder: (context){
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              TDCheckbox(
-                style: TDCheckboxStyle.square,
-                title: '多选',
-              ),
-              TDCheckbox(
-                style: TDCheckboxStyle.square,
-                title: '多选',
-                checked: true,
-              ),
-              TDCheckbox(
-                style: TDCheckboxStyle.square,
-                title: '多选',
-                checked: true,
-              ),
-            ],
-          );
-        }),
-        ExampleItem(desc: '规格', builder: (context){
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              TDCheckbox(
-                title: '多选 H48',
-                checked: true,
-              ),
-              TDCheckbox(
-                title: '多选 H56',
-                size: TDCheckBoxSize.large,
-              ),
-            ],
-          );
-        }),
-        ExampleItem(desc: '带全选多选框', builder: (context){
-          return TDCheckboxGroup(
-              controller: controller,
-              onChangeGroup: (checkedId) {
-                checkIds = checkedId;
-                setState(() {});
-              },
-              checkedIds: checkIds,
-              onOverloadChecked: () {
-                TDToast.showText('最大只能勾选3个选项', context: context);
-              },
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: itemCount,
-                itemBuilder: (BuildContext context, int index) {
-                  if(index == 0) {
-                    return TDCheckbox(
-                      contentDirection: TDContentDirection.right,
-                      title: '全选',
-                      id: '0',
-                      customIconBuilder: (context, checked) {
-                        var length = controller!.allChecked().length - (controller!.checked('0') ? 1 : 0);
-                        var allCheck = itemCount - 1 == length;
-                        var halfSelected =
-                            controller != null
-                                && !allCheck
-                                && length > 0;
-                        return getAllIcon(allCheck, halfSelected);
-                      },
-                      onCheckBoxChanged: (checked){
-                        if (checked) {
-                          controller?.toggleAll(true);
-                        } else {
-                          controller?.toggleAll(false);
-                        }
-                      },
-                    );
-                  }
-                  return TDCheckbox(
-                    contentDirection: TDContentDirection.right,
-                    title: '多选${index}',
-                    id: '$index',
-                    onCheckBoxChanged: (checked) {
-                      var length = controller!.allChecked().length - (controller!.checked('0') ? 1 : 0);
-                      var allCheck = itemCount - 1 == length;
-                      var halfSelected =
-                          controller != null
-                              && !allCheck
-                              && length > 0;
-                      controller!.toggle('0', allCheck);
-                      getAllIcon(allCheck, halfSelected);
-                    },
-                  );
+        },
+        itemCount: 4,
+      ),
+    );
+  }
+
+  @Demo(group: 'checkbox')
+  Widget _horizontalCheckbox(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      selectIds: const ['1'],
+      direction: Axis.horizontal,
+      directionalTdCheckboxes: const [
+        TDCheckbox(
+          id: '0',
+          title: '多选标题',
+          style: TDCheckboxStyle.circle,
+        ),
+        TDCheckbox(
+          id: '1',
+          title: '多选标题',
+          style: TDCheckboxStyle.circle,
+        ),
+        TDCheckbox(
+          id: '2',
+          title: '上限四字',
+          style: TDCheckboxStyle.circle,
+        ),
+      ],
+    );
+  }
+
+  @Demo(group: 'checkbox')
+  Widget _checkAllSelected(BuildContext context) {
+    const itemCount = 4;
+    return TDCheckboxGroupContainer(
+      selectIds: checkIds,
+      passThrough: false,
+      controller: controller,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(0),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (contet, index) {
+          var title = '多选';
+          if(index == 0){
+            title = '全选';
+            return SizedBox(
+              height: 56,
+              child: TDCheckbox(
+                id: 'index:$index',
+                title: title,
+                customIconBuilder: (context, checked) {
+                  var length = controller!.allChecked().length - (controller!.checked('index:0') ? 1 : 0);
+                  var allCheck = itemCount - 1 == length;
+                  var halfSelected =
+                      controller != null
+                          && !allCheck
+                          && length > 0;
+                  return getAllIcon(allCheck, halfSelected);
                 },
-              ));
-        })
-      ]
-    )]);
+                onCheckBoxChanged: (checked){
+                  if (checked) {
+                    controller?.toggleAll(true);
+                  } else {
+                    controller?.toggleAll(false);
+                  }
+                },
+              ),
+            );
+          }else{
+            return SizedBox(
+              height: 56,
+              child: TDCheckbox(
+                id: 'index:$index',
+                title: title,
+                onCheckBoxChanged: (checked){
+                  var length = controller!.allChecked().length - (controller!.checked('index:0') ? 1 : 0);
+                  var allCheck = itemCount - 1 == length;
+                  var halfSelected =
+                      controller != null
+                          && !allCheck
+                          && length > 0;
+                  controller!.toggle('index:0', allCheck);
+                  getAllIcon(allCheck, halfSelected);
+                },
+              ),
+            );
+          }
+        },
+        itemCount: itemCount,
+      ),
+    );
+  }
+
+  @Demo(group: 'checkbox')
+  Widget _checkboxStatus(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      contentDirection: TDContentDirection.right,
+      selectIds: const ['0'],
+      child: Column(
+        children: const [
+          TDCheckbox(
+            id: '0',
+            title: '选项禁用-已选',
+            style: TDCheckboxStyle.circle,
+            enable: false,
+          ),
+          TDCheckbox(
+            id: '1',
+            title: '选项禁用-默认',
+            style: TDCheckboxStyle.circle,
+            enable: false,
+          ),
+        ],
+      ),
+    );
+  }
+
+  @Demo(group: 'checkbox')
+  Widget _checkStyle(BuildContext context) {
+    return Column(
+      children: [
+        TDCheckboxGroupContainer(
+          style: TDCheckboxStyle.check,
+          selectIds: const ['index:0'],
+          child: const TDCheckbox(
+            id: 'index:0',
+            title: '多选',
+          ),
+        ),
+        const SizedBox(
+          height: 17,
+        ),
+        TDCheckboxGroupContainer(
+          style: TDCheckboxStyle.square,
+          selectIds: const ['index:0'],
+          child: const TDCheckbox(
+            id: 'index:0',
+            title: '多选',
+          ),
+        )
+      ],
+    );
+  }
+
+  @Demo(group: 'checkbox')
+  Widget _checkPosition(BuildContext context) {
+    return Column(
+      children: [
+        TDCheckboxGroupContainer(
+          contentDirection: TDContentDirection.right,
+          selectIds: const ['index:0'],
+          child: const TDCheckbox(
+            id: 'index:0',
+            title: '多选',
+          ),
+        ),
+        TDCheckboxGroupContainer(
+          contentDirection: TDContentDirection.left,
+          selectIds: const ['index:0'],
+          child: const TDCheckbox(
+            id: 'index:0',
+            title: '多选',
+          ),
+        )
+      ],
+    );
+  }
+
+  @Demo(group: 'checkbox')
+  Widget _passThroughStyle(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      selectIds: const ['index:0'],
+      passThrough: true,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(0),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (contet, index) {
+          var title = '多选';
+          return SizedBox(
+            height: 56,
+            child: TDCheckbox(
+              id: 'index:$index',
+              title: title,
+            ),
+          );
+        },
+        itemCount: 4,
+      ),
+    );
+  }
+
+  @Demo(group: 'checkbox')
+  Widget _verticalCardStyle(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      selectIds: const ['index:1'],
+      cardMode: true,
+      direction: Axis.vertical,
+      directionalTdCheckboxes: const [
+        TDCheckbox(
+          id: 'index:0',
+          title: '多选',
+          titleMaxLine: 2,
+          subTitleMaxLine: 2,
+          subTitle: '描述信息',
+          cardMode: true,
+        ),
+        TDCheckbox(
+          id: 'index:1',
+          title: '多选',
+          titleMaxLine: 2,
+          subTitleMaxLine: 2,
+          subTitle: '描述信息',
+          cardMode: true,
+        ),
+        TDCheckbox(
+          id: 'index:2',
+          title: '多选',
+          titleMaxLine: 2,
+          subTitleMaxLine: 2,
+          subTitle: '描述信息',
+          cardMode: true,
+        ),
+        TDCheckbox(
+          id: 'index:3',
+          title: '多选',
+          titleMaxLine: 2,
+          subTitleMaxLine: 2,
+          subTitle: '描述信息',
+          cardMode: true,
+        ),
+      ],
+    );
+  }
+
+  @Demo(group: 'checkbox')
+  Widget _horizontalCardStyle(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      selectIds: const ['index:1'],
+      cardMode: true,
+      direction: Axis.horizontal,
+      directionalTdCheckboxes: const [
+        TDCheckbox(
+          id: 'index:0',
+          title: '多选',
+          cardMode: true,
+        ),
+        TDCheckbox(
+          id: 'index:1',
+          title: '多选',
+          cardMode: true,
+        ),
+        TDCheckbox(
+          id: 'index:2',
+          title: '多选',
+          cardMode: true,
+        ),
+      ],
+    );
+  }
+
+  Widget getAllIcon(bool checked, bool halfSelected) {
+    return Icon(
+        checked ? TDIcons.check_circle_filled : halfSelected ? TDIcons.minus_circle_filled : TDIcons.circle,
+        size: 24,
+        color: (checked || halfSelected) ? TDTheme.of(context).brandColor8 : TDTheme.of(context).grayColor4
+    );
   }
 }
