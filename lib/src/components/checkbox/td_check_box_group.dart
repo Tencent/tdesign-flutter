@@ -139,17 +139,17 @@ class TDCheckboxGroup extends StatefulWidget {
   const TDCheckboxGroup(
       {required this.child,
         Key? key,
-      this.onChangeGroup,
-      this.controller,
-      this.checkedIds,
-      this.maxChecked,
-      this.titleMaxLine,
-      this.customContentBuilder,
+        this.onChangeGroup,
+        this.controller,
+        this.checkedIds,
+        this.maxChecked,
+        this.titleMaxLine,
+        this.customContentBuilder,
         this.contentDirection,
-      this.style,
-      this.spacing,
-      this.customIconBuilder,
-      this.onOverloadChecked}) : super(key: key);
+        this.style,
+        this.spacing,
+        this.customIconBuilder,
+        this.onOverloadChecked}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -247,7 +247,7 @@ class TDCheckboxGroupState extends State<TDCheckboxGroup> {
   /// 反选
   void _reverseAll() {
     final reverseValue =
-        checkBoxStates.map((key, value) => MapEntry(key, !value));
+    checkBoxStates.map((key, value) => MapEntry(key, !value));
     checkBoxStates.forEach((key, value) {
       checkBoxStates[key] = false;
     });
@@ -290,8 +290,6 @@ class TDCheckboxGroupInherited extends InheritedWidget {
     return true;
   }
 }
-
-
 
 
 class TDCheckboxGroupContainer extends TDCheckboxGroup {
