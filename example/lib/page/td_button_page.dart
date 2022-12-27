@@ -11,9 +11,8 @@ class TDButtonPage extends StatefulWidget {
 }
 
 class _TDButtonPageState extends State<TDButtonPage> {
-
   void onTap() {
-    TDToast.showText('点击了按钮',context: context);
+    TDToast.showText('点击了按钮', context: context);
   }
 
   void onLongPress() {
@@ -23,332 +22,451 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: TDTheme.of(context).grayColor2,
-      child: ExamplePage(
-          title: '按钮 Button',
-          desc: '用于开启一个闭环的操作任务，如“删除”对象、“购买”商品等。',
-          exampleCodeGroup:'button',
-          padding: const EdgeInsets.only(top: 8,bottom: 8),
-          children: [
-          ExampleModule(title: '默认',
-          children: [
-            ExampleItem(desc: '可点击', builder: _buildNormalClickButton),
-            ExampleItem(desc: '不可点击', builder: _buildNormalUnClickButton),
+        color: TDTheme.of(context).grayColor2,
+        child: ExamplePage(
+            title: '按钮 Button',
+            desc: '用于开启一个闭环的操作任务，如“删除”对象、“购买”商品等。',
+            exampleCodeGroup: 'button',
+            padding: const EdgeInsets.only(top: 8, bottom: 8),
+            children: [
+              ExampleModule(title: '组件类型', children: [
+                ExampleItem(
+                    desc: '基础按钮',
+                    builder: (context) {
+                      return Wrap(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.light,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.defaultTheme,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '描边按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.stroke,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '文字按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.text,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
+                ExampleItem(
+                    desc: '图标按钮',
+                    builder: (context) {
+                      return Wrap(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              icon: TDIcons.app,
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              icon: TDIcons.app,
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.square,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          )
+                        ],
+                      );
+                    }),
+                ExampleItem(
+                    desc: '幽灵按钮: TODO',
+                    builder: (context) {
+                      return Wrap(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              icon: TDIcons.app,
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              icon: TDIcons.app,
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.square,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          )
+                        ],
+                      );
+                    }),
+                ExampleItem(
+                    desc: '组合按钮: TODO',
+                    builder: (context) {
+                      return Wrap(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              icon: TDIcons.app,
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              icon: TDIcons.app,
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.square,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          )
+                        ],
+                      );
+                    }),
+                ExampleItem(
+                    desc: '通栏按钮',
+                    builder: (context) {
+                      return Wrap(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(16),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              icon: TDIcons.app,
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.filled,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
+              ]),
+              ExampleModule(title: '组件状态', children: [
+                ExampleItem(
+                    desc: '基础按钮',
+                    builder: (context) {
+                      return Wrap(
+                        children: const [
+                          TDButton(
+                            content: '填充按钮',
+                            size: TDButtonSize.large,
+                            type: TDButtonType.fill,
+                            shape: TDButtonShape.rectangle,
+                            theme: TDButtonTheme.primary,
+                          )
+                        ],
+                      );
+                    }),
+              ]),
+              ExampleModule(title: '组件主题', children: [
+                ExampleItem(
+                    desc: '按钮尺寸',
+                    builder: (context) {
+                      return Wrap(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(16),
+                            child: const TDButton(
+                              content: '大号按钮48',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(16),
+                            child: const TDButton(
+                              content: '中号按钮40',
+                              size: TDButtonSize.medium,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(16),
+                            child: const TDButton(
+                              content: '小号按钮32',
+                              size: TDButtonSize.small,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(16),
+                            child: const TDButton(
+                              content: '极小按钮28',
+                              size: TDButtonSize.extraSmall,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
+                ExampleItem(
+                    desc: '按钮形状',
+                    builder: (context) {
+                      return Wrap(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              icon: TDIcons.app,
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.square,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          Container(
+                            width: 200,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.round,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              icon: TDIcons.app,
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.circle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          const TDButton(
+                            content: '填充按钮',
+                            size: TDButtonSize.large,
+                            type: TDButtonType.fill,
+                            shape: TDButtonShape.filled,
+                            theme: TDButtonTheme.primary,
+                          )
+                        ],
+                      );
+                    }),
+                ExampleItem(
+                    desc: '按钮主题',
+                    builder: (context) {
+                      return Wrap(
+                        children: [
+                          /// 默认主题
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.defaultTheme,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '描边按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.stroke,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.defaultTheme,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '文字按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.text,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.defaultTheme,
+                            ),
+                          ),
 
+                          /// primary主题
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '描边按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.stroke,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '文字按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.text,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                            ),
+                          ),
 
-            ExampleItem(desc: '可点击', builder: _buildWeeklyClickButton),
-            ExampleItem(desc: '不可点击', builder: (context){
-              return TDButton(content: '弱按钮',
-                style: TDButtonStyle.weakly(),
-                disabled: true,
-                onTap: onTap,
-                onLongPress: onLongPress,);
-            }),
+                          /// danger主题
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.danger,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '描边按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.stroke,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.danger,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '文字按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.text,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.danger,
+                            ),
+                          ),
 
-
-            ExampleItem(desc: '可点击', builder: (context){
-              return TDButton(content: '次按钮',
-                style: TDButtonStyle.secondary(),
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '不可点击', builder: (context){
-              return TDButton(content: '次按钮',
-                style: TDButtonStyle.secondary(),
-                disabled: true,
-                onTap: onTap,
-                onLongPress: onLongPress,);
-            }),
-
-
-            ExampleItem(desc: '可点击', builder: (context){
-              return TDButton(content: '带图标按钮',
-                style: TDButtonStyle.weakly(),
-                icon: TDIcons.app,
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '不可点击', builder: (context){
-              return TDButton(content: '带图标按钮',
-                style: TDButtonStyle.weakly(),
-                icon: TDIcons.app,
-                disabled: true,
-                onTap: onTap,
-                onLongPress: onLongPress,);
-            }),
-
-            ExampleItem(desc: '可点击', builder: (context){
-              return TDButton(content: '强警告按钮',
-                style: TDButtonStyle.warningPrimary(),
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '不可点击', builder: (context){
-              return TDButton(content: '强警告按钮',
-                style: TDButtonStyle.warningPrimary(),
-                disabled: true,
-                onTap: onTap,
-                onLongPress: onLongPress,);
-            }),
-
-
-            ExampleItem(desc: '可点击', builder: (context){
-              return TDButton(content: '弱警告按钮',
-                style: TDButtonStyle.warningWeakly(),
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '不可点击', builder: (context){
-              return TDButton(content: '弱警告按钮',
-                style: TDButtonStyle.warningWeakly(),
-                disabled: true,
-                onTap: onTap,
-                onLongPress: onLongPress,);
-            }),
-
-
-            ExampleItem(desc: '可点击', builder: (context){
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(10),
-                color: Colors.black12,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    TDButton(content: '幽灵按钮',
-                      style: TDButtonStyle.ghost(),
-                      onTap: onTap,
-                      onLongPress: onLongPress,
-                    )
-                  ],),
-              );
-            }),
-            ExampleItem(desc: '不可点击', builder: (context){
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(10),
-                color: Colors.black12,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    TDButton(content: '幽灵按钮',
-                      style: TDButtonStyle.ghost(),
-                      // width: 343,
-                      disabled: true,
-                      onTap: onTap,
-                      onLongPress: onLongPress,)
-                  ],),
-              );
-            }),
-
-
-            ExampleItem(desc: '可点击', builder: (context){
-              return TDTextButton('文字按钮',
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '不可点击', builder: (context){
-              return TDTextButton('文字按钮',
-                onTap: onTap,
-                onLongPress: onLongPress,
-                disabled: true,
-              );
-            }),
-
-
-            ExampleItem(desc: '可点击', builder: (context){
-              return TDButton(content: '通栏按钮',
-                style: TDButtonStyle.full(),
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '不可点击', builder: (context){
-              return TDButton(content: '通栏按钮',
-                style: TDButtonStyle.full(),
-                disabled: true,
-                onTap: onTap,
-                onLongPress: onLongPress,);
-            }),
-
-
-            ExampleItem(desc: '两个按钮', builder: (context){
-              return Row(
-                children: [
-                  Expanded(child: TDButton(content: '次按钮',
-                    style: TDButtonStyle.fullSecondary(),
-                    onTap: onTap,
-                    onLongPress: onLongPress,
-                  )),
-                  Expanded(child: TDButton(content: '主按钮',
-                    style: TDButtonStyle.full(),
-                    onTap: onTap,
-                    onLongPress: onLongPress,
-                  )),
-                ],
-              );
-            }),
-
-
-
-
-
-            ExampleItem(desc: '尺寸', builder: (context){
-              return SizedBox(
-                height: 50,
-                child: TDText(
-                  '下方是尺寸示例',
-                  font: TDTheme.of().fontTitleExtraLarge,
-                  textColor: TDTheme.of().warningNormalColor,
-                ),
-              );
-            }),
-
-
-            ExampleItem(desc: '大', builder: (context){
-              return TDButton(content: '强按钮',
-                style: TDButtonStyle.primary(),
-                size: TDButtonSize.large,
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '中(默认)', builder: (context){
-              return TDButton(content: '强按钮',
-                size: TDButtonSize.medium,
-                style: TDButtonStyle.primary(),
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
-              return TDButton(content: '强按钮',
-                size: TDButtonSize.small,
-                style: TDButtonStyle.primary(),
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
-              return TDButton(content: '弱按钮',
-                size: TDButtonSize.small,
-                style: TDButtonStyle.weakly(),
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
-              return TDButton(content: '次按钮',
-                size: TDButtonSize.small,
-                style: TDButtonStyle.secondary(),
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
-              return TDButton(content: '带图标按钮',
-                size: TDButtonSize.small,
-                style: TDButtonStyle.weakly(),
-                icon: TDIcons.app,
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
-              return TDButton(content: '强警告按钮',
-                size: TDButtonSize.small,
-                style: TDButtonStyle.warningPrimary(),
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
-              return TDButton(content: '弱警告按钮',
-                size: TDButtonSize.small,
-                style: TDButtonStyle.warningWeakly(),
-                onTap: onTap,
-                onLongPress: onLongPress,
-              );
-            }),
-            ExampleItem(desc: '小(宽度自适应)', builder: (context){
-              return Container(
-                width: 200,
-                padding: const EdgeInsets.all(10),
-                color: Colors.black12,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    TDButton(content: '幽灵按钮',
-                      size: TDButtonSize.small,
-                      style: TDButtonStyle.ghost(),
-                      onTap: onTap,
-                      onLongPress: onLongPress,
-                    )
-                  ],),
-              );
-            }),
-
-
-          ]),
-
-            ExampleModule(title: '组件状态', children: [
-              ExampleItem(desc: '可点击', builder: (context){
-                return TDButton(content: '强按钮',
-                  style: TDButtonStyle.primary(),
-                  onTap: onTap,
-                  onLongPress: onLongPress,
-                );
-              }),
-              ExampleItem(desc: '不可点击', builder: (context){
-                return TDButton(content: '强按钮',
-                  style: TDButtonStyle.primary(),
-                  disabled: true,
-                  onTap: onTap,
-                  onLongPress: onLongPress,);
-              }),
-
-
-              ExampleItem(desc: '可点击', builder: (context){
-                return TDButton(content: '弱按钮',
-                  style: TDButtonStyle.weakly(),
-                  onTap: onTap,
-                  onLongPress: onLongPress,
-                );
-              }),
-            ])
-      ]
-    ));
+                          /// light主题
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.light,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '描边按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.stroke,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.light,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '文字按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.text,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.light,
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
+              ]),
+            ]));
   }
 
   @Demo(group: 'button')
   TDButton _buildNormalClickButton(BuildContext context) {
-    return TDButton(content: '强按钮',
+    return TDButton(
+      content: '强按钮',
       style: TDButtonStyle.primary(),
       onTap: onTap,
       onLongPress: onLongPress,
     );
   }
 
-  @Demo(group: 'button')
-  Widget _buildNormalUnClickButton(BuildContext context) {
-    return TDButton(content: '强按钮',
-      style: TDButtonStyle.primary(),
-      disabled: true,
-      onTap: onTap,
-      onLongPress: onLongPress,);
-  }
 
-  @Demo(group: 'button')
-  Widget _buildWeeklyClickButton(BuildContext context) {
-    return TDButton(content: '弱按钮',
-      style: TDButtonStyle.weakly(),
-      onTap: onTap,
-      onLongPress: onLongPress,
-    );
-  }
 }
