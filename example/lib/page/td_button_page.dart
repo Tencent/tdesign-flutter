@@ -118,60 +118,69 @@ class _TDButtonPageState extends State<TDButtonPage> {
                       );
                     }),
                 ExampleItem(
-                    desc: '幽灵按钮: TODO',
+                    desc: '幽灵按钮',
                     builder: (context) {
-                      return Wrap(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.all(8),
-                            child: const TDButton(
-                              content: '填充按钮',
-                              icon: TDIcons.app,
-                              size: TDButtonSize.large,
-                              type: TDButtonType.fill,
-                              shape: TDButtonShape.rectangle,
-                              theme: TDButtonTheme.primary,
+
+                      return Container(
+                        color: TDTheme.of(context).grayColor14,
+                        child: Wrap(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.all(8),
+                              child: const TDButton(
+                                content: '幽灵按钮',
+                                size: TDButtonSize.large,
+                                type: TDButtonType.ghost,
+                                shape: TDButtonShape.rectangle,
+                                theme: TDButtonTheme.primary,
+                              ),
                             ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.all(8),
-                            child: const TDButton(
-                              icon: TDIcons.app,
-                              size: TDButtonSize.large,
-                              type: TDButtonType.fill,
-                              shape: TDButtonShape.square,
-                              theme: TDButtonTheme.primary,
+                            Container(
+                              margin: const EdgeInsets.all(8),
+                              child: const TDButton(
+                                content: '幽灵按钮',
+                                size: TDButtonSize.large,
+                                type: TDButtonType.ghost,
+                                shape: TDButtonShape.rectangle,
+                                theme: TDButtonTheme.danger,
+                              ),
                             ),
-                          )
-                        ],
+                            Container(
+                              margin: const EdgeInsets.all(8),
+                              child: const TDButton(
+                                content: '幽灵按钮',
+                                size: TDButtonSize.large,
+                                type: TDButtonType.ghost,
+                                shape: TDButtonShape.rectangle,
+                                theme: TDButtonTheme.defaultTheme,
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     }),
                 ExampleItem(
-                    desc: '组合按钮: TODO',
+                    desc: '组合按钮',
                     builder: (context) {
-                      return Wrap(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.all(8),
-                            child: const TDButton(
-                              content: '填充按钮',
-                              icon: TDIcons.app,
-                              size: TDButtonSize.large,
-                              type: TDButtonType.fill,
-                              shape: TDButtonShape.rectangle,
-                              theme: TDButtonTheme.primary,
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.all(8),
-                            child: const TDButton(
-                              icon: TDIcons.app,
-                              size: TDButtonSize.large,
-                              type: TDButtonType.fill,
-                              shape: TDButtonShape.square,
-                              theme: TDButtonTheme.primary,
-                            ),
-                          )
+                      return Row(
+                        children: const [
+                          SizedBox(width: 16,),
+                          Expanded(child: TDButton(
+                            content: '填充按钮',
+                            size: TDButtonSize.large,
+                            type: TDButtonType.fill,
+                            shape: TDButtonShape.rectangle,
+                            theme: TDButtonTheme.light,
+                          )),
+                          SizedBox(width: 16,),
+                          Expanded(child: TDButton(
+                            content: '填充按钮',
+                            size: TDButtonSize.large,
+                            type: TDButtonType.fill,
+                            shape: TDButtonShape.rectangle,
+                            theme: TDButtonTheme.primary,
+                          )),
+                          SizedBox(width: 16,),
                         ],
                       );
                     }),
