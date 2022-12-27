@@ -33,6 +33,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
 
     return ExamplePage(
         title: '多选框 Checkbox',
+        exampleCodeGroup: 'checkbox',
         children: [
           ExampleModule(title: '组件类型', children: [
             ExampleItem(desc: '纵向多选框', builder: _verticleCheckbox),
@@ -94,16 +95,19 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
           id: '0',
           title: '多选标题',
           style: TDCheckboxStyle.circle,
+          insetSpacing: 12,
         ),
         TDCheckbox(
           id: '1',
           title: '多选标题',
           style: TDCheckboxStyle.circle,
+          insetSpacing: 12,
         ),
         TDCheckbox(
           id: '2',
           title: '上限四字',
           style: TDCheckboxStyle.circle,
+          insetSpacing: 12,
         ),
       ],
     );
@@ -149,10 +153,12 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             );
           }else{
             return SizedBox(
-              height: 56,
+              height: index == itemCount - 1 ? null : 56,
               child: TDCheckbox(
                 id: 'index:$index',
                 title: title,
+                subTitle: index == itemCount - 1 ? '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息' : null,
+                subTitleMaxLine: 2,
                 onCheckBoxChanged: (checked){
                   var length = controller!.allChecked().length - (controller!.checked('index:0') ? 1 : 0);
                   var allCheck = itemCount - 1 == length;
