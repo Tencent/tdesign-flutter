@@ -4,7 +4,7 @@ import '../../../td_export.dart';
 
 enum TDButtonSize { large, medium, small, extraSmall }
 
-enum TDButtonType { fill, stroke, text }
+enum TDButtonType { fill, stroke, text, ghost }
 
 enum TDButtonShape { rectangle, round, square, circle, filled }
 
@@ -153,6 +153,14 @@ class _TDButtonState extends State<TDButton> {
         });
       },
       onTapUp: (TapUpDetails details){
+        if(widget.disabled){
+          return;
+        }
+        setState(() {
+          _buttonStatus = TDButtonStatus.defaultState;
+        });
+      },
+      onTapCancel: (){
         if(widget.disabled){
           return;
         }
@@ -341,6 +349,8 @@ class _TDButtonState extends State<TDButton> {
         return TDButtonStyle.generateStrokeStyleByTheme(context, widget.theme, _buttonStatus);
       case TDButtonType.text:
         return TDButtonStyle.generateTextStyleByTheme(context, widget.theme, _buttonStatus);
+      case TDButtonType.ghost:
+        return TDButtonStyle.generateGhostStyleByTheme(context, widget.theme, _buttonStatus);
     }
   }
 
