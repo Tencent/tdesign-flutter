@@ -86,6 +86,27 @@ class TDButtonStyle {
     frameColor = backgroundColor;
   }
 
+  TDButtonStyle.generateGhostStyleByTheme(
+      BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
+    switch (theme) {
+      case TDButtonTheme.primary:
+        textColor = _getBrandColor(context, status);
+        break;
+      case TDButtonTheme.danger:
+        textColor = _getErrorColor(context, status);
+        break;
+      case TDButtonTheme.light:
+        textColor = _getBrandColor(context, status);
+        break;
+      case TDButtonTheme.defaultTheme:
+      default:
+        textColor = TDTheme.of(context).fontWhColor1;
+    }
+    backgroundColor = Colors.transparent;
+    frameColor = textColor;
+    frameWidth = 1;
+  }
+
   Color _getBrandColor(BuildContext context, TDButtonStatus status) {
     switch(status){
       case TDButtonStatus.defaultState:
