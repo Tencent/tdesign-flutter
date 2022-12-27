@@ -54,22 +54,23 @@ typedef OnCheckValueChanged = void Function(bool selected);
 class TDCheckbox extends StatefulWidget {
   const TDCheckbox(
       {this.id,
-      Key? key,
-      this.title,
-      this.subTitle,
-      this.enable = true,
-      this.checked = false,
-      this.titleMaxLine,
-      this.subTitleMaxLine = 1,
-      this.customIconBuilder,
-      this.customContentBuilder,
-      this.style,
-      this.spacing,
-      this.backgroundColor,
-      this.size = TDCheckBoxSize.small,
-      this.cardMode = false,
-      this.contentDirection = TDContentDirection.right,
-      this.onCheckBoxChanged})
+        Key? key,
+        this.title,
+        this.subTitle,
+        this.enable = true,
+        this.checked = false,
+        this.titleMaxLine,
+        this.subTitleMaxLine = 1,
+        this.customIconBuilder,
+        this.customContentBuilder,
+        this.insetSpacing = 16,
+        this.style,
+        this.spacing,
+        this.backgroundColor,
+        this.size = TDCheckBoxSize.small,
+        this.cardMode = false,
+        this.contentDirection = TDContentDirection.right,
+        this.onCheckBoxChanged})
       : super(key: key);
 
   /// id
@@ -94,6 +95,9 @@ class TDCheckbox extends StatefulWidget {
 
   /// 辅助文字的行数
   final int? subTitleMaxLine;
+
+  /// 文字和非图标侧的距离
+  final double? insetSpacing;
 
   /// icon和文字的距离
   final double? spacing;
@@ -243,9 +247,10 @@ class TDCheckboxState extends State<TDCheckbox> {
                         children: [
                           Expanded(
                               child: Padding(
-                            padding: const EdgeInsets.only(left: 16),
-                            child: content,
-                          )),
+                                padding: EdgeInsets.only(left: widget.insetSpacing ?? 16),
+                                child: content,
+                              )
+                          ),
                           SizedBox(
                             width: spacing,
                           ),
@@ -257,9 +262,9 @@ class TDCheckboxState extends State<TDCheckbox> {
                       ),
                       Visibility(
                         visible:
-                            widget.subTitle != null && widget.subTitle != '',
+                        widget.subTitle != null && widget.subTitle != '',
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          padding: EdgeInsets.only(left: widget.insetSpacing ?? 16, right: 16),
                           child: TDText(widget.subTitle ?? '',
                               maxLines: widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
@@ -302,19 +307,20 @@ class TDCheckboxState extends State<TDCheckbox> {
                           ),
                           Expanded(
                               child: Padding(
-                            padding: const EdgeInsets.only(right: 16),
-                            child: content,
-                          )),
+                                padding: EdgeInsets.only(right: widget.insetSpacing ?? 16),
+                                child: content,
+                              )
+                          ),
                         ],
                       ),
                       Visibility(
                         visible:
-                            widget.subTitle != null && widget.subTitle != '',
+                        widget.subTitle != null && widget.subTitle != '',
                         child: Padding(
                           padding: EdgeInsets.only(
                               top: widget.cardMode ? 4.scale : 0,
                               left: widget.cardMode ? (16 + spacing) : 48,
-                              right: 16),
+                              right: widget.insetSpacing ?? 16),
                           child: TDText(widget.subTitle ?? '',
                               maxLines: widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
@@ -373,7 +379,7 @@ class TDCheckboxState extends State<TDCheckbox> {
           color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
           border: widget.cardMode && checked
               ? Border.all(width: 1.5, color: TDTheme.of(context).brandColor8)
-              : null,
+              : Border.all(width: 1.5, color: Colors.transparent),
           borderRadius: widget.cardMode
               ? const BorderRadius.all(Radius.circular(10))
               : null),
@@ -405,10 +411,10 @@ class TDCheckboxState extends State<TDCheckbox> {
 
   /// 选中状态的变化
   void onValueChange(
-    String? id,
-    bool value,
-    TDCheckboxGroupState? groupState,
-  ) {
+      String? id,
+      bool value,
+      TDCheckboxGroupState? groupState,
+      ) {
     if (!widget.enable) {
       return;
     }
@@ -425,10 +431,10 @@ class TDCheckboxState extends State<TDCheckbox> {
   /// 构建选择框边上的文本内容
   ///
   Widget? _buildContent(
-    BuildContext context,
-    TDCheckboxGroupState? groupState,
-    bool checked,
-  ) {
+      BuildContext context,
+      TDCheckboxGroupState? groupState,
+      bool checked,
+      ) {
     final title = widget.title;
     final customContent =
         widget.customContentBuilder ?? groupState?.widget.customContentBuilder;
