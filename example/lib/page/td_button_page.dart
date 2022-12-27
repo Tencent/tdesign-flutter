@@ -197,17 +197,60 @@ class _TDButtonPageState extends State<TDButtonPage> {
               ]),
               ExampleModule(title: '组件状态', children: [
                 ExampleItem(
-                    desc: '基础按钮',
+                    desc: '按钮禁用状态',
                     builder: (context) {
                       return Wrap(
-                        children: const [
-                          TDButton(
-                            content: '填充按钮',
-                            size: TDButtonSize.large,
-                            type: TDButtonType.fill,
-                            shape: TDButtonShape.rectangle,
-                            theme: TDButtonTheme.primary,
-                          )
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                              disabled: true,
+                            ),),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.light,
+                              disabled: true,
+                            ),),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '填充按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.fill,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.defaultTheme,
+                              disabled: true,
+                            ),),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '描边按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.stroke,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                              disabled: true,
+                            ),),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: const TDButton(
+                              content: '文字按钮',
+                              size: TDButtonSize.large,
+                              type: TDButtonType.text,
+                              shape: TDButtonShape.rectangle,
+                              theme: TDButtonTheme.primary,
+                              disabled: true,
+                            ),),
                         ],
                       );
                     }),
@@ -458,15 +501,6 @@ class _TDButtonPageState extends State<TDButtonPage> {
             ]));
   }
 
-  @Demo(group: 'button')
-  TDButton _buildNormalClickButton(BuildContext context) {
-    return TDButton(
-      content: '强按钮',
-      style: TDButtonStyle.primary(),
-      onTap: onTap,
-      onLongPress: onLongPress,
-    );
-  }
 
 
 }
