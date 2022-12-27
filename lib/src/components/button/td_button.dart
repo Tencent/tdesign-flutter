@@ -10,7 +10,7 @@ enum TDButtonShape { rectangle, round, square, circle, filled }
 
 enum TDButtonTheme { defaultTheme, primary, danger, light }
 
-enum TDButtonState { defaultState, active, disable }
+enum TDButtonStatus { defaultState, active, disable }
 
 typedef TDButtonEvent = void Function();
 
@@ -21,11 +21,13 @@ class TDButton extends StatefulWidget {
       this.content,
       this.size = TDButtonSize.medium,
       this.type = TDButtonType.fill,
-      this.shape,
+      this.shape = TDButtonShape.rectangle,
       this.theme,
       this.child,
       this.disabled = false,
       this.style,
+      this.activeStyle,
+      this.disableStyle,
       this.textStyle,
       this.disableTextStyle,
       this.width,
@@ -58,13 +60,19 @@ class TDButton extends StatefulWidget {
   final TDButtonType type;
 
   /// 形状：圆角，胶囊，方形，圆形，填充
-  final TDButtonShape? shape;
+  final TDButtonShape shape;
 
   /// 主题
   final TDButtonTheme? theme;
 
-  /// 自定义样式，有则优先用他，没有则根据shape和theme选取
+  /// 自定义样式，有则优先用它，没有则根据type和theme选取
   final TDButtonStyle? style;
+
+  /// 自定义点击样式，有则优先用它，没有则根据type和theme选取
+  final TDButtonStyle? activeStyle;
+
+  /// 自定义禁用样式，有则优先用它，没有则根据type和theme选取
+  final TDButtonStyle? disableStyle;
 
   /// 自定义可点击状态文本样式
   final TextStyle? textStyle;
@@ -89,19 +97,28 @@ class TDButton extends StatefulWidget {
 }
 
 class _TDButtonState extends State<TDButton> {
-  TDButtonStyle? _innerStyle;
+  TDButtonStatus _buttonStatus = TDButtonStatus.defaultState;
+  TDButtonStyle? _innerDefaultStyle;
+  TDButtonStyle? _innerActiveStyle;
+  TDButtonStyle? _innerDisableStyle;
 
   TDButtonStyle get style {
-    if (_innerStyle != null) {
-      return _innerStyle!;
+    switch(_buttonStatus){
+      case TDButtonStatus.defaultState:
+        return _defaultStyle;
+      case TDButtonStatus.active:
+        return _activeStyle;
+      case TDButtonStatus.disable:
+        return _disableStyle;
     }
-    _innerStyle = widget.style ?? _generateInnerStyle();
-    return _innerStyle!;
   }
 
   @override
   void initState() {
     super.initState();
+    if(widget.disabled){
+      _buttonStatus = TDButtonStatus.disable;
+    }
   }
 
   @override
@@ -113,8 +130,7 @@ class _TDButtonState extends State<TDButton> {
       alignment: widget.shape == TDButtonShape.filled ? Alignment.center : null,
       padding: _getPadding(),
       decoration: BoxDecoration(
-        color: style.getBackgroundColor(
-            context: context, disable: widget.disabled),
+        color: style.backgroundColor,
         border: _getBorder(context),
         borderRadius: BorderRadius.all(_getRadius()),
       ),
@@ -128,6 +144,23 @@ class _TDButtonState extends State<TDButton> {
       child: display,
       onTap: widget.onTap,
       onLongPress: widget.onLongPress,
+      onTapDown: (TapDownDetails details){
+        if(widget.disabled){
+          return;
+        }
+        setState(() {
+          _buttonStatus = TDButtonStatus.active;
+        });
+      },
+      onTapUp: (TapUpDetails details){
+        if(widget.disabled){
+          return;
+        }
+        setState(() {
+          _buttonStatus = TDButtonStatus.defaultState;
+        });
+      },
+
     );
   }
 
@@ -135,7 +168,7 @@ class _TDButtonState extends State<TDButton> {
     if (style.frameWidth != null && style.frameWidth != 0) {
       return Border.all(
           color:
-              style.getFrameColor(context: context, disable: widget.disabled),
+              style.frameColor ?? TDTheme.of(context).grayColor3,
           width: style.frameWidth!);
     }
     return null;
@@ -155,7 +188,7 @@ class _TDButtonState extends State<TDButton> {
           style: TextStyle(
             inherit: false,
             color:
-                style.getTextColor(context: context, disable: widget.disabled),
+                style.textColor,
             height: 1,
             fontSize: _getIconSize(),
             fontFamily: widget.icon!.fontFamily,
@@ -170,7 +203,7 @@ class _TDButtonState extends State<TDButton> {
         widget.content!,
         font: _getTextFont(),
         textColor:
-            style.getTextColor(context: context, disable: widget.disabled),
+            style.textColor ?? TDTheme.of(context).fontGyColor1,
         style: widget.disabled ? widget.disableTextStyle : widget.textStyle,
         forceVerticalCenter: true,
       );
@@ -295,17 +328,19 @@ class _TDButtonState extends State<TDButton> {
   @override
   void didUpdateWidget(covariant TDButton oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _innerStyle = widget.style ?? _innerStyle;
+    _innerDefaultStyle = widget.style ?? _innerDefaultStyle;
+    _innerActiveStyle = widget.activeStyle ?? _innerActiveStyle;
+    _innerDisableStyle = widget.disableStyle ?? _innerDisableStyle;
   }
 
   TDButtonStyle _generateInnerStyle() {
     switch (widget.type) {
       case TDButtonType.fill:
-        return TDButtonStyle.generateFillStyleByTheme(context, widget.theme);
+        return TDButtonStyle.generateFillStyleByTheme(context, widget.theme, _buttonStatus);
       case TDButtonType.stroke:
-        return TDButtonStyle.generateStrokeStyleByTheme(context, widget.theme);
+        return TDButtonStyle.generateStrokeStyleByTheme(context, widget.theme, _buttonStatus);
       case TDButtonType.text:
-        return TDButtonStyle.generateTextStyleByTheme(context, widget.theme);
+        return TDButtonStyle.generateTextStyleByTheme(context, widget.theme, _buttonStatus);
     }
   }
 
@@ -318,89 +353,33 @@ class _TDButtonState extends State<TDButton> {
       case TDButtonShape.round:
       case TDButtonShape.circle:
         return Radius.circular(TDTheme.of(context).radiusRound);
-      default:
-        return Radius.zero;
     }
   }
-}
 
-/// TD文字按钮
-class TDTextButton extends StatefulWidget {
-  final TDButtonSize size;
-  final String? content;
-  final bool disabled;
-  final double? width;
-  final double? height;
-  final TextStyle? style;
-  final TextStyle? disableStyle;
-  final TDButtonEvent? onTap;
-  final TDButtonEvent? onLongPress;
-
-  const TDTextButton(this.content,
-      {Key? key,
-      this.size = TDButtonSize.medium,
-      this.disabled = false,
-      this.style,
-      this.disableStyle,
-      this.width,
-      this.height,
-      this.onTap,
-      this.onLongPress})
-      : super(key: key);
-
-  @override
-  State<TDTextButton> createState() => _TDTextButtonState();
-}
-
-class _TDTextButtonState extends State<TDTextButton> {
-  late TextStyle? style;
-  late TextStyle? disableStyle;
-
-  @override
-  void initState() {
-    super.initState();
-    style = widget.style ?? TextStyle(color: TDTheme.of().brandNormalColor);
-    disableStyle = widget.disableStyle ??
-        TextStyle(color: TDTheme.of().brandDisabledColor);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Widget display = SizedBox(
-      width: widget.width,
-      height: widget.height,
-      child: TDText(
-        widget.content!,
-        font: _getTextFont(),
-        style: widget.disabled ? disableStyle : style,
-        forceVerticalCenter: true,
-      ),
-    );
-
-    if (widget.disabled) {
-      return display;
+  TDButtonStyle get _defaultStyle {
+    if (_innerDefaultStyle != null) {
+      return _innerDefaultStyle!;
     }
-    return GestureDetector(
-      child: display,
-      onTap: widget.onTap,
-      onLongPress: widget.onLongPress,
-    );
+    _innerDefaultStyle = widget.style ?? _generateInnerStyle();
+    return _innerDefaultStyle!;
   }
 
-  Font _getTextFont() {
-    switch (widget.size) {
-      case TDButtonSize.large:
-        return TDTheme.of(context).fontBodyLarge ??
-            Font(size: 16, lineHeight: 24);
-      case TDButtonSize.medium:
-        return TDTheme.of(context).fontBodyMedium ??
-            Font(size: 14, lineHeight: 22);
-      case TDButtonSize.small:
-        return TDTheme.of(context).fontBodyMedium ??
-            Font(size: 14, lineHeight: 22);
-      case TDButtonSize.extraSmall:
-        return TDTheme.of(context).fontBodyMedium ??
-            Font(size: 14, lineHeight: 22);
+  TDButtonStyle get _activeStyle {
+    if (_innerActiveStyle != null) {
+      return _innerActiveStyle!;
     }
+    _innerActiveStyle = widget.style ?? _generateInnerStyle();
+    return _innerActiveStyle!;
   }
+
+  TDButtonStyle get _disableStyle {
+    if (_innerDisableStyle != null) {
+      return _innerDisableStyle!;
+    }
+    _innerDisableStyle = widget.style ?? _generateInnerStyle();
+    return _innerDisableStyle!;
+  }
+
 }
+
+
