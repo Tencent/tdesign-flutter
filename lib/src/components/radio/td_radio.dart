@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../td_export.dart';
-import '../../util/auto_size.dart';
 
 enum TDRadioStyle {
   circle, // 圆形
@@ -28,6 +27,7 @@ class TDRadio extends TDCheckbox {
     ContentBuilder? customContentBuilder,
     double? spacing,
     bool? cardMode,
+    bool? showDivider,
     TDCheckBoxSize size = TDCheckBoxSize.small,
     this.radioStyle = TDRadioStyle.circle,
     TDContentDirection contentDirection = TDContentDirection.right,
@@ -41,6 +41,7 @@ class TDRadio extends TDCheckbox {
           enable: enable,
           size: size,
           cardMode: cardMode ?? false,
+          showDivider: showDivider ?? true,
           titleMaxLine: titleMaxLine,
           customContentBuilder: customContentBuilder,
           contentDirection: contentDirection,
@@ -183,7 +184,7 @@ class TDRadioGroup extends TDCheckboxGroup {
           // 使用direction属性则必须配合directionalTdRadios，child字段无效
           if (direction != null && directionalTdRadios == null) {
             throw FlutterError(
-                '[TDRadioGroup] direction and tdRadios must set at the same time');
+                '[TDRadioGroup] direction and directionalTdRadios must set at the same time');
           }
           // 未使用direction则必须设置child
           if (direction == null && child == null) {
@@ -279,27 +280,31 @@ class TDRadioGroup extends TDCheckboxGroup {
                       )
                     : Container(
                         margin: cardMode
-                            ? EdgeInsets.symmetric(horizontal: 16.scale)
+                            ? const EdgeInsets.symmetric(horizontal: 16)
                             : null,
+                        height: cardMode ? 56 : null,
                         alignment: cardMode ? Alignment.topLeft : null,
                         child: cardMode
-                            ? Wrap(
-                                spacing: 12.scale,
-                                runSpacing: 12,
-                                runAlignment: WrapAlignment.spaceEvenly,
-                                children: directionalTdRadios!.map((element) {
-                                  return SizedBox(
-                                    width: 106.3.scale,
-                                    height: 56,
-                                    child: element,
-                                  );
-                                }).toList(),
-                              )
-                            : Row(
+                            ? Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: directionalTdRadios!
-                                    .map((e) => Expanded(child: e))
-                                    .toList(),
+                                    .expand(horizontalChild)
+                                    .toList()
+                                    .sublist(
+                                        0, directionalTdRadios.length * 2 - 1),
+                              )
+                            : Column(
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: directionalTdRadios!
+                                        .map((e) => Expanded(child: e))
+                                        .toList(),
+                                  ),
+                                  const TDDivider(
+                                    margin: EdgeInsets.only(left: 16),
+                                  )
+                                ],
                               ),
                       )),
           ),
@@ -335,3 +340,13 @@ class TDRadioGroupState extends TDCheckboxGroupState {
 }
 
 typedef OnRadioGroupChange = void Function(String? selectedId);
+
+// 横向卡片单选框，根据设计师要求'间距保持一致，宽度适应'
+// 实现方法为在两个单选框中间增加一个宽度固定的SizedBox，同时每个单选框是Expanded的，这样就能
+// 平分整个Row。
+Iterable<Widget> horizontalChild(Widget child) sync* {
+  yield Expanded(child: child);
+  yield const SizedBox(
+    width: 12,
+  );
+}
