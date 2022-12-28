@@ -96,18 +96,21 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
           title: '多选标题',
           style: TDCheckboxStyle.circle,
           insetSpacing: 12,
+          showDivider: false,
         ),
         TDCheckbox(
           id: '1',
           title: '多选标题',
           style: TDCheckboxStyle.circle,
           insetSpacing: 12,
+          showDivider: false,
         ),
         TDCheckbox(
           id: '2',
           title: '上限四字',
           style: TDCheckboxStyle.circle,
           insetSpacing: 12,
+          showDivider: false,
         ),
       ],
     );

@@ -69,6 +69,7 @@ class TDCheckbox extends StatefulWidget {
         this.backgroundColor,
         this.size = TDCheckBoxSize.small,
         this.cardMode = false,
+        this.showDivider = true,
         this.contentDirection = TDContentDirection.right,
         this.onCheckBoxChanged})
       : super(key: key);
@@ -110,6 +111,9 @@ class TDCheckbox extends StatefulWidget {
 
   /// 展示为卡片模式
   final bool cardMode;
+
+  /// 是否展示分割线
+  final bool showDivider;
 
   /// 文字相对icon的方位
   final TDContentDirection contentDirection;
@@ -278,7 +282,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                   ),
                 ),
                 Visibility(
-                    visible: !widget.cardMode,
+                    visible: !widget.cardMode && widget.showDivider,
                     child: const TDDivider(
                       margin: EdgeInsets.only(left: 16),
                     ))
@@ -334,7 +338,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                   ),
                 ),
                 Visibility(
-                    visible: !widget.cardMode,
+                    visible: !widget.cardMode && widget.showDivider,
                     child: const TDDivider(
                       margin: EdgeInsets.only(left: 48),
                     ))
@@ -377,9 +381,9 @@ class TDCheckboxState extends State<TDCheckbox> {
       clipBehavior: widget.cardMode ? Clip.hardEdge : Clip.none,
       decoration: BoxDecoration(
           color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
-          border: widget.cardMode && checked
+          border: widget.cardMode ? checked
               ? Border.all(width: 1.5, color: TDTheme.of(context).brandColor8)
-              : Border.all(width: 1.5, color: Colors.transparent),
+              : Border.all(width: 1.5, color: Colors.transparent) : null,
           borderRadius: widget.cardMode
               ? const BorderRadius.all(Radius.circular(10))
               : null),
