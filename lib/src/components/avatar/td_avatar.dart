@@ -236,8 +236,8 @@ class TDAvatar extends StatelessWidget {
                           size: _getIconWidth(),
                           color: TDTheme.of(context).brandColor8),
                     ),
-                    width: _getAvatarWidth() - avatarDisplayBorder * 2,
-                    height: _getAvatarWidth() - avatarDisplayBorder * 2,
+                    width: _getAvatarWidth(),
+                    height: _getAvatarWidth(),
                     clipBehavior: Clip.hardEdge,
                     decoration: ShapeDecoration(
                       color: TDTheme.of(context).brandColor2,
@@ -246,7 +246,6 @@ class TDAvatar extends StatelessWidget {
                               _getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(
                               color: Colors.white,
-                              strokeAlign: StrokeAlign.outside,
                               width: avatarDisplayBorder)),
                     )),
               )));
@@ -254,8 +253,8 @@ class TDAvatar extends StatelessWidget {
           list.add(Positioned(
               left: left,
               child: Container(
-                  width: _getAvatarWidth() - avatarDisplayBorder * 2,
-                  height: _getAvatarWidth() - avatarDisplayBorder * 2,
+                  width: _getAvatarWidth(),
+                  height: _getAvatarWidth(),
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                       shape: RoundedRectangleBorder(
@@ -263,7 +262,6 @@ class TDAvatar extends StatelessWidget {
                               _getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(
                               color: Colors.white,
-                              strokeAlign: StrokeAlign.outside,
                               width: avatarDisplayBorder)),
                       image: DecorationImage(
                           image: NetworkImage(avatarDisplayList![i]),
@@ -289,8 +287,8 @@ class TDAvatar extends StatelessWidget {
                           size: _getIconWidth(),
                           color: TDTheme.of(context).brandColor8),
                     ),
-                    width: _getAvatarWidth() - avatarDisplayBorder * 2,
-                    height: _getAvatarWidth() - avatarDisplayBorder * 2,
+                    width: _getAvatarWidth(),
+                    height: _getAvatarWidth(),
                     clipBehavior: Clip.hardEdge,
                     decoration: ShapeDecoration(
                       color: TDTheme.of(context).brandColor2,
@@ -299,7 +297,6 @@ class TDAvatar extends StatelessWidget {
                               _getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(
                               color: Colors.white,
-                              strokeAlign: StrokeAlign.outside,
                               width: avatarDisplayBorder)),
                     )),
               )));
@@ -307,15 +304,14 @@ class TDAvatar extends StatelessWidget {
           list.add(Positioned(
               left: left,
               child: Container(
-                  width: _getAvatarWidth() - avatarDisplayBorder * 2,
-                  height: _getAvatarWidth() - avatarDisplayBorder * 2,
+                  width: _getAvatarWidth(),
+                  height: _getAvatarWidth(),
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
                               _getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(
-                              strokeAlign: StrokeAlign.outside,
                               color: Colors.white,
                               width: avatarDisplayBorder)),
                       image: DecorationImage(
@@ -359,8 +355,8 @@ class TDAvatar extends StatelessWidget {
                       textColor: TDTheme.of(context).brandColor8,
                     ),
                   ),
-                  width: _getAvatarWidth() - avatarDisplayBorder * 2,
-                  height: _getAvatarWidth() - avatarDisplayBorder * 2,
+                  width: _getAvatarWidth(),
+                  height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
                     color: TDTheme.of(context).brandColor2,
@@ -369,15 +365,14 @@ class TDAvatar extends StatelessWidget {
                             _getAvatarWidth() - _getDisplayPadding()),
                         side: BorderSide(
                             color: Colors.white,
-                            strokeAlign: StrokeAlign.outside,
                             width: avatarDisplayBorder)),
                   ))));
         } else {
           list.add(Positioned(
               left: left,
               child: Container(
-                  width: _getAvatarWidth() - avatarDisplayBorder * 2,
-                  height: _getAvatarWidth() - avatarDisplayBorder * 2,
+                  width: _getAvatarWidth(),
+                  height: _getAvatarWidth(),
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                       shape: RoundedRectangleBorder(
@@ -385,7 +380,6 @@ class TDAvatar extends StatelessWidget {
                               _getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(
                               color: Colors.white,
-                              strokeAlign: StrokeAlign.outside,
                               width: avatarDisplayBorder)),
                       image: DecorationImage(
                           image: NetworkImage(avatarDisplayList![i]),
@@ -410,8 +404,8 @@ class TDAvatar extends StatelessWidget {
                       textColor: TDTheme.of(context).brandColor8,
                     ),
                   ),
-                  width: _getAvatarWidth() - avatarDisplayBorder * 2,
-                  height: _getAvatarWidth() - avatarDisplayBorder * 2,
+                  width: _getAvatarWidth(),
+                  height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
                       color: TDTheme.of(context).brandColor2,
@@ -420,15 +414,14 @@ class TDAvatar extends StatelessWidget {
                               _getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(
                               color: Colors.white,
-                              strokeAlign: StrokeAlign.outside,
                               width: avatarDisplayBorder)),
                       ))));
         } else {
           list.add(Positioned(
               left: left,
               child: Container(
-                  width: _getAvatarWidth() - avatarDisplayBorder * 2,
-                  height: _getAvatarWidth() - avatarDisplayBorder * 2,
+                  width: _getAvatarWidth(),
+                  height: _getAvatarWidth(),
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                       shape: RoundedRectangleBorder(
@@ -436,7 +429,6 @@ class TDAvatar extends StatelessWidget {
                               _getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(
                               color: Colors.white,
-                              strokeAlign: StrokeAlign.outside,
                               width: avatarDisplayBorder)),
                       image: DecorationImage(
                           image: AssetImage(avatarDisplayListAsset![i]),
