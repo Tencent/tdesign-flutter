@@ -1,0 +1,6 @@
+
+  Widget _buildChildTestButton(BuildContext context) {
+    return const TDButton(
+      child: TDAvatar(),
+    );
+  }
