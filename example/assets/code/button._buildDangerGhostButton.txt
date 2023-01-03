@@ -1,0 +1,10 @@
+
+  TDButton _buildDangerGhostButton(BuildContext context) {
+    return const TDButton(
+                            content: '幽灵按钮',
+                            size: TDButtonSize.large,
+                            type: TDButtonType.ghost,
+                            shape: TDButtonShape.rectangle,
+                            theme: TDButtonTheme.danger,
+                          );
+  }
