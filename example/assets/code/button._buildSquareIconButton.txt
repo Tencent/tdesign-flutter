@@ -1,0 +1,10 @@
+
+  TDButton _buildSquareIconButton(BuildContext context) {
+    return const TDButton(
+                          icon: TDIcons.app,
+                          size: TDButtonSize.large,
+                          type: TDButtonType.fill,
+                          shape: TDButtonShape.square,
+                          theme: TDButtonTheme.primary,
+                        );
+  }
