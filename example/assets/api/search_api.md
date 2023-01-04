@@ -4,6 +4,8 @@
 | --- | --- | --- | --- |
 | key | Key | - |  |
 | placeHolder | String? | - |  |
+| style | TDSearchStlye? | TDSearchStlye.square |  |
+| alignment | TDSearchAlignment? | TDSearchAlignment.left |  |
 | onTextChanged | TDSearchBarEvent? | - |  |
 | onSubmitted | TDSearchBarEvent? | - |  |
 | onEditComplete | TDSearchBarCallBack? | - |  |
