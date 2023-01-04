@@ -88,16 +88,19 @@ class TDRadioPageState extends State<TDRadioPage> {
           id: '0',
           title: '单选标题',
           radioStyle: TDRadioStyle.circle,
+          showDivider: false,
         ),
         TDRadio(
           id: '1',
           title: '单选标题',
           radioStyle: TDRadioStyle.circle,
+          showDivider: false,
         ),
         TDRadio(
           id: '2',
           title: '上限四字',
           radioStyle: TDRadioStyle.circle,
+          showDivider: false,
         ),
       ],
     );
