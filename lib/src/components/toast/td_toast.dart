@@ -36,10 +36,23 @@ class TDToast {
     _showOverlay(_TDIconTextToast(text: text, iconData: TDIcons.error_circle, iconTextDirection: direction,), context: context);
   }
 
+  static void showFail(String? text, {
+    IconTextDirection direction = IconTextDirection.horizontal,
+    required BuildContext context,
+    Duration duration = TDToast._defaultDisPlayDuration}) {
+    _showOverlay(_TDIconTextToast(text: text, iconData: TDIcons.close_circle, iconTextDirection: direction,), context: context);
+  }
+
   static void showLoading({required BuildContext context,
                            String? text,
                            Duration duration = TDToast._defaultDisPlayDuration}) {
     _showOverlay(_TDToastLoading(text: text,), context: context, duration: TDToast._infinteDuration);
+  }
+
+  static void showLoadingWithoutText({required BuildContext context,
+    String? text,
+    Duration duration = TDToast._defaultDisPlayDuration}) {
+    _showOverlay(const _TDToastLoadingWithoutText(), context: context, duration: TDToast._infinteDuration);
   }
 
   static void dismissLoading() {
@@ -111,14 +124,14 @@ class _TDIconTextToast extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
         decoration: BoxDecoration(
           color: TDTheme.of(context).fontGyColor2,
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          Icon(iconData, size: 21, color: TDTheme.of(context).whiteColor1,),
-          const SizedBox(width: 10,),
+          Icon(iconData, size: 24, color: TDTheme.of(context).whiteColor1,),
+          const SizedBox(width: 8,),
           TDText(text ?? '',
             font: TDTheme.of(context).fontBodyMedium,
             fontWeight: FontWeight.w400,
@@ -131,19 +144,19 @@ class _TDIconTextToast extends StatelessWidget {
 
   Widget buildVerticalWidgets(BuildContext context) {
     return ConstrainedBox(constraints: const BoxConstraints(maxWidth: 136, maxHeight: 130), child: Container(
-        width: 136,
-        height: 130,
-        padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+        width: 118,
+        height: 118,
+        padding: const EdgeInsets.fromLTRB(24, 28, 24, 28),
         decoration: BoxDecoration(
           color: TDTheme.of(context).fontGyColor2,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-          Icon(iconData, size: 42, color: TDTheme.of(context).whiteColor1,),
-          const SizedBox(height: 15,),
+          Icon(iconData, size: 32, color: TDTheme.of(context).whiteColor1,),
+          const SizedBox(height: 8,),
           TDText(text ?? '',
             font: TDTheme.of(context).fontBodyMedium,
             fontWeight: FontWeight.w400,
@@ -167,18 +180,19 @@ class _TDToastLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 136,
-        height: 130,
-        padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+        width: 102,
+        height: 102,
+        padding: const EdgeInsets.fromLTRB(23, 23, 23, 19),
         decoration: BoxDecoration(
           color: TDTheme.of(context).fontGyColor2,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
           children: [
-          TDCircleIndicator(color: TDTheme.of(context).whiteColor1, size: 36, lineWidth: 6,),
-          const SizedBox(height: 15,),
+          TDCircleIndicator(color: TDTheme.of(context).whiteColor1, size: 26, lineWidth: 4,),
+          const SizedBox(height: 11,),
           TDText(text ?? '加载中...',
             font: TDTheme.of(context).fontBodyMedium,
             fontWeight: FontWeight.w400,
@@ -186,6 +200,28 @@ class _TDToastLoading extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             textColor: TDTheme.of(context).whiteColor1,)
         ],)
+    );
+  }
+}
+
+class _TDToastLoadingWithoutText extends StatelessWidget {
+  const _TDToastLoadingWithoutText();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: 80,
+        height: 80,
+        padding: const EdgeInsets.fromLTRB(27, 27, 27, 27),
+        decoration: BoxDecoration(
+          color: TDTheme.of(context).fontGyColor2,
+          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TDCircleIndicator(color: TDTheme.of(context).whiteColor1, size: 26, lineWidth: 4,),
+          ],)
     );
   }
 }
@@ -200,7 +236,7 @@ class _TDTextToast extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
         decoration: BoxDecoration(
           color: TDTheme.of(context).fontGyColor2,
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
         ),
         child: TDText(text ?? '',
           font: TDTheme.of(context).fontBodyMedium,
