@@ -25,6 +25,7 @@ class TDButton extends StatefulWidget {
       this.theme,
       this.child,
       this.disabled = false,
+        this.isBlock = false,
       this.style,
       this.activeStyle,
       this.disableStyle,
@@ -92,6 +93,9 @@ class TDButton extends StatefulWidget {
   /// 自定义padding
   final EdgeInsetsGeometry? padding;
 
+  /// 是否为通栏按钮
+  final bool isBlock;
+
   @override
   State<StatefulWidget> createState() => _TDButtonState();
 }
@@ -127,8 +131,9 @@ class _TDButtonState extends State<TDButton> {
     Widget display = Container(
       width: _getWidth(),
       height: _getHeight(),
-      alignment: widget.shape == TDButtonShape.filled ? Alignment.center : null,
+      alignment: widget.shape == TDButtonShape.filled || widget.isBlock ? Alignment.center : null,
       padding: _getPadding(),
+      margin: widget.isBlock ? const EdgeInsets.only(left: 16, right: 16) : null,
       decoration: BoxDecoration(
         color: style.backgroundColor,
         border: _getBorder(context),
@@ -254,8 +259,9 @@ class _TDButtonState extends State<TDButton> {
     if (widget.width != null) {
       return widget.width;
     }
-    if (widget.shape == TDButtonShape.square ||
-        widget.shape == TDButtonShape.circle) {
+    if (!widget.isBlock
+        && (widget.shape == TDButtonShape.square ||
+        widget.shape == TDButtonShape.circle)) {
       switch (widget.size) {
         case TDButtonSize.large:
           return 48;
@@ -358,11 +364,12 @@ class _TDButtonState extends State<TDButton> {
     switch (widget.shape) {
       case TDButtonShape.rectangle:
       case TDButtonShape.square:
-      case TDButtonShape.filled:
         return Radius.circular(TDTheme.of(context).radiusDefault);
       case TDButtonShape.round:
       case TDButtonShape.circle:
         return Radius.circular(TDTheme.of(context).radiusRound);
+      case TDButtonShape.filled:
+        return Radius.zero;
     }
   }
 
