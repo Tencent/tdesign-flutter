@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
+import '../annotation/demo.dart';
 import '../base/example_widget.dart';
-
 
 class TDEmptyPage extends StatefulWidget {
   const TDEmptyPage({Key? key}) : super(key: key);
@@ -16,28 +16,50 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
         title: '空状态 Empty',
+        exampleCodeGroup: 'empty',
+        desc: '用于空状态时的占位提示。',
         children: [
-        ExampleModule(title: '默认',
-        children: [
-          ExampleItem(builder: (_) => Container(
-            height: 720,
-            color: Colors.white,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+          ExampleModule(
+              title: '组件类型',
               children: [
-                TDEmpty(
-                  type: TDEmptyType.operation,
-                  operationText: '操作按钮',
-                  emptyText: '描述文字',
-                  image: Icon(
-                    TDIcons.info_circle_filled,
-                    size: 84,
-                    color: TDTheme.of(context).fontGyColor3,
-                  ),
-                ),
-              ],
-            ),
-          ))
-        ])]);
+                ExampleItem(desc: '图标空状态', builder: _iconEmpty),
+                ExampleItem(desc: '自定义图片空状态', builder: _imageEmpty),
+                ExampleItem(desc: '带操作空状态', builder: _operationEmpty),
+              ]
+          ),
+        ]);
+  }
+
+  @Demo(group: 'empty')
+  Widget _iconEmpty(BuildContext context) {
+    return const TDEmpty(
+      type: TDEmptyType.plain,
+      emptyText: '描述文字',
+    );
+  }
+
+  @Demo(group: 'empty')
+  Widget _imageEmpty(BuildContext context) {
+    return TDEmpty(
+      type: TDEmptyType.plain,
+      emptyText: '描述文字',
+      image: Container(
+        width: 120,
+        height: 120,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+          image: const DecorationImage(image: AssetImage('assets/img/empty.png'))
+        ),
+      ),
+    );
+  }
+
+  @Demo(group: 'empty')
+  Widget _operationEmpty(BuildContext context) {
+    return const TDEmpty(
+      type: TDEmptyType.operation,
+      operationText: '操作按钮',
+      emptyText: '描述文字',
+    );
   }
 }
