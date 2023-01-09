@@ -105,14 +105,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                   desc: '组合按钮',
                   builder: (_)=>CodeWrapper(builder: _buildCombinationButtons)),
               ExampleItem(
-                  ignoreCode: true,
                   desc: '通栏按钮',
-                  builder: (context) {
-                    return Container(
-                      margin: const EdgeInsets.all(16),
-                      child: CodeWrapper(builder: _buildFilledFillButton),
-                    );
-                  }),
+                  builder: _buildFilledFillButton),
             ]),
             ExampleModule(title: '组件状态', children: [
               ExampleItem(
@@ -272,7 +266,47 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 desc: '测试child',
                 builder: (context) {
                   return CodeWrapper(builder: _buildChildTestButton);
-                })
+                }),
+            ExampleItem(
+                  ignoreCode: true,
+                desc: '通栏按钮测试',
+                builder: (context) {
+                  return Container(
+                    color: Colors.grey,
+                    padding: const EdgeInsets.only(top: 16, bottom: 16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        TDButton(
+                          isBlock: true,
+                          content: '填充block按钮',
+                          theme: TDButtonTheme.primary,
+                        ),
+                        SizedBox(height: 16,),
+                        TDButton(
+                          isBlock: true,
+                          content: '描边block按钮',
+                          type: TDButtonType.stroke,
+                          theme: TDButtonTheme.primary,
+                        ),
+                        SizedBox(height: 16,),
+                        TDButton(
+                          isBlock: true,
+                          content: '文字block按钮',
+                          type: TDButtonType.text,
+                          theme: TDButtonTheme.primary,
+                        ),
+                        SizedBox(height: 16,),
+                        TDButton(
+                          isBlock: true,
+                          content: '幽灵block按钮',
+                          type: TDButtonType.ghost,
+                          theme: TDButtonTheme.primary,
+                        ),
+                      ],
+                    ),
+                  );
+                }),
           ],
         ));
   }
@@ -498,8 +532,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                       icon: TDIcons.app,
                       size: TDButtonSize.large,
                       type: TDButtonType.fill,
-                      shape: TDButtonShape.filled,
                       theme: TDButtonTheme.primary,
+      isBlock: true,
                     );
   }
 
