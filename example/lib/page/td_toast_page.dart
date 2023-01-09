@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 import '../../base/example_widget.dart';
+import '../annotation/demo.dart';
 
 class TDToastPage extends StatefulWidget {
   const TDToastPage({Key? key}) : super(key: key);
@@ -12,68 +13,191 @@ class TDToastPage extends StatefulWidget {
 class _TDToastPageState extends State<TDToastPage> {
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(title: '轻提示 Toast',
+    return ExamplePage(
+        title: '轻提示 Toast',
+        desc: '用于轻量级反馈或提示，不会打断用户操作。',
+        exampleCodeGroup: 'toast',
         children: [
-        ExampleModule(title: '默认', children: [
-          ExampleItem(builder: (_) => ElevatedButton(
-          onPressed: () {
-            TDToast.showText('我是Toast', context: context);
-          },
-          child: const Text('普通toast'))),
-    ExampleItem(builder: (_) => ElevatedButton(
-          onPressed: () {
-            TDToast.showIconText('带图标横向',
-                icon: TDIcons.check_circle, context: context);
-          },
-          child: const Text('带图标横向'))),
-    ExampleItem(builder: (_) => ElevatedButton(
-          onPressed: () {
-            TDToast.showIconText('带图标竖向',
-                icon: TDIcons.check_circle,
-                direction: IconTextDirection.vertical,
-                context: context);
-          },
-          child: const Text('带图标竖向'))),
-    ExampleItem(builder: (_) => ElevatedButton(
-          onPressed: () {
-            TDToast.showSuccess('成功文案',
-                direction: IconTextDirection.vertical, context: context);
-          },
-          child: const Text('成功文案'))),
-    ExampleItem(builder: (_) => ElevatedButton(
-          onPressed: () {
-            TDToast.showWarning('警告文案',
-                direction: IconTextDirection.horizontal, context: context);
-          },
-          child: const Text('警告文案'))),
-    ExampleItem(builder: (_) => ElevatedButton(
-          onPressed: () {
-            TDToast.showLoading(context: context);
-          },
-          child: const Text('加载中...'))),
-    ExampleItem(builder: (_) => const ElevatedButton(
-          onPressed: TDToast.dismissLoading, child: Text('停止loading'))),
-    ExampleItem(builder: (_) => ElevatedButton(
-          onPressed: () {
-            var sb = StringBuffer('我是');
-            for (var i = 0; i < 20; i++) {
-              sb.write('很长$i');
-            }
-            sb.write('toast');
-            TDToast.showText(sb.toString(), context: context);
-          },
-          child: const Text('超长toast'))),
-    ExampleItem(builder: (_) => ElevatedButton(
-          onPressed: () {
-            var sb = StringBuffer('我是');
-            for (var i = 0; i < 20; i++) {
-              sb.write('很长$i');
-            }
-            sb.write('toast');
-            TDToast.showText(sb.toString(),
-                context: context, duration: const Duration(seconds: 10));
-          },
-          child: const Text('10秒再消失toast'))),
-    ])]);
+          ExampleModule(title: '组件类型', children: [
+            ExampleItem(desc: '纯文字', builder: _textToast),
+            ExampleItem(desc: '多行文字', builder: _multipleToast),
+            ExampleItem(desc: '带横向图标', builder: _horizontalIconToast),
+            ExampleItem(desc: '带竖向图标', builder: _verticalIconToast),
+            ExampleItem(desc: '加载状态', builder: _loadingToast),
+            ExampleItem(desc: '加载状态(无文字)', builder: _loadingWithoutTextToast),
+            ExampleItem(desc: '停止加载', builder: _dismissLoadingToast),
+          ]),
+          ExampleModule(title: '组件状态', children: [
+            ExampleItem(desc: '成功提示', builder: _successToast),
+            ExampleItem(desc: '成功提示(竖向)', builder: _successVerticalToast),
+            ExampleItem(desc: '警告提示', builder: _warningToast),
+            ExampleItem(desc: '警告提示(竖向)', builder: _warningVerticalToast),
+            ExampleItem(desc: '失败提示', builder: _failToast),
+            ExampleItem(desc: '失败提示(竖向)', builder: _failVerticalToast),
+          ])
+        ]);
+  }
+
+  @Demo(group: 'toast')
+  Widget _textToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showText('轻提示文字内容', context: context);
+      },
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      content: '纯文字',
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _multipleToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showText('最多一行展示十个汉字宽度限制最多不超过三行文字', context: context);
+      },
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      content: '多行文字',
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _horizontalIconToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showIconText('带横向图标',
+            icon: TDIcons.check_circle, context: context);
+      },
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      content: '带横向图标',
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _verticalIconToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showIconText('带竖向图标',
+            icon: TDIcons.check_circle,
+            direction: IconTextDirection.vertical,
+            context: context);
+      },
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      content: '带竖向图标',
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _loadingToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showLoading(context: context);
+      },
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      content: '加载状态',
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _loadingWithoutTextToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showLoadingWithoutText(context: context);
+      },
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      content: '加载状态（无文案）',
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _dismissLoadingToast(BuildContext context) {
+    return TDButton(
+      onTap: TDToast.dismissLoading,
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      content: '停止加载',
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _successToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showSuccess('成功文案',context: context);
+      },
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      content: '成功提示',
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _successVerticalToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showSuccess('成功文案',
+            direction: IconTextDirection.vertical, context: context);
+      },
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      content: '成功提示(竖向)',
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _warningToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showWarning('警告文案',
+            direction: IconTextDirection.horizontal, context: context);
+      },
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      content: '警告提示',
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _warningVerticalToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showWarning('警告文案',
+            direction: IconTextDirection.vertical, context: context);
+      },
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      content: '警告提示(竖向)',
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _failToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showFail('失败文案',
+            direction: IconTextDirection.horizontal, context: context);
+      },
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      content: '失败提示',
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _failVerticalToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showFail('失败文案',
+            direction: IconTextDirection.vertical, context: context);
+      },
+      size: TDButtonSize.large,
+      style: TDButtonStyle.weakly(),
+      content: '失败提示(竖向)',
+    );
   }
 }
