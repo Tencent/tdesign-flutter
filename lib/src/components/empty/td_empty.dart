@@ -48,7 +48,7 @@ class TDEmpty extends StatelessWidget {
                   child: TDButton(
                     content: operationText ?? '',
                     size: TDButtonSize.large,
-                    style: TDButtonStyle.primary(),
+                    theme: TDButtonTheme.primary,
                     width: 179,
                     onTap: () {
                       if (onTapEvent != null) {

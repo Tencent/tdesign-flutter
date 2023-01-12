@@ -1,0 +1,22 @@
+
+  Widget _buildImageMiddleOnlyTitle(BuildContext context) {
+    return TDButton(
+      content: '图片居中-纯标题',
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDImageDialog(
+              image: _demoImage,
+              title: _dialogTitle,
+              imagePosition: TDDialogImagePosition.middle,
+            );
+          },
+        );
+      },
+    );
+  }

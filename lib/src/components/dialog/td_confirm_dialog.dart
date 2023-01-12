@@ -76,7 +76,8 @@ class TDConfirmDialog extends StatelessWidget {
           TDDialogButton(
             buttonText: buttonText,
             buttonTextColor: buttonTextColor,
-            buttonStyle: TDButtonStyle.text(),
+            buttonType: TDButtonType.text,
+            buttonTheme: TDButtonTheme.primary,
             height: 56.scale,
             onPressed: () {
               Navigator.pop(context);
@@ -93,6 +94,7 @@ class TDConfirmDialog extends StatelessWidget {
         child: TDDialogButton(
           buttonText: buttonText,
           buttonTextColor: buttonTextColor,
+          buttonTheme: TDButtonTheme.primary,
           onPressed: () {
             Navigator.pop(context);
             if (action != null) {
