@@ -388,7 +388,7 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     var popUpButtonConfig = itemConfig.popUpButtonConfig;
     var badgeConfig = itemConfig.badgeConfig;
-    bool isInOrOutCapsule =
+    var isInOrOutCapsule =
         componentType == TDBottomNavBarComponentType.label ||
             outlineType == TDBottomNavBarOutlineType.capsule;
     return GestureDetector(

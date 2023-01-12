@@ -25,7 +25,7 @@ class TDButtonStyle {
         break;
       case TDButtonTheme.danger:
         textColor = TDTheme.of(context).fontWhColor1;
-        backgroundColor = _getErrorColor(context, status);;
+        backgroundColor = _getErrorColor(context, status);
         break;
       case TDButtonTheme.light:
         textColor = _getBrandColor(context, status);

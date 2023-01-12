@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import '../../base/example_widget.dart';
+
 import '../../annotation/demo.dart';
+import '../../base/example_widget.dart';
 
 class TDSearchBarPage extends StatefulWidget {
   const TDSearchBarPage({Key? key}) : super(key: key);

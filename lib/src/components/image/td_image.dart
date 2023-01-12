@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../td_export.dart';
 import '../../util/string_util.dart';
-import 'image_widget.dart';
 
 enum TDImageType {
   /// 裁剪
