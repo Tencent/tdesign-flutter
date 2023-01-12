@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 import '../../../td_export.dart';
 import 'dashed_widget.dart';
 
+enum TextAlignment {
+  left,
+  center,
+  right
+}
+
 /// 分割线
 /// 对于非flutter原有的控件，则只需满足TDesign规范即可；
 /// 如果有业务在实际使用，还需兼容实际业务场景。
@@ -18,11 +24,15 @@ class TDDivider extends StatelessWidget {
     this.gapPadding,
     this.hideLine = false,
     this.isDashed = false,
+    this.alignment = TextAlignment.center,
     this.direction = Axis.horizontal,
   }) : super(key: key);
 
   /// 线条颜色
   final Color? color;
+
+  /// 文字位置
+  final TextAlignment alignment;
 
   /// 外部填充
   final EdgeInsetsGeometry? margin;
@@ -70,33 +80,93 @@ class TDDivider extends StatelessWidget {
     }
 
     // 文本+线条
-    return Container(
-      width: width,
-      margin: margin,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-              child: Center(
-            child: _buildLine(
-              context,
-              height: height ?? 0.5,
-              color: color ?? TDTheme.of(context).grayColor3,
-            ),
-          )),
-          Padding(
-              padding: gapPadding ?? const EdgeInsets.only(left: 12, right: 12),
-              child: _buildMiddleWidget(context)),
-          Expanded(
-              child: Center(
-                  child: _buildLine(
-            context,
-            height: height ?? 0.5,
-            color: color ?? TDTheme.of(context).grayColor3,
-          ))),
-        ],
-      ),
-    );
+    return _buildDivider(context, alignment);
+  }
+
+  Widget _buildDivider(BuildContext context, TextAlignment alignment) {
+    switch(alignment) {
+      case TextAlignment.left:
+        return Container(
+          width: width,
+          margin: margin,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildLine(
+                context,
+                width: 16,
+                height: height ?? 0.5,
+                color: color ?? TDTheme.of(context).grayColor3,
+              ),
+              Padding(
+                  padding: gapPadding ?? const EdgeInsets.only(left: 8, right: 8),
+                  child: _buildMiddleWidget(context)),
+              Expanded(
+                  child: Center(
+                      child: _buildLine(
+                        context,
+                        height: height ?? 0.5,
+                        color: color ?? TDTheme.of(context).grayColor3,
+                      ))),
+            ],
+          ),
+        );
+      case TextAlignment.center:
+        return Container(
+          width: width,
+          margin: margin,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                  child: Center(
+                    child: _buildLine(
+                      context,
+                      height: height ?? 0.5,
+                      color: color ?? TDTheme.of(context).grayColor3,
+                    ),
+                  )),
+              Padding(
+                  padding: gapPadding ?? const EdgeInsets.only(left: 8, right: 8),
+                  child: _buildMiddleWidget(context)),
+              Expanded(
+                  child: Center(
+                      child: _buildLine(
+                        context,
+                        height: height ?? 0.5,
+                        color: color ?? TDTheme.of(context).grayColor3,
+                      ))),
+            ],
+          ),
+        );
+      case TextAlignment.right:
+        return Container(
+          width: width,
+          margin: margin,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                  child: Center(
+                    child: _buildLine(
+                      context,
+                      height: height ?? 0.5,
+                      color: color ?? TDTheme.of(context).grayColor3,
+                    ),
+                  )),
+              Padding(
+                  padding: gapPadding ?? const EdgeInsets.only(left: 8, right: 8),
+                  child: _buildMiddleWidget(context)),
+              _buildLine(
+                context,
+                width: 16,
+                height: height ?? 0.5,
+                color: color ?? TDTheme.of(context).grayColor3,
+              ),
+            ],
+          ),
+        );
+    }
   }
 
   /// 绘制线条
