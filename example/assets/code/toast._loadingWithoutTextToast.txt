@@ -7,6 +7,7 @@
       size: TDButtonSize.large,
       type: TDButtonType.stroke,
       theme: TDButtonTheme.primary,
+      isBlock: true,
       content: '加载状态（无文案）',
     );
   }

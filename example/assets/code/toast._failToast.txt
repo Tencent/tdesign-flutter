@@ -8,6 +8,7 @@
       size: TDButtonSize.large,
       type: TDButtonType.stroke,
       theme: TDButtonTheme.primary,
+      isBlock: true,
       content: '失败提示',
     );
   }
