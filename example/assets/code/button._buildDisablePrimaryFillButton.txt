@@ -1,0 +1,11 @@
+
+  TDButton _buildDisablePrimaryFillButton(BuildContext context) {
+    return const TDButton(
+      content: '填充按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+      disabled: true,
+    );
+  }

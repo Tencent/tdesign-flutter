@@ -1,0 +1,20 @@
+
+  Widget _buildImageAvatar(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: Row(
+        children: const [
+          TDAvatar(
+            size: TDAvatarSize.medium,
+            type: TDAvatarType.normal,
+            defaultUrl: 'assets/img/td_avatar_1.png',),
+          SizedBox(width: 32,),
+          TDAvatar(
+            size: TDAvatarSize.medium,
+            type: TDAvatarType.normal,
+            shape: TDAvatarShape.square,
+            defaultUrl: 'assets/img/td_avatar_1.png',),
+        ],
+      ),
+    );
+  }

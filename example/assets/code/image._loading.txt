@@ -1,0 +1,60 @@
+
+  Widget _loading(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(
+          width: 16,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: TDText(
+                '加载默认提示',
+                font: TDTheme.of(context).fontBodyMedium,
+                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+              ),
+            ),
+            const TDImage(
+              imgUrl:
+                  'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              type: TDImageType.roundedSquare,
+            ),
+          ],
+        ),
+        const SizedBox(
+          width: 24,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: TDText(
+                '加载自定义提示',
+                font: TDTheme.of(context).fontBodyMedium,
+                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+              ),
+            ),
+            TDImage(
+              imgUrl:
+                  'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              loadingWidget: RotationTransition(
+                  turns: animation,
+                  alignment: Alignment.center,
+                  child: TDCircleIndicator(
+                    color: TDTheme.of(context).brandColor8,
+                    size: 18,
+                    lineWidth: 3,
+                  )),
+              type: TDImageType.roundedSquare,
+            ),
+          ],
+        ),
+        const SizedBox(
+          width: 24,
+        ),
+      ],
+    );
+  }

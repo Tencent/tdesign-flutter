@@ -1,0 +1,17 @@
+
+  Widget _basicTypeRequire(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          leftLabel: '标签文字',
+          required: true,
+          controller: controller,
+          backgroundColor: Colors.white,
+          hintText: '请输入文字',
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }

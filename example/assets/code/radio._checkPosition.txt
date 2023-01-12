@@ -1,0 +1,23 @@
+
+  Widget _checkPosition(BuildContext context) {
+    return Column(
+      children: [
+        TDRadioGroup(
+          contentDirection: TDContentDirection.right,
+          selectId: 'index:0',
+          child: const TDRadio(
+            id: 'index:0',
+            title: '单选',
+          ),
+        ),
+        TDRadioGroup(
+          contentDirection: TDContentDirection.left,
+          selectId: 'index:0',
+          child: const TDRadio(
+            id: 'index:0',
+            title: '单选',
+          ),
+        )
+      ],
+    );
+  }

@@ -1,0 +1,33 @@
+
+  Widget _specialTypePhoneNumber(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          type: TDInputType.normal,
+          controller: controller,
+          leftLabel: '手机号',
+          hintText: '请输入手机号码',
+          backgroundColor: Colors.white,
+          rightBtn: Row(
+            children: [
+              Container(
+                width: 0.5,
+                height: 24,
+                color: TDTheme.of(context).grayColor3,
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              TDText('发送验证码', textColor: TDTheme.of(context).brandColor8),
+            ],
+          ),
+          onBtnTap: () {
+            TDToast.showText('点击了发送验证码', context: context);
+          },
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }

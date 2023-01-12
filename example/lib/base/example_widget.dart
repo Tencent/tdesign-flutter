@@ -7,6 +7,7 @@ import 'package:tdesign_flutter/td_export.dart';
 import '../web/syntax_highlighter.dart';
 import 'api_widget.dart';
 import 'example_base.dart';
+import 'notification_center.dart';
 
 /// 示例页面控件，建议每个页面返回一个ExampleWidget即可，不用独自封装
 class ExamplePage extends StatefulWidget {
@@ -18,6 +19,7 @@ class ExamplePage extends StatefulWidget {
     this.padding,
     this.backgroundColor,
     this.exampleCodeGroup,
+    this.test = const [],
   }) : super(key: key);
 
   final String title;
@@ -26,6 +28,7 @@ class ExamplePage extends StatefulWidget {
   final EdgeInsetsGeometry? padding;
   final Color? backgroundColor;
   final String? exampleCodeGroup;
+  final List<ExampleItem> test;
 
   @override
   State<ExamplePage> createState() => _ExamplePageState();
@@ -43,6 +46,8 @@ class _ExamplePageState extends State<ExamplePage> {
       var modelTheme = context
           .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
       model = modelTheme?.model;
+      model?.codePath = widget.exampleCodeGroup;
+      model?.apiVisible = apiVisible;
     });
   }
 
@@ -61,18 +66,30 @@ class _ExamplePageState extends State<ExamplePage> {
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.only(top: 16, bottom: 16),
-                  itemCount: widget.children.length + 1,
+                  itemCount: widget.children.length + 2,
                   itemBuilder: (context, index) {
                     if (index == 0) {
                       return _buildHeader(context);
                     }
-                    var data = widget.children[index - 1];
+                    ExampleModule data;
+                    if (index <= widget.children.length) {
+                      data = widget.children[index - 1];
+                    } else {
+                      data = ExampleModule(title: '单元测试', children: [
+                        _buildTestExampleItem(),
+                        ...widget.test]);
+                    }
                     return _buildModule(index, data, context);
                   },
                 ))
               ],
             )));
   }
+
+  ExampleItem _buildTestExampleItem() => ExampleItem(desc:
+  '''未在示例稿中体现，但有必要验证的组件样式，请添加到'test'参数中。以下情景必须有测试：
+  1.参数为数字。需测试数字为负数、0、较大数值的场景。
+  2.参数为枚举，需测试所有枚举组合（示例已有的可不写）''',builder: (_)=>const TDDivider());
 
   Widget _buildNavBar() {
     return TDNavBar(
@@ -83,7 +100,12 @@ class _ExamplePageState extends State<ExamplePage> {
             action: () {
               setState(() {
                 apiVisible = !apiVisible;
+                if (model != null) {
+                  model!.apiVisible = apiVisible;
+                }
               });
+              TNotification.postNotification('onApiVisibleChange', {'apiVisible':apiVisible});
+
             })
       ],
     );
@@ -144,8 +166,6 @@ class _ExamplePageState extends State<ExamplePage> {
       margin: widget.padding,
       child: ExampleItemWidget(
         data: data,
-        apiVisible: apiVisible,
-        exampleCodeGroup: widget.exampleCodeGroup,
       ),
     );
   }
@@ -163,29 +183,25 @@ class ExampleModule {
 /// 示例样例数据
 class ExampleItem {
   const ExampleItem(
-      {Key? key, this.desc = '', required this.builder, this.center = true});
+      {Key? key, this.desc = '', required this.builder, this.center = true, this.ignoreCode = false});
 
   final String desc;
 
   final WidgetBuilder builder;
 
   final bool center;
+
+  final bool ignoreCode;
 }
 
 /// 组件示例
 class ExampleItemWidget extends StatefulWidget {
   const ExampleItemWidget(
       {required this.data,
-      required this.apiVisible,
-      this.exampleCodeGroup,
       Key? key})
       : super(key: key);
 
   final ExampleItem data;
-
-  final bool apiVisible;
-
-  final String? exampleCodeGroup;
 
   @override
   State<ExampleItemWidget> createState() => _ExampleItemWidgetState();
@@ -194,13 +210,88 @@ class ExampleItemWidget extends StatefulWidget {
 class _ExampleItemWidgetState extends State<ExampleItemWidget> {
   @override
   Widget build(BuildContext context) {
-    var child = widget.data.builder(context);
-    if (widget.data.center) {
+    Widget child;
+    if(widget.data.ignoreCode){
+      child = widget.data.builder(context);
+      if (widget.data.center) {
+        child = Center(
+          child: widget.data.builder(context),
+        );
+      }
+    } else {
+      child = CodeWrapper(
+        builder: widget.data.builder, isCenter: widget.data.center,);
+    }
+    child = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        widget.data.desc.isEmpty
+            ? Container()
+            : Container(
+          alignment: Alignment.topLeft,
+          margin: const EdgeInsets.only(
+              left: 16, right: 16, top: 8, bottom: 8),
+          child: TDText(
+            widget.data.desc,
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2,
+          ),
+        ),
+        child
+      ],
+    );
+    return child;
+  }
+}
+
+
+class CodeWrapper extends StatefulWidget {
+  const CodeWrapper({Key? key, required this.builder, this.isCenter = false}) : super(key: key);
+
+  final WidgetBuilder builder;
+
+  final bool isCenter;
+
+  @override
+  State<CodeWrapper> createState() => _CodeWrapperState();
+}
+
+class _CodeWrapperState extends State<CodeWrapper> {
+
+  bool apiVisible = false;
+
+  String exampleCodeGroup = '';
+
+  @override
+  void initState() {
+    super.initState();
+    TNotification.addObserver('onApiVisibleChange', (arguments) {
+      if(arguments is Map){
+        setState((){
+          apiVisible = arguments['apiVisible'] ?? false;
+        });
+      }
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        var modelTheme = context
+            .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
+        exampleCodeGroup = modelTheme?.model.codePath ?? '';
+        apiVisible = modelTheme?.model.apiVisible ?? false;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var child = widget.builder(context);
+    if (widget.isCenter) {
       child = Center(
-        child: widget.data.builder(context),
+        child: widget.builder(context),
       );
     }
-    if (widget.apiVisible) {
+    if (apiVisible) {
       child = Stack(
         children: [
           child,
@@ -223,30 +314,14 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
         ],
       );
     }
-    child = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        widget.data.desc.isEmpty
-            ? Container()
-            : Container(
-                alignment: Alignment.topLeft,
-                margin: const EdgeInsets.only(
-                    left: 16, right: 16, top: 8, bottom: 8),
-                child: TDText(
-                  widget.data.desc,
-                  font: TDTheme.of(context).fontBodyMedium,
-                  textColor: TDTheme.of(context).fontGyColor2,
-                ),
-              ),
-        child
-      ],
-    );
     return child;
   }
 
+
+
   String _getCodeAssetsPath() {
     var methodName = '';
-    var builderString = widget.data.builder.toString();
+    var builderString = widget.builder.toString();
     if (builderString.contains('\'')) {
       var strings = builderString.split('\'');
       if (strings.length > 1) {
@@ -256,9 +331,9 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
         }
       }
     }
-    if (methodName.isNotEmpty) {
+    if (methodName.isNotEmpty && exampleCodeGroup.isNotEmpty) {
       print('example code methodName: $methodName');
-      return 'assets/code/${widget.exampleCodeGroup}.$methodName.txt';
+      return 'assets/code/${exampleCodeGroup}.$methodName.txt';
     }
     return '';
   }
