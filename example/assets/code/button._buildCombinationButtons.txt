@@ -7,23 +7,23 @@
         ),
         Expanded(
             child: TDButton(
-              content: '填充按钮',
-              size: TDButtonSize.large,
-              type: TDButtonType.fill,
-              shape: TDButtonShape.rectangle,
-              theme: TDButtonTheme.light,
-            )),
+          content: '填充按钮',
+          size: TDButtonSize.large,
+          type: TDButtonType.fill,
+          shape: TDButtonShape.rectangle,
+          theme: TDButtonTheme.light,
+        )),
         SizedBox(
           width: 16,
         ),
         Expanded(
             child: TDButton(
-              content: '填充按钮',
-              size: TDButtonSize.large,
-              type: TDButtonType.fill,
-              shape: TDButtonShape.rectangle,
-              theme: TDButtonTheme.primary,
-            )),
+          content: '填充按钮',
+          size: TDButtonSize.large,
+          type: TDButtonType.fill,
+          shape: TDButtonShape.rectangle,
+          theme: TDButtonTheme.primary,
+        )),
         SizedBox(
           width: 16,
         ),
