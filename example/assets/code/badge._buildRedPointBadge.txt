@@ -1,0 +1,70 @@
+
+  Widget _buildRedPointBadge(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 40,
+            height: 24,
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                TDText(
+                  '消息',
+                  font: TDTheme.of(context).fontBodyLarge,
+                ),
+                const Positioned(
+                  child: TDBadge(TDBadgeType.redPoint),
+                  right: 0,
+                  top: 0,
+                )
+              ],
+            ),
+          ),
+          const SizedBox(
+            width: 40,
+          ),
+          SizedBox(
+            width: 27,
+            height: 27,
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: const [
+                Icon(TDIcons.notification),
+                Positioned(
+                  child: TDBadge(TDBadgeType.redPoint),
+                  right: 0,
+                  top: 0,
+                )
+              ],
+            ),
+          ),
+          const SizedBox(
+            width: 40,
+          ),
+          SizedBox(
+            width: 83,
+            height: 51,
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: const [
+                TDButton(
+                  width: 80,
+                  height: 48,
+                  content: '按钮',
+                  size: TDButtonSize.large,
+                  type: TDButtonType.fill,
+                ),
+                Positioned(
+                  child: TDBadge(TDBadgeType.redPoint),
+                  right: 0,
+                  top: 0,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }

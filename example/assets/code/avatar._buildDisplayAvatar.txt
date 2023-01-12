@@ -1,0 +1,15 @@
+
+  Widget _buildDisplayAvatar(BuildContext context){
+    var assetUrl = 'assets/img/td_avatar_1.png';
+    var assetUrl2 = 'assets/img/td_avatar_2.png';
+    var avatarList = [assetUrl, assetUrl2, assetUrl, assetUrl2, assetUrl];
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.only(left: 16),
+      child: TDAvatar(
+        size: TDAvatarSize.medium,
+        type: TDAvatarType.display,
+        displayText: '+5',
+        avatarDisplayListAsset: avatarList,),
+    );
+  }
