@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import '../../base/example_widget.dart';
+import '../annotation/demo.dart';
 
 class TDImagePage extends StatefulWidget {
   const TDImagePage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => TDImageState();
 }
 
-class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixin {
+class TDImageState extends State<TDImagePage>
+    with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
 
@@ -30,185 +33,309 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    var loadingUrl = 'https://images7.alphacoders.com/691/thumbbig-691004.webp';
-    var url = 'http://www.zmaomao.com/uploads/201204/11-20120416014B36.jpg';
     return ExamplePage(
-      title: '图片 Image',
+        title: '图片 Image',
+        exampleCodeGroup: 'image',
+        desc: '用于展示效果，主要为上下左右居中裁切、拉伸、平铺等方式。',
+        children: [
+          ExampleModule(
+            title: '组件类型',
+            children: [
+              ExampleItem(desc: '', builder: _imageClip),
+              ExampleItem(desc: '', builder: _imageSquare),
+            ],
+          ),
+          ExampleModule(
+            title: '组件状态',
+            children: [
+              ExampleItem(desc: '', builder: _loading),
+              ExampleItem(desc: '', builder: _fail),
+            ],
+          )
+        ]);
+  }
+
+  @Demo(group: 'image')
+  Widget _imageClip(BuildContext context) {
+    return Row(
       children: [
-      ExampleModule(title: '默认',
-      children: [
-        ExampleItem(
-            desc: '状态-加载默认',
-            builder: (_) {
-              return TDImage(
-                loadingUrl,
-                type: TDImageType.roundedSquare,
-              );
-            }
+        const SizedBox(
+          width: 16,
         ),
-        ExampleItem(
-            desc: '状态-加载自定义',
-            builder: (_) {
-              return TDImage(
-                loadingUrl,
-                loadingWidget: RotationTransition(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: TDText(
+                '裁剪',
+                font: TDTheme.of(context).fontBodyMedium,
+                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+              ),
+            ),
+            const TDImage(
+              assetUrl: 'assets/img/image.png',
+              type: TDImageType.clip,
+            ),
+          ],
+        ),
+        const SizedBox(
+          width: 24,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: TDText(
+                '适应高',
+                font: TDTheme.of(context).fontBodyMedium,
+                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+              ),
+            ),
+            Container(
+              width: 89,
+              height: 72,
+              color: Colors.black,
+              child: const TDImage(
+                assetUrl: 'assets/img/image.png',
+                type: TDImageType.fitHeight,
+                width: 89,
+                height: 72,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          width: 24,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: TDText(
+                '拉伸',
+                font: TDTheme.of(context).fontBodyMedium,
+                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+              ),
+            ),
+            Container(
+              color: Colors.black,
+              width: 121,
+              height: 72,
+              child: Stack(
+                alignment: Alignment.center,
+                children: const [
+                  TDImage(
+                    assetUrl: 'assets/img/image.png',
+                    width: 121,
+                    height: 50,
+                    type: TDImageType.stretch,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  @Demo(group: 'image')
+  Widget _imageSquare(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24),
+      child: Row(
+        children: [
+          const SizedBox(
+            width: 16,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: TDText(
+                  '方形',
+                  font: TDTheme.of(context).fontBodyMedium,
+                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+                ),
+              ),
+              const TDImage(
+                assetUrl: 'assets/img/image.png',
+                type: TDImageType.square,
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 24,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: TDText(
+                  '圆角方形',
+                  font: TDTheme.of(context).fontBodyMedium,
+                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+                ),
+              ),
+              const TDImage(
+                assetUrl: 'assets/img/image.png',
+                type: TDImageType.roundedSquare,
+                width: 72,
+                height: 72,
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 24,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: TDText(
+                  '圆形',
+                  font: TDTheme.of(context).fontBodyMedium,
+                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+                ),
+              ),
+              const TDImage(
+                assetUrl: 'assets/img/image.png',
+                width: 72,
+                height: 72,
+                type: TDImageType.circle,
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  @Demo(group: 'image')
+  Widget _loading(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(
+          width: 16,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: TDText(
+                '加载默认提示',
+                font: TDTheme.of(context).fontBodyMedium,
+                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+              ),
+            ),
+            const TDImage(
+              imgUrl:
+                  'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              type: TDImageType.roundedSquare,
+            ),
+          ],
+        ),
+        const SizedBox(
+          width: 24,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: TDText(
+                '加载自定义提示',
+                font: TDTheme.of(context).fontBodyMedium,
+                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+              ),
+            ),
+            TDImage(
+              imgUrl:
+                  'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              loadingWidget: RotationTransition(
                   turns: animation,
                   alignment: Alignment.center,
-                  child: const Icon(TDIcons.loading, size: 22,)
+                  child: TDCircleIndicator(
+                    color: TDTheme.of(context).brandColor8,
+                    size: 18,
+                    lineWidth: 3,
+                  )),
+              type: TDImageType.roundedSquare,
+            ),
+          ],
+        ),
+        const SizedBox(
+          width: 24,
+        ),
+      ],
+    );
+  }
+
+  @Demo(group: 'image')
+  Widget _fail(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24),
+      child: Row(
+        children: [
+          const SizedBox(
+            width: 16,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: TDText(
+                  '失败默认提示',
+                  font: TDTheme.of(context).fontBodyMedium,
+                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
                 ),
+              ),
+              const TDImage(
+                imgUrl: 'error',
                 type: TDImageType.roundedSquare,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '状态-失败默认',
-            builder: (_) {
-              return const TDImage(
-                'error',
-                type: TDImageType.roundedSquare,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '状态-失败自定义',
-            builder: (_) {
-              return TDImage(
-                'error',
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 24,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: TDText(
+                  '失败自定义提示',
+                  font: TDTheme.of(context).fontBodyMedium,
+                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+                ),
+              ),
+              TDImage(
+                imgUrl: 'error',
                 errorWidget: TDText(
                   '加载失败',
                   forceVerticalCenter: true,
                   font: TDTheme.of(context).fontBodyExtraSmall,
                   fontWeight: FontWeight.w500,
-                  textColor: TDTheme
-                      .of(context)
-                      .fontGyColor3,
+                  textColor: TDTheme.of(context).fontGyColor3,
                 ),
                 type: TDImageType.roundedSquare,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '类型-裁剪',
-            builder: (_) {
-              return TDImage(
-                url,
-                type: TDImageType.clip,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '类型-适应高',
-            builder: (_) {
-              return TDImage(
-                url,
-                width: 89,
-                height: 72,
-                type: TDImageType.fitHeight,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '类型-拉伸',
-            builder: (_) {
-              return TDImage(
-                url,
-                width: 134,
-                height: 72,
-                type: TDImageType.stretch,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '类型-方形',
-            builder: (_) {
-              return TDImage(
-                url,
-                type: TDImageType.square,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '类型-圆角方形',
-            builder: (_) {
-              return TDImage(
-                url,
-                type: TDImageType.roundedSquare,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '类型-圆形',
-            builder: (_) {
-              return TDImage(
-                url,
-                type: TDImageType.circle,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '规格-图片120',
-            builder: (_) {
-              return TDImage(
-                url,
-                size: TDImageSize.xl,
-                type: TDImageType.roundedSquare,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '规格-图片72',
-            builder: (_) {
-              return TDImage(
-                url,
-                size: TDImageSize.l,
-                type: TDImageType.roundedSquare,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '规格-图片56',
-            builder: (_) {
-              return TDImage(
-                url,
-                size: TDImageSize.m,
-                type: TDImageType.roundedSquare,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '规格-图片48',
-            builder: (_) {
-              return TDImage(
-                url,
-                size: TDImageSize.s,
-                type: TDImageType.roundedSquare,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '规格-图片32',
-            builder: (_) {
-              return TDImage(
-                url,
-                size: TDImageSize.xs,
-                type: TDImageType.roundedSquare,
-              );
-            }
-        ),
-        ExampleItem(
-            desc: '规格-图片24',
-            builder: (_) {
-              return TDImage(
-                url,
-                size: TDImageSize.xxs,
-                type: TDImageType.roundedSquare,
-              );
-            }
-        ),
-        
-      ],
-    )]);
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 24,
+          ),
+        ],
+      ),
+    );
   }
 }
-
-
