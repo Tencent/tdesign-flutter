@@ -1,0 +1,22 @@
+
+  Widget _buildTextButtonSingle(BuildContext context) {
+    return TDButton(
+      content: '单个文字按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDConfirmDialog(
+              title: _dialogTitle,
+              content: _commonContent,
+              buttonStyle: TDDialogButtonStyle.text,
+            );
+          },
+        );
+      },
+    );
+  }
