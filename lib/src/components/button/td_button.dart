@@ -36,6 +36,7 @@ class TDButton extends StatefulWidget {
       this.onTap,
       this.icon,
       this.onLongPress,
+      this.margin,
       this.padding})
       : super(key: key);
 
@@ -93,6 +94,9 @@ class TDButton extends StatefulWidget {
   /// 自定义padding
   final EdgeInsetsGeometry? padding;
 
+  /// 自定义margin
+  final EdgeInsetsGeometry? margin;
+
   /// 是否为通栏按钮
   final bool isBlock;
 
@@ -133,7 +137,7 @@ class _TDButtonState extends State<TDButton> {
       height: _getHeight(),
       alignment: widget.shape == TDButtonShape.filled || widget.isBlock ? Alignment.center : null,
       padding: _getPadding(),
-      margin: widget.isBlock ? const EdgeInsets.only(left: 16, right: 16) : null,
+      margin: _getMargin(),
       decoration: BoxDecoration(
         color: style.backgroundColor,
         border: _getBorder(context),
@@ -303,6 +307,13 @@ class _TDButtonState extends State<TDButton> {
       case TDButtonSize.extraSmall:
         return 20;
     }
+  }
+
+  EdgeInsetsGeometry? _getMargin(){
+    if(widget.margin != null){
+      return widget.margin;
+    }
+    return widget.isBlock ? const EdgeInsets.only(left: 16, right: 16) : null;
   }
 
   EdgeInsetsGeometry? _getPadding() {
