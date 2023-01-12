@@ -38,7 +38,9 @@ class _TDButtonPageState extends State<TDButtonPage> {
                       children: [
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildPrimaryFillButton,),
+                          child: CodeWrapper(
+                            builder: _buildPrimaryFillButton,
+                          ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
@@ -50,7 +52,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildPrimaryStrokeButton),
+                          child:
+                              CodeWrapper(builder: _buildPrimaryStrokeButton),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
@@ -67,7 +70,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                       children: [
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildRectangleIconButton),
+                          child:
+                              CodeWrapper(builder: _buildRectangleIconButton),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
@@ -86,15 +90,18 @@ class _TDButtonPageState extends State<TDButtonPage> {
                         children: [
                           Container(
                             margin: const EdgeInsets.all(8),
-                            child: CodeWrapper(builder: _buildPrimaryGhostButton),
+                            child:
+                                CodeWrapper(builder: _buildPrimaryGhostButton),
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
-                            child: CodeWrapper(builder: _buildDangerGhostButton),
+                            child:
+                                CodeWrapper(builder: _buildDangerGhostButton),
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
-                            child: CodeWrapper(builder: _buildDefaultGhostButton),
+                            child:
+                                CodeWrapper(builder: _buildDefaultGhostButton),
                           ),
                         ],
                       ),
@@ -103,10 +110,9 @@ class _TDButtonPageState extends State<TDButtonPage> {
               ExampleItem(
                   ignoreCode: true,
                   desc: '组合按钮',
-                  builder: (_)=>CodeWrapper(builder: _buildCombinationButtons)),
-              ExampleItem(
-                  desc: '通栏按钮',
-                  builder: _buildFilledFillButton),
+                  builder: (_) =>
+                      CodeWrapper(builder: _buildCombinationButtons)),
+              ExampleItem(desc: '通栏按钮', builder: _buildFilledFillButton),
             ]),
             ExampleModule(title: '组件状态', children: [
               ExampleItem(
@@ -117,23 +123,28 @@ class _TDButtonPageState extends State<TDButtonPage> {
                       children: [
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildDisablePrimaryFillButton),
+                          child: CodeWrapper(
+                              builder: _buildDisablePrimaryFillButton),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildDisableLightFillButton),
+                          child: CodeWrapper(
+                              builder: _buildDisableLightFillButton),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildDisableDefaultFillButton),
+                          child: CodeWrapper(
+                              builder: _buildDisableDefaultFillButton),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildDisablePrimaryStrokeButton),
+                          child: CodeWrapper(
+                              builder: _buildDisablePrimaryStrokeButton),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildDisablePrimaryTextButton),
+                          child: CodeWrapper(
+                              builder: _buildDisablePrimaryTextButton),
                         ),
                       ],
                     );
@@ -173,7 +184,9 @@ class _TDButtonPageState extends State<TDButtonPage> {
                       children: [
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildPrimaryFillButton,),
+                          child: CodeWrapper(
+                            builder: _buildPrimaryFillButton,
+                          ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
@@ -190,7 +203,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(builder: _buildCircleButton),
                         ),
-                    CodeWrapper(builder: _buildFilledButton)
+                        CodeWrapper(builder: _buildFilledButton)
                       ],
                     );
                   }),
@@ -207,7 +220,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildDefaultStrokeButton),
+                          child:
+                              CodeWrapper(builder: _buildDefaultStrokeButton),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
@@ -217,11 +231,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
                         /// primary主题
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildPrimaryFillButton,),
+                          child: CodeWrapper(
+                            builder: _buildPrimaryFillButton,
+                          ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildPrimaryStrokeButton),
+                          child:
+                              CodeWrapper(builder: _buildPrimaryStrokeButton),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
@@ -253,7 +270,9 @@ class _TDButtonPageState extends State<TDButtonPage> {
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildLightTextButton,),
+                          child: CodeWrapper(
+                            builder: _buildLightTextButton,
+                          ),
                         ),
                       ],
                     );
@@ -262,13 +281,13 @@ class _TDButtonPageState extends State<TDButtonPage> {
           ],
           test: [
             ExampleItem(
-                  ignoreCode: true,
+                ignoreCode: true,
                 desc: '测试child',
                 builder: (context) {
                   return CodeWrapper(builder: _buildChildTestButton);
                 }),
             ExampleItem(
-                  ignoreCode: true,
+                ignoreCode: true,
                 desc: '通栏按钮测试',
                 builder: (context) {
                   return Container(
@@ -282,21 +301,27 @@ class _TDButtonPageState extends State<TDButtonPage> {
                           content: '填充block按钮',
                           theme: TDButtonTheme.primary,
                         ),
-                        SizedBox(height: 16,),
+                        SizedBox(
+                          height: 16,
+                        ),
                         TDButton(
                           isBlock: true,
                           content: '描边block按钮',
                           type: TDButtonType.stroke,
                           theme: TDButtonTheme.primary,
                         ),
-                        SizedBox(height: 16,),
+                        SizedBox(
+                          height: 16,
+                        ),
                         TDButton(
                           isBlock: true,
                           content: '文字block按钮',
                           type: TDButtonType.text,
                           theme: TDButtonTheme.primary,
                         ),
-                        SizedBox(height: 16,),
+                        SizedBox(
+                          height: 16,
+                        ),
                         TDButton(
                           isBlock: true,
                           content: '幽灵block按钮',
@@ -314,316 +339,316 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildLightTextButton(BuildContext context) {
     return const TDButton(
-                          content: '文字按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.text,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.light,
-                        );
+      content: '文字按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.text,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.light,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildLightStrokeButton(BuildContext context) {
     return const TDButton(
-                          content: '描边按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.stroke,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.light,
-                        );
+      content: '描边按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.light,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildDangerTextButton(BuildContext context) {
     return const TDButton(
-                          content: '文字按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.text,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.danger,
-                        );
+      content: '文字按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.text,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.danger,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildDangerStrokeButton(BuildContext context) {
     return const TDButton(
-                          content: '描边按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.stroke,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.danger,
-                        );
+      content: '描边按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.danger,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildDangerFillButton(BuildContext context) {
     return const TDButton(
-                          content: '填充按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.danger,
-                        );
+      content: '填充按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.danger,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildDefaultTextButton(BuildContext context) {
     return const TDButton(
-                          content: '文字按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.text,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.defaultTheme,
-                        );
+      content: '文字按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.text,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.defaultTheme,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildDefaultStrokeButton(BuildContext context) {
     return const TDButton(
-                          content: '描边按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.stroke,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.defaultTheme,
-                        );
+      content: '描边按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.defaultTheme,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildFilledButton(BuildContext context) {
     return const TDButton(
-                        content: '填充按钮',
-                        size: TDButtonSize.large,
-                        type: TDButtonType.fill,
-                        shape: TDButtonShape.filled,
-                        theme: TDButtonTheme.primary,
-                      );
+      content: '填充按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.filled,
+      theme: TDButtonTheme.primary,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildCircleButton(BuildContext context) {
     return const TDButton(
-                          icon: TDIcons.app,
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.circle,
-                          theme: TDButtonTheme.primary,
-                        );
+      icon: TDIcons.app,
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.circle,
+      theme: TDButtonTheme.primary,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildRoundButton(BuildContext context) {
     return const TDButton(
-                          content: '填充按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.round,
-                          theme: TDButtonTheme.primary,
-                        );
+      content: '填充按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.round,
+      theme: TDButtonTheme.primary,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildExtraSmallButton(BuildContext context) {
     return const TDButton(
-                          content: '极小按钮28',
-                          size: TDButtonSize.extraSmall,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.primary,
-                        );
+      content: '极小按钮28',
+      size: TDButtonSize.extraSmall,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildSmallButton(BuildContext context) {
     return const TDButton(
-                          content: '小号按钮32',
-                          size: TDButtonSize.small,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.primary,
-                        );
+      content: '小号按钮32',
+      size: TDButtonSize.small,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildMediumButton(BuildContext context) {
     return const TDButton(
-                          content: '中号按钮40',
-                          size: TDButtonSize.medium,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.primary,
-                        );
+      content: '中号按钮40',
+      size: TDButtonSize.medium,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildLargeButton(BuildContext context) {
     return const TDButton(
-                          content: '大号按钮48',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.primary,
-                        );
+      content: '大号按钮48',
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildDisablePrimaryTextButton(BuildContext context) {
     return const TDButton(
-                          content: '文字按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.text,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.primary,
-                          disabled: true,
-                        );
+      content: '文字按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.text,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+      disabled: true,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildDisablePrimaryStrokeButton(BuildContext context) {
     return const TDButton(
-                          content: '描边按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.stroke,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.primary,
-                          disabled: true,
-                        );
+      content: '描边按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+      disabled: true,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildDisableDefaultFillButton(BuildContext context) {
     return const TDButton(
-                          content: '填充按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.defaultTheme,
-                          disabled: true,
-                        );
+      content: '填充按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.defaultTheme,
+      disabled: true,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildDisableLightFillButton(BuildContext context) {
     return const TDButton(
-                          content: '填充按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.light,
-                          disabled: true,
-                        );
+      content: '填充按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.light,
+      disabled: true,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildDisablePrimaryFillButton(BuildContext context) {
     return const TDButton(
-                          content: '填充按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.primary,
-                          disabled: true,
-                        );
+      content: '填充按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+      disabled: true,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildFilledFillButton(BuildContext context) {
     return const TDButton(
-                      content: '填充按钮',
-                      icon: TDIcons.app,
-                      size: TDButtonSize.large,
-                      type: TDButtonType.fill,
-                      theme: TDButtonTheme.primary,
+      content: '填充按钮',
+      icon: TDIcons.app,
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      theme: TDButtonTheme.primary,
       isBlock: true,
-                    );
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildDefaultGhostButton(BuildContext context) {
     return const TDButton(
-                            content: '幽灵按钮',
-                            size: TDButtonSize.large,
-                            type: TDButtonType.ghost,
-                            shape: TDButtonShape.rectangle,
-                            theme: TDButtonTheme.defaultTheme,
-                          );
+      content: '幽灵按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.ghost,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.defaultTheme,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildDangerGhostButton(BuildContext context) {
     return const TDButton(
-                            content: '幽灵按钮',
-                            size: TDButtonSize.large,
-                            type: TDButtonType.ghost,
-                            shape: TDButtonShape.rectangle,
-                            theme: TDButtonTheme.danger,
-                          );
+      content: '幽灵按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.ghost,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.danger,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildPrimaryGhostButton(BuildContext context) {
     return const TDButton(
-                            content: '幽灵按钮',
-                            size: TDButtonSize.large,
-                            type: TDButtonType.ghost,
-                            shape: TDButtonShape.rectangle,
-                            theme: TDButtonTheme.primary,
-                          );
+      content: '幽灵按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.ghost,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildSquareIconButton(BuildContext context) {
     return const TDButton(
-                          icon: TDIcons.app,
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.square,
-                          theme: TDButtonTheme.primary,
-                        );
+      icon: TDIcons.app,
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.square,
+      theme: TDButtonTheme.primary,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildRectangleIconButton(BuildContext context) {
     return const TDButton(
-                          content: '填充按钮',
-                          icon: TDIcons.app,
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.primary,
-                        );
+      content: '填充按钮',
+      icon: TDIcons.app,
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildPrimaryTextButton(BuildContext context) {
     return const TDButton(
-                          content: '文字按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.text,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.primary,
-                        );
+      content: '文字按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.text,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildPrimaryStrokeButton(BuildContext context) {
     return const TDButton(
-                          content: '描边按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.stroke,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.primary,
-                        );
+      content: '描边按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+    );
   }
 
   @Demo(group: 'button')
   TDButton _buildDefaultFillButton(BuildContext context) {
     return const TDButton(
-                          content: '填充按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.defaultTheme,
-                        );
+      content: '填充按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.defaultTheme,
+    );
   }
 
   @Demo(group: 'button')
@@ -658,30 +683,29 @@ class _TDButtonPageState extends State<TDButtonPage> {
         ),
         Expanded(
             child: TDButton(
-              content: '填充按钮',
-              size: TDButtonSize.large,
-              type: TDButtonType.fill,
-              shape: TDButtonShape.rectangle,
-              theme: TDButtonTheme.light,
-            )),
+          content: '填充按钮',
+          size: TDButtonSize.large,
+          type: TDButtonType.fill,
+          shape: TDButtonShape.rectangle,
+          theme: TDButtonTheme.light,
+        )),
         SizedBox(
           width: 16,
         ),
         Expanded(
             child: TDButton(
-              content: '填充按钮',
-              size: TDButtonSize.large,
-              type: TDButtonType.fill,
-              shape: TDButtonShape.rectangle,
-              theme: TDButtonTheme.primary,
-            )),
+          content: '填充按钮',
+          size: TDButtonSize.large,
+          type: TDButtonType.fill,
+          shape: TDButtonShape.rectangle,
+          theme: TDButtonTheme.primary,
+        )),
         SizedBox(
           width: 16,
         ),
       ],
     );
   }
-
 
   @Demo(group: 'button')
   Widget _buildChildTestButton(BuildContext context) {

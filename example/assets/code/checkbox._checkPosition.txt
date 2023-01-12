@@ -1,0 +1,23 @@
+
+  Widget _checkPosition(BuildContext context) {
+    return Column(
+      children: [
+        TDCheckboxGroupContainer(
+          contentDirection: TDContentDirection.right,
+          selectIds: const ['index:0'],
+          child: const TDCheckbox(
+            id: 'index:0',
+            title: '多选',
+          ),
+        ),
+        TDCheckboxGroupContainer(
+          contentDirection: TDContentDirection.left,
+          selectIds: const ['index:0'],
+          child: const TDCheckbox(
+            id: 'index:0',
+            title: '多选',
+          ),
+        )
+      ],
+    );
+  }
