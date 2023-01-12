@@ -95,15 +95,15 @@ class _TDBadgePageState extends State<TDBadgePage> {
             height: 51,
             child: Stack(
               alignment: Alignment.bottomLeft,
-              children: [
+              children: const [
                 TDButton(
                   width: 80,
                   height: 48,
                   content: '按钮',
                   size: TDButtonSize.large,
-                  style: TDButtonStyle.primary(context: context),
+                  type: TDButtonType.fill,
                 ),
-                const Positioned(
+                Positioned(
                   child: TDBadge(TDBadgeType.redPoint),
                   right: 0,
                   top: 0,
@@ -172,15 +172,14 @@ class _TDBadgePageState extends State<TDBadgePage> {
             height: 54,
             child: Stack(
               alignment: Alignment.bottomLeft,
-              children: [
+              children: const [
                 TDButton(
                   width: 80,
                   height: 48,
                   content: '按钮',
                   size: TDButtonSize.large,
-                  style: TDButtonStyle.primary(context: context),
                 ),
-                const Positioned(
+                Positioned(
                   child: TDBadge(
                     TDBadgeType.message,
                     count: '8',
@@ -366,7 +365,10 @@ class _TDBadgePageState extends State<TDBadgePage> {
             child: Stack(
               alignment: Alignment.bottomLeft,
               children: const [
-                TDAvatar(size: TDAvatarSize.large, type: TDAvatarType.normal,),
+                TDAvatar(
+                  size: TDAvatarSize.large,
+                  type: TDAvatarType.normal,
+                ),
                 Positioned(
                   child: TDBadge(
                     TDBadgeType.message,
@@ -396,7 +398,10 @@ class _TDBadgePageState extends State<TDBadgePage> {
             child: Stack(
               alignment: Alignment.bottomLeft,
               children: const [
-                TDAvatar(size: TDAvatarSize.medium, type: TDAvatarType.normal,),
+                TDAvatar(
+                  size: TDAvatarSize.medium,
+                  type: TDAvatarType.normal,
+                ),
                 Positioned(
                   child: TDBadge(
                     TDBadgeType.message,
