@@ -1,0 +1,31 @@
+
+  Widget _buildMediumBadge(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 51,
+            height: 49.5,
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: const [
+                TDAvatar(
+                  size: TDAvatarSize.medium,
+                  type: TDAvatarType.normal,
+                ),
+                Positioned(
+                  child: TDBadge(
+                    TDBadgeType.message,
+                    count: '8',
+                  ),
+                  right: 0,
+                  top: 0,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }

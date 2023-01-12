@@ -1,0 +1,53 @@
+
+  Widget _buildBadgeAvatar(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: Row(
+        children: [
+          SizedBox(
+            height: 51,
+            width: 51,
+            child: Stack(
+              alignment:Alignment.bottomLeft,
+              children: const [
+                TDAvatar(
+                  size: TDAvatarSize.medium,
+                  type: TDAvatarType.normal,
+                  defaultUrl: 'assets/img/td_avatar_1.png',),
+                Positioned(child: TDBadge(TDBadgeType.redPoint), right: 0, top: 0)
+              ],
+            ),
+          ),
+          const SizedBox(width: 32,),
+          SizedBox(
+            height: 51,
+            width: 51,
+            child: Stack(
+              alignment:Alignment.bottomLeft,
+              children: const [
+                TDAvatar(
+                    size: TDAvatarSize.medium,
+                    type: TDAvatarType.customText,
+                    text: 'A'),
+                Positioned(child: TDBadge(TDBadgeType.message,count: '8',), right: 0, top: 0)
+              ],
+            ),
+          ),
+          const SizedBox(width: 32,),
+          SizedBox(
+            width: 51,
+            height: 51,
+            child: Stack(
+              alignment:Alignment.bottomLeft,
+              children: const [
+                TDAvatar(
+                  size: TDAvatarSize.medium,
+                  type: TDAvatarType.icon,),
+                Positioned(child: TDBadge(TDBadgeType.message,count: '12',), right: 0, top: 0,)
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
