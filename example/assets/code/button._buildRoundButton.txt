@@ -1,10 +1,10 @@
 
   TDButton _buildRoundButton(BuildContext context) {
     return const TDButton(
-                          content: '填充按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          shape: TDButtonShape.round,
-                          theme: TDButtonTheme.primary,
-                        );
+      content: '填充按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.round,
+      theme: TDButtonTheme.primary,
+    );
   }

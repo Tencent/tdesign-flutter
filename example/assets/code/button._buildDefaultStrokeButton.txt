@@ -1,10 +1,10 @@
 
   TDButton _buildDefaultStrokeButton(BuildContext context) {
     return const TDButton(
-                          content: '描边按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.stroke,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.defaultTheme,
-                        );
+      content: '描边按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.defaultTheme,
+    );
   }

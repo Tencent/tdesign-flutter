@@ -1,11 +1,11 @@
 
   TDButton _buildDisablePrimaryTextButton(BuildContext context) {
     return const TDButton(
-                          content: '文字按钮',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.text,
-                          shape: TDButtonShape.rectangle,
-                          theme: TDButtonTheme.primary,
-                          disabled: true,
-                        );
+      content: '文字按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.text,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+      disabled: true,
+    );
   }
