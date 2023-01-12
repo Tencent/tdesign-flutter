@@ -1,0 +1,12 @@
+
+  Widget _loadingWithoutTextToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showLoadingWithoutText(context: context);
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      theme: TDButtonTheme.primary,
+      content: '加载状态（无文案）',
+    );
+  }

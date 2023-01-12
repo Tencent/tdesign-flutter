@@ -220,8 +220,9 @@ class HorizontalNormalButtons extends StatelessWidget {
               buttonText: leftBtn.title,
               buttonTextColor:
                   leftBtn.titleColor ?? TDTheme.of(context).brandColor8,
-              // TODO 更换为设计稿的按钮style
-              buttonStyle: leftBtn.style ?? TDButtonStyle.secondary(),
+              buttonStyle: leftBtn.style,
+              buttonType: leftBtn.type,
+              buttonTheme: leftBtn.theme,
               height: leftBtn.height,
               buttonTextFontWeight: leftBtn.fontWeight,
               onPressed: () {
@@ -231,7 +232,7 @@ class HorizontalNormalButtons extends StatelessWidget {
             ),
           ),
           const TDDivider(
-            width: 20,
+            width: 12,
             color: Colors.transparent,
           ),
           Expanded(
@@ -239,7 +240,9 @@ class HorizontalNormalButtons extends StatelessWidget {
               buttonText: rightBtn.title,
               buttonTextColor:
                   rightBtn.titleColor ?? TDTheme.of(context).whiteColor1,
-              buttonStyle: rightBtn.style ?? TDButtonStyle.primary(),
+              buttonStyle: rightBtn.style,
+              buttonType: rightBtn.type,
+              buttonTheme: rightBtn.theme,
               height: rightBtn.height,
               buttonTextFontWeight: rightBtn.fontWeight,
               onPressed: () {
@@ -282,7 +285,9 @@ class HorizontalTextButtons extends StatelessWidget {
                 buttonText: leftBtn.title,
                 buttonTextColor:
                     leftBtn.titleColor ?? TDTheme.of(context).fontGyColor2,
-                buttonStyle: leftBtn.style ?? TDButtonStyle.text(),
+                buttonStyle: leftBtn.style,
+                buttonType: leftBtn.type ?? TDButtonType.text,
+                buttonTheme: leftBtn.theme,
                 height: leftBtn.height,
                 buttonTextFontWeight: leftBtn.fontWeight,
                 onPressed: () {
@@ -300,7 +305,9 @@ class HorizontalTextButtons extends StatelessWidget {
                 buttonText: rightBtn.title,
                 buttonTextColor:
                     rightBtn.titleColor ?? TDTheme.of(context).brandColor8,
-                buttonStyle: rightBtn.style ?? TDButtonStyle.text(),
+                buttonStyle: leftBtn.style,
+                buttonType: leftBtn.type ?? TDButtonType.text,
+                buttonTheme: leftBtn.theme ?? TDButtonTheme.primary,
                 height: rightBtn.height,
                 buttonTextFontWeight: rightBtn.fontWeight,
                 onPressed: () {
@@ -324,9 +331,12 @@ class TDDialogButton extends StatelessWidget {
     this.buttonTextColor,
     this.buttonTextFontWeight = FontWeight.w600,
     this.buttonStyle,
+    this.buttonType,
+    this.buttonTheme,
     required this.onPressed,
     this.height = 40.0,
     this.width,
+    this.isBlock = true,
   }) : super(key: key);
 
   /// 按钮文字
@@ -339,11 +349,18 @@ class TDDialogButton extends StatelessWidget {
 
   final TDButtonStyle? buttonStyle;
 
+  final TDButtonType? buttonType;
+
+  final TDButtonTheme? buttonTheme;
+
   /// 按钮宽度
   final double? width;
 
   /// 按钮高度
   final double? height;
+
+  /// 按钮高度
+  final bool isBlock;
 
   /// 点击
   final Function() onPressed;
@@ -352,11 +369,15 @@ class TDDialogButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TDButton(
       onTap: onPressed,
-      style: buttonStyle ?? TDButtonStyle.primary(),
+      style: buttonStyle,
+      type: buttonType ?? TDButtonType.fill,
+      theme: buttonTheme,
       content: buttonText,
       textStyle: TextStyle(fontWeight: FontWeight.w600, color: buttonTextColor),
       width: width,
       height: height,
+      isBlock: isBlock,
+      margin: EdgeInsets.zero,
     );
   }
 }

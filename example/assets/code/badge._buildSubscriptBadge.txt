@@ -1,0 +1,24 @@
+
+  Widget _buildSubscriptBadge(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topRight,
+      children: [
+        Container(
+          padding: const EdgeInsets.only(left: 16),
+          alignment: Alignment.centerLeft,
+          child: TDText(
+            '单行标题',
+            textColor: TDTheme.of(context).fontGyColor1,
+            font: TDTheme.of(context).fontBodyLarge,
+          ),
+          color: Colors.white,
+          height: 48,
+          width: MediaQuery.of(context).size.width,
+        ),
+        const TDBadge(
+          TDBadgeType.subscript,
+          message: 'NEW',
+        ),
+      ],
+    );
+  }

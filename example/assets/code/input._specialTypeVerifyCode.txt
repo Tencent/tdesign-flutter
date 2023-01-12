@@ -1,0 +1,39 @@
+
+  Widget _specialTypeVerifyCode(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          type: TDInputType.normal,
+          size: TDInputSize.small,
+          controller: controller,
+          leftLabel: '验证码',
+          hintText: '输入验证码',
+          backgroundColor: Colors.white,
+          rightBtn: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 0.5,
+                height: 36,
+                color: TDTheme.of(context).grayColor3,
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              Image.network(
+                'https://img2018.cnblogs.com/blog/736399/202001/736399-20200108170302307-1377487770.jpg',
+                width: 72,
+                height: 36,
+              )
+            ],
+          ),
+          onBtnTap: () {
+            TDToast.showText('点击更换验证码', context: context);
+          },
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }

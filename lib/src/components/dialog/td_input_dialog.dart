@@ -106,7 +106,7 @@ class TDInputDialog extends StatelessWidget {
     final left = leftBtn ??
         TDDialogButtonOptions(title: '取消', action: () {}, height: 56);
     final right = rightBtn ??
-        TDDialogButtonOptions(title: '好的', action: () {}, height: 56);
+        TDDialogButtonOptions(title: '确定', action: () {}, height: 56);
     return HorizontalTextButtons(
       leftBtn: left,
       rightBtn: right,
