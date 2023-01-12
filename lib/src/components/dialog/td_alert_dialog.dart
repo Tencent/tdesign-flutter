@@ -122,8 +122,12 @@ class TDAlertDialog extends StatelessWidget {
   }
 
   Widget _horizontalButtons(BuildContext context) {
-    final left = leftBtn ?? TDDialogButtonOptions(title: '取消', action: () {});
-    final right = rightBtn ?? TDDialogButtonOptions(title: '好的', action: () {});
+    final left = leftBtn ??
+        TDDialogButtonOptions(
+            title: '取消', theme: TDButtonTheme.light, action: () {});
+    final right = rightBtn ??
+        TDDialogButtonOptions(
+            title: '确定', theme: TDButtonTheme.primary, action: () {});
     return _buttonStyle == TDDialogButtonStyle.text
         ? HorizontalTextButtons(leftBtn: left, rightBtn: right)
         : HorizontalNormalButtons(
@@ -141,6 +145,8 @@ class TDAlertDialog extends StatelessWidget {
         height: value.height,
         buttonTextFontWeight: value.fontWeight,
         buttonStyle: value.style,
+        buttonTheme: value.theme,
+        buttonType: value.type,
         onPressed: () {
           Navigator.pop(context);
           value.action();

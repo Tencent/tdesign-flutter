@@ -290,8 +290,10 @@ class _MyHomePageState extends State<MyHomePage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TDButton(
-              style: TDButtonStyle.weakly(),
-              size: TDButtonSize.small,
+              size: TDButtonSize.medium,
+              type: TDButtonType.stroke,
+              shape: TDButtonShape.rectangle,
+              theme: TDButtonTheme.primary,
               onTap: () {
                 Navigator.pushNamed(context, model.path);
               },

@@ -1,0 +1,22 @@
+
+  Widget _buildInputNoContent(BuildContext context) {
+    return TDButton(
+      content: '输入类-无描述',
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDInputDialog(
+              textEditingController: TextEditingController(),
+              title: _dialogTitle,
+              hintText: _inputHint,
+            );
+          },
+        );
+      },
+    );
+  }
