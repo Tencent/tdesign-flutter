@@ -160,12 +160,8 @@ class ImageWidget extends StatefulWidget {
               : AssetImage(assetUrl ?? '', bundle: bundle, package: package),
         ),
         loadingBuilder = null,
-        assert(alignment != null),
-        assert(repeat != null),
-        assert(matchTextDirection != null),
         assert(cacheWidth == null || cacheWidth > 0),
         assert(cacheHeight == null || cacheHeight > 0),
-        assert(isAntiAlias != null),
         super(key: key);
 
   @override

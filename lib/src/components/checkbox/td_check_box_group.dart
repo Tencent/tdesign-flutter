@@ -463,4 +463,4 @@ class TDCheckboxGroupContainerState extends TDCheckboxGroupState {
 
 }
 
-typedef OnCheckBoxGroupChange = void Function(List<String> Ids);
+typedef OnCheckBoxGroupChange = void Function(List<String> ids);
