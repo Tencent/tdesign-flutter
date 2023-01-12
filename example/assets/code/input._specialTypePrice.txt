@@ -1,0 +1,19 @@
+
+  Widget _specialTypePrice(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          type: TDInputType.special,
+          controller: controller,
+          leftLabel: '价格',
+          hintText: '0.00',
+          backgroundColor: Colors.white,
+          textAlign: TextAlign.end,
+          rightWidget: TDText('元', textColor: TDTheme.of(context).fontGyColor1),
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }

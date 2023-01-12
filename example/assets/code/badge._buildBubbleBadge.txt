@@ -1,0 +1,36 @@
+
+  Widget _buildBubbleBadge(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 67,
+            height: 56,
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                Container(
+                  child: const Icon(TDIcons.shop),
+                  decoration: BoxDecoration(
+                      color: TDTheme.of(context).grayColor2,
+                      borderRadius: BorderRadius.circular(
+                          TDTheme.of(context).radiusDefault)),
+                  height: 48,
+                  width: 48,
+                ),
+                const Positioned(
+                  child: TDBadge(
+                    TDBadgeType.bubble,
+                    count: '领积分',
+                  ),
+                  right: 0,
+                  top: 0,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
