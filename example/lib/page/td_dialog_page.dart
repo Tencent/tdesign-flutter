@@ -23,9 +23,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
   final _longContent = '这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案。\n\n' * 4;
   final _inputHint = '请输入文字';
 
-  // TODO 换成设计稿的图
   final _demoImage = Image.asset(
-    'assets/img/brand.png',
+    'assets/img/image.png',
   );
 
   @override
