@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 
 import '../../../td_export.dart';
 import 'td_activity_indicator.dart';
-import 'td_circle_indicator.dart';
 import 'td_point_indicator.dart';
 
 /// Loading 尺寸

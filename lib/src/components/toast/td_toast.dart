@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../td_export.dart';
-import '../loading/td_circle_indicator.dart';
 
 enum IconTextDirection {
   horizontal,       //横向

@@ -128,7 +128,7 @@ class _TDToastPageState extends State<TDToastPage> {
 
   @Demo(group: 'toast')
   Widget _dismissLoadingToast(BuildContext context) {
-    return TDButton(
+    return const TDButton(
       onTap: TDToast.dismissLoading,
       size: TDButtonSize.large,
       type: TDButtonType.stroke,

@@ -39,7 +39,7 @@ class TDAlertDialog extends StatelessWidget {
 
   /// 纵向按钮排列的对话框
   ///
-  /// [buttons]参数是必须的，纵向按钮默认样式都是[TDButtonStyle.primary]
+  /// [buttons]参数是必须的，纵向按钮默认样式都是[TDButtonTheme.primary]
   const TDAlertDialog.vertical({
     Key? key,
     required List<TDDialogButtonOptions> buttons,
