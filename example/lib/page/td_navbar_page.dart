@@ -9,11 +9,12 @@ class TDNavBarPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: '导航栏 NavBar',
+      desc: '用于不同页面之间切换或者跳转，位于内容区的上方，系统状态栏的下方。',
       children: [
-      ExampleModule(title: '默认',
+      ExampleModule(title: '组件类型',
       children: [
         ExampleItem(
-          desc: '基础导航栏',
+          desc: '基础H5导航栏',
           builder: (_) {
             return const TDNavBar(title: '标题');
           },
@@ -45,6 +46,49 @@ class TDNavBarPage extends StatelessWidget {
           },
         ),
         ExampleItem(
+          desc: '带搜索导航栏',
+          builder: (_) {
+            return TDNavBar(
+              useDefaultBack: false,
+              centerTitle: false,
+              titleMargin: 0,
+              titleWidget:  TDSearchBar(
+                autoHeight: true,
+                padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
+                placeHolder: '搜索预设文案',
+                mediumStyle: true,
+                style: TDSearchStyle.round,
+                onTextChanged: (String text) {
+                  print('input：$text');
+                },
+              ),
+              rightBarItems: [
+                TDNavBarItem(icon: TDIcons.notification),
+                TDNavBarItem(icon: TDIcons.ellipsis),
+              ],
+            );
+          },
+        ),
+        ExampleItem(
+          desc: '带图片导航栏',
+          builder: (_) {
+            return TDNavBar(
+              useDefaultBack: false,
+              centerTitle: false,
+              titleMargin: 0,
+              titleWidget:  const TDImage(
+                'https://img01.sogoucdn.com/app/a/200797/37a8fd5f-4e64-4639-975b-44da9e4f612c',
+                width: 102,
+                height: 24,
+              ),
+              rightBarItems: [
+                TDNavBarItem(icon: TDIcons.notification),
+                TDNavBarItem(icon: TDIcons.ellipsis),
+              ],
+            );
+          },
+        ),
+        ExampleItem(
           desc: '基础小程序导航栏',
           builder: (_) {
             return TDNavBar(
@@ -54,6 +98,20 @@ class TDNavBarPage extends StatelessWidget {
               rightBarItems: [
                 TDNavBarItem(icon: TDIcons.ellipsis),
                 TDNavBarItem(icon: TDIcons.add_circle),
+              ],
+            );
+          },
+        ),
+        ExampleItem(
+          desc: '标题左对齐',
+          builder: (_) {
+            return TDNavBar(
+              centerTitle: false,
+              titleMargin: 0,
+              title: '标题',
+              rightBarItems: [
+                TDNavBarItem(icon: TDIcons.home),
+                TDNavBarItem(icon: TDIcons.ellipsis),
               ],
             );
           },
