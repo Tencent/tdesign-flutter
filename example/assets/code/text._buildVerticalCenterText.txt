@@ -1,0 +1,9 @@
+
+  Widget _buildVerticalCenterText(BuildContext context) {
+    return const TDText(
+      '中华人民共和国腾讯科技',
+      // font: Font(size: 100, lineHeight: 100),
+      forceVerticalCenter: true,
+      backgroundColor: Colors.orange,
+    );
+  }

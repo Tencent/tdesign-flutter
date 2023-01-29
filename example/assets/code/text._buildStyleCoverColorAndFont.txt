@@ -1,0 +1,8 @@
+
+  Widget _buildStyleCoverColorAndFont(BuildContext context) {
+    return TDText(
+      exampleTxt,
+      font: TDTheme.of(context).fontBodyLarge,
+      textColor: TDTheme.of(context).brandNormalColor,
+    );
+  }
