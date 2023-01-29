@@ -16,7 +16,7 @@ class TDTag extends StatelessWidget {
       this.size = TDTagSize.medium,
       this.padding,
       this.forceVerticalCenter = true,
-      this.isStroke = false,
+      this.isOutline = false,
       this.isCircle = false,
       this.isLight = false,
       this.needCloseIcon = false,
@@ -59,7 +59,7 @@ class TDTag extends StatelessWidget {
   final bool forceVerticalCenter;
 
   /// 是否为描边类型，默认不是
-  final bool isStroke;
+  final bool isOutline;
 
   /// 是否为圆角类型，默认不是
   final bool isCircle;
@@ -134,8 +134,8 @@ class TDTag extends StatelessWidget {
     if (style != null) {
       return style!;
     }
-    return isStroke
-        ? TDTagStyle.generateStrokeStyleByTheme(
+    return isOutline
+        ? TDTagStyle.generateOutlineStyleByTheme(
             context, theme, isLight, isCircle)
         : TDTagStyle.generateFillStyleByTheme(
             context, theme, isLight, isCircle);
