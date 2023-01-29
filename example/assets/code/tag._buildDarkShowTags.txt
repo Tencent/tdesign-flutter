@@ -1,0 +1,25 @@
+
+  Widget _buildDarkShowTags(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: const [
+        TDTag('默认'),
+        TDTag(
+          '主要',
+          theme: TDTagTheme.primary,
+        ),
+        TDTag(
+          '警告',
+          theme: TDTagTheme.warning,
+        ),
+        TDTag(
+          '危险',
+          theme: TDTagTheme.danger,
+        ),
+        TDTag(
+          '成功',
+          theme: TDTagTheme.success,
+        ),
+      ],
+    );
+  }
