@@ -1,6 +1,27 @@
 import 'package:flutter/material.dart';
 import '../../../td_export.dart';
 
+/// Tag展示类型
+enum TDTagTheme {
+  /// 默认
+  defaultTheme,
+
+  /// 常规
+  primary,
+
+  /// 警告
+  warning,
+
+  /// 危险
+  danger,
+
+  /// 成功
+  success,
+}
+
+/// 标签尺寸
+enum TDTagSize { extraLarge, large, medium, small, custom }
+
 /// 标签样式
 class TDTagStyle {
   TDTagStyle(
@@ -145,159 +166,16 @@ class TDTagStyle {
         : TDTheme.of(context).radiusSmall);
     border = 1;
   }
-}
 
-/// 两端圆弧Style
-class CircleRectTagStyle extends TDTagStyle {
-  CircleRectTagStyle({
-    BuildContext? context,
-    Color? textColor,
-    Color? backgroundColor,
-    Font? font,
-    FontWeight? fontWeight,
-  }) : super(
-          context: context,
-          textColor: textColor,
-          backgroundColor: backgroundColor,
-          font: font,
-          fontWeight: fontWeight,
-        );
+  TDTagStyle.generateDisableSelectStyle(
+      BuildContext context, bool isStroke , bool isCircle) {
 
-  @override
-  BorderRadiusGeometry get getBorderRadius => BorderRadius.circular(1000);
-}
-
-/// 右边端圆弧Style
-class SemicircleRectTagStyle extends TDTagStyle {
-  SemicircleRectTagStyle({
-    BuildContext? context,
-    Color? textColor,
-    Color? backgroundColor,
-    Font? font,
-    FontWeight? fontWeight,
-  }) : super(
-          context: context,
-          textColor: textColor,
-          backgroundColor: backgroundColor,
-          font: font,
-          fontWeight: fontWeight,
-        );
-
-  @override
-  BorderRadiusGeometry get getBorderRadius =>
-      const BorderRadius.horizontal(right: Radius.circular(1000));
-}
-
-/// 描边圆角矩形Style
-class StrokeRoundRectTagStyle extends TDTagStyle {
-  /// 圆角半径
-  final double radius;
-
-  /// 是否为浅色背景
-  final bool isLight;
-
-  StrokeRoundRectTagStyle({
-    BuildContext? context,
-    Color? textColor,
-    Color? backgroundColor,
-    Font? font,
-    FontWeight? fontWeight,
-    Color? wireFrameColor,
-    double border = 1,
-    this.isLight = false,
-    this.radius = 2,
-  }) : super(
-          context: context,
-          textColor: textColor,
-          backgroundColor: backgroundColor,
-          font: font,
-          fontWeight: fontWeight,
-          borderColor: wireFrameColor,
-          border: border,
-        );
-
-  @override
-  Color get getBackgroundColor {
-    if (backgroundColor != null) {
-      return backgroundColor!;
-    }
-    return isLight
-        ? TDTheme.of(context).brandColor2
-        : TDTheme.of(context).whiteColor1;
+    borderColor = TDTheme.of(context).grayColor4;
+    textColor = TDTheme.of(context).fontGyColor4;
+    backgroundColor = TDTheme.of(context).grayColor2;
+    borderRadius = BorderRadius.circular(isCircle
+        ? TDTheme.of(context).radiusRound
+        : TDTheme.of(context).radiusSmall);
+    border = isStroke ? 1 : 0;
   }
-
-  @override
-  BorderRadiusGeometry get getBorderRadius => BorderRadius.circular(radius);
-
-  @override
-  Color get getTextColor => textColor ?? TDTheme.of(context).brandNormalColor;
-
-  @override
-  Color get getBorderColor =>
-      borderColor ?? TDTheme.of(context).brandNormalColor;
-}
-
-/// 常规圆角矩形Style
-class RoundRectTagStyle extends StrokeRoundRectTagStyle {
-  /// 展示类型
-  final TDTagTheme type;
-
-  RoundRectTagStyle(
-      {BuildContext? context,
-      Color? textColor,
-      Color? backgroundColor,
-      Font? font,
-      FontWeight? fontWeight,
-      this.type = TDTagTheme.defaultTheme,
-      double radius = 2,
-      bool isLight = false})
-      : super(
-          context: context,
-          textColor: textColor,
-          backgroundColor: backgroundColor,
-          font: font,
-          fontWeight: fontWeight,
-          radius: radius,
-          isLight: isLight,
-          border: 0,
-        );
-
-  @override
-  Color get getBackgroundColor {
-    if (backgroundColor != null) {
-      return backgroundColor!;
-    }
-    if (isLight) {
-      return TDTheme.of(context).brandColor2;
-    }
-    switch (type) {
-      case TDTagTheme.primary:
-        return TDTheme.of(context).brandNormalColor;
-      case TDTagTheme.success:
-        return TDTheme.of(context).successNormalColor;
-      case TDTagTheme.warning:
-        return TDTheme.of(context).warningNormalColor;
-      case TDTagTheme.danger:
-        return TDTheme.of(context).errorNormalColor;
-      case TDTagTheme.defaultTheme:
-        return TDTheme.of(context).grayColor7;
-      default:
-        return TDTheme.of(context).whiteColor1;
-    }
-  }
-
-  @override
-  Color get getTextColor {
-    if (textColor != null) {
-      return textColor!;
-    }
-    if (isLight) {
-      return TDTheme.of(context).brandNormalColor;
-    } else {
-      return TDTheme.of(context).fontWhColor1;
-    }
-  }
-
-  @override
-  Color get getBorderColor => Colors.transparent;
 }
