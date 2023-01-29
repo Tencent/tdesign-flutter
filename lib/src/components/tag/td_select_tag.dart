@@ -17,7 +17,7 @@ class TDSelectTag extends StatefulWidget {
       this.size = TDTagSize.medium,
       this.padding,
       this.forceVerticalCenter = true,
-      this.isStroke = false,
+      this.isOutline = false,
       this.isCircle = false,
       this.isLight = false,
       this.needCloseIcon = false,
@@ -62,7 +62,7 @@ class TDSelectTag extends StatefulWidget {
   final bool forceVerticalCenter;
 
   /// 是否为描边类型，默认不是
-  final bool isStroke;
+  final bool isOutline;
 
   /// 是否为圆角类型，默认不是
   final bool isCircle;
@@ -125,15 +125,15 @@ class _TDClickTagState extends State<TDSelectTag> {
     if (widget.disableSelectStyle != null) {
       return widget.disableSelectStyle!;
     }
-    return TDTagStyle.generateDisableSelectStyle(context,widget.isStroke, widget.isCircle);
+    return TDTagStyle.generateDisableSelectStyle(context,widget.isOutline, widget.isCircle);
   }
 
   TDTagStyle _getSelectStyle() {
     if (widget.selectStyle != null) {
       return widget.selectStyle!;
     }
-    return widget.isStroke
-        ? TDTagStyle.generateStrokeStyleByTheme(
+    return widget.isOutline
+        ? TDTagStyle.generateOutlineStyleByTheme(
             context, widget.theme, widget.isLight, widget.isCircle)
         : TDTagStyle.generateFillStyleByTheme(
             context, widget.theme, widget.isLight, widget.isCircle);
@@ -143,8 +143,8 @@ class _TDClickTagState extends State<TDSelectTag> {
     if (widget.unSelectStyle != null) {
       return widget.unSelectStyle!;
     }
-    return widget.isStroke
-        ? TDTagStyle.generateStrokeStyleByTheme(
+    return widget.isOutline
+        ? TDTagStyle.generateOutlineStyleByTheme(
         context, TDTagTheme.defaultTheme, widget.isLight, widget.isCircle)
         : TDTagStyle.generateFillStyleByTheme(
         context, TDTagTheme.defaultTheme, widget.isLight, widget.isCircle);

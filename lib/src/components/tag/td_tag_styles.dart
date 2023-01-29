@@ -121,7 +121,7 @@ class TDTagStyle {
     borderColor = backgroundColor;
   }
 
-  TDTagStyle.generateStrokeStyleByTheme(
+  TDTagStyle.generateOutlineStyleByTheme(
       BuildContext context, TDTagTheme? theme, bool light, bool isCircle) {
     this.context = context;
     switch (theme) {
@@ -168,7 +168,7 @@ class TDTagStyle {
   }
 
   TDTagStyle.generateDisableSelectStyle(
-      BuildContext context, bool isStroke , bool isCircle) {
+      BuildContext context, bool isOutline , bool isCircle) {
 
     borderColor = TDTheme.of(context).grayColor4;
     textColor = TDTheme.of(context).fontGyColor4;
@@ -176,6 +176,6 @@ class TDTagStyle {
     borderRadius = BorderRadius.circular(isCircle
         ? TDTheme.of(context).radiusRound
         : TDTheme.of(context).radiusSmall);
-    border = isStroke ? 1 : 0;
+    border = isOutline ? 1 : 0;
   }
 }
