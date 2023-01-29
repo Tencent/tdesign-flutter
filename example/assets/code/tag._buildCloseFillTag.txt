@@ -1,0 +1,10 @@
+
+  Widget _buildCloseFillTag(BuildContext context) {
+    return TDTag(
+      '标签文字',
+      needCloseIcon: true,
+      onCloseTap: () {
+        TDToast.showText('点击关闭', context: context);
+      },
+    );
+  }
