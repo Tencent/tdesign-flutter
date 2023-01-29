@@ -108,15 +108,61 @@ class TDTagPage extends StatelessWidget {
                   );
                 }),
             ExampleItem(
-                desc: '可选中的标签 //TODO', //TODO
+                desc: '可选中的标签', //
                 builder: (context) {
-                  return Row(
-                    children: const [
-                      SizedBox(
-                        width: 16,
-                      ),
-                    ],
-                  );
+                  return Wrap(
+                      spacing: 8,
+                      direction: Axis.vertical,
+                      children: [
+                        // 非浅色填充
+                        Wrap(
+                            spacing: 8,
+                            children:const [
+                              SizedBox(
+                                width: 80,
+                                child: TDText('dark'),
+                              ),
+                              TDSelectTag('未选中态', theme: TDTagTheme.primary,),
+                              TDSelectTag('已选中态', theme: TDTagTheme.primary,isSelected: true,),
+                              TDSelectTag('不可选态', theme: TDTagTheme.primary,disableSelect: true,),
+                            ]),
+                        // 浅色填充
+                        Wrap(
+                            spacing: 8,
+                            children:const [
+                              SizedBox(
+                                width: 80,
+                                child: TDText('light'),
+                              ),
+                              TDSelectTag('未选中态', theme: TDTagTheme.primary,isLight: true, ),
+                              TDSelectTag('已选中态', theme: TDTagTheme.primary,isLight: true, isSelected: true,),
+                              TDSelectTag('不可选态', theme: TDTagTheme.primary,isLight: true, disableSelect: true,),
+                            ]),
+                        // 非浅色描边
+                        Wrap(
+                            spacing: 8,
+                            children:const [
+                              SizedBox(
+                                width: 80,
+                                child: TDText('outline'),
+                              ),
+                              TDSelectTag('未选中态', theme: TDTagTheme.primary,isStroke: true,),
+                              TDSelectTag('已选中态', theme: TDTagTheme.primary,isStroke: true,isSelected: true,),
+                              TDSelectTag('不可选态', theme: TDTagTheme.primary,isStroke: true,disableSelect: true,),
+                            ]),
+                        // 浅色描边
+                        Wrap(
+                            spacing: 8,
+                            children:const [
+                              SizedBox(
+                                width: 80,
+                                child: TDText('light-outline'),
+                              ),
+                              TDSelectTag('未选中态', theme: TDTagTheme.primary,isStroke:true, isLight: true, ),
+                              TDSelectTag('已选中态', theme: TDTagTheme.primary,isStroke:true, isLight: true, isSelected: true,),
+                              TDSelectTag('不可选态', theme: TDTagTheme.primary,isStroke:true, isLight: true, disableSelect: true,),
+                            ]),
+                      ]);
                 }),
           ]),
           ExampleModule(title: '组件状态（主题）', children: [
@@ -456,6 +502,30 @@ class TDTagPage extends StatelessWidget {
                 TDTag(
                   '标签文字',
                   isStroke: true,
+                  needCloseIcon: true,
+                  theme: TDTagTheme.success,
+                ),
+                TDTag(
+                  '标签文字',
+                  needCloseIcon: true,
+                ),
+                TDTag(
+                  '标签文字',
+                  needCloseIcon: true,
+                  theme: TDTagTheme.primary,
+                ),
+                TDTag(
+                  '标签文字',
+                  needCloseIcon: true,
+                  theme: TDTagTheme.warning,
+                ),
+                TDTag(
+                  '标签文字',
+                  needCloseIcon: true,
+                  theme: TDTagTheme.danger,
+                ),
+                TDTag(
+                  '标签文字',
                   needCloseIcon: true,
                   theme: TDTagTheme.success,
                 ),
