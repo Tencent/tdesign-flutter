@@ -13,20 +13,18 @@ class TDTagPage extends StatelessWidget {
           ExampleModule(title: '组件类型', children: [
             ExampleItem(
                 desc: '基础标签',
+                ignoreCode: true,
                 builder: (context) {
                   return Row(
-                    children: const [
-                      SizedBox(
+                    children:  [
+                      const SizedBox(
                         width: 16,
                       ),
-                      TDTag('标签文字'),
-                      SizedBox(
+                      CodeWrapper(builder: _buildSampleFillTag),
+                      const SizedBox(
                         width: 16,
                       ),
-                      TDTag(
-                        '标签文字',
-                        isStroke: true,
-                      ),
+                      CodeWrapper(builder: _buildSampleOutlineTag),
                     ],
                   );
                 }),
@@ -48,7 +46,7 @@ class TDTagPage extends StatelessWidget {
                       TDTag(
                         '标签文字',
                         isCircle: true,
-                        isStroke: true,
+                        isOutline: true,
                       ),
                     ],
                   );
@@ -77,7 +75,7 @@ class TDTagPage extends StatelessWidget {
                           TDIcons.discount,
                           size: 14,
                         ),
-                        isStroke: true,
+                        isOutline: true,
                       ),
                     ],
                   );
@@ -100,7 +98,7 @@ class TDTagPage extends StatelessWidget {
                       const SizedBox(
                         width: 16,
                       ),
-                      TDTag('标签文字', needCloseIcon: true, isStroke: true,
+                      TDTag('标签文字', needCloseIcon: true, isOutline: true,
                           onCloseTap: () {
                         TDToast.showText('点击关闭', context: context);
                       }),
@@ -146,9 +144,9 @@ class TDTagPage extends StatelessWidget {
                                 width: 80,
                                 child: TDText('outline'),
                               ),
-                              TDSelectTag('未选中态', theme: TDTagTheme.primary,isStroke: true,),
-                              TDSelectTag('已选中态', theme: TDTagTheme.primary,isStroke: true,isSelected: true,),
-                              TDSelectTag('不可选态', theme: TDTagTheme.primary,isStroke: true,disableSelect: true,),
+                              TDSelectTag('未选中态', theme: TDTagTheme.primary,isOutline: true,),
+                              TDSelectTag('已选中态', theme: TDTagTheme.primary,isOutline: true,isSelected: true,),
+                              TDSelectTag('不可选态', theme: TDTagTheme.primary,isOutline: true,disableSelect: true,),
                             ]),
                         // 浅色描边
                         Wrap(
@@ -158,9 +156,9 @@ class TDTagPage extends StatelessWidget {
                                 width: 80,
                                 child: TDText('light-outline'),
                               ),
-                              TDSelectTag('未选中态', theme: TDTagTheme.primary,isStroke:true, isLight: true, ),
-                              TDSelectTag('已选中态', theme: TDTagTheme.primary,isStroke:true, isLight: true, isSelected: true,),
-                              TDSelectTag('不可选态', theme: TDTagTheme.primary,isStroke:true, isLight: true, disableSelect: true,),
+                              TDSelectTag('未选中态', theme: TDTagTheme.primary,isOutline:true, isLight: true, ),
+                              TDSelectTag('已选中态', theme: TDTagTheme.primary,isOutline:true, isLight: true, isSelected: true,),
+                              TDSelectTag('不可选态', theme: TDTagTheme.primary,isOutline:true, isLight: true, disableSelect: true,),
                             ]),
                       ]);
                 }),
@@ -229,25 +227,25 @@ class TDTagPage extends StatelessWidget {
                       Wrap(
                         spacing: 8,
                         children: const [
-                          TDTag('默认', isStroke: true),
+                          TDTag('默认', isOutline: true),
                           TDTag(
                             '主要',
-                            isStroke: true,
+                            isOutline: true,
                             theme: TDTagTheme.primary,
                           ),
                           TDTag(
                             '警告',
-                            isStroke: true,
+                            isOutline: true,
                             theme: TDTagTheme.warning,
                           ),
                           TDTag(
                             '危险',
-                            isStroke: true,
+                            isOutline: true,
                             theme: TDTagTheme.danger,
                           ),
                           TDTag(
                             '成功',
-                            isStroke: true,
+                            isOutline: true,
                             theme: TDTagTheme.success,
                           ),
                         ],
@@ -257,28 +255,28 @@ class TDTagPage extends StatelessWidget {
                       Wrap(
                         spacing: 8,
                         children: const [
-                          TDTag('默认', isStroke: true, isLight: true),
+                          TDTag('默认', isOutline: true, isLight: true),
                           TDTag(
                             '主要',
-                            isStroke: true,
+                            isOutline: true,
                             isLight: true,
                             theme: TDTagTheme.primary,
                           ),
                           TDTag(
                             '警告',
-                            isStroke: true,
+                            isOutline: true,
                             isLight: true,
                             theme: TDTagTheme.warning,
                           ),
                           TDTag(
                             '危险',
-                            isStroke: true,
+                            isOutline: true,
                             isLight: true,
                             theme: TDTagTheme.danger,
                           ),
                           TDTag(
                             '成功',
-                            isStroke: true,
+                            isOutline: true,
                             isLight: true,
                             theme: TDTagTheme.success,
                           ),
@@ -406,26 +404,26 @@ class TDTagPage extends StatelessWidget {
               children: const [
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                 ),
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   theme: TDTagTheme.primary,
                 ),
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   theme: TDTagTheme.warning,
                 ),
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   theme: TDTagTheme.danger,
                 ),
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   theme: TDTagTheme.success,
                 ),
               ],
@@ -439,30 +437,30 @@ class TDTagPage extends StatelessWidget {
               children: const [
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   isLight: true,
                 ),
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   isLight: true,
                   theme: TDTagTheme.primary,
                 ),
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   isLight: true,
                   theme: TDTagTheme.warning,
                 ),
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   isLight: true,
                   theme: TDTagTheme.danger,
                 ),
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   isLight: true,
                   theme: TDTagTheme.success,
                 ),
@@ -478,30 +476,30 @@ class TDTagPage extends StatelessWidget {
               children: const [
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   needCloseIcon: true,
                 ),
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   needCloseIcon: true,
                   theme: TDTagTheme.primary,
                 ),
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   needCloseIcon: true,
                   theme: TDTagTheme.warning,
                 ),
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   needCloseIcon: true,
                   theme: TDTagTheme.danger,
                 ),
                 TDTag(
                   '标签文字',
-                  isStroke: true,
+                  isOutline: true,
                   needCloseIcon: true,
                   theme: TDTagTheme.success,
                 ),
@@ -558,7 +556,7 @@ class TDTagPage extends StatelessWidget {
                     size: 14,
                   ),
                   needCloseIcon: true,
-                  isStroke: true,
+                  isOutline: true,
                 ),
               ],
             );
@@ -617,7 +615,7 @@ class TDTagPage extends StatelessWidget {
                 child: Wrap(spacing: 8, runSpacing: 8, children: const [
                   TDTag(
                     '加大尺寸',
-                    isStroke: true,
+                    isOutline: true,
                     icon: Icon(
                       TDIcons.discount,
                       size: 14,
@@ -627,7 +625,7 @@ class TDTagPage extends StatelessWidget {
                   ),
                   TDTag(
                     '大尺寸',
-                    isStroke: true,
+                    isOutline: true,
                     icon: Icon(
                       TDIcons.discount,
                       size: 14,
@@ -637,7 +635,7 @@ class TDTagPage extends StatelessWidget {
                   ),
                   TDTag(
                     '中尺寸',
-                    isStroke: true,
+                    isOutline: true,
                     icon: Icon(
                       TDIcons.discount,
                       size: 14,
@@ -647,7 +645,7 @@ class TDTagPage extends StatelessWidget {
                   ),
                   TDTag(
                     '小尺寸',
-                    isStroke: true,
+                    isOutline: true,
                     icon: Icon(
                       TDIcons.discount,
                       size: 14,
@@ -661,4 +659,13 @@ class TDTagPage extends StatelessWidget {
           }),
     ]);
   }
+
+  TDTag _buildSampleOutlineTag(BuildContext context) {
+    return const TDTag(
+                      '标签文字',
+                      isOutline: true,
+                    );
+  }
+
+  TDTag _buildSampleFillTag(BuildContext context) => const TDTag('标签文字');
 }
