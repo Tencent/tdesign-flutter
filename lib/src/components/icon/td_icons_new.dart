@@ -8,7 +8,7 @@ class _TDIconsData extends IconData {
   const _TDIconsData(int codePoint, this.name)
       : super(
           codePoint,
-          fontFamily: 'TDIcons',
+          fontFamily: 'NewTDIcons',
           fontPackage: 'tdesign_flutter',
         );
 
