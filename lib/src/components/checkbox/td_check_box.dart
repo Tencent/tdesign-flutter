@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/td_colors.dart';
 import '../../theme/td_fonts.dart';
 import '../../theme/td_theme.dart';
+import '../../util/auto_size.dart';
 import '../divider/td_divider.dart';
 import '../icon/td_icons.dart';
 import '../text/td_text.dart';
@@ -15,6 +15,7 @@ import 'td_check_box_group.dart';
 enum TDCheckboxStyle {
   circle, // 圆形
   square, // 方形
+  check, // 无背景勾选样式
 }
 
 ///
@@ -38,8 +39,8 @@ typedef IconBuilder = Widget? Function(BuildContext context, bool checked);
 ///
 /// 自定义Content
 ///
-typedef ContentBuilder = Widget Function(BuildContext context, bool checked, String? content);
-
+typedef ContentBuilder = Widget Function(
+    BuildContext context, bool checked, String? content);
 
 typedef OnCheckValueChanged = void Function(bool selected);
 
@@ -51,7 +52,6 @@ typedef OnCheckValueChanged = void Function(bool selected);
 ///
 ///
 class TDCheckbox extends StatefulWidget {
-
   const TDCheckbox(
       {this.id,
         Key? key,
@@ -63,12 +63,16 @@ class TDCheckbox extends StatefulWidget {
         this.subTitleMaxLine = 1,
         this.customIconBuilder,
         this.customContentBuilder,
+        this.insetSpacing = 16,
         this.style,
         this.spacing,
         this.backgroundColor,
         this.size = TDCheckBoxSize.small,
+        this.cardMode = false,
+        this.showDivider = true,
         this.contentDirection = TDContentDirection.right,
-        this.onCheckBoxChanged}): super(key: key);
+        this.onCheckBoxChanged})
+      : super(key: key);
 
   /// id
   /// 当FuiCheckBox嵌入到FuiCheckBoxGroup内时，这个值需要赋值，否则不会被纳入Group管理
@@ -93,6 +97,9 @@ class TDCheckbox extends StatefulWidget {
   /// 辅助文字的行数
   final int? subTitleMaxLine;
 
+  /// 文字和非图标侧的距离
+  final double? insetSpacing;
+
   /// icon和文字的距离
   final double? spacing;
 
@@ -101,6 +108,12 @@ class TDCheckbox extends StatefulWidget {
 
   /// 复选框大小
   final TDCheckBoxSize size;
+
+  /// 展示为卡片模式
+  final bool cardMode;
+
+  /// 是否展示分割线
+  final bool showDivider;
 
   /// 文字相对icon的方位
   final TDContentDirection contentDirection;
@@ -121,17 +134,32 @@ class TDCheckbox extends StatefulWidget {
   State createState() => TDCheckboxState();
 
   /// 默认的checkBox icon
-  Widget buildDefaultIcon(BuildContext context, TDCheckboxGroupState? groupState, bool isChecked) {
+  Widget buildDefaultIcon(
+      BuildContext context, TDCheckboxGroupState? groupState, bool isChecked) {
+    if (cardMode == true) {
+      return Container();
+    }
     Widget current;
     var size = 24.0;
-    final style = this.style ?? groupState?.widget.style ?? TDCheckboxStyle.circle;
+    final style =
+        this.style ?? groupState?.widget.style ?? TDCheckboxStyle.circle;
     final theme = TDTheme.of(context);
+    final deSelectedColor = style == TDCheckboxStyle.check ? Colors.transparent : theme.grayColor4;
     current = Icon(
       style == TDCheckboxStyle.circle
-          ? isChecked ? TDIcons.check_circle_filled : TDIcons.circle
-          : isChecked ? TDIcons.check_rectangle_filled :  TDIcons.rectangle,
+          ? isChecked
+          ? TDIcons.check_circle_filled
+          : TDIcons.circle :
+      style == TDCheckboxStyle.square
+          ? isChecked
+          ? TDIcons.check_rectangle_filled
+          : TDIcons.rectangle : isChecked
+          ? TDIcons.check
+          : TDIcons.check,
       size: size,
-      color: isChecked && enable ? theme.brandColor8 : theme.grayColor4
+      color: !enable ?
+      (isChecked ? theme.brandColor3 : deSelectedColor) :
+      isChecked ? theme.brandColor8 : deSelectedColor,
     );
     return current;
   }
@@ -161,7 +189,10 @@ class TDCheckboxState extends State<TDCheckbox> {
   }
 
   EdgeInsets _getPadding(TDCheckBoxSize size) {
-    switch(size) {
+    if (widget.cardMode) {
+      return const EdgeInsets.only(top: 16);
+    }
+    switch (size) {
       case TDCheckBoxSize.small:
         return const EdgeInsets.only(top: 12, bottom: 12);
       case TDCheckBoxSize.large:
@@ -189,22 +220,21 @@ class TDCheckboxState extends State<TDCheckbox> {
     // 内容
     var content = _buildContent(context, groupState, checked);
 
-
     if (icon == null && content == null) {
       throw Exception('Icon and content cannot both be null!');
     }
 
-    Widget? current ;
+    Widget? current;
 
     if (icon == null) {
       current = content!;
     } else {
-
       current = icon;
 
       if (content != null) {
         final spacing = _spacing(groupState);
-        var contentDirection = groupState?.widget.contentDirection ?? widget.contentDirection;
+        var contentDirection =
+            groupState?.widget.contentDirection ?? widget.contentDirection;
         switch (contentDirection) {
           case TDContentDirection.left:
             current = Stack(
@@ -219,11 +249,15 @@ class TDCheckboxState extends State<TDCheckbox> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Expanded(child: Padding(
-                            padding: const EdgeInsets.only(left: 16),
-                            child: content,
-                          )),
-                          SizedBox(width: spacing,),
+                          Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(left: widget.insetSpacing ?? 16),
+                                child: content,
+                              )
+                          ),
+                          SizedBox(
+                            width: spacing,
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(right: 16),
                             child: icon,
@@ -231,22 +265,27 @@ class TDCheckboxState extends State<TDCheckbox> {
                         ],
                       ),
                       Visibility(
-                        visible: widget.subTitle != null && widget.subTitle != '',
+                        visible:
+                        widget.subTitle != null && widget.subTitle != '',
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 16, right: 16),
-                          child: TDText(
-                              widget.subTitle ?? '',
-                              maxLines:
-                              widget.subTitleMaxLine,
+                          padding: EdgeInsets.only(left: widget.insetSpacing ?? 16, right: 16),
+                          child: TDText(widget.subTitle ?? '',
+                              maxLines: widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
-                              textColor: widget.enable ? TDTheme.of(context).fontGyColor3 : TDTheme.of(context).fontGyColor4,
-                              font:TDTheme.of(context).fontBodyMedium),
+                              textColor: widget.enable
+                                  ? TDTheme.of(context).fontGyColor3
+                                  : TDTheme.of(context).fontGyColor4,
+                              font: TDTheme.of(context).fontBodyMedium),
                         ),
                       )
                     ],
                   ),
                 ),
-                const TDDivider(margin: EdgeInsets.only(left: 16),)
+                Visibility(
+                    visible: !widget.cardMode && widget.showDivider,
+                    child: const TDDivider(
+                      margin: EdgeInsets.only(left: 16),
+                    ))
               ],
             );
             break;
@@ -267,30 +306,42 @@ class TDCheckboxState extends State<TDCheckbox> {
                             padding: const EdgeInsets.only(left: 16),
                             child: icon,
                           ),
-                          SizedBox(width: spacing,),
-                          Expanded(child: Padding(
-                            padding: const EdgeInsets.only(right: 16),
-                            child: content,
-                          )),
+                          SizedBox(
+                            width: spacing,
+                          ),
+                          Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(right: widget.insetSpacing ?? 16),
+                                child: content,
+                              )
+                          ),
                         ],
                       ),
                       Visibility(
-                        visible: widget.subTitle != null && widget.subTitle != '',
+                        visible:
+                        widget.subTitle != null && widget.subTitle != '',
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 48, right: 16),
-                          child: TDText(
-                              widget.subTitle ?? '',
-                              maxLines:
-                              widget.subTitleMaxLine,
+                          padding: EdgeInsets.only(
+                              top: widget.cardMode ? 4.scale : 0,
+                              left: widget.cardMode ? (16 + spacing) : 48,
+                              right: widget.insetSpacing ?? 16),
+                          child: TDText(widget.subTitle ?? '',
+                              maxLines: widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
-                              textColor: widget.enable ? TDTheme.of(context).fontGyColor3 : TDTheme.of(context).fontGyColor4,
-                              font:TDTheme.of(context).fontBodyMedium),
+                              textColor: widget.enable
+                                  ? TDTheme.of(context).fontGyColor3
+                                  : TDTheme.of(context).fontGyColor4,
+                              font: TDTheme.of(context).fontBodyMedium),
                         ),
                       )
                     ],
                   ),
                 ),
-                const TDDivider(margin: EdgeInsets.only(left: 48),)
+                Visibility(
+                    visible: !widget.cardMode && widget.showDivider,
+                    child: const TDDivider(
+                      margin: EdgeInsets.only(left: 48),
+                    ))
               ],
             );
             break;
@@ -326,12 +377,36 @@ class TDCheckboxState extends State<TDCheckbox> {
       );
     }
 
-    return Container(child: current, color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,);
+    return Container(
+      clipBehavior: widget.cardMode ? Clip.hardEdge : Clip.none,
+      decoration: BoxDecoration(
+          color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+          border: widget.cardMode ? checked
+              ? Border.all(width: 1.5, color: TDTheme.of(context).brandColor8)
+              : Border.all(width: 1.5, color: Colors.transparent) : null,
+          borderRadius: widget.cardMode
+              ? const BorderRadius.all(Radius.circular(6))
+              : null),
+      child: Stack(
+        children: [
+          current,
+          Positioned(
+              top: 0,
+              left: 0,
+              child: Visibility(
+                  visible: widget.cardMode && checked,
+                  child: const RadioCornerIcon(
+                    length: 28,
+                    radius: 4,
+                  ))),
+        ],
+      ),
+    );
   }
 
   /// 点击效果
   void _pressState(bool pressed) {
-    if(!widget.enable) {
+    if (!widget.enable) {
       return;
     }
     _pressed = pressed;
@@ -340,11 +415,11 @@ class TDCheckboxState extends State<TDCheckbox> {
 
   /// 选中状态的变化
   void onValueChange(
-    String? id,
-    bool value,
-    TDCheckboxGroupState? groupState,
-  ) {
-    if(!widget.enable) {
+      String? id,
+      bool value,
+      TDCheckboxGroupState? groupState,
+      ) {
+    if (!widget.enable) {
       return;
     }
     setState(() {
@@ -364,7 +439,6 @@ class TDCheckboxState extends State<TDCheckbox> {
       TDCheckboxGroupState? groupState,
       bool checked,
       ) {
-
     final title = widget.title;
     final customContent =
         widget.customContentBuilder ?? groupState?.widget.customContentBuilder;
@@ -372,24 +446,96 @@ class TDCheckboxState extends State<TDCheckbox> {
     var content = customContent?.call(context, checked, title);
     if (content == null) {
       if (title != null || customContent != null && title != null) {
-        content = TDText(
-            title,
-            maxLines:
-            widget.titleMaxLine ?? groupState?.widget.titleMaxLine,
+        content = TDText(title,
+            maxLines: widget.titleMaxLine ?? groupState?.widget.titleMaxLine,
             overflow: TextOverflow.ellipsis,
-            textColor: widget.enable ? TDTheme.of(context).fontGyColor1 : TDTheme.of(context).fontGyColor4,
-            font:TDTheme.of(context).fontBodyLarge);
+            textColor: widget.enable
+                ? TDTheme.of(context).fontGyColor1
+                : TDTheme.of(context).fontGyColor4,
+            font: TDTheme.of(context).fontBodyLarge);
       }
     }
     return content;
   }
 
   /// 构建icon
-  Widget? _buildCheckboxIcon(BuildContext context, TDCheckboxGroupState? groupState, bool isCheck) {
-    final iconBuilder = widget.customIconBuilder ?? groupState?.widget.customIconBuilder;
+  Widget? _buildCheckboxIcon(
+      BuildContext context, TDCheckboxGroupState? groupState, bool isCheck) {
+    final iconBuilder =
+        widget.customIconBuilder ?? groupState?.widget.customIconBuilder;
     if (iconBuilder != null) {
       return iconBuilder.call(context, isCheck);
     }
     return widget.buildDefaultIcon(context, groupState, isCheck);
   }
+}
+
+class RadioCornerIcon extends StatelessWidget {
+  final double length;
+  final double radius;
+
+  const RadioCornerIcon({Key? key, required this.length, required this.radius})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: length,
+      height: length,
+      child: Stack(
+        alignment: Alignment.topLeft,
+        children: [
+          CustomPaint(
+            painter: RadioCorner(
+                length: length,
+                radius: radius,
+                fillColor: TDTheme.of(context).brandColor8),
+          ),
+          const Positioned(
+              top: 3,
+              left: 2,
+              child: Icon(
+                TDIcons.check,
+                size: 14,
+                color: Colors.white,
+              ))
+        ],
+      ),
+    );
+  }
+}
+
+class RadioCorner extends CustomPainter {
+  final double length;
+  final double radius;
+  final Color fillColor;
+
+  RadioCorner(
+      {required this.length, required this.radius, required this.fillColor});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..isAntiAlias = true
+      ..strokeWidth = 1
+      ..color = fillColor
+      ..style = PaintingStyle.fill;
+    var rect = Rect.fromCircle(center: Offset(radius, radius), radius: radius);
+    var pi = 3.1415;
+    var path = Path();
+    path.moveTo(0, radius);
+    path.addArc(
+      rect,
+      180 * (pi / 180.0),
+      90 * (pi / 180.0),
+    );
+    path.moveTo(radius, 0);
+    path.lineTo(length, 0);
+    path.lineTo(0, length);
+    path.lineTo(0, radius);
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

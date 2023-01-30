@@ -1,0 +1,22 @@
+
+  Widget _buildFeedbackLongContent(BuildContext context) {
+    return TDButton(
+      content: '反馈类-内容超长',
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDConfirmDialog(
+              title: _dialogTitle,
+              content: _longContent,
+              contentMaxHeight: 300,
+            );
+          },
+        );
+      },
+    );
+  }

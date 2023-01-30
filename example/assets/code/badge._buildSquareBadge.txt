@@ -1,0 +1,29 @@
+
+  Widget _buildSquareBadge(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 34,
+            height: 34,
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: const [
+                Icon(TDIcons.notification),
+                Positioned(
+                  child: TDBadge(
+                    TDBadgeType.message,
+                    border: TDBadgeBorder.small,
+                    count: '8',
+                  ),
+                  right: 0,
+                  top: 0,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
