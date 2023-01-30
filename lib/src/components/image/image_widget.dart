@@ -4,7 +4,10 @@ import '../../../td_export.dart';
 ///封装图片加载控件，增加图片加载失败时加载默认图片
 class ImageWidget extends StatefulWidget {
   /// 图片地址
-  final String src;
+  final String? src;
+
+  /// 本地图片地址
+  final String? assetUrl;
 
   /// 图片宽度
   final double width;
@@ -83,34 +86,80 @@ class ImageWidget extends StatefulWidget {
     this.errorWidget,
     this.loadingWidget,
     this.cacheWidth,
-    this.cacheHeight
+    this.cacheHeight,
+    this.assetUrl
   }) : super(key: key);
 
-   ImageWidget.network(this.src, {
+  ImageWidget.network(this.src,
+      {Key? key,
+      required this.width,
+      required this.height,
+      double scale = 1.0,
+      this.errorWidget,
+      this.fit = BoxFit.none,
+      this.loadingWidget,
+      this.frameBuilder,
+      this.loadingBuilder,
+      this.errorBuilder,
+      this.semanticLabel,
+      this.excludeFromSemantics = false,
+      this.color,
+      this.opacity,
+      this.colorBlendMode,
+      this.alignment = Alignment.center,
+      this.repeat = ImageRepeat.noRepeat,
+      this.centerSlice,
+      this.matchTextDirection = false,
+      this.gaplessPlayback = false,
+      this.filterQuality = FilterQuality.low,
+      this.isAntiAlias = false,
+      Map<String, String>? headers,
+      this.cacheWidth,
+      this.assetUrl,
+      this.cacheHeight})
+      : image = ResizeImage.resizeIfNeeded(cacheWidth, cacheHeight,
+            NetworkImage(src ?? '', scale: scale, headers: headers)),
+        assert(cacheWidth == null || cacheWidth > 0),
+        assert(cacheHeight == null || cacheHeight > 0),
+        super(key: key);
+
+  ImageWidget.asset(
+    this.assetUrl, {
     Key? key,
-    required this.width,
-    required this.height,
-    double scale = 1.0,
-    this.errorWidget,
-    this.fit = BoxFit.none,
-    this.loadingWidget,
+    AssetBundle? bundle,
     this.frameBuilder,
-    this.loadingBuilder,
     this.errorBuilder,
     this.semanticLabel,
     this.excludeFromSemantics = false,
+    double? scale,
+    required this.width,
+    required this.height,
     this.color,
     this.opacity,
     this.colorBlendMode,
+    this.fit = BoxFit.none,
     this.alignment = Alignment.center,
     this.repeat = ImageRepeat.noRepeat,
     this.centerSlice,
     this.matchTextDirection = false,
     this.gaplessPlayback = false,
-    this.filterQuality = FilterQuality.low,
     this.isAntiAlias = false,
-    Map<String, String>? headers,
-    this.cacheWidth, this.cacheHeight}) : image = ResizeImage.resizeIfNeeded(cacheWidth, cacheHeight, NetworkImage(src, scale: scale, headers: headers)),
+    String? package,
+    this.filterQuality = FilterQuality.low,
+    this.cacheWidth,
+    this.cacheHeight,
+    this.src,
+    this.errorWidget,
+    this.loadingWidget,
+  })  : image = ResizeImage.resizeIfNeeded(
+          cacheWidth,
+          cacheHeight,
+          scale != null
+              ? ExactAssetImage(assetUrl ?? '',
+                  bundle: bundle, scale: scale, package: package)
+              : AssetImage(assetUrl ?? '', bundle: bundle, package: package),
+        ),
+        loadingBuilder = null,
         assert(cacheWidth == null || cacheWidth > 0),
         assert(cacheHeight == null || cacheHeight > 0),
         super(key: key);
@@ -129,8 +178,8 @@ class _StateImageWidget extends State<ImageWidget> {
   @override
   void initState() {
     super.initState();
-    _image = Image.network(
-      widget.src,
+    _image = widget.assetUrl == null ? Image.network(
+      widget.src ?? '',
       width: widget.width,
       height: widget.height,
       fit: widget.fit,
@@ -150,10 +199,29 @@ class _StateImageWidget extends State<ImageWidget> {
       isAntiAlias: widget.isAntiAlias,
       cacheWidth: widget.cacheWidth,
       cacheHeight: widget.cacheHeight,
+    ) : Image.asset(
+      widget.assetUrl ?? '',
+      width: widget.width,
+      height: widget.height,
+      fit: widget.fit,
+      color: widget.color,
+      frameBuilder: widget.frameBuilder,
+      errorBuilder: widget.errorBuilder,
+      semanticLabel: widget.semanticLabel,
+      excludeFromSemantics: widget.excludeFromSemantics,
+      colorBlendMode: widget.colorBlendMode,
+      alignment: widget.alignment,
+      repeat: widget.repeat,
+      centerSlice: widget.centerSlice,
+      matchTextDirection: widget.matchTextDirection,
+      gaplessPlayback: widget.gaplessPlayback,
+      filterQuality: widget.filterQuality,
+      isAntiAlias: widget.isAntiAlias,
+      cacheWidth: widget.cacheWidth,
+      cacheHeight: widget.cacheHeight,
     );
     var resolve = _image.image.resolve(const ImageConfiguration());
     resolve.addListener(ImageStreamListener((_, __) {
-
       /// 加载成功
       setState(() {
         loading = false;
@@ -184,22 +252,23 @@ class _StateImageWidget extends State<ImageWidget> {
       return Container(
           alignment: widget.alignment,
           color: widget.color ?? TDTheme.of(context).grayColor2,
-          child: widget.loadingWidget ?? Icon(
-            TDIcons.ellipsis,
-            size: 22,
-            color: TDTheme.of(context).fontGyColor3,
-          )
-      );
+          child: widget.loadingWidget ??
+              Icon(
+                TDIcons.ellipsis,
+                size: 22,
+                color: TDTheme.of(context).fontGyColor3,
+              ));
     }
     if (error == true && loading == false) {
       return Container(
         alignment: widget.alignment,
         color: widget.color ?? TDTheme.of(context).grayColor2,
-        child: widget.errorWidget ?? Icon(
-          TDIcons.close,
-          size: 22,
-          color: TDTheme.of(context).fontGyColor3,
-        ),
+        child: widget.errorWidget ??
+            Icon(
+              TDIcons.close,
+              size: 22,
+              color: TDTheme.of(context).fontGyColor3,
+            ),
       );
     }
     if (loading == false && error == false) {

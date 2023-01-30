@@ -1,0 +1,10 @@
+
+  TDButton _buildDangerTextButton(BuildContext context) {
+    return const TDButton(
+      content: '文字按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.text,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.danger,
+    );
+  }

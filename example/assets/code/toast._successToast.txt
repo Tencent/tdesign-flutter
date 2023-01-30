@@ -1,0 +1,13 @@
+
+  Widget _successToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showSuccess('成功文案',context: context);
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      content: '成功提示',
+    );
+  }

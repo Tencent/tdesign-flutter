@@ -1,0 +1,15 @@
+
+  Widget _basicTypePureInput(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          controller: controller,
+          backgroundColor: Colors.white,
+          hintText: '请输入文字',
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }

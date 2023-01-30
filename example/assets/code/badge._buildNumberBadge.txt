@@ -1,0 +1,78 @@
+
+  Widget _buildNumberBadge(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 48,
+            height: 32,
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                TDText(
+                  '消息',
+                  font: TDTheme.of(context).fontBodyLarge,
+                ),
+                const Positioned(
+                  child: TDBadge(
+                    TDBadgeType.message,
+                    count: '8',
+                  ),
+                  right: 0,
+                  top: 0,
+                )
+              ],
+            ),
+          ),
+          const SizedBox(
+            width: 40,
+          ),
+          SizedBox(
+            width: 34,
+            height: 34,
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: const [
+                Icon(TDIcons.notification),
+                Positioned(
+                  child: TDBadge(
+                    TDBadgeType.message,
+                    count: '8',
+                  ),
+                  right: 0,
+                  top: 0,
+                )
+              ],
+            ),
+          ),
+          const SizedBox(
+            width: 40,
+          ),
+          SizedBox(
+            width: 86,
+            height: 54,
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: const [
+                TDButton(
+                  width: 80,
+                  height: 48,
+                  content: '按钮',
+                  size: TDButtonSize.large,
+                ),
+                Positioned(
+                  child: TDBadge(
+                    TDBadgeType.message,
+                    count: '8',
+                  ),
+                  right: 0,
+                  top: 0,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }

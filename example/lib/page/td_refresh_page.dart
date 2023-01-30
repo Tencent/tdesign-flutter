@@ -10,6 +10,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import '../../base/example_widget.dart';
+import '../annotation/demo.dart';
 
 class TdPullDownRefreshPage extends StatefulWidget {
   const TdPullDownRefreshPage({Key? key}) : super(key: key);
@@ -27,32 +28,40 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
         title: '下拉刷新 PullDownRefresh',
+        exampleCodeGroup: 'refresh',
         children: [
         ExampleModule(title: '默认',
         children: [
-          ExampleItem(builder: (_) => SizedBox(
+          ExampleItem(
+              ignoreCode: true,
+              builder: (_) => SizedBox(
             height: 1000,
             child: Stack(
               children: [
-                EasyRefresh(
-                  // 下拉样式
-                  header: TDRefreshHeader(),
-                  child: ListView.builder(
-                    itemBuilder: (context, index) => Text('${dataList[index]}'),
-                    itemCount: dataList.length,
-                  ),
-                  // 下拉刷新回调
-                  onRefresh: () async {
-                    await Future.delayed(const Duration(seconds: 2), () {
-                      dataList.addAll(
-                          List.generate(10, (index) => ' 下拉添加的第$index个item'));
-                      setState(() {});
-                    });
-                  },
-                )
+                CodeWrapper(builder: _buildRefresh)
               ],
             ),
           ))
         ])]);
+  }
+
+  @Demo(group: 'refresh')
+  Widget _buildRefresh(BuildContext context) {
+    return EasyRefresh(
+      // 下拉样式
+      header: TDRefreshHeader(),
+      child: ListView.builder(
+        itemBuilder: (context, index) => Text('${dataList[index]}'),
+        itemCount: dataList.length,
+      ),
+      // 下拉刷新回调
+      onRefresh: () async {
+        await Future.delayed(const Duration(seconds: 2), () {
+          dataList.addAll(
+              List.generate(10, (index) => ' 下拉添加的第$index个item'));
+          setState(() {});
+        });
+      },
+    );
   }
 }
