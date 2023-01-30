@@ -1,0 +1,17 @@
+
+  Widget _buildTextIconHorizontalLoading(BuildContext context) {
+    return _buildRow(const [
+      TDLoading(
+        size: TDLoadingSize.small,
+        icon: TDLoadingIcon.circle,
+        text: '加载中…',
+        axis: Axis.horizontal,
+      ),
+      TDLoading(
+        size: TDLoadingSize.small,
+        icon: TDLoadingIcon.activity,
+        text: '加载中…',
+        axis: Axis.horizontal,
+      ),
+    ]);
+  }
