@@ -1,0 +1,25 @@
+
+  Widget _verticalTextDivider(BuildContext context) {
+    return Column(
+      children: const [
+        TDDivider(
+          text: '文字信息',
+          alignment: TextAlignment.left,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        TDDivider(
+          text: '文字信息',
+          alignment: TextAlignment.center,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        TDDivider(
+          text: '文字信息',
+          alignment: TextAlignment.right,
+        ),
+      ],
+    );
+  }

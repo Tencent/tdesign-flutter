@@ -1,0 +1,15 @@
+
+  Widget _imageEmpty(BuildContext context) {
+    return TDEmpty(
+      type: TDEmptyType.plain,
+      emptyText: '描述文字',
+      image: Container(
+        width: 120,
+        height: 120,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+          image: const DecorationImage(image: AssetImage('assets/img/empty.png'))
+        ),
+      ),
+    );
+  }

@@ -1,0 +1,23 @@
+
+  Widget _radioStatus(BuildContext context) {
+    return TDRadioGroup(
+      contentDirection: TDContentDirection.right,
+      selectId: '0',
+      child: Column(
+        children: const [
+          TDRadio(
+            id: '0',
+            title: '选项禁用-已选',
+            radioStyle: TDRadioStyle.circle,
+            enable: false,
+          ),
+          TDRadio(
+            id: '1',
+            title: '选项禁用-默认',
+            radioStyle: TDRadioStyle.circle,
+            enable: false,
+          ),
+        ],
+      ),
+    );
+  }

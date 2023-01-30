@@ -1,0 +1,26 @@
+
+  Widget _checkStyle(BuildContext context) {
+    return Column(
+      children: [
+        TDCheckboxGroupContainer(
+          style: TDCheckboxStyle.check,
+          selectIds: const ['index:0'],
+          child: const TDCheckbox(
+            id: 'index:0',
+            title: '多选',
+          ),
+        ),
+        const SizedBox(
+          height: 17,
+        ),
+        TDCheckboxGroupContainer(
+          style: TDCheckboxStyle.square,
+          selectIds: const ['index:0'],
+          child: const TDCheckbox(
+            id: 'index:0',
+            title: '多选',
+          ),
+        )
+      ],
+    );
+  }

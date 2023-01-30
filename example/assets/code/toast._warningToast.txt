@@ -1,0 +1,14 @@
+
+  Widget _warningToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showWarning('警告文案',
+            direction: IconTextDirection.horizontal, context: context);
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      content: '警告提示',
+    );
+  }
