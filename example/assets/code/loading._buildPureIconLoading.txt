@@ -1,0 +1,18 @@
+
+  Widget _buildPureIconLoading(BuildContext context) {
+    return _buildRow([
+      const TDLoading(
+        size: TDLoadingSize.small,
+        icon: TDLoadingIcon.circle,
+      ),
+      const TDLoading(
+        size: TDLoadingSize.small,
+        icon: TDLoadingIcon.activity,
+      ),
+      TDLoading(
+        size: TDLoadingSize.small,
+        icon: TDLoadingIcon.point,
+        iconColor: TDTheme.of(context).brandColor8,
+      ),
+    ]);
+  }
