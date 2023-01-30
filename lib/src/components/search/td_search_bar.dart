@@ -31,7 +31,10 @@ class TDSearchBar extends StatefulWidget {
     this.onTextChanged,
     this.onSubmitted,
     this.onEditComplete,
+    this.autoHeight = false,
+    this.padding = const EdgeInsets.fromLTRB(16, 8, 16, 8),
     this.autoFocus = false,
+    this.mediumStyle = false,
     this.backgroundColor = Colors.white,
   }) : super(key: key);
 
@@ -39,7 +42,10 @@ class TDSearchBar extends StatefulWidget {
   final TDSearchStyle? style;
   final TDSearchAlignment? alignment;
   final Color? backgroundColor;
+  final bool autoHeight;
+  final EdgeInsets padding;
   final bool autoFocus;
+  final bool mediumStyle;
   final TDSearchBarEvent? onTextChanged;
   final TDSearchBarEvent? onSubmitted;
   final TDSearchBarCallBack? onEditComplete;
@@ -125,11 +131,15 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
     });
   }
 
+  Font? getSize(BuildContext context){
+      return widget.mediumStyle ? TDTheme.of(context).fontBodyMedium : TDTheme.of(context).fontBodyLarge;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-      height: 56,
+      padding: widget.padding,
+      height: widget.autoHeight ? double.infinity : 56,
       color: widget.backgroundColor,
       child: Stack(
         alignment: AlignmentDirectional.center,
@@ -153,7 +163,7 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
                         visible: _status == _TDSearchBarStatus.focused || controller.text.isNotEmpty,
                         child: Icon(
                           TDIcons.search,
-                          size: 24,
+                          size: widget.mediumStyle ? 20 : 24,
                           color: TDTheme.of(context).fontGyColor3,
                         ),
                       ),
@@ -166,17 +176,17 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
                           autofocus: widget.autoFocus,
                           cursorColor: TDTheme.of(context).brandColor8,
                           cursorWidth: 1,
-                          cursorHeight: 18,
+                          cursorHeight: widget.mediumStyle ? 16 : 18,
                           focusNode: focusNode,
                           onChanged: widget.onTextChanged,
                           onSubmitted: widget.onSubmitted,
                           style: TextStyle(
-                              fontSize: TDTheme.of(context).fontBodyLarge?.size,
+                              fontSize: getSize(context)?.size,
                               color: TDTheme.of(context).fontGyColor1),
                           decoration: InputDecoration(
                             hintText:(_status != _TDSearchBarStatus.focused) ? '' : widget.placeHolder,
                             hintStyle: TextStyle(
-                                fontSize: TDTheme.of(context).fontBodyLarge?.size,
+                                fontSize: getSize(context)?.size,
                                 color: TDTheme.of(context).fontGyColor3),
                             border: InputBorder.none,
                             isCollapsed: true,
@@ -198,7 +208,7 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
                             },
                             child: Icon(
                               TDIcons.close_circle_filled,
-                              size: 21,
+                              size: widget.mediumStyle ? 17 : 21,
                               color: TDTheme.of(context).fontGyColor3,
                             )),
                       ),
@@ -229,7 +239,7 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
                     padding: const EdgeInsets.only(left: 16),
                     child: Text('取消',
                         style: TextStyle(
-                            fontSize: TDTheme.of(context).fontBodyLarge?.size,
+                            fontSize: getSize(context)?.size,
                             color: TDTheme.of(context).brandColor8)),
                   ),),),
             ],
@@ -280,14 +290,14 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
             children: [
               Icon(
                 TDIcons.search,
-                size: 24,
+                size: widget.mediumStyle ? 20 : 24,
                 color: TDTheme.of(context).fontGyColor3,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 3),
                 child: ConstrainedBox(constraints: BoxConstraints(maxWidth: box.maxWidth - 51,), child: TDText(
                   widget.placeHolder,
-                  font: TDTheme.of(context).fontBodyLarge,
+                  font: getSize(context),
                   textColor: TDTheme.of(context).fontGyColor3,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -301,14 +311,14 @@ class _TDSearchBarState extends State<TDSearchBar> with TickerProviderStateMixin
           children: [
             Icon(
               TDIcons.search,
-              size: 24,
+              size: widget.mediumStyle ? 20 : 24,
               color: TDTheme.of(context).fontGyColor3,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 3),
               child: ConstrainedBox(constraints: BoxConstraints(maxWidth: box.maxWidth - 51,), child: TDText(
                 widget.placeHolder,
-                font: TDTheme.of(context).fontBodyLarge,
+                font: getSize(context),
                 textColor: TDTheme.of(context).fontGyColor3,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
