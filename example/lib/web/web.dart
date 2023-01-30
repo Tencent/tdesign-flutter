@@ -305,7 +305,7 @@ class _MobileWidgetState extends State<MobileWidget> {
 class WebApiController {
   static _WebMainBodyState? _state;
 
-  static setApiPath({required String? apiPath,required String? mobilePath, String? codePath}){
+  static void setApiPath({required String? apiPath,required String? mobilePath, String? codePath}){
     _state?.setApiPath(apiPath: apiPath, mobilePath:mobilePath, codePath: codePath);
   }
 }
