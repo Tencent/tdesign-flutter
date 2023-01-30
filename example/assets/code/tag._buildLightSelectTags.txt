@@ -1,0 +1,22 @@
+
+  Widget _buildLightSelectTags(BuildContext context) {
+    return Wrap(spacing: 8, children: const [
+      TDSelectTag(
+        '未选中态',
+        theme: TDTagTheme.primary,
+        isLight: true,
+      ),
+      TDSelectTag(
+        '已选中态',
+        theme: TDTagTheme.primary,
+        isLight: true,
+        isSelected: true,
+      ),
+      TDSelectTag(
+        '不可选态',
+        theme: TDTagTheme.primary,
+        isLight: true,
+        disableSelect: true,
+      ),
+    ]);
+  }

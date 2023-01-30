@@ -1,0 +1,13 @@
+
+  Widget _loadingToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showLoading(context: context);
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.stroke,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      content: '加载状态',
+    );
+  }

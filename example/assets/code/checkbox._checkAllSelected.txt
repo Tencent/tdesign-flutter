@@ -1,0 +1,64 @@
+
+  Widget _checkAllSelected(BuildContext context) {
+    const itemCount = 4;
+    return TDCheckboxGroupContainer(
+      selectIds: checkIds,
+      passThrough: false,
+      controller: controller,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(0),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (contet, index) {
+          var title = '多选';
+          if(index == 0){
+            title = '全选';
+            return SizedBox(
+              height: 56,
+              child: TDCheckbox(
+                id: 'index:$index',
+                title: title,
+                customIconBuilder: (context, checked) {
+                  var length = controller!.allChecked().length - (controller!.checked('index:0') ? 1 : 0);
+                  var allCheck = itemCount - 1 == length;
+                  var halfSelected =
+                      controller != null
+                          && !allCheck
+                          && length > 0;
+                  return getAllIcon(allCheck, halfSelected);
+                },
+                onCheckBoxChanged: (checked){
+                  if (checked) {
+                    controller?.toggleAll(true);
+                  } else {
+                    controller?.toggleAll(false);
+                  }
+                },
+              ),
+            );
+          }else{
+            return SizedBox(
+              height: index == itemCount - 1 ? null : 56,
+              child: TDCheckbox(
+                id: 'index:$index',
+                title: title,
+                subTitle: index == itemCount - 1 ? '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息' : null,
+                subTitleMaxLine: 2,
+                onCheckBoxChanged: (checked){
+                  var length = controller!.allChecked().length - (controller!.checked('index:0') ? 1 : 0);
+                  var allCheck = itemCount - 1 == length;
+                  var halfSelected =
+                      controller != null
+                          && !allCheck
+                          && length > 0;
+                  controller!.toggle('index:0', allCheck);
+                  getAllIcon(allCheck, halfSelected);
+                },
+              ),
+            );
+          }
+        },
+        itemCount: itemCount,
+      ),
+    );
+  }
