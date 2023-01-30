@@ -26,6 +26,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.onBack,
     this.useBorderStyle = false,
     this.border,
+    this.belowTitleWidget,
   }) : super(key: key);
 
   final List<TDNavBarItem>? leftBarItems;
@@ -59,6 +60,9 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
 
   /// 边框
   final TDNavBarItemBorder? border;
+
+  /// belowTitleWidget navbar 下方的widget
+  final Widget? belowTitleWidget;
 
   @override
   State<StatefulWidget> createState() => _TDNavBarState();
@@ -170,6 +174,27 @@ class _TDNavBarState extends State<TDNavBar> {
 
   late final top = MediaQuery.of(context).padding.top;
 
+  Widget _getNavbarChild(){
+     final Widget toolbar = NavigationToolbar(
+      leading: _buildTitleBarItems(true),
+      middle: _getTitleWidget(context),
+      trailing: _buildTitleBarItems(false),
+      middleSpacing: widget.titleMargin,
+      centerMiddle: widget.centerTitle,
+    );
+    if (widget.belowTitleWidget == null) {
+      return toolbar;
+    }
+    var children = <Widget>[
+      Expanded(child: toolbar)
+    ];
+    children.add(widget.belowTitleWidget as Widget);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var bcc = widget.backgroundColor ?? TDTheme.of(context).whiteColor1;
@@ -188,13 +213,7 @@ class _TDNavBarState extends State<TDNavBar> {
       color: bcc,
       height: widget.height + paddingTop,
       padding: padding.add(EdgeInsets.only(top: paddingTop)),
-      child: NavigationToolbar(
-        leading: _buildTitleBarItems(true),
-        middle: _getTitleWidget(context),
-        trailing: _buildTitleBarItems(false),
-        middleSpacing: widget.titleMargin,
-        centerMiddle: widget.centerTitle,
-      ),
+      child: _getNavbarChild()
     );
   }
 }
