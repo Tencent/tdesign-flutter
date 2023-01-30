@@ -12,13 +12,13 @@ class TDPointBounceIndicator extends StatefulWidget {
     Key? key,
     this.color,
     this.size = 20.0,
-    this.duration = const Duration(milliseconds: 1400),
+    this.duration = 1400,
     this.controller,
   }) : super(key: key);
 
   final Color? color;
   final double size;
-  final Duration duration;
+  final int duration;
   final AnimationController? controller;
 
   @override
@@ -34,8 +34,18 @@ class _TDPointBounceIndicatorState extends State<TDPointBounceIndicator>
     super.initState();
 
     _controller = (widget.controller ??
-        AnimationController(vsync: this, duration: widget.duration))
+        AnimationController(
+            vsync: this, duration: Duration(milliseconds: widget.duration)))
       ..repeat();
+  }
+
+  @override
+  void didUpdateWidget(covariant TDPointBounceIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.duration != oldWidget.duration) {
+      _controller.duration = Duration(milliseconds: widget.duration);
+      _controller.repeat();
+    }
   }
 
   @override
