@@ -25,33 +25,35 @@ enum TDLoadingIcon {
 }
 
 class TDLoading extends StatelessWidget {
-  const TDLoading(
-      {Key? key,
-      required this.size,
-      this.icon,
-      this.iconColor,
-      this.axis = Axis.vertical,
-      this.text,
-      this.customIcon,
-      this.textColor = Colors.black})
-      : super(key: key);
+  const TDLoading({
+    Key? key,
+    required this.size,
+    this.icon,
+    this.iconColor,
+    this.axis = Axis.vertical,
+    this.text,
+    this.refreshWidget,
+    this.customIcon,
+    this.textColor = Colors.black,
+    this.duration = 2000,
+  }) : super(key: key);
 
   final TDLoadingSize size;
   final TDLoadingIcon? icon;
   final Color? iconColor;
   final String? text;
+  final Widget? refreshWidget;
   final Color textColor;
   final Axis axis;
   final Widget? customIcon;
+  final int duration;
+
+  int get _innerDuration => duration > 0 ? duration : 1;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency, //透明类型
-      child: Center(
-        //保证控件居中效果
-        child: _contentWidget(),
-      ),
+    return Wrap(
+      children: [_contentWidget()],
     );
   }
 
@@ -59,39 +61,44 @@ class TDLoading extends StatelessWidget {
     if (icon == null) {
       return textWidget();
     } else {
-      if(customIcon != null){
-        return customIcon!;
-      }
       Widget? indicator;
-      switch (icon!) {
-        case TDLoadingIcon.activity:
-          indicator = TDCupertinoActivityIndicator(
-            activeColor: iconColor,
-            radius: size == TDLoadingSize.small
-                ? 10
-                : (size == TDLoadingSize.medium ? 11 : 13),
-          );
-          break;
-        case TDLoadingIcon.circle:
-          indicator = _getCircleIndicator();
-          break;
-        case TDLoadingIcon.point:
-          indicator = TDPointBounceIndicator(
-            color: iconColor,
-            size: size == TDLoadingSize.small
-                ? 12
-                : (size == TDLoadingSize.medium ? 16 : 20),
-          );
-          break;
-        default:
-          indicator = _getCircleIndicator();
-          break;
+      if (customIcon != null) {
+        indicator = customIcon!;
+      } else {
+        switch (icon!) {
+          case TDLoadingIcon.activity:
+            indicator = TDCupertinoActivityIndicator(
+              activeColor: iconColor,
+              radius: size == TDLoadingSize.small
+                  ? 10
+                  : (size == TDLoadingSize.medium ? 11 : 13),
+              duration: _innerDuration,
+            );
+            break;
+          case TDLoadingIcon.circle:
+            indicator = _getCircleIndicator();
+            break;
+          case TDLoadingIcon.point:
+            indicator = TDPointBounceIndicator(
+              color: iconColor,
+              size: size == TDLoadingSize.small
+                  ? 12
+                  : (size == TDLoadingSize.medium ? 16 : 20),
+              duration: _innerDuration,
+            );
+            break;
+          default:
+            indicator = _getCircleIndicator();
+            break;
+        }
       }
 
       if (text == null) {
         return indicator;
       } else if (axis == Axis.vertical) {
-        return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+            children: [
           indicator,
           SizedBox(
             height: _getPaddingWidth(),
@@ -99,7 +106,9 @@ class TDLoading extends StatelessWidget {
           textWidget(),
         ]);
       } else {
-        return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
           indicator,
           SizedBox(
             width: _getPaddingWidth(),
@@ -111,30 +120,33 @@ class TDLoading extends StatelessWidget {
   }
 
   Widget _getCircleIndicator() {
-    switch(size){
+    switch (size) {
       case TDLoadingSize.large:
         return TDCircleIndicator(
           color: iconColor,
           size: 24,
-          lineWidth: 3 * 4/3, // 根据small等等比缩放
+          lineWidth: 3 * 4 / 3, // 根据small等等比缩放
+          duration: _innerDuration,
         );
       case TDLoadingSize.medium:
         return TDCircleIndicator(
           color: iconColor,
           size: 21,
-          lineWidth: 3 * 7/6, // 根据small等等比缩放
+          lineWidth: 3 * 7 / 6, // 根据small等等比缩放
+          duration: _innerDuration,
         );
       case TDLoadingSize.small:
         return TDCircleIndicator(
           color: iconColor,
           size: 18, // 设计稿框位24，图形宽位19.5,推导lineWidth为3时，size位18
           lineWidth: 3,
+          duration: _innerDuration,
         );
     }
   }
 
   double _getPaddingWidth() {
-    switch(size){
+    switch (size) {
       case TDLoadingSize.large:
         return 10;
       case TDLoadingSize.medium:
@@ -145,7 +157,7 @@ class TDLoading extends StatelessWidget {
   }
 
   Font fitFont() {
-    switch(size){
+    switch (size) {
       case TDLoadingSize.large:
         return TDTheme.of().fontBodyLarge ?? Font(size: 16, lineHeight: 24);
       case TDLoadingSize.medium:
@@ -156,12 +168,23 @@ class TDLoading extends StatelessWidget {
   }
 
   Widget textWidget() {
-    return TDText(
+    Widget result =  TDText(
       text,
       textColor: textColor,
       fontWeight: FontWeight.w400,
       font: fitFont(),
       textAlign: TextAlign.center,
     );
+    if(refreshWidget != null){
+      result = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          result,
+          const SizedBox(width: 8,),
+          refreshWidget!,
+        ],
+      );
+    }
+    return result;
   }
 }
