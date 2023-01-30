@@ -18,7 +18,7 @@ class TDLoadingPage extends StatefulWidget {
 
 class _TDLoadingPageState extends State<TDLoadingPage> {
   var rowSpace = const SizedBox(
-    width: 66.25,
+    width: 52,
   );
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,28 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
             ExampleItem(desc: '中尺寸', builder: _buildMediumLoading),
             ExampleItem(desc: '小尺寸', builder: _buildSmallLoading),
           ])
-        ]);
+        ],
+    test: [
+      ExampleItem(
+        desc: '带图标的失败刷新测试',
+          ignoreCode: true,
+          builder: (_){
+        return TDLoading(
+          icon: TDLoadingIcon.circle,
+          size: TDLoadingSize.small,
+          axis: Axis.horizontal,
+          text: '加载失败',
+          refreshWidget: GestureDetector(
+            child: TDText('刷新',
+              font: TDTheme.of(context).fontBodySmall,
+              textColor: TDTheme.of(context).brandNormalColor,),
+            onTap: (){
+              TDToast.showText('刷新', context: context);
+            },
+          ),
+        );
+      })
+    ],);
   }
 
   @Demo(group: 'loading')
@@ -60,15 +81,15 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   Widget _buildPureIconLoading(BuildContext context) {
     return _buildRow([
       const TDLoading(
-        size: TDLoadingSize.medium,
+        size: TDLoadingSize.small,
         icon: TDLoadingIcon.circle,
       ),
       const TDLoading(
-        size: TDLoadingSize.medium,
+        size: TDLoadingSize.small,
         icon: TDLoadingIcon.activity,
       ),
       TDLoading(
-        size: TDLoadingSize.medium,
+        size: TDLoadingSize.small,
         icon: TDLoadingIcon.point,
         iconColor: TDTheme.of(context).brandColor8,
       ),
@@ -80,13 +101,13 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   Widget _buildTextIconHorizontalLoading(BuildContext context) {
     return _buildRow(const [
       TDLoading(
-        size: TDLoadingSize.medium,
+        size: TDLoadingSize.small,
         icon: TDLoadingIcon.circle,
         text: '加载中…',
         axis: Axis.horizontal,
       ),
       TDLoading(
-        size: TDLoadingSize.medium,
+        size: TDLoadingSize.small,
         icon: TDLoadingIcon.activity,
         text: '加载中…',
         axis: Axis.horizontal,
@@ -99,13 +120,13 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   Widget _buildTextIconVerticalLoading(BuildContext context) {
     return _buildRow(const [
       TDLoading(
-        size: TDLoadingSize.medium,
+        size: TDLoadingSize.small,
         icon: TDLoadingIcon.circle,
         text: '加载中…',
         axis: Axis.vertical,
       ),
       TDLoading(
-        size: TDLoadingSize.medium,
+        size: TDLoadingSize.small,
         icon: TDLoadingIcon.activity,
         text: '加载中…',
         axis: Axis.vertical,
@@ -116,20 +137,27 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   /// 纯文字
   @Demo(group: 'loading')
   Widget _buildPureTextLoading(BuildContext context) {
-    // TODO: 加载失败和刷新
     return _buildRow([
       const TDLoading(
-        size: TDLoadingSize.medium,
+        size: TDLoadingSize.small,
         text: '加载中…',
       ),
       TDLoading(
-        size: TDLoadingSize.medium,
+        size: TDLoadingSize.small,
         text: '加载失败',
         textColor: TDTheme.of(context).fontGyColor3,
       ),
-      const TDLoading(
-        size: TDLoadingSize.medium,
+      TDLoading(
+        size: TDLoadingSize.small,
         text: '加载失败',
+        refreshWidget: GestureDetector(
+          child: TDText('刷新',
+          font: TDTheme.of(context).fontBodySmall,
+          textColor: TDTheme.of(context).brandNormalColor,),
+          onTap: (){
+            TDToast.showText('刷新', context: context);
+          },
+        ),
       ),
     ]);
   }

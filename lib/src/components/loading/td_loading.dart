@@ -32,6 +32,7 @@ class TDLoading extends StatelessWidget {
     this.iconColor,
     this.axis = Axis.vertical,
     this.text,
+    this.refreshWidget,
     this.customIcon,
     this.textColor = Colors.black,
     this.duration = 2000,
@@ -41,6 +42,7 @@ class TDLoading extends StatelessWidget {
   final TDLoadingIcon? icon;
   final Color? iconColor;
   final String? text;
+  final Widget? refreshWidget;
   final Color textColor;
   final Axis axis;
   final Widget? customIcon;
@@ -163,12 +165,22 @@ class TDLoading extends StatelessWidget {
   }
 
   Widget textWidget() {
-    return TDText(
+    Widget result =  TDText(
       text,
       textColor: textColor,
       fontWeight: FontWeight.w400,
       font: fitFont(),
       textAlign: TextAlign.center,
     );
+    if(refreshWidget != null){
+      result = Row(
+        children: [
+          result,
+          const SizedBox(width: 8,),
+          refreshWidget!,
+        ],
+      );
+    }
+    return result;
   }
 }
