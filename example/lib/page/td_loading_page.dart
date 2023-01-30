@@ -40,14 +40,18 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
             ExampleItem(desc: '大尺寸', builder: _buildLargeLoading),
             ExampleItem(desc: '中尺寸', builder: _buildMediumLoading),
             ExampleItem(desc: '小尺寸', builder: _buildSmallLoading),
-          ])
+          ]),
+          ExampleModule(title: '加载速度', children: [
+            ExampleItem(desc: '调整加载速度', builder: _buildCustomSpeedLoading),
+          ]),
         ],
     test: [
       ExampleItem(
-        desc: '带图标的失败刷新测试',
+        desc: '带图标的失败横向Loading',
           ignoreCode: true,
           builder: (_){
-        return TDLoading(
+        return Padding(padding: const EdgeInsets.all(16),
+        child: TDLoading(
           icon: TDLoadingIcon.circle,
           size: TDLoadingSize.small,
           axis: Axis.horizontal,
@@ -60,8 +64,27 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
               TDToast.showText('刷新', context: context);
             },
           ),
-        );
-      })
+        ),);
+      }),
+      ExampleItem(
+        desc: '带图标的失败竖向Loading',
+          ignoreCode: true,
+          builder: (_){
+        return Container(padding: const EdgeInsets.all(16),
+        child: TDLoading(
+          icon: TDLoadingIcon.circle,
+          size: TDLoadingSize.small,
+          text: '加载失败',
+          refreshWidget: GestureDetector(
+            child: TDText('刷新',
+              font: TDTheme.of(context).fontBodySmall,
+              textColor: TDTheme.of(context).brandNormalColor,),
+            onTap: (){
+              TDToast.showText('刷新', context: context);
+            },
+          ),
+        ),);
+      }),
     ],);
   }
 
@@ -199,5 +222,39 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
         axis: Axis.horizontal,
       ),
     ]);
+  }
+
+
+  double _currentSliderValue = 1000;
+  /// 自定义尺寸
+  @Demo(group: 'loading')
+  Widget _buildCustomSpeedLoading(BuildContext context) {
+    return Padding(padding: EdgeInsets.all(16),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.circle,
+          axis: Axis.horizontal,
+          text: '加载中…',
+          duration: _currentSliderValue.round(),
+        ),
+        Slider(
+          value: _currentSliderValue,
+          max: 2000,
+          min: -20,
+          divisions: 100,
+          label: _currentSliderValue.round().toString(),
+          onChanged: (double value) {
+            setState(() {
+              _currentSliderValue = value;
+            });
+          },
+        ),
+      ],
+    ),);
   }
 }
