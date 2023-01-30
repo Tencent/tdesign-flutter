@@ -1,0 +1,27 @@
+
+  Widget _iconTypeNavBar4tabs(BuildContext context) {
+    return TDBottomNavBar(TDBottomNavBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomNavBarTabConfig(
+              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomNavBarTabConfig(
+              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomNavBarTabConfig(
+              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomNavBarTabConfig(
+              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
+  }

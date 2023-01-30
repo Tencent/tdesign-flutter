@@ -30,21 +30,26 @@ class TDEmpty extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          image ?? Container(),
-          const Padding(padding: EdgeInsets.only(top: 30)),
+          image ?? Icon(
+            TDIcons.info_circle_filled,
+            size: 84,
+            color: TDTheme.of(context).fontGyColor3,
+          ),
+          Padding(padding: EdgeInsets.only(top: image == null ? 22 : 16)),
           TDText(
             emptyText ?? '',
             fontWeight: FontWeight.w400,
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor3,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
           (type == TDEmptyType.operation)
               ? Padding(
-                  padding: const EdgeInsets.only(top: 24),
+                  padding: const EdgeInsets.only(top: 32),
                   child: TDButton(
                     content: operationText ?? '',
-                    size: TDButtonSize.small,
-                    width: 160,
+                    size: TDButtonSize.large,
+                    theme: TDButtonTheme.primary,
+                    width: 179,
                     onTap: () {
                       if (onTapEvent != null) {
                         onTapEvent!();
