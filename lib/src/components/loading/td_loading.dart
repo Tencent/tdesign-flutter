@@ -48,14 +48,12 @@ class TDLoading extends StatelessWidget {
   final Widget? customIcon;
   final int duration;
 
+  int get _innerDuration => duration > 0 ? duration : 1;
+
   @override
   Widget build(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency, //透明类型
-      child: Center(
-        //保证控件居中效果
-        child: _contentWidget(),
-      ),
+    return Wrap(
+      children: [_contentWidget()],
     );
   }
 
@@ -63,41 +61,44 @@ class TDLoading extends StatelessWidget {
     if (icon == null) {
       return textWidget();
     } else {
-      if (customIcon != null) {
-        return customIcon!;
-      }
       Widget? indicator;
-      switch (icon!) {
-        case TDLoadingIcon.activity:
-          indicator = TDCupertinoActivityIndicator(
-            activeColor: iconColor,
-            radius: size == TDLoadingSize.small
-                ? 10
-                : (size == TDLoadingSize.medium ? 11 : 13),
-            duration: duration,
-          );
-          break;
-        case TDLoadingIcon.circle:
-          indicator = _getCircleIndicator();
-          break;
-        case TDLoadingIcon.point:
-          indicator = TDPointBounceIndicator(
-            color: iconColor,
-            size: size == TDLoadingSize.small
-                ? 12
-                : (size == TDLoadingSize.medium ? 16 : 20),
-            duration: duration,
-          );
-          break;
-        default:
-          indicator = _getCircleIndicator();
-          break;
+      if (customIcon != null) {
+        indicator = customIcon!;
+      } else {
+        switch (icon!) {
+          case TDLoadingIcon.activity:
+            indicator = TDCupertinoActivityIndicator(
+              activeColor: iconColor,
+              radius: size == TDLoadingSize.small
+                  ? 10
+                  : (size == TDLoadingSize.medium ? 11 : 13),
+              duration: _innerDuration,
+            );
+            break;
+          case TDLoadingIcon.circle:
+            indicator = _getCircleIndicator();
+            break;
+          case TDLoadingIcon.point:
+            indicator = TDPointBounceIndicator(
+              color: iconColor,
+              size: size == TDLoadingSize.small
+                  ? 12
+                  : (size == TDLoadingSize.medium ? 16 : 20),
+              duration: _innerDuration,
+            );
+            break;
+          default:
+            indicator = _getCircleIndicator();
+            break;
+        }
       }
 
       if (text == null) {
         return indicator;
       } else if (axis == Axis.vertical) {
-        return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+            children: [
           indicator,
           SizedBox(
             height: _getPaddingWidth(),
@@ -105,7 +106,9 @@ class TDLoading extends StatelessWidget {
           textWidget(),
         ]);
       } else {
-        return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
           indicator,
           SizedBox(
             width: _getPaddingWidth(),
@@ -123,21 +126,21 @@ class TDLoading extends StatelessWidget {
           color: iconColor,
           size: 24,
           lineWidth: 3 * 4 / 3, // 根据small等等比缩放
-          duration: duration,
+          duration: _innerDuration,
         );
       case TDLoadingSize.medium:
         return TDCircleIndicator(
           color: iconColor,
           size: 21,
           lineWidth: 3 * 7 / 6, // 根据small等等比缩放
-          duration: duration,
+          duration: _innerDuration,
         );
       case TDLoadingSize.small:
         return TDCircleIndicator(
           color: iconColor,
           size: 18, // 设计稿框位24，图形宽位19.5,推导lineWidth为3时，size位18
           lineWidth: 3,
-          duration: duration,
+          duration: _innerDuration,
         );
     }
   }
@@ -174,6 +177,7 @@ class TDLoading extends StatelessWidget {
     );
     if(refreshWidget != null){
       result = Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           result,
           const SizedBox(width: 8,),
