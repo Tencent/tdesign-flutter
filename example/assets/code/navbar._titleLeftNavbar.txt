@@ -1,0 +1,19 @@
+
+  Widget _titleLeftNavbar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: TDNavBar(
+          height: 48,
+          title: titleText,
+          titleFontWeight: FontWeight.w600,
+          centerTitle: false,
+          titleMargin: 0,
+          screenAdaptation: false,
+          useDefaultBack: true,
+          rightBarItems: [
+            TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
+            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
+          ]
+      ),
+    );
+  }

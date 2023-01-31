@@ -1,0 +1,24 @@
+
+  Widget _buildPopFromCenterWithClose(BuildContext context) {
+    return TDButton(
+      content: '居中弹出层-带关闭',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            isDismissible:false,
+            slideTransitionFrom: SlideTransitionFrom.center,
+            builder: (context) {
+              return TDPopupCenterPanel(
+                closeClick: (){
+                  Navigator.pop(context);
+                },
+                child: const SizedBox(
+                  width: 240,
+                  height: 240,
+                ),
+              );
+            }));
+      },
+    );
+  }

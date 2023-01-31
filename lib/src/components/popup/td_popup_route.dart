@@ -4,7 +4,7 @@ const Duration _bottomSheetEnterDuration = Duration(milliseconds: 250);
 const Duration _bottomSheetExitDuration = Duration(milliseconds: 200);
 
 /// 从屏幕弹出的方向
-enum SlideTransitionFrom { top, right, left, bottom }
+enum SlideTransitionFrom { top, right, left, bottom, center }
 
 ///
 /// 从屏幕的某个方向滑动弹出的Dialog框的路由，比如从顶部、底部、左、右滑出页面
@@ -62,9 +62,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    return Material(
-      child: builder.call(context),
-    ) ;
+    return builder.call(context) ;
   }
 }
 
@@ -79,10 +77,13 @@ class SlideTransitionLayout extends SingleChildLayoutDelegate {
 
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
-    return BoxConstraints(
-        // minWidth: constraints.maxWidth,
-        maxWidth: constraints.maxWidth,
-        maxHeight: constraints.maxHeight);
+    var width = constraints.maxWidth;
+    var height = constraints.maxHeight;
+    // if (slideTransitionFrom == SlideTransitionFrom.center) {
+    //   width = constraints.maxWidth * progress;
+    //   height = constraints.maxHeight * progress;
+    // }
+    return BoxConstraints(maxWidth: width, maxHeight: height);
   }
 
   @override
@@ -102,6 +103,11 @@ class SlideTransitionLayout extends SingleChildLayoutDelegate {
         break;
       case SlideTransitionFrom.bottom:
         posY = size.height - childSize.height * progress;
+        break;
+      case SlideTransitionFrom.center:
+        print('size.width:${size.width} size.height:${size.height} childSize.width:${childSize.width} childSize.height:${childSize.height} progress:$progress');
+        posX = (size.width - childSize.width) / 2;
+        posY = (size.height - childSize.height) / 2;
         break;
     }
     return Offset(posX, posY);

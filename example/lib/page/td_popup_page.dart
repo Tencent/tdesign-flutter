@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
 ///
@@ -22,71 +23,396 @@ class TDPopupPageState extends State<TDPopupPage> {
 
   @override
   Widget build(BuildContext context) {
-    var current = ExamplePage(title: '弹出层 PopUp',
+    return ExamplePage(title: '弹出层 PopUp',
         padding: const EdgeInsets.only(top: 16),
+        exampleCodeGroup: 'popup',
         children: [
       ExampleModule(
-        title: '默认',
+        title: '组件类型',
         children: [
+          ExampleItem(builder: _buildPopFromTop),
           ExampleItem(
-              builder: (_) => TDButton(
-                    content: '顶部Popup',
-                    onTap: () {
-                      Navigator.of(context).push(TDSlidePopupRoute(
-                          slideTransitionFrom: SlideTransitionFrom.top,
-                          builder: (context) {
-                            return Container(
-                              color: Colors.white,
-                              height: 300,
-                            );
-                          }));
-                    },
-                  )),
+              builder: _buildPopFromLeft),
           ExampleItem(
-              builder: (_) => TDButton(
-                    content: '底部Popup',
-                    onTap: () {
-                      Navigator.of(context).push(TDSlidePopupRoute(
-                          slideTransitionFrom: SlideTransitionFrom.bottom,
-                          builder: (context) {
-                            return Container(
-                              color: Colors.white,
-                              height: 300,
-                            );
-                          }));
-                    },
-                  )),
+              builder: _buildPopFromCenter),
           ExampleItem(
-              builder: (_) => TDButton(
-                    content: '左侧Popup',
-                    onTap: () {
-                      Navigator.of(context).push(TDSlidePopupRoute(
-                          slideTransitionFrom: SlideTransitionFrom.left,
-                          builder: (context) {
-                            return Container(
-                              color: Colors.white,
-                              width: 300,
-                            );
-                          }));
-                    },
-                  )),
+              builder: _buildPopFromBottom),
           ExampleItem(
-              builder: (_) => TDButton(
-                    content: '右侧Popup',
-                    onTap: () {
-                      Navigator.of(context).push(TDSlidePopupRoute(
-                          slideTransitionFrom: SlideTransitionFrom.right,
-                          builder: (context) {
-                            return Container(
-                              color: Colors.white,
-                              width: 300,
-                            );
-                          }));
-                    },
-                  )),
+              builder: _buildPopFromRight),
         ],
-      )
-    ]);
-    return current;
+      ),
+      ExampleModule(
+        title: '组件示例',
+        children: [
+          ExampleItem(builder: _buildPopFromBottomWithOperationAndTitle),
+          ExampleItem(builder: _buildPopFromBottomWithOperation),
+          ExampleItem(builder: _buildPopFromBottomWithCloseAndTitle),
+          ExampleItem(builder: _buildPopFromBottomWithCloseAndLeftTitle),
+          ExampleItem(builder: _buildPopFromBottomWithClose),
+          ExampleItem(builder: _buildPopFromBottomWithTitle),
+          ExampleItem(builder: _buildPopFromCenterWithClose),
+          ExampleItem(builder: _buildPopFromCenterWithUnderClose),
+        ],
+      ),
+    ],
+    test: [
+      ExampleItem(
+          desc: '操作栏超长文本,指定颜色',
+          builder:(_){
+        return TDButton(
+          content: '底部弹出层-带标题及操作',
+          theme: TDButtonTheme.primary,
+          type: TDButtonType.stroke,
+          onTap: () {
+            Navigator.of(context).push(TDSlidePopupRoute(
+                slideTransitionFrom: SlideTransitionFrom.bottom,
+                builder: (context) {
+                  return TDPopupBottomConfirmPanel(
+                    title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                    leftText: '点这里确认!',
+                    leftTextColor: TDTheme.of(context).brandNormalColor,
+                    leftClick: (){
+                      TDToast.showText('确认', context: context);
+                      Navigator.pop(context);
+                    },
+                    rightText: '关闭',
+                    rightTextColor: TDTheme.of(context).errorNormalColor,
+                    rightClick: (){
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      height: 200,
+                    ),
+                  );
+                }));
+          },
+        );
+      }),
+      ExampleItem(
+          desc: '带关闭超长文本',
+          builder:(_){
+        return TDButton(
+          content: '底部弹出层-带标题及操作',
+          theme: TDButtonTheme.primary,
+          type: TDButtonType.stroke,
+          onTap: () {
+            Navigator.of(context).push(TDSlidePopupRoute(
+                slideTransitionFrom: SlideTransitionFrom.bottom,
+                builder: (context) {
+                  return TDPopupBottomDisplayPanel(
+                    title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                    closeColor: TDTheme.of(context).errorNormalColor,
+                    closeClick: (){
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      height: 200,
+                    ),
+                  );
+                }));
+          },
+        );
+      }),
+    ],
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildPopFromTop(BuildContext context) {
+    return TDButton(
+      content: '顶部弹出',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.top,
+            builder: (context) {
+              return Container(
+                color: Colors.white,
+                height: 240,
+              );
+            }));
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildPopFromLeft(BuildContext context) {
+    return TDButton(
+      content: '左侧弹出',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.left,
+            builder: (context) {
+              return Container(
+                color: Colors.white,
+                width: 280,
+              );
+            }));
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildPopFromCenter(BuildContext context) {
+    return TDButton(
+      content: '中间弹出',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.center,
+            builder: (context) {
+              return Container(
+                color: Colors.white,
+                width: 240,
+                height: 240,
+              );
+            }));
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildPopFromBottom(BuildContext context) {
+    return TDButton(
+      content: '底部弹出',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.bottom,
+            builder: (context) {
+              return Container(
+                color: Colors.white,
+                height: 240,
+              );
+            }));
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildPopFromRight(BuildContext context) {
+    return TDButton(
+      content: '右侧弹出',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.right,
+            builder: (context) {
+              return Container(
+                color: Colors.white,
+                width: 280,
+              );
+            }));
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildPopFromBottomWithOperationAndTitle(BuildContext context) {
+    return TDButton(
+      content: '底部弹出层-带标题及操作',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.bottom,
+            builder: (context) {
+              return TDPopupBottomConfirmPanel(
+                title: '标题文字',
+                leftClick: (){
+                  Navigator.pop(context);
+                },
+                rightClick: (){
+                  TDToast.showText('确定', context: context);
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 200,
+                ),
+              );
+            }));
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildPopFromBottomWithOperation(BuildContext context) {
+    return TDButton(
+      content: '底部弹出层-带操作',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.bottom,
+            builder: (context) {
+              return TDPopupBottomConfirmPanel(
+                leftClick: (){
+                  Navigator.pop(context);
+                },
+                rightClick: (){
+                  TDToast.showText('确定', context: context);
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 200,
+                ),
+              );
+            }));
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildPopFromBottomWithCloseAndTitle(BuildContext context) {
+    return TDButton(
+      content: '底部弹出层-带标题及关闭',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.bottom,
+            builder: (context) {
+              return TDPopupBottomDisplayPanel(
+                title: '标题文字',
+                closeClick: (){
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 200,
+                ),
+              );
+            }));
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildPopFromBottomWithCloseAndLeftTitle(BuildContext context) {
+    return TDButton(
+      content: '底部弹出层-带左边标题及关闭',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.bottom,
+            builder: (context) {
+              return TDPopupBottomDisplayPanel(
+                title: '标题文字',
+                titleLeft: true,
+                closeClick: (){
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 200,
+                ),
+              );
+            }));
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildPopFromBottomWithClose(BuildContext context) {
+    return TDButton(
+      content: '底部弹出层-带关闭',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.bottom,
+            builder: (context) {
+              return TDPopupBottomDisplayPanel(
+                closeClick: (){
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 200,
+                ),
+              );
+            }));
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildPopFromBottomWithTitle(BuildContext context) {
+    return TDButton(
+      content: '底部弹出层-仅标题',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.bottom,
+            builder: (context) {
+              return TDPopupBottomDisplayPanel(
+                title: '标题文字',
+                hideClose: true,
+                closeClick: (){
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 200,
+                ),
+              );
+            }));
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildPopFromCenterWithClose(BuildContext context) {
+    return TDButton(
+      content: '居中弹出层-带关闭',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            isDismissible:false,
+            slideTransitionFrom: SlideTransitionFrom.center,
+            builder: (context) {
+              return TDPopupCenterPanel(
+                closeClick: (){
+                  Navigator.pop(context);
+                },
+                child: const SizedBox(
+                  width: 240,
+                  height: 240,
+                ),
+              );
+            }));
+      },
+    );
+  }
+
+  @Demo(group: 'popup')
+  Widget _buildPopFromCenterWithUnderClose(BuildContext context) {
+    return TDButton(
+      content: '居中弹出层-关闭在下方',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            isDismissible:false,
+            slideTransitionFrom: SlideTransitionFrom.center,
+            builder: (context) {
+              return TDPopupCenterPanel(
+                closeUnderBottom: true,
+                closeClick: (){
+                  Navigator.pop(context);
+                },
+                child: const SizedBox(
+                  width: 240,
+                  height: 240,
+                ),
+              );
+            }));
+      },
+    );
   }
 }
