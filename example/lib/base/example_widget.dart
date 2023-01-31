@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -372,6 +374,11 @@ class _CodeWrapperState extends State<CodeWrapper> {
               child: const TDText('暂无演示代码'),
             );
           }
+
+
+          var lines = codeString.split('\n');
+          print('lines: ${lines.length}');
+          double height = max(300, lines.length * 17 + 32);
           var mdText = '''
 ```dart
 ${codeString}
@@ -382,7 +389,7 @@ ${codeString}
             decoration: BoxDecoration(
                 color: TDTheme.of(context).grayColor1,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(TDTheme.of(context).radiusDefault))),
-            height:700,
+            height:height,
             child: Markdown(
               physics: const BouncingScrollPhysics(),
               padding: EdgeInsets.zero,
