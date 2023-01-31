@@ -1,0 +1,23 @@
+
+  Widget _searchNavbar(BuildContext context){
+    return TDNavBar(
+      useDefaultBack: false,
+      screenAdaptation: false,
+      centerTitle: false,
+      titleMargin: 0,
+      titleWidget:  TDSearchBar(
+        autoHeight: true,
+        padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
+        placeHolder: '搜索预设文案',
+        mediumStyle: true,
+        style: TDSearchStyle.round,
+        onTextChanged: (String text) {
+          print('input：$text');
+        },
+      ),
+      rightBarItems: [
+        TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
+        TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
+      ]
+    );
+  }
