@@ -20,6 +20,7 @@ export 'src/components/picker/td_date_picker.dart';
 export 'src/components/picker/td_item_widget.dart';
 export 'src/components/picker/td_multi_picker.dart';
 export 'src/components/picker/td_picker.dart';
+export 'src/components/popup/td_popup_panel.dart';
 export 'src/components/popup/td_popup_route.dart';
 export 'src/components/radio/td_radio.dart';
 export 'src/components/refresh/td_refresh_header.dart';
