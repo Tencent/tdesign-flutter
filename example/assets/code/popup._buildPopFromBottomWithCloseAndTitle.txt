@@ -1,0 +1,23 @@
+
+  Widget _buildPopFromBottomWithCloseAndTitle(BuildContext context) {
+    return TDButton(
+      content: '底部弹出层-带标题及关闭',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.bottom,
+            builder: (context) {
+              return TDPopupBottomDisplayPanel(
+                title: '标题文字',
+                closeClick: (){
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 200,
+                ),
+              );
+            }));
+      },
+    );
+  }
