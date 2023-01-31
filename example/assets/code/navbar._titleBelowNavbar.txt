@@ -1,0 +1,27 @@
+
+  Widget _titleBelowNavbar(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.only(top: 16),
+        child: TDNavBar(
+          height: 104,
+          title: '返回',
+          titleColor: const Color.fromRGBO(0, 0, 0, 0.9),
+          belowTitleWidget: SizedBox(
+            height: 56,
+            child: TDText(titleText, font: Font(size: 28, lineHeight: 52), fontWeight: FontWeight.w600,),
+          ),
+          titleFont: Font(size: 16, lineHeight: 24),
+          centerTitle: false,
+          titleMargin: 0,
+          screenAdaptation: false,
+          useDefaultBack: false,
+          leftBarItems: [
+            TDNavBarItem(icon: TDIcons.chevron_left, iconSize: 20, padding: const EdgeInsets.only(right: 8)),
+          ],
+          rightBarItems: [
+            TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
+            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
+          ]
+      ),
+    );
+  }

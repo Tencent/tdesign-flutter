@@ -1,0 +1,27 @@
+
+  Widget _buildPopFromBottomWithOperationAndTitle(BuildContext context) {
+    return TDButton(
+      content: '底部弹出层-带标题及操作',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.stroke,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.bottom,
+            builder: (context) {
+              return TDPopupBottomConfirmPanel(
+                title: '标题文字',
+                leftClick: (){
+                  Navigator.pop(context);
+                },
+                rightClick: (){
+                  TDToast.showText('确定', context: context);
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 200,
+                ),
+              );
+            }));
+      },
+    );
+  }
