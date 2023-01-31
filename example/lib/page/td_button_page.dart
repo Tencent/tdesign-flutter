@@ -40,11 +40,12 @@ class _TDButtonPageState extends State<TDButtonPage> {
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _buildPrimaryFillButton,
+                            methodName: '_buildPrimaryFillButton',
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildLightFillButton),
+                          child: CodeWrapper(builder: _buildLightFillButton, methodName: '_buildLightFillButton',),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
