@@ -120,7 +120,7 @@ class _ExamplePageState extends State<ExamplePage> {
         children: [
           ApiWidget(
             apiName: model?.apiPath,
-            visible: apiVisible,
+            visible: apiVisible && !PlatformUtil.isWeb,
           ),
           TDText(
             widget.title,
@@ -184,11 +184,13 @@ class ExampleModule {
 /// 示例样例数据
 class ExampleItem {
   const ExampleItem(
-      {Key? key, this.desc = '', required this.builder, this.center = true, this.ignoreCode = false});
+      {Key? key, this.desc = '', required this.builder, this.methodName, this.center = true, this.ignoreCode = false});
 
   final String desc;
 
   final WidgetBuilder builder;
+
+  final String? methodName;
 
   final bool center;
 
@@ -221,7 +223,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
       }
     } else {
       child = CodeWrapper(
-        builder: widget.data.builder, isCenter: widget.data.center,);
+        builder: widget.data.builder, methodName: widget.data.methodName, isCenter: widget.data.center,);
     }
     child = Column(
       mainAxisSize: MainAxisSize.min,
@@ -247,11 +249,13 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
 
 
 class CodeWrapper extends StatefulWidget {
-  const CodeWrapper({Key? key, required this.builder, this.isCenter = false}) : super(key: key);
+  const CodeWrapper({Key? key, required this.builder, this.methodName, this.isCenter = false}) : super(key: key);
 
   final WidgetBuilder builder;
 
   final bool isCenter;
+
+  final String? methodName;
 
   @override
   State<CodeWrapper> createState() => _CodeWrapperState();
@@ -321,14 +325,17 @@ class _CodeWrapperState extends State<CodeWrapper> {
 
 
   String _getCodeAssetsPath() {
-    var methodName = '';
+    var methodName = widget.methodName ?? '';
+
     var builderString = widget.builder.toString();
-    if (builderString.contains('\'')) {
-      var strings = builderString.split('\'');
-      if (strings.length > 1) {
-        methodName = strings[1];
-        if (methodName.isNotEmpty && methodName.contains('@')) {
-          methodName = methodName.split('@')[0];
+    if (methodName.isEmpty) {
+      if (builderString.contains('\'')) {
+        var strings = builderString.split('\'');
+        if (strings.length > 1) {
+          methodName = strings[1];
+          if (methodName.isNotEmpty && methodName.contains('@')) {
+            methodName = methodName.split('@')[0];
+          }
         }
       }
     }
