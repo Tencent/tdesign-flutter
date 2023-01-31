@@ -105,7 +105,6 @@ class SlideTransitionLayout extends SingleChildLayoutDelegate {
         posY = size.height - childSize.height * progress;
         break;
       case SlideTransitionFrom.center:
-        print('size.width:${size.width} size.height:${size.height} childSize.width:${childSize.width} childSize.height:${childSize.height} progress:$progress');
         posX = (size.width - childSize.width) / 2;
         posY = (size.height - childSize.height) / 2;
         break;
