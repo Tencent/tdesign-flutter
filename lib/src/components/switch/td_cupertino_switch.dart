@@ -10,7 +10,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 // Examples can assume:
 // bool _lights = false;
@@ -380,6 +379,7 @@ class _TDCupertinoSwitchRenderObjectWidget
   /// The widget below this widget in the tree.
   ///
   /// {@macro flutter.widgets.ProxyWidget.child}
+  @override
   final Widget? child;
 
   @override
@@ -475,7 +475,6 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
   Color _trackColor;
 
   set trackColor(Color value) {
-    assert(value != null);
     if (value == _trackColor) {
       return;
     }
@@ -513,7 +512,6 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
   TextDirection _textDirection;
 
   set textDirection(TextDirection value) {
-    assert(value != null);
     if (_textDirection == value) {
       return;
     }

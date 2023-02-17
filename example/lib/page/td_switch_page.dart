@@ -25,11 +25,9 @@ class TDSwitchPageState extends State<TDSwitchPage> {
         children: [
           ExampleItem(builder: (_) => _title('基础开关')),
           ExampleItem(
-              builder: (_) => Container(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [demoRow(context, '基础开关', on: true)],
-                    ),
+              builder: (_) => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [demoRow(context, '基础开关', on: true)],
                   )),
           ExampleItem(builder: (_) => _title('带描述开关')),
           ExampleItem(
@@ -52,62 +50,52 @@ class TDSwitchPageState extends State<TDSwitchPage> {
       ExampleModule(title: '组件状态', children: [
         ExampleItem(builder: (_) => _title('加载状态')),
         ExampleItem(
-            builder: (_) => Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      demoRow(
-                        context,
-                        '加载状态',
-                        on: true,
-                        enable: false,
-                        type: TDSwitchType.loading,
-                      ),
-                      demoRow(
-                        context,
-                        '加载状态',
-                        on: false,
-                        enable: false,
-                        type: TDSwitchType.loading,
-                      ),
-                    ],
-                  ),
+            builder: (_) => Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    demoRow(
+                      context,
+                      '加载状态',
+                      on: true,
+                      enable: false,
+                      type: TDSwitchType.loading,
+                    ),
+                    demoRow(
+                      context,
+                      '加载状态',
+                      on: false,
+                      enable: false,
+                      type: TDSwitchType.loading,
+                    ),
+                  ],
                 )),
         ExampleItem(builder: (_) => _title('禁用状态')),
         ExampleItem(
-            builder: (_) => Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      demoRow(context, '禁用状态', on: false, enable: false),
-                      demoRow(context, '禁用状态', on: true, enable: false),
-                    ],
-                  ),
+            builder: (_) => Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    demoRow(context, '禁用状态', on: false, enable: false),
+                    demoRow(context, '禁用状态', on: true, enable: false),
+                  ],
                 )),
       ]),
       ExampleModule(title: '组件样式', children: [
         ExampleItem(builder: (_) => _title('开关尺寸')),
         ExampleItem(
-            builder: (_) => Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      demoRow(context, '大尺寸32',
-                          on: true, size: TDSwitchSize.large),
-                      demoRow(context, '中尺寸28',
-                          on: true, size: TDSwitchSize.medium),
-                      demoRow(context, '小尺寸24',
-                          on: true, size: TDSwitchSize.small),
-                    ],
-                  ),
+            builder: (_) => Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    demoRow(context, '大尺寸32',
+                        on: true, size: TDSwitchSize.large),
+                    demoRow(context, '中尺寸28',
+                        on: true, size: TDSwitchSize.medium),
+                    demoRow(context, '小尺寸24',
+                        on: true, size: TDSwitchSize.small),
+                  ],
                 )),
       ]),
     ]);
     return current;
-  }
-
-  Widget _divider() {
-    return Container(height: 0.5, color: const Color(0x33999999));
   }
 
   Widget _title(String title) {
