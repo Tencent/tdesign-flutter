@@ -127,9 +127,10 @@ class TDSwitchState extends State<TDSwitch> {
       case TDSwitchType.text:
         return Container(
           alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.only(left: 1),
           child: TDText(
             isOn ? '开' : '关',
-            style: TextStyle(color: isOn ? onColor : offColor),
+            style: TextStyle(color: isOn ? onColor : offColor, fontSize: 14),
           ),
         );
       case TDSwitchType.loading:
@@ -139,7 +140,6 @@ class TDSwitchState extends State<TDSwitch> {
             color: onColor,
             size: 16,
             lineWidth: 3,
-            duration: 1000,
           ),
         );
       case TDSwitchType.icon:

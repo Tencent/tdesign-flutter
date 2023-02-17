@@ -6,6 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
+
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
@@ -23,69 +24,77 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: '加载 Loading',
-        backgroundColor: TDTheme.of(context).whiteColor1,
-        exampleCodeGroup: 'loading',
-        desc: '用于表示页面或操作的加载状态，给予用户反馈的同时减缓等待的焦虑感，由一个或一组反馈动效组成。',
-        children: [
-          ExampleModule(title: '组件类型', children: [
-            ExampleItem(desc: '纯图标', builder: _buildPureIconLoading),
-            ExampleItem(
-                desc: '图标加文字横向', builder: _buildTextIconHorizontalLoading),
-            ExampleItem(
-                desc: '图标加文字竖向', builder: _buildTextIconVerticalLoading),
-            ExampleItem(desc: '纯文字', builder: _buildPureTextLoading),
-          ]),
-          ExampleModule(title: '组件尺寸', children: [
-            ExampleItem(desc: '大尺寸', builder: _buildLargeLoading),
-            ExampleItem(desc: '中尺寸', builder: _buildMediumLoading),
-            ExampleItem(desc: '小尺寸', builder: _buildSmallLoading),
-          ]),
-          ExampleModule(title: '加载速度', children: [
-            ExampleItem(desc: '调整加载速度', builder: _buildCustomSpeedLoading),
-          ]),
-        ],
-    test: [
-      ExampleItem(
-        desc: '带图标的失败横向Loading',
-          ignoreCode: true,
-          builder: (_){
-        return Padding(padding: const EdgeInsets.all(16),
-        child: TDLoading(
-          icon: TDLoadingIcon.circle,
-          size: TDLoadingSize.small,
-          axis: Axis.horizontal,
-          text: '加载失败',
-          refreshWidget: GestureDetector(
-            child: TDText('刷新',
-              font: TDTheme.of(context).fontBodySmall,
-              textColor: TDTheme.of(context).brandNormalColor,),
-            onTap: (){
-              TDToast.showText('刷新', context: context);
-            },
-          ),
-        ),);
-      }),
-      ExampleItem(
-        desc: '带图标的失败竖向Loading',
-          ignoreCode: true,
-          builder: (_){
-        return Container(padding: const EdgeInsets.all(16),
-        child: TDLoading(
-          icon: TDLoadingIcon.circle,
-          size: TDLoadingSize.small,
-          text: '加载失败',
-          refreshWidget: GestureDetector(
-            child: TDText('刷新',
-              font: TDTheme.of(context).fontBodySmall,
-              textColor: TDTheme.of(context).brandNormalColor,),
-            onTap: (){
-              TDToast.showText('刷新', context: context);
-            },
-          ),
-        ),);
-      }),
-    ],);
+      title: '加载 Loading',
+      backgroundColor: TDTheme.of(context).whiteColor1,
+      exampleCodeGroup: 'loading',
+      desc: '用于表示页面或操作的加载状态，给予用户反馈的同时减缓等待的焦虑感，由一个或一组反馈动效组成。',
+      children: [
+        ExampleModule(title: '组件类型', children: [
+          ExampleItem(desc: '纯图标', builder: _buildPureIconLoading),
+          ExampleItem(
+              desc: '图标加文字横向', builder: _buildTextIconHorizontalLoading),
+          ExampleItem(desc: '图标加文字竖向', builder: _buildTextIconVerticalLoading),
+          ExampleItem(desc: '纯文字', builder: _buildPureTextLoading),
+        ]),
+        ExampleModule(title: '组件尺寸', children: [
+          ExampleItem(desc: '大尺寸', builder: _buildLargeLoading),
+          ExampleItem(desc: '中尺寸', builder: _buildMediumLoading),
+          ExampleItem(desc: '小尺寸', builder: _buildSmallLoading),
+        ]),
+        ExampleModule(title: '加载速度', children: [
+          ExampleItem(desc: '调整加载速度', builder: _buildCustomSpeedLoading),
+        ]),
+      ],
+      test: [
+        ExampleItem(
+            desc: '带图标的失败横向Loading',
+            ignoreCode: true,
+            builder: (_) {
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: TDLoading(
+                  icon: TDLoadingIcon.circle,
+                  size: TDLoadingSize.small,
+                  axis: Axis.horizontal,
+                  text: '加载失败',
+                  refreshWidget: GestureDetector(
+                    child: TDText(
+                      '刷新',
+                      font: TDTheme.of(context).fontBodySmall,
+                      textColor: TDTheme.of(context).brandNormalColor,
+                    ),
+                    onTap: () {
+                      TDToast.showText('刷新', context: context);
+                    },
+                  ),
+                ),
+              );
+            }),
+        ExampleItem(
+            desc: '带图标的失败竖向Loading',
+            ignoreCode: true,
+            builder: (_) {
+              return Container(
+                padding: const EdgeInsets.all(16),
+                child: TDLoading(
+                  icon: TDLoadingIcon.circle,
+                  size: TDLoadingSize.small,
+                  text: '加载失败',
+                  refreshWidget: GestureDetector(
+                    child: TDText(
+                      '刷新',
+                      font: TDTheme.of(context).fontBodySmall,
+                      textColor: TDTheme.of(context).brandNormalColor,
+                    ),
+                    onTap: () {
+                      TDToast.showText('刷新', context: context);
+                    },
+                  ),
+                ),
+              );
+            }),
+      ],
+    );
   }
 
   @Demo(group: 'loading')
@@ -174,10 +183,12 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
         size: TDLoadingSize.small,
         text: '加载失败',
         refreshWidget: GestureDetector(
-          child: TDText('刷新',
-          font: TDTheme.of(context).fontBodySmall,
-          textColor: TDTheme.of(context).brandNormalColor,),
-          onTap: (){
+          child: TDText(
+            '刷新',
+            font: TDTheme.of(context).fontBodySmall,
+            textColor: TDTheme.of(context).brandNormalColor,
+          ),
+          onTap: () {
             TDToast.showText('刷新', context: context);
           },
         ),
@@ -224,37 +235,39 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
     ]);
   }
 
-
   double _currentSliderValue = 1000;
+
   /// 自定义尺寸
   @Demo(group: 'loading')
   Widget _buildCustomSpeedLoading(BuildContext context) {
-    return Padding(padding: EdgeInsets.all(16),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TDLoading(
-          size: TDLoadingSize.small,
-          icon: TDLoadingIcon.circle,
-          axis: Axis.horizontal,
-          text: '加载中…',
-          duration: _currentSliderValue.round(),
-        ),
-        Slider(
-          value: _currentSliderValue,
-          max: 2000,
-          min: -20,
-          divisions: 100,
-          label: _currentSliderValue.round().toString(),
-          onChanged: (double value) {
-            setState(() {
-              _currentSliderValue = value;
-            });
-          },
-        ),
-      ],
-    ),);
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TDLoading(
+            size: TDLoadingSize.small,
+            icon: TDLoadingIcon.circle,
+            axis: Axis.horizontal,
+            text: '加载中…',
+            duration: _currentSliderValue.round(),
+          ),
+          Slider(
+            value: _currentSliderValue,
+            max: 2000,
+            min: -20,
+            divisions: 100,
+            label: _currentSliderValue.round().toString(),
+            onChanged: (double value) {
+              setState(() {
+                _currentSliderValue = value;
+              });
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
