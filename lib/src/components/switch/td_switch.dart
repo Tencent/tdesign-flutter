@@ -104,8 +104,9 @@ class TDSwitchState extends State<TDSwitch> {
         return 45;
       case TDSwitchSize.small:
         return 39;
+      default:
+        return 45;
     }
-    return 45;
   }
 
   double _getHeight() {
@@ -116,8 +117,9 @@ class TDSwitchState extends State<TDSwitch> {
         return 28;
       case TDSwitchSize.small:
         return 24;
+      default:
+        return 28;
     }
-    return 28;
   }
 
   Widget? _getThumbView(Color onColor, Color offColor) {
@@ -147,8 +149,8 @@ class TDSwitchState extends State<TDSwitch> {
               size: 16, color: isOn ? onColor : offColor),
         );
       case TDSwitchType.fill:
+      default:
         return null;
     }
-    return null;
   }
 }
