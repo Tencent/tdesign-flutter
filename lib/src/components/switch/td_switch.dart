@@ -1,17 +1,23 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../../td_export.dart';
+import 'td_cupertino_switch.dart';
+
+enum TDSwitchSize { large, medium, small }
+
+enum TDSwitchType { fill, text, loading, icon }
 
 class TDSwitch extends StatefulWidget {
-
   const TDSwitch({
     Key? key,
     this.enable = true,
     this.isOn = false,
+    this.size = TDSwitchSize.medium,
+    this.type = TDSwitchType.fill,
     this.onColor,
-    this.offColor,
+    this.offColor = CupertinoColors.secondarySystemFill,
     this.onChanged,
-  }): super(key: key);
+  }) : super(key: key);
 
   /// 是否可点击
   final bool enable;
@@ -25,6 +31,12 @@ class TDSwitch extends StatefulWidget {
   /// 关闭颜色
   final Color? offColor;
 
+  /// 尺寸：大、中、小
+  final TDSwitchSize? size;
+
+  /// 类型：填充、文本、加载
+  final TDSwitchType? type;
+
   ///改变事件
   final ValueChanged<bool>? onChanged;
 
@@ -35,7 +47,6 @@ class TDSwitch extends StatefulWidget {
 }
 
 class TDSwitchState extends State<TDSwitch> {
-
   bool isOn = false;
 
   @override
@@ -53,17 +64,18 @@ class TDSwitchState extends State<TDSwitch> {
   @override
   Widget build(BuildContext context) {
     final theme = TDTheme.of(context);
-    Widget current = CupertinoSwitch(
+    var onColor = widget.onColor ?? theme.brandColor8;
+    var offColor = widget.offColor ?? theme.grayColor4;
+    Widget current = TDCupertinoSwitch(
       value: isOn,
-      activeColor: widget.onColor ?? theme.brandColor8,
-      trackColor: widget.offColor ?? theme.grayColor4,
+      activeColor: onColor,
+      trackColor: offColor,
       onChanged: (value) {
         widget.onChanged?.call(value);
         isOn = value;
-        setState(() {
-
-        });
+        setState(() {});
       },
+      thumbView: _getThumbView(onColor, offColor),
     );
     if (!widget.enable) {
       current = Opacity(
@@ -74,6 +86,69 @@ class TDSwitchState extends State<TDSwitch> {
         ),
       );
     }
-    return current;
+    return SizedBox(
+      width: _getWidth(),
+      height: _getHeight(),
+      child: FittedBox(
+        child: current,
+      ),
+    );
+    // return ConstrainedBox( _getWidth(), height: _getHeight(), child: current);
+  }
+
+  double _getWidth() {
+    switch (widget.size) {
+      case TDSwitchSize.large:
+        return 52;
+      case TDSwitchSize.medium:
+        return 45;
+      case TDSwitchSize.small:
+        return 39;
+    }
+    return 45;
+  }
+
+  double _getHeight() {
+    switch (widget.size) {
+      case TDSwitchSize.large:
+        return 32;
+      case TDSwitchSize.medium:
+        return 28;
+      case TDSwitchSize.small:
+        return 24;
+    }
+    return 28;
+  }
+
+  Widget? _getThumbView(Color onColor, Color offColor) {
+    switch (widget.type) {
+      case TDSwitchType.text:
+        return Container(
+          alignment: Alignment.centerLeft,
+          child: TDText(
+            isOn ? '开' : '关',
+            style: TextStyle(color: isOn ? onColor : offColor),
+          ),
+        );
+      case TDSwitchType.loading:
+        return Container(
+          alignment: Alignment.centerLeft,
+          child: TDCircleIndicator(
+            color: onColor,
+            size: 16,
+            lineWidth: 3,
+            duration: 1000,
+          ),
+        );
+      case TDSwitchType.icon:
+        return Container(
+          alignment: Alignment.centerLeft,
+          child: Icon(isOn ? TDIcons.check : TDIcons.close,
+              size: 16, color: isOn ? onColor : offColor),
+        );
+      case TDSwitchType.fill:
+        return null;
+    }
+    return null;
   }
 }
