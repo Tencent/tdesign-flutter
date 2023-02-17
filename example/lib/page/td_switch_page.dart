@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
+
 import '../base/example_widget.dart';
 
 ///
@@ -17,76 +18,90 @@ class TDSwitchPage extends StatefulWidget {
 class TDSwitchPageState extends State<TDSwitchPage> {
   @override
   Widget build(BuildContext context) {
-    var current = ExamplePage(title: '开关 Switch', children: [
+    var current =
+        ExamplePage(title: 'Switch 开关', desc: '用于控制某个功能的开启和关闭。', children: [
       ExampleModule(
-        title: '默认',
+        title: '组件类型',
         children: [
           ExampleItem(builder: (_) => _title('基础开关')),
           ExampleItem(
               builder: (_) => Container(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
-                        demoRow(context, '开关', on: true),
-                        _divider(),
-                        demoRow(context, '开关', on: false),
-                        _divider(),
-                        demoRow(context, '自定义颜色',
-                            on: true, onColor: Colors.green),
-                        _divider(),
-                        demoRow(context, '自定义颜色',
-                            on: false,
-                            onColor: Colors.green,
-                            offColor: Colors.brown),
-                        _divider(),
-                        demoRow(context, '异步操作', on: true),
-                      ],
+                      children: [demoRow(context, '基础开关', on: true)],
                     ),
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    color: Colors.white,
                   )),
-          ExampleItem(builder: (_) => _title('带描述状态开关')),
+          ExampleItem(builder: (_) => _title('带描述开关')),
           ExampleItem(
-              builder: (_) => Container(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        demoRow(context, '开关', desc: '描述信息', on: true),
-                        _divider(),
-                        demoRow(context, '开关', desc: '描述信息', on: false),
-                        _divider(),
-                        demoRow(context, '自定义颜色',
-                            desc: '描述信息', on: true, onColor: Colors.green),
-                      ],
-                    ),
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    color: Colors.white,
+              builder: (_) => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      demoRow(context, '带文字开关',
+                          on: true, type: TDSwitchType.text),
+                      demoRow(context, '带图标开关',
+                          on: true, type: TDSwitchType.icon)
+                    ],
                   )),
-          ExampleItem(builder: (_) => _title('状态')),
+          ExampleItem(builder: (_) => _title('自定义颜色开关')),
           ExampleItem(
-              builder: (_) => Container(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        demoRow(context, '开关开启禁用', on: true, enable: false),
-                        _divider(),
-                        demoRow(context, '开关开启禁用', on: false, enable: false),
-                        _divider(),
-                        demoRow(context, '开关开启禁用',
-                            on: true, onColor: Colors.green, enable: false),
-                        _divider(),
-                        demoRow(context, '开关开启禁用',
-                            desc: '描述信息', on: false, enable: false),
-                        _divider(),
-                        demoRow(context, '开关开启禁用',
-                            desc: '描述信息', on: true, enable: false),
-                      ],
-                    ),
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    color: Colors.white,
-                  )),
+            builder: (_) =>
+                demoRow(context, '自定义颜色开关', on: true, onColor: Colors.green),
+          ),
         ],
-      )
+      ),
+      ExampleModule(title: '组件状态', children: [
+        ExampleItem(builder: (_) => _title('加载状态')),
+        ExampleItem(
+            builder: (_) => Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      demoRow(
+                        context,
+                        '加载状态',
+                        on: true,
+                        enable: false,
+                        type: TDSwitchType.loading,
+                      ),
+                      demoRow(
+                        context,
+                        '加载状态',
+                        on: false,
+                        enable: false,
+                        type: TDSwitchType.loading,
+                      ),
+                    ],
+                  ),
+                )),
+        ExampleItem(builder: (_) => _title('禁用状态')),
+        ExampleItem(
+            builder: (_) => Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      demoRow(context, '禁用状态', on: false, enable: false),
+                      demoRow(context, '禁用状态', on: true, enable: false),
+                    ],
+                  ),
+                )),
+      ]),
+      ExampleModule(title: '组件样式', children: [
+        ExampleItem(builder: (_) => _title('开关尺寸')),
+        ExampleItem(
+            builder: (_) => Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      demoRow(context, '大尺寸32',
+                          on: true, size: TDSwitchSize.large),
+                      demoRow(context, '中尺寸28',
+                          on: true, size: TDSwitchSize.medium),
+                      demoRow(context, '小尺寸24',
+                          on: true, size: TDSwitchSize.small),
+                    ],
+                  ),
+                )),
+      ]),
     ]);
     return current;
   }
@@ -112,6 +127,8 @@ class TDSwitchPageState extends State<TDSwitchPage> {
     bool enable = true,
     Color? onColor,
     Color? offColor,
+    TDSwitchSize? size,
+    TDSwitchType? type,
   }) {
     final theme = TDTheme.of(context);
     Widget current = Row(
@@ -125,17 +142,30 @@ class TDSwitchPageState extends State<TDSwitchPage> {
           desc ?? '',
           textColor: theme.grayColor6,
         ),
-        TDSwitch(
-          isOn: on,
-          onColor: onColor,
-          enable: enable,
-          offColor: offColor,
+        SizedBox(
+          child: TDSwitch(
+            isOn: on,
+            onColor: onColor,
+            enable: enable,
+            offColor: offColor,
+            size: size,
+            type: type,
+          ),
         )
       ],
     );
-    current = SizedBox(
-      child: current,
-      height: 44,
+    current = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: SizedBox(
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: current,
+          ),
+          color: Colors.white,
+        ),
+        height: 56,
+      ),
     );
     return current;
   }
