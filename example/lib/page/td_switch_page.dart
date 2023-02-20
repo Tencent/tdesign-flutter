@@ -56,15 +56,13 @@ class TDSwitchPageState extends State<TDSwitchPage> {
                     demoRow(
                       context,
                       '加载状态',
-                      on: true,
-                      enable: false,
+                      on: false,
                       type: TDSwitchType.loading,
                     ),
                     demoRow(
                       context,
                       '加载状态',
-                      on: false,
-                      enable: false,
+                      on: true,
                       type: TDSwitchType.loading,
                     ),
                   ],
