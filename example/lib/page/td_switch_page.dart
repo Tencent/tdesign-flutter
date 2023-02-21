@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
+
+import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
 ///
@@ -17,91 +19,33 @@ class TDSwitchPage extends StatefulWidget {
 class TDSwitchPageState extends State<TDSwitchPage> {
   @override
   Widget build(BuildContext context) {
-    var current = ExamplePage(title: '开关 Switch', children: [
-      ExampleModule(
-        title: '默认',
+    var current = ExamplePage(
+        title: 'Switch 开关',
+        exampleCodeGroup: 'switch',
+        desc: '用于控制某个功能的开启和关闭。',
         children: [
-          ExampleItem(builder: (_) => _title('基础开关')),
-          ExampleItem(
-              builder: (_) => Container(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        demoRow(context, '开关', on: true),
-                        _divider(),
-                        demoRow(context, '开关', on: false),
-                        _divider(),
-                        demoRow(context, '自定义颜色',
-                            on: true, onColor: Colors.green),
-                        _divider(),
-                        demoRow(context, '自定义颜色',
-                            on: false,
-                            onColor: Colors.green,
-                            offColor: Colors.brown),
-                        _divider(),
-                        demoRow(context, '异步操作', on: true),
-                      ],
-                    ),
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    color: Colors.white,
-                  )),
-          ExampleItem(builder: (_) => _title('带描述状态开关')),
-          ExampleItem(
-              builder: (_) => Container(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        demoRow(context, '开关', desc: '描述信息', on: true),
-                        _divider(),
-                        demoRow(context, '开关', desc: '描述信息', on: false),
-                        _divider(),
-                        demoRow(context, '自定义颜色',
-                            desc: '描述信息', on: true, onColor: Colors.green),
-                      ],
-                    ),
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    color: Colors.white,
-                  )),
-          ExampleItem(builder: (_) => _title('状态')),
-          ExampleItem(
-              builder: (_) => Container(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        demoRow(context, '开关开启禁用', on: true, enable: false),
-                        _divider(),
-                        demoRow(context, '开关开启禁用', on: false, enable: false),
-                        _divider(),
-                        demoRow(context, '开关开启禁用',
-                            on: true, onColor: Colors.green, enable: false),
-                        _divider(),
-                        demoRow(context, '开关开启禁用',
-                            desc: '描述信息', on: false, enable: false),
-                        _divider(),
-                        demoRow(context, '开关开启禁用',
-                            desc: '描述信息', on: true, enable: false),
-                      ],
-                    ),
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    color: Colors.white,
-                  )),
-        ],
-      )
-    ]);
+          ExampleModule(
+            title: '组件类型',
+            children: [
+              ExampleItem(desc: '基础开关', builder: _buildSwitchWithBase),
+              ExampleItem(desc: '带描述开关', builder: _buildSwitchWithText),
+              ExampleItem(builder: _buildSwitchWithIcon),
+              ExampleItem(desc: '自定义颜色开关', builder: _buildSwitchWithColor),
+            ],
+          ),
+          ExampleModule(title: '组件状态', children: [
+            ExampleItem(desc: '加载状态', builder: _buildSwitchWithLoadingOff),
+            ExampleItem(builder: _buildSwitchWithLoadingOn),
+            ExampleItem(desc: '禁用状态', builder: _buildSwitchWithDisableOff),
+            ExampleItem(builder: _buildSwitchWithDisableOn),
+          ]),
+          ExampleModule(title: '组件样式', children: [
+            ExampleItem(desc: '开关尺寸', builder: _buildSwitchWithSizeLarge),
+            ExampleItem(builder: _buildSwitchWithSizeMed),
+            ExampleItem(builder: _buildSwitchWithSizeSmall),
+          ]),
+        ]);
     return current;
-  }
-
-  Widget _divider() {
-    return Container(height: 0.5, color: const Color(0x33999999));
-  }
-
-  Widget _title(String title) {
-    return Container(
-      height: 40,
-      padding: const EdgeInsets.only(left: 10),
-      alignment: Alignment.centerLeft,
-      child: Text(title),
-    );
   }
 
   Widget demoRow(
@@ -112,6 +56,8 @@ class TDSwitchPageState extends State<TDSwitchPage> {
     bool enable = true,
     Color? onColor,
     Color? offColor,
+    TDSwitchSize? size,
+    TDSwitchType? type,
   }) {
     final theme = TDTheme.of(context);
     Widget current = Row(
@@ -125,18 +71,204 @@ class TDSwitchPageState extends State<TDSwitchPage> {
           desc ?? '',
           textColor: theme.grayColor6,
         ),
-        TDSwitch(
-          isOn: on,
-          onColor: onColor,
-          enable: enable,
-          offColor: offColor,
+        SizedBox(
+          child: _buildSwitch(
+              on: on,
+              enable: enable,
+              onColor: onColor,
+              offColor: offColor,
+              size: size,
+              type: type),
         )
       ],
     );
-    current = SizedBox(
-      child: current,
-      height: 44,
+    current = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: SizedBox(
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: current,
+          ),
+          color: Colors.white,
+        ),
+        height: 56,
+      ),
     );
     return current;
+  }
+
+  /// 每一项的封装
+  @Demo(group: 'switch')
+  Widget _buildItem(BuildContext context, Widget switchItem,
+      {String? title, String? desc}) {
+    final theme = TDTheme.of(context);
+    Widget current = Row(
+      children: [
+        Expanded(
+            child: TDText(
+          title ?? '',
+          textColor: theme.fontGyColor1,
+        )),
+        TDText(
+          desc ?? '',
+          textColor: theme.grayColor6,
+        ),
+        SizedBox(child: switchItem)
+      ],
+    );
+    current = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: SizedBox(
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: current,
+          ),
+          color: Colors.white,
+        ),
+        height: 56,
+      ),
+    );
+    return Column(mainAxisSize: MainAxisSize.min, children: [current]);
+  }
+
+  @Demo(group: 'switch')
+  Widget _buildSwitchWithBase(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(),
+      title: '基础开关',
+    );
+  }
+
+  @Demo(group: 'switch')
+  Widget _buildSwitchWithText(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(isOn: true, type: TDSwitchType.text),
+      title: '带文字开关',
+    );
+  }
+
+  @Demo(group: 'switch')
+  Widget _buildSwitchWithIcon(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(isOn: true, type: TDSwitchType.icon),
+      title: '带图标开关',
+    );
+  }
+
+  @Demo(group: 'switch')
+  Widget _buildSwitchWithColor(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(isOn: true, onColor: Colors.green),
+      title: '自定义颜色开关',
+    );
+  }
+
+  @Demo(group: 'switch')
+  Widget _buildSwitchWithLoadingOff(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(
+        isOn: false,
+        type: TDSwitchType.loading,
+      ),
+      title: '加载状态',
+    );
+  }
+
+  @Demo(group: 'switch')
+  Widget _buildSwitchWithLoadingOn(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(
+        isOn: true,
+        type: TDSwitchType.loading,
+      ),
+      title: '加载状态',
+    );
+  }
+
+  @Demo(group: 'switch')
+  Widget _buildSwitchWithDisableOff(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(
+        enable: false,
+        isOn: false,
+      ),
+      title: '禁用状态',
+    );
+  }
+
+  @Demo(group: 'switch')
+  Widget _buildSwitchWithDisableOn(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(
+        enable: false,
+        isOn: true,
+      ),
+      title: '禁用状态',
+    );
+  }
+
+  @Demo(group: 'switch')
+  Widget _buildSwitchWithSizeLarge(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(
+        isOn: true,
+        size: TDSwitchSize.large,
+      ),
+      title: '大尺寸32',
+    );
+  }
+
+  @Demo(group: 'switch')
+  Widget _buildSwitchWithSizeMed(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(
+        isOn: true,
+        size: TDSwitchSize.medium,
+      ),
+      title: '中尺寸28',
+    );
+  }
+
+  @Demo(group: 'switch')
+  Widget _buildSwitchWithSizeSmall(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(
+        isOn: true,
+        size: TDSwitchSize.small,
+      ),
+      title: '中尺寸24',
+    );
+  }
+
+  @Demo(group: 'switch')
+  Widget _buildSwitch({
+    bool on = true,
+    bool enable = true,
+    Color? onColor,
+    Color? offColor,
+    TDSwitchSize? size,
+    TDSwitchType? type,
+  }) {
+    return TDSwitch(
+      isOn: on,
+      onColor: onColor,
+      enable: enable,
+      offColor: offColor,
+      size: size,
+      type: type,
+    );
   }
 }
