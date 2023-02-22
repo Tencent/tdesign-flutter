@@ -132,7 +132,6 @@ class _TDBadgeState extends State<TDBadge> {
       case TDBadgeType.message:
         return Container(
             height: getBadgeSize(),
-            width: getBadgeSize(),
             padding: const EdgeInsets.only(left: 5, right: 5),
             decoration: BoxDecoration(
               color: widget.color ?? TDTheme.of(context).errorColor6,
