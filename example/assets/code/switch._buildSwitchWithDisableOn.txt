@@ -1,0 +1,11 @@
+
+  Widget _buildSwitchWithDisableOn(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(
+        enable: false,
+        isOn: true,
+      ),
+      title: '禁用状态',
+    );
+  }

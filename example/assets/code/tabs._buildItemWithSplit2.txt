@@ -1,0 +1,11 @@
+
+  Widget _buildItemWithSplit2(BuildContext context) {
+    return TDTabBar(
+      tabs: subList(3),
+      indicatorWidth: 16,
+      indicatorHeight: 3,
+      controller: _tabController2,
+      backgroundColor: Colors.white,
+      showIndicator: true,
+    );
+  }

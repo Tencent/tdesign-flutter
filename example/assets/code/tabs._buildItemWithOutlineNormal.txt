@@ -1,0 +1,26 @@
+
+  Widget _buildItemWithOutlineNormal(BuildContext context) {
+    var tabs = [
+      const TDTab(
+        text: '选项',
+      ),
+      const TDTab(
+        text: '选项',
+      ),
+      const TDTab(
+        text: '选项',
+      ),
+      const TDTab(
+        text: '选项',
+      ),
+    ];
+    return TDTabBar(
+        tabs: tabs,
+        indicatorWidth: 16,
+        indicatorHeight: 3,
+        outlineType: TDTabBarOutlineType.capsule,
+        labelPadding: const EdgeInsets.all(10),
+        controller: TabController(length: 4, vsync: this),
+        backgroundColor: Colors.white,
+        showIndicator: false);
+  }

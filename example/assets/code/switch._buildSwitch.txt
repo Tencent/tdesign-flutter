@@ -1,0 +1,18 @@
+
+  Widget _buildSwitch({
+    bool on = true,
+    bool enable = true,
+    Color? onColor,
+    Color? offColor,
+    TDSwitchSize? size,
+    TDSwitchType? type,
+  }) {
+    return TDSwitch(
+      isOn: on,
+      onColor: onColor,
+      enable: enable,
+      offColor: offColor,
+      size: size,
+      type: type,
+    );
+  }
