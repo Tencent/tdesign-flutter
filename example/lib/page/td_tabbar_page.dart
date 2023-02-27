@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import '../../base/example_widget.dart';
+import '../annotation/demo.dart';
 
 class TDTabBarPage extends StatefulWidget {
   const TDTabBarPage({Key? key}) : super(key: key);
@@ -94,6 +95,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
     return ExamplePage(
         title: 'Tabs 选项卡',
         desc: '用于内容分类后的展示切换。',
+        exampleCodeGroup: 'tabs',
         padding: const EdgeInsets.symmetric(vertical: 16),
         children: [
           ExampleModule(
@@ -121,22 +123,27 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         ]);
   }
 
+  @Demo(group: 'tabs')
   Widget _buildItemWithSplit1(BuildContext context) {
     return _buildItem(2);
   }
 
+  @Demo(group: 'tabs')
   Widget _buildItemWithSplit2(BuildContext context) {
     return _buildItem(3);
   }
 
+  @Demo(group: 'tabs')
   Widget _buildItemWithSplit3(BuildContext context) {
     return _buildItem(4);
   }
 
+  @Demo(group: 'tabs')
   Widget _buildItemWithSplit4(BuildContext context) {
     return _buildItem(5);
   }
 
+  @Demo(group: 'tabs')
   Widget _buildItemWithSpace(BuildContext context) {
     return TDTabBar(
       tabs: subList(6),
@@ -149,6 +156,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
     );
   }
 
+  @Demo(group: 'tabs')
   Widget _buildItemWithIcon(BuildContext context) {
     var tabs = [
       const TDTab(
@@ -182,6 +190,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         showIndicator: true);
   }
 
+  @Demo(group: 'tabs')
   Widget _buildItemWithLogo(BuildContext context) {
     var tabs = [
       const TDTab(
@@ -217,6 +226,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         showIndicator: true);
   }
 
+  @Demo(group: 'tabs')
   Widget _buildItemWithContent(BuildContext context) {
     var tabController = TabController(length: 3, vsync: this);
     return SizedBox(
@@ -243,6 +253,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
     );
   }
 
+  @Demo(group: 'tabs')
   Widget _buildItemWithStatus(BuildContext context) {
     var tabs = [
       const TDTab(
@@ -265,6 +276,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         showIndicator: true);
   }
 
+  @Demo(group: 'tabs')
   Widget _buildItemWithSizeSmall(BuildContext context) {
     var tabs = [
       const TDTab(
@@ -289,6 +301,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         showIndicator: true);
   }
 
+  @Demo(group: 'tabs')
   Widget _buildItemWithSizeBig(BuildContext context) {
     var tabs = [
       const TDTab(
@@ -317,6 +330,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         showIndicator: true);
   }
 
+  @Demo(group: 'tabs')
   Widget _buildItemWithOutlineNormal(BuildContext context) {
     var tabs = [
       const TDTab(
@@ -343,6 +357,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         showIndicator: false);
   }
 
+  @Demo(group: 'tabs')
   Widget _buildItemWithOutlineCard(BuildContext context) {
     var tabs = [
       const TDTab(
