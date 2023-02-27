@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import '../../base/example_widget.dart';
 
+import '../../base/example_widget.dart';
 
 class TDTabBarPage extends StatefulWidget {
   const TDTabBarPage({Key? key}) : super(key: key);
@@ -12,7 +12,7 @@ class TDTabBarPage extends StatefulWidget {
 
 class _TDTabBarPageState extends State<TDTabBarPage>
     with TickerProviderStateMixin {
-  TabController? _tabController;
+  List<TabController>? _tabControllerList;
   TabController? _tabController1;
   TabController? _tabController2;
   TabController? _tabController3;
@@ -23,21 +23,26 @@ class _TDTabBarPageState extends State<TDTabBarPage>
 
   List<TDTab> _getTabs() {
     tabs = const [
-      TDTab(text: '标签页一'),
-      TDTab(text: '标签页二'),
-      TDTab(text: '标签页三'),
-      TDTab(text: '标签页四'),
-      TDTab(text: '标签页五'),
+      TDTab(
+        text: '选项',
+      ),
+      TDTab(
+        text: '选项',
+      ),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
     ];
     return tabs;
   }
 
   List<Widget> _getTabViews() {
     tabViews = const [
-      Center(child: TDText('内容一')),
-      Center(child: TDText('内容二')),
-      Center(child: TDText('内容三')),
-      Center(child: TDText('内容四')),
+      Center(child: TDText('内容区')),
+      Center(child: TDText('内容区')),
+      Center(child: TDText('内容区')),
     ];
     return tabViews;
   }
@@ -51,8 +56,19 @@ class _TDTabBarPageState extends State<TDTabBarPage>
 
   List<TDTab> subList(int length) {
     var temp = <TDTab>[];
-    for(var i = 0; i < length; i++) {
+    for (var i = 0; i < length; i++) {
       temp.add(tabs[i]);
+    }
+    switch (length) {
+      case 3:
+        temp[temp.length - 1] = const TDTab(text: '上限六个字');
+        break;
+      case 4:
+        temp[temp.length - 1] = const TDTab(text: '上限四字');
+        break;
+      case 5:
+        temp[temp.length - 1] = const TDTab(text: '上限三');
+        break;
     }
     return temp;
   }
@@ -64,96 +80,302 @@ class _TDTabBarPageState extends State<TDTabBarPage>
     _tabController3 = TabController(length: 4, vsync: this);
     _tabController4 = TabController(length: 5, vsync: this);
     _tabController5 = TabController(length: 4, vsync: this);
-    _tabController = TabController(length: 5, vsync: this);
+    _tabControllerList = [
+      _tabController1!,
+      _tabController2!,
+      _tabController3!,
+      _tabController4!,
+      _tabController5!
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: '选项卡 Tabs TDTabBar',
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      children: [
-      ExampleModule(title: '默认',
-      children: [
-        ExampleItem(
-          desc: '横向选项卡',
-          builder: (BuildContext context) {
-            return Column(
-              children: [
-                TDTabBar(
-                  tabs: subList(2),
-                  controller: _tabController1,
-                  backgroundColor: Colors.white,
-                  showIndicator: true,
-                ),
-                TDTabBar(
-                  tabs: subList(3),
-                  controller: _tabController2,
-                  backgroundColor: Colors.white,
-                  showIndicator: true,
-                ),
-                TDTabBar(
-                  tabs: subList(4),
-                  controller: _tabController3,
-                  backgroundColor: Colors.white,
-                  showIndicator: true,
-                ),
-                TDTabBar(
-                  tabs: _getTabs(),
-                  controller: _tabController4,
-                  backgroundColor: Colors.white,
-                  showIndicator: true,
-                  isScrollable: true,
-                ),
-              ],
-            );
-          },
-        ),
-        ExampleItem(
-          desc: '无下划线横向选项卡',
-          builder: (BuildContext context) {
-            return TDTabBar(
-              tabs: _getTabs(),
-              controller: _tabController,
-              backgroundColor: Colors.white,
-              isScrollable: true,
-            );
-          },
-        ),
-        ExampleItem(
-          desc: '竖向选项卡',
-          builder: (BuildContext context) {
-            return LayoutBuilder(builder: (context, constraints){
+        title: 'Tabs 选项卡',
+        desc: '用于内容分类后的展示切换。',
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        children: [
+          ExampleModule(
+            title: '组件类型',
+            children: [
+              ExampleItem(desc: '均分选项卡', builder: _buildItemWithSplit1),
+              ExampleItem(builder: _buildItemWithSplit2),
+              ExampleItem(builder: _buildItemWithSplit3),
+              ExampleItem(builder: _buildItemWithSplit4),
+              ExampleItem(desc: '等距选项卡', builder: _buildItemWithSpace),
+              ExampleItem(desc: '带图标选项卡', builder: _buildItemWithIcon),
+              ExampleItem(desc: '带微标选项卡', builder: _buildItemWithLogo),
+              ExampleItem(desc: '带内容区选项卡', builder: _buildItemWithContent),
+            ],
+          ),
+          ExampleModule(title: '组件状态', children: [
+            ExampleItem(desc: '选项卡状态', builder: _buildItemWithStatus),
+          ]),
+          ExampleModule(title: '组件样式', children: [
+            ExampleItem(desc: '选项卡尺寸', builder: _buildItemWithSizeSmall),
+            ExampleItem(builder: _buildItemWithSizeBig),
+            ExampleItem(desc: '选项卡样式', builder: _buildItemWithOutlineNormal),
+            ExampleItem(builder: _buildItemWithOutlineCard),
+          ]),
+        ]);
+  }
 
-              return SizedBox(
-                width: constraints.maxWidth,
-                height: 4 * 54,
-                child: Row(
-                  children: [
-                    TDTabBar(
-                        width: 104,
-                        tabs: subList(4),
-                        controller: _tabController5,
-                        showIndicator: true,
-                        backgroundColor: Colors.white,
-                        isScrollable: false,
-                        isVertical: true
-                    ),
-                    Container(
-                      width: constraints.maxWidth - 104,
-                      color: Colors.white,
-                      child: TDTabBarVerticalView(
-                        children: _getTabViews(),
-                        controller: _tabController5,
-                      ),
-                    )
-                  ],
-                ),
-              );
-            });
-          },
+  Widget _buildItemWithSplit1(BuildContext context) {
+    return _buildItem(2);
+  }
+
+  Widget _buildItemWithSplit2(BuildContext context) {
+    return _buildItem(3);
+  }
+
+  Widget _buildItemWithSplit3(BuildContext context) {
+    return _buildItem(4);
+  }
+
+  Widget _buildItemWithSplit4(BuildContext context) {
+    return _buildItem(5);
+  }
+
+  Widget _buildItemWithSpace(BuildContext context) {
+    return TDTabBar(
+      tabs: subList(6),
+      indicatorWidth: 16,
+      indicatorHeight: 3,
+      controller: TabController(length: 6, vsync: this),
+      backgroundColor: Colors.white,
+      labelPadding: const EdgeInsets.all(10),
+      showIndicator: true,
+    );
+  }
+
+  Widget _buildItemWithIcon(BuildContext context) {
+    var tabs = [
+      const TDTab(
+        text: '选项',
+        icon: Icon(
+          TDIcons.app,
+          size: 14,
         ),
-      ],
-    )]);
+      ),
+      const TDTab(
+        text: '选项',
+        icon: Icon(
+          TDIcons.app,
+          size: 14,
+        ),
+      ),
+      const TDTab(
+        text: '选项',
+        icon: Icon(
+          TDIcons.app,
+          size: 14,
+        ),
+      ),
+    ];
+    return TDTabBar(
+        tabs: tabs,
+        indicatorWidth: 16,
+        indicatorHeight: 3,
+        controller: TabController(length: 3, vsync: this),
+        backgroundColor: Colors.white,
+        showIndicator: true);
+  }
+
+  Widget _buildItemWithLogo(BuildContext context) {
+    var tabs = [
+      const TDTab(
+        text: '选项',
+        contentHeight: 48,
+        textMargin: EdgeInsets.only(right: 8),
+        badge: TDBadge(TDBadgeType.redPoint),
+      ),
+      const TDTab(
+        text: '选项',
+        contentHeight: 42,
+        textMargin: EdgeInsets.only(right: 16, top: 2, bottom: 2),
+        badge: TDBadge(
+          TDBadgeType.message,
+          message: '8',
+        ),
+      ),
+      const TDTab(
+        text: '选项',
+        height: 48,
+        icon: Icon(
+          TDIcons.app,
+          size: 14,
+        ),
+      ),
+    ];
+    return TDTabBar(
+        tabs: tabs,
+        indicatorWidth: 16,
+        indicatorHeight: 3,
+        controller: TabController(length: 3, vsync: this),
+        backgroundColor: Colors.white,
+        showIndicator: true);
+  }
+
+  Widget _buildItemWithContent(BuildContext context) {
+    var tabController = TabController(length: 3, vsync: this);
+    return SizedBox(
+      height: 120 + 48,
+      child: Column(
+        children: [
+          TDTabBar(
+              tabs: subList(3),
+              controller: tabController,
+              showIndicator: true,
+              backgroundColor: Colors.white,
+              isScrollable: false,
+              isVertical: false),
+          Container(
+            height: 120,
+            color: Colors.white,
+            child: TDTabBarVerticalView(
+              children: _getTabViews(),
+              controller: tabController,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItemWithStatus(BuildContext context) {
+    var tabs = [
+      const TDTab(
+        text: '选中',
+      ),
+      const TDTab(
+        text: '默认',
+      ),
+      const TDTab(
+        text: '禁用',
+        enable: false,
+      ),
+    ];
+    return TDTabBar(
+        tabs: tabs,
+        indicatorWidth: 16,
+        indicatorHeight: 3,
+        controller: TabController(length: 3, vsync: this),
+        backgroundColor: Colors.white,
+        showIndicator: true);
+  }
+
+  Widget _buildItemWithSizeSmall(BuildContext context) {
+    var tabs = [
+      const TDTab(
+        text: '小尺寸',
+      ),
+      const TDTab(
+        text: '选项',
+      ),
+      const TDTab(
+        text: '选项',
+      ),
+      const TDTab(
+        text: '选项',
+      ),
+    ];
+    return TDTabBar(
+        tabs: tabs,
+        indicatorWidth: 16,
+        indicatorHeight: 3,
+        controller: TabController(length: 4, vsync: this),
+        backgroundColor: Colors.white,
+        showIndicator: true);
+  }
+
+  Widget _buildItemWithSizeBig(BuildContext context) {
+    var tabs = [
+      const TDTab(
+        text: '大尺寸',
+        size: TDTabSize.large,
+      ),
+      const TDTab(
+        text: '选项',
+        size: TDTabSize.large,
+      ),
+      const TDTab(
+        text: '选项',
+        size: TDTabSize.large,
+      ),
+      const TDTab(
+        text: '选项',
+        size: TDTabSize.large,
+      ),
+    ];
+    return TDTabBar(
+        tabs: tabs,
+        indicatorWidth: 16,
+        indicatorHeight: 3,
+        controller: TabController(length: 4, vsync: this),
+        backgroundColor: Colors.white,
+        showIndicator: true);
+  }
+
+  Widget _buildItemWithOutlineNormal(BuildContext context) {
+    var tabs = [
+      const TDTab(
+        text: '选项',
+      ),
+      const TDTab(
+        text: '选项',
+      ),
+      const TDTab(
+        text: '选项',
+      ),
+      const TDTab(
+        text: '选项',
+      ),
+    ];
+    return TDTabBar(
+        tabs: tabs,
+        indicatorWidth: 16,
+        indicatorHeight: 3,
+        outlineType: TDTabBarOutlineType.capsule,
+        labelPadding: const EdgeInsets.all(10),
+        controller: TabController(length: 4, vsync: this),
+        backgroundColor: Colors.white,
+        showIndicator: false);
+  }
+
+  Widget _buildItemWithOutlineCard(BuildContext context) {
+    var tabs = [
+      const TDTab(
+        text: '选项',
+      ),
+      const TDTab(
+        text: '选项',
+      ),
+      const TDTab(
+        text: '选项',
+      ),
+      const TDTab(
+        text: '选项',
+      ),
+    ];
+    return TDTabBar(
+        tabs: tabs,
+        indicatorWidth: 16,
+        indicatorHeight: 3,
+        outlineType: TDTabBarOutlineType.card,
+        controller: TabController(length: 4, vsync: this),
+        backgroundColor: Colors.white,
+        showIndicator: false);
+  }
+
+  Widget _buildItem(int size) {
+    return TDTabBar(
+      tabs: subList(size),
+      indicatorWidth: 16,
+      indicatorHeight: 3,
+      controller: _tabControllerList![size - 2],
+      backgroundColor: Colors.white,
+      showIndicator: true,
+    );
   }
 }
