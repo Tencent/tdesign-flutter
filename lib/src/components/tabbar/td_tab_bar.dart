@@ -3,40 +3,50 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 import '../../../td_export.dart';
+import 'td_horizontal_tab_bar.dart';
 import 'td_vertical_tab_bar.dart';
 
 bool isCustomStyle = false;
 
-class TDTabBar extends StatefulWidget {
+enum TDTabBarOutlineType {
+  // 填充样式
+  filled,
+  // 胶囊样式
+  capsule,
+  // 卡片
+  card
+}
 
+class TDTabBar extends StatefulWidget {
   const TDTabBar(
       {Key? key,
-        required this.tabs,
-        this.controller,
-        this.decoration,
-        this.backgroundColor,
-        this.indicatorColor,
-        this.indicatorWidth,
-        this.indicatorHeight,
-        this.labelColor,
-        this.unselectedLabelColor,
-        this.isScrollable = false,
-        this.unselectedLabelStyle,
-        this.labelStyle,
-        this.width,
-        this.height,
-        this.indicatorPadding,
-        this.labelPadding,
-        this.indicator,
-        this.physics,
-        this.onTap,
-        this.isVertical = false,
-        this.showIndicator = false})
+      required this.tabs,
+      this.controller,
+      this.decoration,
+      this.backgroundColor,
+      this.indicatorColor,
+      this.indicatorWidth,
+      this.indicatorHeight,
+      this.labelColor,
+      this.unselectedLabelColor,
+      this.isScrollable = false,
+      this.unselectedLabelStyle,
+      this.labelStyle,
+      this.width,
+      this.height,
+      this.indicatorPadding,
+      this.labelPadding,
+      this.indicator,
+      this.physics,
+      this.onTap,
+      this.outlineType = TDTabBarOutlineType.filled,
+      this.isVertical = false,
+      this.showIndicator = false})
       : assert(
-  backgroundColor == null || decoration == null,
-  'Cannot provide both a backgroundColor and a decoration\n'
-      'To provide both, use "decoration: BoxDecoration(color: color)".',
-  ),
+          backgroundColor == null || decoration == null,
+          'Cannot provide both a backgroundColor and a decoration\n'
+          'To provide both, use "decoration: BoxDecoration(color: color)".',
+        ),
         super(key: key);
 
   /// tab数组
@@ -102,13 +112,16 @@ class TDTabBar extends StatefulWidget {
   /// 是否是竖向
   final bool isVertical;
 
+  /// 选项卡样式
+  final TDTabBarOutlineType outlineType;
+
   @override
   State<StatefulWidget> createState() => _TDTabBarState();
 }
 
 class _TDTabBarState extends State<TDTabBar> {
   /// 默认高度
-  static const double _defaultHeight = 46;
+  static const double _defaultHeight = 48;
   static const double _defaultVerticalHeight = 54;
 
   @override
@@ -133,7 +146,7 @@ class _TDTabBarState extends State<TDTabBar> {
               labelColor:
                   widget.labelColor ?? TDTheme.of(context).brandNormalColor,
               labelStyle: widget.labelStyle ?? _getLabelStyle(context),
-              labelPadding: widget.labelPadding,
+              labelPadding: widget.labelPadding ?? const EdgeInsets.all(8),
               unselectedLabelStyle: widget.unselectedLabelStyle ??
                   _getUnSelectLabelStyle(context),
               tabs: widget.tabs,
@@ -143,7 +156,7 @@ class _TDTabBarState extends State<TDTabBar> {
                 widget.onTap?.call(index);
               },
             )
-          : TabBar(
+          : TDHorizontalTabBar(
               physics: widget.physics,
               isScrollable: widget.isScrollable,
               indicator: widget.indicator ?? _getIndicator(context),
@@ -154,11 +167,12 @@ class _TDTabBarState extends State<TDTabBar> {
               labelColor:
                   widget.labelColor ?? TDTheme.of(context).brandNormalColor,
               labelStyle: widget.labelStyle ?? _getLabelStyle(context),
-              labelPadding: widget.labelPadding,
+              labelPadding: widget.labelPadding ?? const EdgeInsets.all(8),
               unselectedLabelStyle: widget.unselectedLabelStyle ??
                   _getUnSelectLabelStyle(context),
               tabs: widget.tabs,
               indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
+              outlineType: widget.outlineType,
               controller: widget.controller,
               onTap: (index) {
                 widget.onTap?.call(index);
@@ -291,7 +305,6 @@ class _TDTabBarVerticalIndicatorPainter extends BoxPainter {
 
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-
     canvas.drawLine(
         Offset(
           0 + _indicatorWidth() / 2,
