@@ -99,7 +99,7 @@ class _TDBadgeState extends State<TDBadge> {
   }
 
   double getBadgeSize() {
-    switch(widget.size) {
+    switch (widget.size) {
       case TDBadgeSize.large:
         return 20;
       case TDBadgeSize.small:
@@ -108,7 +108,7 @@ class _TDBadgeState extends State<TDBadge> {
   }
 
   Font? getBadgeFont(BuildContext context) {
-    switch(widget.size) {
+    switch (widget.size) {
       case TDBadgeSize.large:
         return TDTheme.of(context).fontMarkSmall;
       case TDBadgeSize.small:
