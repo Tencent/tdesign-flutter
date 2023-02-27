@@ -19,14 +19,14 @@ class TDSwiperPagination extends SwiperPlugin {
   static const SwiperPlugin dots = TDSwiperDotsPagination();
 
   /// 圆角矩形 + 圆点样式 默认宽度20，高度6
-  static const SwiperPlugin roundedRectangle =
+  static const SwiperPlugin dotsBar =
       TDSwiperDotsPagination(roundedRectangleWidth: 20);
 
   /// 数字样式
   static const SwiperPlugin fraction = TDFractionPagination();
 
   /// 箭头样式
-  static const SwiperPlugin arrow = TDSwiperArrowPagination();
+  static const SwiperPlugin controls = TDSwiperArrowPagination();
 
   /// 当 scrollDirection== Axis.horizontal 时，默认Alignment.bottomCenter
   /// 当 scrollDirection== Axis.vertical 时，默认Alignment.centerRight
