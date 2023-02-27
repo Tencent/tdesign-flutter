@@ -13,7 +13,6 @@ class TDTabBarPage extends StatefulWidget {
 
 class _TDTabBarPageState extends State<TDTabBarPage>
     with TickerProviderStateMixin {
-  List<TabController>? _tabControllerList;
   TabController? _tabController1;
   TabController? _tabController2;
   TabController? _tabController3;
@@ -81,13 +80,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
     _tabController3 = TabController(length: 4, vsync: this);
     _tabController4 = TabController(length: 5, vsync: this);
     _tabController5 = TabController(length: 4, vsync: this);
-    _tabControllerList = [
-      _tabController1!,
-      _tabController2!,
-      _tabController3!,
-      _tabController4!,
-      _tabController5!
-    ];
   }
 
   @override
@@ -125,22 +117,50 @@ class _TDTabBarPageState extends State<TDTabBarPage>
 
   @Demo(group: 'tabs')
   Widget _buildItemWithSplit1(BuildContext context) {
-    return _buildItem(2);
+    return TDTabBar(
+      tabs: subList(2),
+      indicatorWidth: 16,
+      indicatorHeight: 3,
+      controller: _tabController1,
+      backgroundColor: Colors.white,
+      showIndicator: true,
+    );
   }
 
   @Demo(group: 'tabs')
   Widget _buildItemWithSplit2(BuildContext context) {
-    return _buildItem(3);
+    return TDTabBar(
+      tabs: subList(3),
+      indicatorWidth: 16,
+      indicatorHeight: 3,
+      controller: _tabController2,
+      backgroundColor: Colors.white,
+      showIndicator: true,
+    );
   }
 
   @Demo(group: 'tabs')
   Widget _buildItemWithSplit3(BuildContext context) {
-    return _buildItem(4);
+    return TDTabBar(
+      tabs: subList(4),
+      indicatorWidth: 16,
+      indicatorHeight: 3,
+      controller: _tabController3,
+      backgroundColor: Colors.white,
+      showIndicator: true,
+    );
   }
 
   @Demo(group: 'tabs')
   Widget _buildItemWithSplit4(BuildContext context) {
-    return _buildItem(5);
+    return TDTabBar(
+      tabs: subList(5),
+      indicatorWidth: 16,
+      indicatorHeight: 3,
+      controller: _tabController4,
+      backgroundColor: Colors.white,
+      showIndicator: true,
+    );
   }
 
   @Demo(group: 'tabs')
@@ -243,7 +263,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
           Container(
             height: 120,
             color: Colors.white,
-            child: TDTabBarVerticalView(
+            child: TDTabBarView(
               children: _getTabViews(),
               controller: tabController,
             ),
@@ -381,16 +401,5 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         controller: TabController(length: 4, vsync: this),
         backgroundColor: Colors.white,
         showIndicator: false);
-  }
-
-  Widget _buildItem(int size) {
-    return TDTabBar(
-      tabs: subList(size),
-      indicatorWidth: 16,
-      indicatorHeight: 3,
-      controller: _tabControllerList![size - 2],
-      backgroundColor: Colors.white,
-      showIndicator: true,
-    );
   }
 }
