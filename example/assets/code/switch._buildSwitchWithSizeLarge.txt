@@ -1,0 +1,11 @@
+
+  Widget _buildSwitchWithSizeLarge(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(
+        isOn: true,
+        size: TDSwitchSize.large,
+      ),
+      title: '大尺寸32',
+    );
+  }
