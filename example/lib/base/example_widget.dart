@@ -44,7 +44,7 @@ class _ExamplePageState extends State<ExamplePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       var modelTheme = context
           .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
       model = modelTheme?.model;
@@ -77,9 +77,9 @@ class _ExamplePageState extends State<ExamplePage> {
                     if (index <= widget.children.length) {
                       data = widget.children[index - 1];
                     } else {
-                      data = ExampleModule(title: '单元测试', children: [
-                        _buildTestExampleItem(),
-                        ...widget.test]);
+                      data = ExampleModule(
+                          title: '单元测试',
+                          children: [_buildTestExampleItem(), ...widget.test]);
                     }
                     return _buildModule(index, data, context);
                   },
@@ -88,10 +88,10 @@ class _ExamplePageState extends State<ExamplePage> {
             )));
   }
 
-  ExampleItem _buildTestExampleItem() => ExampleItem(desc:
-  '''未在示例稿中体现，但有必要验证的组件样式，请添加到'test'参数中。以下情景必须有测试：
+  ExampleItem _buildTestExampleItem() =>
+      ExampleItem(desc: '''未在示例稿中体现，但有必要验证的组件样式，请添加到'test'参数中。以下情景必须有测试：
   1.参数为数字。需测试数字为负数、0、较大数值的场景。
-  2.参数为枚举，需测试所有枚举组合（示例已有的可不写）''',builder: (_)=>const TDDivider());
+  2.参数为枚举，需测试所有枚举组合（示例已有的可不写）''', builder: (_) => const TDDivider());
 
   Widget _buildNavBar() {
     return TDNavBar(
@@ -106,8 +106,8 @@ class _ExamplePageState extends State<ExamplePage> {
                   model!.apiVisible = apiVisible;
                 }
               });
-              TNotification.postNotification('onApiVisibleChange', {'apiVisible':apiVisible});
-
+              TNotification.postNotification(
+                  'onApiVisibleChange', {'apiVisible': apiVisible});
             })
       ],
     );
@@ -186,7 +186,12 @@ class ExampleModule {
 /// 示例样例数据
 class ExampleItem {
   const ExampleItem(
-      {Key? key, this.desc = '', required this.builder, this.methodName, this.center = true, this.ignoreCode = false});
+      {Key? key,
+      this.desc = '',
+      required this.builder,
+      this.methodName,
+      this.center = true,
+      this.ignoreCode = false});
 
   final String desc;
 
@@ -201,10 +206,7 @@ class ExampleItem {
 
 /// 组件示例
 class ExampleItemWidget extends StatefulWidget {
-  const ExampleItemWidget(
-      {required this.data,
-      Key? key})
-      : super(key: key);
+  const ExampleItemWidget({required this.data, Key? key}) : super(key: key);
 
   final ExampleItem data;
 
@@ -216,7 +218,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
   @override
   Widget build(BuildContext context) {
     Widget child;
-    if(widget.data.ignoreCode){
+    if (widget.data.ignoreCode) {
       child = widget.data.builder(context);
       if (widget.data.center) {
         child = Center(
@@ -225,7 +227,10 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
       }
     } else {
       child = CodeWrapper(
-        builder: widget.data.builder, methodName: widget.data.methodName, isCenter: widget.data.center,);
+        builder: widget.data.builder,
+        methodName: widget.data.methodName,
+        isCenter: widget.data.center,
+      );
     }
     child = Column(
       mainAxisSize: MainAxisSize.min,
@@ -233,15 +238,15 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
         widget.data.desc.isEmpty
             ? Container()
             : Container(
-          alignment: Alignment.topLeft,
-          margin: const EdgeInsets.only(
-              left: 16, right: 16, top: 8, bottom: 8),
-          child: TDText(
-            widget.data.desc,
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2,
-          ),
-        ),
+                alignment: Alignment.topLeft,
+                margin: const EdgeInsets.only(
+                    left: 16, right: 16, top: 8, bottom: 8),
+                child: TDText(
+                  widget.data.desc,
+                  font: TDTheme.of(context).fontBodyMedium,
+                  textColor: TDTheme.of(context).fontGyColor2,
+                ),
+              ),
         child
       ],
     );
@@ -249,9 +254,10 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
   }
 }
 
-
 class CodeWrapper extends StatefulWidget {
-  const CodeWrapper({Key? key, required this.builder, this.methodName, this.isCenter = false}) : super(key: key);
+  const CodeWrapper(
+      {Key? key, required this.builder, this.methodName, this.isCenter = false})
+      : super(key: key);
 
   final WidgetBuilder builder;
 
@@ -264,7 +270,6 @@ class CodeWrapper extends StatefulWidget {
 }
 
 class _CodeWrapperState extends State<CodeWrapper> {
-
   bool apiVisible = false;
 
   String exampleCodeGroup = '';
@@ -273,14 +278,14 @@ class _CodeWrapperState extends State<CodeWrapper> {
   void initState() {
     super.initState();
     TNotification.addObserver('onApiVisibleChange', (arguments) {
-      if(arguments is Map){
-        setState((){
+      if (arguments is Map) {
+        setState(() {
           apiVisible = arguments['apiVisible'] ?? false;
         });
       }
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       setState(() {
         var modelTheme = context
             .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
@@ -323,8 +328,6 @@ class _CodeWrapperState extends State<CodeWrapper> {
     }
     return child;
   }
-
-
 
   String _getCodeAssetsPath() {
     var methodName = widget.methodName ?? '';
@@ -369,12 +372,12 @@ class _CodeWrapperState extends State<CodeWrapper> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   color: TDTheme.of(context).grayColor1,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(TDTheme.of(context).radiusDefault))),
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(TDTheme.of(context).radiusDefault))),
               height: 500,
               child: const TDText('暂无演示代码'),
             );
           }
-
 
           var lines = codeString.split('\n');
           print('lines: ${lines.length}');
@@ -388,8 +391,9 @@ ${codeString}
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 color: TDTheme.of(context).grayColor1,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(TDTheme.of(context).radiusDefault))),
-            height:height,
+                borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(TDTheme.of(context).radiusDefault))),
+            height: height,
             child: Markdown(
               physics: const BouncingScrollPhysics(),
               padding: EdgeInsets.zero,
@@ -399,10 +403,7 @@ ${codeString}
               data: mdText,
               extensionSet: md.ExtensionSet(
                 md.ExtensionSet.gitHubWeb.blockSyntaxes,
-                [
-                  md.EmojiSyntax(),
-                  ...md.ExtensionSet.gitHubWeb.inlineSyntaxes
-                ],
+                [md.EmojiSyntax(), ...md.ExtensionSet.gitHubWeb.inlineSyntaxes],
               ),
             ),
           );
