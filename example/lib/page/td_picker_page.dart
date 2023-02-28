@@ -38,9 +38,6 @@ class _TDPickerPageState extends State<TDPickerPage> {
   };
 
   String selected_5 = '';
-  String selected_6 = '';
-  String selected_7 = '';
-  String selected_8 = '';
 
   @override
   void initState() {
