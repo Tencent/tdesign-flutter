@@ -2,7 +2,7 @@
   Widget _buildNotLoopCardsSwiper(BuildContext context) {
     return Swiper(
       viewportFraction: 0.75,
-      // scale: 0.8,
+      scale: 0.8,
       outer: true,
       autoplay: true,
       itemCount: 2,

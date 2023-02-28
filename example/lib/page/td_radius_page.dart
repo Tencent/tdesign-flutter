@@ -11,7 +11,7 @@ class TDRadiusPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: 'Radius 圆角',
+        title: tdTitle(context),
         exampleCodeGroup: 'radius',
         children: [
           ExampleModule(title: '数值型', children: [

@@ -14,7 +14,7 @@ class TDIconPage extends StatefulWidget {
 class _TDIconPageState extends State<TDIconPage> {
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(title: 'icon图标',
+    return ExamplePage(title: tdTitle(),
         children: [
         ExampleModule(title: 'icon示例',
         children: [

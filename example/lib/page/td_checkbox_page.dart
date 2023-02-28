@@ -32,7 +32,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
   Widget build(BuildContext context) {
 
     return ExamplePage(
-        title: '多选框 Checkbox',
+        title: tdTitle(),
         exampleCodeGroup: 'checkbox',
         children: [
           ExampleModule(title: '组件类型', children: [

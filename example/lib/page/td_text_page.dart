@@ -14,7 +14,7 @@ class TDTextPage extends StatelessWidget {
     // debugPaintBaselinesEnabled = true;
     return ExamplePage(
         padding: const EdgeInsets.all(8),
-        title: 'TDText',
+        title: tdTitle(context),
         exampleCodeGroup: 'text',
         children: [
           ExampleModule(title: 'Token', children: [

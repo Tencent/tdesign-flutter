@@ -24,7 +24,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: '加载 Loading',
+      title: tdTitle(),
       backgroundColor: TDTheme.of(context).whiteColor1,
       exampleCodeGroup: 'loading',
       desc: '用于表示页面或操作的加载状态，给予用户反馈的同时减缓等待的焦虑感，由一个或一组反馈动效组成。',
