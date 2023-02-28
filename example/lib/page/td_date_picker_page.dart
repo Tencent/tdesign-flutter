@@ -69,34 +69,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             dateEnd: [2023, 12, 31],
             initialDate: [2012, 1, 1]);
       },
-      child: Container(
-        color: TDTheme.of(context).whiteColor1,
-        height: 56,
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-                  child: TDText('选择时间', font: TDTheme.of(context).fontBodyLarge,),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Row(
-                    children: [
-                      TDText(selected_1, font: TDTheme.of(context).fontBodyLarge, textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
-                      Padding(padding: const EdgeInsets.only(left: 2), child: Icon(TDIcons.chevron_right, color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const TDDivider(margin: EdgeInsets.only(left: 16, ),)
-          ],
-        ),
-      ),
+      child: buildSelectRow(context, selected_1, '选择时间'),
     );
   }
 
@@ -116,43 +89,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             dateEnd: [2023, 12, 31],
             initialDate: [2012, 1, 1]);
       },
-      child: Container(
-        color: TDTheme.of(context).whiteColor1,
-        height: 56,
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-                  child: TDText('选择时间', font: TDTheme.of(context).fontBodyLarge,),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Row(
-                    children: [
-                      TDText(
-                        selected_2,
-                        font: TDTheme.of(context).fontBodyLarge,
-                        textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Icon(
-                          TDIcons.chevron_right,
-                          color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const TDDivider(margin: EdgeInsets.only(left: 16, ),)
-          ],
-        ),
-      ),
+      child: buildSelectRow(context, selected_2, '选择时间'),
     );
   }
 
@@ -172,43 +109,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             dateEnd: [2023, 12, 31],
             initialDate: [2012, 1, 1]);
       },
-      child: Container(
-        color: TDTheme.of(context).whiteColor1,
-        height: 56,
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-                  child: TDText('选择时间', font: TDTheme.of(context).fontBodyLarge,),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Row(
-                    children: [
-                      TDText(
-                        selected_3,
-                        font: TDTheme.of(context).fontBodyLarge,
-                        textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Icon(
-                          TDIcons.chevron_right,
-                          color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const TDDivider(margin: EdgeInsets.only(left: 16, ),)
-          ],
-        ),
-      ),
+      child: buildSelectRow(context, selected_3, '选择时间'),
     );
   }
 
@@ -234,43 +135,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             dateEnd: [2023, 12, 31],
             initialDate: [2012, 1, 1]);
       },
-      child: Container(
-        color: TDTheme.of(context).whiteColor1,
-        height: 56,
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-                  child: TDText('选择时间', font: TDTheme.of(context).fontBodyLarge,),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Row(
-                    children: [
-                      TDText(
-                        selected_4,
-                        font: TDTheme.of(context).fontBodyLarge,
-                        textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Icon(
-                          TDIcons.chevron_right,
-                          color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const TDDivider(margin: EdgeInsets.only(left: 16, ),)
-          ],
-        ),
-      ),
+      child: buildSelectRow(context, selected_4, '选择时间'),
     );
   }
 
@@ -296,42 +161,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             dateEnd: [2023, 12, 31],
             initialDate: [2012, 1, 1]);
       },
-      child: Container(
-        color: TDTheme.of(context).whiteColor1,
-        height: 56,
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-                  child: TDText('选择时间', font: TDTheme.of(context).fontBodyLarge,),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Row(
-                    children: [
-                      TDText(
-                        selected_5,
-                        font: TDTheme.of(context).fontBodyLarge,
-                        textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Icon(
-                          TDIcons.chevron_right,
-                          color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const TDDivider(margin: EdgeInsets.only(left: 16, ),)
-          ],
-        ),
-      ),
+      child: buildSelectRow(context, selected_5, '选择时间'),
     );
   }
 
@@ -353,42 +183,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             dateEnd: [2023, 12, 31],
             initialDate: [2012, 1, 1]);
       },
-      child: Container(
-        color: TDTheme.of(context).whiteColor1,
-        height: 56,
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-                  child: TDText('选择时间', font: TDTheme.of(context).fontBodyLarge,),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Row(
-                    children: [
-                      TDText(
-                        selected_6,
-                        font: TDTheme.of(context).fontBodyLarge,
-                        textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Icon(
-                          TDIcons.chevron_right,
-                          color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const TDDivider(margin: EdgeInsets.only(left: 16, ),)
-          ],
-        ),
-      ),
+      child: buildSelectRow(context, selected_6, '选择时间'),
     );
   }
 
@@ -408,42 +203,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             dateEnd: [2023, 12, 31],
             initialDate: [2012, 1, 1]);
       },
-      child: Container(
-        color: TDTheme.of(context).whiteColor1,
-        height: 56,
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-                  child: TDText('带标题时间选择器', font: TDTheme.of(context).fontBodyLarge,),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Row(
-                    children: [
-                      TDText(
-                        selected_7,
-                        font: TDTheme.of(context).fontBodyLarge,
-                        textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Icon(
-                          TDIcons.chevron_right,
-                          color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const TDDivider(margin: EdgeInsets.only(left: 16, ),)
-          ],
-        ),
-      ),
+      child: buildSelectRow(context, selected_7, '带标题时间选择器'),
     );
   }
 
@@ -463,41 +223,45 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             dateEnd: [2023, 12, 31],
             initialDate: [2012, 1, 1]);
       },
-      child: Container(
-        color: TDTheme.of(context).whiteColor1,
-        height: 56,
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-                  child: TDText('无标题时间选择器', font: TDTheme.of(context).fontBodyLarge,),
+      child: buildSelectRow(context, selected_8, '无标题时间选择器'),
+    );
+  }
+
+  Widget buildSelectRow(BuildContext context, String output, String title) {
+    return Container(
+      color: TDTheme.of(context).whiteColor1,
+      height: 56,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
+                child: TDText(title, font: TDTheme.of(context).fontBodyLarge,),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: Row(
+                  children: [
+                    TDText(
+                      output,
+                      font: TDTheme.of(context).fontBodyLarge,
+                      textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 2),
+                      child: Icon(
+                        TDIcons.chevron_right,
+                        color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Row(
-                    children: [
-                      TDText(
-                        selected_8,
-                        font: TDTheme.of(context).fontBodyLarge,
-                        textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Icon(
-                          TDIcons.chevron_right,
-                          color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const TDDivider(margin: EdgeInsets.only(left: 16, ),)
-          ],
-        ),
+              ),
+            ],
+          ),
+          const TDDivider(margin: EdgeInsets.only(left: 16, ),)
+        ],
       ),
     );
   }
