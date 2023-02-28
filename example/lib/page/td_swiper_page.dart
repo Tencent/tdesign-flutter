@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:flutter_swiper_null_safety/src/transformer_page_view/transformer_page_view.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import '../../base/example_widget.dart';
@@ -78,11 +79,23 @@ class TDSwiperPage extends StatelessWidget {
             builder: (_) {
               return Container(
                 height: 193,
-                margin: const EdgeInsets.only(left: 16,right: 16),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
-                child: const Center(
-                  child: TDText("TODO"),
+                child: CodeWrapper(
+                  builder: _buildCardsSwiper,
+                ),
+              );
+            }),
+        ExampleItem(
+            desc: '卡片式(cards)-scale:0.8',
+            ignoreCode: true,
+            builder: (_) {
+              return Container(
+                height: 193,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+                child: CodeWrapper(
+                  builder: _buildScaleCardsSwiper,
                 ),
               );
             }),
@@ -118,7 +131,7 @@ class TDSwiperPage extends StatelessWidget {
               );
             }),
         ExampleItem(
-            desc: '右边',
+            desc: '右边(竖向)',
             ignoreCode: true,
             builder: (_) {
               return Container(
@@ -133,122 +146,52 @@ class TDSwiperPage extends StatelessWidget {
             }),
       ])
       ],
-    test: [
-      ExampleItem(
-          desc: '圆角矩形指示器（默认100ms动画）',
-          builder: (_) {
-            return Container(
-              height: 100,
-              decoration: BoxDecoration(
-                  color: Colors.blueAccent.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Swiper(
-                autoplay: true,
-                itemCount: 6,
-                loop: true,
-                pagination: const SwiperPagination(
-                    alignment: Alignment.bottomCenter,
-                    builder: TDSwiperPagination.dotsBar),
-                itemBuilder: (BuildContext context, int index) {
-                  return FlutterLogo(
-                    size: MediaQuery.of(context).size.width,
-                  );
-                },
-              ),
-            );
-          }),
-      ExampleItem(
-          desc: '数字指示器',
-          builder: (_) {
-            return Container(
-              height: 100,
-              decoration: BoxDecoration(
-                  color: Colors.blueAccent.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Swiper(
-                autoplay: true,
-                itemCount: 6,
-                loop: true,
-                pagination: const SwiperPagination(
-                    alignment: Alignment.bottomCenter,
-                    builder: TDSwiperPagination.fraction),
-                itemBuilder: (BuildContext context, int index) {
-                  return FlutterLogo(
-                    size: MediaQuery.of(context).size.width,
-                  );
-                },
-              ),
-            );
-          }),
-      ExampleItem(
-          desc: '数字指示器指定位置',
-          builder: (_) {
-            return Container(
-              height: 100,
-              decoration: BoxDecoration(
-                  color: Colors.blueAccent.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Swiper(
-                autoplay: true,
-                itemCount: 6,
-                loop: true,
-                pagination: const SwiperPagination(
-                    alignment: Alignment.topRight,
-                    builder: TDSwiperPagination.fraction),
-                itemBuilder: (BuildContext context, int index) {
-                  return FlutterLogo(
-                    size: MediaQuery.of(context).size.width,
-                  );
-                },
-              ),
-            );
-          }),
-      ExampleItem(
-          desc: '箭头指示器',
-          builder: (_) {
-            return Container(
-              height: 100,
-              decoration: BoxDecoration(
-                  color: Colors.blueAccent.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Swiper(
-                autoplay: true,
-                itemCount: 6,
-                loop: true,
-                pagination: const SwiperPagination(
-                    alignment: Alignment.center,
-                    builder: TDSwiperPagination.controls),
-                itemBuilder: (BuildContext context, int index) {
-                  return FlutterLogo(
-                    size: MediaQuery.of(context).size.width,
-                  );
-                },
-              ),
-            );
-          }),
-      ExampleItem(
-          desc: '箭头指示器非循环，边界箭头隐藏',
-          builder: (_) {
-            return Container(
-              height: 100,
-              decoration: BoxDecoration(
-                  color: Colors.blueAccent.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Swiper(
-                autoplay: true,
-                itemCount: 6,
-                loop: false,
-                pagination: const SwiperPagination(
-                    alignment: Alignment.center,
-                    builder: TDSwiperPagination.controls),
-                itemBuilder: (BuildContext context, int index) {
-                  return FlutterLogo(
-                    size: MediaQuery.of(context).size.width,
-                  );
-                },
-              ),
-            );
-          }),],);
+
+      test: [
+
+        ExampleItem(
+            desc: '卡片式(cards),只有两张不轮播',
+            ignoreCode: true,
+            builder: (_) {
+              return Container(
+                height: 193,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+                child: CodeWrapper(
+                  builder: _buildNotLoopCardsSwiper,
+                ),
+              );
+            }),
+        ExampleItem(
+            desc: '点条状outer样式',
+            ignoreCode: true,
+            builder: (_) {
+              return Container(
+                height: 193,
+                margin: const EdgeInsets.only(left: 16,right: 16),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+                child: CodeWrapper(
+                  builder: _buildOuterDotsBarSwiper,
+                ),
+              );
+            }),
+        ExampleItem(
+            desc: '分式符位置',
+            ignoreCode: true,
+            builder: (_) {
+              return Container(
+                height: 193,
+                margin: const EdgeInsets.only(left: 16,right: 16),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+                child: CodeWrapper(
+                  builder: _buildFractionBarSwiper,
+                ),
+              );
+            }),
+      ],
+    );
   }
 
   @Demo(group: 'swiper')
@@ -312,11 +255,48 @@ class TDSwiperPage extends StatelessWidget {
   }
 
   @Demo(group: 'swiper')
+  Widget _buildCardsSwiper(BuildContext context) {
+    return Swiper(
+      viewportFraction: 0.75,
+      outer: true,
+      autoplay: true,
+      itemCount: 6,
+      loop: true,
+      transformer: TDPageTransformer.margin(),
+      pagination: const SwiperPagination(
+          alignment: Alignment.center,
+          builder: TDSwiperPagination.dots),
+      itemBuilder: (BuildContext context, int index) {
+        return const TDImage(assetUrl: 'assets/img/image.png',);
+      },
+    );
+  }
+
+  @Demo(group: 'swiper')
+  Widget _buildScaleCardsSwiper(BuildContext context) {
+    return Swiper(
+      viewportFraction: 0.75,
+      outer: true,
+      autoplay: true,
+      itemCount: 6,
+      loop: true,
+      transformer: TDPageTransformer.scaleAndFade(),
+      pagination: const SwiperPagination(
+          alignment: Alignment.center,
+          builder: TDSwiperPagination.dots),
+      itemBuilder: (BuildContext context, int index) {
+        return const TDImage(assetUrl: 'assets/img/image.png',);
+      },
+    );
+  }
+
+  @Demo(group: 'swiper')
   Widget _buildOuterDotsSwiper(BuildContext context) {
     return Swiper(
       autoplay: true,
       itemCount: 6,
       loop: true,
+      outer: true,
       pagination: const SwiperPagination(
           alignment: Alignment.bottomCenter,
           builder: TDSwiperPagination.dots),
@@ -332,6 +312,7 @@ class TDSwiperPage extends StatelessWidget {
       autoplay: true,
       itemCount: 6,
       loop: true,
+      scrollDirection: Axis.vertical,
       pagination: const SwiperPagination(
           alignment: Alignment.centerRight,
           builder: TDSwiperPagination.dots),
@@ -340,4 +321,54 @@ class TDSwiperPage extends StatelessWidget {
       },
     );
   }
+
+  @Demo(group: 'swiper')
+  Widget _buildNotLoopCardsSwiper(BuildContext context) {
+    return Swiper(
+      viewportFraction: 0.75,
+      scale: 0.8,
+      outer: true,
+      autoplay: true,
+      itemCount: 2,
+      loop: false,
+      pagination: const SwiperPagination(
+          alignment: Alignment.center,
+          builder: TDSwiperPagination.dots),
+      itemBuilder: (BuildContext context, int index) {
+        return const TDImage(assetUrl: 'assets/img/image.png',);
+      },
+    );
+  }
+
+  @Demo(group: 'swiper')
+  Widget _buildOuterDotsBarSwiper(BuildContext context) {
+    return Swiper(
+      outer: true,
+      autoplay: true,
+      itemCount: 6,
+      loop: true,
+      pagination: const SwiperPagination(
+          alignment: Alignment.topLeft,
+          builder: TDSwiperPagination.dotsBar),
+      itemBuilder: (BuildContext context, int index) {
+        return const TDImage(assetUrl: 'assets/img/image.png',);
+      },
+    );
+  }
+
+  @Demo(group: 'swiper')
+  Widget _buildFractionBarSwiper(BuildContext context) {
+    return Swiper(
+      autoplay: true,
+      itemCount: 6,
+      loop: true,
+      pagination: const SwiperPagination(
+          alignment: Alignment.bottomRight,
+          builder: TDSwiperPagination.fraction),
+      itemBuilder: (BuildContext context, int index) {
+        return const TDImage(assetUrl: 'assets/img/image.png',);
+      },
+    );
+  }
 }
+
