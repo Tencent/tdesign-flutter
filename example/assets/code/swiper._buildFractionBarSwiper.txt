@@ -1,0 +1,14 @@
+
+  Widget _buildFractionBarSwiper(BuildContext context) {
+    return Swiper(
+      autoplay: true,
+      itemCount: 6,
+      loop: true,
+      pagination: const SwiperPagination(
+          alignment: Alignment.bottomRight,
+          builder: TDSwiperPagination.fraction),
+      itemBuilder: (BuildContext context, int index) {
+        return const TDImage(assetUrl: 'assets/img/image.png',);
+      },
+    );
+  }

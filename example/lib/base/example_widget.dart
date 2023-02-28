@@ -44,7 +44,7 @@ class _ExamplePageState extends State<ExamplePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var modelTheme = context
           .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
       model = modelTheme?.model;
@@ -285,7 +285,7 @@ class _CodeWrapperState extends State<CodeWrapper> {
       }
     });
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
         var modelTheme = context
             .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();

@@ -1,0 +1,14 @@
+
+  Widget buildAreaWithoutTitle(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showMultiPicker(context, title: '',
+            onConfirm: (selected) {
+              setState(() {
+                selected_5 = '${data_1[selected[0]]}';
+              });
+            }, data: [data_1]);
+      },
+      child: buildSelectRow(context, selected_5, '无标题选择器'),
+    );
+  }

@@ -17,7 +17,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
   TabController? _tabController2;
   TabController? _tabController3;
   TabController? _tabController4;
-  TabController? _tabController5;
   List<TDTab> tabs = [];
   List<Widget> tabViews = [];
 
@@ -79,7 +78,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
     _tabController2 = TabController(length: 3, vsync: this);
     _tabController3 = TabController(length: 4, vsync: this);
     _tabController4 = TabController(length: 5, vsync: this);
-    _tabController5 = TabController(length: 4, vsync: this);
   }
 
   @override
