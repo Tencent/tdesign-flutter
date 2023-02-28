@@ -1,0 +1,14 @@
+
+  Widget _buildControlsSwiper(BuildContext context) {
+    return Swiper(
+      autoplay: true,
+      itemCount: 6,
+      loop: true,
+      pagination: const SwiperPagination(
+          alignment: Alignment.center,
+          builder: TDSwiperPagination.controls),
+      itemBuilder: (BuildContext context, int index) {
+        return const TDImage(assetUrl: 'assets/img/image.png',);
+      },
+    );
+  }
