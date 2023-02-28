@@ -25,7 +25,7 @@ class TDRadioPageState extends State<TDRadioPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: '单选框 Radio',
+        title: tdTitle(),
         exampleCodeGroup: 'radio',
         backgroundColor: const Color(0xfff6f6f6),
         children: [

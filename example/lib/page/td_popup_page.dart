@@ -23,7 +23,7 @@ class TDPopupPageState extends State<TDPopupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(title: '弹出层 PopUp',
+    return ExamplePage(title: tdTitle(),
         padding: const EdgeInsets.only(top: 16),
         exampleCodeGroup: 'popup',
         children: [

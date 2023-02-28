@@ -4,6 +4,7 @@
       autoplay: true,
       itemCount: 6,
       loop: true,
+      outer: true,
       pagination: const SwiperPagination(
           alignment: Alignment.bottomCenter,
           builder: TDSwiperPagination.dots),

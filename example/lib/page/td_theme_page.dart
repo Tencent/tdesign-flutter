@@ -17,7 +17,7 @@ class TDThemePage extends StatefulWidget {
 class _TDThemePageState extends State<TDThemePage> {
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(title: '主题示例',
+    return ExamplePage(title: tdTitle(),
         desc: '点击标题栏右上角图标可查看使用示例代码',
         exampleCodeGroup: 'theme',
         children: [

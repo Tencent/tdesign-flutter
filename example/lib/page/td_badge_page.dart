@@ -14,7 +14,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: '徽标 Badge',
+        title: tdTitle(),
         desc: '用于告知用户，该区域的状态变化或者待处理任务的数量。',
         exampleCodeGroup: 'badge',
         children: [

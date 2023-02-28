@@ -83,7 +83,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: 'Tabs 选项卡',
+        title: tdTitle(),
         desc: '用于内容分类后的展示切换。',
         exampleCodeGroup: 'tabs',
         padding: const EdgeInsets.symmetric(vertical: 16),
