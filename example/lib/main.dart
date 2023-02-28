@@ -247,7 +247,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
-          actions: PlatformUtil.isWeb ? null : [
+          actions: ScreenUtil.isWebLargeScreen(context) ? null : [
             GestureDetector(
               child: Container(
                 alignment: Alignment.centerRight,
@@ -269,7 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    if (PlatformUtil.isWeb) {
+    if (ScreenUtil.isWebLargeScreen(context)) {
       return const web.WebMainBody();
     }
     return Center(
