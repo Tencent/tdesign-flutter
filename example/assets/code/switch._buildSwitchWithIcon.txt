@@ -1,0 +1,8 @@
+
+  Widget _buildSwitchWithIcon(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(isOn: true, type: TDSwitchType.icon),
+      title: '带图标开关',
+    );
+  }
