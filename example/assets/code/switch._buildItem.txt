@@ -1,0 +1,33 @@
+
+  Widget _buildItem(BuildContext context, Widget switchItem,
+      {String? title, String? desc}) {
+    final theme = TDTheme.of(context);
+    Widget current = Row(
+      children: [
+        Expanded(
+            child: TDText(
+          title ?? '',
+          textColor: theme.fontGyColor1,
+        )),
+        TDText(
+          desc ?? '',
+          textColor: theme.grayColor6,
+        ),
+        SizedBox(child: switchItem)
+      ],
+    );
+    current = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: SizedBox(
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: current,
+          ),
+          color: Colors.white,
+        ),
+        height: 56,
+      ),
+    );
+    return Column(mainAxisSize: MainAxisSize.min, children: [current]);
+  }

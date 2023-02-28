@@ -1,0 +1,8 @@
+
+  Widget _buildSwitchWithBase(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(),
+      title: '基础开关',
+    );
+  }

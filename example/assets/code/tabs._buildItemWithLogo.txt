@@ -1,0 +1,35 @@
+
+  Widget _buildItemWithLogo(BuildContext context) {
+    var tabs = [
+      const TDTab(
+        text: '选项',
+        contentHeight: 48,
+        textMargin: EdgeInsets.only(right: 8),
+        badge: TDBadge(TDBadgeType.redPoint),
+      ),
+      const TDTab(
+        text: '选项',
+        contentHeight: 42,
+        textMargin: EdgeInsets.only(right: 16, top: 2, bottom: 2),
+        badge: TDBadge(
+          TDBadgeType.message,
+          message: '8',
+        ),
+      ),
+      const TDTab(
+        text: '选项',
+        height: 48,
+        icon: Icon(
+          TDIcons.app,
+          size: 14,
+        ),
+      ),
+    ];
+    return TDTabBar(
+        tabs: tabs,
+        indicatorWidth: 16,
+        indicatorHeight: 3,
+        controller: TabController(length: 3, vsync: this),
+        backgroundColor: Colors.white,
+        showIndicator: true);
+  }
