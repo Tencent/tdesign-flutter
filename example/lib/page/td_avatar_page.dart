@@ -16,7 +16,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       backgroundColor: TDTheme.of(context).whiteColor1,
-      title: '头像 Avatar',
+      title: tdTitle(),
       exampleCodeGroup: 'avatar',
       desc: '用于告知用户，该区域的状态变化或者待处理任务的数量。',
       children: [

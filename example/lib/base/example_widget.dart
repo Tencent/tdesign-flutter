@@ -410,3 +410,25 @@ ${codeString}
         });
   }
 }
+
+/// State获取标题的扩展
+extension TDStateExs on State{
+
+  String tdTitle(){
+    var modelTheme = context
+        .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
+    return modelTheme?.model.text ?? '';
+  }
+
+}
+
+/// StatelessWidget获取标题的扩展
+extension TDWidgetExs on StatelessWidget{
+
+  String tdTitle(BuildContext context){
+    var modelTheme = context
+        .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
+    return modelTheme?.model.text ?? '';
+  }
+
+}

@@ -30,7 +30,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: '对话框 Dialog',
+        title: tdTitle(),
         desc: '用于显示重要提示或请求用户进行重要操作，一种打断当前操作的模态视图。',
         exampleCodeGroup: 'dialog',
         padding: const EdgeInsets.only(top: 8, bottom: 8),

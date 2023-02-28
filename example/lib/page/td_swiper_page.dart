@@ -12,7 +12,7 @@ class TDSwiperPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: '轮播图 Swiper',
+      title: tdTitle(context),
       exampleCodeGroup: 'swiper',
       children: [
       ExampleModule(title: '组件类型',

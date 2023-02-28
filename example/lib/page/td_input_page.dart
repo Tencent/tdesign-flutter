@@ -19,7 +19,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
         backgroundColor: const Color(0xFFF0F2F5),
-        title: 'Input 输入框',
+        title: tdTitle(),
         desc: '用于在预设的一组选项中执行单项选择，并呈现选择结果。',
         exampleCodeGroup: 'input',
         children: [
