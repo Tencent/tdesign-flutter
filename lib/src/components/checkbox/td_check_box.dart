@@ -499,10 +499,10 @@ class RadioCornerIcon extends StatelessWidget {
                 radius: radius,
                 fillColor: TDTheme.of(context).brandColor8),
           ),
-          Positioned(
+          const Positioned(
               top: 3,
               left: 2,
-              child: const Icon(
+              child: Icon(
                 TDIcons.check,
                 size: 14,
                 color: Colors.white,
