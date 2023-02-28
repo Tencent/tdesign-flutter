@@ -1,0 +1,12 @@
+
+  Widget _buildItemWithSpace(BuildContext context) {
+    return TDTabBar(
+      tabs: subList(6),
+      indicatorWidth: 16,
+      indicatorHeight: 3,
+      controller: TabController(length: 6, vsync: this),
+      backgroundColor: Colors.white,
+      labelPadding: const EdgeInsets.all(10),
+      showIndicator: true,
+    );
+  }
