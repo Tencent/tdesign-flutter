@@ -1,0 +1,14 @@
+
+  Widget buildTime(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showMultiPicker(context, title: '选择时间',
+            onConfirm: (selected) {
+              setState(() {
+                selected_2 = '${data_2[0][selected[0]]} ${data_2[1][selected[1]]}';
+              });
+            }, data: data_2);
+      },
+      child: buildSelectRow(context, selected_2, '选择时间'),
+    );
+  }
