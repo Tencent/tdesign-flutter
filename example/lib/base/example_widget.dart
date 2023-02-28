@@ -96,8 +96,7 @@ class _ExamplePageState extends State<ExamplePage> {
   Widget _buildNavBar() {
     return TDNavBar(
       title: widget.title,
-      rightBarItems: [
-        TDNavBarItem(
+      rightBarItems: PlatformUtil.isWeb ? [] : [ TDNavBarItem(
             icon: TDIcons.info_circle,
             action: () {
               setState(() {
@@ -122,7 +121,7 @@ class _ExamplePageState extends State<ExamplePage> {
         children: [
           ApiWidget(
             apiName: model?.apiPath,
-            visible: apiVisible && !PlatformUtil.isWeb,
+            visible: apiVisible && !ScreenUtil.isWebLargeScreen(context),
           ),
           TDText(
             widget.title,
@@ -375,7 +374,7 @@ class _CodeWrapperState extends State<CodeWrapper> {
                   borderRadius: BorderRadius.vertical(
                       top: Radius.circular(TDTheme.of(context).radiusDefault))),
               height: 500,
-              child: const TDText('暂无演示代码'),
+              child: TDText(PlatformUtil.isWeb ? 'web不支持演示代码，请在移动端查看' : '暂无演示代码'),
             );
           }
 
