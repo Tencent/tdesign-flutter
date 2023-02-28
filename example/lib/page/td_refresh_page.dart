@@ -27,7 +27,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: '下拉刷新 PullDownRefresh',
+        title: tdTitle(),
         exampleCodeGroup: 'refresh',
         children: [
         ExampleModule(title: '默认',

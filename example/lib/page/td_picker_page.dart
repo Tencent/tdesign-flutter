@@ -53,7 +53,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: 'Picker 选择器',
+      title: tdTitle(),
       desc: '用于一组预设数据中的选择。',
       exampleCodeGroup: 'picker',
       children: [

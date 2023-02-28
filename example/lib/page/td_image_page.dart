@@ -34,7 +34,7 @@ class TDImageState extends State<TDImagePage>
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: '图片 Image',
+        title: tdTitle(),
         exampleCodeGroup: 'image',
         desc: '用于展示效果，主要为上下左右居中裁切、拉伸、平铺等方式。',
         children: [

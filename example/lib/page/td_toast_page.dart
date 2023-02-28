@@ -14,7 +14,7 @@ class _TDToastPageState extends State<TDToastPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: '轻提示 Toast',
+        title: tdTitle(),
         desc: '用于轻量级反馈或提示，不会打断用户操作。',
         exampleCodeGroup: 'toast',
         children: [

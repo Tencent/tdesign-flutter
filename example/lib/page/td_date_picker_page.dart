@@ -32,7 +32,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: 'DatetimePicker 时间选择器 ',
+        title: tdTitle(),
         desc: '用于选择一个时间点或者一个时间段。',
         exampleCodeGroup: 'datetimePicker',
         children: [
