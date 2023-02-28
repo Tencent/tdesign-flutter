@@ -35,3 +35,16 @@ class ExamplePageInheritedTheme extends InheritedWidget {
   }
 }
 
+class ScreenUtil{
+
+  static bool isLargeScreen(BuildContext context){
+
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    return width > height;
+  }
+
+  static bool isWebLargeScreen(BuildContext context){
+    return PlatformUtil.isWeb && isLargeScreen(context);
+  }
+}

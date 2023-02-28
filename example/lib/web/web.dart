@@ -19,7 +19,7 @@ class WebMainBody extends StatefulWidget {
 }
 
 class _WebMainBodyState extends State<WebMainBody> {
-  static const menuWidth = 260.0;
+  static const menuWidth = 280.0;
 
   var screenSizeList = <Size>[
     const Size(520, 1080),
