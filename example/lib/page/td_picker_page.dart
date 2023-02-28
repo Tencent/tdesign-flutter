@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import '../../base/example_widget.dart';
+import '../annotation/demo.dart';
 
 
 class TDPickerPage extends StatefulWidget {
@@ -16,9 +17,9 @@ class _TDPickerPageState extends State<TDPickerPage> {
   List<String> data_1 = ['广州市', '韶关市', '深圳市', '珠海区', '汕头市'];
   String selected_2 = '';
   String selected_3 = '';
-  List<List<String>> data_3 = [];
+  List<List<String>> data_2 = [];
   String selected_4 = '';
-  Map data_4 = {
+  Map data_3 = {
     '广东省': {
       '深圳市': ['南山区', '宝安区', '罗湖区', '福田区'],
       '佛山市': [''],
@@ -37,9 +38,6 @@ class _TDPickerPageState extends State<TDPickerPage> {
   };
 
   String selected_5 = '';
-  String selected_6 = '';
-  String selected_7 = '';
-  String selected_8 = '';
 
   @override
   void initState() {
@@ -47,193 +45,152 @@ class _TDPickerPageState extends State<TDPickerPage> {
     for(var i = 2022; i >= 2000; i--) {
       list.add('${i}年');
     }
-    data_3.add(list);
-    data_3.add(['春', '夏', '秋', '冬']);
+    data_2.add(list);
+    data_2.add(['春', '夏', '秋', '冬']);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: '选择器 Picker',
+      title: 'Picker 选择器',
+      desc: '用于一组预设数据中的选择。',
+      exampleCodeGroup: 'picker',
       children: [
-      ExampleModule(title: '默认',
-      children: [
-        ExampleItem(
-            desc: '基础选择器--城市',
-            builder: (_) {
-              return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(desc: '基础选择器--地区', builder: buildArea),
+            ExampleItem(desc: '基础选择器--时间', builder: buildTime),
+            ExampleItem(desc: '基础选择器--地区--联动', builder: buildMultiArea),
+          ],
+        ),
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(desc: '带标题选择器', builder: buildAreaWithTitle),
+            ExampleItem(desc: '无标题选择器', builder: buildAreaWithoutTitle),
+          ],
+        )
+      ]
+    );
+  }
+
+  @Demo(group: 'picker')
+  Widget buildArea(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showMultiPicker(context, title: '选择地区',
+            onConfirm: (selected) {
+              setState(() {
+                selected_1 = '${data_1[selected[0]]}';
+              });
+            }, data: [data_1]);
+      },
+      child: buildSelectRow(context, selected_1, '选择地区'),
+    );
+  }
+
+  @Demo(group: 'picker')
+  Widget buildTime(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showMultiPicker(context, title: '选择时间',
+            onConfirm: (selected) {
+              setState(() {
+                selected_2 = '${data_2[0][selected[0]]} ${data_2[1][selected[1]]}';
+              });
+            }, data: data_2);
+      },
+      child: buildSelectRow(context, selected_2, '选择时间'),
+    );
+  }
+
+  @Demo(group: 'picker')
+  Widget buildMultiArea(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showMultiLinkedPicker(context, title: '选择地区',
+            onConfirm: (selected) {
+              setState(() {
+                selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
+              });
+            },
+            data: data_3,
+            columnNum: 3,
+            initialData: ['浙江省', '杭州市', '西湖区']);
+      },
+      child: buildSelectRow(context, selected_3, '选择地区'),
+    );
+  }
+
+  @Demo(group: 'picker')
+  Widget buildAreaWithTitle(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showMultiPicker(context, title: '选择地区',
+            onConfirm: (selected) {
+              setState(() {
+                selected_4 = '${data_1[selected[0]]}';
+              });
+            }, data: [data_1]);
+      },
+      child: buildSelectRow(context, selected_4, '带标题选择器'),
+    );
+  }
+
+  @Demo(group: 'picker')
+  Widget buildAreaWithoutTitle(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showMultiPicker(context, title: '',
+            onConfirm: (selected) {
+              setState(() {
+                selected_5 = '${data_1[selected[0]]}';
+              });
+            }, data: [data_1]);
+      },
+      child: buildSelectRow(context, selected_5, '无标题选择器'),
+    );
+  }
+
+
+  Widget buildSelectRow(BuildContext context, String output, String title) {
+    return Container(
+      color: TDTheme.of(context).whiteColor1,
+      height: 56,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
+                child: TDText(title, font: TDTheme.of(context).fontBodyLarge,),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: Row(
                   children: [
-                    TDButton(
-                      width: 200,
-                      content: '选择城市',
-                      onTap: () => TDPicker.showMultiPicker(context, title: '',
-                          onConfirm: (selected) {
-                        setState(() {
-                          selected_1 = '城市: ${data_1[selected[0]]}';
-                        });
-                      }, data: [data_1], pickerHeight: 168, pickerItemCount: 4),
-                    ),
                     TDText(
-                      selected_1,
+                      output,
+                      font: TDTheme.of(context).fontBodyLarge,
+                      textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 2),
+                      child: Icon(
+                        TDIcons.chevron_right,
+                        color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
                     ),
-                  ]);
-            }),
-        ExampleItem(desc: '基础选择器--年份和季节', builder: (_) {
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TDButton(
-                  width: 200,
-                  content: '选择年份和季节',
-                  onTap: () => TDPicker.showMultiPicker(context, title: '',
-                      onConfirm: (selected) {
-                        setState(() {
-                          selected_3 =
-                          '年份和季节: ${data_3[0][selected[0]]} ${data_3[1][selected[1]]}';
-                        });
-                      }, data: data_3, initialIndexes: [1, 2]),
+                  ],
                 ),
-                TDText(
-                  selected_3,
-                ),
-              ]);
-        }),
-        ExampleItem(desc: '基础选择器--日期', builder: (_) {
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TDButton(
-                  width: 200,
-                  content: '选择日期',
-                  onTap: () => TDPicker.showDatePicker(context, title: '',
-                      onConfirm: (selected) {
-                        setState(() {
-                          selected_2 = '日期: $selected';
-                        });
-                      },
-                      dateStart: [2010, 12, 20],
-                      dateEnd: [2022, 2, 28],
-                      initialDate: [2012, 1, 1]),
-                ),
-                TDText(
-                  selected_2,
-                ),
-              ]);
-        }),
-        ExampleItem(desc: '基础选择器--地区--联动', builder: (_) {
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TDButton(
-                  width: 200,
-                  content: '选择地区',
-                  onTap: () => TDPicker.showMultiLinkedPicker(context, title: '',
-                      onConfirm: (selected) {
-                        setState(() {
-                          selected_4 = '组合: ${selected[0]} ${selected[1]} ${selected[2]}';
-                        });
-                      },
-                      pickerHeight: 168,
-                      data: data_4,
-                      pickerItemCount: 4,
-                      columnNum: 3,
-                      initialData: ['浙江省', '杭州市', '西湖区']),
-                ),
-                TDText(
-                  selected_4,
-                ),
-              ]);
-        }),
-        ExampleItem(
-            desc: '带标题--城市',
-            builder: (_) {
-              return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TDButton(
-                      width: 200,
-                      content: '带标题-选择城市',
-                      onTap: () => TDPicker.showMultiPicker(context, title: '选择城市',
-                          onConfirm: (selected) {
-                            setState(() {
-                              selected_5 = '城市: ${data_1[selected[0]]}';
-                            });
-                          }, data: [data_1], pickerHeight: 168, pickerItemCount: 4),
-                    ),
-                    TDText(
-                      selected_5,
-                    ),
-                  ]);
-            }),
-        ExampleItem(desc: '带标题--年份和四季', builder: (_) {
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TDButton(
-                  width: 200,
-                  content: '带标题-年份和季节',
-                  onTap: () => TDPicker.showMultiPicker(context, title: '选择年份和季节',
-                      onConfirm: (selected) {
-                        setState(() {
-                          selected_6 =
-                          '年份和季节: ${data_3[0][selected[0]]} ${data_3[1][selected[1]]}';
-                        });
-                      }, data: data_3, initialIndexes: [1, 2]),
-                ),
-                TDText(
-                  selected_6,
-                ),
-              ]);
-        }),
-        ExampleItem(desc: '带标题--日期', builder: (_) {
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TDButton(
-                  width: 200,
-                  content: '带标题-选择日期',
-                  onTap: () => TDPicker.showDatePicker(context, title: '选择日期',
-                      onConfirm: (selected) {
-                        setState(() {
-                          selected_7 = '日期: $selected';
-                        });
-                      },
-                      dateStart: [2010, 12, 20],
-                      dateEnd: [2022, 2, 28],
-                      initialDate: [2012, 1, 1]),
-                ),
-                TDText(
-                  selected_7,
-                ),
-              ]);
-        }),
-        ExampleItem(desc: '基础选择器--地区--联动', builder: (_) {
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TDButton(
-                  width: 200,
-                  content: '带标题-选择地区',
-                  onTap: () => TDPicker.showMultiLinkedPicker(context, title: '选择地区',
-                      onConfirm: (selected) {
-                        setState(() {
-                          selected_8 = '组合: ${selected[0]} ${selected[1]} ${selected[2]}';
-                        });
-                      },
-                      pickerHeight: 168,
-                      data: data_4,
-                      pickerItemCount: 4,
-                      columnNum: 3,
-                      initialData: ['浙江省', '杭州市', '西湖区']),
-                ),
-                TDText(
-                  selected_8,
-                ),
-              ]);
-        }),
-      ],
-    )]);
+              ),
+            ],
+          ),
+          const TDDivider(margin: EdgeInsets.only(left: 16, ),)
+        ],
+      ),
+    );
   }
 }
