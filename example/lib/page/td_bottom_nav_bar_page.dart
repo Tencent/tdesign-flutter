@@ -14,7 +14,7 @@ class TDBottomNavBarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: '标签栏 TDBottomNavBar',
+        title: tdTitle(context),
         padding: const EdgeInsets.symmetric(vertical: 16),
         backgroundColor: const Color(0xFFF0F2F5),
         exampleCodeGroup: 'bottomNavBar',

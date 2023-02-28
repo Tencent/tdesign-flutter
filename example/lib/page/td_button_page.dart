@@ -24,7 +24,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
     return Container(
         color: TDTheme.of(context).grayColor2,
         child: ExamplePage(
-          title: '按钮 Button',
+          title: tdTitle(),
           desc: '用于开启一个闭环的操作任务，如“删除”对象、“购买”商品等。',
           exampleCodeGroup: 'button',
           padding: const EdgeInsets.only(top: 8, bottom: 8),
