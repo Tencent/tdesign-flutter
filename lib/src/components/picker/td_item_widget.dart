@@ -82,7 +82,11 @@ class ItemDistanceCalculator {
   }
 
   FontWeight calculateFontWeight(BuildContext context, double distance) {
-    return FontWeight.w400;
+    if (distance < 0.5) {
+      return FontWeight.w600;
+    } else {
+      return FontWeight.w400;
+    }
   }
 
   double calculateFont(BuildContext context, double distance) {
