@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../td_export.dart';
 import 'td_date_picker.dart';
 import 'td_multi_picker.dart';
 
@@ -14,12 +15,14 @@ class TDPicker {
       bool useHour = false,
       bool useMinute = false,
       bool useSecond = false,
+      bool useWeekDay = false,
+      Color? barrierColor,
       List<int> dateStart = const [1970, 1, 1],
       List<int>? dateEnd,
       List<int>? initialDate,
       Duration duration = const Duration(milliseconds: 100),
-      double pickerHeight = 270,
-      int pickerItemCount = 7}) {
+      double pickerHeight = 200,
+      int pickerItemCount = 5}) {
     if (dateEnd == null || initialDate == null) {
       var now = DateTime.now();
       // 如果未指定结束时间，则取当前时间
@@ -28,7 +31,8 @@ class TDPicker {
     }
     showModalBottomSheet(
         context: context,
-        barrierColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        barrierColor: barrierColor ?? TDTheme.of(context).fontGyColor2.withOpacity(0.6),
         builder: (context) {
           return TDDatePicker(
               title: title,
@@ -38,12 +42,13 @@ class TDPicker {
                 useYear: useYear,
                 useMonth: useMonth,
                 useDay: useDay,
+                useWeekDay: useWeekDay,
                 useHour: useHour,
                 useMinute: useMinute,
                 useSecond: useSecond,
                 dateStart: dateStart,
                 dateEnd: dateEnd!,
-                dateInitial: initialDate
+                dateInitial: initialDate,
               ),
               pickerHeight: pickerHeight,
               pickerItemCount: pickerItemCount);
@@ -57,11 +62,13 @@ class TDPicker {
       required List<List<String>> data,
       List<int>? initialIndexes,
       Duration duration = const Duration(milliseconds: 100),
-      double pickerHeight = 270,
-      int pickerItemCount = 7}) {
+      Color? barrierColor,
+      double pickerHeight = 200,
+      int pickerItemCount = 5}) {
     showModalBottomSheet(
         context: context,
-        barrierColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        barrierColor: barrierColor ?? TDTheme.of(context).fontGyColor2.withOpacity(0.6),
         builder: (context) {
           return TDMultiPicker(
             title: title,
@@ -83,11 +90,13 @@ class TDPicker {
       required int columnNum,
       required List initialData,
       Duration duration = const Duration(milliseconds: 100),
-      double pickerHeight = 248,
-      int pickerItemCount = 7}) {
+      Color? barrierColor,
+      double pickerHeight = 200,
+      int pickerItemCount = 5}) {
     showModalBottomSheet(
         context: context,
-        barrierColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        barrierColor: barrierColor ?? TDTheme.of(context).fontGyColor2.withOpacity(0.6),
         builder: (context) {
           return TDMultiLinkedPicker(
             title: title,
