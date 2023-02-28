@@ -1,0 +1,14 @@
+
+  Widget buildAreaWithTitle(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showMultiPicker(context, title: '选择地区',
+            onConfirm: (selected) {
+              setState(() {
+                selected_4 = '${data_1[selected[0]]}';
+              });
+            }, data: [data_1]);
+      },
+      child: buildSelectRow(context, selected_4, '带标题选择器'),
+    );
+  }

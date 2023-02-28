@@ -104,7 +104,7 @@ class _TDSearchBarState extends State<TDSearchBar>
         });
       }
     });
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var box = _textFieldKey.currentContext?.findRenderObject() as RenderBox?;
       var phBox = _phKey.currentContext?.findRenderObject() as RenderBox?;
       if (box != null && phBox != null) {
