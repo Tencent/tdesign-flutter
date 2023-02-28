@@ -87,12 +87,12 @@ class TDSwiperDotsPagination extends SwiperPlugin {
   final Key? key;
 
   const TDSwiperDotsPagination({
-    this.activeColor = Colors.white,
-    this.color = const Color(0x8CFFFFFF),
+    this.activeColor,
+    this.color,
     this.key,
     this.size = 6.0,
     this.activeSize = 6.0,
-    this.space = 8.0,
+    this.space = 4.0,
     this.roundedRectangleWidth,
     this.animationDuration,
   });
@@ -103,14 +103,8 @@ class TDSwiperDotsPagination extends SwiperPlugin {
       print('warning: The itemCount is too big, '
           'we suggest use TDFractionPaginationBuilder');
     }
-    var activeColor = this.activeColor;
-    var color = this.color;
-
-    if (activeColor == null || color == null) {
-      var themeData = Theme.of(context);
-      activeColor = this.activeColor ?? themeData.primaryColor;
-      color = this.color ?? themeData.scaffoldBackgroundColor;
-    }
+    var activeColor = this.activeColor ?? (config.outer ? TDTheme.of(context).brandNormalColor : TDTheme.of(context).whiteColor1);
+    var color = this.color ?? (config.outer ? TDTheme.of(context).grayColor3 : TDTheme.of(context).whiteColor1.withOpacity(0.55));
 
     if (config.indicatorLayout != PageIndicatorLayout.NONE &&
         config.layout == SwiperLayout.DEFAULT) {

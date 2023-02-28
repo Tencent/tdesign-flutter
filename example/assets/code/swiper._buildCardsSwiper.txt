@@ -1,0 +1,24 @@
+
+  Widget _buildCardsSwiper(BuildContext context) {
+    return Swiper(
+      viewportFraction: 0.75,
+      outer: true,
+      autoplay: false,
+      itemCount: 6,
+      loop: true,
+      transformer: PageTransformerBuilder(builder: (item ,info){
+        // return item;
+        return Container(
+          margin: const EdgeInsets.only(left: 6,right: 6),
+          child: item,
+        );
+      }),
+      pagination: const SwiperPagination(
+          alignment: Alignment.center,
+          builder: TDSwiperPagination.dots),
+      itemBuilder: (BuildContext context, int index) {
+        return TDImage(assetUrl: 'assets/img/image.png',);
+        // return Image.asset('assets/img/image.png',);
+      },
+    );
+  }
