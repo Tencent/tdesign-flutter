@@ -12,4 +12,5 @@
 | gapPadding | EdgeInsetsGeometry? | - | 线条和中间文本之间的填充 |
 | hideLine | bool | false | 隐藏线条，使用纯文本分割 |
 | isDashed | bool | false | 是否为虚线 |
+| alignment | TextAlignment | TextAlignment.center | 文字位置 |
 | direction | Axis | Axis.horizontal | 方向,竖直虚线必须传 |

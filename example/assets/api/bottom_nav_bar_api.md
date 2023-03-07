@@ -2,11 +2,13 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| type | TDBottomNavBarType | type |  |
+| basicType | TDBottomNavBarBasicType | basicType |  |
 | key | Key | - |  |
-| navigationTabs | List<TDBottomNavBarTabConfig> | - | tab |
+| componentType | TDBottomNavBarComponentType? | TDBottomNavBarComponentType.label |  |
+| outlineType | TDBottomNavBarOutlineType? | TDBottomNavBarOutlineType.filled |  |
+| navigationTabs | List<TDBottomNavBarTabConfig> | - | tabs配置 |
 | barHeight | double? | _kDefaultNavBarHeight | tab高度 |
-| useVerticalDivider | bool? | - | 是否使用竖线分隔 |
+| useVerticalDivider | bool? | - | 是否使用竖线分隔(如果选项样式为label则强制为false) |
 | dividerHeight | double? | - | 分割线高度（可选） |
 | dividerThickness | double? | - | 分割线厚度（可选） |
 | dividerColor | Color? | - | 分割线颜色（可选） |

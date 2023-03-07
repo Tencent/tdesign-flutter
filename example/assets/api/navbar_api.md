@@ -22,3 +22,4 @@
 | onBack | VoidCallback? | - | 返回事件 |
 | useBorderStyle | bool | false | 是否使用边框模式 |
 | border | TDNavBarItemBorder? | - | 边框 |
+| belowTitleWidget | Widget? | - | belowTitleWidget navbar 下方的widget |

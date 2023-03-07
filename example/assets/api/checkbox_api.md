@@ -12,9 +12,12 @@
 | subTitleMaxLine | int? | 1 | 辅助文字的行数 |
 | customIconBuilder | IconBuilder? | - | 自定义Checkbox显示样式 |
 | customContentBuilder | ContentBuilder? | - | 完全自定义内容 |
+| insetSpacing | double? | 16 | 文字和非图标侧的距离 |
 | style | TDCheckboxStyle? | - | 复选框样式：圆形或方形 |
 | spacing | double? | - | icon和文字的距离 |
 | backgroundColor | Color? | - | 背景颜色 |
 | size | TDCheckBoxSize | TDCheckBoxSize.small | 复选框大小 |
+| cardMode | bool | false | 展示为卡片模式 |
+| showDivider | bool | true | 是否展示分割线 |
 | contentDirection | TDContentDirection | TDContentDirection.right | 文字相对icon的方位 |
 | onCheckBoxChanged | OnCheckValueChanged? | - | 切换监听 |
