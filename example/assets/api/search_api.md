@@ -4,10 +4,13 @@
 | --- | --- | --- | --- |
 | key | Key | - |  |
 | placeHolder | String? | - |  |
-| style | TDSearchStlye? | TDSearchStlye.square |  |
+| style | TDSearchStyle? | TDSearchStyle.square |  |
 | alignment | TDSearchAlignment? | TDSearchAlignment.left |  |
 | onTextChanged | TDSearchBarEvent? | - |  |
 | onSubmitted | TDSearchBarEvent? | - |  |
 | onEditComplete | TDSearchBarCallBack? | - |  |
+| autoHeight | bool | false |  |
+| padding | EdgeInsets | const EdgeInsets.fromLTRB(16, 8, 16, 8) |  |
 | autoFocus | bool | false |  |
+| mediumStyle | bool | false |  |
 | backgroundColor | Color? | Colors.white |  |

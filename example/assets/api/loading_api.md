@@ -8,5 +8,7 @@
 | iconColor | Color? | - |  |
 | axis | Axis | Axis.vertical |  |
 | text | String? | - |  |
+| refreshWidget | Widget? | - |  |
 | customIcon | Widget? | - |  |
 | textColor | Color | Colors.black |  |
+| duration | int | 2000 |  |

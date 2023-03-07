@@ -2,9 +2,8 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| imgUrl | String | imgUrl | 图片地址 |
+| imgUrl | String? | - | 图片地址 |
 | key | Key | - |  |
-| size | TDImageSize | TDImageSize.l | 图片大小 |
 | type | TDImageType | TDImageType.roundedSquare | 图片类型 |
 | errorWidget | Widget? | - | 失败自定义提示 |
 | loadingWidget | Widget? | - | 加载自定义提示 |
@@ -27,3 +26,4 @@
 | filterQuality | FilterQuality | FilterQuality.low |  |
 | cacheHeight | int? | - |  |
 | cacheWidth | int? | - |  |
+| assetUrl | String? | - | 本地素材地址 |
