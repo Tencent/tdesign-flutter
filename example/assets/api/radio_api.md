@@ -12,6 +12,8 @@
 | checkedColor |  | - |  |
 | customContentBuilder |  | - |  |
 | spacing |  | - |  |
+| cardMode |  | - |  |
+| showDivider |  | - |  |
 | size |  | TDCheckBoxSize.small |  |
 | radioStyle |  | TDRadioStyle.circle |  |
 | contentDirection |  | TDContentDirection.right |  |
