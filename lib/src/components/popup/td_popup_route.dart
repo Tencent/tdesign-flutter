@@ -6,9 +6,7 @@ const Duration _bottomSheetExitDuration = Duration(milliseconds: 200);
 /// 从屏幕弹出的方向
 enum SlideTransitionFrom { top, right, left, bottom, center }
 
-///
 /// 从屏幕的某个方向滑动弹出的Dialog框的路由，比如从顶部、底部、左、右滑出页面
-///
 class TDSlidePopupRoute<T> extends PopupRoute<T> {
   TDSlidePopupRoute(
       {required this.builder,
@@ -68,7 +66,6 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
 
 /// 从各个方向弹出的Transition
 /// progress为0到1区间的变化值
-///
 class SlideTransitionLayout extends SingleChildLayoutDelegate {
   final double progress;
   final SlideTransitionFrom slideTransitionFrom;

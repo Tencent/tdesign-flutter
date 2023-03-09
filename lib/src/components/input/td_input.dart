@@ -154,10 +154,10 @@ class TDInput extends StatelessWidget {
   /// 提示文本颜色，默认为文本颜色
   final TextStyle? hintTextStyle;
 
-  // 卡片模式上方文字
+  /// 卡片模式上方文字
   final String? cardStyleTopText;
 
-  // 卡片模式下方文字
+  /// 卡片模式下方文字
   final String? cardStyleBottomText;
 
   /// 文本框背景色

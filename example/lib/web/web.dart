@@ -221,7 +221,14 @@ class _DetailLayoutState extends State<DetailLayout> with TickerProviderStateMix
 
   List<Widget> _getTabViews() {
     var tabViews = [
-      ApiWidget(apiName: widget.apiPath,visible: true,),
+      SingleChildScrollView(
+        child: Container(
+          // height: 1500,
+          // child: Center(child: Text("test"),),
+          child: ApiWidget(apiName: widget.apiPath,visible: true,),
+        ),
+      )
+      ,
       CodeWidget(codePath: widget.codePath,),
     ];
     return tabViews;
