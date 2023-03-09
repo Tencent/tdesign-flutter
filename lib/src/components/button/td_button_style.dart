@@ -4,11 +4,14 @@ import '../../../td_export.dart';
 
 /// TDButton按钮样式
 class TDButtonStyle {
+  /// 背景颜色
   Color? backgroundColor;
+  /// 边框颜色
   Color? frameColor;
+  /// 文字颜色
   Color? textColor;
+  /// 边框宽度
   double? frameWidth;
-  bool isFullWidth = false;
 
   TDButtonStyle(
       {this.backgroundColor,
@@ -16,6 +19,7 @@ class TDButtonStyle {
       this.textColor,
       this.frameWidth,});
 
+  /// 生成不同主题的填充按钮样式
   TDButtonStyle.generateFillStyleByTheme(
       BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
     switch (theme) {
@@ -39,7 +43,8 @@ class TDButtonStyle {
     frameColor = backgroundColor;
   }
 
-  TDButtonStyle.generateStrokeStyleByTheme(
+  /// 生成不同主题的描边按钮样式
+  TDButtonStyle.generateOutlineStyleByTheme(
       BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
     switch (theme) {
       case TDButtonTheme.primary:
@@ -66,6 +71,7 @@ class TDButtonStyle {
     frameWidth = 1;
   }
 
+  /// 生成不同主题的文本按钮样式
   TDButtonStyle.generateTextStyleByTheme(
       BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
     switch (theme) {
@@ -86,6 +92,7 @@ class TDButtonStyle {
     frameColor = backgroundColor;
   }
 
+  /// 生成不同主题的幽灵按钮样式
   TDButtonStyle.generateGhostStyleByTheme(
       BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
     switch (theme) {

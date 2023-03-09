@@ -37,16 +37,37 @@ class TDSearchBar extends StatefulWidget {
     this.backgroundColor = Colors.white,
   }) : super(key: key);
 
+  /// 预设文案
   final String? placeHolder;
+
+  /// 样式
   final TDSearchStyle? style;
+
+  /// 对齐方式，居中或这头部对齐
   final TDSearchAlignment? alignment;
+
+  /// 背景颜色
   final Color? backgroundColor;
+
+  /// 是否自动计算高度
   final bool autoHeight;
+
+  /// 内部填充
   final EdgeInsets padding;
+
+  /// 是否自动获取焦点
   final bool autoFocus;
+
+  /// 是否在导航栏中的样式
   final bool mediumStyle;
+
+  /// 文字改变回调
   final TDSearchBarEvent? onTextChanged;
+
+  /// 提交回调
   final TDSearchBarEvent? onSubmitted;
+
+  /// 编辑完成回调
   final TDSearchBarCallBack? onEditComplete;
 
   @override

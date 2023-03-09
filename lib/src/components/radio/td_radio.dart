@@ -9,9 +9,7 @@ enum TDRadioStyle {
   hollowCircle, // 镂空圆点样式
 }
 
-///
-/// 单选框按钮
-///
+/// 单选框按钮,继承自TDCheckbox，字段含义与父类一致
 class TDRadio extends TDCheckbox {
   final TDRadioStyle radioStyle;
 
@@ -152,7 +150,7 @@ class HollowCircle extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// RadioGroup分组对象
+/// RadioGroup分组对象，继承自TDCheckboxGroup，字段含义与父类一致
 /// RadioGroup应该嵌套在RadioGroup内，所有在RadioGroup的RadioButton只能有一个被选中
 ///
 /// cardMode: 使用卡片样式，需要配合direction 和 directionalTdRadios 使用，

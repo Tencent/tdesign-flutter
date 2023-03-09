@@ -6,6 +6,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import '../../../td_export.dart';
 
 /// TDesign刷新头部
+/// 结合EasyRefresh类实现下拉刷新,继承自Header类，字段含义与父类一致
 class TDRefreshHeader extends Header {
 
   TDRefreshHeader({

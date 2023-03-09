@@ -335,6 +335,8 @@ class TDTextSpan extends TextSpan {
 
 /// 存储可以自定义TDText居中算法数据的内部控件
 class TDTextConfiguration extends InheritedWidget {
+
+  /// forceVerticalCenter=true时，内置padding配置
   final TDTextPaddingConfig? paddingConfig;
 
   const TDTextConfiguration(
