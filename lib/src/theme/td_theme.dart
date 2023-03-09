@@ -14,8 +14,10 @@ class TDTheme extends StatelessWidget {
       {required this.data, required this.child, this.systemData, Key? key})
       : super(key: key);
 
+  /// 子控件
   final Widget child;
 
+  /// 主题数据
   final TDThemeData data;
 
   /// Flutter系统主题数据
@@ -72,13 +74,21 @@ class TDThemeData {
   static const String _defaultThemeName = 'default';
   static TDThemeData? _defaultThemeData;
 
+  /// 名称
   late String name;
+  /// 颜色
   late Map<String, Color> colorMap;
+  /// 字体尺寸
   late Map<String, Font> fontMap;
+  /// 圆角
   late Map<String, double> radiusMap;
+  /// 字体样式
   late Map<String, FontFamily> fontFamilyMap;
+  /// 阴影
   late Map<String, List<BoxShadow>> shadowMap;
+  /// 间隔
   late Map<String, double> spacerMap;
+  /// 额外定义的结构
   late TDExtraThemeData? extraThemeData;
 
   TDThemeData(
@@ -89,8 +99,7 @@ class TDThemeData {
       required this.fontFamilyMap,
       required this.shadowMap,
       required this.spacerMap,
-      this.extraThemeData,
-      bool recoverDefault = false});
+      this.extraThemeData,});
 
   /// 获取默认Data，一个App里只有一个，用于没有context的地方
   static TDThemeData defaultData({TDExtraThemeData? extraThemeData}) {

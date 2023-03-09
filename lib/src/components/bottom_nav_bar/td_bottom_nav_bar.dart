@@ -2,19 +2,25 @@ import 'package:flutter/material.dart';
 
 import '../../../td_export.dart';
 
-// 展开项 向下箭头宽
+/// 展开项 向下箭头宽
 const double _kArrowWidth = 13.5;
-// 展开项  向下箭头高
+
+/// 展开项  向下箭头高
 const double _kArrowHeight = 8;
-// 展开项选项弹窗 单个item最低高度
+
+/// 展开项选项弹窗 单个item最低高度
 const double _kMenuItemMinHeight = 23;
-// 展开项弹窗 单个item默认高度
+
+/// 展开项弹窗 单个item默认高度
 const double _kDefaultMenuItemHeight = 48;
-// 展开项弹窗 单个item默认宽度为按钮宽度-20
+
+/// 展开项弹窗 单个item默认宽度为按钮宽度-20
 const double _kDefaultMenuItemWidthShrink = 20;
-// 导航栏默认高度
+
+/// 导航栏默认高度
 const double _kDefaultNavBarHeight = 56;
-// 展开项弹窗弹出动画时间
+
+/// 展开项弹窗弹出动画时间
 const Duration _kPopupMenuDuration = Duration(milliseconds: 10);
 
 enum TDBottomNavBarBasicType {
@@ -32,20 +38,22 @@ enum TDBottomNavBarBasicType {
 }
 
 enum TDBottomNavBarComponentType {
-  // 普通样式
+  /// 普通样式
   normal,
-  // 带胶囊背景的item选中样式
+
+  /// 带胶囊背景的item选中样式
   label
 }
 
 enum TDBottomNavBarOutlineType {
-  // 填充样式
+  /// 填充样式
   filled,
-  // 胶囊样式
+
+  /// 胶囊样式
   capsule
 }
 
-// 图标加文本标签栏配置
+/// 图标加文本标签栏配置
 class IconTextTypeConfig {
   IconTextTypeConfig(
       {required this.tabText,
@@ -62,20 +70,20 @@ class IconTextTypeConfig {
           return true;
         }());
 
-  // tab文本
+  /// tab文本
   final String tabText;
 
-  // 选中时图标
+  /// 选中时图标
   final Widget? selectedIcon;
 
-  // 未选中时图标
+  /// 未选中时图标
   final Widget? unselectedIcon;
 
-  // 使用TDESIGN 默认icon
+  /// 使用TDESIGN 默认icon
   final bool? useDefaultIcon;
 }
 
-// 纯图标标签栏配置
+/// 纯图标标签栏配置
 class IconTypeConfig {
   IconTypeConfig({this.selectedIcon, this.unselectedIcon, this.useDefaultIcon})
       : assert(() {
@@ -88,17 +96,17 @@ class IconTypeConfig {
           return true;
         }());
 
-  // 选中时图标
+  /// 选中时图标
   final Widget? selectedIcon;
 
-  // 未选中时图标
+  /// 未选中时图标
   final Widget? unselectedIcon;
 
-  // 使用TDESIGN 默认icon
+  /// 使用TDESIGN 默认icon
   final bool? useDefaultIcon;
 }
 
-// 飘新配置
+/// 飘新配置
 class BadgeConfig {
   BadgeConfig(
       {required this.showBage,
@@ -120,7 +128,7 @@ class BadgeConfig {
   final double? badgeRightOffset;
 }
 
-// 单个tab配置
+/// 单个tab配置
 class TDBottomNavBarTabConfig {
   TDBottomNavBarTabConfig({
     required this.onTap,
@@ -154,7 +162,7 @@ class TDBottomNavBarTabConfig {
   /// 消息配置
   final BadgeConfig? badgeConfig;
 
-  // 弹窗配置
+  /// 弹窗配置
   final TDBottomNavBarPopUpBtnConfig? popUpButtonConfig;
 }
 
@@ -207,13 +215,13 @@ class TDBottomNavBar extends StatefulWidget {
         }()),
         super(key: key);
 
-  // 基本样式（纯文本、纯图标、图标+文本）
+  /// 基本样式（纯文本、纯图标、图标+文本）
   final TDBottomNavBarBasicType basicType;
 
-  // 选项样式 默认label
+  /// 选项样式 默认label
   final TDBottomNavBarComponentType? componentType;
 
-  // 标签栏样式 默认filled
+  /// 标签栏样式 默认filled
   final TDBottomNavBarOutlineType? outlineType;
 
   /// tabs配置
@@ -253,10 +261,11 @@ class _TDBottomNavBarState extends State<TDBottomNavBar> {
         widget.outlineType == TDBottomNavBarOutlineType.capsule;
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        // -2 是为了增加边框
+        /// -2 是为了增加边框
         var maxWidth =
             double.parse(constraints.biggest.width.toStringAsFixed(1)) - 2;
-        // 胶囊样式 比正常样式宽度要小32
+
+        /// 胶囊样式 比正常样式宽度要小32
         if (isCapsuleOutlineType) {
           maxWidth -= 32;
         }
@@ -357,40 +366,39 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
       required this.tabsLength})
       : super(key: key);
 
-  // tab基本类型
+  /// tab基本类型
   final TDBottomNavBarBasicType basiceType;
 
-  // tab选中背景类型
+  /// tab选中背景类型
   final TDBottomNavBarComponentType componentType;
 
   //
   final TDBottomNavBarOutlineType outlineType;
 
-  // 单个tab的属性配置
+  /// 单个tab的属性配置
   final TDBottomNavBarTabConfig itemConfig;
 
-  // 选中状态
+  /// 选中状态
   final bool isSelected;
 
-  // tab高度
+  /// tab高度
   final double itemHeight;
 
-  // tab宽度
+  /// tab宽度
   final double itemWidth;
 
-  // 点击事件
+  /// 点击事件
   final GestureTapCallback onTap;
 
-  // tab总个数
+  /// tab总个数
   final int tabsLength;
 
   @override
   Widget build(BuildContext context) {
     var popUpButtonConfig = itemConfig.popUpButtonConfig;
     var badgeConfig = itemConfig.badgeConfig;
-    var isInOrOutCapsule =
-        componentType == TDBottomNavBarComponentType.label ||
-            outlineType == TDBottomNavBarOutlineType.capsule;
+    var isInOrOutCapsule = componentType == TDBottomNavBarComponentType.label ||
+        outlineType == TDBottomNavBarOutlineType.capsule;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -422,7 +430,7 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
                 visible: componentType == TDBottomNavBarComponentType.label &&
                     isSelected,
                 child: Container(
-                  // 设计稿上 tab个数大于3时，左右边距为8，小于等于3时，左右边距为12
+                  /// 设计稿上 tab个数大于3时，左右边距为8，小于等于3时，左右边距为12
                   width: itemWidth - (tabsLength > 3 ? 16 : 24),
                   decoration: BoxDecoration(
                       color: TDTheme.of(context).brandColor1,
@@ -434,7 +442,8 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
                     top: isInOrOutCapsule ? 3.0 : 2.0,
                     bottom: isInOrOutCapsule ? 1.0 : 0.0),
                 child: _constructItem(context, badgeConfig, isInOrOutCapsule)),
-            // )
+
+            /// )
           ],
         ),
       ),
@@ -483,7 +492,7 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
       var selectedIcon = itemConfig.iconTypeConfig!.selectedIcon;
       var unSelectedIcon = itemConfig.iconTypeConfig!.unselectedIcon;
       if (itemConfig.iconTypeConfig!.useDefaultIcon ?? false) {
-        // selectedIcon = const TabIcon(isSelected: true, isPureIcon: true);
+        /// selectedIcon = const TabIcon(isSelected: true, isPureIcon: true);
         selectedIcon = Icon(
           TDIcons.app,
           size: 24,
@@ -561,6 +570,7 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
   }
 }
 
+/// 展开项配置
 class TDBottomNavBarPopUpBtnConfig {
   TDBottomNavBarPopUpBtnConfig(
       {required this.items, required this.onChanged, this.popUpDialogConfig})
@@ -578,16 +588,17 @@ class TDBottomNavBarPopUpBtnConfig {
           return true;
         }());
 
-  // 选项list
+  /// 选项list
   final List<PopUpMenuItem> items;
 
-  // 统一在 onChanged 中处理各item点击事件
+  /// 统一在 onChanged 中处理各item点击事件
   final ValueChanged<String> onChanged;
 
-  // 弹窗UI配置
+  /// 弹窗UI配置
   final TDBottomNavBarPopUpShapeConfig? popUpDialogConfig;
 }
 
+/// 弹窗UI配置
 class TDBottomNavBarPopUpShapeConfig {
   TDBottomNavBarPopUpShapeConfig(
       {this.popUpWidth,
@@ -597,13 +608,13 @@ class TDBottomNavBarPopUpShapeConfig {
       this.arrowWidth,
       this.arrowHeight});
 
-  // 弹窗宽度（不设置，默认为按钮宽度 - 20）
+  /// 弹窗宽度（不设置，默认为按钮宽度 - 20）
   final double? popUpWidth;
 
-  // 单个选项高度 所有选项等高 不设置则使用默认值 48
+  /// 单个选项高度 所有选项等高 不设置则使用默认值 48
   final double? popUpitemHeight;
 
-  // 弹窗背景颜色
+  /// 弹窗背景颜色
   final Color? backgroundColor;
 
   /// pannel圆角 默认0
@@ -612,10 +623,11 @@ class TDBottomNavBarPopUpShapeConfig {
   /// 箭头宽度 默认13.5
   final double? arrowWidth;
 
-  // 箭头高度 默认8
+  /// 箭头高度 默认8
   final double? arrowHeight;
 }
 
+/// 弹窗菜单item
 class PopUpMenuItem extends StatelessWidget {
   const PopUpMenuItem({
     Key? key,
@@ -624,13 +636,13 @@ class PopUpMenuItem extends StatelessWidget {
     this.alignment = AlignmentDirectional.center,
   }) : super(key: key);
 
-  // 选项widget
+  /// 选项widget
   final Widget? itemWidget;
 
-  // 选项值
+  /// 选项值
   final String value;
 
-  // 对齐方式
+  /// 对齐方式
   final AlignmentGeometry alignment;
 
   @override
@@ -672,19 +684,19 @@ class PopRoute extends PopupRoute {
 }
 
 class PopupDialog extends StatefulWidget {
-  // 按钮context
+  /// 按钮context
   final BuildContext btnContext;
 
-  // 点击事件
+  /// 点击事件
   final ValueChanged<String> onClickMenu;
 
-  // 弹窗选项列表
+  /// 弹窗选项列表
   final List<PopUpMenuItem> items;
 
-  // 弹窗配置
+  /// 弹窗配置
   final TDBottomNavBarPopUpShapeConfig? config;
 
-  // 默认弹窗宽度
+  /// 默认弹窗宽度
   final double defaultPopUpWidth;
 
   const PopupDialog(this.defaultPopUpWidth,
@@ -751,8 +763,9 @@ class PopupDialogState extends State<PopupDialog> {
               color: Colors.transparent,
             ),
             Positioned(
-                // 这里 -8 是因为widget.btnContext是TDBottomNavBarItemWithBadge的，它在父widget内有8dp的padding
-                // -4 是设计稿上箭头和tab有4dp的距离
+
+                /// 这里 -8 是因为widget.btnContext是TDBottomNavBarItemWithBadge的，它在父widget内有8dp的padding
+                /// -4 是设计稿上箭头和tab有4dp的距离
                 top: position!.top -
                     (popUpitemHeight * widget.items.length +
                         (widget.config?.arrowHeight ?? _kArrowHeight)) -
@@ -826,7 +839,7 @@ class PannelWithDownArrow extends CustomPainter {
             Radius.circular(config?.radius ?? 0.0)),
         paint);
 
-    // 下方箭头
+    /// 下方箭头
     if (config?.arrowWidth != 0.0 && config?.arrowHeight != 0.0) {
       var left = (pannelWidth - _kArrowWidth) / 2;
       var right = (pannelWidth + _kArrowWidth) / 2;

@@ -71,7 +71,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '反馈类-带标题',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -93,7 +93,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '反馈类-无标题',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -114,7 +114,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '反馈类-纯标题',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -135,7 +135,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '反馈类-内容超长',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -159,7 +159,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '确认类-带标题',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -181,7 +181,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '确认类-无标题',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -202,7 +202,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '确认类-纯标题',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -224,7 +224,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '输入类-带描述',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -248,7 +248,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '输入类-无描述',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -272,7 +272,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '图片置顶-带标题描述',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -295,7 +295,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '图片置顶-无标题',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -317,7 +317,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '图片置顶-纯标题',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -339,7 +339,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '图片居中-带标题描述',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -363,7 +363,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '图片居中-纯标题',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -386,7 +386,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '图片居中-纯图片',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -409,7 +409,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '单个文字按钮',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -432,7 +432,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '左右文字按钮',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -456,7 +456,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '单个横向基础按钮',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -478,7 +478,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '左右横向基础按钮',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -501,7 +501,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '两个纵向基础按钮',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -533,7 +533,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '三个纵向基础按钮',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
@@ -570,7 +570,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
     return TDButton(
       content: '带关闭按钮的对话框',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(

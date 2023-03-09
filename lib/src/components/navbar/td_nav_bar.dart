@@ -29,21 +29,34 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.belowTitleWidget,
   }) : super(key: key);
 
+  /// 左边操作项
   final List<TDNavBarItem>? leftBarItems;
+  /// 右边操作项
   final List<TDNavBarItem>? rightBarItems;
+  /// 标题控件，优先级高于title文案
   final Widget? titleWidget;
+  /// 标题文案
   final String? title;
+  /// 标题颜色
   final Color? titleColor;
+  /// 标题字体尺寸
   final Font? titleFont;
+  /// 标题字体粗细
   final FontWeight? titleFontWeight;
+  /// 标题字体样式
   final FontFamily? titleFontFamily;
+  /// 标题是否居中
   final bool centerTitle;
+  /// 透明度
   final double opacity;
+  /// 背景颜色
   final Color? backgroundColor;
+  /// 内部填充
   final EdgeInsetsGeometry? padding;
 
   /// 中间文案左右两边间距
   final double titleMargin;
+  /// 高度
   final double height;
 
   /// 是否进行屏幕适配，默认true
@@ -219,11 +232,17 @@ class _TDNavBarState extends State<TDNavBar> {
 }
 
 class TDNavBarItem {
+  /// 图标
   IconData? icon;
+  /// 图标颜色
   Color? iconColor;
+  /// 操作回调
   TDBarItemAction? action;
+  /// 图标尺寸
   double? iconSize;
+  /// 内部填充
   EdgeInsetsGeometry? padding;
+  /// 图标组件，优先级高与icon
   Widget? iconWidget;
 
   TDNavBarItem({

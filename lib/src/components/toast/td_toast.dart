@@ -8,11 +8,14 @@ enum IconTextDirection {
   vertical          //竖向
 }
 class TDToast {
+
+  /// 普通文本Toast
   static void showText(String? text, {required BuildContext context,
       Duration duration = TDToast._defaultDisPlayDuration}) {
     _showOverlay(_TDTextToast(text: text,), context: context);
   }
 
+  /// 带图标的Toast
   static void showIconText(String? text, {
                             IconData? icon,
                             IconTextDirection direction = IconTextDirection.horizontal,
@@ -21,6 +24,7 @@ class TDToast {
     _showOverlay(_TDIconTextToast(text: text, iconData: icon, iconTextDirection: direction,), context: context);
   }
 
+  /// 成功提示Toast
   static void showSuccess(String? text, {
                           IconTextDirection direction = IconTextDirection.horizontal,
                           required BuildContext context,
@@ -28,6 +32,7 @@ class TDToast {
     _showOverlay(_TDIconTextToast(text: text, iconData: TDIcons.check_circle, iconTextDirection: direction,), context: context);
   }
 
+  /// 警告Toast
   static void showWarning(String? text, {
                           IconTextDirection direction = IconTextDirection.horizontal,
                           required BuildContext context,
@@ -35,6 +40,7 @@ class TDToast {
     _showOverlay(_TDIconTextToast(text: text, iconData: TDIcons.error_circle, iconTextDirection: direction,), context: context);
   }
 
+  /// 失败提示Toast
   static void showFail(String? text, {
     IconTextDirection direction = IconTextDirection.horizontal,
     required BuildContext context,
@@ -42,18 +48,21 @@ class TDToast {
     _showOverlay(_TDIconTextToast(text: text, iconData: TDIcons.close_circle, iconTextDirection: direction,), context: context);
   }
 
+  /// 带文案的加载Toast
   static void showLoading({required BuildContext context,
                            String? text,
                            Duration duration = TDToast._defaultDisPlayDuration}) {
     _showOverlay(_TDToastLoading(text: text,), context: context, duration: TDToast._infinteDuration);
   }
 
+  /// 不带文案的加载Toast
   static void showLoadingWithoutText({required BuildContext context,
     String? text,
     Duration duration = TDToast._defaultDisPlayDuration}) {
     _showOverlay(const _TDToastLoadingWithoutText(), context: context, duration: TDToast._infinteDuration);
   }
 
+  /// 关闭加载Toast
   static void dismissLoading() {
     _cancel();
   }

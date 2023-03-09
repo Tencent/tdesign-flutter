@@ -109,6 +109,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '时间选择器 DatePicker',
       path: 'TDDatePickerPage',
+      apiPath: 'date_picker',
       codePath: 'date_picker',
       pageBuilder: _wrapInheritedTheme((context) => const TDDatePickerPage())),
   ExamplePageModel(
@@ -119,6 +120,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '选择器 Picker',
       path: 'TDPickerPage',
+      apiPath: 'picker',
       codePath: 'picker',
       pageBuilder: _wrapInheritedTheme((context) => const TDPickerPage())),
   ExamplePageModel(
@@ -165,6 +167,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '弹出层 PopUp',
       path: 'TDPopUpPage',
+      apiPath: 'popup',
       codePath: 'popup',
       pageBuilder: _wrapInheritedTheme((context) => const TDPopupPage())),
   ExamplePageModel(
@@ -175,6 +178,7 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '轻提示 Toast',
       path: 'TDToastPage',
+      apiPath: 'toast',
       codePath: 'toast',
       pageBuilder: _wrapInheritedTheme((context) => const TDToastPage())),
 ];
@@ -291,7 +295,7 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: const EdgeInsets.all(8.0),
           child: TDButton(
               size: TDButtonSize.medium,
-              type: TDButtonType.stroke,
+              type: TDButtonType.outline,
               shape: TDButtonShape.rectangle,
               theme: TDButtonTheme.primary,
               onTap: () {

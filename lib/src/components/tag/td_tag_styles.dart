@@ -72,6 +72,7 @@ class TDTagStyle {
   BorderRadiusGeometry get getBorderRadius =>
       borderRadius ?? BorderRadius.circular(0);
 
+  /// 根据主题生成填充Tag样式
   TDTagStyle.generateFillStyleByTheme(
       BuildContext context, TDTagTheme? theme, bool light, bool isCircle) {
     this.context = context;
@@ -121,6 +122,7 @@ class TDTagStyle {
     borderColor = backgroundColor;
   }
 
+  /// 根据主题生成描边Tag样式
   TDTagStyle.generateOutlineStyleByTheme(
       BuildContext context, TDTagTheme? theme, bool light, bool isCircle) {
     this.context = context;
@@ -167,6 +169,7 @@ class TDTagStyle {
     border = 1;
   }
 
+  /// 根据主题生成禁用Tag样式
   TDTagStyle.generateDisableSelectStyle(
       BuildContext context, bool isOutline , bool isCircle) {
 

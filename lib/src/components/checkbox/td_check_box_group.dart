@@ -76,65 +76,6 @@ class TDCheckboxGroupController {
 ///
 ///
 class TDCheckboxGroup extends StatefulWidget {
-  ///
-  /// 可以是任意包含TDCheckBox的容器，比如：
-  /// ```
-  /// Row(
-  ///   children: [
-  ///     TDCheckBox(),
-  ///     TDCheckBox(),
-  ///     ...
-  ///   ]
-  /// )
-  /// ```
-  ///
-  final Widget child;
-
-  ///
-  /// 状态变化监听器
-  ///
-  final OnGroupChange? onChangeGroup;
-
-  ///
-  /// 可以通过控制器操作勾选状态
-  ///
-  final TDCheckboxGroupController? controller;
-
-  ///
-  /// 最多可以勾选多少
-  ///
-  final int? maxChecked;
-
-  ///
-  /// 勾选的CheckBox id列表
-  ///
-  final List<String>? checkedIds;
-
-  ///
-  /// 超过最大可勾选的个数
-  ///
-  final VoidCallback? onOverloadChecked;
-
-  /// CheckBox标题的行数
-  final int? titleMaxLine;
-
-
-  /// CheckBox完全自定义内容
-  final ContentBuilder? customContentBuilder;
-
-  /// CheckBoxicon和文字的距离
-  final double? spacing;
-
-  /// CheckBox复选框样式：圆形或方形
-  final TDCheckboxStyle? style;
-
-  ///
-  /// 文字相对icon的方位
-  ///
-  final TDContentDirection? contentDirection;
-
-  /// 自定义选择icon的样式
-  final IconBuilder? customIconBuilder;
 
   const TDCheckboxGroup(
       {required this.child,
@@ -150,6 +91,54 @@ class TDCheckboxGroup extends StatefulWidget {
         this.spacing,
         this.customIconBuilder,
         this.onOverloadChecked}) : super(key: key);
+
+  ///
+  /// 可以是任意包含TDCheckBox的容器，比如：
+  /// ```
+  /// Row(
+  ///   children: [
+  ///     TDCheckBox(),
+  ///     TDCheckBox(),
+  ///     ...
+  ///   ]
+  /// )
+  /// ```
+  ///
+  final Widget child;
+
+  /// 状态变化监听器
+  final OnGroupChange? onChangeGroup;
+
+  /// 可以通过控制器操作勾选状态
+  final TDCheckboxGroupController? controller;
+
+  /// 最多可以勾选多少
+  final int? maxChecked;
+
+  /// 勾选的CheckBox id列表
+  final List<String>? checkedIds;
+
+  /// 超过最大可勾选的个数
+  final VoidCallback? onOverloadChecked;
+
+  /// CheckBox标题的行数
+  final int? titleMaxLine;
+
+
+  /// CheckBox完全自定义内容
+  final ContentBuilder? customContentBuilder;
+
+  /// CheckBoxicon和文字的距离
+  final double? spacing;
+
+  /// CheckBox复选框样式：圆形或方形
+  final TDCheckboxStyle? style;
+
+  /// 文字相对icon的方位
+  final TDContentDirection? contentDirection;
+
+  /// 自定义选择icon的样式
+  final IconBuilder? customIconBuilder;
 
   @override
   State<StatefulWidget> createState() {

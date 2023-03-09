@@ -38,14 +38,23 @@ class TDLoading extends StatelessWidget {
     this.duration = 2000,
   }) : super(key: key);
 
+  /// 尺寸
   final TDLoadingSize size;
+  /// 图标，支持圆形、点状、菊花状
   final TDLoadingIcon? icon;
+  /// 图标颜色
   final Color? iconColor;
+  /// 文案
   final String? text;
+  /// 失败刷新组件
   final Widget? refreshWidget;
+  /// 文案颜色
   final Color textColor;
+  /// 文案和图标相对方向
   final Axis axis;
+  /// 自定义图标，优先级高于icon
   final Widget? customIcon;
+  /// 一次刷新的时间，控制动画速度
   final int duration;
 
   int get _innerDuration => duration > 0 ? duration : 1;

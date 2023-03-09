@@ -308,7 +308,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                         TDButton(
                           isBlock: true,
                           content: '描边block按钮',
-                          type: TDButtonType.stroke,
+                          type: TDButtonType.outline,
                           theme: TDButtonTheme.primary,
                         ),
                         SizedBox(
@@ -353,7 +353,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
     return const TDButton(
       content: '描边按钮',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       shape: TDButtonShape.rectangle,
       theme: TDButtonTheme.light,
     );
@@ -375,7 +375,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
     return const TDButton(
       content: '描边按钮',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       shape: TDButtonShape.rectangle,
       theme: TDButtonTheme.danger,
     );
@@ -408,7 +408,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
     return const TDButton(
       content: '描边按钮',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       shape: TDButtonShape.rectangle,
       theme: TDButtonTheme.defaultTheme,
     );
@@ -508,7 +508,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
     return const TDButton(
       content: '描边按钮',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       shape: TDButtonShape.rectangle,
       theme: TDButtonTheme.primary,
       disabled: true,
@@ -635,7 +635,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
     return const TDButton(
       content: '描边按钮',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       shape: TDButtonShape.rectangle,
       theme: TDButtonTheme.primary,
     );

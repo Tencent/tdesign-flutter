@@ -62,7 +62,7 @@ class TDPopupPageState extends State<TDPopupPage> {
         return TDButton(
           content: '底部弹出层-带标题及操作',
           theme: TDButtonTheme.primary,
-          type: TDButtonType.stroke,
+          type: TDButtonType.outline,
           onTap: () {
             Navigator.of(context).push(TDSlidePopupRoute(
                 slideTransitionFrom: SlideTransitionFrom.bottom,
@@ -94,7 +94,7 @@ class TDPopupPageState extends State<TDPopupPage> {
         return TDButton(
           content: '底部弹出层-带标题及操作',
           theme: TDButtonTheme.primary,
-          type: TDButtonType.stroke,
+          type: TDButtonType.outline,
           onTap: () {
             Navigator.of(context).push(TDSlidePopupRoute(
                 slideTransitionFrom: SlideTransitionFrom.bottom,
@@ -122,7 +122,7 @@ class TDPopupPageState extends State<TDPopupPage> {
     return TDButton(
       content: '顶部弹出',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.top,
@@ -141,7 +141,7 @@ class TDPopupPageState extends State<TDPopupPage> {
     return TDButton(
       content: '左侧弹出',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.left,
@@ -160,7 +160,7 @@ class TDPopupPageState extends State<TDPopupPage> {
     return TDButton(
       content: '中间弹出',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.center,
@@ -180,7 +180,7 @@ class TDPopupPageState extends State<TDPopupPage> {
     return TDButton(
       content: '底部弹出',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.bottom,
@@ -199,7 +199,7 @@ class TDPopupPageState extends State<TDPopupPage> {
     return TDButton(
       content: '右侧弹出',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.right,
@@ -218,7 +218,7 @@ class TDPopupPageState extends State<TDPopupPage> {
     return TDButton(
       content: '底部弹出层-带标题及操作',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.bottom,
@@ -246,7 +246,7 @@ class TDPopupPageState extends State<TDPopupPage> {
     return TDButton(
       content: '底部弹出层-带操作',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.bottom,
@@ -273,7 +273,7 @@ class TDPopupPageState extends State<TDPopupPage> {
     return TDButton(
       content: '底部弹出层-带标题及关闭',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.bottom,
@@ -297,7 +297,7 @@ class TDPopupPageState extends State<TDPopupPage> {
     return TDButton(
       content: '底部弹出层-带左边标题及关闭',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.bottom,
@@ -322,7 +322,7 @@ class TDPopupPageState extends State<TDPopupPage> {
     return TDButton(
       content: '底部弹出层-带关闭',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.bottom,
@@ -345,7 +345,7 @@ class TDPopupPageState extends State<TDPopupPage> {
     return TDButton(
       content: '底部弹出层-仅标题',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.bottom,
@@ -370,7 +370,7 @@ class TDPopupPageState extends State<TDPopupPage> {
     return TDButton(
       content: '居中弹出层-带关闭',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             isDismissible:false,
@@ -395,7 +395,7 @@ class TDPopupPageState extends State<TDPopupPage> {
     return TDButton(
       content: '居中弹出层-关闭在下方',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             isDismissible:false,

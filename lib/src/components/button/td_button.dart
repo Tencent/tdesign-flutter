@@ -4,7 +4,7 @@ import '../../../td_export.dart';
 
 enum TDButtonSize { large, medium, small, extraSmall }
 
-enum TDButtonType { fill, stroke, text, ghost }
+enum TDButtonType { fill, outline, text, ghost }
 
 enum TDButtonShape { rectangle, round, square, circle, filled }
 
@@ -362,8 +362,8 @@ class _TDButtonState extends State<TDButton> {
     switch (widget.type) {
       case TDButtonType.fill:
         return TDButtonStyle.generateFillStyleByTheme(context, widget.theme, _buttonStatus);
-      case TDButtonType.stroke:
-        return TDButtonStyle.generateStrokeStyleByTheme(context, widget.theme, _buttonStatus);
+      case TDButtonType.outline:
+        return TDButtonStyle.generateOutlineStyleByTheme(context, widget.theme, _buttonStatus);
       case TDButtonType.text:
         return TDButtonStyle.generateTextStyleByTheme(context, widget.theme, _buttonStatus);
       case TDButtonType.ghost:
