@@ -9,6 +9,29 @@ typedef DatePickerCallback = void Function(Map<String, int> selected);
 
 /// 时间选择器
 class TDDatePicker extends StatefulWidget {
+
+  const TDDatePicker(
+      {required this.title,
+        required this.onConfirm,
+        this.onCancel,
+        this.backgroundColor,
+        this.titleDividerColor,
+        this.topRadius,
+        this.titleHeight,
+        this.padding,
+        this.leftPadding,
+        this.rightPadding,
+        this.leftTextStyle,
+        this.rightTextStyle,
+        this.centerTextStyle,
+        this.customSelectWidget,
+        this.itemDistanceCalculator,
+        required this.model,
+        this.showTitle = true,
+        this.pickerHeight = 200,
+        required this.pickerItemCount,
+        Key? key}) : super(key: key);
+
   final String title; // 选择器标题
   final DatePickerCallback? onConfirm; // 选择器确认按钮回调
   final DatePickerCallback? onCancel; // 选择器取消按钮回调
@@ -47,29 +70,6 @@ class TDDatePicker extends StatefulWidget {
   final bool showTitle;
 
   final DatePickerModel model;
-
-
-   const TDDatePicker(
-      {required this.title,
-      required this.onConfirm,
-      this.onCancel,
-      this.backgroundColor,
-      this.titleDividerColor,
-      this.topRadius,
-      this.titleHeight,
-      this.padding,
-      this.leftPadding,
-      this.rightPadding,
-      this.leftTextStyle,
-      this.rightTextStyle,
-      this.centerTextStyle,
-      this.customSelectWidget,
-      this.itemDistanceCalculator,
-      required this.model,
-      this.showTitle = true,
-      this.pickerHeight = 200,
-      required this.pickerItemCount,
-      Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TDDatePickerState();

@@ -18,9 +18,13 @@ class TDEmpty extends StatelessWidget {
 
   /// 点击事件
   final TDTapEvent? onTapEvent;
+  /// 展示图片
   final Widget? image;
+  /// 描述文字
   final String? emptyText;
+  /// 操作按钮文案
   final String? operationText;
+  /// 类型，为operation有操作按钮，plain无按钮
   final TDEmptyType type;
 
   @override

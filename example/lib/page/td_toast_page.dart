@@ -45,7 +45,7 @@ class _TDToastPageState extends State<TDToastPage> {
         TDToast.showText('轻提示文字内容', context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '纯文字',
@@ -59,7 +59,7 @@ class _TDToastPageState extends State<TDToastPage> {
         TDToast.showText('最多一行展示十个汉字宽度限制最多不超过三行文字', context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '多行文字',
@@ -74,7 +74,7 @@ class _TDToastPageState extends State<TDToastPage> {
             icon: TDIcons.check_circle, context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '带横向图标',
@@ -91,7 +91,7 @@ class _TDToastPageState extends State<TDToastPage> {
             context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '带竖向图标',
@@ -105,7 +105,7 @@ class _TDToastPageState extends State<TDToastPage> {
         TDToast.showLoading(context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '加载状态',
@@ -119,7 +119,7 @@ class _TDToastPageState extends State<TDToastPage> {
         TDToast.showLoadingWithoutText(context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '加载状态（无文案）',
@@ -131,7 +131,7 @@ class _TDToastPageState extends State<TDToastPage> {
     return const TDButton(
       onTap: TDToast.dismissLoading,
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '停止加载',
@@ -145,7 +145,7 @@ class _TDToastPageState extends State<TDToastPage> {
         TDToast.showSuccess('成功文案',context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '成功提示',
@@ -160,7 +160,7 @@ class _TDToastPageState extends State<TDToastPage> {
             direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '成功提示(竖向)',
@@ -175,7 +175,7 @@ class _TDToastPageState extends State<TDToastPage> {
             direction: IconTextDirection.horizontal, context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '警告提示',
@@ -190,7 +190,7 @@ class _TDToastPageState extends State<TDToastPage> {
             direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '警告提示(竖向)',
@@ -205,7 +205,7 @@ class _TDToastPageState extends State<TDToastPage> {
             direction: IconTextDirection.horizontal, context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '失败提示',
@@ -220,7 +220,7 @@ class _TDToastPageState extends State<TDToastPage> {
             direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '失败提示(竖向)',

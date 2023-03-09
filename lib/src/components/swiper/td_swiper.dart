@@ -6,6 +6,7 @@ import '../../theme/td_theme.dart';
 
 const _kAminatedDuration = 100;
 
+/// TDesign风格的Swiper指示器样式，与flutter_swiper的Swiper结合使用
 class TDSwiperPagination extends SwiperPlugin {
 
 
