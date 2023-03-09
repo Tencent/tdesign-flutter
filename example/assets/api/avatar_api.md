@@ -1,8 +1,10 @@
 ## API
+### TDAvatar
+#### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key | Key | - |  |
+| key |  | - |  |
 | size | TDAvatarSize | TDAvatarSize.medium | 头像尺寸 |
 | type | TDAvatarType | TDAvatarType.normal | 头像类型 |
 | shape | TDAvatarShape | TDAvatarShape.circle | 头像形状 |

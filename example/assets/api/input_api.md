@@ -1,14 +1,16 @@
 ## API
+### TDInput
+#### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key | Key | - |  |
+| key |  | - |  |
 | width | double? | - | 输入框宽度(TDCardStyle时必须设置该参数) |
 | height | double? | - | 输入框宽度 |
 | textStyle | TextStyle? | - | 文本颜色 |
 | backgroundColor | Color? | - | 输入框背景色 |
 | decoration | Decoration? | - | 输入框样式 |
-| leftIcon | Widget? | - |  |
+| leftIcon |  | - |  |
 | leftLabel | String? | - | 输入框左侧文案 |
 | required | bool? | - | 是否必填标志（红色*） |
 | readOnly | bool | false | 是否只读 |
@@ -36,9 +38,9 @@
 | leftInfoWidth | double? | - | 输入框左侧的宽度（输入框有16dp的左侧padding，因而左侧部分不用考虑这16dp） |
 | maxNum | int? | 500 | 最大字数限制 |
 | addtionInfo | String? | '' | 错误提示信息 |
-| addtionInfoColor | Color? | - |  |
+| addtionInfoColor |  | - |  |
 | textAlign | TextAlign? | - | 文字对齐方向 |
 | rightWidget | Widget? | - | 右侧自定义组件 特殊类型时生效 |
 | cardStyle | TDCardStyle? | - | 卡片默认样式 |
-| cardStyleTopText | String? | - |  |
-| cardStyleBottomText | String? | - |  |
+| cardStyleTopText | String? | - | 卡片模式上方文字 |
+| cardStyleBottomText | String? | - | 卡片模式下方文字 |

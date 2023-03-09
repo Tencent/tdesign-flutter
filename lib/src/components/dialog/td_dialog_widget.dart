@@ -345,12 +345,16 @@ class TDDialogButton extends StatelessWidget {
   /// 按钮文字颜色
   final Color? buttonTextColor;
 
+  /// 按钮文字粗细
   final FontWeight? buttonTextFontWeight;
 
+  /// 按钮样式
   final TDButtonStyle? buttonStyle;
 
+  /// 按钮类型
   final TDButtonType? buttonType;
 
+  /// 按钮主题
   final TDButtonTheme? buttonTheme;
 
   /// 按钮宽度

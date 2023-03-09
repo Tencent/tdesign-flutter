@@ -1,9 +1,11 @@
 ## API
+### TDCheckbox
+#### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | id | String? | - | id |
-| key | Key | - |  |
+| key |  | - |  |
 | title | String? | - | 文本 |
 | subTitle | String? | - | 辅助文字 |
 | enable | bool | true | 不可用 |
@@ -21,3 +23,24 @@
 | showDivider | bool | true | 是否展示分割线 |
 | contentDirection | TDContentDirection | TDContentDirection.right | 文字相对icon的方位 |
 | onCheckBoxChanged | OnCheckValueChanged? | - | 切换监听 |
+
+```
+```
+ ### TDCheckboxGroup
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| child |  | - |  |
+| key |  | - |  |
+| onChangeGroup | OnGroupChange? | - | 状态变化监听器 |
+| controller | TDCheckboxGroupController? | - | 可以通过控制器操作勾选状态 |
+| checkedIds | List<String>? | - | 勾选的CheckBox id列表 |
+| maxChecked | int? | - | 最多可以勾选多少 |
+| titleMaxLine | int? | - | CheckBox标题的行数 |
+| customContentBuilder | ContentBuilder? | - | CheckBox完全自定义内容 |
+| contentDirection | TDContentDirection? | - | 文字相对icon的方位 |
+| style | TDCheckboxStyle? | - | CheckBox复选框样式：圆形或方形 |
+| spacing | double? | - | CheckBoxicon和文字的距离 |
+| customIconBuilder | IconBuilder? | - | 自定义选择icon的样式 |
+| onOverloadChecked | VoidCallback? | - | 超过最大可勾选的个数 |

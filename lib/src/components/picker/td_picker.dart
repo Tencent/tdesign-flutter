@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../td_export.dart';
 
 class TDPicker {
+
+  /// 显示时间选择器
   static void showDatePicker(context,
       {required String title,
       required DatePickerCallback? onConfirm,
@@ -53,6 +55,7 @@ class TDPicker {
         });
   }
 
+  /// 显示多级选择器
   static void showMultiPicker(context,
       {String? title,
       required MultiPickerCallback? onConfirm,
@@ -80,6 +83,7 @@ class TDPicker {
         });
   }
 
+  /// 显示多级联动选择器
   static void showMultiLinkedPicker(context,
       {String? title,
       required MultiPickerCallback? onConfirm,

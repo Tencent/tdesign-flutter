@@ -1,9 +1,11 @@
 ## API
+### TDBadge
+#### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | type | TDBadgeType | type | 红点样式 |
-| key | Key | - |  |
+| key |  | - |  |
 | count | String? | - | 红点数量 |
 | border | TDBadgeBorder | TDBadgeBorder.large | 红点圆角大小 |
 | size | TDBadgeSize | TDBadgeSize.small | 红点尺寸 |

@@ -1,8 +1,10 @@
 ## API
+### TDDivider
+#### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key | Key | - |  |
+| key |  | - |  |
 | color | Color? | - | 线条颜色 |
 | margin | EdgeInsetsGeometry? | - | 外部填充 |
 | width | double? | - | 宽度，需要竖向线条时使用 |
