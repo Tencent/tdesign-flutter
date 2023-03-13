@@ -58,6 +58,7 @@ class TDText extends StatelessWidget {
   })  : textSpan = null,
         super(key: key);
 
+  /// 富文本构造方法
   const TDText.rich(
     this.textSpan, {
     this.font,

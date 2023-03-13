@@ -4,22 +4,22 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| title |  | - |  |
-| onConfirm |  | - |  |
-| onCancel |  | - |  |
-| backgroundColor |  | - |  |
-| titleDividerColor |  | - |  |
-| topRadius |  | - |  |
-| titleHeight |  | - |  |
+| title | String | - | 选择器标题 |
+| onConfirm | DatePickerCallback? | - | 选择器确认按钮回调 |
+| onCancel | DatePickerCallback? | - | 选择器取消按钮回调 |
+| backgroundColor | Color? | - | 背景颜色 |
+| titleDividerColor | Color? | - | 标题分割线颜色 |
+| topRadius | double? | - | 顶部圆角 |
+| titleHeight | double? | - | 标题高度 |
 | padding | EdgeInsets? | - | 适配padding |
-| leftPadding |  | - |  |
-| rightPadding |  | - |  |
+| leftPadding | double? | - | 左边填充 |
+| rightPadding | double? | - | 右边填充 |
 | leftTextStyle | TextStyle? | - | 自定义左侧文案样式 |
 | rightTextStyle | TextStyle? | - | 自定义右侧文案样式 |
 | centerTextStyle | TextStyle? | - | 自定义中间文案样式 |
 | customSelectWidget | Widget? | - | 自定义选择框样式 |
 | itemDistanceCalculator | ItemDistanceCalculator? | - | 根据距离计算字体颜色、透明度、粗细 |
-| model |  | - |  |
+| model | DatePickerModel | - | 数据模型 |
 | showTitle | bool | true | 是否展示标题 |
 | pickerHeight | double | 200 | 选择器List的视窗高度，默认200 |
 | pickerItemCount | int | - | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |

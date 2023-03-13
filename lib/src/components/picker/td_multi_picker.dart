@@ -39,13 +39,28 @@ class TDMultiPicker extends StatelessWidget {
   /// 自定义中间文案样式
   final TextStyle? centerTextStyle;
 
+  /// 标题高度
   final double? titleHeight;
+
+  /// 顶部填充
   final double? topPadding;
+
+  /// 左边填充
   final double? leftPadding;
+
+  /// 右边填充
   final double? rightPadding;
+
+  /// 标题分割线颜色
   final Color? titleDividerColor;
+
+  /// 背景颜色
   final Color? backgroundColor;
+
+  /// 顶部圆角
   final double? topRadius;
+
+  /// 不同距离自选项计算策略
   final ItemDistanceCalculator? itemDistanceCalculator;
 
   /// 适配padding
@@ -314,13 +329,28 @@ class TDMultiLinkedPicker extends StatefulWidget {
   /// 适配padding
   final EdgeInsets? padding;
 
+  /// 标题高度
   final double? titleHeight;
+
+  /// 顶部填充
   final double? topPadding;
+
+  /// 左边填充
   final double? leftPadding;
+
+  /// 右边填充
   final double? rightPadding;
+
+  /// 标题分割线颜色
   final Color? titleDividerColor;
+
+  /// 背景颜色
   final Color? backgroundColor;
+
+  /// 顶部圆角
   final double? topRadius;
+
+  /// 不同距离自选项计算策略
   final ItemDistanceCalculator? itemDistanceCalculator;
 
   const TDMultiLinkedPicker({

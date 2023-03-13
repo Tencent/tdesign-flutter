@@ -103,7 +103,7 @@ class TDInput extends StatelessWidget {
   /// 是否必填标志（红色*）
   final bool? required;
 
-  //带图标的输入框
+  /// 带图标的输入框
   final Widget? leftIcon;
 
   /// leftLabel右侧组件，支持自定义
@@ -193,6 +193,7 @@ class TDInput extends StatelessWidget {
   /// 错误提示信息
   final String? addtionInfo;
 
+  /// 错误提示颜色
   final Color? addtionInfoColor;
 
   /// 文字对齐方向

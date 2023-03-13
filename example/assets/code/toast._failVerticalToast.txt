@@ -6,7 +6,7 @@
             direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '失败提示(竖向)',

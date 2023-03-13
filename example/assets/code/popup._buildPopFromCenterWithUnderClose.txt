@@ -3,7 +3,7 @@
     return TDButton(
       content: '居中弹出层-关闭在下方',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             isDismissible:false,
