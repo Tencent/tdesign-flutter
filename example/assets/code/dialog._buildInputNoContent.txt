@@ -3,7 +3,7 @@
     return TDButton(
       content: '输入类-无描述',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(

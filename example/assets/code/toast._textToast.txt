@@ -5,7 +5,7 @@
         TDToast.showText('轻提示文字内容', context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '纯文字',
