@@ -3,7 +3,7 @@
     return const TDButton(
       content: '描边按钮',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       shape: TDButtonShape.rectangle,
       theme: TDButtonTheme.defaultTheme,
     );

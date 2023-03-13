@@ -3,7 +3,7 @@
     return const TDButton(
       onTap: TDToast.dismissLoading,
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '停止加载',
