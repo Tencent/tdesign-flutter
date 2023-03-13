@@ -8,7 +8,7 @@
             context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '带竖向图标',

@@ -18,13 +18,28 @@ class TDPopupBottomDisplayPanel extends StatelessWidget {
         Key? key})
       : super(key: key);
 
+  /// 子控件
   final Widget child;
+
+  /// 标题
   final String? title;
+
+  /// 标题颜色
   final Color? titleColor;
+
+  /// 标题是否靠左
   final bool titleLeft;
+
+  /// 是否隐藏关闭按钮
   final bool hideClose;
+
+  /// 关闭按钮颜色
   final Color? closeColor;
+
+  /// 关闭按钮点击回调
   final PopupClick? closeClick;
+
+  /// 背景颜色
   final Color? backgroundColor;
 
   @override
@@ -95,15 +110,34 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
       Key? key})
       : super(key: key);
 
+  /// 子控件
   final Widget child;
+
+  /// 标题
   final String? title;
+
+  /// 标题颜色
   final Color? titleColor;
+
+  /// 左边文本
   final String? leftText;
+
+  /// 左边文本颜色
   final Color? leftTextColor;
+
+  /// 左边文本点击回调
   final PopupClick? leftClick;
+
+  /// 右边文本
   final String? rightText;
+
+  /// 右边文本颜色
   final Color? rightTextColor;
+
+  /// 右边文本点击回调
   final PopupClick? rightClick;
+
+  /// 背景颜色
   final Color? backgroundColor;
 
   @override
@@ -181,10 +215,20 @@ class TDPopupCenterPanel extends StatelessWidget {
         Key? key})
       : super(key: key);
 
+
+  /// 子控件
   final Widget child;
+
+  /// 关闭按钮是否在视图框下方
   final bool closeUnderBottom;
+
+  /// 关闭按钮颜色
   final Color? closeColor;
+
+  /// 关闭按钮点击回调
   final PopupClick? closeClick;
+
+  /// 背景颜色
   final Color? backgroundColor;
 
   @override

@@ -19,7 +19,7 @@
 | cardMode |  | - |  |
 | showDivider |  | - |  |
 | size |  | TDCheckBoxSize.small |  |
-| radioStyle | TDRadioStyle | TDRadioStyle.circle |  |
+| radioStyle | TDRadioStyle | TDRadioStyle.circle | 单选框按钮样式 |
 | contentDirection |  | TDContentDirection.right |  |
 | customIconBuilder |  | - |  |
 
@@ -43,8 +43,8 @@ RadioGroup分组对象，继承自TDCheckboxGroup，字段含义与父类一致
 | selectId |  | - |  |
 | passThrough |  | - |  |
 | cardMode |  | false |  |
-| strictMode | bool | true |  |
-| radioCheckStyle | TDRadioStyle? | - |  |
+| strictMode | bool | true | 严格模式下，用户不能取消勾选，只能切换选择项， |
+| radioCheckStyle | TDRadioStyle? | - | 勾选样式 |
 | titleMaxLine |  | - |  |
 | customIconBuilder |  | - |  |
 | customContentBuilder |  | - |  |

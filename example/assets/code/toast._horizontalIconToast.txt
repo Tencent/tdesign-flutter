@@ -6,7 +6,7 @@
             icon: TDIcons.check_circle, context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '带横向图标',

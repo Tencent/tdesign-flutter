@@ -14,15 +14,15 @@
 | leftTextStyle | TextStyle? | - | 自定义左侧文案样式 |
 | rightTextStyle | TextStyle? | - | 自定义右侧文案样式 |
 | centerTextStyle | TextStyle? | - | 自定义中间文案样式 |
-| titleHeight | double? | - |  |
-| topPadding | double? | - |  |
-| leftPadding | double? | - |  |
-| rightPadding | double? | - |  |
-| titleDividerColor | Color? | - |  |
-| backgroundColor | Color? | - |  |
-| topRadius | double? | - |  |
+| titleHeight | double? | - | 标题高度 |
+| topPadding | double? | - | 顶部填充 |
+| leftPadding | double? | - | 左边填充 |
+| rightPadding | double? | - | 右边填充 |
+| titleDividerColor | Color? | - | 标题分割线颜色 |
+| backgroundColor | Color? | - | 背景颜色 |
+| topRadius | double? | - | 顶部圆角 |
 | padding | EdgeInsets? | - | 适配padding |
-| itemDistanceCalculator | ItemDistanceCalculator? | - |  |
+| itemDistanceCalculator | ItemDistanceCalculator? | - | 不同距离自选项计算策略 |
 | customSelectWidget | Widget? | - | 自定义选择框样式 |
 | key |  | - |  |
 
@@ -45,15 +45,15 @@
 | leftTextStyle | TextStyle? | - | 自定义左侧文案样式 |
 | rightTextStyle | TextStyle? | - | 自定义右侧文案样式 |
 | centerTextStyle | TextStyle? | - | 自定义中间文案样式 |
-| titleHeight | double? | - |  |
-| topPadding | double? | - |  |
-| leftPadding | double? | - |  |
-| rightPadding | double? | - |  |
-| titleDividerColor | Color? | - |  |
-| backgroundColor | Color? | - |  |
-| topRadius | double? | - |  |
+| titleHeight | double? | - | 标题高度 |
+| topPadding | double? | - | 顶部填充 |
+| leftPadding | double? | - | 左边填充 |
+| rightPadding | double? | - | 右边填充 |
+| titleDividerColor | Color? | - | 标题分割线颜色 |
+| backgroundColor | Color? | - | 背景颜色 |
+| topRadius | double? | - | 顶部圆角 |
 | padding | EdgeInsets? | - | 适配padding |
-| itemDistanceCalculator | ItemDistanceCalculator? | - |  |
+| itemDistanceCalculator | ItemDistanceCalculator? | - | 不同距离自选项计算策略 |
 | key |  | - |  |
 
 ```

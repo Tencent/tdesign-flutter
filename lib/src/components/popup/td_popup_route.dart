@@ -16,12 +16,19 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
       this.transitionAnimationController,
       this.slideTransitionFrom = SlideTransitionFrom.bottom});
 
+  /// 控件构建器
   final WidgetBuilder builder;
+
+  /// 蒙层颜色
   final Color? modalBarrierColor;
+
+  /// 点击蒙层能否关闭
   final bool isDismissible;
+
+  /// 动画控制器
   final AnimationController? transitionAnimationController;
 
-  // 设置从屏幕的哪个方向滑出
+  /// 设置从屏幕的哪个方向滑出
   final SlideTransitionFrom slideTransitionFrom;
 
   @override

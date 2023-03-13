@@ -32,14 +32,23 @@ class TDDatePicker extends StatefulWidget {
         required this.pickerItemCount,
         Key? key}) : super(key: key);
 
-  final String title; // 选择器标题
-  final DatePickerCallback? onConfirm; // 选择器确认按钮回调
-  final DatePickerCallback? onCancel; // 选择器取消按钮回调
+  /// 选择器标题
+  final String title;
+  /// 选择器确认按钮回调
+  final DatePickerCallback? onConfirm;
+  /// 选择器取消按钮回调
+  final DatePickerCallback? onCancel;
+  /// 背景颜色
   final Color? backgroundColor;
+  /// 标题分割线颜色
   final Color? titleDividerColor;
+  /// 顶部圆角
   final double? topRadius;
+  /// 标题高度
   final double? titleHeight;
+  /// 左边填充
   final double? leftPadding;
+  /// 右边填充
   final double? rightPadding;
 
   /// 根据距离计算字体颜色、透明度、粗细
@@ -69,6 +78,7 @@ class TDDatePicker extends StatefulWidget {
   /// 是否展示标题
   final bool showTitle;
 
+  /// 数据模型
   final DatePickerModel model;
 
   @override
