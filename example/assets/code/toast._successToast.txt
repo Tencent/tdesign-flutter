@@ -5,7 +5,7 @@
         TDToast.showSuccess('成功文案',context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '成功提示',

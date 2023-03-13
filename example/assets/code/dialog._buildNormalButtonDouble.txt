@@ -3,7 +3,7 @@
     return TDButton(
       content: '左右横向基础按钮',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(

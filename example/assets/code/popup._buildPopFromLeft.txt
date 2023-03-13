@@ -3,7 +3,7 @@
     return TDButton(
       content: '左侧弹出',
       theme: TDButtonTheme.primary,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.left,

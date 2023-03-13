@@ -3,7 +3,7 @@
     return TDButton(
       content: '图片居中-纯图片',
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(

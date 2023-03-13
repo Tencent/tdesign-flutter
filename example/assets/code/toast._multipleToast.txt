@@ -5,7 +5,7 @@
         TDToast.showText('最多一行展示十个汉字宽度限制最多不超过三行文字', context: context);
       },
       size: TDButtonSize.large,
-      type: TDButtonType.stroke,
+      type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
       content: '多行文字',
