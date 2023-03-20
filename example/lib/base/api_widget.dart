@@ -5,6 +5,26 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:tdesign_flutter/td_export.dart';
 
+import 'example_base.dart';
+
+/// API展示页面
+class ApiPage extends StatelessWidget {
+  const ApiPage({Key? key, this.model}) : super(key: key);
+
+  final ExamplePageModel? model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: TDText('${model?.text} API', textColor: TDTheme.of(context).whiteColor1,),),
+      body: SingleChildScrollView(
+        child: ApiWidget(apiName: model?.apiPath, visible: true,),
+      ),
+    );
+  }
+}
+
+
 class ApiWidget extends StatefulWidget {
   const ApiWidget({Key? key, required this.apiName, this.visible = false}) : super(key: key);
 
