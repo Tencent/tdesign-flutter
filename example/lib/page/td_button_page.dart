@@ -27,58 +27,70 @@ class _TDButtonPageState extends State<TDButtonPage> {
           title: tdTitle(),
           desc: '用于开启一个闭环的操作任务，如“删除”对象、“购买”商品等。',
           exampleCodeGroup: 'button',
-          padding: const EdgeInsets.only(top: 8, bottom: 8),
+          padding: const EdgeInsets.only(top: 8, bottom: 8, ),
           children: [
             ExampleModule(title: '组件类型', children: [
               ExampleItem(
                   ignoreCode: true,
                   desc: '基础按钮',
                   builder: (context) {
-                    return Wrap(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _buildPrimaryFillButton,
-                            methodName: '_buildPrimaryFillButton',
+                    return Container(
+                      alignment: Alignment.topLeft,
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Wrap(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(
+                              builder: _buildPrimaryFillButton,
+                              methodName: '_buildPrimaryFillButton',
+                            ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildLightFillButton, methodName: '_buildLightFillButton',),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildDefaultFillButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child:
-                              CodeWrapper(builder: _buildPrimaryStrokeButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildPrimaryTextButton),
-                        ),
-                      ],
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(builder: _buildLightFillButton, methodName: '_buildLightFillButton',),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(builder: _buildDefaultFillButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child:
+                            CodeWrapper(builder: _buildPrimaryStrokeButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(builder: _buildPrimaryTextButton),
+                          ),
+                        ],
+                      ),
                     );
                   }),
               ExampleItem(
                   ignoreCode: true,
                   desc: '图标按钮',
+                  center: false,
                   builder: (context) {
-                    return Wrap(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child:
-                              CodeWrapper(builder: _buildRectangleIconButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildSquareIconButton),
-                        )
-                      ],
+                    return Container(
+                      padding: const EdgeInsets.only(left: 8,right: 8),
+                      child: Wrap(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child:
+                            CodeWrapper(builder: _buildRectangleIconButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(builder: _buildSquareIconButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(builder: _buildLoadingIconButton),
+                          )
+                        ],
+                      ),
                     );
                   }),
               ExampleItem(
@@ -86,7 +98,9 @@ class _TDButtonPageState extends State<TDButtonPage> {
                   desc: '幽灵按钮',
                   builder: (context) {
                     return Container(
+                      alignment: Alignment.topLeft,
                       color: TDTheme.of(context).grayColor14,
+                      padding: const EdgeInsets.only(left: 8,right: 8),
                       child: Wrap(
                         children: [
                           Container(
@@ -120,34 +134,38 @@ class _TDButtonPageState extends State<TDButtonPage> {
                   ignoreCode: true,
                   desc: '按钮禁用状态',
                   builder: (context) {
-                    return Wrap(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                              builder: _buildDisablePrimaryFillButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                              builder: _buildDisableLightFillButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                              builder: _buildDisableDefaultFillButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                              builder: _buildDisablePrimaryStrokeButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                              builder: _buildDisablePrimaryTextButton),
-                        ),
-                      ],
+                    return Container(
+                      alignment: Alignment.topLeft,
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Wrap(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(
+                                builder: _buildDisablePrimaryFillButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(
+                                builder: _buildDisableLightFillButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(
+                                builder: _buildDisableDefaultFillButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(
+                                builder: _buildDisablePrimaryStrokeButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(
+                                builder: _buildDisablePrimaryTextButton),
+                          ),
+                        ],
+                      ),
                     );
                   }),
             ]),
@@ -156,126 +174,137 @@ class _TDButtonPageState extends State<TDButtonPage> {
                   ignoreCode: true,
                   desc: '按钮尺寸',
                   builder: (context) {
-                    return Wrap(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(16),
-                          child: CodeWrapper(builder: _buildLargeButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(16),
-                          child: CodeWrapper(builder: _buildMediumButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(16),
-                          child: CodeWrapper(builder: _buildSmallButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(16),
-                          child: CodeWrapper(builder: _buildExtraSmallButton),
-                        ),
-                      ],
+                    return Container(
+                      alignment: Alignment.topLeft,
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Wrap(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(6),
+                            child: CodeWrapper(builder: _buildLargeButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(6),
+                            child: CodeWrapper(builder: _buildMediumButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(6),
+                            child: CodeWrapper(builder: _buildSmallButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(6),
+                            child: CodeWrapper(builder: _buildExtraSmallButton),
+                          ),
+                        ],
+                      ),
                     );
                   }),
               ExampleItem(
                   ignoreCode: true,
                   desc: '按钮形状',
                   builder: (context) {
-                    return Wrap(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _buildPrimaryFillButton,
+                    return Container(
+                      alignment: Alignment.topLeft,
+                      child: Wrap(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 16,right: 6,top: 6),
+                            child: CodeWrapper(
+                              builder: _buildPrimaryFillButton,
+                            ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildSquareIconButton),
-                        ),
-                        Container(
-                          width: 200,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildRoundButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildCircleButton),
-                        ),
-                        CodeWrapper(builder: _buildFilledButton)
-                      ],
+                          Container(
+                            margin: const EdgeInsets.all(6),
+                            child: CodeWrapper(builder: _buildSquareIconButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(6),
+                            child: CodeWrapper(builder: _buildRoundButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(right: 16,left: 6, top: 6),
+                            child: CodeWrapper(builder: _buildCircleButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only( top: 10),
+                            child: CodeWrapper(builder: _buildFilledButton),
+                          )
+                        ],
+                      ),
                     );
                   }),
               ExampleItem(
                   ignoreCode: true,
                   desc: '按钮主题',
                   builder: (context) {
-                    return Wrap(
-                      children: [
-                        /// 默认主题
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildDefaultFillButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child:
-                              CodeWrapper(builder: _buildDefaultStrokeButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildDefaultTextButton),
-                        ),
-
-                        /// primary主题
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _buildPrimaryFillButton,
+                    return Container(
+                      alignment: Alignment.topLeft,
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Wrap(
+                        children: [
+                          /// 默认主题
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(builder: _buildDefaultFillButton),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child:
-                              CodeWrapper(builder: _buildPrimaryStrokeButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildPrimaryTextButton),
-                        ),
-
-                        /// danger主题
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildDangerFillButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildDangerStrokeButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildDangerTextButton),
-                        ),
-
-                        /// light主题
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildLightFillButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(builder: _buildLightStrokeButton),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _buildLightTextButton,
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child:
+                            CodeWrapper(builder: _buildDefaultStrokeButton),
                           ),
-                        ),
-                      ],
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(builder: _buildDefaultTextButton),
+                          ),
+
+                          /// primary主题
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(
+                              builder: _buildPrimaryFillButton,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child:
+                            CodeWrapper(builder: _buildPrimaryStrokeButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(builder: _buildPrimaryTextButton),
+                          ),
+
+                          /// danger主题
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(builder: _buildDangerFillButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(builder: _buildDangerStrokeButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(builder: _buildDangerTextButton),
+                          ),
+
+                          /// light主题
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(builder: _buildLightFillButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(builder: _buildLightStrokeButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: CodeWrapper(
+                              builder: _buildLightTextButton,
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   }),
             ]),
@@ -450,7 +479,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildExtraSmallButton(BuildContext context) {
     return const TDButton(
-      content: '极小按钮28',
+      content: '按钮28',
       size: TDButtonSize.extraSmall,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -461,7 +490,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildSmallButton(BuildContext context) {
     return const TDButton(
-      content: '小号按钮32',
+      content: '按钮32',
       size: TDButtonSize.small,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -472,7 +501,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildMediumButton(BuildContext context) {
     return const TDButton(
-      content: '中号按钮40',
+      content: '按钮40',
       size: TDButtonSize.medium,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -483,7 +512,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildLargeButton(BuildContext context) {
     return const TDButton(
-      content: '大号按钮48',
+      content: '按钮48',
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -603,6 +632,18 @@ class _TDButtonPageState extends State<TDButtonPage> {
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.square,
+      theme: TDButtonTheme.primary,
+    );
+  }
+
+  @Demo(group: 'button')
+  TDButton _buildLoadingIconButton(BuildContext context) {
+    return TDButton(
+      content: '加载中',
+      iconWidget: TDLoading(size: TDLoadingSize.small, icon: TDLoadingIcon.circle, iconColor: TDTheme.of(context).whiteColor1,),
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
       theme: TDButtonTheme.primary,
     );
   }
