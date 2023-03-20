@@ -35,6 +35,7 @@ class TDButton extends StatefulWidget {
       this.height,
       this.onTap,
       this.icon,
+        this.iconWidget,
       this.onLongPress,
       this.margin,
       this.padding})
@@ -90,6 +91,9 @@ class TDButton extends StatefulWidget {
 
   /// 图标icon
   final IconData? icon;
+
+  /// 自定义图标icon控件
+  final Widget? iconWidget;
 
   /// 自定义padding
   final EdgeInsetsGeometry? padding;
@@ -192,27 +196,13 @@ class _TDButtonState extends State<TDButton> {
   }
 
   Widget _getChild() {
-    if (widget.content == null && widget.icon == null) {
+    var icon = getIcon();
+    if (widget.content == null && icon == null) {
       return Container();
     }
     var children = <Widget>[];
     // 系统Icon会导致不居中，因此自绘icon指定height
-    if (widget.icon != null) {
-      var icon = RichText(
-        overflow: TextOverflow.visible,
-        text: TextSpan(
-          text: String.fromCharCode(widget.icon!.codePoint),
-          style: TextStyle(
-            inherit: false,
-            color:
-                style.textColor,
-            height: 1,
-            fontSize: _getIconSize(),
-            fontFamily: widget.icon!.fontFamily,
-            package: widget.icon!.fontPackage,
-          ),
-        ),
-      );
+    if (icon != null) {
       children.add(icon);
     }
     if (widget.content != null) {
@@ -240,6 +230,30 @@ class _TDButtonState extends State<TDButton> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: children,
     );
+  }
+
+  Widget? getIcon(){
+    if(widget.iconWidget != null){
+      return widget.iconWidget;
+    }
+    if(widget.icon != null){
+      return RichText(
+        overflow: TextOverflow.visible,
+        text: TextSpan(
+          text: String.fromCharCode(widget.icon!.codePoint),
+          style: TextStyle(
+            inherit: false,
+            color:
+            style.textColor,
+            height: 1,
+            fontSize: _getIconSize(),
+            fontFamily: widget.icon!.fontFamily,
+            package: widget.icon!.fontPackage,
+          ),
+        ),
+      );
+    }
+    return null;
   }
 
   Font _getTextFont() {
