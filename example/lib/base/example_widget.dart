@@ -9,6 +9,7 @@ import 'package:tdesign_flutter/td_export.dart';
 import '../web/syntax_highlighter.dart';
 import 'api_widget.dart';
 import 'example_base.dart';
+import 'example_route.dart';
 import 'notification_center.dart';
 
 /// 示例页面控件，建议每个页面返回一个ExampleWidget即可，不用独自封装
@@ -40,6 +41,7 @@ class _ExamplePageState extends State<ExamplePage> {
   late List<ExampleModule> list;
   bool apiVisible = false;
   ExamplePageModel? model;
+  bool showAction = false;
 
   @override
   void initState() {
@@ -50,6 +52,9 @@ class _ExamplePageState extends State<ExamplePage> {
       model = modelTheme?.model;
       model?.codePath = widget.exampleCodeGroup;
       model?.apiVisible = apiVisible;
+      setState(() {
+        showAction = model?.showAction ?? false;
+      });
     });
   }
 
@@ -94,10 +99,17 @@ class _ExamplePageState extends State<ExamplePage> {
   2.参数为枚举，需测试所有枚举组合（示例已有的可不写）''', builder: (_) => const TDDivider());
 
   Widget _buildNavBar() {
-    return TDNavBar(
-      title: widget.title,
-      rightBarItems: PlatformUtil.isWeb ? [] : [ TDNavBarItem(
-            icon: TDIcons.info_circle,
+    var rightBarItems = <TDNavBarItem>[];
+
+    if (showAction) {
+      rightBarItems.add(TDNavBarItem(
+          icon: TDIcons.info_circle,
+          action: () {
+            Navigator.pushNamed(context, TDExampleRoute.getApiPath(model));
+          }));
+      if (!PlatformUtil.isWeb) {
+        rightBarItems.add(TDNavBarItem(
+            icon: TDIcons.code,
             action: () {
               setState(() {
                 apiVisible = !apiVisible;
@@ -107,8 +119,12 @@ class _ExamplePageState extends State<ExamplePage> {
               });
               TNotification.postNotification(
                   'onApiVisibleChange', {'apiVisible': apiVisible});
-            })
-      ],
+            }));
+      }
+    }
+    return TDNavBar(
+      title: widget.title,
+      rightBarItems:  rightBarItems,
     );
   }
 
@@ -119,10 +135,6 @@ class _ExamplePageState extends State<ExamplePage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ApiWidget(
-            apiName: model?.apiPath,
-            visible: apiVisible && !ScreenUtil.isWebLargeScreen(context),
-          ),
           TDText(
             widget.title,
             font: TDTheme.of(context).fontHeadlineSmall,
@@ -380,7 +392,7 @@ class _CodeWrapperState extends State<CodeWrapper> {
 
           var lines = codeString.split('\n');
           print('lines: ${lines.length}');
-          double height = max(300, lines.length * 17 + 32);
+          double height = min(max(300, lines.length * 17 + 32),MediaQuery.of(context).size.height - 150);
           var mdText = '''
 ```dart
 ${codeString}
