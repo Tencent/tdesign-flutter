@@ -204,7 +204,7 @@ class MyApp extends StatelessWidget {
         TDTheme(
       data: TDThemeData.defaultData(),
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'TDesign Flutter Example',
         theme: ThemeData(
             colorScheme: ColorScheme.light(
                 primary: TDTheme.of(context).brandNormalColor)),
@@ -299,7 +299,7 @@ class _MyHomePageState extends State<MyHomePage> {
               shape: TDButtonShape.rectangle,
               theme: TDButtonTheme.primary,
               onTap: () {
-                Navigator.pushNamed(context, model.path);
+                Navigator.pushNamed(context, '${model.path}?showAction=1');
               },
               content: model.text),
         )
