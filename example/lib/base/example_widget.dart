@@ -6,6 +6,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:tdesign_flutter/td_export.dart';
 
+import '../page/td_theme_page.dart';
 import '../web/syntax_highlighter.dart';
 import 'api_widget.dart';
 import 'example_base.dart';
@@ -66,6 +67,7 @@ class _ExamplePageState extends State<ExamplePage> {
             data: ScrollbarThemeData(
                 trackVisibility: MaterialStateProperty.all(true)),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildNavBar(),
                 Expanded(
@@ -245,6 +247,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
     }
     child = Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: widget.data.center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         widget.data.desc.isEmpty
             ? Container()
