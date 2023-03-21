@@ -74,7 +74,7 @@ class _ExamplePageState extends State<ExamplePage> {
                     child: ListView.builder(
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.only(top: 16, bottom: 16),
+                  padding: const EdgeInsets.only(top: 24, bottom: 24),
                   itemCount: widget.children.length + 2,
                   itemBuilder: (context, index) {
                     if (index == 0) {
@@ -132,7 +132,8 @@ class _ExamplePageState extends State<ExamplePage> {
 
   Widget _buildHeader(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(left: 16,right: 16,),
+      color: Colors.red,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,7 +165,7 @@ class _ExamplePageState extends State<ExamplePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
+          margin: const EdgeInsets.only(left: 16, right: 16, top: 32),
           child: TDText(
             '${index < 10 ? "0$index" : index} ${data.title}',
             font: TDTheme.of(context).fontTitleLarge,
@@ -254,7 +255,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
             : Container(
                 alignment: Alignment.topLeft,
                 margin: const EdgeInsets.only(
-                    left: 16, right: 16, top: 8, bottom: 8),
+                    left: 16, right: 16, top: 8, bottom: 16),
                 child: TDText(
                   widget.data.desc,
                   font: TDTheme.of(context).fontBodyMedium,
