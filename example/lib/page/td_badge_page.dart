@@ -276,7 +276,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 Icon(TDIcons.notification),
                 Positioned(
                   child: TDBadge(
-                    TDBadgeType.message,
+                    TDBadgeType.square,
                     border: TDBadgeBorder.small,
                     count: '8',
                   ),
@@ -367,7 +367,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
               children: const [
                 TDAvatar(
                   size: TDAvatarSize.large,
-                  type: TDAvatarType.normal,
+                  type: TDAvatarType.icon,
                 ),
                 Positioned(
                   child: TDBadge(
@@ -400,7 +400,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
               children: const [
                 TDAvatar(
                   size: TDAvatarSize.medium,
-                  type: TDAvatarType.normal,
+                  type: TDAvatarType.icon,
                 ),
                 Positioned(
                   child: TDBadge(
