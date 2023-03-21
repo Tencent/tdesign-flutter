@@ -33,6 +33,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
 
     return ExamplePage(
         title: tdTitle(),
+        desc: '用于预设的一组选项中执行多项选择，并呈现选择结果。',
         exampleCodeGroup: 'checkbox',
         children: [
           ExampleModule(title: '组件类型', children: [
