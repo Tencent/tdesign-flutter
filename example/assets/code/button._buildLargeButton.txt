@@ -1,7 +1,7 @@
 
   TDButton _buildLargeButton(BuildContext context) {
     return const TDButton(
-      content: '大号按钮48',
+      content: '按钮48',
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
