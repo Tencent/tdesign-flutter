@@ -143,6 +143,8 @@ class TDTag extends StatelessWidget {
 
   Font? _getFont(BuildContext context) {
     switch (size) {
+      case TDTagSize.extraLarge:
+        return TDTheme.of(context).fontBodyMedium;
       case TDTagSize.large:
         return TDTheme.of(context).fontBodyMedium;
       case TDTagSize.small:
