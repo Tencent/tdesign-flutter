@@ -12,7 +12,7 @@
               children: const [
                 TDAvatar(
                   size: TDAvatarSize.medium,
-                  type: TDAvatarType.normal,
+                  type: TDAvatarType.icon,
                 ),
                 Positioned(
                   child: TDBadge(

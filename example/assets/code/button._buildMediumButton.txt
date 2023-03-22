@@ -1,7 +1,7 @@
 
   TDButton _buildMediumButton(BuildContext context) {
     return const TDButton(
-      content: '中号按钮40',
+      content: '按钮40',
       size: TDButtonSize.medium,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
