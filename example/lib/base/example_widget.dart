@@ -133,7 +133,6 @@ class _ExamplePageState extends State<ExamplePage> {
   Widget _buildHeader(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(left: 16,right: 16,),
-      color: Colors.red,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

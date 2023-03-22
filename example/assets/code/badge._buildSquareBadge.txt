@@ -13,7 +13,7 @@
                 Icon(TDIcons.notification),
                 Positioned(
                   child: TDBadge(
-                    TDBadgeType.message,
+                    TDBadgeType.square,
                     border: TDBadgeBorder.small,
                     count: '8',
                   ),
