@@ -86,48 +86,52 @@ class TDTagPage extends StatelessWidget {
                 desc: '可选中的标签',
                 ignoreCode: true,
                 builder: (context) {
-                  return Wrap(spacing: 8, direction: Axis.vertical, children: [
-                    // 非浅色填充
-                    Row(
-                      children: [
-                        const SizedBox(
-                          width: 80,
-                          child: TDText('dark'),
-                        ),
-                        CodeWrapper(builder: _buildDarkSelectTags)
-                      ],
-                    ),
-                    // 浅色填充
-                    Row(
-                      children: [
-                        const SizedBox(
-                          width: 80,
-                          child: TDText('light'),
-                        ),
-                        CodeWrapper(builder: _buildLightSelectTags)
-                      ],
-                    ),
-                    // 非浅色描边
-                    Row(
-                      children: [
-                        const SizedBox(
-                          width: 80,
-                          child: TDText('outline'),
-                        ),
-                        CodeWrapper(builder: _buildOutlineSelectTags)
-                      ],
-                    ),
-                    // 浅色描边
-                    Row(
-                      children: [
-                        const SizedBox(
-                          width: 80,
-                          child: TDText('light-outline'),
-                        ),
-                        CodeWrapper(builder: _buildLightOutlineSelectTags)
-                      ],
-                    ),
-                  ]);
+                  return Container(
+                    alignment: Alignment.topLeft,
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Wrap(spacing: 8, direction: Axis.vertical, children: [
+                      // 非浅色填充
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 80,
+                            child: TDText('dark'),
+                          ),
+                          CodeWrapper(builder: _buildDarkSelectTags)
+                        ],
+                      ),
+                      // 浅色填充
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 80,
+                            child: TDText('light'),
+                          ),
+                          CodeWrapper(builder: _buildLightSelectTags)
+                        ],
+                      ),
+                      // 非浅色描边
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 80,
+                            child: TDText('outline'),
+                          ),
+                          CodeWrapper(builder: _buildOutlineSelectTags)
+                        ],
+                      ),
+                      // 浅色描边
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 80,
+                            child: TDText('light-outline'),
+                          ),
+                          CodeWrapper(builder: _buildLightOutlineSelectTags)
+                        ],
+                      ),
+                    ]),
+                  );
                 }),
           ]),
           ExampleModule(title: '组件状态（主题）', children: [
@@ -135,22 +139,26 @@ class TDTagPage extends StatelessWidget {
                 desc: '展示型标签',
                 ignoreCode: true,
                 builder: (context) {
-                  return Wrap(
-                    spacing: 8,
-                    direction: Axis.vertical,
-                    children: [
-                      // 浅色填充
-                      CodeWrapper(builder: _buildLightShowTags),
+                  return Container(
+                    alignment: Alignment.topLeft,
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Wrap(
+                      spacing: 8,
+                      direction: Axis.vertical,
+                      children: [
+                        // 浅色填充
+                        CodeWrapper(builder: _buildLightShowTags),
 
-                      // 非浅色填充
-                      CodeWrapper(builder: _buildDarkShowTags),
+                        // 非浅色填充
+                        CodeWrapper(builder: _buildDarkShowTags),
 
-                      // 非浅色描边
-                      CodeWrapper(builder: _buildOutlineShowTags),
+                        // 非浅色描边
+                        CodeWrapper(builder: _buildOutlineShowTags),
 
-                      // 浅色描边
-                      CodeWrapper(builder: _buildLightOutlineShowTags),
-                    ],
+                        // 浅色描边
+                        CodeWrapper(builder: _buildLightOutlineShowTags),
+                      ],
+                    ),
                   );
                 }),
           ]),
@@ -158,12 +166,16 @@ class TDTagPage extends StatelessWidget {
             ExampleItem(
                 ignoreCode: true,
                 builder: (context) {
-                  return Wrap(spacing: 8, direction: Axis.vertical, children: [
-                    // 不带关闭
-                    CodeWrapper(builder: _buildAllSizeTags),
-                    // 带关闭
-                    CodeWrapper(builder: _buildAllSizeCloseTags),
-                  ]);
+                  return Container(
+                    alignment: Alignment.topLeft,
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Wrap(spacing: 8, direction: Axis.vertical, children: [
+                      // 不带关闭
+                      CodeWrapper(builder: _buildAllSizeTags),
+                      // 带关闭
+                      CodeWrapper(builder: _buildAllSizeCloseTags),
+                    ]),
+                  );
                 })
           ])
         ],
