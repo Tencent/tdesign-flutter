@@ -362,6 +362,11 @@ class _TDButtonPageState extends State<TDButtonPage> {
                     ),
                   );
                 }),
+
+            ExampleItem(
+                ignoreCode: true,
+                desc: '各种按钮状态测试',
+                builder: _buildStatusDisplay),
           ],
         ));
   }
@@ -754,5 +759,449 @@ class _TDButtonPageState extends State<TDButtonPage> {
     return const TDButton(
       child: TDAvatar(),
     );
+  }
+
+  Widget _buildStatusDisplay(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      children: [
+
+        /// fill
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.primary,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.primary,
+                style: TDButtonStyle.generateFillStyleByTheme(context, TDButtonTheme.primary, TDButtonStatus.active),
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.primary,
+                disabled: true,
+              ),
+            ],),
+        ),
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.light,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.light,
+                style: TDButtonStyle.generateFillStyleByTheme(context, TDButtonTheme.light, TDButtonStatus.active),
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.light,
+                disabled: true,
+              ),
+            ],),
+        ),
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.defaultTheme,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.defaultTheme,
+                style: TDButtonStyle.generateFillStyleByTheme(context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.defaultTheme,
+                disabled: true,
+              ),
+            ],),
+        ),
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.danger,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.danger,
+                style: TDButtonStyle.generateFillStyleByTheme(context, TDButtonTheme.danger, TDButtonStatus.active),
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.danger,
+                disabled: true,
+              ),
+            ],),
+        ),
+
+
+        /// outline
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.primary,
+                type: TDButtonType.outline,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.primary,
+                style: TDButtonStyle.generateOutlineStyleByTheme(context, TDButtonTheme.primary, TDButtonStatus.active),
+                type: TDButtonType.outline,
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.primary,
+                disabled: true,
+                type: TDButtonType.outline,
+              ),
+            ],),
+        ),
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.light,
+                type: TDButtonType.outline,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.light,
+                style: TDButtonStyle.generateOutlineStyleByTheme(context, TDButtonTheme.light, TDButtonStatus.active),
+                type: TDButtonType.outline,
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.light,
+                disabled: true,
+                type: TDButtonType.outline,
+              ),
+            ],),
+        ),
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.defaultTheme,
+                type: TDButtonType.outline,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.defaultTheme,
+                style: TDButtonStyle.generateOutlineStyleByTheme(context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
+                type: TDButtonType.outline,
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.defaultTheme,
+                disabled: true,
+                type: TDButtonType.outline,
+              ),
+            ],),
+        ),
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.danger,
+                type: TDButtonType.outline,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.danger,
+                style: TDButtonStyle.generateOutlineStyleByTheme(context, TDButtonTheme.danger, TDButtonStatus.active),
+                type: TDButtonType.outline,
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.danger,
+                disabled: true,
+                type: TDButtonType.outline,
+              ),
+            ],),
+        ),
+
+
+        /// text
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.primary,
+                type: TDButtonType.text,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.primary,
+                style: TDButtonStyle.generateTextStyleByTheme(context, TDButtonTheme.primary, TDButtonStatus.active),
+                type: TDButtonType.text,
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.primary,
+                disabled: true,
+                type: TDButtonType.text,
+              ),
+            ],),
+        ),
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.light,
+                type: TDButtonType.text,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.light,
+                style: TDButtonStyle.generateTextStyleByTheme(context, TDButtonTheme.light, TDButtonStatus.active),
+                type: TDButtonType.text,
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.light,
+                disabled: true,
+                type: TDButtonType.text,
+              ),
+            ],),
+        ),
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.defaultTheme,
+                type: TDButtonType.text,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.defaultTheme,
+                style: TDButtonStyle.generateTextStyleByTheme(context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
+                type: TDButtonType.text,
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.defaultTheme,
+                disabled: true,
+                type: TDButtonType.text,
+              ),
+            ],),
+        ),
+        Container(
+          margin: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.danger,
+                type: TDButtonType.text,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.danger,
+                style: TDButtonStyle.generateTextStyleByTheme(context, TDButtonTheme.danger, TDButtonStatus.active),
+                type: TDButtonType.text,
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.danger,
+                disabled: true,
+                type: TDButtonType.text,
+              ),
+            ],),
+        ),
+
+
+        /// ghost
+        Container(
+          padding: const EdgeInsets.all(16),
+          color: Colors.black,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.primary,
+                type: TDButtonType.ghost,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.primary,
+                style: TDButtonStyle.generateGhostStyleByTheme(context, TDButtonTheme.primary, TDButtonStatus.active),
+                type: TDButtonType.ghost,
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.primary,
+                disabled: true,
+                type: TDButtonType.ghost,
+              ),
+            ],),
+        ),
+        Container(
+          padding: const EdgeInsets.all(16),
+          color: Colors.black,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.light,
+                type: TDButtonType.ghost,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.light,
+                style: TDButtonStyle.generateGhostStyleByTheme(context, TDButtonTheme.light, TDButtonStatus.active),
+                type: TDButtonType.ghost,
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.light,
+                disabled: true,
+                type: TDButtonType.ghost,
+              ),
+            ],),
+        ),
+        Container(
+          padding: const EdgeInsets.all(16),
+          color: Colors.black,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.defaultTheme,
+                type: TDButtonType.ghost,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.defaultTheme,
+                style: TDButtonStyle.generateGhostStyleByTheme(context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
+                type: TDButtonType.ghost,
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.defaultTheme,
+                disabled: true,
+                type: TDButtonType.ghost,
+              ),
+            ],),
+        ),
+        Container(
+          padding: const EdgeInsets.all(16),
+          color: Colors.black,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.danger,
+                type: TDButtonType.ghost,
+              ),
+              TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.danger,
+                style: TDButtonStyle.generateGhostStyleByTheme(context, TDButtonTheme.danger, TDButtonStatus.active),
+                type: TDButtonType.ghost,
+              ),
+              const TDButton(
+                icon: TDIcons.app,
+                content: 'Button',
+                theme: TDButtonTheme.danger,
+                disabled: true,
+                type: TDButtonType.ghost,
+              ),
+            ],),
+        ),
+      ],);
   }
 }
