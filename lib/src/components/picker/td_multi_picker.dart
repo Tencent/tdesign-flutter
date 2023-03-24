@@ -561,8 +561,8 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                     child: TDText(
                       widget.title,
                       style: widget.centerTextStyle ?? TextStyle(
-                        fontSize: TDTheme.of(context).fontBodyLarge!.size,
-                        fontWeight: FontWeight.w600,
+                        fontSize: TDTheme.of(context).fontTitleLarge!.size,
+                        fontWeight: FontWeight.w700,
                         color: TDTheme.of(context).fontGyColor1
                       ),
                     ),
