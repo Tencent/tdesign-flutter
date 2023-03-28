@@ -27,6 +27,8 @@ issue label 需要设置为 help wanted，发起招募
 
 设计稿：
 
+截图：
+
 
 ### 参与贡献
 
