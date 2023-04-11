@@ -16,6 +16,7 @@ import 'page/td_empty_page.dart';
 import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
 import 'page/td_input_page.dart';
+import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
 import 'page/td_navbar_page.dart';
 import 'page/td_picker_page.dart';
@@ -31,10 +32,10 @@ import 'page/td_tag_page.dart';
 import 'page/td_text_page.dart';
 import 'page/td_theme_page.dart';
 import 'page/td_toast_page.dart';
-import 'web/web.dart' if(dart.library.io) 'web/web_replace.dart' as web;
+import 'web/web.dart' if (dart.library.io) 'web/web_replace.dart' as web;
 
-PageBuilder _wrapInheritedTheme(WidgetBuilder builder){
-  return (context, model){
+PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
+  return (context, model) {
     return ExamplePageInheritedTheme(model: model, child: builder(context));
   };
 }
@@ -148,7 +149,8 @@ List<ExamplePageModel> examplePageList = [
       text: '标签栏 TabBar',
       path: 'TDBottomNavBarPage',
       apiPath: 'bottom_nav_bar',
-      pageBuilder: _wrapInheritedTheme((context) => const TDBottomNavBarPage())),
+      pageBuilder:
+          _wrapInheritedTheme((context) => const TDBottomNavBarPage())),
   ExamplePageModel(
       text: '选项卡 Tabs',
       path: 'TDTabBarPage',
@@ -174,13 +176,20 @@ List<ExamplePageModel> examplePageList = [
       text: '下拉刷新 PullDownRefresh',
       path: 'TdPullDownRefreshPage',
       apiPath: 'refresh',
-      pageBuilder: _wrapInheritedTheme((context) => const TdPullDownRefreshPage())),
+      pageBuilder:
+          _wrapInheritedTheme((context) => const TdPullDownRefreshPage())),
   ExamplePageModel(
       text: '轻提示 Toast',
       path: 'TDToastPage',
       apiPath: 'toast',
       codePath: 'toast',
       pageBuilder: _wrapInheritedTheme((context) => const TDToastPage())),
+  ExamplePageModel(
+      text: '链接 Link',
+      path: 'TDLinkPage',
+      apiPath: 'link',
+      codePath: 'link',
+      pageBuilder: _wrapInheritedTheme((context) => const TDLinkViewPage())),
 ];
 
 void main() {
@@ -212,8 +221,8 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: TDExampleRoute.onGenerateRoute,
         // TODO:所有路径指向首页，需区分
         routes: {
-          for(var model in examplePageList)
-            model.path: (context)=>model.pageBuilder.call(context, model)
+          for (var model in examplePageList)
+            model.path: (context) => model.pageBuilder.call(context, model)
         },
       ),
     );
@@ -251,23 +260,25 @@ class _MyHomePageState extends State<MyHomePage> {
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
-          actions: ScreenUtil.isWebLargeScreen(context) ? null : [
-            GestureDetector(
-              child: Container(
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(
-                  right: 16,
-                ),
-                child: TDText(
-                  '关于',
-                  textColor: TDTheme.of(context).whiteColor1,
-                ),
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, TDExampleRoute.aboutPath);
-              },
-            )
-          ],
+          actions: ScreenUtil.isWebLargeScreen(context)
+              ? null
+              : [
+                  GestureDetector(
+                    child: Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(
+                        right: 16,
+                      ),
+                      child: TDText(
+                        '关于',
+                        textColor: TDTheme.of(context).whiteColor1,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, TDExampleRoute.aboutPath);
+                    },
+                  )
+                ],
         ),
         body: _buildBody(context));
   }
