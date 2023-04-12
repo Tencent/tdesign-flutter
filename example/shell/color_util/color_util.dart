@@ -2,7 +2,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-/// 用来处理
+/// 用来批处理主题颜色变更的工具类
 void main(){
   var path = '/Users/zflyluo/WorkSpace/flutter/tdesign_group/tdesign-flutter/example/shell/color_util/color.txt';
   var dartPath = '/Users/zflyluo/WorkSpace/flutter/tdesign_group/tdesign-flutter/lib/src/theme/td_colors.dart';
