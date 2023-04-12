@@ -518,7 +518,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
                       theme: TDButtonTheme.primary),
                   TDDialogButtonOptions(
                       title: '次要按钮',
-                      titleColor: TDTheme.of(context).brandColor8,
+                      titleColor: TDTheme.of(context).brandColor7,
                       action: () {},
                       theme: TDButtonTheme.light),
                 ]);
@@ -550,12 +550,12 @@ class _TDDialogPageState extends State<TDDialogPage> {
                       theme: TDButtonTheme.primary),
                   TDDialogButtonOptions(
                       title: '次要按钮',
-                      titleColor: TDTheme.of(context).brandColor8,
+                      titleColor: TDTheme.of(context).brandColor7,
                       action: () {},
                       theme: TDButtonTheme.light),
                   TDDialogButtonOptions(
                       title: '次要按钮',
-                      titleColor: TDTheme.of(context).brandColor8,
+                      titleColor: TDTheme.of(context).brandColor7,
                       action: () {},
                       theme: TDButtonTheme.light),
                 ]);
