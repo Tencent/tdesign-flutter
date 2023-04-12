@@ -31,6 +31,12 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
                 desc: 'Link with SuffixIcon 后置图标文字链接',
                 builder: _withSuffixIcon),
           ]),
+          ExampleModule(title: 'Status 组件状态', children: [
+            ExampleItem(desc: 'Link Status 链接状态', builder: _buildLinkStats)
+          ]),
+          ExampleModule(title: 'Style 组件样式', children: [
+            ExampleItem(desc: 'Link Size 链接尺寸', builder: _buildLinkSizes)
+          ])
         ]);
   }
 
@@ -47,7 +53,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
         label: 'Link',
         style: TDLinkStyle.primary,
         type: type,
-        uri: Uri.parse('https://github.com'),
+        size: TDLinkSize.small,
       ),
       const SizedBox(
         height: 16,
@@ -57,7 +63,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
         label: 'Link',
         style: TDLinkStyle.defaultStyle,
         type: type,
-        uri: Uri.parse('https://github.com'),
+        size: TDLinkSize.small,
       ),
       const SizedBox(
         height: 16,
@@ -83,6 +89,104 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   Widget _withPrefixIcon(BuildContext context) {
     return Row(
       children: _buildLinksWithType(TDLinkType.withPrefixIcon),
+    );
+  }
+
+  @Demo(group: 'link')
+  Widget _buildLinkStats(BuildContext context) {
+    return Table(
+      children: <TableRow>[
+        _buildLinksWithStat(TDLinkState.normal),
+        _buildGapRow(),
+        _buildLinksWithStat(TDLinkState.active),
+        _buildGapRow(),
+        _buildLinksWithStat(TDLinkState.disabled),
+        _buildGapRow(),
+        TableRow(
+          children: [
+            Text('Primary',
+                style: TextStyle(color: TDTheme.of(context).fontGyColor3)),
+            Text('Default',
+                style: TextStyle(color: TDTheme.of(context).fontGyColor3)),
+            Text('Danger',
+                style: TextStyle(color: TDTheme.of(context).fontGyColor3)),
+            Text('Warning',
+                style: TextStyle(color: TDTheme.of(context).fontGyColor3)),
+            Text('Success',
+                style: TextStyle(color: TDTheme.of(context).fontGyColor3)),
+            const Text(''),
+          ],
+        )
+      ],
+    );
+  }
+
+  TableRow _buildGapRow() {
+    return const TableRow(children: [
+      SizedBox(height: 20),
+      SizedBox(height: 20),
+      SizedBox(height: 20),
+      SizedBox(height: 20),
+      SizedBox(height: 20),
+      SizedBox(height: 20)
+    ]);
+  }
+
+  _buildLinksWithStat(TDLinkState state) {
+    return TableRow(
+      children: [
+        _buildLinkWithTypeAndState(TDLinkStyle.primary, state),
+        _buildLinkWithTypeAndState(TDLinkStyle.defaultStyle, state),
+        _buildLinkWithTypeAndState(TDLinkStyle.danger, state),
+        _buildLinkWithTypeAndState(TDLinkStyle.warning, state),
+        _buildLinkWithTypeAndState(TDLinkStyle.success, state),
+        Text(state.name,
+            style: TextStyle(color: TDTheme.of(context).fontGyColor3)),
+      ],
+    );
+  }
+
+  _buildLinkWithTypeAndState(TDLinkStyle style, TDLinkState state) {
+    return TDLink(
+      label: 'Link',
+      style: style,
+      state: state,
+      type: TDLinkType.withSuffixIcon,
+      size: TDLinkSize.large,
+    );
+  }
+
+  Widget _buildLinkSizes(BuildContext context) {
+    return Table(
+      children: [
+        _buildLinkWithSize(TDLinkSize.large),
+        _buildGapRow(),
+        _buildLinkWithSize(TDLinkSize.medium),
+        _buildGapRow(),
+        _buildLinkWithSize(TDLinkSize.small),
+      ],
+    );
+  }
+
+  _buildLinkWithSize(TDLinkSize size) {
+    return TableRow(children: [
+      _buildLinkWithSizeAndStyle(TDLinkStyle.primary, size),
+      _buildLinkWithSizeAndStyle(TDLinkStyle.defaultStyle, size),
+      _buildLinkWithSizeAndStyle(TDLinkStyle.danger, size),
+      _buildLinkWithSizeAndStyle(TDLinkStyle.warning, size),
+      _buildLinkWithSizeAndStyle(TDLinkStyle.success, size),
+      Text(size.name,
+          style: TextStyle(color: TDTheme.of(context).fontGyColor3)),
+    ]);
+  }
+
+  _buildLinkWithSizeAndStyle(TDLinkStyle style, TDLinkSize size) {
+    return TDLink(
+      label: 'Link',
+      style: style,
+      state: TDLinkState.normal,
+      type: TDLinkType.withSuffixIcon,
+      size: size,
     );
   }
 }
