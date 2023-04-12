@@ -1,0 +1,4980 @@
+/* Color_Light Mode  */
+
+position: relative;
+width: 1440px;
+height: 2035px;
+
+/* Gray 中性/White */
+background: #FFFFFF;
+border-radius: 24px;
+
+
+/* Color_Light Mode */
+
+position: absolute;
+width: 306px;
+height: 44px;
+left: 96px;
+top: 80px;
+
+/* Headline/Large */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 600;
+font-size: 36px;
+line-height: 44px;
+/* identical to box height, or 122% */
+
+/* Text&Icon/Font Gy1 90% */
+color: rgba(0, 0, 0, 0.9);
+
+
+
+/* Frame 1 */
+
+position: absolute;
+width: 1248px;
+height: 557px;
+left: 96px;
+top: 188px;
+
+
+
+/* divider */
+
+position: absolute;
+width: 1248px;
+height: 1px;
+left: 0px;
+top: 52px;
+
+/* Gray 中性/Gray3 */
+background: #E7E7E7;
+
+
+/* 功能色 */
+
+position: absolute;
+width: 60px;
+height: 28px;
+left: 0px;
+top: 0px;
+
+/* Title/ExtraLarge */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 600;
+font-size: 20px;
+line-height: 28px;
+/* identical to box height, or 140% */
+
+/* Text&Icon/Font Gy1 90% */
+color: rgba(0, 0, 0, 0.9);
+
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 0px;
+top: 77px;
+
+/* Brand 品牌/Brand1-Light */
+background: #F2F3FF;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 328px;
+top: 77px;
+
+/* Error 错误/Error1-Light */
+background: #FFF0ED;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 656px;
+top: 77px;
+
+/* Warning 警告/Warning1-Light */
+background: #FFF1E9;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 984px;
+top: 77px;
+
+/* Success 成功/Success1-Light */
+background: #E3F9E9;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 0px;
+top: 125px;
+
+/* Brand 品牌/Brand2-Focus */
+background: #D9E1FF;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 328px;
+top: 125px;
+
+/* Error 错误/Error2-Focus */
+background: #FFD8D2;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 656px;
+top: 125px;
+
+/* Warning 警告/Warning2-Focus */
+background: #FFD9C2;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 984px;
+top: 125px;
+
+/* Success 成功/Success2-Focus */
+background: #C6F3D7;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 0px;
+top: 173px;
+
+/* Brand 品牌/Brand3-Disabled */
+background: #B5C7FF;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 328px;
+top: 173px;
+
+/* Error 错误/Error3-Disabled */
+background: #FFB9B0;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 656px;
+top: 173px;
+
+/* Warning 警告/Warning3-Disabled */
+background: #FFB98C;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 984px;
+top: 173px;
+
+/* Success 成功/Success3-Disabled */
+background: #92DAB2;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 0px;
+top: 221px;
+
+/* Brand 品牌/Brand4 */
+background: #8EABFF;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 328px;
+top: 221px;
+
+/* Error 错误/Error4 */
+background: #FF9285;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 656px;
+top: 221px;
+
+/* Warning 警告/Warning4-Hover */
+background: #FA9550;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 984px;
+top: 221px;
+
+/* Success 成功/Success4-Hover */
+background: #56C08D;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 0px;
+top: 365px;
+
+/* Brand 品牌/Brand7-Normal */
+background: #0052D9;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 328px;
+top: 365px;
+
+/* Error 错误/Error7-Click */
+background: #AD352F;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 656px;
+top: 365px;
+
+/* Warning 警告/Warning7 */
+background: #954500;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 984px;
+top: 365px;
+
+/* Success 成功/Success7 */
+background: #006C45;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 0px;
+top: 269px;
+
+/* Brand 品牌/Brand5 */
+background: #618DFF;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 328px;
+top: 269px;
+
+/* Error 错误/Error5-Hover */
+background: #F6685D;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 656px;
+top: 269px;
+
+/* Warning 警告/Warning5-Normal */
+background: #E37318;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 984px;
+top: 269px;
+
+/* Success 成功/Success5-Normal */
+background: #2BA471;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 0px;
+top: 413px;
+
+/* Brand 品牌/Brand8-Click */
+background: #003CAB;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 328px;
+top: 413px;
+
+/* Error 错误/Error8 */
+background: #881F1C;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 656px;
+top: 413px;
+
+/* Warning 警告/Warning8 */
+background: #713300;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 984px;
+top: 413px;
+
+/* Success 成功/Success8 */
+background: #005334;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 0px;
+top: 317px;
+
+/* Brand 品牌/Brand6-Hover */
+background: #366EF4;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 328px;
+top: 317px;
+
+/* Error 错误/Error6-Normal */
+background: #D54941;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 656px;
+top: 317px;
+
+/* Warning 警告/Warning6-Click */
+background: #BE5A00;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 984px;
+top: 317px;
+
+/* Success 成功/Success6-Click */
+background: #008858;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 0px;
+top: 461px;
+
+/* Brand 品牌/Brand9 */
+background: #002A7C;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 328px;
+top: 461px;
+
+/* Error 错误/Error9 */
+background: #68070A;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 656px;
+top: 461px;
+
+/* Warning 警告/Warning9 */
+background: #532300;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 984px;
+top: 461px;
+
+/* Success 成功/Success9 */
+background: #003B23;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 0px;
+top: 509px;
+
+/* Brand 品牌/Brand10 */
+background: #001A57;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 328px;
+top: 509px;
+
+/* Error 错误/Error10 */
+background: #490002;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 656px;
+top: 509px;
+
+/* Warning 警告/Warning10 */
+background: #3B1700;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 984px;
+top: 509px;
+
+/* Success 成功/Success10 */
+background: #002515;
+
+
+/* Normal */
+
+position: absolute;
+width: 40px;
+height: 20px;
+left: 9px;
+top: 389px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Normal */
+
+position: absolute;
+width: 40px;
+height: 20px;
+left: 336px;
+top: 341px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Normal */
+
+position: absolute;
+width: 40px;
+height: 20px;
+left: 664px;
+top: 293px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Normal */
+
+position: absolute;
+width: 40px;
+height: 20px;
+left: 992px;
+top: 293px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Hover */
+
+position: absolute;
+width: 33px;
+height: 20px;
+left: 8px;
+top: 341px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 33px;
+height: 20px;
+left: 336px;
+top: 293px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Hover */
+
+position: absolute;
+width: 33px;
+height: 20px;
+left: 664px;
+top: 245px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Hover */
+
+position: absolute;
+width: 33px;
+height: 20px;
+left: 992px;
+top: 245px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Click */
+
+position: absolute;
+width: 28px;
+height: 20px;
+left: 8px;
+top: 437px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Click */
+
+position: absolute;
+width: 28px;
+height: 20px;
+left: 336px;
+top: 389px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Click */
+
+position: absolute;
+width: 28px;
+height: 20px;
+left: 664px;
+top: 341px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Click */
+
+position: absolute;
+width: 28px;
+height: 20px;
+left: 992px;
+top: 341px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Brand1 */
+
+position: absolute;
+width: 38px;
+height: 20px;
+left: 8px;
+top: 81px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Error1 */
+
+position: absolute;
+width: 33px;
+height: 20px;
+left: 336px;
+top: 81px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Light */
+
+position: absolute;
+width: 29px;
+height: 20px;
+left: 8px;
+top: 101px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Warning1 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 664px;
+top: 81px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Light */
+
+position: absolute;
+width: 29px;
+height: 20px;
+left: 664px;
+top: 101px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Success1 */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 992px;
+top: 81px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #F2F3FF */
+
+position: absolute;
+width: 50px;
+height: 20px;
+left: 206px;
+top: 81px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #FFF0ED */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 532px;
+top: 81px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #FFF1E9 */
+
+position: absolute;
+width: 48px;
+height: 20px;
+left: 864px;
+top: 81px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #E3F9E9 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 1189px;
+top: 81px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Brand3 */
+
+position: absolute;
+width: 41px;
+height: 20px;
+left: 8px;
+top: 177px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Error3 */
+
+position: absolute;
+width: 36px;
+height: 20px;
+left: 336px;
+top: 177px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Warning3 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 664px;
+top: 177px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Success3 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 992px;
+top: 177px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #B5C7FF */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 204px;
+top: 177px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #FFB9B0 */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 532px;
+top: 177px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #FFB98C */
+
+position: absolute;
+width: 53px;
+height: 20px;
+left: 859px;
+top: 177px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #92DAB2 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 1186px;
+top: 177px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Brand7 */
+
+position: absolute;
+width: 40px;
+height: 20px;
+left: 8px;
+top: 369px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Error7 */
+
+position: absolute;
+width: 35px;
+height: 20px;
+left: 336px;
+top: 369px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Warning7 */
+
+position: absolute;
+width: 53px;
+height: 20px;
+left: 664px;
+top: 369px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Success7 */
+
+position: absolute;
+width: 53px;
+height: 20px;
+left: 992px;
+top: 369px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #0052D9 */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 204px;
+top: 369px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #AD352F */
+
+position: absolute;
+width: 53px;
+height: 20px;
+left: 531px;
+top: 369px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #954500 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 861px;
+top: 369px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #006C45 */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 1188px;
+top: 369px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Brand5 */
+
+position: absolute;
+width: 41px;
+height: 20px;
+left: 8px;
+top: 273px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Error5 */
+
+position: absolute;
+width: 36px;
+height: 20px;
+left: 336px;
+top: 273px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Warning5 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 664px;
+top: 273px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Success5 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 992px;
+top: 273px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #618DFF */
+
+position: absolute;
+width: 49px;
+height: 20px;
+left: 207px;
+top: 273px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #F6685D */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 532px;
+top: 273px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #E37318 */
+
+position: absolute;
+width: 48px;
+height: 20px;
+left: 864px;
+top: 273px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #2BA471 */
+
+position: absolute;
+width: 49px;
+height: 20px;
+left: 1191px;
+top: 273px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Brand9 */
+
+position: absolute;
+width: 41px;
+height: 20px;
+left: 8px;
+top: 465px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Error9 */
+
+position: absolute;
+width: 36px;
+height: 20px;
+left: 336px;
+top: 465px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Warning9 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 664px;
+top: 465px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Success9 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 992px;
+top: 465px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #002A7C */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 204px;
+top: 465px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #68070A */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 533px;
+top: 465px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #532300 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 861px;
+top: 465px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #003B23 */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 1188px;
+top: 465px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Brand2 */
+
+position: absolute;
+width: 41px;
+height: 20px;
+left: 8px;
+top: 129px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Error2 */
+
+position: absolute;
+width: 36px;
+height: 20px;
+left: 336px;
+top: 129px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Warning2 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 664px;
+top: 129px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Success2 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 992px;
+top: 129px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #D9E1FF */
+
+position: absolute;
+width: 50px;
+height: 20px;
+left: 206px;
+top: 129px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #FFD8D2 */
+
+position: absolute;
+width: 53px;
+height: 20px;
+left: 531px;
+top: 129px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #FFD9C2 */
+
+position: absolute;
+width: 53px;
+height: 20px;
+left: 859px;
+top: 129px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #C6F3D7 */
+
+position: absolute;
+width: 53px;
+height: 20px;
+left: 1187px;
+top: 129px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Focus */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 8px;
+top: 149px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Disabled */
+
+position: absolute;
+width: 48px;
+height: 20px;
+left: 8px;
+top: 197px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Light */
+
+position: absolute;
+width: 29px;
+height: 20px;
+left: 336px;
+top: 101px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Focus */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 336px;
+top: 149px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Disabled */
+
+position: absolute;
+width: 48px;
+height: 20px;
+left: 336px;
+top: 197px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Focus */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 664px;
+top: 149px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Disabled */
+
+position: absolute;
+width: 48px;
+height: 20px;
+left: 664px;
+top: 197px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Focus */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 992px;
+top: 149px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Disabled */
+
+position: absolute;
+width: 48px;
+height: 20px;
+left: 992px;
+top: 197px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Brand4 */
+
+position: absolute;
+width: 41px;
+height: 20px;
+left: 8px;
+top: 225px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Error4 */
+
+position: absolute;
+width: 36px;
+height: 20px;
+left: 336px;
+top: 225px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Warning4 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 664px;
+top: 225px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Success4 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 992px;
+top: 225px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #8EABFF */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 204px;
+top: 225px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #FF9285 */
+
+position: absolute;
+width: 50px;
+height: 20px;
+left: 534px;
+top: 225px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #FA9550 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 861px;
+top: 225px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #56C08D */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 1186px;
+top: 225px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Brand8 */
+
+position: absolute;
+width: 41px;
+height: 20px;
+left: 8px;
+top: 417px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Error8 */
+
+position: absolute;
+width: 36px;
+height: 20px;
+left: 336px;
+top: 417px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Warning8 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 664px;
+top: 417px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Success8 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 992px;
+top: 417px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #003CAB */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 202px;
+top: 417px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #881F1C */
+
+position: absolute;
+width: 47px;
+height: 20px;
+left: 537px;
+top: 417px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #713300 */
+
+position: absolute;
+width: 48px;
+height: 20px;
+left: 864px;
+top: 417px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #005334 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 1189px;
+top: 417px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Brand6 */
+
+position: absolute;
+width: 41px;
+height: 20px;
+left: 8px;
+top: 321px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Error6 */
+
+position: absolute;
+width: 36px;
+height: 20px;
+left: 336px;
+top: 321px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Warning6 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 664px;
+top: 321px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Success6 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 992px;
+top: 321px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #366EF4 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 205px;
+top: 321px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #D54941 */
+
+position: absolute;
+width: 50px;
+height: 20px;
+left: 534px;
+top: 321px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #BE5A00 */
+
+position: absolute;
+width: 53px;
+height: 20px;
+left: 859px;
+top: 321px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #008858 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 1189px;
+top: 321px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Brand10 */
+
+position: absolute;
+width: 45px;
+height: 20px;
+left: 8px;
+top: 513px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Error10 */
+
+position: absolute;
+width: 40px;
+height: 20px;
+left: 336px;
+top: 513px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Warning10 */
+
+position: absolute;
+width: 58px;
+height: 20px;
+left: 664px;
+top: 513px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Success10 */
+
+position: absolute;
+width: 59px;
+height: 20px;
+left: 992px;
+top: 513px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #001A57 */
+
+position: absolute;
+width: 49px;
+height: 20px;
+left: 207px;
+top: 513px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #490002 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 533px;
+top: 513px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #3B1700 */
+
+position: absolute;
+width: 49px;
+height: 20px;
+left: 863px;
+top: 513px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #002515 */
+
+position: absolute;
+width: 48px;
+height: 20px;
+left: 1192px;
+top: 513px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Light */
+
+position: absolute;
+width: 29px;
+height: 20px;
+left: 992px;
+top: 101px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* divider */
+
+position: absolute;
+width: 1248px;
+height: 1px;
+left: 96px;
+top: 861px;
+
+/* Gray 中性/Gray3 */
+background: #E7E7E7;
+
+
+/* divider */
+
+position: absolute;
+width: 1248px;
+height: 1px;
+left: 96px;
+top: 1194px;
+
+/* Gray 中性/Gray3 */
+background: #E7E7E7;
+
+
+/* 文字&图标色 */
+
+position: absolute;
+width: 116px;
+height: 28px;
+left: 96px;
+top: 809px;
+
+/* Title/ExtraLarge */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 600;
+font-size: 20px;
+line-height: 28px;
+/* identical to box height, or 140% */
+
+/* Text&Icon/Font Gy1 90% */
+color: rgba(0, 0, 0, 0.9);
+
+
+
+/* 中性色板 */
+
+position: absolute;
+width: 80px;
+height: 28px;
+left: 96px;
+top: 1142px;
+
+/* Title/ExtraLarge */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 600;
+font-size: 20px;
+line-height: 28px;
+/* identical to box height, or 140% */
+
+/* Text&Icon/Font Gy1 90% */
+color: rgba(0, 0, 0, 0.9);
+
+
+
+/* Rectangle 59 */
+
+position: absolute;
+width: 264px;
+height: 192px;
+left: 424px;
+top: 886px;
+
+/* Text&Icon/Font Gy1 90% */
+background: rgba(0, 0, 0, 0.9);
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 886px;
+
+/* Text&Icon/Font Gy4 26% */
+background: rgba(0, 0, 0, 0.26);
+
+
+/* Example */
+
+position: absolute;
+width: 248px;
+height: 44px;
+left: 432px;
+top: 938px;
+
+/* Text&Icon/Font Wh3 35% */
+background: rgba(255, 255, 255, 0.35);
+
+
+/* Example */
+
+position: absolute;
+width: 248px;
+height: 44px;
+left: 432px;
+top: 894px;
+
+/* Text&Icon/Font Wh4 22% */
+background: rgba(255, 255, 255, 0.22);
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 934px;
+
+/* Text&Icon/Font Gy3 40% */
+background: rgba(0, 0, 0, 0.4);
+
+
+/* Example */
+
+position: absolute;
+width: 248px;
+height: 44px;
+left: 432px;
+top: 982px;
+
+/* Text&Icon/Font Wh2 55% */
+background: rgba(255, 255, 255, 0.55);
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 982px;
+
+/* Text&Icon/Font Gy2 60% */
+background: rgba(0, 0, 0, 0.6);
+
+
+/* Example */
+
+position: absolute;
+width: 248px;
+height: 44px;
+left: 432px;
+top: 1026px;
+
+/* Text&Icon/Font Wh1 100% */
+background: #FFFFFF;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1030px;
+
+/* Text&Icon/Font Gy1 90% */
+background: rgba(0, 0, 0, 0.9);
+
+
+/* Font Gy4 */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 104px;
+top: 890px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Font Wh3 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 440px;
+top: 940px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Font Wh4 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 440px;
+top: 896px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #000000 26% */
+
+position: absolute;
+width: 81px;
+height: 20px;
+left: 271px;
+top: 890px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #FFFFFF 35% */
+
+position: absolute;
+width: 79px;
+height: 20px;
+left: 593px;
+top: 940px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #FFFFFF 22% */
+
+position: absolute;
+width: 79px;
+height: 20px;
+left: 593px;
+top: 896px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Font Gy2 */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 104px;
+top: 986px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Font Wh1 */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 440px;
+top: 1028px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy1 90% */
+color: rgba(0, 0, 0, 0.9);
+
+
+
+/* #000000 60% */
+
+position: absolute;
+width: 81px;
+height: 20px;
+left: 271px;
+top: 986px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #FFFFFF 100% */
+
+position: absolute;
+width: 84px;
+height: 20px;
+left: 588px;
+top: 1028px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy1 90% */
+color: rgba(0, 0, 0, 0.9);
+
+
+
+/* Font Gy3 */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 104px;
+top: 938px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Font Wh2 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 440px;
+top: 984px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #000000 40% */
+
+position: absolute;
+width: 81px;
+height: 20px;
+left: 271px;
+top: 938px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #FFFFFF 55% */
+
+position: absolute;
+width: 79px;
+height: 20px;
+left: 593px;
+top: 984px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Font Gy1 */
+
+position: absolute;
+width: 49px;
+height: 20px;
+left: 104px;
+top: 1034px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #000000 90% */
+
+position: absolute;
+width: 81px;
+height: 20px;
+left: 271px;
+top: 1034px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1267px;
+
+/* Gray 中性/Gray1 */
+background: #F3F3F3;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1267px;
+
+/* Gray 中性/Blue Gy1 */
+background: #F3F3F4;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1219px;
+
+/* Gray 中性/White */
+background: #FFFFFF;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1219px;
+
+/* Gray 中性/White */
+background: #FFFFFF;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1315px;
+
+/* Gray 中性/Gray2 */
+background: #EEEEEE;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1315px;
+
+/* Gray 中性/Blue Gy2 */
+background: #EEEEF0;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1363px;
+
+/* Gray 中性/Gray3 */
+background: #E7E7E7;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1363px;
+
+/* Gray 中性/Blue Gy3 */
+background: #E7E8EB;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1411px;
+
+/* Gray 中性/Gray4 */
+background: #DCDCDC;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1411px;
+
+/* Gray 中性/Blue Gy4 */
+background: #DCDDE1;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1555px;
+
+/* Gray 中性/Gray7 */
+background: #8B8B8B;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1555px;
+
+/* Gray 中性/Blue Gy7 */
+background: #858A99;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1459px;
+
+/* Gray 中性/Gray5 */
+background: #C5C5C5;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1459px;
+
+/* Gray 中性/Blue Gy5 */
+background: #C4C6CD;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1603px;
+
+/* Gray 中性/Gray8 */
+background: #777777;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1603px;
+
+/* Gray 中性/Blue Gy8 */
+background: #6F7686;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1507px;
+
+/* Gray 中性/Gray6 */
+background: #A6A6A6;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1507px;
+
+/* Gray 中性/Blue Gy6 */
+background: #A2A6B1;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1651px;
+
+/* Gray 中性/Gray9 */
+background: #5E5E5E;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1651px;
+
+/* Gray 中性/Blue Gy9 */
+background: #535D6D;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1699px;
+
+/* Gray 中性/Gray10 */
+background: #4B4B4B;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1699px;
+
+/* Gray 中性/Blue Gy10 */
+background: #424A57;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1747px;
+
+/* Gray 中性/Gray11 */
+background: #383838;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1747px;
+
+/* Gray 中性/Blue Gy11 */
+background: #323843;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1795px;
+
+/* Gray 中性/Gray12 */
+background: #2C2C2C;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1795px;
+
+/* Gray 中性/Blue Gy12 */
+background: #272B34;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1843px;
+
+/* Gray 中性/Gray13 */
+background: #242424;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1843px;
+
+/* Gray 中性/Blue Gy13 */
+background: #20232B;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1891px;
+
+/* Gray 中性/Gray14 */
+background: #181818;
+
+
+/* Example */
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1891px;
+
+/* Gray 中性/Blue Gy14 */
+background: #15181D;
+
+
+/* Gray1 */
+
+position: absolute;
+width: 31px;
+height: 20px;
+left: 104px;
+top: 1271px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Gray1 */
+
+position: absolute;
+width: 31px;
+height: 20px;
+left: 432px;
+top: 1271px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* White1 */
+
+position: absolute;
+width: 37px;
+height: 20px;
+left: 104px;
+top: 1223px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* White1 */
+
+position: absolute;
+width: 37px;
+height: 20px;
+left: 432px;
+top: 1223px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #F3F3F3 */
+
+position: absolute;
+width: 50px;
+height: 20px;
+left: 302px;
+top: 1271px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #F3F3F4 */
+
+position: absolute;
+width: 50px;
+height: 20px;
+left: 630px;
+top: 1271px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #FFFFFF */
+
+position: absolute;
+width: 49px;
+height: 20px;
+left: 303px;
+top: 1223px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #FFFFFF */
+
+position: absolute;
+width: 49px;
+height: 20px;
+left: 631px;
+top: 1223px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Gray3 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 104px;
+top: 1367px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Gray3 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 432px;
+top: 1367px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #E7E7E7 */
+
+position: absolute;
+width: 50px;
+height: 20px;
+left: 302px;
+top: 1367px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #E7E8EB */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 628px;
+top: 1367px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Gray7 */
+
+position: absolute;
+width: 33px;
+height: 20px;
+left: 104px;
+top: 1559px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray7 */
+
+position: absolute;
+width: 33px;
+height: 20px;
+left: 432px;
+top: 1559px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #8B8B8B */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 298px;
+top: 1559px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #858A99 */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 628px;
+top: 1559px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray5 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 104px;
+top: 1463px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Gray5 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 432px;
+top: 1463px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #C5C5C5 */
+
+position: absolute;
+width: 55px;
+height: 20px;
+left: 297px;
+top: 1463px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #C4C6CD */
+
+position: absolute;
+width: 57px;
+height: 20px;
+left: 623px;
+top: 1463px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Gray9 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 104px;
+top: 1655px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray9 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 432px;
+top: 1655px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #5E5E5E */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 300px;
+top: 1655px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #535D6D */
+
+position: absolute;
+width: 53px;
+height: 20px;
+left: 627px;
+top: 1655px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray2 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 104px;
+top: 1319px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Gray2 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 432px;
+top: 1319px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #EEEEEE */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 298px;
+top: 1319px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #EEEEF0 */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 628px;
+top: 1319px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Gray4 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 104px;
+top: 1415px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Gray4 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 432px;
+top: 1415px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #DCDCDC */
+
+position: absolute;
+width: 59px;
+height: 20px;
+left: 293px;
+top: 1415px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* #DCDDE1 */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 626px;
+top: 1415px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Gy2 60% */
+color: rgba(0, 0, 0, 0.6);
+
+
+
+/* Gray8 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 104px;
+top: 1607px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray8 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 432px;
+top: 1607px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #777777 */
+
+position: absolute;
+width: 47px;
+height: 20px;
+left: 305px;
+top: 1607px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #6F7686 */
+
+position: absolute;
+width: 50px;
+height: 20px;
+left: 630px;
+top: 1607px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray6 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 104px;
+top: 1511px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray6 */
+
+position: absolute;
+width: 34px;
+height: 20px;
+left: 432px;
+top: 1511px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #A6A6A6 */
+
+position: absolute;
+width: 53px;
+height: 20px;
+left: 299px;
+top: 1511px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #A2A6B1 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 629px;
+top: 1511px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray10 */
+
+position: absolute;
+width: 39px;
+height: 20px;
+left: 104px;
+top: 1703px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray10 */
+
+position: absolute;
+width: 39px;
+height: 20px;
+left: 432px;
+top: 1703px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray11 */
+
+position: absolute;
+width: 36px;
+height: 20px;
+left: 104px;
+top: 1751px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray11 */
+
+position: absolute;
+width: 36px;
+height: 20px;
+left: 432px;
+top: 1751px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray12 */
+
+position: absolute;
+width: 39px;
+height: 20px;
+left: 104px;
+top: 1799px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray12 */
+
+position: absolute;
+width: 39px;
+height: 20px;
+left: 432px;
+top: 1799px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray13 */
+
+position: absolute;
+width: 39px;
+height: 20px;
+left: 104px;
+top: 1847px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray13 */
+
+position: absolute;
+width: 39px;
+height: 20px;
+left: 432px;
+top: 1847px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray14 */
+
+position: absolute;
+width: 39px;
+height: 20px;
+left: 104px;
+top: 1895px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Gray14 */
+
+position: absolute;
+width: 39px;
+height: 20px;
+left: 432px;
+top: 1895px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #4B4B4B */
+
+position: absolute;
+width: 54px;
+height: 20px;
+left: 298px;
+top: 1703px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #424A57 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 629px;
+top: 1703px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #383838 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 301px;
+top: 1751px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #323843 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 629px;
+top: 1751px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #2C2C2C */
+
+position: absolute;
+width: 55px;
+height: 20px;
+left: 297px;
+top: 1799px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #272B34 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 629px;
+top: 1799px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #242424 */
+
+position: absolute;
+width: 51px;
+height: 20px;
+left: 301px;
+top: 1847px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #20232B */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 628px;
+top: 1847px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #181818 */
+
+position: absolute;
+width: 44px;
+height: 20px;
+left: 308px;
+top: 1895px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* #15181D */
+
+position: absolute;
+width: 45px;
+height: 20px;
+left: 635px;
+top: 1895px;
+
+/* Body/Small */
+font-family: 'PingFang SC';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 20px;
+/* identical to box height, or 167% */
+text-align: right;
+
+/* Text&Icon/Font Wh1 100% */
+color: #FFFFFF;
+
+
+
+/* Rectangle 57 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 96px;
+top: 1219px;
+
+border: 1px solid #DCDCDC;
+
+
+/* Rectangle 58 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 264px;
+height: 48px;
+left: 424px;
+top: 1219px;
+
+/* Gray 中性/Gray4 */
+border: 1px solid #DCDCDC;
