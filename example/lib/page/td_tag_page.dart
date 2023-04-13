@@ -727,6 +727,7 @@ class TDTagPage extends StatelessWidget {
                       TDTag(
                         'Tag',
                         theme: TDTagTheme.primary,
+                        shape: TDTagShape.round,
                         disable: true,
                       ),
                       TDTag(
@@ -760,6 +761,7 @@ class TDTagPage extends StatelessWidget {
                       TDTag(
                         'Tag',
                         theme: TDTagTheme.primary,
+                        shape: TDTagShape.round,
                         isLight: true,
                         disable: true,
                       ),
@@ -795,6 +797,7 @@ class TDTagPage extends StatelessWidget {
                       TDTag(
                         'Tag',
                         theme: TDTagTheme.primary,
+                        shape: TDTagShape.round,
                         isOutline: true,
                         disable: true,
                       ),
@@ -832,6 +835,7 @@ class TDTagPage extends StatelessWidget {
                       TDTag(
                         'Tag',
                         theme: TDTagTheme.primary,
+                        shape: TDTagShape.round,
                         isOutline: true,
                         isLight: true,
                         disable: true,
