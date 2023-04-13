@@ -206,6 +206,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'TDesign Flutter Example',
         theme: ThemeData(
+          // extensions: [TDThemeData.defaultData().copyWith(colorMap: {'brandNormalColor':Colors.yellow})],
             colorScheme: ColorScheme.light(
                 primary: TDTheme.of(context).brandNormalColor)),
         home: const MyHomePage(title: 'TDesgin Flutter 组件库'),
