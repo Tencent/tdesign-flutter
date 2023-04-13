@@ -2,10 +2,7 @@
   Widget _buildIconOutlineTag(BuildContext context) {
     return const TDTag(
       '标签文字',
-      icon: Icon(
-        TDIcons.discount,
-        size: 14,
-      ),
+      icon: TDIcons.discount,
       isOutline: true,
     );
   }
