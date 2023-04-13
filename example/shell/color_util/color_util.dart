@@ -47,11 +47,11 @@ void main(){
       var strings = element.split('/');
       if(strings.length > 1){
         var validKey = strings[1];
-        var aliasKey;
+        // var aliasKey;
         if(validKey.contains('-')){
           var vks = validKey.split('-');
           validKey = vks[0];
-          aliasKey = vks[1];
+          // aliasKey = vks[1];
         }
         var numLength = validKey.endsWith('0') ? 2 : 1;
         var number = validKey.substring(validKey.length - numLength,validKey.length);
