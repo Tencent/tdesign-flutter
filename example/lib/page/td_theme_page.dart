@@ -52,7 +52,7 @@ class _TDThemePageState extends State<TDThemePage> {
     /// 此处替换主题
     return TDTheme(
         // 替换fonts和colors，其他主题从父类拷贝
-        data: TDTheme.of(context).copyWith('custom', fontMap: {
+        data: TDTheme.of(context).copyWithTDThemeData('custom', fontMap: {
           'fontBodyLarge': Font(size: 40, lineHeight: 80),
         }, colorMap: {
           'brandNormalColor': Colors.red
