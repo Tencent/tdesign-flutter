@@ -49,6 +49,23 @@ class TDTagPage extends StatelessWidget {
                   );
                 }),
             ExampleItem(
+                desc: 'Mark标签',
+                ignoreCode: true,
+                builder: (context) {
+                  return Row(
+                    children: [
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      CodeWrapper(builder: _buildMarkFillTag),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      CodeWrapper(builder: _buildMarkOutlineTag),
+                    ],
+                  );
+                }),
+            ExampleItem(
                 desc: '带图标的标签',
                 ignoreCode: true,
                 builder: (context) {
@@ -391,10 +408,7 @@ class TDTagPage extends StatelessWidget {
                     ),
                     TDTag(
                       '标签文字',
-                      icon: Icon(
-                        TDIcons.discount,
-                        size: 14,
-                      ),
+                      icon: TDIcons.discount,
                       needCloseIcon: true,
                     ),
                     SizedBox(
@@ -402,10 +416,7 @@ class TDTagPage extends StatelessWidget {
                     ),
                     TDTag(
                       '标签文字',
-                      icon: Icon(
-                        TDIcons.discount,
-                        size: 14,
-                      ),
+                      icon: TDIcons.discount,
                       needCloseIcon: true,
                       isOutline: true,
                     ),
@@ -424,37 +435,25 @@ class TDTagPage extends StatelessWidget {
                     child: Wrap(spacing: 8, runSpacing: 8, children: const [
                       TDTag(
                         '加大尺寸',
-                        icon: Icon(
-                          TDIcons.discount,
-                          size: 14,
-                        ),
+                        icon: TDIcons.discount,
                         needCloseIcon: true,
                         size: TDTagSize.extraLarge,
                       ),
                       TDTag(
                         '大尺寸',
-                        icon: Icon(
-                          TDIcons.discount,
-                          size: 14,
-                        ),
+                        icon: TDIcons.discount,
                         needCloseIcon: true,
                         size: TDTagSize.large,
                       ),
                       TDTag(
                         '中尺寸',
-                        icon: Icon(
-                          TDIcons.discount,
-                          size: 14,
-                        ),
+                        icon: TDIcons.discount,
                         needCloseIcon: true,
                         size: TDTagSize.medium,
                       ),
                       TDTag(
                         '小尺寸',
-                        icon: Icon(
-                          TDIcons.discount,
-                          size: 14,
-                        ),
+                        icon: TDIcons.discount,
                         needCloseIcon: true,
                         size: TDTagSize.small,
                       ),
@@ -468,42 +467,237 @@ class TDTagPage extends StatelessWidget {
                       TDTag(
                         '加大尺寸',
                         isOutline: true,
-                        icon: Icon(
-                          TDIcons.discount,
-                          size: 14,
-                        ),
+                        icon: TDIcons.discount,
                         needCloseIcon: true,
                         size: TDTagSize.extraLarge,
                       ),
                       TDTag(
                         '大尺寸',
                         isOutline: true,
-                        icon: Icon(
-                          TDIcons.discount,
-                          size: 14,
-                        ),
+                        icon: TDIcons.discount,
                         needCloseIcon: true,
                         size: TDTagSize.large,
                       ),
                       TDTag(
                         '中尺寸',
                         isOutline: true,
-                        icon: Icon(
-                          TDIcons.discount,
-                          size: 14,
-                        ),
+                        icon: TDIcons.discount,
                         needCloseIcon: true,
                         size: TDTagSize.medium,
                       ),
                       TDTag(
                         '小尺寸',
                         isOutline: true,
-                        icon: Icon(
-                          TDIcons.discount,
-                          size: 14,
-                        ),
+                        icon: TDIcons.discount,
                         needCloseIcon: true,
                         size: TDTagSize.small,
+                      ),
+                    ]),
+                  ),
+                ]);
+              }),
+          ExampleItem(
+              desc: '可选各状态测试',
+              ignoreCode: true,
+              builder: (context) {
+                return Wrap(spacing: 8, direction: Axis.vertical, children: [
+                  // Normal
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(left: 16, right: 16),
+                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        shape: TDTagShape.mark,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isSelected: true,
+                        shape: TDTagShape.mark,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        isSelected: true,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        disableSelect: true,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        disableSelect: true,
+                        shape: TDTagShape.mark,
+                      ),
+                    ]),
+                  ),
+                  // Light
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(left: 16, right: 16),
+                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isLight: true,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isLight: true,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        shape: TDTagShape.mark,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isLight: true,
+                        isSelected: true,
+                        shape: TDTagShape.mark,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        icon: TDIcons.discount,
+                        isLight: true,
+                        needCloseIcon: true,
+                        isSelected: true,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isLight: true,
+                        disableSelect: true,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isLight: true,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        disableSelect: true,
+                        shape: TDTagShape.mark,
+                      ),
+                    ]),
+                  ),
+                  // Outline
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(left: 16, right: 16),
+                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        shape: TDTagShape.mark,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        isSelected: true,
+                        shape: TDTagShape.mark,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        icon: TDIcons.discount,
+                        isOutline: true,
+                        needCloseIcon: true,
+                        isSelected: true,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        disableSelect: true,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        disableSelect: true,
+                        shape: TDTagShape.mark,
+                      ),
+                    ]),
+                  ),
+                  // Outline-Light
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(left: 16, right: 16),
+                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        isLight: true,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        isLight: true,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        shape: TDTagShape.mark,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        isLight: true,
+                        isSelected: true,
+                        shape: TDTagShape.mark,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        icon: TDIcons.discount,
+                        isOutline: true,
+                        isLight: true,
+                        needCloseIcon: true,
+                        isSelected: true,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        isLight: true,
+                        disableSelect: true,
+                      ),
+                      TDSelectTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        isLight: true,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        disableSelect: true,
+                        shape: TDTagShape.mark,
                       ),
                     ]),
                   ),
@@ -529,7 +723,7 @@ class TDTagPage extends StatelessWidget {
   Widget _buildCircleFillTag(BuildContext context) {
     return const TDTag(
       '标签文字',
-      isCircle: true,
+      shape: TDTagShape.round,
     );
   }
 
@@ -537,7 +731,24 @@ class TDTagPage extends StatelessWidget {
   Widget _buildCircleOutlineTag(BuildContext context) {
     return const TDTag(
       '标签文字',
-      isCircle: true,
+      shape: TDTagShape.round,
+      isOutline: true,
+    );
+  }
+
+  @Demo(group: 'tag')
+  Widget _buildMarkFillTag(BuildContext context) {
+    return const TDTag(
+      '标签文字',
+      shape: TDTagShape.mark,
+    );
+  }
+
+  @Demo(group: 'tag')
+  Widget _buildMarkOutlineTag(BuildContext context) {
+    return const TDTag(
+      '标签文字',
+      shape: TDTagShape.mark,
       isOutline: true,
     );
   }
@@ -546,10 +757,7 @@ class TDTagPage extends StatelessWidget {
   Widget _buildIconFillTag(BuildContext context) {
     return const TDTag(
       '标签文字',
-      icon: Icon(
-        TDIcons.discount,
-        size: 14,
-      ),
+      icon: TDIcons.discount,
     );
   }
 
@@ -557,10 +765,7 @@ class TDTagPage extends StatelessWidget {
   Widget _buildIconOutlineTag(BuildContext context) {
     return const TDTag(
       '标签文字',
-      icon: Icon(
-        TDIcons.discount,
-        size: 14,
-      ),
+      icon: TDIcons.discount,
       isOutline: true,
     );
   }
