@@ -703,6 +703,153 @@ class TDTagPage extends StatelessWidget {
                   ),
                 ]);
               }),
+          ExampleItem(
+              desc: '展示各状态测试',
+              ignoreCode: true,
+              builder: (context) {
+                return Wrap(spacing: 8, direction: Axis.vertical, children: [
+                  // Normal
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(left: 16, right: 16),
+                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                      ),
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        shape: TDTagShape.mark,
+                      ),
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        disable: true,
+                      ),
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        disable: true,
+                        shape: TDTagShape.mark,
+                      ),
+                    ]),
+                  ),
+                  // Light
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(left: 16, right: 16),
+                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isLight: true,
+                      ),
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isLight: true,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        shape: TDTagShape.mark,
+                      ),
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isLight: true,
+                        disable: true,
+                      ),
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isLight: true,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        disable: true,
+                        shape: TDTagShape.mark,
+                      ),
+                    ]),
+                  ),
+                  // Outline
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(left: 16, right: 16),
+                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                      ),
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        shape: TDTagShape.mark,
+                      ),
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        disable: true,
+                      ),
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        disable: true,
+                        shape: TDTagShape.mark,
+                      ),
+                    ]),
+                  ),
+                  // Outline-Light
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(left: 16, right: 16),
+                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        isLight: true,
+                      ),
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        isLight: true,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        shape: TDTagShape.mark,
+                      ),
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        isLight: true,
+                        disable: true,
+                      ),
+                      TDTag(
+                        'Tag',
+                        theme: TDTagTheme.primary,
+                        isOutline: true,
+                        isLight: true,
+                        icon: TDIcons.discount,
+                        needCloseIcon: true,
+                        disable: true,
+                        shape: TDTagShape.mark,
+                      ),
+                    ]),
+                  ),
+                ]);
+              }),
         ]);
   }
 
