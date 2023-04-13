@@ -8,6 +8,7 @@ class TDSelectTag extends StatefulWidget {
   const TDSelectTag(this.text,
       {this.theme,
       this.icon,
+      this.iconWidget,
       this.selectStyle,
       this.unSelectStyle,
       this.disableSelectStyle,
@@ -18,7 +19,7 @@ class TDSelectTag extends StatefulWidget {
       this.padding,
       this.forceVerticalCenter = true,
       this.isOutline = false,
-      this.isCircle = false,
+      this.shape = TDTagShape.square,
       this.isLight = false,
       this.needCloseIcon = false,
       this.onCloseTap,
@@ -31,8 +32,11 @@ class TDSelectTag extends StatefulWidget {
   /// 主题
   final TDTagTheme? theme;
 
-  /// 图标内容
-  final Widget? icon;
+  /// 图标内容，可随状态改变颜色
+  final IconData? icon;
+
+  /// 自定义图标内容，需自处理颜色
+  final Widget? iconWidget;
 
   /// 选中的标签样式
   final TDTagStyle? selectStyle;
@@ -64,8 +68,8 @@ class TDSelectTag extends StatefulWidget {
   /// 是否为描边类型，默认不是
   final bool isOutline;
 
-  /// 是否为圆角类型，默认不是
-  final bool isCircle;
+  /// 标签形状
+  final TDTagShape shape;
 
   /// 是否为浅色
   final bool isLight;
@@ -93,6 +97,8 @@ class _TDClickTagState extends State<TDSelectTag> {
   Widget build(BuildContext context) {
     Widget result = TDTag(
       widget.text,
+      icon: widget.icon,
+      iconWidget: widget.iconWidget,
       style: _getStyle(),
       size: widget.size,
       padding: widget.padding,
@@ -125,7 +131,7 @@ class _TDClickTagState extends State<TDSelectTag> {
     if (widget.disableSelectStyle != null) {
       return widget.disableSelectStyle!;
     }
-    return TDTagStyle.generateDisableSelectStyle(context,widget.isOutline, widget.isCircle);
+    return TDTagStyle.generateDisableSelectStyle(context,widget.isOutline, widget.shape);
   }
 
   TDTagStyle _getSelectStyle() {
@@ -134,9 +140,9 @@ class _TDClickTagState extends State<TDSelectTag> {
     }
     return widget.isOutline
         ? TDTagStyle.generateOutlineStyleByTheme(
-            context, widget.theme, widget.isLight, widget.isCircle)
+            context, widget.theme, widget.isLight, widget.shape)
         : TDTagStyle.generateFillStyleByTheme(
-            context, widget.theme, widget.isLight, widget.isCircle);
+            context, widget.theme, widget.isLight, widget.shape);
   }
 
   TDTagStyle _getUnSelectStyle() {
@@ -145,9 +151,9 @@ class _TDClickTagState extends State<TDSelectTag> {
     }
     return widget.isOutline
         ? TDTagStyle.generateOutlineStyleByTheme(
-        context, TDTagTheme.defaultTheme, widget.isLight, widget.isCircle)
+        context, TDTagTheme.defaultTheme, widget.isLight, widget.shape)
         : TDTagStyle.generateFillStyleByTheme(
-        context, TDTagTheme.defaultTheme, widget.isLight, widget.isCircle);
+        context, TDTagTheme.defaultTheme, widget.isLight, widget.shape);
   }
 
   @override
