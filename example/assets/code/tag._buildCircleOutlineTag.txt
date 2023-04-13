@@ -2,7 +2,7 @@
   Widget _buildCircleOutlineTag(BuildContext context) {
     return const TDTag(
       '标签文字',
-      isCircle: true,
+      shape: TDTagShape.round,
       isOutline: true,
     );
   }
