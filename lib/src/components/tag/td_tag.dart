@@ -8,6 +8,7 @@ class TDTag extends StatelessWidget {
   const TDTag(this.text,
       {this.theme,
       this.icon,
+      this.iconWidget,
       this.textColor,
       this.backgroundColor,
       this.font,
@@ -17,7 +18,7 @@ class TDTag extends StatelessWidget {
       this.padding,
       this.forceVerticalCenter = true,
       this.isOutline = false,
-      this.isCircle = false,
+      this.shape = TDTagShape.square,
       this.isLight = false,
       this.needCloseIcon = false,
       this.onCloseTap,
@@ -31,8 +32,11 @@ class TDTag extends StatelessWidget {
   /// 主题
   final TDTagTheme? theme;
 
-  /// 图标内容
-  final Widget? icon;
+  /// 图标内容，可随状态改变颜色
+  final IconData? icon;
+
+  /// 自定义图标内容，需自处理颜色
+  final Widget? iconWidget;
 
   /// 文字颜色, 优先级高于style的textColor
   final Color? textColor;
@@ -61,8 +65,8 @@ class TDTag extends StatelessWidget {
   /// 是否为描边类型，默认不是
   final bool isOutline;
 
-  /// 是否为圆角类型，默认不是
-  final bool isCircle;
+  /// 标签形状
+  final TDTagShape shape;
 
   /// 是否为浅色
   final bool isLight;
@@ -89,14 +93,15 @@ class TDTag extends StatelessWidget {
       fontWeight: fontWeight ?? innerStyle.fontWeight,
     );
 
-    if (icon != null || needCloseIcon) {
+    var innerIcon = getIcon(innerStyle);
+    if (innerIcon != null || needCloseIcon) {
       var children = <Widget>[];
-      if (icon != null) {
+      if (innerIcon != null) {
         children.add(Container(
           margin: const EdgeInsets.only(right: 4),
           width: 14,
           height: 14,
-          child: icon!,
+          child: innerIcon,
         ));
       }
       children.add(child);
@@ -130,15 +135,39 @@ class TDTag extends StatelessWidget {
     );
   }
 
+  Widget? getIcon(TDTagStyle innerStyle){
+    if(iconWidget != null){
+      return iconWidget;
+    }
+    if(icon != null){
+      return RichText(
+        overflow: TextOverflow.visible,
+        text: TextSpan(
+          text: String.fromCharCode(icon!.codePoint),
+          style: TextStyle(
+            inherit: false,
+            color:
+            innerStyle.textColor,
+            height: 1,
+            fontSize: _getIconSize(),
+            fontFamily: icon!.fontFamily,
+            package: icon!.fontPackage,
+          ),
+        ),
+      );
+    }
+    return null;
+  }
+
   TDTagStyle _getInnerStyle(BuildContext context) {
     if (style != null) {
       return style!;
     }
     return isOutline
         ? TDTagStyle.generateOutlineStyleByTheme(
-            context, theme, isLight, isCircle)
+            context, theme, isLight, shape)
         : TDTagStyle.generateFillStyleByTheme(
-            context, theme, isLight, isCircle);
+            context, theme, isLight, shape);
   }
 
   Font? _getFont(BuildContext context) {
@@ -167,6 +196,21 @@ class TDTag extends StatelessWidget {
         return const EdgeInsets.only(left: 6, right: 6, top: 2, bottom: 2);
       default:
         return EdgeInsets.zero;
+    }
+  }
+
+  double _getIconSize() {
+    switch (size) {
+      case TDTagSize.extraLarge:
+        return 16;
+      case TDTagSize.large:
+        return 16;
+      case TDTagSize.medium:
+        return 14;
+      case TDTagSize.small:
+        return 12;
+      default:
+        return 14;
     }
   }
 }
