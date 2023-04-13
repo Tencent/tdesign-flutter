@@ -22,6 +22,9 @@ enum TDTagTheme {
 /// 标签尺寸
 enum TDTagSize { extraLarge, large, medium, small, custom }
 
+/// 标签形状
+enum TDTagShape { square, round, mark }
+
 /// 标签样式
 class TDTagStyle {
   TDTagStyle(
@@ -74,7 +77,7 @@ class TDTagStyle {
 
   /// 根据主题生成填充Tag样式
   TDTagStyle.generateFillStyleByTheme(
-      BuildContext context, TDTagTheme? theme, bool light, bool isCircle) {
+      BuildContext context, TDTagTheme? theme, bool light, TDTagShape shape) {
     this.context = context;
     switch (theme) {
       case TDTagTheme.primary:
@@ -116,15 +119,23 @@ class TDTagStyle {
             ? TDTheme.of(context).grayColor1
             : TDTheme.of(context).grayColor3;
     }
-    borderRadius = BorderRadius.circular(isCircle
-        ? TDTheme.of(context).radiusRound
-        : TDTheme.of(context).radiusSmall);
+    switch(shape){
+      case TDTagShape.square:
+        borderRadius = BorderRadius.circular(TDTheme.of(context).radiusSmall);
+        break;
+      case TDTagShape.round:
+        borderRadius = BorderRadius.circular(TDTheme.of(context).radiusRound);
+        break;
+      case TDTagShape.mark:
+        borderRadius = BorderRadius.only(topRight:Radius.circular(TDTheme.of(context).radiusRound),bottomRight: Radius.circular(TDTheme.of(context).radiusRound));
+        break;
+    }
     borderColor = backgroundColor;
   }
 
   /// 根据主题生成描边Tag样式
   TDTagStyle.generateOutlineStyleByTheme(
-      BuildContext context, TDTagTheme? theme, bool light, bool isCircle) {
+      BuildContext context, TDTagTheme? theme, bool light, TDTagShape shape) {
     this.context = context;
     switch (theme) {
       case TDTagTheme.primary:
@@ -163,22 +174,38 @@ class TDTagStyle {
             ? TDTheme.of(context).grayColor1
             : TDTheme.of(context).whiteColor1;
     }
-    borderRadius = BorderRadius.circular(isCircle
-        ? TDTheme.of(context).radiusRound
-        : TDTheme.of(context).radiusSmall);
+    switch(shape){
+      case TDTagShape.square:
+        borderRadius = BorderRadius.circular(TDTheme.of(context).radiusSmall);
+        break;
+      case TDTagShape.round:
+        borderRadius = BorderRadius.circular(TDTheme.of(context).radiusRound);
+        break;
+      case TDTagShape.mark:
+        borderRadius = BorderRadius.only(topRight:Radius.circular(TDTheme.of(context).radiusRound),bottomRight: Radius.circular(TDTheme.of(context).radiusRound));
+        break;
+    }
     border = 1;
   }
 
   /// 根据主题生成禁用Tag样式
   TDTagStyle.generateDisableSelectStyle(
-      BuildContext context, bool isOutline , bool isCircle) {
+      BuildContext context, bool isOutline , TDTagShape shape) {
 
     borderColor = TDTheme.of(context).grayColor4;
     textColor = TDTheme.of(context).fontGyColor4;
     backgroundColor = TDTheme.of(context).grayColor2;
-    borderRadius = BorderRadius.circular(isCircle
-        ? TDTheme.of(context).radiusRound
-        : TDTheme.of(context).radiusSmall);
+    switch(shape){
+      case TDTagShape.square:
+        borderRadius = BorderRadius.circular(TDTheme.of(context).radiusSmall);
+        break;
+      case TDTagShape.round:
+        borderRadius = BorderRadius.circular(TDTheme.of(context).radiusRound);
+        break;
+      case TDTagShape.mark:
+        borderRadius = BorderRadius.only(topRight:Radius.circular(TDTheme.of(context).radiusRound),bottomRight: Radius.circular(TDTheme.of(context).radiusRound));
+        break;
+    }
     border = isOutline ? 1 : 0;
   }
 }
