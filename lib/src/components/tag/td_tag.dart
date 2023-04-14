@@ -20,6 +20,7 @@ class TDTag extends StatelessWidget {
       this.isOutline = false,
       this.shape = TDTagShape.square,
       this.isLight = false,
+      this.disable = false,
       this.needCloseIcon = false,
       this.onCloseTap,
       this.overflow,
@@ -70,6 +71,9 @@ class TDTag extends StatelessWidget {
 
   /// 是否为浅色
   final bool isLight;
+
+  /// 是否为禁用状态
+  final bool disable;
 
   /// 关闭图标
   final bool needCloseIcon;
@@ -162,6 +166,9 @@ class TDTag extends StatelessWidget {
   TDTagStyle _getInnerStyle(BuildContext context) {
     if (style != null) {
       return style!;
+    }
+    if(disable){
+      return TDTagStyle.generateDisableSelectStyle(context, isOutline, shape);
     }
     return isOutline
         ? TDTagStyle.generateOutlineStyleByTheme(

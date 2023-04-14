@@ -7,13 +7,12 @@
           title: titleText,
           titleFontWeight: FontWeight.w600,
           screenAdaptation: false,
-          useDefaultBack: false,
+          useDefaultBack: true,
           leftBarItems: [
-            TDNavBarItem(icon: TDIcons.chevron_left, iconSize: 20, padding: const EdgeInsets.only(right: 8)),
-            TDNavBarItem(icon: TDIcons.close, iconSize: 20, padding: const EdgeInsets.only(right: 8)),
+            TDNavBarItem(icon: TDIcons.close, iconSize: 24),
           ],
           rightBarItems: [
-            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20)
+            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
           ]
       ),
     );
