@@ -121,7 +121,7 @@ class _TDNavBarState extends State<TDNavBar> {
 
   Widget get backButton {
     return TDNavBarItem(
-      icon: Icons.arrow_back_ios,
+      icon: Icons.chevron_left,
       action: () {
         widget.onBack?.call();
         Navigator.maybePop(context);
@@ -134,7 +134,7 @@ class _TDNavBarState extends State<TDNavBar> {
         (isLeft ? widget.leftBarItems : widget.rightBarItems) ?? [];
     var children = barItems
         .map(
-          (e) => e.toWidget(context),
+          (e) => e.toWidget(context, isLeft: isLeft),
         )
         .toList();
 
@@ -249,17 +249,17 @@ class TDNavBarItem {
     this.icon,
     this.iconColor,
     this.action,
-    this.iconSize = 16.0,
+    this.iconSize = 24.0,
     this.padding,
     this.iconWidget,
   });
 
-  Widget toWidget(BuildContext context) => GestureDetector(
+  Widget toWidget(BuildContext context,{bool isLeft = true}) => GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: action,
         child: Padding(
           padding:
-              padding ?? EdgeInsets.all(TDTheme.of(context).spacer8),
+          padding ?? (isLeft ? EdgeInsets.only(right: TDTheme.of(context).spacer8) : EdgeInsets.only(left: TDTheme.of(context).spacer8)),
           child: iconWidget ??
               Icon(
                 icon,
