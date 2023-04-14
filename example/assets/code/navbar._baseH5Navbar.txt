@@ -1,14 +1,10 @@
 
   Widget _baseH5Navbar(BuildContext context) {
-    return TDNavBar(
+    return const TDNavBar(
         height: 48,
         titleFontWeight: FontWeight.w600,
         title: titleText,
         screenAdaptation: false,
-        useDefaultBack: false,
-        rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
-          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
-        ]
+        useDefaultBack: true,
     );
   }
