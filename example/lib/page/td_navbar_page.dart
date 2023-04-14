@@ -68,16 +68,12 @@ class TDNavBarPage extends StatelessWidget {
 
   @Demo(group: 'navbar')
   Widget _baseH5Navbar(BuildContext context) {
-    return TDNavBar(
+    return const TDNavBar(
         height: 48,
         titleFontWeight: FontWeight.w600,
         title: titleText,
         screenAdaptation: false,
-        useDefaultBack: false,
-        rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
-          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
-        ]
+        useDefaultBack: true,
     );
   }
 
@@ -90,13 +86,12 @@ class TDNavBarPage extends StatelessWidget {
           title: titleText,
           titleFontWeight: FontWeight.w600,
           screenAdaptation: false,
-          useDefaultBack: false,
+          useDefaultBack: true,
           leftBarItems: [
-            TDNavBarItem(icon: TDIcons.chevron_left, iconSize: 20, padding: const EdgeInsets.only(right: 8)),
-            TDNavBarItem(icon: TDIcons.close, iconSize: 20, padding: const EdgeInsets.only(right: 8)),
+            TDNavBarItem(icon: TDIcons.close, iconSize: 24),
           ],
           rightBarItems: [
-            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20)
+            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
           ]
       ),
     );
@@ -113,8 +108,8 @@ class TDNavBarPage extends StatelessWidget {
             screenAdaptation: false,
             useDefaultBack: true,
             rightBarItems: [
-              TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
-              TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
+              TDNavBarItem(icon: TDIcons.home, iconSize: 24, ),
+              TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24,)
             ]
         ),
     );
@@ -128,6 +123,7 @@ class TDNavBarPage extends StatelessWidget {
       centerTitle: false,
       titleMargin: 0,
       titleWidget:  TDSearchBar(
+        needCancel: false,
         autoHeight: true,
         padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
         placeHolder: '搜索预设文案',
@@ -138,8 +134,8 @@ class TDNavBarPage extends StatelessWidget {
         },
       ),
       rightBarItems: [
-        TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
-        TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
+        TDNavBarItem(icon: TDIcons.home,iconSize: 24),
+        TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
       ]
     );
   }
@@ -157,8 +153,8 @@ class TDNavBarPage extends StatelessWidget {
           height: 24,
         ),
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
-          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
+          TDNavBarItem(icon: TDIcons.home,iconSize: 24),
+          TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
         ]
     );
   }
@@ -172,8 +168,8 @@ class TDNavBarPage extends StatelessWidget {
         screenAdaptation: false,
         useDefaultBack: true,
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
-          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
+          TDNavBarItem(icon: TDIcons.home,iconSize: 24),
+          TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
         ]
     );
   }
@@ -191,8 +187,8 @@ class TDNavBarPage extends StatelessWidget {
           screenAdaptation: false,
           useDefaultBack: true,
           rightBarItems: [
-            TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
-            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
+            TDNavBarItem(icon: TDIcons.home,iconSize: 24),
+            TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
           ]
       ),
     );
@@ -207,8 +203,8 @@ class TDNavBarPage extends StatelessWidget {
         screenAdaptation: false,
         useDefaultBack: true,
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
-          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
+          TDNavBarItem(icon: TDIcons.home,iconSize: 24),
+          TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
         ]
     );
   }
@@ -231,11 +227,11 @@ class TDNavBarPage extends StatelessWidget {
           screenAdaptation: false,
           useDefaultBack: false,
           leftBarItems: [
-            TDNavBarItem(icon: TDIcons.chevron_left, iconSize: 20, padding: const EdgeInsets.only(right: 8)),
+            TDNavBarItem(icon: TDIcons.chevron_left,iconSize: 24),
           ],
           rightBarItems: [
-            TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
-            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
+            TDNavBarItem(icon: TDIcons.home,iconSize: 24),
+            TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
           ]
       ),
     );
@@ -252,11 +248,11 @@ class TDNavBarPage extends StatelessWidget {
         useDefaultBack: false,
         screenAdaptation: false,
         leftBarItems: [
-          TDNavBarItem(icon: TDIcons.chevron_left, iconSize: 20, iconColor: Colors.white, padding: const EdgeInsets.only(right: 8)),
+          TDNavBarItem(icon: TDIcons.chevron_left, iconSize: 24, iconColor: Colors.white),
         ],
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home, iconSize: 20, iconColor: Colors.white, padding: const EdgeInsets.only(left: 8)),
-          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, iconColor: Colors.white, padding: const EdgeInsets.only(left: 8))
+          TDNavBarItem(icon: TDIcons.home, iconSize: 24, iconColor: Colors.white),
+          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24, iconColor: Colors.white)
         ]
     );
   }
