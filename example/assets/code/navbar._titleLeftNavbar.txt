@@ -11,8 +11,8 @@
           screenAdaptation: false,
           useDefaultBack: true,
           rightBarItems: [
-            TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
-            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
+            TDNavBarItem(icon: TDIcons.home,iconSize: 24),
+            TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
           ]
       ),
     );
