@@ -31,18 +31,43 @@ class TDStepper extends StatefulWidget {
     this.onOverlimit,
   }) : super(key: key);
 
+  /// 禁用输入框
   final bool disableInput;
+
+  /// 禁用全部操作
   final bool disabled;
+
+  /// 禁用全部操作
   final double? inputWidth;
+
+  /// 最大值
   final int max;
+
+  /// 最小值
   final int min;
+
+  /// 组件尺寸
   final TDStepperSize size;
+
+  /// 步长
   final int step;
+
+  /// 组件风格
   final TDStepperTheme theme;
+
+  /// 值
   final int? value;
+
+  /// 默认值
   final int? defaultValue;
+
+  /// 输入框失去焦点时触发
   final VoidCallback? onBlur;
+
+  /// 数值发生变更时触发
   final ValueChanged<int>? onChange;
+
+  /// 数值超出限制时触发
   final TDStepperOverlimitFunction? onOverlimit;
 
   @override
