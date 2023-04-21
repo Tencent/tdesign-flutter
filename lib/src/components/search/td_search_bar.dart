@@ -130,18 +130,17 @@ class _TDSearchBarState extends State<TDSearchBar>
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var box = _textFieldKey.currentContext?.findRenderObject() as RenderBox?;
       var phBox = _phKey.currentContext?.findRenderObject() as RenderBox?;
-      if (box != null && phBox != null) {
+      if (phBox != null) {
         setState(() {
           if (widget.alignment != TDSearchAlignment.center) {
             return;
           }
-          var dx = (box.size.width / 2 + 16.5 - phBox.size.width / 2) /
-              phBox.size.width;
+          var dx = (phBox.size.width / 2 - 24) / phBox.size.width;
           if (dx < 0) {
             return;
           }
+
           _animation ??= Tween(begin: Offset.zero, end: Offset(-dx, 0))
               .animate(_animationController);
         });
@@ -331,35 +330,41 @@ class _TDSearchBarState extends State<TDSearchBar>
   Widget _getPlaceHolderWidgets() {
     return LayoutBuilder(builder: (BuildContext context, BoxConstraints box) {
       if (_animation != null) {
-        return SlideTransition(
-          position: _animation!,
-          child: Row(
-            key: _phKey,
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                TDIcons.search,
-                size: widget.mediumStyle ? 20 : 24,
-                color: TDTheme.of(context).fontGyColor3,
+        return Row(
+          children: [
+            Icon(
+              TDIcons.search,
+              size: widget.mediumStyle ? 20 : 24,
+              color: TDTheme.of(context).fontGyColor3,
+            ),
+            Expanded(
+                child: SlideTransition(
+              position: _animation!,
+              child: Row(
+                key: _phKey,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                        right: (widget.mediumStyle ? 20 : 24) / 2),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: box.maxWidth - 51,
+                      ),
+                      child: TDText(
+                        widget.placeHolder,
+                        font: getSize(context),
+                        textColor: TDTheme.of(context).fontGyColor3,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  )
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 3),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: box.maxWidth - 51,
-                  ),
-                  child: TDText(
-                    widget.placeHolder,
-                    font: getSize(context),
-                    textColor: TDTheme.of(context).fontGyColor3,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              )
-            ],
-          ),
+            ))
+          ],
         );
       } else {
         return Row(
