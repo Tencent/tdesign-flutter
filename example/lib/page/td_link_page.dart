@@ -132,7 +132,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
     ]);
   }
 
-  _buildLinksWithStat(TDLinkState state) {
+  TableRow _buildLinksWithStat(TDLinkState state) {
     return TableRow(
       children: [
         _buildLinkWithTypeAndState(TDLinkStyle.primary, state),
@@ -146,7 +146,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
     );
   }
 
-  _buildLinkWithTypeAndState(TDLinkStyle style, TDLinkState state) {
+  TDLink _buildLinkWithTypeAndState(TDLinkStyle style, TDLinkState state) {
     return TDLink(
       label: 'Link',
       style: style,
@@ -168,7 +168,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
     );
   }
 
-  _buildLinkWithSize(TDLinkSize size) {
+  TableRow _buildLinkWithSize(TDLinkSize size) {
     return TableRow(children: [
       _buildLinkWithSizeAndStyle(TDLinkStyle.primary, size),
       _buildLinkWithSizeAndStyle(TDLinkStyle.defaultStyle, size),
@@ -180,7 +180,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
     ]);
   }
 
-  _buildLinkWithSizeAndStyle(TDLinkStyle style, TDLinkSize size) {
+  TDLink _buildLinkWithSizeAndStyle(TDLinkStyle style, TDLinkSize size) {
     return TDLink(
       label: 'Link',
       style: style,
