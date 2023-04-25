@@ -51,46 +51,46 @@ class TDLink extends StatelessWidget {
     this.rightGapWithIcon,
   }) : super(key: key);
 
-  /// link label to display
+  /// link 展示的文本
   final String label;
 
-  /// the link to jump
+  /// link 跳转的uri
   final Uri? uri;
 
-  /// link type
+  /// link 类型
   final TDLinkType type;
 
-  /// link style
+  /// link 风格
   final TDLinkStyle style;
 
-  /// link state
+  /// link 状态
   final TDLinkState state;
 
-  /// link size
+  /// link 大小
   final TDLinkSize size;
 
-  /// prefix icon
+  /// 前置 icon
   final Icon? prefixIcon;
 
-  /// suffix icon
+  /// 后置 icon
   final Icon? suffixIcon;
 
-  /// link label color, calculated by state and style if not set
+  /// link 文本的颜色，如果不设置则根据状态和风格进行计算
   final Color? color;
 
-  /// link icon size, calculated by state and style if not set
+  /// link icon 大小，如果不设置则根据状态和风格进行计算
   final double? iconSize;
 
-  /// link font size, calculated by state and style if not set
+  /// link 文本的字体大小，如果不设置则根据状态和风格进行计算
   final double? fontSize;
 
-  /// gap between icon and text, calculated by state and style if not set
+  /// 前置icon和文本之间的间隔，如果不设置则根据状态和风格进行计算
   final double? leftGapWithIcon;
 
-  /// gap between icon and text, calculated by state and style if not set
+  /// 后置icon和文本之间的间隔，如果不设置则根据状态和风格进行计算
   final double? rightGapWithIcon;
 
-  /// action when the link clicked
+  /// link 被点击之后所采取的动作，会将uri当做参数传入到该方法当中
   final LinkClick? linkClick;
 
   @override
