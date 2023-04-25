@@ -156,6 +156,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
     );
   }
 
+  @Demo(group: 'link')
   Widget _buildLinkSizes(BuildContext context) {
     return Table(
       children: [
