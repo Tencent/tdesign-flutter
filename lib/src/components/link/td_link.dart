@@ -33,6 +33,7 @@ class TDLink extends StatelessWidget {
   const TDLink({
     Key? key,
     required this.label,
+    this.uri,
     this.prefixIcon,
     this.suffixIcon,
     this.followLink,
@@ -49,6 +50,9 @@ class TDLink extends StatelessWidget {
 
   /// link label to display
   final String label;
+
+  /// the link to jump
+  final Uri? uri;
 
   /// link type
   final TDLinkType type;
@@ -109,6 +113,11 @@ class TDLink extends StatelessWidget {
     return _buildLink(context);
   }
 
+  /// 提取成方法，允许业务定义自己的TDLinkConfiguration
+  TDLinkConfiguration? getConfiguration(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<TDLinkConfiguration>();
+  }
+
   Color getColor(BuildContext context) {
     if (color != null) {
       return color!;
@@ -125,8 +134,9 @@ class TDLink extends StatelessWidget {
             return TDTheme.of(context).warningColor5;
           case TDLinkStyle.success:
             return TDTheme.of(context).successColor5;
+          case TDLinkStyle.defaultStyle:
+            return TDTheme.of(context).fontGyColor1;
         }
-        return TDTheme.of(context).fontGyColor1;
 
       case TDLinkState.active:
         switch (style) {
@@ -138,8 +148,9 @@ class TDLink extends StatelessWidget {
             return TDTheme.of(context).warningColor6;
           case TDLinkStyle.success:
             return TDTheme.of(context).successColor6;
+          case TDLinkStyle.defaultStyle:
+            return TDTheme.of(context).brandClickColor;
         }
-        return TDTheme.of(context).brandClickColor;
       case TDLinkState.disabled:
         switch (style) {
           case TDLinkStyle.primary:
@@ -150,9 +161,10 @@ class TDLink extends StatelessWidget {
             return TDTheme.of(context).warningDisabledColor;
           case TDLinkStyle.success:
             return TDTheme.of(context).successDisabledColor;
+          case TDLinkStyle.defaultStyle:
+            return TDTheme.of(context).fontGyColor4;
         }
     }
-    return TDTheme.of(context).fontGyColor4;
   }
 
   Icon _getDefaultIcon(BuildContext context) {
@@ -163,13 +175,21 @@ class TDLink extends StatelessWidget {
     );
   }
 
-  _buildLink(BuildContext context) {
+  InkWell _buildLink(BuildContext context) {
     return InkWell(
         onTap: () {
-          if (state == TDLinkState.disabled || followLink == null) {
+          if (state == TDLinkState.disabled) {
             return;
           }
-          followLink!();
+          if (followLink != null) {
+            followLink!(uri);
+          } else {
+            var tdLinkConfig = getConfiguration(context);
+
+            if (tdLinkConfig != null && tdLinkConfig.followLink != null) {
+              tdLinkConfig.followLink!(uri);
+            }
+          }
         },
         child: Text(
           label,
@@ -192,8 +212,9 @@ class TDLink extends StatelessWidget {
         return 11.99;
       case TDLinkSize.small:
         return 9.32;
+      case TDLinkSize.medium:
+        return 10.66;
     }
-    return 10.66;
   }
 
   double _getFontSize(BuildContext context) {
@@ -205,11 +226,12 @@ class TDLink extends StatelessWidget {
         return 16;
       case TDLinkSize.small:
         return 12;
+      case TDLinkSize.medium:
+        return 14;
     }
-    return 14;
   }
 
-  _getLeftGapSize(BuildContext context) {
+  double _getLeftGapSize(BuildContext context) {
     if (leftGapWithIcon != null) {
       return leftGapWithIcon!;
     }
@@ -218,11 +240,12 @@ class TDLink extends StatelessWidget {
         return 14.64;
       case TDLinkSize.small:
         return 6.05;
+      case TDLinkSize.medium:
+        return 6.34;
     }
-    return 6.34;
   }
 
-  _getRightGapSize(BuildContext context) {
+  double _getRightGapSize(BuildContext context) {
     if (rightGapWithIcon != null) {
       return rightGapWithIcon!;
     }
@@ -231,7 +254,22 @@ class TDLink extends StatelessWidget {
         return 15.37;
       case TDLinkSize.small:
         return 6.63;
+      case TDLinkSize.medium:
+        return 7;
     }
-    return 7;
+  }
+}
+
+/// 存储可以自定义TDLink跳转算法的控件
+class TDLinkConfiguration extends InheritedWidget {
+  /// 统一跳转的函数
+  final Function? followLink;
+
+  const TDLinkConfiguration({this.followLink, Key? key, required Widget child})
+      : super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(covariant TDLinkConfiguration oldWidget) {
+    return followLink != oldWidget.followLink;
   }
 }
