@@ -6,6 +6,7 @@
       centerTitle: false,
       titleMargin: 0,
       titleWidget:  TDSearchBar(
+        needCancel: false,
         autoHeight: true,
         padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
         placeHolder: '搜索预设文案',
@@ -16,8 +17,8 @@
         },
       ),
       rightBarItems: [
-        TDNavBarItem(icon: TDIcons.home, iconSize: 20, padding: const EdgeInsets.only(left: 8)),
-        TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 20, padding: const EdgeInsets.only(left: 8))
+        TDNavBarItem(icon: TDIcons.home,iconSize: 24),
+        TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
       ]
     );
   }

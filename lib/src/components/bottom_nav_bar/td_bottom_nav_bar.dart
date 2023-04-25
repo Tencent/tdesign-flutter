@@ -242,7 +242,7 @@ class TDBottomNavBar extends StatefulWidget {
   /// 分割线颜色（可选）
   final Color? dividerColor;
 
-  /// 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值）
+  /// 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值,非胶囊型才生效）
   final bool? showTopBorder;
 
   /// 上边线样式
@@ -279,8 +279,8 @@ class _TDBottomNavBarState extends State<TDBottomNavBar> {
                 color: Colors.white,
                 borderRadius:
                     isCapsuleOutlineType ? BorderRadius.circular(56) : null,
-                border: widget.showTopBorder!
-                    ? Border.all(color: TDTheme.of(context).grayColor3)
+                border: widget.showTopBorder! && !isCapsuleOutlineType
+                    ?  Border(top: widget.topBorder ?? BorderSide(color: TDTheme.of(context).grayColor3))
                     : null,
                 boxShadow: isCapsuleOutlineType
                     ? TDTheme.of(context).shadowsTop
