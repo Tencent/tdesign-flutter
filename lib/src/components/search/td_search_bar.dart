@@ -34,6 +34,7 @@ class TDSearchBar extends StatefulWidget {
     this.padding = const EdgeInsets.fromLTRB(16, 8, 16, 8),
     this.autoFocus = false,
     this.mediumStyle = false,
+    this.needCancel = true,
     this.backgroundColor = Colors.white,
   }) : super(key: key);
 
@@ -60,6 +61,9 @@ class TDSearchBar extends StatefulWidget {
 
   /// 是否在导航栏中的样式
   final bool mediumStyle;
+
+  /// 是否需要取消按钮
+  final bool needCancel;
 
   /// 文字改变回调
   final TDSearchBarEvent? onTextChanged;
@@ -248,7 +252,7 @@ class _TDSearchBarState extends State<TDSearchBar>
               ),
             ),
             Offstage(
-              offstage: cancelBtnHide,
+              offstage: cancelBtnHide || !widget.needCancel,
               child: GestureDetector(
                 onTap: () {
                   controller.clear();

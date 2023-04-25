@@ -12,6 +12,9 @@ class TDIconPage extends StatefulWidget {
 }
 
 class _TDIconPageState extends State<TDIconPage> {
+
+  bool showBorder = false;
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(title: tdTitle(),
@@ -25,13 +28,26 @@ class _TDIconPageState extends State<TDIconPage> {
         alignment: Alignment.center,
         child: Wrap(
           children: [
+            Container(
+              child: TDButton(content: showBorder? '隐藏边框':'显示边框',
+                shape: TDButtonShape.filled,
+                onTap: (){
+                  setState(() {
+                    showBorder = !showBorder;
+                  });
+                },),
+              margin: const EdgeInsets.only(bottom: 16),
+            ),
             for (var iconData in TDIcons.all.values) SizedBox(
               height: 100,
               width: 175,
 
               child: Column(
                 children: [
-                  Icon(iconData),
+                  Container(
+                    color: showBorder ? Colors.green : Colors.transparent,
+                    child: Icon(iconData),
+                  ),
                   TDText(iconData.name)
                 ],
               ),

@@ -17,15 +17,52 @@ class TDThemePage extends StatefulWidget {
 class _TDThemePageState extends State<TDThemePage> {
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(title: tdTitle(),
-        desc: '点击标题栏右上角图标可查看使用示例代码',
-        exampleCodeGroup: 'theme',
-        children: [
-      ExampleModule(title: '默认', children: [
+    return ExamplePage(
+      title: tdTitle(),
+      desc: '点击标题栏右上角图标可查看使用示例代码',
+      exampleCodeGroup: 'theme',
+      children: [
+        ExampleModule(title: '颜色示例', children: [
+          ExampleItem(
+              desc: '功能色', builder: _buildFunctionColor, ignoreCode: true),
+          ExampleItem(
+              desc: '文字&图标颜色', builder: _buildTextColor, ignoreCode: true),
+          ExampleItem(desc: '中性色板', builder: _buildOtherColor, ignoreCode: true)
+        ])
+      ],
+      test: [
         ExampleItem(builder: _buildDefaultTheme),
         ExampleItem(builder: _buildCustomTheme)
-      ])
-    ]);
+      ],
+    );
+  }
+
+  var brandMap = <String, Color>{};
+  var errorMap = <String, Color>{};
+  var warningMap = <String, Color>{};
+  var successMap = <String, Color>{};
+  var fontMap = <String, Color>{};
+  var grayMap = <String, Color>{};
+
+  @override
+  void initState() {
+    super.initState();
+
+    TDTheme.of(context).colorMap.forEach((key, value) {
+      if (key.startsWith('brand')) {
+        brandMap[key] = value;
+      } else if (key.startsWith('error')) {
+        errorMap[key] = value;
+      } else if (key.startsWith('warning')) {
+        warningMap[key] = value;
+      } else if (key.startsWith('success')) {
+        successMap[key] = value;
+      } else if (key.startsWith('font')) {
+        fontMap[key] = value;
+      } else {
+        grayMap[key] = value;
+      }
+    });
   }
 
   @Demo(group: 'theme')
@@ -35,14 +72,15 @@ class _TDThemePageState extends State<TDThemePage> {
       margin: EdgeInsets.all(TDTheme.of(context).spacer8), // 间隔
       decoration: BoxDecoration(
         color: TDTheme.of(context).grayColor1, // 颜色
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault), // 圆角
+        borderRadius:
+            BorderRadius.circular(TDTheme.of(context).radiusDefault), // 圆角
         boxShadow: TDTheme.of(context).shadowsBase, // 阴影
       ),
       child: TDText(
         '使用外层默认主题',
-        font:
-            TDTheme.of(context).fontBodyLarge, // 字体，业务方使用时，
-        textColor: TDTheme.of(context).brandNormalColor, // 颜色，AS中点击颜色可查看具体设置和显示效果
+        font: TDTheme.of(context).fontBodyLarge, // 字体，业务方使用时，
+        textColor:
+            TDTheme.of(context).brandNormalColor, // 颜色，AS中点击颜色可查看具体设置和显示效果
       ),
     );
   }
@@ -52,7 +90,7 @@ class _TDThemePageState extends State<TDThemePage> {
     /// 此处替换主题
     return TDTheme(
         // 替换fonts和colors，其他主题从父类拷贝
-        data: TDTheme.of(context).copyWith('custom', fontMap: {
+        data: TDTheme.of(context).copyWithTDThemeData('custom', fontMap: {
           'fontBodyLarge': Font(size: 40, lineHeight: 80),
         }, colorMap: {
           'brandNormalColor': Colors.red
@@ -93,6 +131,99 @@ class _TDThemePageState extends State<TDThemePage> {
 //     );
 //   }
 // }
+  }
+
+  Widget _buildFunctionColor(BuildContext context) {
+    var spList = ['Light', 'Focus', 'Disabled', 'Hover', 'Normal', 'Click'];
+    var functionList = [
+      'brand',
+      'error',
+      'warning',
+      'success',
+    ];
+    if (brandMap.length == errorMap.length &&
+        warningMap.length == successMap.length &&
+        brandMap.length == warningMap.length) {
+      return ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: brandMap.length * 4,
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(16),
+          itemBuilder: (context, index) {
+            var type = index ~/ brandMap.length;
+            index = index % brandMap.length;
+            var function = functionList[type];
+            if (index < 10) {
+              return Container(
+                color: TDTheme.of(context)
+                    .colorMap['${function}Color${index + 1}'],
+                child: TDText('${function}Color${index + 1}'),
+              );
+            } else {
+              return Container(
+                color: TDTheme.of(context)
+                    .colorMap['$function${spList[index - 10]}Color'],
+                child: TDText('$function${spList[index - 10]}Color'),
+              );
+            }
+          });
+    } else {
+      return TDText(
+        '功能色数量不一样',
+        textColor: TDTheme.of(context).errorNormalColor,
+      );
+    }
+  }
+
+  Widget _buildTextColor(BuildContext context) {
+    var textList = ['Gy', 'Wh'];
+    return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: fontMap.length,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          var light = (index - 3).abs() < 2;
+          var type = index ~/ 4;
+          index = index % 4;
+          var function = textList[type];
+          return Container(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            color: type == 0 ? Colors.white : Colors.black,
+            child: Container(
+              color: TDTheme.of(context)
+                  .colorMap['font${function}Color${index + 1}'],
+              child: TDText(
+                'font${function}Color${index + 1}',
+                textColor: light ? Colors.black : Colors.white,
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget _buildOtherColor(BuildContext context) {
+    return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: grayMap.length,
+        padding: const EdgeInsets.all(16),
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          var light = index < 6;
+          if (index == 0) {
+            return Container(
+              color: TDTheme.of(context).colorMap['whiteColor1'],
+              child: const TDText('whiteColor1'),
+            );
+          } else {
+            return Container(
+              color: TDTheme.of(context).colorMap['grayColor${index}'],
+              child: TDText(
+                'grayColor${index}',
+                textColor: light ? Colors.black : Colors.white,
+              ),
+            );
+          }
+        });
   }
 }
 
