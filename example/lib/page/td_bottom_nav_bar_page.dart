@@ -15,46 +15,88 @@ class TDBottomNavBarPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExamplePage(
         title: tdTitle(context),
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        desc: '用于在不同功能模块之间进行快速切换，位于页面底部。',
         backgroundColor: const Color(0xFFF0F2F5),
         exampleCodeGroup: 'bottomNavBar',
         children: [
           ExampleModule(
             title: '组件类型',
             children: [
-              ExampleItem(desc: '纯文本标签栏', builder: _textTypeNavBar),
               ExampleItem(
-                builder: _textTypeNavBar3tabs,
-              ),
+                ignoreCode: true,
+                  desc: '纯文本标签栏', builder: (context){
+                    return Container(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CodeWrapper(builder: _textTypeNavBar),);
+              }),
               ExampleItem(
-                builder: _textTypeNavBar4tabs,
-              ),
+                ignoreCode: true,builder: (context){
+                    return Container(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CodeWrapper(builder: _textTypeNavBar3tabs),);
+              }),
               ExampleItem(
-                builder: _textTypeNavBar5tabs,
-              ),
-              ExampleItem(desc: '图标加文本标签栏', builder: _iconTextTypeNavBar),
+                ignoreCode: true, builder: (context){
+                    return Container(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CodeWrapper(builder: _textTypeNavBar4tabs),);
+              }),
               ExampleItem(
-                builder: _iconTextTypeNavBar3tabs,
-              ),
+                ignoreCode: true, builder: (context){
+                    return Container(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CodeWrapper(builder: _textTypeNavBar5tabs),);
+              }),
               ExampleItem(
-                builder: _iconTextTypeNavBar4tabs,
-              ),
+                ignoreCode: true,
+                  desc: '图标加文本标签栏', builder: (context){
+                    return Container(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CodeWrapper(builder: _iconTextTypeNavBar),);
+              }),
               ExampleItem(
-                builder: _iconTextTypeNavBar5tabs,
-              ),
+                ignoreCode: true, builder: (context){
+                    return Container(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CodeWrapper(builder: _iconTextTypeNavBar3tabs),);
+              }),
               ExampleItem(
-                desc: '纯图标标签栏',
-                builder: _iconTypeNavBar,
-              ),
+                ignoreCode: true, builder: (context){
+                    return Container(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CodeWrapper(builder: _iconTextTypeNavBar4tabs),);
+              }),
               ExampleItem(
-                builder: _iconTypeNavBar3tabs,
-              ),
+                ignoreCode: true, builder: (context){
+                    return Container(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CodeWrapper(builder: _iconTextTypeNavBar5tabs),);
+              }),
               ExampleItem(
-                builder: _iconTypeNavBar4tabs,
-              ),
+                ignoreCode: true,
+                  desc: '纯图标标签栏',builder: (context){
+                    return Container(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CodeWrapper(builder: _iconTypeNavBar),);
+              }),
               ExampleItem(
-                builder: _iconTypeNavBar5tabs,
-              ),
+                ignoreCode: true,builder: (context){
+                    return Container(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CodeWrapper(builder: _iconTypeNavBar3tabs),);
+              }),
+              ExampleItem(
+                ignoreCode: true,builder: (context){
+                    return Container(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CodeWrapper(builder: _iconTypeNavBar4tabs),);
+              }),
+              ExampleItem(
+                ignoreCode: true,builder: (context){
+                    return Container(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CodeWrapper(builder: _iconTypeNavBar5tabs),);
+              }),
               ExampleItem(
                 desc: '双层级文本标签栏',
                 builder: _expansionPannelTypeNavBar,
@@ -62,22 +104,76 @@ class TDBottomNavBarPage extends StatelessWidget {
             ],
           ),
           ExampleModule(title: '组件样式', children: [
+
             ExampleItem(
-              desc: '弱选中标签栏',
-              builder: _weakSelectTextNavBar,
-            ),
+                ignoreCode: true,
+                desc: '弱选中标签栏',builder: (context){
+              return Container(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: CodeWrapper(builder: _weakSelectTextNavBar),);
+            }),
             ExampleItem(
-              builder: _weakSelectIconNavBar,
-            ),
+                ignoreCode: true,builder: (context){
+              return Container(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: CodeWrapper(builder: _weakSelectIconNavBar),);
+            }),
             ExampleItem(
-              builder: _weakSelectIconTextNavBar,
-            ),
+                ignoreCode: true,builder: (context){
+              return Container(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: CodeWrapper(builder: _weakSelectIconTextNavBar),);
+            }),
             ExampleItem(
               desc: '悬浮胶囊标签栏',
               builder: _capsuleNavBar,
             ),
           ]),
-        ]);
+        ],
+    test: [
+      ExampleItem(
+          desc: '自定义上边线样式',
+          builder: (context){
+        return TDBottomNavBar(
+          TDBottomNavBarBasicType.iconText,
+          topBorder: const BorderSide(color: Colors.red, width: 5),
+          componentType: TDBottomNavBarComponentType.normal,
+          useVerticalDivider: false,
+          navigationTabs: [
+            TDBottomNavBarTabConfig(
+              iconTextTypeConfig:
+              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+              badgeConfig: BadgeConfig(
+                showBage: true,
+                tdBadge: const TDBadge(TDBadgeType.redPoint),
+                badgeTopOffset: -2,
+                badgeRightOffset: -10,
+              ),
+              tabText: '标签',
+              onTap: () {
+                onTapTab(context, '标签1');
+              },
+            ),
+            TDBottomNavBarTabConfig(
+              iconTextTypeConfig:
+              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+              tabText: '标签',
+              onTap: () {
+                onTapTab(context, '标签2');
+              },
+            ),
+            TDBottomNavBarTabConfig(
+              iconTextTypeConfig:
+              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+              tabText: '标签',
+              onTap: () {
+                onTapTab(context, '标签3');
+              },
+            ),
+          ],
+        );})
+    ],
+    );
   }
 
   @Demo(group: 'bottomNavBar')

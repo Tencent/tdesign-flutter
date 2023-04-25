@@ -14,206 +14,206 @@ import 'td_theme.dart';
 extension TDColors on TDThemeData {
   /// 功能色组----------------------------------------------------
 
-  ///#ECF2FE
-  Color get brandColor1 => colorMap['brandColor1'] ?? const Color(0xFFECF2FE);
+  ///#F2F3FF
+  Color get brandColor1 => colorMap['brandColor1'] ?? const Color(0xFFF2F3FF);
 
-  ///#D4E3FC
-  Color get brandColor2 => colorMap['brandColor2'] ?? const Color(0xFFD4E3FC);
+  ///#D9E1FF
+  Color get brandColor2 => colorMap['brandColor2'] ?? const Color(0xFFD9E1FF);
 
-  ///#BBD3FB
-  Color get brandColor3 => colorMap['brandColor3'] ?? const Color(0xFFBBD3FB);
+  ///#B5C7FF
+  Color get brandColor3 => colorMap['brandColor3'] ?? const Color(0xFFB5C7FF);
 
-  ///#96BBF8
-  Color get brandColor4 => colorMap['brandColor4'] ?? const Color(0xFF96BBF8);
+  ///#8EABFF
+  Color get brandColor4 => colorMap['brandColor4'] ?? const Color(0xFF8EABFF);
 
-  ///#699EF5
-  Color get brandColor5 => colorMap['brandColor5'] ?? const Color(0xFF699EF5);
+  ///#618DFF
+  Color get brandColor5 => colorMap['brandColor5'] ?? const Color(0xFF618DFF);
 
-  ///#4787F0
-  Color get brandColor6 => colorMap['brandColor6'] ?? const Color(0xFF4787F0);
-
-  ///#266FE8
-  Color get brandColor7 => colorMap['brandColor7'] ?? const Color(0xFF266FE8);
+  ///#366EF4
+  Color get brandColor6 => colorMap['brandColor6'] ?? const Color(0xFF366EF4);
 
   ///#0052D9
-  Color get brandColor8 => colorMap['brandColor8'] ?? const Color(0xFF0052D9);
+  Color get brandColor7 => colorMap['brandColor7'] ?? const Color(0xFF0052D9);
 
-  ///#0034B5
-  Color get brandColor9 => colorMap['brandColor9'] ?? const Color(0xFF0034B5);
+  ///#003CAB
+  Color get brandColor8 => colorMap['brandColor8'] ?? const Color(0xFF003CAB);
 
-  ///#001F97
-  Color get brandColor10 => colorMap['brandColor10'] ?? const Color(0xFF001F97);
+  ///#002A7C
+  Color get brandColor9 => colorMap['brandColor9'] ?? const Color(0xFF002A7C);
 
-  ///#ECF2FE
+  ///#001A57
+  Color get brandColor10 => colorMap['brandColor10'] ?? const Color(0xFF001A57);
+
+  ///#F2F3FF
   Color get brandLightColor => colorMap['brandLightColor'] ?? brandColor1;
 
-  ///#D4E3FC
+  ///#D9E1FF
   Color get brandFocusColor => colorMap['brandFocusColor'] ?? brandColor2;
 
-  ///#BBD3FB
+  ///#B5C7FF
   Color get brandDisabledColor => colorMap['brandDisabledColor'] ?? brandColor3;
 
-  ///#266FE8
-  Color get brandHoverColor => colorMap['brandHoverColor'] ?? brandColor7;
+  ///#366EF4
+  Color get brandHoverColor => colorMap['brandHoverColor'] ?? brandColor6;
 
   ///#0052D9
-  Color get brandNormalColor => colorMap['brandNormalColor'] ?? brandColor8;
+  Color get brandNormalColor => colorMap['brandNormalColor'] ?? brandColor7;
 
-  ///#0034B5
-  Color get brandClickColor => colorMap['brandClickColor'] ?? brandColor9;
+  ///#003CAB
+  Color get brandClickColor => colorMap['brandClickColor'] ?? brandColor8;
 
   /// 错误色组----------------------------------------------------
 
-  ///#FDECEE
-  Color get errorColor1 => colorMap['errorColor1'] ?? const Color(0xFFFDECEE);
+  ///#FFF0ED
+  Color get errorColor1 => colorMap['errorColor1'] ?? const Color(0xFFFFF0ED);
 
-  ///#F9D7D9
-  Color get errorColor2 => colorMap['errorColor2'] ?? const Color(0xFFF9D7D9);
+  ///#FFD8D2
+  Color get errorColor2 => colorMap['errorColor2'] ?? const Color(0xFFFFD8D2);
 
-  ///#F8B9BE
-  Color get errorColor3 => colorMap['errorColor3'] ?? const Color(0xFFF8B9BE);
+  ///#FFB9B0
+  Color get errorColor3 => colorMap['errorColor3'] ?? const Color(0xFFFFB9B0);
 
-  ///#F78D94
-  Color get errorColor4 => colorMap['errorColor4'] ?? const Color(0xFFF78D94);
+  ///#FF9285
+  Color get errorColor4 => colorMap['errorColor4'] ?? const Color(0xFFFF9285);
 
-  ///#F36D78
-  Color get errorColor5 => colorMap['errorColor5'] ?? const Color(0xFFF36D78);
+  ///#F6685D
+  Color get errorColor5 => colorMap['errorColor5'] ?? const Color(0xFFF6685D);
 
-  ///#E34D59
-  Color get errorColor6 => colorMap['errorColor6'] ?? const Color(0xFFE34D59);
+  ///#D54941
+  Color get errorColor6 => colorMap['errorColor6'] ?? const Color(0xFFD54941);
 
-  ///#C9353F
-  Color get errorColor7 => colorMap['errorColor7'] ?? const Color(0xFFC9353F);
+  ///#AD352F
+  Color get errorColor7 => colorMap['errorColor7'] ?? const Color(0xFFAD352F);
 
-  ///#B11F26
-  Color get errorColor8 => colorMap['errorColor8'] ?? const Color(0xFFB11F26);
+  ///#881F1C
+  Color get errorColor8 => colorMap['errorColor8'] ?? const Color(0xFF881F1C);
 
-  ///#951114
-  Color get errorColor9 => colorMap['errorColor9'] ?? const Color(0xFF951114);
+  ///#68070A
+  Color get errorColor9 => colorMap['errorColor9'] ?? const Color(0xFF68070A);
 
-  ///#680506
-  Color get errorColor10 => colorMap['errorColor10'] ?? const Color(0xFF680506);
+  ///#490002
+  Color get errorColor10 => colorMap['errorColor10'] ?? const Color(0xFF490002);
 
-  ///#FDECEE
+  ///#FFF0ED
   Color get errorLightColor => colorMap['errorLightColor'] ?? errorColor1;
 
-  ///#F9D7D9
+  ///#FFD8D2
   Color get errorFocusColor => colorMap['errorFocusColor'] ?? errorColor2;
 
-  ///#F8B9BE
+  ///#FFB9B0
   Color get errorDisabledColor => colorMap['errorDisabledColor'] ?? errorColor3;
 
-  ///#F36D78
+  ///#F6685D
   Color get errorHoverColor => colorMap['errorHoverColor'] ?? errorColor5;
 
-  ///#E34D59
+  ///#D54941
   Color get errorNormalColor => colorMap['errorNormalColor'] ?? errorColor6;
 
-  ///#C9353F
+  ///#AD352F
   Color get errorClickColor => colorMap['errorClickColor'] ?? errorColor7;
 
   /// 警告色组----------------------------------------------------
 
-  ///#FEF3E6
-  Color get warningColor1 => colorMap['warningColor1'] ?? const Color(0xFFFEF3E6);
+  ///#FFF1E9
+  Color get warningColor1 => colorMap['warningColor1'] ?? const Color(0xFFFFF1E9);
 
-  ///#F9E0C7
-  Color get warningColor2 => colorMap['warningColor2'] ?? const Color(0xFFF9E0C7);
+  ///#FFD9C2
+  Color get warningColor2 => colorMap['warningColor2'] ?? const Color(0xFFFFD9C2);
 
-  ///#F7C797
-  Color get warningColor3 => colorMap['warningColor3'] ?? const Color(0xFFF7C797);
+  ///#FFB98C
+  Color get warningColor3 => colorMap['warningColor3'] ?? const Color(0xFFFFB98C);
 
-  ///#F2995F
-  Color get warningColor4 => colorMap['warningColor4'] ?? const Color(0xFFF2995F);
+  ///#FA9550
+  Color get warningColor4 => colorMap['warningColor4'] ?? const Color(0xFFFA9550);
 
-  ///#ED7B2F
-  Color get warningColor5 => colorMap['warningColor5'] ?? const Color(0xFFED7B2F);
+  ///#E37318
+  Color get warningColor5 => colorMap['warningColor5'] ?? const Color(0xFFE37318);
 
-  ///#D35A21
-  Color get warningColor6 => colorMap['warningColor6'] ?? const Color(0xFFD35A21);
+  ///#BE5A00
+  Color get warningColor6 => colorMap['warningColor6'] ?? const Color(0xFFBE5A00);
 
-  ///#BA431B
-  Color get warningColor7 => colorMap['warningColor7'] ?? const Color(0xFFBA431B);
+  ///#954500
+  Color get warningColor7 => colorMap['warningColor7'] ?? const Color(0xFF954500);
 
-  ///#9E3610
-  Color get warningColor8 => colorMap['warningColor8'] ?? const Color(0xFF9E3610);
+  ///#713300
+  Color get warningColor8 => colorMap['warningColor8'] ?? const Color(0xFF713300);
 
-  ///#842B0B
-  Color get warningColor9 => colorMap['warningColor9'] ?? const Color(0xFF842B0B);
+  ///#532300
+  Color get warningColor9 => colorMap['warningColor9'] ?? const Color(0xFF532300);
 
-  ///#5A1907
+  ///#3B1700
   Color get warningColor10 =>
-      colorMap['warningColor10'] ?? const Color(0xFF5A1907);
+      colorMap['warningColor10'] ?? const Color(0xFF3B1700);
 
-  ///#FEF3E6
+  ///#FFF1E9
   Color get warningLightColor => colorMap['warningLightColor'] ?? warningColor1;
 
-  ///#F9E0C7
+  ///#FFD9C2
   Color get warningFocusColor => colorMap['warningFocusColor'] ?? warningColor2;
 
-  ///#F7C797
+  ///#FFB98C
   Color get warningDisabledColor =>
       colorMap['warningDisabledColor'] ?? warningColor3;
 
-  ///#F2995F
+  ///#FA9550
   Color get warningHoverColor => colorMap['warningHoverColor'] ?? warningColor4;
 
-  ///#ED7B2F
+  ///#E37318
   Color get warningNormalColor => colorMap['warningNormalColor'] ?? warningColor5;
 
-  ///#D35A21
+  ///#BE5A00
   Color get warningClickColor => colorMap['warningClickColor'] ?? warningColor6;
 
   /// 成功色组----------------------------------------------------
 
-  ///#E8F8F2
-  Color get successColor1 => colorMap['successColor1'] ?? const Color(0xFFE8F8F2);
+  ///#E3F9E9
+  Color get successColor1 => colorMap['successColor1'] ?? const Color(0xFFE3F9E9);
 
-  ///#BCEBDC
-  Color get successColor2 => colorMap['successColor2'] ?? const Color(0xFFBCEBDC);
+  ///#C6F3D7
+  Color get successColor2 => colorMap['successColor2'] ?? const Color(0xFFC6F3D7);
 
-  ///#85DBBE
-  Color get successColor3 => colorMap['successColor3'] ?? const Color(0xFF85DBBE);
+  ///#92DAB2
+  Color get successColor3 => colorMap['successColor3'] ?? const Color(0xFF92DAB2);
 
-  ///#48C79C
-  Color get successColor4 => colorMap['successColor4'] ?? const Color(0xFF48C79C);
+  ///#56C08D
+  Color get successColor4 => colorMap['successColor4'] ?? const Color(0xFF56C08D);
 
-  ///#00A870
-  Color get successColor5 => colorMap['successColor5'] ?? const Color(0xFF00A870);
+  ///#2BA471
+  Color get successColor5 => colorMap['successColor5'] ?? const Color(0xFF2BA471);
 
-  ///#078D5C
-  Color get successColor6 => colorMap['successColor6'] ?? const Color(0xFF078D5C);
+  ///#008858
+  Color get successColor6 => colorMap['successColor6'] ?? const Color(0xFF008858);
 
-  ///#067945
-  Color get successColor7 => colorMap['successColor7'] ?? const Color(0xFF067945);
+  ///#006C45
+  Color get successColor7 => colorMap['successColor7'] ?? const Color(0xFF006C45);
 
-  ///#056334
-  Color get successColor8 => colorMap['successColor8'] ?? const Color(0xFF056334);
+  ///#005334
+  Color get successColor8 => colorMap['successColor8'] ?? const Color(0xFF005334);
 
-  ///#044F2A
-  Color get successColor9 => colorMap['successColor9'] ?? const Color(0xFF044F2A);
+  ///#003B23
+  Color get successColor9 => colorMap['successColor9'] ?? const Color(0xFF003B23);
 
-  ///#033017
+  ///#002515
   Color get successColor10 =>
-      colorMap['successColor10'] ?? const Color(0xFF033017);
+      colorMap['successColor10'] ?? const Color(0xFF002515);
 
-  ///#E8F8F2
+  ///#E3F9E9
   Color get successLightColor => colorMap['successLightColor'] ?? successColor1;
 
-  ///#BCEBDC
+  ///#C6F3D7
   Color get successFocusColor => colorMap['successFocusColor'] ?? successColor2;
 
-  ///#85DBBE
+  ///#92DAB2
   Color get successDisabledColor =>
       colorMap['successDisabledColor'] ?? successColor3;
 
-  ///#48C79C
+  ///#56C08D
   Color get successHoverColor => colorMap['successHoverColor'] ?? successColor4;
 
-  ///#00A870
+  ///#2BA471
   Color get successNormalColor => colorMap['successNormalColor'] ?? successColor5;
 
-  ///#078D5C
+  ///#008858
   Color get successClickColor => colorMap['successClickColor'] ?? successColor6;
 
   /// 文字色组----------------------------------------------------
