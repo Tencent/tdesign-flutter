@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../td_export.dart';
 
+/// 限制Function类型，防止传递错误的Function，导致参数对不上
+typedef LinkClick = Function(Uri? uri);
+
 enum TDLinkType {
   basic,
   withUnderline,
@@ -36,7 +39,7 @@ class TDLink extends StatelessWidget {
     this.uri,
     this.prefixIcon,
     this.suffixIcon,
-    this.followLink,
+    this.linkClick,
     this.type = TDLinkType.basic,
     this.style = TDLinkStyle.defaultStyle,
     this.state = TDLinkState.normal,
@@ -88,7 +91,7 @@ class TDLink extends StatelessWidget {
   final double? rightGapWithIcon;
 
   /// action when the link clicked
-  final Function? followLink;
+  final LinkClick? linkClick;
 
   @override
   Widget build(BuildContext context) {
@@ -181,13 +184,13 @@ class TDLink extends StatelessWidget {
           if (state == TDLinkState.disabled) {
             return;
           }
-          if (followLink != null) {
-            followLink!(uri);
+          if (linkClick != null) {
+            linkClick!(uri);
           } else {
             var tdLinkConfig = getConfiguration(context);
 
-            if (tdLinkConfig != null && tdLinkConfig.followLink != null) {
-              tdLinkConfig.followLink!(uri);
+            if (tdLinkConfig != null && tdLinkConfig.linkClick != null) {
+              tdLinkConfig.linkClick!(uri);
             }
           }
         },
@@ -263,13 +266,13 @@ class TDLink extends StatelessWidget {
 /// 存储可以自定义TDLink跳转算法的控件
 class TDLinkConfiguration extends InheritedWidget {
   /// 统一跳转的函数
-  final Function? followLink;
+  final LinkClick? linkClick;
 
-  const TDLinkConfiguration({this.followLink, Key? key, required Widget child})
+  const TDLinkConfiguration({this.linkClick, Key? key, required Widget child})
       : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(covariant TDLinkConfiguration oldWidget) {
-    return followLink != oldWidget.followLink;
+    return linkClick != oldWidget.linkClick;
   }
 }
