@@ -64,8 +64,9 @@ class TDSwitchState extends State<TDSwitch> {
   @override
   Widget build(BuildContext context) {
     final theme = TDTheme.of(context);
-    var onColor = widget.onColor ?? theme.brandColor8;
-    var offColor = widget.offColor ?? theme.grayColor4;
+    final switchEnable = widget.enable && widget.type != TDSwitchType.loading;
+    var onColor = widget.onColor ?? theme.brandColor7;
+    var offColor = widget.offColor ?? theme.fontGyColor4;
     Widget current = TDCupertinoSwitch(
       value: isOn,
       activeColor: onColor,
@@ -77,11 +78,11 @@ class TDSwitchState extends State<TDSwitch> {
       },
       thumbView: _getThumbView(onColor, offColor),
     );
-    if (!widget.enable) {
+    if (!switchEnable) {
       current = Opacity(
         opacity: 0.4,
         child: IgnorePointer(
-          ignoring: !widget.enable,
+          ignoring: !switchEnable,
           child: current,
         ),
       );
