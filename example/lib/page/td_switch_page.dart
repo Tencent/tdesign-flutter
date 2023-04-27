@@ -249,7 +249,7 @@ class TDSwitchPageState extends State<TDSwitchPage> {
         isOn: true,
         size: TDSwitchSize.small,
       ),
-      title: '中尺寸24',
+      title: '小尺寸24',
     );
   }
 
