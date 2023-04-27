@@ -15,7 +15,7 @@ class TDSwitch extends StatefulWidget {
     this.size = TDSwitchSize.medium,
     this.type = TDSwitchType.fill,
     this.onColor,
-    this.offColor = CupertinoColors.secondarySystemFill,
+    this.offColor,
     this.onChanged,
   }) : super(key: key);
 
@@ -66,7 +66,7 @@ class TDSwitchState extends State<TDSwitch> {
     final theme = TDTheme.of(context);
     final switchEnable = widget.enable && widget.type != TDSwitchType.loading;
     var onColor = widget.onColor ?? theme.brandColor7;
-    var offColor = widget.offColor ?? theme.fontGyColor4;
+    var offColor = widget.offColor ?? theme.grayColor4;
     Widget current = TDCupertinoSwitch(
       value: isOn,
       activeColor: onColor,
