@@ -172,7 +172,7 @@ class TDLink extends StatelessWidget {
 
   Icon _getDefaultIcon(BuildContext context) {
     return Icon(
-      TDIcons.link,
+      type == TDLinkType.withPrefixIcon ? TDIcons.link : TDIcons.jump,
       size: _getIconSize(context),
       color: getColor(context),
     );
@@ -212,11 +212,11 @@ class TDLink extends StatelessWidget {
     }
     switch (size) {
       case TDLinkSize.large:
-        return 11.99;
+        return 18;
       case TDLinkSize.small:
-        return 9.32;
+        return 14;
       case TDLinkSize.medium:
-        return 10.66;
+        return 16;
     }
   }
 
