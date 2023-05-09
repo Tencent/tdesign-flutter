@@ -280,7 +280,11 @@ class _TDBottomNavBarState extends State<TDBottomNavBar> {
                 borderRadius:
                     isCapsuleOutlineType ? BorderRadius.circular(56) : null,
                 border: widget.showTopBorder! && !isCapsuleOutlineType
-                    ?  Border(top: widget.topBorder ?? BorderSide(color: TDTheme.of(context).grayColor3))
+                    ? Border(
+                        top: widget.topBorder ??
+                            BorderSide(
+                                color: TDTheme.of(context).grayColor3,
+                                width: 0.5))
                     : null,
                 boxShadow: isCapsuleOutlineType
                     ? TDTheme.of(context).shadowsTop
@@ -432,6 +436,9 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
                 child: Container(
                   /// 设计稿上 tab个数大于3时，左右边距为8，小于等于3时，左右边距为12
                   width: itemWidth - (tabsLength > 3 ? 16 : 24),
+                  height: basiceType == TDBottomNavBarBasicType.text ||
+                          basiceType == TDBottomNavBarBasicType.expansionPanel
+                      ? 32 : null,
                   decoration: BoxDecoration(
                       color: TDTheme.of(context).brandColor1,
                       borderRadius:
@@ -557,15 +564,14 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
 
   Widget _textItem(
       BuildContext context, String text, bool isSelected, Font font) {
-    return Text(
+    return TDText(
       text,
-      style: TextStyle(
-          color: isSelected
-              ? TDTheme.of(context).brandColor8
-              : TDTheme.of(context).fontGyColor1,
-          fontSize: font.size,
-          height: font.height,
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal),
+      font: font,
+      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+      textColor: isSelected
+          ? TDTheme.of(context).brandColor8
+          : TDTheme.of(context).fontGyColor1,
+      forceVerticalCenter: true,
     );
   }
 }
@@ -651,7 +657,7 @@ class PopUpMenuItem extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: _kMenuItemMinHeight),
       alignment: alignment,
       child: itemWidget ??
-          Text(
+          TDText(
             value,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
           ),
