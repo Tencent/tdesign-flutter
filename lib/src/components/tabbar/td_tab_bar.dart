@@ -132,7 +132,7 @@ class _TDTabBarState extends State<TDTabBar> {
           ? widget.height ?? _defaultVerticalHeight * widget.tabs.length
           : widget.height ?? _defaultHeight,
       decoration:
-          widget.decoration ?? BoxDecoration(color: widget.backgroundColor),
+          widget.decoration ?? BoxDecoration(color: widget.backgroundColor,border: Border(bottom: BorderSide(color: TDTheme.of(context).grayColor3,width: 0.5))),
       child: widget.isVertical
           ? VerticalTabBar(
               selectedBackgroundColor: TDTheme.of(context).whiteColor1,
