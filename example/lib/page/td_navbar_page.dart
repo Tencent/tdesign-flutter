@@ -148,7 +148,7 @@ class TDNavBarPage extends StatelessWidget {
         centerTitle: false,
         titleMargin: 0,
         titleWidget:  const TDImage(
-          imgUrl:'https://img01.sogoucdn.com/app/a/200797/37a8fd5f-4e64-4639-975b-44da9e4f612c',
+          assetUrl: 'assets/img/td_brand.png',
           width: 102,
           height: 24,
         ),
