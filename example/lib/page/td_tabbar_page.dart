@@ -33,6 +33,20 @@ class _TDTabBarPageState extends State<TDTabBarPage>
       TDTab(text: '选项'),
       TDTab(text: '选项'),
       TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
+      TDTab(text: '选项'),
     ];
     return tabs;
   }
@@ -86,15 +100,14 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         title: tdTitle(),
         desc: '用于内容分类后的展示切换。',
         exampleCodeGroup: 'tabs',
-        padding: const EdgeInsets.symmetric(vertical: 16),
         children: [
           ExampleModule(
             title: '组件类型',
             children: [
               ExampleItem(desc: '均分选项卡', builder: _buildItemWithSplit1),
-              ExampleItem(builder: _buildItemWithSplit2),
-              ExampleItem(builder: _buildItemWithSplit3),
-              ExampleItem(builder: _buildItemWithSplit4),
+              ExampleItem(builder: _buildItemWithSplit2, padding: const EdgeInsets.only(top: 16)),
+              ExampleItem(builder: _buildItemWithSplit3, padding: const EdgeInsets.only(top: 16)),
+              ExampleItem(builder: _buildItemWithSplit4, padding: const EdgeInsets.only(top: 16)),
               ExampleItem(desc: '等距选项卡', builder: _buildItemWithSpace),
               ExampleItem(desc: '带图标选项卡', builder: _buildItemWithIcon),
               ExampleItem(desc: '带微标选项卡', builder: _buildItemWithLogo),
@@ -108,7 +121,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
             ExampleItem(desc: '选项卡尺寸', builder: _buildItemWithSizeSmall),
             ExampleItem(builder: _buildItemWithSizeBig),
             ExampleItem(desc: '选项卡样式', builder: _buildItemWithOutlineNormal),
-            ExampleItem(builder: _buildItemWithOutlineCard),
+            ExampleItem(builder: _buildItemWithOutlineCard, padding: const EdgeInsets.only(top: 16)),
           ]),
         ]);
   }
@@ -164,13 +177,14 @@ class _TDTabBarPageState extends State<TDTabBarPage>
   @Demo(group: 'tabs')
   Widget _buildItemWithSpace(BuildContext context) {
     return TDTabBar(
-      tabs: subList(6),
+      tabs: subList(16),
       indicatorWidth: 16,
       indicatorHeight: 3,
-      controller: TabController(length: 6, vsync: this),
+      controller: TabController(length: 16, vsync: this),
       backgroundColor: Colors.white,
       labelPadding: const EdgeInsets.all(10),
       showIndicator: true,
+      isScrollable: true,
     );
   }
 
@@ -181,21 +195,21 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         text: '选项',
         icon: Icon(
           TDIcons.app,
-          size: 14,
+          size: 18,
         ),
       ),
       const TDTab(
         text: '选项',
         icon: Icon(
           TDIcons.app,
-          size: 14,
+          size: 18,
         ),
       ),
       const TDTab(
         text: '选项',
         icon: Icon(
           TDIcons.app,
-          size: 14,
+          size: 18,
         ),
       ),
     ];
@@ -231,7 +245,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         height: 48,
         icon: Icon(
           TDIcons.app,
-          size: 14,
+          size: 18,
         ),
       ),
     ];
@@ -255,6 +269,8 @@ class _TDTabBarPageState extends State<TDTabBarPage>
               tabs: subList(3),
               controller: tabController,
               showIndicator: true,
+              indicatorWidth: 16,
+              indicatorHeight: 3,
               backgroundColor: Colors.white,
               isScrollable: false,
               isVertical: false),
@@ -369,7 +385,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
         indicatorWidth: 16,
         indicatorHeight: 3,
         outlineType: TDTabBarOutlineType.capsule,
-        labelPadding: const EdgeInsets.all(10),
         controller: TabController(length: 4, vsync: this),
         backgroundColor: Colors.white,
         showIndicator: false);
