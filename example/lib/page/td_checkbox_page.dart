@@ -61,7 +61,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
     return TDCheckboxGroupContainer(
       selectIds: const ['index:1'],
       child: ListView.builder(
-        padding: const EdgeInsets.all(0),
+        padding: EdgeInsets.zero,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
@@ -268,12 +268,10 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (contet, index) {
           var title = '多选';
-          return SizedBox(
-            height: 56,
-            child: TDCheckbox(
-              id: 'index:$index',
-              title: title,
-            ),
+          return TDCheckbox(
+            id: 'index:$index',
+            title: title,
+            size: TDCheckBoxSize.large,
           );
         },
         itemCount: 4,
