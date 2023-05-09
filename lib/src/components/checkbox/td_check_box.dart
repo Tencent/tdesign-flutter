@@ -312,7 +312,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                             child: icon,
                           ),
                           SizedBox(
-                            width: spacing,
+                            width: widget.cardMode ? 0 : spacing,
                           ),
                           Expanded(
                               child: Padding(
@@ -328,7 +328,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                         child: Padding(
                           padding: EdgeInsets.only(
                               top: widget.cardMode ? 4.scale : 0,
-                              left: widget.cardMode ? (16 + spacing) : 48,
+                              left: widget.cardMode ? 16 : 48,
                               right: widget.insetSpacing ?? 16),
                           child: TDText(widget.subTitle ?? '',
                               maxLines: widget.subTitleMaxLine,
