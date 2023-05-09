@@ -213,6 +213,7 @@ class _TDButtonState extends State<TDButton> {
             style.textColor ?? TDTheme.of(context).fontGyColor1,
         style: widget.disabled ? widget.disableTextStyle : widget.textStyle,
         forceVerticalCenter: true,
+        fontWeight: FontWeight.w600,
       );
       children.add(text);
     }
