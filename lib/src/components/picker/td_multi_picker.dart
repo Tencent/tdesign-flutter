@@ -222,7 +222,7 @@ class TDMultiPicker extends StatelessWidget {
                     child: TDText(
                       title,
                       style: centerTextStyle ?? TextStyle(
-                        fontSize: TDTheme.of(context).fontBodyLarge!.size,
+                        fontSize: TDTheme.of(context).fontTitleLarge!.size,
                         fontWeight: FontWeight.w600,
                         color: TDTheme.of(context).fontGyColor1
                       ),
