@@ -88,6 +88,7 @@ class TDDatePicker extends StatefulWidget {
 class _TDDatePickerState extends State<TDDatePicker> {
 
   double pickerHeight = 0;
+  static const _pickerTitleHeight = 56.0;
 
   @override
   void initState() {
@@ -175,7 +176,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                   child: IgnorePointer(
                     ignoring: true,
                     child: Container(
-                      height: 48,
+                      height: _pickerTitleHeight,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -192,7 +193,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                   child: IgnorePointer(
                     ignoring: true,
                     child: Container(
-                      height: 48,
+                      height: _pickerTitleHeight,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -397,7 +398,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
     );
   }
 
-  double getTitleHeight() => widget.titleHeight ?? 48;
+  double getTitleHeight() => widget.titleHeight ?? _pickerTitleHeight;
 }
 
 // 时间选择器的数据类
