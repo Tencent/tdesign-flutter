@@ -69,7 +69,7 @@ class TDMultiPicker extends StatelessWidget {
   /// 若为null表示全部从零开始
   final List<int>? initialIndexes;
 
-
+  static const _pickerTitleHeight = 56.0;
 
   const TDMultiPicker(
       {required this.title,
@@ -150,7 +150,7 @@ class TDMultiPicker extends StatelessWidget {
                 child: IgnorePointer(
                   ignoring: true,
                   child: Container(
-                    height: 48,
+                    height: _pickerTitleHeight,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -167,7 +167,7 @@ class TDMultiPicker extends StatelessWidget {
                 child: IgnorePointer(
                   ignoring: true,
                   child: Container(
-                    height: 48,
+                    height: _pickerTitleHeight,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -255,7 +255,7 @@ class TDMultiPicker extends StatelessWidget {
     );
   }
 
-  double getTitleHeight() => titleHeight ?? 48;
+  double getTitleHeight() => titleHeight ?? _pickerTitleHeight;
 
   Widget buildList(context, int position, List<FixedExtentScrollController> controllers) {
     var maxWidth = MediaQuery.of(context).size.width;
@@ -387,6 +387,8 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
 
   double pickerHeight = 0;
 
+  static const _pickerTitleHeight = 56.0;
+
   @override
   void initState() {
     super.initState();
@@ -447,7 +449,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                   child: IgnorePointer(
                     ignoring: true,
                     child: Container(
-                      height: 48,
+                      height: _pickerTitleHeight,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -464,7 +466,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                   child: IgnorePointer(
                     ignoring: true,
                     child: Container(
-                      height: 48,
+                      height: _pickerTitleHeight,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -591,7 +593,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
     );
   }
 
-  double getTitleHeight() => widget.titleHeight ?? 48;
+  double getTitleHeight() => widget.titleHeight ?? _pickerTitleHeight;
 }
 
 class MultiLinkedPickerModel {
