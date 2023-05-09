@@ -54,8 +54,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
     String? desc,
     bool on = true,
     bool enable = true,
-    Color? onColor,
-    Color? offColor,
+    Color? trackOnColor,
+    Color? trackOffColor,
+    Color? thumbContentOnColor,
+    Color? thumbContentOffColor,
     TDSwitchSize? size,
     TDSwitchType? type,
   }) {
@@ -75,8 +77,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
           child: _buildSwitch(
               on: on,
               enable: enable,
-              onColor: onColor,
-              offColor: offColor,
+              trackOnColor: trackOnColor,
+              trackOffColor: trackOffColor,
+              thumbContentOnColor: thumbContentOnColor,
+              thumbContentOffColor: thumbContentOffColor,
               size: size,
               type: type),
         )
@@ -164,7 +168,7 @@ class TDSwitchPageState extends State<TDSwitchPage> {
   Widget _buildSwitchWithColor(BuildContext context) {
     return _buildItem(
       context,
-      const TDSwitch(isOn: true, onColor: Colors.green),
+      const TDSwitch(isOn: true, trackOnColor: Colors.green),
       title: '自定义颜色开关',
     );
   }
@@ -257,16 +261,20 @@ class TDSwitchPageState extends State<TDSwitchPage> {
   Widget _buildSwitch({
     bool on = true,
     bool enable = true,
-    Color? onColor,
-    Color? offColor,
+    Color? trackOnColor,
+    Color? trackOffColor,
+    Color? thumbContentOnColor,
+    Color? thumbContentOffColor,
     TDSwitchSize? size,
     TDSwitchType? type,
   }) {
     return TDSwitch(
       isOn: on,
-      onColor: onColor,
+      trackOnColor: trackOnColor,
+      trackOffColor: trackOffColor,
+      thumbContentOnColor: thumbContentOnColor,
+      thumbContentOffColor: thumbContentOffColor,
       enable: enable,
-      offColor: offColor,
       size: size,
       type: type,
     );
