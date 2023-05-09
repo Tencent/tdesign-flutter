@@ -172,16 +172,17 @@ class _ExamplePageState extends State<ExamplePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        for (var item in data.children) _buildExampleItem(item)
+        for (var index = 0; index < data.children.length; index++) _buildExampleItem(data.children[index],index)
       ],
     );
   }
 
-  Widget _buildExampleItem(ExampleItem data) {
+  Widget _buildExampleItem(ExampleItem data, int index) {
     return Container(
       margin: widget.padding,
       child: ExampleItemWidget(
         data: data,
+        index: index,
       ),
     );
   }
@@ -219,9 +220,10 @@ class ExampleItem {
 
 /// 组件示例
 class ExampleItemWidget extends StatefulWidget {
-  const ExampleItemWidget({required this.data, Key? key}) : super(key: key);
+  const ExampleItemWidget({required this.data, Key? key, required this.index}) : super(key: key);
 
   final ExampleItem data;
+  final int index;
 
   @override
   State<ExampleItemWidget> createState() => _ExampleItemWidgetState();
@@ -253,8 +255,8 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
             ? Container()
             : Container(
                 alignment: Alignment.topLeft,
-                margin: const EdgeInsets.only(
-                    left: 16, right: 16, top: 8, bottom: 16),
+                margin: EdgeInsets.only(
+                    left: 16, right: 16, top: widget.index == 0 ? 8 : 24, bottom: 16),
                 child: TDText(
                   widget.data.desc,
                   font: TDTheme.of(context).fontBodyMedium,
