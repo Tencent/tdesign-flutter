@@ -34,7 +34,7 @@ class TDText extends StatelessWidget {
   const TDText(
     this.data, {
     this.font,
-    this.fontWeight = FontWeight.w400,
+    this.fontWeight,
     this.fontFamily,
     this.textColor = Colors.black,
     this.backgroundColor,
@@ -62,7 +62,7 @@ class TDText extends StatelessWidget {
   const TDText.rich(
     this.textSpan, {
     this.font,
-    this.fontWeight = FontWeight.w400,
+    this.fontWeight,
     this.fontFamily,
     this.textColor = Colors.black,
     this.backgroundColor,
@@ -188,7 +188,7 @@ class TDText extends StatelessWidget {
       /// 不使用系统本身的背景色，因为系统属性存在中英文是，会导致颜色出现阶梯状
       backgroundColor: backgroundColor,
       fontSize: style?.fontSize ?? textFont.size,
-      fontWeight: style?.fontWeight ?? fontWeight,
+      fontWeight: style?.fontWeight ?? fontWeight ?? textFont.fontWeight,
       fontStyle: style?.fontStyle,
       letterSpacing: style?.letterSpacing,
       wordSpacing: style?.wordSpacing,
@@ -264,7 +264,7 @@ class TDTextSpan extends TextSpan {
     BuildContext?
         context, // 如果未设置font，且不想使用默认的fontBodyLarge尺寸时，需设置context，否则可省略
     Font? font,
-    FontWeight fontWeight = FontWeight.w400,
+    FontWeight? fontWeight,
     FontFamily? fontFamily,
     Color textColor = Colors.black,
     bool? isTextThrough = false,
@@ -294,7 +294,7 @@ class TDTextSpan extends TextSpan {
     BuildContext? context,
     TextStyle? style,
     Font? font,
-    FontWeight fontWeight,
+    FontWeight? fontWeight,
     FontFamily? fontFamily,
     Color textColor,
     bool? isTextThrough,
@@ -309,7 +309,7 @@ class TDTextSpan extends TextSpan {
       color: style?.color ?? textColor,
       backgroundColor: style?.backgroundColor,
       fontSize: style?.fontSize ?? textFont.size,
-      fontWeight: style?.fontWeight ?? fontWeight,
+      fontWeight: style?.fontWeight ?? fontWeight ?? textFont.fontWeight,
       fontStyle: style?.fontStyle,
       letterSpacing: style?.letterSpacing,
       wordSpacing: style?.wordSpacing,
