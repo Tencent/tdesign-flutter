@@ -119,7 +119,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
           ]),
           ExampleModule(title: '组件样式', children: [
             ExampleItem(desc: '选项卡尺寸', builder: _buildItemWithSizeSmall),
-            ExampleItem(builder: _buildItemWithSizeBig),
+            ExampleItem(builder: _buildItemWithSizeBig, padding: const EdgeInsets.only(top: 16)),
             ExampleItem(desc: '选项卡样式', builder: _buildItemWithOutlineNormal),
             ExampleItem(builder: _buildItemWithOutlineCard, padding: const EdgeInsets.only(top: 16)),
           ]),
@@ -130,8 +130,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
   Widget _buildItemWithSplit1(BuildContext context) {
     return TDTabBar(
       tabs: subList(2),
-      indicatorWidth: 16,
-      indicatorHeight: 3,
       controller: _tabController1,
       backgroundColor: Colors.white,
       showIndicator: true,
@@ -142,8 +140,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
   Widget _buildItemWithSplit2(BuildContext context) {
     return TDTabBar(
       tabs: subList(3),
-      indicatorWidth: 16,
-      indicatorHeight: 3,
       controller: _tabController2,
       backgroundColor: Colors.white,
       showIndicator: true,
@@ -154,8 +150,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
   Widget _buildItemWithSplit3(BuildContext context) {
     return TDTabBar(
       tabs: subList(4),
-      indicatorWidth: 16,
-      indicatorHeight: 3,
       controller: _tabController3,
       backgroundColor: Colors.white,
       showIndicator: true,
@@ -166,8 +160,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
   Widget _buildItemWithSplit4(BuildContext context) {
     return TDTabBar(
       tabs: subList(5),
-      indicatorWidth: 16,
-      indicatorHeight: 3,
       controller: _tabController4,
       backgroundColor: Colors.white,
       showIndicator: true,
@@ -178,8 +170,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
   Widget _buildItemWithSpace(BuildContext context) {
     return TDTabBar(
       tabs: subList(16),
-      indicatorWidth: 16,
-      indicatorHeight: 3,
       controller: TabController(length: 16, vsync: this),
       backgroundColor: Colors.white,
       labelPadding: const EdgeInsets.all(10),
@@ -215,8 +205,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
     ];
     return TDTabBar(
         tabs: tabs,
-        indicatorWidth: 16,
-        indicatorHeight: 3,
         controller: TabController(length: 3, vsync: this),
         backgroundColor: Colors.white,
         showIndicator: true);
@@ -251,8 +239,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
     ];
     return TDTabBar(
         tabs: tabs,
-        indicatorWidth: 16,
-        indicatorHeight: 3,
         controller: TabController(length: 3, vsync: this),
         backgroundColor: Colors.white,
         showIndicator: true);
@@ -269,8 +255,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
               tabs: subList(3),
               controller: tabController,
               showIndicator: true,
-              indicatorWidth: 16,
-              indicatorHeight: 3,
               backgroundColor: Colors.white,
               isScrollable: false,
               isVertical: false),
@@ -303,8 +287,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
     ];
     return TDTabBar(
         tabs: tabs,
-        indicatorWidth: 16,
-        indicatorHeight: 3,
         controller: TabController(length: 3, vsync: this),
         backgroundColor: Colors.white,
         showIndicator: true);
@@ -328,8 +310,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
     ];
     return TDTabBar(
         tabs: tabs,
-        indicatorWidth: 16,
-        indicatorHeight: 3,
         controller: TabController(length: 4, vsync: this),
         backgroundColor: Colors.white,
         showIndicator: true);
@@ -357,8 +337,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
     ];
     return TDTabBar(
         tabs: tabs,
-        indicatorWidth: 16,
-        indicatorHeight: 3,
         controller: TabController(length: 4, vsync: this),
         backgroundColor: Colors.white,
         showIndicator: true);
@@ -382,8 +360,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
     ];
     return TDTabBar(
         tabs: tabs,
-        indicatorWidth: 16,
-        indicatorHeight: 3,
         outlineType: TDTabBarOutlineType.capsule,
         controller: TabController(length: 4, vsync: this),
         backgroundColor: Colors.white,
@@ -408,8 +384,6 @@ class _TDTabBarPageState extends State<TDTabBarPage>
     ];
     return TDTabBar(
         tabs: tabs,
-        indicatorWidth: 16,
-        indicatorHeight: 3,
         outlineType: TDTabBarOutlineType.card,
         controller: TabController(length: 4, vsync: this),
         backgroundColor: Colors.white,
