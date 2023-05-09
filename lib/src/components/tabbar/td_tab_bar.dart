@@ -226,10 +226,10 @@ class TDTabBarIndicator extends Decoration {
 
 class _TDTabBarIndicatorPainter extends BoxPainter {
   /// 下标宽度
-  static const double _defaultIndicatorWidth = 56;
+  static const double _defaultIndicatorWidth = 16;
 
   /// 下标高度
-  static const double _defaultIndicatorHeight = 1.5;
+  static const double _defaultIndicatorHeight = 3;
 
   final TDTabBarIndicator decoration;
 
@@ -252,9 +252,9 @@ class _TDTabBarIndicatorPainter extends BoxPainter {
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
     canvas.drawLine(
         Offset(offset.dx + (configuration.size!.width - _indicatorWidth()) / 2,
-            configuration.size!.height - _indicatorHeight()),
+            configuration.size!.height - _indicatorHeight() / 2),
         Offset(offset.dx + (configuration.size!.width + _indicatorWidth()) / 2,
-            configuration.size!.height - _indicatorHeight()),
+            configuration.size!.height - _indicatorHeight() / 2),
         _paint..strokeWidth = _indicatorHeight());
   }
 
