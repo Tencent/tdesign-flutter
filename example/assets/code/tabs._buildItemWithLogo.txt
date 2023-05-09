@@ -21,14 +21,12 @@
         height: 48,
         icon: Icon(
           TDIcons.app,
-          size: 14,
+          size: 18,
         ),
       ),
     ];
     return TDTabBar(
         tabs: tabs,
-        indicatorWidth: 16,
-        indicatorHeight: 3,
         controller: TabController(length: 3, vsync: this),
         backgroundColor: Colors.white,
         showIndicator: true);
