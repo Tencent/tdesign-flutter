@@ -205,7 +205,8 @@ class ExampleItem {
       required this.builder,
       this.methodName,
       this.center = true,
-      this.ignoreCode = false});
+      this.ignoreCode = false,
+      this.padding});
 
   final String desc;
 
@@ -216,6 +217,8 @@ class ExampleItem {
   final bool center;
 
   final bool ignoreCode;
+
+  final EdgeInsetsGeometry? padding;
 }
 
 /// 组件示例
@@ -246,6 +249,9 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
         methodName: widget.data.methodName,
         isCenter: widget.data.center,
       );
+    }
+    if(widget.data.padding != null){
+      child = Padding(padding: widget.data.padding!, child: child,);
     }
     child = Column(
       mainAxisSize: MainAxisSize.min,
