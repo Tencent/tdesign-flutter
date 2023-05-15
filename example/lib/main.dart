@@ -69,8 +69,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Link 链接',
         name: 'link',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDLinkViewPage())),
     ExamplePageModel(
         text: 'Text 文本',
         name: 'text',
@@ -115,10 +114,6 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         text: 'Tabs 选项卡',
         name: 'tabs',
         pageBuilder: _wrapInheritedTheme((context) => const TDTabBarPage())),
-    ExamplePageModel(
-        name: 'link',
-        text: 'Link 链接',
-        pageBuilder: _wrapInheritedTheme((context) => const TDLinkViewPage())),
   ],
   '输入': [
     ExamplePageModel(
