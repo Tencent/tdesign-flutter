@@ -354,6 +354,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = HKB8WPFBR9;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = HKB8WPFBR9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -363,6 +364,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.tdesign.db;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "* InHouse";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "* InHouse";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Profile;
@@ -481,6 +483,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = HKB8WPFBR9;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = HKB8WPFBR9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -490,6 +493,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.tdesign.db;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "* InHouse";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "* InHouse";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -503,6 +507,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = HKB8WPFBR9;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = HKB8WPFBR9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -512,6 +517,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.tdesign.db;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "* InHouse";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "* InHouse";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
