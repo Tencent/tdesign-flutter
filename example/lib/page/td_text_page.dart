@@ -27,6 +27,8 @@ class TDTextPage extends StatelessWidget {
                       child: TDText(
                         '@$key:${value.size.toInt()}px',
                         font: value,
+                        /// link类型的示例添加下划线
+                        style: TextStyle(decoration: key.contains('Link') ? TextDecoration.underline : null, decorationColor: TDTheme.of(context).fontGyColor1),
                       ),
                       decoration: BoxDecoration(
                           border: Border(
