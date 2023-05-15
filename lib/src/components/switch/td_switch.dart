@@ -14,8 +14,10 @@ class TDSwitch extends StatefulWidget {
     this.isOn = false,
     this.size = TDSwitchSize.medium,
     this.type = TDSwitchType.fill,
-    this.onColor,
-    this.offColor = CupertinoColors.secondarySystemFill,
+    this.trackOnColor,
+    this.trackOffColor,
+    this.thumbContentOnColor,
+    this.thumbContentOffColor,
     this.onChanged,
   }) : super(key: key);
 
@@ -25,11 +27,17 @@ class TDSwitch extends StatefulWidget {
   /// 是否打开
   final bool isOn;
 
-  /// 开启颜色
-  final Color? onColor;
+  /// 开启时轨道颜色
+  final Color? trackOnColor;
 
-  /// 关闭颜色
-  final Color? offColor;
+  /// 关闭时轨道颜色
+  final Color? trackOffColor;
+
+  /// 开启时ThumbView的颜色
+  final Color? thumbContentOnColor;
+
+  /// 关闭时ThumbView的颜色
+  final Color? thumbContentOffColor;
 
   /// 尺寸：大、中、小
   final TDSwitchSize? size;
@@ -64,24 +72,29 @@ class TDSwitchState extends State<TDSwitch> {
   @override
   Widget build(BuildContext context) {
     final theme = TDTheme.of(context);
+    final switchEnable = widget.enable && widget.type != TDSwitchType.loading;
+    final trackOnColor = widget.trackOnColor ?? theme.brandColor7;
+    final trackOffColor = widget.trackOffColor ?? theme.grayColor4;
+    final thumbContentOnColor = widget.thumbContentOnColor ?? theme.brandNormalColor;
+    final thumbContentOffColor = widget.thumbContentOffColor ?? theme.fontGyColor4;
     var onColor = widget.onColor ?? theme.brandNormalColor;
     var offColor = widget.offColor ?? theme.grayColor4;
     Widget current = TDCupertinoSwitch(
       value: isOn,
-      activeColor: onColor,
-      trackColor: offColor,
+      activeColor: trackOnColor,
+      trackColor: trackOffColor,
       onChanged: (value) {
         widget.onChanged?.call(value);
         isOn = value;
         setState(() {});
       },
-      thumbView: _getThumbView(onColor, offColor),
+      thumbView: _getThumbView(thumbContentOnColor, thumbContentOffColor),
     );
-    if (!widget.enable) {
+    if (!switchEnable) {
       current = Opacity(
         opacity: 0.4,
         child: IgnorePointer(
-          ignoring: !widget.enable,
+          ignoring: !switchEnable,
           child: current,
         ),
       );
@@ -122,7 +135,7 @@ class TDSwitchState extends State<TDSwitch> {
     }
   }
 
-  Widget? _getThumbView(Color onColor, Color offColor) {
+  Widget? _getThumbView(Color thumbContentOnColor, Color thumbContentOffColor) {
     switch (widget.type) {
       case TDSwitchType.text:
         return Container(
@@ -130,14 +143,14 @@ class TDSwitchState extends State<TDSwitch> {
           padding: const EdgeInsets.only(left: 1),
           child: TDText(
             isOn ? '开' : '关',
-            style: TextStyle(color: isOn ? onColor : offColor, fontSize: 14),
+            style: TextStyle(color: isOn ? thumbContentOnColor : thumbContentOffColor, fontSize: 14),
           ),
         );
       case TDSwitchType.loading:
         return Container(
           alignment: Alignment.centerLeft,
           child: TDCircleIndicator(
-            color: onColor,
+            color: thumbContentOnColor,
             size: 16,
             lineWidth: 3,
           ),
@@ -146,7 +159,7 @@ class TDSwitchState extends State<TDSwitch> {
         return Container(
           alignment: Alignment.centerLeft,
           child: Icon(isOn ? TDIcons.check : TDIcons.close,
-              size: 16, color: isOn ? onColor : offColor),
+              size: 16, color: isOn ? thumbContentOnColor : thumbContentOffColor),
         );
       case TDSwitchType.fill:
       default:
