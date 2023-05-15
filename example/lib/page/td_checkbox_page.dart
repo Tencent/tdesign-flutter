@@ -352,7 +352,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
     return Icon(
         checked ? TDIcons.check_circle_filled : halfSelected ? TDIcons.minus_circle_filled : TDIcons.circle,
         size: 24,
-        color: (checked || halfSelected) ? TDTheme.of(context).brandColor8 : TDTheme.of(context).grayColor4
+        color: (checked || halfSelected) ? TDTheme.of(context).brandNormalColor : TDTheme.of(context).grayColor4
     );
   }
 }
