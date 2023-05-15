@@ -13,7 +13,7 @@
             height: 28,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
-                color: TDTheme.of(context).brandColor8),
+                color: TDTheme.of(context).brandNormalColor),
             child: TDText(
               '操作按钮',
               font: TDTheme.of(context).fontBodyMedium,
