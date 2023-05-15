@@ -75,8 +75,10 @@ class TDSwitchState extends State<TDSwitch> {
     final switchEnable = widget.enable && widget.type != TDSwitchType.loading;
     final trackOnColor = widget.trackOnColor ?? theme.brandColor7;
     final trackOffColor = widget.trackOffColor ?? theme.grayColor4;
-    final thumbContentOnColor = widget.thumbContentOnColor ?? theme.brandColor7;
+    final thumbContentOnColor = widget.thumbContentOnColor ?? theme.brandNormalColor;
     final thumbContentOffColor = widget.thumbContentOffColor ?? theme.fontGyColor4;
+    var onColor = widget.onColor ?? theme.brandNormalColor;
+    var offColor = widget.offColor ?? theme.grayColor4;
     Widget current = TDCupertinoSwitch(
       value: isOn,
       activeColor: trackOnColor,
