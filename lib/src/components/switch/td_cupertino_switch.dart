@@ -418,8 +418,12 @@ const double _kSwitchWidth = 45.0;
 const double _kSwitchHeight = 28.0;
 // Opacity of a disabled switch, as eye-balled from iOS Simulator on Mac.
 const double _kTDCupertinoSwitchDisabledOpacity = 0.5;
-const double _kThumbRadius = 11;
-const double _kThumbMargin = (_kTrackHeight - _kThumbRadius * 2) / 2;
+// In the normal switch case, the closed thumb is smaller than the open thumb.
+// Same size as if there is a child widget on thumb.
+const double _kSwitchOnThumbRadius = 11;
+const double _kSwitchOffThumbRadius = 8;
+const double _kSwitchOnThumbMargin = (_kTrackHeight - _kSwitchOnThumbRadius * 2) / 2;
+const double _kSwitchOffThumbMargin = (_kTrackHeight - _kSwitchOffThumbRadius * 2) / 2;
 
 const Duration _kReactionDuration = Duration(milliseconds: 300);
 const Duration _kToggleDuration = Duration(milliseconds: 200);
@@ -521,6 +525,21 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
 
   bool get isInteractive => onChanged != null;
 
+  double get thumbRadius {
+    if (child == null) {
+      final value = _state.position.value;
+      return (_kSwitchOnThumbRadius - _kSwitchOffThumbRadius) * value + _kSwitchOffThumbRadius;
+    }
+    return _kSwitchOnThumbRadius;
+  }
+
+  double get thumbMargin {
+    if (child == null) {
+      return value ? _kSwitchOffThumbMargin : _kSwitchOffThumbMargin;
+    }
+    return _kSwitchOnThumbMargin;
+  }
+
   @override
   bool hitTestSelf(Offset position) => true;
 
@@ -578,24 +597,21 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
     final currentThumbExtension =
         CupertinoThumbPainter.extension * currentReactionValue;
     final thumbLeft = lerpDouble(
-      trackRect.left + _kTrackInnerStart - _kThumbRadius,
-      trackRect.left + _kTrackInnerEnd - _kThumbRadius - currentThumbExtension,
+      trackRect.left + _kTrackInnerStart - thumbRadius,
+      trackRect.left + _kTrackInnerEnd - thumbRadius - currentThumbExtension,
       visualPosition,
     )!;
     final thumbRight = lerpDouble(
-      trackRect.left +
-          _kTrackInnerStart +
-          _kThumbRadius +
-          currentThumbExtension,
-      trackRect.left + _kTrackInnerEnd + _kThumbRadius,
+      trackRect.left + _kTrackInnerStart + thumbRadius + currentThumbExtension,
+      trackRect.left + _kTrackInnerEnd + thumbRadius,
       visualPosition,
     )!;
     final thumbCenterY = offset.dy + size.height / 2.0;
     final thumbBounds = Rect.fromLTRB(
       thumbLeft,
-      thumbCenterY - _kThumbRadius,
+      thumbCenterY - thumbRadius,
       thumbRight,
-      thumbCenterY + _kThumbRadius,
+      thumbCenterY + thumbRadius,
     );
 
     _clipRRectLayer.layer = context
@@ -604,7 +620,7 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
       _thumbPainter.paint(innerContext.canvas, thumbBounds);
     }, oldLayer: _clipRRectLayer.layer);
     if (child != null) {
-      context.paintChild(child!, Offset(thumbBounds.left + _kThumbMargin, 0));
+      context.paintChild(child!, Offset(thumbBounds.left + thumbMargin, 0));
     }
   }
 
