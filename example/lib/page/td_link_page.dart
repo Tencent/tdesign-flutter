@@ -38,10 +38,12 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
 
   @Demo(group: 'link')
   Widget _basicTypeBasic(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: _buildLinksWithType(TDLinkType.basic),
-    );
+    return Container(
+        color: TDTheme.of(context).whiteColor1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _buildLinksWithType(TDLinkType.basic),
+        ));
   }
 
   List<Widget> _buildLinksWithType(TDLinkType type) {
@@ -70,26 +72,32 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
 
   @Demo(group: 'link')
   Widget _withUnderline(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: _buildLinksWithType(TDLinkType.withUnderline),
-    );
+    return Container(
+        color: TDTheme.of(context).whiteColor1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _buildLinksWithType(TDLinkType.withUnderline),
+        ));
   }
 
   @Demo(group: 'link')
   Widget _withSuffixIcon(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: _buildLinksWithType(TDLinkType.withSuffixIcon),
-    );
+    return Container(
+        color: TDTheme.of(context).whiteColor1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _buildLinksWithType(TDLinkType.withSuffixIcon),
+        ));
   }
 
   @Demo(group: 'link')
   Widget _withPrefixIcon(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: _buildLinksWithType(TDLinkType.withPrefixIcon),
-    );
+    return Container(
+        color: TDTheme.of(context).whiteColor1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _buildLinksWithType(TDLinkType.withPrefixIcon),
+        ));
   }
 
   @Demo(group: 'link')
@@ -105,25 +113,29 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   Column _buildLinkWithStyles(TDLinkState state) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildLinkWithTypeAndState(TDLinkStyle.primary, state),
-            const SizedBox(height: 48, width: 50),
-            _buildLinkWithTypeAndState(TDLinkStyle.defaultStyle, state),
-            const SizedBox(height: 48, width: 50),
-            _buildLinkWithTypeAndState(TDLinkStyle.danger, state),
-          ],
-        ),
+        Container(
+            color: TDTheme.of(context).whiteColor1,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildLinkWithTypeAndState(TDLinkStyle.primary, state),
+                const SizedBox(height: 48, width: 50),
+                _buildLinkWithTypeAndState(TDLinkStyle.defaultStyle, state),
+                const SizedBox(height: 48, width: 50),
+                _buildLinkWithTypeAndState(TDLinkStyle.danger, state),
+              ],
+            )),
         const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildLinkWithTypeAndState(TDLinkStyle.warning, state),
-            const SizedBox(height: 48, width: 50),
-            _buildLinkWithTypeAndState(TDLinkStyle.success, state),
-          ],
-        ),
+        Container(
+            color: TDTheme.of(context).whiteColor1,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildLinkWithTypeAndState(TDLinkStyle.warning, state),
+                const SizedBox(height: 48, width: 50),
+                _buildLinkWithTypeAndState(TDLinkStyle.success, state),
+              ],
+            )),
       ],
     );
   }
@@ -140,16 +152,18 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
 
   @Demo(group: 'link')
   Widget _buildLinkSizes(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.small),
-        const SizedBox(height: 48, width: 40),
-        _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.medium),
-        const SizedBox(height: 48, width: 40),
-        _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.large),
-      ],
-    );
+    return Container(
+        color: TDTheme.of(context).whiteColor1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.small),
+            const SizedBox(height: 48, width: 40),
+            _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.medium),
+            const SizedBox(height: 48, width: 40),
+            _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.large),
+          ],
+        ));
   }
 
   TDLink _buildLinkWithSizeAndStyle(TDLinkStyle style, TDLinkSize size) {
