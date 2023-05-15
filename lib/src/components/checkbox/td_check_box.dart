@@ -160,9 +160,9 @@ class TDCheckbox extends StatefulWidget {
                   : TDIcons.check,
       size: size,
       color: !enable
-          ? (isChecked ? theme.brandColor3 : deSelectedColor)
+          ? (isChecked ? theme.brandDisabledColor : deSelectedColor)
           : isChecked
-              ? theme.brandColor8
+              ? theme.brandNormalColor
               : deSelectedColor,
     );
     return current;
@@ -312,7 +312,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                             child: icon,
                           ),
                           SizedBox(
-                            width: spacing,
+                            width: widget.cardMode ? 0 : spacing,
                           ),
                           Expanded(
                               child: Padding(
@@ -328,7 +328,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                         child: Padding(
                           padding: EdgeInsets.only(
                               top: widget.cardMode ? 4.scale : 0,
-                              left: widget.cardMode ? (16 + spacing) : 48,
+                              left: widget.cardMode ? 16 : 48,
                               right: widget.insetSpacing ?? 16),
                           child: TDText(widget.subTitle ?? '',
                               maxLines: widget.subTitleMaxLine,
@@ -389,7 +389,7 @@ class TDCheckboxState extends State<TDCheckbox> {
           border: widget.cardMode
               ? checked
                   ? Border.all(
-                      width: 1.5, color: TDTheme.of(context).brandColor8)
+                      width: 1.5, color: TDTheme.of(context).brandNormalColor)
                   : Border.all(width: 1.5, color: Colors.transparent)
               : null,
           borderRadius: widget.cardMode
@@ -497,7 +497,7 @@ class RadioCornerIcon extends StatelessWidget {
             painter: RadioCorner(
                 length: length,
                 radius: radius,
-                fillColor: TDTheme.of(context).brandColor8),
+                fillColor: TDTheme.of(context).brandNormalColor),
           ),
           const Positioned(
               top: 3,

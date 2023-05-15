@@ -284,7 +284,7 @@ class TDImageState extends State<TDImagePage>
                         turns: animation,
                         alignment: Alignment.center,
                         child: TDCircleIndicator(
-                          color: TDTheme.of(context).brandColor8,
+                          color: TDTheme.of(context).brandNormalColor,
                           size: 18,
                           lineWidth: 3,
                         ))
@@ -298,7 +298,7 @@ class TDImageState extends State<TDImagePage>
             //       turns: animation,
             //       alignment: Alignment.center,
             //       child: TDCircleIndicator(
-            //         color: TDTheme.of(context).brandColor8,
+            //         color: TDTheme.of(context).brandNormalColor,
             //         size: 18,
             //         lineWidth: 3,
             //       )),

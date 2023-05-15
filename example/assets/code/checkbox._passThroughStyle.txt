@@ -9,12 +9,10 @@
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (contet, index) {
           var title = '多选';
-          return SizedBox(
-            height: 56,
-            child: TDCheckbox(
-              id: 'index:$index',
-              title: title,
-            ),
+          return TDCheckbox(
+            id: 'index:$index',
+            title: title,
+            size: TDCheckBoxSize.large,
           );
         },
         itemCount: 4,
