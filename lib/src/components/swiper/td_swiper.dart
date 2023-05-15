@@ -8,13 +8,11 @@ const _kAminatedDuration = 100;
 
 /// TDesign风格的Swiper指示器样式，与flutter_swiper的Swiper结合使用
 class TDSwiperPagination extends SwiperPlugin {
-
-
   const TDSwiperPagination(
       {this.alignment,
-        this.key,
-        this.margin = const EdgeInsets.all(10.0),
-        this.builder = TDSwiperPagination.dots});
+      this.key,
+      this.margin = const EdgeInsets.all(10.0),
+      this.builder = TDSwiperPagination.dots});
 
   /// 圆点样式
   static const SwiperPlugin dots = TDSwiperDotsPagination();
@@ -40,7 +38,6 @@ class TDSwiperPagination extends SwiperPlugin {
   final SwiperPlugin builder;
 
   final Key? key;
-
 
   @override
   Widget build(BuildContext context, SwiperPluginConfig config) {
@@ -104,8 +101,14 @@ class TDSwiperDotsPagination extends SwiperPlugin {
       print('warning: The itemCount is too big, '
           'we suggest use TDFractionPaginationBuilder');
     }
-    var activeColor = this.activeColor ?? (config.outer ? TDTheme.of(context).brandNormalColor : TDTheme.of(context).whiteColor1);
-    var color = this.color ?? (config.outer ? TDTheme.of(context).grayColor3 : TDTheme.of(context).whiteColor1.withOpacity(0.55));
+    var activeColor = this.activeColor ??
+        (config.outer
+            ? TDTheme.of(context).brandNormalColor
+            : TDTheme.of(context).whiteColor1);
+    var color = this.color ??
+        (config.outer
+            ? TDTheme.of(context).grayColor3
+            : TDTheme.of(context).whiteColor1.withOpacity(0.55));
 
     if (config.indicatorLayout != PageIndicatorLayout.NONE &&
         config.layout == SwiperLayout.DEFAULT) {
@@ -282,30 +285,42 @@ class TDSwiperArrowPagination extends SwiperPlugin {
       Visibility(
         visible: config.loop ||
             ((autoHideWhenAtBoundary ?? false) && activeIndex != 0),
-        child: CircleAvatar(
-          radius: radius ?? 10.0,
-          backgroundColor: backgroundColor ?? TDTheme.of(context).fontGyColor3,
-          child: backArrow ??
-              const Icon(
-                Icons.arrow_back_ios_outlined,
-                color: Colors.white,
-                size: 9,
-              ),
+        child: GestureDetector(
+          child: CircleAvatar(
+            radius: radius ?? 10.0,
+            backgroundColor:
+                backgroundColor ?? TDTheme.of(context).fontGyColor3,
+            child: backArrow ??
+                const Icon(
+                  Icons.arrow_back_ios_outlined,
+                  color: Colors.white,
+                  size: 9,
+                ),
+          ),
+          onTap: () {
+            config.controller.previous();
+          },
         ),
       ),
       const Spacer(),
       Visibility(
         visible: config.loop ||
             ((autoHideWhenAtBoundary ?? false) && activeIndex != itemCount - 1),
-        child: CircleAvatar(
-          radius: radius ?? 10.0,
-          backgroundColor: backgroundColor ?? TDTheme.of(context).fontGyColor3,
-          child: forwardArrow ??
-              const Icon(
-                Icons.arrow_forward_ios_outlined,
-                color: Colors.white,
-                size: 9,
-              ),
+        child: GestureDetector(
+          child: CircleAvatar(
+            radius: radius ?? 10.0,
+            backgroundColor:
+                backgroundColor ?? TDTheme.of(context).fontGyColor3,
+            child: forwardArrow ??
+                const Icon(
+                  Icons.arrow_forward_ios_outlined,
+                  color: Colors.white,
+                  size: 9,
+                ),
+          ),
+          onTap: () {
+            config.controller.next();
+          },
         ),
       ),
     ]);

@@ -72,9 +72,9 @@ class TDRadio extends TDCheckbox {
         height: size,
         child: CustomPaint(
           painter: HollowCircle(!enable
-              ? (isSelected ? theme.brandColor3 : theme.grayColor4)
+              ? (isSelected ? theme.brandDisabledColor : theme.grayColor4)
               : isSelected
-                  ? theme.brandColor8
+                  ? theme.brandNormalColor
                   : theme.grayColor4),
         ),
       );
@@ -97,9 +97,9 @@ class TDRadio extends TDCheckbox {
       return Icon(iconData,
           size: size,
           color: !enable
-              ? (isSelected ? theme.brandColor3 : theme.grayColor4)
+              ? (isSelected ? theme.brandDisabledColor : theme.grayColor4)
               : isSelected
-                  ? theme.brandColor8
+                  ? theme.brandNormalColor
                   : theme.grayColor4);
     } else {
       return SizedBox(
