@@ -364,7 +364,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.tdesign.db;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "* InHouse";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "* InHouse";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = _InHouse;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Profile;
@@ -493,7 +493,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.tdesign.db;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "* InHouse";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "* InHouse";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = _InHouse;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -517,7 +517,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.tdesign.db;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "* InHouse";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "* InHouse";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = _InHouse;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
