@@ -36,7 +36,7 @@ class TDEmpty extends StatelessWidget {
         children: [
           image ?? Icon(
             TDIcons.info_circle_filled,
-            size: 84,
+            size: 96,
             color: TDTheme.of(context).fontGyColor3,
           ),
           Padding(padding: EdgeInsets.only(top: image == null ? 22 : 16)),
