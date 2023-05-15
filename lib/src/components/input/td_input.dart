@@ -390,7 +390,7 @@ class TDInput extends StatelessWidget {
           cardStyleDecoration = BoxDecoration(
               color: Colors.white,
               border: Border.all(
-                  color: TDTheme.of(context).brandColor8, width: 1.5),
+                  color: TDTheme.of(context).brandNormalColor, width: 1.5),
               borderRadius: BorderRadius.circular(6));
           break;
         case TDCardStyle.errorStyle:

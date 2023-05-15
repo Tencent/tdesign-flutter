@@ -155,7 +155,7 @@ class TDAvatar extends StatelessWidget {
             decoration: BoxDecoration(
               color: TDTheme.of(context).brandColor2,
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),),
-            child: Center(child: Icon(icon ?? TDIcons.user, size: _getIconWidth(), color: TDTheme.of(context).brandColor8)),
+            child: Center(child: Icon(icon ?? TDIcons.user, size: _getIconWidth(), color: TDTheme.of(context).brandNormalColor)),
         );
       case TDAvatarType.normal:
         return Container(
@@ -234,7 +234,7 @@ class TDAvatar extends StatelessWidget {
                     child: Center(
                       child: Icon(TDIcons.user_add,
                           size: _getIconWidth(),
-                          color: TDTheme.of(context).brandColor8),
+                          color: TDTheme.of(context).brandNormalColor),
                     ),
                     width: _getAvatarWidth(),
                     height: _getAvatarWidth(),
@@ -285,7 +285,7 @@ class TDAvatar extends StatelessWidget {
                     child: Center(
                       child: avatarDisplayWidget ?? Icon(TDIcons.user_add,
                           size: _getIconWidth(),
-                          color: TDTheme.of(context).brandColor8),
+                          color: TDTheme.of(context).brandNormalColor),
                     ),
                     width: _getAvatarWidth(),
                     height: _getAvatarWidth(),
@@ -352,7 +352,7 @@ class TDAvatar extends StatelessWidget {
                       forceVerticalCenter: true,
                       textAlign: TextAlign.center,
                       font: _getTextFont(context),
-                      textColor: TDTheme.of(context).brandColor8,
+                      textColor: TDTheme.of(context).brandNormalColor,
                     ),
                   ),
                   width: _getAvatarWidth(),
@@ -401,7 +401,7 @@ class TDAvatar extends StatelessWidget {
                       forceVerticalCenter: true,
                       textAlign: TextAlign.center,
                       font: _getTextFont(context),
-                      textColor: TDTheme.of(context).brandColor8,
+                      textColor: TDTheme.of(context).brandNormalColor,
                     ),
                   ),
                   width: _getAvatarWidth(),

@@ -179,7 +179,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
             height: 28,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
-                color: TDTheme.of(context).brandColor8),
+                color: TDTheme.of(context).brandNormalColor),
             child: TDText(
               '操作按钮',
               font: TDTheme.of(context).fontBodyMedium,
@@ -332,7 +332,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
               const SizedBox(
                 width: 16,
               ),
-              TDText('发送验证码', textColor: TDTheme.of(context).brandColor8),
+              TDText('发送验证码', textColor: TDTheme.of(context).brandNormalColor),
             ],
           ),
           onBtnTap: () {
