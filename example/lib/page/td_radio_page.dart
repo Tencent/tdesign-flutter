@@ -192,12 +192,10 @@ class TDRadioPageState extends State<TDRadioPage> {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (contet, index) {
           var title = '单选';
-          return SizedBox(
-            height: 56,
-            child: TDRadio(
-              id: 'index:$index',
-              title: title,
-            ),
+          return TDRadio(
+            id: 'index:$index',
+            title: title,
+            size: TDCheckBoxSize.large,
           );
         },
         itemCount: 4,
