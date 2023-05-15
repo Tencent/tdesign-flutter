@@ -32,7 +32,8 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
           ExampleModule(title: '下拉示例', children: [
             ExampleItem(
                 ignoreCode: true,
-                builder: (_) => SizedBox(
+                builder: (_) => Container(
+                  margin: const EdgeInsets.only(top: 16),
                       height: 400,
                       child: Stack(
                         children: [CodeWrapper(builder: _buildRefresh)],
