@@ -134,7 +134,7 @@ class _WebMainBodyState extends State<WebMainBody> {
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      WebApiController.setApiPath(apiPath: model.apiPath,mobilePath: model.path, codePath: model.codePath ?? model.apiPath, );
+                      WebApiController.setApiPath(apiPath: model.name,mobilePath: model.name, codePath: model.codePath ?? model.name, );
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
