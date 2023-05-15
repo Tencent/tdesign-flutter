@@ -3,16 +3,44 @@
     return EasyRefresh(
       // 下拉样式
       header: TDRefreshHeader(),
-      child: ListView.builder(
-        itemBuilder: (context, index) => Text('${dataList[index]}'),
-        itemCount: dataList.length,
+      child: Column(
+        children: [
+          Container(
+            height: 171,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: TDTheme.of(context).grayColor1,
+                borderRadius: BorderRadius.all(
+                    Radius.circular(TDTheme.of(context).radiusLarge))),
+            margin: const EdgeInsets.only(left: 16, right: 16),
+            child: TDText(
+              '拖拽该区域演示 顶部下拉刷新',
+              font: TDTheme.of(context).fontBodyLarge,
+              textColor: TDTheme.of(context).fontGyColor4,
+            ),
+          ),
+          Container(
+            height: 70,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: TDTheme.of(context).grayColor1,
+                borderRadius: BorderRadius.all(
+                    Radius.circular(TDTheme.of(context).radiusLarge))),
+            margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
+            child: TDText(
+              '下拉刷新次数：${count}',
+              font: TDTheme.of(context).fontBodyLarge,
+              textColor: TDTheme.of(context).fontGyColor4,
+            ),
+          ),
+        ],
       ),
       // 下拉刷新回调
       onRefresh: () async {
         await Future.delayed(const Duration(seconds: 2), () {
-          dataList.addAll(
-              List.generate(10, (index) => ' 下拉添加的第$index个item'));
-          setState(() {});
+          setState(() {
+            count++;
+          });
         });
       },
     );
