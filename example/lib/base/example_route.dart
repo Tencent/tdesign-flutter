@@ -16,9 +16,11 @@ class TDExampleRoute {
   }
 
   static void init(){
-    for(var model in examplePageList){
-      pageModelList[model.name] = model;
-    }
+    exampleMap.forEach((key, value) {
+      value.forEach((model) {
+        pageModelList[model.name] = model;
+      });
+    });
     // 添加关于页路由
     pageModelList[aboutPath] = ExamplePageModel(
       text: '关于',
