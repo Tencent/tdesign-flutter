@@ -851,6 +851,10 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
         }
       }
 
+      EdgeInsetsGeometry? capsuleDefaultPadding;
+      if(widget.outlineType == TDTabBarOutlineType.capsule){
+        capsuleDefaultPadding = const EdgeInsets.all(4);
+      }
       return Container(
         color: _getBackgroundColor(index),
         child: Container(
@@ -860,6 +864,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
             child: Padding(
               padding: adjustedPadding ??
                   widget.labelPadding ??
+                  capsuleDefaultPadding ??
                   tabBarTheme.labelPadding ??
                   kTabLabelPadding,
               child: KeyedSubtree(
