@@ -27,7 +27,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
           title: tdTitle(),
           desc: '用于开启一个闭环的操作任务，如“删除”对象、“购买”商品等。',
           exampleCodeGroup: 'button',
-          padding: const EdgeInsets.only(top: 8, bottom: 8, ),
+          // padding: const EdgeInsets.only(top: 8, bottom: 8, ),
           children: [
             ExampleModule(title: '组件类型', children: [
               ExampleItem(
