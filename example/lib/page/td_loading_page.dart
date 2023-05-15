@@ -123,7 +123,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
       TDLoading(
         size: TDLoadingSize.small,
         icon: TDLoadingIcon.point,
-        iconColor: TDTheme.of(context).brandColor8,
+        iconColor: TDTheme.of(context).brandNormalColor,
       ),
     ]);
   }
