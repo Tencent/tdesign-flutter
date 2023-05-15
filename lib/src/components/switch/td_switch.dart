@@ -64,7 +64,7 @@ class TDSwitchState extends State<TDSwitch> {
   @override
   Widget build(BuildContext context) {
     final theme = TDTheme.of(context);
-    var onColor = widget.onColor ?? theme.brandColor8;
+    var onColor = widget.onColor ?? theme.brandNormalColor;
     var offColor = widget.offColor ?? theme.grayColor4;
     Widget current = TDCupertinoSwitch(
       value: isOn,
