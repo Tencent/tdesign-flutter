@@ -3,7 +3,7 @@
     return TDCheckboxGroupContainer(
       selectIds: const ['index:1'],
       child: ListView.builder(
-        padding: const EdgeInsets.all(0),
+        padding: EdgeInsets.zero,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {

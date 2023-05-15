@@ -242,7 +242,7 @@ class TDSwiperPage extends StatelessWidget {
   @Demo(group: 'swiper')
   Widget _buildControlsSwiper(BuildContext context) {
     return Swiper(
-      autoplay: true,
+      // autoplay: true,
       itemCount: 6,
       loop: true,
       pagination: const SwiperPagination(
