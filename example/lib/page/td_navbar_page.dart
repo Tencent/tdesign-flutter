@@ -243,7 +243,7 @@ class TDNavBarPage extends StatelessWidget {
         height: 48,
         title: titleText,
         titleColor: Colors.white,
-        backgroundColor: TDTheme.of(context).brandColor8,
+        backgroundColor: TDTheme.of(context).brandNormalColor,
         titleFontWeight: FontWeight.w600,
         useDefaultBack: false,
         screenAdaptation: false,
