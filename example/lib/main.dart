@@ -31,10 +31,10 @@ import 'page/td_tag_page.dart';
 import 'page/td_text_page.dart';
 import 'page/td_theme_page.dart';
 import 'page/td_toast_page.dart';
-import 'web/web.dart' if(dart.library.io) 'web/web_replace.dart' as web;
+import 'web/web.dart' if (dart.library.io) 'web/web_replace.dart' as web;
 
-PageBuilder _wrapInheritedTheme(WidgetBuilder builder){
-  return (context, model){
+PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
+  return (context, model) {
     return ExamplePageInheritedTheme(model: model, child: builder(context));
   };
 }
@@ -124,7 +124,8 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '标签栏 TabBar',
       name: 'bottom_nav_bar',
-      pageBuilder: _wrapInheritedTheme((context) => const TDBottomNavBarPage())),
+      pageBuilder:
+          _wrapInheritedTheme((context) => const TDBottomNavBarPage())),
   ExamplePageModel(
       text: '选项卡 Tabs',
       name: 'tabbar',
@@ -144,15 +145,33 @@ List<ExamplePageModel> examplePageList = [
   ExamplePageModel(
       text: '下拉刷新 PullDownRefresh',
       name: 'refresh',
-      pageBuilder: _wrapInheritedTheme((context) => const TdPullDownRefreshPage())),
+      pageBuilder:
+          _wrapInheritedTheme((context) => const TdPullDownRefreshPage())),
   ExamplePageModel(
       text: '轻提示 Toast',
       name: 'toast',
       pageBuilder: _wrapInheritedTheme((context) => const TDToastPage())),
 ];
 
-Map<String,List<ExamplePageModel>> exampleMap = {
+Map<String, List<ExamplePageModel>> exampleMap = {
+  '基础': [
 
+  ],
+  '导航': [
+
+  ],
+  '输入': [
+
+  ],
+  '数据展示': [
+
+  ],
+  '反馈': [
+
+  ],
+  '其他': [
+
+  ],
 };
 
 void main() {
@@ -178,15 +197,15 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'TDesign Flutter Example',
         theme: ThemeData(
-          // extensions: [TDThemeData.defaultData().copyWith(colorMap: {'brandNormalColor':Colors.yellow})],
+            // extensions: [TDThemeData.defaultData().copyWith(colorMap: {'brandNormalColor':Colors.yellow})],
             colorScheme: ColorScheme.light(
                 primary: TDTheme.of(context).brandNormalColor)),
         home: const MyHomePage(title: 'TDesgin Flutter 组件库'),
         onGenerateRoute: TDExampleRoute.onGenerateRoute,
         // TODO:所有路径指向首页，需区分
         routes: {
-          for(var model in examplePageList)
-            model.name: (context)=>model.pageBuilder.call(context, model)
+          for (var model in examplePageList)
+            model.name: (context) => model.pageBuilder.call(context, model)
         },
       ),
     );
@@ -224,23 +243,25 @@ class _MyHomePageState extends State<MyHomePage> {
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
-          actions: ScreenUtil.isWebLargeScreen(context) ? null : [
-            GestureDetector(
-              child: Container(
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(
-                  right: 16,
-                ),
-                child: TDText(
-                  '关于',
-                  textColor: TDTheme.of(context).whiteColor1,
-                ),
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, TDExampleRoute.aboutPath);
-              },
-            )
-          ],
+          actions: ScreenUtil.isWebLargeScreen(context)
+              ? null
+              : [
+                  GestureDetector(
+                    child: Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(
+                        right: 16,
+                      ),
+                      child: TDText(
+                        '关于',
+                        textColor: TDTheme.of(context).whiteColor1,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, TDExampleRoute.aboutPath);
+                    },
+                  )
+                ],
         ),
         body: _buildBody(context));
   }
