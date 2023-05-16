@@ -22,9 +22,9 @@ class TDImageDialog extends StatelessWidget {
     required this.image,
     this.imagePosition = TDDialogImagePosition.top,
     this.backgroundColor = Colors.white,
-    this.radius = 8.0,
+    this.radius = 12.0,
     this.title,
-    this.titleColor = Colors.black,
+    this.titleColor = const Color(0xE6000000),
     this.content,
     this.contentColor,
     this.leftBtn,
@@ -67,8 +67,8 @@ class TDImageDialog extends StatelessWidget {
 
   Widget _buildImage(BuildContext context) {
     return SizedBox(
-      width: 320.scale,
-      height: 140.scale,
+      width: 311,
+      height: 160,
       child: FittedBox(
         fit: BoxFit.cover,
         child: image,
@@ -86,11 +86,12 @@ class TDImageDialog extends StatelessWidget {
       ),
       TDDialogInfoWidget(
         title: title,
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
         titleColor: titleColor,
         content: content,
         contentColor: contentColor,
       ),
-      TDDivider(height: 24.scale, color: Colors.transparent),
+      const TDDivider(height: 24, color: Colors.transparent),
       _horizontalButtons(context),
     ]);
   }
@@ -98,18 +99,19 @@ class TDImageDialog extends StatelessWidget {
   Widget _buildMiddleImage(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       TDDialogInfoWidget(
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
         title: title,
         titleColor: titleColor,
         content: content,
         contentColor: contentColor,
       ),
       Container(
-        padding: EdgeInsets.only(top: 24.scale),
+        padding: const EdgeInsets.only(top: 24),
         child: ClipRRect(
           child: _buildImage(context),
         ),
       ),
-      TDDivider(height: 24.scale, color: Colors.transparent),
+      const TDDivider(height: 24, color: Colors.transparent),
       _horizontalButtons(context),
     ]);
   }
@@ -122,7 +124,7 @@ class TDImageDialog extends StatelessWidget {
             topRight: Radius.circular(radius)),
         child: _buildImage(context),
       ),
-      TDDivider(height: 24.scale, color: Colors.transparent),
+      const TDDivider(height: 24, color: Colors.transparent),
       _horizontalButtons(context),
     ]);
   }
