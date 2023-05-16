@@ -14,7 +14,7 @@
 		<string>_InHouse</string>
 	</dict>
 	<key>signingCertificate</key>
-	<string>iPhone Distribution: Tencent Technology (Shenzhen) Co., Ltd</string>
+	<string>"iPhone Distribution: Tencent Technology (Shenzhen) Co., Ltd"</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>stripSwiftSymbols</key>
