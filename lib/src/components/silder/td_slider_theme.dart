@@ -432,7 +432,7 @@ class TDNoOverlayShape extends SliderComponentShape {
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
-    return Size.zero;
+    return const Size(0, 40);
   }
 
   @override
