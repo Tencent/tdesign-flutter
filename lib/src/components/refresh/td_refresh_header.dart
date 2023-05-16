@@ -106,7 +106,7 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget> with TickerProvi
   Widget _buildLoading() => TDLoading(
     size: TDLoadingSize.medium,
     icon: widget.loadingIcon,
-    iconColor: TDTheme.of(context).brandColor8,
+    iconColor: TDTheme.of(context).brandNormalColor,
     axis: Axis.horizontal,
     text: '正在刷新',
     textColor: TDTheme.of(context).fontGyColor3,

@@ -2,8 +2,6 @@
   Widget _buildItemWithSplit4(BuildContext context) {
     return TDTabBar(
       tabs: subList(5),
-      indicatorWidth: 16,
-      indicatorHeight: 3,
       controller: _tabController4,
       backgroundColor: Colors.white,
       showIndicator: true,
