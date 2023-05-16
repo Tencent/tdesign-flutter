@@ -259,16 +259,16 @@ class _TDButtonState extends State<TDButton> {
   Font _getTextFont() {
     switch (widget.size) {
       case TDButtonSize.large:
-        return TDTheme.of(context).fontBodyLarge ??
+        return TDTheme.of(context).fontMarkLarge ??
             Font(size: 16, lineHeight: 24);
       case TDButtonSize.medium:
-        return TDTheme.of(context).fontBodyLarge ??
+        return TDTheme.of(context).fontMarkLarge ??
             Font(size: 16, lineHeight: 24);
       case TDButtonSize.small:
-        return TDTheme.of(context).fontBodyMedium ??
+        return TDTheme.of(context).fontMarkMedium ??
             Font(size: 14, lineHeight: 22);
       case TDButtonSize.extraSmall:
-        return TDTheme.of(context).fontBodyMedium ??
+        return TDTheme.of(context).fontMarkMedium ??
             Font(size: 14, lineHeight: 22);
     }
   }

@@ -197,7 +197,7 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
         Map<String, dynamic>? fontsMap = curThemeMap['font'];
         fontsMap?.forEach((key, value) {
           theme.fontMap[key] =
-              Font(size: value['size'], lineHeight: value['lineHeight']);
+              Font.fromJson(value);
         });
 
         /// 设置圆角
