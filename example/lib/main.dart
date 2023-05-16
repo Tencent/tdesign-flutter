@@ -158,8 +158,8 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'search',
         pageBuilder: _wrapInheritedTheme((context) => const TDSearchBarPage())),
     ExamplePageModel(
-        text: '滑动选择器 Slider',
-        name: 'TDSliderPage',
+        text: 'Slider 滑动选择器',
+        name: 'slider',
         pageBuilder: _wrapInheritedTheme((context) => const TDSliderPage())),
     ExamplePageModel(
         text: 'Stepper 步进器',
