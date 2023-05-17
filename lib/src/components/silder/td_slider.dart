@@ -77,7 +77,7 @@ class TDSliderState extends State<TDSlider> {
     var tdSliderThemeData = widget.sliderThemeData ?? TDSliderThemeData();
     return Container(
       padding: EdgeInsets.only(
-        top: (tdSliderThemeData.showScaleValue ? 6 : 0) + 8,
+        top: (tdSliderThemeData.showScaleValue || tdSliderThemeData.showThumbValue ? 16 : 0) + 8,
         bottom: 8,
       ),
       color: Colors.white,
@@ -190,7 +190,7 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
     var tdSliderThemeData = widget.sliderThemeData ?? TDSliderThemeData();
     return Container(
       padding: EdgeInsets.only(
-        top: (tdSliderThemeData.showScaleValue ? 6 : 0) + 8,
+        top: (tdSliderThemeData.showScaleValue || tdSliderThemeData.showThumbValue ? 16 : 0) + 8,
         bottom: 8,
       ),
       color: Colors.white,
