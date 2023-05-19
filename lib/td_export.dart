@@ -25,6 +25,8 @@ export 'src/components/popup/td_popup_route.dart';
 export 'src/components/radio/td_radio.dart';
 export 'src/components/refresh/td_refresh_header.dart';
 export 'src/components/search/td_search_bar.dart';
+export 'src/components/silder/td_slider.dart';
+export 'src/components/silder/td_slider_theme.dart';
 export 'src/components/swiper/td_page_transform.dart';
 export 'src/components/swiper/td_swiper.dart';
 export 'src/components/switch/td_switch.dart';
