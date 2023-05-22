@@ -1,7 +1,7 @@
 
   Widget _buildInputNoContent(BuildContext context) {
     return TDButton(
-      content: '输入类-无描述',
+      text: '输入类-无描述',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,

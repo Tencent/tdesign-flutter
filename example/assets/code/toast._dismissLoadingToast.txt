@@ -6,6 +6,6 @@
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '停止加载',
+      text: '停止加载',
     );
   }

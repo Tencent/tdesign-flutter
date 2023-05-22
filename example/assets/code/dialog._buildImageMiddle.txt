@@ -1,7 +1,7 @@
 
   Widget _buildImageMiddle(BuildContext context) {
     return TDButton(
-      content: '图片居中-带标题描述',
+      text: '图片居中-带标题描述',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,

@@ -86,7 +86,7 @@ class _ExamplePageState extends State<ExamplePage> {
                           Container(
                             margin: const EdgeInsets.only(top: 24),
                             child: TDButton(
-                              content: '生成Web使用md',
+                              text: '生成Web使用md',
                               type: TDButtonType.fill,
                               onTap: ()=>
                                   WebMdTool.generateWebMd(

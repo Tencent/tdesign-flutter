@@ -48,7 +48,7 @@ class _TDToastPageState extends State<TDToastPage> {
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '纯文字',
+      text: '纯文字',
     );
   }
 
@@ -62,7 +62,7 @@ class _TDToastPageState extends State<TDToastPage> {
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '多行文字',
+      text: '多行文字',
     );
   }
 
@@ -77,7 +77,7 @@ class _TDToastPageState extends State<TDToastPage> {
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '带横向图标',
+      text: '带横向图标',
     );
   }
 
@@ -94,7 +94,7 @@ class _TDToastPageState extends State<TDToastPage> {
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '带竖向图标',
+      text: '带竖向图标',
     );
   }
 
@@ -108,7 +108,7 @@ class _TDToastPageState extends State<TDToastPage> {
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '加载状态',
+      text: '加载状态',
     );
   }
 
@@ -122,7 +122,7 @@ class _TDToastPageState extends State<TDToastPage> {
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '加载状态（无文案）',
+      text: '加载状态（无文案）',
     );
   }
 
@@ -134,7 +134,7 @@ class _TDToastPageState extends State<TDToastPage> {
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '停止加载',
+      text: '停止加载',
     );
   }
 
@@ -148,7 +148,7 @@ class _TDToastPageState extends State<TDToastPage> {
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '成功提示',
+      text: '成功提示',
     );
   }
 
@@ -163,7 +163,7 @@ class _TDToastPageState extends State<TDToastPage> {
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '成功提示(竖向)',
+      text: '成功提示(竖向)',
     );
   }
 
@@ -178,7 +178,7 @@ class _TDToastPageState extends State<TDToastPage> {
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '警告提示',
+      text: '警告提示',
     );
   }
 
@@ -193,7 +193,7 @@ class _TDToastPageState extends State<TDToastPage> {
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '警告提示(竖向)',
+      text: '警告提示(竖向)',
     );
   }
 
@@ -208,7 +208,7 @@ class _TDToastPageState extends State<TDToastPage> {
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '失败提示',
+      text: '失败提示',
     );
   }
 
@@ -223,7 +223,7 @@ class _TDToastPageState extends State<TDToastPage> {
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '失败提示(竖向)',
+      text: '失败提示(竖向)',
     );
   }
 }

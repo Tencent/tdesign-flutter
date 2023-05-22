@@ -468,7 +468,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onTap: () {
                     Navigator.pushNamed(context, '${model.name}?showAction=1');
                   },
-                  content: model.text),
+                  text: model.text),
             ));
           }
         } else {
@@ -483,7 +483,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onTap: () {
                   Navigator.pushNamed(context, '${model.name}?showAction=1');
                 },
-                content: model.text),
+                text: model.text),
           ));
         }
       });
