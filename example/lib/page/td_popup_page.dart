@@ -60,7 +60,7 @@ class TDPopupPageState extends State<TDPopupPage> {
           desc: '操作栏超长文本,指定颜色',
           builder:(_){
         return TDButton(
-          content: '底部弹出层-带标题及操作',
+          text: '底部弹出层-带标题及操作',
           theme: TDButtonTheme.primary,
           type: TDButtonType.outline,
           onTap: () {
@@ -92,7 +92,7 @@ class TDPopupPageState extends State<TDPopupPage> {
           desc: '带关闭超长文本',
           builder:(_){
         return TDButton(
-          content: '底部弹出层-带标题及操作',
+          text: '底部弹出层-带标题及操作',
           theme: TDButtonTheme.primary,
           type: TDButtonType.outline,
           onTap: () {
@@ -120,7 +120,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @Demo(group: 'popup')
   Widget _buildPopFromTop(BuildContext context) {
     return TDButton(
-      content: '顶部弹出',
+      text: '顶部弹出',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {
@@ -139,7 +139,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @Demo(group: 'popup')
   Widget _buildPopFromLeft(BuildContext context) {
     return TDButton(
-      content: '左侧弹出',
+      text: '左侧弹出',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {
@@ -158,7 +158,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @Demo(group: 'popup')
   Widget _buildPopFromCenter(BuildContext context) {
     return TDButton(
-      content: '中间弹出',
+      text: '中间弹出',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {
@@ -178,7 +178,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @Demo(group: 'popup')
   Widget _buildPopFromBottom(BuildContext context) {
     return TDButton(
-      content: '底部弹出',
+      text: '底部弹出',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {
@@ -197,7 +197,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @Demo(group: 'popup')
   Widget _buildPopFromRight(BuildContext context) {
     return TDButton(
-      content: '右侧弹出',
+      text: '右侧弹出',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {
@@ -216,7 +216,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @Demo(group: 'popup')
   Widget _buildPopFromBottomWithOperationAndTitle(BuildContext context) {
     return TDButton(
-      content: '底部弹出层-带标题及操作',
+      text: '底部弹出层-带标题及操作',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {
@@ -244,7 +244,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @Demo(group: 'popup')
   Widget _buildPopFromBottomWithOperation(BuildContext context) {
     return TDButton(
-      content: '底部弹出层-带操作',
+      text: '底部弹出层-带操作',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {
@@ -271,7 +271,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @Demo(group: 'popup')
   Widget _buildPopFromBottomWithCloseAndTitle(BuildContext context) {
     return TDButton(
-      content: '底部弹出层-带标题及关闭',
+      text: '底部弹出层-带标题及关闭',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {
@@ -295,7 +295,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @Demo(group: 'popup')
   Widget _buildPopFromBottomWithCloseAndLeftTitle(BuildContext context) {
     return TDButton(
-      content: '底部弹出层-带左边标题及关闭',
+      text: '底部弹出层-带左边标题及关闭',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {
@@ -320,7 +320,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @Demo(group: 'popup')
   Widget _buildPopFromBottomWithClose(BuildContext context) {
     return TDButton(
-      content: '底部弹出层-带关闭',
+      text: '底部弹出层-带关闭',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {
@@ -343,7 +343,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @Demo(group: 'popup')
   Widget _buildPopFromBottomWithTitle(BuildContext context) {
     return TDButton(
-      content: '底部弹出层-仅标题',
+      text: '底部弹出层-仅标题',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {
@@ -368,7 +368,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @Demo(group: 'popup')
   Widget _buildPopFromCenterWithClose(BuildContext context) {
     return TDButton(
-      content: '居中弹出层-带关闭',
+      text: '居中弹出层-带关闭',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {
@@ -393,7 +393,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @Demo(group: 'popup')
   Widget _buildPopFromCenterWithUnderClose(BuildContext context) {
     return TDButton(
-      content: '居中弹出层-关闭在下方',
+      text: '居中弹出层-关闭在下方',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {

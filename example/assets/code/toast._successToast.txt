@@ -8,6 +8,6 @@
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '成功提示',
+      text: '成功提示',
     );
   }
