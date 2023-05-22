@@ -328,7 +328,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                       children: const [
                         TDButton(
                           isBlock: true,
-                          content: '填充block按钮',
+                          text: '填充block按钮',
                           theme: TDButtonTheme.primary,
                         ),
                         SizedBox(
@@ -336,7 +336,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                         ),
                         TDButton(
                           isBlock: true,
-                          content: '描边block按钮',
+                          text: '描边block按钮',
                           type: TDButtonType.outline,
                           theme: TDButtonTheme.primary,
                         ),
@@ -345,7 +345,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                         ),
                         TDButton(
                           isBlock: true,
-                          content: '文字block按钮',
+                          text: '文字block按钮',
                           type: TDButtonType.text,
                           theme: TDButtonTheme.primary,
                         ),
@@ -354,7 +354,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                         ),
                         TDButton(
                           isBlock: true,
-                          content: '幽灵block按钮',
+                          text: '幽灵block按钮',
                           type: TDButtonType.ghost,
                           theme: TDButtonTheme.primary,
                         ),
@@ -374,7 +374,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildLightTextButton(BuildContext context) {
     return const TDButton(
-      content: '文字按钮',
+      text: '文字按钮',
       size: TDButtonSize.large,
       type: TDButtonType.text,
       shape: TDButtonShape.rectangle,
@@ -385,7 +385,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildLightStrokeButton(BuildContext context) {
     return const TDButton(
-      content: '描边按钮',
+      text: '描边按钮',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       shape: TDButtonShape.rectangle,
@@ -396,7 +396,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildDangerTextButton(BuildContext context) {
     return const TDButton(
-      content: '文字按钮',
+      text: '文字按钮',
       size: TDButtonSize.large,
       type: TDButtonType.text,
       shape: TDButtonShape.rectangle,
@@ -407,7 +407,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildDangerStrokeButton(BuildContext context) {
     return const TDButton(
-      content: '描边按钮',
+      text: '描边按钮',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       shape: TDButtonShape.rectangle,
@@ -418,7 +418,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildDangerFillButton(BuildContext context) {
     return const TDButton(
-      content: '填充按钮',
+      text: '填充按钮',
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -429,7 +429,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildDefaultTextButton(BuildContext context) {
     return const TDButton(
-      content: '文字按钮',
+      text: '文字按钮',
       size: TDButtonSize.large,
       type: TDButtonType.text,
       shape: TDButtonShape.rectangle,
@@ -440,7 +440,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildDefaultStrokeButton(BuildContext context) {
     return const TDButton(
-      content: '描边按钮',
+      text: '描边按钮',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       shape: TDButtonShape.rectangle,
@@ -451,7 +451,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildFilledButton(BuildContext context) {
     return const TDButton(
-      content: '填充按钮',
+      text: '填充按钮',
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.filled,
@@ -473,7 +473,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildRoundButton(BuildContext context) {
     return const TDButton(
-      content: '填充按钮',
+      text: '填充按钮',
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.round,
@@ -484,7 +484,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildExtraSmallButton(BuildContext context) {
     return const TDButton(
-      content: '按钮28',
+      text: '按钮28',
       size: TDButtonSize.extraSmall,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -495,7 +495,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildSmallButton(BuildContext context) {
     return const TDButton(
-      content: '按钮32',
+      text: '按钮32',
       size: TDButtonSize.small,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -506,7 +506,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildMediumButton(BuildContext context) {
     return const TDButton(
-      content: '按钮40',
+      text: '按钮40',
       size: TDButtonSize.medium,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -517,7 +517,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildLargeButton(BuildContext context) {
     return const TDButton(
-      content: '按钮48',
+      text: '按钮48',
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -528,7 +528,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildDisablePrimaryTextButton(BuildContext context) {
     return const TDButton(
-      content: '文字按钮',
+      text: '文字按钮',
       size: TDButtonSize.large,
       type: TDButtonType.text,
       shape: TDButtonShape.rectangle,
@@ -540,7 +540,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildDisablePrimaryStrokeButton(BuildContext context) {
     return const TDButton(
-      content: '描边按钮',
+      text: '描边按钮',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       shape: TDButtonShape.rectangle,
@@ -552,7 +552,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildDisableDefaultFillButton(BuildContext context) {
     return const TDButton(
-      content: '填充按钮',
+      text: '填充按钮',
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -564,7 +564,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildDisableLightFillButton(BuildContext context) {
     return const TDButton(
-      content: '填充按钮',
+      text: '填充按钮',
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -576,7 +576,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildDisablePrimaryFillButton(BuildContext context) {
     return const TDButton(
-      content: '填充按钮',
+      text: '填充按钮',
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -588,7 +588,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildFilledFillButton(BuildContext context) {
     return const TDButton(
-      content: '填充按钮',
+      text: '填充按钮',
       icon: TDIcons.app,
       size: TDButtonSize.large,
       type: TDButtonType.fill,
@@ -600,7 +600,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildDefaultGhostButton(BuildContext context) {
     return const TDButton(
-      content: '幽灵按钮',
+      text: '幽灵按钮',
       size: TDButtonSize.large,
       type: TDButtonType.ghost,
       shape: TDButtonShape.rectangle,
@@ -611,7 +611,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildDangerGhostButton(BuildContext context) {
     return const TDButton(
-      content: '幽灵按钮',
+      text: '幽灵按钮',
       size: TDButtonSize.large,
       type: TDButtonType.ghost,
       shape: TDButtonShape.rectangle,
@@ -622,7 +622,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildPrimaryGhostButton(BuildContext context) {
     return const TDButton(
-      content: '幽灵按钮',
+      text: '幽灵按钮',
       size: TDButtonSize.large,
       type: TDButtonType.ghost,
       shape: TDButtonShape.rectangle,
@@ -644,7 +644,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildLoadingIconButton(BuildContext context) {
     return TDButton(
-      content: '加载中',
+      text: '加载中',
       iconWidget: TDLoading(size: TDLoadingSize.small, icon: TDLoadingIcon.circle, iconColor: TDTheme.of(context).whiteColor1,),
       size: TDButtonSize.large,
       type: TDButtonType.fill,
@@ -656,7 +656,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildRectangleIconButton(BuildContext context) {
     return const TDButton(
-      content: '填充按钮',
+      text: '填充按钮',
       icon: TDIcons.app,
       size: TDButtonSize.large,
       type: TDButtonType.fill,
@@ -668,7 +668,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildPrimaryTextButton(BuildContext context) {
     return const TDButton(
-      content: '文字按钮',
+      text: '文字按钮',
       size: TDButtonSize.large,
       type: TDButtonType.text,
       shape: TDButtonShape.rectangle,
@@ -679,7 +679,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildPrimaryStrokeButton(BuildContext context) {
     return const TDButton(
-      content: '描边按钮',
+      text: '描边按钮',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       shape: TDButtonShape.rectangle,
@@ -690,7 +690,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildDefaultFillButton(BuildContext context) {
     return const TDButton(
-      content: '填充按钮',
+      text: '填充按钮',
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -702,7 +702,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildPrimaryFillButton(BuildContext context) {
     return const TDButton(
-      content: '填充按钮',
+      text: '填充按钮',
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -713,7 +713,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
   @Demo(group: 'button')
   TDButton _buildLightFillButton(BuildContext context) {
     return const TDButton(
-      content: '填充按钮',
+      text: '填充按钮',
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -730,7 +730,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
         ),
         Expanded(
             child: TDButton(
-          content: '填充按钮',
+          text: '填充按钮',
           size: TDButtonSize.large,
           type: TDButtonType.fill,
           shape: TDButtonShape.rectangle,
@@ -741,7 +741,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
         ),
         Expanded(
             child: TDButton(
-          content: '填充按钮',
+          text: '填充按钮',
           size: TDButtonSize.large,
           type: TDButtonType.fill,
           shape: TDButtonShape.rectangle,
@@ -776,18 +776,18 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.primary,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.primary,
                 style: TDButtonStyle.generateFillStyleByTheme(context, TDButtonTheme.primary, TDButtonStatus.active),
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.primary,
                 disabled: true,
               ),
@@ -800,18 +800,18 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.light,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.light,
                 style: TDButtonStyle.generateFillStyleByTheme(context, TDButtonTheme.light, TDButtonStatus.active),
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.light,
                 disabled: true,
               ),
@@ -824,18 +824,18 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
                 style: TDButtonStyle.generateFillStyleByTheme(context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
                 disabled: true,
               ),
@@ -848,18 +848,18 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.danger,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.danger,
                 style: TDButtonStyle.generateFillStyleByTheme(context, TDButtonTheme.danger, TDButtonStatus.active),
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.danger,
                 disabled: true,
               ),
@@ -875,20 +875,20 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.primary,
                 type: TDButtonType.outline,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.primary,
                 style: TDButtonStyle.generateOutlineStyleByTheme(context, TDButtonTheme.primary, TDButtonStatus.active),
                 type: TDButtonType.outline,
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.primary,
                 disabled: true,
                 type: TDButtonType.outline,
@@ -902,20 +902,20 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.light,
                 type: TDButtonType.outline,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.light,
                 style: TDButtonStyle.generateOutlineStyleByTheme(context, TDButtonTheme.light, TDButtonStatus.active),
                 type: TDButtonType.outline,
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.light,
                 disabled: true,
                 type: TDButtonType.outline,
@@ -929,20 +929,20 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
                 type: TDButtonType.outline,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
                 style: TDButtonStyle.generateOutlineStyleByTheme(context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
                 type: TDButtonType.outline,
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
                 disabled: true,
                 type: TDButtonType.outline,
@@ -956,20 +956,20 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.danger,
                 type: TDButtonType.outline,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.danger,
                 style: TDButtonStyle.generateOutlineStyleByTheme(context, TDButtonTheme.danger, TDButtonStatus.active),
                 type: TDButtonType.outline,
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.danger,
                 disabled: true,
                 type: TDButtonType.outline,
@@ -986,20 +986,20 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.primary,
                 type: TDButtonType.text,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.primary,
                 style: TDButtonStyle.generateTextStyleByTheme(context, TDButtonTheme.primary, TDButtonStatus.active),
                 type: TDButtonType.text,
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.primary,
                 disabled: true,
                 type: TDButtonType.text,
@@ -1013,20 +1013,20 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.light,
                 type: TDButtonType.text,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.light,
                 style: TDButtonStyle.generateTextStyleByTheme(context, TDButtonTheme.light, TDButtonStatus.active),
                 type: TDButtonType.text,
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.light,
                 disabled: true,
                 type: TDButtonType.text,
@@ -1040,20 +1040,20 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
                 type: TDButtonType.text,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
                 style: TDButtonStyle.generateTextStyleByTheme(context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
                 type: TDButtonType.text,
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
                 disabled: true,
                 type: TDButtonType.text,
@@ -1067,20 +1067,20 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.danger,
                 type: TDButtonType.text,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.danger,
                 style: TDButtonStyle.generateTextStyleByTheme(context, TDButtonTheme.danger, TDButtonStatus.active),
                 type: TDButtonType.text,
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.danger,
                 disabled: true,
                 type: TDButtonType.text,
@@ -1098,20 +1098,20 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.primary,
                 type: TDButtonType.ghost,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.primary,
                 style: TDButtonStyle.generateGhostStyleByTheme(context, TDButtonTheme.primary, TDButtonStatus.active),
                 type: TDButtonType.ghost,
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.primary,
                 disabled: true,
                 type: TDButtonType.ghost,
@@ -1126,20 +1126,20 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.light,
                 type: TDButtonType.ghost,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.light,
                 style: TDButtonStyle.generateGhostStyleByTheme(context, TDButtonTheme.light, TDButtonStatus.active),
                 type: TDButtonType.ghost,
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.light,
                 disabled: true,
                 type: TDButtonType.ghost,
@@ -1154,20 +1154,20 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
                 type: TDButtonType.ghost,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
                 style: TDButtonStyle.generateGhostStyleByTheme(context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
                 type: TDButtonType.ghost,
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
                 disabled: true,
                 type: TDButtonType.ghost,
@@ -1182,20 +1182,20 @@ class _TDButtonPageState extends State<TDButtonPage> {
             children: [
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.danger,
                 type: TDButtonType.ghost,
               ),
               TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.danger,
                 style: TDButtonStyle.generateGhostStyleByTheme(context, TDButtonTheme.danger, TDButtonStatus.active),
                 type: TDButtonType.ghost,
               ),
               const TDButton(
                 icon: TDIcons.app,
-                content: 'Button',
+                text: 'Button',
                 theme: TDButtonTheme.danger,
                 disabled: true,
                 type: TDButtonType.ghost,

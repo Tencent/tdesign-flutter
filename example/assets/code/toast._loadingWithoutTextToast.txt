@@ -8,6 +8,6 @@
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '加载状态（无文案）',
+      text: '加载状态（无文案）',
     );
   }
