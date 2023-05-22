@@ -50,7 +50,7 @@ class TDEmpty extends StatelessWidget {
               ? Padding(
                   padding: const EdgeInsets.only(top: 32),
                   child: TDButton(
-                    content: operationText ?? '',
+                    text: operationText ?? '',
                     size: TDButtonSize.large,
                     theme: TDButtonTheme.primary,
                     width: 179,

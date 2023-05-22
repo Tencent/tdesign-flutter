@@ -380,7 +380,7 @@ class TDDialogButton extends StatelessWidget {
       style: buttonStyle,
       type: buttonType ?? TDButtonType.fill,
       theme: buttonTheme,
-      content: buttonText,
+      text: buttonText,
       textStyle: TextStyle(fontWeight: buttonTextFontWeight, color: buttonTextColor),
       width: width,
       height: height,

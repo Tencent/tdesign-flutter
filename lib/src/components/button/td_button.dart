@@ -18,7 +18,7 @@ typedef TDButtonEvent = void Function();
 class TDButton extends StatefulWidget {
   const TDButton(
       {Key? key,
-      this.content,
+      this.text,
       this.size = TDButtonSize.medium,
       this.type = TDButtonType.fill,
       this.shape = TDButtonShape.rectangle,
@@ -45,7 +45,7 @@ class TDButton extends StatefulWidget {
   final Widget? child;
 
   /// 文本内容
-  final String? content;
+  final String? text;
 
   /// 禁止点击
   final bool disabled;
@@ -197,7 +197,7 @@ class _TDButtonState extends State<TDButton> {
 
   Widget _getChild() {
     var icon = getIcon();
-    if (widget.content == null && icon == null) {
+    if (widget.text == null && icon == null) {
       return Container();
     }
     var children = <Widget>[];
@@ -205,9 +205,9 @@ class _TDButtonState extends State<TDButton> {
     if (icon != null) {
       children.add(icon);
     }
-    if (widget.content != null) {
+    if (widget.text != null) {
       var text = TDText(
-        widget.content!,
+        widget.text!,
         font: _getTextFont(),
         textColor:
             style.textColor ?? TDTheme.of(context).fontGyColor1,
