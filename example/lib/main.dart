@@ -4,6 +4,7 @@ import 'package:tdesign_flutter/td_export.dart';
 
 import 'base/example_base.dart';
 import 'base/example_route.dart';
+import 'base/web_md_tool.dart';
 import 'page/td_avatar_page.dart';
 import 'page/td_badge_page.dart';
 import 'page/td_bottom_nav_bar_page.dart';
@@ -452,6 +453,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ));
       value.forEach((model) {
+        model.spline = WebMdTool.getSpline(key);
         if (model.isTodo) {
           if (_kShowTodoComponent) {
             children.add(Padding(
