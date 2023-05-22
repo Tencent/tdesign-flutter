@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter_example/page/td_slider_page.dart';
 
 import 'base/example_base.dart';
 import 'base/example_route.dart';
@@ -160,8 +161,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Slider 滑动选择器',
         name: 'slider',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDSliderPage())),
     ExamplePageModel(
         text: 'Stepper 步进器',
         name: 'stepper',
