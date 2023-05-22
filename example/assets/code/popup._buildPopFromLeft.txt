@@ -1,7 +1,7 @@
 
   Widget _buildPopFromLeft(BuildContext context) {
     return TDButton(
-      content: '左侧弹出',
+      text: '左侧弹出',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {

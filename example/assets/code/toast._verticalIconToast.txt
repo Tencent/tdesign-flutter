@@ -11,6 +11,6 @@
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '带竖向图标',
+      text: '带竖向图标',
     );
   }
