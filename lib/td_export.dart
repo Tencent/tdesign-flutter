@@ -13,6 +13,7 @@ export 'src/components/image/image_widget.dart';
 export 'src/components/image/td_image.dart';
 export 'src/components/input/input_view.dart';
 export 'src/components/input/td_input.dart';
+export 'src/components/link/td_link.dart';
 export 'src/components/loading/td_circle_indicator.dart';
 export 'src/components/loading/td_loading.dart';
 export 'src/components/navbar/td_nav_bar.dart';
