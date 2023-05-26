@@ -18,6 +18,7 @@ import 'page/td_empty_page.dart';
 import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
 import 'page/td_input_page.dart';
+import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
 import 'page/td_navbar_page.dart';
 import 'page/td_picker_page.dart';
@@ -70,8 +71,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Link 链接',
         name: 'link',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDLinkViewPage())),
     ExamplePageModel(
         text: 'Text 文本',
         name: 'text',
