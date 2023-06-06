@@ -9,6 +9,6 @@
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '警告提示',
+      text: '警告提示',
     );
   }

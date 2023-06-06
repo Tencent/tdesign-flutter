@@ -18,7 +18,7 @@
               const SizedBox(
                 width: 16,
               ),
-              TDText('发送验证码', textColor: TDTheme.of(context).brandColor8),
+              TDText('发送验证码', textColor: TDTheme.of(context).brandNormalColor),
             ],
           ),
           onBtnTap: () {
