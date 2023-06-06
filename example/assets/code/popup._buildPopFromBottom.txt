@@ -1,7 +1,7 @@
 
   Widget _buildPopFromBottom(BuildContext context) {
     return TDButton(
-      content: '底部弹出',
+      text: '底部弹出',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {

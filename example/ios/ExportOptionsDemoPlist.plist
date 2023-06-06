@@ -11,7 +11,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.tencent.tdesign.db</key>
-		<string>* InHouse</string>
+		<string>_InHouse</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>iPhone Distribution: Tencent Technology (Shenzhen) Co., Ltd</string>

@@ -29,7 +29,7 @@ class _TDIconPageState extends State<TDIconPage> {
         child: Wrap(
           children: [
             Container(
-              child: TDButton(content: showBorder? '隐藏边框':'显示边框',
+              child: TDButton(text: showBorder? '隐藏边框':'显示边框',
                 shape: TDButtonShape.filled,
                 onTap: (){
                   setState(() {
