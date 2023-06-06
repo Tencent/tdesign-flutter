@@ -14,6 +14,7 @@ class ExamplePageModel{
   final String text;
   final String name;
   String? codePath;
+  String? spline;
   bool apiVisible;
   bool showAction;
   bool isTodo;

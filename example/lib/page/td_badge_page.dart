@@ -99,7 +99,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 TDButton(
                   width: 80,
                   height: 48,
-                  content: '按钮',
+                  text: '按钮',
                   size: TDButtonSize.large,
                   type: TDButtonType.fill,
                 ),
@@ -176,7 +176,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 TDButton(
                   width: 80,
                   height: 48,
-                  content: '按钮',
+                  text: '按钮',
                   size: TDButtonSize.large,
                 ),
                 Positioned(
