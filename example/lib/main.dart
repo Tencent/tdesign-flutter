@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter_example/page/td_slider_page.dart';
 
 import 'base/example_base.dart';
 import 'base/example_route.dart';
+import 'base/web_md_tool.dart';
 import 'page/td_avatar_page.dart';
 import 'page/td_badge_page.dart';
 import 'page/td_bottom_nav_bar_page.dart';
@@ -16,6 +18,7 @@ import 'page/td_empty_page.dart';
 import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
 import 'page/td_input_page.dart';
+import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
 import 'page/td_navbar_page.dart';
 import 'page/td_picker_page.dart';
@@ -69,8 +72,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Link 链接',
         name: 'link',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDLinkViewPage())),
     ExamplePageModel(
         text: 'Text 文本',
         name: 'text',
@@ -160,8 +162,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Slider 滑动选择器',
         name: 'slider',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDSliderPage())),
     ExamplePageModel(
         text: 'Stepper 步进器',
         name: 'stepper',
@@ -452,6 +453,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ));
       value.forEach((model) {
+        model.spline = WebMdTool.getSpline(key);
         if (model.isTodo) {
           if (_kShowTodoComponent) {
             children.add(Padding(
@@ -466,7 +468,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onTap: () {
                     Navigator.pushNamed(context, '${model.name}?showAction=1');
                   },
-                  content: model.text),
+                  text: model.text),
             ));
           }
         } else {
@@ -481,7 +483,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onTap: () {
                   Navigator.pushNamed(context, '${model.name}?showAction=1');
                 },
-                content: model.text),
+                text: model.text),
           ));
         }
       });

@@ -1,0 +1,43 @@
+
+  Widget _buildDisable(BuildContext context) {
+    return Column(
+      children: [
+        TDSlider(
+          sliderThemeData: TDSliderThemeData(
+            min: 0,
+            max: 100,
+          ),
+          value: 40,
+          leftLabel: '0',
+          rightLabel: '100',
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData(
+            min: 0,
+            max: 100,
+            showThumbValue: true,
+            scaleFormatter: (value) => value.toInt().toString(),
+          ),
+          value: const RangeValues(20, 60),
+          leftLabel: '0',
+          rightLabel: '100',
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData(
+            showScaleValue: true,
+            divisions: 5,
+            min: 0,
+            max: 100,
+            scaleFormatter: (value) => value.toInt().toString(),
+          ),
+          value: const RangeValues(20, 60),
+        ),
+      ],
+    );
+  }

@@ -1,7 +1,7 @@
 
   Widget _buildInputNormal(BuildContext context) {
     return TDButton(
-      content: '输入类-带描述',
+      text: '输入类-带描述',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
