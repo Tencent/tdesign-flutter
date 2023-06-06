@@ -117,6 +117,11 @@ class _TDStepperState extends State<TDStepper> {
     }
   }
 
+  double _getTextWidth() {
+    var textLength = value.toString().length;
+    return textLength < 4 ? 0 : (textLength - 4) * _getFontSize();
+  }
+
   double _getHeight() {
     switch (widget.size) {
       case TDStepperSize.small:
@@ -222,118 +227,124 @@ class _TDStepperState extends State<TDStepper> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          TDStepperIconButton(
-            type: TDStepperIconType.remove,
-            disabled: widget.disabled || value <= widget.min,
-            theme: widget.theme,
-            size: widget.size,
-            onTap: onReduce,
-          ),
-          Container(
-            decoration: BoxDecoration(
-                border: widget.theme == TDStepperTheme.outline
-                    ? Border(
-                        top: BorderSide(
-                          color: TDTheme.of(context).grayColor4,
-                        ),
-                        bottom: BorderSide(
-                          color: TDTheme.of(context).grayColor4,
-                        ))
-                    : null),
-            child: Padding(
+    return Row(
+      children: [
+        TDStepperIconButton(
+          type: TDStepperIconType.remove,
+          disabled: widget.disabled || value <= widget.min,
+          theme: widget.theme,
+          size: widget.size,
+          onTap: onReduce,
+        ),
+        Container(
+          decoration: BoxDecoration(
+              border: widget.theme == TDStepperTheme.outline
+                  ? Border(
+                      top: BorderSide(
+                        color: TDTheme.of(context).grayColor4,
+                      ),
+                      bottom: BorderSide(
+                        color: TDTheme.of(context).grayColor4,
+                      ))
+                  : null),
+          child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: widget.theme == TDStepperTheme.normal ? 0 : 4),
-              child: Container(
-                width: _getWidth(),
-                height: _getHeight(),
-                decoration: BoxDecoration(color: _getBackgroundColor(context)),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: TextField(
-                    controller: _controller,
-                    enabled: !widget.disabled && !widget.disableInput,
-                    focusNode: _focuseNode,
-                    style: TextStyle(
-                        fontSize: _getFontSize(),
-                        color: widget.disabled
-                            ? TDTheme.of(context).fontGyColor4
-                            : TDTheme.of(context).fontGyColor1),
-                    textAlign: TextAlign.center,
-                    textAlignVertical: TextAlignVertical.center,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(border: InputBorder.none),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      TextInputFormatter.withFunction((oldValue, newValue) {
-                        try {
-                          if (newValue.text == '') {
-                            setState(() {
-                              value = widget.min;
-                            });
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                    minWidth: _getWidth(),
+                    maxWidth: _getWidth() + _getTextWidth()),
+                child: Container(
+                  height: _getHeight(),
+                  decoration:
+                      BoxDecoration(color: _getBackgroundColor(context)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    child: TextField(
+                      controller: _controller,
+                      enabled: !widget.disabled && !widget.disableInput,
+                      focusNode: _focuseNode,
+                      style: TextStyle(
+                          fontSize: _getFontSize(),
+                          color: widget.disabled
+                              ? TDTheme.of(context).fontGyColor4
+                              : TDTheme.of(context).fontGyColor1),
+                      textAlign: TextAlign.center,
+                      textAlignVertical: TextAlignVertical.center,
+                      keyboardType: TextInputType.number,
+                      decoration:
+                          const InputDecoration(border: InputBorder.none),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        TextInputFormatter.withFunction((oldValue, newValue) {
+                          try {
+                            if (newValue.text == '') {
+                              setState(() {
+                                value = widget.min;
+                              });
 
-                            if (widget.onOverlimit != null) {
-                              widget.onOverlimit!(TDStepperOverlimitType.minus);
+                              if (widget.onOverlimit != null) {
+                                widget
+                                    .onOverlimit!(TDStepperOverlimitType.minus);
+                              }
+
+                              return newValue.copyWith(
+                                  text: value.toString(),
+                                  selection: TextSelection.collapsed(
+                                      offset: value.toString().length));
+                            }
+
+                            final newNum = int.parse(newValue.text);
+                            if (newNum < widget.min) {
+                              setState(() {
+                                value = widget.min;
+                              });
+                              if (widget.onOverlimit != null) {
+                                widget
+                                    .onOverlimit!(TDStepperOverlimitType.minus);
+                              }
+                            } else if (newNum > widget.max) {
+                              setState(() {
+                                value = widget.max;
+                              });
+                              if (widget.onOverlimit != null) {
+                                widget
+                                    .onOverlimit!(TDStepperOverlimitType.plus);
+                              }
+                            } else {
+                              setState(() {
+                                value = newNum;
+                              });
                             }
 
                             return newValue.copyWith(
                                 text: value.toString(),
                                 selection: TextSelection.collapsed(
                                     offset: value.toString().length));
+                          } catch (e) {
+                            return oldValue;
                           }
-
-                          final newNum = int.parse(newValue.text);
-                          if (newNum < widget.min) {
-                            setState(() {
-                              value = widget.min;
-                            });
-                            if (widget.onOverlimit != null) {
-                              widget.onOverlimit!(TDStepperOverlimitType.minus);
-                            }
-                          } else if (newNum > widget.max) {
-                            setState(() {
-                              value = widget.max;
-                            });
-                            if (widget.onOverlimit != null) {
-                              widget.onOverlimit!(TDStepperOverlimitType.plus);
-                            }
-                          } else {
-                            setState(() {
-                              value = newNum;
-                            });
-                          }
-
-                          return newValue.copyWith(
-                              text: value.toString(),
-                              selection: TextSelection.collapsed(
-                                  offset: value.toString().length));
-                        } catch (e) {
-                          return oldValue;
+                        })
+                      ],
+                      onChanged: (newValue) {
+                        final result = int.parse(newValue);
+                        if (widget.onChange != null) {
+                          widget.onChange!(result);
                         }
-                      })
-                    ],
-                    onChanged: (newValue) {
-                      final result = int.parse(newValue);
-                      if (widget.onChange != null) {
-                        widget.onChange!(result);
-                      }
-                    },
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-          TDStepperIconButton(
-            type: TDStepperIconType.add,
-            disabled: widget.disabled || value >= widget.max,
-            theme: widget.theme,
-            size: widget.size,
-            onTap: onAdd,
-          )
-        ],
-      ),
+              )),
+        ),
+        TDStepperIconButton(
+          type: TDStepperIconType.add,
+          disabled: widget.disabled || value >= widget.max,
+          theme: widget.theme,
+          size: widget.size,
+          onTap: onAdd,
+        )
+      ],
     );
   }
 }
