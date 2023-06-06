@@ -2,7 +2,7 @@
   @Demo(group: 'button')
   TDButton _buildPrimaryFillButton(BuildContext context) {
     return const TDButton(
-      content: '填充按钮',
+      text: '填充按钮',
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,

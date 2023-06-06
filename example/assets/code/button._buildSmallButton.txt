@@ -1,7 +1,7 @@
 
   TDButton _buildSmallButton(BuildContext context) {
     return const TDButton(
-      content: '按钮32',
+      text: '按钮32',
       size: TDButtonSize.small,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,

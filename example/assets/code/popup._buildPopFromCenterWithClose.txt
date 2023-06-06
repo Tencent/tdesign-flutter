@@ -1,7 +1,7 @@
 
   Widget _buildPopFromCenterWithClose(BuildContext context) {
     return TDButton(
-      content: '居中弹出层-带关闭',
+      text: '居中弹出层-带关闭',
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
       onTap: () {

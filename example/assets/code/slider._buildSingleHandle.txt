@@ -1,0 +1,12 @@
+
+  Widget _buildSingleHandle(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData(
+        min: 0,
+        max: 100,
+      ),
+      value: 10,
+      // divisions: 5,
+      onChanged: (value) {},
+    );
+  }
