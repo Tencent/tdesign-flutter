@@ -7,7 +7,7 @@
         ),
         Expanded(
             child: TDButton(
-          content: '填充按钮',
+          text: '填充按钮',
           size: TDButtonSize.large,
           type: TDButtonType.fill,
           shape: TDButtonShape.rectangle,
@@ -18,7 +18,7 @@
         ),
         Expanded(
             child: TDButton(
-          content: '填充按钮',
+          text: '填充按钮',
           size: TDButtonSize.large,
           type: TDButtonType.fill,
           shape: TDButtonShape.rectangle,
