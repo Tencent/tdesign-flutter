@@ -205,7 +205,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                         key: _textFieldKey,
                         controller: controller,
                         autofocus: widget.autoFocus,
-                        cursorColor: TDTheme.of(context).brandColor8,
+                        cursorColor: TDTheme.of(context).brandNormalColor,
                         cursorWidth: 1,
                         cursorHeight: widget.mediumStyle ? 16 : 18,
                         focusNode: focusNode,
@@ -277,7 +277,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                   child: Text('取消',
                       style: TextStyle(
                           fontSize: getSize(context)?.size,
-                          color: TDTheme.of(context).brandColor8)),
+                          color: TDTheme.of(context).brandNormalColor)),
                 ),
               ),
             ),

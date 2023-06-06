@@ -1,7 +1,7 @@
 
   TDButton _buildDisablePrimaryStrokeButton(BuildContext context) {
     return const TDButton(
-      content: '描边按钮',
+      text: '描边按钮',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       shape: TDButtonShape.rectangle,

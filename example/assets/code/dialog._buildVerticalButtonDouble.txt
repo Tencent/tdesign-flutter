@@ -1,7 +1,7 @@
 
   Widget _buildVerticalButtonDouble(BuildContext context) {
     return TDButton(
-      content: '两个纵向基础按钮',
+      text: '两个纵向基础按钮',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
@@ -20,7 +20,7 @@
                       theme: TDButtonTheme.primary),
                   TDDialogButtonOptions(
                       title: '次要按钮',
-                      titleColor: TDTheme.of(context).brandColor8,
+                      titleColor: TDTheme.of(context).brandColor7,
                       action: () {},
                       theme: TDButtonTheme.light),
                 ]);
