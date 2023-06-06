@@ -1,7 +1,7 @@
 
   Widget _buildFeedbackNormal(BuildContext context) {
     return TDButton(
-      content: '反馈类-带标题',
+      text: '反馈类-带标题',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,

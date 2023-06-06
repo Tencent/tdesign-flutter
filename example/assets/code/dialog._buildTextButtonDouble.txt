@@ -1,7 +1,7 @@
 
   Widget _buildTextButtonDouble(BuildContext context) {
     return TDButton(
-      content: '左右文字按钮',
+      text: '左右文字按钮',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
