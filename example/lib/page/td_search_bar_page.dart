@@ -66,6 +66,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
   Widget _buildFocusSearchBar(BuildContext context) {
     return const TDSearchBar(
       placeHolder: '搜索预设文案',
+      needCancel: true,
       autoFocus: true,
     );
   }
