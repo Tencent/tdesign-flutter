@@ -34,7 +34,7 @@ class TDSearchBar extends StatefulWidget {
     this.padding = const EdgeInsets.fromLTRB(16, 8, 16, 8),
     this.autoFocus = false,
     this.mediumStyle = false,
-    this.needCancel = true,
+    this.needCancel = false,
     this.backgroundColor = Colors.white,
   }) : super(key: key);
 
@@ -129,23 +129,23 @@ class _TDSearchBarState extends State<TDSearchBar>
         });
       }
     });
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var phBox = _phKey.currentContext?.findRenderObject() as RenderBox?;
-      if (phBox != null) {
-        setState(() {
-          if (widget.alignment != TDSearchAlignment.center) {
-            return;
-          }
-          var dx = (phBox.size.width / 2 - 24) / phBox.size.width;
-          if (dx < 0) {
-            return;
-          }
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   var phBox = _phKey.currentContext?.findRenderObject() as RenderBox?;
+    //   if (phBox != null) {
+    //     setState(() {
+    //       if (widget.alignment != TDSearchAlignment.center) {
+    //         return;
+    //       }
+    //       var dx = (phBox.size.width / 2 - 24) / phBox.size.width;
+    //       if (dx < 0) {
+    //         return;
+    //       }
 
-          _animation ??= Tween(begin: Offset.zero, end: Offset(-dx, 0))
-              .animate(_animationController);
-        });
-      }
-    });
+    //       _animation ??= Tween(begin: Offset.zero, end: Offset(-dx, 0))
+    //           .animate(_animationController);
+    //     });
+    //   }
+    // });
   }
 
   void _updateClearBtnVisible(bool visible) {
@@ -208,6 +208,9 @@ class _TDSearchBarState extends State<TDSearchBar>
                         cursorColor: TDTheme.of(context).brandNormalColor,
                         cursorWidth: 1,
                         cursorHeight: widget.mediumStyle ? 16 : 18,
+                        textAlign: widget.alignment == TDSearchAlignment.center
+                            ? TextAlign.center
+                            : TextAlign.left,
                         focusNode: focusNode,
                         onChanged: widget.onTextChanged,
                         onSubmitted: widget.onSubmitted,
