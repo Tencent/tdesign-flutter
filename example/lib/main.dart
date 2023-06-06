@@ -165,8 +165,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Stepper 步进器',
         name: 'stepper',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDStepperPage())),
     ExamplePageModel(
         text: 'Switch 开关',
         name: 'switch',
