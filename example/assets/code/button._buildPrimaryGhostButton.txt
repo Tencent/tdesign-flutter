@@ -1,7 +1,7 @@
 
   TDButton _buildPrimaryGhostButton(BuildContext context) {
     return const TDButton(
-      content: '幽灵按钮',
+      text: '幽灵按钮',
       size: TDButtonSize.large,
       type: TDButtonType.ghost,
       shape: TDButtonShape.rectangle,
