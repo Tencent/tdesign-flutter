@@ -14,23 +14,34 @@ class TDStepperPage extends StatefulWidget {
 class _TDStepperPageState extends State<TDStepperPage> {
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(
-        title: tdTitle(),
-        desc: '用于数量的增减。',
-        exampleCodeGroup: 'stepper',
-        children: [
-          ExampleModule(title: '组件类型', children: [
-            ExampleItem(desc: '基础步进器', builder: _buildStepperWithBase),
+    return GestureDetector(
+      onTap: () {
+        var currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus!.unfocus();
+        }
+      },
+      child: ExamplePage(
+          title: tdTitle(),
+          desc: '用于数量的增减。',
+          exampleCodeGroup: 'stepper',
+          children: [
+            ExampleModule(title: '组件类型', children: [
+              ExampleItem(desc: '基础步进器', builder: _buildStepperWithBase),
+            ]),
+            ExampleModule(title: '组件状态', children: [
+              ExampleItem(
+                  desc: '最大最小状态', builder: _buildStepperWithMaxMinStatus),
+              ExampleItem(desc: '禁用状态', builder: _buildStepperWithDisableStatus)
+            ]),
+            ExampleModule(title: '组件样式', children: [
+              ExampleItem(desc: '步进器样式', builder: _buildStepperWithTheme),
+              ExampleItem(desc: '步进器尺寸', builder: _buildStepperWithSize)
+            ]),
           ]),
-          ExampleModule(title: '组件状态', children: [
-            ExampleItem(desc: '最大最小状态', builder: _buildStepperWithMaxMinStatus),
-            ExampleItem(desc: '禁用状态', builder: _buildStepperWithDisableStatus)
-          ]),
-          ExampleModule(title: '组件样式', children: [
-            ExampleItem(desc: '步进器样式', builder: _buildStepperWithTheme),
-            ExampleItem(desc: '步进器尺寸', builder: _buildStepperWithSize)
-          ]),
-        ]);
+    );
   }
 
   @Demo(group: 'stepper')
