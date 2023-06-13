@@ -28,19 +28,9 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
         title: tdTitle(),
         exampleCodeGroup: 'refresh',
         desc: '用于快速刷新页面信息，刷新可以是整页刷新也可以是页面的局部刷新。',
-        children: [
-          ExampleModule(title: '下拉示例', children: [
-            ExampleItem(
-                ignoreCode: true,
-                builder: (_) => Container(
-                  margin: const EdgeInsets.only(top: 16),
-                      height: 400,
-                      child: Stack(
-                        children: [CodeWrapper(builder: _buildRefresh)],
-                      ),
-                    ))
-          ])
-        ]);
+        showSingleChild: true,
+        singleChild: CodeWrapper(builder: _buildRefresh),
+    );
   }
 
   @Demo(group: 'refresh')
