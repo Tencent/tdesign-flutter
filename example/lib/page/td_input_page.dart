@@ -26,11 +26,13 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           ExampleModule(
             title: '组件类型',
             children: [
-              ExampleItem(desc: '基础文本框', builder: _basicTypeBasic),
+              ExampleItem(desc: '基础输入框', builder: _basicTypeBasic),
               ExampleItem(builder: _basicTypeRequire),
               ExampleItem(builder: _basicTypeOptional),
               ExampleItem(builder: _basicTypePureInput),
               ExampleItem(builder: _basicTypeAdditionalDesc),
+              ExampleItem(desc: '带字数限制输入框', builder: _basicTypeTextLimit),
+              ExampleItem(builder: _basicTypeTextLimitChinese2),
               ExampleItem(desc: '带操作输入框', builder: _basicTypeWithHandleIconOne),
               ExampleItem(builder: _basicTypeWithHandleIconTwo),
               ExampleItem(builder: _basicTypeWithHandleIconThree),
@@ -51,12 +53,14 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
             ExampleItem(builder: _inputStatusLongInput),
           ]),
           ExampleModule(title: '组件样式', children: [
+            ExampleItem(desc: '内容位置', builder: _contentLeft),
+            ExampleItem(builder: _contentCenter),
+            ExampleItem(builder: _contentRight),
             ExampleItem(desc: '竖排样式', builder: _verticalStyle),
             ExampleItem(desc: '非通栏样式', builder: _cardStyle),
+            ExampleItem(desc: '标签外置样式', builder: _labelOutStyle),
+            ExampleItem(desc: '自定义样式输入框', builder: _customStyle),
           ]),
-          ExampleModule(title: '特殊样式', children: [
-            ExampleItem(desc: '非通栏样式', builder: _labelOutStyle),
-          ])
         ]);
   }
 
@@ -135,7 +139,40 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       leftLabel: '标签文字',
       controller: controller,
       hintText: '请输入文字',
-      addtionInfo: '辅助说明',
+      additionInfo: '辅助说明',
+      backgroundColor: Colors.white,
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _basicTypeTextLimit(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          type: TDInputType.normal,
+          leftLabel: '标签文字',
+          controller: controller,
+          hintText: '请输入文字',
+          maxNum: 10,
+          additionInfo: '最大输入10个字符',
+          backgroundColor: Colors.white,
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _basicTypeTextLimitChinese2(BuildContext context) {
+    return TDInput(
+      type: TDInputType.normal,
+      leftLabel: '标签文字',
+      controller: controller,
+      hintText: '请输入文字',
+      inputFormatters: [Chinese2Formatter(10)],
+      additionInfo: '最大输入10个字符，汉字算两个',
       backgroundColor: Colors.white,
     );
   }
@@ -204,7 +241,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       controller: controller,
       backgroundColor: Colors.white,
       hintText: '请输入文字',
-      rightBtn: const Icon(TDIcons.calendar),
+      rightBtn: Icon(TDIcons.user_avatar, color: TDTheme.of(context).fontGyColor3,),
       onBtnTap: () {
         TDToast.showText('点击操作按钮', context: context);
       },
@@ -320,7 +357,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           type: TDInputType.normal,
           controller: controller,
           leftLabel: '手机号',
-          hintText: '请输入手机号码',
+          hintText: '输入手机号',
           backgroundColor: Colors.white,
           rightBtn: Row(
             children: [
@@ -372,7 +409,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       type: TDInputType.special,
       controller: controller,
       leftLabel: '数量',
-      hintText: '输入数量',
+      hintText: '填写个数',
       backgroundColor: Colors.white,
       textAlign: TextAlign.end,
       rightWidget: TDText('个', textColor: TDTheme.of(context).fontGyColor1),
@@ -388,8 +425,8 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           controller: controller,
           backgroundColor: Colors.white,
           hintText: '请输入文字',
-          addtionInfo: '辅助说明',
-          addtionInfoColor: TDTheme.of(context).errorColor6,
+          additionInfo: '错误提示说明',
+          additionInfoColor: TDTheme.of(context).errorColor6,
         ),
         const SizedBox(
           height: 16,
@@ -493,6 +530,75 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         onBtnTap: () {
           TDToast.showText('点击右侧按钮', context: context);
         },
+      ),
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _contentLeft(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          leftLabel: '左对齐',
+          controller: controller,
+          backgroundColor: Colors.white,
+          hintText: '请输入文字',
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _contentCenter(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          leftLabel: '居中',
+          controller: controller,
+          backgroundColor: Colors.white,
+          contentAlignment: TextAlign.center,
+          hintText: '请输入文字',
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _contentRight(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          leftLabel: '右对齐',
+          controller: controller,
+          backgroundColor: Colors.white,
+          contentAlignment: TextAlign.end,
+          hintText: '请输入文字',
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _customStyle(BuildContext context) {
+    return TDInput(
+      leftLabel: '标签文字',
+      controller: controller,
+      backgroundColor: TDTheme.of(context).grayColor12,
+      leftLabelStyle: TextStyle(
+        color: TDTheme.of(context).fontWhColor1
+      ),
+      hintText: '请输入文字',
+      hintTextStyle: TextStyle(
+          color: TDTheme.of(context).fontWhColor3
       ),
     );
   }

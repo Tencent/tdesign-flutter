@@ -27,6 +27,7 @@ class TDInput extends StatelessWidget {
       this.decoration,
       this.leftIcon,// leftIcon is default designed 24 in size.
       this.leftLabel,
+      this.leftLabelStyle,
       this.required,
       this.readOnly = false,
       this.autofocus = false,
@@ -49,12 +50,13 @@ class TDInput extends StatelessWidget {
       this.textInputBackgroundColor,
       this.contentPadding,
       this.type = TDInputType.normal,
-      this.size = TDInputSize.small,
+      this.size = TDInputSize.large,
       double? leftInfoWidth,
       this.maxNum = 500,
-      this.addtionInfo = '',
-      this.addtionInfoColor,
+      this.additionInfo = '',
+      this.additionInfoColor,
       this.textAlign,
+      this.contentAlignment = TextAlign.start,
       this.rightWidget,
       this.cardStyle,
       this.cardStyleTopText,
@@ -191,16 +193,22 @@ class TDInput extends StatelessWidget {
   final int? maxNum;
 
   /// 错误提示信息
-  final String? addtionInfo;
+  final String? additionInfo;
 
   /// 错误提示颜色
-  final Color? addtionInfoColor;
+  final Color? additionInfoColor;
 
   /// 文字对齐方向
   final TextAlign? textAlign;
 
   /// 右侧自定义组件 特殊类型时生效
   final Widget? rightWidget;
+
+  /// 内容对齐方向
+  final TextAlign contentAlignment;
+
+  /// 左侧标签样式
+  final TextStyle? leftLabelStyle;
 
   /// 获取输入框规格
   double getInputPadding() {
@@ -243,7 +251,7 @@ class TDInput extends StatelessWidget {
               : backgroundColor,
           decoration: cardStyleDecoration ?? decoration,
           child: Row(
-            crossAxisAlignment: addtionInfo != ''
+            crossAxisAlignment: additionInfo != ''
                 ? CrossAxisAlignment.start
                 : CrossAxisAlignment.center,
             children: <Widget>[
@@ -274,6 +282,7 @@ class TDInput extends StatelessWidget {
                             TDText(
                               leftLabel,
                               maxLines: 2,
+                              style: leftLabelStyle,
                               font: TDTheme.of(context).fontBodyLarge,
                               fontWeight: FontWeight.w400,
                             ),
@@ -317,12 +326,12 @@ class TDInput extends StatelessWidget {
                       hintText: hintText,
                       inputType: inputType,
                       onChanged: onChanged,
-                      inputFormatters: inputFormatters,
+                      inputFormatters: inputFormatters ?? [LengthLimitingTextInputFormatter(maxNum)],
                       inputDecoration: inputDecoration,
                       maxLines: maxLines,
                       focusNode: focusNode,
                       isCollapsed: true,
-                      textAlign: textAlign,
+                      textAlign: contentAlignment,
                       hintTextStyle: hintTextStyle ??
                           TextStyle(color: TDTheme.of(context).fontGyColor3),
                       cursorColor: cursorColor,
@@ -332,7 +341,7 @@ class TDInput extends StatelessWidget {
                           EdgeInsets.only(
                               left: 16,
                               right: 16,
-                              bottom: addtionInfo != '' ? 4 : getInputPadding(),
+                              bottom: additionInfo != '' ? 4 : getInputPadding(),
                               top: getInputPadding()),
                     ),
                     Visibility(
@@ -340,13 +349,13 @@ class TDInput extends StatelessWidget {
                         padding: EdgeInsets.only(
                             left: 16, bottom: getInputPadding()),
                         child: TDText(
-                          addtionInfo,
+                          additionInfo,
                           font: TDTheme.of(context).fontBodySmall,
-                          textColor: addtionInfoColor ??
+                          textColor: additionInfoColor ??
                               TDTheme.of(context).fontGyColor3,
                         ),
                       ),
-                      visible: addtionInfo != '',
+                      visible: additionInfo != '',
                     )
                   ],
                 ),
@@ -750,5 +759,43 @@ class TDInput extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+/// 中文算作两个字符类型的TextInputFormatter
+class Chinese2Formatter extends TextInputFormatter{
+
+  final int maxLength;
+
+  Chinese2Formatter(this.maxLength);
+
+  final _regExp = r'^[\u4E00-\u9FA5A-Za-z0-9_]+$';
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+
+    var newValueLength = newValue.text.length;
+    var count = 0;
+    if(newValueLength == 0){
+      return newValue;
+    }
+    if(maxLength >0){
+      for (var i = 0; i < newValueLength; i++) {
+        if (newValue.text.codeUnitAt(i) > 122) {
+          ///中文字符按照2个计算
+          count++;
+        }
+        if(i >0 && count +i > maxLength-1){
+          var text =newValue.text.substring(0,i);
+          return newValue.copyWith(text:text,composing:TextRange.empty,selection: TextSelection.fromPosition(
+              TextPosition(offset: i,affinity: TextAffinity.downstream)));
+        }
+      }
+    }
+    if(newValueLength>0 && RegExp(_regExp).firstMatch(newValue.text)!=null){
+      if(newValueLength +count<= maxLength){
+        return newValue;
+      }
+    }
+    return oldValue;
   }
 }
