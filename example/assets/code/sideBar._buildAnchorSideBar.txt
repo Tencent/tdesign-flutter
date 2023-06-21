@@ -1,22 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
 
-import '../annotation/demo.dart';
-import '../base/example_widget.dart';
-
-///
-/// TDSideBarIconPage演示
-///
-class TDSideBarIconPage extends StatefulWidget {
-  const TDSideBarIconPage({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return TDSideBarIconPageState();
-  }
-}
-
-class TDSideBarIconPageState extends State<TDSideBarIconPage> {
+class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
   var currentValue = 1;
   var itemHeight = 278.5;
   final _demoScroller = ScrollController(initialScrollOffset: 278.5);
@@ -63,23 +46,26 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-        title: 'SideBar 带图标侧边栏',
-        exampleCodeGroup: 'SideBarIcon',
+        title: 'SideBar 锚点用法',
+        exampleCodeGroup: 'sideBarAnchor',
         showSingleChild: true,
         singleChild: CodeWrapper(
           isCenter: false,
-          builder: _buildDefaultSideBar,
+          builder: _buildAnchorSideBar,
         ));
   }
 
-  @Demo(group: 'SideBarIcon')
-  Widget _buildDefaultSideBar(BuildContext context) {
+  @Demo(group: 'sideBarAnchor')
+  Widget _buildAnchorSideBar(BuildContext context) {
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 
     for (var i = 0; i < 20; i++) {
-      list.add(
-          SideItemProps(index: i, label: '选项', value: i, icon: TDIcons.app));
+      list.add(SideItemProps(
+        index: i,
+        label: '选项',
+        value: i,
+      ));
       pages.add(getAnchorDemo(i));
     }
 
