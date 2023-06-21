@@ -1,22 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
 
-import '../annotation/demo.dart';
-import '../base/example_widget.dart';
-
-///
-/// TDSideBarPaginationPage演示
-///
-class TDSideBarPaginationPage extends StatefulWidget {
-  const TDSideBarPaginationPage({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return TDSideBarPaginationPageState();
-  }
-}
-
-class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
+class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
   var currentValue = 1;
   final _pageController = PageController(initialPage: 1);
   final _sideBarController = TDSideBarController();
@@ -29,17 +12,17 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-        title: 'SideBar 切页用法',
-        exampleCodeGroup: 'SideBarPagination',
+        title: 'SideBar 自定义样式',
+        exampleCodeGroup: 'sideBarCustom',
         showSingleChild: true,
         singleChild: CodeWrapper(
           isCenter: false,
-          builder: _buildDefaultSideBar,
+          builder: _buildCustomSideBar,
         ));
   }
 
-  @Demo(group: 'SideBarPagination')
-  Widget _buildDefaultSideBar(BuildContext context) {
+  @Demo(group: 'sideBarCustom')
+  Widget _buildCustomSideBar(BuildContext context) {
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 
@@ -57,6 +40,7 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
       TDBadgeType.message,
       count: '8',
     );
+    list[1].textStyle = const TextStyle(color: Colors.green);
 
     setCurrentValue(int value) {
       _pageController.jumpToPage(value);
@@ -81,6 +65,7 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
+                    textStyle: ele.textStyle,
                     icon: ele.icon))
                 .toList(),
             onSelected: setCurrentValue,

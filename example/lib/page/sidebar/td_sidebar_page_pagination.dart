@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../annotation/demo.dart';
-import '../base/example_widget.dart';
+import '../../annotation/demo.dart';
+import '../../base/example_widget.dart';
 
 ///
-/// TDSideBarCustomPage演示
+/// TDSideBarPaginationPage演示
 ///
-class TDSideBarCustomPage extends StatefulWidget {
-  const TDSideBarCustomPage({Key? key}) : super(key: key);
+class TDSideBarPaginationPage extends StatefulWidget {
+  const TDSideBarPaginationPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarCustomPageState();
+    return TDSideBarPaginationPageState();
   }
 }
 
-class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
+class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
   var currentValue = 1;
   final _pageController = PageController(initialPage: 1);
   final _sideBarController = TDSideBarController();
@@ -29,17 +29,17 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-        title: 'SideBar 自定义样式',
-        exampleCodeGroup: 'SideBarCustom',
+        title: 'SideBar 切页用法',
+        exampleCodeGroup: 'sideBar',
         showSingleChild: true,
         singleChild: CodeWrapper(
           isCenter: false,
-          builder: _buildDefaultSideBar,
+          builder: _buildPaginationSideBar,
         ));
   }
 
-  @Demo(group: 'SideBarCustom')
-  Widget _buildDefaultSideBar(BuildContext context) {
+  @Demo(group: 'sideBar')
+  Widget _buildPaginationSideBar(BuildContext context) {
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 
@@ -57,7 +57,6 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
       TDBadgeType.message,
       count: '8',
     );
-    list[1].textStyle = const TextStyle(color: Colors.green);
 
     setCurrentValue(int value) {
       _pageController.jumpToPage(value);
@@ -82,7 +81,6 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
-                    textStyle: ele.textStyle,
                     icon: ele.icon))
                 .toList(),
             onSelected: setCurrentValue,

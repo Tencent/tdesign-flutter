@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../annotation/demo.dart';
-import '../base/example_widget.dart';
+import '../../annotation/demo.dart';
+import '../../base/example_widget.dart';
 
 ///
-/// TDSideBarAnchorPage演示
+/// TDSideBarOutlinePage演示
 ///
-class TDSideBarAnchorPage extends StatefulWidget {
-  const TDSideBarAnchorPage({Key? key}) : super(key: key);
+class TDSideBarOutlinePage extends StatefulWidget {
+  const TDSideBarOutlinePage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarAnchorPageState();
+    return TDSideBarOutlinePageState();
   }
 }
 
-class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
+class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
   var currentValue = 1;
   var itemHeight = 278.5;
   final _demoScroller = ScrollController(initialScrollOffset: 278.5);
@@ -63,17 +63,17 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-        title: 'SideBar 锚点用法',
-        exampleCodeGroup: 'SideBarAnchor',
+        title: 'SideBar 非通栏选项样式',
+        exampleCodeGroup: 'sideBar',
         showSingleChild: true,
         singleChild: CodeWrapper(
           isCenter: false,
-          builder: _buildDefaultSideBar,
+          builder: _buildOutlineSideBar,
         ));
   }
 
-  @Demo(group: 'SideBarAnchor')
-  Widget _buildDefaultSideBar(BuildContext context) {
+  @Demo(group: 'sideBar')
+  Widget _buildOutlineSideBar(BuildContext context) {
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 
@@ -105,7 +105,7 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
           width: 110,
           child: TDSideBar(
             height: demoHeight,
-            style: TDSideBarStyle.normal,
+            style: TDSideBarStyle.outline,
             value: currentValue,
             controller: _sideBarController,
             children: list
