@@ -58,7 +58,7 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
       count: '8',
     );
 
-    setCurrentValue(int value) {
+    void setCurrentValue(int value) {
       _pageController.jumpToPage(value);
       if (currentValue != value) {
         currentValue = value;
