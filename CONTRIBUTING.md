@@ -12,7 +12,7 @@ spline: explain
 - 组件库用到的所有色值、圆角、字体字号等样式属性需全部定义在主题中。
 - 代码规范遵循腾讯Dart代码规范。
 - 对于系统原有组件，如Text,Image等，应兼容系统原组件功能，只能扩展，不能阉割，以免业务需要使用系统功能时，必须放弃TDesign控件。
-- 示例页面尽量使用ExamplePage+ExampleModule+ExampleItem组合，按照示例稿的布局实现；页面写完后，在main.dart中将页面注册进examplePageList即可。
+- 示例页面尽量使用ExamplePage+ExampleModule+ExampleItem组合，按照示例稿的布局实现；页面写完后，在main.dart中修改exampleMap对应组件的isTodo属性即可。
 - 组件API和演示代码，请参考`demo_tool/README.md`文件。
 
 ## 共建流程
