@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
-import '../annotation/demo.dart';
-import '../base/example_widget.dart';
+import '../../annotation/demo.dart';
+import '../../base/example_widget.dart';
 
 ///
 /// TDSideBarPage演示
@@ -17,10 +17,6 @@ class TDSideBarPage extends StatefulWidget {
 }
 
 class TDSideBarPageState extends State<TDSideBarPage> {
-  var currentValue = 1;
-  final _pageController = PageController(initialPage: 1);
-  final _sideBarController = TDSideBarController();
-
   @override
   Widget build(BuildContext context) {
     var current = buildWidget(context);
@@ -30,7 +26,7 @@ class TDSideBarPageState extends State<TDSideBarPage> {
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
         title: tdTitle(),
-        exampleCodeGroup: 'sidebar',
+        exampleCodeGroup: 'sideBar',
         desc: '用于内容分类后的展示切换。',
         children: [
           ExampleModule(title: '组件类型', children: [
@@ -43,7 +39,7 @@ class TDSideBarPageState extends State<TDSideBarPage> {
         ]);
   }
 
-  @Demo(group: 'sidebar')
+  @Demo(group: 'sideBar')
   Widget _buildNavigatorSideBar(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -94,7 +90,7 @@ class TDSideBarPageState extends State<TDSideBarPage> {
       shape: TDButtonShape.rectangle,
       theme: TDButtonTheme.primary,
       onTap: () {
-        Navigator.pushNamed(context, routeName);
+        Navigator.pushNamed(context, '$routeName?showAction=1');
       },
     );
   }
