@@ -149,6 +149,10 @@ class _ExamplePageState extends State<ExamplePage> {
   Widget _buildNavBar() {
     var rightBarItems = <TDNavBarItem>[];
 
+    // web端示例页不展示标题栏
+    if(PlatformUtil.isWeb){
+      return Container();
+    }
     if (showAction) {
       rightBarItems.add(TDNavBarItem(
           icon: TDIcons.info_circle,
