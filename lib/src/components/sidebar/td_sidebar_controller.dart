@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class TDSideBarController extends ChangeNotifier {
   int currentValue = 0;
 
-  selectTo(int value) {
+  void selectTo(int value) {
     currentValue = value;
     notifyListeners();
   }

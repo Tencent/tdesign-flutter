@@ -59,7 +59,7 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
     );
     list[1].textStyle = const TextStyle(color: Colors.green);
 
-    setCurrentValue(int value) {
+    void setCurrentValue(int value) {
       _pageController.jumpToPage(value);
       if (currentValue != value) {
         currentValue = value;
