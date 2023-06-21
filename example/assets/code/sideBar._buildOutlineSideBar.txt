@@ -1,20 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
-
-import '../annotation/demo.dart';
-import '../base/example_widget.dart';
-
-///
-/// TDSideBarOutlinePage演示
-///
-class TDSideBarOutlinePage extends StatefulWidget {
-  const TDSideBarOutlinePage({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return TDSideBarOutlinePageState();
-  }
-}
 
 class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
   var currentValue = 1;
@@ -64,16 +47,16 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
         title: 'SideBar 非通栏选项样式',
-        exampleCodeGroup: 'SideBarOutline',
+        exampleCodeGroup: 'sideBar',
         showSingleChild: true,
         singleChild: CodeWrapper(
           isCenter: false,
-          builder: _buildDefaultSideBar,
+          builder: _buildOutlineSideBar,
         ));
   }
 
-  @Demo(group: 'SideBarOutline')
-  Widget _buildDefaultSideBar(BuildContext context) {
+  @Demo(group: 'sideBar')
+  Widget _buildOutlineSideBar(BuildContext context) {
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 
