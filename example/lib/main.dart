@@ -47,7 +47,6 @@ PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TDTextPage()
 List<ExamplePageModel> examplePageList = [];
 
-/// 是否显示TODO组件
 var _kShowTodoComponent = false;
 
 Map<String, List<ExamplePageModel>> exampleMap = {
@@ -336,6 +335,12 @@ void main() {
     systemNavigationBarColor: Colors.transparent,
     systemNavigationBarDividerColor: Colors.transparent,
   ));
+
+  exampleMap.forEach((key, value) {
+    value.forEach((model) {
+      examplePageList.add(model);
+    });
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -354,13 +359,13 @@ class MyApp extends StatelessWidget {
             // extensions: [TDThemeData.defaultData().copyWith(colorMap: {'brandNormalColor':Colors.yellow})],
             colorScheme: ColorScheme.light(
                 primary: TDTheme.of(context).brandNormalColor)),
-        home: const MyHomePage(title: 'TDesgin Flutter 组件库'),
+        home: PlatformUtil.isWeb ? null : const MyHomePage(title: 'TDesgin Flutter 组件库'),
         onGenerateRoute: TDExampleRoute.onGenerateRoute,
         // // TODO:所有路径指向首页，需区分
-        // routes: {
-        //   for (var model in examplePageList)
-        //     model.name: (context) => model.pageBuilder.call(context, model)
-        // },
+        routes: {
+          for (var model in examplePageList)
+            model.name: (context) => model.pageBuilder.call(context, model)
+        }..putIfAbsent('/', () => (context) => const TDButtonPage()),
       ),
     );
   }
