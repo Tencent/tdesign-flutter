@@ -20,19 +20,42 @@ class ExamplePage extends StatefulWidget {
     Key? key,
     required this.title,
     this.desc = '',
-    required this.children,
+    this.children = const [],
     this.padding,
     this.backgroundColor,
-    this.exampleCodeGroup,
+    required this.exampleCodeGroup,
     this.test = const [],
-  }) : super(key: key);
+    this.showSingleChild = false,
+    this.singleChild,
+  })  : assert(children.length > 0 || (showSingleChild && singleChild != null),
+            'children or singleChild must have at least one'),
+        super(key: key);
 
+  /// 标题
   final String title;
-  final String desc;
+
+  /// 如果封装的children无法满足需求，可以自定义子控件
+  final bool showSingleChild;
+
+  /// 自定义的自控件，只有showSingleChild为true才会展示。CodeWrapper的builder构建真正的试图
+  final CodeWrapper? singleChild;
+
+  /// 示例组件模块列表
   final List<ExampleModule> children;
+
+  /// 描述，showSingleChild为false会展示
+  final String desc;
+
+  /// 填充
   final EdgeInsetsGeometry? padding;
+
+  /// 背景颜色
   final Color? backgroundColor;
+
+  /// 示例代码路径
   final String? exampleCodeGroup;
+
+  /// 测试组件列表
   final List<ExampleItem> test;
 
   @override
@@ -72,44 +95,48 @@ class _ExamplePageState extends State<ExamplePage> {
               children: [
                 _buildNavBar(),
                 Expanded(
-                    child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.only(top: 24, bottom: 24),
-                  itemCount: widget.children.length + 3,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return _buildHeader(context);
-                    }
-                    if(index == widget.children.length + 2){
-                      return WebMdTool.needGenerateWebMd ?
-                          Container(
-                            margin: const EdgeInsets.only(top: 24),
-                            child: TDButton(
-                              text: '生成Web使用md',
-                              type: TDButtonType.fill,
-                              onTap: ()=>
-                                  WebMdTool.generateWebMd(
-                                      model: model,
-                                      description: widget.desc,
-                                      exampleCodeGroup: widget.exampleCodeGroup,
-                                      exampleModuleList: widget.children,
-                                      testList: widget.test),
-                            ),
-                          )
-                      :Container();
-                    }
-                    ExampleModule data;
-                    if (index <= widget.children.length) {
-                      data = widget.children[index - 1];
-                    } else {
-                      data = ExampleModule(
-                          title: '单元测试',
-                          children: [_buildTestExampleItem(), ...widget.test]);
-                    }
-                    return _buildModule(index, data, context);
-                  },
-                )),
+                    child: widget.showSingleChild && widget.singleChild != null
+                        ? widget.singleChild!
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.only(top: 24, bottom: 24),
+                            itemCount: widget.children.length + 3,
+                            itemBuilder: (context, index) {
+                              if (index == 0) {
+                                return _buildHeader(context);
+                              }
+                              if (index == widget.children.length + 2) {
+                                return WebMdTool.needGenerateWebMd
+                                    ? Container(
+                                        margin: const EdgeInsets.only(top: 24),
+                                        child: TDButton(
+                                          text: '生成Web使用md',
+                                          type: TDButtonType.fill,
+                                          onTap: () => WebMdTool.generateWebMd(
+                                              model: model,
+                                              description: widget.desc,
+                                              exampleCodeGroup:
+                                                  widget.exampleCodeGroup,
+                                              exampleModuleList:
+                                                  widget.children,
+                                              testList: widget.test),
+                                        ),
+                                      )
+                                    : Container();
+                              }
+                              ExampleModule data;
+                              if (index <= widget.children.length) {
+                                data = widget.children[index - 1];
+                              } else {
+                                data = ExampleModule(title: '单元测试', children: [
+                                  _buildTestExampleItem(),
+                                  ...widget.test
+                                ]);
+                              }
+                              return _buildModule(index, data, context);
+                            },
+                          )),
               ],
             )));
   }
@@ -122,6 +149,10 @@ class _ExamplePageState extends State<ExamplePage> {
   Widget _buildNavBar() {
     var rightBarItems = <TDNavBarItem>[];
 
+    // web端示例页不展示标题栏
+    if(PlatformUtil.isWeb){
+      return Container();
+    }
     if (showAction) {
       rightBarItems.add(TDNavBarItem(
           icon: TDIcons.info_circle,
@@ -150,6 +181,9 @@ class _ExamplePageState extends State<ExamplePage> {
   }
 
   Widget _buildHeader(BuildContext context) {
+    if (widget.showSingleChild) {
+      return Container();
+    }
     return Container(
       margin: const EdgeInsets.only(
         left: 16,
