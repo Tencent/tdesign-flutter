@@ -5,7 +5,7 @@ import 'dart:io';
 /// 用来批处理主题颜色变更的工具类
 void main(){
   var path = '/Users/zflyluo/WorkSpace/flutter/tdesign_group/tdesign-flutter/example/shell/td_icons/index.json';
-  var dartPath = '/Users/zflyluo/WorkSpace/flutter/tdesign_group/tdesign-flutter/lib/src/components/icon/td_icons_new.dart';
+  // var dartPath = '/Users/zflyluo/WorkSpace/flutter/tdesign_group/tdesign-flutter/lib/src/components/icon/td_icons_new.dart';
   var file = File(path);
   if(!file.existsSync()){
     print('file not exist， exit');
