@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import '../base/api_widget.dart';
+import '../base/example_base.dart';
 import '../main.dart';
 import 'code_widget.dart';
 
@@ -134,7 +135,7 @@ class _WebMainBodyState extends State<WebMainBody> {
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      WebApiController.setApiPath(apiPath: model.apiPath,mobilePath: model.path, codePath: model.codePath ?? model.apiPath, );
+                      WebApiController.setApiPath(apiPath: model.name,mobilePath: model.name, codePath: model.codePath ?? model.name, );
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

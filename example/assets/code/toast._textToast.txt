@@ -8,6 +8,6 @@
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,
       isBlock: true,
-      content: '纯文字',
+      text: '纯文字',
     );
   }

@@ -1,7 +1,7 @@
 
   TDButton _buildLightTextButton(BuildContext context) {
     return const TDButton(
-      content: '文字按钮',
+      text: '文字按钮',
       size: TDButtonSize.large,
       type: TDButtonType.text,
       shape: TDButtonShape.rectangle,
