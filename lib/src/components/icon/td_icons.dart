@@ -7,10 +7,10 @@ import 'package:flutter/widgets.dart';
 class _TDIconsData extends IconData {
   const _TDIconsData(int codePoint, this.name)
       : super(
-          codePoint,
-          fontFamily: 'TGFontIcons',
+    codePoint,
+    fontFamily: 'TDIcons',
     fontPackage: 'tdesign_flutter',
-        );
+  );
 
   final String name;
 }
@@ -19,242 +19,250 @@ class _TDIconsData extends IconData {
 class TDIcons {
   const TDIcons._();
 
-  static const add = _TDIconsData(59395, 'add');
-  static const arrow_down_rectangle = _TDIconsData(59396, 'arrow_down_rectangle');
-  static const arrow_down = _TDIconsData(59397, 'arrow_down');
-  static const arrow_left = _TDIconsData(59398, 'arrow_left');
-  static const arrow_right = _TDIconsData(59399, 'arrow_right');
-  static const arrow_up = _TDIconsData(59400, 'arrow_up');
-  static const attach = _TDIconsData(59401, 'attach');
-  static const backtop_rectangle = _TDIconsData(59402, 'backtop_rectangle');
-  static const backward = _TDIconsData(59403, 'backward');
-  static const backtop = _TDIconsData(59404, 'backtop');
-  static const barcode = _TDIconsData(59405, 'barcode');
-  static const books = _TDIconsData(59406, 'books');
-  static const browse_off = _TDIconsData(59407, 'browse_off');
-  static const browse = _TDIconsData(59408, 'browse');
-  static const bulletpoint = _TDIconsData(59409, 'bulletpoint');
-  static const calendar = _TDIconsData(59410, 'calendar');
-  static const call = _TDIconsData(59411, 'call');
-  static const caret_down_small = _TDIconsData(59412, 'caret_down_small');
-  static const caret_down = _TDIconsData(59413, 'caret_down');
-  static const caret_left_small = _TDIconsData(59414, 'caret_left_small');
-  static const caret_left = _TDIconsData(59415, 'caret_left');
-  static const caret_right_small = _TDIconsData(59416, 'caret_right_small');
-  static const caret_right = _TDIconsData(59417, 'caret_right');
-  static const caret_up_small = _TDIconsData(59418, 'caret_up_small');
-  static const caret_up = _TDIconsData(59419, 'caret_up');
-  static const cart = _TDIconsData(59420, 'cart');
-  static const chart_bar = _TDIconsData(59421, 'chart_bar');
-  static const chart_bubble = _TDIconsData(59422, 'chart_bubble');
-  static const chart_pie = _TDIconsData(59423, 'chart_pie');
-  static const chart = _TDIconsData(59424, 'chart');
-  static const chat = _TDIconsData(59425, 'chat');
-  static const check_circle_filled = _TDIconsData(59426, 'check_circle_filled');
-  static const check_circle = _TDIconsData(59427, 'check_circle');
-  static const check_rectangle_filled = _TDIconsData(59428, 'check_rectangle_filled');
-  static const check_rectangle = _TDIconsData(59429, 'check_rectangle');
-  static const check = _TDIconsData(59430, 'check');
-  static const chevron_down_circle = _TDIconsData(59431, 'chevron_down_circle');
-  static const chevron_down_rectangle = _TDIconsData(59432, 'chevron_down_rectangle');
-  static const chevron_down = _TDIconsData(59433, 'chevron_down');
-  static const chevron_left_circle = _TDIconsData(59434, 'chevron_left_circle');
-  static const chevron_left_rectangle = _TDIconsData(59435, 'chevron_left_rectangle');
-  static const chevron_left_double = _TDIconsData(59436, 'chevron_left_double');
-  static const chevron_left = _TDIconsData(59437, 'chevron_left');
-  static const chevron_right_circle = _TDIconsData(59438, 'chevron_right_circle');
-  static const chevron_right_rectangle = _TDIconsData(59439, 'chevron_right_rectangle');
-  static const chevron_right_double = _TDIconsData(59440, 'chevron_right_double');
-  static const chevron_right = _TDIconsData(59441, 'chevron_right');
-  static const chevron_up_circle = _TDIconsData(59442, 'chevron_up_circle');
-  static const chevron_up_rectangle = _TDIconsData(59443, 'chevron_up_rectangle');
-  static const chevron_up = _TDIconsData(59444, 'chevron_up');
-  static const circle = _TDIconsData(59445, 'circle');
-  static const clear = _TDIconsData(59446, 'clear');
-  static const close_circle_filled = _TDIconsData(59447, 'close_circle_filled');
-  static const close_circle = _TDIconsData(59448, 'close_circle');
-  static const close_rectangle = _TDIconsData(59449, 'close_rectangle');
-  static const close = _TDIconsData(59450, 'close');
-  static const cloud_download = _TDIconsData(59451, 'cloud_download');
-  static const cloud_upload = _TDIconsData(59452, 'cloud_upload');
-  static const cloud = _TDIconsData(59453, 'cloud');
-  static const code = _TDIconsData(59454, 'code');
-  static const control_platform = _TDIconsData(59455, 'control_platform');
-  static const creditcard = _TDIconsData(59456, 'creditcard');
-  static const dashboard = _TDIconsData(59457, 'dashboard');
-  static const delete = _TDIconsData(59458, 'delete');
-  static const desktop = _TDIconsData(59459, 'desktop');
-  static const discount_filled = _TDIconsData(59460, 'discount_filled');
-  static const discount = _TDIconsData(59461, 'discount');
-  static const download = _TDIconsData(59462, 'download');
-  static const edit_1 = _TDIconsData(59463, 'edit_1');
-  static const edit = _TDIconsData(59464, 'edit');
-  static const ellipsis = _TDIconsData(59465, 'ellipsis');
-  static const enter = _TDIconsData(59466, 'enter');
-  static const error_circle_filled = _TDIconsData(59467, 'error_circle_filled');
-  static const error_circle = _TDIconsData(59468, 'error_circle');
-  static const error = _TDIconsData(59469, 'error');
-  static const file_add = _TDIconsData(59470, 'file_add');
-  static const file_copy = _TDIconsData(59471, 'file_copy');
-  static const file_excel = _TDIconsData(59472, 'file_excel');
-  static const file_image = _TDIconsData(59473, 'file_image');
-  static const file_icon = _TDIconsData(59474, 'file_icon');
-  static const file_paste = _TDIconsData(59475, 'file_paste');
-  static const file_pdf = _TDIconsData(59476, 'file_pdf');
-  static const file_unknown = _TDIconsData(59477, 'file_unknown');
-  static const file = _TDIconsData(59478, 'file');
-  static const file_powerpoint = _TDIconsData(59479, 'file_powerpoint');
-  static const file_word = _TDIconsData(59480, 'file_word');
-  static const filter_clear = _TDIconsData(59481, 'filter_clear');
-  static const filter = _TDIconsData(59482, 'filter');
-  static const flag = _TDIconsData(59483, 'flag');
-  static const folder_add = _TDIconsData(59484, 'folder_add');
-  static const folder_open = _TDIconsData(59485, 'folder_open');
-  static const folder = _TDIconsData(59486, 'folder');
-  static const fork = _TDIconsData(59487, 'fork');
-  static const format_horizontal_align_bottom = _TDIconsData(59488, 'format_horizontal_align_bottom');
-  static const format_horizontal_align_center = _TDIconsData(59489, 'format_horizontal_align_center');
-  static const format_vertical_align_center = _TDIconsData(59490, 'format_vertical_align_center');
-  static const format_horizontal_align_top = _TDIconsData(59491, 'format_horizontal_align_top');
-  static const format_vertical_align_left = _TDIconsData(59492, 'format_vertical_align_left');
-  static const format_vertical_align_right = _TDIconsData(59493, 'format_vertical_align_right');
-  static const forward = _TDIconsData(59494, 'forward');
-  static const fullscreen_exit = _TDIconsData(59495, 'fullscreen_exit');
-  static const fullsreen = _TDIconsData(59496, 'fullsreen');
-  static const gender_female = _TDIconsData(59497, 'gender_female');
-  static const gender_male = _TDIconsData(59498, 'gender_male');
-  static const gift = _TDIconsData(59499, 'gift');
-  static const heart_filled = _TDIconsData(59500, 'heart_filled');
-  static const heart = _TDIconsData(59501, 'heart');
-  static const help_circle_filled = _TDIconsData(59502, 'help_circle_filled');
-  static const help_circle = _TDIconsData(59503, 'help_circle');
-  static const help = _TDIconsData(59504, 'help');
-  static const history = _TDIconsData(59505, 'history');
-  static const home = _TDIconsData(59506, 'home');
-  static const hourglass = _TDIconsData(59507, 'hourglass');
-  static const image_error = _TDIconsData(59508, 'image_error');
-  static const image = _TDIconsData(59509, 'image');
-  static const info_circle_filled = _TDIconsData(59510, 'info_circle_filled');
-  static const info_circle = _TDIconsData(59511, 'info_circle');
-  static const internet = _TDIconsData(59512, 'internet');
-  static const jump = _TDIconsData(59513, 'jump');
-  static const laptop = _TDIconsData(59514, 'laptop');
-  static const layers = _TDIconsData(59515, 'layers');
-  static const link_unlink = _TDIconsData(59516, 'link_unlink');
-  static const link = _TDIconsData(59517, 'link');
-  static const location = _TDIconsData(59518, 'location');
-  static const lock_off = _TDIconsData(59519, 'lock_off');
-  static const lock_on = _TDIconsData(59520, 'lock_on');
-  static const login = _TDIconsData(59521, 'login');
-  static const logo_android = _TDIconsData(59522, 'logo_android');
-  static const logo_apple_filled = _TDIconsData(59523, 'logo_apple_filled');
-  static const logo_apple = _TDIconsData(59524, 'logo_apple');
-  static const logo_chrome_filled = _TDIconsData(59525, 'logo_chrome_filled');
-  static const logo_chrome = _TDIconsData(59526, 'logo_chrome');
-  static const logo_codepen = _TDIconsData(59527, 'logo_codepen');
-  static const logo_github_filled = _TDIconsData(59528, 'logo_github_filled');
-  static const logo_github = _TDIconsData(59529, 'logo_github');
-  static const logo_ie_filled = _TDIconsData(59530, 'logo_ie_filled');
-  static const logo_ie = _TDIconsData(59531, 'logo_ie');
-  static const logo_qq = _TDIconsData(59532, 'logo_qq');
-  static const logo_wechat = _TDIconsData(59533, 'logo_wechat');
-  static const logo_wecom = _TDIconsData(59534, 'logo_wecom');
-  static const logo_windows_filled = _TDIconsData(59535, 'logo_windows_filled');
-  static const logo_windows = _TDIconsData(59536, 'logo_windows');
-  static const logout = _TDIconsData(59537, 'logout');
-  static const mail = _TDIconsData(59538, 'mail');
-  static const menu_application = _TDIconsData(59539, 'menu_application');
-  static const menu_fold = _TDIconsData(59540, 'menu_fold');
-  static const menu_unfold = _TDIconsData(59541, 'menu_unfold');
-  static const minus_circle_filled = _TDIconsData(59542, 'minus_circle_filled');
-  static const minus_circle = _TDIconsData(59543, 'minus_circle');
-  static const minus_rectangle = _TDIconsData(59544, 'minus_rectangle');
-  static const mirror = _TDIconsData(59545, 'mirror');
-  static const mobile_vibrate = _TDIconsData(59546, 'mobile_vibrate');
-  static const mobile = _TDIconsData(59547, 'mobile');
-  static const money_circle = _TDIconsData(59548, 'money_circle');
-  static const more = _TDIconsData(59549, 'more');
-  static const move = _TDIconsData(59550, 'move');
-  static const next = _TDIconsData(59551, 'next');
-  static const notification_filled = _TDIconsData(59552, 'notification_filled');
-  static const notification = _TDIconsData(59553, 'notification');
-  static const order_adjustment_column = _TDIconsData(59554, 'order_adjustment_column');
-  static const order_ascending = _TDIconsData(59555, 'order_ascending');
-  static const order_descending = _TDIconsData(59556, 'order_descending');
-  static const page_first = _TDIconsData(59557, 'page_first');
-  static const page_last = _TDIconsData(59558, 'page_last');
-  static const pause_circle_filled = _TDIconsData(59559, 'pause_circle_filled');
-  static const photo = _TDIconsData(59560, 'photo');
-  static const pin_filled = _TDIconsData(59561, 'pin_filled');
-  static const pin = _TDIconsData(59562, 'pin');
-  static const play_circle_filled = _TDIconsData(59563, 'play_circle_filled');
-  static const play_circle_stroke = _TDIconsData(59564, 'play_circle_stroke');
-  static const play_circle = _TDIconsData(59565, 'play_circle');
-  static const play = _TDIconsData(59566, 'play');
-  static const poweroff = _TDIconsData(59567, 'poweroff');
-  static const precise_monitor = _TDIconsData(59568, 'precise_monitor');
-  static const previous = _TDIconsData(59569, 'previous');
-  static const print = _TDIconsData(59570, 'print');
-  static const qrcode = _TDIconsData(59571, 'qrcode');
-  static const queue = _TDIconsData(59572, 'queue');
-  static const rectangle = _TDIconsData(59573, 'rectangle');
-  static const refresh = _TDIconsData(59574, 'refresh');
-  static const relativity = _TDIconsData(59575, 'relativity');
-  static const remove = _TDIconsData(59576, 'remove');
-  static const rollback = _TDIconsData(59577, 'rollback');
-  static const root_list = _TDIconsData(59578, 'root_list');
-  static const rotation = _TDIconsData(59579, 'rotation');
-  static const round = _TDIconsData(59580, 'round');
-  static const save = _TDIconsData(59581, 'save');
-  static const scan = _TDIconsData(59582, 'scan');
-  static const search = _TDIconsData(59583, 'search');
-  static const secured = _TDIconsData(59584, 'secured');
-  static const server = _TDIconsData(59585, 'server');
-  static const service = _TDIconsData(59586, 'service');
-  static const setting = _TDIconsData(59587, 'setting');
-  static const share = _TDIconsData(59588, 'share');
-  static const shop = _TDIconsData(59589, 'shop');
-  static const slash = _TDIconsData(59590, 'slash');
-  static const sound = _TDIconsData(59591, 'sound');
-  static const star_filled = _TDIconsData(59592, 'star_filled');
-  static const star = _TDIconsData(59593, 'star');
-  static const stop_circle_1 = _TDIconsData(59594, 'stop_circle_1');
-  static const stop_circle_filled = _TDIconsData(59595, 'stop_circle_filled');
-  static const stop_circle = _TDIconsData(59596, 'stop_circle');
-  static const stop = _TDIconsData(59597, 'stop');
-  static const swap_left = _TDIconsData(59598, 'swap_left');
-  static const swap_right = _TDIconsData(59599, 'swap_right');
-  static const swap = _TDIconsData(59600, 'swap');
-  static const thumb_down = _TDIconsData(59601, 'thumb_down');
-  static const thumb_up = _TDIconsData(59602, 'thumb_up');
-  static const time_filled = _TDIconsData(59603, 'time_filled');
-  static const time = _TDIconsData(59604, 'time');
-  static const tips = _TDIconsData(59605, 'tips');
-  static const tools = _TDIconsData(59606, 'tools');
-  static const unfold_less = _TDIconsData(59607, 'unfold_less');
-  static const unfold_more = _TDIconsData(59608, 'unfold_more');
-  static const upload = _TDIconsData(59609, 'upload');
-  static const usb = _TDIconsData(59610, 'usb');
-  static const user_add = _TDIconsData(59611, 'user_add');
-  static const user_avatar = _TDIconsData(59612, 'user_avatar');
-  static const user_circle = _TDIconsData(59613, 'user_circle');
-  static const user_clear = _TDIconsData(59614, 'user_clear');
-  static const user_talk = _TDIconsData(59615, 'user_talk');
-  static const user = _TDIconsData(59616, 'user');
-  static const usergroup_add = _TDIconsData(59617, 'usergroup_add');
-  static const usergroup_clear = _TDIconsData(59618, 'usergroup_clear');
-  static const usergroup = _TDIconsData(59619, 'usergroup');
-  static const video = _TDIconsData(59620, 'video');
-  static const view_column = _TDIconsData(59621, 'view_column');
-  static const view_list = _TDIconsData(59622, 'view_list');
-  static const view_module = _TDIconsData(59623, 'view_module');
-  static const wallet = _TDIconsData(59624, 'wallet');
-  static const wifi = _TDIconsData(59625, 'wifi');
-  static const zoom_in = _TDIconsData(59626, 'zoom_in');
-  static const zoom_out = _TDIconsData(59627, 'zoom_out');
-  static const app = _TDIconsData(59394, 'app');
-  static const add_rectangle = _TDIconsData(59393, 'add_rectangle');
-  static const add_circle = _TDIconsData(59392, 'add_circle');
+  static const add_circle = _TDIconsData(0xE001, 'add_circle');
+  static const add_rectangle = _TDIconsData(0xE002, 'add_rectangle');
+  static const add = _TDIconsData(0xE003, 'add');
+  static const app = _TDIconsData(0xE004, 'app');
+  static const arrow_down_rectangle = _TDIconsData(0xE005, 'arrow_down_rectangle');
+  static const arrow_down = _TDIconsData(0xE006, 'arrow_down');
+  static const arrow_left = _TDIconsData(0xE007, 'arrow_left');
+  static const arrow_right = _TDIconsData(0xE008, 'arrow_right');
+  static const arrow_triangle_down_filled = _TDIconsData(0xE009, 'arrow_triangle_down_filled');
+  static const arrow_triangle_down = _TDIconsData(0xE00A, 'arrow_triangle_down');
+  static const arrow_triangle_up_filled = _TDIconsData(0xE00B, 'arrow_triangle_up_filled');
+  static const arrow_triangle_up = _TDIconsData(0xE00C, 'arrow_triangle_up');
+  static const arrow_up = _TDIconsData(0xE00D, 'arrow_up');
+  static const attach = _TDIconsData(0xE00E, 'attach');
+  static const backtop_rectangle = _TDIconsData(0xE00F, 'backtop_rectangle');
+  static const backtop = _TDIconsData(0xE010, 'backtop');
+  static const backward = _TDIconsData(0xE011, 'backward');
+  static const barcode = _TDIconsData(0xE012, 'barcode');
+  static const books = _TDIconsData(0xE013, 'books');
+  static const browse_off = _TDIconsData(0xE014, 'browse_off');
+  static const browse = _TDIconsData(0xE015, 'browse');
+  static const bulletpoint = _TDIconsData(0xE016, 'bulletpoint');
+  static const calendar = _TDIconsData(0xE017, 'calendar');
+  static const call = _TDIconsData(0xE018, 'call');
+  static const caret_down_small = _TDIconsData(0xE019, 'caret_down_small');
+  static const caret_down = _TDIconsData(0xE01A, 'caret_down');
+  static const caret_left_small = _TDIconsData(0xE01B, 'caret_left_small');
+  static const caret_left = _TDIconsData(0xE01C, 'caret_left');
+  static const caret_right_small = _TDIconsData(0xE01D, 'caret_right_small');
+  static const caret_right = _TDIconsData(0xE01E, 'caret_right');
+  static const caret_up_small = _TDIconsData(0xE01F, 'caret_up_small');
+  static const caret_up = _TDIconsData(0xE020, 'caret_up');
+  static const cart = _TDIconsData(0xE021, 'cart');
+  static const chart_bar = _TDIconsData(0xE022, 'chart_bar');
+  static const chart_bubble = _TDIconsData(0xE023, 'chart_bubble');
+  static const chart_pie = _TDIconsData(0xE024, 'chart_pie');
+  static const chart = _TDIconsData(0xE025, 'chart');
+  static const chat = _TDIconsData(0xE026, 'chat');
+  static const check_circle_filled = _TDIconsData(0xE027, 'check_circle_filled');
+  static const check_circle = _TDIconsData(0xE028, 'check_circle');
+  static const check_rectangle_filled = _TDIconsData(0xE029, 'check_rectangle_filled');
+  static const check_rectangle = _TDIconsData(0xE02A, 'check_rectangle');
+  static const check = _TDIconsData(0xE02B, 'check');
+  static const chevron_down_circle = _TDIconsData(0xE02C, 'chevron_down_circle');
+  static const chevron_down_rectangle = _TDIconsData(0xE02D, 'chevron_down_rectangle');
+  static const chevron_down = _TDIconsData(0xE02E, 'chevron_down');
+  static const chevron_left_circle = _TDIconsData(0xE02F, 'chevron_left_circle');
+  static const chevron_left_double = _TDIconsData(0xE030, 'chevron_left_double');
+  static const chevron_left_rectangle = _TDIconsData(0xE031, 'chevron_left_rectangle');
+  static const chevron_left = _TDIconsData(0xE032, 'chevron_left');
+  static const chevron_right_circle = _TDIconsData(0xE033, 'chevron_right_circle');
+  static const chevron_right_double = _TDIconsData(0xE034, 'chevron_right_double');
+  static const chevron_right_rectangle = _TDIconsData(0xE035, 'chevron_right_rectangle');
+  static const chevron_right = _TDIconsData(0xE036, 'chevron_right');
+  static const chevron_up_circle = _TDIconsData(0xE037, 'chevron_up_circle');
+  static const chevron_up_rectangle = _TDIconsData(0xE038, 'chevron_up_rectangle');
+  static const chevron_up = _TDIconsData(0xE039, 'chevron_up');
+  static const circle = _TDIconsData(0xE03A, 'circle');
+  static const clear = _TDIconsData(0xE03B, 'clear');
+  static const close_circle_filled = _TDIconsData(0xE03C, 'close_circle_filled');
+  static const close_circle = _TDIconsData(0xE03D, 'close_circle');
+  static const close_rectangle = _TDIconsData(0xE03E, 'close_rectangle');
+  static const close = _TDIconsData(0xE03F, 'close');
+  static const cloud_download = _TDIconsData(0xE040, 'cloud_download');
+  static const cloud_upload = _TDIconsData(0xE041, 'cloud_upload');
+  static const cloud = _TDIconsData(0xE042, 'cloud');
+  static const code = _TDIconsData(0xE043, 'code');
+  static const control_platform = _TDIconsData(0xE044, 'control_platform');
+  static const creditcard = _TDIconsData(0xE045, 'creditcard');
+  static const dashboard = _TDIconsData(0xE046, 'dashboard');
+  static const delete = _TDIconsData(0xE047, 'delete');
+  static const desktop = _TDIconsData(0xE048, 'desktop');
+  static const discount_filled = _TDIconsData(0xE049, 'discount_filled');
+  static const discount = _TDIconsData(0xE04A, 'discount');
+  static const download = _TDIconsData(0xE04B, 'download');
+  static const edit_1 = _TDIconsData(0xE04C, 'edit_1');
+  static const edit = _TDIconsData(0xE04D, 'edit');
+  static const ellipsis = _TDIconsData(0xE04E, 'ellipsis');
+  static const enter = _TDIconsData(0xE04F, 'enter');
+  static const error_circle_filled = _TDIconsData(0xE050, 'error_circle_filled');
+  static const error_circle = _TDIconsData(0xE051, 'error_circle');
+  static const error = _TDIconsData(0xE052, 'error');
+  static const file_add = _TDIconsData(0xE053, 'file_add');
+  static const file_copy = _TDIconsData(0xE054, 'file_copy');
+  static const file_excel = _TDIconsData(0xE055, 'file_excel');
+  static const file_icon = _TDIconsData(0xE056, 'file_icon');
+  static const file_image = _TDIconsData(0xE057, 'file_image');
+  static const file_paste = _TDIconsData(0xE058, 'file_paste');
+  static const file_pdf = _TDIconsData(0xE059, 'file_pdf');
+  static const file_powerpoint = _TDIconsData(0xE05A, 'file_powerpoint');
+  static const file_unknown = _TDIconsData(0xE05B, 'file_unknown');
+  static const file_word = _TDIconsData(0xE05C, 'file_word');
+  static const file = _TDIconsData(0xE05D, 'file');
+  static const filter_clear = _TDIconsData(0xE05E, 'filter_clear');
+  static const filter = _TDIconsData(0xE05F, 'filter');
+  static const flag = _TDIconsData(0xE060, 'flag');
+  static const folder_add = _TDIconsData(0xE061, 'folder_add');
+  static const folder_open = _TDIconsData(0xE062, 'folder_open');
+  static const folder = _TDIconsData(0xE063, 'folder');
+  static const fork = _TDIconsData(0xE064, 'fork');
+  static const format_horizontal_align_bottom = _TDIconsData(0xE065, 'format_horizontal_align_bottom');
+  static const format_horizontal_align_center = _TDIconsData(0xE066, 'format_horizontal_align_center');
+  static const format_horizontal_align_top = _TDIconsData(0xE067, 'format_horizontal_align_top');
+  static const format_vertical_align_center = _TDIconsData(0xE068, 'format_vertical_align_center');
+  static const format_vertical_align_left = _TDIconsData(0xE069, 'format_vertical_align_left');
+  static const format_vertical_align_right = _TDIconsData(0xE06A, 'format_vertical_align_right');
+  static const forward = _TDIconsData(0xE06B, 'forward');
+  static const fullscreen_exit = _TDIconsData(0xE06C, 'fullscreen_exit');
+  static const fullscreen = _TDIconsData(0xE06D, 'fullscreen');
+  static const gender_female = _TDIconsData(0xE06E, 'gender_female');
+  static const gender_male = _TDIconsData(0xE06F, 'gender_male');
+  static const gift = _TDIconsData(0xE070, 'gift');
+  static const heart_filled = _TDIconsData(0xE071, 'heart_filled');
+  static const heart = _TDIconsData(0xE072, 'heart');
+  static const help_circle_filled = _TDIconsData(0xE073, 'help_circle_filled');
+  static const help_circle = _TDIconsData(0xE074, 'help_circle');
+  static const help = _TDIconsData(0xE075, 'help');
+  static const history = _TDIconsData(0xE076, 'history');
+  static const home = _TDIconsData(0xE077, 'home');
+  static const hourglass = _TDIconsData(0xE078, 'hourglass');
+  static const image_error = _TDIconsData(0xE079, 'image_error');
+  static const image = _TDIconsData(0xE07A, 'image');
+  static const info_circle_filled = _TDIconsData(0xE07B, 'info_circle_filled');
+  static const info_circle = _TDIconsData(0xE07C, 'info_circle');
+  static const internet = _TDIconsData(0xE07D, 'internet');
+  static const jump = _TDIconsData(0xE07E, 'jump');
+  static const laptop = _TDIconsData(0xE07F, 'laptop');
+  static const layers = _TDIconsData(0xE080, 'layers');
+  static const link_unlink = _TDIconsData(0xE081, 'link_unlink');
+  static const link = _TDIconsData(0xE082, 'link');
+  static const loading = _TDIconsData(0xE083, 'loading');
+  static const location = _TDIconsData(0xE084, 'location');
+  static const lock_off = _TDIconsData(0xE085, 'lock_off');
+  static const lock_on = _TDIconsData(0xE086, 'lock_on');
+  static const login = _TDIconsData(0xE087, 'login');
+  static const logo_android = _TDIconsData(0xE088, 'logo_android');
+  static const logo_apple_filled = _TDIconsData(0xE089, 'logo_apple_filled');
+  static const logo_apple = _TDIconsData(0xE08A, 'logo_apple');
+  static const logo_chrome_filled = _TDIconsData(0xE08B, 'logo_chrome_filled');
+  static const logo_chrome = _TDIconsData(0xE08C, 'logo_chrome');
+  static const logo_codepen = _TDIconsData(0xE08D, 'logo_codepen');
+  static const logo_github_filled = _TDIconsData(0xE08E, 'logo_github_filled');
+  static const logo_github = _TDIconsData(0xE08F, 'logo_github');
+  static const logo_ie_filled = _TDIconsData(0xE090, 'logo_ie_filled');
+  static const logo_ie = _TDIconsData(0xE091, 'logo_ie');
+  static const logo_qq = _TDIconsData(0xE092, 'logo_qq');
+  static const logo_wechat = _TDIconsData(0xE093, 'logo_wechat');
+  static const logo_wecom = _TDIconsData(0xE094, 'logo_wecom');
+  static const logo_windows_filled = _TDIconsData(0xE095, 'logo_windows_filled');
+  static const logo_windows = _TDIconsData(0xE096, 'logo_windows');
+  static const logout = _TDIconsData(0xE097, 'logout');
+  static const mail = _TDIconsData(0xE098, 'mail');
+  static const menu_fold = _TDIconsData(0xE099, 'menu_fold');
+  static const menu_unfold = _TDIconsData(0xE09A, 'menu_unfold');
+  static const minus_circle_filled = _TDIconsData(0xE09B, 'minus_circle_filled');
+  static const minus_circle = _TDIconsData(0xE09C, 'minus_circle');
+  static const minus_rectangle_filled = _TDIconsData(0xE09D, 'minus_rectangle_filled');
+  static const minus_rectangle = _TDIconsData(0xE09E, 'minus_rectangle');
+  static const mirror = _TDIconsData(0xE09F, 'mirror');
+  static const mobile_vibrate = _TDIconsData(0xE0A0, 'mobile_vibrate');
+  static const mobile = _TDIconsData(0xE0A1, 'mobile');
+  static const money_circle = _TDIconsData(0xE0A2, 'money_circle');
+  static const more = _TDIconsData(0xE0A3, 'more');
+  static const move = _TDIconsData(0xE0A4, 'move');
+  static const next = _TDIconsData(0xE0A5, 'next');
+  static const notification_filled = _TDIconsData(0xE0A6, 'notification_filled');
+  static const notification = _TDIconsData(0xE0A7, 'notification');
+  static const order_adjustment_column = _TDIconsData(0xE0A8, 'order_adjustment_column');
+  static const order_ascending = _TDIconsData(0xE0A9, 'order_ascending');
+  static const order_descending = _TDIconsData(0xE0AA, 'order_descending');
+  static const page_first = _TDIconsData(0xE0AB, 'page_first');
+  static const page_last = _TDIconsData(0xE0AC, 'page_last');
+  static const pause_circle_filled = _TDIconsData(0xE0AD, 'pause_circle_filled');
+  static const photo = _TDIconsData(0xE0AE, 'photo');
+  static const pin_filled = _TDIconsData(0xE0AF, 'pin_filled');
+  static const pin = _TDIconsData(0xE0B0, 'pin');
+  static const play_circle_filled = _TDIconsData(0xE0B1, 'play_circle_filled');
+  static const play_circle_stroke = _TDIconsData(0xE0B2, 'play_circle_stroke');
+  static const play_circle = _TDIconsData(0xE0B3, 'play_circle');
+  static const play = _TDIconsData(0xE0B4, 'play');
+  static const poweroff = _TDIconsData(0xE0B5, 'poweroff');
+  static const precise_monitor = _TDIconsData(0xE0B6, 'precise_monitor');
+  static const previous = _TDIconsData(0xE0B7, 'previous');
+  static const print = _TDIconsData(0xE0B8, 'print');
+  static const qrcode = _TDIconsData(0xE0B9, 'qrcode');
+  static const queue = _TDIconsData(0xE0BA, 'queue');
+  static const rectangle = _TDIconsData(0xE0BB, 'rectangle');
+  static const refresh = _TDIconsData(0xE0BC, 'refresh');
+  static const relativity = _TDIconsData(0xE0BD, 'relativity');
+  static const remove = _TDIconsData(0xE0BE, 'remove');
+  static const rollback = _TDIconsData(0xE0BF, 'rollback');
+  static const rollfront = _TDIconsData(0xE0C0, 'rollfront');
+  static const root_list = _TDIconsData(0xE0C1, 'root_list');
+  static const rotation = _TDIconsData(0xE0C2, 'rotation');
+  static const round = _TDIconsData(0xE0C3, 'round');
+  static const save = _TDIconsData(0xE0C4, 'save');
+  static const scan = _TDIconsData(0xE0C5, 'scan');
+  static const search = _TDIconsData(0xE0C6, 'search');
+  static const secured = _TDIconsData(0xE0C7, 'secured');
+  static const server = _TDIconsData(0xE0C8, 'server');
+  static const service = _TDIconsData(0xE0C9, 'service');
+  static const setting = _TDIconsData(0xE0CA, 'setting');
+  static const share = _TDIconsData(0xE0CB, 'share');
+  static const shop = _TDIconsData(0xE0CC, 'shop');
+  static const slash = _TDIconsData(0xE0CD, 'slash');
+  static const sound = _TDIconsData(0xE0CE, 'sound');
+  static const star_filled = _TDIconsData(0xE0CF, 'star_filled');
+  static const star = _TDIconsData(0xE0D0, 'star');
+  static const stop_circle_1 = _TDIconsData(0xE0D1, 'stop_circle_1');
+  static const stop_circle_filled = _TDIconsData(0xE0D2, 'stop_circle_filled');
+  static const stop_circle = _TDIconsData(0xE0D3, 'stop_circle');
+  static const stop = _TDIconsData(0xE0D4, 'stop');
+  static const swap_left = _TDIconsData(0xE0D5, 'swap_left');
+  static const swap_right = _TDIconsData(0xE0D6, 'swap_right');
+  static const swap = _TDIconsData(0xE0D7, 'swap');
+  static const thumb_down = _TDIconsData(0xE0D8, 'thumb_down');
+  static const thumb_up = _TDIconsData(0xE0D9, 'thumb_up');
+  static const time_filled = _TDIconsData(0xE0DA, 'time_filled');
+  static const time = _TDIconsData(0xE0DB, 'time');
+  static const tips = _TDIconsData(0xE0DC, 'tips');
+  static const tools = _TDIconsData(0xE0DD, 'tools');
+  static const translate_1 = _TDIconsData(0xE0DE, 'translate_1');
+  static const translate = _TDIconsData(0xE0DF, 'translate');
+  static const unfold_less = _TDIconsData(0xE0E0, 'unfold_less');
+  static const unfold_more = _TDIconsData(0xE0E1, 'unfold_more');
+  static const upload = _TDIconsData(0xE0E2, 'upload');
+  static const usb = _TDIconsData(0xE0E3, 'usb');
+  static const user_add = _TDIconsData(0xE0E4, 'user_add');
+  static const user_avatar = _TDIconsData(0xE0E5, 'user_avatar');
+  static const user_circle = _TDIconsData(0xE0E6, 'user_circle');
+  static const user_clear = _TDIconsData(0xE0E7, 'user_clear');
+  static const user_talk = _TDIconsData(0xE0E8, 'user_talk');
+  static const user = _TDIconsData(0xE0E9, 'user');
+  static const usergroup_add = _TDIconsData(0xE0EA, 'usergroup_add');
+  static const usergroup_clear = _TDIconsData(0xE0EB, 'usergroup_clear');
+  static const usergroup = _TDIconsData(0xE0EC, 'usergroup');
+  static const video = _TDIconsData(0xE0ED, 'video');
+  static const view_column = _TDIconsData(0xE0EE, 'view_column');
+  static const view_list = _TDIconsData(0xE0EF, 'view_list');
+  static const view_module = _TDIconsData(0xE0F0, 'view_module');
+  static const wallet = _TDIconsData(0xE0F1, 'wallet');
+  static const wifi = _TDIconsData(0xE0F2, 'wifi');
+  static const zoom_in = _TDIconsData(0xE0F3, 'zoom_in');
+  static const zoom_out = _TDIconsData(0xE0F4, 'zoom_out');
 
   static const all = <String, _TDIconsData>{
     'add_circle': add_circle,
@@ -265,6 +273,10 @@ class TDIcons {
     'arrow_down': arrow_down,
     'arrow_left': arrow_left,
     'arrow_right': arrow_right,
+    'arrow_triangle_down_filled': arrow_triangle_down_filled,
+    'arrow_triangle_down': arrow_triangle_down,
+    'arrow_triangle_up_filled': arrow_triangle_up_filled,
+    'arrow_triangle_up': arrow_triangle_up,
     'arrow_up': arrow_up,
     'attach': attach,
     'backtop_rectangle': backtop_rectangle,
@@ -300,12 +312,12 @@ class TDIcons {
     'chevron_down_rectangle': chevron_down_rectangle,
     'chevron_down': chevron_down,
     'chevron_left_circle': chevron_left_circle,
-    'chevron_left_rectangle': chevron_left_rectangle,
     'chevron_left_double': chevron_left_double,
+    'chevron_left_rectangle': chevron_left_rectangle,
     'chevron_left': chevron_left,
     'chevron_right_circle': chevron_right_circle,
-    'chevron_right_rectangle': chevron_right_rectangle,
     'chevron_right_double': chevron_right_double,
+    'chevron_right_rectangle': chevron_right_rectangle,
     'chevron_right': chevron_right,
     'chevron_up_circle': chevron_up_circle,
     'chevron_up_rectangle': chevron_up_rectangle,
@@ -361,7 +373,7 @@ class TDIcons {
     'format_vertical_align_right': format_vertical_align_right,
     'forward': forward,
     'fullscreen_exit': fullscreen_exit,
-    'fullsreen': fullsreen,
+    'fullscreen': fullscreen,
     'gender_female': gender_female,
     'gender_male': gender_male,
     'gift': gift,
@@ -383,6 +395,7 @@ class TDIcons {
     'layers': layers,
     'link_unlink': link_unlink,
     'link': link,
+    'loading': loading,
     'location': location,
     'lock_off': lock_off,
     'lock_on': lock_on,
@@ -404,11 +417,11 @@ class TDIcons {
     'logo_windows': logo_windows,
     'logout': logout,
     'mail': mail,
-    'menu_application': menu_application,
     'menu_fold': menu_fold,
     'menu_unfold': menu_unfold,
     'minus_circle_filled': minus_circle_filled,
     'minus_circle': minus_circle,
+    'minus_rectangle_filled': minus_rectangle_filled,
     'minus_rectangle': minus_rectangle,
     'mirror': mirror,
     'mobile_vibrate': mobile_vibrate,
@@ -443,6 +456,7 @@ class TDIcons {
     'relativity': relativity,
     'remove': remove,
     'rollback': rollback,
+    'rollfront': rollfront,
     'root_list': root_list,
     'rotation': rotation,
     'round': round,
@@ -472,6 +486,8 @@ class TDIcons {
     'time': time,
     'tips': tips,
     'tools': tools,
+    'translate_1': translate_1,
+    'translate': translate,
     'unfold_less': unfold_less,
     'unfold_more': unfold_more,
     'upload': upload,
