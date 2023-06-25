@@ -1,7 +1,7 @@
 
   Widget _buildFeedbackLongContent(BuildContext context) {
     return TDButton(
-      content: '反馈类-内容超长',
+      text: '反馈类-内容超长',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,

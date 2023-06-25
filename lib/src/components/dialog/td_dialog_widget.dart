@@ -223,7 +223,7 @@ class HorizontalNormalButtons extends StatelessWidget {
             child: TDDialogButton(
               buttonText: leftBtn.title,
               buttonTextColor:
-                  leftBtn.titleColor ?? TDTheme.of(context).brandColor8,
+                  leftBtn.titleColor ?? TDTheme.of(context).brandNormalColor,
               buttonStyle: leftBtn.style,
               buttonType: leftBtn.type,
               buttonTheme: leftBtn.theme,
@@ -308,7 +308,7 @@ class HorizontalTextButtons extends StatelessWidget {
               child: TDDialogButton(
                 buttonText: rightBtn.title,
                 buttonTextColor:
-                    rightBtn.titleColor ?? TDTheme.of(context).brandColor8,
+                    rightBtn.titleColor ?? TDTheme.of(context).brandNormalColor,
                 buttonStyle: leftBtn.style,
                 buttonType: leftBtn.type ?? TDButtonType.text,
                 buttonTheme: leftBtn.theme ?? TDButtonTheme.primary,
@@ -380,7 +380,7 @@ class TDDialogButton extends StatelessWidget {
       style: buttonStyle,
       type: buttonType ?? TDButtonType.fill,
       theme: buttonTheme,
-      content: buttonText,
+      text: buttonText,
       textStyle: TextStyle(fontWeight: buttonTextFontWeight, color: buttonTextColor),
       width: width,
       height: height,
