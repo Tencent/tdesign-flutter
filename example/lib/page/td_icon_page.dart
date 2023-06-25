@@ -18,6 +18,7 @@ class _TDIconPageState extends State<TDIconPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(title: tdTitle(),
+        exampleCodeGroup: 'icon',
         children: [
         ExampleModule(title: 'icon示例',
         children: [
@@ -29,7 +30,7 @@ class _TDIconPageState extends State<TDIconPage> {
         child: Wrap(
           children: [
             Container(
-              child: TDButton(content: showBorder? '隐藏边框':'显示边框',
+              child: TDButton(text: showBorder? '隐藏边框':'显示边框',
                 shape: TDButtonShape.filled,
                 onTap: (){
                   setState(() {

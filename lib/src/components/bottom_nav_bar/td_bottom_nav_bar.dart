@@ -482,7 +482,7 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
               TDIcons.view_list,
               size: 16.0,
               color: isSelected
-                  ? TDTheme.of(context).brandColor8
+                  ? TDTheme.of(context).brandNormalColor
                   : TDTheme.of(context).fontGyColor1,
             ),
             const SizedBox(width: 5),
@@ -503,7 +503,7 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
         selectedIcon = Icon(
           TDIcons.app,
           size: 24,
-          color: TDTheme.of(context).brandColor8,
+          color: TDTheme.of(context).brandNormalColor,
         );
         unSelectedIcon = Icon(
           TDIcons.app,
@@ -525,7 +525,7 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
         selectedIcon = Icon(
           TDIcons.app,
           size: size,
-          color: TDTheme.of(context).brandColor8,
+          color: TDTheme.of(context).brandNormalColor,
         );
         unSelectedIcon = Icon(
           TDIcons.app,
@@ -569,7 +569,7 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
       font: font,
       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
       textColor: isSelected
-          ? TDTheme.of(context).brandColor8
+          ? TDTheme.of(context).brandNormalColor
           : TDTheme.of(context).fontGyColor1,
       forceVerticalCenter: true,
     );
