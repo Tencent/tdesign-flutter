@@ -22,12 +22,17 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
   final _demoScroller = ScrollController(initialScrollOffset: 278.5);
   final _sideBarController = TDSideBarController();
   static const threshold = 50;
+  var lock = false;
 
   @override
   void initState() {
     super.initState();
 
     _demoScroller.addListener(() {
+      if (lock) {
+        return;
+      }
+
       var scrollTop = _demoScroller.offset;
       var index = (scrollTop + threshold) ~/ itemHeight;
 
@@ -39,13 +44,16 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
     });
   }
 
-  void onSelected(int value) {
+  Future<void> onSelected(int value) async {
     if (currentValue != value) {
       setState(() {
         currentValue = value;
       });
 
-      _demoScroller.jumpTo(value.toDouble() * itemHeight);
+      lock = true;
+      await _demoScroller.animateTo(value.toDouble() * itemHeight,
+          duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+      lock = false;
     }
   }
 
