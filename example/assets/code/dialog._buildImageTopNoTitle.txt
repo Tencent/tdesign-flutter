@@ -1,7 +1,7 @@
 
   Widget _buildImageTopNoTitle(BuildContext context) {
     return TDButton(
-      content: '图片置顶-无标题',
+      text: '图片置顶-无标题',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       theme: TDButtonTheme.primary,

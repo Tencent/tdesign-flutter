@@ -12,6 +12,7 @@ import 'api_widget.dart';
 import 'example_base.dart';
 import 'example_route.dart';
 import 'notification_center.dart';
+import 'web_md_tool.dart';
 
 /// 示例页面控件，建议每个页面返回一个ExampleWidget即可，不用独自封装
 class ExamplePage extends StatefulWidget {
@@ -19,19 +20,42 @@ class ExamplePage extends StatefulWidget {
     Key? key,
     required this.title,
     this.desc = '',
-    required this.children,
+    this.children = const [],
     this.padding,
     this.backgroundColor,
-    this.exampleCodeGroup,
+    required this.exampleCodeGroup,
     this.test = const [],
-  }) : super(key: key);
+    this.showSingleChild = false,
+    this.singleChild,
+  })  : assert(children.length > 0 || (showSingleChild && singleChild != null),
+            'children or singleChild must have at least one'),
+        super(key: key);
 
+  /// 标题
   final String title;
-  final String desc;
+
+  /// 如果封装的children无法满足需求，可以自定义子控件
+  final bool showSingleChild;
+
+  /// 自定义的自控件，只有showSingleChild为true才会展示。CodeWrapper的builder构建真正的试图
+  final CodeWrapper? singleChild;
+
+  /// 示例组件模块列表
   final List<ExampleModule> children;
+
+  /// 描述，showSingleChild为false会展示
+  final String desc;
+
+  /// 填充
   final EdgeInsetsGeometry? padding;
+
+  /// 背景颜色
   final Color? backgroundColor;
+
+  /// 示例代码路径
   final String? exampleCodeGroup;
+
+  /// 测试组件列表
   final List<ExampleItem> test;
 
   @override
@@ -71,26 +95,48 @@ class _ExamplePageState extends State<ExamplePage> {
               children: [
                 _buildNavBar(),
                 Expanded(
-                    child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.only(top: 24, bottom: 24),
-                  itemCount: widget.children.length + 2,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return _buildHeader(context);
-                    }
-                    ExampleModule data;
-                    if (index <= widget.children.length) {
-                      data = widget.children[index - 1];
-                    } else {
-                      data = ExampleModule(
-                          title: '单元测试',
-                          children: [_buildTestExampleItem(), ...widget.test]);
-                    }
-                    return _buildModule(index, data, context);
-                  },
-                ))
+                    child: widget.showSingleChild && widget.singleChild != null
+                        ? widget.singleChild!
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.only(top: 24, bottom: 24),
+                            itemCount: widget.children.length + 3,
+                            itemBuilder: (context, index) {
+                              if (index == 0) {
+                                return _buildHeader(context);
+                              }
+                              if (index == widget.children.length + 2) {
+                                return WebMdTool.needGenerateWebMd
+                                    ? Container(
+                                        margin: const EdgeInsets.only(top: 24),
+                                        child: TDButton(
+                                          text: '生成Web使用md',
+                                          type: TDButtonType.fill,
+                                          onTap: () => WebMdTool.generateWebMd(
+                                              model: model,
+                                              description: widget.desc,
+                                              exampleCodeGroup:
+                                                  widget.exampleCodeGroup,
+                                              exampleModuleList:
+                                                  widget.children,
+                                              testList: widget.test),
+                                        ),
+                                      )
+                                    : Container();
+                              }
+                              ExampleModule data;
+                              if (index <= widget.children.length) {
+                                data = widget.children[index - 1];
+                              } else {
+                                data = ExampleModule(title: '单元测试', children: [
+                                  _buildTestExampleItem(),
+                                  ...widget.test
+                                ]);
+                              }
+                              return _buildModule(index, data, context);
+                            },
+                          )),
               ],
             )));
   }
@@ -103,6 +149,10 @@ class _ExamplePageState extends State<ExamplePage> {
   Widget _buildNavBar() {
     var rightBarItems = <TDNavBarItem>[];
 
+    // web端示例页不展示标题栏
+    if(PlatformUtil.isWeb){
+      return Container();
+    }
     if (showAction) {
       rightBarItems.add(TDNavBarItem(
           icon: TDIcons.info_circle,
@@ -126,13 +176,19 @@ class _ExamplePageState extends State<ExamplePage> {
     }
     return TDNavBar(
       title: widget.title,
-      rightBarItems:  rightBarItems,
+      rightBarItems: rightBarItems,
     );
   }
 
   Widget _buildHeader(BuildContext context) {
+    if (widget.showSingleChild) {
+      return Container();
+    }
     return Container(
-      margin: const EdgeInsets.only(left: 16,right: 16,),
+      margin: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,17 +228,20 @@ class _ExamplePageState extends State<ExamplePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        for (var index = 0; index < data.children.length; index++) _buildExampleItem(data.children[index],index)
+        for (var index = 0; index < data.children.length; index++)
+          _buildExampleItem(data, index)
       ],
     );
   }
 
-  Widget _buildExampleItem(ExampleItem data, int index) {
+  Widget _buildExampleItem(ExampleModule data, int index) {
     return Container(
       margin: widget.padding,
       child: ExampleItemWidget(
-        data: data,
+        data: data.children[index],
         index: index,
+        exampleCodeGroup: widget.exampleCodeGroup,
+        moduleTitle: data.title,
       ),
     );
   }
@@ -222,11 +281,33 @@ class ExampleItem {
 }
 
 /// 组件示例
+class ExampleItemInherited extends InheritedWidget {
+  const ExampleItemInherited(
+      {required this.path, Key? key, required Widget child})
+      : super(key: key, child: child);
+
+  final String path;
+
+  @override
+  bool updateShouldNotify(covariant ExampleItemInherited oldWidget) {
+    return path != oldWidget.path;
+  }
+}
+
+/// 组件示例
 class ExampleItemWidget extends StatefulWidget {
-  const ExampleItemWidget({required this.data, Key? key, required this.index}) : super(key: key);
+  const ExampleItemWidget(
+      {required this.data,
+      Key? key,
+      required this.index,
+      this.exampleCodeGroup,
+      this.moduleTitle})
+      : super(key: key);
 
   final ExampleItem data;
   final int index;
+  final String? exampleCodeGroup;
+  final String? moduleTitle;
 
   @override
   State<ExampleItemWidget> createState() => _ExampleItemWidgetState();
@@ -248,21 +329,30 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
         builder: widget.data.builder,
         methodName: widget.data.methodName,
         isCenter: widget.data.center,
+        isFromItem: true,
       );
     }
-    if(widget.data.padding != null){
-      child = Padding(padding: widget.data.padding!, child: child,);
+    if (widget.data.padding != null) {
+      child = Padding(
+        padding: widget.data.padding!,
+        child: child,
+      );
     }
     child = Column(
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: widget.data.center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      crossAxisAlignment: widget.data.center
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       children: [
         widget.data.desc.isEmpty
             ? Container()
             : Container(
                 alignment: Alignment.topLeft,
                 margin: EdgeInsets.only(
-                    left: 16, right: 16, top: widget.index == 0 ? 8 : 24, bottom: 16),
+                    left: 16,
+                    right: 16,
+                    top: widget.index == 0 ? 8 : 24,
+                    bottom: 16),
                 child: TDText(
                   widget.data.desc,
                   font: TDTheme.of(context).fontBodyMedium,
@@ -272,18 +362,28 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
         child
       ],
     );
-    return child;
+    return ExampleItemInherited(
+      child: child,
+      path: WebMdTool.getItemKey(
+          widget.exampleCodeGroup, widget.moduleTitle, widget.data.desc),
+    );
   }
 }
 
 class CodeWrapper extends StatefulWidget {
   const CodeWrapper(
-      {Key? key, required this.builder, this.methodName, this.isCenter = false})
+      {Key? key,
+      required this.builder,
+      this.methodName,
+      this.isCenter = false,
+      this.isFromItem = false})
       : super(key: key);
 
   final WidgetBuilder builder;
 
   final bool isCenter;
+
+  final bool isFromItem;
 
   final String? methodName;
 
@@ -295,6 +395,8 @@ class _CodeWrapperState extends State<CodeWrapper> {
   bool apiVisible = false;
 
   String exampleCodeGroup = '';
+
+  String? codeString;
 
   @override
   void initState() {
@@ -314,7 +416,22 @@ class _CodeWrapperState extends State<CodeWrapper> {
         exampleCodeGroup = modelTheme?.model.codePath ?? '';
         apiVisible = modelTheme?.model.apiVisible ?? false;
       });
+
+      if (WebMdTool.needGenerateWebMd && !widget.isFromItem) {
+        loadManualCode();
+      }
     });
+  }
+
+  void loadManualCode() async {
+    var modelTheme =
+        context.dependOnInheritedWidgetOfExactType<ExampleItemInherited>();
+    if (modelTheme?.path != null) {
+      codeString ??= await loadCodeString();
+      var list = WebMdTool.manualExampleCode[modelTheme!.path] ?? [];
+      list.add(codeString!);
+      WebMdTool.manualExampleCode[modelTheme.path] = list;
+    }
   }
 
   @override
@@ -374,22 +491,14 @@ class _CodeWrapperState extends State<CodeWrapper> {
   }
 
   void _showCodePanel() async {
-    var assetsPath = _getCodeAssetsPath();
-    var codeString = '';
-    if (assetsPath.isNotEmpty) {
-      try {
-        codeString = await rootBundle.loadString(assetsPath);
-      } catch (e) {
-        print(e);
-      }
-    }
+    codeString ??= await loadCodeString();
     await showModalBottomSheet(
         isScrollControlled: true,
         barrierColor: Colors.black.withOpacity(0.5),
         backgroundColor: Colors.transparent,
         context: context,
         builder: (_) {
-          if (codeString.isEmpty) {
+          if (codeString!.isEmpty) {
             return Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -397,13 +506,15 @@ class _CodeWrapperState extends State<CodeWrapper> {
                   borderRadius: BorderRadius.vertical(
                       top: Radius.circular(TDTheme.of(context).radiusDefault))),
               height: 500,
-              child: TDText(PlatformUtil.isWeb ? 'web不支持演示代码，请在移动端查看' : '暂无演示代码'),
+              child:
+                  TDText(PlatformUtil.isWeb ? 'web不支持演示代码，请在移动端查看' : '暂无演示代码'),
             );
           }
 
-          var lines = codeString.split('\n');
+          var lines = codeString!.split('\n');
           print('lines: ${lines.length}');
-          double height = min(max(300, lines.length * 17 + 32),MediaQuery.of(context).size.height - 150);
+          double height = min(max(300, lines.length * 17 + 32),
+              MediaQuery.of(context).size.height - 150);
           var mdText = '''
 ```dart
 ${codeString}
@@ -431,26 +542,35 @@ ${codeString}
           );
         });
   }
+
+  Future<String> loadCodeString() async {
+    var codeString;
+    var assetsPath = _getCodeAssetsPath();
+    if (assetsPath.isNotEmpty) {
+      try {
+        codeString = await rootBundle.loadString(assetsPath);
+      } catch (e) {
+        print(e);
+      }
+    }
+    return codeString;
+  }
 }
 
 /// State获取标题的扩展
-extension TDStateExs on State{
-
-  String tdTitle(){
-    var modelTheme = context
-        .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
+extension TDStateExs on State {
+  String tdTitle() {
+    var modelTheme =
+        context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
     return modelTheme?.model.text ?? '';
   }
-
 }
 
 /// StatelessWidget获取标题的扩展
-extension TDWidgetExs on StatelessWidget{
-
-  String tdTitle(BuildContext context){
-    var modelTheme = context
-        .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
+extension TDWidgetExs on StatelessWidget {
+  String tdTitle(BuildContext context) {
+    var modelTheme =
+        context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
     return modelTheme?.model.text ?? '';
   }
-
 }
