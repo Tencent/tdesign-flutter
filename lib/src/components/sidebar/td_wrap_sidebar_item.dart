@@ -125,8 +125,8 @@ class TDWrapSideBarItem extends StatelessWidget {
               width: preLineWidth,
               height: 14,
               decoration: BoxDecoration(
-                color: TDTheme.of(context).brandNormalColor,
-              ),
+                  color: TDTheme.of(context).brandNormalColor,
+                  borderRadius: BorderRadius.circular(4)),
             )
           ],
         ));
