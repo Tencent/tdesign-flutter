@@ -12,17 +12,19 @@ class TDExampleRoute {
   static const String apiPath = 'api';
 
   static String getApiPath(ExamplePageModel? model){
-    return '$apiPath?${model?.path}';
+    return '$apiPath?${model?.name}';
   }
 
   static void init(){
-    for(var model in examplePageList){
-      pageModelList[model.path] = model;
-    }
+    exampleMap.forEach((key, value) {
+      value.forEach((model) {
+        pageModelList[model.name] = model;
+      });
+    });
     // 添加关于页路由
     pageModelList[aboutPath] = ExamplePageModel(
       text: '关于',
-        path: 'AboutPage',
+        name: 'AboutPage',
         pageBuilder: (context,model)=> const AboutPage());
   }
 
