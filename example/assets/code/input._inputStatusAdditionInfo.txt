@@ -7,8 +7,8 @@
           controller: controller,
           backgroundColor: Colors.white,
           hintText: '请输入文字',
-          addtionInfo: '辅助说明',
-          addtionInfoColor: TDTheme.of(context).errorColor6,
+          additionInfo: '错误提示说明',
+          additionInfoColor: TDTheme.of(context).errorColor6,
         ),
         const SizedBox(
           height: 16,
