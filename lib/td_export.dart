@@ -34,7 +34,6 @@ export 'src/components/swiper/td_swiper.dart';
 export 'src/components/switch/td_switch.dart';
 export 'src/components/tabbar/td_tab.dart';
 export 'src/components/tabbar/td_tab_bar.dart';
-export 'src/components/tabbar/td_tab_bar_vertical_view.dart';
 export 'src/components/tabbar/td_tab_bar_view.dart';
 export 'src/components/tag/td_select_tag.dart';
 export 'src/components/tag/td_tag.dart';
