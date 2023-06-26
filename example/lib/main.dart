@@ -26,6 +26,7 @@ import 'page/td_radio_page.dart';
 import 'page/td_radius_page.dart';
 import 'page/td_refresh_page.dart';
 import 'page/td_search_bar_page.dart';
+import 'page/td_stepper_page.dart';
 import 'page/td_slider_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
@@ -164,8 +165,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Stepper 步进器',
         name: 'stepper',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDStepperPage())),
     ExamplePageModel(
         text: 'Switch 开关',
         name: 'switch',
