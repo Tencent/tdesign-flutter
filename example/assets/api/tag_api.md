@@ -6,7 +6,8 @@
 | --- | --- | --- | --- |
 | text | String | text | 标签内容 |
 | theme | TDTagTheme? | - | 主题 |
-| icon | Widget? | - | 图标内容 |
+| icon | IconData? | - | 图标内容，可随状态改变颜色 |
+| iconWidget | Widget? | - | 自定义图标内容，需自处理颜色 |
 | selectStyle | TDTagStyle? | - | 选中的标签样式 |
 | unSelectStyle | TDTagStyle? | - | 未选中标签样式 |
 | disableSelectStyle | TDTagStyle? | - | 不可选标签样式 |
@@ -17,7 +18,7 @@
 | padding | EdgeInsets? | - | 自定义模式下的间距 |
 | forceVerticalCenter | bool | true | 是否强制中文文字居中 |
 | isOutline | bool | false | 是否为描边类型，默认不是 |
-| isCircle | bool | false | 是否为圆角类型，默认不是 |
+| shape | TDTagShape | TDTagShape.square | 标签形状 |
 | isLight | bool | false | 是否为浅色 |
 | needCloseIcon | bool | false | 关闭图标 |
 | onCloseTap | GestureTapCallback? | - | 关闭图标点击事件 |
@@ -57,7 +58,8 @@
 | --- | --- | --- | --- |
 | text | String | text | 标签内容 |
 | theme | TDTagTheme? | - | 主题 |
-| icon | Widget? | - | 图标内容 |
+| icon | IconData? | - | 图标内容，可随状态改变颜色 |
+| iconWidget | Widget? | - | 自定义图标内容，需自处理颜色 |
 | textColor | Color? | - | 文字颜色, 优先级高于style的textColor |
 | backgroundColor | Color? | - | 背景颜色, 优先级高于style的backgroundColor |
 | font | Font? | - | 字体尺寸, 优先级高于style的font |
@@ -67,8 +69,9 @@
 | padding | EdgeInsets? | - | 自定义模式下的间距 |
 | forceVerticalCenter | bool | true | 是否强制中文文字居中 |
 | isOutline | bool | false | 是否为描边类型，默认不是 |
-| isCircle | bool | false | 是否为圆角类型，默认不是 |
+| shape | TDTagShape | TDTagShape.square | 标签形状 |
 | isLight | bool | false | 是否为浅色 |
+| disable | bool | false | 是否为禁用状态 |
 | needCloseIcon | bool | false | 关闭图标 |
 | onCloseTap | GestureTapCallback? | - | 关闭图标点击事件 |
 | overflow | TextOverflow? | - | 文字溢出处理 |

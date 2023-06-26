@@ -45,7 +45,6 @@
 | physics | ScrollPhysics? | - | 自定义滑动 |
 | onTap |  Function(int)? | - | 点击事件 |
 | outlineType | TDTabBarOutlineType | TDTabBarOutlineType.filled | 选项卡样式 |
-| isVertical | bool | false | 是否是竖向 |
 | showIndicator | bool | false | 是否展示引导控件 |
 
 ```
