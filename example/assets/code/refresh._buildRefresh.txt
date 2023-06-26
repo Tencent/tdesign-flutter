@@ -14,7 +14,7 @@
                     Radius.circular(TDTheme.of(context).radiusLarge))),
             margin: const EdgeInsets.only(left: 16, right: 16),
             child: TDText(
-              '拖拽该区域演示 顶部下拉刷新',
+              PlatformUtil.isWeb ? 'Web暂不支持下拉，请下载安装apk体验' : '拖拽该区域演示 顶部下拉刷新',
               font: TDTheme.of(context).fontBodyLarge,
               textColor: TDTheme.of(context).fontGyColor4,
             ),
