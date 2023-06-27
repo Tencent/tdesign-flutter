@@ -6,7 +6,7 @@
           type: TDInputType.normal,
           controller: controller,
           leftLabel: '手机号',
-          hintText: '请输入手机号码',
+          hintText: '输入手机号',
           backgroundColor: Colors.white,
           rightBtn: Row(
             children: [
