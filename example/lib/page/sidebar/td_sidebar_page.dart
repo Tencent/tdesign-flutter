@@ -30,31 +30,42 @@ class TDSideBarPageState extends State<TDSideBarPage> {
         desc: '用于内容分类后的展示切换。',
         children: [
           ExampleModule(title: '组件类型', children: [
-            ExampleItem(desc: '侧边导航用法', ignoreCode: true, builder: _buildNavigatorSideBar),
-            ExampleItem(desc: '图标侧边导航', builder: _buildIconSideBar, methodName: '_buildIconSideBar')
+            ExampleItem(
+                desc: '侧边导航用法',
+                ignoreCode: true,
+                builder: _buildNavigatorSideBar),
+            ExampleItem(
+                desc: '图标侧边导航',
+                builder: _buildIconSideBar,
+                methodName: '_buildIconSideBar')
           ]),
           ExampleModule(title: '组件样式', children: [
-            ExampleItem(desc: '侧边导航样式', ignoreCode: true, builder: _buildStyleSideBar),
+            ExampleItem(
+                desc: '侧边导航样式', ignoreCode: true, builder: _buildStyleSideBar),
           ])
         ]);
   }
 
-
   Widget _buildNavigatorSideBar(BuildContext context) {
-      return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              CodeWrapper(builder: (_)=>getCustomButtom(context, '锚点用法', 'SideBarAnchor'),methodName: '_buildAnchorSideBar',),
-              const SizedBox(
-                height: 16,
-              ),
-              CodeWrapper(builder: (_)=>getCustomButtom(context, '切页用法', 'SideBarPagination'),methodName: '_buildPaginationSideBar',),
-            ],
-          ));
-
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            CodeWrapper(
+              builder: (_) => getCustomButtom(context, '锚点用法', 'SideBarAnchor'),
+              methodName: '_buildAnchorSideBar',
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            CodeWrapper(
+              builder: (_) =>
+                  getCustomButtom(context, '切页用法', 'SideBarPagination'),
+              methodName: '_buildPaginationSideBar',
+            ),
+          ],
+        ));
   }
-
 
   Widget _buildIconSideBar(BuildContext context) {
     return Padding(
@@ -66,17 +77,24 @@ class TDSideBarPageState extends State<TDSideBarPage> {
         ));
   }
 
-
   Widget _buildStyleSideBar(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            CodeWrapper(builder: (_)=>getCustomButtom(context, '非通栏选项样式', 'SideBarOutline'),methodName: '_buildOutlineSideBar',),
+            CodeWrapper(
+              builder: (_) =>
+                  getCustomButtom(context, '非通栏选项样式', 'SideBarOutline'),
+              methodName: '_buildOutlineSideBar',
+            ),
             const SizedBox(
               height: 16,
             ),
-            CodeWrapper(builder: (_)=>getCustomButtom(context, '自定义样式', 'SideBarCustom'),methodName: '_buildCustomSideBar',),
+            CodeWrapper(
+              builder: (_) =>
+                  getCustomButtom(context, '自定义样式', 'SideBarCustom'),
+              methodName: '_buildCustomSideBar',
+            ),
           ],
         ));
   }
