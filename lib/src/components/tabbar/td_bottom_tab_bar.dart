@@ -18,12 +18,12 @@ const double _kDefaultMenuItemHeight = 48;
 const double _kDefaultMenuItemWidthShrink = 20;
 
 /// 导航栏默认高度
-const double _kDefaultNavBarHeight = 56;
+const double _kDefaultTabBarHeight = 56;
 
 /// 展开项弹窗弹出动画时间
 const Duration _kPopupMenuDuration = Duration(milliseconds: 10);
 
-enum TDBottomNavBarBasicType {
+enum TDBottomTabBarBasicType {
   /// 单层级纯文本标签栏
   text,
 
@@ -37,7 +37,7 @@ enum TDBottomNavBarBasicType {
   expansionPanel,
 }
 
-enum TDBottomNavBarComponentType {
+enum TDBottomTabBarComponentType {
   /// 普通样式
   normal,
 
@@ -45,7 +45,7 @@ enum TDBottomNavBarComponentType {
   label
 }
 
-enum TDBottomNavBarOutlineType {
+enum TDBottomTabBarOutlineType {
   /// 填充样式
   filled,
 
@@ -129,8 +129,8 @@ class BadgeConfig {
 }
 
 /// 单个tab配置
-class TDBottomNavBarTabConfig {
-  TDBottomNavBarTabConfig({
+class TDBottomTabBarTabConfig {
+  TDBottomTabBarTabConfig({
     required this.onTap,
     this.iconTextTypeConfig,
     this.iconTypeConfig,
@@ -163,17 +163,17 @@ class TDBottomNavBarTabConfig {
   final BadgeConfig? badgeConfig;
 
   /// 弹窗配置
-  final TDBottomNavBarPopUpBtnConfig? popUpButtonConfig;
+  final TDBottomTabBarPopUpBtnConfig? popUpButtonConfig;
 }
 
-class TDBottomNavBar extends StatefulWidget {
-  TDBottomNavBar(
+class TDBottomTabBar extends StatefulWidget {
+  TDBottomTabBar(
     this.basicType, {
     Key? key,
-    this.componentType = TDBottomNavBarComponentType.label,
-    this.outlineType = TDBottomNavBarOutlineType.filled,
+    this.componentType = TDBottomTabBarComponentType.label,
+    this.outlineType = TDBottomTabBarOutlineType.filled,
     required this.navigationTabs,
-    this.barHeight = _kDefaultNavBarHeight,
+    this.barHeight = _kDefaultTabBarHeight,
     this.useVerticalDivider,
     this.dividerHeight,
     this.dividerThickness,
@@ -183,30 +183,30 @@ class TDBottomNavBar extends StatefulWidget {
   })  : assert(() {
           if (navigationTabs.isEmpty) {
             throw FlutterError(
-                '[TDBottomNavigationBar] please set at least one tab!');
+                '[TDBottomTabBar] please set at least one tab!');
           }
-          if (basicType == TDBottomNavBarBasicType.text) {
+          if (basicType == TDBottomTabBarBasicType.text) {
             for (final item in navigationTabs) {
               if (item.tabText == null) {
                 throw FlutterError(
-                    '[TDBottomNavigationBar] type is TDBottomBarType.text, but not set text.');
+                    '[TDBottomTabBar] type is TDBottomBarType.text, but not set text.');
               }
             }
           }
-          if (basicType == TDBottomNavBarBasicType.icon) {
+          if (basicType == TDBottomTabBarBasicType.icon) {
             for (final item in navigationTabs) {
               if (item.iconTypeConfig == null) {
                 throw FlutterError(
-                    '[TDBottomNavigationBar] type is TDBottomBarType.icon,'
+                    '[TDBottomTabBar] type is TDBottomBarType.icon,'
                     'but has no iconTypeConfig instance.');
               }
             }
           }
-          if (basicType == TDBottomNavBarBasicType.iconText) {
+          if (basicType == TDBottomTabBarBasicType.iconText) {
             for (final item in navigationTabs) {
               if (item.iconTextTypeConfig == null) {
                 throw FlutterError(
-                    '[TDBottomNavigationBar] type is TDBottomBarType.iconText,'
+                    '[TDBottomTabBar] type is TDBottomBarType.iconText,'
                     'but has no iconTextConfig instance.');
               }
             }
@@ -216,16 +216,16 @@ class TDBottomNavBar extends StatefulWidget {
         super(key: key);
 
   /// 基本样式（纯文本、纯图标、图标+文本）
-  final TDBottomNavBarBasicType basicType;
+  final TDBottomTabBarBasicType basicType;
 
   /// 选项样式 默认label
-  final TDBottomNavBarComponentType? componentType;
+  final TDBottomTabBarComponentType? componentType;
 
   /// 标签栏样式 默认filled
-  final TDBottomNavBarOutlineType? outlineType;
+  final TDBottomTabBarOutlineType? outlineType;
 
   /// tabs配置
-  final List<TDBottomNavBarTabConfig> navigationTabs;
+  final List<TDBottomTabBarTabConfig> navigationTabs;
 
   /// tab高度
   final double? barHeight;
@@ -249,16 +249,16 @@ class TDBottomNavBar extends StatefulWidget {
   final BorderSide? topBorder;
 
   @override
-  State<TDBottomNavBar> createState() => _TDBottomNavBarState();
+  State<TDBottomTabBar> createState() => _TDBottomTabBarState();
 }
 
-class _TDBottomNavBarState extends State<TDBottomNavBar> {
+class _TDBottomTabBarState extends State<TDBottomTabBar> {
   int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     var isCapsuleOutlineType =
-        widget.outlineType == TDBottomNavBarOutlineType.capsule;
+        widget.outlineType == TDBottomTabBarOutlineType.capsule;
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         /// -2 是为了增加边框
@@ -314,18 +314,18 @@ class _TDBottomNavBarState extends State<TDBottomNavBar> {
   Widget _item(int index, double itemWidth) {
     var tabItemConfig = widget.navigationTabs[index];
     return Container(
-        height: widget.barHeight ?? _kDefaultNavBarHeight,
+        height: widget.barHeight ?? _kDefaultTabBarHeight,
         width: itemWidth,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(vertical: 7),
-        child: TDBottomNavBarItemWithBadge(
+        child: TDBottomTabBarItemWithBadge(
           basiceType: widget.basicType,
           componentType:
-              widget.componentType ?? TDBottomNavBarComponentType.label,
-          outlineType: widget.outlineType ?? TDBottomNavBarOutlineType.filled,
+              widget.componentType ?? TDBottomTabBarComponentType.label,
+          outlineType: widget.outlineType ?? TDBottomTabBarOutlineType.filled,
           itemConfig: tabItemConfig,
           isSelected: index == _selectedIndex,
-          itemHeight: widget.barHeight ?? _kDefaultNavBarHeight,
+          itemHeight: widget.barHeight ?? _kDefaultTabBarHeight,
           itemWidth: itemWidth,
           tabsLength: widget.navigationTabs.length,
           onTap: () {
@@ -335,9 +335,9 @@ class _TDBottomNavBarState extends State<TDBottomNavBar> {
   }
 
   Widget _verticalDivider() {
-    if (widget.componentType == TDBottomNavBarComponentType.label) {}
+    if (widget.componentType == TDBottomTabBarComponentType.label) {}
     return Visibility(
-      visible: widget.componentType != TDBottomNavBarComponentType.label &&
+      visible: widget.componentType != TDBottomTabBarComponentType.label &&
           (widget.useVerticalDivider ?? false),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -356,8 +356,8 @@ class _TDBottomNavBarState extends State<TDBottomNavBar> {
   }
 }
 
-class TDBottomNavBarItemWithBadge extends StatelessWidget {
-  const TDBottomNavBarItemWithBadge(
+class TDBottomTabBarItemWithBadge extends StatelessWidget {
+  const TDBottomTabBarItemWithBadge(
       {Key? key,
       required this.basiceType,
       required this.componentType,
@@ -371,16 +371,16 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
       : super(key: key);
 
   /// tab基本类型
-  final TDBottomNavBarBasicType basiceType;
+  final TDBottomTabBarBasicType basiceType;
 
   /// tab选中背景类型
-  final TDBottomNavBarComponentType componentType;
+  final TDBottomTabBarComponentType componentType;
 
   //
-  final TDBottomNavBarOutlineType outlineType;
+  final TDBottomTabBarOutlineType outlineType;
 
   /// 单个tab的属性配置
-  final TDBottomNavBarTabConfig itemConfig;
+  final TDBottomTabBarTabConfig itemConfig;
 
   /// 选中状态
   final bool isSelected;
@@ -401,8 +401,8 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     var popUpButtonConfig = itemConfig.popUpButtonConfig;
     var badgeConfig = itemConfig.badgeConfig;
-    var isInOrOutCapsule = componentType == TDBottomNavBarComponentType.label ||
-        outlineType == TDBottomNavBarOutlineType.capsule;
+    var isInOrOutCapsule = componentType == TDBottomTabBarComponentType.label ||
+        outlineType == TDBottomTabBarOutlineType.capsule;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -431,13 +431,13 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Visibility(
-                visible: componentType == TDBottomNavBarComponentType.label &&
+                visible: componentType == TDBottomTabBarComponentType.label &&
                     isSelected,
                 child: Container(
                   /// 设计稿上 tab个数大于3时，左右边距为8，小于等于3时，左右边距为12
                   width: itemWidth - (tabsLength > 3 ? 16 : 24),
-                  height: basiceType == TDBottomNavBarBasicType.text ||
-                          basiceType == TDBottomNavBarBasicType.expansionPanel
+                  height: basiceType == TDBottomTabBarBasicType.text ||
+                          basiceType == TDBottomTabBarBasicType.expansionPanel
                       ? 32 : null,
                   decoration: BoxDecoration(
                       color: TDTheme.of(context).brandColor1,
@@ -469,11 +469,11 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
   Widget _constructItem(
       BuildContext context, BadgeConfig? badgeConfig, bool isInOrOutCapsule) {
     Widget child = Container();
-    if (basiceType == TDBottomNavBarBasicType.text) {
+    if (basiceType == TDBottomTabBarBasicType.text) {
       child = _textItem(context, itemConfig.tabText!, isSelected,
           TDTheme.of(context).fontTitleMedium!);
     }
-    if (basiceType == TDBottomNavBarBasicType.expansionPanel) {
+    if (basiceType == TDBottomTabBarBasicType.expansionPanel) {
       if (itemConfig.popUpButtonConfig != null) {
         child = Row(
           mainAxisSize: MainAxisSize.min,
@@ -495,7 +495,7 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
             TDTheme.of(context).fontTitleMedium!);
       }
     }
-    if (basiceType == TDBottomNavBarBasicType.icon) {
+    if (basiceType == TDBottomTabBarBasicType.icon) {
       var selectedIcon = itemConfig.iconTypeConfig!.selectedIcon;
       var unSelectedIcon = itemConfig.iconTypeConfig!.unselectedIcon;
       if (itemConfig.iconTypeConfig!.useDefaultIcon ?? false) {
@@ -514,7 +514,7 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
       child = isSelected ? selectedIcon! : unSelectedIcon!;
     }
 
-    if (basiceType == TDBottomNavBarBasicType.iconText) {
+    if (basiceType == TDBottomTabBarBasicType.iconText) {
       var selectedIcon = itemConfig.iconTextTypeConfig!.selectedIcon;
       var unSelectedIcon = itemConfig.iconTextTypeConfig!.unselectedIcon;
       if (itemConfig.iconTextTypeConfig!.useDefaultIcon ?? false) {
@@ -577,8 +577,8 @@ class TDBottomNavBarItemWithBadge extends StatelessWidget {
 }
 
 /// 展开项配置
-class TDBottomNavBarPopUpBtnConfig {
-  TDBottomNavBarPopUpBtnConfig(
+class TDBottomTabBarPopUpBtnConfig {
+  TDBottomTabBarPopUpBtnConfig(
       {required this.items, required this.onChanged, this.popUpDialogConfig})
       : assert(() {
           if (popUpDialogConfig != null) {
@@ -587,7 +587,7 @@ class TDBottomNavBarPopUpBtnConfig {
                 (popUpDialogConfig.arrowWidth != null &&
                     popUpDialogConfig.arrowWidth! <= 0.0)) {
               throw FlutterError(
-                  '[TDBottomNavBarPopUpBtnConfig] arrowHeight or arrowHeight can '
+                  '[TDBottomTabBarPopUpBtnConfig] arrowHeight or arrowHeight can '
                   'not set less than or equal to zero');
             }
           }
@@ -601,12 +601,12 @@ class TDBottomNavBarPopUpBtnConfig {
   final ValueChanged<String> onChanged;
 
   /// 弹窗UI配置
-  final TDBottomNavBarPopUpShapeConfig? popUpDialogConfig;
+  final TDBottomTabBarPopUpShapeConfig? popUpDialogConfig;
 }
 
 /// 弹窗UI配置
-class TDBottomNavBarPopUpShapeConfig {
-  TDBottomNavBarPopUpShapeConfig(
+class TDBottomTabBarPopUpShapeConfig {
+  TDBottomTabBarPopUpShapeConfig(
       {this.popUpWidth,
       this.popUpitemHeight = _kDefaultMenuItemHeight,
       this.backgroundColor,
@@ -700,7 +700,7 @@ class PopupDialog extends StatefulWidget {
   final List<PopUpMenuItem> items;
 
   /// 弹窗配置
-  final TDBottomNavBarPopUpShapeConfig? config;
+  final TDBottomTabBarPopUpShapeConfig? config;
 
   /// 默认弹窗宽度
   final double defaultPopUpWidth;
@@ -770,7 +770,7 @@ class PopupDialogState extends State<PopupDialog> {
             ),
             Positioned(
 
-                /// 这里 -8 是因为widget.btnContext是TDBottomNavBarItemWithBadge的，它在父widget内有8dp的padding
+                /// 这里 -8 是因为widget.btnContext是TDBottomTabBarItemWithBadge的，它在父widget内有8dp的padding
                 /// -4 是设计稿上箭头和tab有4dp的距离
                 top: position!.top -
                     (popUpitemHeight * widget.items.length +
@@ -824,7 +824,7 @@ class PopupDialogState extends State<PopupDialog> {
 
 /// 带下箭头的展开pannel
 class PannelWithDownArrow extends CustomPainter {
-  TDBottomNavBarPopUpShapeConfig? config;
+  TDBottomTabBarPopUpShapeConfig? config;
 
   PannelWithDownArrow({
     this.config,
