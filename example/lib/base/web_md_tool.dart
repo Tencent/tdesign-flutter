@@ -12,7 +12,7 @@ class WebMdTool {
   WebMdTool._();
 
   /// 用于生成web端的md,正常使用不要开启
-  static const bool needGenerateWebMd = false;
+  static const bool needGenerateWebMd = true;
 
   /// 生成web端的md
   static void generateWebMd({
