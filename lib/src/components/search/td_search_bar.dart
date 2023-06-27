@@ -34,7 +34,7 @@ class TDSearchBar extends StatefulWidget {
     this.padding = const EdgeInsets.fromLTRB(16, 8, 16, 8),
     this.autoFocus = false,
     this.mediumStyle = false,
-    this.needCancel = true,
+    this.needCancel = false,
     this.backgroundColor = Colors.white,
   }) : super(key: key);
 
@@ -129,24 +129,23 @@ class _TDSearchBarState extends State<TDSearchBar>
         });
       }
     });
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var box = _textFieldKey.currentContext?.findRenderObject() as RenderBox?;
-      var phBox = _phKey.currentContext?.findRenderObject() as RenderBox?;
-      if (box != null && phBox != null) {
-        setState(() {
-          if (widget.alignment != TDSearchAlignment.center) {
-            return;
-          }
-          var dx = (box.size.width / 2 + 16.5 - phBox.size.width / 2) /
-              phBox.size.width;
-          if (dx < 0) {
-            return;
-          }
-          _animation ??= Tween(begin: Offset.zero, end: Offset(-dx, 0))
-              .animate(_animationController);
-        });
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   var phBox = _phKey.currentContext?.findRenderObject() as RenderBox?;
+    //   if (phBox != null) {
+    //     setState(() {
+    //       if (widget.alignment != TDSearchAlignment.center) {
+    //         return;
+    //       }
+    //       var dx = (phBox.size.width / 2 - 24) / phBox.size.width;
+    //       if (dx < 0) {
+    //         return;
+    //       }
+
+    //       _animation ??= Tween(begin: Offset.zero, end: Offset(-dx, 0))
+    //           .animate(_animationController);
+    //     });
+    //   }
+    // });
   }
 
   void _updateClearBtnVisible(bool visible) {
@@ -190,14 +189,10 @@ class _TDSearchBarState extends State<TDSearchBar>
                     const SizedBox(
                       width: 12,
                     ),
-                    Visibility(
-                      visible: _status == _TDSearchBarStatus.focused ||
-                          controller.text.isNotEmpty,
-                      child: Icon(
-                        TDIcons.search,
-                        size: widget.mediumStyle ? 20 : 24,
-                        color: TDTheme.of(context).fontGyColor3,
-                      ),
+                    Icon(
+                      TDIcons.search,
+                      size: widget.mediumStyle ? 20 : 24,
+                      color: TDTheme.of(context).fontGyColor3,
                     ),
                     const Padding(padding: EdgeInsets.only(left: 3)),
                     Expanded(
@@ -209,6 +204,9 @@ class _TDSearchBarState extends State<TDSearchBar>
                         cursorColor: TDTheme.of(context).brandNormalColor,
                         cursorWidth: 1,
                         cursorHeight: widget.mediumStyle ? 16 : 18,
+                        textAlign: widget.alignment == TDSearchAlignment.center
+                            ? TextAlign.center
+                            : TextAlign.left,
                         focusNode: focusNode,
                         onChanged: widget.onTextChanged,
                         onSubmitted: widget.onSubmitted,
@@ -316,9 +314,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 12, right: 12),
-                    alignment: widget.alignment == TDSearchAlignment.left
-                        ? Alignment.centerLeft
-                        : Alignment.center,
+                    alignment: Alignment.centerLeft,
                     child: _getPlaceHolderWidgets(),
                   )
                 ],
@@ -331,35 +327,52 @@ class _TDSearchBarState extends State<TDSearchBar>
   Widget _getPlaceHolderWidgets() {
     return LayoutBuilder(builder: (BuildContext context, BoxConstraints box) {
       if (_animation != null) {
-        return SlideTransition(
-          position: _animation!,
-          child: Row(
-            key: _phKey,
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                TDIcons.search,
-                size: widget.mediumStyle ? 20 : 24,
-                color: TDTheme.of(context).fontGyColor3,
+        return Row(
+          children: [
+            Icon(
+              TDIcons.search,
+              size: widget.mediumStyle ? 20 : 24,
+              color: TDTheme.of(context).fontGyColor3,
+            ),
+            Expanded(
+                child: SlideTransition(
+              position: _animation!,
+              child: Row(
+                key: _phKey,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: (widget.mediumStyle ? 20 : 24) / 2,
+                  ),
+                  Expanded(
+                      child: Row(
+                    mainAxisAlignment:
+                        widget.alignment == TDSearchAlignment.left
+                            ? MainAxisAlignment.start
+                            : MainAxisAlignment.center,
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: box.maxWidth - 51,
+                        ),
+                        child: TDText(
+                          widget.placeHolder,
+                          font: getSize(context),
+                          textColor: TDTheme.of(context).fontGyColor3,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    ],
+                  )),
+                  const SizedBox(
+                    width: 6,
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 3),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: box.maxWidth - 51,
-                  ),
-                  child: TDText(
-                    widget.placeHolder,
-                    font: getSize(context),
-                    textColor: TDTheme.of(context).fontGyColor3,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              )
-            ],
-          ),
+            ))
+          ],
         );
       } else {
         return Row(
@@ -372,21 +385,32 @@ class _TDSearchBarState extends State<TDSearchBar>
               size: widget.mediumStyle ? 20 : 24,
               color: TDTheme.of(context).fontGyColor3,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 3),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: box.maxWidth - 51,
-                ),
-                child: TDText(
-                  widget.placeHolder,
-                  font: getSize(context),
-                  textColor: TDTheme.of(context).fontGyColor3,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            )
+            const SizedBox(
+              width: 3,
+            ),
+            Expanded(
+                child: Row(
+              mainAxisAlignment: widget.alignment == TDSearchAlignment.left
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.center,
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: box.maxWidth - 51,
+                  ),
+                  child: TDText(
+                    widget.placeHolder,
+                    font: getSize(context),
+                    textColor: TDTheme.of(context).fontGyColor3,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
+              ],
+            )),
+            const SizedBox(
+              width: 6,
+            ),
           ],
         );
       }
