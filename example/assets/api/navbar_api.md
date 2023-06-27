@@ -36,6 +36,6 @@
 | icon | IconData? | - | 图标 |
 | iconColor | Color? | - | 图标颜色 |
 | action | TDBarItemAction? | - | 操作回调 |
-| iconSize | double? | 16.0 | 图标尺寸 |
+| iconSize | double? | 24.0 | 图标尺寸 |
 | padding | EdgeInsetsGeometry? | - |  |
 | iconWidget | Widget? | - | 图标组件，优先级高与icon |

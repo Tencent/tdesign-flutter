@@ -6,7 +6,7 @@
 | --- | --- | --- | --- |
 | data | null | data | 以下系统text属性，释义请参考系统[Text]中注释 |
 | font | Font? | - | 字体尺寸，包含大小size和行高height |
-| fontWeight | FontWeight? | FontWeight.w400 | 字体粗细 |
+| fontWeight | FontWeight? | - | 字体粗细 |
 | fontFamily | FontFamily? | - | 字体ttf |
 | textColor | Color | Colors.black | 文本颜色 |
 | backgroundColor | Color? | - | 背景颜色 |
@@ -44,7 +44,7 @@
 | --- | --- | --- | --- |
 | context |  | - |  |
 | font |  | - |  |
-| fontWeight |  | FontWeight.w400 |  |
+| fontWeight |  | - |  |
 | fontFamily |  | - |  |
 | textColor |  | Colors.black |  |
 | isTextThrough |  | false |  |
