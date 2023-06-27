@@ -4,9 +4,16 @@
       children: [
         TDInput(
           leftLabel: '标签超长时最多十个字',
-          controller: controller,
+          controller: controller[18],
           backgroundColor: Colors.white,
           hintText: '请输入文字',
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller[18].clear();
+            setState(() {});
+          },
         ),
         const SizedBox(
           height: 16,

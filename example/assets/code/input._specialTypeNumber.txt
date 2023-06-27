@@ -2,7 +2,7 @@
   Widget _specialTypeNumber(BuildContext context) {
     return TDInput(
       type: TDInputType.special,
-      controller: controller,
+      controller: controller[16],
       leftLabel: '数量',
       hintText: '填写个数',
       backgroundColor: Colors.white,

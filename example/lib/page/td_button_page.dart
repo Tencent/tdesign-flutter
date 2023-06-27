@@ -756,8 +756,12 @@ class _TDButtonPageState extends State<TDButtonPage> {
 
   @Demo(group: 'button')
   Widget _buildChildTestButton(BuildContext context) {
-    return const TDButton(
-      child: TDAvatar(),
+    return  TDButton(
+      child: Container(
+        height: 24,
+        width: 24,
+        color: Colors.red,
+      ),
     );
   }
 

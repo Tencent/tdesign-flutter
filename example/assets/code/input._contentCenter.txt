@@ -4,10 +4,17 @@
       children: [
         TDInput(
           leftLabel: '居中',
-          controller: controller,
+          controller: controller[24],
           backgroundColor: Colors.white,
           contentAlignment: TextAlign.center,
           hintText: '请输入文字',
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller[24].clear();
+            setState(() {});
+          },
         ),
         const SizedBox(
           height: 16,

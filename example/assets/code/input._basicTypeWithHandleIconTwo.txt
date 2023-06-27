@@ -4,7 +4,7 @@
       children: [
         TDInput(
           leftLabel: '标签文字',
-          controller: controller,
+          controller: controller[8],
           backgroundColor: Colors.white,
           hintText: '请输入文字',
           rightBtn: Container(
@@ -14,15 +14,16 @@
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
                 color: TDTheme.of(context).brandNormalColor),
-            child: TDText(
-              '操作按钮',
-              font: TDTheme.of(context).fontBodyMedium,
-              style: const TextStyle(color: Colors.white),
+            child: const TDButton(
+              text: '操作按钮',
+              size: TDButtonSize.extraSmall,
+              theme: TDButtonTheme.primary
             ),
           ),
           onBtnTap: () {
             TDToast.showText('点击操作按钮', context: context);
           },
+          needClear: false,
         ),
         const SizedBox(
           height: 16,

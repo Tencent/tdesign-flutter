@@ -5,7 +5,9 @@
         SizedBox(
           height: 20,
         ),
-        TDDivider(isDashed: true,),
+        TDDivider(
+          isDashed: true,
+        ),
         SizedBox(
           height: 20,
         ),

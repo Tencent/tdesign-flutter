@@ -3,10 +3,17 @@
     return TDInput(
       type: TDInputType.normal,
       leftLabel: '标签文字',
-      controller: controller,
+      controller: controller[6],
       hintText: '请输入文字',
       inputFormatters: [Chinese2Formatter(10)],
       additionInfo: '最大输入10个字符，汉字算两个',
       backgroundColor: Colors.white,
+      onChanged: (text) {
+        setState(() {});
+      },
+      onClearTap: () {
+        controller[6].clear();
+        setState(() {});
+      },
     );
   }

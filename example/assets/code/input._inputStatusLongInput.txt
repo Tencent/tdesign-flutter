@@ -3,7 +3,7 @@
     return TDInput(
       type: TDInputType.normal,
       leftLabel: '标签文字',
-      controller: controller,
+      controller: controller[19],
       backgroundColor: Colors.white,
       hintText: '输入文字超长不超过两行输入文字超长不超过两行',
       hintTextStyle: TextStyle(

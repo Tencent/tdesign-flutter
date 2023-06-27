@@ -1,37 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
 
-import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
-
-
-class TDIconPage extends StatefulWidget {
-  const TDIconPage({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _TDIconPageState();
-}
-
-class _TDIconPageState extends State<TDIconPage> {
-
-  bool showBorder = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return ExamplePage(title: tdTitle(),
-        exampleCodeGroup: 'icon',
-        children: [
-        ExampleModule(title: 'icon示例',
-        children: [
-          ExampleItem(
-              desc: 'icon数量: ${TDIcons.all.length}',
-              builder: _showAllIcons)
-    ])
-        ]);
-
-  }
-
-  @Demo(group: 'icon')
   Widget _showAllIcons(BuildContext context) {
     return Container(
       color: Colors.white,
@@ -66,4 +33,3 @@ class _TDIconPageState extends State<TDIconPage> {
       ),
     );
   }
-}
