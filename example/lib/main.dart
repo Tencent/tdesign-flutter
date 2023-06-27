@@ -7,7 +7,7 @@ import 'base/example_route.dart';
 import 'base/web_md_tool.dart';
 import 'page/td_avatar_page.dart';
 import 'page/td_badge_page.dart';
-import 'page/td_bottom_nav_bar_page.dart';
+import 'page/td_bottom_tab_bar_page.dart';
 import 'page/td_button_page.dart';
 import 'page/td_checkbox_page.dart';
 import 'page/td_date_picker_page.dart';
@@ -26,11 +26,11 @@ import 'page/td_radio_page.dart';
 import 'page/td_radius_page.dart';
 import 'page/td_refresh_page.dart';
 import 'page/td_search_bar_page.dart';
-import 'page/td_stepper_page.dart';
 import 'page/td_slider_page.dart';
+import 'page/td_stepper_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
-import 'page/td_tabbar_page.dart';
+import 'page/td_tabs_page.dart';
 import 'page/td_tag_page.dart';
 import 'page/td_text_page.dart';
 import 'page/td_theme_page.dart';
@@ -109,13 +109,13 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
         text: 'TabBar 标签栏',
-        name: 'bottom_nav_bar',
+        name: 'tabbar',
         pageBuilder:
-            _wrapInheritedTheme((context) => const TDBottomNavBarPage())),
+            _wrapInheritedTheme((context) => const TDBottomTabBarPage())),
     ExamplePageModel(
         text: 'Tabs 选项卡',
-        name: 'tabbar',
-        pageBuilder: _wrapInheritedTheme((context) => const TDTabBarPage())),
+        name: 'tabs',
+        pageBuilder: _wrapInheritedTheme((context) => const TDTabsPage())),
   ],
   '输入': [
     ExamplePageModel(
@@ -202,7 +202,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
         text: 'CountDown 倒计时',
-        name: 'countDown',
+        name: 'count_down',
         isTodo: true,
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
@@ -230,7 +230,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TDImagePage())),
     ExamplePageModel(
         text: 'ImageViewer 图片预览',
-        name: 'imageViewer',
+        name: 'image_viewer',
         isTodo: true,
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
@@ -288,7 +288,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
         text: 'NoticeBar 公告栏',
-        name: 'noticeBar',
+        name: 'notice_bar',
         isTodo: true,
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
