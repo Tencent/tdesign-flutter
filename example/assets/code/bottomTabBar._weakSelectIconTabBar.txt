@@ -1,13 +1,12 @@
 
-  Widget _weakSelectIconTextNavBar(BuildContext context) {
-    return TDBottomNavBar(
-      TDBottomNavBarBasicType.iconText,
-      componentType: TDBottomNavBarComponentType.normal,
+  Widget _weakSelectIconTabBar(BuildContext context) {
+    return TDBottomTabBar(
+      TDBottomTabBarBasicType.icon,
+      componentType: TDBottomTabBarComponentType.normal,
       useVerticalDivider: false,
       navigationTabs: [
-        TDBottomNavBarTabConfig(
-          iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+        TDBottomTabBarTabConfig(
+          iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
           badgeConfig: BadgeConfig(
             showBage: true,
             tdBadge: const TDBadge(TDBadgeType.redPoint),
@@ -19,17 +18,15 @@
             onTapTab(context, '标签1');
           },
         ),
-        TDBottomNavBarTabConfig(
-          iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+        TDBottomTabBarTabConfig(
+          iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签2');
           },
         ),
-        TDBottomNavBarTabConfig(
-          iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+        TDBottomTabBarTabConfig(
+          iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签3');
