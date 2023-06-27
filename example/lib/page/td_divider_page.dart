@@ -13,7 +13,7 @@ class TDDividerPage extends StatelessWidget {
         title: tdTitle(context),
         desc: '用于分割、组织、细化有一定逻辑的组织元素内容和页面结构。',
         exampleCodeGroup: 'divider',
-        padding: const EdgeInsets.only(top: 16, bottom: 16),
+        // padding: const EdgeInsets.only(top: 16, bottom: 16),
         children: [
           ExampleModule(title: '组件类型', children: [
             ExampleItem(desc: '水平分割线', builder: _verticalDivider),
@@ -21,16 +21,20 @@ class TDDividerPage extends StatelessWidget {
             ExampleItem(desc: '垂直分割', builder: _horizontalTextDivider),
           ]),
           ExampleModule(title: '组件状态', children: [
-            ExampleItem(
-                desc: '虚线样式',
-                builder: _dashedDivider),
+            ExampleItem(desc: '虚线样式', builder: _dashedDivider),
           ])
         ]);
   }
 
   @Demo(group: 'divider')
   Widget _verticalDivider(BuildContext context) {
-    return const TDDivider();
+    return SizedBox(
+      height: 20,
+      child: Container(
+        alignment: Alignment.center,
+        child: const TDDivider(),
+      ),
+    );
   }
 
   @Demo(group: 'divider')
@@ -67,7 +71,9 @@ class TDDividerPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const SizedBox(width: 16,),
+          const SizedBox(
+            width: 16,
+          ),
           TDText(
             '文字信息',
             textColor: TDTheme.of(context).fontGyColor1.withOpacity(0.9),
@@ -77,7 +83,8 @@ class TDDividerPage extends StatelessWidget {
             height: 12,
             margin: EdgeInsets.only(left: 16, right: 16),
           ),
-          TDText('文字信息', textColor: TDTheme.of(context).fontGyColor1.withOpacity(0.9)),
+          TDText('文字信息',
+              textColor: TDTheme.of(context).fontGyColor1.withOpacity(0.9)),
           const TDDivider(
             width: 0.5,
             height: 12,
@@ -85,7 +92,8 @@ class TDDividerPage extends StatelessWidget {
             isDashed: true,
             direction: Axis.vertical,
           ),
-          TDText('文字信息', textColor: TDTheme.of(context).fontGyColor1.withOpacity(0.9)),
+          TDText('文字信息',
+              textColor: TDTheme.of(context).fontGyColor1.withOpacity(0.9)),
         ],
       ),
     );
@@ -98,7 +106,9 @@ class TDDividerPage extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
-        TDDivider(isDashed: true,),
+        TDDivider(
+          isDashed: true,
+        ),
         SizedBox(
           height: 20,
         ),

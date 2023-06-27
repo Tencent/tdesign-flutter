@@ -1,0 +1,22 @@
+
+  Widget _buildRow(BuildContext context, List<Widget> stepperItems) {
+    final theme = TDTheme.of(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.whiteColor1,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: stepperItems
+              .map((item) => SizedBox(
+                    width: (MediaQuery.of(context).size.width - 32) / 3,
+                    child: item,
+                  ))
+              .toList(),
+        ),
+      ),
+    );
+  }

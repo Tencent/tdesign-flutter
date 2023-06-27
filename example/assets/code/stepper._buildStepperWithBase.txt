@@ -1,5 +1,5 @@
 
-Widget _buildStepperWithBase(BuildContext context) {
+  Widget _buildStepperWithBase(BuildContext context) {
     return _buildRow(context, [
       const TDStepper(
         theme: TDStepperTheme.filled,

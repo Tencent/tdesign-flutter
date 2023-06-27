@@ -4,7 +4,7 @@
       children: [
         TDInput(
           leftLabel: '标签文字',
-          controller: controller,
+          controller: controller[7],
           backgroundColor: Colors.white,
           hintText: '请输入文字',
           rightBtn: Icon(
@@ -13,6 +13,13 @@
           ),
           onBtnTap: () {
             TDToast.showText('点击右侧按钮', context: context);
+          },
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller[7].clear();
+            setState(() {});
           },
         ),
         const SizedBox(

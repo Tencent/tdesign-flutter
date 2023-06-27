@@ -309,10 +309,10 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
                 color: TDTheme.of(context).brandNormalColor),
-            child: TDText(
-              '操作按钮',
-              font: TDTheme.of(context).fontBodyMedium,
-              style: const TextStyle(color: Colors.white),
+            child: const TDButton(
+              text: '操作按钮',
+              size: TDButtonSize.extraSmall,
+              theme: TDButtonTheme.primary
             ),
           ),
           onBtnTap: () {

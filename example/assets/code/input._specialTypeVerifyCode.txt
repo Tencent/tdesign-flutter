@@ -5,7 +5,7 @@
         TDInput(
           type: TDInputType.normal,
           size: TDInputSize.small,
-          controller: controller,
+          controller: controller[13],
           leftLabel: '验证码',
           hintText: '输入验证码',
           backgroundColor: Colors.white,
@@ -14,7 +14,7 @@
             children: [
               Container(
                 width: 0.5,
-                height: 36,
+                height: 24,
                 color: TDTheme.of(context).grayColor3,
               ),
               const SizedBox(
@@ -27,6 +27,7 @@
               )
             ],
           ),
+          needClear: false,
           onBtnTap: () {
             TDToast.showText('点击更换验证码', context: context);
           },

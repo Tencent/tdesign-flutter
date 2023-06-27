@@ -4,7 +4,6 @@
       leftLabel: '标签文字',
       readOnly: true,
       // 不可编辑文字 则不必带入controller
-      //controller: controller,
       backgroundColor: Colors.white,
       hintText: '不可编辑文字',
     );
