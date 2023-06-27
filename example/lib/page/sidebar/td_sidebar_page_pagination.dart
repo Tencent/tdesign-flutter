@@ -40,6 +40,7 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
 
   @Demo(group: 'sideBar')
   Widget _buildPaginationSideBar(BuildContext context) {
+    // 切页用法
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 

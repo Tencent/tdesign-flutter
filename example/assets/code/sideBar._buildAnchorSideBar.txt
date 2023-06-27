@@ -1,5 +1,6 @@
 
   Widget _buildAnchorSideBar(BuildContext context) {
+    // 锚点用法
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 
