@@ -19,11 +19,12 @@
 # navbar
 ./bin/demo_tool generate --file ../lib/src/components/navbar/td_nav_bar.dart --name TDNavBar,TDNavBarItem, --folder-name navbar --output ../example/assets/api/ --only-api
 # sidebar
+./bin/demo_tool generate --folder ../lib/src/components/sidebar --name TDSideBar,TDSideBarItem, --folder-name sidebar --output ../example/assets/api/ --only-api
 # steps
 # tabbar
-./bin/demo_tool generate --file ../lib/src/components/bottom_nav_bar/td_bottom_nav_bar.dart --name TDBottomNavBar,IconTextTypeConfig,IconTypeConfig,BadgeConfig,TDBottomNavBarTabConfig,TDBottomNavBarPopUpBtnConfig,TDBottomNavBarPopUpShapeConfig,PopUpMenuItem --folder-name bottom_nav_bar --output ../example/assets/api/ --only-api
+./bin/demo_tool generate --file ../lib/src/components/tabbar/td_bottom_tab_bar.dart --name TDBottomTabBar,IconTextTypeConfig,IconTypeConfig,BadgeConfig,TDBottomTabBarTabConfig,TDBottomTabBarPopUpBtnConfig,TDBottomTabBarPopUpShapeConfig,PopUpMenuItem --folder-name tabbar --output ../example/assets/api/ --only-api
 # tabs
-./bin/demo_tool generate --folder ../lib/src/components/tabbar --name TDTabBar,TDTab,TDTabBarView --folder-name tabbar --output ../example/assets/api/ --only-api
+./bin/demo_tool generate --folder ../lib/src/components/tabs --name TDTabBar,TDTab,TDTabBarView --folder-name tabs --output ../example/assets/api/ --only-api
 
 
 # 输入
