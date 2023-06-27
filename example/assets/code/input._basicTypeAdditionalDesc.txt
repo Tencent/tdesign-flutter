@@ -3,9 +3,16 @@
     return TDInput(
       type: TDInputType.normal,
       leftLabel: '标签文字',
-      controller: controller,
+      controller: controller[4],
       hintText: '请输入文字',
       additionInfo: '辅助说明',
       backgroundColor: Colors.white,
+      onChanged: (text) {
+        setState(() {});
+      },
+      onClearTap: () {
+        controller[4].clear();
+        setState(() {});
+      },
     );
   }

@@ -2,12 +2,19 @@
   Widget _basicTypeWithHandleIconThree(BuildContext context) {
     return TDInput(
       leftLabel: '标签文字',
-      controller: controller,
+      controller: controller[9],
       backgroundColor: Colors.white,
       hintText: '请输入文字',
       rightBtn: Icon(TDIcons.user_avatar, color: TDTheme.of(context).fontGyColor3,),
       onBtnTap: () {
         TDToast.showText('点击操作按钮', context: context);
+      },
+      onChanged: (text) {
+        setState(() {});
+      },
+      onClearTap: () {
+        controller[9].clear();
+        setState(() {});
       },
     );
   }

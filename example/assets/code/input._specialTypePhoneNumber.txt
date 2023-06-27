@@ -4,25 +4,38 @@
       children: [
         TDInput(
           type: TDInputType.normal,
-          controller: controller,
+          controller: controller[14],
           leftLabel: '手机号',
           hintText: '输入手机号',
           backgroundColor: Colors.white,
-          rightBtn: Row(
-            children: [
-              Container(
-                width: 0.5,
-                height: 24,
-                color: TDTheme.of(context).grayColor3,
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              TDText('发送验证码', textColor: TDTheme.of(context).brandNormalColor),
-            ],
+          rightBtn: SizedBox(
+            width: 97.5,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: Container(
+                    width: 0.5,
+                    height: 24,
+                    color: TDTheme.of(context).grayColor3,
+                  ),
+                ),
+                _countdownTime > 0
+                    ? TDText('${countDownText}(${_countdownTime}秒)', textColor: TDTheme.of(context).fontGyColor4,)
+                    : TDText(confirmText, textColor: TDTheme.of(context).brandNormalColor),
+              ],
+            ),
           ),
+          needClear: false,
           onBtnTap: () {
-            TDToast.showText('点击了发送验证码', context: context);
+            if (_countdownTime == 0) {
+              TDToast.showText('点击了发送验证码', context: context);
+              setState(() {
+                _countdownTime = 60;
+              });
+              startCountdownTimer();
+            }
           },
         ),
         const SizedBox(

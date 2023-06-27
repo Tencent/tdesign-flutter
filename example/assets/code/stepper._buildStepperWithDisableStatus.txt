@@ -1,5 +1,5 @@
 
-Widget _buildStepperWithDisableStatus(BuildContext context) {
+  Widget _buildStepperWithDisableStatus(BuildContext context) {
     return _buildRow(context, [
       const TDStepper(
         theme: TDStepperTheme.filled,

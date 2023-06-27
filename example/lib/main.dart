@@ -109,12 +109,12 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
         text: 'TabBar 标签栏',
-        name: 'tabbar',
+        name: 'bottom_nav_bar',
         pageBuilder:
             _wrapInheritedTheme((context) => const TDBottomNavBarPage())),
     ExamplePageModel(
         text: 'Tabs 选项卡',
-        name: 'tabs',
+        name: 'tabbar',
         pageBuilder: _wrapInheritedTheme((context) => const TDTabBarPage())),
   ],
   '输入': [

@@ -15,8 +15,10 @@ class _TDIconsData extends IconData {
   final String name;
 }
 
-@immutable
+
 class TDIcons {
+
+  /// 私有构造方法，不支持外部创建，仅提供静态常量给外部使用
   const TDIcons._();
 
   static const add_circle = _TDIconsData(0xE001, 'add_circle');
