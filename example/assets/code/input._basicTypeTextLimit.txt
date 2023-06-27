@@ -1,0 +1,19 @@
+
+  Widget _basicTypeTextLimit(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          type: TDInputType.normal,
+          leftLabel: '标签文字',
+          controller: controller,
+          hintText: '请输入文字',
+          maxNum: 10,
+          additionInfo: '最大输入10个字符',
+          backgroundColor: Colors.white,
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }
