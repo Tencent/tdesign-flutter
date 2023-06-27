@@ -96,7 +96,7 @@ class _ExamplePageState extends State<ExamplePage> {
                 _buildNavBar(),
                 Expanded(
                     child: widget.showSingleChild && widget.singleChild != null
-                        ? widget.singleChild!
+                        ? _singleChild()
                         : ListView.builder(
                             shrinkWrap: true,
                             physics: const BouncingScrollPhysics(),
@@ -139,6 +139,33 @@ class _ExamplePageState extends State<ExamplePage> {
                           )),
               ],
             )));
+  }
+
+  Widget _singleChild(){
+    if(!WebMdTool.needGenerateWebMd){
+      return widget.singleChild!;
+    }
+    return Stack(
+      children: [
+        widget.singleChild!,
+        Positioned(
+          left: 16,
+            right: 16,
+            bottom: 0,
+            child: TDButton(
+          text: '生成Web使用md',
+          type: TDButtonType.fill,
+          onTap: () => WebMdTool.generateWebMd(
+              model: model,
+              description: widget.desc,
+              exampleCodeGroup:
+              widget.exampleCodeGroup,
+              exampleModuleList:
+              widget.children,
+              testList: widget.test),
+        )),
+      ],
+    );
   }
 
   ExampleItem _buildTestExampleItem() =>
