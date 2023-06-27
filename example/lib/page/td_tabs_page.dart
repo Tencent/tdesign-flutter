@@ -4,14 +4,14 @@ import 'package:tdesign_flutter/td_export.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDTabBarPage extends StatefulWidget {
-  const TDTabBarPage({Key? key}) : super(key: key);
+class TDTabsPage extends StatefulWidget {
+  const TDTabsPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TDTabBarPageState();
+  State<StatefulWidget> createState() => _TDTabsPageState();
 }
 
-class _TDTabBarPageState extends State<TDTabBarPage>
+class _TDTabsPageState extends State<TDTabsPage>
     with TickerProviderStateMixin {
   TabController? _tabController1;
   TabController? _tabController2;
