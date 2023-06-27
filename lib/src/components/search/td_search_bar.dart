@@ -189,14 +189,10 @@ class _TDSearchBarState extends State<TDSearchBar>
                     const SizedBox(
                       width: 12,
                     ),
-                    Visibility(
-                      visible: _status == _TDSearchBarStatus.focused ||
-                          controller.text.isNotEmpty,
-                      child: Icon(
-                        TDIcons.search,
-                        size: widget.mediumStyle ? 20 : 24,
-                        color: TDTheme.of(context).fontGyColor3,
-                      ),
+                    Icon(
+                      TDIcons.search,
+                      size: widget.mediumStyle ? 20 : 24,
+                      color: TDTheme.of(context).fontGyColor3,
                     ),
                     const Padding(padding: EdgeInsets.only(left: 3)),
                     Expanded(
@@ -318,9 +314,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 12, right: 12),
-                    alignment: widget.alignment == TDSearchAlignment.left
-                        ? Alignment.centerLeft
-                        : Alignment.center,
+                    alignment: Alignment.centerLeft,
                     child: _getPlaceHolderWidgets(),
                   )
                 ],
@@ -348,22 +342,33 @@ class _TDSearchBarState extends State<TDSearchBar>
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                        right: (widget.mediumStyle ? 20 : 24) / 2),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: box.maxWidth - 51,
-                      ),
-                      child: TDText(
-                        widget.placeHolder,
-                        font: getSize(context),
-                        textColor: TDTheme.of(context).fontGyColor3,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  )
+                  SizedBox(
+                    width: (widget.mediumStyle ? 20 : 24) / 2,
+                  ),
+                  Expanded(
+                      child: Row(
+                    mainAxisAlignment:
+                        widget.alignment == TDSearchAlignment.left
+                            ? MainAxisAlignment.start
+                            : MainAxisAlignment.center,
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: box.maxWidth - 51,
+                        ),
+                        child: TDText(
+                          widget.placeHolder,
+                          font: getSize(context),
+                          textColor: TDTheme.of(context).fontGyColor3,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    ],
+                  )),
+                  const SizedBox(
+                    width: 6,
+                  ),
                 ],
               ),
             ))
@@ -380,21 +385,32 @@ class _TDSearchBarState extends State<TDSearchBar>
               size: widget.mediumStyle ? 20 : 24,
               color: TDTheme.of(context).fontGyColor3,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 3),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: box.maxWidth - 51,
-                ),
-                child: TDText(
-                  widget.placeHolder,
-                  font: getSize(context),
-                  textColor: TDTheme.of(context).fontGyColor3,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            )
+            const SizedBox(
+              width: 3,
+            ),
+            Expanded(
+                child: Row(
+              mainAxisAlignment: widget.alignment == TDSearchAlignment.left
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.center,
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: box.maxWidth - 51,
+                  ),
+                  child: TDText(
+                    widget.placeHolder,
+                    font: getSize(context),
+                    textColor: TDTheme.of(context).fontGyColor3,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
+              ],
+            )),
+            const SizedBox(
+              width: 6,
+            ),
           ],
         );
       }
