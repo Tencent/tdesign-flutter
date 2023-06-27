@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
-import 'package:tdesign_flutter_example/page/td_slider_page.dart';
 
 import 'base/example_base.dart';
 import 'base/example_route.dart';
@@ -27,6 +26,8 @@ import 'page/td_radio_page.dart';
 import 'page/td_radius_page.dart';
 import 'page/td_refresh_page.dart';
 import 'page/td_search_bar_page.dart';
+import 'page/td_stepper_page.dart';
+import 'page/td_slider_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
 import 'page/td_tabbar_page.dart';
@@ -164,8 +165,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Stepper 步进器',
         name: 'stepper',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDStepperPage())),
     ExamplePageModel(
         text: 'Switch 开关',
         name: 'switch',
@@ -361,13 +361,21 @@ class MyApp extends StatelessWidget {
                 primary: TDTheme.of(context).brandNormalColor)),
         home: PlatformUtil.isWeb ? null : const MyHomePage(title: 'TDesgin Flutter 组件库'),
         onGenerateRoute: TDExampleRoute.onGenerateRoute,
-        // // TODO:所有路径指向首页，需区分
-        routes: {
-          for (var model in examplePageList)
-            model.name: (context) => model.pageBuilder.call(context, model)
-        }..putIfAbsent('/', () => (context) => const TDButtonPage()),
+        routes:  _getRoutes(),
       ),
     );
+  }
+
+  Map<String, WidgetBuilder> _getRoutes() {
+    if(PlatformUtil.isWeb) {
+      return {
+        for (var model in examplePageList)
+          model.name: (context) => model.pageBuilder.call(context, model)
+      }
+        ..putIfAbsent('/', () => (context) => const TDButtonPage());
+    } else {
+      return const {};
+    }
   }
 }
 
