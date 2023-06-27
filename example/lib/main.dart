@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
+
 import 'base/example_base.dart';
 import 'base/example_route.dart';
 import 'base/web_md_tool.dart';
@@ -31,6 +32,7 @@ import 'page/td_radio_page.dart';
 import 'page/td_radius_page.dart';
 import 'page/td_refresh_page.dart';
 import 'page/td_search_bar_page.dart';
+import 'page/td_stepper_page.dart';
 import 'page/td_slider_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
@@ -51,7 +53,6 @@ PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
 /// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TDTextPage()
 List<ExamplePageModel> examplePageList = [];
 
-/// 是否显示TODO组件
 var _kShowTodoComponent = false;
 
 Map<String, List<ExamplePageModel>> exampleMap = {
@@ -174,8 +175,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Stepper 步进器',
         name: 'stepper',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDStepperPage())),
     ExamplePageModel(
         text: 'Switch 开关',
         name: 'switch',
@@ -377,6 +377,12 @@ void main() {
     systemNavigationBarColor: Colors.transparent,
     systemNavigationBarDividerColor: Colors.transparent,
   ));
+
+  exampleMap.forEach((key, value) {
+    value.forEach((model) {
+      examplePageList.add(model);
+    });
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -395,15 +401,23 @@ class MyApp extends StatelessWidget {
             // extensions: [TDThemeData.defaultData().copyWith(colorMap: {'brandNormalColor':Colors.yellow})],
             colorScheme: ColorScheme.light(
                 primary: TDTheme.of(context).brandNormalColor)),
-        home: const MyHomePage(title: 'TDesgin Flutter 组件库'),
+        home: PlatformUtil.isWeb ? null : const MyHomePage(title: 'TDesgin Flutter 组件库'),
         onGenerateRoute: TDExampleRoute.onGenerateRoute,
-        // // TODO:所有路径指向首页，需区分
-        // routes: {
-        //   for (var model in examplePageList)
-        //     model.name: (context) => model.pageBuilder.call(context, model)
-        // },
+        routes:  _getRoutes(),
       ),
     );
+  }
+
+  Map<String, WidgetBuilder> _getRoutes() {
+    if(PlatformUtil.isWeb) {
+      return {
+        for (var model in examplePageList)
+          model.name: (context) => model.pageBuilder.call(context, model)
+      }
+        ..putIfAbsent('/', () => (context) => const TDButtonPage());
+    } else {
+      return const {};
+    }
   }
 }
 
