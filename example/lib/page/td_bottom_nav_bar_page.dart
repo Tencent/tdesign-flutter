@@ -133,45 +133,7 @@ class TDBottomNavBarPage extends StatelessWidget {
     test: [
       ExampleItem(
           desc: '自定义上边线样式',
-          builder: (context){
-        return TDBottomNavBar(
-          TDBottomNavBarBasicType.iconText,
-          topBorder: const BorderSide(color: Colors.red, width: 5),
-          componentType: TDBottomNavBarComponentType.normal,
-          useVerticalDivider: false,
-          navigationTabs: [
-            TDBottomNavBarTabConfig(
-              iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
-              badgeConfig: BadgeConfig(
-                showBage: true,
-                tdBadge: const TDBadge(TDBadgeType.redPoint),
-                badgeTopOffset: -2,
-                badgeRightOffset: -10,
-              ),
-              tabText: '标签',
-              onTap: () {
-                onTapTab(context, '标签1');
-              },
-            ),
-            TDBottomNavBarTabConfig(
-              iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
-              tabText: '标签',
-              onTap: () {
-                onTapTab(context, '标签2');
-              },
-            ),
-            TDBottomNavBarTabConfig(
-              iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
-              tabText: '标签',
-              onTap: () {
-                onTapTab(context, '标签3');
-              },
-            ),
-          ],
-        );})
+          builder: _buildCustomTopStyle)
     ],
     );
   }
@@ -720,6 +682,48 @@ class TDBottomNavBarPage extends StatelessWidget {
         TDBottomNavBarTabConfig(
           iconTextTypeConfig:
               IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签3');
+          },
+        ),
+      ],
+    );
+  }
+
+  @Demo(group: 'bottomNavBar')
+  Widget _buildCustomTopStyle(BuildContext context) {
+    return TDBottomNavBar(
+      TDBottomNavBarBasicType.iconText,
+      topBorder: const BorderSide(color: Colors.red, width: 5),
+      componentType: TDBottomNavBarComponentType.normal,
+      useVerticalDivider: false,
+      navigationTabs: [
+        TDBottomNavBarTabConfig(
+          iconTextTypeConfig:
+          IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+          badgeConfig: BadgeConfig(
+            showBage: true,
+            tdBadge: const TDBadge(TDBadgeType.redPoint),
+            badgeTopOffset: -2,
+            badgeRightOffset: -10,
+          ),
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签1');
+          },
+        ),
+        TDBottomNavBarTabConfig(
+          iconTextTypeConfig:
+          IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签2');
+          },
+        ),
+        TDBottomNavBarTabConfig(
+          iconTextTypeConfig:
+          IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签3');
