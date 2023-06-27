@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../../td_export.dart';
 import 'td_horizontal_tab_bar.dart';
-import 'td_vertical_tab_bar.dart';
 
 bool isCustomStyle = false;
 
@@ -40,7 +39,6 @@ class TDTabBar extends StatefulWidget {
       this.physics,
       this.onTap,
       this.outlineType = TDTabBarOutlineType.filled,
-      this.isVertical = false,
       this.showIndicator = false})
       : assert(
           backgroundColor == null || decoration == null,
@@ -109,9 +107,6 @@ class TDTabBar extends StatefulWidget {
   /// tab间距
   final EdgeInsetsGeometry? labelPadding;
 
-  /// 是否是竖向
-  final bool isVertical;
-
   /// 选项卡样式
   final TDTabBarOutlineType outlineType;
 
@@ -122,15 +117,12 @@ class TDTabBar extends StatefulWidget {
 class _TDTabBarState extends State<TDTabBar> {
   /// 默认高度
   static const double _defaultHeight = 48;
-  static const double _defaultVerticalHeight = 54;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: widget.width ?? MediaQuery.of(context).size.width,
-      height: widget.isVertical
-          ? widget.height ?? _defaultVerticalHeight * widget.tabs.length
-          : widget.height ?? _defaultHeight,
+      height: widget.height ?? _defaultHeight,
       decoration: widget.decoration ??
           (widget.outlineType == TDTabBarOutlineType.card
               ? BoxDecoration(
@@ -140,30 +132,7 @@ class _TDTabBarState extends State<TDTabBar> {
                   border: Border(
                       bottom: BorderSide(
                           color: TDTheme.of(context).grayColor3, width: 0.5)))),
-      child: widget.isVertical
-          ? VerticalTabBar(
-              selectedBackgroundColor: TDTheme.of(context).whiteColor1,
-              physics: widget.physics,
-              isScrollable: widget.isScrollable,
-              indicator: widget.indicator ?? _getIndicator(context),
-              indicatorColor:
-                  widget.indicatorColor ?? TDTheme.of(context).brandNormalColor,
-              unselectedLabelColor: widget.unselectedLabelColor ??
-                  TDTheme.of(context).fontGyColor2,
-              labelColor:
-                  widget.labelColor ?? TDTheme.of(context).brandNormalColor,
-              labelStyle: widget.labelStyle ?? _getLabelStyle(context),
-              labelPadding: widget.labelPadding ?? const EdgeInsets.all(8),
-              unselectedLabelStyle: widget.unselectedLabelStyle ??
-                  _getUnSelectLabelStyle(context),
-              tabs: widget.tabs,
-              indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
-              controller: widget.controller,
-              onTap: (index) {
-                widget.onTap?.call(index);
-              },
-            )
-          : TDHorizontalTabBar(
+      child: TDHorizontalTabBar(
               physics: widget.physics,
               isScrollable: widget.isScrollable,
               indicator: widget.indicator ?? _getIndicator(context),
@@ -204,12 +173,7 @@ class _TDTabBarState extends State<TDTabBar> {
 
   Decoration _getIndicator(BuildContext context) {
     return widget.showIndicator
-        ? widget.isVertical
-            ? TDTabBarVerticalIndicator(
-                context: context,
-                indicatorHeight: widget.indicatorHeight,
-                indicatorWidth: widget.indicatorWidth)
-            : TDTabBarIndicator(
+        ? TDTabBarIndicator(
                 context: context,
                 indicatorHeight: widget.indicatorHeight,
                 indicatorWidth: widget.indicatorWidth)

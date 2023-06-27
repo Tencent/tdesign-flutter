@@ -4,7 +4,7 @@
       type: TDInputType.special,
       controller: controller,
       leftLabel: '数量',
-      hintText: '输入数量',
+      hintText: '填写个数',
       backgroundColor: Colors.white,
       textAlign: TextAlign.end,
       rightWidget: TDText('个', textColor: TDTheme.of(context).fontGyColor1),
