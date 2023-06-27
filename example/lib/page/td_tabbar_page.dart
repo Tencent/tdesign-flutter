@@ -256,8 +256,7 @@ class _TDTabBarPageState extends State<TDTabBarPage>
               controller: tabController,
               showIndicator: true,
               backgroundColor: Colors.white,
-              isScrollable: false,
-              isVertical: false),
+              isScrollable: false,),
           Container(
             height: 120,
             color: Colors.white,
