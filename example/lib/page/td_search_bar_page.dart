@@ -26,11 +26,11 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
             title: '组件类型',
             children: [
               ExampleItem(desc: '基础搜索框', builder: _buildDefaultSearchBar),
+              ExampleItem(desc: '获取焦点后显示取消按钮', builder: _buildFocusSearchBar),
             ],
           ),
           ExampleModule(title: '组件样式', children: [
-            ExampleItem(desc: '搜索框形状', builder: _buildSquareSearchBar),
-            ExampleItem(builder: _buildRoundSearchBar),
+            ExampleItem(desc: '搜索框形状', builder: _buildSearchBarWithShape),
             ExampleItem(desc: '默认状态其他对齐方式', builder: _buildCenterSearchBar),
           ])
         ]);
@@ -38,39 +38,68 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
 
   @Demo(group: 'search')
   Widget _buildDefaultSearchBar(BuildContext context) {
-    return TDSearchBar(
-      placeHolder: '搜索预设文案',
-      onTextChanged: (String text) {
-        setState(() {
-          inputText = text;
-        });
-      },
+    return _buildColumnWidgets(
+        context,
+        TDSearchBar(
+          placeHolder: '搜索预设文案',
+          onTextChanged: (String text) {
+            setState(() {
+              inputText = text;
+            });
+          },
+        ));
+  }
+
+  @Demo(group: 'search')
+  Widget _buildColumnWidgets(BuildContext context, Widget widget) {
+    return Column(
+      children: [
+        widget,
+        const SizedBox(
+          height: 16,
+        ),
+      ],
     );
   }
 
   @Demo(group: 'search')
-  Widget _buildSquareSearchBar(BuildContext context) {
-    return TDSearchBar(
+  Widget _buildFocusSearchBar(BuildContext context) {
+    return const TDSearchBar(
       placeHolder: '搜索预设文案',
-      style: TDSearchStyle.square,
-      onTextChanged: (String text) {
-        setState(() {
-          inputText = text;
-        });
-      },
+      needCancel: true,
+      autoFocus: true,
     );
   }
 
   @Demo(group: 'search')
-  Widget _buildRoundSearchBar(BuildContext context) {
-    return TDSearchBar(
-      placeHolder: '搜索预设文案',
-      style: TDSearchStyle.round,
-      onTextChanged: (String text) {
-        setState(() {
-          inputText = text;
-        });
-      },
+  Widget _buildSearchBarWithShape(BuildContext context) {
+    return Column(
+      children: [
+        _buildColumnWidgets(
+          context,
+          TDSearchBar(
+            placeHolder: '搜索预设文案',
+            style: TDSearchStyle.square,
+            onTextChanged: (String text) {
+              setState(() {
+                inputText = text;
+              });
+            },
+          ),
+        ),
+        _buildColumnWidgets(
+          context,
+          TDSearchBar(
+            placeHolder: '搜索预设文案',
+            style: TDSearchStyle.round,
+            onTextChanged: (String text) {
+              setState(() {
+                inputText = text;
+              });
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -86,5 +115,4 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
       },
     );
   }
-  
 }
