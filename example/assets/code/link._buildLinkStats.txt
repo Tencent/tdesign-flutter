@@ -1,0 +1,4 @@
+
+  Widget _buildLinkStats(BuildContext context) {
+    return _buildLinkWithStyles(TDLinkState.normal);
+  }

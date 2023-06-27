@@ -1,0 +1,9 @@
+
+  Widget _withPrefixIcon(BuildContext context) {
+    return Container(
+        color: TDTheme.of(context).whiteColor1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _buildLinksWithType(TDLinkType.withPrefixIcon),
+        ));
+  }

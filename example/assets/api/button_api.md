@@ -27,7 +27,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | key |  | - |  |
-| content | String? | - | 文本内容 |
+| text | String? | - | 文本内容 |
 | size | TDButtonSize | TDButtonSize.medium | 尺寸 |
 | type | TDButtonType | TDButtonType.fill | 类型：填充，描边，文字 |
 | shape | TDButtonShape | TDButtonShape.rectangle | 形状：圆角，胶囊，方形，圆形，填充 |
@@ -44,6 +44,7 @@
 | height | double? | - | 自定义高度 |
 | onTap | TDButtonEvent? | - | 点击事件 |
 | icon | IconData? | - | 图标icon |
+| iconWidget | Widget? | - | 自定义图标icon控件 |
 | onLongPress | TDButtonEvent? | - | 长按事件 |
 | margin | EdgeInsetsGeometry? | - | 自定义margin |
 | padding | EdgeInsetsGeometry? | - | 自定义padding |
