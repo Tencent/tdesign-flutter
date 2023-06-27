@@ -1,8 +1,0 @@
-
-  Widget _buildSizeMedium(BuildContext context) {
-    return const TDLoading(
-      size: TDLoadingSize.medium,
-      icon: TDLoadingIcon.circle,
-      text: '加载中…',
-    );
-  }

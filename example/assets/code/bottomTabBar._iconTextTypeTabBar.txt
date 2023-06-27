@@ -1,16 +1,16 @@
 
-  Widget _iconTextTypeNavBar(BuildContext context) {
-    return TDBottomNavBar(TDBottomNavBarBasicType.iconText,
+  Widget _iconTextTypeTabBar(BuildContext context) {
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
         useVerticalDivider: false,
         navigationTabs: [
-          TDBottomNavBarTabConfig(
+          TDBottomTabBarTabConfig(
             iconTextTypeConfig:
                 IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
             onTap: () {
               onTapTab(context, '标签1');
             },
           ),
-          TDBottomNavBarTabConfig(
+          TDBottomTabBarTabConfig(
             iconTextTypeConfig:
                 IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
             onTap: () {

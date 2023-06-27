@@ -1,30 +1,24 @@
 
-  Widget _buildCustomSideBar(BuildContext context) {
+  Widget _buildIconSideBar(BuildContext context) {
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 
-    for (var i = 0; i < 100; i++) {
-      list.add(SideItemProps(
-        index: i,
-        label: '选项',
-        value: i,
-      ));
-      pages.add(getPageDemo(i));
+    for (var i = 0; i < 20; i++) {
+      list.add(
+          SideItemProps(index: i, label: '选项', value: i, icon: TDIcons.app));
+      pages.add(getAnchorDemo(i));
     }
+
+    pages.add(Container(
+      height: MediaQuery.of(context).size.height - itemHeight,
+      decoration: const BoxDecoration(color: Colors.white),
+    ));
 
     list[1].badge = const TDBadge(TDBadgeType.redPoint);
     list[2].badge = const TDBadge(
       TDBadgeType.message,
       count: '8',
     );
-    list[1].textStyle = const TextStyle(color: Colors.green);
-
-    void setCurrentValue(int value) {
-      _pageController.jumpToPage(value);
-      if (currentValue != value) {
-        currentValue = value;
-      }
-    }
 
     var demoHeight = MediaQuery.of(context).size.height;
 
@@ -42,20 +36,20 @@
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
-                    textStyle: ele.textStyle,
                     icon: ele.icon))
                 .toList(),
-            onSelected: setCurrentValue,
+            onChanged: onChanged,
+            onSelected: onSelected,
           ),
         ),
         Expanded(
             child: SizedBox(
           height: demoHeight,
-          child: PageView(
-            controller: _pageController,
-            scrollDirection: Axis.vertical,
-            children: pages,
-            physics: const NeverScrollableScrollPhysics(),
+          child: SingleChildScrollView(
+            controller: _demoScroller,
+            child: Column(
+              children: pages,
+            ),
           ),
         ))
       ],

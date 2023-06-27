@@ -1,8 +1,0 @@
-
-  Widget _buildCircleOutlinTag(BuildContext context) {
-    return const TDTag(
-      '标签文字',
-      isCircle: true,
-      isOutline: true,
-    );
-  }
