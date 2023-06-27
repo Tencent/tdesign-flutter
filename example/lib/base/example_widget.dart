@@ -53,7 +53,7 @@ class ExamplePage extends StatefulWidget {
   final Color? backgroundColor;
 
   /// 示例代码路径
-  final String? exampleCodeGroup;
+  final String exampleCodeGroup;
 
   /// 测试组件列表
   final List<ExampleItem> test;
@@ -120,7 +120,9 @@ class _ExamplePageState extends State<ExamplePage> {
                                                   widget.exampleCodeGroup,
                                               exampleModuleList:
                                                   widget.children,
-                                              testList: widget.test),
+                                              testList: widget.test,
+                                            singleChild: widget.showSingleChild ? widget.singleChild : null
+                                          ),
                                         ),
                                       )
                                     : Container();
@@ -145,7 +147,8 @@ class _ExamplePageState extends State<ExamplePage> {
     if(!WebMdTool.needGenerateWebMd){
       return widget.singleChild!;
     }
-    return Stack(
+    return ExampleItemInherited(
+     child:Stack(
       children: [
         widget.singleChild!,
         Positioned(
@@ -162,10 +165,12 @@ class _ExamplePageState extends State<ExamplePage> {
               widget.exampleCodeGroup,
               exampleModuleList:
               widget.children,
-              testList: widget.test),
+              testList: widget.test,
+              singleChild: widget.showSingleChild ? widget.singleChild : null),
         )),
       ],
-    );
+    ),
+    path: widget.exampleCodeGroup,);
   }
 
   ExampleItem _buildTestExampleItem() =>
@@ -459,6 +464,7 @@ class _CodeWrapperState extends State<CodeWrapper> {
       list.add(codeString!);
       WebMdTool.manualExampleCode[modelTheme.path] = list;
     }
+
   }
 
   @override
