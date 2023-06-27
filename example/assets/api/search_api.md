@@ -15,4 +15,5 @@
 | padding | EdgeInsets | const EdgeInsets.fromLTRB(16, 8, 16, 8) | 内部填充 |
 | autoFocus | bool | false | 是否自动获取焦点 |
 | mediumStyle | bool | false | 是否在导航栏中的样式 |
+| needCancel | bool | true | 是否需要取消按钮 |
 | backgroundColor | Color? | Colors.white | 背景颜色 |

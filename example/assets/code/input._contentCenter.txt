@@ -1,14 +1,13 @@
 
-  Widget _inputStatusAdditionInfo(BuildContext context) {
+  Widget _contentCenter(BuildContext context) {
     return Column(
       children: [
         TDInput(
-          leftLabel: '标签文字',
+          leftLabel: '居中',
           controller: controller,
           backgroundColor: Colors.white,
+          contentAlignment: TextAlign.center,
           hintText: '请输入文字',
-          additionInfo: '错误提示说明',
-          additionInfoColor: TDTheme.of(context).errorColor6,
         ),
         const SizedBox(
           height: 16,
