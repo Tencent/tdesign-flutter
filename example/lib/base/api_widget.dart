@@ -74,7 +74,11 @@ class _ApiWidgetState extends State<ApiWidget> {
   }
 
   Future<String> getApiData() async {
-    const defaultResult = '加载失败';
+    const defaultResult = '''
+## API
+
+暂无对应api
+    ''';
     if(widget.apiName == lastApiName && result != null && result != defaultResult){
       return result!;
     }
