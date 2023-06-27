@@ -8,9 +8,9 @@
 | image | Image | - | 图片 |
 | imagePosition | TDDialogImagePosition? | TDDialogImagePosition.top | 图片位置 |
 | backgroundColor | Color | Colors.white | 背景颜色 |
-| radius | double | 8.0 | 圆角 |
+| radius | double | 12.0 | 圆角 |
 | title | String? | - | 标题 |
-| titleColor | Color | Colors.black | 标题颜色 |
+| titleColor | Color | const Color(0xE6000000) | 标题颜色 |
 | content | String? | - | 内容 |
 | contentColor | Color? | - | 内容颜色 |
 | leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
@@ -43,9 +43,9 @@
 | key |  | - |  |
 | action |  Function()? | - | 点击 |
 | backgroundColor | Color | Colors.white | 背景颜色 |
-| radius | double | 8.0 | 圆角 |
+| radius | double | 12.0 | 圆角 |
 | title | String? | - | 标题 |
-| titleColor | Color | Colors.black | 标题颜色 |
+| titleColor | Color | const Color(0xE6000000) | 标题颜色 |
 | content | String? | - | 内容 |
 | contentColor | Color? | - | 内容颜色 |
 | contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
@@ -64,9 +64,9 @@
 | key |  | - |  |
 | textEditingController | TextEditingController | - | 输入controller |
 | backgroundColor | Color | Colors.white | 背景颜色 |
-| radius | double | 8.0 | 圆角 |
+| radius | double | 12.0 | 圆角 |
 | title | String? | - | 标题 |
-| titleColor | Color | Colors.black | 标题颜色 |
+| titleColor | Color | const Color(0xE6000000) | 标题颜色 |
 | content | String? | - | 内容 |
 | hintText | String? | '' | 输入提示 |
 | contentColor | Color? | - | 内容颜色 |
@@ -83,9 +83,9 @@
 | --- | --- | --- | --- |
 | key |  | - |  |
 | backgroundColor | Color | Colors.white | 背景颜色 |
-| radius | double | 8.0 | 圆角 |
+| radius | double | 12.0 | 圆角 |
 | title | String? | - | 标题 |
-| titleColor | Color | Colors.black | 标题颜色 |
+| titleColor | Color | const Color(0xE6000000) | 标题颜色 |
 | content | String? | - | 内容 |
 | contentColor | Color? | - | 内容颜色 |
 | contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
@@ -114,7 +114,7 @@
 | body | Widget | - | Dialog主体 |
 | showCloseButton | bool? | - | 显示右上角关闭按钮 |
 | backgroundColor | Color | Colors.white | 背景色 |
-| radius | double | 8.0 | 圆角 |
+| radius | double | 12.0 | 圆角 |
 
 ```
 ```
@@ -136,7 +136,7 @@
 | --- | --- | --- | --- |
 | key |  | - |  |
 | content | String | '当前弹窗内容' | 标题文字 |
-| contentColor | Color | const Color(0x66000000) | 标题颜色 |
+| contentColor | Color | const Color(0x99000000) | 标题颜色 |
 
 ```
 ```
@@ -148,6 +148,7 @@
 | key |  | - |  |
 | title | String? | - | 标题 |
 | titleColor | Color | Colors.black | 标题颜色 |
+| padding | EdgeInsetsGeometry? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容的内边距 |
 | content | String? | - | 内容 |
 | contentColor | Color? | - | 内容颜色 |
 | contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
