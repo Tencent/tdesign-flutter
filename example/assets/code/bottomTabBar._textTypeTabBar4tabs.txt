@@ -1,33 +1,27 @@
 
-  Widget _textTypeNavBar5tabs(BuildContext context) {
-    return TDBottomNavBar(TDBottomNavBarBasicType.text,
+  Widget _textTypeTabBar4tabs(BuildContext context) {
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
         useVerticalDivider: false,
         navigationTabs: [
-          TDBottomNavBarTabConfig(
+          TDBottomTabBarTabConfig(
             tabText: '标签',
             onTap: () {
               onTapTab(context, '标签1');
             },
           ),
-          TDBottomNavBarTabConfig(
+          TDBottomTabBarTabConfig(
             tabText: '标签',
             onTap: () {
               onTapTab(context, '标签1');
             },
           ),
-          TDBottomNavBarTabConfig(
+          TDBottomTabBarTabConfig(
             tabText: '标签',
             onTap: () {
               onTapTab(context, '标签1');
             },
           ),
-          TDBottomNavBarTabConfig(
-            tabText: '标签',
-            onTap: () {
-              onTapTab(context, '标签1');
-            },
-          ),
-          TDBottomNavBarTabConfig(
+          TDBottomTabBarTabConfig(
             tabText: '标签',
             onTap: () {
               onTapTab(context, '标签1');

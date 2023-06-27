@@ -1,8 +1,0 @@
-
-  Widget _buildWeeklyClickButton(BuildContext context) {
-    return TDButton(content: '弱按钮',
-      style: TDButtonStyle.weakly(),
-      onTap: onTap,
-      onLongPress: onLongPress,
-    );
-  }
