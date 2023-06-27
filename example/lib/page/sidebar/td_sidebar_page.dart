@@ -52,7 +52,7 @@ class TDSideBarPageState extends State<TDSideBarPage> {
         child: Column(
           children: [
             CodeWrapper(
-              builder: (_) => getCustomButtom(context, '锚点用法', 'SideBarAnchor'),
+              builder: (_) => getCustomButton(context, '锚点用法', 'SideBarAnchor'),
               methodName: '_buildAnchorSideBar',
             ),
             const SizedBox(
@@ -60,7 +60,7 @@ class TDSideBarPageState extends State<TDSideBarPage> {
             ),
             CodeWrapper(
               builder: (_) =>
-                  getCustomButtom(context, '切页用法', 'SideBarPagination'),
+                  getCustomButton(context, '切页用法', 'SideBarPagination'),
               methodName: '_buildPaginationSideBar',
             ),
           ],
@@ -72,7 +72,7 @@ class TDSideBarPageState extends State<TDSideBarPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            getCustomButtom(context, '带图标侧边导航', 'SideBarIcon'),
+            getCustomButton(context, '带图标侧边导航', 'SideBarIcon'),
           ],
         ));
   }
@@ -84,7 +84,7 @@ class TDSideBarPageState extends State<TDSideBarPage> {
           children: [
             CodeWrapper(
               builder: (_) =>
-                  getCustomButtom(context, '非通栏选项样式', 'SideBarOutline'),
+                  getCustomButton(context, '非通栏选项样式', 'SideBarOutline'),
               methodName: '_buildOutlineSideBar',
             ),
             const SizedBox(
@@ -92,14 +92,14 @@ class TDSideBarPageState extends State<TDSideBarPage> {
             ),
             CodeWrapper(
               builder: (_) =>
-                  getCustomButtom(context, '自定义样式', 'SideBarCustom'),
+                  getCustomButton(context, '自定义样式', 'SideBarCustom'),
               methodName: '_buildCustomSideBar',
             ),
           ],
         ));
   }
 
-  TDButton getCustomButtom(
+  TDButton getCustomButton(
       BuildContext context, String text, String routeName) {
     return TDButton(
       text: text,
@@ -109,7 +109,7 @@ class TDSideBarPageState extends State<TDSideBarPage> {
       shape: TDButtonShape.rectangle,
       theme: TDButtonTheme.primary,
       onTap: () {
-        Navigator.pushNamed(context, '$routeName?showAction=1');
+        Navigator.pushNamed(context, PlatformUtil.isWeb ? routeName : '$routeName?showAction=1');
       },
     );
   }
