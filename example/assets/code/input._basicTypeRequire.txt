@@ -5,9 +5,16 @@
         TDInput(
           leftLabel: '标签文字',
           required: true,
-          controller: controller,
+          controller: controller[1],
           backgroundColor: Colors.white,
           hintText: '请输入文字',
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller[1].clear();
+            setState(() {});
+          },
         ),
         const SizedBox(
           height: 16,

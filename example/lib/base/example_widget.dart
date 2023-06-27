@@ -530,7 +530,7 @@ ${codeString}
             child: Markdown(
               physics: const BouncingScrollPhysics(),
               padding: EdgeInsets.zero,
-              selectable: true,
+              selectable: false,
               shrinkWrap: true,
               syntaxHighlighter: DartSyntaxHighlighter(),
               data: mdText,

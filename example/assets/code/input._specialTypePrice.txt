@@ -4,7 +4,7 @@
       children: [
         TDInput(
           type: TDInputType.special,
-          controller: controller,
+          controller: controller[15],
           leftLabel: '价格',
           hintText: '0.00',
           backgroundColor: Colors.white,
