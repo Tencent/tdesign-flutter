@@ -82,6 +82,7 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
 
   @Demo(group: 'sideBar')
   Widget _buildOutlineSideBar(BuildContext context) {
+    // 非通栏选项样式
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 

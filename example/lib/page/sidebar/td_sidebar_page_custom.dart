@@ -40,6 +40,7 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
 
   @Demo(group: 'sideBar')
   Widget _buildCustomSideBar(BuildContext context) {
+    // 自定义样式
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 

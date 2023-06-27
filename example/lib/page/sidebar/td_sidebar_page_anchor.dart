@@ -82,6 +82,7 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
 
   @Demo(group: 'sideBar')
   Widget _buildAnchorSideBar(BuildContext context) {
+    // 锚点用法
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 
