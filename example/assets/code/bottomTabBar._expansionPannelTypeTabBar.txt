@@ -1,28 +1,28 @@
 
-  Widget _expansionPannelTypeNavBar(BuildContext context) {
-    return TDBottomNavBar(
-      TDBottomNavBarBasicType.expansionPanel,
+  Widget _expansionPannelTypeTabBar(BuildContext context) {
+    return TDBottomTabBar(
+      TDBottomTabBarBasicType.expansionPanel,
       useVerticalDivider: true,
       navigationTabs: [
-        TDBottomNavBarTabConfig(
+        TDBottomTabBarTabConfig(
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签1');
           },
         ),
-        TDBottomNavBarTabConfig(
+        TDBottomTabBarTabConfig(
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签2');
           },
         ),
-        TDBottomNavBarTabConfig(
+        TDBottomTabBarTabConfig(
             tabText: '展开项',
             onTap: () {
               onTapTab(context, '展开项');
             },
-            popUpButtonConfig: TDBottomNavBarPopUpBtnConfig(
-                popUpDialogConfig: TDBottomNavBarPopUpShapeConfig(
+            popUpButtonConfig: TDBottomTabBarPopUpBtnConfig(
+                popUpDialogConfig: TDBottomTabBarPopUpShapeConfig(
                   radius: 10,
                   arrowWidth: 16,
                   arrowHeight: 8,

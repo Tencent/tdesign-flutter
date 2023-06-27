@@ -1,8 +1,0 @@
-
-  TDButton _buildNormalClickButton(BuildContext context) {
-    return TDButton(content: '强按钮',
-      style: TDButtonStyle.primary(),
-      onTap: onTap,
-      onLongPress: onLongPress,
-    );
-  }

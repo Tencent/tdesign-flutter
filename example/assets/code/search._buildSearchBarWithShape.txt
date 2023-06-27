@@ -1,5 +1,5 @@
 
- Widget _buildSearchBarWithShape(BuildContext context) {
+  Widget _buildSearchBarWithShape(BuildContext context) {
     return Column(
       children: [
         _buildColumnWidgets(

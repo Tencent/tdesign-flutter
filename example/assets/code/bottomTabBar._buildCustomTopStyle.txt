@@ -1,12 +1,12 @@
 
   Widget _buildCustomTopStyle(BuildContext context) {
-    return TDBottomNavBar(
-      TDBottomNavBarBasicType.iconText,
+    return TDBottomTabBar(
+      TDBottomTabBarBasicType.iconText,
       topBorder: const BorderSide(color: Colors.red, width: 5),
-      componentType: TDBottomNavBarComponentType.normal,
+      componentType: TDBottomTabBarComponentType.normal,
       useVerticalDivider: false,
       navigationTabs: [
-        TDBottomNavBarTabConfig(
+        TDBottomTabBarTabConfig(
           iconTextTypeConfig:
           IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
           badgeConfig: BadgeConfig(
@@ -20,7 +20,7 @@
             onTapTab(context, '标签1');
           },
         ),
-        TDBottomNavBarTabConfig(
+        TDBottomTabBarTabConfig(
           iconTextTypeConfig:
           IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
           tabText: '标签',
@@ -28,7 +28,7 @@
             onTapTab(context, '标签2');
           },
         ),
-        TDBottomNavBarTabConfig(
+        TDBottomTabBarTabConfig(
           iconTextTypeConfig:
           IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
           tabText: '标签',
