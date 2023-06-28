@@ -117,8 +117,8 @@ class ImageWidget extends StatefulWidget {
       this.cacheWidth,
       this.assetUrl,
       this.cacheHeight})
-      : image = ResizeImage.resizeIfNeeded(cacheWidth, cacheHeight,
-            NetworkImage(src ?? '', scale: scale, headers: headers)),
+      : image = ResizeImage.resizeIfNeeded(
+            cacheWidth, cacheHeight, NetworkImage(src ?? '', scale: scale, headers: headers)),
         assert(cacheWidth == null || cacheWidth > 0),
         assert(cacheHeight == null || cacheHeight > 0),
         super(key: key);
@@ -155,8 +155,7 @@ class ImageWidget extends StatefulWidget {
           cacheWidth,
           cacheHeight,
           scale != null
-              ? ExactAssetImage(assetUrl ?? '',
-                  bundle: bundle, scale: scale, package: package)
+              ? ExactAssetImage(assetUrl ?? '', bundle: bundle, scale: scale, package: package)
               : AssetImage(assetUrl ?? '', bundle: bundle, package: package),
         ),
         loadingBuilder = null,
@@ -172,12 +171,20 @@ class ImageWidget extends StatefulWidget {
 
 class _StateImageWidget extends State<ImageWidget> {
   late Image _image;
+  late ImageStream _resolve;
+  late ImageStreamListener _listener;
   bool error = false;
   bool loading = true;
 
   @override
-  void initState() {
-    super.initState();
+  void didUpdateWidget(covariant ImageWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.src != widget.src || oldWidget.assetUrl != widget.assetUrl) {
+      initImage();
+    }
+  }
+
+  void initImage() {
     _image = widget.assetUrl == null
         ? Image.network(
             widget.src ?? '',
@@ -222,8 +229,8 @@ class _StateImageWidget extends State<ImageWidget> {
             cacheWidth: widget.cacheWidth,
             cacheHeight: widget.cacheHeight,
           );
-    var resolve = _image.image.resolve(const ImageConfiguration());
-    resolve.addListener(ImageStreamListener((_, __) {
+    _resolve = _image.image.resolve(const ImageConfiguration());
+    _listener = ImageStreamListener((_, __) {
       /// 加载成功
       if (mounted) {
         setState(() {
@@ -249,7 +256,14 @@ class _StateImageWidget extends State<ImageWidget> {
           loading = false;
         });
       }
-    }));
+    });
+    _resolve.addListener(_listener);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initImage();
   }
 
   @override
@@ -281,5 +295,11 @@ class _StateImageWidget extends State<ImageWidget> {
       return _image;
     }
     return Container();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _resolve.removeListener(_listener);
   }
 }
