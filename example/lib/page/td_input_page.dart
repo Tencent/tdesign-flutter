@@ -795,6 +795,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       onChanged: (text) {
         setState(() {});
       },
+      clearBtnColor: TDTheme.of(context).fontWhColor3,
       onClearTap: () {
         controller[26].clear();
         setState(() {});
