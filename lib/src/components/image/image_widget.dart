@@ -61,34 +61,34 @@ class ImageWidget extends StatefulWidget {
 
   final int? cacheHeight;
 
-  const ImageWidget({
-    Key? key,
-    required this.image,
-    this.frameBuilder,
-    this.loadingBuilder,
-    this.errorBuilder,
-    this.semanticLabel,
-    this.excludeFromSemantics = false,
-    required this.width,
-    required this.height,
-    this.color,
-    this.opacity,
-    this.colorBlendMode,
-    required this.fit,
-    this.alignment = Alignment.center,
-    this.repeat = ImageRepeat.noRepeat,
-    this.centerSlice,
-    this.matchTextDirection = false,
-    this.gaplessPlayback = false,
-    this.isAntiAlias = false,
-    this.filterQuality = FilterQuality.low,
-    required this.src,
-    this.errorWidget,
-    this.loadingWidget,
-    this.cacheWidth,
-    this.cacheHeight,
-    this.assetUrl
-  }) : super(key: key);
+  const ImageWidget(
+      {Key? key,
+      required this.image,
+      this.frameBuilder,
+      this.loadingBuilder,
+      this.errorBuilder,
+      this.semanticLabel,
+      this.excludeFromSemantics = false,
+      required this.width,
+      required this.height,
+      this.color,
+      this.opacity,
+      this.colorBlendMode,
+      required this.fit,
+      this.alignment = Alignment.center,
+      this.repeat = ImageRepeat.noRepeat,
+      this.centerSlice,
+      this.matchTextDirection = false,
+      this.gaplessPlayback = false,
+      this.isAntiAlias = false,
+      this.filterQuality = FilterQuality.low,
+      required this.src,
+      this.errorWidget,
+      this.loadingWidget,
+      this.cacheWidth,
+      this.cacheHeight,
+      this.assetUrl})
+      : super(key: key);
 
   ImageWidget.network(this.src,
       {Key? key,
@@ -117,8 +117,8 @@ class ImageWidget extends StatefulWidget {
       this.cacheWidth,
       this.assetUrl,
       this.cacheHeight})
-      : image = ResizeImage.resizeIfNeeded(cacheWidth, cacheHeight,
-            NetworkImage(src ?? '', scale: scale, headers: headers)),
+      : image = ResizeImage.resizeIfNeeded(
+            cacheWidth, cacheHeight, NetworkImage(src ?? '', scale: scale, headers: headers)),
         assert(cacheWidth == null || cacheWidth > 0),
         assert(cacheHeight == null || cacheHeight > 0),
         super(key: key);
@@ -155,17 +155,12 @@ class ImageWidget extends StatefulWidget {
           cacheWidth,
           cacheHeight,
           scale != null
-              ? ExactAssetImage(assetUrl ?? '',
-                  bundle: bundle, scale: scale, package: package)
+              ? ExactAssetImage(assetUrl ?? '', bundle: bundle, scale: scale, package: package)
               : AssetImage(assetUrl ?? '', bundle: bundle, package: package),
         ),
         loadingBuilder = null,
-        assert(alignment != null),
-        assert(repeat != null),
-        assert(matchTextDirection != null),
         assert(cacheWidth == null || cacheWidth > 0),
         assert(cacheHeight == null || cacheHeight > 0),
-        assert(isAntiAlias != null),
         super(key: key);
 
   @override
@@ -176,68 +171,84 @@ class ImageWidget extends StatefulWidget {
 
 class _StateImageWidget extends State<ImageWidget> {
   late Image _image;
+  late ImageStream _resolve;
+  late ImageStreamListener _listener;
   bool error = false;
   bool loading = true;
 
   @override
-  void initState() {
-    super.initState();
-    _image = widget.assetUrl == null ? Image.network(
-      widget.src ?? '',
-      width: widget.width,
-      height: widget.height,
-      fit: widget.fit,
-      color: widget.color,
-      frameBuilder: widget.frameBuilder,
-      loadingBuilder: widget.loadingBuilder,
-      errorBuilder: widget.errorBuilder,
-      semanticLabel: widget.semanticLabel,
-      excludeFromSemantics: widget.excludeFromSemantics,
-      colorBlendMode: widget.colorBlendMode,
-      alignment: widget.alignment,
-      repeat: widget.repeat,
-      centerSlice: widget.centerSlice,
-      matchTextDirection: widget.matchTextDirection,
-      gaplessPlayback: widget.gaplessPlayback,
-      filterQuality: widget.filterQuality,
-      isAntiAlias: widget.isAntiAlias,
-      cacheWidth: widget.cacheWidth,
-      cacheHeight: widget.cacheHeight,
-    ) : Image.asset(
-      widget.assetUrl ?? '',
-      width: widget.width,
-      height: widget.height,
-      fit: widget.fit,
-      color: widget.color,
-      frameBuilder: widget.frameBuilder,
-      errorBuilder: widget.errorBuilder,
-      semanticLabel: widget.semanticLabel,
-      excludeFromSemantics: widget.excludeFromSemantics,
-      colorBlendMode: widget.colorBlendMode,
-      alignment: widget.alignment,
-      repeat: widget.repeat,
-      centerSlice: widget.centerSlice,
-      matchTextDirection: widget.matchTextDirection,
-      gaplessPlayback: widget.gaplessPlayback,
-      filterQuality: widget.filterQuality,
-      isAntiAlias: widget.isAntiAlias,
-      cacheWidth: widget.cacheWidth,
-      cacheHeight: widget.cacheHeight,
-    );
-    var resolve = _image.image.resolve(const ImageConfiguration());
-    resolve.addListener(ImageStreamListener((_, __) {
+  void didUpdateWidget(covariant ImageWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.src != widget.src || oldWidget.assetUrl != widget.assetUrl) {
+      initImage();
+    }
+  }
+
+  void initImage() {
+    _image = widget.assetUrl == null
+        ? Image.network(
+            widget.src ?? '',
+            key: ValueKey(widget.src),
+            width: widget.width,
+            height: widget.height,
+            fit: widget.fit,
+            color: widget.color,
+            frameBuilder: widget.frameBuilder,
+            loadingBuilder: widget.loadingBuilder,
+            errorBuilder: widget.errorBuilder,
+            semanticLabel: widget.semanticLabel,
+            excludeFromSemantics: widget.excludeFromSemantics,
+            colorBlendMode: widget.colorBlendMode,
+            alignment: widget.alignment,
+            repeat: widget.repeat,
+            centerSlice: widget.centerSlice,
+            matchTextDirection: widget.matchTextDirection,
+            gaplessPlayback: widget.gaplessPlayback,
+            filterQuality: widget.filterQuality,
+            isAntiAlias: widget.isAntiAlias,
+            cacheWidth: widget.cacheWidth,
+            cacheHeight: widget.cacheHeight,
+          )
+        : Image.asset(
+            widget.assetUrl ?? '',
+            key: ValueKey(widget.assetUrl),
+            width: widget.width,
+            height: widget.height,
+            fit: widget.fit,
+            color: widget.color,
+            frameBuilder: widget.frameBuilder,
+            errorBuilder: widget.errorBuilder,
+            semanticLabel: widget.semanticLabel,
+            excludeFromSemantics: widget.excludeFromSemantics,
+            colorBlendMode: widget.colorBlendMode,
+            alignment: widget.alignment,
+            repeat: widget.repeat,
+            centerSlice: widget.centerSlice,
+            matchTextDirection: widget.matchTextDirection,
+            gaplessPlayback: widget.gaplessPlayback,
+            filterQuality: widget.filterQuality,
+            isAntiAlias: widget.isAntiAlias,
+            cacheWidth: widget.cacheWidth,
+            cacheHeight: widget.cacheHeight,
+          );
+    _resolve = _image.image.resolve(const ImageConfiguration());
+    _listener = ImageStreamListener((_, __) {
       /// 加载成功
-      setState(() {
-        loading = false;
-        error = false;
-      });
+      if (mounted) {
+        setState(() {
+          loading = false;
+          error = false;
+        });
+      }
     }, onChunk: (ImageChunkEvent event) {
       /// 加载中
       if (loading == false) {
-        setState(() {
-          loading = true;
-          error = false;
-        });
+        if (mounted) {
+          setState(() {
+            loading = true;
+            error = false;
+          });
+        }
       }
     }, onError: (dynamic exception, StackTrace? stackTrace) {
       /// 加载失败
@@ -247,7 +258,14 @@ class _StateImageWidget extends State<ImageWidget> {
           loading = false;
         });
       }
-    }));
+    });
+    _resolve.addListener(_listener);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initImage();
   }
 
   @override
@@ -279,5 +297,11 @@ class _StateImageWidget extends State<ImageWidget> {
       return _image;
     }
     return Container();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _resolve.removeListener(_listener);
   }
 }
