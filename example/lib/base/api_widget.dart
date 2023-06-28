@@ -5,6 +5,26 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:tdesign_flutter/td_export.dart';
 
+import 'example_base.dart';
+
+/// API展示页面
+class ApiPage extends StatelessWidget {
+  const ApiPage({Key? key, this.model}) : super(key: key);
+
+  final ExamplePageModel? model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: TDText('${model?.text} API', textColor: TDTheme.of(context).whiteColor1,),),
+      body: SingleChildScrollView(
+        child: ApiWidget(apiName: model?.name, visible: true,),
+      ),
+    );
+  }
+}
+
+
 class ApiWidget extends StatefulWidget {
   const ApiWidget({Key? key, required this.apiName, this.visible = false}) : super(key: key);
 
@@ -29,15 +49,18 @@ class _ApiWidgetState extends State<ApiWidget> {
       future: getApiData(),
       builder: (context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return Markdown(
-            padding: EdgeInsets.zero,
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            selectable: true,
-            data: snapshot.data ?? '',
-            extensionSet: md.ExtensionSet(
-              md.ExtensionSet.gitHubWeb.blockSyntaxes,
-              [md.EmojiSyntax(), ...md.ExtensionSet.gitHubWeb.inlineSyntaxes],
+          return Container(
+            margin: const EdgeInsets.only(bottom: 64),
+            child:  Markdown(
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              selectable: true,
+              data: snapshot.data ?? '',
+              extensionSet: md.ExtensionSet(
+                md.ExtensionSet.gitHubWeb.blockSyntaxes,
+                [md.EmojiSyntax(), ...md.ExtensionSet.gitHubWeb.inlineSyntaxes],
+              ),
             ),
           );
         } else {
@@ -51,7 +74,11 @@ class _ApiWidgetState extends State<ApiWidget> {
   }
 
   Future<String> getApiData() async {
-    const defaultResult = '加载失败';
+    const defaultResult = '''
+## API
+
+暂无对应api
+    ''';
     if(widget.apiName == lastApiName && result != null && result != defaultResult){
       return result!;
     }

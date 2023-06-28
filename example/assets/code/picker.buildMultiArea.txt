@@ -1,0 +1,17 @@
+
+  Widget buildMultiArea(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showMultiLinkedPicker(context, title: '选择地区',
+            onConfirm: (selected) {
+              setState(() {
+                selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
+              });
+            },
+            data: data_3,
+            columnNum: 3,
+            initialData: ['浙江省', '杭州市', '西湖区']);
+      },
+      child: buildSelectRow(context, selected_3, '选择地区'),
+    );
+  }

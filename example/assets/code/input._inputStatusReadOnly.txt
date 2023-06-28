@@ -1,0 +1,10 @@
+
+  Widget _inputStatusReadOnly(BuildContext context) {
+    return TDInput(
+      leftLabel: '标签文字',
+      readOnly: true,
+      // 不可编辑文字 则不必带入controller
+      backgroundColor: Colors.white,
+      hintText: '不可编辑文字',
+    );
+  }

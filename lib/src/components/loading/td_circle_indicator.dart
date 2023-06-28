@@ -15,12 +15,14 @@ class TDCircleIndicator extends StatefulWidget {
     Key? key,
     this.color,
     this.size = 20.0,
-    this.lineWidth = 3.0
+    this.lineWidth = 3.0,
+    this.duration = 1000,
   }) : super(key: key);
 
   final Color? color;
   final double size;
   final double lineWidth;
+  final int duration;
 
   @override
   _TDCircleIndicatorState createState() => _TDCircleIndicatorState();
@@ -36,12 +38,21 @@ class _TDCircleIndicatorState extends State<TDCircleIndicator>
     super.initState();
 
     _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2000))
+        vsync: this, duration: Duration(milliseconds: widget.duration))
       ..addListener(() => setState(() {}))
       ..repeat();
     _animation1 = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
         parent: _controller,
         curve: const Interval(0.0, 1.0, curve: Curves.linear)));
+  }
+
+  @override
+  void didUpdateWidget(covariant TDCircleIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.duration != oldWidget.duration) {
+      _controller.duration = Duration(milliseconds: widget.duration);
+      _controller.repeat();
+    }
   }
 
   @override
@@ -53,7 +64,7 @@ class _TDCircleIndicatorState extends State<TDCircleIndicator>
   @override
   Widget build(BuildContext context) {
     var value = (_animation1.value) * 2 * pi;
-    var paintColor = widget.color ?? TDTheme.of(context).brandColor8;
+    var paintColor = widget.color ?? TDTheme.of(context).brandNormalColor;
     return Transform(
       transform: Matrix4.identity()..rotateZ(value),
       alignment: FractionalOffset.center,
@@ -66,7 +77,6 @@ class _TDCircleIndicatorState extends State<TDCircleIndicator>
     );
   }
 }
-
 
 class _CirclePaint extends CustomPainter {
   final Color color;
@@ -82,12 +92,22 @@ class _CirclePaint extends CustomPainter {
     _paint.strokeWidth = width;
     _paint.shader = ui.Gradient.sweep(Offset(size.width / 2, size.height / 2),
         [const Color(0x01ffffff), color]);
-    if(minLength == size.width){
+    if (minLength == size.width) {
       canvas.drawArc(
-          Rect.fromLTWH(0, (size.height - size.width) / 2, size.width, size.width), 0, pi * 2, false, _paint);
+          Rect.fromLTWH(
+              0, (size.height - size.width) / 2, size.width, size.width),
+          0,
+          pi * 2,
+          false,
+          _paint);
     } else {
       canvas.drawArc(
-          Rect.fromLTWH((size.width - size.height) / 2, 0,  size.height, size.height ), 0, pi * 2, false, _paint);
+          Rect.fromLTWH(
+              (size.width - size.height) / 2, 0, size.height, size.height),
+          0,
+          pi * 2,
+          false,
+          _paint);
     }
   }
 

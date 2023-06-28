@@ -6,27 +6,26 @@ import '../../theme/td_theme.dart';
 
 const _kAminatedDuration = 100;
 
+/// TDesign风格的Swiper指示器样式，与flutter_swiper的Swiper结合使用
 class TDSwiperPagination extends SwiperPlugin {
-
-
   const TDSwiperPagination(
       {this.alignment,
-        this.key,
-        this.margin = const EdgeInsets.all(10.0),
-        this.builder = TDSwiperPagination.dots});
+      this.key,
+      this.margin = const EdgeInsets.all(10.0),
+      this.builder = TDSwiperPagination.dots});
 
   /// 圆点样式
   static const SwiperPlugin dots = TDSwiperDotsPagination();
 
   /// 圆角矩形 + 圆点样式 默认宽度20，高度6
-  static const SwiperPlugin roundedRectangle =
+  static const SwiperPlugin dotsBar =
       TDSwiperDotsPagination(roundedRectangleWidth: 20);
 
   /// 数字样式
   static const SwiperPlugin fraction = TDFractionPagination();
 
   /// 箭头样式
-  static const SwiperPlugin arrow = TDSwiperArrowPagination();
+  static const SwiperPlugin controls = TDSwiperArrowPagination();
 
   /// 当 scrollDirection== Axis.horizontal 时，默认Alignment.bottomCenter
   /// 当 scrollDirection== Axis.vertical 时，默认Alignment.centerRight
@@ -39,7 +38,6 @@ class TDSwiperPagination extends SwiperPlugin {
   final SwiperPlugin builder;
 
   final Key? key;
-
 
   @override
   Widget build(BuildContext context, SwiperPluginConfig config) {
@@ -87,12 +85,12 @@ class TDSwiperDotsPagination extends SwiperPlugin {
   final Key? key;
 
   const TDSwiperDotsPagination({
-    this.activeColor = Colors.white,
-    this.color = const Color(0x8CFFFFFF),
+    this.activeColor,
+    this.color,
     this.key,
     this.size = 6.0,
     this.activeSize = 6.0,
-    this.space = 8.0,
+    this.space = 4.0,
     this.roundedRectangleWidth,
     this.animationDuration,
   });
@@ -103,14 +101,14 @@ class TDSwiperDotsPagination extends SwiperPlugin {
       print('warning: The itemCount is too big, '
           'we suggest use TDFractionPaginationBuilder');
     }
-    var activeColor = this.activeColor;
-    var color = this.color;
-
-    if (activeColor == null || color == null) {
-      var themeData = Theme.of(context);
-      activeColor = this.activeColor ?? themeData.primaryColor;
-      color = this.color ?? themeData.scaffoldBackgroundColor;
-    }
+    var activeColor = this.activeColor ??
+        (config.outer
+            ? TDTheme.of(context).brandNormalColor
+            : TDTheme.of(context).whiteColor1);
+    var color = this.color ??
+        (config.outer
+            ? TDTheme.of(context).grayColor3
+            : TDTheme.of(context).whiteColor1.withOpacity(0.55));
 
     if (config.indicatorLayout != PageIndicatorLayout.NONE &&
         config.layout == SwiperLayout.DEFAULT) {
@@ -287,30 +285,42 @@ class TDSwiperArrowPagination extends SwiperPlugin {
       Visibility(
         visible: config.loop ||
             ((autoHideWhenAtBoundary ?? false) && activeIndex != 0),
-        child: CircleAvatar(
-          radius: radius ?? 10.0,
-          backgroundColor: backgroundColor ?? TDTheme.of(context).fontGyColor3,
-          child: backArrow ??
-              const Icon(
-                Icons.arrow_back_ios_outlined,
-                color: Colors.white,
-                size: 9,
-              ),
+        child: GestureDetector(
+          child: CircleAvatar(
+            radius: radius ?? 10.0,
+            backgroundColor:
+                backgroundColor ?? TDTheme.of(context).fontGyColor3,
+            child: backArrow ??
+                const Icon(
+                  Icons.arrow_back_ios_outlined,
+                  color: Colors.white,
+                  size: 9,
+                ),
+          ),
+          onTap: () {
+            config.controller.previous();
+          },
         ),
       ),
       const Spacer(),
       Visibility(
         visible: config.loop ||
             ((autoHideWhenAtBoundary ?? false) && activeIndex != itemCount - 1),
-        child: CircleAvatar(
-          radius: radius ?? 10.0,
-          backgroundColor: backgroundColor ?? TDTheme.of(context).fontGyColor3,
-          child: forwardArrow ??
-              const Icon(
-                Icons.arrow_forward_ios_outlined,
-                color: Colors.white,
-                size: 9,
-              ),
+        child: GestureDetector(
+          child: CircleAvatar(
+            radius: radius ?? 10.0,
+            backgroundColor:
+                backgroundColor ?? TDTheme.of(context).fontGyColor3,
+            child: forwardArrow ??
+                const Icon(
+                  Icons.arrow_forward_ios_outlined,
+                  color: Colors.white,
+                  size: 9,
+                ),
+          ),
+          onTap: () {
+            config.controller.next();
+          },
         ),
       ),
     ]);

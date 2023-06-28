@@ -1,0 +1,11 @@
+
+  Widget _buildColumnWidgets(BuildContext context, Widget widget) {
+    return Column(
+      children: [
+        widget,
+        const SizedBox(
+          height: 16,
+        ),
+      ],
+    );
+  }

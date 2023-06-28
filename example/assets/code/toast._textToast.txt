@@ -1,0 +1,13 @@
+
+  Widget _textToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showText('轻提示文字内容', context: context);
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '纯文字',
+    );
+  }

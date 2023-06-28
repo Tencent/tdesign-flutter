@@ -1,26 +1,104 @@
 ## API
+### IconTextTypeConfig
+#### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key | Key | - |  |
-| tabs | List<TDTab> | - | tab数组 |
-| controller | TabController? | - | tab控制器 |
-| decoration | Decoration? | - | tabBar修饰 |
-| backgroundColor | Color? | - | tabBar背景色 |
-| indicatorColor | Color? | - | tabBar下标颜色 |
-| indicatorWidth | double? | - | tabBar下标宽度 |
-| indicatorHeight | double? | - | tabBar下标高度 |
-| labelColor | Color? | - | tabBar 已选标签颜色 |
-| unselectedLabelColor | Color? | - | tabBar未选标签颜色 |
-| isScrollable | bool | false | 是否滚动 |
-| unselectedLabelStyle | TextStyle? | - | unselectedLabel字体 |
-| labelStyle | TextStyle? | - | 已选label字体 |
-| width | double? | - | tabBar宽度 |
-| height | double? | - | tabBar高度 |
-| indicatorPadding | EdgeInsets? | - | 引导padding |
-| labelPadding | EdgeInsetsGeometry? | - | tab间距 |
-| indicator | Decoration? | - | 自定义引导控件 |
-| physics | ScrollPhysics? | - | 自定义滑动 |
-| onTap |  Function(int)? | - | 点击事件 |
-| isVertical | bool | false | 是否是竖向 |
-| showIndicator | bool | false | 是否展示引导控件 |
+| tabText | String | - | tab文本 |
+| selectedIcon | Widget? | - | 选中时图标 |
+| unselectedIcon | Widget? | - | 未选中时图标 |
+| useDefaultIcon | bool? | - | 使用TDESIGN 默认icon |
+
+```
+```
+ ### IconTypeConfig
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| selectedIcon | Widget? | - | 选中时图标 |
+| unselectedIcon | Widget? | - | 未选中时图标 |
+| useDefaultIcon | bool? | - | 使用TDESIGN 默认icon |
+
+```
+```
+ ### BadgeConfig
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| showBage | bool | - | 是否展示消息 |
+| tdBadge | TDBadge? | - | 消息样式(未设置但showBage为true，则默认使用红点) |
+| badgeTopOffset | double? | - | 消息顶部偏移量 |
+| badgeRightOffset | double? | - | 消息右侧偏移量 |
+
+```
+```
+ ### TDBottomTabBarTabConfig
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| onTap | GestureTapCallback? | - | tab点击事件 |
+| iconTextTypeConfig | IconTextTypeConfig? | - | 图标+文本样式 basicType为iconText时必填 |
+| iconTypeConfig | IconTypeConfig? | - | 纯图标样式 basicType为icon时必填 |
+| tabText | String? | - | 纯文本样式 basicType为text时必填 |
+| badgeConfig | BadgeConfig? | - | 消息配置 |
+| popUpButtonConfig | TDBottomTabBarPopUpBtnConfig? | - | 弹窗配置 |
+
+```
+```
+ ### TDBottomTabBar
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| basicType | TDBottomTabBarBasicType | basicType | 基本样式（纯文本、纯图标、图标+文本） |
+| key |  | - |  |
+| componentType | TDBottomTabBarComponentType? | TDBottomTabBarComponentType.label | 选项样式 默认label |
+| outlineType | TDBottomTabBarOutlineType? | TDBottomTabBarOutlineType.filled | 标签栏样式 默认filled |
+| navigationTabs | List<TDBottomTabBarTabConfig> | - | tabs配置 |
+| barHeight | double? | _kDefaultTabBarHeight | tab高度 |
+| useVerticalDivider | bool? | - | 是否使用竖线分隔(如果选项样式为label则强制为false) |
+| dividerHeight | double? | - | 分割线高度（可选） |
+| dividerThickness | double? | - | 分割线厚度（可选） |
+| dividerColor | Color? | - | 分割线颜色（可选） |
+| showTopBorder | bool? | true | 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值,非胶囊型才生效） |
+| topBorder | BorderSide? | - | 上边线样式 |
+
+```
+```
+ ### TDBottomTabBarPopUpBtnConfig
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| items | List<PopUpMenuItem> | - | 选项list |
+| onChanged | ValueChanged<String> | - | 统一在 onChanged 中处理各item点击事件 |
+| popUpDialogConfig | TDBottomTabBarPopUpShapeConfig? | - | 弹窗UI配置 |
+
+```
+```
+ ### TDBottomTabBarPopUpShapeConfig
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| popUpWidth | double? | - | 弹窗宽度（不设置，默认为按钮宽度 - 20） |
+| popUpitemHeight | double? | _kDefaultMenuItemHeight | 单个选项高度 所有选项等高 不设置则使用默认值 48 |
+| backgroundColor | Color? | - | 弹窗背景颜色 |
+| radius | double? | - | pannel圆角 默认0 |
+| arrowWidth | double? | - | 箭头宽度 默认13.5 |
+| arrowHeight | double? | - | 箭头高度 默认8 |
+
+```
+```
+ ### PopUpMenuItem
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key |  | - |  |
+| itemWidget | Widget? | - | 选项widget |
+| value | String | - | 选项值 |
+| alignment | AlignmentGeometry | AlignmentDirectional.center | 对齐方式 |

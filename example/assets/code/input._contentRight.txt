@@ -1,0 +1,24 @@
+
+  Widget _contentRight(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          leftLabel: '右对齐',
+          controller: controller[25],
+          backgroundColor: Colors.white,
+          contentAlignment: TextAlign.end,
+          hintText: '请输入文字',
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller[25].clear();
+            setState(() {});
+          },
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }

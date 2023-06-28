@@ -1,0 +1,11 @@
+
+  TDButton _buildDisableDefaultFillButton(BuildContext context) {
+    return const TDButton(
+      text: '填充按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.defaultTheme,
+      disabled: true,
+    );
+  }

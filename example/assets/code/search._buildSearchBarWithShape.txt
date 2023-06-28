@@ -1,0 +1,31 @@
+
+  Widget _buildSearchBarWithShape(BuildContext context) {
+    return Column(
+      children: [
+        _buildColumnWidgets(
+          context,
+          TDSearchBar(
+            placeHolder: '搜索预设文案',
+            style: TDSearchStyle.square,
+            onTextChanged: (String text) {
+              setState(() {
+                inputText = text;
+              });
+            },
+          ),
+        ),
+        _buildColumnWidgets(
+          context,
+          TDSearchBar(
+            placeHolder: '搜索预设文案',
+            style: TDSearchStyle.round,
+            onTextChanged: (String text) {
+              setState(() {
+                inputText = text;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }

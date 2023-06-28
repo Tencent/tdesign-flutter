@@ -9,10 +9,10 @@ enum TDRadioStyle {
   hollowCircle, // 镂空圆点样式
 }
 
-///
-/// 单选框按钮
-///
+/// 单选框按钮,继承自TDCheckbox，字段含义与父类一致
 class TDRadio extends TDCheckbox {
+
+  /// 单选框按钮样式
   final TDRadioStyle radioStyle;
 
   const TDRadio({
@@ -72,9 +72,9 @@ class TDRadio extends TDCheckbox {
         height: size,
         child: CustomPaint(
           painter: HollowCircle(!enable
-              ? (isSelected ? theme.brandColor3 : theme.grayColor4)
+              ? (isSelected ? theme.brandDisabledColor : theme.grayColor4)
               : isSelected
-                  ? theme.brandColor8
+                  ? theme.brandNormalColor
                   : theme.grayColor4),
         ),
       );
@@ -97,9 +97,9 @@ class TDRadio extends TDCheckbox {
       return Icon(iconData,
           size: size,
           color: !enable
-              ? (isSelected ? theme.brandColor3 : theme.grayColor4)
+              ? (isSelected ? theme.brandDisabledColor : theme.grayColor4)
               : isSelected
-                  ? theme.brandColor8
+                  ? theme.brandNormalColor
                   : theme.grayColor4);
     } else {
       return SizedBox(
@@ -152,16 +152,16 @@ class HollowCircle extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// RadioGroup分组对象
+/// RadioGroup分组对象，继承自TDCheckboxGroup，字段含义与父类一致
 /// RadioGroup应该嵌套在RadioGroup内，所有在RadioGroup的RadioButton只能有一个被选中
 ///
 /// cardMode: 使用卡片样式，需要配合direction 和 directionalTdRadios 使用，
 /// 组合为横向、纵向卡片，同时需要在每个TDRadio上设置cardMode参数。
 class TDRadioGroup extends TDCheckboxGroup {
-  // 严格模式下，用户不能取消勾选，只能切换选择项，
+  /// 严格模式下，用户不能取消勾选，只能切换选择项，
   final bool strictMode;
 
-  // 勾选样式
+  /// 勾选样式
   final TDRadioStyle? radioCheckStyle;
 
   TDRadioGroup({

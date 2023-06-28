@@ -1,0 +1,22 @@
+
+  Widget _buildDialogWithCloseButton(BuildContext context) {
+    return TDButton(
+      text: '带关闭按钮的对话框',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDConfirmDialog(
+              title: _dialogTitle,
+              content: _commonContent,
+              showCloseButton: true,
+            );
+          },
+        );
+      },
+    );
+  }
