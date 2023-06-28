@@ -256,9 +256,11 @@ class _TDStepperState extends State<TDStepper> {
                     maxWidth: _getWidth() + _getTextWidth()),
                 child: Container(
                   height: _getHeight(),
+                  alignment: Alignment.center,
                   decoration:
                       BoxDecoration(color: _getBackgroundColor(context)),
-                  child: Padding(
+                  child: Container(
+                    height: PlatformUtil.isWeb ? _getFontSize() : null,
                     padding: const EdgeInsets.symmetric(vertical: 2),
                     child: TextField(
                       controller: _controller,
