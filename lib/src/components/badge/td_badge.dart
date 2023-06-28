@@ -99,7 +99,7 @@ class _TDBadgeState extends State<TDBadge> {
   }
 
   double getBadgeSize() {
-    switch(widget.size) {
+    switch (widget.size) {
       case TDBadgeSize.large:
         return 20;
       case TDBadgeSize.small:
@@ -108,7 +108,7 @@ class _TDBadgeState extends State<TDBadge> {
   }
 
   Font? getBadgeFont(BuildContext context) {
-    switch(widget.size) {
+    switch (widget.size) {
       case TDBadgeSize.large:
         return TDTheme.of(context).fontMarkSmall;
       case TDBadgeSize.small:
@@ -130,9 +130,25 @@ class _TDBadgeState extends State<TDBadge> {
               borderRadius: BorderRadius.circular(getBadgeSize() / 4)),
         );
       case TDBadgeType.message:
-        return Container(
+        return badgeNum.length == 1 ? Container(
             height: getBadgeSize(),
             width: getBadgeSize(),
+            decoration: BoxDecoration(
+              color: widget.color ?? TDTheme.of(context).errorColor6,
+              borderRadius: BorderRadius.circular(getBadgeSize() / 2),
+            ),
+            child: Center(
+              child: TDText(
+                widget.message ?? '$badgeNum',
+                forceVerticalCenter: true,
+                font: getBadgeFont(context),
+                fontWeight: FontWeight.w500,
+                textColor: widget.textColor ?? TDTheme.of(context).whiteColor1,
+                textAlign: TextAlign.center,
+              ),
+            ))
+        : Container(
+            height: getBadgeSize(),
             padding: const EdgeInsets.only(left: 5, right: 5),
             decoration: BoxDecoration(
               color: widget.color ?? TDTheme.of(context).errorColor6,

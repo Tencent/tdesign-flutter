@@ -36,8 +36,7 @@ class _CodeWidgetState extends State<CodeWidget> {
       return result!;
     }
     try {
-      var url =
-          'https://raw.githubusercontent.com/TDesignOteam/tdesign-flutter/main/example/lib/tdesign/page/td_${widget.codePath}_page.dart';
+      var url = 'https://raw.githubusercontent.com/TDesignOteam/tdesign-flutter/main/example/lib/page/td_${widget.codePath}_page.dart';
 
       print('getCodeData url:$url');
       var resp = await http.get(Uri.parse(url));

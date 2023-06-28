@@ -1,0 +1,23 @@
+
+  Widget _buildSmallAvatar(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: Row(
+        children: const [
+          TDAvatar(
+            size: TDAvatarSize.small,
+            type: TDAvatarType.normal,
+            defaultUrl: 'assets/img/td_avatar_1.png',),
+          SizedBox(width: 56,),
+          TDAvatar(
+              size: TDAvatarSize.small,
+              type: TDAvatarType.customText,
+              text: 'A'),
+          SizedBox(width: 56,),
+          TDAvatar(
+            size: TDAvatarSize.small,
+            type: TDAvatarType.icon,),
+        ],
+      ),
+    );
+  }

@@ -25,7 +25,7 @@ class TDRadioPageState extends State<TDRadioPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: '单选框 Radio',
+        title: tdTitle(),
         exampleCodeGroup: 'radio',
         backgroundColor: const Color(0xfff6f6f6),
         children: [
@@ -192,12 +192,10 @@ class TDRadioPageState extends State<TDRadioPage> {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (contet, index) {
           var title = '单选';
-          return SizedBox(
-            height: 56,
-            child: TDRadio(
-              id: 'index:$index',
-              title: title,
-            ),
+          return TDRadio(
+            id: 'index:$index',
+            title: title,
+            size: TDCheckBoxSize.large,
           );
         },
         itemCount: 4,

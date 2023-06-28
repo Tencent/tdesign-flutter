@@ -1,0 +1,22 @@
+
+  Widget _buildTextButtonDouble(BuildContext context) {
+    return TDButton(
+      text: '左右文字按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDAlertDialog(
+              title: _dialogTitle,
+              content: _commonContent,
+              buttonStyle: TDDialogButtonStyle.text,
+            );
+          },
+        );
+      },
+    );
+  }

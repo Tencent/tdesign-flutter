@@ -1,0 +1,34 @@
+
+  Widget _weakSelectTextTabBar(BuildContext context) {
+    return TDBottomTabBar(
+      TDBottomTabBarBasicType.text,
+      componentType: TDBottomTabBarComponentType.normal,
+      useVerticalDivider: true,
+      navigationTabs: [
+        TDBottomTabBarTabConfig(
+          badgeConfig: BadgeConfig(
+            showBage: true,
+            tdBadge: const TDBadge(TDBadgeType.redPoint),
+            badgeTopOffset: -2,
+            badgeRightOffset: -10,
+          ),
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签1');
+          },
+        ),
+        TDBottomTabBarTabConfig(
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签2');
+          },
+        ),
+        TDBottomTabBarTabConfig(
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签3');
+          },
+        ),
+      ],
+    );
+  }

@@ -14,7 +14,7 @@ class _TDToastPageState extends State<TDToastPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: '轻提示 Toast',
+        title: tdTitle(),
         desc: '用于轻量级反馈或提示，不会打断用户操作。',
         exampleCodeGroup: 'toast',
         children: [
@@ -45,8 +45,10 @@ class _TDToastPageState extends State<TDToastPage> {
         TDToast.showText('轻提示文字内容', context: context);
       },
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
-      content: '纯文字',
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '纯文字',
     );
   }
 
@@ -57,8 +59,10 @@ class _TDToastPageState extends State<TDToastPage> {
         TDToast.showText('最多一行展示十个汉字宽度限制最多不超过三行文字', context: context);
       },
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
-      content: '多行文字',
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '多行文字',
     );
   }
 
@@ -70,8 +74,10 @@ class _TDToastPageState extends State<TDToastPage> {
             icon: TDIcons.check_circle, context: context);
       },
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
-      content: '带横向图标',
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '带横向图标',
     );
   }
 
@@ -85,8 +91,10 @@ class _TDToastPageState extends State<TDToastPage> {
             context: context);
       },
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
-      content: '带竖向图标',
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '带竖向图标',
     );
   }
 
@@ -97,8 +105,10 @@ class _TDToastPageState extends State<TDToastPage> {
         TDToast.showLoading(context: context);
       },
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
-      content: '加载状态',
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '加载状态',
     );
   }
 
@@ -109,18 +119,22 @@ class _TDToastPageState extends State<TDToastPage> {
         TDToast.showLoadingWithoutText(context: context);
       },
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
-      content: '加载状态（无文案）',
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '加载状态（无文案）',
     );
   }
 
   @Demo(group: 'toast')
   Widget _dismissLoadingToast(BuildContext context) {
-    return TDButton(
+    return const TDButton(
       onTap: TDToast.dismissLoading,
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
-      content: '停止加载',
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '停止加载',
     );
   }
 
@@ -131,8 +145,10 @@ class _TDToastPageState extends State<TDToastPage> {
         TDToast.showSuccess('成功文案',context: context);
       },
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
-      content: '成功提示',
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '成功提示',
     );
   }
 
@@ -144,8 +160,10 @@ class _TDToastPageState extends State<TDToastPage> {
             direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
-      content: '成功提示(竖向)',
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '成功提示(竖向)',
     );
   }
 
@@ -157,8 +175,10 @@ class _TDToastPageState extends State<TDToastPage> {
             direction: IconTextDirection.horizontal, context: context);
       },
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
-      content: '警告提示',
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '警告提示',
     );
   }
 
@@ -170,8 +190,10 @@ class _TDToastPageState extends State<TDToastPage> {
             direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
-      content: '警告提示(竖向)',
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '警告提示(竖向)',
     );
   }
 
@@ -183,8 +205,10 @@ class _TDToastPageState extends State<TDToastPage> {
             direction: IconTextDirection.horizontal, context: context);
       },
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
-      content: '失败提示',
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '失败提示',
     );
   }
 
@@ -196,8 +220,10 @@ class _TDToastPageState extends State<TDToastPage> {
             direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
-      content: '失败提示(竖向)',
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '失败提示(竖向)',
     );
   }
 }

@@ -1,0 +1,21 @@
+
+  Widget _buildImageTopNoTitle(BuildContext context) {
+    return TDButton(
+      text: '图片置顶-无标题',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDImageDialog(
+              image: _demoImage,
+              content: _commonContent,
+            );
+          },
+        );
+      },
+    );
+  }

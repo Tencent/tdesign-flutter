@@ -1,0 +1,19 @@
+
+  Widget _buildPopFromCenter(BuildContext context) {
+    return TDButton(
+      text: '中间弹出',
+      theme: TDButtonTheme.primary,
+      type: TDButtonType.outline,
+      onTap: () {
+        Navigator.of(context).push(TDSlidePopupRoute(
+            slideTransitionFrom: SlideTransitionFrom.center,
+            builder: (context) {
+              return Container(
+                color: Colors.white,
+                width: 240,
+                height: 240,
+              );
+            }));
+      },
+    );
+  }

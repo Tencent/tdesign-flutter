@@ -1,0 +1,35 @@
+
+  Widget _horizontalTextDivider(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const SizedBox(
+            width: 16,
+          ),
+          TDText(
+            '文字信息',
+            textColor: TDTheme.of(context).fontGyColor1.withOpacity(0.9),
+          ),
+          const TDDivider(
+            width: 0.5,
+            height: 12,
+            margin: EdgeInsets.only(left: 16, right: 16),
+          ),
+          TDText('文字信息',
+              textColor: TDTheme.of(context).fontGyColor1.withOpacity(0.9)),
+          const TDDivider(
+            width: 0.5,
+            height: 12,
+            margin: EdgeInsets.only(left: 16, right: 16),
+            isDashed: true,
+            direction: Axis.vertical,
+          ),
+          TDText('文字信息',
+              textColor: TDTheme.of(context).fontGyColor1.withOpacity(0.9)),
+        ],
+      ),
+    );
+  }

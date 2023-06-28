@@ -1,0 +1,23 @@
+
+  Widget _checkboxStatus(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      contentDirection: TDContentDirection.right,
+      selectIds: const ['0'],
+      child: Column(
+        children: const [
+          TDCheckbox(
+            id: '0',
+            title: '选项禁用-已选',
+            style: TDCheckboxStyle.circle,
+            enable: false,
+          ),
+          TDCheckbox(
+            id: '1',
+            title: '选项禁用-默认',
+            style: TDCheckboxStyle.circle,
+            enable: false,
+          ),
+        ],
+      ),
+    );
+  }

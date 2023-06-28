@@ -1,0 +1,19 @@
+
+  Widget _setBgColorNavbar(BuildContext context) {
+    return TDNavBar(
+        height: 48,
+        title: titleText,
+        titleColor: Colors.white,
+        backgroundColor: TDTheme.of(context).brandNormalColor,
+        titleFontWeight: FontWeight.w600,
+        useDefaultBack: false,
+        screenAdaptation: false,
+        leftBarItems: [
+          TDNavBarItem(icon: TDIcons.chevron_left, iconSize: 24, iconColor: Colors.white),
+        ],
+        rightBarItems: [
+          TDNavBarItem(icon: TDIcons.home, iconSize: 24, iconColor: Colors.white),
+          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24, iconColor: Colors.white)
+        ]
+    );
+  }

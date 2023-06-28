@@ -1,0 +1,20 @@
+
+  Widget _buildConfirmOnlyTitle(BuildContext context) {
+    return TDButton(
+      text: '确认类-纯标题',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDAlertDialog(
+              title: _dialogTitle,
+            );
+          },
+        );
+      },
+    );
+  }

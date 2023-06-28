@@ -1,0 +1,42 @@
+
+  Widget _verticalCardStyle(BuildContext context) {
+    return TDRadioGroup(
+      selectId: 'index:1',
+      cardMode: true,
+      direction: Axis.vertical,
+      directionalTdRadios: const [
+        TDRadio(
+          id: 'index:0',
+          title: '单选',
+          titleMaxLine: 2,
+          subTitleMaxLine: 2,
+          subTitle: '描述信息',
+          cardMode: true,
+        ),
+        TDRadio(
+          id: 'index:1',
+          title: '单选',
+          titleMaxLine: 2,
+          subTitleMaxLine: 2,
+          subTitle: '描述信息',
+          cardMode: true,
+        ),
+        TDRadio(
+          id: 'index:2',
+          title: '单选',
+          titleMaxLine: 2,
+          subTitleMaxLine: 2,
+          subTitle: '描述信息',
+          cardMode: true,
+        ),
+        TDRadio(
+          id: 'index:3',
+          title: '单选',
+          titleMaxLine: 2,
+          subTitleMaxLine: 2,
+          subTitle: '描述信息',
+          cardMode: true,
+        ),
+      ],
+    );
+  }

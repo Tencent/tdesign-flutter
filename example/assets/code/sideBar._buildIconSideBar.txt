@@ -1,0 +1,57 @@
+
+  Widget _buildIconSideBar(BuildContext context) {
+    final list = <SideItemProps>[];
+    final pages = <Widget>[];
+
+    for (var i = 0; i < 20; i++) {
+      list.add(
+          SideItemProps(index: i, label: '选项', value: i, icon: TDIcons.app));
+      pages.add(getAnchorDemo(i));
+    }
+
+    pages.add(Container(
+      height: MediaQuery.of(context).size.height - itemHeight,
+      decoration: const BoxDecoration(color: Colors.white),
+    ));
+
+    list[1].badge = const TDBadge(TDBadgeType.redPoint);
+    list[2].badge = const TDBadge(
+      TDBadgeType.message,
+      count: '8',
+    );
+
+    var demoHeight = MediaQuery.of(context).size.height;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: 110,
+          child: TDSideBar(
+            height: demoHeight,
+            style: TDSideBarStyle.normal,
+            value: currentValue,
+            controller: _sideBarController,
+            children: list
+                .map((ele) => TDSideBarItem(
+                    label: ele.label ?? '',
+                    badge: ele.badge,
+                    value: ele.value,
+                    icon: ele.icon))
+                .toList(),
+            onChanged: onChanged,
+            onSelected: onSelected,
+          ),
+        ),
+        Expanded(
+            child: SizedBox(
+          height: demoHeight,
+          child: SingleChildScrollView(
+            controller: _demoScroller,
+            child: Column(
+              children: pages,
+            ),
+          ),
+        ))
+      ],
+    );
+  }

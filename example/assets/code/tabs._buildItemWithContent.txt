@@ -1,0 +1,25 @@
+
+  Widget _buildItemWithContent(BuildContext context) {
+    var tabController = TabController(length: 3, vsync: this);
+    return SizedBox(
+      height: 120 + 48,
+      child: Column(
+        children: [
+          TDTabBar(
+              tabs: subList(3),
+              controller: tabController,
+              showIndicator: true,
+              backgroundColor: Colors.white,
+              isScrollable: false,),
+          Container(
+            height: 120,
+            color: Colors.white,
+            child: TDTabBarView(
+              children: _getTabViews(),
+              controller: tabController,
+            ),
+          )
+        ],
+      ),
+    );
+  }
