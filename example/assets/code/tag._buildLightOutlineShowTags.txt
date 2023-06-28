@@ -1,0 +1,33 @@
+
+  Widget _buildLightOutlineShowTags(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: const [
+        TDTag('默认', isOutline: true, isLight: true),
+        TDTag(
+          '主要',
+          isOutline: true,
+          isLight: true,
+          theme: TDTagTheme.primary,
+        ),
+        TDTag(
+          '警告',
+          isOutline: true,
+          isLight: true,
+          theme: TDTagTheme.warning,
+        ),
+        TDTag(
+          '危险',
+          isOutline: true,
+          isLight: true,
+          theme: TDTagTheme.danger,
+        ),
+        TDTag(
+          '成功',
+          isOutline: true,
+          isLight: true,
+          theme: TDTagTheme.success,
+        ),
+      ],
+    );
+  }

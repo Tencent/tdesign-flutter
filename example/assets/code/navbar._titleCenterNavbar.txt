@@ -1,0 +1,14 @@
+
+  Widget _titleCenterNavbar(BuildContext context) {
+    return TDNavBar(
+        height: 48,
+        title: titleText,
+        titleFontWeight: FontWeight.w600,
+        screenAdaptation: false,
+        useDefaultBack: true,
+        rightBarItems: [
+          TDNavBarItem(icon: TDIcons.home,iconSize: 24),
+          TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
+        ]
+    );
+  }

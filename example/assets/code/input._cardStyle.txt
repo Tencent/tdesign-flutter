@@ -1,0 +1,18 @@
+
+  Widget _cardStyle(BuildContext context) {
+    return TDInput(
+      type: TDInputType.cardStyle,
+      width: MediaQuery.of(context).size.width - 32,
+      leftLabel: '标签文字',
+      controller: controller[21],
+      hintText: '请输入文字',
+      backgroundColor: Colors.white,
+      onChanged: (text) {
+        setState(() {});
+      },
+      onClearTap: () {
+        controller[21].clear();
+        setState(() {});
+      },
+    );
+  }

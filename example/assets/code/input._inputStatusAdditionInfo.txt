@@ -1,0 +1,25 @@
+
+  Widget _inputStatusAdditionInfo(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          leftLabel: '标签文字',
+          controller: controller[17],
+          backgroundColor: Colors.white,
+          hintText: '请输入文字',
+          additionInfo: '错误提示说明',
+          additionInfoColor: TDTheme.of(context).errorColor6,
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller[17].clear();
+            setState(() {});
+          },
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }

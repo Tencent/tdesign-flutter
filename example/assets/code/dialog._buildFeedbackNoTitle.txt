@@ -1,0 +1,20 @@
+
+  Widget _buildFeedbackNoTitle(BuildContext context) {
+    return TDButton(
+      text: '反馈类-无标题',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDConfirmDialog(
+              content: _commonContent,
+            );
+          },
+        );
+      },
+    );
+  }

@@ -1,0 +1,10 @@
+
+  TDButton _buildDangerStrokeButton(BuildContext context) {
+    return const TDButton(
+      text: '描边按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.danger,
+    );
+  }

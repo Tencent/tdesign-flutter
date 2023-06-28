@@ -1,0 +1,37 @@
+
+  Widget _weakSelectIconTabBar(BuildContext context) {
+    return TDBottomTabBar(
+      TDBottomTabBarBasicType.icon,
+      componentType: TDBottomTabBarComponentType.normal,
+      useVerticalDivider: false,
+      navigationTabs: [
+        TDBottomTabBarTabConfig(
+          iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+          badgeConfig: BadgeConfig(
+            showBage: true,
+            tdBadge: const TDBadge(TDBadgeType.redPoint),
+            badgeTopOffset: -2,
+            badgeRightOffset: -10,
+          ),
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签1');
+          },
+        ),
+        TDBottomTabBarTabConfig(
+          iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签2');
+          },
+        ),
+        TDBottomTabBarTabConfig(
+          iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签3');
+          },
+        ),
+      ],
+    );
+  }

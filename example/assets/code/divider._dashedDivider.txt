@@ -1,0 +1,37 @@
+
+  Widget _dashedDivider(BuildContext context) {
+    return Column(
+      children: const [
+        SizedBox(
+          height: 20,
+        ),
+        TDDivider(
+          isDashed: true,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        TDDivider(
+          text: '文字信息',
+          alignment: TextAlignment.left,
+          isDashed: true,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        TDDivider(
+          text: '文字信息',
+          alignment: TextAlignment.center,
+          isDashed: true,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        TDDivider(
+          text: '文字信息',
+          alignment: TextAlignment.right,
+          isDashed: true,
+        ),
+      ],
+    );
+  }

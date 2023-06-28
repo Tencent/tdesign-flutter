@@ -34,7 +34,7 @@ class TDImageState extends State<TDImagePage>
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: '图片 Image',
+        title: tdTitle(),
         exampleCodeGroup: 'image',
         desc: '用于展示效果，主要为上下左右居中裁切、拉伸、平铺等方式。',
         children: [
@@ -235,11 +235,27 @@ class TDImageState extends State<TDImagePage>
                 textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
               ),
             ),
-            const TDImage(
-              imgUrl:
-                  'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-              type: TDImageType.roundedSquare,
+            Container(
+                height: 72,
+                width: 72,
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                child: Container(
+                    alignment: Alignment.center,
+                    color: TDTheme.of(context).grayColor2,
+                    child: Icon(
+                      TDIcons.ellipsis,
+                      size: 22,
+                      color: TDTheme.of(context).fontGyColor3,
+                    )
+                )
             ),
+            // 实际组件写法如下：上面仅为加载展示
+            // const TDImage(
+            //   imgUrl:
+            //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+            //   type: TDImageType.roundedSquare,
+            // ),
           ],
         ),
         const SizedBox(
@@ -256,19 +272,38 @@ class TDImageState extends State<TDImagePage>
                 textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
               ),
             ),
-            TDImage(
-              imgUrl:
-                  'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-              loadingWidget: RotationTransition(
-                  turns: animation,
-                  alignment: Alignment.center,
-                  child: TDCircleIndicator(
-                    color: TDTheme.of(context).brandColor8,
-                    size: 18,
-                    lineWidth: 3,
-                  )),
-              type: TDImageType.roundedSquare,
+            Container(
+                height: 72,
+                width: 72,
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                child: Container(
+                    alignment: Alignment.center,
+                    color: TDTheme.of(context).grayColor2,
+                    child: RotationTransition(
+                        turns: animation,
+                        alignment: Alignment.center,
+                        child: TDCircleIndicator(
+                          color: TDTheme.of(context).brandNormalColor,
+                          size: 18,
+                          lineWidth: 3,
+                        ))
+                )
             ),
+            // 实际组件写法如下：上面仅为加载展示
+            // TDImage(
+            //   imgUrl:
+            //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+            //   loadingWidget: RotationTransition(
+            //       turns: animation,
+            //       alignment: Alignment.center,
+            //       child: TDCircleIndicator(
+            //         color: TDTheme.of(context).brandNormalColor,
+            //         size: 18,
+            //         lineWidth: 3,
+            //       )),
+            //   type: TDImageType.roundedSquare,
+            // ),
           ],
         ),
         const SizedBox(

@@ -4,11 +4,9 @@ const Duration _bottomSheetEnterDuration = Duration(milliseconds: 250);
 const Duration _bottomSheetExitDuration = Duration(milliseconds: 200);
 
 /// 从屏幕弹出的方向
-enum SlideTransitionFrom { top, right, left, bottom }
+enum SlideTransitionFrom { top, right, left, bottom, center }
 
-///
 /// 从屏幕的某个方向滑动弹出的Dialog框的路由，比如从顶部、底部、左、右滑出页面
-///
 class TDSlidePopupRoute<T> extends PopupRoute<T> {
   TDSlidePopupRoute(
       {required this.builder,
@@ -18,12 +16,19 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
       this.transitionAnimationController,
       this.slideTransitionFrom = SlideTransitionFrom.bottom});
 
+  /// 控件构建器
   final WidgetBuilder builder;
+
+  /// 蒙层颜色
   final Color? modalBarrierColor;
+
+  /// 点击蒙层能否关闭
   final bool isDismissible;
+
+  /// 动画控制器
   final AnimationController? transitionAnimationController;
 
-  // 设置从屏幕的哪个方向滑出
+  /// 设置从屏幕的哪个方向滑出
   final SlideTransitionFrom slideTransitionFrom;
 
   @override
@@ -62,15 +67,12 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    return Material(
-      child: builder.call(context),
-    ) ;
+    return builder.call(context) ;
   }
 }
 
 /// 从各个方向弹出的Transition
 /// progress为0到1区间的变化值
-///
 class SlideTransitionLayout extends SingleChildLayoutDelegate {
   final double progress;
   final SlideTransitionFrom slideTransitionFrom;
@@ -79,10 +81,13 @@ class SlideTransitionLayout extends SingleChildLayoutDelegate {
 
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
-    return BoxConstraints(
-        // minWidth: constraints.maxWidth,
-        maxWidth: constraints.maxWidth,
-        maxHeight: constraints.maxHeight);
+    var width = constraints.maxWidth;
+    var height = constraints.maxHeight;
+    // if (slideTransitionFrom == SlideTransitionFrom.center) {
+    //   width = constraints.maxWidth * progress;
+    //   height = constraints.maxHeight * progress;
+    // }
+    return BoxConstraints(maxWidth: width, maxHeight: height);
   }
 
   @override
@@ -102,6 +107,10 @@ class SlideTransitionLayout extends SingleChildLayoutDelegate {
         break;
       case SlideTransitionFrom.bottom:
         posY = size.height - childSize.height * progress;
+        break;
+      case SlideTransitionFrom.center:
+        posX = (size.width - childSize.width) / 2;
+        posY = (size.height - childSize.height) / 2;
         break;
     }
     return Offset(posX, posY);

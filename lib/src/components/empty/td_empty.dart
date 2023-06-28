@@ -18,9 +18,13 @@ class TDEmpty extends StatelessWidget {
 
   /// 点击事件
   final TDTapEvent? onTapEvent;
+  /// 展示图片
   final Widget? image;
+  /// 描述文字
   final String? emptyText;
+  /// 操作按钮文案
   final String? operationText;
+  /// 类型，为operation有操作按钮，plain无按钮
   final TDEmptyType type;
 
   @override
@@ -32,7 +36,7 @@ class TDEmpty extends StatelessWidget {
         children: [
           image ?? Icon(
             TDIcons.info_circle_filled,
-            size: 84,
+            size: 96,
             color: TDTheme.of(context).fontGyColor3,
           ),
           Padding(padding: EdgeInsets.only(top: image == null ? 22 : 16)),
@@ -46,9 +50,9 @@ class TDEmpty extends StatelessWidget {
               ? Padding(
                   padding: const EdgeInsets.only(top: 32),
                   child: TDButton(
-                    content: operationText ?? '',
+                    text: operationText ?? '',
                     size: TDButtonSize.large,
-                    style: TDButtonStyle.primary(),
+                    theme: TDButtonTheme.primary,
                     width: 179,
                     onTap: () {
                       if (onTapEvent != null) {

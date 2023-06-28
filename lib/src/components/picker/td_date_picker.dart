@@ -9,14 +9,46 @@ typedef DatePickerCallback = void Function(Map<String, int> selected);
 
 /// 时间选择器
 class TDDatePicker extends StatefulWidget {
-  final String title; // 选择器标题
-  final DatePickerCallback? onConfirm; // 选择器确认按钮回调
-  final DatePickerCallback? onCancel; // 选择器取消按钮回调
+
+  const TDDatePicker(
+      {required this.title,
+        required this.onConfirm,
+        this.onCancel,
+        this.backgroundColor,
+        this.titleDividerColor,
+        this.topRadius,
+        this.titleHeight,
+        this.padding,
+        this.leftPadding,
+        this.rightPadding,
+        this.leftTextStyle,
+        this.rightTextStyle,
+        this.centerTextStyle,
+        this.customSelectWidget,
+        this.itemDistanceCalculator,
+        required this.model,
+        this.showTitle = true,
+        this.pickerHeight = 200,
+        required this.pickerItemCount,
+        Key? key}) : super(key: key);
+
+  /// 选择器标题
+  final String title;
+  /// 选择器确认按钮回调
+  final DatePickerCallback? onConfirm;
+  /// 选择器取消按钮回调
+  final DatePickerCallback? onCancel;
+  /// 背景颜色
   final Color? backgroundColor;
+  /// 标题分割线颜色
   final Color? titleDividerColor;
+  /// 顶部圆角
   final double? topRadius;
+  /// 标题高度
   final double? titleHeight;
+  /// 左边填充
   final double? leftPadding;
+  /// 右边填充
   final double? rightPadding;
 
   /// 根据距离计算字体颜色、透明度、粗细
@@ -46,31 +78,8 @@ class TDDatePicker extends StatefulWidget {
   /// 是否展示标题
   final bool showTitle;
 
+  /// 数据模型
   final DatePickerModel model;
-
-
-   const TDDatePicker(
-      {required this.title,
-      required this.onConfirm,
-      this.onCancel,
-      this.backgroundColor,
-      this.titleDividerColor,
-      this.topRadius,
-      this.titleHeight,
-      this.padding,
-      this.leftPadding,
-      this.rightPadding,
-      this.leftTextStyle,
-      this.rightTextStyle,
-      this.centerTextStyle,
-      this.customSelectWidget,
-      this.itemDistanceCalculator,
-      required this.model,
-      this.showTitle = true,
-      this.pickerHeight = 200,
-      required this.pickerItemCount,
-      Key? key})
-      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TDDatePickerState();
@@ -79,11 +88,24 @@ class TDDatePicker extends StatefulWidget {
 class _TDDatePickerState extends State<TDDatePicker> {
 
   double pickerHeight = 0;
+  static const _pickerTitleHeight = 56.0;
 
   @override
   void initState() {
     super.initState();
     pickerHeight = widget.pickerHeight;
+  }
+
+  bool useAll() {
+    if(widget.model.useYear
+        && widget.model.useMonth
+        && widget.model.useDay
+        && widget.model.useHour
+        && widget.model.useMinute
+        && widget.model.useSecond) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -95,41 +117,38 @@ class _TDDatePickerState extends State<TDDatePicker> {
       decoration: BoxDecoration(
         color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(widget.topRadius ?? 0),
-          topRight: Radius.circular(widget.topRadius ?? 0),
+          topLeft: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
+          topRight: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
         ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Visibility(child: buildTitle(context), visible: widget.showTitle == true,),
-          Container(
-            width: maxWidth,
-            height: 0.5,
-            color: widget.titleDividerColor ?? TDTheme.of(context).fontGyColor3,
-          ),
           SizedBox(
             height: pickerHeight,
             child: Stack(
               alignment: Alignment.center,
               children: [
-                widget.customSelectWidget ?? Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                      border: Border(
-                    top: BorderSide(
-                        color: TDTheme.of(context).fontGyColor3, width: 0.5),
-                    bottom: BorderSide(
-                        color: TDTheme.of(context).fontGyColor3, width: 0.5),
-                  )),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: widget.customSelectWidget ?? Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: TDTheme.of(context).grayColor1,
+                      borderRadius: BorderRadius.all(Radius.circular(TDTheme.of(context).radiusDefault))
+                    ),
+                  ),
                 ),
-                SizedBox(
+                Container(
                     height: pickerHeight,
                     width: maxWidth,
+                    padding: const EdgeInsets.only(left: 32, right: 32),
                     child: Row(
                       children: [
                         widget.model.useYear
-                            ? Expanded(child: buildList(context, 0))
+                            ? useAll() ? SizedBox(child: buildList(context, 0), width: 64,)
+                            : Expanded(child: buildList(context, 0))
                             : Container(),
                         widget.model.useMonth
                             ? Expanded(child: buildList(context, 1))
@@ -137,17 +156,55 @@ class _TDDatePickerState extends State<TDDatePicker> {
                         widget.model.useDay
                             ? Expanded(child: buildList(context, 2))
                             : Container(),
-                        widget.model.useHour
+                        widget.model.useWeekDay
                             ? Expanded(child: buildList(context, 3))
                             : Container(),
-                        widget.model.useMinute
+                        widget.model.useHour
                             ? Expanded(child: buildList(context, 4))
                             : Container(),
-                        widget.model.useSecond
+                        widget.model.useMinute
                             ? Expanded(child: buildList(context, 5))
                             : Container(),
+                        widget.model.useSecond
+                            ? Expanded(child: buildList(context, 6))
+                            : Container(),
                       ],
-                    ))
+                    )),
+                // 蒙层
+                Positioned(
+                  top: 0,
+                  child: IgnorePointer(
+                    ignoring: true,
+                    child: Container(
+                      height: _pickerTitleHeight,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [TDTheme.of(context).whiteColor1, TDTheme.of(context).whiteColor1.withOpacity(0)]
+                          )
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  child: IgnorePointer(
+                    ignoring: true,
+                    child: Container(
+                      height: _pickerTitleHeight,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [TDTheme.of(context).whiteColor1, TDTheme.of(context).whiteColor1.withOpacity(0)]
+                          )
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           )
@@ -156,8 +213,8 @@ class _TDDatePickerState extends State<TDDatePicker> {
     );
   }
 
-  Widget buildList(context, int whichline) {
-    /// whichline参数表示这个列表表示的是年，还是月还是日......
+  Widget buildList(context, int whichLine) {
+    /// whichLine参数表示这个列表表示的是年，还是月还是日......
     var maxWidth = MediaQuery.of(context).size.width;
     return MediaQuery.removePadding(
         context: context,
@@ -167,16 +224,32 @@ class _TDDatePickerState extends State<TDDatePicker> {
           child: ListWheelScrollView.useDelegate(
               itemExtent: pickerHeight / widget.pickerItemCount,
               diameterRatio: 100,
-              controller: widget.model.controllers[whichline],
-              physics: const FixedExtentScrollPhysics(),
+              controller: widget.model.controllers[whichLine],
+              physics: whichLine == 3 ? const NeverScrollableScrollPhysics() : const FixedExtentScrollPhysics(),
               onSelectedItemChanged: (index) {
-                if (whichline == 0 || whichline == 1) {
+                if (whichLine == 0 || whichLine == 1 || whichLine == 2) {
                   // 年月的改变会引起日的改变, 年的改变会引起月的改变
                   setState(() {
-                    if (whichline == 0) {
-                      widget.model.refreshMonthDataAndController();
+                    switch(whichLine) {
+                      case 0:
+                        widget.model.refreshMonthDataAndController();
+                        widget.model.refreshDayDataAndController();
+                        if(widget.model.useWeekDay) {
+                          widget.model.refreshWeekDayDataAndController();
+                        }
+                        break;
+                      case 1:
+                        widget.model.refreshDayDataAndController();
+                        if(widget.model.useWeekDay) {
+                          widget.model.refreshWeekDayDataAndController();
+                        }
+                        break;
+                      case 2:
+                        if(widget.model.useWeekDay) {
+                          widget.model.refreshWeekDayDataAndController();
+                        }
+                        break;
                     }
-                    widget.model.refreshDayDataAndController();
 
                     /// 使用动态高度，强制列表组件的state刷新，以展现更新的数据，详见下方链接
                     /// FIX:https://github.com/flutter/flutter/issues/22999
@@ -186,7 +259,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                 }
               },
               childDelegate: ListWheelChildBuilderDelegate(
-                  childCount: widget.model.data[whichline].length,
+                  childCount: widget.model.data[whichLine].length,
                   builder: (context, index) {
                     return Container(
                         alignment: Alignment.center,
@@ -195,10 +268,13 @@ class _TDDatePickerState extends State<TDDatePicker> {
                         child: TDItemWidget(
                           index: index,
                           itemHeight: pickerHeight / widget.pickerItemCount,
-                          content: widget.model.data[whichline][index].toString() +
-                              widget.model.mapping[whichline],
+                          content: whichLine == 3 ?
+                          widget.model.mapping[whichLine] +
+                              widget.model.weekMap[widget.model.data[whichLine][index] - 1]
+                          : widget.model.data[whichLine][index].toString() +
+                              widget.model.mapping[whichLine],
                           fixedExtentScrollController:
-                              widget.model.controllers[whichline],
+                              widget.model.controllers[whichLine],
                           itemDistanceCalculator: widget.itemDistanceCalculator,
                         ));
                   })),
@@ -232,6 +308,10 @@ class _TDDatePickerState extends State<TDDatePicker> {
                         ? widget.model.dayFixedExtentScrollController.selectedItem +
                             widget.model.data[2][0]
                         : -1,
+                    'weekDay': widget.model.useWeekDay
+                        ? widget.model.weekDayFixedExtentScrollController.selectedItem +
+                        widget.model.data[3][0]
+                        : -1,
                     'hour': widget.model.useHour
                         ? widget.model.hourFixedExtentScrollController.selectedItem
                         : -1,
@@ -261,8 +341,8 @@ class _TDDatePickerState extends State<TDDatePicker> {
                     child: TDText(
                       widget.title,
                       style: widget.centerTextStyle ?? TextStyle(
-                        fontSize: TDTheme.of(context).fontBodyLarge!.size,
-                        fontWeight: FontWeight.w600,
+                        fontSize: TDTheme.of(context).fontTitleLarge!.size,
+                        fontWeight: FontWeight.w700,
                         color: TDTheme.of(context).fontGyColor1,
                       ),
                     ),
@@ -286,6 +366,10 @@ class _TDDatePickerState extends State<TDDatePicker> {
                       ? widget.model.dayFixedExtentScrollController.selectedItem +
                           widget.model.data[2][0]
                       : -1,
+                  'weekDay': widget.model.useWeekDay
+                      ? widget.model.weekDayFixedExtentScrollController.selectedItem +
+                          widget.model.data[3][0]
+                      : -1,
                   'hour': widget.model.useHour
                       ? widget.model.hourFixedExtentScrollController.selectedItem
                       : -1,
@@ -302,7 +386,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
-              '确认',
+              '确定',
               style: widget.rightTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontBodyLarge!.size,
                   color: TDTheme.of(context).brandNormalColor
@@ -314,7 +398,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
     );
   }
 
-  double getTitleHeight() => widget.titleHeight ?? 48;
+  double getTitleHeight() => widget.titleHeight ?? _pickerTitleHeight;
 }
 
 // 时间选择器的数据类
@@ -322,6 +406,7 @@ class DatePickerModel {
   bool useYear;
   bool useMonth;
   bool useDay;
+  bool useWeekDay;
   bool useHour;
   bool useMinute;
   bool useSecond;
@@ -329,18 +414,21 @@ class DatePickerModel {
   List<int> dateEnd;
   List<int>? dateInitial;
 
-  final mapping = ['年', '月', '日', '时', '分', '秒'];
+  final mapping = ['年', '月', '日', '周', '时', '分', '秒'];
+  final weekMap = ['一', '二', '三', '四', '五', '六', '日'];
 
   late DateTime initialTime;
 
-  /// 这三项随滑动而更新，注意初始化
+  /// 这四项随滑动而更新，注意初始化
   late int yearIndex;
   late int monthIndex;
   late int dayIndex;
+  late int weekDayIndex;
 
   late List<List<int>> data = [
     List.generate(
         dateEnd[0] - dateStart[0] + 1, (index) => index + dateStart[0]),
+    [],
     [],
     [],
     List.generate(24, (index) => index),
@@ -351,6 +439,7 @@ class DatePickerModel {
   late FixedExtentScrollController yearFixedExtentScrollController;
   late FixedExtentScrollController monthFixedExtentScrollController;
   late FixedExtentScrollController dayFixedExtentScrollController;
+  late FixedExtentScrollController weekDayFixedExtentScrollController;
   late FixedExtentScrollController hourFixedExtentScrollController;
   late FixedExtentScrollController minuteFixedExtentScrollController;
   late FixedExtentScrollController secondFixedExtentScrollController;
@@ -361,14 +450,17 @@ class DatePickerModel {
     required this.useDay,
     required this.useHour,
     required this.useMinute,
+    required this.useWeekDay,
     required this.useSecond,
     required this.dateStart,
     required this.dateEnd,
     this.dateInitial
-  }) {
+  }){
+    assert(!useWeekDay || (!useSecond && !useMinute && !useHour), 'WeekDay can only used with Year, Month and Day!');
     setInitialTime();
     setInitialMonthData();
     setInitialDayData();
+    setInitialWeekDayData();
     setControllers();
     addListener();
   }
@@ -385,13 +477,12 @@ class DatePickerModel {
       }
       return;
     }
+    
     var now = DateTime.now();
-    if (now.year * 500 + now.month * 40 + now.day <
-        dateStart[0] * 500 + dateStart[1] * 40 + dateStart[2]) {
+    if (now.isBefore(startTime)) {
       initialTime = DateTime(dateStart[0], dateStart[1], dateStart[2], now.hour,
           now.minute, now.second);
-    } else if (now.year * 500 + now.month * 40 + now.day >
-        dateEnd[0] * 500 + dateEnd[1] * 40 + dateEnd[2]) {
+    } else if (now.isAfter(endTime)) {
       initialTime = DateTime(
           dateEnd[0], dateEnd[1], dateEnd[2], now.hour, now.minute, now.second);
     } else {
@@ -433,16 +524,23 @@ class DatePickerModel {
           (index) => index + 1);
     }
   }
+  
+  void setInitialWeekDayData() {
+    data[3] = [1, 2, 3, 4, 5, 6, 7];
+  }
 
   void setControllers() {
     /// 初始化Index
     yearIndex = initialTime.year - data[0][0];
     monthIndex = initialTime.month - data[1][0];
     dayIndex = initialTime.day - data[2][0];
+    weekDayIndex = initialTime.weekday - 1;
+
     controllers = [
       FixedExtentScrollController(initialItem: yearIndex),
       FixedExtentScrollController(initialItem: monthIndex),
       FixedExtentScrollController(initialItem: dayIndex),
+      FixedExtentScrollController(initialItem: weekDayIndex),
       FixedExtentScrollController(initialItem: initialTime.hour),
       FixedExtentScrollController(initialItem: initialTime.minute),
       FixedExtentScrollController(initialItem: initialTime.second)
@@ -450,9 +548,10 @@ class DatePickerModel {
     yearFixedExtentScrollController = controllers[0];
     monthFixedExtentScrollController = controllers[1];
     dayFixedExtentScrollController = controllers[2];
-    hourFixedExtentScrollController = controllers[3];
-    minuteFixedExtentScrollController = controllers[4];
-    secondFixedExtentScrollController = controllers[5];
+    weekDayFixedExtentScrollController = controllers[3];
+    hourFixedExtentScrollController = controllers[4];
+    minuteFixedExtentScrollController = controllers[5];
+    secondFixedExtentScrollController = controllers[6];
   }
 
   void addListener() {
@@ -465,6 +564,9 @@ class DatePickerModel {
     });
     dayFixedExtentScrollController.addListener(() {
       dayIndex = dayFixedExtentScrollController.selectedItem;
+    });
+    weekDayFixedExtentScrollController.addListener(() {
+      weekDayIndex = weekDayFixedExtentScrollController.selectedItem;
     });
   }
 
@@ -506,14 +608,9 @@ class DatePickerModel {
         dayIndex > data[2].length - 1 ? data[2].length - 1 : dayIndex);
   }
 
-  Map<String, int> getSelectedMap() {
-    var map = <String, int>{
-      'year': yearIndex + data[0][0],
-      'month': monthIndex + data[1][0],
-      'day' : dayIndex + data[2][0],
-    };
-    return map;
+  void refreshWeekDayDataAndController() {
+    var date = DateTime(data[0][yearFixedExtentScrollController.selectedItem], data[1][monthFixedExtentScrollController.selectedItem], data[2][dayFixedExtentScrollController.selectedItem]);
+    weekDayFixedExtentScrollController.jumpToItem(date.weekday - 1);
   }
 
 }
-

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import '../base/api_widget.dart';
+import '../base/example_base.dart';
 import '../main.dart';
 import 'code_widget.dart';
 
@@ -19,7 +20,7 @@ class WebMainBody extends StatefulWidget {
 }
 
 class _WebMainBodyState extends State<WebMainBody> {
-  static const menuWidth = 260.0;
+  static const menuWidth = 280.0;
 
   var screenSizeList = <Size>[
     const Size(520, 1080),
@@ -134,7 +135,7 @@ class _WebMainBodyState extends State<WebMainBody> {
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      WebApiController.setApiPath(apiPath: model.apiPath,mobilePath: model.path, codePath: model.codePath ?? model.apiPath, );
+                      WebApiController.setApiPath(apiPath: model.name,mobilePath: model.name, codePath: model.codePath ?? model.name, );
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -221,7 +222,10 @@ class _DetailLayoutState extends State<DetailLayout> with TickerProviderStateMix
 
   List<Widget> _getTabViews() {
     var tabViews = [
-      ApiWidget(apiName: widget.apiPath,visible: true,),
+      SingleChildScrollView(
+        child: ApiWidget(apiName: widget.apiPath,visible: true,),
+      )
+      ,
       CodeWidget(codePath: widget.codePath,),
     ];
     return tabViews;
@@ -305,7 +309,7 @@ class _MobileWidgetState extends State<MobileWidget> {
 class WebApiController {
   static _WebMainBodyState? _state;
 
-  static setApiPath({required String? apiPath,required String? mobilePath, String? codePath}){
+  static void setApiPath({required String? apiPath,required String? mobilePath, String? codePath}){
     _state?.setApiPath(apiPath: apiPath, mobilePath:mobilePath, codePath: codePath);
   }
 }

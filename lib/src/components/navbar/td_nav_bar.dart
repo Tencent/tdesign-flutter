@@ -26,23 +26,37 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.onBack,
     this.useBorderStyle = false,
     this.border,
+    this.belowTitleWidget,
   }) : super(key: key);
 
+  /// 左边操作项
   final List<TDNavBarItem>? leftBarItems;
+  /// 右边操作项
   final List<TDNavBarItem>? rightBarItems;
+  /// 标题控件，优先级高于title文案
   final Widget? titleWidget;
+  /// 标题文案
   final String? title;
+  /// 标题颜色
   final Color? titleColor;
+  /// 标题字体尺寸
   final Font? titleFont;
+  /// 标题字体粗细
   final FontWeight? titleFontWeight;
+  /// 标题字体样式
   final FontFamily? titleFontFamily;
+  /// 标题是否居中
   final bool centerTitle;
+  /// 透明度
   final double opacity;
+  /// 背景颜色
   final Color? backgroundColor;
+  /// 内部填充
   final EdgeInsetsGeometry? padding;
 
   /// 中间文案左右两边间距
   final double titleMargin;
+  /// 高度
   final double height;
 
   /// 是否进行屏幕适配，默认true
@@ -59,6 +73,9 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
 
   /// 边框
   final TDNavBarItemBorder? border;
+
+  /// belowTitleWidget navbar 下方的widget
+  final Widget? belowTitleWidget;
 
   @override
   State<StatefulWidget> createState() => _TDNavBarState();
@@ -104,7 +121,7 @@ class _TDNavBarState extends State<TDNavBar> {
 
   Widget get backButton {
     return TDNavBarItem(
-      icon: Icons.arrow_back_ios,
+      icon: Icons.chevron_left,
       action: () {
         widget.onBack?.call();
         Navigator.maybePop(context);
@@ -117,7 +134,7 @@ class _TDNavBarState extends State<TDNavBar> {
         (isLeft ? widget.leftBarItems : widget.rightBarItems) ?? [];
     var children = barItems
         .map(
-          (e) => e.toWidget(context),
+          (e) => e.toWidget(context, isLeft: isLeft),
         )
         .toList();
 
@@ -170,6 +187,27 @@ class _TDNavBarState extends State<TDNavBar> {
 
   late final top = MediaQuery.of(context).padding.top;
 
+  Widget _getNavbarChild(){
+     final Widget toolbar = NavigationToolbar(
+      leading: _buildTitleBarItems(true),
+      middle: _getTitleWidget(context),
+      trailing: _buildTitleBarItems(false),
+      middleSpacing: widget.titleMargin,
+      centerMiddle: widget.centerTitle,
+    );
+    if (widget.belowTitleWidget == null) {
+      return toolbar;
+    }
+    var children = <Widget>[
+      Expanded(child: toolbar)
+    ];
+    children.add(widget.belowTitleWidget as Widget);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var bcc = widget.backgroundColor ?? TDTheme.of(context).whiteColor1;
@@ -188,40 +226,40 @@ class _TDNavBarState extends State<TDNavBar> {
       color: bcc,
       height: widget.height + paddingTop,
       padding: padding.add(EdgeInsets.only(top: paddingTop)),
-      child: NavigationToolbar(
-        leading: _buildTitleBarItems(true),
-        middle: _getTitleWidget(context),
-        trailing: _buildTitleBarItems(false),
-        middleSpacing: widget.titleMargin,
-        centerMiddle: widget.centerTitle,
-      ),
+      child: _getNavbarChild()
     );
   }
 }
 
 class TDNavBarItem {
+  /// 图标
   IconData? icon;
+  /// 图标颜色
   Color? iconColor;
+  /// 操作回调
   TDBarItemAction? action;
+  /// 图标尺寸
   double? iconSize;
+  /// 内部填充
   EdgeInsetsGeometry? padding;
+  /// 图标组件，优先级高与icon
   Widget? iconWidget;
 
   TDNavBarItem({
     this.icon,
     this.iconColor,
     this.action,
-    this.iconSize = 16.0,
+    this.iconSize = 24.0,
     this.padding,
     this.iconWidget,
   });
 
-  Widget toWidget(BuildContext context) => GestureDetector(
+  Widget toWidget(BuildContext context,{bool isLeft = true}) => GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: action,
         child: Padding(
           padding:
-              padding ?? EdgeInsets.all(TDTheme.of(context).spacer8),
+          padding ?? (isLeft ? EdgeInsets.only(right: TDTheme.of(context).spacer8) : EdgeInsets.only(left: TDTheme.of(context).spacer8)),
           child: iconWidget ??
               Icon(
                 icon,

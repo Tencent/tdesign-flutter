@@ -1,0 +1,35 @@
+
+  Widget _showAllIcons(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      alignment: Alignment.center,
+      child: Wrap(
+        children: [
+          Container(
+            child: TDButton(text: showBorder? '隐藏边框':'显示边框',
+              shape: TDButtonShape.filled,
+              onTap: (){
+                setState(() {
+                  showBorder = !showBorder;
+                });
+              },),
+            margin: const EdgeInsets.only(bottom: 16),
+          ),
+          for (var iconData in TDIcons.all.values) SizedBox(
+            height: 100,
+            width: 175,
+
+            child: Column(
+              children: [
+                Container(
+                  color: showBorder ? Colors.green : Colors.transparent,
+                  child: Icon(iconData),
+                ),
+                TDText(iconData.name)
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }

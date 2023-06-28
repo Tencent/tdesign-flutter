@@ -4,141 +4,190 @@ import '../../../td_export.dart';
 
 /// TDButton按钮样式
 class TDButtonStyle {
+  /// 背景颜色
   Color? backgroundColor;
+  /// 边框颜色
   Color? frameColor;
+  /// 文字颜色
   Color? textColor;
-  Color? disableBackgroundColor;
-  Color? disableFrameColor;
-  Color? disableTextColor;
-  Radius? radius;
+  /// 边框宽度
   double? frameWidth;
-  bool isFullWidth = false;
-
-  Color getBackgroundColor({BuildContext? context, bool disable = false}){
-    return (disable ? disableBackgroundColor : backgroundColor) ?? TDTheme.of(context).brandNormalColor;
-  }
-
-  Color getFrameColor({BuildContext? context, bool disable = false}){
-    return (disable ? disableFrameColor : frameColor) ?? TDTheme.of(context).brandNormalColor;
-  }
-
-  Color getTextColor({BuildContext? context, bool disable = false}){
-    return (disable ? disableTextColor : textColor) ?? TDTheme.of(context).fontWhColor1;
-  }
 
   TDButtonStyle(
       {this.backgroundColor,
-        this.frameColor,
-        this.textColor,
-        this.disableBackgroundColor,
-        this.disableFrameColor,
-        this.disableTextColor,
-        this.frameWidth,
-        this.radius});
+      this.frameColor,
+      this.textColor,
+      this.frameWidth,});
 
-  TDButtonStyle.primary({BuildContext? context}){
-    var themeData = TDTheme.of(context);
-    backgroundColor = themeData.brandNormalColor;
-    textColor = themeData.fontWhColor1;
+  /// 生成不同主题的填充按钮样式
+  TDButtonStyle.generateFillStyleByTheme(
+      BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
+    switch (theme) {
+      case TDButtonTheme.primary:
+        textColor = TDTheme.of(context).fontWhColor1;
+        backgroundColor = _getBrandColor(context, status);
+        break;
+      case TDButtonTheme.danger:
+        textColor = TDTheme.of(context).fontWhColor1;
+        backgroundColor = _getErrorColor(context, status);
+        break;
+      case TDButtonTheme.light:
+        textColor = _getBrandColor(context, status);
+        backgroundColor = _getLightColor(context, status);
+        break;
+      case TDButtonTheme.defaultTheme:
+      default:
+        textColor = _getDefaultTextColor(context, status);
+        backgroundColor = _getDefaultBgColor(context, status);
+    }
     frameColor = backgroundColor;
-    disableBackgroundColor = themeData.brandDisabledColor;
-    disableTextColor = themeData.fontWhColor1;
-    disableFrameColor = disableBackgroundColor;
-    radius = const Radius.circular(4);
   }
 
-  TDButtonStyle.weakly({BuildContext? context}){
-    var themeData = TDTheme.of(context);
-    textColor = themeData.brandNormalColor;
-    frameColor = themeData.brandNormalColor;
-    backgroundColor = themeData.whiteColor1;
-    disableTextColor = themeData.brandDisabledColor;
-    disableFrameColor = themeData.brandDisabledColor;
-    disableBackgroundColor = themeData.whiteColor1;
-    radius = const Radius.circular(4);
-    frameWidth = 0.5;
+  /// 生成不同主题的描边按钮样式
+  TDButtonStyle.generateOutlineStyleByTheme(
+      BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
+    switch (theme) {
+      case TDButtonTheme.primary:
+        textColor = _getBrandColor(context, status);
+        backgroundColor = status == TDButtonStatus.active ? TDTheme.of(context).grayColor3 : TDTheme.of(context).whiteColor1;
+        frameColor = textColor;
+        break;
+      case TDButtonTheme.danger:
+        textColor = _getErrorColor(context, status);
+        backgroundColor = status == TDButtonStatus.active ? TDTheme.of(context).grayColor3 : TDTheme.of(context).whiteColor1;
+        frameColor = textColor;
+        break;
+      case TDButtonTheme.light:
+        textColor = _getBrandColor(context, status);
+        backgroundColor = _getLightColor(context, status);
+        frameColor = textColor;
+        break;
+      case TDButtonTheme.defaultTheme:
+      default:
+        textColor = _getDefaultTextColor(context, status);
+        backgroundColor = _getOutlineDefaultBgColor(context, status);
+        frameColor = TDTheme.of(context).grayColor4;
+    }
+    frameWidth = 1;
   }
 
-  TDButtonStyle.secondary({BuildContext? context}){
-    var themeData = TDTheme.of(context);
-    disableTextColor = themeData.fontGyColor4;
-    disableFrameColor = themeData.grayColor4;
-    textColor = themeData.fontGyColor1;
-    frameColor = themeData.grayColor4;
-    backgroundColor = themeData.whiteColor1;
-    disableBackgroundColor = themeData.whiteColor1;
-    radius = const Radius.circular(4);
-    frameWidth = 0.5;
-  }
-
-  TDButtonStyle.warningPrimary({BuildContext? context}){
-    var themeData = TDTheme.of(context);
-    disableBackgroundColor = themeData.errorDisabledColor;
-    disableTextColor = themeData.fontWhColor1;
-    backgroundColor = themeData.errorNormalColor;
-    textColor = themeData.fontWhColor1;
+  /// 生成不同主题的文本按钮样式
+  TDButtonStyle.generateTextStyleByTheme(
+      BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
+    switch (theme) {
+      case TDButtonTheme.primary:
+        textColor = _getBrandColor(context, status);
+        backgroundColor = status == TDButtonStatus.active ? TDTheme.of(context).grayColor3 : Colors.transparent;
+        break;
+      case TDButtonTheme.danger:
+        textColor = _getErrorColor(context, status);
+        backgroundColor = status == TDButtonStatus.active ? TDTheme.of(context).grayColor3 : Colors.transparent;
+        break;
+      case TDButtonTheme.light:
+        textColor = _getBrandColor(context, status);
+        backgroundColor = status == TDButtonStatus.active ? TDTheme.of(context).grayColor3 : Colors.transparent;
+        break;
+      case TDButtonTheme.defaultTheme:
+      default:
+        textColor = _getDefaultTextColor(context, status);
+        backgroundColor = status == TDButtonStatus.active ? TDTheme.of(context).grayColor3 : Colors.transparent;
+    }
     frameColor = backgroundColor;
-    disableFrameColor = backgroundColor;
-    radius = const Radius.circular(4);
   }
 
-  TDButtonStyle.warningWeakly({BuildContext? context}){
-    var themeData = TDTheme.of(context);
-    disableTextColor = themeData.errorDisabledColor;
-    disableFrameColor = themeData.errorDisabledColor;
-    textColor = themeData.errorNormalColor;
-    frameColor = themeData.errorNormalColor;
-    backgroundColor = themeData.whiteColor1;
-    disableBackgroundColor = themeData.whiteColor1;
-    radius = const Radius.circular(4);
-    frameWidth = 0.5;
+  /// 生成不同主题的幽灵按钮样式
+  TDButtonStyle.generateGhostStyleByTheme(
+      BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
+    switch (theme) {
+      case TDButtonTheme.primary:
+        textColor = status == TDButtonStatus.disable ? TDTheme.of(context).fontWhColor4 : _getBrandColor(context, status);
+        break;
+      case TDButtonTheme.danger:
+        textColor = status == TDButtonStatus.disable ? TDTheme.of(context).fontWhColor4 :_getErrorColor(context, status);
+        break;
+      case TDButtonTheme.light:
+        textColor = status == TDButtonStatus.disable ? TDTheme.of(context).fontWhColor4 :_getBrandColor(context, status);
+        break;
+      case TDButtonTheme.defaultTheme:
+      default:
+        switch(status){
+          case TDButtonStatus.active:
+            textColor =  TDTheme.of(context).fontWhColor2;
+            break;
+          case TDButtonStatus.disable:
+            textColor =  TDTheme.of(context).fontWhColor4;
+            break;
+          default:
+            textColor = TDTheme.of(context).fontWhColor1;
+        }
+    }
+    backgroundColor = Colors.transparent;
+    frameColor = textColor;
+    frameWidth = 1;
   }
 
-  TDButtonStyle.ghost({BuildContext? context}){
-    var themeData = TDTheme.of(context);
-    textColor = themeData.fontWhColor1;
-    frameColor = themeData.whiteColor1;
-    backgroundColor =  Colors.transparent;
-    disableTextColor = themeData.fontWhColor3;
-    disableFrameColor = themeData.fontWhColor3;
-    disableBackgroundColor =  Colors.transparent;
-    radius = const Radius.circular(4);
-    frameWidth = 0.5;
+  Color _getBrandColor(BuildContext context, TDButtonStatus status) {
+    switch(status){
+      case TDButtonStatus.defaultState:
+        return TDTheme.of(context).brandNormalColor;
+      case TDButtonStatus.active:
+        return TDTheme.of(context).brandClickColor;
+      case TDButtonStatus.disable:
+        return TDTheme.of(context).brandDisabledColor;
+    }
   }
 
-  TDButtonStyle.text({BuildContext? context,
-    Color? textColor,
-    Color? disableTextColor}){
-    this.textColor = textColor ?? TDTheme.of(context).brandNormalColor;
-    this.disableTextColor = disableTextColor ?? TDTheme.of(context).brandDisabledColor;
-    frameColor = Colors.transparent;
-    backgroundColor =  Colors.transparent;
-    disableFrameColor = Colors.transparent;
-    disableBackgroundColor = Colors.transparent;
-    radius = const Radius.circular(4);
+  Color _getLightColor(BuildContext context, TDButtonStatus status) {
+    switch(status){
+      case TDButtonStatus.defaultState:
+      case TDButtonStatus.disable:
+        return TDTheme.of(context).brandLightColor;
+      case TDButtonStatus.active:
+        return TDTheme.of(context).brandFocusColor;
+    }
   }
 
-  TDButtonStyle.full({BuildContext? context}){
-    var themeData = TDTheme.of(context);
-    textColor = themeData.fontWhColor1;
-    frameColor = themeData.brandNormalColor;
-    backgroundColor =  themeData.brandNormalColor;
-    disableTextColor = themeData.fontWhColor1;
-    disableFrameColor = themeData.brandDisabledColor;
-    disableBackgroundColor = themeData.brandDisabledColor;
-    radius = const Radius.circular(0);
-    isFullWidth = true;
+  Color _getErrorColor(BuildContext context, TDButtonStatus status) {
+    switch(status){
+      case TDButtonStatus.defaultState:
+        return TDTheme.of(context).errorNormalColor;
+      case TDButtonStatus.active:
+        return TDTheme.of(context).errorClickColor;
+      case TDButtonStatus.disable:
+        return TDTheme.of(context).errorDisabledColor;
+    }
   }
 
-  TDButtonStyle.fullSecondary({BuildContext? context}){
-    var themeData = TDTheme.of(context);
-    textColor = themeData.fontGyColor1;
-    frameColor = themeData.whiteColor1;
-    backgroundColor =  themeData.whiteColor1;
-    disableTextColor = themeData.fontGyColor4;
-    disableFrameColor = themeData.whiteColor1;
-    disableBackgroundColor = themeData.whiteColor1;
-    radius = const Radius.circular(0);
-    isFullWidth = true;
+  Color _getDefaultBgColor(BuildContext context, TDButtonStatus status) {
+    switch(status){
+      case TDButtonStatus.defaultState:
+        return TDTheme.of(context).grayColor3;
+      case TDButtonStatus.active:
+        return TDTheme.of(context).grayColor5;
+      case TDButtonStatus.disable:
+        return TDTheme.of(context).grayColor2;
+    }
   }
+
+  Color _getDefaultTextColor(BuildContext context, TDButtonStatus status) {
+    switch(status){
+      case TDButtonStatus.defaultState:
+      case TDButtonStatus.active:
+        return TDTheme.of(context).fontGyColor1;
+      case TDButtonStatus.disable:
+        return TDTheme.of(context).fontGyColor4;
+    }
+  }
+
+  Color _getOutlineDefaultBgColor(BuildContext context, TDButtonStatus status) {
+    switch(status){
+      case TDButtonStatus.defaultState:
+        return TDTheme.of(context).whiteColor1;
+      case TDButtonStatus.active:
+        return TDTheme.of(context).grayColor3;
+      case TDButtonStatus.disable:
+        return TDTheme.of(context).grayColor2;
+    }
+  }
+
 }

@@ -16,9 +16,9 @@ class TDInputDialog extends StatelessWidget {
     Key? key,
     required this.textEditingController,
     this.backgroundColor = Colors.white,
-    this.radius = 8.0,
+    this.radius = 12.0,
     this.title,
-    this.titleColor = Colors.black,
+    this.titleColor = const Color(0xE6000000),
     this.content,
     this.hintText = '',
     this.contentColor,
@@ -79,18 +79,18 @@ class TDInputDialog extends StatelessWidget {
           Container(
             color: Colors.white,
             height: 48,
-            margin: const EdgeInsets.fromLTRB(0, 8, 0, 24),
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            margin: const EdgeInsets.fromLTRB(24, 16, 24, 24),
             child: TextField(
               controller: textEditingController,
               autofocus: true,
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(3),
+                    borderRadius: BorderRadius.circular(6),
                     borderSide: BorderSide.none),
                 hintText: hintText,
-                fillColor: const Color(0xfff0f0f0),
+                hintStyle: const TextStyle(color: Color(0x66000000)),
+                fillColor: const Color(0xFFF3F3F3),
                 filled: true,
                 // labelText: '左上角',
               ),
@@ -104,9 +104,9 @@ class TDInputDialog extends StatelessWidget {
 
   Widget _horizontalButtons(BuildContext context) {
     final left = leftBtn ??
-        TDDialogButtonOptions(title: '取消', action: () {}, height: 56);
+        TDDialogButtonOptions(title: '取消', titleColor: const Color(0xE6000000), fontWeight: FontWeight.normal, action: () {}, height: 56);
     final right = rightBtn ??
-        TDDialogButtonOptions(title: '好的', action: () {}, height: 56);
+        TDDialogButtonOptions(title: '确定', action: () {}, fontWeight: FontWeight.w600, height: 56);
     return HorizontalTextButtons(
       leftBtn: left,
       rightBtn: right,
