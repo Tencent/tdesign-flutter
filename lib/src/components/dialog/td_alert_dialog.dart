@@ -21,9 +21,9 @@ class TDAlertDialog extends StatelessWidget {
   const TDAlertDialog({
     Key? key,
     this.backgroundColor = Colors.white,
-    this.radius = 8.0,
+    this.radius = 12.0,
     this.title,
-    this.titleColor = Colors.black,
+    this.titleColor = const Color(0xE6000000),
     this.content,
     this.contentColor,
     this.contentMaxHeight = 0,
@@ -39,12 +39,12 @@ class TDAlertDialog extends StatelessWidget {
 
   /// 纵向按钮排列的对话框
   ///
-  /// [buttons]参数是必须的，纵向按钮默认样式都是[TDButtonStyle.primary]
+  /// [buttons]参数是必须的，纵向按钮默认样式都是[TDButtonTheme.primary]
   const TDAlertDialog.vertical({
     Key? key,
     required List<TDDialogButtonOptions> buttons,
     this.backgroundColor = Colors.white,
-    this.radius = 8.0,
+    this.radius = 12.0,
     this.title,
     this.titleColor = Colors.black,
     this.content,
@@ -116,14 +116,18 @@ class TDAlertDialog extends StatelessWidget {
             contentColor: contentColor,
             contentMaxHeight: contentMaxHeight,
           ),
-          TDDivider(height: 24.scale, color: Colors.transparent),
+          const TDDivider(height: 24, color: Colors.transparent),
           _vertical ? _verticalButtons(context) : _horizontalButtons(context),
         ]));
   }
 
   Widget _horizontalButtons(BuildContext context) {
-    final left = leftBtn ?? TDDialogButtonOptions(title: '取消', action: () {});
-    final right = rightBtn ?? TDDialogButtonOptions(title: '好的', action: () {});
+    final left = leftBtn ??
+        TDDialogButtonOptions(
+            title: '取消', theme: TDButtonTheme.light, action: () {});
+    final right = rightBtn ??
+        TDDialogButtonOptions(
+            title: '确定', theme: TDButtonTheme.primary, action: () {});
     return _buttonStyle == TDDialogButtonStyle.text
         ? HorizontalTextButtons(leftBtn: left, rightBtn: right)
         : HorizontalNormalButtons(
@@ -139,8 +143,10 @@ class TDAlertDialog extends StatelessWidget {
         buttonText: value.title,
         buttonTextColor: value.titleColor,
         height: value.height,
-        buttonTextFontWeight: value.fontWeight,
+        buttonTextFontWeight: value.fontWeight ?? FontWeight.w600,
         buttonStyle: value.style,
+        buttonTheme: value.theme,
+        buttonType: value.type,
         onPressed: () {
           Navigator.pop(context);
           value.action();
@@ -148,13 +154,13 @@ class TDAlertDialog extends StatelessWidget {
       );
       widgets.add(btn);
       if (index < _buttons!.length - 1) {
-        widgets.add(TDDivider(height: 12.scale, color: Colors.transparent));
+        widgets.add(const TDDivider(height: 12, color: Colors.transparent));
       }
     });
 
     return Container(
       padding:
-          EdgeInsets.only(left: 24.scale, right: 24.scale, bottom: 24.scale),
+          const EdgeInsets.only(left: 24, right: 24, bottom: 24),
       child: Column(
         children: widgets,
       ),

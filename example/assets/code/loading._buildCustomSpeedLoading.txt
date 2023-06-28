@@ -1,0 +1,32 @@
+
+  Widget _buildCustomSpeedLoading(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TDLoading(
+            size: TDLoadingSize.small,
+            icon: TDLoadingIcon.circle,
+            axis: Axis.horizontal,
+            text: '加载中…',
+            duration: _currentSliderValue.round(),
+          ),
+          Slider(
+            value: _currentSliderValue,
+            max: 2000,
+            min: -20,
+            divisions: 100,
+            label: _currentSliderValue.round().toString(),
+            onChanged: (double value) {
+              setState(() {
+                _currentSliderValue = value;
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }

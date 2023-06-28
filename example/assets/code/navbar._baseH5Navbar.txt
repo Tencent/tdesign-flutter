@@ -1,0 +1,10 @@
+
+  Widget _baseH5Navbar(BuildContext context) {
+    return const TDNavBar(
+        height: 48,
+        titleFontWeight: FontWeight.w600,
+        title: titleText,
+        screenAdaptation: false,
+        useDefaultBack: true,
+    );
+  }

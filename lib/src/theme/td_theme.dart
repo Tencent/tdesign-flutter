@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import '../../td_export.dart';
 import '../util/log.dart';
 import '../util/string_util.dart';
 import 'basic.dart';
@@ -14,8 +15,10 @@ class TDTheme extends StatelessWidget {
       {required this.data, required this.child, this.systemData, Key? key})
       : super(key: key);
 
+  /// 子控件
   final Widget child;
 
+  /// 主题数据
   final TDThemeData data;
 
   /// Flutter系统主题数据
@@ -23,14 +26,11 @@ class TDTheme extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget result = _TDInheritedTheme(
-      theme: this,
-      child: child,
-    );
-    if (systemData != null) {
-      result = Theme(data: systemData!, child: result);
-    }
-    return result;
+
+    var extensions = [data];
+    return Theme(data: systemData?.copyWith(
+      extensions: extensions
+    ) ?? ThemeData(extensions: extensions), child: child);
   }
 
   /// 获取默认主题数据，全局唯一
@@ -43,42 +43,51 @@ class TDTheme extends StatelessWidget {
   static TDThemeData of([BuildContext? context]) {
     if (context != null) {
       // 如果传了context，则从其中获取最近主题
-      final inheritedTheme =
-          context.dependOnInheritedWidgetOfExactType<_TDInheritedTheme>();
-      return inheritedTheme?.theme.data ?? TDThemeData.defaultData();
+      try {
+        var data = Theme.of(context).extensions[TDThemeData] as TDThemeData?;
+        return data ?? TDThemeData.defaultData();
+      } catch (e) {
+        return TDThemeData.defaultData();
+      }
     } else {
       // 如果context为null,则返回全局默认主题
       return TDThemeData.defaultData();
     }
   }
-}
 
-/// 存储主题数据的内部控件
-class _TDInheritedTheme extends InheritedWidget {
-  final TDTheme theme;
-
-  const _TDInheritedTheme(
-      {required this.theme, Key? key, required Widget child})
-      : super(key: key, child: child);
-
-  @override
-  bool updateShouldNotify(covariant _TDInheritedTheme oldWidget) {
-    return theme.data != oldWidget.theme.data;
+  /// 获取主题数据，取不到则可空
+  /// 传了context，则获取最近的主题，取不到或未传context则返回null,
+  static TDThemeData? ofNullable([BuildContext? context]) {
+    if (context != null) {
+      // 如果传了context，则从其中获取最近主题
+      return Theme.of(context).extensions[TDThemeData] as TDThemeData?;
+    } else {
+      // 如果context为null,则返回null
+      return null;
+    }
   }
 }
 
 /// 主题数据
-class TDThemeData {
+class TDThemeData extends ThemeExtension<TDThemeData> {
   static const String _defaultThemeName = 'default';
   static TDThemeData? _defaultThemeData;
 
+  /// 名称
   late String name;
+  /// 颜色
   late Map<String, Color> colorMap;
+  /// 字体尺寸
   late Map<String, Font> fontMap;
+  /// 圆角
   late Map<String, double> radiusMap;
+  /// 字体样式
   late Map<String, FontFamily> fontFamilyMap;
+  /// 阴影
   late Map<String, List<BoxShadow>> shadowMap;
+  /// 间隔
   late Map<String, double> spacerMap;
+  /// 额外定义的结构
   late TDExtraThemeData? extraThemeData;
 
   TDThemeData(
@@ -89,8 +98,7 @@ class TDThemeData {
       required this.fontFamilyMap,
       required this.shadowMap,
       required this.spacerMap,
-      this.extraThemeData,
-      bool recoverDefault = false});
+      this.extraThemeData,});
 
   /// 获取默认Data，一个App里只有一个，用于没有context的地方
   static TDThemeData defaultData({TDExtraThemeData? extraThemeData}) {
@@ -103,7 +111,7 @@ class TDThemeData {
   }
 
   /// 从父类拷贝
-  TDThemeData copyWith(
+  TDThemeData copyWithTDThemeData(
     String name, {
     Map<String, Color>? colorMap,
     Map<String, Font>? fontMap,
@@ -113,8 +121,23 @@ class TDThemeData {
     Map<String, double>? marginMap,
     TDExtraThemeData? extraThemeData,
   }) {
+
+    return copyWith(name: name,colorMap: colorMap,fontMap: fontMap,radiusMap: radiusMap,fontFamilyMap: fontFamilyMap,shadowMap: shadowMap,marginMap: marginMap,extraThemeData: extraThemeData) as TDThemeData;
+  }
+
+  @override
+  ThemeExtension<TDThemeData> copyWith({
+    String? name,
+    Map<String, Color>? colorMap,
+    Map<String, Font>? fontMap,
+    Map<String, double>? radiusMap,
+    Map<String, FontFamily>? fontFamilyMap,
+    Map<String, List<BoxShadow>>? shadowMap,
+    Map<String, double>? marginMap,
+    TDExtraThemeData? extraThemeData,
+  }) {
     var result = TDThemeData(
-        name: name,
+        name: name ?? 'default',
         colorMap: _copyMap<Color>(this.colorMap, colorMap),
         fontMap: _copyMap<Font>(this.fontMap, fontMap),
         radiusMap: _copyMap<double>(this.radiusMap, radiusMap),
@@ -122,7 +145,6 @@ class TDThemeData {
         shadowMap: _copyMap<List<BoxShadow>>(this.shadowMap, shadowMap),
         spacerMap: _copyMap<double>(spacerMap, marginMap),
         extraThemeData: extraThemeData ?? this.extraThemeData);
-
     return result;
   }
 
@@ -175,7 +197,7 @@ class TDThemeData {
         Map<String, dynamic>? fontsMap = curThemeMap['font'];
         fontsMap?.forEach((key, value) {
           theme.fontMap[key] =
-              Font(size: value['size'], lineHeight: value['lineHeight']);
+              Font.fromJson(value);
         });
 
         /// 设置圆角
@@ -267,6 +289,14 @@ class TDThemeData {
       Log.e('TDThemeData ofExtra error: $e');
     }
     return null;
+  }
+
+  @override
+  ThemeExtension<TDThemeData> lerp(ThemeExtension<TDThemeData>? other, double t) {
+    if (other is! TDThemeData) {
+      return this;
+    }
+    return TDThemeData(name: other.name, colorMap: other.colorMap, fontMap: other.fontMap, radiusMap: other.radiusMap, fontFamilyMap: other.fontFamilyMap, shadowMap: other.shadowMap, spacerMap: other.spacerMap);
   }
 }
 

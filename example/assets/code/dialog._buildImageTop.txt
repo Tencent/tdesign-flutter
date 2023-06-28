@@ -1,0 +1,22 @@
+
+  Widget _buildImageTop(BuildContext context) {
+    return TDButton(
+      text: '图片置顶-带标题描述',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDImageDialog(
+              image: _demoImage,
+              title: _dialogTitle,
+              content: _commonContent,
+            );
+          },
+        );
+      },
+    );
+  }

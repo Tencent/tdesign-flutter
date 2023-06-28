@@ -1,0 +1,12 @@
+
+  Widget _specialTypeNumber(BuildContext context) {
+    return TDInput(
+      type: TDInputType.special,
+      controller: controller[16],
+      leftLabel: '数量',
+      hintText: '填写个数',
+      backgroundColor: Colors.white,
+      textAlign: TextAlign.end,
+      rightWidget: TDText('个', textColor: TDTheme.of(context).fontGyColor1),
+    );
+  }

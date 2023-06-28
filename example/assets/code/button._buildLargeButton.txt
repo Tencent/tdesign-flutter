@@ -1,0 +1,10 @@
+
+  TDButton _buildLargeButton(BuildContext context) {
+    return const TDButton(
+      text: '按钮48',
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+    );
+  }

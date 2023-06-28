@@ -1,0 +1,14 @@
+
+  Widget _buildSingleHandleWithNumber(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData(
+        min: 0,
+        max: 100,
+      ),
+      value: 10,
+      leftLabel: '0',
+      rightLabel: '100',
+      // divisions: 5,
+      onChanged: (value) {},
+    );
+  }
