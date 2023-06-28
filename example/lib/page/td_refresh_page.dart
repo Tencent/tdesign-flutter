@@ -10,6 +10,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:tdesign_flutter/td_export.dart';
 
 import '../../base/example_widget.dart';
+import '../annotation/demo.dart';
 
 class TdPullDownRefreshPage extends StatefulWidget {
   const TdPullDownRefreshPage({Key? key}) : super(key: key);
@@ -19,40 +20,64 @@ class TdPullDownRefreshPage extends StatefulWidget {
 }
 
 class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
-  var itemCount = 10;
-
-  var dataList = List.generate(10, (index) => '首页$index');
+  var count = 0;
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: '下拉刷新 PullDownRefresh',
+        title: tdTitle(),
+        exampleCodeGroup: 'refresh',
+        desc: '用于快速刷新页面信息，刷新可以是整页刷新也可以是页面的局部刷新。',
+        showSingleChild: true,
+        singleChild: CodeWrapper(builder: _buildRefresh),
+    );
+  }
+
+  @Demo(group: 'refresh')
+  Widget _buildRefresh(BuildContext context) {
+    return EasyRefresh(
+      // 下拉样式
+      header: TDRefreshHeader(),
+      child: Column(
         children: [
-        ExampleModule(title: '默认',
-        children: [
-          ExampleItem(builder: (_) => SizedBox(
-            height: 1000,
-            child: Stack(
-              children: [
-                EasyRefresh(
-                  // 下拉样式
-                  header: TDRefreshHeader(),
-                  child: ListView.builder(
-                    itemBuilder: (context, index) => Text('${dataList[index]}'),
-                    itemCount: dataList.length,
-                  ),
-                  // 下拉刷新回调
-                  onRefresh: () async {
-                    await Future.delayed(const Duration(seconds: 2), () {
-                      dataList.addAll(
-                          List.generate(10, (index) => ' 下拉添加的第$index个item'));
-                      setState(() {});
-                    });
-                  },
-                )
-              ],
+          Container(
+            height: 171,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: TDTheme.of(context).grayColor1,
+                borderRadius: BorderRadius.all(
+                    Radius.circular(TDTheme.of(context).radiusLarge))),
+            margin: const EdgeInsets.only(left: 16, right: 16),
+            child: TDText(
+              PlatformUtil.isWeb ? 'Web暂不支持下拉，请下载安装apk体验' : '拖拽该区域演示 顶部下拉刷新',
+              font: TDTheme.of(context).fontBodyLarge,
+              textColor: TDTheme.of(context).fontGyColor4,
             ),
-          ))
-        ])]);
+          ),
+          Container(
+            height: 70,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: TDTheme.of(context).grayColor1,
+                borderRadius: BorderRadius.all(
+                    Radius.circular(TDTheme.of(context).radiusLarge))),
+            margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
+            child: TDText(
+              '下拉刷新次数：${count}',
+              font: TDTheme.of(context).fontBodyLarge,
+              textColor: TDTheme.of(context).fontGyColor4,
+            ),
+          ),
+        ],
+      ),
+      // 下拉刷新回调
+      onRefresh: () async {
+        await Future.delayed(const Duration(seconds: 2), () {
+          setState(() {
+            count++;
+          });
+        });
+      },
+    );
   }
 }

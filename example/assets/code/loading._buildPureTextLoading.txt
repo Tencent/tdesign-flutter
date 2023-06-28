@@ -1,0 +1,28 @@
+
+  Widget _buildPureTextLoading(BuildContext context) {
+    return _buildRow([
+      const TDLoading(
+        size: TDLoadingSize.small,
+        text: '加载中…',
+      ),
+      TDLoading(
+        size: TDLoadingSize.small,
+        text: '加载失败',
+        textColor: TDTheme.of(context).fontGyColor3,
+      ),
+      TDLoading(
+        size: TDLoadingSize.small,
+        text: '加载失败',
+        refreshWidget: GestureDetector(
+          child: TDText(
+            '刷新',
+            font: TDTheme.of(context).fontBodySmall,
+            textColor: TDTheme.of(context).brandNormalColor,
+          ),
+          onTap: () {
+            TDToast.showText('刷新', context: context);
+          },
+        ),
+      ),
+    ]);
+  }

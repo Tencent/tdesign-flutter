@@ -1,0 +1,23 @@
+
+  Widget _basicTypeWithLeftIcon(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          leftIcon: const Icon(TDIcons.app),
+          controller: controller[11],
+          backgroundColor: Colors.white,
+          hintText: '请输入文字',
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller[11].clear();
+            setState(() {});
+          },
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }

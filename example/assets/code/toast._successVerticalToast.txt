@@ -1,0 +1,14 @@
+
+  Widget _successVerticalToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showSuccess('成功文案',
+            direction: IconTextDirection.vertical, context: context);
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '成功提示(竖向)',
+    );
+  }

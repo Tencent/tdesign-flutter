@@ -23,15 +23,14 @@ class _TDDialogPageState extends State<TDDialogPage> {
   final _longContent = '这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案。\n\n' * 4;
   final _inputHint = '请输入文字';
 
-  // TODO 换成设计稿的图
   final _demoImage = Image.asset(
-    'assets/img/brand.png',
+    'assets/img/image.png',
   );
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: '对话框 Dialog',
+        title: tdTitle(),
         desc: '用于显示重要提示或请求用户进行重要操作，一种打断当前操作的模态视图。',
         exampleCodeGroup: 'dialog',
         padding: const EdgeInsets.only(top: 8, bottom: 8),
@@ -70,9 +69,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildFeedbackNormal(BuildContext context) {
     return TDButton(
-      content: '反馈类-带标题',
+      text: '反馈类-带标题',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -91,9 +91,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildFeedbackNoTitle(BuildContext context) {
     return TDButton(
-      content: '反馈类-无标题',
+      text: '反馈类-无标题',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -111,9 +112,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildFeedbackOnlyTitle(BuildContext context) {
     return TDButton(
-      content: '反馈类-纯标题',
+      text: '反馈类-纯标题',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -131,9 +133,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildFeedbackLongContent(BuildContext context) {
     return TDButton(
-      content: '反馈类-内容超长',
+      text: '反馈类-内容超长',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -154,9 +157,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildConfirmNormal(BuildContext context) {
     return TDButton(
-      content: '确认类-带标题',
+      text: '确认类-带标题',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -175,9 +179,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildConfirmNoTitle(BuildContext context) {
     return TDButton(
-      content: '确认类-无标题',
+      text: '确认类-无标题',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -195,9 +200,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildConfirmOnlyTitle(BuildContext context) {
     return TDButton(
-      content: '确认类-纯标题',
+      text: '确认类-纯标题',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -216,9 +222,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildInputNormal(BuildContext context) {
     return TDButton(
-      content: '输入类-带描述',
+      text: '输入类-带描述',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -239,9 +246,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildInputNoContent(BuildContext context) {
     return TDButton(
-      content: '输入类-无描述',
+      text: '输入类-无描述',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -262,9 +270,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildImageTop(BuildContext context) {
     return TDButton(
-      content: '图片置顶-带标题描述',
+      text: '图片置顶-带标题描述',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -284,9 +293,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildImageTopNoTitle(BuildContext context) {
     return TDButton(
-      content: '图片置顶-无标题',
+      text: '图片置顶-无标题',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -305,9 +315,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildImageTopOnlyTitle(BuildContext context) {
     return TDButton(
-      content: '图片置顶-纯标题',
+      text: '图片置顶-纯标题',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -326,9 +337,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildImageMiddle(BuildContext context) {
     return TDButton(
-      content: '图片居中-带标题描述',
+      text: '图片居中-带标题描述',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -349,9 +361,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildImageMiddleOnlyTitle(BuildContext context) {
     return TDButton(
-      content: '图片居中-纯标题',
+      text: '图片居中-纯标题',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -371,9 +384,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildImageMiddleOnlyImage(BuildContext context) {
     return TDButton(
-      content: '图片居中-纯图片',
+      text: '图片居中-纯图片',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -393,9 +407,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildTextButtonSingle(BuildContext context) {
     return TDButton(
-      content: '单个文字按钮',
+      text: '单个文字按钮',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -415,9 +430,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildTextButtonDouble(BuildContext context) {
     return TDButton(
-      content: '左右文字按钮',
+      text: '左右文字按钮',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -438,9 +454,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildNormalButtonSingle(BuildContext context) {
     return TDButton(
-      content: '单个横向基础按钮',
+      text: '单个横向基础按钮',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -459,9 +476,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildNormalButtonDouble(BuildContext context) {
     return TDButton(
-      content: '左右横向基础按钮',
+      text: '左右横向基础按钮',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -481,9 +499,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildVerticalButtonDouble(BuildContext context) {
     return TDButton(
-      content: '两个纵向基础按钮',
+      text: '两个纵向基础按钮',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -496,12 +515,12 @@ class _TDDialogPageState extends State<TDDialogPage> {
                   TDDialogButtonOptions(
                       title: '主要按钮',
                       action: () {},
-                      style: TDButtonStyle.primary()),
+                      theme: TDButtonTheme.primary),
                   TDDialogButtonOptions(
                       title: '次要按钮',
-                      titleColor: TDTheme.of(context).brandColor8,
+                      titleColor: TDTheme.of(context).brandColor7,
                       action: () {},
-                      style: TDButtonStyle.secondary()),
+                      theme: TDButtonTheme.light),
                 ]);
           },
         );
@@ -512,9 +531,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildVerticalButtonTriple(BuildContext context) {
     return TDButton(
-      content: '三个纵向基础按钮',
+      text: '三个纵向基础按钮',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -527,17 +547,17 @@ class _TDDialogPageState extends State<TDDialogPage> {
                   TDDialogButtonOptions(
                       title: '主要按钮',
                       action: () {},
-                      style: TDButtonStyle.primary()),
+                      theme: TDButtonTheme.primary),
                   TDDialogButtonOptions(
                       title: '次要按钮',
-                      titleColor: TDTheme.of(context).brandColor8,
+                      titleColor: TDTheme.of(context).brandColor7,
                       action: () {},
-                      style: TDButtonStyle.secondary()),
+                      theme: TDButtonTheme.light),
                   TDDialogButtonOptions(
                       title: '次要按钮',
-                      titleColor: TDTheme.of(context).brandColor8,
+                      titleColor: TDTheme.of(context).brandColor7,
                       action: () {},
-                      style: TDButtonStyle.secondary()),
+                      theme: TDButtonTheme.light),
                 ]);
           },
         );
@@ -548,9 +568,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
   @Demo(group: 'dialog')
   Widget _buildDialogWithCloseButton(BuildContext context) {
     return TDButton(
-      content: '带关闭按钮的对话框',
+      text: '带关闭按钮的对话框',
       size: TDButtonSize.large,
-      style: TDButtonStyle.weakly(),
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
       onTap: () {
         showGeneralDialog(
           context: context,

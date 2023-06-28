@@ -1,0 +1,12 @@
+
+  Widget _buildCenterSearchBar(BuildContext context) {
+    return TDSearchBar(
+      placeHolder: '搜索预设文案',
+      alignment: TDSearchAlignment.center,
+      onTextChanged: (String text) {
+        setState(() {
+          inputText = text;
+        });
+      },
+    );
+  }

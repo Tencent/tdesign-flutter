@@ -1,0 +1,22 @@
+
+  Widget _buildSwitch({
+    bool on = true,
+    bool enable = true,
+    Color? trackOnColor,
+    Color? trackOffColor,
+    Color? thumbContentOnColor,
+    Color? thumbContentOffColor,
+    TDSwitchSize? size,
+    TDSwitchType? type,
+  }) {
+    return TDSwitch(
+      isOn: on,
+      trackOnColor: trackOnColor,
+      trackOffColor: trackOffColor,
+      thumbContentOnColor: thumbContentOnColor,
+      thumbContentOffColor: thumbContentOffColor,
+      enable: enable,
+      size: size,
+      type: type,
+    );
+  }

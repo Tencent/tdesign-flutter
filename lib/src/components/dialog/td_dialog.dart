@@ -29,6 +29,8 @@ class TDDialogButtonOptions {
     required this.action,
     this.titleColor,
     this.style,
+    this.type,
+    this.theme,
     this.height,
     this.fontWeight,
   });
@@ -45,6 +47,12 @@ class TDDialogButtonOptions {
   /// 按钮样式
   /// 设置单个按钮的样式会覆盖Dialog的默认样式
   final TDButtonStyle? style;
+
+  /// 按钮类型
+  final TDButtonType? type;
+
+  /// 按钮类型
+  final TDButtonTheme? theme;
 
   /// 按钮高度
   /// 建议使用默认高度

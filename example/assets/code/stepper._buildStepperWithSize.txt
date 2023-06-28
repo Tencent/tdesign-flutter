@@ -1,0 +1,11 @@
+
+  Widget _buildStepperWithSize(BuildContext context) {
+    return _buildRow(context, [
+      const TDStepper(
+          size: TDStepperSize.large, theme: TDStepperTheme.filled, value: 3),
+      const TDStepper(
+          size: TDStepperSize.medium, theme: TDStepperTheme.filled, value: 3),
+      const TDStepper(
+          size: TDStepperSize.small, theme: TDStepperTheme.filled, value: 3),
+    ]);
+  }

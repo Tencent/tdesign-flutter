@@ -1,0 +1,29 @@
+
+  Widget _buildLightShowTags(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: const [
+        TDTag('默认', isLight: true),
+        TDTag(
+          '主要',
+          isLight: true,
+          theme: TDTagTheme.primary,
+        ),
+        TDTag(
+          '警告',
+          isLight: true,
+          theme: TDTagTheme.warning,
+        ),
+        TDTag(
+          '危险',
+          isLight: true,
+          theme: TDTagTheme.danger,
+        ),
+        TDTag(
+          '成功',
+          isLight: true,
+          theme: TDTagTheme.success,
+        ),
+      ],
+    );
+  }

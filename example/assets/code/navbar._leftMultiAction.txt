@@ -1,0 +1,19 @@
+
+  Widget _leftMultiAction(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: TDNavBar(
+          height: 48,
+          title: titleText,
+          titleFontWeight: FontWeight.w600,
+          screenAdaptation: false,
+          useDefaultBack: true,
+          leftBarItems: [
+            TDNavBarItem(icon: TDIcons.close, iconSize: 24),
+          ],
+          rightBarItems: [
+            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+          ]
+      ),
+    );
+  }

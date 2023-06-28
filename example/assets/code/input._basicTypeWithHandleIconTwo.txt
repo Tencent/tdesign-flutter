@@ -1,0 +1,33 @@
+
+  Widget _basicTypeWithHandleIconTwo(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          leftLabel: '标签文字',
+          controller: controller[8],
+          backgroundColor: Colors.white,
+          hintText: '请输入文字',
+          rightBtn: Container(
+            alignment: Alignment.center,
+            width: 72,
+            height: 28,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: TDTheme.of(context).brandNormalColor),
+            child: const TDButton(
+              text: '操作按钮',
+              size: TDButtonSize.extraSmall,
+              theme: TDButtonTheme.primary
+            ),
+          ),
+          onBtnTap: () {
+            TDToast.showText('点击操作按钮', context: context);
+          },
+          needClear: false,
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }

@@ -9,12 +9,15 @@ typedef PageBuilder = Widget Function(BuildContext context, ExamplePageModel mod
 /// 示例页面数据
 class ExamplePageModel{
 
-  ExamplePageModel({required this.text,required this.path, this.apiPath, this.codePath,required this.pageBuilder,});
+  ExamplePageModel({required this.text,required this.name, this.apiVisible = false, this.showAction = false, this.isTodo = false,required this.pageBuilder,});
 
   final String text;
-  final String path;
-  final String? apiPath;
-  final String? codePath;
+  final String name;
+  String? codePath;
+  String? spline;
+  bool apiVisible;
+  bool showAction;
+  bool isTodo;
   final PageBuilder pageBuilder;
 }
 
@@ -34,3 +37,16 @@ class ExamplePageInheritedTheme extends InheritedWidget {
   }
 }
 
+class ScreenUtil{
+
+  static bool isLargeScreen(BuildContext context){
+
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    return width > height;
+  }
+
+  static bool isWebLargeScreen(BuildContext context){
+    return PlatformUtil.isWeb && isLargeScreen(context);
+  }
+}

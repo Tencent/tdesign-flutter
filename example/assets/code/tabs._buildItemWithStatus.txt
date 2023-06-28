@@ -1,0 +1,20 @@
+
+  Widget _buildItemWithStatus(BuildContext context) {
+    var tabs = [
+      const TDTab(
+        text: '选中',
+      ),
+      const TDTab(
+        text: '默认',
+      ),
+      const TDTab(
+        text: '禁用',
+        enable: false,
+      ),
+    ];
+    return TDTabBar(
+        tabs: tabs,
+        controller: TabController(length: 3, vsync: this),
+        backgroundColor: Colors.white,
+        showIndicator: true);
+  }

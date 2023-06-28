@@ -1,0 +1,11 @@
+
+  Widget _dismissLoadingToast(BuildContext context) {
+    return const TDButton(
+      onTap: TDToast.dismissLoading,
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '停止加载',
+    );
+  }

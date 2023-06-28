@@ -188,7 +188,6 @@ class _StateImageWidget extends State<ImageWidget> {
     _image = widget.assetUrl == null
         ? Image.network(
             widget.src ?? '',
-            key: ValueKey(widget.src),
             width: widget.width,
             height: widget.height,
             fit: widget.fit,
@@ -211,7 +210,6 @@ class _StateImageWidget extends State<ImageWidget> {
           )
         : Image.asset(
             widget.assetUrl ?? '',
-            key: ValueKey(widget.assetUrl),
             width: widget.width,
             height: widget.height,
             fit: widget.fit,

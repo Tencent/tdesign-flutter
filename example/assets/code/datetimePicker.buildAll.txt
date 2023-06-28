@@ -1,0 +1,25 @@
+
+  Widget buildAll(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showDatePicker(context, title: '选择时间',
+            onConfirm: (selected) {
+              setState(() {
+                selected_5 = '${selected['year'].toString().padLeft(4, '0')}-'
+                    '${selected['month'].toString().padLeft(2, '0')}-'
+                    '${selected['day'].toString().padLeft(2, '0')} '
+                    '${selected['hour'].toString().padLeft(2, '0')}:'
+                    '${selected['minute'].toString().padLeft(2, '0')}:'
+                    '${selected['second'].toString().padLeft(2, '0')}';
+              });
+            },
+            useHour: true,
+            useMinute: true,
+            useSecond: true,
+            dateStart: [1999, 01, 01],
+            dateEnd: [2023, 12, 31],
+            initialDate: [2012, 1, 1]);
+      },
+      child: buildSelectRow(context, selected_5, '选择时间'),
+    );
+  }

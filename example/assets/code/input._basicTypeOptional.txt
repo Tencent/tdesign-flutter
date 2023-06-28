@@ -1,0 +1,23 @@
+
+  Widget _basicTypeOptional(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          leftLabel: '标签文字',
+          controller: controller[2],
+          backgroundColor: Colors.white,
+          hintText: '请输入文字(选填)',
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller[2].clear();
+            setState(() {});
+          },
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }

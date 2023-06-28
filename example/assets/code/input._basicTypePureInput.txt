@@ -1,0 +1,22 @@
+
+  Widget _basicTypePureInput(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          controller: controller[3],
+          backgroundColor: Colors.white,
+          hintText: '请输入文字',
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller[3].clear();
+            setState(() {});
+          },
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }

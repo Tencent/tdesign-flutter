@@ -1,0 +1,26 @@
+
+  Widget _checkStyle(BuildContext context) {
+    return Column(
+      children: [
+        TDRadioGroup(
+          radioCheckStyle: TDRadioStyle.check,
+          selectId: 'index:0',
+          child: const TDRadio(
+            id: 'index:0',
+            title: '单选',
+          ),
+        ),
+        const SizedBox(
+          height: 17,
+        ),
+        TDRadioGroup(
+          radioCheckStyle: TDRadioStyle.hollowCircle,
+          selectId: 'index:0',
+          child: const TDRadio(
+            id: 'index:0',
+            title: '单选',
+          ),
+        )
+      ],
+    );
+  }

@@ -18,9 +18,9 @@ class TDConfirmDialog extends StatelessWidget {
     Key? key,
     this.action,
     this.backgroundColor = Colors.white,
-    this.radius = 8.0,
+    this.radius = 12.0,
     this.title,
-    this.titleColor = Colors.black,
+    this.titleColor = const Color(0xE6000000),
     this.content,
     this.contentColor,
     this.contentMaxHeight = 0,
@@ -71,13 +71,14 @@ class TDConfirmDialog extends StatelessWidget {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TDDivider(height: 23.scale, color: Colors.transparent),
+          const TDDivider(height: 23, color: Colors.transparent),
           const TDDivider(height: 1),
           TDDialogButton(
             buttonText: buttonText,
             buttonTextColor: buttonTextColor,
-            buttonStyle: TDButtonStyle.text(),
-            height: 56.scale,
+            buttonType: TDButtonType.text,
+            buttonTheme: TDButtonTheme.primary,
+            height: 56,
             onPressed: () {
               Navigator.pop(context);
               if (action != null) {
@@ -93,6 +94,7 @@ class TDConfirmDialog extends StatelessWidget {
         child: TDDialogButton(
           buttonText: buttonText,
           buttonTextColor: buttonTextColor,
+          buttonTheme: TDButtonTheme.primary,
           onPressed: () {
             Navigator.pop(context);
             if (action != null) {

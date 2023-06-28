@@ -1,0 +1,10 @@
+
+  Widget _verticalDivider(BuildContext context) {
+    return SizedBox(
+      height: 20,
+      child: Container(
+        alignment: Alignment.center,
+        child: const TDDivider(),
+      ),
+    );
+  }

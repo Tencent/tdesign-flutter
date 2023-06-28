@@ -1,0 +1,11 @@
+
+  TDButton _buildFilledFillButton(BuildContext context) {
+    return const TDButton(
+      text: '填充按钮',
+      icon: TDIcons.app,
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+    );
+  }

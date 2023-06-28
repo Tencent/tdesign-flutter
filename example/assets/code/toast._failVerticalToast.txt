@@ -1,0 +1,14 @@
+
+  Widget _failVerticalToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showFail('失败文案',
+            direction: IconTextDirection.vertical, context: context);
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '失败提示(竖向)',
+    );
+  }
