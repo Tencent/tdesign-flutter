@@ -58,6 +58,7 @@ class TDInput extends StatelessWidget {
       this.textAlign,
       this.onClearTap,
       this.needClear = true,
+      this.clearBtnColor,
       this.contentAlignment = TextAlign.start,
       this.rightWidget,
       this.cardStyle,
@@ -181,6 +182,9 @@ class TDInput extends StatelessWidget {
   
   /// 是否需要右侧按钮变为删除
   final bool needClear;
+
+  /// 右侧删除按钮颜色
+  final Color? clearBtnColor;
 
   /// textInput内边距
   final EdgeInsetsGeometry? contentPadding;
@@ -375,7 +379,7 @@ class TDInput extends StatelessWidget {
                     margin: EdgeInsets.only(left: 17.5, right: 16, top: additionInfo != '' ? getInputPadding() : 0),
                     child: Icon(
                       TDIcons.close_circle_filled,
-                      color: TDTheme.of(context).fontGyColor3,
+                      color: clearBtnColor ?? TDTheme.of(context).fontGyColor3,
                     ),
                   ),
                   onTap: onClearTap
@@ -518,7 +522,7 @@ class TDInput extends StatelessWidget {
                           margin: const EdgeInsets.only(left: 17.5, right: 16),
                           child: Icon(
                             TDIcons.close_circle_filled,
-                            color: TDTheme.of(context).fontGyColor3,
+                            color: clearBtnColor ?? TDTheme.of(context).fontGyColor3,
                           ),
                         ),
                         onTap: onClearTap,
@@ -666,57 +670,49 @@ class TDInput extends StatelessWidget {
                 visible: labelWidget != null,
                 child: labelWidget ?? const SizedBox.shrink(),
               ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: getTextSize(
-                          hintText ?? '',
-                          textStyle ??
-                              TextStyle(
-                                  color: TDTheme.of(context).fontGyColor1,
-                                  fontSize: 16),
-                        ).width +
-                        8,
-                    child: TDInputView(
-                      textStyle: textStyle ??
-                          TextStyle(color: TDTheme.of(context).fontGyColor1),
-                      readOnly: readOnly,
-                      autofocus: autofocus,
-                      obscureText: obscureText,
-                      onEditingComplete: onEditingComplete,
-                      onSubmitted: onSubmitted,
-                      hintText: hintText,
-                      inputType: inputType,
-                      onChanged: onChanged,
-                      inputFormatters: inputFormatters,
-                      inputDecoration: inputDecoration,
-                      maxLines: maxLines,
-                      focusNode: focusNode,
-                      isCollapsed: true,
-                      hintTextStyle: hintTextStyle ??
-                          TextStyle(color: TDTheme.of(context).fontGyColor3),
-                      cursorColor: cursorColor,
-                      textInputBackgroundColor: textInputBackgroundColor,
-                      controller: controller,
-                      textAlign: textAlign,
-                      contentPadding: contentPadding ??
-                          EdgeInsets.only(
-                              right: 8,
-                              bottom: getInputPadding(),
-                              top: getInputPadding()),
-                    ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: TDInputView(
+                    textStyle: textStyle ??
+                        TextStyle(color: TDTheme.of(context).fontGyColor1),
+                    readOnly: readOnly,
+                    autofocus: autofocus,
+                    obscureText: obscureText,
+                    onEditingComplete: onEditingComplete,
+                    onSubmitted: onSubmitted,
+                    hintText: hintText,
+                    inputType: inputType,
+                    onChanged: onChanged,
+                    inputFormatters: inputFormatters,
+                    inputDecoration: inputDecoration,
+                    maxLines: maxLines,
+                    focusNode: focusNode,
+                    isCollapsed: true,
+                    hintTextStyle: hintTextStyle ??
+                        TextStyle(color: TDTheme.of(context).fontGyColor3),
+                    cursorColor: cursorColor,
+                    textInputBackgroundColor: textInputBackgroundColor,
+                    controller: controller,
+                    textAlign: textAlign,
+                    contentPadding: contentPadding ??
+                        EdgeInsets.only(
+                            right: 8,
+                            bottom: getInputPadding(),
+                            top: getInputPadding()),
                   ),
-                  Visibility(
-                    visible: rightWidget != null,
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          top: getInputPadding(),
-                          bottom: getInputPadding(),
-                          right: 16),
-                      child: rightWidget,
-                    ),
-                  ),
-                ],
+                ),
+              ),
+              Visibility(
+                visible: rightWidget != null,
+                child: Container(
+                  margin: EdgeInsets.only(
+                      top: getInputPadding(),
+                      bottom: getInputPadding(),
+                      right: 16),
+                  child: rightWidget,
+                ),
               ),
             ],
           ),
