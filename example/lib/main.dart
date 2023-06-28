@@ -378,6 +378,7 @@ void main() {
       examplePageList.add(model);
     });
   });
+  sideBarExamplePage.forEach(examplePageList.add);
 }
 
 class MyApp extends StatelessWidget {
