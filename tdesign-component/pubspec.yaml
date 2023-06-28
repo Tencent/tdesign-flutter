@@ -17,6 +17,9 @@ dependencies:
   # 下拉刷新组件
   flutter_easyrefresh: ^2.2.1
 
+  # 相册选择组件
+  image_picker: ^1.0.0
+
 dev_dependencies:
   flutter_lints: ^1.0.4
   flutter_test:
