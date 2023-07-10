@@ -43,6 +43,7 @@
 | textAlign | TextAlign? | - | 文字对齐方向 |
 | onClearTap | GestureTapCallback? | - | 右侧删除点击 |
 | needClear | bool | true | 是否需要右侧按钮变为删除 |
+| clearBtnColor | Color? | - | 右侧删除按钮颜色 |
 | contentAlignment | TextAlign | TextAlign.start | 内容对齐方向 |
 | rightWidget | Widget? | - | 右侧自定义组件 特殊类型时生效 |
 | cardStyle | TDCardStyle? | - | 卡片默认样式 |
