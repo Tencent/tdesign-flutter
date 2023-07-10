@@ -19,10 +19,10 @@
 # navbar
 ./bin/demo_tool generate --file ../lib/src/components/navbar/td_nav_bar.dart --name TDNavBar,TDNavBarItem, --folder-name navbar --output ../example/assets/api/ --only-api
 # sidebar
-./bin/demo_tool generate --folder ../lib/src/components/sidebar --name TDSideBar,TDSideBarItem, --folder-name sidebar --output ../example/assets/api/ --only-api
+./bin/demo_tool generate --folder ../lib/src/components/sidebar --name TDSideBar,TDSideBarItem, --folder-name side-bar --output ../example/assets/api/ --only-api
 # steps
 # tabbar
-./bin/demo_tool generate --file ../lib/src/components/tabbar/td_bottom_tab_bar.dart --name TDBottomTabBar,IconTextTypeConfig,IconTypeConfig,BadgeConfig,TDBottomTabBarTabConfig,TDBottomTabBarPopUpBtnConfig,TDBottomTabBarPopUpShapeConfig,PopUpMenuItem --folder-name tabbar --output ../example/assets/api/ --only-api
+./bin/demo_tool generate --file ../lib/src/components/tabbar/td_bottom_tab_bar.dart --name TDBottomTabBar,IconTextTypeConfig,IconTypeConfig,BadgeConfig,TDBottomTabBarTabConfig,TDBottomTabBarPopUpBtnConfig,TDBottomTabBarPopUpShapeConfig,PopUpMenuItem --folder-name tab-bar --output ../example/assets/api/ --only-api
 # tabs
 ./bin/demo_tool generate --folder ../lib/src/components/tabs --name TDTabBar,TDTab,TDTabBarView --folder-name tabs --output ../example/assets/api/ --only-api
 
@@ -33,7 +33,7 @@
 # checkbox
 ./bin/demo_tool generate --folder ../lib/src/components/checkbox --name TDCheckbox,TDCheckboxGroup --folder-name checkbox --output ../example/assets/api/ --only-api
 # date_picker
-./bin/demo_tool generate --folder ../lib/src/components/picker --name TDPicker,TDDatePicker --folder-name date_picker --output ../example/assets/api/ --only-api
+./bin/demo_tool generate --folder ../lib/src/components/picker --name TDPicker,TDDatePicker --folder-name date-time-picker --output ../example/assets/api/ --only-api
 # input
 ./bin/demo_tool generate --file ../lib/src/components/input/td_input.dart --name TDInput --folder-name input --output ../example/assets/api/ --only-api
 # picker
@@ -93,7 +93,7 @@
 # popup
 ./bin/demo_tool generate --folder ../lib/src/components/popup --name TDSlidePopupRoute,TDPopupBottomDisplayPanel,TDPopupBottomConfirmPanel,TDPopupCenterPanel --folder-name popup --output ../example/assets/api/ --only-api --get-comments
 # refresh
-./bin/demo_tool generate --file ../lib/src/components/refresh/td_refresh_header.dart --name TDRefreshHeader --folder-name refresh --output ../example/assets/api/ --only-api --get-comments
+./bin/demo_tool generate --file ../lib/src/components/refresh/td_refresh_header.dart --name TDRefreshHeader --folder-name pull-down-refresh --output ../example/assets/api/ --only-api --get-comments
 # swipecell
 # toast
 ./bin/demo_tool generate --file ../lib/src/components/toast/td_toast.dart --name TDToast --folder-name toast --output ../example/assets/api/ --only-api
