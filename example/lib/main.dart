@@ -105,7 +105,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TDNavBarPage())),
     ExamplePageModel(
         text: 'Sidebar 侧边栏',
-        name: 'sidebar',
+        name: 'side-bar',
         pageBuilder: _wrapInheritedTheme((context) => const TDSideBarPage())),
     ExamplePageModel(
         text: 'Steps 步骤条',
@@ -114,7 +114,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
         text: 'TabBar 标签栏',
-        name: 'tabbar',
+        name: 'tab-bar',
         pageBuilder:
             _wrapInheritedTheme((context) => const TDBottomTabBarPage())),
     ExamplePageModel(
@@ -139,7 +139,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TDCheckboxPage())),
     ExamplePageModel(
         text: 'DatePicker 时间选择器',
-        name: 'date_picker',
+        name: 'date-time-picker',
         pageBuilder:
             _wrapInheritedTheme((context) => const TDDatePickerPage())),
     ExamplePageModel(
@@ -307,7 +307,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TDPopupPage())),
     ExamplePageModel(
         text: 'PullDownRefresh 下拉刷新',
-        name: 'refresh',
+        name: 'pull-down-refresh',
         pageBuilder:
             _wrapInheritedTheme((context) => const TdPullDownRefreshPage())),
     ExamplePageModel(
