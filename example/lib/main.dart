@@ -104,7 +104,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'navbar',
         pageBuilder: _wrapInheritedTheme((context) => const TDNavBarPage())),
     ExamplePageModel(
-        text: 'Sidebar 侧边栏',
+        text: 'SideBar 侧边栏',
         name: 'side-bar',
         pageBuilder: _wrapInheritedTheme((context) => const TDSideBarPage())),
     ExamplePageModel(
@@ -138,7 +138,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'checkbox',
         pageBuilder: _wrapInheritedTheme((context) => const TDCheckboxPage())),
     ExamplePageModel(
-        text: 'DatePicker 时间选择器',
+        text: 'DateTimePicker 时间选择器',
         name: 'date-time-picker',
         pageBuilder:
             _wrapInheritedTheme((context) => const TDDatePickerPage())),
