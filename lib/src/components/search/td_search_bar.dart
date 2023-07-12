@@ -197,35 +197,38 @@ class _TDSearchBarState extends State<TDSearchBar>
                     const Padding(padding: EdgeInsets.only(left: 3)),
                     Expanded(
                       flex: 1,
-                      child: TextField(
-                        key: _textFieldKey,
-                        controller: controller,
-                        autofocus: widget.autoFocus,
-                        cursorColor: TDTheme.of(context).brandNormalColor,
-                        cursorWidth: 1,
-                        cursorHeight: widget.mediumStyle ? 16 : 18,
-                        textAlign: widget.alignment == TDSearchAlignment.center
-                            ? TextAlign.center
-                            : TextAlign.left,
-                        focusNode: focusNode,
-                        onChanged: widget.onTextChanged,
-                        onSubmitted: widget.onSubmitted,
-                        style: TextStyle(
-                            fontSize: getSize(context)?.size,
-                            color: TDTheme.of(context).fontGyColor1),
-                        decoration: InputDecoration(
-                          hintText: (_status != _TDSearchBarStatus.focused)
-                              ? ''
-                              : widget.placeHolder,
-                          hintStyle: TextStyle(
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 1),// 为了适配TextField与Text的差异，后续需要做通用适配
+                        child: TextField(
+                          key: _textFieldKey,
+                          controller: controller,
+                          autofocus: widget.autoFocus,
+                          cursorColor: TDTheme.of(context).brandNormalColor,
+                          cursorWidth: 1,
+                          cursorHeight: widget.mediumStyle ? 16 : 18,
+                          textAlign: widget.alignment == TDSearchAlignment.center
+                              ? TextAlign.center
+                              : TextAlign.left,
+                          focusNode: focusNode,
+                          onChanged: widget.onTextChanged,
+                          onSubmitted: widget.onSubmitted,
+                          style: TextStyle(
                               fontSize: getSize(context)?.size,
-                              color: TDTheme.of(context).fontGyColor3),
-                          border: InputBorder.none,
-                          isCollapsed: true,
-                          filled: true,
-                          fillColor: TDTheme.of(context).grayColor1,
+                              color: TDTheme.of(context).fontGyColor1),
+                          decoration: InputDecoration(
+                            hintText: (_status != _TDSearchBarStatus.focused)
+                                ? ''
+                                : widget.placeHolder,
+                            hintStyle: TextStyle(
+                                fontSize: getSize(context)?.size,
+                                color: TDTheme.of(context).fontGyColor3),
+                            border: InputBorder.none,
+                            isCollapsed: true,
+                            filled: true,
+                            fillColor: TDTheme.of(context).grayColor1,
+                          ),
+                          maxLines: 1,
                         ),
-                        maxLines: 1,
                       ),
                     ),
                     const Padding(padding: EdgeInsets.only(right: 9)),
@@ -362,6 +365,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                           textColor: TDTheme.of(context).fontGyColor3,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
+                          forceVerticalCenter: true,
                         ),
                       )
                     ],
