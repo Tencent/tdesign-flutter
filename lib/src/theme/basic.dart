@@ -14,7 +14,7 @@ class Font {
   factory Font.fromJson(Map<String, dynamic> map) =>
       Font(size: map['size'], lineHeight: map['lineHeight'], fontWeight: _getFontWeight(map));
 
-  static _getFontWeight(Map<String, dynamic> map) {
+  static FontWeight _getFontWeight(Map<String, dynamic> map) {
     int weight = map['fontWeight'] ?? 4;
     return FontWeight.values[weight - 1];
   }
