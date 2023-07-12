@@ -192,7 +192,7 @@ class WebMdTool {
     return '${exampleCodeGroup}_${moduleTitle}_${itemDesc}';
   }
 
-  static _getTemplate(
+  static String _getTemplate(
     String title,
     String description,
     String spline,
