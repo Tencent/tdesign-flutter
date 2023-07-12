@@ -206,7 +206,7 @@ class CustomPaddingText extends StatelessWidget {
 /// 重写内部padding方法
 class CustomTextPaddingConfig extends TDTextPaddingConfig {
   @override
-  EdgeInsetsGeometry getPadding(String data, double fontSize, double height) {
+  EdgeInsetsGeometry getPadding(String? data, double fontSize, double height) {
     var supperPadding = super.getPadding(data, fontSize, height);
     return EdgeInsets.only(left: 30, top: supperPadding.vertical.toDouble());
   }

@@ -361,7 +361,7 @@ class TDTextPaddingConfig {
   }
 
   /// 获取padding
-  EdgeInsetsGeometry getPadding(String data, double fontSize, double height) {
+  EdgeInsetsGeometry getPadding(String? data, double fontSize, double height) {
     var paddingFont = fontSize * paddingRate;
     var paddingLeading;
     if (height < heightRate) {

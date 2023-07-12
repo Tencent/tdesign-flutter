@@ -16,7 +16,6 @@ class TDBottomTabBarPage extends StatelessWidget {
     return ExamplePage(
         title: tdTitle(context),
         desc: '用于在不同功能模块之间进行快速切换，位于页面底部。',
-        backgroundColor: const Color(0xFFF0F2F5),
         exampleCodeGroup: 'bottomTabBar',
         children: [
           ExampleModule(
