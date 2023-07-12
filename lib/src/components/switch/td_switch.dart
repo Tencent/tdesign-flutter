@@ -142,6 +142,7 @@ class TDSwitchState extends State<TDSwitch> {
           child: TDText(
             isOn ? '开' : '关',
             style: TextStyle(color: isOn ? thumbContentOnColor : thumbContentOffColor, fontSize: 14),
+            forceVerticalCenter: true,
           ),
         );
       case TDSwitchType.loading:

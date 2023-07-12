@@ -86,7 +86,7 @@ class _ExamplePageState extends State<ExamplePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: widget.backgroundColor,
+        backgroundColor: widget.backgroundColor ?? TDTheme.of(context).grayColor1,
         body: ScrollbarTheme(
             data: ScrollbarThemeData(
                 trackVisibility: MaterialStateProperty.all(true)),

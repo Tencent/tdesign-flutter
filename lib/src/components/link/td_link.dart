@@ -170,7 +170,7 @@ class TDLink extends StatelessWidget {
     }
   }
 
-  Icon _getDefaultIcon(BuildContext context) {
+  Widget _getDefaultIcon(BuildContext context) {
     return Icon(
       type == TDLinkType.withPrefixIcon ? TDIcons.link : TDIcons.jump,
       size: _getIconSize(context),
@@ -178,7 +178,7 @@ class TDLink extends StatelessWidget {
     );
   }
 
-  InkWell _buildLink(BuildContext context) {
+  Widget _buildLink(BuildContext context) {
     return InkWell(
         onTap: () {
           if (state == TDLinkState.disabled) {
@@ -194,7 +194,7 @@ class TDLink extends StatelessWidget {
             }
           }
         },
-        child: Text(
+        child: TDText(
           label,
           style: TextStyle(
             fontSize: _getFontSize(context),
@@ -203,6 +203,7 @@ class TDLink extends StatelessWidget {
                 ? TextDecoration.underline
                 : null,
           ),
+          forceVerticalCenter: true,
         ));
   }
 
