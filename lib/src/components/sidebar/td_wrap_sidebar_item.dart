@@ -153,8 +153,9 @@ class TDWrapSideBarItem extends StatelessWidget {
     return TDText.rich(
       TextSpan(
         children: [
-          TDTextSpan(
-            text: label,
+          WidgetSpan(
+              child: TDText(
+            label,
             style: textStyle,
             fontWeight:
                 selected && !disabled ? FontWeight.w600 : FontWeight.w400,
@@ -163,7 +164,8 @@ class TDWrapSideBarItem extends StatelessWidget {
                 : selected
                     ? TDTheme.of(context).brandNormalColor
                     : Colors.black,
-          ),
+            forceVerticalCenter: true,
+          )),
           WidgetSpan(
               child: SizedBox(
             width: 1,
@@ -171,7 +173,7 @@ class TDWrapSideBarItem extends StatelessWidget {
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                badge != null ? Positioned(top: -5, child: badge!) : Container()
+                badge != null ? Positioned(top: -6, child: badge!) : Container()
               ],
             ),
           ))
