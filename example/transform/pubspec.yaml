@@ -8,24 +8,14 @@ environment:
 dependency_overrides:
   kernel:
     git:
-      url: https://tgclub_app:xyApp2017@git.woa.com/flutter_components/FlutterDynamic/dart-sdk.git
-      ref: conch/stable/3.0.5
+      url: https://github.com/skylerpfli/DartSdkHook.git
+      ref: stable/3.0.5
       path: pkg/kernel
   meta:
     git:
-      url: https://tgclub_app:xyApp2017@git.woa.com/flutter_components/FlutterDynamic/dart-sdk.git
-      ref: conch/stable/3.0.5
+      url: https://github.com/skylerpfli/DartSdkHook.git
+      ref: stable/3.0.5
       path: pkg/meta
-#  kernel:
-#    git:
-#      url: https://github.com/skylerpfli/DartSdkHook.git
-#      ref: stable/3.0.5
-#      path: pkg/kernel
-#  meta:
-#    git:
-#      url: https://github.com/skylerpfli/DartSdkHook.git
-#      ref: stable/3.0.5
-#      path: pkg/meta
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
