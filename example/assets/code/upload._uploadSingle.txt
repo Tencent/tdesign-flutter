@@ -1,0 +1,39 @@
+
+  final List<TDUploadFile> files1 = [];
+
+  void onVaueChanged(List<TDUploadFile> fileList, List<TDUploadFile> value,
+      TDUploadType event) {
+    switch (event) {
+      case TDUploadType.add:
+        setState(() {
+          fileList.addAll(value);
+        });
+        break;
+      case TDUploadType.remove:
+        setState(() {
+          fileList.removeWhere((element) => element.key == value[0].key);
+        });
+        break;
+    }
+  }
+
+  void onClick(int key) {
+    print('点击 $key');
+  }
+
+  void onCancel() {
+    print('取消');
+  }
+
+  @Demo(group: 'upload')
+  Widget _uploadSingle(BuildContext context) {
+    return wrapDemoContainer('单选上传',
+        child: TDUpload(
+          files: files1,
+          onClick: onClick,
+          onCancel: onCancel,
+          onError: print,
+          onValidate: print,
+          onChange: ((files, type) => onVaueChanged(files1, files, type)),
+        ));
+  }
