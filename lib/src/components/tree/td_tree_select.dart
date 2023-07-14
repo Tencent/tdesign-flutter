@@ -66,6 +66,9 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
     super.initState();
 
     values = List.from(widget.value);
+    if (values.isEmpty && widget.options.isNotEmpty) {
+      values.add(widget.options[0].value);
+    }
   }
 
   int maxLevel() {
@@ -74,7 +77,7 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
     }
 
     var secondLevelOptions = widget.options
-        .takeWhile((element) => element.children.isNotEmpty)
+        .where((element) => element.children.isNotEmpty)
         .map((ele) => ele.children)
         .toList();
     if (secondLevelOptions.isEmpty) {
@@ -108,7 +111,9 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                   values.add(value);
                 } else {
                   values = [value];
-                  controller2.jumpTo(0);
+                  if (controller2.hasClients) {
+                    controller2.jumpTo(0);
+                  }
                 }
 
                 if (widget.onChange != null) {
@@ -173,12 +178,16 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                             break;
                           case 2:
                             values[1] = displayOptions[index].value;
-                            controller3.jumpTo(0);
+                            if (controller3.hasClients) {
+                              controller3.jumpTo(0);
+                            }
                             break;
                           default:
                             values[1] = displayOptions[index].value;
                             values.removeLast();
-                            controller3.jumpTo(0);
+                            if (controller3.hasClients) {
+                              controller3.jumpTo(0);
+                            }
                         }
                       } else {
                         switch (values.length) {
