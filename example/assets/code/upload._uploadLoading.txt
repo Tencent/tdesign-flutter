@@ -1,0 +1,55 @@
+
+  final List<TDUploadFile> files3 = [
+    TDUploadFile(
+        key: 1,
+        status: TDUploadFileStatus.loading,
+        loadingText: '上传中...',
+        remotePath:
+            'https://tdesign.gtimg.com/miniprogram/images/example5.png'),
+    TDUploadFile(
+        key: 2,
+        status: TDUploadFileStatus.loading,
+        progress: 68,
+        remotePath:
+            'https://tdesign.gtimg.com/miniprogram/images/example4.png'),
+  ];
+
+  void onVaueChanged(List<TDUploadFile> fileList, List<TDUploadFile> value,
+      TDUploadType event) {
+    switch (event) {
+      case TDUploadType.add:
+        setState(() {
+          fileList.addAll(value);
+        });
+        break;
+      case TDUploadType.remove:
+        setState(() {
+          fileList.removeWhere((element) => element.key == value[0].key);
+        });
+        break;
+    }
+  }
+
+  void onClick(int key) {
+    print('点击 $key');
+  }
+
+  void onCancel() {
+    print('取消');
+  }
+
+  @Demo(group: 'upload')
+  Widget _uploadLoading(BuildContext context) {
+    return wrapDemoContainer('上传图片',
+        child: TDUpload(
+          files: files3,
+          multiple: true,
+          max: 9,
+          onClick: onClick,
+          onCancel: onCancel,
+          onError: print,
+          onValidate: print,
+          onChange: ((files, type) => onVaueChanged(files3, files, type)),
+        ));
+  }
+  
