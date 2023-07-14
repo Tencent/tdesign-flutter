@@ -12,13 +12,19 @@ class TDSelectOption {
   List<TDSelectOption> children;
 }
 
+enum TDTreeSelectStyle {
+  normal,
+  outline,
+}
+
 class TDTreeSelect extends StatefulWidget {
   const TDTreeSelect(
       {Key? key,
       this.options = const [],
-      this.value = const [],
+      this.defaultValue = const [],
       this.onChange,
       this.multiple = false,
+      this.style = TDTreeSelectStyle.normal,
       this.height = 336})
       : super(key: key);
 
@@ -26,7 +32,7 @@ class TDTreeSelect extends StatefulWidget {
   final List<TDSelectOption> options;
 
   /// 初始值，对应options中的value值
-  final List<dynamic> value;
+  final List<dynamic> defaultValue;
 
   /// 选中值发生变化
   final TDTreeSelectChangeEvent? onChange;
@@ -36,6 +42,9 @@ class TDTreeSelect extends StatefulWidget {
 
   /// 支持多选
   final bool multiple;
+
+  /// 一级菜单样式
+  final TDTreeSelectStyle style;
 
   @override
   State<TDTreeSelect> createState() => _TDTreeSelectState();
@@ -69,7 +78,7 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
   void initState() {
     super.initState();
 
-    values = List.from(widget.value);
+    values = List.from(widget.defaultValue);
     if (values.isEmpty && widget.options.isNotEmpty) {
       values.add(widget.options[0].value);
     }
@@ -103,6 +112,9 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
           child: TDSideBar(
             height: widget.height,
             value: firstValue,
+            style: widget.style == TDTreeSelectStyle.outline
+                ? TDSideBarStyle.outline
+                : TDSideBarStyle.normal,
             children: widget.options
                 .map((ele) => TDSideBarItem(
                       value: ele.value,
