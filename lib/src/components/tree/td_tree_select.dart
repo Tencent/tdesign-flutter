@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../td_export.dart';
 
-typedef TDTreeSelectChangeEvent = void Function(List<int>, int level);
+typedef TDTreeSelectChangeEvent = void Function(List<dynamic>, int level);
 
 class TDSelectOption {
   TDSelectOption(
@@ -18,6 +18,7 @@ class TDTreeSelect extends StatefulWidget {
       this.options = const [],
       this.value = const [],
       this.onChange,
+      this.multiple = false,
       this.height = 336})
       : super(key: key);
 
@@ -25,13 +26,16 @@ class TDTreeSelect extends StatefulWidget {
   final List<TDSelectOption> options;
 
   /// 初始值，对应options中的value值
-  final List<int> value;
+  final List<dynamic> value;
 
   /// 选中值发生变化
   final TDTreeSelectChangeEvent? onChange;
 
   /// 高度
   final double height;
+
+  /// 支持多选
+  final bool multiple;
 
   @override
   State<TDTreeSelect> createState() => _TDTreeSelectState();
@@ -41,11 +45,11 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
   ScrollController controller2 = ScrollController();
   ScrollController controller3 = ScrollController();
 
-  List<int> values = [];
+  List<dynamic> values = [];
   int get currentLevel => values.length + 1;
   int? get firstValue => values.isNotEmpty ? values[0] : null;
-  int? get secondValue => values.length >= 2 ? values[1] : null;
-  int? get thirdValue => values.length >= 3 ? values[2] : null;
+  dynamic get secondValue => values.length >= 2 ? values[1] : null;
+  dynamic get thirdValue => values.length >= 3 ? values[2] : null;
 
   List<TDSelectOption> get firstOptions => widget.options;
   List<TDSelectOption> get secondOptions => maxLevel() <= 1 || values.isEmpty
@@ -164,8 +168,27 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
             itemExtent: 56,
             itemCount: displayOptions.length,
             itemBuilder: (BuildContext ctx, int index) {
-              var selected = (level == 2 ? secondValue : thirdValue) ==
-                  displayOptions[index].value;
+              var currentValue = displayOptions[index].value;
+              // 判断是否被选中
+              var selected = false;
+              if (widget.multiple) {
+                if (level == 2) {
+                  if (maxLevel() == 2) {
+                    selected = secondValue != null
+                        ? (secondValue as List<int>).contains(currentValue)
+                        : false;
+                  } else {
+                    selected = secondValue == currentValue;
+                  }
+                } else {
+                  selected = thirdValue != null
+                      ? (thirdValue as List<int>).contains(currentValue)
+                      : false;
+                }
+              } else {
+                selected =
+                    (level == 2 ? secondValue : thirdValue) == currentValue;
+              }
 
               return GestureDetector(
                   behavior: HitTestBehavior.translucent,
@@ -174,16 +197,28 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                       if (level == 2) {
                         switch (values.length) {
                           case 1:
-                            values.add(displayOptions[index].value);
+                            values.add(widget.multiple
+                                ? [currentValue]
+                                : currentValue);
                             break;
                           case 2:
-                            values[1] = displayOptions[index].value;
+                            if (widget.multiple) {
+                              var hasContains = (values[1] as List<int>)
+                                  .contains(currentValue);
+                              if (hasContains) {
+                                (values[1] as List<int>).remove(currentValue);
+                              } else {
+                                (values[1] as List<int>).add(currentValue);
+                              }
+                            } else {
+                              values[1] = currentValue;
+                            }
                             if (controller3.hasClients) {
                               controller3.jumpTo(0);
                             }
                             break;
                           default:
-                            values[1] = displayOptions[index].value;
+                            values[1] = currentValue;
                             values.removeLast();
                             if (controller3.hasClients) {
                               controller3.jumpTo(0);
@@ -193,10 +228,22 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                         switch (values.length) {
                           case 1:
                           case 2:
-                            values.add(displayOptions[index].value);
+                            values.add(widget.multiple
+                                ? [currentValue]
+                                : currentValue);
                             break;
                           default:
-                            values[2] = displayOptions[index].value;
+                            if (widget.multiple) {
+                              var hasContains = (values[2] as List<int>)
+                                  .contains(currentValue);
+                              if (hasContains) {
+                                (values[2] as List<int>).remove(currentValue);
+                              } else {
+                                (values[2] as List<int>).add(currentValue);
+                              }
+                            } else {
+                              values[2] = currentValue;
+                            }
                         }
                       }
 
