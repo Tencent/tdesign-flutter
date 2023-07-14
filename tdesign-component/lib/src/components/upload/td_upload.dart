@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
@@ -9,7 +8,7 @@ import '../../../td_export.dart';
 
 enum TDUploadMediaType {
   image, // 图片
-  viedo, // 视频
+  video, // 视频
 }
 
 enum TDUploadValidatorError {
@@ -37,6 +36,9 @@ class TDUploadFile {
       this.file,
       this.progress,
       this.status = TDUploadFileStatus.success,
+      this.loadingText = 'Loading...',
+      this.retryText = 'Re-Upload',
+      this.errorText = 'Error',
       this.canDelete = true});
 
   final int key;
@@ -45,6 +47,9 @@ class TDUploadFile {
   final File? file;
   final bool canDelete;
   final int? progress;
+  final String loadingText;
+  final String retryText;
+  final String errorText;
   TDUploadFileStatus status;
 }
 
@@ -58,8 +63,7 @@ class TDUpload extends StatefulWidget {
   const TDUpload(
       {Key? key,
       this.max = 0,
-      this.mediaType = const [TDUploadMediaType.image, TDUploadMediaType.viedo],
-      this.requestMethod,
+      this.mediaType = const [TDUploadMediaType.image, TDUploadMediaType.video],
       this.sizeLimit,
       this.onCancel,
       this.onError,
@@ -78,9 +82,6 @@ class TDUpload extends StatefulWidget {
 
   /// 支持上传的文件类型，图片或视频
   final List<TDUploadMediaType> mediaType;
-
-  /// 自定义上传方法
-  final Function? requestMethod;
 
   /// 图片大小限制，单位为KB
   final double? sizeLimit;
@@ -134,7 +135,7 @@ class _TDUploadState extends State<TDUpload> {
             widget.mediaType.contains(TDUploadMediaType.image)) {
           medias = await _picker.pickMultiImage();
         } else {
-          medias = await _picker.pickMultipleMedia();
+          medias = await _picker.pickMultiImage();
         }
 
         return medias;
@@ -148,7 +149,7 @@ class _TDUploadState extends State<TDUpload> {
           media = await _picker.pickVideo(source: ImageSource.gallery);
         }
       } else {
-        media = await _picker.pickMedia();
+        media = await _picker.pickImage(source: ImageSource.gallery);
       }
 
       return media == null ? [] : [media];
@@ -242,7 +243,7 @@ class _TDUploadState extends State<TDUpload> {
         spacing: 8,
         runSpacing: 16,
         children: [
-          ...fileList.map(_buildImageBox).toList(),
+          ...fileList.map((file) => _buildImageBox(context, file)).toList(),
           _buildUploadBox(context, shouldDisplay: canUpload, onTap: () async {
             final files = await getMediaFromPicker();
             extractImageList(files);
@@ -254,8 +255,9 @@ class _TDUploadState extends State<TDUpload> {
 
   Widget _buildUploadBox(BuildContext context,
       {void Function()? onTap, bool shouldDisplay = true}) {
-    return shouldDisplay
-        ? GestureDetector(
+    return Visibility(
+        visible: shouldDisplay,
+        child: GestureDetector(
             onTap: onTap,
             child: Container(
               width: 80,
@@ -269,11 +271,10 @@ class _TDUploadState extends State<TDUpload> {
                 color: Color.fromRGBO(0, 0, 0, 0.4),
                 size: 28,
               )),
-            ))
-        : Container();
+            )));
   }
 
-  Widget _buildImageBox(TDUploadFile file) {
+  Widget _buildImageBox(BuildContext context, TDUploadFile file) {
     return GestureDetector(
       onTap: () {
         if (widget.onClick != null) {
@@ -286,6 +287,7 @@ class _TDUploadState extends State<TDUpload> {
             width: 80,
             height: 80,
             imgUrl: file.remotePath,
+            assetUrl: file.assetPath,
           ),
           Visibility(
               visible: file.status != TDUploadFileStatus.success,
@@ -325,13 +327,13 @@ class _TDUploadState extends State<TDUpload> {
     switch (file.status) {
       case TDUploadFileStatus.loading:
         displayText =
-            file.progress != null ? '${file.progress!}%' : 'Loading...';
+            file.progress != null ? '${file.progress!}%' : file.loadingText;
         break;
       case TDUploadFileStatus.retry:
-        displayText = 'Re-Upload';
+        displayText = file.retryText;
         break;
       case TDUploadFileStatus.error:
-        displayText = 'Error';
+        displayText = file.errorText;
         break;
       default:
     }
