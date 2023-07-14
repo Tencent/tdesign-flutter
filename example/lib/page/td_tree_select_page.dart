@@ -13,7 +13,15 @@ class TDTreeSelectPage extends StatefulWidget {
 
 class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
   String? inputText;
-  List<int> values = [1, 11, 111];
+  List<dynamic> values1 = [
+    1,
+    11,
+  ];
+  List<dynamic> values2 = [
+    1,
+    [11, 12, 13],
+  ];
+  List<dynamic> values3 = [1, 11, 111];
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +35,13 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
             title: '组件类型',
             children: [
               ExampleItem(desc: '基础树形选择', builder: _buildDefaultTreeSelect),
+              ExampleItem(desc: '多选树形选择', builder: _buildMultipleTreeSelect),
+            ],
+          ),
+          ExampleModule(
+            title: '组件状态',
+            children: [
+              ExampleItem(desc: '三级树形选择', builder: _buildThirdTreeSelect),
             ],
           ),
         ]);
@@ -34,6 +49,51 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
 
   @Demo(group: 'tree')
   Widget _buildDefaultTreeSelect(BuildContext context) {
+    var options = <TDSelectOption>[];
+
+    for (var i = 1; i <= 10; i++) {
+      options.add(TDSelectOption(label: '选项$i', value: i, children: []));
+
+      for (var j = 1; j <= 10; j++) {
+        options[i - 1].children.add(
+            TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []));
+      }
+    }
+
+    return TDTreeSelect(
+      options: options,
+      defaultValue: values1,
+      onChange: (val, level) {
+        print('$val, $level');
+      },
+    );
+  }
+
+  @Demo(group: 'tree')
+  Widget _buildMultipleTreeSelect(BuildContext context) {
+    var options = <TDSelectOption>[];
+
+    for (var i = 1; i <= 10; i++) {
+      options.add(TDSelectOption(label: '选项$i', value: i, children: []));
+
+      for (var j = 1; j <= 10; j++) {
+        options[i - 1].children.add(
+            TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []));
+      }
+    }
+
+    return TDTreeSelect(
+      options: options,
+      defaultValue: values2,
+      multiple: true,
+      onChange: (val, level) {
+        print('$val, $level');
+      },
+    );
+  }
+
+  @Demo(group: 'tree')
+  Widget _buildThirdTreeSelect(BuildContext context) {
     var options = <TDSelectOption>[];
 
     for (var i = 1; i <= 10; i++) {
@@ -52,7 +112,10 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
 
     return TDTreeSelect(
       options: options,
-      value: values,
+      defaultValue: values3,
+      onChange: (val, level) {
+        print('$val, $level');
+      },
     );
   }
 }
