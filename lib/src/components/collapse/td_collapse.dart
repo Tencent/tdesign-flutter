@@ -5,10 +5,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../td_export.dart';
-import 'td_collapse_panel_body.dart';
-import 'td_collapse_panel_header.dart';
 import 'td_collapse_salted_key.dart';
 import 'td_inset_divider.dart';
+import 'td_nonanimated_expand_icon.dart';
 
 /// 折叠面板的组件样式
 enum TDCollapseStyle {
@@ -127,38 +126,68 @@ class _TDCollapseState extends State<TDCollapse> {
       final isLastChild = index == widget.children.length - 1;
       final child = widget.children[index];
 
+      final titleWidget = _buildTitleWidget(context, child, index);
+      final expandIconWidget = _buildExpandIconWidget(context, child, index);
+
       final borderRadius =
           _isCardStyle() ? _createRadius(index) : BorderRadius.zero;
 
-      final sliceKey =
-          TDCollapseSaltedKey<BuildContext, int>(context, index * 2);
-
       items.add(
         MaterialSlice(
-          key: sliceKey,
-          color: child.backgroundColor,
-          child: Column(
-            key:
-                sliceKey, // to prevent collapse state change when parent rebuild
-            children: [
-              TDCollapsePanelHeader(
-                index: index,
-                animationDuration: widget.animationDuration,
-                borderRadius: borderRadius,
-                headerBuilder: child.headerBuilder,
-                expandIconTextBuilder: child.expandIconTextBuilder,
-                isExpanded: _isChildExpanded(index),
-                onPress: _handlePressed,
-              ),
-              TDCollapsePanelBody(
-                animationDuration: widget.animationDuration,
-                body: child.body,
-                isExpanded: _isChildExpanded(index),
-              ),
-              if (!isLastChild) const TDInsetDivider()
-            ],
-          ),
-        ),
+            key: TDCollapseSaltedKey<BuildContext, int>(context, index * 2),
+            color: child.backgroundColor,
+            child: Column(
+              // to prevent collapse state change when parent rebuild
+              key: TDCollapseSaltedKey<BuildContext, int>(context, index * 2),
+              children: [
+                MergeSemantics(
+                  child: InkWell(
+                    borderRadius: borderRadius,
+                    onTap: () => _handlePressed(index, _isChildExpanded(index)),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: AnimatedContainer(
+                            duration: widget.animationDuration,
+                            curve: Curves.fastOutSlowIn,
+                            margin: EdgeInsets.zero,
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                minHeight: kMinInteractiveDimension,
+                              ),
+                              child: titleWidget,
+                            ),
+                          ),
+                        ),
+                        expandIconWidget,
+                      ],
+                    ),
+                  ),
+                ),
+                AnimatedCrossFade(
+                  firstChild: Container(height: 0.0),
+                  secondChild: Column(
+                    children: [
+                      const TDInsetDivider(),
+                      Container(
+                        padding: EdgeInsets.all(TDTheme.of(context).spacer16),
+                        child: child.body,
+                      ),
+                    ],
+                  ),
+                  firstCurve:
+                      const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
+                  secondCurve:
+                      const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
+                  sizeCurve: Curves.fastOutSlowIn,
+                  crossFadeState: _isChildExpanded(index)
+                      ? CrossFadeState.showSecond
+                      : CrossFadeState.showFirst,
+                  duration: widget.animationDuration,
+                ),
+                if (!isLastChild) const TDInsetDivider()
+              ],
+            )),
       );
 
       if (_isChildExpanded(index) && !isLastChild) {
@@ -166,6 +195,7 @@ class _TDCollapseState extends State<TDCollapse> {
       }
     }
 
+    // FIXME: 非连续展开的 item 会导致 expanded 时动画丢失
     Widget collapse = MergeableMaterial(
       hasDividers: false,
       elevation: widget.elevation,
@@ -246,6 +276,45 @@ class _TDCollapseState extends State<TDCollapse> {
     setState(() {
       _currentOpenPanel = isExpanded ? null : widget.children[index];
     });
+  }
+
+  Widget _buildTitleWidget(
+      BuildContext context, TDCollapsePanel child, int index) {
+    final titleWidget = child.headerBuilder(context, _isChildExpanded(index));
+    return ListTile(
+      title: titleWidget,
+    );
+  }
+
+  Widget _buildExpandIconWidget(
+      BuildContext context, TDCollapsePanel child, int index) {
+    Widget expandedIcon = Container(
+      key: TDCollapseSaltedKey<BuildContext, int>(context, index * 2),
+      margin: const EdgeInsetsDirectional.all(0.0),
+      child: TdNonAnimatedExpandIcon(
+        isExpanded: _isChildExpanded(index),
+        padding: child.expandIconTextBuilder != null
+            ? EdgeInsets.only(
+                right: TDTheme.of(context).spacer16,
+                top: TDTheme.of(context).spacer16,
+                bottom: TDTheme.of(context).spacer16,
+                left: 0,
+              )
+            : EdgeInsets.all(TDTheme.of(context).spacer16),
+      ),
+    );
+
+    return Row(
+      children: [
+        if (child.expandIconTextBuilder != null)
+          Text(child.expandIconTextBuilder!(context, _isChildExpanded(index)),
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.4),
+              )),
+        expandedIcon,
+      ],
+    );
   }
 
   bool _allPanelsHaveValue() {
