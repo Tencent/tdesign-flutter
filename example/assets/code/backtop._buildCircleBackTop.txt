@@ -1,0 +1,36 @@
+
+ Widget _buildCircleBackTop(BuildContext context) {
+    return _buildRowDemo(
+      context,
+      [
+        TDBackTop(
+          showText: true,
+          controller: controller,
+          onClick: () {
+            print('点击');
+          },
+        ),
+        TDBackTop(
+          showText: true,
+          theme: TDBackTopTheme.dark,
+          controller: controller,
+          onClick: () {
+            print('点击');
+          },
+        ),
+        TDBackTop(
+          controller: controller,
+          onClick: () {
+            print('点击');
+          },
+        ),
+        TDBackTop(
+          theme: TDBackTopTheme.dark,
+          controller: controller,
+          onClick: () {
+            print('点击');
+          },
+        )
+      ],
+    );
+  }
