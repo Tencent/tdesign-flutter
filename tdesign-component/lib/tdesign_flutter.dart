@@ -1,4 +1,5 @@
 export 'src/components/avatar/td_avatar.dart';
+export 'src/components/backtop/td_backtop.dart';
 export 'src/components/badge/td_badge.dart';
 export 'src/components/button/td_button.dart';
 export 'src/components/button/td_button_style.dart';

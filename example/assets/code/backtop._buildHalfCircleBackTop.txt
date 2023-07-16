@@ -1,0 +1,40 @@
+
+ Widget _buildHalfCircleBackTop(BuildContext context) {
+    return _buildRowDemo(
+      context,
+      [
+        TDBackTop(
+          showText: true,
+          style: TDBackTopStyle.halfCircle,
+          controller: controller,
+          onClick: () {
+            print('点击');
+          },
+        ),
+        TDBackTop(
+          showText: true,
+          theme: TDBackTopTheme.dark,
+          style: TDBackTopStyle.halfCircle,
+          controller: controller,
+          onClick: () {
+            print('点击');
+          },
+        ),
+        TDBackTop(
+          style: TDBackTopStyle.halfCircle,
+          controller: controller,
+          onClick: () {
+            print('点击');
+          },
+        ),
+        TDBackTop(
+          theme: TDBackTopTheme.dark,
+          style: TDBackTopStyle.halfCircle,
+          controller: controller,
+          onClick: () {
+            print('点击');
+          },
+        )
+      ],
+    );
+  }
