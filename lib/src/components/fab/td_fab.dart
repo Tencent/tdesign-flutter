@@ -62,11 +62,11 @@ class TDFab extends StatelessWidget {
       case TDFabSize.small:
         return showText
             ? const EdgeInsets.symmetric(horizontal: 12, vertical: 5)
-            : const EdgeInsets.all(8);
+            : const EdgeInsets.all(7);
       case TDFabSize.extraSmall:
         return showText
             ? const EdgeInsets.symmetric(horizontal: 8, vertical: 3)
-            : const EdgeInsets.all(6);
+            : const EdgeInsets.all(5);
       default:
         return showText
             ? const EdgeInsets.symmetric(horizontal: 20, vertical: 12)
@@ -126,9 +126,9 @@ class TDFab extends StatelessWidget {
       case TDFabSize.medium:
         return 20.0;
       case TDFabSize.small:
-        return 16.0;
+        return 18.0;
       case TDFabSize.extraSmall:
-        return 16.0;
+        return 18.0;
       default:
         return 24.0;
     }
