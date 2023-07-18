@@ -30,7 +30,7 @@ class TDFab extends StatelessWidget {
       : super(key: key);
 
   /// 主题
-  final TDFabTheme? theme;
+  final TDFabTheme theme;
 
   /// 形状
   final TDFabShape shape;
