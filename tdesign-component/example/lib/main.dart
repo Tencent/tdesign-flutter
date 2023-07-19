@@ -55,8 +55,9 @@ List<ExamplePageModel> examplePageList = [];
 
 var _kShowTodoComponent = false;
 
+// TODO: 修改代码规范测试
 Map<String, List<ExamplePageModel>> exampleMap = {
-  '基础': [
+  "基础": [
     ExamplePageModel(
         text: 'Button 按钮',
         name: 'button',
