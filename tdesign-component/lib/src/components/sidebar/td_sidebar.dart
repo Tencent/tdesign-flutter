@@ -200,6 +200,7 @@ class _TDSideBarState extends State<TDSideBar> {
                 removeTop: true,
                 removeBottom: true,
                 child: ListView.builder(
+                    physics: const ClampingScrollPhysics(),
                     itemCount: displayChildren.length,
                     controller: _scrollerController,
                     itemBuilder: (BuildContext context, int index) {
