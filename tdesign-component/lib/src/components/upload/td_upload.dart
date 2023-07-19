@@ -344,40 +344,39 @@ class _TDUploadState extends State<TDUpload> {
       decoration: BoxDecoration(
           color: const Color.fromRGBO(0, 0, 0, 0.4),
           borderRadius: BorderRadius.circular(6)),
-      child: Center(
-          child: Padding(
+      child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          children: [
-            Visibility(
-              visible: file.status == TDUploadFileStatus.loading,
-              child: const TDLoading(
-                size: TDLoadingSize.small,
-                icon: TDLoadingIcon.circle,
-                iconColor: Colors.white,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Visibility(
+                visible: file.status == TDUploadFileStatus.loading,
+                child: const TDLoading(
+                  size: TDLoadingSize.small,
+                  icon: TDLoadingIcon.circle,
+                  iconColor: Colors.white,
+                ),
               ),
-            ),
-            Visibility(
-                visible: file.status == TDUploadFileStatus.retry ||
-                    file.status == TDUploadFileStatus.error,
-                child: Icon(
-                  file.status == TDUploadFileStatus.retry
-                      ? Icons.sync_outlined
-                      : Icons.highlight_off_outlined,
-                  size: 24,
-                  color: Colors.white,
-                )),
-            const SizedBox(
-              height: 4,
-            ),
-            TDText(
-              displayText,
-              textColor: Colors.white,
-              style: const TextStyle(fontSize: 12),
-            ),
-          ],
+              Visibility(
+                  visible: file.status == TDUploadFileStatus.retry ||
+                      file.status == TDUploadFileStatus.error,
+                  child: Icon(
+                    file.status == TDUploadFileStatus.retry
+                        ? TDIcons.refresh
+                        : TDIcons.close_circle,
+                    size: 24,
+                    color: Colors.white,
+                  )),
+              TDText(
+                displayText,
+                textColor: Colors.white,
+                style: const TextStyle(fontSize: 12, height: 1.67),
+              ),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }
