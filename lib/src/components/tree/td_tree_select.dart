@@ -274,10 +274,14 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                               top: 16, left: 16, bottom: 16),
                           child: TDText(
                             displayOptions[index].label,
-                            textColor: !lastColumn && selected
+                            textColor: (!lastColumn && selected)
                                 ? const Color.fromRGBO(0, 82, 217, 1)
                                 : const Color.fromRGBO(0, 0, 0, 0.9),
-                            style: const TextStyle(fontSize: 16),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: (!lastColumn && selected)
+                                    ? FontWeight.w600
+                                    : FontWeight.w400),
                           ),
                         ),
                         Visibility(
