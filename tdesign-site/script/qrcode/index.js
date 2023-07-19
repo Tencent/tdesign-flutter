@@ -68,7 +68,8 @@ const getUnlimitedQRCodeImage = (appid, appSecret) => {
         };
         getUnlimitedQRCode(token, JSON.stringify({ ...specialParameter, ...baseParameter }), { ...baseConfig }).then(
           (res) => {
-            // 因为微信接口 getwxacodeunlimit 成功时返回的是 Buffer ，失败时返回 JSON 结构。这里把返回数据全部当成 Buffer 处理，所以 res.length < 200， 则表示获取失败。
+            // 因为微信接口 getwxacodeunlimit 成功时返回的是 Buffer ，失败时返回 JSON 结构。
+            // 这里把返回数据全部当成 Buffer 处理，所以 res.length < 200， 则表示获取失败。
             if (res.length < 200) {
               const { errcode, errmsg } = JSON.parse(res.toString());
               // eslint-disable-next-line no-console
