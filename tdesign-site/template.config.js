@@ -24,15 +24,6 @@ module.exports = {
   renameFileFn: (fileName, templateName, utils) => {
     const { path } = utils;
     const { base } = path.parse(fileName);
-    // TODO: 代码规范测试
-    var test = true
-    if(test)
-      if(test)
-        test = false
-    else
-      test = true
-  
-    // TODO: 代码规范测试
     return base.replace(/__templateName__/gm, templateName);
   },
   renameSubDirectoriesFn: (directoryName, templateName, _utils) => {
