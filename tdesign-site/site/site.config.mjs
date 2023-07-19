@@ -16,7 +16,7 @@ export default {
           name: 'develop',
           meta: { docType: 'explain' },
           path: '/flutter/develop',
-          component: () => import('@/../example/CONTRIBUTING.md'),
+          component: () => import('@/../../tdesign-component/CONTRIBUTING.md'),
         },
         // {
         //   title: '谁在用',
@@ -30,7 +30,7 @@ export default {
           name: 'changelog',
           meta: { docType: 'explain' },
           path: '/flutter/changelog',
-          component: () => import('@/../example/CHANGELOG.md'),
+          component: () => import('@/../../tdesign-component/CHANGELOG.md'),
         },
         // {
         //   title: '自定义主题',
