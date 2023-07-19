@@ -7,4 +7,4 @@ docClass: timeline
 
 ## 1.0.0
 
-* 正式发布，包含TDText,TDButton等一期组件
+* 正式发布，包含TDButton等29个组件,提供TDTheme、TDIcon等基础属性
