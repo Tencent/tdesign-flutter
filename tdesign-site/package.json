@@ -38,7 +38,7 @@
     "test:unit": "jest",
     "test:e2e": "jest -c jest.e2e.config.js",
     "badge": "node script/coverage-badge.js",
-    "prepare": "husky install",
+    "prepare": "cd .. && husky install tdesign-site/superjsonweb/.husky",
     "generate": "gulp generate --gulpfile script/gulpfile.js --cwd ./",
     "changelog": "node script/generate-changelog.js",
     "robot": "publish-cli robot-msg",
