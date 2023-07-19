@@ -56,8 +56,8 @@ spline: explain
 
   <div class="image-wrapper">
     <a class="item" href="/flutter/components/text">
-      <img class="__light__" src="https://tdesign.gtimg.com/site/miniprogram-doc/doc-text.png" />
-      <img class="__dark__" src="https://tdesign.gtimg.com/site/miniprogram-doc/doc-text-dark.png" />
+      <img class="__light__" src="https://tdesign.gtimg.com/site/miniprogram-doc/doc_text.png" />
+      <img class="__dark__" src="https://tdesign.gtimg.com/site/miniprogram-doc/doc_text_dark.png" />
       <p class="name">Text 文本</p>
     </a>
   </div>
