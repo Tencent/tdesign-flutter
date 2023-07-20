@@ -93,17 +93,18 @@ class _CirclePaint extends CustomPainter {
     _paint.shader = ui.Gradient.sweep(Offset(size.width / 2, size.height / 2),
         [const Color(0x01ffffff), color]);
     if (minLength == size.width) {
+      // strokeWidth是居中位置的，需要减去width/2，使其向内绘制
       canvas.drawArc(
-          Rect.fromLTWH(
-              0, (size.height - size.width) / 2, size.width, size.width),
+          Rect.fromLTWH(width / 2, (size.height - size.width) / 2 + width / 2,
+              size.width - width, size.width - width),
           0,
           pi * 2,
           false,
           _paint);
     } else {
       canvas.drawArc(
-          Rect.fromLTWH(
-              (size.width - size.height) / 2, 0, size.height, size.height),
+          Rect.fromLTWH((size.width - size.height) / 2 + width / 2, width / 2,
+              size.height - width, size.height - width),
           0,
           pi * 2,
           false,
