@@ -116,6 +116,7 @@ class _TDBackTopState extends State<TDBackTop> {
                   topLeft: Radius.circular(999),
                   bottomLeft: Radius.circular(999))),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(
@@ -132,10 +133,12 @@ class _TDBackTopState extends State<TDBackTop> {
                     height: 32,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TDText(
                           'BACK',
                           style: TextStyle(
+                              height: 1.2,
                               fontSize: 10,
                               color: color,
                               fontWeight: FontWeight.w600),
@@ -143,6 +146,7 @@ class _TDBackTopState extends State<TDBackTop> {
                         TDText(
                           'TOP',
                           style: TextStyle(
+                              height: 1.2,
                               fontSize: 10,
                               color: color,
                               fontWeight: FontWeight.w600),
