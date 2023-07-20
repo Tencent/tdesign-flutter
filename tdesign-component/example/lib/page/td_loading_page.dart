@@ -93,6 +93,35 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
                 ),
               );
             }),
+        ExampleItem(
+            desc: '验证居中问题',
+            ignoreCode: true,
+            builder: (_){
+          var list = const [
+            TDLoading(
+              size: TDLoadingSize.large,
+              icon: TDLoadingIcon.circle,
+              text: '加载中…',
+              axis: Axis.vertical,
+            ),
+            TDLoading(
+              size: TDLoadingSize.large,
+              icon: TDLoadingIcon.activity,
+              text: '加载中…',
+              axis: Axis.vertical,
+            ),
+          ];
+          return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                  children: list.fold(
+                      [],
+                          (previousValue, element) =>
+                      [...previousValue, Container(
+                        color: TDTheme.of(context).grayColor6,
+                        child: element,
+                      ), rowSpace])));
+        })
       ],
     );
   }
