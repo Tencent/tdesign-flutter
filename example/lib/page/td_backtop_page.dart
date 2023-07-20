@@ -56,15 +56,22 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
           children: [
             Visibility(
                 visible: showBackTop,
-                child: Positioned(
-                    right: -16,
-                    bottom: 10,
-                    child: TDBackTop(
-                      controller: controller,
-                      theme: TDBackTopTheme.dark,
-                      showText: true,
-                      style: style,
-                    )))
+                child: style == TDBackTopStyle.halfCircle
+                    ? Positioned(
+                        right: -16,
+                        bottom: 10,
+                        child: TDBackTop(
+                          controller: controller,
+                          theme: TDBackTopTheme.dark,
+                          showText: true,
+                          style: style,
+                        ))
+                    : TDBackTop(
+                        controller: controller,
+                        theme: TDBackTopTheme.dark,
+                        showText: true,
+                        style: style,
+                      ))
           ],
         ),
         children: [
