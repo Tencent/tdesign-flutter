@@ -27,6 +27,7 @@ class ExamplePage extends StatefulWidget {
     this.test = const [],
     this.showSingleChild = false,
     this.singleChild,
+    this.scrollController,
   })  : assert(children.length > 0 || (showSingleChild && singleChild != null),
             'children or singleChild must have at least one'),
         super(key: key);
@@ -58,6 +59,9 @@ class ExamplePage extends StatefulWidget {
   /// 测试组件列表
   final List<ExampleItem> test;
 
+  /// 滚动控制组件
+  final ScrollController? scrollController;
+
   @override
   State<ExamplePage> createState() => _ExamplePageState();
 }
@@ -86,7 +90,8 @@ class _ExamplePageState extends State<ExamplePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: widget.backgroundColor ?? TDTheme.of(context).grayColor1,
+        backgroundColor:
+            widget.backgroundColor ?? TDTheme.of(context).grayColor1,
         body: ScrollbarTheme(
             data: ScrollbarThemeData(
                 trackVisibility: MaterialStateProperty.all(true)),
@@ -98,6 +103,7 @@ class _ExamplePageState extends State<ExamplePage> {
                     child: widget.showSingleChild && widget.singleChild != null
                         ? _singleChild()
                         : ListView.builder(
+                            controller: widget.scrollController,
                             shrinkWrap: true,
                             physics: const BouncingScrollPhysics(),
                             padding: const EdgeInsets.only(top: 24, bottom: 24),
@@ -121,8 +127,10 @@ class _ExamplePageState extends State<ExamplePage> {
                                               exampleModuleList:
                                                   widget.children,
                                               testList: widget.test,
-                                            singleChild: widget.showSingleChild ? widget.singleChild : null
-                                          ),
+                                              singleChild:
+                                                  widget.showSingleChild
+                                                      ? widget.singleChild
+                                                      : null),
                                         ),
                                       )
                                     : Container();
@@ -143,34 +151,34 @@ class _ExamplePageState extends State<ExamplePage> {
             )));
   }
 
-  Widget _singleChild(){
-    if(!WebMdTool.needGenerateWebMd){
+  Widget _singleChild() {
+    if (!WebMdTool.needGenerateWebMd) {
       return widget.singleChild!;
     }
     return ExampleItemInherited(
-     child:Stack(
-      children: [
-        widget.singleChild!,
-        Positioned(
-          left: 16,
-            right: 16,
-            bottom: 0,
-            child: TDButton(
-          text: '生成Web使用md',
-          type: TDButtonType.fill,
-          onTap: () => WebMdTool.generateWebMd(
-              model: model,
-              description: widget.desc,
-              exampleCodeGroup:
-              widget.exampleCodeGroup,
-              exampleModuleList:
-              widget.children,
-              testList: widget.test,
-              singleChild: widget.showSingleChild ? widget.singleChild : null),
-        )),
-      ],
-    ),
-    path: widget.exampleCodeGroup,);
+      child: Stack(
+        children: [
+          widget.singleChild!,
+          Positioned(
+              left: 16,
+              right: 16,
+              bottom: 0,
+              child: TDButton(
+                text: '生成Web使用md',
+                type: TDButtonType.fill,
+                onTap: () => WebMdTool.generateWebMd(
+                    model: model,
+                    description: widget.desc,
+                    exampleCodeGroup: widget.exampleCodeGroup,
+                    exampleModuleList: widget.children,
+                    testList: widget.test,
+                    singleChild:
+                        widget.showSingleChild ? widget.singleChild : null),
+              )),
+        ],
+      ),
+      path: widget.exampleCodeGroup,
+    );
   }
 
   ExampleItem _buildTestExampleItem() =>
@@ -182,7 +190,7 @@ class _ExamplePageState extends State<ExamplePage> {
     var rightBarItems = <TDNavBarItem>[];
 
     // web端示例页不展示标题栏
-    if(PlatformUtil.isWeb && !Navigator.canPop(context)){
+    if (PlatformUtil.isWeb && !Navigator.canPop(context)) {
       return Container();
     }
     if (showAction && !PlatformUtil.isWeb) {
@@ -464,7 +472,6 @@ class _CodeWrapperState extends State<CodeWrapper> {
       list.add(codeString!);
       WebMdTool.manualExampleCode[modelTheme.path] = list;
     }
-
   }
 
   @override
