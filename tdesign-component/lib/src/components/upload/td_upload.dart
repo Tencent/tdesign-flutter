@@ -353,7 +353,7 @@ class _TDUploadState extends State<TDUpload> {
               Visibility(
                 visible: file.status == TDUploadFileStatus.loading,
                 child: const TDLoading(
-                  size: TDLoadingSize.small,
+                  size: TDLoadingSize.large,
                   icon: TDLoadingIcon.circle,
                   iconColor: Colors.white,
                 ),
