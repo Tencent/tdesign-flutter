@@ -32,58 +32,58 @@ import '../../../td_export.dart';
 ///
 class TDText extends StatelessWidget {
   const TDText(
-    this.data, {
-    this.font,
-    this.fontWeight,
-    this.fontFamily,
-    this.textColor = Colors.black,
-    this.backgroundColor,
-    this.isTextThrough = false,
-    this.lineThroughColor = Colors.white,
-    this.package,
-    this.style,
-    this.strutStyle,
-    this.textAlign,
-    this.textDirection,
-    this.locale,
-    this.softWrap,
-    this.overflow,
-    this.textScaleFactor,
-    this.maxLines,
-    this.semanticsLabel,
-    this.textWidthBasis,
-    this.textHeightBehavior,
-    this.forceVerticalCenter = false,
-    Key? key,
-  })  : textSpan = null,
+      this.data, {
+        this.font,
+        this.fontWeight,
+        this.fontFamily,
+        this.textColor = Colors.black,
+        this.backgroundColor,
+        this.isTextThrough = false,
+        this.lineThroughColor = Colors.white,
+        this.package,
+        this.style,
+        this.strutStyle,
+        this.textAlign,
+        this.textDirection,
+        this.locale,
+        this.softWrap,
+        this.overflow,
+        this.textScaleFactor,
+        this.maxLines,
+        this.semanticsLabel,
+        this.textWidthBasis,
+        this.textHeightBehavior,
+        this.forceVerticalCenter = false,
+        Key? key,
+      })  : textSpan = null,
         super(key: key);
 
   /// 富文本构造方法
   const TDText.rich(
-    this.textSpan, {
-    this.font,
-    this.fontWeight,
-    this.fontFamily,
-    this.textColor = Colors.black,
-    this.backgroundColor,
-    this.isTextThrough = false,
-    this.lineThroughColor = Colors.white,
-    this.package = 'tdesign_flutter',
-    Key? key,
-    this.style,
-    this.strutStyle,
-    this.textAlign,
-    this.textDirection,
-    this.locale,
-    this.softWrap,
-    this.overflow,
-    this.textScaleFactor,
-    this.maxLines,
-    this.semanticsLabel,
-    this.textWidthBasis,
-    this.textHeightBehavior,
-    this.forceVerticalCenter = false,
-  })  : data = null,
+      this.textSpan, {
+        this.font,
+        this.fontWeight,
+        this.fontFamily,
+        this.textColor = Colors.black,
+        this.backgroundColor,
+        this.isTextThrough = false,
+        this.lineThroughColor = Colors.white,
+        this.package = 'tdesign_flutter',
+        Key? key,
+        this.style,
+        this.strutStyle,
+        this.textAlign,
+        this.textDirection,
+        this.locale,
+        this.softWrap,
+        this.overflow,
+        this.textScaleFactor,
+        this.maxLines,
+        this.semanticsLabel,
+        this.textWidthBasis,
+        this.textHeightBehavior,
+        this.forceVerticalCenter = false,
+      })  : data = null,
         super(key: key);
 
   /// 字体尺寸，包含大小size和行高height
@@ -181,6 +181,18 @@ class TDText extends StatelessWidget {
     var textFont = font ??
         TDTheme.of(context).fontBodyLarge ??
         Font(size: 16, lineHeight: 24);
+
+    var stylePackage = package;
+    var styleFontFamily = style?.fontFamily ?? fontFamily?.fontFamily;
+    var realFontWeight = style?.fontWeight ?? fontWeight;
+    // Flutter 3.0之后，iOS w500之下字体不生效，需要替换字体
+    if (PlatformUtil.isIOS &&
+        (styleFontFamily == null || styleFontFamily.isEmpty) &&
+        realFontWeight != null &&
+        realFontWeight.index <= FontWeight.w500.index) {
+      stylePackage = null;
+      styleFontFamily = 'PingFang SC';
+    }
     return TextStyle(
       inherit: style?.inherit ?? true,
       color: style?.color ?? textColor,
@@ -206,9 +218,9 @@ class TDText extends StatelessWidget {
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
-      fontFamily: style?.fontFamily ?? fontFamily?.fontFamily,
+      fontFamily: styleFontFamily,
       fontFamilyFallback: style?.fontFamilyFallback,
-      package: package,
+      package: stylePackage,
     );
   }
 
@@ -222,38 +234,38 @@ class TDText extends StatelessWidget {
       {BuildContext? context, TextStyle? textStyle, Color? backgroundColor}) {
     return textSpan == null
         ? Text(
-            data,
-            key: key,
-            style: textStyle ??
-                getTextStyle(context, backgroundColor: backgroundColor),
-            strutStyle: strutStyle,
-            textAlign: textAlign,
-            textDirection: textDirection,
-            locale: locale,
-            softWrap: softWrap,
-            overflow: overflow,
-            textScaleFactor: textScaleFactor,
-            maxLines: maxLines,
-            semanticsLabel: semanticsLabel,
-            textWidthBasis: textWidthBasis,
-            textHeightBehavior: textHeightBehavior,
-          )
+      data,
+      key: key,
+      style: textStyle ??
+          getTextStyle(context, backgroundColor: backgroundColor),
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      textDirection: textDirection,
+      locale: locale,
+      softWrap: softWrap,
+      overflow: overflow,
+      textScaleFactor: textScaleFactor,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textWidthBasis: textWidthBasis,
+      textHeightBehavior: textHeightBehavior,
+    )
         : Text.rich(
-            textSpan!,
-            style: textStyle ??
-                getTextStyle(context, backgroundColor: backgroundColor),
-            strutStyle: strutStyle,
-            textAlign: textAlign,
-            textDirection: textDirection,
-            locale: locale,
-            softWrap: softWrap,
-            overflow: overflow,
-            textScaleFactor: textScaleFactor,
-            maxLines: maxLines,
-            semanticsLabel: semanticsLabel,
-            textWidthBasis: textWidthBasis,
-            textHeightBehavior: textHeightBehavior,
-          );
+      textSpan!,
+      style: textStyle ??
+          getTextStyle(context, backgroundColor: backgroundColor),
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      textDirection: textDirection,
+      locale: locale,
+      softWrap: softWrap,
+      overflow: overflow,
+      textScaleFactor: textScaleFactor,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textWidthBasis: textWidthBasis,
+      textHeightBehavior: textHeightBehavior,
+    );
   }
 }
 
@@ -262,7 +274,7 @@ class TDTextSpan extends TextSpan {
   /// 构造参数，扩展参数释义可参考[TDText]中字段注释
   TDTextSpan({
     BuildContext?
-        context, // 如果未设置font，且不想使用默认的fontBodyLarge尺寸时，需设置context，否则可省略
+    context, // 如果未设置font，且不想使用默认的fontBodyLarge尺寸时，需设置context，否则可省略
     Font? font,
     FontWeight? fontWeight,
     FontFamily? fontFamily,
@@ -279,28 +291,28 @@ class TDTextSpan extends TextSpan {
     PointerExitEventListener? onExit,
     String? semanticsLabel,
   }) : super(
-          text: text,
-          children: children,
-          style: _getTextStyle(context, style, font, fontWeight, fontFamily,
-              textColor, isTextThrough, lineThroughColor, package),
-          recognizer: recognizer,
-          mouseCursor: mouseCursor,
-          onEnter: onEnter,
-          onExit: onExit,
-          semanticsLabel: semanticsLabel,
-        );
+    text: text,
+    children: children,
+    style: _getTextStyle(context, style, font, fontWeight, fontFamily,
+        textColor, isTextThrough, lineThroughColor, package),
+    recognizer: recognizer,
+    mouseCursor: mouseCursor,
+    onEnter: onEnter,
+    onExit: onExit,
+    semanticsLabel: semanticsLabel,
+  );
 
   static TextStyle? _getTextStyle(
-    BuildContext? context,
-    TextStyle? style,
-    Font? font,
-    FontWeight? fontWeight,
-    FontFamily? fontFamily,
-    Color textColor,
-    bool? isTextThrough,
-    Color? lineThroughColor,
-    String package,
-  ) {
+      BuildContext? context,
+      TextStyle? style,
+      Font? font,
+      FontWeight? fontWeight,
+      FontFamily? fontFamily,
+      Color textColor,
+      bool? isTextThrough,
+      Color? lineThroughColor,
+      String package,
+      ) {
     var textFont = font ??
         TDTheme.of(context).fontBodyLarge ??
         Font(size: 16, lineHeight: 24);
@@ -336,7 +348,6 @@ class TDTextSpan extends TextSpan {
 
 /// 存储可以自定义TDText居中算法数据的内部控件
 class TDTextConfiguration extends InheritedWidget {
-
   /// forceVerticalCenter=true时，内置padding配置
   final TDTextPaddingConfig? paddingConfig;
 
@@ -384,8 +395,8 @@ class TDTextPaddingConfig {
   double get paddingRate => PlatformUtil.isWeb
       ? 3 / 8
       : PlatformUtil.isAndroid
-          ? -7 / 128
-          : 0;
+      ? -7 / 128
+      : 0;
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
   double get paddingExtraRate => PlatformUtil.isAndroid ? 115 / 256 : 97 / 240;
