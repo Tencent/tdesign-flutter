@@ -183,6 +183,18 @@ class TDText extends StatelessWidget {
   TextStyle? getTextStyle(BuildContext? context,{ double? height, Color? backgroundColor}) {
     var textFont =
         font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
+
+    var stylePackage = package;
+    var styleFontFamily = style?.fontFamily ?? fontFamily?.fontFamily;
+    var realFontWeight = style?.fontWeight ?? fontWeight;
+    // Flutter 3.0之后，iOS w500之下字体不生效，需要替换字体
+    if (PlatformUtil.isIOS &&
+        (styleFontFamily == null || styleFontFamily.isEmpty) &&
+        realFontWeight != null &&
+        realFontWeight.index <= FontWeight.w500.index) {
+      stylePackage = null;
+      styleFontFamily =  "PingFang SC";
+    }
     return TextStyle(
       inherit: style?.inherit ?? true,
       color: style?.color ?? textColor,
@@ -206,9 +218,9 @@ class TDText extends StatelessWidget {
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
-      fontFamily: style?.fontFamily ?? fontFamily?.fontFamily,
+      fontFamily: styleFontFamily,
       fontFamilyFallback: style?.fontFamilyFallback,
-      package: package,
+      package: stylePackage,
     );
   }
 
