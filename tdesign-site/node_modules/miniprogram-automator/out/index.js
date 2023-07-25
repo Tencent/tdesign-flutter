@@ -1,0 +1,1 @@
+"use strict";var __importDefault=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};const Automator_1=__importDefault(require("./Automator"));module.exports=new Automator_1.default;

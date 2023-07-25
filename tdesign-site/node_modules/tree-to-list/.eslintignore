@@ -1,0 +1,4 @@
+dist
+test
+__tests__
+node_modules

@@ -1,0 +1,36 @@
+# Github actions workflow name
+name: CI
+
+# Triggers the workflow on push or pull request events
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  jest_test:
+    name: miniprogram-simulate test with jest
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+    - run: npm install
+    - run: npm run test
+    - run: npm run codecov
+  
+  karma_test:
+    name: miniprogram-simulate test with karma
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+    - run: npm install
+    - run: npm i puppeteer@latest
+    - run: npm run karma

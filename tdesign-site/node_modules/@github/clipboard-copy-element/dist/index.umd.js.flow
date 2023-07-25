@@ -1,0 +1,8 @@
+/* @flow strict */
+
+declare module '@github/clipboard-copy-element' {
+  declare export default class ClipboardCopyElement extends HTMLElement {
+    get value(): string;
+    set value(value: string): void;
+  }
+}
