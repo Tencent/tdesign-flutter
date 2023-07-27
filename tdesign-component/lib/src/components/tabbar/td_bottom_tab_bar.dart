@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 
 /// 展开项 向下箭头宽
 const double _kArrowWidth = 13.5;

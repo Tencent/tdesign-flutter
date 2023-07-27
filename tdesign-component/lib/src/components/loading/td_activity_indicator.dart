@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
 
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 
 const double _kDefaultIndicatorRadius = 10.0;
 

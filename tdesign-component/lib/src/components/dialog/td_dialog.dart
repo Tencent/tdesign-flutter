@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 
 export 'td_alert_dialog.dart';
 export 'td_confirm_dialog.dart';

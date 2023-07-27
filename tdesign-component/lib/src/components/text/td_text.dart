@@ -5,7 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 
 /// 文本控件
 /// 设计原则：

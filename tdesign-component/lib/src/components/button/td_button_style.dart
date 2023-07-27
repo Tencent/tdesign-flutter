@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 
 /// TDButton按钮样式
 class TDButtonStyle {

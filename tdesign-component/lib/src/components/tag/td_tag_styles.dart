@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 
 /// Tag展示类型
 enum TDTagTheme {

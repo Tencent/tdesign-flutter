@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 
 /// 点击型标签组件，点击时内部更改自身状态
 /// 支持样式：方形/圆角/半圆/带关闭图标
