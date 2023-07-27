@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
-import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'example_base.dart';
 
