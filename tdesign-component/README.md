@@ -21,7 +21,7 @@ TDesign Flutter技术栈组件库，适合在移动端项目中使用。
       tdesign_flutter:
         git: https://github.com/TDesignOteam/tdesign-flutter.git
     
-- 在文件头部引入：import 'package:tdesign_flutter/td_export.dart'; // 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类
+- 在文件头部引入：import 'package:tdesign_flutter/tdesign_flutter.dart'; // 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类
 - 可通过json文件配置颜色/字体尺寸/字体样式/圆角/阴影等主题样式。通过TDTheme.of(context)或者TDTheme.defaultData()获取主题数据。建议组件都使用TDTheme.of(context)的，不需要跟随局部主题的组件，才可以使用TDTheme.defaultData()。
     
     颜色，字体，圆角等使用示例：

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类
-import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
