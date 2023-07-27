@@ -213,7 +213,7 @@ isComponent: true
 在tdesign_flutter/td_export.dart中有所有组件的路径。
 
 ```dart
-import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 
 ## 代码演示

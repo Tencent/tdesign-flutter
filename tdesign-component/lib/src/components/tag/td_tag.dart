@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 
 /// 展示型标签组件，仅展示，内部不可更改自身状态
 /// 支持样式：方形/圆角/半圆/带关闭图标

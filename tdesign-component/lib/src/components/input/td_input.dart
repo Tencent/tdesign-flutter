@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 
 enum TDInputType {
   normal,
