@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 import 'td_cupertino_switch.dart';
 
 enum TDSwitchSize { large, medium, small }

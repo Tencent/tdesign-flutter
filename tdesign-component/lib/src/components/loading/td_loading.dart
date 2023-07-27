@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 import 'td_activity_indicator.dart';
 import 'td_point_indicator.dart';
 
