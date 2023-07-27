@@ -1,7 +1,7 @@
 name: tdesign_flutter
-description: A new Flutter plugin.
-version: 0.0.1
-homepage:
+description: tdesign flutter component
+version: 0.0.2
+homepage: https://github.com/TDesignOteam/tdesign-flutter/tree/main/tdesign-component
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
