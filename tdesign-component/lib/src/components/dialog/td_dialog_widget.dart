@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 import '../../util/auto_size.dart';
 
 /// TDDialog手脚架

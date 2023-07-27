@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 
 /// 限制Function类型，防止传递错误的Function，导致参数对不上
 typedef LinkClick = Function(Uri? uri);
