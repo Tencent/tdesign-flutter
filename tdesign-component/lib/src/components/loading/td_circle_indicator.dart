@@ -8,7 +8,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
 
 class TDCircleIndicator extends StatefulWidget {
   const TDCircleIndicator({
