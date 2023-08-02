@@ -6,20 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../td_export.dart';
-import '../../util/platform_util.dart';
 
 /// 文本控件
 /// 设计原则：
 /// 1.为了使用更方便，所以对系统组件进行的扩展，需兼容系统控件所有功能，不能让用户使用TDesign时，因不能满足系统功能而弃用。
 /// 2.非系统已有属性，尽量添加注释
-/// 
+///
 /// 需求：把一部分在TextStyle中的属性扁平化，放到外层。
 /// 1.暴露系统的所有属性，支持系统所有操作
 /// 2.约束使用主题配置的几种字体
 /// 3.提供转换为系统Text的方法，以使某些系统组件指定接收系统Text时可使用。（Image组件同理）
 /// 4.支持自定义TextStyle
 /// 5.兼容TextSpan形式
-/// 
+///
 /// 技巧：
 /// 命名参数替换属性的正则：
 /// 第一步，把Text中的可选参数拷贝过来，变成如下格式：
@@ -69,7 +68,7 @@ class TDText extends StatelessWidget {
         this.backgroundColor,
         this.isTextThrough = false,
         this.lineThroughColor = Colors.white,
-        this.package = 'tdesign_flutter',
+        this.package,
         Key? key,
         this.style,
         this.strutStyle,
@@ -275,7 +274,7 @@ class TDTextSpan extends TextSpan{
     Color textColor = Colors.black,
     bool? isTextThrough = false,
     Color? lineThroughColor = Colors.white,
-    String package = 'tdesign_flutter',
+    String? package,
     String? text,
     List<InlineSpan>? children,
     TextStyle? style,
@@ -313,7 +312,7 @@ class TDTextSpan extends TextSpan{
       Color textColor,
       bool? isTextThrough,
       Color? lineThroughColor,
-      String package,
+      String? package,
       ) {
     var textFont =
         font ?? TDTheme.of(context).fontM ?? Font(size: 16, lineHeight: 24);
