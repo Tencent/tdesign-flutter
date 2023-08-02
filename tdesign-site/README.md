@@ -45,7 +45,7 @@ tdesign_flutter:
 以按钮组件为例，只需要在 `JSON` 文件中引入按钮对应的自定义组件即可
 
 ```dart
-import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 
 ## 本地运行示例代码
