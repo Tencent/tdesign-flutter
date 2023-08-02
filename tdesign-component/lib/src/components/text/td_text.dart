@@ -68,7 +68,7 @@ class TDText extends StatelessWidget {
         this.backgroundColor,
         this.isTextThrough = false,
         this.lineThroughColor = Colors.white,
-        this.package = 'tdesign_flutter',
+        this.package,
         Key? key,
         this.style,
         this.strutStyle,
@@ -281,7 +281,7 @@ class TDTextSpan extends TextSpan {
     Color textColor = Colors.black,
     bool? isTextThrough = false,
     Color? lineThroughColor = Colors.white,
-    String package = 'tdesign_flutter',
+    String? package,
     String? text,
     List<InlineSpan>? children,
     TextStyle? style,
@@ -311,7 +311,7 @@ class TDTextSpan extends TextSpan {
       Color textColor,
       bool? isTextThrough,
       Color? lineThroughColor,
-      String package,
+      String? package,
       ) {
     var textFont = font ??
         TDTheme.of(context).fontBodyLarge ??

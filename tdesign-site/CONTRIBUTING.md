@@ -5,7 +5,7 @@ spline: explain
 ---
 
 ## 项目地址
-[TDesign-Flutter](https://github.com/TDesignOteam/tdesign-flutter.git)
+[TDesign-Flutter](https://github.com/TDesignOteam/tdesign-flutter/tree/main/tdesign-component)
 
 组件项目：tdesign-component
 
