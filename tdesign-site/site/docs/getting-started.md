@@ -14,7 +14,7 @@ Android请扫码下载预览 ↓
 <br/>
 iOS请运行项目预览 ↓
 <br/>
-https://github.com/TDesignOteam/tdesign-flutter.git
+https://github.com/TDesignOteam/tdesign-flutter/tree/main/tdesign-component
 
 ## 使用方法
 - 在pubbspec.yaml引入依赖。
