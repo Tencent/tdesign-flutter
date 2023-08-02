@@ -6,10 +6,12 @@ spline: explain
 
 ## 项目地址
 [TDesign-Flutter](https://github.com/TDesignOteam/tdesign-flutter.git)
+
 组件项目：tdesign-component
+
 官网项目：tdesign-site
 
-# 开发规范
+### 开发规范
 - 组件命名规范：以TD为前缀，组件名称、API名称参考TDesign现有组件和API命名，可以根据flutter原生Widget的特点进行修改。组件API以满足设计要求和使用为准，可根据flutter特点做精简或定制。
 - 组件库用到的所有色值、圆角、字体字号等样式属性需全部定义在主题中。
 - 代码规范遵循腾讯Dart代码规范。
@@ -17,7 +19,7 @@ spline: explain
 - 示例页面尽量使用ExamplePage+ExampleModule+ExampleItem组合，按照示例稿的布局实现；页面写完后，在main.dart中修改exampleMap对应组件的isTodo属性即可。
 - 组件API和演示代码，请参考`demo_tool/README.md`文件。
 
-# 共建流程
+### 共建流程
 - 拉取开发分支：建议将项目fork到自己github,每个组件从main分支拉取对应开发分支，命名为feature/组件名小写_下划线
 - 实现组件：组件中的属性请尽量使用TDTheme提供的公共属性，使用方法参考'主题-基础'页面
 - 编写示例页：示例页请尽量使用ExamplePage+ExampleModule+ExampleItem组合，参考示例稿布局实现。
