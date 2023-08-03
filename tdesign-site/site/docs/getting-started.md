@@ -35,7 +35,7 @@ https://github.com/TDesignOteam/tdesign-flutter/tree/main/tdesign-component
 - TDesign的Icon不跟随主题，都是ttf格式：
 
     使用示例：
-    `TDIcon(TDIcons.activity)`
+    `Icon(TDIcons.activity)`
     
 - 使用示例：`example/lib/page/`
 
