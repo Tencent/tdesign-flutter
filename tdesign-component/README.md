@@ -33,7 +33,7 @@ TDesign Flutter技术栈组件库，适合在移动端项目中使用。
 ```
 - TDesign的Icon不跟随主题，都是ttf格式,使用示例：
 ```
-    TDIcon(TDIcons.activity)
+    Icon(TDIcons.activity)
 ```
     
 - 使用示例：`example/lib/page/`
