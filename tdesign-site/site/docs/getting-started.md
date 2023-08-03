@@ -41,4 +41,4 @@ https://github.com/TDesignOteam/tdesign-flutter/tree/main/tdesign-component
 
 ## 基础库版本
 
-最低基础库版本：`^0.0.2`
+最低基础库版本：`^0.0.3`
