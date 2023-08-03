@@ -5,6 +5,10 @@ toc: false
 docClass: timeline
 ---
 
+## 0.0.3
+
+* 删除TDText中相关package的默认值，允许package传null
+
 ## 0.0.2
 
 * 更新ReadMe,修改引入文件为'tdesign_flutter.dart'
