@@ -71,7 +71,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
+| --- | --- | -- | --- |
 | context |  | - |  |
 | font |  | - |  |
 | fontWeight |  | - |  |
@@ -79,7 +79,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | textColor |  | Colors.black |  |
 | isTextThrough |  | false |  |
 | lineThroughColor |  | Colors.white |  |
-| package |  | 'tdesign_flutter' |  |
+| package |  |  |  |
 | text |  | - |  |
 | children |  | - |  |
 | style |  | - |  |
