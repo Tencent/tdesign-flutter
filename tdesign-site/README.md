@@ -18,31 +18,40 @@
 </p>
 
 
-[TDesign](https://github.com/Tencent/tdesign) 适配微信小程序的组件库。
+[TDesign](https://github.com/Tencent/tdesign) 适配Flutter的组件库。
 
 ## 预览
 
-请下载App预览 ↓
 <br/>
-
-<img width="260" src="https://user-images.githubusercontent.com/7017290/146479952-b05298e8-f6ac-44a1-b73c-7abd8b9b3914.jpeg" />
+Android请扫码下载预览 ↓
+<br/>
+<img width="260" src="/flutter/assets/qrcode/td_apk_qrcode.png" />
+<br/>
+iOS请运行项目预览 ↓
+<br/>
+https://github.com/TDesignOteam/tdesign-flutter/tree/main/tdesign-component
 
 ## 使用组件
 
 ### yaml引入依赖
 
-小程序已经支持使用 NPM 安装第三方包。
-
-具体使用方式，可以参考小程序官网文档： [《NPM 支持》](https://developers.weixin.qq.com/miniprogram/dev/devtools/npm.html?search-key=npm)
-
 ```yaml
-tdesign_flutter:
-  git: https://github.com/TDesignOteam/tdesign-flutter.git
+    dependencies:
+      tdesign_flutter:
+        git: https://github.com/TDesignOteam/tdesign-flutter.git
+```
+    或者：
+```yaml
+    dependencies:
+      tdesign_flutter:
+        hosted:
+          name: tdesign_flutter
+          url: http://pub.xxxx（公司内网pub库）
+          version: ^0.0.3
 ```
 
-### 引入组件代码
 
-以按钮组件为例，只需要在 `JSON` 文件中引入按钮对应的自定义组件即可
+### 引入组件代码
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -51,7 +60,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ## 本地运行示例代码
 
 - 进入 `site` 文件夹，安装`npm install` 安装依赖包 
-- `cd ..` 回到 `tdesing-minprogram` 目录，运行命令 `npm run site:dev` ，本地运行小程序官方文档项目
+- `cd ..` 回到 `tdesing-site` 目录，运行命令 `npm run site:dev` ，本地运行小程序官方文档项目
 
 ## 基础库版本
 
