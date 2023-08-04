@@ -5,10 +5,7 @@
       <td-doc-tabs ref="tdDocTabs" :tab="tab"></td-doc-tabs>
       <div class="td-doc-main" v-show="tab === 'demo'">
         <div name="DEMO" v-html="info.demoMd"></div>
-        <td-doc-phone>
-          <div class="qrcode__wrapper" slot="qrcode">
-            <img class="qrcode" :src="qrcode" />
-          </div>
+        <td-doc-phone headless>
           <iframe
             :src="liveUrl"
             frameborder="0"
