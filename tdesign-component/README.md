@@ -22,7 +22,7 @@ TDesign Flutter技术栈组件库，适合在移动端项目中使用。
       tdesign_flutter:
         git: https://github.com/TDesignOteam/tdesign-flutter.git
 ```
-    或者：
+或者：
 ```yaml
     dependencies:
       tdesign_flutter:
