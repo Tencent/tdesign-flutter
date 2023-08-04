@@ -25,7 +25,7 @@
 <br/>
 Android请扫码下载预览 ↓
 <br/>
-<img width="260" src="/flutter/assets/qrcode/td_apk_qrcode.png" />
+<img width="260" src="site/public/assets/qrcode/td_apk_qrcode.png" />
 <br/>
 iOS请运行项目预览 ↓
 <br/>
@@ -40,7 +40,7 @@ https://github.com/TDesignOteam/tdesign-flutter/tree/main/tdesign-component
       tdesign_flutter:
         git: https://github.com/TDesignOteam/tdesign-flutter.git
 ```
-    或者：
+或者：
 ```yaml
     dependencies:
       tdesign_flutter:
