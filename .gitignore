@@ -9,6 +9,8 @@
 .history
 .svn/
 
+tdesign-site/node_modules/
+
 # IntelliJ related
 *.iml
 *.ipr
