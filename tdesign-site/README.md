@@ -57,14 +57,14 @@ https://github.com/TDesignOteam/tdesign-flutter/tree/main/tdesign-component
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 
-## 本地运行示例代码
+## 本地运行官网示例代码
 
 - 进入 `site` 文件夹，安装`npm install` 安装依赖包 
-- `cd ..` 回到 `tdesing-site` 目录，运行命令 `npm run site:dev` ，本地运行小程序官方文档项目
+- `cd ..` 回到 `tdesing-site` 目录，运行命令 `npm run site:dev` 
 
 ## 基础库版本
 
-最低基础库版本`^1.0.0`
+最低基础库版本`^0.0.3`
 
 ## 开源协议
 
