@@ -233,6 +233,7 @@ class TDMultiPicker extends StatelessWidget {
                         alignment: Alignment.center,
                         height: pickerHeight / pickerItemCount,
                         width: maxWidth,
+                        padding: EdgeInsets.only(left: 16,right: 16),
                         child: TDItemWidget(
                           index: index,
                           itemHeight: pickerHeight / pickerItemCount,
