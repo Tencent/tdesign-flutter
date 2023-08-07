@@ -13,66 +13,28 @@ class TDTextPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // debugPaintBaselinesEnabled = true;
     return ExamplePage(
-        padding: const EdgeInsets.all(8),
-        title: tdTitle(context),
-        exampleCodeGroup: 'text',
-        children: [
-          ExampleModule(title: 'Token', children: [
-            ExampleItem(
-                ignoreCode: true,
-                builder: (context) {
-                  var children = <Widget>[];
-                  TDTheme.of(context).fontMap.forEach((key, value) {
-                    children.add(Container(
-                      child: TDText(
-                        '@$key:${value.size.toInt()}px',
-                        font: value,
-                        /// link类型的示例添加下划线
-                        style: TextStyle(decoration: key.contains('Link') ? TextDecoration.underline : null, decorationColor: TDTheme.of(context).fontGyColor1),
-                      ),
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  color: TDTheme.of(context).grayColor4,
-                                  width: 0.5))),
-                    ));
-                  });
-                  return ListView(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: children,
-                  );
-                })
-          ]),
-        ],
-    test: [
-      ExampleItem(
-          desc: '系统Text:',
-          builder: _buildSystemText
-      ),
-      ExampleItem(desc: '普通TDText:', builder: _buildNormalTDText),
-      ExampleItem(
-          desc: '指定常用属性:',
-          builder: _buildGeneralProp),
-      ExampleItem(
-          desc: 'style覆盖textColor,不覆盖font:',
-          builder: _buildStyleCoverColor),
-      ExampleItem(
-          desc: 'style覆盖textColor和font:',
-          builder: _buildStyleCoverColorAndFont),
-      ExampleItem(
-          desc: 'TDText.rich测试:',
-          builder: _buildRichText),
-      ExampleItem(
-          desc: '获取系统Text:',
-          builder: _getSystemText),
-      ExampleItem(
-          desc: '中文居中:（带有英文可能不居中）',
-          builder: _buildVerticalCenterText),
-      ExampleItem(
-          desc: '自定义内部padding:',
-          builder: _buildCustomPaddingText),
-    ],);
+      padding: const EdgeInsets.all(8),
+      title: tdTitle(context),
+      exampleCodeGroup: 'text',
+      children: [
+        ExampleModule(title: '使用示例', children: [
+          ExampleItem(desc: '系统Text:', builder: _buildSystemText),
+          ExampleItem(desc: '普通TDText:', builder: _buildNormalTDText),
+          ExampleItem(desc: '指定常用属性:', builder: _buildGeneralProp),
+          ExampleItem(
+              desc: 'style覆盖textColor,不覆盖font:',
+              builder: _buildStyleCoverColor),
+          ExampleItem(
+              desc: 'style覆盖textColor和font:',
+              builder: _buildStyleCoverColorAndFont),
+          ExampleItem(desc: 'TDText.rich测试:', builder: _buildRichText),
+          ExampleItem(desc: '获取系统Text:', builder: _getSystemText),
+          ExampleItem(
+              desc: '中文居中:（带有英文可能不居中）', builder: _buildVerticalCenterText),
+          ExampleItem(desc: '自定义内部padding:', builder: _buildCustomPaddingText),
+        ]),
+      ],
+    );
   }
 
   @Demo(group: 'text')
@@ -105,8 +67,7 @@ class TDTextPage extends StatelessWidget {
       exampleTxt,
       font: TDTheme.of(context).fontBodyLarge,
       textColor: TDTheme.of(context).brandNormalColor,
-      style: TextStyle(
-          color: TDTheme.of(context).errorNormalColor),
+      style: TextStyle(color: TDTheme.of(context).errorNormalColor),
     );
   }
 
@@ -128,26 +89,22 @@ class TDTextPage extends StatelessWidget {
             font: TDTheme.of(context).fontTitleExtraLarge,
             textColor: TDTheme.of(context).warningNormalColor,
             isTextThrough: true,
-            lineThroughColor:
-            TDTheme.of(context).brandNormalColor,
-            style: TextStyle(
-                color: TDTheme.of(context).errorNormalColor)),
+            lineThroughColor: TDTheme.of(context).brandNormalColor,
+            style: TextStyle(color: TDTheme.of(context).errorNormalColor)),
         TextSpan(
             text: 'TextSpan2',
             style: TextStyle(
-                fontSize: 14,
-                color: TDTheme.of(context).brandNormalColor)),
+                fontSize: 14, color: TDTheme.of(context).brandNormalColor)),
         const WidgetSpan(
             child: Icon(
-              TDIcons.setting,
-              size: 24,
-            )),
+          TDIcons.setting,
+          size: 24,
+        )),
       ]),
       font: TDTheme.of(context).fontBodyLarge,
       textColor: TDTheme.of(context).brandNormalColor,
-      style: TextStyle(
-          color: TDTheme.of(context).errorNormalColor,
-          fontSize: 32),
+      style:
+          TextStyle(color: TDTheme.of(context).errorNormalColor, fontSize: 32),
     );
   }
 

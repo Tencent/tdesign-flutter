@@ -20,6 +20,7 @@ import 'page/td_date_picker_page.dart';
 import 'page/td_dialog_page.dart';
 import 'page/td_divider_page.dart';
 import 'page/td_empty_page.dart';
+import 'page/td_font_page.dart';
 import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
 import 'page/td_input_page.dart';
@@ -32,6 +33,7 @@ import 'page/td_radio_page.dart';
 import 'page/td_radius_page.dart';
 import 'page/td_refresh_page.dart';
 import 'page/td_search_bar_page.dart';
+import 'page/td_shadows_page.dart';
 import 'page/td_slider_page.dart';
 import 'page/td_stepper_page.dart';
 import 'page/td_swiper_page.dart';
@@ -320,15 +322,24 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'toast',
         pageBuilder: _wrapInheritedTheme((context) => const TDToastPage())),
   ],
-  '其他': [
+  '主题': [
     ExamplePageModel(
-        text: '主题--基础',
-        name: 'theme',
-        pageBuilder: _wrapInheritedTheme((context) => const TDThemePage())),
+        text: '颜色',
+        name: 'theme_colors',
+        pageBuilder:
+            _wrapInheritedTheme((context) => const TDThemeColorsPage())),
     ExamplePageModel(
-        text: '圆角--基础',
+        text: '字体',
+        name: 'font',
+        pageBuilder: _wrapInheritedTheme((context) => const TDFontPage())),
+    ExamplePageModel(
+        text: '圆角',
         name: 'radius',
         pageBuilder: _wrapInheritedTheme((context) => const TDRadiusPage())),
+    ExamplePageModel(
+        text: '阴影',
+        name: 'shadows',
+        pageBuilder: _wrapInheritedTheme((context) => const TDShadowsPage())),
   ],
 };
 
@@ -397,20 +408,21 @@ class MyApp extends StatelessWidget {
             // extensions: [TDThemeData.defaultData().copyWith(colorMap: {'brandNormalColor':Colors.yellow})],
             colorScheme: ColorScheme.light(
                 primary: TDTheme.of(context).brandNormalColor)),
-        home: PlatformUtil.isWeb ? null : const MyHomePage(title: 'TDesgin Flutter 组件库'),
+        home: PlatformUtil.isWeb
+            ? null
+            : const MyHomePage(title: 'TDesgin Flutter 组件库'),
         onGenerateRoute: TDExampleRoute.onGenerateRoute,
-        routes:  _getRoutes(),
+        routes: _getRoutes(),
       ),
     );
   }
 
   Map<String, WidgetBuilder> _getRoutes() {
-    if(PlatformUtil.isWeb) {
+    if (PlatformUtil.isWeb) {
       return {
         for (var model in examplePageList)
           model.name: (context) => model.pageBuilder.call(context, model)
-      }
-        ..putIfAbsent('/', () => (context) => const TDButtonPage());
+      }..putIfAbsent('/', () => (context) => const TDButtonPage());
     } else {
       return const {};
     }

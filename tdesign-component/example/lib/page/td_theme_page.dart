@@ -5,16 +5,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-/// 主题示例页
-
-class TDThemePage extends StatefulWidget {
-  const TDThemePage({Key? key}) : super(key: key);
+/// 主题颜色示例页
+class TDThemeColorsPage extends StatefulWidget {
+  const TDThemeColorsPage({Key? key}) : super(key: key);
 
   @override
-  _TDThemePageState createState() => _TDThemePageState();
+  _TDThemeColorsPageState createState() => _TDThemeColorsPageState();
 }
 
-class _TDThemePageState extends State<TDThemePage> {
+class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
