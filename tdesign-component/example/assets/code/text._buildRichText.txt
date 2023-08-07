@@ -7,25 +7,21 @@
             font: TDTheme.of(context).fontTitleExtraLarge,
             textColor: TDTheme.of(context).warningNormalColor,
             isTextThrough: true,
-            lineThroughColor:
-            TDTheme.of(context).brandNormalColor,
-            style: TextStyle(
-                color: TDTheme.of(context).errorNormalColor)),
+            lineThroughColor: TDTheme.of(context).brandNormalColor,
+            style: TextStyle(color: TDTheme.of(context).errorNormalColor)),
         TextSpan(
             text: 'TextSpan2',
             style: TextStyle(
-                fontSize: 14,
-                color: TDTheme.of(context).brandNormalColor)),
+                fontSize: 14, color: TDTheme.of(context).brandNormalColor)),
         const WidgetSpan(
             child: Icon(
-              TDIcons.setting,
-              size: 24,
-            )),
+          TDIcons.setting,
+          size: 24,
+        )),
       ]),
       font: TDTheme.of(context).fontBodyLarge,
       textColor: TDTheme.of(context).brandNormalColor,
-      style: TextStyle(
-          color: TDTheme.of(context).errorNormalColor,
-          fontSize: 32),
+      style:
+          TextStyle(color: TDTheme.of(context).errorNormalColor, fontSize: 32),
     );
   }
