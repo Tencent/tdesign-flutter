@@ -16,16 +16,167 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-### 1 Token
+### 1 使用示例
 
-
+系统Text:
             
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _buildSystemText(BuildContext context) {
+    return Text(
+      exampleTxt,
+    );
+  }</pre>
 
 </td-code-block>
-                      
+                                  
+
+普通TDText:
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildNormalTDText(BuildContext context) {
+    return TDText(
+      exampleTxt,
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+指定常用属性:
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildGeneralProp(BuildContext context) {
+    return TDText(
+      exampleTxt,
+      font: TDTheme.of(context).fontHeadlineLarge,
+      textColor: TDTheme.of(context).brandNormalColor,
+      backgroundColor: TDTheme.of(context).successHoverColor,
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+style覆盖textColor,不覆盖font:
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildStyleCoverColor(BuildContext context) {
+    return TDText(
+      exampleTxt,
+      font: TDTheme.of(context).fontBodyLarge,
+      textColor: TDTheme.of(context).brandNormalColor,
+      style: TextStyle(color: TDTheme.of(context).errorNormalColor),
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+style覆盖textColor和font:
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildStyleCoverColorAndFont(BuildContext context) {
+    return TDText(
+      exampleTxt,
+      font: TDTheme.of(context).fontBodyLarge,
+      textColor: TDTheme.of(context).brandNormalColor,
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+TDText.rich测试:
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildRichText(BuildContext context) {
+    return TDText.rich(
+      TextSpan(children: [
+        TDTextSpan(
+            text: 'TDTextSpan1',
+            font: TDTheme.of(context).fontTitleExtraLarge,
+            textColor: TDTheme.of(context).warningNormalColor,
+            isTextThrough: true,
+            lineThroughColor: TDTheme.of(context).brandNormalColor,
+            style: TextStyle(color: TDTheme.of(context).errorNormalColor)),
+        TextSpan(
+            text: 'TextSpan2',
+            style: TextStyle(
+                fontSize: 14, color: TDTheme.of(context).brandNormalColor)),
+        const WidgetSpan(
+            child: Icon(
+          TDIcons.setting,
+          size: 24,
+        )),
+      ]),
+      font: TDTheme.of(context).fontBodyLarge,
+      textColor: TDTheme.of(context).brandNormalColor,
+      style:
+          TextStyle(color: TDTheme.of(context).errorNormalColor, fontSize: 32),
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+获取系统Text:
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _getSystemText(BuildContext context) {
+    return TDText(
+      exampleTxt,
+      backgroundColor: TDTheme.of(context).successHoverColor,
+    ).getRawText(context: context);
+  }</pre>
+
+</td-code-block>
+                                  
+
+中文居中:（带有英文可能不居中）
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildVerticalCenterText(BuildContext context) {
+    return const TDText(
+      '中华人民共和国腾讯科技',
+      // font: Font(size: 100, lineHeight: 100),
+      forceVerticalCenter: true,
+      backgroundColor: Colors.orange,
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+自定义内部padding:
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildCustomPaddingText(BuildContext context) {
+    return TDTextConfiguration(
+      paddingConfig: CustomTextPaddingConfig(),
+      child: const CustomPaddingText(),
+    );
+  }</pre>
+
+</td-code-block>
+                                  
 
 
 ## API
@@ -71,7 +222,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | -- | --- |
+| --- | --- | --- | --- |
 | context |  | - |  |
 | font |  | - |  |
 | fontWeight |  | - |  |
