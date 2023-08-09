@@ -233,7 +233,7 @@ class TDMultiPicker extends StatelessWidget {
                         alignment: Alignment.center,
                         height: pickerHeight / pickerItemCount,
                         width: maxWidth,
-                        padding: EdgeInsets.only(left: 16,right: 16),
+                        padding: const EdgeInsets.only(left: 16,right: 16),
                         child: TDItemWidget(
                           index: index,
                           itemHeight: pickerHeight / pickerItemCount,
@@ -377,9 +377,10 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                 ),
 
                 // 列表
-                SizedBox(
+                Container(
                     height: pickerHeight,
                     width: maxWidth,
+                    padding: const EdgeInsets.only(left: 16,right: 16),
                     child: Row(
                       children: [
                         for (var i = 0; i < widget.columnNum; i++)
