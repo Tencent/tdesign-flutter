@@ -257,7 +257,7 @@ class TDInput extends StatelessWidget {
             ],
           ),
         ),
-        const Visibility(child: TDDivider(margin: EdgeInsets.only(left: 16, ),),),
+        Visibility(child: const TDDivider(margin: EdgeInsets.only(left: 16, ),), visible: showBottomDivider,),
       ],
     );
   }
@@ -491,7 +491,7 @@ class TDInput extends StatelessWidget {
             ],
           ),
         ),
-        const Visibility(child: TDDivider(margin: EdgeInsets.only(left: 16, ),),),
+        Visibility(child: const TDDivider(margin: EdgeInsets.only(left: 16, ),), visible: showBottomDivider,),
       ],
     );
   }
