@@ -48,7 +48,8 @@ class TDInput extends StatelessWidget {
     this.maxNum = 500,
     this.errorText = '',
     this.textAlign,
-    this.rightWidget
+    this.rightWidget,
+    this.showBottomDivider = true
   }) : super(key: key);
 
   /// 输入框宽度
@@ -146,6 +147,9 @@ class TDInput extends StatelessWidget {
 
   /// 右侧自定义组件 特殊类型时生效
   final Widget? rightWidget;
+
+  /// 是否展示底部分割线
+  final bool showBottomDivider;
 
 
   /// 获取输入框规格
@@ -340,7 +344,7 @@ class TDInput extends StatelessWidget {
               ),
             ],
           ),
-          const Visibility(child: TDDivider(margin: EdgeInsets.only(left: 16, ),),),
+          Visibility(child: const TDDivider(margin: EdgeInsets.only(left: 16, ),), visible: showBottomDivider,),
         ],
       ),
     );
