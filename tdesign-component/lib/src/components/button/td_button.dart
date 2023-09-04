@@ -189,8 +189,7 @@ class _TDButtonState extends State<TDButton> {
     if (style.frameWidth != null && style.frameWidth != 0) {
       return Border.all(
           color: style.frameColor ?? TDTheme.of(context).grayColor3,
-          width: style.frameWidth!,
-          strokeAlign: StrokeAlign.inside);
+          width: style.frameWidth!,);
     }
     return null;
   }
