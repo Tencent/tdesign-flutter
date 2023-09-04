@@ -18,7 +18,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
   var browseOn = false;
   var confirmText = '发送验证码';
   var countDownText = '重发';
-  late Timer _timer;
+  Timer? _timer;
   int _countdownTime = 0;
 
   @override
@@ -33,7 +33,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
   void dispose() {
     super.dispose();
     if (_timer != null) {
-      _timer.cancel();
+      _timer!.cancel();
     }
   }
 
@@ -42,7 +42,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
     var callback = (timer) => {
       setState((){
         if(_countdownTime < 1) {
-          _timer.cancel();
+          _timer?.cancel();
         } else {
           _countdownTime = _countdownTime - 1;
         }
