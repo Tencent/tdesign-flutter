@@ -188,9 +188,9 @@ class _TDButtonState extends State<TDButton> {
   Border? _getBorder(BuildContext context) {
     if (style.frameWidth != null && style.frameWidth != 0) {
       return Border.all(
-          color:
-              style.frameColor ?? TDTheme.of(context).grayColor3,
-          width: style.frameWidth!);
+          color: style.frameColor ?? TDTheme.of(context).grayColor3,
+          width: style.frameWidth!,
+          strokeAlign: StrokeAlign.inside);
     }
     return null;
   }
@@ -355,6 +355,16 @@ class _TDButtonState extends State<TDButton> {
         horizontalPadding = equalSide ? 5 : 8;
         verticalPadding = equalSide ? 5 : 3;
         break;
+    }
+    if (style.frameWidth != null && style.frameWidth != 0) {
+      horizontalPadding = horizontalPadding - style.frameWidth!;
+      verticalPadding = verticalPadding - style.frameWidth!;
+      if(horizontalPadding < 0){
+        horizontalPadding = 0;
+      }
+      if(verticalPadding < 0){
+        verticalPadding = 0;
+      }
     }
     return EdgeInsets.only(
         left: horizontalPadding,

@@ -129,11 +129,13 @@ class TDTag extends StatelessWidget {
     }
 
     return Container(
-      padding: padding ?? _getPadding(),
+      padding: padding ?? _getPadding(innerStyle.border),
       decoration: BoxDecoration(
           color: backgroundColor ?? innerStyle.getBackgroundColor,
           border: Border.all(
-              width: innerStyle.border, color: innerStyle.getBorderColor),
+              width: innerStyle.border,
+              color: innerStyle.getBorderColor,
+              strokeAlign: StrokeAlign.inside),
           borderRadius: innerStyle.getBorderRadius),
       child: child,
     );
@@ -190,20 +192,41 @@ class TDTag extends StatelessWidget {
     }
   }
 
-  EdgeInsets _getPadding() {
-    /// 为了文本居中，修改了padding的值
+  /// 计算padding，需去除描边的宽对，对内描边
+  EdgeInsets _getPadding(double border) {
+    var hPadding = 0.0;
+    var vPadding = 0.0;
     switch (size) {
       case TDTagSize.extraLarge:
-        return const EdgeInsets.only(left: 16, right: 16, top: 9, bottom: 9);
+        hPadding = 16;
+        vPadding = 9;
+        break;
       case TDTagSize.large:
-        return const EdgeInsets.only(left: 8, right: 8, top: 3, bottom: 3);
+        hPadding = 8;
+        vPadding = 3;
+        break;
       case TDTagSize.medium:
-        return const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2);
+        hPadding = 8;
+        vPadding = 2;
+        break;
       case TDTagSize.small:
-        return const EdgeInsets.only(left: 6, right: 6, top: 2, bottom: 2);
+        hPadding = 6;
+        vPadding = 2;
+        break;
       default:
         return EdgeInsets.zero;
     }
+    if (hPadding >= border) {
+      hPadding = hPadding - border;
+    } else {
+      hPadding = 0;
+    }
+    if (vPadding >= border) {
+      vPadding = vPadding - border;
+    } else {
+      vPadding = 0;
+    }
+    return EdgeInsets.only(left: hPadding, right: hPadding, top: vPadding, bottom: vPadding);
   }
 
   double _getIconSize() {
