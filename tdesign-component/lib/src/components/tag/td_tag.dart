@@ -134,8 +134,7 @@ class TDTag extends StatelessWidget {
           color: backgroundColor ?? innerStyle.getBackgroundColor,
           border: Border.all(
               width: innerStyle.border,
-              color: innerStyle.getBorderColor,
-              strokeAlign: StrokeAlign.inside),
+              color: innerStyle.getBorderColor),
           borderRadius: innerStyle.getBorderRadius),
       child: child,
     );
