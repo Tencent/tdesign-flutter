@@ -48,20 +48,25 @@ class _TDButtonPageState extends State<TDButtonPage> {
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
-                            child: CodeWrapper(builder: _buildLightFillButton, methodName: '_buildLightFillButton',),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.all(8),
-                            child: CodeWrapper(builder: _buildDefaultFillButton),
+                            child: CodeWrapper(
+                              builder: _buildLightFillButton,
+                              methodName: '_buildLightFillButton',
+                            ),
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
                             child:
-                            CodeWrapper(builder: _buildPrimaryStrokeButton),
+                                CodeWrapper(builder: _buildDefaultFillButton),
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
-                            child: CodeWrapper(builder: _buildPrimaryTextButton),
+                            child:
+                                CodeWrapper(builder: _buildPrimaryStrokeButton),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child:
+                                CodeWrapper(builder: _buildPrimaryTextButton),
                           ),
                         ],
                       ),
@@ -73,13 +78,13 @@ class _TDButtonPageState extends State<TDButtonPage> {
                   center: false,
                   builder: (context) {
                     return Container(
-                      padding: const EdgeInsets.only(left: 8,right: 8),
+                      padding: const EdgeInsets.only(left: 8, right: 8),
                       child: Wrap(
                         children: [
                           Container(
                             margin: const EdgeInsets.all(8),
                             child:
-                            CodeWrapper(builder: _buildRectangleIconButton),
+                                CodeWrapper(builder: _buildRectangleIconButton),
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
@@ -87,7 +92,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
-                            child: CodeWrapper(builder: _buildLoadingIconButton),
+                            child:
+                                CodeWrapper(builder: _buildLoadingIconButton),
                           )
                         ],
                       ),
@@ -100,7 +106,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
                     return Container(
                       alignment: Alignment.topLeft,
                       color: TDTheme.of(context).grayColor14,
-                      padding: const EdgeInsets.only(left: 8,right: 8),
+                      padding: const EdgeInsets.only(left: 8, right: 8),
                       child: Wrap(
                         children: [
                           Container(
@@ -208,7 +214,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                       child: Wrap(
                         children: [
                           Container(
-                            margin: const EdgeInsets.only(left: 16,right: 6,top: 6),
+                            margin: const EdgeInsets.only(
+                                left: 16, right: 6, top: 6),
                             child: CodeWrapper(
                               builder: _buildPrimaryFillButton,
                             ),
@@ -222,11 +229,12 @@ class _TDButtonPageState extends State<TDButtonPage> {
                             child: CodeWrapper(builder: _buildRoundButton),
                           ),
                           Container(
-                            margin: const EdgeInsets.only(right: 16,left: 6, top: 6),
+                            margin: const EdgeInsets.only(
+                                right: 16, left: 6, top: 6),
                             child: CodeWrapper(builder: _buildCircleButton),
                           ),
                           Container(
-                            margin: const EdgeInsets.only( top: 10),
+                            margin: const EdgeInsets.only(top: 10),
                             child: CodeWrapper(builder: _buildFilledButton),
                           )
                         ],
@@ -245,16 +253,18 @@ class _TDButtonPageState extends State<TDButtonPage> {
                           /// 默认主题
                           Container(
                             margin: const EdgeInsets.all(8),
-                            child: CodeWrapper(builder: _buildDefaultFillButton),
+                            child:
+                                CodeWrapper(builder: _buildDefaultFillButton),
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
                             child:
-                            CodeWrapper(builder: _buildDefaultStrokeButton),
+                                CodeWrapper(builder: _buildDefaultStrokeButton),
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
-                            child: CodeWrapper(builder: _buildDefaultTextButton),
+                            child:
+                                CodeWrapper(builder: _buildDefaultTextButton),
                           ),
 
                           /// primary主题
@@ -267,11 +277,12 @@ class _TDButtonPageState extends State<TDButtonPage> {
                           Container(
                             margin: const EdgeInsets.all(8),
                             child:
-                            CodeWrapper(builder: _buildPrimaryStrokeButton),
+                                CodeWrapper(builder: _buildPrimaryStrokeButton),
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
-                            child: CodeWrapper(builder: _buildPrimaryTextButton),
+                            child:
+                                CodeWrapper(builder: _buildPrimaryTextButton),
                           ),
 
                           /// danger主题
@@ -281,7 +292,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
-                            child: CodeWrapper(builder: _buildDangerStrokeButton),
+                            child:
+                                CodeWrapper(builder: _buildDangerStrokeButton),
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
@@ -295,7 +307,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
-                            child: CodeWrapper(builder: _buildLightStrokeButton),
+                            child:
+                                CodeWrapper(builder: _buildLightStrokeButton),
                           ),
                           Container(
                             margin: const EdgeInsets.all(8),
@@ -362,7 +375,6 @@ class _TDButtonPageState extends State<TDButtonPage> {
                     ),
                   );
                 }),
-
             ExampleItem(
                 ignoreCode: true,
                 desc: '各种按钮状态测试',
@@ -645,7 +657,11 @@ class _TDButtonPageState extends State<TDButtonPage> {
   TDButton _buildLoadingIconButton(BuildContext context) {
     return TDButton(
       text: '加载中',
-      iconWidget: TDLoading(size: TDLoadingSize.small, icon: TDLoadingIcon.circle, iconColor: TDTheme.of(context).whiteColor1,),
+      iconWidget: TDLoading(
+        size: TDLoadingSize.small,
+        icon: TDLoadingIcon.circle,
+        iconColor: TDTheme.of(context).whiteColor1,
+      ),
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -756,7 +772,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
 
   @Demo(group: 'button')
   Widget _buildChildTestButton(BuildContext context) {
-    return  TDButton(
+    return TDButton(
       child: Container(
         height: 24,
         width: 24,
@@ -771,12 +787,12 @@ class _TDButtonPageState extends State<TDButtonPage> {
       physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
       children: [
-
         /// fill
         Container(
           margin: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -787,7 +803,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.primary,
-                style: TDButtonStyle.generateFillStyleByTheme(context, TDButtonTheme.primary, TDButtonStatus.active),
+                style: TDButtonStyle.generateFillStyleByTheme(
+                    context, TDButtonTheme.primary, TDButtonStatus.active),
               ),
               const TDButton(
                 icon: TDIcons.app,
@@ -795,12 +812,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 theme: TDButtonTheme.primary,
                 disabled: true,
               ),
-            ],),
+            ],
+          ),
         ),
         Container(
           margin: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -811,7 +830,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.light,
-                style: TDButtonStyle.generateFillStyleByTheme(context, TDButtonTheme.light, TDButtonStatus.active),
+                style: TDButtonStyle.generateFillStyleByTheme(
+                    context, TDButtonTheme.light, TDButtonStatus.active),
               ),
               const TDButton(
                 icon: TDIcons.app,
@@ -819,12 +839,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 theme: TDButtonTheme.light,
                 disabled: true,
               ),
-            ],),
+            ],
+          ),
         ),
         Container(
           margin: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -835,7 +857,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
-                style: TDButtonStyle.generateFillStyleByTheme(context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
+                style: TDButtonStyle.generateFillStyleByTheme(
+                    context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
               ),
               const TDButton(
                 icon: TDIcons.app,
@@ -843,12 +866,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 theme: TDButtonTheme.defaultTheme,
                 disabled: true,
               ),
-            ],),
+            ],
+          ),
         ),
         Container(
           margin: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -859,7 +884,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.danger,
-                style: TDButtonStyle.generateFillStyleByTheme(context, TDButtonTheme.danger, TDButtonStatus.active),
+                style: TDButtonStyle.generateFillStyleByTheme(
+                    context, TDButtonTheme.danger, TDButtonStatus.active),
               ),
               const TDButton(
                 icon: TDIcons.app,
@@ -867,15 +893,16 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 theme: TDButtonTheme.danger,
                 disabled: true,
               ),
-            ],),
+            ],
+          ),
         ),
-
 
         /// outline
         Container(
           margin: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -887,7 +914,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.primary,
-                style: TDButtonStyle.generateOutlineStyleByTheme(context, TDButtonTheme.primary, TDButtonStatus.active),
+                style: TDButtonStyle.generateOutlineStyleByTheme(
+                    context, TDButtonTheme.primary, TDButtonStatus.active),
                 type: TDButtonType.outline,
               ),
               const TDButton(
@@ -897,12 +925,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 disabled: true,
                 type: TDButtonType.outline,
               ),
-            ],),
+            ],
+          ),
         ),
         Container(
           margin: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -914,7 +944,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.light,
-                style: TDButtonStyle.generateOutlineStyleByTheme(context, TDButtonTheme.light, TDButtonStatus.active),
+                style: TDButtonStyle.generateOutlineStyleByTheme(
+                    context, TDButtonTheme.light, TDButtonStatus.active),
                 type: TDButtonType.outline,
               ),
               const TDButton(
@@ -924,12 +955,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 disabled: true,
                 type: TDButtonType.outline,
               ),
-            ],),
+            ],
+          ),
         ),
         Container(
           margin: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -941,7 +974,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
-                style: TDButtonStyle.generateOutlineStyleByTheme(context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
+                style: TDButtonStyle.generateOutlineStyleByTheme(
+                    context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
                 type: TDButtonType.outline,
               ),
               const TDButton(
@@ -951,12 +985,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 disabled: true,
                 type: TDButtonType.outline,
               ),
-            ],),
+            ],
+          ),
         ),
         Container(
           margin: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -968,7 +1004,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.danger,
-                style: TDButtonStyle.generateOutlineStyleByTheme(context, TDButtonTheme.danger, TDButtonStatus.active),
+                style: TDButtonStyle.generateOutlineStyleByTheme(
+                    context, TDButtonTheme.danger, TDButtonStatus.active),
                 type: TDButtonType.outline,
               ),
               const TDButton(
@@ -978,15 +1015,16 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 disabled: true,
                 type: TDButtonType.outline,
               ),
-            ],),
+            ],
+          ),
         ),
-
 
         /// text
         Container(
           margin: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -998,7 +1036,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.primary,
-                style: TDButtonStyle.generateTextStyleByTheme(context, TDButtonTheme.primary, TDButtonStatus.active),
+                style: TDButtonStyle.generateTextStyleByTheme(
+                    context, TDButtonTheme.primary, TDButtonStatus.active),
                 type: TDButtonType.text,
               ),
               const TDButton(
@@ -1008,12 +1047,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 disabled: true,
                 type: TDButtonType.text,
               ),
-            ],),
+            ],
+          ),
         ),
         Container(
           margin: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -1025,7 +1066,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.light,
-                style: TDButtonStyle.generateTextStyleByTheme(context, TDButtonTheme.light, TDButtonStatus.active),
+                style: TDButtonStyle.generateTextStyleByTheme(
+                    context, TDButtonTheme.light, TDButtonStatus.active),
                 type: TDButtonType.text,
               ),
               const TDButton(
@@ -1035,12 +1077,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 disabled: true,
                 type: TDButtonType.text,
               ),
-            ],),
+            ],
+          ),
         ),
         Container(
           margin: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -1052,7 +1096,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
-                style: TDButtonStyle.generateTextStyleByTheme(context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
+                style: TDButtonStyle.generateTextStyleByTheme(
+                    context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
                 type: TDButtonType.text,
               ),
               const TDButton(
@@ -1062,12 +1107,14 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 disabled: true,
                 type: TDButtonType.text,
               ),
-            ],),
+            ],
+          ),
         ),
         Container(
           margin: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -1079,7 +1126,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.danger,
-                style: TDButtonStyle.generateTextStyleByTheme(context, TDButtonTheme.danger, TDButtonStatus.active),
+                style: TDButtonStyle.generateTextStyleByTheme(
+                    context, TDButtonTheme.danger, TDButtonStatus.active),
                 type: TDButtonType.text,
               ),
               const TDButton(
@@ -1089,16 +1137,17 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 disabled: true,
                 type: TDButtonType.text,
               ),
-            ],),
+            ],
+          ),
         ),
-
 
         /// ghost
         Container(
           padding: const EdgeInsets.all(16),
           color: Colors.black,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -1110,7 +1159,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.primary,
-                style: TDButtonStyle.generateGhostStyleByTheme(context, TDButtonTheme.primary, TDButtonStatus.active),
+                style: TDButtonStyle.generateGhostStyleByTheme(
+                    context, TDButtonTheme.primary, TDButtonStatus.active),
                 type: TDButtonType.ghost,
               ),
               const TDButton(
@@ -1120,13 +1170,15 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 disabled: true,
                 type: TDButtonType.ghost,
               ),
-            ],),
+            ],
+          ),
         ),
         Container(
           padding: const EdgeInsets.all(16),
           color: Colors.black,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -1138,7 +1190,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.light,
-                style: TDButtonStyle.generateGhostStyleByTheme(context, TDButtonTheme.light, TDButtonStatus.active),
+                style: TDButtonStyle.generateGhostStyleByTheme(
+                    context, TDButtonTheme.light, TDButtonStatus.active),
                 type: TDButtonType.ghost,
               ),
               const TDButton(
@@ -1148,13 +1201,15 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 disabled: true,
                 type: TDButtonType.ghost,
               ),
-            ],),
+            ],
+          ),
         ),
         Container(
           padding: const EdgeInsets.all(16),
           color: Colors.black,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -1166,7 +1221,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.defaultTheme,
-                style: TDButtonStyle.generateGhostStyleByTheme(context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
+                style: TDButtonStyle.generateGhostStyleByTheme(
+                    context, TDButtonTheme.defaultTheme, TDButtonStatus.active),
                 type: TDButtonType.ghost,
               ),
               const TDButton(
@@ -1176,13 +1232,15 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 disabled: true,
                 type: TDButtonType.ghost,
               ),
-            ],),
+            ],
+          ),
         ),
         Container(
           padding: const EdgeInsets.all(16),
           color: Colors.black,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               const TDButton(
                 icon: TDIcons.app,
@@ -1194,7 +1252,8 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 icon: TDIcons.app,
                 text: 'Button',
                 theme: TDButtonTheme.danger,
-                style: TDButtonStyle.generateGhostStyleByTheme(context, TDButtonTheme.danger, TDButtonStatus.active),
+                style: TDButtonStyle.generateGhostStyleByTheme(
+                    context, TDButtonTheme.danger, TDButtonStatus.active),
                 type: TDButtonType.ghost,
               ),
               const TDButton(
@@ -1204,8 +1263,10 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 disabled: true,
                 type: TDButtonType.ghost,
               ),
-            ],),
+            ],
+          ),
         ),
-      ],);
+      ],
+    );
   }
 }
