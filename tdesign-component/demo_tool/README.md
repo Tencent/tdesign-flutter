@@ -88,4 +88,4 @@ dart tools/smart_cli/bin/main.dart generate
 其中，`group`参数需与`exampleCodeGroup`参数一致，为直接的字符串赋值，不能是变量引用或者字符串拼接。
 
 ## Flutter AOP
-请设置`flutter_aop.sh`的`flutterDir`和`exampleDir`,运行后会将flutter SDK 切换至3.0.5版本，并支持AOP能力。
+请设置`flutter_aop.sh`的`flutterDir`和`exampleDir`,运行后会将flutter SDK 切换至3.10.0版本，并支持AOP能力。
