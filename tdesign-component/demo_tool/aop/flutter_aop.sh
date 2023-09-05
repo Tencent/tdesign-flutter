@@ -1,5 +1,5 @@
 # flutter AOP 补丁
-# TODO: 指定自己的flutter目录，并且切换到3.0.5版本
+# TODO: 指定自己的flutter目录，并且切换到3.10.0版本
 flutterDir=/Users/zflyluo/tools/flutter1
 # TODO:指定当前example的目录，后面不带"/"
 projectDir=/Users/zflyluo/WorkSpace/flutter/tdesign_group/demo/tdesign-flutter/tdesign-component
