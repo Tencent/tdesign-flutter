@@ -24,7 +24,7 @@ spline: explain
 - 实现组件：组件中的属性请尽量使用TDTheme提供的公共属性，使用方法参考'主题-基础'页面
 - 编写示例页：示例页请尽量使用ExamplePage+ExampleModule+ExampleItem组合，参考示例稿布局实现。
 - 演示代码：每个组件示例，尽量将原子性代码提取成独立方法，并添加@Demo注解，方便生成演示代码。其中，@Demo注解的'group'参数需与ExamplePage的'exampleCodeGroup'参数一致。写法请参考'圆角-基础'页。
-- flutterAOP: 如果可以，建议切换到flutter 3.0.5分支，并添加AOP补丁，生成演示代码。
+- flutterAOP: 如果可以，建议切换到flutter 3.10.0分支，并添加AOP补丁，生成演示代码。
 - API文档：API文档由工具统一生成，请尽量添加字段的详细注释，并将构造方法作为类名下的第一个方法，字段放在构造方法之下，具体写法请参考TDText。
 - 代码规范：开发完成后，请检查'Dart Analysis'下的提示，尽量符合代码规范。
 - 单元测试：添加未在示例稿中体现，但有必要验证的组件样式，请添加到ExamplePage的'test'参数中。
