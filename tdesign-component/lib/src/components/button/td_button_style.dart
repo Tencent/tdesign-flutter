@@ -12,12 +12,15 @@ class TDButtonStyle {
   Color? textColor;
   /// 边框宽度
   double? frameWidth;
+  /// 自定义圆角
+  BorderRadiusGeometry? radius;
 
   TDButtonStyle(
       {this.backgroundColor,
       this.frameColor,
       this.textColor,
-      this.frameWidth,});
+      this.frameWidth,
+      this.radius});
 
   /// 生成不同主题的填充按钮样式
   TDButtonStyle.generateFillStyleByTheme(
