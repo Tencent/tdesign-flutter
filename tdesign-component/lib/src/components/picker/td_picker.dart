@@ -20,6 +20,8 @@ class TDPicker {
       List<int> dateStart = const [1970, 1, 1],
       List<int>? dateEnd,
       List<int>? initialDate,
+      String rightText = '确认',
+      String leftText = '取消',
       Duration duration = const Duration(milliseconds: 100),
       double pickerHeight = 200,
       int pickerItemCount = 5}) {
@@ -38,6 +40,8 @@ class TDPicker {
               title: title,
               onConfirm: onConfirm,
               onCancel: onCancel,
+              rightText: rightText,
+              leftText: leftText,
               model: DatePickerModel(
                 useYear: useYear,
                 useMonth: useMonth,

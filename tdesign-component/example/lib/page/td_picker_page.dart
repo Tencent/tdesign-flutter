@@ -21,14 +21,14 @@ class _TDPickerPageState extends State<TDPickerPage> {
   String selected_4 = '';
   Map data_3 = {
     '广东省': {
-      '深圳市': ['南山区', '宝安区', '罗湖区', '福田区'],
+      '深圳市': ['南山区南山区南山区南山区南山区', '宝安区', '罗湖区', '福田区'],
       '佛山市': [''],
-      '广州市': ['花都区']
+      '广州市广州市广州市广州市广州市广州市广州市广州市广州市广州市广州市': ['花都区']
     },
     '重庆市': {
-      '重庆市': ['九龙坡区', '江北区']
+      '重庆市重庆市重庆市重庆市重庆市重庆市重庆市': ['九龙坡区', '江北区']
     },
-    '浙江省': {
+    '浙江省浙江省浙江省浙江省浙江省浙江省浙江省浙江省': {
       '杭州市': ['西湖区', '余杭区', '萧山区'],
       '宁波市': ['江东区', '北仑区', '奉化市']
     },
@@ -169,14 +169,17 @@ class _TDPickerPageState extends State<TDPickerPage> {
                 padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
                 child: TDText(title, font: TDTheme.of(context).fontBodyLarge,),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
+              Expanded(child: Padding(
+                padding: const EdgeInsets.only(right: 16, left: 16),
                 child: Row(
                   children: [
-                    TDText(
+                    Expanded(child: TDText(
                       output,
                       font: TDTheme.of(context).fontBodyLarge,
-                      textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
+                      textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )),
                     Padding(
                       padding: const EdgeInsets.only(left: 2),
                       child: Icon(
@@ -185,7 +188,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                     ),
                   ],
                 ),
-              ),
+              )),
             ],
           ),
           const TDDivider(margin: EdgeInsets.only(left: 16, ),)
