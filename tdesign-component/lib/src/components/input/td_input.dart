@@ -61,6 +61,7 @@ class TDInput extends StatelessWidget {
       this.clearBtnColor,
       this.contentAlignment = TextAlign.start,
       this.rightWidget,
+        this.showBottomDivider = true,
       this.cardStyle,
       this.cardStyleTopText,
       this.cardStyleBottomText})
@@ -215,6 +216,9 @@ class TDInput extends StatelessWidget {
 
   /// 右侧自定义组件 特殊类型时生效
   final Widget? rightWidget;
+
+  /// 是否展示底部分割线
+  final bool showBottomDivider;
 
   /// 内容对齐方向
   final TextAlign contentAlignment;
@@ -551,6 +555,7 @@ class TDInput extends StatelessWidget {
               ),
             ),
           ),
+          Visibility(child: const TDDivider(margin: EdgeInsets.only(left: 16, ),), visible: showBottomDivider,),
         ],
       ),
     );
