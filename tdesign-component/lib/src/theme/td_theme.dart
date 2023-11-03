@@ -15,6 +15,10 @@ class TDTheme extends StatelessWidget {
       {required this.data, required this.child, this.systemData, Key? key})
       : super(key: key);
 
+  /// 仅使用Default主题，不需要切换主题功能
+  static bool _needMultiTheme = false;
+
+
   /// 子控件
   final Widget child;
 
@@ -33,6 +37,11 @@ class TDTheme extends StatelessWidget {
     ) ?? ThemeData(extensions: extensions), child: child);
   }
 
+  /// 开启多套主题功能
+  static void needMultiTheme([bool value = true]) {
+    _needMultiTheme = value;
+  }
+
   /// 获取默认主题数据，全局唯一
   static TDThemeData defaultData() {
     return TDThemeData.defaultData();
@@ -41,7 +50,10 @@ class TDTheme extends StatelessWidget {
   /// 获取主题数据，如果未传context则获取全局唯一的默认数据,
   /// 传了context，则获取最近的主题，取不到则会获取全局唯一默认数据
   static TDThemeData of([BuildContext? context]) {
-    if (context != null) {
+    if(!_needMultiTheme || context == null){
+      // 如果context为null,则返回全局默认主题
+      return TDThemeData.defaultData();
+    }
       // 如果传了context，则从其中获取最近主题
       try {
         var data = Theme.of(context).extensions[TDThemeData] as TDThemeData?;
@@ -49,10 +61,6 @@ class TDTheme extends StatelessWidget {
       } catch (e) {
         return TDThemeData.defaultData();
       }
-    } else {
-      // 如果context为null,则返回全局默认主题
-      return TDThemeData.defaultData();
-    }
   }
 
   /// 获取主题数据，取不到则可空
