@@ -161,8 +161,12 @@ class TDText extends StatelessWidget {
         child: _getRawText(context: context, textStyle: getTextStyle(context, height: showHeight)),
       );
     }
+    var bgColor = style?.backgroundColor ?? backgroundColor;
+    if(bgColor == null){
+      return _getRawText(context: context);
+    }
     return Container(
-      color: style?.backgroundColor ?? backgroundColor,
+      color: bgColor,
       child: _getRawText(context: context),
     );
   }

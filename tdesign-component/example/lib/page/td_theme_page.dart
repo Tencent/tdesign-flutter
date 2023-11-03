@@ -86,6 +86,8 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
 
   @Demo(group: 'theme')
   Widget _buildCustomTheme(BuildContext context) {
+    /// 开启多主题
+    TDTheme.needMultiTheme(true);
     /// 此处替换主题
     return TDTheme(
         // 替换fonts和colors，其他主题从父类拷贝
