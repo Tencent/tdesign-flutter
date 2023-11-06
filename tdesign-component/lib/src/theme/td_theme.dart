@@ -18,6 +18,8 @@ class TDTheme extends StatelessWidget {
   /// 仅使用Default主题，不需要切换主题功能
   static bool _needMultiTheme = false;
 
+  /// 主题数据
+  static TDThemeData? _singleData;
 
   /// 子控件
   final Widget child;
@@ -31,6 +33,9 @@ class TDTheme extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    if(!_needMultiTheme){
+      _singleData = data;
+    }
     var extensions = [data];
     return Theme(data: systemData?.copyWith(
       extensions: extensions
@@ -52,7 +57,7 @@ class TDTheme extends StatelessWidget {
   static TDThemeData of([BuildContext? context]) {
     if(!_needMultiTheme || context == null){
       // 如果context为null,则返回全局默认主题
-      return TDThemeData.defaultData();
+      return _singleData ?? TDThemeData.defaultData();
     }
       // 如果传了context，则从其中获取最近主题
       try {
