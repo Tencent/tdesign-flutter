@@ -351,6 +351,7 @@ class TDTextConfiguration extends InheritedWidget {
 /// 通过Padding自定义TDText居中算法
 class TDTextPaddingConfig {
   static TDTextPaddingConfig? _defaultConfig;
+  static final Map _cacheMap = {};
 
   /// 获取默认配置
   static TDTextPaddingConfig getDefaultConfig() {
@@ -360,6 +361,10 @@ class TDTextPaddingConfig {
 
   /// 获取padding
   EdgeInsetsGeometry getPadding(String? data, double fontSize, double height) {
+    var cache = _cacheMap[fontSize]?[height];
+    if(cache != null){
+      return cache;
+    }
     var paddingFont = fontSize * paddingRate;
     var paddingLeading;
     if (height < heightRate) {
@@ -375,7 +380,16 @@ class TDTextPaddingConfig {
     if (paddingTop < 0) {
       paddingTop = 0;
     }
-    return EdgeInsets.only(top: paddingTop);
+    var padding = EdgeInsets.only(top: paddingTop);
+
+    // 记录缓存
+    var heightMap = _cacheMap[fontSize];
+    if(heightMap == null){
+      heightMap = {};
+      _cacheMap[fontSize] = heightMap;
+    }
+    heightMap[height] = padding;
+    return padding;
   }
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
