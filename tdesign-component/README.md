@@ -18,18 +18,8 @@ TDesign Flutter技术栈组件库，适合在移动端项目中使用。
 - 在pubbspec.yaml引入依赖。
 
 ```yaml
-    dependencies:
-      tdesign_flutter:
-        git: https://github.com/TDesignOteam/tdesign-flutter.git
-```
-或者：
-```yaml
-    dependencies:
-      tdesign_flutter:
-        hosted:
-          name: tdesign_flutter
-          url: http://pub.xxxx（公司内网pub库）
-          version: ^0.0.3
+  dependencies:
+    tdesign_flutter: ^0.0.3
 ```
 
 - 在文件头部引入：`import 'package:tdesign_flutter/tdesign_flutter.dart'; // 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类`
@@ -78,4 +68,4 @@ flutter: ">=3.3.0"
 
 # 开源协议
 
-TDesign 遵循 [MIT 协议](https://github.com/TDesignOteam/tdesign-flutter/blob/main/LICENSE)
+TDesign 遵循 [MIT 协议](https://github.com/Tencent/tdesing-flutter/blob/main/tdesign-component/LICENSE)

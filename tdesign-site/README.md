@@ -29,25 +29,15 @@ Android请扫码下载预览 ↓
 <br/>
 iOS请运行项目预览 ↓
 <br/>
-https://github.com/TDesignOteam/tdesign-flutter/tree/main/tdesign-component
+https://github.com/Tencent/tdesing-flutter/tree/main/tdesign-component
 
 ## 使用组件
 
 ### yaml引入依赖
 
 ```yaml
-    dependencies:
-      tdesign_flutter:
-        git: https://github.com/TDesignOteam/tdesign-flutter.git
-```
-或者：
-```yaml
-    dependencies:
-      tdesign_flutter:
-        hosted:
-          name: tdesign_flutter
-          url: http://pub.xxxx（公司内网pub库）
-          version: ^0.0.3
+  dependencies:
+    tdesign_flutter: ^0.0.3
 ```
 
 
@@ -68,4 +58,4 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 开源协议
 
-TDesign 遵循 [MIT 协议](https://github.com/Tencent/tdesign-miniprogram/LICENSE)。
+TDesign 遵循 [MIT 协议](https://github.com/Tencent/tdesing-flutter/blob/main/tdesign-component/LICENSE)。
