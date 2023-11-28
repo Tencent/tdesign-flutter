@@ -14,14 +14,13 @@ Android请扫码下载预览 ↓
 <br/>
 iOS请运行项目预览 ↓
 <br/>
-https://github.com/TDesignOteam/tdesign-flutter/tree/main/tdesign-component
+https://github.com/Tencent/tdesing-flutter/tree/main/tdesign-component
 
 ## 使用方法
 - 在pubbspec.yaml引入依赖。
 ```yaml
-    dependencies:
-      tdesign_flutter:
-        git: https://github.com/TDesignOteam/tdesign-flutter.git
+  dependencies:
+    tdesign_flutter: ^0.0.3
 ```
     
 - 在文件头部引入：`import 'package:tdesign_flutter/tdesign_flutter.dart'; // 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类`
