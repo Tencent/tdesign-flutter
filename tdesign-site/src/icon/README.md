@@ -46,7 +46,7 @@ icon数量: 244
             child: Column(
               children: [
                 Container(
-                  color: showBorder ? Colors.green : Colors.transparent,
+                  color: showBorder ? TDTheme.of(context).brandDisabledColor : Colors.transparent,
                   child: Icon(iconData),
                 ),
                 TDText(iconData.name)
