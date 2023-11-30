@@ -56,7 +56,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       exampleTxt,
       font: TDTheme.of(context).fontHeadlineLarge,
       textColor: TDTheme.of(context).brandNormalColor,
-      backgroundColor: TDTheme.of(context).successHoverColor,
+      backgroundColor: TDTheme.of(context).brandFocusColor,
     );
   }</pre>
 
@@ -139,7 +139,7 @@ TDText.rich测试:
   Widget _getSystemText(BuildContext context) {
     return TDText(
       exampleTxt,
-      backgroundColor: TDTheme.of(context).successHoverColor,
+      backgroundColor: TDTheme.of(context).brandHoverColor,
     ).getRawText(context: context);
   }</pre>
 
@@ -152,11 +152,11 @@ TDText.rich测试:
 
   <pre slot="Dart" lang="javascript">
   Widget _buildVerticalCenterText(BuildContext context) {
-    return const TDText(
+    return TDText(
       '中华人民共和国腾讯科技',
       // font: Font(size: 100, lineHeight: 100),
       forceVerticalCenter: true,
-      backgroundColor: Colors.orange,
+      backgroundColor: TDTheme.of(context).brandHoverColor,
     );
   }</pre>
 
