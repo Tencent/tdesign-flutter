@@ -57,7 +57,7 @@ class TDTextPage extends StatelessWidget {
       exampleTxt,
       font: TDTheme.of(context).fontHeadlineLarge,
       textColor: TDTheme.of(context).brandNormalColor,
-      backgroundColor: TDTheme.of(context).successHoverColor,
+      backgroundColor: TDTheme.of(context).brandFocusColor,
     );
   }
 
@@ -112,17 +112,17 @@ class TDTextPage extends StatelessWidget {
   Widget _getSystemText(BuildContext context) {
     return TDText(
       exampleTxt,
-      backgroundColor: TDTheme.of(context).successHoverColor,
+      backgroundColor: TDTheme.of(context).brandHoverColor,
     ).getRawText(context: context);
   }
 
   @Demo(group: 'text')
   Widget _buildVerticalCenterText(BuildContext context) {
-    return const TDText(
+    return TDText(
       '中华人民共和国腾讯科技',
       // font: Font(size: 100, lineHeight: 100),
       forceVerticalCenter: true,
-      backgroundColor: Colors.orange,
+      backgroundColor: TDTheme.of(context).brandHoverColor,
     );
   }
 
@@ -144,16 +144,16 @@ class CustomPaddingText extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const TDText(
+        TDText(
           '中华人民共和国腾讯科技fgjpqy',
           forceVerticalCenter: true,
-          backgroundColor: Colors.orange,
+          backgroundColor: TDTheme.of(context).brandHoverColor,
         ),
         TDText(
           'English',
           font: TDTheme.of(context).fontHeadlineLarge,
           forceVerticalCenter: true,
-          backgroundColor: Colors.orange,
+          backgroundColor: TDTheme.of(context).brandHoverColor,
         ),
       ],
     );

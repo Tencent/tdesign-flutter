@@ -55,7 +55,7 @@ class _TDIconPageState extends State<TDIconPage> {
             child: Column(
               children: [
                 Container(
-                  color: showBorder ? Colors.green : Colors.transparent,
+                  color: showBorder ? TDTheme.of(context).brandDisabledColor : Colors.transparent,
                   child: Icon(iconData),
                 ),
                 TDText(iconData.name)
