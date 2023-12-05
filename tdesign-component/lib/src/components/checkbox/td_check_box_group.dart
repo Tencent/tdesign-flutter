@@ -386,7 +386,7 @@ class TDCheckboxGroupContainer extends TDCheckboxGroup {
                     ? const EdgeInsets.symmetric(horizontal: 16)
                     : null,
                 height: cardMode ? 82 : null,
-                child: directionalTdCheckboxes![index],
+                child: directionalTdCheckboxes[index],
               );
             },
             itemCount: directionalTdCheckboxes!.length,
