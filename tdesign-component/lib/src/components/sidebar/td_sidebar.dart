@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
@@ -84,14 +83,18 @@ class _TDSideBarState extends State<TDSideBar> {
 
   // 选中某值
   void selectValue(int value, {bool needScroll = false}) {
-    final item =
-        displayChildren.firstWhereOrNull((element) => element.value == value);
+    SideItemProps? item;
+    for (var element in displayChildren) {
+      if (element.value == value) {
+        item = element;
+      }
+    }
 
-    if (needScroll) {
+    if (needScroll && item != null) {
       try {
         var height = globalKey.currentContext!.size!.height;
         var offset = _scrollerController.offset;
-        var distance = item!.index * itemHeight - offset;
+        var distance = item.index * itemHeight - offset;
         if (distance + itemHeight > height) {
           _scrollerController.animateTo(offset + itemHeight,
               duration: const Duration(milliseconds: 100),
