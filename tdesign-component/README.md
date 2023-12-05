@@ -3,8 +3,7 @@
     <img alt="TDesign Logo" width="200" src="https://tdesign.gtimg.com/site/TDesign.png" />
   </a>
 </p>
-
-TDesign Flutter技术栈组件库，适合在移动端项目中使用。
+腾讯TDesign Flutter技术栈组件库，适合在移动端项目中使用。
 
 # 特性
 
@@ -19,7 +18,7 @@ TDesign Flutter技术栈组件库，适合在移动端项目中使用。
 
 ```yaml
   dependencies:
-    tdesign_flutter: ^0.0.3
+    tdesign_flutter: ^0.0.5
 ```
 
 - 在文件头部引入：`import 'package:tdesign_flutter/tdesign_flutter.dart'; // 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类`
