@@ -212,7 +212,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return Column(
       children: [
         TDSlider(
-          sliderThemeData: TDSliderThemeFactory.capsuleThemeData.copyWith(
+          sliderThemeData: TDSliderThemeData.capsule(
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
@@ -225,7 +225,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           height: 16,
         ),
         TDRangeSlider(
-          sliderThemeData: TDSliderThemeFactory.capsuleThemeData.copyWith(
+          sliderThemeData: TDSliderThemeData.capsule(
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
@@ -238,7 +238,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           height: 16,
         ),
         TDSlider(
-          sliderThemeData: TDSliderThemeFactory.capsuleThemeData.copyWith(
+          sliderThemeData: TDSliderThemeData.capsule(
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
@@ -253,7 +253,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           height: 16,
         ),
         TDRangeSlider(
-          sliderThemeData: TDSliderThemeFactory.capsuleThemeData.copyWith(
+          sliderThemeData: TDSliderThemeData.capsule(
             min: 0,
             max: 100,
             showThumbValue: true,
@@ -269,15 +269,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           height: 16,
         ),
         TDSlider(
-          sliderThemeData: TDSliderThemeFactory.capsuleThemeData.copyWith(
-            activeTickMarkColor: const Color(0xFFE7E7E7),
-            inactiveTickMarkColor: const Color(0xFFE7E7E7),
+          sliderThemeData: TDSliderThemeData.capsule(
             showScaleValue: true,
             divisions: 5,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
-          ),
+          )..updateSliderThemeData((data) => data.copyWith(
+                activeTickMarkColor: const Color(0xFFE7E7E7),
+                inactiveTickMarkColor: const Color(0xFFE7E7E7),
+              )),,
           value: 60,
           // divisions: 5,
           onChanged: (value) {},
@@ -286,15 +287,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           height: 16,
         ),
         TDRangeSlider(
-          sliderThemeData: TDSliderThemeFactory.capsuleThemeData.copyWith(
-            activeTickMarkColor: const Color(0xFFE7E7E7),
-            inactiveTickMarkColor: const Color(0xFFE7E7E7),
+          sliderThemeData: TDSliderThemeData.capsule(
             showScaleValue: true,
             divisions: 5,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
-          ),
+          )
+            ..updateSliderThemeData((data) =>
+                data.copyWith(
+                  activeTickMarkColor: const Color(0xFFE7E7E7),
+                  inactiveTickMarkColor: const Color(0xFFE7E7E7),
+                )),
           value: const RangeValues(20, 60),
           // divisions: 5,
           onChanged: (value) {},

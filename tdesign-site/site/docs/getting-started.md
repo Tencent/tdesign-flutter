@@ -20,7 +20,7 @@ https://github.com/Tencent/tdesing-flutter/tree/main/tdesign-component
 - 在pubbspec.yaml引入依赖。
 ```yaml
   dependencies:
-    tdesign_flutter: ^0.0.3
+    tdesign_flutter: ^0.0.5
 ```
     
 - 在文件头部引入：`import 'package:tdesign_flutter/tdesign_flutter.dart'; // 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类`
@@ -40,7 +40,7 @@ https://github.com/Tencent/tdesing-flutter/tree/main/tdesign-component
 
 ## 基础库版本
 
-最低基础库版本：`^0.0.3`
+最低基础库版本：`^0.0.5`
 
 ## SDK依赖版本
 

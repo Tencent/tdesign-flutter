@@ -49,7 +49,7 @@
 | textColor |  | Colors.black |  |
 | isTextThrough |  | false |  |
 | lineThroughColor |  | Colors.white |  |
-| package |  |  |  |
+| package |  | - |  |
 | text |  | - |  |
 | children |  | - |  |
 | style |  | - |  |
