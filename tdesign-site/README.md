@@ -37,7 +37,7 @@ https://github.com/Tencent/tdesing-flutter/tree/main/tdesign-component
 
 ```yaml
   dependencies:
-    tdesign_flutter: ^0.0.3
+    tdesign_flutter: ^0.0.6
 ```
 
 
@@ -54,7 +54,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 基础库版本
 
-最低基础库版本`^0.0.3`
+最低基础库版本`^0.0.6`
 
 ## 开源协议
 
