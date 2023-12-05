@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../about.dart';
-import '../main.dart';
+import '../main_run.dart';
 import 'api_widget.dart';
 import 'example_base.dart';
 import 'example_widget.dart';
