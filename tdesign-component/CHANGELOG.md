@@ -5,20 +5,23 @@ toc: false
 docClass: timeline
 ---
 
+## 0.0.6
+* update slider component, make it is not depend on flutter sdk version
+
 ## 0.0.5
-* 上传pub
+* publisher to pub.dev
 
 ## 0.0.4
-* 修改部分已知问题
+* fix some bugs
 
 ## 0.0.3
 
-* 删除TDText中相关package的默认值，允许package传null
+* delete default value of TDText's package prop, allow set it null value
 
 ## 0.0.2
 
-* 更新ReadMe,修改引入文件为'tdesign_flutter.dart'
+* update ReadMe.md, modify export file is 'tdesign_flutter.dart'
 
 ## 0.0.1
 
-* 正式发布，包含TDButton等29个组件,提供TDTheme、TDIcon等基础属性
+* the first version, add button,text and other components.
