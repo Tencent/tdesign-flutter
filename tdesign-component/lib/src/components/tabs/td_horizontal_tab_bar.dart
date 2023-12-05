@@ -551,7 +551,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
     // with a better long-term solution.
     // https://github.com/flutter/flutter/pull/68171#pullrequestreview-517753917
     if (widget.automaticIndicatorColorAdjustment &&
-        color.value == Material.of(context)?.color?.value) {
+        color.value == Material.of(context).color?.value) {
       color = Colors.white;
     }
 
@@ -571,15 +571,6 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   void _updateTabController() {
     final newController = widget.controller ?? DefaultTabController.of(context);
     assert(() {
-      if (newController == null) {
-        throw FlutterError(
-          'No TabController for ${widget.runtimeType}.\n'
-          'When creating a ${widget.runtimeType}, you must either provide an explicit '
-          'TabController using the "controller" property, or you must ensure that there '
-          'is a DefaultTabController above the ${widget.runtimeType}.\n'
-          'In this case, there was neither an explicit controller nor a default controller.',
-        );
-      }
       return true;
     }());
 
@@ -1255,15 +1246,6 @@ class _TDHorizontalTabBarViewState extends State<TDHorizontalTabBarView> {
   void _updateTabController() {
     final newController = widget.controller ?? DefaultTabController.of(context);
     assert(() {
-      if (newController == null) {
-        throw FlutterError(
-          'No TabController for ${widget.runtimeType}.\n'
-          'When creating a ${widget.runtimeType}, you must either provide an explicit '
-          'TabController using the "controller" property, or you must ensure that there '
-          'is a DefaultTabController above the ${widget.runtimeType}.\n'
-          'In this case, there was neither an explicit controller nor a default controller.',
-        );
-      }
       return true;
     }());
 
@@ -1573,19 +1555,10 @@ class TabPageSelector extends StatelessWidget {
     final tabController = controller ?? DefaultTabController.of(context);
     final localizations = MaterialLocalizations.of(context);
     assert(() {
-      if (tabController == null) {
-        throw FlutterError(
-          'No TabController for $runtimeType.\n'
-          'When creating a $runtimeType, you must either provide an explicit TabController '
-          'using the "controller" property, or you must ensure that there is a '
-          'DefaultTabController above the $runtimeType.\n'
-          'In this case, there was neither an explicit controller nor a default controller.',
-        );
-      }
       return true;
     }());
     final Animation<double> animation = CurvedAnimation(
-      parent: tabController!.animation!,
+      parent: tabController.animation!,
       curve: Curves.fastOutSlowIn,
     );
     return AnimatedBuilder(

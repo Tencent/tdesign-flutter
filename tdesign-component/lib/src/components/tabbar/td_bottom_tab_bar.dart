@@ -729,7 +729,7 @@ class PopupDialogState extends State<PopupDialog> {
     button = widget.btnContext.findRenderObject() as RenderBox;
     size = button!.size;
     overlay =
-        Overlay.of(widget.btnContext)?.context.findRenderObject() as RenderBox;
+        Overlay.of(widget.btnContext).context.findRenderObject() as RenderBox;
     position = RelativeRect.fromRect(
       Rect.fromPoints(
         button!.localToGlobal(Offset.zero, ancestor: overlay),

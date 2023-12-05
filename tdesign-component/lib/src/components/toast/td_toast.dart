@@ -83,7 +83,7 @@ class TDToast {
           ),
         ));
     if (_overlayEntry != null) {
-      overlayState?.insert(_overlayEntry!);
+      overlayState.insert(_overlayEntry!);
     }
     _startTimer(duration);
   }

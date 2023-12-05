@@ -265,7 +265,7 @@ class TDRadioGroup extends TDCheckboxGroup {
                                 ? const EdgeInsets.symmetric(horizontal: 16)
                                 : null,
                             height: cardMode ? 82 : null,
-                            child: directionalTdRadios![index],
+                            child: directionalTdRadios[index],
                           );
                         },
                         itemCount: directionalTdRadios!.length,
