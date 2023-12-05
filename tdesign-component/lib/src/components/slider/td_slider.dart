@@ -87,7 +87,7 @@ class TDSliderState extends State<TDSlider> {
           const SizedBox(width: 8),
           Expanded(
               child: SliderTheme(
-            data: tdSliderThemeData,
+            data: tdSliderThemeData.sliderThemeData,
             child: Slider(
               value: value,
               min: tdSliderThemeData.min,
@@ -200,7 +200,7 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
           const SizedBox(width: 8),
           Expanded(
               child: SliderTheme(
-            data: tdSliderThemeData,
+            data: tdSliderThemeData.sliderThemeData,
             child: RangeSlider(
               values: rangeValues,
               min: tdSliderThemeData.min,
