@@ -1,9 +1,6 @@
----
-title: 更新日志
-spline: explain
-toc: false
-docClass: timeline
----
+
+## 0.0.7
+* update example main.dart
 
 ## 0.0.6
 * update slider component, make it is not depend on flutter sdk version

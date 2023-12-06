@@ -7,7 +7,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
-import '../../util/auto_size.dart';
 import 'td_dialog_widget.dart';
 
 /// 弹窗控件
