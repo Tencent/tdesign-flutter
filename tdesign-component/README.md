@@ -5,7 +5,7 @@
 </p>
 
 
-** Tencent TDesign UI component library of Flutter, suitable for use in mobile projects. **
+Tencent TDesign UI component library of Flutter, suitable for use in mobile projects. 
 
 
 [中文文档](https://github.com/Tencent/tdesing-flutter/blob/main/tdesign-component/README_zh.md)
