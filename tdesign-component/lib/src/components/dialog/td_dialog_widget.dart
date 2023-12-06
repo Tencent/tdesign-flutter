@@ -7,7 +7,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
-import '../../util/auto_size.dart';
 
 /// TDDialog手脚架
 class TDDialogScaffold extends StatelessWidget {
