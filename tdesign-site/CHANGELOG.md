@@ -5,6 +5,10 @@ toc: false
 docClass: timeline
 ---
 
+## 0.0.7
+
+* 修改 exmaple的main.dart
+
 ## 0.0.6
 
 * 修改slider组件，使其与flutter sdk 版本解耦

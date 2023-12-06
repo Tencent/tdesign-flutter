@@ -22,7 +22,7 @@ Tencent TDesign UI component library of Flutter, suitable for use in mobile proj
 
 # Notice:
 
-- Theme styles such as color/font size/font style/rounded corners/shadow can be configured through json files. Get theme data through `TDTheme.of(context)` or `DTheme.defaultData()`. It is recommended that all components use `TDTheme.of(context)`Only components that do not need to follow the local theme can use `TDTheme.defaultData()`.
+- Theme styles such as color/font size/font style/rounded corners/shadow can be configured through json files. Get theme data through `TDTheme.of(context)` or `TDTheme.defaultData()`. It is recommended that all components use `TDTheme.of(context)`Only components that do not need to follow the local theme can use `TDTheme.defaultData()`.
 
   Examples of usage of colors, fonts, rounded corners, etc.:
 ```
