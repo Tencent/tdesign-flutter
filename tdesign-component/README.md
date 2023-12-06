@@ -20,7 +20,7 @@ Tencent TDesign UI component library of Flutter, suitable for use in mobile proj
 - The color value declaration class can add default colors and view the default display effect of color values in real time.
 
 
-# Notice
+# Notice:
 
 - Theme styles such as color/font size/font style/rounded corners/shadow can be configured through json files. Get theme data through `TDTheme.of(context)` or `DTheme.defaultData()`. It is recommended that all components use `TDTheme.of(context)`Only components that do not need to follow the local theme can use `TDTheme.defaultData()`.
 
@@ -37,18 +37,18 @@ Tencent TDesign UI component library of Flutter, suitable for use in mobile proj
     
 - Example: `example/lib/page/`
 
-# SDK dependency version
+# SDK dependency version:
 
 dart: ">=2.18.0 <4.0.0"
 
 flutter: ">=3.3.0"
 
-# Other technology stack implementations
+# Other technology stack implementations:
 
 - Desktop Vue 3 implementation：[web-vue-next](https://github.com/Tencent/tdesign-vue-next)
 - Desktop Vue implementation： [web-react](https://github.com/Tencent/tdesign-vue)
 - Implementation of miniprogram： [miniprogram](https://github.com/Tencent/tdesign-miniprogram)
 
-# Open source agreement
+# Open source agreement:
 
 TDesign is licensed under the [MIT LICENSE](https://github.com/Tencent/tdesing-flutter/blob/main/tdesign-component/LICENSE)
