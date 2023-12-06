@@ -1,23 +1,4 @@
 
-<p align="center">
-  <a href="https://tdesign.tencent.com/" target="_blank">
-    <img alt="TDesign Logo" width="200" src="https://tdesign.gtimg.com/site/TDesign.png">
-  </a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/Tencent/tdesign-miniprogram/blob/develop/LICENSE">
-    <img src="https://img.shields.io/npm/l/tdesign-miniprogram.svg?sanitize=true" alt="License">
-  </a>
-  <a href="https://www.npmjs.com/package/tdesign-miniprogram">
-    <img src="https://img.shields.io/npm/v/tdesign-miniprogram.svg?sanitize=true" alt="Version">
-  </a>
-  <a href="https://www.npmjs.com/package/tdesign-miniprogram">
-    <img src="https://img.shields.io/npm/dw/tdesign-miniprogram" alt="Downloads">
-  </a>
-</p>
-
-
 [TDesign](https://github.com/Tencent/tdesign) 适配Flutter的组件库。
 
 ## 预览
@@ -25,7 +6,7 @@
 <br/>
 Android请扫码下载预览 ↓
 <br/>
-<img width="260" src="site/public/assets/qrcode/td_apk_qrcode.png" />
+<img width="260" src="site/public/assets/qrcode/apk_qrcode.png" />
 <br/>
 iOS请运行项目预览 ↓
 <br/>
@@ -37,7 +18,7 @@ https://github.com/Tencent/tdesing-flutter/tree/main/tdesign-component
 
 ```yaml
   dependencies:
-    tdesign_flutter: ^0.0.6
+    tdesign_flutter: ^0.0.5
 ```
 
 
@@ -54,7 +35,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 基础库版本
 
-最低基础库版本`^0.0.6`
+最低基础库版本`^0.0.5`
 
 ## 开源协议
 

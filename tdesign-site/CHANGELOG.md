@@ -5,6 +5,18 @@ toc: false
 docClass: timeline
 ---
 
+## 0.0.6
+
+* 修改slider组件，使其与flutter sdk 版本解耦
+
+## 0.0.5
+
+* 发布到pub仓库
+
+## 0.0.4
+
+* 修复一些已知bug
+
 ## 0.0.3
 
 * 删除TDText中相关package的默认值，允许package传null
