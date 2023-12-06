@@ -7,7 +7,7 @@
 TDesign Flutter技术栈组件库，适合在移动端项目中使用。
 
 # 简介
-Flutter组件库项目在tdesign-component文件夹下，相关使用详见[tdesign-component/README.md](./tdesign-component/README.md)
+Flutter组件库项目在tdesign-component文件夹下，相关使用详见[tdesign-component/README_zh.md](./tdesign-component/README_zh.md)
 
 # 其他技术栈实现
 - 桌面端 Vue 3 实现：[web-vue-next](https://github.com/Tencent/tdesign-vue-next)
