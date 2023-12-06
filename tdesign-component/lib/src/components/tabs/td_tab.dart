@@ -115,7 +115,7 @@ class TDTab extends Tab {
         ],
       );
     }
-    var isCapsuleOutlineType = outlineType == TDBottomTabBarOutlineType.capsule;
+    var isCapsuleOutlineType = outlineType == TDTabOutlineType.capsule;
 
     return IgnorePointer(
       ignoring: !enable,
