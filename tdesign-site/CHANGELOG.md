@@ -5,6 +5,19 @@ toc: false
 docClass: timeline
 ---
 
+
+## 0.1.0
+
+* 发布比较稳定的版本到pub
+
+## 0.0.9
+
+* 修改代码规范
+
+## 0.0.8
+
+* 更新 License
+
 ## 0.0.7
 
 * 修改 exmaple的main.dart
