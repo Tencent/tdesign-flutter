@@ -8,7 +8,7 @@
 Tencent TDesign UI component library of Flutter, suitable for use in mobile projects. 
 
 
-[中文文档](https://github.com/Tencent/tdesing-flutter/blob/main/tdesign-component/README_zh.md)
+[中文文档](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/README_zh.md)
 
 
 # Features:
@@ -51,4 +51,4 @@ flutter: ">=3.3.0"
 
 # Open source agreement:
 
-TDesign is licensed under the [MIT LICENSE](https://github.com/Tencent/tdesing-flutter/blob/main/tdesign-component/LICENSE)
+TDesign is licensed under the [MIT LICENSE](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/LICENSE)
