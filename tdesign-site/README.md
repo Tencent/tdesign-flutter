@@ -10,7 +10,7 @@ Android请扫码下载预览 ↓
 <br/>
 iOS请运行项目预览 ↓
 <br/>
-https://github.com/Tencent/tdesing-flutter/tree/main/tdesign-component
+https://github.com/Tencent/tdesign-flutter/tree/main/tdesign-component
 
 ## 使用组件
 
@@ -31,7 +31,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ## 本地运行官网示例代码
 
 - 进入 `site` 文件夹，安装`npm install` 安装依赖包 
-- `cd ..` 回到 `tdesing-site` 目录，运行命令 `npm run site:dev` 
+- `cd ..` 回到 `tdesign-site` 目录，运行命令 `npm run site:dev` 
 
 ## 基础库版本
 
@@ -39,4 +39,4 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 开源协议
 
-TDesign 遵循 [MIT 协议](https://github.com/Tencent/tdesing-flutter/blob/main/tdesign-component/LICENSE)。
+TDesign 遵循 [MIT 协议](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/LICENSE)。
