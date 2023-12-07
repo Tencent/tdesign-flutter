@@ -6,7 +6,7 @@
 <br/>
 Android请扫码下载预览 ↓
 <br/>
-<img width="260" src="site/public/assets/qrcode/apk_qrcode.png" />
+<img width="260" src="site/public/assets/qrcode/tdesign_apk_qrcode.png" />
 <br/>
 iOS请运行项目预览 ↓
 <br/>
