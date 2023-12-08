@@ -180,6 +180,7 @@ class TDBottomTabBar extends StatefulWidget {
     this.dividerColor,
     this.showTopBorder = true,
     this.topBorder,
+    this.useSafeArea = true,
   })  : assert(() {
           if (navigationTabs.isEmpty) {
             throw FlutterError(
@@ -248,6 +249,9 @@ class TDBottomTabBar extends StatefulWidget {
   /// 上边线样式
   final BorderSide? topBorder;
 
+  /// 使用安全区域
+  final bool useSafeArea;
+
   @override
   State<TDBottomTabBar> createState() => _TDBottomTabBarState();
 }
@@ -270,7 +274,9 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
           maxWidth -= 32;
         }
         var itemWidth = maxWidth / widget.navigationTabs.length;
-        return Container(
+
+        Widget result = Container(
+          height: widget.barHeight ?? _kDefaultTabBarHeight,
             alignment: Alignment.center,
             margin: isCapsuleOutlineType
                 ? const EdgeInsets.symmetric(horizontal: 16)
@@ -298,6 +304,10 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
                   })),
               _verticalDivider(),
             ]));
+        if(widget.useSafeArea){
+          result = SafeArea(child: result);
+        }
+        return result;
       },
     );
   }
