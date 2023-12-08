@@ -46,7 +46,7 @@ flutter: ">=3.3.0"
 # Other technology stack implementations:
 
 - Desktop Vue 3 implementation：[web-vue-next](https://github.com/Tencent/tdesign-vue-next)
-- Desktop Vue implementation： [web-react](https://github.com/Tencent/tdesign-vue)
+- Desktop React implementation： [web-react](https://github.com/Tencent/tdesign-react)
 - Implementation of miniprogram： [miniprogram](https://github.com/Tencent/tdesign-miniprogram)
 
 # Open source agreement:
