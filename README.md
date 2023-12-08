@@ -11,7 +11,7 @@ Flutter组件库项目在tdesign-component文件夹下，相关使用详见[tdes
 
 # 其他技术栈实现
 - 桌面端 Vue 3 实现：[web-vue-next](https://github.com/Tencent/tdesign-vue-next)
-- 桌面端 Vue 实现： [web-react](https://github.com/Tencent/tdesign-vue)
+- 桌面端 React 实现： [web-react](https://github.com/Tencent/tdesign-react)
 - 移动端小程序实现： [小程序](https://github.com/Tencent/tdesign-miniprogram)
 
 # 开源协议
