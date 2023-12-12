@@ -11,7 +11,7 @@ class WebMdTool {
   WebMdTool._();
 
   /// 用于生成web端的md,正常使用不要开启
-  static const bool needGenerateWebMd = false;
+  static const bool needGenerateWebMd = true;
 
   /// 生成web端的md
   static void generateWebMd({
@@ -48,11 +48,12 @@ class WebMdTool {
       }
       var mdContent = _getTemplate(model.text, description,
           model.spline ?? 'other', exampleCodeSb.toString(), api.toString());
-      var file = File('/sdcard/td/web_md/${model.name}/README.md');
-      if (!file.existsSync()) {
-        file.createSync(recursive: true);
-      }
-      file.writeAsStringSync(mdContent);
+      print('生成演示代码成功：\n$mdContent');
+      // var file = File('/sdcard/td/web_md/${model.name}/README.md');
+      // if (!file.existsSync()) {
+      //   file.createSync(recursive: true);
+      // }
+      // file.writeAsStringSync(mdContent);
     }
   }
 
