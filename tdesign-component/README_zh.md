@@ -66,7 +66,9 @@ flutter: ">=3.3.0"
 - 移动端小程序实现： [小程序](https://github.com/Tencent/tdesign-miniprogram)
 
 # 交流反馈
-![feedback](../feedback.png =200x200)
+
+ <img src="../feedback.png" width = "200" height = "200" alt="feedback" align=center />
+
 
 # 开源协议
 

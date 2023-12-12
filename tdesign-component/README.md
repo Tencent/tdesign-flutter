@@ -50,7 +50,8 @@ flutter: ">=3.3.0"
 - Implementation of miniprogram： [miniprogram](https://github.com/Tencent/tdesign-miniprogram)
 
 # Feedback
-![feedback](../feedback.png =200x200)
+
+ <img src="../feedback.png" width = "200" height = "200" alt="feedback" align=center />
 
 # Open source agreement:
 
