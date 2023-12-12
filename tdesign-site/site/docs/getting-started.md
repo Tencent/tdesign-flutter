@@ -47,3 +47,7 @@ https://github.com/Tencentgn-flutter/tree/main/tdesign-component
 dart: ">=2.18.0,  < 3.0.0"
 
 flutter: ">=3.3.0"
+
+## 交流反馈
+
+<img width="260" src="/flutter/assets/feedback.png" />
