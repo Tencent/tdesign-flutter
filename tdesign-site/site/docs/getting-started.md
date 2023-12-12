@@ -47,3 +47,7 @@ iOS请运行项目预览 ↓
 dart: ">=2.18.0,  < 3.0.0"
 
 flutter: ">=3.3.0"
+
+## 交流反馈
+
+<img width="260" src="/flutter/assets/feedback.png" />
