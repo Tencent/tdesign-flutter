@@ -16,7 +16,7 @@ Flutter组件库项目在tdesign-component文件夹下，相关使用详见[tdes
 
 # 交流反馈
 
- <img src="../feedback.png" width = "200" height = "200" alt="feedback" align=center />
+ <img src="feedback.png" width = "200" height = "200" alt="feedback" align=center />
 
 # 开源协议
 
