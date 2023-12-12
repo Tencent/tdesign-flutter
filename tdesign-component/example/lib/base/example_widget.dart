@@ -233,6 +233,7 @@ class _ExamplePageState extends State<ExamplePage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if(WebMdTool.needGenerateWebMd) const TDText('WebGenTag'),
           TDText(
             widget.title,
             font: TDTheme.of(context).fontHeadlineSmall,
