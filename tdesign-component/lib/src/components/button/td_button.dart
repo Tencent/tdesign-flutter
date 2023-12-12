@@ -123,6 +123,7 @@ class _TDButtonState extends State<TDButton> {
   double? _iconSize;
 
   _updateParams(){
+    _buttonStatus = widget.disabled ? TDButtonStatus.disable : TDButtonStatus.defaultState;
     _innerDefaultStyle = widget.style ?? _innerDefaultStyle;
     _innerActiveStyle = widget.activeStyle ?? _innerActiveStyle;
     _innerDisableStyle = widget.disableStyle ?? _innerDisableStyle;
@@ -154,7 +155,6 @@ class _TDButtonState extends State<TDButton> {
   @override
   void initState() {
     super.initState();
-    _buttonStatus = widget.disabled ? TDButtonStatus.disable : TDButtonStatus.defaultState;
     _updateParams();
   }
 
@@ -403,7 +403,6 @@ class _TDButtonState extends State<TDButton> {
   @override
   void didUpdateWidget(covariant TDButton oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _buttonStatus = widget.disabled ? TDButtonStatus.disable : TDButtonStatus.defaultState;
     _updateParams();
   }
 
