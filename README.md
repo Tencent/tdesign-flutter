@@ -14,6 +14,9 @@ Flutter组件库项目在tdesign-component文件夹下，相关使用详见[tdes
 - 桌面端 React 实现： [web-react](https://github.com/Tencent/tdesign-react)
 - 移动端小程序实现： [小程序](https://github.com/Tencent/tdesign-miniprogram)
 
+# 交流反馈
+![feedback](feedback.png =200x200)
+
 # 开源协议
 
 TDesign 遵循 [MIT 协议](https://github.com/Tencent/tdesing-flutter/blob/main/tdesign-component/LICENSE)
