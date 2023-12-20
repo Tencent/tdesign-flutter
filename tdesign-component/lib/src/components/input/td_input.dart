@@ -386,7 +386,9 @@ class TDInput extends StatelessWidget {
                       color: clearBtnColor ?? TDTheme.of(context).fontGyColor3,
                     ),
                   ),
-                  onTap: onClearTap
+                  onTap: onClearTap ?? (){
+                    controller?.text = '';
+                  }
                 ),
                 replacement: Visibility(
                   visible: rightBtn != null,
