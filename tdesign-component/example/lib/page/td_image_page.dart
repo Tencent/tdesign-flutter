@@ -42,6 +42,7 @@ class TDImageState extends State<TDImagePage>
             title: '组件类型',
             children: [
               ExampleItem(desc: '', builder: _imageClip),
+              ExampleItem(desc: '', builder: _imageFitWidth),
               ExampleItem(desc: '', builder: _imageSquare),
             ],
           ),
@@ -100,8 +101,6 @@ class TDImageState extends State<TDImagePage>
               child: const TDImage(
                 assetUrl: 'assets/img/image.png',
                 type: TDImageType.fitHeight,
-                width: 89,
-                height: 72,
               ),
             ),
           ],
@@ -139,6 +138,42 @@ class TDImageState extends State<TDImagePage>
           ],
         )
       ],
+    );
+  }
+
+  @Demo(group: 'image')
+  Widget _imageFitWidth(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24),
+      child: Row(
+        children: [
+          const SizedBox(
+            width: 16,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: TDText(
+                  '适应宽',
+                  font: TDTheme.of(context).fontBodyMedium,
+                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+                ),
+              ),
+              Container(
+                width: 72,
+                height: 89,
+                color: Colors.black,
+                child: const TDImage(
+                  assetUrl: 'assets/img/image.png',
+                  type: TDImageType.fitWidth,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
