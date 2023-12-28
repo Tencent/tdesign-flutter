@@ -21,6 +21,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   var rowSpace = const SizedBox(
     width: 52,
   );
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -31,8 +32,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
       children: [
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '纯图标', builder: _buildPureIconLoading),
-          ExampleItem(
-              desc: '图标加文字横向', builder: _buildTextIconHorizontalLoading),
+          ExampleItem(desc: '图标加文字横向', builder: _buildTextIconHorizontalLoading),
           ExampleItem(desc: '图标加文字竖向', builder: _buildTextIconVerticalLoading),
           ExampleItem(desc: '纯文字', builder: _buildPureTextLoading),
         ]),
@@ -96,32 +96,56 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
         ExampleItem(
             desc: '验证居中问题',
             ignoreCode: true,
-            builder: (_){
-          var list = const [
-            TDLoading(
-              size: TDLoadingSize.large,
-              icon: TDLoadingIcon.circle,
-              text: '加载中…',
-              axis: Axis.vertical,
-            ),
-            TDLoading(
-              size: TDLoadingSize.large,
-              icon: TDLoadingIcon.activity,
-              text: '加载中…',
-              axis: Axis.vertical,
-            ),
-          ];
-          return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                  children: list.fold(
-                      [],
-                          (previousValue, element) =>
-                      [...previousValue, Container(
-                        color: TDTheme.of(context).grayColor6,
-                        child: element,
-                      ), rowSpace])));
-        })
+            builder: (_) {
+              var list = const [
+                TDLoading(
+                  size: TDLoadingSize.large,
+                  icon: TDLoadingIcon.circle,
+                  text: '加载中…',
+                  axis: Axis.vertical,
+                ),
+                TDLoading(
+                  size: TDLoadingSize.large,
+                  icon: TDLoadingIcon.activity,
+                  text: '加载中…',
+                  axis: Axis.vertical,
+                ),
+              ];
+              return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                      children: list.fold(
+                          [],
+                          (previousValue, element) => [
+                                ...previousValue,
+                                Container(
+                                  color: TDTheme.of(context).grayColor6,
+                                  child: element,
+                                ),
+                                rowSpace
+                              ])));
+            }),
+        ExampleItem(
+            desc: '展示/隐藏Loading',
+            ignoreCode: true,
+            builder: (_) {
+              var list = [
+                TDButton(
+                  text: '展示Loading',
+                  theme: TDButtonTheme.primary,
+                  onTap: () {
+                    TDLoadingController.show(context);
+                  },
+                ),
+                const SizedBox(width: 24,),
+                const TDButton(
+                  text: '隐藏Loading',
+                  theme: TDButtonTheme.primary,
+                  onTap: TDLoadingController.dismiss,
+                ),
+              ];
+              return Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Row(children: list, ));
+            })
       ],
     );
   }
@@ -130,11 +154,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   Widget _buildRow(List<Widget> list) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-            children: list.fold(
-                [],
-                (previousValue, element) =>
-                    [...previousValue, element, rowSpace])));
+        child: Row(children: list.fold([], (previousValue, element) => [...previousValue, element, rowSpace])));
   }
 
   /// 纯图标
