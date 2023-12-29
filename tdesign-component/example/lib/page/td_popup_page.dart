@@ -112,8 +112,122 @@ class TDPopupPageState extends State<TDPopupPage> {
                 }));
           },
         );
-      }),
-    ],
+            }),
+        ExampleItem(
+            desc: '修改圆角',
+            builder: (_) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.all(8),
+                    child: TDButton(
+                      text: '底部弹出层-修改圆角',
+                      theme: TDButtonTheme.primary,
+                      type: TDButtonType.outline,
+                      onTap: () {
+                        Navigator.of(context).push(TDSlidePopupRoute(
+                            slideTransitionFrom: SlideTransitionFrom.bottom,
+                            builder: (context) {
+                              return TDPopupBottomDisplayPanel(
+                                title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                                closeColor: TDTheme.of(context).errorNormalColor,
+                                closeClick: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  height: 200,
+                                ),
+                                radius: 6,
+                              );
+                            }));
+                      },
+                    ),
+                  ),
+                  Container(
+                      margin: const EdgeInsets.all(8),
+                      child: TDButton(
+                        text: '底部弹出层-修改圆角',
+                        theme: TDButtonTheme.primary,
+                        type: TDButtonType.outline,
+                        onTap: () {
+                          Navigator.of(context).push(TDSlidePopupRoute(
+                              slideTransitionFrom: SlideTransitionFrom.bottom,
+                              builder: (context) {
+                                return TDPopupBottomConfirmPanel(
+                                  title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                                  leftText: '点这里确认!',
+                                  leftTextColor: TDTheme.of(context).brandNormalColor,
+                                  leftClick: () {
+                                    TDToast.showText('确认', context: context);
+                                    Navigator.pop(context);
+                                  },
+                                  rightText: '关闭',
+                                  rightTextColor: TDTheme.of(context).errorNormalColor,
+                                  rightClick: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                    height: 200,
+                                  ),
+                                  radius: 6,
+                                );
+                              }));
+                        },
+                      )),
+                  Container(
+                      margin: const EdgeInsets.all(8),
+                      child: TDButton(
+                        text: '居中弹出层-修改圆角',
+                        theme: TDButtonTheme.primary,
+                        type: TDButtonType.outline,
+                        onTap: () {
+                          Navigator.of(context).push(TDSlidePopupRoute(
+                              slideTransitionFrom: SlideTransitionFrom.center,
+                              builder: (context) {
+                            return TDPopupCenterPanel(
+                              closeColor: TDTheme.of(context).errorNormalColor,
+                              closeClick: () {
+                                Navigator.pop(context);
+                              },
+                              child: const SizedBox(
+                                height: 240,
+                                width: 240,
+                              ),
+                              radius: 6,
+                            );
+                          }));
+                        },
+                      )),
+                  Container(
+                      margin: const EdgeInsets.all(8),
+                      child: TDButton(
+                        text: '居中弹出层-底部关闭-修改圆角',
+                        theme: TDButtonTheme.primary,
+                        type: TDButtonType.outline,
+                        onTap: () {
+                          Navigator.of(context).push(TDSlidePopupRoute(
+                              slideTransitionFrom: SlideTransitionFrom.center,
+                              builder: (context) {
+                            return TDPopupCenterPanel(
+                              closeUnderBottom: true,
+                              closeClick: () {
+                                Navigator.pop(context);
+                              },
+                              child: const SizedBox(
+                                height: 240,
+                                width: 240,
+                              ),
+                              radius: 6,
+                            );
+                          }));
+                        },
+                      )),
+                ],
+              );
+            }),
+      ],
     );
   }
 
