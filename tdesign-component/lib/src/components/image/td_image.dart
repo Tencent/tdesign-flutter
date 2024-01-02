@@ -10,6 +10,9 @@ enum TDImageType {
   /// 适应高
   fitHeight,
 
+  /// 适应宽
+  fitWidth,
+
   /// 拉伸
   stretch,
 
@@ -222,9 +225,7 @@ class _TDImageState extends State<TDImage> {
       case TDImageType.stretch:
         return widget.assetUrl == null
             ? ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxHeight: widget.height ?? 72,
-                    maxWidth: widget.width ?? 72),
+                constraints: BoxConstraints(maxHeight: widget.height ?? 72, maxWidth: widget.width ?? 72),
                 child: ImageWidget.network(
                   widget.imgUrl,
                   height: widget.height ?? 72,
@@ -252,9 +253,7 @@ class _TDImageState extends State<TDImage> {
                 ),
               )
             : ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxHeight: widget.height ?? 72,
-                    maxWidth: widget.width ?? 72),
+                constraints: BoxConstraints(maxHeight: widget.height ?? 72, maxWidth: widget.width ?? 72),
                 child: ImageWidget.asset(
                   widget.assetUrl!,
                   width: widget.width ?? 72,
@@ -443,6 +442,57 @@ class _TDImageState extends State<TDImage> {
                     cacheHeight: widget.cacheHeight,
                     cacheWidth: widget.cacheWidth,
                   ));
+      case TDImageType.fitWidth:
+        return widget.assetUrl == null
+            ? ImageWidget.network(
+                widget.imgUrl,
+                height: widget.height ?? 72,
+                width: widget.width ?? 72,
+                errorWidget: widget.errorWidget,
+                loadingWidget: widget.loadingWidget,
+                fit: BoxFit.fitWidth,
+                color: widget.color,
+                frameBuilder: widget.frameBuilder,
+                loadingBuilder: widget.loadingBuilder,
+                errorBuilder: widget.errorBuilder,
+                semanticLabel: widget.semanticLabel,
+                excludeFromSemantics: widget.excludeFromSemantics,
+                opacity: widget.opacity,
+                colorBlendMode: widget.colorBlendMode,
+                alignment: widget.alignment,
+                repeat: widget.repeat,
+                centerSlice: widget.centerSlice,
+                matchTextDirection: widget.matchTextDirection,
+                gaplessPlayback: widget.gaplessPlayback,
+                filterQuality: widget.filterQuality,
+                isAntiAlias: widget.isAntiAlias,
+                cacheHeight: widget.cacheHeight,
+                cacheWidth: widget.cacheWidth,
+              )
+            : ImageWidget.asset(
+                widget.assetUrl!,
+                width: widget.width ?? 72,
+                height: widget.height ?? 72,
+                errorWidget: widget.errorWidget,
+                loadingWidget: widget.loadingWidget,
+                fit: BoxFit.fitWidth,
+                color: widget.color,
+                frameBuilder: widget.frameBuilder,
+                errorBuilder: widget.errorBuilder,
+                semanticLabel: widget.semanticLabel,
+                excludeFromSemantics: widget.excludeFromSemantics,
+                opacity: widget.opacity,
+                colorBlendMode: widget.colorBlendMode,
+                alignment: widget.alignment,
+                repeat: widget.repeat,
+                centerSlice: widget.centerSlice,
+                matchTextDirection: widget.matchTextDirection,
+                gaplessPlayback: widget.gaplessPlayback,
+                filterQuality: widget.filterQuality,
+                isAntiAlias: widget.isAntiAlias,
+                cacheHeight: widget.cacheHeight,
+                cacheWidth: widget.cacheWidth,
+              );
     }
   }
 }

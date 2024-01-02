@@ -49,6 +49,10 @@ flutter: ">=3.3.0"
 - Desktop React implementation： [web-react](https://github.com/Tencent/tdesign-react)
 - Implementation of miniprogram： [miniprogram](https://github.com/Tencent/tdesign-miniprogram)
 
+# Feedback
+
+ <img src="../feedback.png" width = "200" height = "200" alt="feedback" align=center />
+
 # Open source agreement:
 
 TDesign is licensed under the [MIT LICENSE](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/LICENSE)

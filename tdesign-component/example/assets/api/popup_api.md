@@ -30,6 +30,7 @@
 | closeColor | Color? | - | 关闭按钮颜色 |
 | closeClick | PopupClick? | - | 关闭按钮点击回调 |
 | backgroundColor | Color? | - | 背景颜色 |
+| radius | double? | - | 圆角 |
 | key |  | - |  |
 
 ```
@@ -51,6 +52,7 @@
 | rightTextColor | Color? | - | 右边文本颜色 |
 | rightClick | PopupClick? | - | 右边文本点击回调 |
 | backgroundColor | Color? | - | 背景颜色 |
+| radius | double? | - | 圆角 |
 | key |  | - |  |
 
 ```
@@ -67,4 +69,5 @@
 | closeColor | Color? | - | 关闭按钮颜色 |
 | closeClick | PopupClick? | - | 关闭按钮点击回调 |
 | backgroundColor | Color? | - | 背景颜色 |
+| radius | double? | - | 圆角 |
 | key |  | - |  |
