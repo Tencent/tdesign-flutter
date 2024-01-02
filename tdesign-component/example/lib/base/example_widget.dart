@@ -116,21 +116,30 @@ class _ExamplePageState extends State<ExamplePage> {
                                 return WebMdTool.needGenerateWebMd
                                     ? Container(
                                         margin: const EdgeInsets.only(top: 24),
-                                        child: TDButton(
-                                          text: '生成Web使用md',
-                                          type: TDButtonType.fill,
-                                          onTap: () => WebMdTool.generateWebMd(
-                                              model: model,
-                                              description: widget.desc,
-                                              exampleCodeGroup:
+                                        child: Column(
+                                          children: [
+                                            TDButton(
+                                              text: '生成Web使用md',
+                                              type: TDButtonType.fill,
+                                              onTap: () => WebMdTool.generateWebMd(
+                                                  model: model,
+                                                  description: widget.desc,
+                                                  exampleCodeGroup:
                                                   widget.exampleCodeGroup,
-                                              exampleModuleList:
+                                                  exampleModuleList:
                                                   widget.children,
-                                              testList: widget.test,
-                                              singleChild:
+                                                  testList: widget.test,
+                                                  singleChild:
                                                   widget.showSingleChild
                                                       ? widget.singleChild
                                                       : null),
+                                            ),
+                                            TDButton(
+                                              text: '返回首页',
+                                              type: TDButtonType.fill,
+                                              onTap: () => Navigator.of(context).maybePop(),
+                                            ),
+                                          ],
                                         ),
                                       )
                                     : Container();
@@ -163,17 +172,26 @@ class _ExamplePageState extends State<ExamplePage> {
               left: 16,
               right: 16,
               bottom: 0,
-              child: TDButton(
-                text: '生成Web使用md',
-                type: TDButtonType.fill,
-                onTap: () => WebMdTool.generateWebMd(
-                    model: model,
-                    description: widget.desc,
-                    exampleCodeGroup: widget.exampleCodeGroup,
-                    exampleModuleList: widget.children,
-                    testList: widget.test,
-                    singleChild:
+              child: Column(
+                children: [
+                  TDButton(
+                    text: '生成Web使用md',
+                    type: TDButtonType.fill,
+                    onTap: () => WebMdTool.generateWebMd(
+                        model: model,
+                        description: widget.desc,
+                        exampleCodeGroup: widget.exampleCodeGroup,
+                        exampleModuleList: widget.children,
+                        testList: widget.test,
+                        singleChild:
                         widget.showSingleChild ? widget.singleChild : null),
+                  ),
+                  TDButton(
+                    text: '返回首页',
+                    type: TDButtonType.fill,
+                    onTap: () => Navigator.of(context).maybePop(),
+                  ),
+                ],
               )),
         ],
       ),
