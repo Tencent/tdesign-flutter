@@ -11,7 +11,7 @@ class WebMdTool {
   WebMdTool._();
 
   /// 用于生成web端的md,正常使用不要开启
-  static const bool needGenerateWebMd = true;
+  static bool needGenerateWebMd = false;
 
   /// 生成web端的md
   static void generateWebMd({
@@ -48,12 +48,24 @@ class WebMdTool {
       }
       var mdContent = _getTemplate(model.text, description,
           model.spline ?? 'other', exampleCodeSb.toString(), api.toString());
-      print('生成演示代码成功：\n$mdContent');
-      // var file = File('/sdcard/td/web_md/${model.name}/README.md');
-      // if (!file.existsSync()) {
-      //   file.createSync(recursive: true);
-      // }
-      // file.writeAsStringSync(mdContent);
+      print('生成演示代码成功：\n${mdContent.substring(0,50)}...');
+
+      var path = "";
+      if(Platform.environment['FLUTTER_TEST'] == 'true'){
+
+        // file:///Users/zflyluo/WorkSpace/flutter/tdesign_group/tdesign-mobile-flutter/tdesign-component/example/main.dart
+        var baseDir = Platform.script.toFilePath().split('/tdesign-component')[0];
+        path = '$baseDir/tdesign-site/src/${model.name}/README.md';
+        // path = '$baseDir/test/src/${model.name}/README.md';
+        // File
+      } else {
+        path = '/sdcard/td/web_md/${model.name}/README.md';
+      }
+      var file = File(path);
+      if (!file.existsSync()) {
+        file.createSync(recursive: true);
+      }
+      file.writeAsStringSync(mdContent);
     }
   }
 
@@ -66,7 +78,7 @@ class WebMdTool {
       list.forEach((element) {
         exampleCodeSb.writeln('');
         exampleCodeSb.writeln('''
-          
+      
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">${element}</pre>
