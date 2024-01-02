@@ -167,8 +167,10 @@ class _TDButtonState extends State<TDButton> {
         if(widget.disabled){
           return;
         }
-        setState(() {
-          _buttonStatus = TDButtonStatus.defaultState;
+        Future.delayed(Duration(milliseconds: 100),() {
+          setState(() {
+            _buttonStatus = TDButtonStatus.defaultState;
+          });
         });
       },
       onTapCancel: (){
