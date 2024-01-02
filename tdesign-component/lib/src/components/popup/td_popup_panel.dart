@@ -15,6 +15,7 @@ class TDPopupBottomDisplayPanel extends StatelessWidget {
         this.closeColor,
         this.closeClick,
         this.backgroundColor,
+        this.radius,
         Key? key})
       : super(key: key);
 
@@ -42,13 +43,16 @@ class TDPopupBottomDisplayPanel extends StatelessWidget {
   /// 背景颜色
   final Color? backgroundColor;
 
+  /// 圆角
+  final double? radius;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
           color: backgroundColor ?? TDTheme.of(context).whiteColor1,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(radius ?? 12), topRight: Radius.circular(radius ?? 12))),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [_buildTop(context), child],
@@ -107,6 +111,7 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
       this.rightTextColor,
       this.rightClick,
         this.backgroundColor,
+        this.radius,
       Key? key})
       : super(key: key);
 
@@ -140,13 +145,16 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
   /// 背景颜色
   final Color? backgroundColor;
 
+  /// 圆角
+  final double? radius;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: backgroundColor ?? TDTheme.of(context).whiteColor1,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+          borderRadius:  BorderRadius.only(
+              topLeft: Radius.circular(radius ?? 12), topRight: Radius.circular(radius ?? 12))),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [_buildTop(context), child],
@@ -212,6 +220,7 @@ class TDPopupCenterPanel extends StatelessWidget {
         this.closeColor,
         this.closeClick,
         this.backgroundColor,
+        this.radius,
         Key? key})
       : super(key: key);
 
@@ -231,6 +240,9 @@ class TDPopupCenterPanel extends StatelessWidget {
   /// 背景颜色
   final Color? backgroundColor;
 
+  /// 圆角
+  final double? radius;
+
   @override
   Widget build(BuildContext context) {
     if(closeUnderBottom){
@@ -244,7 +256,7 @@ class TDPopupCenterPanel extends StatelessWidget {
             margin: const EdgeInsets.only(top: 24, bottom: 24),
               decoration: BoxDecoration(
                   color: backgroundColor ?? TDTheme.of(context).whiteColor1,
-                  borderRadius: const BorderRadius.all(Radius.circular(12))),
+                  borderRadius: BorderRadius.all(Radius.circular(radius ?? 12))),
             child: child,
           ),
           GestureDetector(
@@ -263,7 +275,7 @@ class TDPopupCenterPanel extends StatelessWidget {
       return Container(
         decoration: BoxDecoration(
             color: backgroundColor ?? TDTheme.of(context).whiteColor1,
-            borderRadius: const BorderRadius.all(Radius.circular(12))),
+            borderRadius: BorderRadius.all(Radius.circular(radius ?? 12))),
         child: Stack(
           children: [
             child,
