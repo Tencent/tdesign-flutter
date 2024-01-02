@@ -163,6 +163,7 @@ class TDSwiperPage extends StatelessWidget {
               );
             }),
         ExampleItem(
+          // outer样式不支持竖向布局
             desc: '点条状outer样式',
             ignoreCode: true,
             builder: (_) {
@@ -187,6 +188,20 @@ class TDSwiperPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
                 child: CodeWrapper(
                   builder: _buildFractionBarSwiper,
+                ),
+              );
+            }),
+        ExampleItem(
+            desc: '竖向点条状',
+            ignoreCode: true,
+            builder: (_) {
+              return Container(
+                height: 193,
+                margin: const EdgeInsets.only(left: 16,right: 16),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+                child: CodeWrapper(
+                  builder: _buildVerticalDotsBarSwiper,
                 ),
               );
             }),
@@ -365,6 +380,22 @@ class TDSwiperPage extends StatelessWidget {
       pagination: const SwiperPagination(
           alignment: Alignment.bottomRight,
           builder: TDSwiperPagination.fraction),
+      itemBuilder: (BuildContext context, int index) {
+        return const TDImage(assetUrl: 'assets/img/image.png',);
+      },
+    );
+  }
+
+  @Demo(group: 'swiper')
+  Widget _buildVerticalDotsBarSwiper(BuildContext context) {
+    return Swiper(
+      autoplay: true,
+      itemCount: 6,
+      loop: true,
+      scrollDirection:Axis.vertical,
+      pagination: const SwiperPagination(
+          alignment: Alignment.bottomRight,
+          builder: TDSwiperPagination.dotsBar),
       itemBuilder: (BuildContext context, int index) {
         return const TDImage(assetUrl: 'assets/img/image.png',);
       },
