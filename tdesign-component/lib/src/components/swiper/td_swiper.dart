@@ -132,6 +132,13 @@ class TDSwiperDotsPagination extends SwiperPlugin {
       var active = i == activeIndex;
       var isActiviRectangle =
           roundedRectangleWidth != null && roundedRectangleWidth! > 0 && active;
+      double? scalableLen;
+      double? fixedLen;
+
+      scalableLen = isActiviRectangle
+          ? roundedRectangleWidth
+          : (active ? activeSize : size);
+      fixedLen = active ? activeSize : size;
 
       list.add(Container(
         key: Key('pagination_$i'),
@@ -139,10 +146,8 @@ class TDSwiperDotsPagination extends SwiperPlugin {
         child: AnimatedContainer(
           duration:
               Duration(milliseconds: animationDuration ?? _kAminatedDuration),
-          width: isActiviRectangle
-              ? roundedRectangleWidth
-              : (active ? activeSize : size),
-          height: active ? activeSize : size,
+          width: config.scrollDirection == Axis.horizontal ? scalableLen : fixedLen,
+          height: config.scrollDirection == Axis.horizontal ? fixedLen : scalableLen,
           decoration: BoxDecoration(
               color: active ? activeColor : color,
               borderRadius: BorderRadius.circular(activeSize / 2)),
