@@ -43,8 +43,6 @@
               child: const TDImage(
                 assetUrl: 'assets/img/image.png',
                 type: TDImageType.fitHeight,
-                width: 89,
-                height: 72,
               ),
             ),
           ],

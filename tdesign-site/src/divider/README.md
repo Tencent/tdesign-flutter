@@ -19,7 +19,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### 1 组件类型
 
 水平分割线
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -34,10 +34,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 带文字水平分割线
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -67,10 +67,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 垂直分割
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -110,11 +110,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 ### 1 组件状态
 
 虚线样式
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -156,7 +156,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 
 ## API

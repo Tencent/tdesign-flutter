@@ -20,7 +20,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 基础按钮
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -36,9 +36,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -53,9 +53,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -70,9 +70,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -87,9 +87,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -104,11 +104,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 图标按钮
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -124,9 +124,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -141,16 +141,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
   TDButton _buildLoadingIconButton(BuildContext context) {
     return TDButton(
       text: '加载中',
-      iconWidget: TDLoading(size: TDLoadingSize.small, icon: TDLoadingIcon.circle, iconColor: TDTheme.of(context).whiteColor1,),
+      iconWidget: TDLoading(
+        size: TDLoadingSize.small,
+        icon: TDLoadingIcon.circle,
+        iconColor: TDTheme.of(context).whiteColor1,
+      ),
       size: TDButtonSize.large,
       type: TDButtonType.fill,
       shape: TDButtonShape.rectangle,
@@ -159,11 +163,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 幽灵按钮
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -178,9 +182,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -195,9 +199,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -212,11 +216,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 组合按钮
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -253,10 +257,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 通栏按钮
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -272,12 +276,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 ### 1 组件状态
 
 按钮禁用状态
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -293,9 +297,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -311,9 +315,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -329,9 +333,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -347,9 +351,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -365,12 +369,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 ### 1 组件主题
 
 按钮尺寸
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -385,9 +389,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -402,9 +406,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -419,9 +423,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -436,11 +440,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 按钮形状
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -456,9 +460,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -473,9 +477,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -490,9 +494,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -507,9 +511,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -524,11 +528,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 按钮主题
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -543,9 +547,43 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  TDButton _buildDefaultStrokeButton(BuildContext context) {
+    return const TDButton(
+      text: '描边按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.defaultTheme,
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  TDButton _buildDefaultTextButton(BuildContext context) {
+    return const TDButton(
+      text: '文字按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.text,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.defaultTheme,
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -561,9 +599,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -578,9 +616,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -595,60 +633,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
-<td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">
-  TDButton _buildLightFillButton(BuildContext context) {
-    return const TDButton(
-      text: '填充按钮',
-      size: TDButtonSize.large,
-      type: TDButtonType.fill,
-      shape: TDButtonShape.rectangle,
-      theme: TDButtonTheme.light,
-    );
-  }</pre>
-
-</td-code-block>
-                      
-
-                
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TDButton _buildDefaultStrokeButton(BuildContext context) {
-    return const TDButton(
-      text: '描边按钮',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      shape: TDButtonShape.rectangle,
-      theme: TDButtonTheme.defaultTheme,
-    );
-  }</pre>
-
-</td-code-block>
-                      
-
-                
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TDButton _buildDefaultTextButton(BuildContext context) {
-    return const TDButton(
-      text: '文字按钮',
-      size: TDButtonSize.large,
-      type: TDButtonType.text,
-      shape: TDButtonShape.rectangle,
-      theme: TDButtonTheme.defaultTheme,
-    );
-  }</pre>
-
-</td-code-block>
-                      
-
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -663,9 +650,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -680,9 +667,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -697,9 +684,26 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  TDButton _buildLightFillButton(BuildContext context) {
+    return const TDButton(
+      text: '填充按钮',
+      size: TDButtonSize.large,
+      type: TDButtonType.fill,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.light,
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -714,9 +718,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
-
                 
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -731,7 +735,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 
 ## API

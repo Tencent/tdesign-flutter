@@ -20,7 +20,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 点状(dots)
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -39,11 +39,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 点条状(dots-bar)
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -62,11 +62,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 分式(fraction)
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -85,11 +85,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 切换按钮(controls)
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -108,11 +108,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 卡片式(cards)
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -134,11 +134,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 卡片式(cards)-scale:0.8
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -160,12 +160,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 ### 1 组件样式
 
 内部
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -184,11 +184,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 外部
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -208,11 +208,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 右边(竖向)
 
-                
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -232,7 +232,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                      
+                
 
 
 ## API
