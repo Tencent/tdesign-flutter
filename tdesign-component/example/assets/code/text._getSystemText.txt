@@ -2,6 +2,6 @@
   Widget _getSystemText(BuildContext context) {
     return TDText(
       exampleTxt,
-      backgroundColor: TDTheme.of(context).successHoverColor,
+      backgroundColor: TDTheme.of(context).brandHoverColor,
     ).getRawText(context: context);
   }
