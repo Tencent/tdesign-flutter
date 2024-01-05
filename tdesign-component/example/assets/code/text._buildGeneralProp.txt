@@ -4,6 +4,6 @@
       exampleTxt,
       font: TDTheme.of(context).fontHeadlineLarge,
       textColor: TDTheme.of(context).brandNormalColor,
-      backgroundColor: TDTheme.of(context).successHoverColor,
+      backgroundColor: TDTheme.of(context).brandFocusColor,
     );
   }
