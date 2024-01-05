@@ -19,7 +19,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### 1 组件类型
 
 
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -67,8 +67,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               child: const TDImage(
                 assetUrl: 'assets/img/image.png',
                 type: TDImageType.fitHeight,
-                width: 89,
-                height: 72,
               ),
             ),
           ],
@@ -110,10 +108,53 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 
-                  
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageFitWidth(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24),
+      child: Row(
+        children: [
+          const SizedBox(
+            width: 16,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: TDText(
+                  '适应宽',
+                  font: TDTheme.of(context).fontBodyMedium,
+                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+                ),
+              ),
+              Container(
+                width: 72,
+                height: 89,
+                color: Colors.black,
+                child: const TDImage(
+                  assetUrl: 'assets/img/image.png',
+                  type: TDImageType.fitWidth,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -192,11 +233,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 ### 1 组件状态
 
 
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -296,10 +337,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -364,7 +405,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 
 ## API
