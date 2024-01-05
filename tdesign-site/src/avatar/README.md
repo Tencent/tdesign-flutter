@@ -19,7 +19,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### 1 组件类型
 
 图片头像
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -44,10 +44,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 字符头像
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -72,10 +72,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 图标头像
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -99,10 +99,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 带徽标头像
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -160,11 +160,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 ### 1 特殊类型
 
 纯展示的头像组
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -184,10 +184,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 带操作的头像组
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -209,11 +209,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 ### 1 组件尺寸
 
 大尺寸 :64px
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -241,10 +241,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 中尺寸 :48px
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -272,10 +272,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 小尺寸 :40px
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -303,7 +303,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 
 ## API

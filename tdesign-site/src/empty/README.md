@@ -19,7 +19,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### 1 组件类型
 
 图标空状态
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -31,10 +31,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 自定义图片空状态
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -54,10 +54,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 带操作空状态
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -70,7 +70,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 
 ## API

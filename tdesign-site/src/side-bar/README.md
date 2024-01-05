@@ -1,5 +1,5 @@
 ---
-title: Sidebar 侧边栏
+title: SideBar 侧边栏
 description: 用于内容分类后的展示切换。
 spline: base
 isComponent: true
@@ -19,6 +19,143 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### 1 组件类型
 
 侧边导航用法
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildAnchorSideBar(BuildContext context) {
+    // 锚点用法
+    final list = <SideItemProps>[];
+    final pages = <Widget>[];
+
+    for (var i = 0; i < 20; i++) {
+      list.add(SideItemProps(
+        index: i,
+        label: '选项',
+        value: i,
+      ));
+      pages.add(getAnchorDemo(i));
+    }
+
+    pages.add(Container(
+      height: MediaQuery.of(context).size.height - itemHeight,
+      decoration: const BoxDecoration(color: Colors.white),
+    ));
+
+    list[1].badge = const TDBadge(TDBadgeType.redPoint);
+    list[2].badge = const TDBadge(
+      TDBadgeType.message,
+      count: '8',
+    );
+
+    var demoHeight = MediaQuery.of(context).size.height;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: 110,
+          child: TDSideBar(
+            height: demoHeight,
+            style: TDSideBarStyle.normal,
+            value: currentValue,
+            controller: _sideBarController,
+            children: list
+                .map((ele) => TDSideBarItem(
+                    label: ele.label ?? '',
+                    badge: ele.badge,
+                    value: ele.value,
+                    icon: ele.icon))
+                .toList(),
+            onChanged: onChanged,
+            onSelected: onSelected,
+          ),
+        ),
+        Expanded(
+            child: SizedBox(
+          height: demoHeight,
+          child: SingleChildScrollView(
+            controller: _demoScroller,
+            child: Column(
+              children: pages,
+            ),
+          ),
+        ))
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildPaginationSideBar(BuildContext context) {
+    // 切页用法
+    final list = <SideItemProps>[];
+    final pages = <Widget>[];
+
+    for (var i = 0; i < 100; i++) {
+      list.add(SideItemProps(
+        index: i,
+        label: '选项',
+        value: i,
+      ));
+      pages.add(getPageDemo(i));
+    }
+
+    list[1].badge = const TDBadge(TDBadgeType.redPoint);
+    list[2].badge = const TDBadge(
+      TDBadgeType.message,
+      count: '8',
+    );
+
+    void setCurrentValue(int value) {
+      _pageController.jumpToPage(value);
+      if (currentValue != value) {
+        currentValue = value;
+      }
+    }
+
+    var demoHeight = MediaQuery.of(context).size.height;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: 110,
+          child: TDSideBar(
+            height: demoHeight,
+            style: TDSideBarStyle.normal,
+            value: currentValue,
+            controller: _sideBarController,
+            children: list
+                .map((ele) => TDSideBarItem(
+                    label: ele.label ?? '',
+                    badge: ele.badge,
+                    value: ele.value,
+                    icon: ele.icon))
+                .toList(),
+            onSelected: setCurrentValue,
+          ),
+        ),
+        Expanded(
+            child: SizedBox(
+          height: demoHeight,
+          child: PageView(
+            controller: _pageController,
+            scrollDirection: Axis.vertical,
+            children: pages,
+            physics: const NeverScrollableScrollPhysics(),
+          ),
+        ))
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
 
           
 <td-code-block panel="Dart">
@@ -224,6 +361,145 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### 1 组件样式
 
 侧边导航样式
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildOutlineSideBar(BuildContext context) {
+    // 非通栏选项样式
+    final list = <SideItemProps>[];
+    final pages = <Widget>[];
+
+    for (var i = 0; i < 20; i++) {
+      list.add(SideItemProps(
+        index: i,
+        label: '选项',
+        value: i,
+      ));
+      pages.add(getAnchorDemo(i));
+    }
+
+    pages.add(Container(
+      height: MediaQuery.of(context).size.height - itemHeight,
+      decoration: const BoxDecoration(color: Colors.white),
+    ));
+
+    list[1].badge = const TDBadge(TDBadgeType.redPoint);
+    list[2].badge = const TDBadge(
+      TDBadgeType.message,
+      count: '8',
+    );
+
+    var demoHeight = MediaQuery.of(context).size.height;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: 110,
+          child: TDSideBar(
+            height: demoHeight,
+            style: TDSideBarStyle.outline,
+            value: currentValue,
+            controller: _sideBarController,
+            children: list
+                .map((ele) => TDSideBarItem(
+                    label: ele.label ?? '',
+                    badge: ele.badge,
+                    value: ele.value,
+                    icon: ele.icon))
+                .toList(),
+            onChanged: onChanged,
+            onSelected: onSelected,
+          ),
+        ),
+        Expanded(
+            child: SizedBox(
+          height: demoHeight,
+          child: SingleChildScrollView(
+            controller: _demoScroller,
+            child: Column(
+              children: pages,
+            ),
+          ),
+        ))
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildCustomSideBar(BuildContext context) {
+    // 自定义样式
+    final list = <SideItemProps>[];
+    final pages = <Widget>[];
+
+    for (var i = 0; i < 100; i++) {
+      list.add(SideItemProps(
+        index: i,
+        label: '选项',
+        value: i,
+      ));
+      pages.add(getPageDemo(i));
+    }
+
+    list[1].badge = const TDBadge(TDBadgeType.redPoint);
+    list[2].badge = const TDBadge(
+      TDBadgeType.message,
+      count: '8',
+    );
+    list[1].textStyle = const TextStyle(color: Colors.green);
+
+    void setCurrentValue(int value) {
+      _pageController.jumpToPage(value);
+      if (currentValue != value) {
+        currentValue = value;
+      }
+    }
+
+    var demoHeight = MediaQuery.of(context).size.height;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: 110,
+          child: TDSideBar(
+            height: demoHeight,
+            style: TDSideBarStyle.normal,
+            value: currentValue,
+            controller: _sideBarController,
+            children: list
+                .map((ele) => TDSideBarItem(
+                    label: ele.label ?? '',
+                    badge: ele.badge,
+                    value: ele.value,
+                    textStyle: ele.textStyle,
+                    icon: ele.icon))
+                .toList(),
+            onSelected: setCurrentValue,
+          ),
+        ),
+        Expanded(
+            child: SizedBox(
+          height: demoHeight,
+          child: PageView(
+            controller: _pageController,
+            scrollDirection: Axis.vertical,
+            children: pages,
+            physics: const NeverScrollableScrollPhysics(),
+          ),
+        ))
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
 
           
 <td-code-block panel="Dart">

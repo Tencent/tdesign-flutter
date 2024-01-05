@@ -19,7 +19,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### 1 组件类型
 
 基础文字链接
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -33,10 +33,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 下划线文字链接
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -50,10 +50,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 前置图标文字链接
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -67,10 +67,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 后置图标文字链接
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -84,11 +84,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 ### 1 组件状态
 
 不同主题
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -97,10 +97,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 禁用状态
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -109,11 +109,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 ### 1 组件样式
 
 链接尺寸
-                  
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -133,7 +133,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                        
+                                  
 
 
 ## API
