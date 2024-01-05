@@ -84,7 +84,7 @@ class TDInput extends StatelessWidget {
                                 : (leftLabel!.length > 5
                                     ? 5.1
                                     : leftLabel.length)) *
-                            16 +
+                            16 + 1 +
                         (leftIcon != null ? 1 : 0) * 28) +
                     (required == true ? 1 : 0) * 14),
         height = 56,
@@ -464,6 +464,7 @@ class TDInput extends StatelessWidget {
                           child: TDText(
                             leftLabel,
                             maxLines: 1,
+                            style: leftLabelStyle,
                             font: TDTheme.of(context).fontBodyMedium,
                             fontWeight: FontWeight.w400,
                           ),
