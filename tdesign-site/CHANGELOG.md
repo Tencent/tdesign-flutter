@@ -5,6 +5,32 @@ toc: false
 docClass: timeline
 ---
 
+## 🌈 0.1.2 `2024-01-08`
+
+### 🚀 Features
+- `TDImage`:
+  - add:图片增加FitWidth类型，修改对应Demo页面 ([#14](https://github.com/Tencent/tdesign-flutter/pull/14))
+- `TDLoading`:
+  - add: 加载添加显示与隐藏的方法 ([#15](https://github.com/Tencent/tdesign-flutter/pull/15))
+- `TDPopup`:
+  - add: 添加自定义圆角支持 ([#17](https://github.com/Tencent/tdesign-flutter/pull/17))
+- `TDAvatar`:
+  - add:头像类型为字符、图标时，支持自定义背景颜色 ([#20](https://github.com/Tencent/tdesign-flutter/pull/20))
+
+### 🐞 Bug Fixes
+- `TDBottomTabBar`:
+  - 添加安全区域,修复 ([#1](https://github.com/Tencent/tdesign-flutter/issues/1))
+- `TDButton`:
+  - update widget 可更新按钮disable状态
+  - fix: 按钮点击态过短 ([#13](https://github.com/Tencent/tdesign-flutter/pull/13))
+- `TDSwiper`:
+  - fix: 适配swiper竖向点条状样式 ([#19](https://github.com/Tencent/tdesign-flutter/pull/19))
+- `TDInput`:
+  - fix: type为TDInputType.twoLine下leftLabelStyle设置不生效 ([#21](https://github.com/Tencent/tdesign-flutter/pull/21))
+
+### 🚧 Others
+- 修改最低兼容版本为3.7.0 ([#3](https://github.com/Tencent/tdesign-flutter/issues/3))
+
 ## 0.1.1
 
 * 回退代码规范，兼容3.7.x
