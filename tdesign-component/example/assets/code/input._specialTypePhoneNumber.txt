@@ -9,7 +9,7 @@
           hintText: '输入手机号',
           backgroundColor: Colors.white,
           rightBtn: SizedBox(
-            width: 97.5,
+            width: 98,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
