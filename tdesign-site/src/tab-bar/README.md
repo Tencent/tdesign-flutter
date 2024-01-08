@@ -3824,6 +3824,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | dividerColor | Color? | - | 分割线颜色（可选） |
 | showTopBorder | bool? | true | 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值,非胶囊型才生效） |
 | topBorder | BorderSide? | - | 上边线样式 |
+| useSafeArea | bool | true | 使用安全区域 |
 
 ```
 ```
