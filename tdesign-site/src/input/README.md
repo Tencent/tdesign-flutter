@@ -282,7 +282,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           hintText: '请输入文字',
           rightBtn: Container(
             alignment: Alignment.center,
-            width: 72,
+            width: 73,
             height: 28,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
@@ -501,7 +501,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           hintText: '输入手机号',
           backgroundColor: Colors.white,
           rightBtn: SizedBox(
-            width: 97.5,
+            width: 98,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
