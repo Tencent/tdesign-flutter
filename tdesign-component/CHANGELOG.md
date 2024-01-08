@@ -1,3 +1,29 @@
+## 🌈 0.1.2 `2024-01-08`
+
+### 🚀 Features
+- `TDImage`:
+    - add: Added FitWidth type to the image, modified the corresponding Demo page ([#14](https://github.com/Tencent/tdesign-flutter/pull/14))
+- `TDLoading`:
+    - add: Added methods for showing and hiding loading ([#15](https://github.com/Tencent/tdesign-flutter/pull/15))
+- `TDPopup`:
+    - add: Added support for customizing the round corners ([#17](https://github.com/Tencent/tdesign-flutter/pull/17))
+- `TDAvatar`:
+    - add: When the avatar type is character or icon, support for customizing the background color is added ([#20](https://github.com/Tencent/tdesign-flutter/pull/20))
+
+### 🐞 Bug Fixes
+- `TDBottomTabBar`:
+    - Added a safe area, fixed ([#1](https://github.com/Tencent/tdesign-flutter/issues/1))
+- `TDButton`:
+    - update widget: Button's disable status can be updated
+    - fix: Button click state is too short ([#13](https://github.com/Tencent/tdesign-flutter/pull/13))
+- `TDSwiper`:
+    - fix: Adapted swiper vertical dot bar style ([#19](https://github.com/Tencent/tdesign-flutter/pull/19))
+- `TDInput`:
+    - fix: The setting of leftLabelStyle does not take effect when type is TDInputType.twoLine ([#21](https://github.com/Tencent/tdesign-flutter/pull/21))
+
+### 🚧 Others
+- The minimum compatible version has been changed to 3.7.0 ([#3](https://github.com/Tencent/tdesign-flutter/issues/3))
+
 ## 0.1.1
 * reset code style, can run on 3.7.x
 
