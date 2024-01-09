@@ -1,7 +1,7 @@
 {
   "name": "tdesign-flutter",
   "purename": "tdesign",
-  "version": "1.1.5-beta",
+  "version": "0.1.2",
   "description": "tdesign-flutter",
   "title": "tdesign-flutter",
   "main": "miniprogram_dist/index.js",
