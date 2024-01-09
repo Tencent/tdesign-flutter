@@ -39,9 +39,9 @@ Tencent TDesign UI component library of Flutter, suitable for use in mobile proj
 
 # SDK dependency version:
 
-dart: ">=2.18.0 <4.0.0"
+dart: ">=2.19.0 <4.0.0"
 
-flutter: ">=3.3.0"
+flutter: ">=3.7.0"
 
 # Other technology stack implementations:
 

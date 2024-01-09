@@ -32,6 +32,6 @@ spline: explain
 
 ## SDK依赖版本
 
-dart: ">=2.18.0,  < 3.0.0"
+dart: ">=2.19.0 <4.0.0"
 
-flutter: ">=3.3.0"
+flutter: ">=3.7.0"

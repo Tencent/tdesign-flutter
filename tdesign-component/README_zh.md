@@ -56,9 +56,9 @@
 - 合并代码: 上述检查完成后，请发起pr，合并到dev分支，并同步项目组验收。
 
 # SDK依赖版本
-dart: ">=2.18.0 <4.0.0"
+dart: ">=2.19.0 <4.0.0"
 
-flutter: ">=3.3.0"
+flutter: ">=3.7.0"
 
 # 其他技术栈实现
 - 桌面端 Vue 3 实现：[web-vue-next](https://github.com/Tencent/tdesign-vue-next)
