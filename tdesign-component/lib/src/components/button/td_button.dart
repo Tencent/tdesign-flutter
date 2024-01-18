@@ -170,7 +170,7 @@ class _TDButtonState extends State<TDButton> {
       decoration: BoxDecoration(
         color: style.backgroundColor,
         border: _getBorder(context),
-        borderRadius: BorderRadius.all(_getRadius()),
+        borderRadius: style.radius ?? BorderRadius.all(_getRadius()),
       ),
       child: widget.child ?? _getChild(),
     );
