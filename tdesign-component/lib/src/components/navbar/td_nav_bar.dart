@@ -185,8 +185,6 @@ class _TDNavBarState extends State<TDNavBar> {
         );
   }
 
-  late final top = MediaQuery.of(context).padding.top;
-
   Widget _getNavbarChild(){
      final Widget toolbar = NavigationToolbar(
       leading: _buildTitleBarItems(true),
@@ -215,13 +213,14 @@ class _TDNavBarState extends State<TDNavBar> {
       bcc = bcc.withOpacity(widget.opacity);
     }
 
-    var paddingTop = widget.screenAdaptation ? top : 0.0;
+    var paddingTop = widget.screenAdaptation ? MediaQuery.of(context).padding.top : 0.0;
     var padding = widget.padding ??
         EdgeInsets.symmetric(
           horizontal: TDTheme.of(context).spacer16,
           vertical: TDTheme.of(context).spacer4,
         );
 
+    print("screenAdaptation:${widget.screenAdaptation}, paddingTop:$paddingTop");
     return Container(
       color: bcc,
       height: widget.height + paddingTop,
