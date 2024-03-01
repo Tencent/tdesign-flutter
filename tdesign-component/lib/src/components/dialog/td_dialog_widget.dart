@@ -186,6 +186,7 @@ class TDDialogInfoWidget extends StatelessWidget {
                       scrollDirection: Axis.vertical,
                       child: TDDialogContent(
                         content: content!,
+                        contentColor: contentColor ?? const Color(0x99000000),
                       ),
                     ),
                   ),
