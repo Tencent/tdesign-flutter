@@ -216,7 +216,7 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
           overflow: TextOverflow.ellipsis,
           fontWeight: FontWeight.bold,
         );
-        switch (status) {
+        switch (widget.status) {
           case TDProgressStatus.success:
             iconThemeData = IconThemeData(
               color: theme.successNormalColor,
@@ -454,6 +454,7 @@ class _TDProgressActionPaint extends StatefulWidget {
   State<_TDProgressActionPaint> createState() => _TDProgressActionPaintState();
 }
 
+/// 绘制active运动状态的进度条
 class _TDProgressActionPaintState extends State<_TDProgressActionPaint> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late CurvedAnimation curvedAnimation;

@@ -32,9 +32,10 @@ class _TDProgressPageState extends State<TDProgressPage> {
       ),
       ExampleModule(title: '组件状态', children: [
         ExampleItem(desc: '线性进度条', builder: _buildLineStatus),
+        ExampleItem(desc: '线性运动状态/渐变色', builder: _buildLineActionAndGradient),
         ExampleItem(desc: '百分比内显进度条', builder: _buildPlumpStatus),
         ExampleItem(desc: '环形进度条', builder: _buildCircleStatus),
-        // ExampleItem(desc: '不同尺寸', builder: _buildCircleSize),
+        ExampleItem(desc: '不同尺寸', builder: _buildCircleSize),
       ]),
     ]);
     return current;
@@ -145,7 +146,18 @@ class _TDProgressPageState extends State<TDProgressPage> {
           TDProgress(percentage: 80, status: TDProgressStatus.error),
           SizedBox(height: 8),
           TDProgress(percentage: 80, status: TDProgressStatus.success),
-          SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+
+  @Demo(group: 'progress')
+  Widget _buildLineActionAndGradient(BuildContext context){
+    return const Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
           TDProgress(percentage: 80, status: TDProgressStatus.active),
           SizedBox(height: 8),
           TDProgress(
@@ -205,11 +217,11 @@ class _TDProgressPageState extends State<TDProgressPage> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TDProgress(percentage: 80, size: TDProgressSize.small),
-          SizedBox(height: 8),
-          TDProgress(percentage: 80, size: TDProgressSize.medium),
-          SizedBox(height: 8),
-          TDProgress(percentage: 80, size: TDProgressSize.large),
+          TDProgress(percentage: 30, theme: TDProgressTheme.circle, size: TDProgressSize.small),
+          SizedBox(width: 8),
+          TDProgress(percentage: 30, theme: TDProgressTheme.circle, size: TDProgressSize.medium),
+          SizedBox(width: 8),
+          TDProgress(percentage: 75, theme: TDProgressTheme.circle, size: TDProgressSize.large),
         ],
       ),
     );
