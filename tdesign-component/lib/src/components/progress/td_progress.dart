@@ -46,7 +46,7 @@ class TDProgress extends ImplicitlyAnimatedWidget {
     this.showLabel = true,
     this.label,
     this.percentage = 0,
-    this.boxSize,
+    this.circleSize,
     this.size = TDProgressSize.medium,
     this.status,
     this.strokeWidth,
@@ -71,8 +71,8 @@ class TDProgress extends ImplicitlyAnimatedWidget {
   /// 进度条百分比 0-100
   final double percentage;
 
-  /// 进度条尺寸，不为空则覆盖[size]中的默认值
-  final Size? boxSize;
+  /// 环形进度条尺寸，不为空则覆盖[size]中的默认值
+  final Size? circleSize;
 
   /// 进度条尺寸
   final TDProgressSize size;
@@ -378,7 +378,7 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
         );
       case TDProgressTheme.circle:
         Widget? label;
-        var boxSize = widget.boxSize;
+        var boxSize = widget.circleSize;
         switch(size){
           case TDProgressSize.small:
             boxSize ??= const Size.square(72);
@@ -594,7 +594,7 @@ class _TDLineProgressPrinter extends CustomPainter {
   }
 }
 
-/// 圆形进度条绘制
+/// 环形进度条绘制
 class _TDCircleProgressPainter extends CustomPainter {
   const _TDCircleProgressPainter({
     required this.animation,
