@@ -4,26 +4,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../tdesign_flutter.dart';
+
 /// 组件大小
 enum TDProgressSize {
   /// 小
   small,
+
   /// 中等
   medium,
+
   /// 大
   large;
 }
+
 /// 进度条状态
 enum TDProgressStatus {
   /// 成功
   success,
+
   /// 错误
   error,
+
   /// 告警
   warning,
+
   /// 执行动画
   active;
 }
+
 /// 进度条风格。
 /// 值为 line，标签（label）显示在进度条右侧；
 /// 值为 plump，标签（label）显示在进度条里面；
@@ -31,8 +39,10 @@ enum TDProgressStatus {
 enum TDProgressTheme {
   /// 标签（label）显示在进度条右侧；
   line,
+
   /// 标签（label）显示在进度条里面；
   plump,
+
   /// 标签（label）显示在进度条正中间。
   circle;
 }
@@ -113,13 +123,13 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
 
   /// 如果是默认状态，则值100时变更为success状态
   TDProgressStatus? get status {
-    if(widget.status == null) {
-      if(animationPercentage >= 100.0){
+    if (widget.status == null) {
+      if (animationPercentage >= 100.0) {
         return TDProgressStatus.success;
       } else {
         return null;
       }
-    } else if(widget.status == TDProgressStatus.active && animationPercentage >= 100){
+    } else if (widget.status == TDProgressStatus.active && animationPercentage >= 100) {
       return TDProgressStatus.success;
     }
     return widget.status;
@@ -274,7 +284,7 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
 
     // 线条颜色
     var color = widget.color;
-    if (color == null) {
+    if (color == null || color.isEmpty) {
       switch (status) {
         case TDProgressStatus.success:
           color = [theme.successNormalColor];
@@ -302,7 +312,7 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
               isComplex: isAction,
               size: Size.fromHeight(strokeWidth),
               painter: (animation) {
-                return _TDLineProgressPrinter(
+                return _TDProgressLinePrinter(
                   percentage: animationPercentage,
                   strokeWidth: strokeWidth!,
                   color: color!,
@@ -323,9 +333,7 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
             child: label,
           ));
         }
-        return Row(
-          children: list,
-        );
+        return Row(children: list);
       case TDProgressTheme.plump:
         Widget? label;
         if (widget.showLabel) {
@@ -363,7 +371,7 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
             willChange: isAction,
             isComplex: isAction,
             painter: (animation) {
-              return _TDLineProgressPrinter(
+              return _TDProgressLinePrinter(
                 percentage: animationPercentage,
                 strokeWidth: strokeWidth!,
                 color: color!,
@@ -379,7 +387,7 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
       case TDProgressTheme.circle:
         Widget? label;
         var boxSize = widget.circleSize;
-        switch(size){
+        switch (size) {
           case TDProgressSize.small:
             boxSize ??= const Size.square(72);
             break;
@@ -403,7 +411,7 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
             willChange: isAction,
             isComplex: isAction,
             painter: (animation) {
-              return _TDCircleProgressPainter(
+              return _TDProgressCirclePainter(
                 percentage: animationPercentage,
                 strokeWidth: strokeWidth!,
                 color: color!,
@@ -502,8 +510,8 @@ class _TDProgressActionPaintState extends State<_TDProgressActionPaint> with Sin
 }
 
 /// 线条进度条绘制
-class _TDLineProgressPrinter extends CustomPainter {
-  const _TDLineProgressPrinter({
+class _TDProgressLinePrinter extends CustomPainter {
+  const _TDProgressLinePrinter({
     required this.animation,
     required this.percentage,
     required this.color,
@@ -573,7 +581,7 @@ class _TDLineProgressPrinter extends CustomPainter {
     canvas.drawLine(p1, p2, paint);
 
     // action动画
-    if(animation.value > 0) {
+    if (animation.value > 0) {
       var value = animation.value;
       if (value <= .35) {
         var tween = Tween<double>(begin: .1, end: .4);
@@ -589,14 +597,14 @@ class _TDLineProgressPrinter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _TDLineProgressPrinter oldDelegate) {
+  bool shouldRepaint(covariant _TDProgressLinePrinter oldDelegate) {
     return this != oldDelegate;
   }
 }
 
 /// 环形进度条绘制
-class _TDCircleProgressPainter extends CustomPainter {
-  const _TDCircleProgressPainter({
+class _TDProgressCirclePainter extends CustomPainter {
+  const _TDProgressCirclePainter({
     required this.animation,
     required this.percentage,
     required this.color,
@@ -676,7 +684,7 @@ class _TDCircleProgressPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _TDCircleProgressPainter oldDelegate) {
+  bool shouldRepaint(covariant _TDProgressCirclePainter oldDelegate) {
     return this != oldDelegate;
   }
 }
