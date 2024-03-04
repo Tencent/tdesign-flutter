@@ -150,116 +150,6 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
     ) as Tween<double>;
   }
 
-  Font _getCircleTextFont() {
-    switch (widget.size) {
-      case TDProgressSize.large:
-        return Font(size: 36, lineHeight: 36);
-      case TDProgressSize.medium:
-        return Font(size: 20, lineHeight: 20);
-      case TDProgressSize.small:
-        return Font(size: 14, lineHeight: 14);
-    }
-  }
-
-  /// 构建标签
-  Widget? _buildLabel(TDThemeData theme) {
-    var label = widget.label;
-    IconThemeData? iconThemeData;
-    TextStyle style;
-    switch (widget.theme) {
-      case TDProgressTheme.line:
-        var fontBodyMedium = theme.fontBodyLarge ?? Font(size: 16, lineHeight: 24);
-        var iconSize = fontBodyMedium.size;
-        style = TextStyle(
-          fontSize: fontBodyMedium.size,
-          color: theme.fontGyColor1,
-          overflow: TextOverflow.ellipsis,
-        );
-        switch (widget.status) {
-          case TDProgressStatus.success:
-            iconThemeData = IconThemeData(
-              color: theme.successNormalColor,
-              size: iconSize,
-            );
-            label ??= const Icon(TDIcons.check_circle_filled);
-            break;
-          case TDProgressStatus.error:
-            iconThemeData = IconThemeData(
-              color: theme.errorNormalColor,
-              size: iconSize,
-            );
-            label ??= const Icon(TDIcons.close_circle_filled);
-            break;
-          case TDProgressStatus.warning:
-            iconThemeData = IconThemeData(
-              color: theme.warningNormalColor,
-              size: iconSize,
-            );
-            label ??= const Icon(TDIcons.error_circle_filled);
-            break;
-          default:
-            label ??= Text('${(percentage).round()}%');
-        }
-        break;
-      case TDProgressTheme.plump:
-        Color fontColor;
-        if (animationPercentage <= 10) {
-          fontColor = theme.fontGyColor1;
-        } else {
-          fontColor = theme.whiteColor1;
-        }
-        var fontBodySmall = theme.fontBodyMedium ?? Font(size: 14, lineHeight: 22);
-        style = TextStyle(
-          fontSize: fontBodySmall.size,
-          color: fontColor,
-          overflow: TextOverflow.ellipsis,
-        );
-        label ??= Text('${(percentage).round()}%');
-        break;
-      case TDProgressTheme.circle:
-        var font = _getCircleTextFont();
-        var iconSize = font.size * 2.40;
-        style = TextStyle(
-          fontSize: font.size,
-          height: font.height,
-          color: theme.fontGyColor1,
-          overflow: TextOverflow.ellipsis,
-          fontWeight: FontWeight.bold,
-        );
-        switch (widget.status) {
-          case TDProgressStatus.success:
-            iconThemeData = IconThemeData(
-              color: theme.successNormalColor,
-              size: iconSize,
-            );
-            label ??= const Icon(TDIcons.check);
-            break;
-          case TDProgressStatus.error:
-            iconThemeData = IconThemeData(
-              color: theme.errorNormalColor,
-              size: iconSize,
-            );
-            label ??= const Icon(TDIcons.close);
-            break;
-          case TDProgressStatus.warning:
-            iconThemeData = IconThemeData(
-              color: theme.warningNormalColor,
-              size: iconSize,
-            );
-            label ??= const Icon(TDIcons.error);
-            break;
-          default:
-            label ??= Text('${(percentage).round()}%');
-        }
-        break;
-    }
-    if (iconThemeData != null) {
-      label = IconTheme(data: iconThemeData, child: label);
-    }
-    label = DefaultTextStyle(style: style.merge(widget.textStyle), child: label);
-    return label;
-  }
-
   @override
   Widget build(BuildContext context) {
     var theme = TDTheme.of(context);
@@ -336,6 +226,7 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
         return Row(children: list);
       case TDProgressTheme.plump:
         Widget? label;
+        EdgeInsets padding;
         if (widget.showLabel) {
           AlignmentGeometry alignment1;
           AlignmentGeometry alignment2;
@@ -344,10 +235,16 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
             alignment1 = Alignment.centerLeft;
             alignment2 = Alignment.centerRight;
             widthFactor = animationPercentage / 100;
+            padding = EdgeInsets.only(
+                right: widget.strokeCap == StrokeCap.butt ? theme.spacer8 : theme.spacer8 * widthFactor);
           } else {
             alignment1 = Alignment.centerRight;
             alignment2 = Alignment.centerLeft;
             widthFactor = 1 - animationPercentage / 100;
+            padding = EdgeInsets.only(
+                left: widget.strokeCap == StrokeCap.butt
+                    ? theme.spacer8
+                    : (strokeWidth / 2 + theme.spacer8) * widthFactor);
           }
           label = FractionallySizedBox(
             alignment: alignment1,
@@ -355,7 +252,7 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
             child: Align(
               alignment: alignment2,
               child: Padding(
-                padding: EdgeInsets.only(left: strokeWidth / 2 + theme.spacer8),
+                padding: padding,
                 child: _buildLabel(theme),
               ),
             ),
@@ -426,6 +323,106 @@ class _TProgressState extends AnimatedWidgetBaseState<TDProgress> {
         );
     }
   }
+
+  Font _getCircleTextFont() {
+    switch (widget.size) {
+      case TDProgressSize.large:
+        return Font(size: 36, lineHeight: 36);
+      case TDProgressSize.medium:
+        return Font(size: 20, lineHeight: 20);
+      case TDProgressSize.small:
+        return Font(size: 14, lineHeight: 14);
+    }
+  }
+
+  IconThemeData _getIconThemeData(TDThemeData theme, double size) {
+    switch (status) {
+      case TDProgressStatus.success:
+        return IconThemeData(color: theme.successNormalColor, size: size);
+      case TDProgressStatus.error:
+        return IconThemeData(color: theme.errorNormalColor, size: size);
+      case TDProgressStatus.warning:
+        return IconThemeData(color: theme.warningNormalColor, size: size);
+      default:
+        return IconThemeData(size: size);
+    }
+  }
+
+  /// 构建标签
+  Widget? _buildLabel(TDThemeData theme) {
+    var label = widget.label;
+    IconThemeData iconThemeData;
+    TextStyle style;
+    switch (widget.theme) {
+      case TDProgressTheme.line:
+        var fontBodyMedium = theme.fontBodyLarge ?? Font(size: 16, lineHeight: 24);
+        var size = fontBodyMedium.size;
+        style = TextStyle(
+          fontSize: size,
+          color: theme.fontGyColor1,
+          overflow: TextOverflow.ellipsis,
+        );
+        iconThemeData = _getIconThemeData(theme, size);
+        switch (widget.status) {
+          case TDProgressStatus.success:
+            label ??= const Icon(TDIcons.check_circle_filled);
+            break;
+          case TDProgressStatus.error:
+            label ??= const Icon(TDIcons.close_circle_filled);
+            break;
+          case TDProgressStatus.warning:
+            label ??= const Icon(TDIcons.error_circle_filled);
+            break;
+          default:
+            label ??= Text('${(percentage).round()}%');
+        }
+        break;
+      case TDProgressTheme.plump:
+        Color fontColor;
+        if (animationPercentage <= 10) {
+          fontColor = theme.fontGyColor1;
+        } else {
+          fontColor = theme.whiteColor1;
+        }
+        var fontBodySmall = theme.fontBodyMedium ?? Font(size: 14, lineHeight: 22);
+        var size = fontBodySmall.size;
+        style = TextStyle(
+          fontSize: size,
+          color: fontColor,
+          overflow: TextOverflow.ellipsis,
+        );
+        iconThemeData = IconThemeData(color: fontColor, size: size);
+        label ??= Text('${(percentage).round()}%');
+        break;
+      case TDProgressTheme.circle:
+        var font = _getCircleTextFont();
+        style = TextStyle(
+          fontSize: font.size,
+          height: font.height,
+          color: theme.fontGyColor1,
+          overflow: TextOverflow.ellipsis,
+          fontWeight: FontWeight.bold,
+        );
+        iconThemeData = _getIconThemeData(theme, font.size * 2.40);
+        switch (widget.status) {
+          case TDProgressStatus.success:
+            label ??= const Icon(TDIcons.check);
+            break;
+          case TDProgressStatus.error:
+            label ??= const Icon(TDIcons.close);
+            break;
+          case TDProgressStatus.warning:
+            label ??= const Icon(TDIcons.error);
+            break;
+          default:
+            label ??= Text('${(percentage).round()}%');
+        }
+        break;
+    }
+    label = IconTheme(data: iconThemeData, child: label);
+    label = DefaultTextStyle(style: style.merge(widget.textStyle), child: label);
+    return label;
+  }
 }
 
 typedef AnimationPainter = CustomPainter Function(Animation<double> animation);
@@ -465,12 +462,12 @@ class _TDProgressActionPaint extends StatefulWidget {
 /// 绘制active运动状态的进度条
 class _TDProgressActionPaintState extends State<_TDProgressActionPaint> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  late CurvedAnimation curvedAnimation;
+  late CurvedAnimation _curvedAnimation;
 
   @override
   void initState() {
     _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2));
-    curvedAnimation = CurvedAnimation(parent: _animationController, curve: const Cubic(.23, .99, .86, .2));
+    _curvedAnimation = CurvedAnimation(parent: _animationController, curve: const Cubic(.23, .99, .86, .2));
     if (widget.action) {
       _animationController.repeat();
     }
@@ -493,14 +490,14 @@ class _TDProgressActionPaintState extends State<_TDProgressActionPaint> with Sin
   @override
   void dispose() {
     _animationController.dispose();
-    curvedAnimation.dispose();
+    _curvedAnimation.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: widget.painter?.call(curvedAnimation),
+      painter: widget.painter?.call(_curvedAnimation),
       size: widget.size,
       isComplex: widget.isComplex,
       willChange: widget.willChange,
@@ -544,8 +541,8 @@ class _TDProgressLinePrinter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // 圆角超出矩形部分
-    var offset = Offset(strokeWidth / 2, 0);
+    // 处理延展超出矩形部分
+    var offset = strokeCap == StrokeCap.butt ? Offset.zero : Offset(strokeWidth / 2, 0);
 
     var paint = Paint()
       ..style = PaintingStyle.stroke
@@ -564,9 +561,10 @@ class _TDProgressLinePrinter extends CustomPainter {
     if (percentage == 0) {
       return;
     }
-    var percentageSize = Size((size.width * percentage / 100).clamp(p1.dx, p2.dx), size.height);
-    p2 = percentageSize.centerRight(Offset.zero);
+    var percentageSize = Size(size.width * percentage / 100, size.height);
+    p2 = Offset(p2.dx * percentage / 100, p2.dy);
 
+    // 进度条
     if (color.length >= 2) {
       Gradient gradient = LinearGradient(
         colors: color,
@@ -577,7 +575,6 @@ class _TDProgressLinePrinter extends CustomPainter {
     } else {
       paint.color = color[0];
     }
-    // 进度
     canvas.drawLine(p1, p2, paint);
 
     // action动画
