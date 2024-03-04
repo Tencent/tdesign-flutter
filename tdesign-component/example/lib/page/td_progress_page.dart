@@ -43,12 +43,12 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildProgressWithBase(BuildContext context) {
-    return  Padding(
-      padding: EdgeInsets.all(16.0),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: const [
           TDProgress(
             percentage: 80,
             theme: TDProgressTheme.line,
@@ -134,11 +134,11 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildLineStatus(BuildContext context) {
-    return  Padding(
-      padding: EdgeInsets.all(16.0),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: const [
           TDProgress(percentage: 80),
           SizedBox(height: 8),
           TDProgress(percentage: 80, status: TDProgressStatus.warning),
@@ -152,12 +152,12 @@ class _TDProgressPageState extends State<TDProgressPage> {
   }
 
   @Demo(group: 'progress')
-  Widget _buildLineActionAndGradient(BuildContext context){
-    return  Padding(
-      padding: EdgeInsets.all(16.0),
+  Widget _buildLineActionAndGradient(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: const [
           TDProgress(percentage: 80, status: TDProgressStatus.active),
           SizedBox(height: 8),
           TDProgress(
@@ -172,11 +172,11 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildPlumpStatus(BuildContext context) {
-    return  Padding(
-      padding: EdgeInsets.all(16.0),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: const [
           TDProgress(percentage: 80, theme: TDProgressTheme.plump),
           SizedBox(height: 8),
           TDProgress(percentage: 88, theme: TDProgressTheme.plump, status: TDProgressStatus.warning),
@@ -191,13 +191,13 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildCircleStatus(BuildContext context) {
-    return  Padding(
-      padding: EdgeInsets.all(16.0),
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      alignment: Alignment.centerLeft,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(),
+        children: const [
           TDProgress(percentage: 80, theme: TDProgressTheme.circle),
           SizedBox(height: 8),
           TDProgress(percentage: 80, theme: TDProgressTheme.circle, status: TDProgressStatus.warning),
@@ -212,15 +212,15 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildCircleSize(BuildContext context) {
-    return  Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      alignment: Alignment.topLeft,
+      child: Column(
+        children: const [
           TDProgress(percentage: 30, theme: TDProgressTheme.circle, size: TDProgressSize.small),
-          SizedBox(width: 8),
+          SizedBox(height: 8),
           TDProgress(percentage: 30, theme: TDProgressTheme.circle, size: TDProgressSize.medium),
-          SizedBox(width: 8),
+          SizedBox(height: 8),
           TDProgress(percentage: 75, theme: TDProgressTheme.circle, size: TDProgressSize.large),
         ],
       ),
