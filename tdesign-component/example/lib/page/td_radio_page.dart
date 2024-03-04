@@ -45,7 +45,65 @@ class TDRadioPageState extends State<TDRadioPage> {
             ExampleItem(desc: '纵向卡片单选框', builder: _verticalCardStyle),
             ExampleItem(desc: '横向卡片单选框', builder: _horizontalCardStyle),
           ]),
-        ]);
+        ],
+      test: [
+        ExampleItem(desc: '横向单选框-显示下划线', builder: (context){
+          return TDRadioGroup(
+            selectId: 'index:1',
+            direction: Axis.horizontal,
+            showDivider: true,
+            directionalTdRadios: const [
+              TDRadio(
+                id: '0',
+                title: '单选标题',
+                radioStyle: TDRadioStyle.circle,
+                showDivider: false,
+              ),
+              TDRadio(
+                id: '1',
+                title: '单选标题',
+                radioStyle: TDRadioStyle.circle,
+                showDivider: false,
+              ),
+              TDRadio(
+                id: '2',
+                title: '上限四字',
+                radioStyle: TDRadioStyle.circle,
+                showDivider: false,
+              ),
+            ],
+          );
+        }),
+        ExampleItem(desc: '横向单选框-自定义下划线', builder: (context){
+          return TDRadioGroup(
+            selectId: 'index:1',
+            direction: Axis.horizontal,
+            showDivider: true,
+            divider: const TDDivider(height: 20, color: Colors.red,),
+            directionalTdRadios: const [
+              TDRadio(
+                id: '0',
+                title: '单选标题',
+                radioStyle: TDRadioStyle.circle,
+                showDivider: false,
+              ),
+              TDRadio(
+                id: '1',
+                title: '单选标题',
+                radioStyle: TDRadioStyle.circle,
+                showDivider: false,
+              ),
+              TDRadio(
+                id: '2',
+                title: '上限四字',
+                radioStyle: TDRadioStyle.circle,
+                showDivider: false,
+              ),
+            ],
+          );
+        }),
+      ],
+    );
   }
 
   @Demo(group: 'radio')
@@ -175,6 +233,7 @@ class TDRadioPageState extends State<TDRadioPage> {
           child: const TDRadio(
             id: 'index:0',
             title: '单选',
+            showDivider: false,
           ),
         )
       ],
