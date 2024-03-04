@@ -28,6 +28,8 @@ class TDAlertDialog extends StatelessWidget {
     this.contentMaxHeight = 0,
     this.leftBtn,
     this.rightBtn,
+    this.leftBtnAction,
+    this.rightBtnAction,
     this.showCloseButton,
     TDDialogButtonStyle buttonStyle = TDDialogButtonStyle.normal,
   })  : assert((title != null || content != null)),
@@ -55,6 +57,8 @@ class TDAlertDialog extends StatelessWidget {
         rightBtn = null,
         _buttons = buttons,
         _buttonStyle = TDDialogButtonStyle.normal,
+        leftBtnAction = null,
+        rightBtnAction = null,
         super(key: key);
 
   /// 背景颜色
@@ -83,6 +87,12 @@ class TDAlertDialog extends StatelessWidget {
 
   /// 右侧按钮配置
   final TDDialogButtonOptions? rightBtn;
+
+  /// 左侧按钮默认点击
+  final Function()? leftBtnAction;
+
+  /// 右侧按钮默认点击
+  final Function()? rightBtnAction;
 
   /// 显示右上角关闭按钮
   final bool? showCloseButton;
@@ -123,10 +133,10 @@ class TDAlertDialog extends StatelessWidget {
   Widget _horizontalButtons(BuildContext context) {
     final left = leftBtn ??
         TDDialogButtonOptions(
-            title: '取消', theme: TDButtonTheme.light, action: () {});
+            title: '取消', theme: TDButtonTheme.light, action: leftBtnAction ?? () {});
     final right = rightBtn ??
         TDDialogButtonOptions(
-            title: '确定', theme: TDButtonTheme.primary, action: () {});
+            title: '确定', theme: TDButtonTheme.primary, action: rightBtnAction ?? () {});
     return _buttonStyle == TDDialogButtonStyle.text
         ? HorizontalTextButtons(leftBtn: left, rightBtn: right)
         : HorizontalNormalButtons(
