@@ -70,6 +70,7 @@
 ./bin/demo_tool generate --file ../lib/src/components/image/td_image.dart --name TDImage --folder-name image --output ../example/assets/api/ --only-api
 # imageViewer
 # progress
+./bin/demo_tool generate --folder ../lib/src/components/progress --name TDProgress --folder-name progress --output ../example/assets/api/ --only-api --get-comments
 # result
 # skeleton
 # sticky

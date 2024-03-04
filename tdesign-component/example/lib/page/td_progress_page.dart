@@ -43,7 +43,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildProgressWithBase(BuildContext context) {
-    return const Padding(
+    return  Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -134,7 +134,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildLineStatus(BuildContext context) {
-    return const Padding(
+    return  Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -153,7 +153,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildLineActionAndGradient(BuildContext context){
-    return const Padding(
+    return  Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -172,7 +172,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildPlumpStatus(BuildContext context) {
-    return const Padding(
+    return  Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -191,7 +191,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildCircleStatus(BuildContext context) {
-    return const Padding(
+    return  Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -212,7 +212,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildCircleSize(BuildContext context) {
-    return const Padding(
+    return  Padding(
       padding: EdgeInsets.all(16.0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
