@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import 'td_horizontal_tab_bar.dart';
 
-bool isCustomStyle = false;
-
 enum TDTabBarOutlineType {
   // 填充样式
   filled,
@@ -176,7 +174,8 @@ class _TDTabBarState extends State<TDTabBar> {
         ? TDTabBarIndicator(
                 context: context,
                 indicatorHeight: widget.indicatorHeight,
-                indicatorWidth: widget.indicatorWidth)
+                indicatorWidth: widget.indicatorWidth,
+    indicatorColor: widget.indicatorColor)
         : TDNoneIndicator();
   }
 }
@@ -186,9 +185,10 @@ class TDTabBarIndicator extends Decoration {
   final BuildContext? context;
   final double? indicatorWidth;
   final double? indicatorHeight;
+  final Color? indicatorColor;
 
   const TDTabBarIndicator(
-      {this.context, this.indicatorWidth, this.indicatorHeight});
+      {this.context, this.indicatorWidth, this.indicatorHeight, this.indicatorColor});
 
   @override
   BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
@@ -207,15 +207,8 @@ class _TDTabBarIndicatorPainter extends BoxPainter {
   final _paint = Paint();
 
   _TDTabBarIndicatorPainter(this.decoration, VoidCallback onChanged) {
-    if (isCustomStyle) {
-      _paint.shader = ui.Gradient.linear(Offset.zero, Offset.zero, <Color>[
-        TDTheme.of(decoration.context).brandNormalColor,
-        TDTheme.of(decoration.context).brandNormalColor,
-      ]);
-    } else {
-      /// 下标颜色
-      _paint.color = TDTheme.of(decoration.context).brandNormalColor;
-    }
+    /// 下标颜色
+    _paint.color = decoration.indicatorColor ?? TDTheme.of(decoration.context).brandNormalColor;
     _paint.strokeCap = StrokeCap.round;
   }
 
@@ -262,15 +255,8 @@ class _TDTabBarVerticalIndicatorPainter extends BoxPainter {
   final _paint = Paint();
 
   _TDTabBarVerticalIndicatorPainter(this.decoration, VoidCallback onChanged) {
-    if (isCustomStyle) {
-      _paint.shader = ui.Gradient.linear(Offset.zero, Offset.zero, <Color>[
-        TDTheme.of(decoration.context).brandNormalColor,
-        TDTheme.of(decoration.context).brandNormalColor,
-      ]);
-    } else {
-      /// 下标颜色
-      _paint.color = TDTheme.of(decoration.context).brandNormalColor;
-    }
+    /// 下标颜色
+    _paint.color = TDTheme.of(decoration.context).brandNormalColor;
     _paint.strokeCap = StrokeCap.round;
   }
 
