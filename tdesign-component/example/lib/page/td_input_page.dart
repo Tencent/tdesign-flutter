@@ -97,7 +97,40 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
             ExampleItem(desc: '标签外置样式', builder: _labelOutStyle),
             ExampleItem(desc: '自定义样式输入框', builder: _customStyle),
           ]),
-        ]);
+        ],
+    test: [
+
+      ExampleItem(desc: '长文本样式', builder: (context){
+        return Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.only(top: 16, bottom: 24),
+          width: MediaQuery.of(context).size.width,
+          color: Colors.white,
+          child: TDInput(
+            type: TDInputType.longText,
+            cardStyle: TDCardStyle.topText,
+            width: MediaQuery.of(context).size.width - 32,
+            cardStyleTopText: '标签文字',
+            controller: controller[22],
+            hintText: '请输入文字',
+            rightBtn: Icon(
+              TDIcons.error_circle_filled,
+              color: TDTheme.of(context).fontGyColor3,
+            ),
+            onBtnTap: () {
+              TDToast.showText('点击右侧按钮', context: context);
+            },
+            onChanged: (text) {
+              setState(() {});
+            },
+            onClearTap: () {
+              controller[22].clear();
+              setState(() {});
+            },
+          ),
+        );
+      }),
+    ],);
   }
 
   @Demo(group: 'input')
@@ -224,7 +257,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           leftLabel: '标签文字',
           controller: controller[5],
           hintText: '请输入文字',
-          maxNum: 10,
+          maxLength: 10,
           additionInfo: '最大输入10个字符',
           backgroundColor: Colors.white,
           onChanged: (text) {

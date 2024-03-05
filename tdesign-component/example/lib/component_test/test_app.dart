@@ -8,16 +8,19 @@ void main(){
         // appBar: TDNavBar(),
         appBar: PreferredSize(
           preferredSize: Size(MediaQuery.of(context).size.width,MediaQuery.of(context).size.height + MediaQuery.of(context).padding.top),
-          child: Padding(
+          child: Container(
             padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            color: Colors.red,
             child: TDNavBar(
                 useDefaultBack: false,
                 // screenAdaptation: false,
+                opacity: 0,
                 centerTitle: false,
                 titleMargin: 0,
                 titleWidget:  TDSearchBar(
                   needCancel: false,
                   autoHeight: true,
+                  backgroundColor: Colors.transparent,
                   padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
                   placeHolder: '搜索预设文案',
                   mediumStyle: true,
