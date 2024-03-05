@@ -123,7 +123,21 @@ class _TDTabsPageState extends State<TDTabsPage>
             ExampleItem(desc: '选项卡样式', builder: _buildItemWithOutlineNormal),
             ExampleItem(builder: _buildItemWithOutlineCard, padding: const EdgeInsets.only(top: 16)),
           ]),
-        ]);
+        ],
+    test: [
+      ExampleItem(desc: '自定义下标属性', builder: (context){
+        return TDTabBar(
+          tabs: subList(2),
+          controller: _tabController1,
+          backgroundColor: Colors.white,
+          showIndicator: true,
+          indicatorColor: Colors.red,
+          indicatorHeight: 20,
+          indicatorWidth: 10,
+          indicatorPadding: const EdgeInsets.only(left: 20),
+        );
+      }),
+    ],);
   }
 
   @Demo(group: 'tabs')
