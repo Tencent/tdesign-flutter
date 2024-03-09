@@ -38,6 +38,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
         children: [
           ExampleModule(title: '组件类型',
             children: [
+              ExampleItem(desc: '年份带生肖的选择器', builder: buildYearMonthDayNeedZodiac),
               ExampleItem(desc: '年月日选择器', builder: buildYearMonthDay),
               ExampleItem(desc: '年月选择器', builder: buildYearMonth),
               ExampleItem(desc: '月日选择器', builder: buildMonthDay),
@@ -53,6 +54,25 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             ],
           )
         ]);
+  }
+
+  @Demo(group: 'datetimePicker')
+  Widget buildYearMonthDayNeedZodiac(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showDatePicker(context, title: '选择时间',
+            needYearZodiac: true,
+            onConfirm: (selected) {
+              setState(() {
+                selected_1 = '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
+              });
+            },
+            dateStart: [1999, 01, 01],
+            dateEnd: [2023, 12, 31],
+            initialDate: [2012, 1, 1]);
+      },
+      child: buildSelectRow(context, selected_1, '选择时间'),
+    );
   }
 
   @Demo(group: 'datetimePicker')

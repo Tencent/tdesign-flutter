@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:lunar/lunar.dart';
 
 import '../../../tdesign_flutter.dart';
 import 'no_wave_behavior.dart';
@@ -32,6 +33,7 @@ class TDDatePicker extends StatefulWidget {
         this.showTitle = true,
         this.pickerHeight = 200,
         required this.pickerItemCount,
+        this.needYearZodiac = false,
         Key? key})
       : super(key: key);
 
@@ -94,6 +96,9 @@ class TDDatePicker extends StatefulWidget {
 
   /// 是否展示标题
   final bool showTitle;
+
+  // 是否需要展示年份的生肖
+  final bool needYearZodiac;
 
   /// 数据模型
   final DatePickerModel model;
@@ -275,9 +280,10 @@ class _TDDatePickerState extends State<TDDatePicker> {
                           index: index,
                           itemHeight: pickerHeight / widget.pickerItemCount,
                           content: whichLine == 3
-                              ? widget.model.mapping[whichLine] +
-                              widget.model.weekMap[widget.model.data[whichLine][index] - 1]
-                              : widget.model.data[whichLine][index].toString() + widget.model.mapping[whichLine],
+                              ? widget.model.mapping[whichLine] + widget.model.weekMap[widget.model.data[whichLine][index] - 1]
+                              : whichLine==0 && widget.needYearZodiac ?
+                                  widget.model.data[whichLine][index].toString() + Lunar.fromYmd(widget.model.data[whichLine][index], 1, 1).getYearShengXiao()+ widget.model.mapping[whichLine]
+                                  : widget.model.data[whichLine][index].toString() + widget.model.mapping[whichLine],
                           fixedExtentScrollController: widget.model.controllers[whichLine],
                           itemDistanceCalculator: widget.itemDistanceCalculator,
                         ));

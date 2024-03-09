@@ -16,6 +16,7 @@ class TDPicker {
       bool useMinute = false,
       bool useSecond = false,
       bool useWeekDay = false,
+      bool needYearZodiac = false,
       Color? barrierColor,
       List<int> dateStart = const [1970, 1, 1],
       List<int>? dateEnd,
@@ -42,6 +43,7 @@ class TDPicker {
               onCancel: onCancel,
               rightText: rightText,
               leftText: leftText,
+              needYearZodiac: needYearZodiac,
               model: DatePickerModel(
                 useYear: useYear,
                 useMonth: useMonth,
