@@ -181,7 +181,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           leftLabel: '标签文字',
           controller: controller[5],
           hintText: '请输入文字',
-          maxNum: 10,
+          maxLength: 10,
           additionInfo: '最大输入10个字符',
           backgroundColor: Colors.white,
           onChanged: (text) {
@@ -282,7 +282,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           hintText: '请输入文字',
           rightBtn: Container(
             alignment: Alignment.center,
-            width: 72,
+            width: 73,
             height: 28,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
@@ -501,7 +501,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           hintText: '输入手机号',
           backgroundColor: Colors.white,
           rightBtn: SizedBox(
-            width: 97.5,
+            width: 98,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -959,7 +959,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | type | TDInputType | TDInputType.normal | 输入框类型 |
 | size | TDInputSize | TDInputSize.large | 输入框规格 |
 | leftInfoWidth | double? | - | 输入框左侧的宽度（输入框有16dp的左侧padding，因而左侧部分不用考虑这16dp） |
-| maxNum | int? | 500 | 最大字数限制 |
+| maxLength | int? | 500 | 最大字数限制 |
 | additionInfo | String? | '' | 错误提示信息 |
 | additionInfoColor | Color? | - | 错误提示颜色 |
 | textAlign | TextAlign? | - | 文字对齐方向 |
@@ -968,6 +968,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | clearBtnColor | Color? | - | 右侧删除按钮颜色 |
 | contentAlignment | TextAlign | TextAlign.start | 内容对齐方向 |
 | rightWidget | Widget? | - | 右侧自定义组件 特殊类型时生效 |
+| showBottomDivider | bool | true | 是否展示底部分割线 |
 | cardStyle | TDCardStyle? | - | 卡片默认样式 |
 | cardStyleTopText | String? | - | 卡片模式上方文字 |
 | cardStyleBottomText | String? | - | 卡片模式下方文字 |

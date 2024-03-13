@@ -179,6 +179,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: const TDRadio(
             id: 'index:0',
             title: '单选',
+            showDivider: false,
           ),
         )
       ],
@@ -326,7 +327,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | customContentBuilder |  | - |  |
 | spacing |  | - |  |
 | cardMode |  | - |  |
-| showDivider |  | - |  |
+| showDivider | bool | - | 是否显示下划线 |
 | size |  | TDCheckBoxSize.small |  |
 | radioStyle | TDRadioStyle | TDRadioStyle.circle | 单选框按钮样式 |
 | contentDirection |  | TDContentDirection.right |  |
@@ -360,6 +361,8 @@ RadioGroup分组对象，继承自TDCheckboxGroup，字段含义与父类一致
 | spacing |  | - |  |
 | contentDirection |  | - |  |
 | onRadioGroupChange |  | - |  |
+| showDivider | bool | false | 是否显示下划线 |
+| divider | Widget? | - | 自定义下划线 |
 
 
   
