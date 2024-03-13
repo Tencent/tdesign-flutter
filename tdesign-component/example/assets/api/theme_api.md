@@ -14,6 +14,7 @@
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
+| needMultiTheme |  |   bool value, | 开启多套主题功能 |
 | defaultData |  |  | 获取默认主题数据，全局唯一 |
 | of |  |   BuildContext? context, | 获取主题数据，如果未传context则获取全局唯一的默认数据,   传了context，则获取最近的主题，取不到则会获取全局唯一默认数据 |
 | ofNullable |  |   BuildContext? context, | 获取主题数据，取不到则可空   传了context，则获取最近的主题，取不到或未传context则返回null, |
