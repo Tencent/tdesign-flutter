@@ -1,6 +1,7 @@
 
 name: Push Test
 on: push
+  branches: [develop, feature/actions, main]
 
 jobs:
   my-job:
