@@ -748,6 +748,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | frameColor | Color? | - | 边框颜色 |
 | textColor | Color? | - | 文字颜色 |
 | frameWidth | double? | - | 边框宽度 |
+| radius | BorderRadiusGeometry? | - | 自定义圆角 |
 
 
 #### 工厂构造方法
