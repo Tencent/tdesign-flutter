@@ -423,7 +423,7 @@ class MyApp extends StatelessWidget {
       return {
         for (var model in examplePageList)
           model.name: (context) => model.pageBuilder.call(context, model)
-      }..putIfAbsent('/', () => (context) => const TDButtonPage());
+      }..putIfAbsent('/', () => (context) => const MyHomePage(title: 'TDesgin Flutter 组件库'));
     } else {
       return const {};
     }
