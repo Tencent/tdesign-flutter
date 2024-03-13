@@ -13,4 +13,4 @@
 | trackOffColor | Color? | - | 关闭时轨道颜色 |
 | thumbContentOnColor | Color? | - | 开启时ThumbView的颜色 |
 | thumbContentOffColor | Color? | - | 关闭时ThumbView的颜色 |
-| onChanged | ValueChanged<bool>? | - | 改变事件 |
+| onChanged | OnSwitchChanged? | - | 改变事件 |
