@@ -15,5 +15,15 @@ jobs:
         FIRST_NAME: Luozf
         MIDDLE_NAME: The
         LAST_NAME: 12345
+      shell: bash
       run: |
         echo $MY_VAR $FIRST_NAME $MIDDLE_NAME $LAST_NAME.
+        result=$(curl ${{github.event.issue.pull_request.url}} -H "Authorization: token ${{ secrets.TD_FLUTTER }}")
+        headrefreg='"ref": "(release/[[:digit:]]{1,2}\.[[:digit:]]{1,2}\.[[:digit:]]{1,2})",'
+        if [[ $result =~ $headrefreg ]]
+        then
+          echo "属于 release pr 的 comment ${BASH_REMATCH[1]}" 
+        else
+          echo "不属于 release pr 的 comment" && exit 1
+        fi
+        echo "::set-output name=branch::${BASH_REMATCH[1]}"
