@@ -16,6 +16,7 @@
           child: const TDRadio(
             id: 'index:0',
             title: '单选',
+            showDivider: false,
           ),
         )
       ],
