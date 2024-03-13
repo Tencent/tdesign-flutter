@@ -2,13 +2,13 @@ name: Auto Release
 
 on:
   pull_request:
-    branches: [develop, feature/auto-release]
+    branches: [develop, feature/actions, main]
     types: [opened, synchronize, reopened, closed]
 #    paths:
 #      - "package.json"
   push:
     branches: [develop, feature/auto-release]
-    types: [opened, synchronize, reopened, closed]
+#    types: [opened, synchronize, reopened, closed]
 #    paths:
 #      - "package.json"
 #  issue_comment:
