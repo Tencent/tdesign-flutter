@@ -61,6 +61,7 @@
 ./bin/demo_tool generate --file ../lib/src/components/badge/td_badge.dart --name TDBadge --folder-name badge --output ../example/assets/api/ --only-api
 # cell
 # countDown
+./bin/demo_tool generate --folder ../lib/src/components/count_down --name TDCountDown,TDCountDownStyle --folder-name count-down --output ../example/assets/api/ --only-api
 # collapse
 # empty
 ./bin/demo_tool generate --file ../lib/src/components/empty/td_empty.dart --name TDEmpty --folder-name empty --output ../example/assets/api/ --only-api
