@@ -38,6 +38,37 @@ iOS请运行项目预览 ↓
     
 - 使用示例：`example/lib/page/`
 
+
+## 自定义主题
+
+设置自定义主题的方式:
+```
+    MaterialApp(
+      theme: ThemeData(
+        extensions: [TDThemeData.fromJson('test', testThemeConfig)!],
+      )
+      ……
+    )
+```
+自定义主题属性,常用可设置属性键值请参考[td_default_theme.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/lib/src/theme/td_default_theme.dart):
+```
+    String testThemeConfig = '''
+      {
+        "test": {
+            "color": {
+                "brandNormalColor": "#D7B386"
+            },
+            "font": {
+                "fontBodyMedium": {
+                    "size": 40,
+                    "lineHeight": 55
+                }
+            }
+        }
+    }
+  ''';
+```
+
 ## 基础库版本
 
 最低基础库版本：`^0.1.0`

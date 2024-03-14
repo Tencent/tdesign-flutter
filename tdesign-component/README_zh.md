@@ -36,6 +36,36 @@
     
 - 使用示例：`example/lib/page/`
 
+# 自定义主题
+
+设置自定义主题的方式:
+```
+    MaterialApp(
+      theme: ThemeData(
+        extensions: [TDThemeData.fromJson('test', testThemeConfig)!],
+      )
+      ……
+    )
+```
+自定义主题属性,常用可设置属性键值请参考[td_default_theme.dart](lib/src/theme/td_default_theme.dart):
+```
+    String testThemeConfig = '''
+      {
+        "test": {
+            "color": {
+                "brandNormalColor": "#D7B386"
+            },
+            "font": {
+                "fontBodyMedium": {
+                    "size": 40,
+                    "lineHeight": 55
+                }
+            }
+        }
+    }
+  ''';
+```
+
 # 开发规范
 - 组件命名规范：以TD为前缀，组件名称、API名称参考TDesign现有组件和API命名，可以根据flutter原生Widget的特点进行修改。组件API以满足设计要求和使用为准，可根据flutter特点做精简或定制。
 - 组件库用到的所有色值、圆角、字体字号等样式属性需全部定义在主题中。
