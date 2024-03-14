@@ -152,19 +152,19 @@ class TDBottomTabBar extends StatefulWidget {
           }
           if (basicType == TDBottomTabBarBasicType.icon) {
             for (final item in navigationTabs) {
-              if (item.selectedIcon == null && item.unselectedIcon == null) {
+              if (item.selectedIcon == null || item.unselectedIcon == null) {
                 throw FlutterError(
                     '[TDBottomTabBar] type is TDBottomBarType.icon,'
-                    'but has no set Icon widget.');
+                    'but has no set icon.');
               }
             }
           }
           if (basicType == TDBottomTabBarBasicType.iconText) {
             for (final item in navigationTabs) {
-              if (item.tabText == null) {
+              if (item.tabText == null || item.selectedIcon == null || item.unselectedIcon == null) {
                 throw FlutterError(
                     '[TDBottomTabBar] type is TDBottomBarType.iconText,'
-                    'but not set tabText.');
+                    'but not set tabText or icon.');
               }
             }
           }
