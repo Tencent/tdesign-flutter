@@ -6,7 +6,9 @@
       useVerticalDivider: false,
       navigationTabs: [
         TDBottomTabBarTabConfig(
-          iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBage: true,
             tdBadge: const TDBadge(TDBadgeType.redPoint),
@@ -19,14 +21,18 @@
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签2');
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签3');
