@@ -10,6 +10,7 @@
                     '${selected['day'].toString().padLeft(2, '0')} '
                     '${weekDayList[selected['weekDay']! - 1]}';
               });
+              Navigator.of(context).pop();
             },
             useWeekDay: true,
             dateStart: [1999, 01, 01],

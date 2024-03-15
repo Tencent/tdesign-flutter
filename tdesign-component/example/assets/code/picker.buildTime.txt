@@ -7,6 +7,7 @@
               setState(() {
                 selected_2 = '${data_2[0][selected[0]]} ${data_2[1][selected[1]]}';
               });
+              Navigator.of(context).pop();
             }, data: data_2);
       },
       child: buildSelectRow(context, selected_2, '选择时间'),
