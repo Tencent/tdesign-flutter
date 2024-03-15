@@ -9,7 +9,7 @@
           hintText: '请输入文字',
           rightBtn: Container(
             alignment: Alignment.center,
-            width: 72,
+            width: 73,
             height: 28,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),

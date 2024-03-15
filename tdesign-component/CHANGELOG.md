@@ -1,3 +1,37 @@
+// TODO: TDBottoomBar
+## 🌈 0.1.3 `2024-03-15`
+
+### 🚀 Features
+- `TDButton`:
+  - add: Support for customizing the corner radius size through TDButtonStyle.radius
+- `TDPicker`:
+  - add: Picker component scrolling on PC now supports mouse dragging
+- `TDSwitch`:
+  - add: onChanged now supports externally specifying whether to consume the event. If it has been consumed, it will no longer be processed internally ([#27](https://github.com/Tencent/tdesign-flutter/issues/27))
+- `TDBottomTabBar`:
+  - add: Added custom label text style, optimized labText and icon parameter passing ([#49](https://github.com/Tencent/tdesign-flutter/issues/49))
+
+### 🐞 Bug Fixes
+- `TDNavBar`:
+  - fix: The height of NavBar is now obtained in real time to prevent it from not being available at the beginning ([#34](https://github.com/Tencent/tdesign-flutter/issues/34))
+- `TDDialog`:
+  - fix: The contentColor parameter in DialogInfo was not passed in ([#37](https://github.com/Tencent/tdesign-flutter/pull/37))
+- `TDButton`:
+  - fix: The click disable effect of TDButton is invalid ([#44](https://github.com/Tencent/tdesign-flutter/issues/44))
+- `TDInput`:
+  - fix: The delete button inside does not automatically refresh ([#30](https://github.com/Tencent/tdesign-flutter/issues/30))
+  - fix: Fixed the mutual exclusion problem between the length of the input content and inputFormatters ([#38](https://github.com/Tencent/tdesign-flutter/issues/38))
+- `TDAlertDialog`:
+  - fix: The operation of the default button of the component is open ([#40](https://github.com/Tencent/tdesign-flutter/issues/40))
+- `TDRadio`:
+  - fix: Horizontal arrangement will force the addition of an underline ([#40](https://github.com/Tencent/tdesign-flutter/issues/40))
+- `TDTabBar`:
+  - fix: The indicatorColor does not take effect ([#31](https://github.com/Tencent/tdesign-flutter/issues/31))
+
+### 🚧 Others
+- Optimized the performance of commonly used components such as TDButton, TDText, TDTheme, etc.
+
+
 ## 🌈 0.1.2 `2024-01-08`
 
 ### 🚀 Features

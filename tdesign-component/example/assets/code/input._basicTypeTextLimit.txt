@@ -7,7 +7,7 @@
           leftLabel: '标签文字',
           controller: controller[5],
           hintText: '请输入文字',
-          maxNum: 10,
+          maxLength: 10,
           additionInfo: '最大输入10个字符',
           backgroundColor: Colors.white,
           onChanged: (text) {

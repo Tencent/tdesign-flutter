@@ -52,7 +52,7 @@ class TDInput extends StatelessWidget {
       this.type = TDInputType.normal,
       this.size = TDInputSize.large,
       double? leftInfoWidth,
-      this.maxNum = 500,
+      this.maxLength = 500,
       this.additionInfo = '',
       this.additionInfoColor,
       this.textAlign,
@@ -203,7 +203,7 @@ class TDInput extends StatelessWidget {
   final double? leftInfoWidth;
 
   /// 最大字数限制
-  final int? maxNum;
+  final int? maxLength;
 
   /// 错误提示信息
   final String? additionInfo;
@@ -342,9 +342,10 @@ class TDInput extends StatelessWidget {
                       hintText: hintText,
                       inputType: inputType,
                       onChanged: onChanged,
-                      inputFormatters: inputFormatters ?? [LengthLimitingTextInputFormatter(maxNum)],
+                      inputFormatters: inputFormatters,
                       inputDecoration: inputDecoration,
                       maxLines: maxLines,
+                      maxLength: maxLength,
                       focusNode: focusNode,
                       isCollapsed: true,
                       textAlign: contentAlignment,
@@ -610,7 +611,7 @@ class TDInput extends StatelessWidget {
               textAlign: textAlign,
               onChanged: onChanged,
               inputFormatters:
-                  inputFormatters ?? [LengthLimitingTextInputFormatter(maxNum)],
+                  inputFormatters ?? [LengthLimitingTextInputFormatter(maxLength)],
               inputDecoration: inputDecoration,
               maxLines: maxLines,
               focusNode: focusNode,
@@ -628,7 +629,7 @@ class TDInput extends StatelessWidget {
             alignment: Alignment.bottomRight,
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
             child: TDText(
-              '${controller?.text.length}/${maxNum}',
+              '${controller?.text.length}/${maxLength}',
               font: TDTheme.of(context).fontBodySmall,
               textColor: TDTheme.of(context).fontGyColor3,
             ),

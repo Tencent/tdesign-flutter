@@ -91,6 +91,8 @@
 | contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
 | leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
 | rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
+| leftBtnAction |  Function()? | - | 左侧按钮默认点击 |
+| rightBtnAction |  Function()? | - | 右侧按钮默认点击 |
 | showCloseButton | bool? | - | 显示右上角关闭按钮 |
 | buttonStyle |  | TDDialogButtonStyle.normal |  |
 

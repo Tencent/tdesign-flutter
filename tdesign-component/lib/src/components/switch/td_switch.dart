@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import '../../../tdesign_flutter.dart';
 import 'td_cupertino_switch.dart';
 
+/// 开关改变事件处理
+typedef OnSwitchChanged = bool Function(bool value);
+
 enum TDSwitchSize { large, medium, small }
 
 enum TDSwitchType { fill, text, loading, icon }
@@ -46,7 +49,7 @@ class TDSwitch extends StatefulWidget {
   final TDSwitchType? type;
 
   ///改变事件
-  final ValueChanged<bool>? onChanged;
+  final OnSwitchChanged? onChanged;
 
   @override
   State<StatefulWidget> createState() {
@@ -82,9 +85,12 @@ class TDSwitchState extends State<TDSwitch> {
       activeColor: trackOnColor,
       trackColor: trackOffColor,
       onChanged: (value) {
-        widget.onChanged?.call(value);
-        isOn = value;
-        setState(() {});
+        var process = widget.onChanged?.call(value) ?? false;
+        // 如果外部未处理,才需要自定刷新开关,如果已处理则不需要刷新
+        if (!process) {
+          isOn = value;
+          setState(() {});
+        }
       },
       thumbView: _getThumbView(thumbContentOnColor, thumbContentOffColor),
     );

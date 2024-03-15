@@ -5,6 +5,41 @@ toc: false
 docClass: timeline
 ---
 
+## 🌈 0.1.3 `2024-03-15`
+
+### 🚀 Features
+- `TDButton`:
+  - add:支持通过TDButtonStyle.radius自定义圆角大小
+- `TDPicker`:
+  - add: picker组件滚动PC支持鼠标拖拽
+- `TDSwitch`:
+  - add: onChanged支持外部指定是否消费事件,如果已消费则内部不再处理([#27](https://github.com/Tencent/tdesign-flutter/issues/27))
+- `TDBottomTabBar`:
+  - add: 增加自定义标签文字样式,优化labText和icon传递参数([#49](https://github.com/Tencent/tdesign-flutter/issues/49))
+
+
+### 🐞 Bug Fixes
+- `TDNavBar`:
+  - fix: NavBar顶部高度改为实时获取,防止最开始的时候拿不到([#34](https://github.com/Tencent/tdesign-flutter/issues/34))
+- `TDDialog`:
+  - fix: DialogInfo 中 contentColor 参数没有传进去 ([#37](https://github.com/Tencent/tdesign-flutter/pull/37))
+- `TDButton`:
+  - fix: TDButton点击禁用效果无效问题 ([#44](https://github.com/Tencent/tdesign-flutter/issues/44))
+- `TDInput`:
+  - fix: 删除按钮内部没有自动刷新的问题  ([#30](https://github.com/Tencent/tdesign-flutter/issues/30))
+  - fix: 修复输入内容长度和inputFormatters互斥问题  ([#38](https://github.com/Tencent/tdesign-flutter/issues/38))
+- `TDAlertDialog`:
+  - fix: 组件的默认按钮的操作为开放 ([#40](https://github.com/Tencent/tdesign-flutter/issues/40))
+- `TDRadio`:
+  - fix: 水平排列会强制添加下划线 ([#40](https://github.com/Tencent/tdesign-flutter/issues/40))
+- `TDTabBar`:
+  - fix: indicatorColor不生效问题 ([#31](https://github.com/Tencent/tdesign-flutter/issues/31))
+
+### 🚧 Others
+- 优化了TDButton,TDText,TDTheme等常用组件的性能
+
+
+
 ## 🌈 0.1.2 `2024-01-08`
 
 ### 🚀 Features
