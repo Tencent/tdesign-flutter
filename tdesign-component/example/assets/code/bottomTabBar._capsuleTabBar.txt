@@ -7,24 +7,24 @@
       useVerticalDivider: true,
       navigationTabs: [
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签1');
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签2');
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签3');
