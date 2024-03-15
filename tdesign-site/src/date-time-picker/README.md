@@ -31,6 +31,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               setState(() {
                 selected_1 = '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
@@ -57,6 +58,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 selected_2 = '${selected['year'].toString().padLeft(4, '0')}-'
                     '${selected['month'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useDay: false,
             dateStart: [1999, 01, 01],
@@ -84,6 +86,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 selected_3 = '${selected['month'].toString().padLeft(2, '0')}-'
                     '${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useYear: false,
             dateStart: [1999, 01, 01],
@@ -112,6 +115,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     '${selected['minute'].toString().padLeft(2, '0')}:'
                     '${selected['second'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useYear: false,
             useMonth: false,
@@ -148,6 +152,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     '${selected['minute'].toString().padLeft(2, '0')}:'
                     '${selected['second'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useHour: true,
             useMinute: true,
@@ -179,6 +184,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     '${selected['day'].toString().padLeft(2, '0')} '
                     '${weekDayList[selected['weekDay']! - 1]}';
               });
+              Navigator.of(context).pop();
             },
             useWeekDay: true,
             dateStart: [1999, 01, 01],
@@ -208,6 +214,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     '${selected['month'].toString().padLeft(2, '0')}-'
                     '${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
@@ -235,6 +242,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     '${selected['month'].toString().padLeft(2, '0')}-'
                     '${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
