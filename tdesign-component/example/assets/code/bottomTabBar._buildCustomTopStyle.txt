@@ -3,12 +3,13 @@
     return TDBottomTabBar(
       TDBottomTabBarBasicType.iconText,
       topBorder: const BorderSide(color: Colors.red, width: 5),
+      barHeight: 61,
       componentType: TDBottomTabBarComponentType.normal,
       useVerticalDivider: false,
       navigationTabs: [
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-          IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+         selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBage: true,
             tdBadge: const TDBadge(TDBadgeType.redPoint),
@@ -21,16 +22,16 @@
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-          IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+         selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签2');
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-          IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+         selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签3');

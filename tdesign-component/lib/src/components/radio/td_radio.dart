@@ -164,6 +164,12 @@ class TDRadioGroup extends TDCheckboxGroup {
   /// 勾选样式
   final TDRadioStyle? radioCheckStyle;
 
+  /// 是否显示下划线
+  final bool showDivider;
+
+  /// 自定义下划线
+  final Widget? divider;
+
   TDRadioGroup({
     Key? key,
     Widget? child, // 使用child 则请勿设置direction
@@ -180,6 +186,8 @@ class TDRadioGroup extends TDCheckboxGroup {
     double? spacing, // icon和文字距离
     TDContentDirection? contentDirection,
     OnRadioGroupChange? onRadioGroupChange, // 切换监听
+    this.showDivider = false,
+    this.divider,
   })  : assert(() {
           // 使用direction属性则必须配合directionalTdRadios，child字段无效
           if (direction != null && directionalTdRadios == null) {
@@ -301,9 +309,11 @@ class TDRadioGroup extends TDCheckboxGroup {
                                         .map((e) => Expanded(child: e))
                                         .toList(),
                                   ),
-                                  const TDDivider(
-                                    margin: EdgeInsets.only(left: 16),
-                                  )
+                                  if (showDivider)
+                                    divider ??
+                                        const TDDivider(
+                                          margin: EdgeInsets.only(left: 16),
+                                        )
                                 ],
                               ),
                       )),
