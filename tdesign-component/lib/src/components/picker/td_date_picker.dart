@@ -316,8 +316,9 @@ class _TDDatePickerState extends State<TDDatePicker> {
                     'second': widget.model.useSecond ? widget.model.secondFixedExtentScrollController.selectedItem : -1,
                   };
                   widget.onCancel!(selected);
+                } else {
+                  Navigator.of(context).pop();
                 }
-                Navigator.of(context).pop();
               },
               behavior: HitTestBehavior.opaque,
               child: TDText(widget.leftText,
