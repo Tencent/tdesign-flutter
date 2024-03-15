@@ -23,6 +23,9 @@ class TDInputView extends StatelessWidget {
   /// 最大输入行数
   final int? maxLines;
 
+  /// 最大输入长度
+  final int? maxLength;
+
   /// 获取或者取消焦点使用
   final FocusNode? focusNode;
 
@@ -75,6 +78,7 @@ class TDInputView extends StatelessWidget {
       this.inputFormatters,
       this.inputDecoration,
       this.maxLines,
+      this.maxLength,
       this.focusNode,
       this.hintTextStyle,
       this.cursorColor,
@@ -102,8 +106,10 @@ class TDInputView extends StatelessWidget {
       focusNode: focusNode,
       cursorColor: cursorColor,
       maxLines: maxLines,
+      maxLength: maxLength,
       style: textStyle,
       textAlign: textAlign ?? TextAlign.start,
+      buildCounter: _buildCounter,
       decoration: inputDecoration ??
           InputDecoration(
             hintText: hintText,
@@ -121,5 +127,9 @@ class TDInputView extends StatelessWidget {
             ),
           ),
     );
+  }
+
+  Widget? _buildCounter(BuildContext context, {required int currentLength, required bool isFocused, required int? maxLength}) {
+    return null;
   }
 }
