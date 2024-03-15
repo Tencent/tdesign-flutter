@@ -14,6 +14,9 @@ docClass: timeline
   - add: picker组件滚动PC支持鼠标拖拽
 - `TDSwitch`:
   - add: onChanged支持外部指定是否消费事件,如果已消费则内部不再处理([#27](https://github.com/Tencent/tdesign-flutter/issues/27))
+- `TDBottomTabBar`:
+  - add: 增加自定义标签文字样式,优化labText和icon传递参数([#49](https://github.com/Tencent/tdesign-flutter/issues/49))
+
 
 ### 🐞 Bug Fixes
 - `TDNavBar`:
