@@ -85,6 +85,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
               setState(() {
                 selected_1 = '${data_1[selected[0]]}';
               });
+              Navigator.of(context).pop();
             }, data: [data_1]);
       },
       child: buildSelectRow(context, selected_1, '选择地区'),
@@ -100,6 +101,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
               setState(() {
                 selected_2 = '${data_2[0][selected[0]]} ${data_2[1][selected[1]]}';
               });
+              Navigator.of(context).pop();
             }, data: data_2);
       },
       child: buildSelectRow(context, selected_2, '选择时间'),
@@ -115,6 +117,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
               setState(() {
                 selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
               });
+              Navigator.of(context).pop();
             },
             data: data_3,
             columnNum: 3,
@@ -133,6 +136,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
               setState(() {
                 selected_4 = '${data_1[selected[0]]}';
               });
+              Navigator.of(context).pop();
             }, data: [data_1]);
       },
       child: buildSelectRow(context, selected_4, '带标题选择器'),
@@ -148,6 +152,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
               setState(() {
                 selected_5 = '${data_1[selected[0]]}';
               });
+              Navigator.of(context).pop();
             }, data: [data_1]);
       },
       child: buildSelectRow(context, selected_5, '无标题选择器'),
