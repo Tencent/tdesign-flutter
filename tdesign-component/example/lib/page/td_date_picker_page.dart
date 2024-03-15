@@ -64,6 +64,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
               setState(() {
                 selected_1 = '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
@@ -83,6 +84,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                 selected_2 = '${selected['year'].toString().padLeft(4, '0')}-'
                     '${selected['month'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useDay: false,
             dateStart: [1999, 01, 01],
@@ -103,6 +105,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                 selected_3 = '${selected['month'].toString().padLeft(2, '0')}-'
                     '${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useYear: false,
             dateStart: [1999, 01, 01],
@@ -124,6 +127,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                     '${selected['minute'].toString().padLeft(2, '0')}:'
                     '${selected['second'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useYear: false,
             useMonth: false,
@@ -153,6 +157,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                     '${selected['minute'].toString().padLeft(2, '0')}:'
                     '${selected['second'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useHour: true,
             useMinute: true,
@@ -177,6 +182,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                     '${selected['day'].toString().padLeft(2, '0')} '
                     '${weekDayList[selected['weekDay']! - 1]}';
               });
+              Navigator.of(context).pop();
             },
             useWeekDay: true,
             dateStart: [1999, 01, 01],
@@ -198,6 +204,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                     '${selected['month'].toString().padLeft(2, '0')}-'
                     '${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
@@ -218,6 +225,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                     '${selected['month'].toString().padLeft(2, '0')}-'
                     '${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],

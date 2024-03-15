@@ -12,6 +12,7 @@ docClass: timeline
   - add:支持通过TDButtonStyle.radius自定义圆角大小
 - `TDPicker`:
   - add: picker组件滚动PC支持鼠标拖拽
+  - add: TDPicker和TDDatePicker组件,onConfirm内部不在默认pop弹窗组件,允许外部自定义处理;OnCancel不为空时不再自动pop组件
 - `TDSwitch`:
   - add: onChanged支持外部指定是否消费事件,如果已消费则内部不再处理([#27](https://github.com/Tencent/tdesign-flutter/issues/27))
 - `TDBottomTabBar`:
