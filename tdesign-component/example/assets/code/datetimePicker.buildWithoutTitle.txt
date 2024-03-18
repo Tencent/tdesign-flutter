@@ -9,6 +9,7 @@
                     '${selected['month'].toString().padLeft(2, '0')}-'
                     '${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
