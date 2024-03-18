@@ -12,6 +12,7 @@
                     '${selected['minute'].toString().padLeft(2, '0')}:'
                     '${selected['second'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useHour: true,
             useMinute: true,
