@@ -64,6 +64,7 @@ class TDTheme extends StatelessWidget {
         var data = Theme.of(context).extensions[TDThemeData] as TDThemeData?;
         return data ?? TDThemeData.defaultData();
       } catch (e) {
+      Log.w('TDTheme', 'TDTheme.of() error: $e');
         return TDThemeData.defaultData();
       }
   }
