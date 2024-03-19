@@ -70,6 +70,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildSingleHandleWithNumber(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        showThumbValue: true,
+        scaleFormatter: (value) => value.toInt().toString(),
         min: 0,
         max: 100,
       ),
@@ -180,6 +182,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            showThumbValue: true,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
