@@ -1,28 +1,5 @@
 ## API
-### IconTextTypeConfig
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| tabText | String | - | tab文本 |
-| selectedIcon | Widget? | - | 选中时图标 |
-| unselectedIcon | Widget? | - | 未选中时图标 |
-| useDefaultIcon | bool? | - | 使用TDESIGN 默认icon |
-
-```
-```
- ### IconTypeConfig
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| selectedIcon | Widget? | - | 选中时图标 |
-| unselectedIcon | Widget? | - | 未选中时图标 |
-| useDefaultIcon | bool? | - | 使用TDESIGN 默认icon |
-
-```
-```
- ### BadgeConfig
+### BadgeConfig
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -40,9 +17,11 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | onTap | GestureTapCallback? | - | tab点击事件 |
-| iconTextTypeConfig | IconTextTypeConfig? | - | 图标+文本样式 basicType为iconText时必填 |
-| iconTypeConfig | IconTypeConfig? | - | 纯图标样式 basicType为icon时必填 |
-| tabText | String? | - | 纯文本样式 basicType为text时必填 |
+| selectedIcon | Widget? | - | 选中时图标 |
+| unselectedIcon | Widget? | - | 未选中时图标 |
+| tabText | String? | - | tab文本 |
+| selectTabTextStyle | TextStyle? | - | 文本已选择样式 basicType为text时必填 |
+| unselectTabTextStyle | TextStyle? | - | 文本未选择样式 basicType为text时必填 |
 | badgeConfig | BadgeConfig? | - | 消息配置 |
 | popUpButtonConfig | TDBottomTabBarPopUpBtnConfig? | - | 弹窗配置 |
 

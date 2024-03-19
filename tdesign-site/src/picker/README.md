@@ -31,6 +31,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               setState(() {
                 selected_1 = '${data_1[selected[0]]}';
               });
+              Navigator.of(context).pop();
             }, data: [data_1]);
       },
       child: buildSelectRow(context, selected_1, '选择地区'),
@@ -53,6 +54,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               setState(() {
                 selected_2 = '${data_2[0][selected[0]]} ${data_2[1][selected[1]]}';
               });
+              Navigator.of(context).pop();
             }, data: data_2);
       },
       child: buildSelectRow(context, selected_2, '选择时间'),
@@ -75,6 +77,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               setState(() {
                 selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
               });
+              Navigator.of(context).pop();
             },
             data: data_3,
             columnNum: 3,
@@ -101,6 +104,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               setState(() {
                 selected_4 = '${data_1[selected[0]]}';
               });
+              Navigator.of(context).pop();
             }, data: [data_1]);
       },
       child: buildSelectRow(context, selected_4, '带标题选择器'),
@@ -123,6 +127,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               setState(() {
                 selected_5 = '${data_1[selected[0]]}';
               });
+              Navigator.of(context).pop();
             }, data: [data_1]);
       },
       child: buildSelectRow(context, selected_5, '无标题选择器'),
@@ -210,7 +215,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| showDatePicker |  |   required null context,  required String title,  required DatePickerCallback? onConfirm,  DatePickerCallback? onCancel,  bool useYear,  bool useMonth,  bool useDay,  bool useHour,  bool useMinute,  bool useSecond,  bool useWeekDay,  Color? barrierColor,  List<int> dateStart,  List<int>? dateEnd,  List<int>? initialDate,  Duration duration,  double pickerHeight,  int pickerItemCount, | 显示时间选择器 |
+| showDatePicker |  |   required null context,  required String title,  required DatePickerCallback? onConfirm,  DatePickerCallback? onCancel,  bool useYear,  bool useMonth,  bool useDay,  bool useHour,  bool useMinute,  bool useSecond,  bool useWeekDay,  Color? barrierColor,  List<int> dateStart,  List<int>? dateEnd,  List<int>? initialDate,  String rightText,  String leftText,  Duration duration,  double pickerHeight,  int pickerItemCount, | 显示时间选择器 |
 | showMultiPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List<List<String>> data,  List<int>? initialIndexes,  Duration duration,  Color? barrierColor,  double pickerHeight,  int pickerItemCount, | 显示多级选择器 |
 | showMultiLinkedPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required Map data,  required int columnNum,  required List initialData,  Duration duration,  Color? barrierColor,  double pickerHeight,  int pickerItemCount, | 显示多级联动选择器 |
 

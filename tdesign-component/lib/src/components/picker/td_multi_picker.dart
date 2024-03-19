@@ -202,8 +202,9 @@ class TDMultiPicker extends StatelessWidget {
                     for (var i = 0; i < controllers.length; i++)
                       controllers[i].selectedItem
                   ]);
+                } else {
+                  Navigator.of(context).pop();
                 }
-                Navigator.of(context).pop();
               },
               behavior: HitTestBehavior.opaque,
               child: TDText(
@@ -239,7 +240,6 @@ class TDMultiPicker extends StatelessWidget {
                     controllers[i].selectedItem
                 ]);
               }
-              Navigator.of(context).pop();
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
@@ -543,8 +543,9 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               onTap: () {
                 if (widget.onCancel != null) {
                   widget.onCancel!(model.selectedData);
+                } else {
+                  Navigator.of(context).pop();
                 }
-                Navigator.of(context).pop();
               },
               behavior: HitTestBehavior.opaque,
               child: TDText(
@@ -577,7 +578,6 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               if (widget.onConfirm != null) {
                 widget.onConfirm!(model.selectedData);
               }
-              Navigator.of(context).pop();
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(

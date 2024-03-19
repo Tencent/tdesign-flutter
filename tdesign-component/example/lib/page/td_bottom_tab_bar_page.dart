@@ -4,6 +4,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
+
+Widget? _selectedIcon;
+
+Widget? _unSelectedIcon;
+
 class TDBottomTabBarPage extends StatelessWidget {
   const TDBottomTabBarPage({Key? key}) : super(key: key);
 
@@ -13,7 +18,20 @@ class TDBottomTabBarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(
+    _selectedIcon = Icon(
+      TDIcons.app,
+      size: 20,
+      color: TDTheme.of(context).brandNormalColor,
+    );
+    _unSelectedIcon = Icon(
+      TDIcons.app,
+      size: 20,
+      color: TDTheme.of(context).brandNormalColor,
+    );
+    return MediaQuery(
+      // 去掉底部安全区域,保证示例展示正常
+      data: MediaQuery.of(context).copyWith(padding: EdgeInsets.zero),
+      child: ExamplePage(
         title: tdTitle(context),
         desc: '用于在不同功能模块之间进行快速切换，位于页面底部。',
         exampleCodeGroup: 'bottomTabBar',
@@ -22,79 +40,79 @@ class TDBottomTabBarPage extends StatelessWidget {
             title: '组件类型',
             children: [
               ExampleItem(
-                ignoreCode: true,
+                  ignoreCode: true,
                   desc: '纯文本标签栏', builder: (context){
-                    return Container(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: CodeWrapper(builder: _textTypeTabBar),);
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: CodeWrapper(builder: _textTypeTabBar),);
               }),
               ExampleItem(
-                ignoreCode: true,builder: (context){
-                    return Container(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: CodeWrapper(builder: _textTypeTabBar3tabs),);
+                  ignoreCode: true,builder: (context){
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: CodeWrapper(builder: _textTypeTabBar3tabs),);
               }),
               ExampleItem(
-                ignoreCode: true, builder: (context){
-                    return Container(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: CodeWrapper(builder: _textTypeTabBar4tabs),);
+                  ignoreCode: true, builder: (context){
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: CodeWrapper(builder: _textTypeTabBar4tabs),);
               }),
               ExampleItem(
-                ignoreCode: true, builder: (context){
-                    return Container(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: CodeWrapper(builder: _textTypeTabBar5tabs),);
+                  ignoreCode: true, builder: (context){
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: CodeWrapper(builder: _textTypeTabBar5tabs),);
               }),
               ExampleItem(
-                ignoreCode: true,
+                  ignoreCode: true,
                   desc: '图标加文本标签栏', builder: (context){
-                    return Container(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: CodeWrapper(builder: _iconTextTypeTabBar),);
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: CodeWrapper(builder: _iconTextTypeTabBar),);
               }),
               ExampleItem(
-                ignoreCode: true, builder: (context){
-                    return Container(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: CodeWrapper(builder: _iconTextTypeTabBar3tabs),);
+                  ignoreCode: true, builder: (context){
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: CodeWrapper(builder: _iconTextTypeTabBar3tabs),);
               }),
               ExampleItem(
-                ignoreCode: true, builder: (context){
-                    return Container(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: CodeWrapper(builder: _iconTextTypeTabBar4tabs),);
+                  ignoreCode: true, builder: (context){
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: CodeWrapper(builder: _iconTextTypeTabBar4tabs),);
               }),
               ExampleItem(
-                ignoreCode: true, builder: (context){
-                    return Container(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: CodeWrapper(builder: _iconTextTypeTabBar5tabs),);
+                  ignoreCode: true, builder: (context){
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: CodeWrapper(builder: _iconTextTypeTabBar5tabs),);
               }),
               ExampleItem(
-                ignoreCode: true,
+                  ignoreCode: true,
                   desc: '纯图标标签栏',builder: (context){
-                    return Container(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: CodeWrapper(builder: _iconTypeTabBar),);
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: CodeWrapper(builder: _iconTypeTabBar),);
               }),
               ExampleItem(
-                ignoreCode: true,builder: (context){
-                    return Container(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: CodeWrapper(builder: _iconTypeTabBar3tabs),);
+                  ignoreCode: true,builder: (context){
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: CodeWrapper(builder: _iconTypeTabBar3tabs),);
               }),
               ExampleItem(
-                ignoreCode: true,builder: (context){
-                    return Container(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: CodeWrapper(builder: _iconTypeTabBar4tabs),);
+                  ignoreCode: true,builder: (context){
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: CodeWrapper(builder: _iconTypeTabBar4tabs),);
               }),
               ExampleItem(
-                ignoreCode: true,builder: (context){
-                    return Container(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: CodeWrapper(builder: _iconTypeTabBar5tabs),);
+                  ignoreCode: true,builder: (context){
+                return Container(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: CodeWrapper(builder: _iconTypeTabBar5tabs),);
               }),
               ExampleItem(
                 desc: '双层级文本标签栏',
@@ -129,11 +147,12 @@ class TDBottomTabBarPage extends StatelessWidget {
             ),
           ]),
         ],
-    test: [
-      ExampleItem(
-          desc: '自定义上边线样式',
-          builder: _buildCustomTopStyle)
-    ],
+        test: [
+          ExampleItem(
+              desc: '自定义上边线样式',
+              builder: _buildCustomTopStyle)
+        ],
+      ),
     );
   }
 
@@ -253,21 +272,25 @@ class TDBottomTabBarPage extends StatelessWidget {
         ]);
   }
 
+
+
   @Demo(group: 'bottomTabBar')
   Widget _iconTextTypeTabBar(BuildContext context) {
+
     return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-                IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签1');
             },
           ),
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-                IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig(tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签2');
             },
@@ -275,28 +298,29 @@ class TDBottomTabBarPage extends StatelessWidget {
         ]);
   }
 
+
   @Demo(group: 'bottomTabBar')
   Widget _iconTextTypeTabBar3tabs(BuildContext context) {
     return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
         useVerticalDivider: false,
         navigationTabs: [
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig(tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签1');
             },
           ),
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig(tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签2');
             },
           ),
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig(tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签2');
             },
@@ -309,30 +333,30 @@ class TDBottomTabBarPage extends StatelessWidget {
     return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
         useVerticalDivider: false,
         navigationTabs: [
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig(tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签1');
             },
           ),
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig(tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签2');
             },
           ),
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig( tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签2');
             },
           ),
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig( tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签2');
             },
@@ -345,37 +369,37 @@ class TDBottomTabBarPage extends StatelessWidget {
     return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
         useVerticalDivider: false,
         navigationTabs: [
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig( tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签1');
             },
           ),
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig( tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签2');
             },
           ),
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig( tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签2');
             },
           ),
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig( tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签2');
             },
           ),
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig( tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签2');
             },
@@ -389,12 +413,15 @@ class TDBottomTabBarPage extends StatelessWidget {
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签1');
               }),
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签2');
               })
@@ -407,17 +434,23 @@ class TDBottomTabBarPage extends StatelessWidget {
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签1');
               }),
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签2');
               }),
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签2');
               }),
@@ -430,22 +463,30 @@ class TDBottomTabBarPage extends StatelessWidget {
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签1');
               }),
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签2');
               }),
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签2');
               }),
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签2');
               }),
@@ -458,27 +499,37 @@ class TDBottomTabBarPage extends StatelessWidget {
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签1');
               }),
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签2');
               }),
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签2');
               }),
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签2');
               }),
           TDBottomTabBarTabConfig(
-              iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
               onTap: () {
                 onTapTab(context, '标签2');
               }),
@@ -583,7 +634,9 @@ class TDBottomTabBarPage extends StatelessWidget {
       useVerticalDivider: false,
       navigationTabs: [
         TDBottomTabBarTabConfig(
-          iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBage: true,
             tdBadge: const TDBadge(TDBadgeType.redPoint),
@@ -596,14 +649,18 @@ class TDBottomTabBarPage extends StatelessWidget {
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签2');
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTypeConfig: IconTypeConfig(useDefaultIcon: true),
+
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签3');
@@ -621,8 +678,8 @@ class TDBottomTabBarPage extends StatelessWidget {
       useVerticalDivider: false,
       navigationTabs: [
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBage: true,
             tdBadge: const TDBadge(TDBadgeType.redPoint),
@@ -635,16 +692,16 @@ class TDBottomTabBarPage extends StatelessWidget {
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签2');
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签3');
@@ -663,24 +720,24 @@ class TDBottomTabBarPage extends StatelessWidget {
       useVerticalDivider: true,
       navigationTabs: [
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签1');
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签2');
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-              IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签3');
@@ -695,12 +752,13 @@ class TDBottomTabBarPage extends StatelessWidget {
     return TDBottomTabBar(
       TDBottomTabBarBasicType.iconText,
       topBorder: const BorderSide(color: Colors.red, width: 5),
+      barHeight: 61,
       componentType: TDBottomTabBarComponentType.normal,
       useVerticalDivider: false,
       navigationTabs: [
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-          IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+         selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBage: true,
             tdBadge: const TDBadge(TDBadgeType.redPoint),
@@ -713,16 +771,16 @@ class TDBottomTabBarPage extends StatelessWidget {
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-          IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+         selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签2');
           },
         ),
         TDBottomTabBarTabConfig(
-          iconTextTypeConfig:
-          IconTextTypeConfig(useDefaultIcon: true, tabText: '标签'),
+         selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
             onTapTab(context, '标签3');

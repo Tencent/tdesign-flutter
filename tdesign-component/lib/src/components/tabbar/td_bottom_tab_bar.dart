@@ -53,58 +53,6 @@ enum TDBottomTabBarOutlineType {
   capsule
 }
 
-/// 图标加文本标签栏配置
-class IconTextTypeConfig {
-  IconTextTypeConfig(
-      {required this.tabText,
-      this.selectedIcon,
-      this.unselectedIcon,
-      this.useDefaultIcon})
-      : assert(() {
-          if ((!(useDefaultIcon ?? false) &&
-              (selectedIcon == null || unselectedIcon == null))) {
-            throw FlutterError(
-                '[IconTextTypeConfig] you should set useDefaultIcon true'
-                ' when not set selectedIcon or unselectedIcon');
-          }
-          return true;
-        }());
-
-  /// tab文本
-  final String tabText;
-
-  /// 选中时图标
-  final Widget? selectedIcon;
-
-  /// 未选中时图标
-  final Widget? unselectedIcon;
-
-  /// 使用TDESIGN 默认icon
-  final bool? useDefaultIcon;
-}
-
-/// 纯图标标签栏配置
-class IconTypeConfig {
-  IconTypeConfig({this.selectedIcon, this.unselectedIcon, this.useDefaultIcon})
-      : assert(() {
-          if ((!(useDefaultIcon ?? false) &&
-              (selectedIcon == null || unselectedIcon == null))) {
-            throw FlutterError(
-                '[IconTypeConfig] you should set useDefaultIcon true'
-                ' when not set selectedIcon or unselectedIcon');
-          }
-          return true;
-        }());
-
-  /// 选中时图标
-  final Widget? selectedIcon;
-
-  /// 未选中时图标
-  final Widget? unselectedIcon;
-
-  /// 使用TDESIGN 默认icon
-  final bool? useDefaultIcon;
-}
 
 /// 飘新配置
 class BadgeConfig {
@@ -132,9 +80,11 @@ class BadgeConfig {
 class TDBottomTabBarTabConfig {
   TDBottomTabBarTabConfig({
     required this.onTap,
-    this.iconTextTypeConfig,
-    this.iconTypeConfig,
+    this.selectedIcon,
+    this.unselectedIcon,
     this.tabText,
+    this.selectTabTextStyle,
+    this.unselectTabTextStyle,
     this.badgeConfig,
     this.popUpButtonConfig,
   }) : assert(() {
@@ -147,14 +97,20 @@ class TDBottomTabBarTabConfig {
           return true;
         }());
 
-  /// 图标+文本样式 basicType为iconText时必填
-  final IconTextTypeConfig? iconTextTypeConfig;
+  /// 选中时图标
+  final Widget? selectedIcon;
 
-  /// 纯图标样式 basicType为icon时必填
-  final IconTypeConfig? iconTypeConfig;
+  /// 未选中时图标
+  final Widget? unselectedIcon;
 
-  /// 纯文本样式 basicType为text时必填
+  /// tab文本
   final String? tabText;
+
+  /// 文本已选择样式 basicType为text时必填
+  final TextStyle? selectTabTextStyle;
+
+  /// 文本未选择样式 basicType为text时必填
+  final TextStyle? unselectTabTextStyle;
 
   /// tab点击事件
   final GestureTapCallback? onTap;
@@ -190,25 +146,25 @@ class TDBottomTabBar extends StatefulWidget {
             for (final item in navigationTabs) {
               if (item.tabText == null) {
                 throw FlutterError(
-                    '[TDBottomTabBar] type is TDBottomBarType.text, but not set text.');
+                    '[TDBottomTabBar] type is TDBottomBarType.text, but not set tabText.');
               }
             }
           }
           if (basicType == TDBottomTabBarBasicType.icon) {
             for (final item in navigationTabs) {
-              if (item.iconTypeConfig == null) {
+              if (item.selectedIcon == null || item.unselectedIcon == null) {
                 throw FlutterError(
                     '[TDBottomTabBar] type is TDBottomBarType.icon,'
-                    'but has no iconTypeConfig instance.');
+                    'but has no set icon.');
               }
             }
           }
           if (basicType == TDBottomTabBarBasicType.iconText) {
             for (final item in navigationTabs) {
-              if (item.iconTextTypeConfig == null) {
+              if (item.tabText == null || item.selectedIcon == null || item.unselectedIcon == null) {
                 throw FlutterError(
                     '[TDBottomTabBar] type is TDBottomBarType.iconText,'
-                    'but has no iconTextConfig instance.');
+                    'but not set tabText or icon.');
               }
             }
           }
@@ -480,7 +436,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
       BuildContext context, BadgeConfig? badgeConfig, bool isInOrOutCapsule) {
     Widget child = Container();
     if (basiceType == TDBottomTabBarBasicType.text) {
-      child = _textItem(context, itemConfig.tabText!, isSelected,
+      child = _textItem(context, itemConfig, isSelected,
           TDTheme.of(context).fontTitleMedium!);
     }
     if (basiceType == TDBottomTabBarBasicType.expansionPanel) {
@@ -496,53 +452,24 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
                   : TDTheme.of(context).fontGyColor1,
             ),
             const SizedBox(width: 5),
-            _textItem(context, itemConfig.tabText!, isSelected,
+            _textItem(context, itemConfig, isSelected,
                 TDTheme.of(context).fontTitleMedium!)
           ],
         );
       } else {
-        child = _textItem(context, itemConfig.tabText!, isSelected,
+        child = _textItem(context, itemConfig, isSelected,
             TDTheme.of(context).fontTitleMedium!);
       }
     }
     if (basiceType == TDBottomTabBarBasicType.icon) {
-      var selectedIcon = itemConfig.iconTypeConfig!.selectedIcon;
-      var unSelectedIcon = itemConfig.iconTypeConfig!.unselectedIcon;
-      if (itemConfig.iconTypeConfig!.useDefaultIcon ?? false) {
-        /// selectedIcon = const TabIcon(isSelected: true, isPureIcon: true);
-        selectedIcon = Icon(
-          TDIcons.app,
-          size: 24,
-          color: TDTheme.of(context).brandNormalColor,
-        );
-        unSelectedIcon = Icon(
-          TDIcons.app,
-          size: 24,
-          color: TDTheme.of(context).fontGyColor1,
-        );
-      }
+      var selectedIcon = itemConfig.selectedIcon;
+      var unSelectedIcon = itemConfig.unselectedIcon;
       child = isSelected ? selectedIcon! : unSelectedIcon!;
     }
 
     if (basiceType == TDBottomTabBarBasicType.iconText) {
-      var selectedIcon = itemConfig.iconTextTypeConfig!.selectedIcon;
-      var unSelectedIcon = itemConfig.iconTextTypeConfig!.unselectedIcon;
-      if (itemConfig.iconTextTypeConfig!.useDefaultIcon ?? false) {
-        var size = 24.0;
-        if (isInOrOutCapsule) {
-          size = 20.0;
-        }
-        selectedIcon = Icon(
-          TDIcons.app,
-          size: size,
-          color: TDTheme.of(context).brandNormalColor,
-        );
-        unSelectedIcon = Icon(
-          TDIcons.app,
-          size: size,
-          color: TDTheme.of(context).fontGyColor1,
-        );
-      }
+      var selectedIcon = itemConfig.selectedIcon;
+      var unSelectedIcon = itemConfig.unselectedIcon;
       child = Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -550,7 +477,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
           isSelected ? selectedIcon! : unSelectedIcon!,
           _textItem(
             context,
-            itemConfig.iconTextTypeConfig!.tabText,
+            itemConfig,
             isSelected,
             TDTheme.of(context).fontBodyExtraSmall!,
           )
@@ -573,11 +500,12 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
   }
 
   Widget _textItem(
-      BuildContext context, String text, bool isSelected, Font font) {
+      BuildContext context, TDBottomTabBarTabConfig config, bool isSelected, Font font) {
     return TDText(
-      text,
+      config.tabText,
       font: font,
       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+      style: isSelected ? config.selectTabTextStyle : config.unselectTabTextStyle,
       textColor: isSelected
           ? TDTheme.of(context).brandNormalColor
           : TDTheme.of(context).fontGyColor1,

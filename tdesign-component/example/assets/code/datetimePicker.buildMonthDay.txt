@@ -8,6 +8,7 @@
                 selected_3 = '${selected['month'].toString().padLeft(2, '0')}-'
                     '${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useYear: false,
             dateStart: [1999, 01, 01],

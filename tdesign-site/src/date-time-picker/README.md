@@ -31,6 +31,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               setState(() {
                 selected_1 = '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
@@ -57,6 +58,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 selected_2 = '${selected['year'].toString().padLeft(4, '0')}-'
                     '${selected['month'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useDay: false,
             dateStart: [1999, 01, 01],
@@ -84,6 +86,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 selected_3 = '${selected['month'].toString().padLeft(2, '0')}-'
                     '${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useYear: false,
             dateStart: [1999, 01, 01],
@@ -112,6 +115,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     '${selected['minute'].toString().padLeft(2, '0')}:'
                     '${selected['second'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useYear: false,
             useMonth: false,
@@ -148,6 +152,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     '${selected['minute'].toString().padLeft(2, '0')}:'
                     '${selected['second'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             useHour: true,
             useMinute: true,
@@ -179,6 +184,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     '${selected['day'].toString().padLeft(2, '0')} '
                     '${weekDayList[selected['weekDay']! - 1]}';
               });
+              Navigator.of(context).pop();
             },
             useWeekDay: true,
             dateStart: [1999, 01, 01],
@@ -208,6 +214,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     '${selected['month'].toString().padLeft(2, '0')}-'
                     '${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
@@ -235,6 +242,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     '${selected['month'].toString().padLeft(2, '0')}-'
                     '${selected['day'].toString().padLeft(2, '0')}';
               });
+              Navigator.of(context).pop();
             },
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
@@ -256,6 +264,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | title | String | - | 选择器标题 |
 | onConfirm | DatePickerCallback? | - | 选择器确认按钮回调 |
+| rightText | String | '确认' | 右侧按钮文案 |
+| leftText | String | '取消' | 左侧按钮文案 |
 | onCancel | DatePickerCallback? | - | 选择器取消按钮回调 |
 | backgroundColor | Color? | - | 背景颜色 |
 | titleDividerColor | Color? | - | 标题分割线颜色 |
@@ -283,7 +293,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| showDatePicker |  |   required null context,  required String title,  required DatePickerCallback? onConfirm,  DatePickerCallback? onCancel,  bool useYear,  bool useMonth,  bool useDay,  bool useHour,  bool useMinute,  bool useSecond,  bool useWeekDay,  Color? barrierColor,  List<int> dateStart,  List<int>? dateEnd,  List<int>? initialDate,  Duration duration,  double pickerHeight,  int pickerItemCount, | 显示时间选择器 |
+| showDatePicker |  |   required null context,  required String title,  required DatePickerCallback? onConfirm,  DatePickerCallback? onCancel,  bool useYear,  bool useMonth,  bool useDay,  bool useHour,  bool useMinute,  bool useSecond,  bool useWeekDay,  Color? barrierColor,  List<int> dateStart,  List<int>? dateEnd,  List<int>? initialDate,  String rightText,  String leftText,  Duration duration,  double pickerHeight,  int pickerItemCount, | 显示时间选择器 |
 | showMultiPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List<List<String>> data,  List<int>? initialIndexes,  Duration duration,  Color? barrierColor,  double pickerHeight,  int pickerItemCount, | 显示多级选择器 |
 | showMultiLinkedPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required Map data,  required int columnNum,  required List initialData,  Duration duration,  Color? barrierColor,  double pickerHeight,  int pickerItemCount, | 显示多级联动选择器 |
 
