@@ -251,6 +251,10 @@ class TestWidget extends StatelessWidget {
             textColor:
                 TDTheme.of(context).successNormalColor, // 明确使用内层主题，必须传context
           ),
+          const TDButton(
+            text:  '使用内层赋值主题',
+            theme: TDButtonTheme.primary,
+          ),
           TDText(
             '使用默认主题',
             font:

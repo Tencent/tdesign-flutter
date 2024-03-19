@@ -115,25 +115,21 @@ class _TDButtonState extends State<TDButton> {
   TDButtonStyle? _innerDisableStyle;
   double? _width;
   double? _height;
-  EdgeInsetsGeometry? _padding;
   EdgeInsetsGeometry? _margin;
   Alignment? _alignment;
-  Font? _textFont;
   TextStyle? _textStyle;
   double? _iconSize;
 
-  _updateParams(){
+  _updateParams() async {
     _buttonStatus = widget.disabled ? TDButtonStatus.disable : TDButtonStatus.defaultState;
     _innerDefaultStyle = widget.style ?? _innerDefaultStyle;
     _innerActiveStyle = widget.activeStyle ?? _innerActiveStyle;
     _innerDisableStyle = widget.disableStyle ?? _innerDisableStyle;
     _width = _getWidth();
     _height = _getHeight();
-    _padding = _getPadding();
     _margin = _getMargin();
     _alignment =  widget.shape == TDButtonShape.filled || widget.isBlock ? Alignment.center : null;
     if (widget.text != null) {
-      _textFont = _getTextFont();
       _textStyle = widget.disabled ? widget.disableTextStyle : widget.textStyle;
     }
     if(widget.icon != null){
@@ -165,7 +161,7 @@ class _TDButtonState extends State<TDButton> {
       width: _width,
       height: _height,
       alignment: _alignment,
-      padding: _padding,
+      padding: _getPadding(),
       margin: _margin,
       decoration: BoxDecoration(
         color: style.backgroundColor,
@@ -234,7 +230,7 @@ class _TDButtonState extends State<TDButton> {
     if (widget.text != null) {
       var text = TDText(
         widget.text!,
-        font: _textFont,
+        font: _getTextFont(),
         textColor:
         style.textColor ?? TDTheme.of(context).fontGyColor1,
         style: _textStyle,
