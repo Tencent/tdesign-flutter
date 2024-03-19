@@ -1,4 +1,4 @@
-
+// TODO: TDBottoomBar
 ## 🌈 0.1.3 `2024-03-15`
 
 ### 🚀 Features
@@ -6,8 +6,11 @@
   - add: Support for customizing the corner radius size through TDButtonStyle.radius
 - `TDPicker`:
   - add: Picker component scrolling on PC now supports mouse dragging
+  - add: For TDPicker and TDDatePicker components, the onConfirm no longer defaults to pop up the component internally, allowing external customization; when OnCancel is not empty, the component will not automatically pop.
 - `TDSwitch`:
   - add: onChanged now supports externally specifying whether to consume the event. If it has been consumed, it will no longer be processed internally ([#27](https://github.com/Tencent/tdesign-flutter/issues/27))
+- `TDBottomTabBar`:
+  - add: Added custom label text style, optimized labText and icon parameter passing ([#49](https://github.com/Tencent/tdesign-flutter/issues/49))
 
 ### 🐞 Bug Fixes
 - `TDNavBar`:
