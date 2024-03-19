@@ -22,7 +22,7 @@
 ./bin/demo_tool generate --folder ../lib/src/components/sidebar --name TDSideBar,TDSideBarItem, --folder-name side-bar --output ../example/assets/api/ --only-api
 # steps
 # tabbar
-./bin/demo_tool generate --file ../lib/src/components/tabbar/td_bottom_tab_bar.dart --name TDBottomTabBar,IconTextTypeConfig,IconTypeConfig,BadgeConfig,TDBottomTabBarTabConfig,TDBottomTabBarPopUpBtnConfig,TDBottomTabBarPopUpShapeConfig,PopUpMenuItem --folder-name tab-bar --output ../example/assets/api/ --only-api
+./bin/demo_tool generate --file ../lib/src/components/tabbar/td_bottom_tab_bar.dart --name TDBottomTabBar,BadgeConfig,TDBottomTabBarTabConfig,TDBottomTabBarPopUpBtnConfig,TDBottomTabBarPopUpShapeConfig,PopUpMenuItem --folder-name tab-bar --output ../example/assets/api/ --only-api
 # tabs
 ./bin/demo_tool generate --folder ../lib/src/components/tabs --name TDTabBar,TDTab,TDTabBarView --folder-name tabs --output ../example/assets/api/ --only-api
 

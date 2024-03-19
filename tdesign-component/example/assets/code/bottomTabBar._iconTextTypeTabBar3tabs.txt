@@ -3,23 +3,23 @@
     return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
         useVerticalDivider: false,
         navigationTabs: [
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig(tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签1');
             },
           ),
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig(tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签2');
             },
           ),
-          TDBottomTabBarTabConfig(
-            iconTextTypeConfig:
-            IconTextTypeConfig(tabText: '标签', useDefaultIcon: true),
+          TDBottomTabBarTabConfig(tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签2');
             },

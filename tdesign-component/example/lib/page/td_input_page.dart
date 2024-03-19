@@ -23,7 +23,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
 
   @override
   void initState() {
-    for(var i = 0; i < 27; i++) {
+    for(var i = 0; i < 28; i++) {
       controller.add(TextEditingController());
     }
     super.initState();
@@ -111,7 +111,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
             cardStyle: TDCardStyle.topText,
             width: MediaQuery.of(context).size.width - 32,
             cardStyleTopText: '标签文字',
-            controller: controller[22],
+            controller: controller[27],
             hintText: '请输入文字',
             rightBtn: Icon(
               TDIcons.error_circle_filled,
