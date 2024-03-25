@@ -4,6 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import '../../../tdesign_flutter.dart';
 
+Map<String, String> timeUnitMap = {
+  'DD': '天',
+  'HH': '时',
+  'mm': '分',
+  'ss': '秒',
+  'SSS': '毫秒',
+};
+
+RegExp timeReg = RegExp(r'D{2}|H{2}|m{2}|s{2}|S{3}');
+
+String toDigits(int n, int l) => n.toString().padLeft(l, '0');
+
+String getMark(String format, String? type) {
+  var part = format.split(type ?? '')[1];
+  if (part.isEmpty) {
+    return '';
+  }
+  return part.split('')[0];
+}
+
 /// 倒计时组件
 class TDCountDown extends StatefulWidget {
   const TDCountDown({
@@ -53,14 +73,6 @@ class TDCountDown extends StatefulWidget {
 
   /// 倒计时结束时触发回调
   final VoidCallback? onFinish;
-
-  static Map<String, String> timeUnitMap = {
-    'DD': '天',
-    'HH': '时',
-    'mm': '分',
-    'ss': '秒',
-    'SSS': '毫秒',
-  };
 
   @override
   _TDCountDownState createState() => _TDCountDownState();
@@ -119,19 +131,18 @@ class _TDCountDownState extends State<TDCountDown>
   }
 
   List<Widget> _buildTimeWidget(BuildContext context) {
-    var reg = RegExp(r'D{2}|H{2}|m{2}|s{2}|S{3}');
     var format = widget.millisecond
         ? '${widget.format.replaceAll(':SSS', '')}:SSS'
         : widget.format;
-    var matches = reg.allMatches(format);
+    var matches = timeReg.allMatches(format);
     var timeMap = _getTimeMap(_time);
     return matches
         .map((match) {
           var timeType = match.group(0);
-          var timeData = TDCountDown.timeUnitMap[timeType] ?? '';
+          var timeData = timeUnitMap[timeType] ?? '';
           return _buildTextWidget(
               timeMap[timeType] ?? '0',
-              widget.splitWithUnit ? timeData : _getMark(format, timeType),
+              widget.splitWithUnit ? timeData : getMark(format, timeType),
               widget.style ??
                   TDCountDownStyle.generateStyle(context,
                       size: widget.size,
@@ -180,7 +191,6 @@ class _TDCountDownState extends State<TDCountDown>
 
   Map<String, String> _getTimeMap(int m) {
     var duration = Duration(milliseconds: m);
-    String toDigits(int n, int l) => n.toString().padLeft(l, '0');
     var days = toDigits(duration.inDays, 2);
     var hours = toDigits(duration.inHours, 2);
     var minutes = toDigits(duration.inMinutes.remainder(60), 2);
@@ -193,13 +203,5 @@ class _TDCountDownState extends State<TDCountDown>
       'ss': seconds,
       'SSS': milliseconds
     };
-  }
-
-  String _getMark(String format, String? type) {
-    var part = format.split(type ?? '')[1];
-    if (part.isEmpty) {
-      return '';
-    }
-    return part.split('')[0];
   }
 }
