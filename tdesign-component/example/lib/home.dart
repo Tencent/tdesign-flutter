@@ -10,11 +10,16 @@ import 'web/web.dart' if (dart.library.io) 'web/web_replace.dart' as web;
 
 var _kShowTodoComponent = false;
 
+/// 切换主题的回调
+typedef OnThemeChange = Function(TDThemeData themeData);
+
 /// 示例首页
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title, this.onThemeChange}) : super(key: key);
 
   final String title;
+
+  final OnThemeChange? onThemeChange;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -23,11 +28,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool useConch = false;
 
+  late TDThemeData _themeData;
+
   @override
   void initState() {
     super.initState();
     TDExampleRoute.init();
     sideBarExamplePage.forEach(TDExampleRoute.add);
+    _themeData = TDThemeData.defaultData();
   }
 
   @override
@@ -38,52 +46,99 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
     return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title),
-          actions: ScreenUtil.isWebLargeScreen(context)
-              ? null
-              : [
-                  GestureDetector(
-                    child: Container(
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(
-                        right: 16,
-                      ),
-                      child: TDText(
-                        '关于',
-                        textColor: TDTheme.of(context).whiteColor1,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushNamed(context, TDExampleRoute.aboutPath);
-                    },
-                  )
-                ],
-        ),
-        body: _buildBody(context));
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+        actions: ScreenUtil.isWebLargeScreen(context)
+            ? null
+            : [
+          GestureDetector(
+            child: Container(
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(
+                right: 16,
+              ),
+              child: TDText(
+                '关于',
+                textColor: TDTheme.of(context).whiteColor1,
+              ),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, TDExampleRoute.aboutPath);
+            },
+          )
+        ],
+      ),
+      body: _buildBody(context),
+    );
   }
 
   Widget _buildBody(BuildContext context) {
     if (ScreenUtil.isWebLargeScreen(context)) {
       return const web.WebMainBody();
     }
-    return Center(
-      // Center is a layout widget. It takes a single child and positions it
-      // in the middle of the parent.
+    return SafeArea(
+        child: Center(
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: _buildChildren(context),
         ),
       ),
-    );
+    ));
   }
 
   List<Widget> _buildChildren(BuildContext context) {
     var children = <Widget>[];
+
+    // 添加切换主题的按钮
+    children.add(Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          TDTheme(
+              data: TDThemeData.defaultData(),
+              child: TDButton(
+                text: '默认主题',
+                theme: TDButtonTheme.primary,
+                onTap: () {
+                  widget.onThemeChange?.call(TDTheme.defaultData());
+                  // setState(() {
+                  //   _themeData = TDTheme.defaultData();
+                  // });
+                },
+              )),
+          TDTheme(
+              data: TDThemeData.fromJson('green', greenThemeConfig) ?? TDThemeData.defaultData(),
+              child: TDButton(
+                  text: '绿色主题',
+                  theme: TDButtonTheme.primary,
+                  onTap: () async {
+                    var jsonString = await rootBundle.loadString('assets/theme.json');
+                    var newData = TDThemeData.fromJson('green', jsonString);
+                    widget.onThemeChange?.call(newData ?? TDTheme.defaultData());
+                    // setState(() {
+                    //   _themeData = newData ?? TDTheme.defaultData();
+                    // });
+                  })),
+          TDTheme(
+              data: TDThemeData.fromJson('red', greenThemeConfig) ?? TDThemeData.defaultData(),
+              child: TDButton(
+                  text: '红色主题',
+                  theme: TDButtonTheme.danger,
+                  onTap: () async {
+                    var jsonString = await rootBundle.loadString('assets/theme.json');
+                    var newData = TDThemeData.fromJson('red', jsonString);
+                    widget.onThemeChange?.call(newData ?? TDTheme.defaultData());
+                  })),
+        ],
+      ),
+    ));
+
     exampleMap.forEach((key, value) {
       children.add(Container(
         alignment: Alignment.topLeft,
@@ -131,48 +186,22 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       });
     });
+
     return children;
   }
 }
 
-// 测试页面
-class TestPage extends StatelessWidget {
-  const TestPage({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TDText(
-              '测试文本',
-              textColor: TDTheme.of(context).brandNormalColor,
-              font: TDTheme.of(context).fontBodyMedium,
-            ),
-            const TDButton(
-              text: '演示按钮',
-              theme: TDButtonTheme.primary,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-String testThemeConfig = '''
+String greenThemeConfig = '''
   {
-    "test": {
+    "green": {
         "color": {
-            "brandNormalColor": "#F6685D"
-        },
-        "font": {
-            "fontBodyMedium": {
-                "size": 40,
-                "lineHeight": 55
-            }
+            "brandNormalColor": "#45c58b"
+        }
+    },
+    "red": {
+        "color": {
+            "brandNormalColor": "#ff0000"
         }
     }
 }
