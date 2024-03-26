@@ -33,9 +33,14 @@ class TDCountDownStyle {
     this.timePadding,
     this.timeMargin,
     this.timeBox,
-    this.timeFont,
+    this.timeFontFamily,
+    this.timeFontSize,
+    this.timeFontHeight,
+    this.timeFontWeight,
     this.timeColor,
-    this.splitFont,
+    this.splitFontSize,
+    this.splitFontHeight,
+    this.splitFontWeight,
     this.splitColor,
     this.space,
   });
@@ -54,15 +59,30 @@ class TDCountDownStyle {
 
   /// 时间容器装饰
   BoxDecoration? timeBox;
-  
+
+  /// 时间字体
+  FontFamily? timeFontFamily;
+
   /// 时间字体尺寸
-  Font? timeFont;
+  double? timeFontSize;
+
+  /// 时间字体行高
+  double? timeFontHeight;
+
+  /// 时间字体粗细
+  FontWeight? timeFontWeight;
 
   /// 时间字体颜色
   Color? timeColor;
-    
+
   /// 分隔符字体尺寸
-  Font? splitFont;
+  double? splitFontSize;
+
+  /// 分隔符字体行高
+  double? splitFontHeight;
+
+  /// 分隔符字体粗细
+  FontWeight? splitFontWeight;
 
   /// 分隔符字体颜色
   Color? splitColor;
@@ -72,33 +92,51 @@ class TDCountDownStyle {
 
   /// 生成默认样式
   TDCountDownStyle.generateStyle(
-    BuildContext context,
-    {
-      TDCountDownSize? size,
-      TDCountDownTheme? theme,
-      bool? splitWithUnit,
-    }
-  ) {
+    BuildContext context, {
+    TDCountDownSize? size,
+    TDCountDownTheme? theme,
+    bool? splitWithUnit,
+  }) {
+    // timeFontFamily = TDTheme.of(context).numberFontFamily;
+    var font;
     switch (size ?? TDCountDownSize.medium) {
       case TDCountDownSize.small:
-        timeWidth = 20;
-        timeHeight = 20;
-        timeFont = TDTheme.of(context).fontMarkSmall;
-        splitFont = TDTheme.of(context).fontMarkExtraSmall;
+        timeWidth = timeHeight = 20;
+        if (theme == TDCountDownTheme.defaultTheme) {
+          font = TDTheme.of(context).fontBodyMedium;
+          timeFontSize = splitFontSize = font?.size ?? 14;
+          timeFontHeight = splitFontHeight = font?.height ?? 22;
+        } else {
+          font = TDTheme.of(context).fontBodySmall;
+          timeFontSize = splitFontSize = font?.size ?? 12;
+          timeFontHeight = splitFontHeight = null;
+        }
         space = TDTheme.of(context).spacer4 / 2;
         break;
       case TDCountDownSize.medium:
-        timeWidth = 24;
-        timeHeight = 24;
-        timeFont = TDTheme.of(context).fontMarkMedium;
-        splitFont = TDTheme.of(context).fontMarkSmall;
+        timeWidth = timeHeight = 24;
+        if (theme == TDCountDownTheme.defaultTheme) {
+          font = TDTheme.of(context).fontBodyLarge;
+          timeFontSize = splitFontSize = font?.size ?? 16;
+          timeFontHeight = splitFontHeight = font?.height ?? 24;
+        } else {
+          font = TDTheme.of(context).fontBodyMedium;
+          timeFontSize = splitFontSize = font?.size ?? 14;
+          timeFontHeight = splitFontHeight = null;
+        }
         space = TDTheme.of(context).spacer8 / 2;
         break;
       case TDCountDownSize.large:
-        timeWidth = 28;
-        timeHeight = 28;
-        timeFont = TDTheme.of(context).fontMarkLarge;
-        splitFont = TDTheme.of(context).fontMarkMedium;
+        timeWidth = timeHeight = 28;
+        if (theme == TDCountDownTheme.defaultTheme) {
+          font = TDTheme.of(context).fontBodyExtraLarge;
+          timeFontSize = splitFontSize = font?.size ?? 18;
+          timeFontHeight = splitFontHeight = font?.height ?? 26;
+        } else {
+          font = TDTheme.of(context).fontBodyLarge;
+          timeFontSize = splitFontSize = font?.size ?? 16;
+          timeFontHeight = splitFontHeight = null;
+        }
         space = TDTheme.of(context).spacer12 / 2;
     }
 
@@ -132,4 +170,3 @@ class TDCountDownStyle {
     }
   }
 }
-
