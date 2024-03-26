@@ -122,9 +122,9 @@ class _TDButtonState extends State<TDButton> {
 
   _updateParams() async {
     _buttonStatus = widget.disabled ? TDButtonStatus.disable : TDButtonStatus.defaultState;
-    _innerDefaultStyle = widget.style ?? _innerDefaultStyle;
-    _innerActiveStyle = widget.activeStyle ?? _innerActiveStyle;
-    _innerDisableStyle = widget.disableStyle ?? _innerDisableStyle;
+    _innerDefaultStyle = widget.style;
+    _innerActiveStyle = widget.activeStyle;
+    _innerDisableStyle = widget.disableStyle;
     _width = _getWidth();
     _height = _getHeight();
     _margin = _getMargin();
@@ -157,6 +157,9 @@ class _TDButtonState extends State<TDButton> {
   @override
   Widget build(BuildContext context) {
 
+    var text = widget.text;
+    var color = TDTheme.of(context).brandNormalColor;
+    print('text:${text}, brandNormalColor:$color');
     Widget display = Container(
       width: _width,
       height: _height,
