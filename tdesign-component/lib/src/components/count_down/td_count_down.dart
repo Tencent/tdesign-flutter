@@ -168,9 +168,10 @@ class _TDCountDownState extends State<TDCountDown>
         child: Center(
             child: Text(time,
                 style: TextStyle(
-                    fontSize: style.timeFont?.size,
-                    // height: style.timeFont?.height,
-                    fontWeight: style.timeFont?.fontWeight,
+                    fontFamily: style.timeFontFamily?.fontFamily,
+                    fontSize: style.timeFontSize,
+                    height: style.timeFontHeight,
+                    fontWeight: style.timeFontWeight,
                     color: style.timeColor))),
       ),
     ];
@@ -179,9 +180,9 @@ class _TDCountDownState extends State<TDCountDown>
         SizedBox(width: style.space),
         Text(split,
             style: TextStyle(
-                fontSize: style.splitFont?.size,
-                // height: style.splitFont?.height,
-                fontWeight: style.splitFont?.fontWeight,
+                fontSize: style.splitFontSize,
+                height: style.splitFontHeight,
+                fontWeight: style.splitFontWeight,
                 color: style.splitColor)),
         SizedBox(width: style.space),
       ]);
