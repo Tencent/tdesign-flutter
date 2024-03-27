@@ -226,7 +226,7 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
         /// 设置字体
         Map<String, dynamic>? fontFamilyMap = curThemeMap['fontFamily'];
         fontFamilyMap?.forEach((key, value) {
-          theme.fontFamilyMap[key] = FontFamily(fontFamily: value['fontFamily']);
+          theme.fontFamilyMap[key] = FontFamily.fromJson(value);
         });
 
         /// 设置阴影
