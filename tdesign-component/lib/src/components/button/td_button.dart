@@ -156,10 +156,6 @@ class _TDButtonState extends State<TDButton> {
 
   @override
   Widget build(BuildContext context) {
-
-    var text = widget.text;
-    var color = TDTheme.of(context).brandNormalColor;
-    print('text:${text}, brandNormalColor:$color');
     Widget display = Container(
       width: _width,
       height: _height,
