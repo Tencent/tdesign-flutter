@@ -300,6 +300,12 @@ class TDDefaultTheme {
             "spacer64": 64,
             "spacer96": 96,
             "spacer160": 160
+        },
+        "fontFamily": {
+            "numberFontFamily": {
+				      "fontFamily": "TCloudNumber",
+				      "package": "tdesign_flutter"
+			      }
         }
     }
 }

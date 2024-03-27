@@ -179,7 +179,7 @@ class TDText extends StatelessWidget {
   TextStyle? getTextStyle(BuildContext? context, {double? height, Color? backgroundColor}) {
     var textFont = font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
 
-    var stylePackage = package;
+    var stylePackage = package ?? fontFamily?.package;
     var styleFontFamily = style?.fontFamily ?? fontFamily?.fontFamily;
     var realFontWeight = style?.fontWeight ?? fontWeight;
     // Flutter 3.0之后，iOS w500之下字体不生效，需要替换字体
