@@ -25,27 +25,40 @@ void main() {
   sideBarExamplePage.forEach(examplePageList.add);
 }
 
-/// TDesign Flutter 组件库示例
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  late TDThemeData _themeData;
+
+  @override
+  void initState() {
+    super.initState();
+    _themeData = TDThemeData.defaultData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return
-        // 在此处导入默认主题
-        TDTheme(
-      data: TDThemeData.defaultData(),
-      child: MaterialApp(
-        title: 'TDesign Flutter Example',
-        theme: ThemeData(
-            // extensions: [TDThemeData.defaultData().copyWith(colorMap: {'brandNormalColor':Colors.yellow})],
-            colorScheme: ColorScheme.light(primary: TDTheme.of(context).brandNormalColor)),
-        home: PlatformUtil.isWeb ? null : const MyHomePage(title: 'TDesign Flutter 组件库'),
-        // : const TestPage(),
-        onGenerateRoute: TDExampleRoute.onGenerateRoute,
-        routes: _getRoutes(),
-      ),
+    // 使用多套主题
+    TDTheme.needMultiTheme();
+
+    return MaterialApp(
+      title: 'TDesign Flutter Example',
+      theme: ThemeData(
+          extensions: [_themeData],
+          colorScheme: ColorScheme.light(primary: _themeData.brandNormalColor)),
+      home: PlatformUtil.isWeb ? null :  MyHomePage(title: 'TDesign Flutter 组件库', onThemeChange: (themeData){
+        setState(() {
+          _themeData = themeData;
+        });
+      },),
+      onGenerateRoute: TDExampleRoute.onGenerateRoute,
+      routes: _getRoutes(),
     );
   }
 
