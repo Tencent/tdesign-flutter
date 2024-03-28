@@ -51,19 +51,26 @@ void genThemeJson({required List<ThemeItem> items, required String output}) {
         if (key.startsWith('--td-$element-color')) {
           var newKey = convertToCamelCase(key);
           var colorString = value.toString().replaceAll(';', '');
-          if (toColorInt(colorString) != null) {
-            filterMap[newKey] = colorString;
-          }
+          filterMap[newKey] = colorString;
           break;
         }
       }
     });
 
-    var themeMap = {};
+    var refMap = <String, String> {};
     filterMap.forEach((key, value) {
-      // print('$key:$value');
-      themeMap['color'] = filterMap;
+      if(value is String) {
+        if (value.contains('var(')) {
+          var field = value.replaceAll('var(', '')
+          .replaceAll(')', '');
+          refMap[key] = convertToCamelCase(field);
+        }
+      }
     });
+
+    var themeMap = {};
+    themeMap['ref'] = refMap;
+    themeMap['color'] = filterMap;
 
     outputMap[item.name] = themeMap;
   }
