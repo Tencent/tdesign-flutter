@@ -192,8 +192,9 @@ class TDDefaultTheme {
         },
         "fontFamily": {
             "numberFontFamily": {
-                "fontFamily": "DINAlternate-B"
-            }
+				      "fontFamily": "TCloudNumber",
+				      "package": "tdesign_flutter"
+			      }
         },
         "radius": {
             "radiusSmall": 3,
@@ -304,12 +305,6 @@ class TDDefaultTheme {
             "spacer64": 64,
             "spacer96": 96,
             "spacer160": 160
-        },
-        "fontFamily": {
-            "numberFontFamily": {
-				      "fontFamily": "TCloudNumber",
-				      "package": "tdesign_flutter"
-			      }
         }
     }
 }
