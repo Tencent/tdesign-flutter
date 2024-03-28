@@ -46,21 +46,51 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
   @override
   void initState() {
     super.initState();
+    _initData();
+  }
 
-    TDTheme.of(context).colorMap.forEach((key, value) {
-      if (key.startsWith('brand')) {
-        brandMap[key] = value;
-      } else if (key.startsWith('error')) {
-        errorMap[key] = value;
-      } else if (key.startsWith('warning')) {
-        warningMap[key] = value;
-      } else if (key.startsWith('success')) {
-        successMap[key] = value;
-      } else if (key.startsWith('font')) {
-        fontMap[key] = value;
-      } else {
-        grayMap[key] = value;
-      }
+  void _initData() async{
+
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      TDTheme.of(context).colorMap.forEach((key, value) {
+        if (key.startsWith('brand')) {
+          brandMap[key] = value;
+        } else if (key.startsWith('error')) {
+          errorMap[key] = value;
+        } else if (key.startsWith('warning')) {
+          warningMap[key] = value;
+        } else if (key.startsWith('success')) {
+          successMap[key] = value;
+        } else if (key.startsWith('font')) {
+          fontMap[key] = value;
+        } else {
+          grayMap[key] = value;
+        }
+      });
+
+      TDTheme.of(context).refMap.forEach((key, value) {
+        var color = TDTheme.of(context).colorMap[key];
+        if(color == null){
+          return;
+        }
+        if (key.startsWith('brand')) {
+          brandMap[key] = color;
+        } else if (key.startsWith('error')) {
+          errorMap[key] = color;
+        } else if (key.startsWith('warning')) {
+          warningMap[key] = color;
+        } else if (key.startsWith('success')) {
+          successMap[key] = color;
+        } else if (key.startsWith('font')) {
+          fontMap[key] = color;
+        } else {
+          grayMap[key] = color;
+        }
+      });
+      setState(() {
+
+      });
     });
   }
 
@@ -154,6 +184,16 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
             var type = index ~/ brandMap.length;
             index = index % brandMap.length;
             var function = functionList[type];
+            var map = {};
+            if(type == 0){
+              map = brandMap;
+            } else if(type == 1){
+              map = errorMap;
+            } else if (type == 2){
+              map = warningMap;
+            } else if(type == 3){
+              map = successMap;
+            }
             if (index < 10) {
               return Container(
                 color: TDTheme.of(context)
@@ -162,9 +202,8 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
               );
             } else {
               return Container(
-                color: TDTheme.of(context)
-                    .colorMap['$function${spList[index - 10]}Color'],
-                child: TDText('$function${spList[index - 10]}Color'),
+                color: map.values.elementAt(index),
+                child: TDText(map.keys.elementAt(index)),
               );
             }
           });
@@ -260,19 +299,6 @@ class TestWidget extends StatelessWidget {
             font:
                 TDTheme.defaultData().fontBodyLarge, //不传context，使用默认主题，此处是外层的主题
             textColor: TDTheme.defaultData().brandNormalColor,
-          ),
-          TDText(
-            '不使用数字字体:1234567890abcd',
-            font:
-                TDTheme.defaultData().fontTitleSmall,
-            textColor: TDTheme.of(context).brandColor6,
-          ),
-          TDText(
-            '使用数字字体:1234567890abcd',
-            font:
-                TDTheme.defaultData().fontTitleSmall,
-            textColor: TDTheme.of(context).brandColor6,
-            fontFamily: TDTheme.defaultData().numberFontFamily,
           ),
         ],
       ),
