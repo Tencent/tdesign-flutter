@@ -120,8 +120,6 @@ class _TDCountDownState extends State<TDCountDown>
     if (widget.content == 'default') {
       return Row(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.baseline,
-          textBaseline: TextBaseline.alphabetic,
           children: _buildTimeWidget(context));
     }
     if (widget.content is Function) {

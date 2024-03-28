@@ -98,15 +98,16 @@ class TDCountDownStyle {
     bool? splitWithUnit,
   }) {
     timeFontFamily = TDTheme.of(context).numberFontFamily;
-    var font;
+    late Font? font;
     switch (size ?? TDCountDownSize.medium) {
       case TDCountDownSize.small:
-        timeWidth = timeHeight = 20;
         if (theme == TDCountDownTheme.defaultTheme) {
+          timeWidth = timeHeight = null;
           font = TDTheme.of(context).fontBodyMedium;
           timeFontSize = splitFontSize = font?.size ?? 14;
-          timeFontHeight = splitFontHeight = font?.height ?? 22;
+          timeFontHeight = splitFontHeight = (font?.height ?? 22) / (timeFontSize ?? 14);
         } else {
+          timeWidth = timeHeight = 20;
           font = TDTheme.of(context).fontBodySmall;
           timeFontSize = splitFontSize = font?.size ?? 12;
           timeFontHeight = splitFontHeight = null;
@@ -114,12 +115,13 @@ class TDCountDownStyle {
         space = TDTheme.of(context).spacer4 / 2;
         break;
       case TDCountDownSize.medium:
-        timeWidth = timeHeight = 24;
         if (theme == TDCountDownTheme.defaultTheme) {
+          timeWidth = timeHeight = null;
           font = TDTheme.of(context).fontBodyLarge;
           timeFontSize = splitFontSize = font?.size ?? 16;
-          timeFontHeight = splitFontHeight = font?.height ?? 24;
+          timeFontHeight = splitFontHeight = (font?.height ?? 24) / (timeFontSize ?? 16);
         } else {
+          timeWidth = timeHeight = 24;
           font = TDTheme.of(context).fontBodyMedium;
           timeFontSize = splitFontSize = font?.size ?? 14;
           timeFontHeight = splitFontHeight = null;
@@ -127,12 +129,13 @@ class TDCountDownStyle {
         space = TDTheme.of(context).spacer8 / 2;
         break;
       case TDCountDownSize.large:
-        timeWidth = timeHeight = 28;
         if (theme == TDCountDownTheme.defaultTheme) {
+          timeWidth = timeHeight = null;
           font = TDTheme.of(context).fontBodyExtraLarge;
           timeFontSize = splitFontSize = font?.size ?? 18;
-          timeFontHeight = splitFontHeight = font?.height ?? 26;
+          timeFontHeight = splitFontHeight = (font?.height ?? 26) / (timeFontSize ?? 18);
         } else {
+          timeWidth = timeHeight = 28;
           font = TDTheme.of(context).fontBodyLarge;
           timeFontSize = splitFontSize = font?.size ?? 16;
           timeFontHeight = splitFontHeight = null;
