@@ -41,6 +41,7 @@ dependencies:
   http: ^0.13.5
   tdesign_flutter:
     path: ../
+  lunar: ^1.6.1
 
 dev_dependencies:
   flutter_test:
