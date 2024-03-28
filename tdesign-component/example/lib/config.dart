@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'base/example_base.dart';
-import 'base/example_route.dart';
-import 'base/web_md_tool.dart';
 import 'page/sidebar/td_sidebar_page.dart';
 import 'page/sidebar/td_sidebar_page_anchor.dart';
 import 'page/sidebar/td_sidebar_page_custom.dart';
@@ -14,6 +12,7 @@ import 'page/td_badge_page.dart';
 import 'page/td_bottom_tab_bar_page.dart';
 import 'page/td_button_page.dart';
 import 'page/td_checkbox_page.dart';
+import 'page/td_count_down_page.dart';
 import 'page/td_date_picker_page.dart';
 import 'page/td_dialog_page.dart';
 import 'page/td_divider_page.dart';
@@ -153,8 +152,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'CountDown 倒计时',
         name: 'count_down',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDCountDownPage())),
     ExamplePageModel(
         text: 'Collapse 折叠面板',
         name: 'collapse',
