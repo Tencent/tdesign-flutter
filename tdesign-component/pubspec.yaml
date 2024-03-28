@@ -36,6 +36,9 @@ flutter:
     - family: TDIcons
       fonts:
         - asset: assets/tdesign/td_icons.ttf
+    - family: TCloudNumber
+      fonts:
+        - asset: assets/tdesign/TCloudNumberVF.ttf
 
 
   # To add assets to your plugin package, add an assets section, like this:

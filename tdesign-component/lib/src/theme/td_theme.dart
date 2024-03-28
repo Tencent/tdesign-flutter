@@ -204,7 +204,10 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
         /// 设置颜色
         Map<String, dynamic>? colorsMap = curThemeMap['color'];
         colorsMap?.forEach((key, value) {
-          theme.colorMap[key] = toColor(value);
+          var color = toColor(value);
+          if (color != null) {
+            theme.colorMap[key] = color;
+          }
         });
 
         /// 设置字体尺寸
@@ -223,7 +226,7 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
         /// 设置字体
         Map<String, dynamic>? fontFamilyMap = curThemeMap['fontFamily'];
         fontFamilyMap?.forEach((key, value) {
-          theme.fontFamilyMap[key] = FontFamily(fontFamily: value['fontFamily']);
+          theme.fontFamilyMap[key] = FontFamily.fromJson(value);
         });
 
         /// 设置阴影
@@ -232,7 +235,7 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
           var list = <BoxShadow>[];
           (value as List).forEach((element) {
             list.add(BoxShadow(
-              color: toColor(element['color']),
+              color: toColor(element['color']) ?? Colors.black,
               blurRadius: element['blurRadius'].toDouble(),
               spreadRadius: element['spreadRadius'].toDouble(),
               offset: Offset(element['offset']?['x'].toDouble() ?? 0,

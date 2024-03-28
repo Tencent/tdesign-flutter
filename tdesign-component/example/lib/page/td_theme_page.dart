@@ -261,6 +261,19 @@ class TestWidget extends StatelessWidget {
                 TDTheme.defaultData().fontBodyLarge, //不传context，使用默认主题，此处是外层的主题
             textColor: TDTheme.defaultData().brandNormalColor,
           ),
+          TDText(
+            '不使用数字字体:1234567890abcd',
+            font:
+                TDTheme.defaultData().fontTitleSmall,
+            textColor: TDTheme.of(context).brandColor6,
+          ),
+          TDText(
+            '使用数字字体:1234567890abcd',
+            font:
+                TDTheme.defaultData().fontTitleSmall,
+            textColor: TDTheme.of(context).brandColor6,
+            fontFamily: TDTheme.defaultData().numberFontFamily,
+          ),
         ],
       ),
     );
