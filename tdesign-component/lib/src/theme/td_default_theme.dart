@@ -139,6 +139,10 @@ class TDDefaultTheme {
                 "size": 14,
                 "lineHeight": 22
             },
+            "fontBodyExtraLarge": {
+                "size": 18,
+                "lineHeight": 26
+            },
             "fontBodyLarge": {
                 "size": 16,
                 "lineHeight": 24
