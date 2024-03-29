@@ -97,7 +97,7 @@ class TDCountDownStyle {
     TDCountDownTheme? theme,
     bool? splitWithUnit,
   }) {
-    timeFontFamily = TDTheme.of(context).numberFontFamily;
+    timeFontFamily = TDTheme.defaultData().numberFontFamily;
     late Font? font;
     switch (size ?? TDCountDownSize.medium) {
       case TDCountDownSize.small:

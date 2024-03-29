@@ -167,6 +167,7 @@ class _TDCountDownState extends State<TDCountDown>
             child: Text(time,
                 style: TextStyle(
                     fontFamily: style.timeFontFamily?.fontFamily,
+                    package: style.timeFontFamily?.package,
                     fontSize: style.timeFontSize,
                     height: style.timeFontHeight,
                     fontWeight: style.timeFontWeight,
