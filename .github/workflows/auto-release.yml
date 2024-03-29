@@ -3,11 +3,11 @@ name: Auto Release
 on:
   pull_request:
     branches: [develop, feature/actions, main]
-    types: [opened, synchronize, reopened, closed]
+#    types: [opened, synchronize, reopened, closed]
 #    paths:
 #      - "package.json"
-  push:
-    branches: [develop, feature/auto-release]
+#  push:
+#    branches: [main,develop, feature/auto-release]
 #    types: [opened, synchronize, reopened, closed]
 #    paths:
 #      - "package.json"
@@ -45,15 +45,24 @@ jobs:
       - id: comment
         shell: bash
         run: |
-          result=$(curl ${{github.event.issue.pull_request.url}} -H "Authorization: token ${{ secrets.TD_FLUTTER }}")
-          headrefreg='"ref": "(release/[[:digit:]]{1,2}\.[[:digit:]]{1,2}\.[[:digit:]]{1,2})",'
-          if [[ $result =~ $headrefreg ]]
-          then
-            echo "属于 release pr 的 comment ${BASH_REMATCH[1]}" 
-          else
-            echo "不属于 release pr 的 comment" && exit 1
-          fi
-          echo "::set-output name=branch::${BASH_REMATCH[1]}"
+          echo "github event:${{github}}"
+          echo "github.event_name:${{github.event_name}}"
+          echo "github.event:${{github.event}}"
+          echo "github.event.issue:${{github.event.issue}}"
+          echo "github.event.issue.pull_request:${{github.event.issue.pull_request}}"
+          echo "github.event.sender:${{github.event.sender}}"
+          echo "github.event.sender.login:${{github.event.sender.login}}"
+          echo "github.event.comment:${{github.event.comment}}"
+          echo "github.event.comment.body:${{github.event.comment.body}}"
+#          result=$(curl ${{github.event.issue.pull_request.url}} -H "Authorization: token ${{ secrets.TD_FLUTTER }}")
+#          headrefreg='"ref": "(release/[[:digit:]]{1,2}\.[[:digit:]]{1,2}\.[[:digit:]]{1,2})",'
+#          if [[ $result =~ $headrefreg ]]
+#          then
+#            echo "属于 release pr 的 comment ${BASH_REMATCH[1]}"
+#          else
+#            echo "不属于 release pr 的 comment" && exit 1
+#          fi
+#          echo "::set-output name=branch::${BASH_REMATCH[1]}"
       # zsh $match[1]
       - uses: actions/checkout@v3
         with:
