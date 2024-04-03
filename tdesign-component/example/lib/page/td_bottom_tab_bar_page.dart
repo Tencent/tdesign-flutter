@@ -150,7 +150,10 @@ class TDBottomTabBarPage extends StatelessWidget {
         test: [
           ExampleItem(
               desc: '自定义上边线样式',
-              builder: _buildCustomTopStyle)
+              builder: _buildCustomTopStyle),
+          ExampleItem(
+              desc: '自定义选择的背景颜色',
+              builder: _customBgColor),
         ],
       ),
     );
@@ -788,5 +791,50 @@ class TDBottomTabBarPage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  @Demo(group: 'bottomTabBar')
+  Widget _customBgColor(BuildContext context) {
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        selectedBgColor: TDTheme.of(context).errorColor3,
+        unselectedBgColor: TDTheme.of(context).grayColor3,
+        navigationTabs: [
+          TDBottomTabBarTabConfig( tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig( tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig( tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig( tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig( tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }
 }
