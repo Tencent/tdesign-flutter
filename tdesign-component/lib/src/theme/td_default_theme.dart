@@ -3,6 +3,32 @@ class TDDefaultTheme {
   static String defaultThemeConfig = '''
   {
     "default": {
+        "ref":{
+            "brandLightColor": "brandColor1",
+            "brandFocusColor": "brandColor2",
+            "brandDisabledColor": "brandColor3",
+            "brandHoverColor": "brandColor6",
+            "brandNormalColor": "brandColor7",
+            "brandClickColor": "brandColor8",
+            "errorLightColor": "errorColor1",
+            "errorFocusColor": "errorColor2",
+            "errorDisabledColor": "errorColor3",
+            "errorHoverColor": "errorColor5",
+            "errorNormalColor": "errorColor6",
+            "errorClickColor": "errorColor7",
+            "warningLightColor": "warningColor1",
+            "warningFocusColor": "warningColor2",
+            "warningDisabledColor": "warningColor3",
+            "warningHoverColor": "warningColor4",
+            "warningNormalColor": "warningColor5",
+            "warningClickColor": "warningColor6",
+            "successLightColor": "successColor1",
+            "successFocusColor": "successColor2",
+            "successDisabledColor": "successColor3",
+            "successHoverColor": "successColor4",
+            "successNormalColor": "successColor5",
+            "successClickColor": "successColor6"
+            },
         "color": {
             "brandColor1": "#F2F3FF",
             "brandColor2": "#D9E1FF",
@@ -14,12 +40,6 @@ class TDDefaultTheme {
             "brandColor8": "#003CAB",
             "brandColor9": "#002A7C",
             "brandColor10": "#001A57",
-            "brandLightColor": "#F2F3FF",
-            "brandFocusColor": "#D9E1FF",
-            "brandDisabledColor": "#B5C7FF",
-            "brandHoverColor": "#366EF4",
-            "brandNormalColor": "#0052D9",
-            "brandClickColor": "#003CAB",
             "errorColor1": "#FFF0ED",
             "errorColor2": "#FFD8D2",
             "errorColor3": "#FFB9B0",
@@ -30,12 +50,6 @@ class TDDefaultTheme {
             "errorColor8": "#881F1C",
             "errorColor9": "#68070A",
             "errorColor10": "#490002",
-            "errorLightColor": "#FFF0ED",
-            "errorFocusColor": "#FFD8D2",
-            "errorDisabledColor": "#FFB9B0",
-            "errorHoverColor": "#F6685D",
-            "errorNormalColor": "#D54941",
-            "errorClickColor": "#AD352F",
             "warningColor1": "#FFF1E9",
             "warningColor2": "#FFD9C2",
             "warningColor3": "#FFB98C",
@@ -46,12 +60,6 @@ class TDDefaultTheme {
             "warningColor8": "#713300",
             "warningColor9": "#532300",
             "warningColor10": "#3B1700",
-            "warningLightColor": "#FFF1E9",
-            "warningFocusColor": "#FFD9C2",
-            "warningDisabledColor": "#FFB98C",
-            "warningHoverColor": "#FA9550",
-            "warningNormalColor": "#E37318",
-            "warningClickColor": "#BE5A00",
             "successColor1": "#E3F9E9",
             "successColor2": "#C6F3D7",
             "successColor3": "#92DAB2",
@@ -62,12 +70,6 @@ class TDDefaultTheme {
             "successColor8": "#005334",
             "successColor9": "#003B23",
             "successColor10": "#002515",
-            "successLightColor": "#E3F9E9",
-            "successFocusColor": "#C6F3D7",
-            "successDisabledColor": "#92DAB2",
-            "successHoverColor": "#56C08D",
-            "successNormalColor": "#2BA471",
-            "successClickColor": "#008858",
             "fontGyColor1": "#E6000000",
             "fontGyColor2": "#99000000",
             "fontGyColor3": "#66000000",
@@ -137,6 +139,10 @@ class TDDefaultTheme {
                 "size": 14,
                 "lineHeight": 22
             },
+            "fontBodyExtraLarge": {
+                "size": 18,
+                "lineHeight": 26
+            },
             "fontBodyLarge": {
                 "size": 16,
                 "lineHeight": 24
@@ -188,8 +194,9 @@ class TDDefaultTheme {
         },
         "fontFamily": {
             "numberFontFamily": {
-                "fontFamily": "DINAlternate-B"
-            }
+				      "fontFamily": "TCloudNumber",
+				      "package": "tdesign_flutter"
+			      }
         },
         "radius": {
             "radiusSmall": 3,

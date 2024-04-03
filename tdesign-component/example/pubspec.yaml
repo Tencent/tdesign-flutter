@@ -100,3 +100,4 @@ flutter:
     - assets/code/
     - assets/version
     - assets/img/
+    - assets/theme.json
