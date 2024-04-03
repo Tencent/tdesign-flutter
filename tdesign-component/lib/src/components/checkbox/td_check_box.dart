@@ -67,6 +67,8 @@ class TDCheckbox extends StatefulWidget {
       this.style,
       this.spacing,
       this.backgroundColor,
+        this.selectColor,
+        this.disableColor,
       this.size = TDCheckBoxSize.small,
       this.cardMode = false,
       this.showDivider = true,
@@ -130,6 +132,12 @@ class TDCheckbox extends StatefulWidget {
   /// 背景颜色
   final Color? backgroundColor;
 
+  /// 选择颜色
+  final Color? selectColor;
+
+  /// 禁用选择颜色
+  final Color? disableColor;
+
   @override
   State createState() => TDCheckboxState();
 
@@ -160,9 +168,9 @@ class TDCheckbox extends StatefulWidget {
                   : TDIcons.check,
       size: size,
       color: !enable
-          ? (isChecked ? theme.brandDisabledColor : deSelectedColor)
+          ? (isChecked ? (disableColor ?? theme.brandDisabledColor) : deSelectedColor)
           : isChecked
-              ? theme.brandNormalColor
+              ? selectColor ?? theme.brandNormalColor
               : deSelectedColor,
     );
     return current;
@@ -305,7 +313,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                     children: [
                       Row(
                         mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 16),
@@ -389,7 +397,7 @@ class TDCheckboxState extends State<TDCheckbox> {
           border: widget.cardMode
               ? checked
                   ? Border.all(
-                      width: 1.5, color: TDTheme.of(context).brandNormalColor)
+                      width: 1.5, color: widget.selectColor ?? TDTheme.of(context).brandNormalColor)
                   : Border.all(width: 1.5, color: Colors.transparent)
               : null,
           borderRadius: widget.cardMode
@@ -403,9 +411,10 @@ class TDCheckboxState extends State<TDCheckbox> {
               left: 0,
               child: Visibility(
                   visible: widget.cardMode && checked,
-                  child: const RadioCornerIcon(
+                  child:  RadioCornerIcon(
                     length: 28,
                     radius: 4,
+                    selectColor: widget.selectColor,
                   ))),
         ],
       ),
@@ -481,8 +490,9 @@ class TDCheckboxState extends State<TDCheckbox> {
 class RadioCornerIcon extends StatelessWidget {
   final double length;
   final double radius;
+  final Color? selectColor;
 
-  const RadioCornerIcon({Key? key, required this.length, required this.radius})
+  const RadioCornerIcon({Key? key, required this.length, required this.radius, required this.selectColor})
       : super(key: key);
 
   @override
@@ -497,7 +507,7 @@ class RadioCornerIcon extends StatelessWidget {
             painter: RadioCorner(
                 length: length,
                 radius: radius,
-                fillColor: TDTheme.of(context).brandNormalColor),
+                fillColor: selectColor ?? TDTheme.of(context).brandNormalColor),
           ),
           const Positioned(
               top: 3,
