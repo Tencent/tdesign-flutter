@@ -31,6 +31,9 @@ extension TDFonts on TDThemeData {
   /// 14/22
   Font? get fontTitleSmall => fontMap['fontTitleSmall'];
 
+  /// 18/26
+  Font? get fontBodyExtraLarge => fontMap['fontBodyExtraLarge'];
+
   /// 16/24
   Font? get fontBodyLarge => fontMap['fontBodyLarge'];
 

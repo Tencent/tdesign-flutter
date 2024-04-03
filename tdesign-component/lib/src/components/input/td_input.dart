@@ -94,7 +94,7 @@ class TDInput extends StatelessWidget {
   /// 输入框宽度(TDCardStyle时必须设置该参数)
   final double? width;
 
-  /// 输入框宽度
+  /// 输入框高度
   final double? height;
 
   /// 输入框背景色
