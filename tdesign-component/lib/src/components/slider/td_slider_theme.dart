@@ -133,9 +133,9 @@ class TDSliderThemeData {
       thumbColor : Colors.white,
       disabledThumbColor : Colors.white,
       overlayShape : const TDNoOverlayShape(),
-      tickMarkShape : TDRoundSliderTickMarkShape(themeData: this),
-      thumbShape : const TDRoundSliderThumbShape(),
-      trackShape : const TDRoundedRectSliderTrackShape(),
+      tickMarkShape: TDRoundSliderTickMarkShape(themeData: this),
+      thumbShape: TDRoundSliderThumbShape(themeData: this),
+      trackShape: TDRoundedRectSliderTrackShape(themeData: this),
       rangeTickMarkShape :  TDRoundRangeSliderTickMarkShape(themeData: this),
       rangeThumbShape :  TDRoundRangeSliderThumbShape(themeData: this),
       rangeTrackShape :  TDRoundedRectRangeSliderTrackShape(themeData: this),
@@ -148,7 +148,7 @@ class TDSliderThemeData {
     return SliderThemeData(
       trackShape: TDCapsuleRectSliderTrackShape(themeData: this),
       tickMarkShape: TDCapsuleSliderTickMarkShape(themeData: this),
-      thumbShape: const TDCapsuleSliderThumbShape(),
+      thumbShape: TDCapsuleSliderThumbShape(themeData: this),
       rangeTrackShape: TDCapsuleRectRangeSliderTrackShape(themeData: this),
       rangeTickMarkShape: TDCapsuleRangeSliderTickMarkShape(themeData: this),
       rangeThumbShape: TDCapsuleRangeSliderThumbShape(themeData: this),
@@ -207,7 +207,9 @@ class SliderMeasureData {
 ///
 class TDRoundedRectSliderTrackShape extends SliderTrackShape with BaseSliderTrackShape {
   /// Create a slider track that draws two rectangles with rounded outer edges.
-  const TDRoundedRectSliderTrackShape();
+  const TDRoundedRectSliderTrackShape({required this.themeData});
+
+  final TDSliderThemeData themeData;
 
   @override
   void paint(
@@ -263,6 +265,8 @@ class TDRoundedRectSliderTrackShape extends SliderTrackShape with BaseSliderTrac
       isEnabled: isEnabled,
       isDiscrete: isDiscrete,
     );
+    //record size ,Use it when calculating thumb text position
+    themeData.sliderMeasureData.trackerRect = trackRect;
     final trackRadius = Radius.circular(trackRect.height / 2);
     final activeTrackRadius = Radius.circular((trackRect.height + additionalActiveTrackHeight) / 2);
 
@@ -301,6 +305,7 @@ class TDRoundSliderThumbShape extends SliderComponentShape {
     this.disabledThumbRadius,
     this.elevation = 4.0,
     this.pressedElevation = 4.0,
+    required this.themeData,
   });
 
   /// The preferred radius of the round thumb shape when the slider is enabled.
@@ -332,6 +337,8 @@ class TDRoundSliderThumbShape extends SliderComponentShape {
   /// Use 0 for no shadow. The higher the value, the larger the shadow. For
   /// example, a value of 12 will create a very large shadow.
   final double pressedElevation;
+
+  final TDSliderThemeData themeData;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
@@ -381,6 +388,25 @@ class TDRoundSliderThumbShape extends SliderComponentShape {
 
     if (paintShadows) {
       canvas.drawShadow(path, const Color.fromRGBO(0, 0, 0, 0.5), evaluatedElevation, true);
+    }
+    // draw thumb text
+    if (themeData.showThumbValue && themeData.sliderMeasureData.trackerRect != null) {
+      var trackerRect = themeData.sliderMeasureData.trackerRect!;
+      var ratio = (center.dx - trackerRect.left) / (trackerRect.right - trackerRect.left);
+      //计算滑块的值
+      var value = (themeData.max - themeData.min) * ratio + themeData.min;
+      //格式化显示
+      var formatterValue =
+          themeData.scaleFormatter == null ? value.toStringAsFixed(2) : themeData.scaleFormatter!(value);
+      //绘制数值
+      var painter = TextPainter(
+          text: TextSpan(
+              text: '$formatterValue',
+              style: enableAnimation.value > 0 ? themeData.thumbTextStyle : themeData.disabledThumbTextStyle),
+          textDirection: TextDirection.ltr,
+          textAlign: TextAlign.center)
+        ..layout(maxWidth: 100);
+      painter.paint(context.canvas, Offset(center.dx - painter.size.width / 2, center.dy - painter.height - 14));
     }
     var paint = Paint();
     paint.color = color;
@@ -1064,6 +1090,7 @@ class TDCapsuleRectSliderTrackShape extends SliderTrackShape with BaseSliderTrac
       isEnabled: isEnabled,
       isDiscrete: isDiscrete,
     );
+    themeData.sliderMeasureData.trackerRect = trackRect;
     final trackRadius = Radius.circular(trackRect.height / 2);
     final activeTrackRadius = Radius.circular((trackRect.height - additionalActiveTrackHeight) / 2);
 
@@ -1110,6 +1137,7 @@ class TDCapsuleSliderThumbShape extends SliderComponentShape {
     this.disabledThumbRadius,
     this.elevation = 4.0,
     this.pressedElevation = 4.0,
+    required this.themeData,
   });
 
   /// The preferred radius of the round thumb shape when the slider is enabled.
@@ -1141,6 +1169,8 @@ class TDCapsuleSliderThumbShape extends SliderComponentShape {
   /// Use 0 for no shadow. The higher the value, the larger the shadow. For
   /// example, a value of 12 will create a very large shadow.
   final double pressedElevation;
+
+  final TDSliderThemeData themeData;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
@@ -1189,6 +1219,25 @@ class TDCapsuleSliderThumbShape extends SliderComponentShape {
 
     if (paintShadows) {
       canvas.drawShadow(path, const Color.fromRGBO(0, 0, 0, 0.5), evaluatedElevation, true);
+    }
+    // draw thumb text
+    if (themeData.showThumbValue && themeData.sliderMeasureData.trackerRect != null) {
+      var trackerRect = themeData.sliderMeasureData.trackerRect!;
+      var ratio = (center.dx - trackerRect.left) / (trackerRect.right - trackerRect.left);
+      //计算滑块的值
+      var value = (themeData.max - themeData.min) * ratio + themeData.min;
+      //格式化显示
+      var formatterValue =
+          themeData.scaleFormatter == null ? value.toStringAsFixed(2) : themeData.scaleFormatter!(value);
+      //绘制数值
+      var painter = TextPainter(
+          text: TextSpan(
+              text: '$formatterValue',
+              style: enableAnimation.value > 0 ? themeData.thumbTextStyle : themeData.disabledThumbTextStyle),
+          textDirection: TextDirection.ltr,
+          textAlign: TextAlign.center)
+        ..layout(maxWidth: 100);
+      painter.paint(context.canvas, Offset(center.dx - painter.size.width / 2, center.dy - painter.height - 14));
     }
     var paint = Paint();
     paint.color = color;
