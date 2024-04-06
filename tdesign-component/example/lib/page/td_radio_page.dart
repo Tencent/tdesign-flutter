@@ -47,61 +47,10 @@ class TDRadioPageState extends State<TDRadioPage> {
           ]),
         ],
       test: [
-        ExampleItem(desc: '横向单选框-显示下划线', builder: (context){
-          return TDRadioGroup(
-            selectId: 'index:1',
-            direction: Axis.horizontal,
-            showDivider: true,
-            directionalTdRadios: const [
-              TDRadio(
-                id: '0',
-                title: '单选标题',
-                radioStyle: TDRadioStyle.circle,
-                showDivider: false,
-              ),
-              TDRadio(
-                id: '1',
-                title: '单选标题',
-                radioStyle: TDRadioStyle.circle,
-                showDivider: false,
-              ),
-              TDRadio(
-                id: '2',
-                title: '上限四字',
-                radioStyle: TDRadioStyle.circle,
-                showDivider: false,
-              ),
-            ],
-          );
-        }),
-        ExampleItem(desc: '横向单选框-自定义下划线', builder: (context){
-          return TDRadioGroup(
-            selectId: 'index:1',
-            direction: Axis.horizontal,
-            showDivider: true,
-            divider: const TDDivider(height: 20, color: Colors.red,),
-            directionalTdRadios: const [
-              TDRadio(
-                id: '0',
-                title: '单选标题',
-                radioStyle: TDRadioStyle.circle,
-                showDivider: false,
-              ),
-              TDRadio(
-                id: '1',
-                title: '单选标题',
-                radioStyle: TDRadioStyle.circle,
-                showDivider: false,
-              ),
-              TDRadio(
-                id: '2',
-                title: '上限四字',
-                radioStyle: TDRadioStyle.circle,
-                showDivider: false,
-              ),
-            ],
-          );
-        }),
+        ExampleItem(desc: '横向单选框-显示下划线', builder: _showBottomLine),
+        ExampleItem(desc: '横向单选框-自定义下划线', builder: _customBottomLine),
+        ExampleItem(desc: '横向单选框-自定义颜色和字体尺寸', builder: _customColorAndFont),
+        ExampleItem(desc: '横向单选框-自定义禁用字体颜色', builder: _customDisableColorAndFont),
       ],
     );
   }
@@ -333,6 +282,163 @@ class TDRadioPageState extends State<TDRadioPage> {
           cardMode: true,
         ),
       ],
+    );
+  }
+
+  @Demo(group: 'radio')
+  Widget _showBottomLine(BuildContext context) {
+    return TDRadioGroup(
+      selectId: 'index:1',
+      direction: Axis.horizontal,
+      showDivider: true,
+      directionalTdRadios: const [
+        TDRadio(
+          id: '0',
+          title: '单选标题',
+          radioStyle: TDRadioStyle.circle,
+          showDivider: false,
+        ),
+        TDRadio(
+          id: '1',
+          title: '单选标题',
+          radioStyle: TDRadioStyle.circle,
+          showDivider: false,
+        ),
+        TDRadio(
+          id: '2',
+          title: '上限四字',
+          radioStyle: TDRadioStyle.circle,
+          showDivider: false,
+        ),
+      ],
+    );
+  }
+
+  @Demo(group: 'radio')
+  Widget _customBottomLine(BuildContext context) {
+    return TDRadioGroup(
+      selectId: 'index:1',
+      direction: Axis.horizontal,
+      showDivider: true,
+      divider: const TDDivider(height: 20, color: Colors.red,),
+      directionalTdRadios: const [
+        TDRadio(
+          id: '0',
+          title: '单选标题',
+          radioStyle: TDRadioStyle.circle,
+          showDivider: false,
+        ),
+        TDRadio(
+          id: '1',
+          title: '单选标题',
+          radioStyle: TDRadioStyle.circle,
+          showDivider: false,
+        ),
+        TDRadio(
+          id: '2',
+          title: '上限四字',
+          radioStyle: TDRadioStyle.circle,
+          showDivider: false,
+        ),
+      ],
+    );
+  }
+
+  @Demo(group: 'radio')
+  Widget _customColorAndFont(BuildContext context) {
+    return TDRadioGroup(
+      selectId: 'index:1',
+      child: ListView(
+        padding: const EdgeInsets.all(0),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          TDRadio(
+            id: 'index:1',
+            title: '单选',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            selectColor: TDTheme.of(context).errorColor3,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+          TDRadio(
+            id: 'index:2',
+            title: '单选',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            subTitle: '单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行',
+            selectColor: TDTheme.of(context).errorColor3,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+          TDRadio(
+            id: 'index:3',
+            title: '单选',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
+            selectColor: TDTheme.of(context).errorColor3,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+          TDRadio(
+            id: 'index:4',
+            title: '单选',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            subTitle: '单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行',
+            selectColor: TDTheme.of(context).errorColor3,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+            radioStyle: TDRadioStyle.hollowCircle,
+          ),
+          TDRadio(
+            id: 'index:5',
+            title: '单选',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
+            selectColor: TDTheme.of(context).errorColor3,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+            cardMode: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+
+
+  @Demo(group: 'radio')
+  Widget _customDisableColorAndFont(BuildContext context) {
+    return TDRadioGroup(
+      contentDirection: TDContentDirection.right,
+      selectId: '0',
+      child: Column(
+        children:  [
+          TDRadio(
+            id: '0',
+            title: '选项禁用-已选',
+            subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
+            radioStyle: TDRadioStyle.circle,
+            enable: false,
+            disableColor: TDTheme.of(context).errorColor1,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+          TDRadio(
+            id: '1',
+            title: '选项禁用-默认',
+            radioStyle: TDRadioStyle.circle,
+            enable: false,
+            disableColor: TDTheme.of(context).errorColor1,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+        ],
+      ),
     );
   }
 }
