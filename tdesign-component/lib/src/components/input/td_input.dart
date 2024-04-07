@@ -14,7 +14,6 @@ class TDInput extends StatelessWidget {
   TDInput(
       {Key? key,
       this.width,
-      double? height,
       this.textStyle,
       this.backgroundColor,
       this.decoration,
@@ -77,14 +76,10 @@ class TDInput extends StatelessWidget {
                         1 +
                         (leftIcon != null ? 1 : 0) * 28) +
                     (required == true ? 1 : 0) * 14),
-        height = 56,
         super(key: key);
 
   /// 输入框宽度(TDCardStyle时必须设置该参数)
   final double? width;
-
-  /// 输入框高度
-  final double? height;
 
   /// 输入框背景色
   final Color? backgroundColor;
