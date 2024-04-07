@@ -5,6 +5,42 @@ toc: false
 docClass: timeline
 ---
 
+## 🌈 0.1.4 `2024-04-08`
+
+### 🚀 Features
+- `TDCountDown`:
+  - add: 新增TDCountDown倒计时组件 @hkaikai
+- `TDTheme`:
+  - add: 修改主题实现方式,支持ref属性进行自定义映射
+  - add: 添加默认数字字体 numberFontFamily
+- `TDText`:
+  - add: 添加TDText强制居中开关 kTextForceVerticalCenterEnable,可以全局禁用强制居中,防止flutter 3.16版本之后文字偏移太多([#35](https://github.com/Tencent/tdesign-flutter/issues/35))
+- `TDBottomTabBar`:
+  - add: 添加自定义背景颜色功能([#55](https://github.com/Tencent/tdesign-flutter/issues/55))
+- `TDCheckbox`:
+  - add: TDCheckbox和TDRadio支持自定义颜色([#57](https://github.com/Tencent/tdesign-flutter/issues/57))
+  - add: TDCheckbox和TDRadio支持自定义字体大小([#66](https://github.com/Tencent/tdesign-flutter/issues/66))
+- `TDTabBar`:
+  - add: TDTabBar添加分割线的颜色和高度的自定义设置([#71](https://github.com/Tencent/tdesign-flutter/issues/71))
+- `TDSwitch`:
+  - add: TDSwitch 支持自定义"开/关"文案 ([#73](https://github.com/Tencent/tdesign-flutter/issues/73))
+- `TDDialog`:
+  - add: 添加自定义标题对齐和内容Widget的功能 ([#58](https://github.com/Tencent/tdesign-flutter/issues/58))
+
+
+### 🐞 Bug Fixes
+- `TDSlider`:
+  - fix: 修复TDSlider单游标模式下设置showThumbValue不起作用的问题。
+- `TDButton`:
+  - fix: 修复TDButton外部设置主题颜色不生效的问题 ([#54](https://github.com/Tencent/tdesign-flutter/issues/54))
+- `TDInput`:
+  - fix: 修复TDInput的showBottomDivider不生效的问题  ([#70](https://github.com/Tencent/tdesign-flutter/issues/70))
+  - fix: TDInput去掉无效的height API,使用SizedBox来修改高度  ([#70](https://github.com/Tencent/tdesign-flutter/issues/70))
+
+### 🚧 Others
+- example应用,添加修改主题按钮,可快速修改主题颜色
+
+
 ## 🌈 0.1.3 `2024-03-15`
 
 ### 🚀 Features
