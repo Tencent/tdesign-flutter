@@ -314,9 +314,15 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
             alignment: Alignment.center,
             width: 73,
             height: 28,
-            decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(6), color: TDTheme.of(context).brandNormalColor),
-            child: const TDButton(text: '操作按钮', size: TDButtonSize.extraSmall, theme: TDButtonTheme.primary),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: TDTheme.of(context).brandNormalColor,
+            ),
+            child: const TDButton(
+              text: '操作按钮',
+              size: TDButtonSize.extraSmall,
+              theme: TDButtonTheme.primary,
+            ),
           ),
           onBtnTap: () {
             TDToast.showText('点击操作按钮', context: context);
@@ -860,6 +866,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
     );
   }
 
+  @Demo(group: 'input')
   Widget _customHeight(BuildContext context) {
     var controller = TextEditingController();
     return Container(
