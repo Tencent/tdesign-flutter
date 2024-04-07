@@ -101,8 +101,9 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         ]),
       ],
       test: [
-        // ExampleItem(desc: '长文本样式', builder: _customLongTextStyle),
+        ExampleItem(desc: '长文本样式', builder: _customLongTextStyle),
         ExampleItem(desc: '隐藏底部分割线', builder: _hideBottomDivider),
+        ExampleItem(desc: '自定义高度-使用SizeBox', builder: _customHeight),
       ],
     );
   }
@@ -809,6 +810,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
 
   @Demo(group: 'input')
   Widget _customLongTextStyle(BuildContext context) {
+    var controller = TextEditingController();
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.only(top: 16, bottom: 24),
@@ -819,7 +821,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         cardStyle: TDCardStyle.topText,
         width: MediaQuery.of(context).size.width - 32,
         cardStyleTopText: '标签文字',
-        controller: controller[27],
+        controller: controller,
         hintText: '请输入文字',
         rightBtn: Icon(
           TDIcons.error_circle_filled,
@@ -832,7 +834,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           setState(() {});
         },
         onClearTap: () {
-          controller[22].clear();
+          controller.clear();
           setState(() {});
         },
       ),
@@ -841,19 +843,46 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
 
   @Demo(group: 'input')
   Widget _hideBottomDivider(BuildContext context) {
+    var controller = TextEditingController();
     return TDInput(
       leftLabel: '标签文字',
-      controller: controller[0],
+      controller: controller,
       backgroundColor: Colors.white,
       hintText: '请输入文字',
       onChanged: (text) {
         setState(() {});
       },
       onClearTap: () {
-        controller[0].clear();
+        controller.clear();
         setState(() {});
       },
       showBottomDivider: false,
+    );
+  }
+
+  Widget _customHeight(BuildContext context) {
+    var controller = TextEditingController();
+    return Container(
+      color: Colors.yellow,
+      alignment: Alignment.center,
+      height: 90,
+      child: SizedBox(
+        height: 60,
+        child: TDInput(
+          size: TDInputSize.small,
+          leftLabel: '标签文字',
+          controller: controller,
+          backgroundColor: Colors.white,
+          hintText: '请输入文字',
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller.clear();
+            setState(() {});
+          },
+        ),
+      ),
     );
   }
 }
