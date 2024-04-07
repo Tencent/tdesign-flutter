@@ -20,6 +20,8 @@ class TDConfirmDialog extends StatelessWidget {
     this.radius = 12.0,
     this.title,
     this.titleColor = const Color(0xE6000000),
+    this.titleAlignment,
+    this.contentWidget,
     this.content,
     this.contentColor,
     this.contentMaxHeight = 0,
@@ -34,6 +36,12 @@ class TDConfirmDialog extends StatelessWidget {
 
   /// 标题颜色
   final Color titleColor;
+
+  /// 标题对齐模式
+  final AlignmentGeometry? titleAlignment;
+
+  /// 内容Widget
+  final Widget? contentWidget;
 
   /// 内容
   final String? content;
@@ -117,6 +125,8 @@ class TDConfirmDialog extends StatelessWidget {
           TDDialogInfoWidget(
             title: title,
             titleColor: titleColor,
+            titleAlignment: titleAlignment,
+            contentWidget: contentWidget,
             content: content,
             contentColor: contentColor,
             contentMaxHeight: contentMaxHeight,
