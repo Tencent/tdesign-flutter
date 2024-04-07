@@ -394,6 +394,7 @@ class _TDTabsPageState extends State<TDTabsPage>
         showIndicator: false);
   }
 
+  @Demo(group: 'tabs')
   Widget _customIndicatorStyle(BuildContext context) {
     return TDTabBar(
       tabs: subList(2),
@@ -407,6 +408,7 @@ class _TDTabsPageState extends State<TDTabsPage>
     );
   }
 
+  @Demo(group: 'tabs')
   Widget _customDividerStyle(BuildContext context) {
     return TDTabBar(
       tabs: subList(2),
@@ -418,6 +420,7 @@ class _TDTabsPageState extends State<TDTabsPage>
     );
   }
 
+  @Demo(group: 'tabs')
   Widget _hideBottomDivider(BuildContext context) {
     return TDTabBar(
       tabs: subList(2),
