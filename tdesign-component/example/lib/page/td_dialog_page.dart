@@ -62,7 +62,13 @@ class _TDDialogPageState extends State<TDDialogPage> {
             ExampleItem(
                 desc: '带关闭按钮的对话框', builder: _buildDialogWithCloseButton),
           ]),
-        ]);
+        ],
+    test: [
+      ExampleItem(desc: '自定义标题对齐和内容组件', builder: _customFeedbackNormal),
+      ExampleItem(builder: _customConfirmNormal),
+      ExampleItem(builder: _customConfirmVertical),
+      ExampleItem(builder: _customImageTop),
+    ],);
   }
 
   // 反馈类
@@ -581,6 +587,133 @@ class _TDDialogPageState extends State<TDDialogPage> {
               title: _dialogTitle,
               content: _commonContent,
               showCloseButton: true,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // 反馈类
+  @Demo(group: 'dialog')
+  Widget _customFeedbackNormal(BuildContext context) {
+    return TDButton(
+      text: '反馈类-标题偏左',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDConfirmDialog(
+              title: _dialogTitle,
+              titleAlignment: Alignment.centerLeft,
+              contentWidget: TDText.rich(
+                  TDTextSpan(
+                      children: [
+                        TDTextSpan(text: '红色文字', textColor: Colors.red),
+                        TDTextSpan(text: '绿色文字', textColor: Colors.green),
+                      ]
+                  )
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+  @Demo(group: 'dialog')
+  Widget _customConfirmNormal(BuildContext context) {
+    return TDButton(
+      text: '确认类-标题偏右',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDAlertDialog(
+              title: _dialogTitle,
+              titleAlignment: Alignment.centerRight,
+              contentWidget: TDText.rich(
+                  TDTextSpan(
+                      children: [
+                        TDTextSpan(text: '红色文字', textColor: Colors.red),
+                        TDTextSpan(text: '绿色文字', textColor: Colors.green),
+                      ]
+                  )
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @Demo(group: 'dialog')
+  Widget _customConfirmVertical(BuildContext context) {
+    return TDButton(
+      text: '纵向按钮-自定义内容',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDAlertDialog.vertical(
+                title: _dialogTitle,
+                contentWidget: TDText.rich(
+                    TDTextSpan(
+                        children: [
+                          TDTextSpan(text: '红色文字', textColor: Colors.red),
+                          TDTextSpan(text: '绿色文字', textColor: Colors.green),
+                        ]
+                    )
+                ),
+                buttons: [
+                  TDDialogButtonOptions(
+                      title: '主要按钮',
+                      action: () {},
+                      theme: TDButtonTheme.primary),
+                  TDDialogButtonOptions(
+                      title: '次要按钮',
+                      titleColor: TDTheme.of(context).brandColor7,
+                      action: () {},
+                      theme: TDButtonTheme.light),
+                ]);
+          },
+        );
+      },
+    );
+  }
+  @Demo(group: 'dialog')
+  Widget _customImageTop(BuildContext context) {
+    return TDButton(
+      text: '图片置顶-自定义列表内容',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDImageDialog(
+              image: _demoImage,
+              title: _dialogTitle,
+              contentWidget: ListView(
+                shrinkWrap: true,
+                children: const [
+                  TDText('红色文字', textColor: Colors.red),
+                  TDText('绿色文字', textColor: Colors.green),
+                ],
+              ),
             );
           },
         );
