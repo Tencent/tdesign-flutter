@@ -15,30 +15,32 @@ enum TDTabBarOutlineType {
 }
 
 class TDTabBar extends StatefulWidget {
-  const TDTabBar(
-      {Key? key,
-      required this.tabs,
-      this.controller,
-      this.decoration,
-      this.backgroundColor,
-      this.indicatorColor,
-      this.indicatorWidth,
-      this.indicatorHeight,
-      this.labelColor,
-      this.unselectedLabelColor,
-      this.isScrollable = false,
-      this.unselectedLabelStyle,
-      this.labelStyle,
-      this.width,
-      this.height,
-      this.indicatorPadding,
-      this.labelPadding,
-      this.indicator,
-      this.physics,
-      this.onTap,
-      this.outlineType = TDTabBarOutlineType.filled,
-      this.showIndicator = false})
-      : assert(
+  const TDTabBar({
+    Key? key,
+    required this.tabs,
+    this.controller,
+    this.decoration,
+    this.backgroundColor,
+    this.indicatorColor,
+    this.indicatorWidth,
+    this.indicatorHeight,
+    this.labelColor,
+    this.unselectedLabelColor,
+    this.isScrollable = false,
+    this.unselectedLabelStyle,
+    this.labelStyle,
+    this.width,
+    this.height,
+    this.indicatorPadding,
+    this.labelPadding,
+    this.indicator,
+    this.physics,
+    this.onTap,
+    this.outlineType = TDTabBarOutlineType.filled,
+    this.showIndicator = false,
+    this.dividerColor,
+    this.dividerHeight = 0.5,
+  })  : assert(
           backgroundColor == null || decoration == null,
           'Cannot provide both a backgroundColor and a decoration\n'
           'To provide both, use "decoration: BoxDecoration(color: color)".',
@@ -108,6 +110,12 @@ class TDTabBar extends StatefulWidget {
   /// 选项卡样式
   final TDTabBarOutlineType outlineType;
 
+  /// 分割线颜色
+  final Color? dividerColor;
+
+  /// 分割线高度,小于等于0则不展示分割线
+  final double dividerHeight;
+
   @override
   State<StatefulWidget> createState() => _TDTabBarState();
 }
@@ -123,35 +131,33 @@ class _TDTabBarState extends State<TDTabBar> {
       height: widget.height ?? _defaultHeight,
       decoration: widget.decoration ??
           (widget.outlineType == TDTabBarOutlineType.card
-              ? BoxDecoration(
-              color: widget.backgroundColor)
+              ? BoxDecoration(color: widget.backgroundColor)
               : BoxDecoration(
                   color: widget.backgroundColor,
-                  border: Border(
-                      bottom: BorderSide(
-                          color: TDTheme.of(context).grayColor3, width: 0.5)))),
+                  border: widget.dividerHeight <= 0
+                      ? null
+                      : Border(
+                          bottom: BorderSide(
+                              color: widget.dividerColor ?? TDTheme.of(context).grayColor3,
+                              width: widget.dividerHeight)))),
       child: TDHorizontalTabBar(
-              physics: widget.physics,
-              isScrollable: widget.isScrollable,
-              indicator: widget.indicator ?? _getIndicator(context),
-              indicatorColor:
-                  widget.indicatorColor ?? TDTheme.of(context).brandNormalColor,
-              unselectedLabelColor: widget.unselectedLabelColor ??
-                  TDTheme.of(context).fontGyColor2,
-              labelColor:
-                  widget.labelColor ?? TDTheme.of(context).brandNormalColor,
-              labelStyle: widget.labelStyle ?? _getLabelStyle(context),
-              labelPadding: widget.labelPadding ?? const EdgeInsets.all(8),
-              unselectedLabelStyle: widget.unselectedLabelStyle ??
-                  _getUnSelectLabelStyle(context),
-              tabs: widget.tabs,
-              indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
-              outlineType: widget.outlineType,
-              controller: widget.controller,
-              onTap: (index) {
-                widget.onTap?.call(index);
-              },
-            ),
+        physics: widget.physics,
+        isScrollable: widget.isScrollable,
+        indicator: widget.indicator ?? _getIndicator(context),
+        indicatorColor: widget.indicatorColor ?? TDTheme.of(context).brandNormalColor,
+        unselectedLabelColor: widget.unselectedLabelColor ?? TDTheme.of(context).fontGyColor2,
+        labelColor: widget.labelColor ?? TDTheme.of(context).brandNormalColor,
+        labelStyle: widget.labelStyle ?? _getLabelStyle(context),
+        labelPadding: widget.labelPadding ?? const EdgeInsets.all(8),
+        unselectedLabelStyle: widget.unselectedLabelStyle ?? _getUnSelectLabelStyle(context),
+        tabs: widget.tabs,
+        indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
+        outlineType: widget.outlineType,
+        controller: widget.controller,
+        onTap: (index) {
+          widget.onTap?.call(index);
+        },
+      ),
     );
   }
 
@@ -172,10 +178,10 @@ class _TDTabBarState extends State<TDTabBar> {
   Decoration _getIndicator(BuildContext context) {
     return widget.showIndicator
         ? TDTabBarIndicator(
-                context: context,
-                indicatorHeight: widget.indicatorHeight,
-                indicatorWidth: widget.indicatorWidth,
-    indicatorColor: widget.indicatorColor)
+            context: context,
+            indicatorHeight: widget.indicatorHeight,
+            indicatorWidth: widget.indicatorWidth,
+            indicatorColor: widget.indicatorColor)
         : TDNoneIndicator();
   }
 }
@@ -187,12 +193,10 @@ class TDTabBarIndicator extends Decoration {
   final double? indicatorHeight;
   final Color? indicatorColor;
 
-  const TDTabBarIndicator(
-      {this.context, this.indicatorWidth, this.indicatorHeight, this.indicatorColor});
+  const TDTabBarIndicator({this.context, this.indicatorWidth, this.indicatorHeight, this.indicatorColor});
 
   @override
-  BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
-      _TDTabBarIndicatorPainter(this, onChanged!);
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) => _TDTabBarIndicatorPainter(this, onChanged!);
 }
 
 class _TDTabBarIndicatorPainter extends BoxPainter {
@@ -222,11 +226,9 @@ class _TDTabBarIndicatorPainter extends BoxPainter {
         _paint..strokeWidth = _indicatorHeight());
   }
 
-  double _indicatorHeight() =>
-      decoration.indicatorHeight ?? _defaultIndicatorHeight;
+  double _indicatorHeight() => decoration.indicatorHeight ?? _defaultIndicatorHeight;
 
-  double _indicatorWidth() =>
-      decoration.indicatorWidth ?? _defaultIndicatorWidth;
+  double _indicatorWidth() => decoration.indicatorWidth ?? _defaultIndicatorWidth;
 }
 
 /// TDesign自定义下标 竖向
@@ -235,12 +237,10 @@ class TDTabBarVerticalIndicator extends Decoration {
   final double? indicatorWidth;
   final double? indicatorHeight;
 
-  const TDTabBarVerticalIndicator(
-      {this.context, this.indicatorWidth, this.indicatorHeight});
+  const TDTabBarVerticalIndicator({this.context, this.indicatorWidth, this.indicatorHeight});
 
   @override
-  BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
-      _TDTabBarVerticalIndicatorPainter(this, onChanged!);
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) => _TDTabBarVerticalIndicatorPainter(this, onChanged!);
 }
 
 class _TDTabBarVerticalIndicatorPainter extends BoxPainter {
@@ -274,18 +274,15 @@ class _TDTabBarVerticalIndicatorPainter extends BoxPainter {
         _paint..strokeWidth = _indicatorWidth());
   }
 
-  double _indicatorHeight() =>
-      decoration.indicatorHeight ?? _defaultIndicatorHeight;
+  double _indicatorHeight() => decoration.indicatorHeight ?? _defaultIndicatorHeight;
 
-  double _indicatorWidth() =>
-      decoration.indicatorWidth ?? _defaultIndicatorWidth;
+  double _indicatorWidth() => decoration.indicatorWidth ?? _defaultIndicatorWidth;
 }
 
 /// TDesign不展示下标
 class TDNoneIndicator extends Decoration {
   @override
-  BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
-      _TDNoneIndicatorPainter();
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) => _TDNoneIndicatorPainter();
 }
 
 class _TDNoneIndicatorPainter extends BoxPainter {
