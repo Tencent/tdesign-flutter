@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../../tdesign_flutter.dart';
 import 'td_cupertino_switch.dart';
@@ -22,6 +24,8 @@ class TDSwitch extends StatefulWidget {
     this.thumbContentOnColor,
     this.thumbContentOffColor,
     this.onChanged,
+    this.openText,
+     this.closeText,
   }) : super(key: key);
 
   /// 是否可点击
@@ -48,8 +52,14 @@ class TDSwitch extends StatefulWidget {
   /// 类型：填充、文本、加载
   final TDSwitchType? type;
 
-  ///改变事件
+  /// 改变事件
   final OnSwitchChanged? onChanged;
+
+  /// 打开文案
+  final String? openText;
+
+  /// 关闭文案
+  final String? closeText;
 
   @override
   State<StatefulWidget> createState() {
@@ -142,14 +152,17 @@ class TDSwitchState extends State<TDSwitch> {
   Widget? _getThumbView(Color thumbContentOnColor, Color thumbContentOffColor) {
     switch (widget.type) {
       case TDSwitchType.text:
-        return Container(
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.only(left: 1),
-          child: TDText(
-            isOn ? '开' : '关',
-            style: TextStyle(color: isOn ? thumbContentOnColor : thumbContentOffColor, fontSize: 14),
-            forceVerticalCenter: true,
-          ),
+        return Stack(
+          children: [Container(
+            alignment: Alignment.center,
+            width: 16,
+            child: TDText(
+              isOn ? (widget.openText ?? '开') : (widget.closeText ?? '关'),
+              style: TextStyle(color: isOn ? thumbContentOnColor : thumbContentOffColor, fontSize: 14),
+              forceVerticalCenter: true,
+              maxLines: 1,
+            ),
+          )],
         );
       case TDSwitchType.loading:
         return Container(
