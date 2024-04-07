@@ -108,3 +108,8 @@ flutter: ">=3.7.0"
 <br/>
 <img width="260" src="/flutter/assets/qrcode/feedback.png" />
 <br/>
+
+# 致谢
+TDesign Flutter 依赖以下组件库,感谢作者的开源贡献:
+[flutter_easyrefresh](https://pub-web.flutter-io.cn/packages/easy_refresh)
+[flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)
