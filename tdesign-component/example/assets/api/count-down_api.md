@@ -29,9 +29,14 @@
 | timePadding | EdgeInsets? | - | 时间容器内边距 |
 | timeMargin | EdgeInsets? | - | 时间容器外边距 |
 | timeBox | BoxDecoration? | - | 时间容器装饰 |
-| timeFont | Font? | - | 时间字体尺寸 |
+| timeFontFamily | FontFamily? | - | 时间字体 |
+| timeFontSize | double? | - | 时间字体尺寸 |
+| timeFontHeight | double? | - | 时间字体行高 |
+| timeFontWeight | FontWeight? | - | 时间字体粗细 |
 | timeColor | Color? | - | 时间字体颜色 |
-| splitFont | Font? | - | 分隔符字体尺寸 |
+| splitFontSize | double? | - | 分隔符字体尺寸 |
+| splitFontHeight | double? | - | 分隔符字体行高 |
+| splitFontWeight | FontWeight? | - | 分隔符字体粗细 |
 | splitColor | Color? | - | 分隔符字体颜色 |
 | space | double? | - | 时间与分隔符的间隔 |
 

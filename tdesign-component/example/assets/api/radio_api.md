@@ -9,11 +9,14 @@
 | id |  | - |  |
 | key |  | - |  |
 | title |  | - |  |
+| titleFont |  | - |  |
 | subTitle |  | - |  |
+| subTitleFont |  | - |  |
 | enable |  | true |  |
 | subTitleMaxLine |  | 1 |  |
 | titleMaxLine |  | 1 |  |
-| checkedColor |  | - |  |
+| selectColor |  | - |  |
+| disableColor |  | - |  |
 | customContentBuilder |  | - |  |
 | spacing |  | - |  |
 | cardMode |  | - |  |
