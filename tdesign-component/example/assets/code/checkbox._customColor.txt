@@ -1,0 +1,37 @@
+
+  Widget _customColor(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      contentDirection: TDContentDirection.right,
+      selectIds: const ['0'],
+      child: Column(
+        children:  [
+          TDCheckbox(
+            selectColor: TDTheme.of(context).errorColor3,
+            disableColor: TDTheme.of(context).errorColor1,
+            id: '0',
+            title: '选项禁用-已选',
+            style: TDCheckboxStyle.circle,
+            enable: false,
+          ),
+          TDCheckbox(
+            selectColor: TDTheme.of(context).errorColor3,
+            disableColor: TDTheme.of(context).errorColor1,
+            id: '1',
+            title: '选项禁用-默认',
+            style: TDCheckboxStyle.circle,
+          ),
+
+          TDCheckbox(
+            selectColor: TDTheme.of(context).errorColor3,
+            disableColor: TDTheme.of(context).errorColor1,
+            id: 'index:0',
+            title: '多选',
+            subTitle: '描述信息',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            cardMode: true,
+          ),
+        ],
+      ),
+    );
+  }
