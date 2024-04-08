@@ -111,6 +111,11 @@
 - 单元测试：添加未在示例稿中体现，但有必要验证的组件样式，请添加到ExamplePage的'test'参数中。
 - 合并代码: 上述检查完成后，请发起pr，合并到dev分支，并同步项目组验收。
 
+## 常见问题
+
+- Flutter 3.16之后,修改了渲染引擎,导致启用forceVerticalCenter参数的组件字体偏移更多,不再居中.可以通过设置kTextForceVerticalCenterEnable=false来禁用字体居中功能,让组件显示与官方Text一致
+
+
 # SDK依赖版本
 dart: ">=2.19.0 <4.0.0"
 
