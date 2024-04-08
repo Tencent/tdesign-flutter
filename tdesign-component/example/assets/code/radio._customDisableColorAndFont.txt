@@ -1,0 +1,30 @@
+
+  Widget _customDisableColorAndFont(BuildContext context) {
+    return TDRadioGroup(
+      contentDirection: TDContentDirection.right,
+      selectId: '0',
+      child: Column(
+        children:  [
+          TDRadio(
+            id: '0',
+            title: '选项禁用-已选',
+            subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
+            radioStyle: TDRadioStyle.circle,
+            enable: false,
+            disableColor: TDTheme.of(context).errorColor1,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+          TDRadio(
+            id: '1',
+            title: '选项禁用-默认',
+            radioStyle: TDRadioStyle.circle,
+            enable: false,
+            disableColor: TDTheme.of(context).errorColor1,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+        ],
+      ),
+    );
+  }

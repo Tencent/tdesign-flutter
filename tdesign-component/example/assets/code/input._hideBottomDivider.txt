@@ -1,0 +1,18 @@
+
+  Widget _hideBottomDivider(BuildContext context) {
+    var controller = TextEditingController();
+    return TDInput(
+      leftLabel: '标签文字',
+      controller: controller,
+      backgroundColor: Colors.white,
+      hintText: '请输入文字',
+      onChanged: (text) {
+        setState(() {});
+      },
+      onClearTap: () {
+        controller.clear();
+        setState(() {});
+      },
+      showBottomDivider: false,
+    );
+  }

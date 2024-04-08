@@ -1,0 +1,32 @@
+
+  Widget _customLongTextStyle(BuildContext context) {
+    var controller = TextEditingController();
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.only(top: 16, bottom: 24),
+      width: MediaQuery.of(context).size.width,
+      color: Colors.white,
+      child: TDInput(
+        type: TDInputType.longText,
+        cardStyle: TDCardStyle.topText,
+        width: MediaQuery.of(context).size.width - 32,
+        cardStyleTopText: '标签文字',
+        controller: controller,
+        hintText: '请输入文字',
+        rightBtn: Icon(
+          TDIcons.error_circle_filled,
+          color: TDTheme.of(context).fontGyColor3,
+        ),
+        onBtnTap: () {
+          TDToast.showText('点击右侧按钮', context: context);
+        },
+        onChanged: (text) {
+          setState(() {});
+        },
+        onClearTap: () {
+          controller.clear();
+          setState(() {});
+        },
+      ),
+    );
+  }
