@@ -37,7 +37,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
         exampleCodeGroup: 'checkbox',
         children: [
           ExampleModule(title: '组件类型', children: [
-            ExampleItem(desc: '纵向多选框', builder: _verticleCheckbox),
+            ExampleItem(desc: '纵向多选框', builder: _verticalCheckbox),
             ExampleItem(desc: '横向多选框', builder: _horizontalCheckbox),
             ExampleItem(desc: '带全选多选框', builder: _checkAllSelected)
           ]),
@@ -53,11 +53,16 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             ExampleItem(desc: '纵向卡片单选框', builder: _verticalCardStyle),
             ExampleItem(desc: '横向卡片单选框', builder: _horizontalCardStyle),
           ]),
-        ]);
+        ],
+    test: [
+      ExampleItem(desc: '自定义Icon', builder: _customIconBuildStyle),
+      ExampleItem(desc: '自定义颜色', builder: _customColor),
+      ExampleItem(desc: '自定义字体尺寸', builder: _customFont),
+    ],);
   }
 
   @Demo(group: 'checkbox')
-  Widget _verticleCheckbox(BuildContext context) {
+  Widget _verticalCheckbox(BuildContext context) {
     return TDCheckboxGroupContainer(
       selectIds: const ['index:1'],
       child: ListView.builder(
@@ -345,6 +350,107 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
           cardMode: true,
         ),
       ],
+    );
+  }
+
+
+
+  @Demo(group: 'checkbox')
+  Widget _customIconBuildStyle(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      selectIds: const ['index:1'],
+      cardMode: true,
+      direction: Axis.vertical,
+      directionalTdCheckboxes:  [
+        TDCheckbox(
+          id: 'index:0',
+          title: '多选',
+          subTitle: '描述信息',
+          titleMaxLine: 2,
+          subTitleMaxLine: 2,
+          cardMode: true,
+          customIconBuilder: (context, checked){
+            return const Icon(TDIcons.app, size: 12,);
+          },
+        ),
+      ],
+    );
+  }
+  @Demo(group: 'checkbox')
+  Widget _customColor(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      contentDirection: TDContentDirection.right,
+      selectIds: const ['0'],
+      child: Column(
+        children:  [
+          TDCheckbox(
+            selectColor: TDTheme.of(context).errorColor3,
+            disableColor: TDTheme.of(context).errorColor1,
+            id: '0',
+            title: '选项禁用-已选',
+            style: TDCheckboxStyle.circle,
+            enable: false,
+          ),
+          TDCheckbox(
+            selectColor: TDTheme.of(context).errorColor3,
+            disableColor: TDTheme.of(context).errorColor1,
+            id: '1',
+            title: '选项禁用-默认',
+            style: TDCheckboxStyle.circle,
+          ),
+
+          TDCheckbox(
+            selectColor: TDTheme.of(context).errorColor3,
+            disableColor: TDTheme.of(context).errorColor1,
+            id: 'index:0',
+            title: '多选',
+            subTitle: '描述信息',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            cardMode: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  @Demo(group: 'checkbox')
+  Widget _customFont(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      contentDirection: TDContentDirection.right,
+      selectIds: const ['0'],
+      child: Column(
+        children:  [
+          TDCheckbox(
+            id: '0',
+            title: '选项禁用-已选',
+            subTitle: '描述文本',
+            style: TDCheckboxStyle.circle,
+            enable: false,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+          TDCheckbox(
+            id: '1',
+            title: '选项禁用-默认',
+            subTitle: '描述文本',
+            style: TDCheckboxStyle.circle,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+
+          TDCheckbox(
+            id: 'index:0',
+            title: '多选',
+            subTitle: '描述信息',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            cardMode: true,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+        ],
+      ),
     );
   }
 

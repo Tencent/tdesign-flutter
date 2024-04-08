@@ -7,6 +7,9 @@ import 'package:flutter/services.dart';
 
 import '../../../tdesign_flutter.dart';
 
+/// 是否启用强制居中
+var kTextForceVerticalCenterEnable = true;
+
 /// 文本控件
 /// 设计原则：
 /// 1.为了使用更方便，所以对系统组件进行的扩展，需兼容系统控件所有功能，不能让用户使用TDesign时，因不能满足系统功能而弃用。
@@ -144,7 +147,7 @@ class TDText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (forceVerticalCenter) {
+    if (forceVerticalCenter && kTextForceVerticalCenterEnable) {
       var config = getConfiguration(context);
       var paddingConfig = config?.paddingConfig;
 

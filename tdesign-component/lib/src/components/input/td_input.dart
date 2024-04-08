@@ -3,14 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../tdesign_flutter.dart';
 
-enum TDInputType {
-  normal,
-  twoLine,
-  longText,
-  special,
-  normalMaxTwoLine,
-  cardStyle
-}
+enum TDInputType { normal, twoLine, longText, special, normalMaxTwoLine, cardStyle }
 
 enum TDInputSize { small, large }
 
@@ -21,11 +14,10 @@ class TDInput extends StatelessWidget {
   TDInput(
       {Key? key,
       this.width,
-      double? height,
       this.textStyle,
       this.backgroundColor,
       this.decoration,
-      this.leftIcon,// leftIcon is default designed 24 in size.
+      this.leftIcon, // leftIcon is default designed 24 in size.
       this.leftLabel,
       this.leftLabelStyle,
       this.required,
@@ -61,7 +53,7 @@ class TDInput extends StatelessWidget {
       this.clearBtnColor,
       this.contentAlignment = TextAlign.start,
       this.rightWidget,
-        this.showBottomDivider = true,
+      this.showBottomDivider = true,
       this.cardStyle,
       this.cardStyleTopText,
       this.cardStyleBottomText})
@@ -80,22 +72,14 @@ class TDInput extends StatelessWidget {
         leftInfoWidth = leftInfoWidth ??
             ((leftLabel == null && leftIcon == null && !(required ?? false))
                 ? 0
-                : ((leftLabel?.length == null
-                                ? 0
-                                : (leftLabel!.length > 5
-                                    ? 5.1
-                                    : leftLabel.length)) *
-                            16 + 1 +
+                : ((leftLabel?.length == null ? 0 : (leftLabel!.length > 5 ? 5.1 : leftLabel.length)) * 16 +
+                        1 +
                         (leftIcon != null ? 1 : 0) * 28) +
                     (required == true ? 1 : 0) * 14),
-        height = 56,
         super(key: key);
 
   /// 输入框宽度(TDCardStyle时必须设置该参数)
   final double? width;
-
-  /// 输入框高度
-  final double? height;
 
   /// 输入框背景色
   final Color? backgroundColor;
@@ -180,7 +164,7 @@ class TDInput extends StatelessWidget {
 
   /// 右侧删除点击
   final GestureTapCallback? onClearTap;
-  
+
   /// 是否需要右侧按钮变为删除
   final bool needClear;
 
@@ -255,21 +239,16 @@ class TDInput extends StatelessWidget {
 
   Widget buildNormalInput(BuildContext context) {
     var cardStyleDecoration = _getCardStylePreDecoration(context);
-    var hasLeftWidget =
-        leftLabel != null || leftIcon != null || (required ?? false);
+    var hasLeftWidget = leftLabel != null || leftIcon != null || (required ?? false);
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
         Container(
           alignment: Alignment.centerLeft,
-          color: (cardStyleDecoration != null || decoration != null)
-              ? null
-              : backgroundColor,
+          color: (cardStyleDecoration != null || decoration != null) ? null : backgroundColor,
           decoration: cardStyleDecoration ?? decoration,
           child: Row(
-            crossAxisAlignment: additionInfo != ''
-                ? CrossAxisAlignment.start
-                : CrossAxisAlignment.center,
+            crossAxisAlignment: additionInfo != '' ? CrossAxisAlignment.start : CrossAxisAlignment.center,
             children: <Widget>[
               Visibility(
                 visible: hasLeftWidget,
@@ -290,9 +269,7 @@ class TDInput extends StatelessWidget {
                       child: Container(
                         constraints: const BoxConstraints(maxWidth: 81),
                         padding: EdgeInsets.only(
-                            left: leftIcon != null ? 4 : 0,
-                            top: getInputPadding(),
-                            bottom: getInputPadding()),
+                            left: leftIcon != null ? 4 : 0, top: getInputPadding(), bottom: getInputPadding()),
                         child: Column(
                           children: [
                             TDText(
@@ -317,8 +294,7 @@ class TDInput extends StatelessWidget {
                           child: TDText(
                             '*',
                             maxLines: 1,
-                            style: TextStyle(
-                                color: TDTheme.of(context).errorColor6),
+                            style: TextStyle(color: TDTheme.of(context).errorColor6),
                             font: TDTheme.of(context).fontBodyLarge,
                             fontWeight: FontWeight.w400,
                           ),
@@ -332,8 +308,7 @@ class TDInput extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TDInputView(
-                      textStyle: textStyle ??
-                          TextStyle(color: TDTheme.of(context).fontGyColor1),
+                      textStyle: textStyle ?? TextStyle(color: TDTheme.of(context).fontGyColor1),
                       readOnly: readOnly,
                       autofocus: autofocus,
                       obscureText: obscureText,
@@ -349,8 +324,7 @@ class TDInput extends StatelessWidget {
                       focusNode: focusNode,
                       isCollapsed: true,
                       textAlign: contentAlignment,
-                      hintTextStyle: hintTextStyle ??
-                          TextStyle(color: TDTheme.of(context).fontGyColor3),
+                      hintTextStyle: hintTextStyle ?? TextStyle(color: TDTheme.of(context).fontGyColor3),
                       cursorColor: cursorColor,
                       textInputBackgroundColor: textInputBackgroundColor,
                       controller: controller,
@@ -363,13 +337,11 @@ class TDInput extends StatelessWidget {
                     ),
                     Visibility(
                       child: Padding(
-                        padding: EdgeInsets.only(
-                            left: 16, bottom: getInputPadding()),
+                        padding: EdgeInsets.only(left: 16, bottom: getInputPadding()),
                         child: TDText(
                           additionInfo,
                           font: TDTheme.of(context).fontBodySmall,
-                          textColor: additionInfoColor ??
-                              TDTheme.of(context).fontGyColor3,
+                          textColor: additionInfoColor ?? TDTheme.of(context).fontGyColor3,
                         ),
                       ),
                       visible: additionInfo != '',
@@ -380,17 +352,17 @@ class TDInput extends StatelessWidget {
               Visibility(
                 visible: controller != null && controller!.text.isNotEmpty && needClear,
                 child: GestureDetector(
-                  child: Container(
-                    margin: EdgeInsets.only(left: 17.5, right: 16, top: additionInfo != '' ? getInputPadding() : 0),
-                    child: Icon(
-                      TDIcons.close_circle_filled,
-                      color: clearBtnColor ?? TDTheme.of(context).fontGyColor3,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 17.5, right: 16, top: additionInfo != '' ? getInputPadding() : 0),
+                      child: Icon(
+                        TDIcons.close_circle_filled,
+                        color: clearBtnColor ?? TDTheme.of(context).fontGyColor3,
+                      ),
                     ),
-                  ),
-                  onTap: onClearTap ?? (){
-                    controller?.text = '';
-                  }
-                ),
+                    onTap: onClearTap ??
+                        () {
+                          controller?.text = '';
+                        }),
                 replacement: Visibility(
                   visible: rightBtn != null,
                   child: GestureDetector(
@@ -405,14 +377,15 @@ class TDInput extends StatelessWidget {
             ],
           ),
         ),
-        Visibility(
-          visible: type != TDInputType.cardStyle,
-          child: const TDDivider(
-            margin: EdgeInsets.only(
-              left: 16,
+        if (showBottomDivider)
+          Visibility(
+            visible: type != TDInputType.cardStyle,
+            child: const TDDivider(
+              margin: EdgeInsets.only(
+                left: 16,
+              ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -430,20 +403,17 @@ class TDInput extends StatelessWidget {
         case TDCardStyle.topTextWithBlueBorder:
           cardStyleDecoration = BoxDecoration(
               color: Colors.white,
-              border: Border.all(
-                  color: TDTheme.of(context).brandNormalColor, width: 1.5),
+              border: Border.all(color: TDTheme.of(context).brandNormalColor, width: 1.5),
               borderRadius: BorderRadius.circular(6));
           break;
         case TDCardStyle.errorStyle:
           cardStyleDecoration = BoxDecoration(
               color: Colors.white,
-              border: Border.all(
-                  color: TDTheme.of(context).errorColor6, width: 1.5),
+              border: Border.all(color: TDTheme.of(context).errorColor6, width: 1.5),
               borderRadius: BorderRadius.circular(6));
           break;
         default:
-          cardStyleDecoration = BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(6));
+          cardStyleDecoration = BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(6));
           break;
       }
     }
@@ -498,8 +468,7 @@ class TDInput extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: TDInputView(
-                        textStyle: textStyle ??
-                            TextStyle(color: TDTheme.of(context).fontGyColor1),
+                        textStyle: textStyle ?? TextStyle(color: TDTheme.of(context).fontGyColor1),
                         readOnly: readOnly,
                         autofocus: autofocus,
                         obscureText: obscureText,
@@ -514,13 +483,11 @@ class TDInput extends StatelessWidget {
                         isCollapsed: true,
                         maxLines: maxLines,
                         focusNode: focusNode,
-                        hintTextStyle: hintTextStyle ??
-                            TextStyle(color: TDTheme.of(context).fontGyColor3),
+                        hintTextStyle: hintTextStyle ?? TextStyle(color: TDTheme.of(context).fontGyColor3),
                         cursorColor: cursorColor,
                         textInputBackgroundColor: textInputBackgroundColor,
                         controller: controller,
-                        contentPadding: contentPadding ??
-                            const EdgeInsets.only(left: 16, right: 16),
+                        contentPadding: contentPadding ?? const EdgeInsets.only(left: 16, right: 16),
                       ),
                     ),
                     Visibility(
@@ -551,14 +518,12 @@ class TDInput extends StatelessWidget {
               ),
             ],
           ),
-          const Visibility(
-            child: TDDivider(
+          if (showBottomDivider)
+            const TDDivider(
               margin: EdgeInsets.only(
                 left: 16,
               ),
             ),
-          ),
-          Visibility(child: const TDDivider(margin: EdgeInsets.only(left: 16, ),), visible: showBottomDivider,),
         ],
       ),
     );
@@ -579,28 +544,25 @@ class TDInput extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                    padding: EdgeInsets.only(
-                        left: 16,
-                        top: getInputPadding(),
-                        bottom: getInputPadding()),
+                    padding: EdgeInsets.only(left: 16, top: getInputPadding(), bottom: getInputPadding()),
                     child: TDText(
                       leftLabel,
                       maxLines: 2,
                       fontWeight: FontWeight.w400,
                     )),
-                const TDDivider(
-                  margin: EdgeInsets.only(
-                    left: 16,
+                if (showBottomDivider)
+                  const TDDivider(
+                    margin: EdgeInsets.only(
+                      left: 16,
+                    ),
                   ),
-                ),
               ],
             ),
           ),
           Expanded(
             flex: 1,
             child: TDInputView(
-              textStyle: textStyle ??
-                  TextStyle(color: TDTheme.of(context).fontGyColor1),
+              textStyle: textStyle ?? TextStyle(color: TDTheme.of(context).fontGyColor1),
               readOnly: readOnly,
               autofocus: autofocus,
               obscureText: obscureText,
@@ -610,19 +572,15 @@ class TDInput extends StatelessWidget {
               inputType: inputType,
               textAlign: textAlign,
               onChanged: onChanged,
-              inputFormatters:
-                  inputFormatters ?? [LengthLimitingTextInputFormatter(maxLength)],
+              inputFormatters: inputFormatters ?? [LengthLimitingTextInputFormatter(maxLength)],
               inputDecoration: inputDecoration,
               maxLines: maxLines,
               focusNode: focusNode,
-              hintTextStyle: hintTextStyle ??
-                  TextStyle(color: TDTheme.of(context).fontGyColor3),
+              hintTextStyle: hintTextStyle ?? TextStyle(color: TDTheme.of(context).fontGyColor3),
               cursorColor: cursorColor,
               textInputBackgroundColor: textInputBackgroundColor,
               controller: controller,
-              contentPadding: contentPadding ??
-                  const EdgeInsets.only(
-                      left: 16, right: 16, top: 12, bottom: 12),
+              contentPadding: contentPadding ?? const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
             ),
           ),
           Container(
@@ -653,10 +611,7 @@ class TDInput extends StatelessWidget {
               Visibility(
                 visible: leftLabel != null,
                 child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 16,
-                      top: getInputPadding(),
-                      bottom: getInputPadding()),
+                  padding: EdgeInsets.only(left: 16, top: getInputPadding(), bottom: getInputPadding()),
                   child: leftInfoWidth != null
                       ? SizedBox(
                           width: leftInfoWidth,
@@ -684,8 +639,7 @@ class TDInput extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: TDInputView(
-                    textStyle: textStyle ??
-                        TextStyle(color: TDTheme.of(context).fontGyColor1),
+                    textStyle: textStyle ?? TextStyle(color: TDTheme.of(context).fontGyColor1),
                     readOnly: readOnly,
                     autofocus: autofocus,
                     obscureText: obscureText,
@@ -699,40 +653,34 @@ class TDInput extends StatelessWidget {
                     maxLines: maxLines,
                     focusNode: focusNode,
                     isCollapsed: true,
-                    hintTextStyle: hintTextStyle ??
-                        TextStyle(color: TDTheme.of(context).fontGyColor3),
+                    hintTextStyle: hintTextStyle ?? TextStyle(color: TDTheme.of(context).fontGyColor3),
                     cursorColor: cursorColor,
                     textInputBackgroundColor: textInputBackgroundColor,
                     controller: controller,
                     textAlign: textAlign,
-                    contentPadding: contentPadding ??
-                        EdgeInsets.only(
-                            right: 8,
-                            bottom: getInputPadding(),
-                            top: getInputPadding()),
+                    contentPadding:
+                        contentPadding ?? EdgeInsets.only(right: 8, bottom: getInputPadding(), top: getInputPadding()),
                   ),
                 ),
               ),
               Visibility(
                 visible: rightWidget != null,
                 child: Container(
-                  margin: EdgeInsets.only(
-                      top: getInputPadding(),
-                      bottom: getInputPadding(),
-                      right: 16),
+                  margin: EdgeInsets.only(top: getInputPadding(), bottom: getInputPadding(), right: 16),
                   child: rightWidget,
                 ),
               ),
             ],
           ),
         ),
-        const Visibility(
-          child: TDDivider(
-            margin: EdgeInsets.only(
-              left: 16,
+        if (showBottomDivider)
+          const Visibility(
+            child: TDDivider(
+              margin: EdgeInsets.only(
+                left: 16,
+              ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -801,36 +749,37 @@ class TDInput extends StatelessWidget {
 }
 
 /// 中文算作两个字符类型的TextInputFormatter
-class Chinese2Formatter extends TextInputFormatter{
-
+class Chinese2Formatter extends TextInputFormatter {
   final int maxLength;
 
   Chinese2Formatter(this.maxLength);
 
   final _regExp = r'^[\u4E00-\u9FA5A-Za-z0-9_]+$';
+
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-
     var newValueLength = newValue.text.length;
     var count = 0;
-    if(newValueLength == 0){
+    if (newValueLength == 0) {
       return newValue;
     }
-    if(maxLength >0){
+    if (maxLength > 0) {
       for (var i = 0; i < newValueLength; i++) {
         if (newValue.text.codeUnitAt(i) > 122) {
           ///中文字符按照2个计算
           count++;
         }
-        if(i >0 && count +i > maxLength-1){
-          var text =newValue.text.substring(0,i);
-          return newValue.copyWith(text:text,composing:TextRange.empty,selection: TextSelection.fromPosition(
-              TextPosition(offset: i,affinity: TextAffinity.downstream)));
+        if (i > 0 && count + i > maxLength - 1) {
+          var text = newValue.text.substring(0, i);
+          return newValue.copyWith(
+              text: text,
+              composing: TextRange.empty,
+              selection: TextSelection.fromPosition(TextPosition(offset: i, affinity: TextAffinity.downstream)));
         }
       }
     }
-    if(newValueLength>0 && RegExp(_regExp).firstMatch(newValue.text)!=null){
-      if(newValueLength +count<= maxLength){
+    if (newValueLength > 0 && RegExp(_regExp).firstMatch(newValue.text) != null) {
+      if (newValueLength + count <= maxLength) {
         return newValue;
       }
     }
