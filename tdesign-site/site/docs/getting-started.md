@@ -72,6 +72,7 @@ iOS请运行项目预览 ↓
 
 ## 主题生成器
 如果你不想自定义太多颜色,但是想要拥有好看的自定义主题,"主题生成器"是个不错的选择.
+
 1.进入[TDesign官网](https://tdesign.tencent.com/vue/custom-theme) ,点击下方的主题生成器,然后再右边生成器里选择想要的颜色,点击下载
 
 ![img.png](/flutter/assets/theme_generator.png)
