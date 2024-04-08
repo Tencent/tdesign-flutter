@@ -226,7 +226,7 @@ isComponent: true
 在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
 
 ```dart
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';${_getExtraImport(title)}
 ```
 
 ## 代码演示
@@ -238,4 +238,18 @@ ${api}
   ''';
 
   static var manualExampleCode = <String, List<String>>{};
+
+  static _getExtraImport(String title) {
+    if(title == 'Swiper 轮播图'){
+      return '''
+ 
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';''';
+    } else if(title == 'PullDownRefresh 下拉刷新'){
+      return '''
+ 
+import 'package:flutter_easyrefresh/easy_refresh.dart';''';
+
+    }
+    return '';
+  }
 }
