@@ -44,12 +44,18 @@ class _TabStyle extends AnimatedWidget {
     // the same value of inherit. Force that to be inherit=true here.
     final defaultStyle = (labelStyle ??
             tabBarTheme.labelStyle ??
-            themeData.primaryTextTheme.bodyText1!)
+            TextStyle(
+              height: TDTheme.of(context).fontBodyMedium?.height ?? 1.57,
+              fontSize: TDTheme.of(context).fontBodyMedium?.size ?? 14
+            ))
         .copyWith(inherit: true);
     final defaultUnselectedStyle = (unselectedLabelStyle ??
             tabBarTheme.unselectedLabelStyle ??
             labelStyle ??
-            themeData.primaryTextTheme.bodyText1!)
+        TextStyle(
+            height: TDTheme.of(context).fontBodyMedium?.height ?? 1.57,
+            fontSize: TDTheme.of(context).fontBodyMedium?.size ?? 14
+        ))
         .copyWith(inherit: true);
     final textStyle = selected
         ? TextStyle.lerp(defaultStyle, defaultUnselectedStyle, animation.value)!
@@ -58,7 +64,7 @@ class _TabStyle extends AnimatedWidget {
 
     final selectedColor = labelColor ??
         tabBarTheme.labelColor ??
-        themeData.primaryTextTheme.bodyText1!.color!;
+        TDTheme.of(context).brandNormalColor;
     final unselectedColor = unselectedLabelColor ??
         tabBarTheme.unselectedLabelColor ??
         selectedColor.withAlpha(0xB2); // 70% alpha
