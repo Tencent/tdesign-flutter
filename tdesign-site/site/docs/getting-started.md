@@ -72,14 +72,14 @@ iOS请运行项目预览 ↓
 
 ## 主题生成器
 如果你不想自定义太多颜色,但是想要拥有好看的自定义主题,"主题生成器"是个不错的选择.
-1.进入TDesign官网,点击下方的主题生成器,然后再右边生成器里选择想要的颜色,点击下载
+1.进入[TDesign官网](https://tdesign.tencent.com/vue/custom-theme) ,点击下方的主题生成器,然后再右边生成器里选择想要的颜色,点击下载
 
-![img.png](../public/assets/theme_generator.png)
+![img.png](/flutter/assets/theme_generator.png)
 
-![img.png](../public/assets/select_color.png)
+![img.png](/flutter/assets/select_color.png)
 
 2.此时你得到是一个theme.css文件,可以将该文件放到tdesign-component/example/shell/theme/文件夹下,把该文件夹下的css2JsonTheme.dart修改为你自己的文件名、主题名和输出路径,即可得到一个theme.json文件
-![img.png](../public/assets/dart_modify.png)
+![img.png](/flutter/assets/dart_modify.png)
 
 3.将主题json加载进TDTheme,美观的自定义主题就设置完成了.
 ```
