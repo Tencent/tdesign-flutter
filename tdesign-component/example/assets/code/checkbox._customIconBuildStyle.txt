@@ -1,0 +1,21 @@
+
+  Widget _customIconBuildStyle(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      selectIds: const ['index:1'],
+      cardMode: true,
+      direction: Axis.vertical,
+      directionalTdCheckboxes:  [
+        TDCheckbox(
+          id: 'index:0',
+          title: '多选',
+          subTitle: '描述信息',
+          titleMaxLine: 2,
+          subTitleMaxLine: 2,
+          cardMode: true,
+          customIconBuilder: (context, checked){
+            return const Icon(TDIcons.app, size: 12,);
+          },
+        ),
+      ],
+    );
+  }

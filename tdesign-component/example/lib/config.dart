@@ -151,7 +151,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         text: 'Cell 单元格', name: 'cell', isTodo: true, pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
         text: 'CountDown 倒计时',
-        name: 'count_down',
+        name: 'count-down',
         pageBuilder: _wrapInheritedTheme((context) => const TDCountDownPage())),
     ExamplePageModel(
         text: 'Collapse 折叠面板',
