@@ -1,6 +1,6 @@
 name: tdesign_flutter
 description: Tencent TDesign UI component library of Flutter, suitable for use in mobile projects.
-version: 0.1.3
+version: 0.1.4
 homepage: https://github.com/Tencent/tdesign-flutter
 
 environment:
@@ -36,6 +36,9 @@ flutter:
     - family: TDIcons
       fonts:
         - asset: assets/tdesign/td_icons.ttf
+    - family: TCloudNumber
+      fonts:
+        - asset: assets/tdesign/TCloudNumberVF.ttf
 
 
   # To add assets to your plugin package, add an assets section, like this:

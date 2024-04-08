@@ -11,6 +11,8 @@
 | radius | double | 12.0 | 圆角 |
 | title | String? | - | 标题 |
 | titleColor | Color | const Color(0xE6000000) | 标题颜色 |
+| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
+| contentWidget | Widget? | - | 内容Widget |
 | content | String? | - | 内容 |
 | contentColor | Color? | - | 内容颜色 |
 | leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
@@ -46,6 +48,8 @@
 | radius | double | 12.0 | 圆角 |
 | title | String? | - | 标题 |
 | titleColor | Color | const Color(0xE6000000) | 标题颜色 |
+| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
+| contentWidget | Widget? | - | 内容Widget |
 | content | String? | - | 内容 |
 | contentColor | Color? | - | 内容颜色 |
 | contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
@@ -67,6 +71,8 @@
 | radius | double | 12.0 | 圆角 |
 | title | String? | - | 标题 |
 | titleColor | Color | const Color(0xE6000000) | 标题颜色 |
+| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
+| contentWidget | Widget? | - | 内容Widget |
 | content | String? | - | 内容 |
 | hintText | String? | '' | 输入提示 |
 | contentColor | Color? | - | 内容颜色 |
@@ -88,6 +94,8 @@
 | titleColor | Color | const Color(0xE6000000) | 标题颜色 |
 | content | String? | - | 内容 |
 | contentColor | Color? | - | 内容颜色 |
+| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
+| contentWidget | Widget? | - | 内容Widget |
 | contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
 | leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
 | rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
@@ -150,10 +158,12 @@
 | key |  | - |  |
 | title | String? | - | 标题 |
 | titleColor | Color | Colors.black | 标题颜色 |
-| padding | EdgeInsetsGeometry? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容的内边距 |
+| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
+| contentWidget | Widget? | - | 内容Widget |
 | content | String? | - | 内容 |
 | contentColor | Color? | - | 内容颜色 |
 | contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
+| padding | EdgeInsetsGeometry? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容的内边距 |
 
 ```
 ```

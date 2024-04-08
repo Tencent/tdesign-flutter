@@ -34,6 +34,24 @@ class TDTextPage extends StatelessWidget {
           ExampleItem(desc: '自定义内部padding:', builder: _buildCustomPaddingText),
         ]),
       ],
+      test: [
+        ExampleItem(
+            desc: '中文居中-系统字体',
+            builder: (context){
+          return Container(
+            color: TDTheme.of(context).brandFocusColor,
+            child: Text(exampleTxt),
+          );
+        }),
+        ExampleItem(
+            desc: '中文居中-TD字体',
+            builder: (context){
+          return Container(
+            color: TDTheme.of(context).brandFocusColor,
+            child: TDText(exampleTxt, forceVerticalCenter: true,),
+          );
+        }),
+      ],
     );
   }
 
@@ -112,7 +130,7 @@ class TDTextPage extends StatelessWidget {
   Widget _getSystemText(BuildContext context) {
     return TDText(
       exampleTxt,
-      backgroundColor: TDTheme.of(context).brandHoverColor,
+      backgroundColor: TDTheme.of(context).brandFocusColor,
     ).getRawText(context: context);
   }
 
@@ -122,7 +140,7 @@ class TDTextPage extends StatelessWidget {
       '中华人民共和国腾讯科技',
       // font: Font(size: 100, lineHeight: 100),
       forceVerticalCenter: true,
-      backgroundColor: TDTheme.of(context).brandHoverColor,
+      backgroundColor: TDTheme.of(context).brandFocusColor,
     );
   }
 
@@ -147,13 +165,13 @@ class CustomPaddingText extends StatelessWidget {
         TDText(
           '中华人民共和国腾讯科技fgjpqy',
           forceVerticalCenter: true,
-          backgroundColor: TDTheme.of(context).brandHoverColor,
+          backgroundColor: TDTheme.of(context).brandFocusColor,
         ),
         TDText(
           'English',
           font: TDTheme.of(context).fontHeadlineLarge,
           forceVerticalCenter: true,
-          backgroundColor: TDTheme.of(context).brandHoverColor,
+          backgroundColor: TDTheme.of(context).brandFocusColor,
         ),
       ],
     );
