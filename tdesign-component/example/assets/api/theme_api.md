@@ -27,12 +27,13 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | name | String | - | 名称 |
-| colorMap | Map<String, Color> | - | 颜色 |
-| fontMap | Map<String, Font> | - | 字体尺寸 |
-| radiusMap | Map<String, double> | - | 圆角 |
-| fontFamilyMap | Map<String, FontFamily> | - | 字体样式 |
-| shadowMap | Map<String, List<BoxShadow>> | - | 阴影 |
-| spacerMap | Map<String, double> | - | 间隔 |
+| colorMap | _TDMap<String, Color> | - | 颜色 |
+| fontMap | _TDMap<String, Font> | - | 字体尺寸 |
+| radiusMap | _TDMap<String, double> | - | 圆角 |
+| fontFamilyMap | _TDMap<String, FontFamily> | - | 字体样式 |
+| shadowMap | _TDMap<String, List<BoxShadow>> | - | 阴影 |
+| spacerMap | _TDMap<String, double> | - | 间隔 |
+| refMap | _TDMap<String, String> | - | 映射关系 |
 | extraThemeData | TDExtraThemeData? | - | 额外定义的结构 |
 
 
