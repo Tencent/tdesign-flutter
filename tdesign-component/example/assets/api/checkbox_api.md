@@ -8,6 +8,8 @@
 | key |  | - |  |
 | title | String? | - | 文本 |
 | subTitle | String? | - | 辅助文字 |
+| titleFont | Font? | - | 标题字体大小 |
+| subTitleFont | Font? | - | 副标题字体大小 |
 | enable | bool | true | 不可用 |
 | checked | bool | false | 选中状态。默认为`false` |
 | titleMaxLine | int? | - | 标题的行数 |
@@ -18,6 +20,8 @@
 | style | TDCheckboxStyle? | - | 复选框样式：圆形或方形 |
 | spacing | double? | - | icon和文字的距离 |
 | backgroundColor | Color? | - | 背景颜色 |
+| selectColor | Color? | - | 选择颜色 |
+| disableColor | Color? | - | 禁用选择颜色 |
 | size | TDCheckBoxSize | TDCheckBoxSize.small | 复选框大小 |
 | cardMode | bool | false | 展示为卡片模式 |
 | showDivider | bool | true | 是否展示分割线 |

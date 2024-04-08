@@ -1,4 +1,38 @@
-// TODO: TDBottoomBar
+## 🌈 0.1.4 `2024-04-08`
+
+### 🚀 Features
+- `TDCountDown`:
+  - add: Added TDCountDown countdown component @hkaikai
+- `TDTheme`:
+  - add: Modified the theme implementation method, supporting ref attribute for custom mapping
+  - add: Added default number font numberFontFamily
+- `TDText`:
+  - add: Added TDText force center switch kTextForceVerticalCenterEnable, which can globally disable forced centering to prevent excessive text offset after flutter 3.16 version ([#35](https://github.com/Tencent/tdesign-flutter/issues/35))
+- `TDBottomTabBar`:
+  - add: Added custom background color feature ([#55](https://github.com/Tencent/tdesign-flutter/issues/55))
+- `TDCheckbox`:
+  - add: TDCheckbox and TDRadio support custom colors ([#57](https://github.com/Tencent/tdesign-flutter/issues/57))
+  - add: TDCheckbox and TDRadio support custom font sizes ([#66](https://github.com/Tencent/tdesign-flutter/issues/66))
+- `TDTabBar`:
+  - add: TDTabBar adds custom settings for divider color and height ([#71](https://github.com/Tencent/tdesign-flutter/issues/71))
+- `TDSwitch`:
+  - add: TDSwitch supports custom "on/off" text ([#73](https://github.com/Tencent/tdesign-flutter/issues/73))
+- `TDDialog`:
+  - add: Added custom title alignment and content Widget feature ([#58](https://github.com/Tencent/tdesign-flutter/issues/58))
+
+### 🐞 Bug Fixes
+- `TDSlider`:
+  - fix: Fixed an issue where TDSlider setting showThumbValue does not work.
+- `TDButton`:
+  - fix: Fixed an issue where the external setting of the theme color for TDButton does not take effect ([#54](https://github.com/Tencent/tdesign-flutter/issues/54))
+- `TDInput`:
+  - fix: Fixed an issue where TDInput's showBottomDivider does not work ([#70](https://github.com/Tencent/tdesign-flutter/issues/70))
+  - fix: Removed the invalid height API of TDInput, use SizedBox to modify the height ([#70](https://github.com/Tencent/tdesign-flutter/issues/70))
+
+### 🚧 Others
+- Example application, added a button to modify the theme, can quickly modify the theme color
+
+
 ## 🌈 0.1.3 `2024-03-15`
 
 ### 🚀 Features

@@ -46,6 +46,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     // 使用多套主题
     TDTheme.needMultiTheme();
+    // 适配3.16的字体居中前,先禁用字体居中功能
+    kTextForceVerticalCenterEnable = false;
 
     return MaterialApp(
       title: 'TDesign Flutter Example',

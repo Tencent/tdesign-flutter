@@ -38,6 +38,7 @@
 
 # 自定义主题
 
+## 基础用法
 设置自定义主题的方式:
 ```
     MaterialApp(
@@ -64,6 +65,30 @@
         }
     }
   ''';
+```
+
+## 主题生成器
+如果你不想自定义太多颜色,但是想要拥有好看的自定义主题,"主题生成器"是个不错的选择.
+1.进入TDesign官网,点击下方的主题生成器,然后再右边生成器里选择想要的颜色,点击下载
+
+![img.png](../tdesign-site/site/public/assets/theme_generator.png)
+
+![img.png](../tdesign-site/site/public/assets/select_color.png)
+
+2.此时你得到是一个theme.css文件,可以将该文件放到tdesign-component/example/shell/theme/文件夹下,把该文件夹下的css2JsonTheme.dart修改为你自己的文件名、主题名和输出路径,即可得到一个theme.json文件
+![img.png](../tdesign-site/site/public/assets/dart_modify.png)
+
+3.将主题json加载进TDTheme,美观的自定义主题就设置完成了.
+```
+    var jsonString = await rootBundle.loadString('assets/theme.json');
+    var _themeData = TDThemeData.fromJson('green', jsonString);
+    // ……
+    MaterialApp(
+      title: 'TDesign Flutter Example',
+      theme: ThemeData(
+      extensions: [_themeData],
+      home: MyHomePage(title: 'TDesign Flutter 组件库'),
+    );
 ```
 
 # 开发规范
@@ -103,3 +128,8 @@ flutter: ">=3.7.0"
 # 开源协议
 
 TDesign 遵循 [MIT 协议](https://github.com/Tencent/tdesing-flutter/blob/main/tdesign-component/LICENSE)
+
+# 致谢
+TDesign Flutter 依赖以下组件库,感谢作者的开源贡献:
+[flutter_easyrefresh](https://pub-web.flutter-io.cn/packages/easy_refresh)
+[flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)

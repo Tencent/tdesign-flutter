@@ -44,7 +44,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
             ExampleItem(builder: _buildSwitchWithSizeMed),
             ExampleItem(builder: _buildSwitchWithSizeSmall),
           ]),
-        ]);
+        ],
+    test: [
+      ExampleItem(desc: '自定义开关文案-通常只支持一个字符,超出部分无法展示', builder: _customText),
+    ],);
     return current;
   }
 
@@ -277,6 +280,19 @@ class TDSwitchPageState extends State<TDSwitchPage> {
       enable: enable,
       size: size,
       type: type,
+    );
+  }
+
+  @Demo(group: 'switch')
+  Widget _customText(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(
+        type: TDSwitchType.text,
+        openText: '1111',
+        closeText: '—',
+      ),
+      title: '基础开关',
     );
   }
 }
