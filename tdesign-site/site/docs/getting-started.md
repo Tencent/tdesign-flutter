@@ -95,6 +95,10 @@ iOS请运行项目预览 ↓
     );
 ```
 
+## 常见问题
+
+- Flutter 3.16之后,修改了渲染引擎,导致启用forceVerticalCenter参数的组件字体偏移更多,不再居中.可以通过设置kTextForceVerticalCenterEnable=false来禁用字体居中功能,让组件显示与官方Text一致
+
 ## 基础库版本
 
 最低基础库版本：`^0.1.0`
