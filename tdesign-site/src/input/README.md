@@ -285,12 +285,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             width: 73,
             height: 28,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                color: TDTheme.of(context).brandNormalColor),
+              borderRadius: BorderRadius.circular(6),
+              color: TDTheme.of(context).brandNormalColor,
+            ),
             child: const TDButton(
               text: '操作按钮',
               size: TDButtonSize.extraSmall,
-              theme: TDButtonTheme.primary
+              theme: TDButtonTheme.primary,
             ),
           ),
           onBtnTap: () {
@@ -319,7 +320,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       controller: controller[9],
       backgroundColor: Colors.white,
       hintText: '请输入文字',
-      rightBtn: Icon(TDIcons.user_avatar, color: TDTheme.of(context).fontGyColor3,),
+      rightBtn: Icon(
+        TDIcons.user_avatar,
+        color: TDTheme.of(context).fontGyColor3,
+      ),
       onBtnTap: () {
         TDToast.showText('点击操作按钮', context: context);
       },
@@ -414,13 +418,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           leftLabel: '输入密码',
           hintText: '请输入密码',
           backgroundColor: Colors.white,
-          rightBtn: browseOn ? Icon(
-            TDIcons.browse,
-            color: TDTheme.of(context).fontGyColor3,
-          ) : Icon(
-            TDIcons.browse_off,
-            color: TDTheme.of(context).fontGyColor3,
-          ),
+          rightBtn: browseOn
+              ? Icon(
+                  TDIcons.browse,
+                  color: TDTheme.of(context).fontGyColor3,
+                )
+              : Icon(
+                  TDIcons.browse_off,
+                  color: TDTheme.of(context).fontGyColor3,
+                ),
           onBtnTap: () {
             setState(() {
               browseOn = !browseOn;
@@ -514,7 +520,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   ),
                 ),
                 _countdownTime > 0
-                    ? TDText('${countDownText}(${_countdownTime}秒)', textColor: TDTheme.of(context).fontGyColor4,)
+                    ? TDText(
+                        '${countDownText}(${_countdownTime}秒)',
+                        textColor: TDTheme.of(context).fontGyColor4,
+                      )
                     : TDText(confirmText, textColor: TDTheme.of(context).brandNormalColor),
               ],
             ),
@@ -586,6 +595,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
+
+
+      
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+
+</td-code-block>
+                
 ### 1 组件状态
 
 输入框状态
@@ -895,16 +913,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       leftLabel: '标签文字',
       controller: controller[26],
       backgroundColor: TDTheme.of(context).grayColor12,
-      leftLabelStyle: TextStyle(
-        color: TDTheme.of(context).fontWhColor1
-      ),
-      textStyle: TextStyle(
-          color: TDTheme.of(context).fontWhColor1
-      ),
+      leftLabelStyle: TextStyle(color: TDTheme.of(context).fontWhColor1),
+      textStyle: TextStyle(color: TDTheme.of(context).fontWhColor1),
       hintText: '请输入文字',
-      hintTextStyle: TextStyle(
-          color: TDTheme.of(context).fontWhColor3
-      ),
+      hintTextStyle: TextStyle(color: TDTheme.of(context).fontWhColor3),
       onChanged: (text) {
         setState(() {});
       },
@@ -928,7 +940,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | key |  | - |  |
 | width | double? | - | 输入框宽度(TDCardStyle时必须设置该参数) |
-| height | double? | - | 输入框宽度 |
 | textStyle | TextStyle? | - | 文本颜色 |
 | backgroundColor | Color? | - | 输入框背景色 |
 | decoration | Decoration? | - | 输入框样式 |

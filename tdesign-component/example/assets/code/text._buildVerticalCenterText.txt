@@ -4,6 +4,6 @@
       '中华人民共和国腾讯科技',
       // font: Font(size: 100, lineHeight: 100),
       forceVerticalCenter: true,
-      backgroundColor: TDTheme.of(context).brandHoverColor,
+      backgroundColor: TDTheme.of(context).brandFocusColor,
     );
   }

@@ -1,0 +1,4 @@
+
+TDCountDown _buildRoundSimple(BuildContext context) {
+  return const TDCountDown(time: 60 * 60 * 1000, theme: TDCountDownTheme.round);
+}

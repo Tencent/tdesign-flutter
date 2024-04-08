@@ -1,0 +1,29 @@
+
+  Widget _customFeedbackNormal(BuildContext context) {
+    return TDButton(
+      text: '反馈类-标题偏左',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDConfirmDialog(
+              title: _dialogTitle,
+              titleAlignment: Alignment.centerLeft,
+              contentWidget: TDText.rich(
+                  TDTextSpan(
+                      children: [
+                        TDTextSpan(text: '红色文字', textColor: Colors.red),
+                        TDTextSpan(text: '绿色文字', textColor: Colors.green),
+                      ]
+                  )
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
