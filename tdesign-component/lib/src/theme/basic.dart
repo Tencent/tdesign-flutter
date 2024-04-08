@@ -23,9 +23,10 @@ class Font {
 /// 字体样式
 class FontFamily {
   late String fontFamily;
+  String? package;
 
-  FontFamily({required this.fontFamily});
+  FontFamily({required this.fontFamily, this.package});
 
   factory FontFamily.fromJson(Map<String, dynamic> map) =>
-      FontFamily(fontFamily: map['fontFamily']);
+      FontFamily(fontFamily: map['fontFamily'], package: map['package']);
 }

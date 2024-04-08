@@ -25,6 +25,8 @@ class TDAlertDialog extends StatelessWidget {
     this.titleColor = const Color(0xE6000000),
     this.content,
     this.contentColor,
+    this.titleAlignment,
+    this.contentWidget,
     this.contentMaxHeight = 0,
     this.leftBtn,
     this.rightBtn,
@@ -48,6 +50,8 @@ class TDAlertDialog extends StatelessWidget {
     this.radius = 12.0,
     this.title,
     this.titleColor = Colors.black,
+    this.titleAlignment,
+    this.contentWidget,
     this.content,
     this.contentColor,
     this.contentMaxHeight = 0,
@@ -72,6 +76,12 @@ class TDAlertDialog extends StatelessWidget {
 
   /// 标题颜色
   final Color titleColor;
+
+  /// 标题对齐模式
+  final AlignmentGeometry? titleAlignment;
+
+  /// 内容Widget
+  final Widget? contentWidget;
 
   /// 内容
   final String? content;
@@ -121,6 +131,8 @@ class TDAlertDialog extends StatelessWidget {
           TDDialogInfoWidget(
             title: title,
             titleColor: titleColor,
+            titleAlignment: titleAlignment,
+            contentWidget: contentWidget,
             content: content,
             contentColor: contentColor,
             contentMaxHeight: contentMaxHeight,
