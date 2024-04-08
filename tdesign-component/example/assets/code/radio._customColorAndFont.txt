@@ -1,0 +1,64 @@
+
+  Widget _customColorAndFont(BuildContext context) {
+    return TDRadioGroup(
+      selectId: 'index:1',
+      child: ListView(
+        padding: const EdgeInsets.all(0),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          TDRadio(
+            id: 'index:1',
+            title: '单选',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            selectColor: TDTheme.of(context).errorColor3,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+          TDRadio(
+            id: 'index:2',
+            title: '单选',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            subTitle: '单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行',
+            selectColor: TDTheme.of(context).errorColor3,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+          TDRadio(
+            id: 'index:3',
+            title: '单选',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
+            selectColor: TDTheme.of(context).errorColor3,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+          TDRadio(
+            id: 'index:4',
+            title: '单选',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            subTitle: '单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行',
+            selectColor: TDTheme.of(context).errorColor3,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+            radioStyle: TDRadioStyle.hollowCircle,
+          ),
+          TDRadio(
+            id: 'index:5',
+            title: '单选',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
+            selectColor: TDTheme.of(context).errorColor3,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+            cardMode: true,
+          ),
+        ],
+      ),
+    );
+  }
