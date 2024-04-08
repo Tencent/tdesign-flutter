@@ -102,60 +102,64 @@ class _ExamplePageState extends State<ExamplePage> {
                 Expanded(
                     child: widget.showSingleChild && widget.singleChild != null
                         ? _singleChild()
-                        : ListView.builder(
-                            controller: widget.scrollController,
-                            shrinkWrap: true,
-                            physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.only(top: 24, bottom: 24),
-                            itemCount: widget.children.length + 3,
-                            itemBuilder: (context, index) {
-                              if (index == 0) {
-                                return _buildHeader(context);
-                              }
-                              if (index == widget.children.length + 2) {
-                                return WebMdTool.needGenerateWebMd
-                                    ? Container(
-                                        margin: const EdgeInsets.only(top: 24),
-                                        child: Column(
-                                          children: [
-                                            TDButton(
-                                              text: '生成Web使用md',
-                                              type: TDButtonType.fill,
-                                              onTap: () => WebMdTool.generateWebMd(
-                                                  model: model,
-                                                  description: widget.desc,
-                                                  exampleCodeGroup:
-                                                  widget.exampleCodeGroup,
-                                                  exampleModuleList:
-                                                  widget.children,
-                                                  testList: widget.test,
-                                                  singleChild:
-                                                  widget.showSingleChild
-                                                      ? widget.singleChild
-                                                      : null),
-                                            ),
-                                            TDButton(
-                                              text: '返回首页',
-                                              type: TDButtonType.fill,
-                                              onTap: () => Navigator.of(context).maybePop(),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    : Container();
-                              }
-                              ExampleModule data;
-                              if (index <= widget.children.length) {
-                                data = widget.children[index - 1];
-                              } else {
-                                data = ExampleModule(title: '单元测试', children: [
-                                  _buildTestExampleItem(),
-                                  ...widget.test
-                                ]);
-                              }
-                              return _buildModule(index, data, context);
-                            },
-                          )),
+                        : MediaQuery(
+                      // 去掉底部安全区域,保证示例展示正常
+                      data: MediaQuery.of(context).copyWith(padding: EdgeInsets.zero),
+                      child: ListView.builder(
+                        controller: widget.scrollController,
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.only(top: 24, bottom: 24),
+                        itemCount: widget.children.length + 3,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return _buildHeader(context);
+                          }
+                          if (index == widget.children.length + 2) {
+                            return WebMdTool.needGenerateWebMd
+                                ? Container(
+                              margin: const EdgeInsets.only(top: 24),
+                              child: Column(
+                                children: [
+                                  TDButton(
+                                    text: '生成Web使用md',
+                                    type: TDButtonType.fill,
+                                    onTap: () => WebMdTool.generateWebMd(
+                                        model: model,
+                                        description: widget.desc,
+                                        exampleCodeGroup:
+                                        widget.exampleCodeGroup,
+                                        exampleModuleList:
+                                        widget.children,
+                                        testList: widget.test,
+                                        singleChild:
+                                        widget.showSingleChild
+                                            ? widget.singleChild
+                                            : null),
+                                  ),
+                                  TDButton(
+                                    text: '返回首页',
+                                    type: TDButtonType.fill,
+                                    onTap: () => Navigator.of(context).maybePop(),
+                                  ),
+                                ],
+                              ),
+                            )
+                                : Container();
+                          }
+                          ExampleModule data;
+                          if (index <= widget.children.length) {
+                            data = widget.children[index - 1];
+                          } else {
+                            data = ExampleModule(title: '单元测试', children: [
+                              _buildTestExampleItem(),
+                              ...widget.test
+                            ]);
+                          }
+                          return _buildModule(index, data, context);
+                        },
+                      ),
+                    )),
               ],
             )));
   }

@@ -129,10 +129,12 @@ class TDDialogInfoWidget extends StatelessWidget {
     Key? key,
     this.title,
     this.titleColor = Colors.black,
-    this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
+    this.titleAlignment,
+    this.contentWidget,
     this.content,
     this.contentColor,
     this.contentMaxHeight = 0,
+    this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
   }) : super(key: key);
 
   /// 标题
@@ -140,6 +142,12 @@ class TDDialogInfoWidget extends StatelessWidget {
 
   /// 标题颜色
   final Color titleColor;
+
+  /// 标题对齐模式
+  final AlignmentGeometry? titleAlignment;
+
+  /// 内容Widget
+  final Widget? contentWidget;
 
   /// 内容
   final String? content;
@@ -162,26 +170,27 @@ class TDDialogInfoWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          title != null
-              ? TDText(
-                  title,
-                  textColor: titleColor,
-                  fontWeight: FontWeight.w600,
-                  font: Font(size: 18, lineHeight: 26),
-                  textAlign: TextAlign.center,
-                )
-              : Container(),
-          content == null
-              ? Container()
-              : Container(
-                  padding: EdgeInsets.fromLTRB(
-                      0, (title != null && content != null) ? 8.0 : 0, 0, 0),
-                  constraints: contentMaxHeight > 0
-                      ? BoxConstraints(
-                          maxHeight: contentMaxHeight,
-                        )
-                      : null,
-                  child: Scrollbar(
+          if (title != null)
+            Align(
+              alignment: titleAlignment ?? Alignment.center,
+              child: TDText(
+                title,
+                textColor: titleColor,
+                fontWeight: FontWeight.w600,
+                font: Font(size: 18, lineHeight: 26),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          if (contentWidget != null || content != null)
+            Container(
+              padding: EdgeInsets.fromLTRB(0, (title != null && content != null) ? 8.0 : 0, 0, 0),
+              constraints: contentMaxHeight > 0
+                  ? BoxConstraints(
+                      maxHeight: contentMaxHeight,
+                    )
+                  : null,
+              child: contentWidget ??
+                  Scrollbar(
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
                       child: TDDialogContent(
@@ -190,7 +199,7 @@ class TDDialogInfoWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
+            ),
         ],
       ),
     );
@@ -222,8 +231,7 @@ class HorizontalNormalButtons extends StatelessWidget {
           Expanded(
             child: TDDialogButton(
               buttonText: leftBtn.title,
-              buttonTextColor:
-                  leftBtn.titleColor ?? TDTheme.of(context).brandNormalColor,
+              buttonTextColor: leftBtn.titleColor ?? TDTheme.of(context).brandNormalColor,
               buttonStyle: leftBtn.style,
               buttonType: leftBtn.type,
               buttonTheme: leftBtn.theme,
@@ -242,8 +250,7 @@ class HorizontalNormalButtons extends StatelessWidget {
           Expanded(
             child: TDDialogButton(
               buttonText: rightBtn.title,
-              buttonTextColor:
-                  rightBtn.titleColor ?? TDTheme.of(context).whiteColor1,
+              buttonTextColor: rightBtn.titleColor ?? TDTheme.of(context).whiteColor1,
               buttonStyle: rightBtn.style,
               buttonType: rightBtn.type,
               buttonTheme: rightBtn.theme,
@@ -287,8 +294,7 @@ class HorizontalTextButtons extends StatelessWidget {
             Expanded(
               child: TDDialogButton(
                 buttonText: leftBtn.title,
-                buttonTextColor:
-                    leftBtn.titleColor ?? TDTheme.of(context).fontGyColor1,
+                buttonTextColor: leftBtn.titleColor ?? TDTheme.of(context).fontGyColor1,
                 buttonStyle: leftBtn.style,
                 buttonType: leftBtn.type ?? TDButtonType.text,
                 buttonTheme: leftBtn.theme,
@@ -307,8 +313,7 @@ class HorizontalTextButtons extends StatelessWidget {
             Expanded(
               child: TDDialogButton(
                 buttonText: rightBtn.title,
-                buttonTextColor:
-                    rightBtn.titleColor ?? TDTheme.of(context).brandNormalColor,
+                buttonTextColor: rightBtn.titleColor ?? TDTheme.of(context).brandNormalColor,
                 buttonStyle: leftBtn.style,
                 buttonType: leftBtn.type ?? TDButtonType.text,
                 buttonTheme: leftBtn.theme ?? TDButtonTheme.primary,

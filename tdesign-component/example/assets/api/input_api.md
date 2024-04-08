@@ -6,7 +6,6 @@
 | --- | --- | --- | --- |
 | key |  | - |  |
 | width | double? | - | 输入框宽度(TDCardStyle时必须设置该参数) |
-| height | double? | - | 输入框宽度 |
 | textStyle | TextStyle? | - | 文本颜色 |
 | backgroundColor | Color? | - | 输入框背景色 |
 | decoration | Decoration? | - | 输入框样式 |

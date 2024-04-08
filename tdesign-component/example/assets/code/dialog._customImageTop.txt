@@ -1,0 +1,28 @@
+
+  Widget _customImageTop(BuildContext context) {
+    return TDButton(
+      text: '图片置顶-自定义列表内容',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDImageDialog(
+              image: _demoImage,
+              title: _dialogTitle,
+              contentWidget: ListView(
+                shrinkWrap: true,
+                children: const [
+                  TDText('红色文字', textColor: Colors.red),
+                  TDText('绿色文字', textColor: Colors.green),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }

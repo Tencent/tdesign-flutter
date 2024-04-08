@@ -1,0 +1,7 @@
+
+TDCountDown _buildSmallSize(BuildContext context) {
+  return const TDCountDown(
+    time: 60 * 60 * 1000,
+    size: TDCountDownSize.small,
+  );
+}

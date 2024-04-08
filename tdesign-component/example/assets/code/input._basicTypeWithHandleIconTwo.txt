@@ -12,12 +12,13 @@
             width: 73,
             height: 28,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                color: TDTheme.of(context).brandNormalColor),
+              borderRadius: BorderRadius.circular(6),
+              color: TDTheme.of(context).brandNormalColor,
+            ),
             child: const TDButton(
               text: '操作按钮',
               size: TDButtonSize.extraSmall,
-              theme: TDButtonTheme.primary
+              theme: TDButtonTheme.primary,
             ),
           ),
           onBtnTap: () {

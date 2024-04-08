@@ -139,7 +139,7 @@ TDText.rich测试:
   Widget _getSystemText(BuildContext context) {
     return TDText(
       exampleTxt,
-      backgroundColor: TDTheme.of(context).brandHoverColor,
+      backgroundColor: TDTheme.of(context).brandFocusColor,
     ).getRawText(context: context);
   }</pre>
 
@@ -156,7 +156,7 @@ TDText.rich测试:
       '中华人民共和国腾讯科技',
       // font: Font(size: 100, lineHeight: 100),
       forceVerticalCenter: true,
-      backgroundColor: TDTheme.of(context).brandHoverColor,
+      backgroundColor: TDTheme.of(context).brandFocusColor,
     );
   }</pre>
 

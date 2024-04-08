@@ -4,6 +4,7 @@
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            showThumbValue: true,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),

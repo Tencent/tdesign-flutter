@@ -4,16 +4,10 @@
       leftLabel: '标签文字',
       controller: controller[26],
       backgroundColor: TDTheme.of(context).grayColor12,
-      leftLabelStyle: TextStyle(
-        color: TDTheme.of(context).fontWhColor1
-      ),
-      textStyle: TextStyle(
-          color: TDTheme.of(context).fontWhColor1
-      ),
+      leftLabelStyle: TextStyle(color: TDTheme.of(context).fontWhColor1),
+      textStyle: TextStyle(color: TDTheme.of(context).fontWhColor1),
       hintText: '请输入文字',
-      hintTextStyle: TextStyle(
-          color: TDTheme.of(context).fontWhColor3
-      ),
+      hintTextStyle: TextStyle(color: TDTheme.of(context).fontWhColor3),
       onChanged: (text) {
         setState(() {});
       },

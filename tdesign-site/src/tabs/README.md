@@ -423,6 +423,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onTap |  Function(int)? | - | 点击事件 |
 | outlineType | TDTabBarOutlineType | TDTabBarOutlineType.filled | 选项卡样式 |
 | showIndicator | bool | false | 是否展示引导控件 |
+| dividerColor | Color? | - | 分割线颜色 |
+| dividerHeight | double | 0.5 | 分割线高度,小于等于0则不展示分割线 |
 
 ```
 ```
