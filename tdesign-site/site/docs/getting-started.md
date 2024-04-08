@@ -10,7 +10,7 @@ TDesign Flutter组件示例应用
 <br/>
 Android请扫码下载预览 ↓
 <br/>
-<img width="260" src="/flutter/assets/qrcode/tdesign_apk_qrcode.png" />
+<img width="260" src="/flutter/assets/qrcode/td_apk_qrcode.png" />
 <br/>
 iOS请运行项目预览 ↓
 <br/>
@@ -116,5 +116,7 @@ flutter: ">=3.7.0"
 
 # 致谢
 TDesign Flutter 依赖以下组件库,感谢作者的开源贡献:
+
 [flutter_easyrefresh](https://pub-web.flutter-io.cn/packages/easy_refresh)
+
 [flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)
