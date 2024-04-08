@@ -11,7 +11,6 @@ enum TDRadioStyle {
 
 /// 单选框按钮,继承自TDCheckbox，字段含义与父类一致
 class TDRadio extends TDCheckbox {
-
   /// 单选框按钮样式
   final TDRadioStyle radioStyle;
 
@@ -19,11 +18,14 @@ class TDRadio extends TDCheckbox {
     String? id,
     Key? key,
     String? title,
+    Font? titleFont,
     String? subTitle,
+    Font? subTitleFont,
     bool enable = true,
     int subTitleMaxLine = 1,
     int titleMaxLine = 1,
-    Color? checkedColor,
+    Color? selectColor,
+    Color? disableColor,
     ContentBuilder? customContentBuilder,
     double? spacing,
     bool? cardMode,
@@ -37,6 +39,8 @@ class TDRadio extends TDCheckbox {
           key: key,
           title: title,
           subTitle: subTitle,
+          titleFont: titleFont,
+          subTitleFont: subTitleFont,
           subTitleMaxLine: subTitleMaxLine,
           enable: enable,
           size: size,
@@ -47,11 +51,12 @@ class TDRadio extends TDCheckbox {
           contentDirection: contentDirection,
           spacing: spacing,
           customIconBuilder: customIconBuilder,
+          selectColor: selectColor,
+          disableColor: disableColor,
         );
 
   @override
-  Widget buildDefaultIcon(
-      BuildContext context, TDCheckboxGroupState? groupState, bool isSelected) {
+  Widget buildDefaultIcon(BuildContext context, TDCheckboxGroupState? groupState, bool isSelected) {
     if (cardMode == true) {
       return Container();
     }
@@ -74,7 +79,7 @@ class TDRadio extends TDCheckbox {
           painter: HollowCircle(!enable
               ? (isSelected ? theme.brandDisabledColor : theme.grayColor4)
               : isSelected
-                  ? theme.brandNormalColor
+                  ? selectColor ?? theme.brandNormalColor
                   : theme.grayColor4),
         ),
       );
@@ -86,8 +91,7 @@ class TDRadio extends TDCheckbox {
         iconData = isSelected ? TDIcons.check : null;
         break;
       case TDRadioStyle.square:
-        iconData =
-            isSelected ? TDIcons.check_rectangle_filled : TDIcons.rectangle;
+        iconData = isSelected ? TDIcons.check_rectangle_filled : TDIcons.rectangle;
         break;
       default:
         iconData = isSelected ? TDIcons.check_circle_filled : TDIcons.circle;
@@ -97,9 +101,9 @@ class TDRadio extends TDCheckbox {
       return Icon(iconData,
           size: size,
           color: !enable
-              ? (isSelected ? theme.brandDisabledColor : theme.grayColor4)
+              ? (isSelected ? (disableColor ?? theme.brandDisabledColor) : theme.grayColor4)
               : isSelected
-                  ? theme.brandNormalColor
+                  ? selectColor ??  theme.brandNormalColor
                   : theme.grayColor4);
     } else {
       return SizedBox(
@@ -191,26 +195,22 @@ class TDRadioGroup extends TDCheckboxGroup {
   })  : assert(() {
           // 使用direction属性则必须配合directionalTdRadios，child字段无效
           if (direction != null && directionalTdRadios == null) {
-            throw FlutterError(
-                '[TDRadioGroup] direction and directionalTdRadios must set at the same time');
+            throw FlutterError('[TDRadioGroup] direction and directionalTdRadios must set at the same time');
           }
           // 未使用direction则必须设置child
           if (direction == null && child == null) {
-            throw FlutterError(
-                '[TDRadioGroup] direction means use child as the exact one, but child is null');
+            throw FlutterError('[TDRadioGroup] direction means use child as the exact one, but child is null');
           }
           // 横向单选框 每个选项有字数限制
           if (direction == Axis.horizontal && directionalTdRadios != null) {
             directionalTdRadios.forEach((element) {
               if (element.subTitle != null) {
-                throw FlutterError(
-                    'horizontal radios style should not have subTilte, '
+                throw FlutterError('horizontal radios style should not have subTilte, '
                     'because there left no room for it');
               }
             });
             var maxWordCount = 2;
-            var tips =
-                '[TDRadioGroup] radio title please not exceed $maxWordCount words.\n'
+            var tips = '[TDRadioGroup] radio title please not exceed $maxWordCount words.\n'
                 '2tabs: 7words maximum\n'
                 '3tabs: 4words maximum\n'
                 '4tabs: 2words maximum';
@@ -236,13 +236,11 @@ class TDRadioGroup extends TDCheckboxGroup {
               // if use cardMode at TDRadioGroup, then every TDRadio should
               // set it's own carMode to true.
               if (element.cardMode == false) {
-                throw FlutterError(
-                    'if use cardMode at TDRadioGroup, then every '
+                throw FlutterError('if use cardMode at TDRadioGroup, then every '
                     'TDRadio should set it\'s own carMode to true.');
               }
               if (element.subTitle != null && direction == Axis.horizontal) {
-                throw FlutterError(
-                    'horizontal card style should not have subTilte, '
+                throw FlutterError('horizontal card style should not have subTilte, '
                     'because there left no room for it');
               }
             });
@@ -251,9 +249,7 @@ class TDRadioGroup extends TDCheckboxGroup {
         }()),
         super(
           child: Container(
-            clipBehavior: (passThrough ?? false) && direction != Axis.horizontal
-                ? Clip.hardEdge
-                : Clip.none,
+            clipBehavior: (passThrough ?? false) && direction != Axis.horizontal ? Clip.hardEdge : Clip.none,
             decoration: (passThrough ?? false) && direction != Axis.horizontal
                 ? BoxDecoration(borderRadius: BorderRadius.circular(10))
                 : null,
@@ -269,9 +265,7 @@ class TDRadioGroup extends TDCheckboxGroup {
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           return Container(
-                            margin: cardMode
-                                ? const EdgeInsets.symmetric(horizontal: 16)
-                                : null,
+                            margin: cardMode ? const EdgeInsets.symmetric(horizontal: 16) : null,
                             height: cardMode ? 82 : null,
                             child: directionalTdRadios[index],
                           );
@@ -287,9 +281,7 @@ class TDRadioGroup extends TDCheckboxGroup {
                         },
                       )
                     : Container(
-                        margin: cardMode
-                            ? const EdgeInsets.symmetric(horizontal: 16)
-                            : null,
+                        margin: cardMode ? const EdgeInsets.symmetric(horizontal: 16) : null,
                         height: cardMode ? 56 : null,
                         alignment: cardMode ? Alignment.topLeft : null,
                         child: cardMode
@@ -298,16 +290,13 @@ class TDRadioGroup extends TDCheckboxGroup {
                                 children: directionalTdRadios!
                                     .expand(horizontalChild)
                                     .toList()
-                                    .sublist(
-                                        0, directionalTdRadios.length * 2 - 1),
+                                    .sublist(0, directionalTdRadios.length * 2 - 1),
                               )
                             : Column(
                                 children: [
                                   Row(
                                     mainAxisSize: MainAxisSize.min,
-                                    children: directionalTdRadios!
-                                        .map((e) => Expanded(child: e))
-                                        .toList(),
+                                    children: directionalTdRadios!.map((e) => Expanded(child: e)).toList(),
                                   ),
                                   if (showDivider)
                                     divider ??
