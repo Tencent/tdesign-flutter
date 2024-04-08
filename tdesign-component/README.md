@@ -60,5 +60,7 @@ TDesign is licensed under the [MIT LICENSE](https://github.com/Tencent/tdesign-f
 
 # Acknowledgements
 TDesign Flutter depends on the following component libraries. We appreciate the authors for their open-source contributions:
+
 [flutter_easyrefresh](https://pub-web.flutter-io.cn/packages/easy_refresh)
+
 [flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)

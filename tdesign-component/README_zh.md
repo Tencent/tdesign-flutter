@@ -137,5 +137,7 @@ TDesign 遵循 [MIT 协议](https://github.com/Tencent/tdesing-flutter/blob/main
 
 # 致谢
 TDesign Flutter 依赖以下组件库,感谢作者的开源贡献:
+
 [flutter_easyrefresh](https://pub-web.flutter-io.cn/packages/easy_refresh)
+
 [flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)
