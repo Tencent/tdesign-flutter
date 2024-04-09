@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var jsonString = await rootBundle.loadString('assets/theme1.json');
+  print('jsonString:$jsonString');
+  TDTheme.needMultiTheme(true);
+  TDTheme.defaultData();
+  var themeData = TDThemeData.fromJson('theme', jsonString);
   runApp(MaterialApp(
-    home: Builder(
-      builder: (context) {
-        return Scaffold(
-          // appBar: TDNavBar(),
-          appBar: _buildAppBar(context),
-          body: const Center(
-            child: TDText('测试文案'),
-          ),
-          bottomNavigationBar: _buildBottomTabBar(),
-        );
-      },
-    ),
+    home: Theme(
+        data: ThemeData(extensions: [themeData!]),
+        child: Builder(
+          builder: (context) {
+            return Scaffold(
+              // appBar: TDNavBar(),
+              appBar: _buildAppBar(context),
+              body:  Center(
+                child: TDText('测试文案', textColor: TDTheme.of(context)
+                    .brandNormalColor,),
+              ),
+              bottomNavigationBar: _buildBottomTabBar(),
+            );
+          },
+        )),
   ));
 }
 
