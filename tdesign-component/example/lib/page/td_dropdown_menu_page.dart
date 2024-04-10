@@ -18,11 +18,20 @@ class TDDropdownMenuPage extends StatelessWidget {
             ExampleModule(title: '组件类型', children: [
               ExampleItem(
                 ignoreCode: true,
+                desc: '单选上拉菜单',
+                // center: false,
+                // padding: const EdgeInsets.only(left: 16),
+                builder: (BuildContext context) {
+                  return const CodeWrapper(builder: _buildUpSimple);
+                },
+              ),
+              ExampleItem(
+                ignoreCode: true,
                 desc: '单选下拉菜单',
                 // center: false,
                 // padding: const EdgeInsets.only(left: 16),
                 builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildSimple);
+                  return const CodeWrapper(builder: _buildDownSimple);
                 },
               ),
             ]),
@@ -32,8 +41,28 @@ class TDDropdownMenuPage extends StatelessWidget {
 }
 
 @Demo(group: 'dropdownMenu')
-TDDropdownMenu _buildSimple(BuildContext context) {
-  return TDDropdownMenu(builder: (context) {
-    return [const TDDropdownItem<int>(), const TDDropdownItem<int>()];
+TDDropdownMenu _buildDownSimple(BuildContext context) {
+  return TDDropdownMenu(direction: TDDropdownMenuDirection.down, builder: (context) {
+    return [
+      const TDDropdownItem(
+        value: 1,
+        options: [TDDropdownItemOptions(label: 'test1', value: 1)],
+      ),
+      const TDDropdownItem(label: 'test2')
+    ];
+  });
+}
+
+
+@Demo(group: 'dropdownMenu')
+TDDropdownMenu _buildUpSimple(BuildContext context) {
+  return TDDropdownMenu(direction: TDDropdownMenuDirection.up, builder: (context) {
+    return [
+      const TDDropdownItem(
+        value: 1,
+        options: [TDDropdownItemOptions(label: 'test1', value: 1)],
+      ),
+      const TDDropdownItem(label: 'test2')
+    ];
   });
 }

@@ -1,18 +1,22 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import './td_dropdown_item.dart';
 import '../../theme/td_colors.dart';
 import '../../theme/td_theme.dart';
 import '../icon/td_icons.dart';
+import 'td_dropdown_popup.dart';
 
 /// 菜单展开方向
 enum TDDropdownMenuDirection { down, up }
 
 /// 下拉菜单构建器
-typedef TDDropdownItemBuilder<T> = List<TDDropdownItem<T>> Function(BuildContext context);
+typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(
+    BuildContext context);
 
 /// 下拉菜单
-class TDDropdownMenu<T> extends StatefulWidget {
+class TDDropdownMenu extends StatefulWidget {
   const TDDropdownMenu({
     Key? key,
     required this.builder,
@@ -20,13 +24,13 @@ class TDDropdownMenu<T> extends StatefulWidget {
     this.direction = TDDropdownMenuDirection.down,
     this.duration = 200.0,
     this.showOverlay = true,
-    this.arrowIcons, //  = const [Icon(TDIcons.caret_up_small), Icon(TDIcons.caret_down_small)]
+    this.arrowIcon,
     this.onMenuOpened,
     this.onMenuClosed,
   }) : super(key: key);
 
   /// 下拉菜单构建器
-  final TDDropdownItemBuilder<T> builder;
+  final TDDropdownItemBuilder builder;
 
   /// 是否在点击遮罩层后关闭菜单
   final bool closeOnClickOverlay;
@@ -40,27 +44,54 @@ class TDDropdownMenu<T> extends StatefulWidget {
   /// 是否显示遮罩层
   final bool showOverlay;
 
-  /// 自定义箭头图标[关闭,展开]
-  final List<Icon>? arrowIcons;
+  /// 自定义箭头图标
+  final IconData? arrowIcon;
 
   /// 展开菜单事件
-  final ValueChanged<TDDropdownItem<T>>? onMenuOpened;
+  final ValueChanged<int>? onMenuOpened;
 
   /// 关闭菜单事件
-  final ValueChanged<TDDropdownItem<T>>? onMenuClosed;
+  final ValueChanged<int>? onMenuClosed;
+
+  static _TDDropdownMenuState? _currentOpenedInstance;
 
   @override
-  _DropdownMenuState createState() => _DropdownMenuState();
+  _TDDropdownMenuState createState() => _TDDropdownMenuState();
 }
 
-class _DropdownMenuState extends State<TDDropdownMenu> {
-  var _isOpen = false;
-  late List<TDDropdownItem> _items;
+class _TDDropdownMenuState extends State<TDDropdownMenu>
+    with TickerProviderStateMixin {
+  late final List<TDDropdownItem> _items;
+  late final List<AnimationController> _iconControllers;
+  late final List<Animation<double>> _iconAnimations;
+  late TDDropdownPopup? _dropdownPopup;
+  late List<bool> _isOpened;
 
   @override
   void initState() {
     super.initState();
     _items = widget.builder(context);
+    _iconControllers = List.generate(
+        _items.length,
+        (index) => AnimationController(
+              duration: Duration(milliseconds: widget.duration.toInt()),
+              vsync: this,
+            ));
+    _iconAnimations = _iconControllers
+        .map((e) => Tween<double>(begin: 0, end: 0.5).animate(e))
+        .toList();
+    _isOpened = List.filled(_items.length, false);
+  }
+
+  @override
+  void dispose() {
+    if (TDDropdownMenu._currentOpenedInstance == this) {
+      TDDropdownMenu._currentOpenedInstance = null;
+    }
+    _iconControllers.forEach((controller) {
+      controller.dispose();
+    });
+    super.dispose();
   }
 
   @override
@@ -83,21 +114,76 @@ class _DropdownMenuState extends State<TDDropdownMenu> {
                 child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      print('Row 被点击了');
+                      _isOpened[index] ? _closeMenu() : _openMenu(index);
                     },
                     child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text('xxxxx'),
-                          Icon(TDIcons.caret_up_small)
-                        ])));
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [_getText(_items[index]), _getIcon(index)],
+                    )));
           })),
     );
   }
 
-  Map<String, dynamic> _getItemConfig(TDDropdownItem dropdownItem) {
-    var label = dropdownItem.label;
-    var currentValue = dropdownItem.value;
+  Widget _getText(TDDropdownItem item) {
+    return Text(item.getLabel());
+  }
+
+  Widget _getIcon(int index) {
+    var arrowIcon = widget.arrowIcon ??
+        (widget.direction == TDDropdownMenuDirection.down
+            ? TDIcons.caret_down_small
+            : TDIcons.caret_up_small);
+    return RotationTransition(
+      turns: _iconAnimations[index],
+      child: Icon(
+        arrowIcon,
+        size: 48,
+        color: Colors.blue,
+      ),
+    );
+  }
+
+  /// 打开菜单
+  void _openMenu(int index) async {
+    await TDDropdownMenu._currentOpenedInstance?._closeMenu();
+    TDDropdownMenu._currentOpenedInstance = this;
+
+    _dropdownPopup =
+        TDDropdownPopup(context, _items, index, widget, _closeMenu);
+    unawaited(_dropdownPopup!.add().then((value) {
+      if (widget.onMenuOpened is Function) {
+        widget.onMenuOpened!(index);
+      }
+    }));
+
+    setState(() {
+      _isOpened = List.filled(_items.length, false);
+      _isOpened[index] = true;
+    });
+    _iconControllers.asMap().forEach((key, value) {
+      if (value.status == AnimationStatus.completed) {
+        value.reverse();
+      } else if (key == index) {
+        value.forward();
+      }
+    });
+  }
+
+  /// 关闭菜单
+  Future<void> _closeMenu() async {
+    var index = _isOpened.indexOf(true);
+    setState(() {
+      _isOpened = List.filled(_items.length, false);
+    });
+    _iconControllers.forEach((value) {
+      if (value.status == AnimationStatus.completed) {
+        value.reverse();
+      }
+    });
+    await _dropdownPopup?.remove();
+    _dropdownPopup = null;
+    if (index > 0 && widget.onMenuClosed is Function) {
+      widget.onMenuClosed!(index);
+    }
   }
 }
-
