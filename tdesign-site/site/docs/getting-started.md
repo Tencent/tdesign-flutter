@@ -84,6 +84,9 @@ iOS请运行项目预览 ↓
 
 3.将主题json加载进TDTheme,美观的自定义主题就设置完成了.
 ```
+    // 开启多套主题功能
+    TDTheme.needMultiTheme();
+
     var jsonString = await rootBundle.loadString('assets/theme.json');
     var _themeData = TDThemeData.fromJson('green', jsonString);
     // ……
