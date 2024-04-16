@@ -1,41 +1,51 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'td_dropdown_inherited.dart';
 import 'td_dropdown_item.dart';
 import 'td_dropdown_menu.dart';
+import 'td_dropdown_panel.dart';
 
-typedef FutureReturnCallback = Future<void> Function();
-typedef FutureParamCallback = void Function(FutureReturnCallback);
+typedef TDDropdownPopupDirection = TDDropdownMenuDirection;
 
 class TDDropdownPopup {
-  TDDropdownPopup(
-    this.context,
-    this.items,
-    this.index,
-    this.widget,
-    this.onClose,
-  );
+  TDDropdownPopup({
+    required this.parentContext,
+    required this.child,
+    this.handleClose,
+    this.direction = TDDropdownPopupDirection.down,
+    this.showOverlay = true,
+    this.closeOnClickOverlay = true,
+    this.duration = const Duration(milliseconds: 200),
+  }) {
+    _init();
+  }
 
-  final BuildContext context;
-  final List<TDDropdownItem> items;
-  final int index;
-  final TDDropdownMenu widget;
-  final VoidCallback onClose;
+  final BuildContext parentContext;
+  final Widget child;
+  final VoidCallback? handleClose;
+  final TDDropdownPopupDirection? direction;
+  final bool? showOverlay;
+  final bool? closeOnClickOverlay;
+  final Duration? duration;
 
-  late double _overlayTop, _overlayBottom, _initContentTop, _initContentBottom;
-  late FutureReturnCallback _closeContent;
+  late final double _overlayTop,
+      _overlayBottom,
+      _initContentTop,
+      _initContentBottom;
+  late VoidCallback _closeContent;
 
   OverlayEntry? overlayEntry;
 
-  Future<void> add() async {
-    var completer = Completer<void>();
-    var renderBox = context.findRenderObject() as RenderBox;
+  Duration get _duration => duration ?? const Duration(milliseconds: 200);
+
+  void _init() {
+    var renderBox = parentContext.findRenderObject() as RenderBox;
     var position = renderBox.localToGlobal(Offset.zero);
     var size = renderBox.size;
-    var screenHeight = MediaQuery.of(context).size.height;
-    var isDown = widget.direction == TDDropdownMenuDirection.down;
+    var screenHeight = MediaQuery.of(parentContext).size.height;
+    var isDown = direction == TDDropdownPopupDirection.down;
     if (isDown) {
       _overlayTop = position.dy + size.height;
       _initContentTop = _overlayTop;
@@ -47,7 +57,9 @@ class TDDropdownPopup {
       _overlayBottom = screenHeight - position.dy;
       _initContentBottom = _overlayBottom;
     }
+  }
 
+  Future<void> add([Widget? updateChild]) async {
     overlayEntry?.remove();
     overlayEntry = OverlayEntry(
       builder: (BuildContext context) {
@@ -58,135 +70,49 @@ class TDDropdownPopup {
             left: 0,
             right: 0,
             child: Container(
-              color: widget.showOverlay ? Colors.black54 : Colors.transparent,
+              color:
+                  (showOverlay ?? true) ? Colors.black54 : Colors.transparent,
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
-                  if (widget.closeOnClickOverlay) {
-                    onClose();
+                  if (!(closeOnClickOverlay ?? true)) {
+                    return;
+                  }
+                  if (handleClose != null) {
+                    handleClose!();
+                  } else {
+                    remove();
                   }
                 },
               ),
             ),
           ),
-          _TDDropdownContent(
-            duration: Duration(milliseconds: widget.duration.toInt()),
-            direction: widget.direction,
-            initContentBottom: _initContentBottom,
-            initContentTop: _initContentTop,
-            closeCallback: _closeCallback,
-            opened: () {
-              completer.complete();
-            },
-            child: items[index],
-          ),
+          TDDropdownInherited(
+              state: this,
+              child: TDDropdownPanel(
+                duration: _duration,
+                direction: direction ?? TDDropdownPopupDirection.down,
+                initContentBottom: _initContentBottom,
+                initContentTop: _initContentTop,
+                closeCallback: _closeCallback,
+                child: updateChild ?? child,
+              )),
         ]);
       },
     );
 
-    Overlay.of(context).insert(overlayEntry!);
-    await completer.future;
+    Overlay.of(parentContext).insert(overlayEntry!);
+    await Future.delayed(_duration);
   }
 
   Future<void> remove() async {
-    await _closeContent();
+    _closeContent();
+    await Future.delayed(Duration(milliseconds: _duration.inMilliseconds ~/ 2));
     overlayEntry?.remove();
     overlayEntry = null;
   }
 
-  _closeCallback(FutureReturnCallback fn) {
+  _closeCallback(VoidCallback fn) {
     _closeContent = fn;
-  }
-}
-
-class _TDDropdownContent extends StatefulWidget {
-  const _TDDropdownContent({
-    Key? key,
-    required this.initContentTop,
-    required this.initContentBottom,
-    required this.duration,
-    required this.direction,
-    required this.closeCallback,
-    required this.opened,
-    required this.child,
-  }) : super(key: key);
-
-  final double initContentTop;
-  final double initContentBottom;
-  final Duration duration;
-  final TDDropdownMenuDirection direction;
-  final FutureParamCallback closeCallback;
-  final VoidCallback opened;
-  final Widget child;
-
-  @override
-  _TDDropdownContentState createState() => _TDDropdownContentState();
-}
-
-class _TDDropdownContentState extends State<_TDDropdownContent> {
-  double? contentTop, contentBottom;
-  Completer<void>? _animationCompleter;
-
-  @override
-  void initState() {
-    super.initState();
-    widget.closeCallback(close);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedPositioned(
-      top: contentTop ?? widget.initContentTop,
-      bottom: contentBottom ?? widget.initContentBottom,
-      left: 0,
-      right: 0,
-      duration: contentBottom != null || contentTop != null
-          ? widget.duration
-          : widget.duration ~/ 2,
-      onEnd: () {
-        _animationCompleter?.complete();
-      },
-      child: SingleChildScrollView(
-        child: Builder(
-          builder: (BuildContext context) {
-            open(context);
-            return widget.child;
-          },
-        ),
-      ),
-    );
-  }
-
-  void open(BuildContext popupContext) {
-    if (contentBottom != null || contentTop != null) {
-      return;
-    }
-    if (_animationCompleter != null) {
-      return;
-    }
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      _animationCompleter = Completer<void>();
-      var renderBox = popupContext.findRenderObject() as RenderBox;
-      var size = renderBox.size;
-      setState(() {
-        if (widget.direction == TDDropdownMenuDirection.down) {
-          contentBottom = max(0, widget.initContentBottom - size.height);
-        } else {
-          contentTop = max(0, widget.initContentTop - size.height);
-        }
-      });
-      await _animationCompleter!.future;
-      _animationCompleter = null;
-      widget.opened();
-    });
-  }
-
-  Future<void> close() async {
-    _animationCompleter = Completer<void>();
-    setState(() {
-      contentBottom = contentTop = null;
-    });
-    await _animationCompleter!.future;
-    _animationCompleter = null;
   }
 }
