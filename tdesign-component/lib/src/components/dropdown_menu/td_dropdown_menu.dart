@@ -6,6 +6,7 @@ import './td_dropdown_item.dart';
 import '../../theme/td_colors.dart';
 import '../../theme/td_theme.dart';
 import '../icon/td_icons.dart';
+import '../text/td_text.dart';
 import 'td_dropdown_popup.dart';
 
 /// 菜单展开方向
@@ -14,6 +15,8 @@ enum TDDropdownMenuDirection { down, up }
 /// 下拉菜单构建器
 typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(
     BuildContext context);
+
+const Color disabledColor = Color.fromARGB(26, 0, 0, 0);
 
 /// 下拉菜单
 class TDDropdownMenu extends StatefulWidget {
@@ -33,16 +36,16 @@ class TDDropdownMenu extends StatefulWidget {
   final TDDropdownItemBuilder builder;
 
   /// 是否在点击遮罩层后关闭菜单
-  final bool closeOnClickOverlay;
+  final bool? closeOnClickOverlay;
 
   /// 菜单展开方向
-  final TDDropdownMenuDirection direction;
+  final TDDropdownMenuDirection? direction;
 
-  /// 动画时长
-  final double duration;
+  /// 动画时长，毫秒
+  final double? duration;
 
   /// 是否显示遮罩层
-  final bool showOverlay;
+  final bool? showOverlay;
 
   /// 自定义箭头图标
   final IconData? arrowIcon;
@@ -64,8 +67,8 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
   late final List<TDDropdownItem> _items;
   late final List<AnimationController> _iconControllers;
   late final List<Animation<double>> _iconAnimations;
-  late TDDropdownPopup? _dropdownPopup;
   late List<bool> _isOpened;
+  TDDropdownPopup? _dropdownPopup;
 
   @override
   void initState() {
@@ -74,7 +77,8 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
     _iconControllers = List.generate(
         _items.length,
         (index) => AnimationController(
-              duration: Duration(milliseconds: widget.duration.toInt()),
+              duration:
+                  Duration(milliseconds: (widget.duration ?? 200).toInt()),
               vsync: this,
             ));
     _iconAnimations = _iconControllers
@@ -85,9 +89,8 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
 
   @override
   void dispose() {
-    if (TDDropdownMenu._currentOpenedInstance == this) {
-      TDDropdownMenu._currentOpenedInstance = null;
-    }
+    _dropdownPopup?.overlayEntry?.remove();
+    TDDropdownMenu._currentOpenedInstance = null;
     _iconControllers.forEach((controller) {
       controller.dispose();
     });
@@ -108,24 +111,31 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
         ),
       ),
       child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: List.generate(_items.length, (index) {
-            return Expanded(
-                child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      _isOpened[index] ? _closeMenu() : _openMenu(index);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [_getText(_items[index]), _getIcon(index)],
-                    )));
-          })),
+        return Expanded(
+            child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  if (_disabled(index)) {
+                    return;
+                  }
+                  _isOpened[index] ? _closeMenu() : _openMenu(index);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [_getText(index), _getIcon(index)],
+                )));
+      })),
     );
   }
 
-  Widget _getText(TDDropdownItem item) {
-    return Text(item.getLabel());
+  Widget _getText(int index) {
+    var textColor = _disabled(index)
+        ? disabledColor
+        : _isOpened[index]
+            ? TDTheme.of(context).brandColor7
+            : Colors.black;
+    return TDText(_items[index].getLabel(), textColor: textColor);
   }
 
   Widget _getIcon(int index) {
@@ -137,20 +147,34 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
       turns: _iconAnimations[index],
       child: Icon(
         arrowIcon,
-        size: 48,
-        color: Colors.blue,
+        size: 48 / 1.4,
+        color: _disabled(index)
+            ? disabledColor
+            : _isOpened[index]
+                ? TDTheme.of(context).brandColor7
+                : null,
       ),
     );
+  }
+
+  bool _disabled(int index) {
+    return _items[index].disabled == true;
   }
 
   /// 打开菜单
   void _openMenu(int index) async {
     await TDDropdownMenu._currentOpenedInstance?._closeMenu();
     TDDropdownMenu._currentOpenedInstance = this;
-
-    _dropdownPopup =
-        TDDropdownPopup(context, _items, index, widget, _closeMenu);
-    unawaited(_dropdownPopup!.add().then((value) {
+    _dropdownPopup ??= TDDropdownPopup(
+      child: _items[index],
+      parentContext: context,
+      handleClose: _closeMenu,
+      direction: widget.direction,
+      showOverlay: widget.showOverlay,
+      closeOnClickOverlay: widget.closeOnClickOverlay,
+      duration: Duration(milliseconds: (widget.duration ?? 200).toInt()),
+    );
+    unawaited(_dropdownPopup!.add(_items[index]).then((value) {
       if (widget.onMenuOpened is Function) {
         widget.onMenuOpened!(index);
       }
@@ -181,7 +205,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
       }
     });
     await _dropdownPopup?.remove();
-    _dropdownPopup = null;
+    TDDropdownMenu._currentOpenedInstance = null;
     if (index > 0 && widget.onMenuClosed is Function) {
       widget.onMenuClosed!(index);
     }

@@ -46,7 +46,7 @@ TDDropdownMenu _buildDownSimple(BuildContext context) {
     return [
       const TDDropdownItem(
         value: 1,
-        options: [TDDropdownItemOptions(label: 'test1', value: 1)],
+        options: [TDDropdownItemOption(label: 'test1', value: 1)],
       ),
       const TDDropdownItem(label: 'test2')
     ];
@@ -56,13 +56,20 @@ TDDropdownMenu _buildDownSimple(BuildContext context) {
 
 @Demo(group: 'dropdownMenu')
 TDDropdownMenu _buildUpSimple(BuildContext context) {
-  return TDDropdownMenu(direction: TDDropdownMenuDirection.up, builder: (context) {
-    return [
-      const TDDropdownItem(
-        value: 1,
-        options: [TDDropdownItemOptions(label: 'test1', value: 1)],
-      ),
-      const TDDropdownItem(label: 'test2')
-    ];
-  });
+  return TDDropdownMenu(
+    direction: TDDropdownMenuDirection.up,
+    builder: (context) {
+      return [
+        const TDDropdownItem(
+          value: 1,
+          options: [
+            TDDropdownItemOption(label: 'test1', value: 1),
+            TDDropdownItemOption(label: 'test2', value: 2, disabled: true),
+            TDDropdownItemOption(label: 'test3', value: 3),
+          ],
+        ),
+        const TDDropdownItem(label: 'test2', disabled: true)
+      ];
+    },
+  );
 }
