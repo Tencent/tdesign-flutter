@@ -16,8 +16,6 @@ enum TDDropdownMenuDirection { down, up }
 typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(
     BuildContext context);
 
-const Color disabledColor = Color.fromARGB(26, 0, 0, 0);
-
 /// 下拉菜单
 class TDDropdownMenu extends StatefulWidget {
   const TDDropdownMenu({
@@ -88,9 +86,8 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
   }
 
   @override
-  void dispose() {
-    _dropdownPopup?.overlayEntry?.remove();
-    TDDropdownMenu._currentOpenedInstance = null;
+  void dispose() async {
+    await _closeMenu();
     _iconControllers.forEach((controller) {
       controller.dispose();
     });
@@ -131,10 +128,10 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
 
   Widget _getText(int index) {
     var textColor = _disabled(index)
-        ? disabledColor
+        ? TDTheme.of(context).fontGyColor4
         : _isOpened[index]
             ? TDTheme.of(context).brandColor7
-            : Colors.black;
+            : TDTheme.of(context).fontGyColor1;
     return TDText(_items[index].getLabel(), textColor: textColor);
   }
 
@@ -149,7 +146,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
         arrowIcon,
         size: 48 / 1.4,
         color: _disabled(index)
-            ? disabledColor
+            ? TDTheme.of(context).fontGyColor4
             : _isOpened[index]
                 ? TDTheme.of(context).brandColor7
                 : null,

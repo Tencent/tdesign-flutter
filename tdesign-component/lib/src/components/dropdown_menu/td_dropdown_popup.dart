@@ -8,6 +8,7 @@ import 'td_dropdown_menu.dart';
 import 'td_dropdown_panel.dart';
 
 typedef TDDropdownPopupDirection = TDDropdownMenuDirection;
+typedef FutureCallback = Future<void> Function();
 
 class TDDropdownPopup {
   TDDropdownPopup({
@@ -24,7 +25,7 @@ class TDDropdownPopup {
 
   final BuildContext parentContext;
   final Widget child;
-  final VoidCallback? handleClose;
+  final FutureCallback? handleClose;
   final TDDropdownPopupDirection? direction;
   final bool? showOverlay;
   final bool? closeOnClickOverlay;
@@ -39,6 +40,8 @@ class TDDropdownPopup {
   OverlayEntry? overlayEntry;
 
   Duration get _duration => duration ?? const Duration(milliseconds: 200);
+
+  double get maxContentHeight => direction == TDDropdownPopupDirection.down ? _initContentBottom : _initContentTop;
 
   void _init() {
     var renderBox = parentContext.findRenderObject() as RenderBox;
