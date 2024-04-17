@@ -41,35 +41,51 @@ class TDDropdownMenuPage extends StatelessWidget {
 }
 
 @Demo(group: 'dropdownMenu')
-TDDropdownMenu _buildDownSimple(BuildContext context) {
-  return TDDropdownMenu(direction: TDDropdownMenuDirection.down, builder: (context) {
-    return [
-      const TDDropdownItem(
-        value: 1,
-        options: [TDDropdownItemOption(label: 'test1', value: 1)],
-      ),
-      const TDDropdownItem(label: 'test2')
-    ];
-  });
-}
-
-
-@Demo(group: 'dropdownMenu')
 TDDropdownMenu _buildUpSimple(BuildContext context) {
   return TDDropdownMenu(
     direction: TDDropdownMenuDirection.up,
     builder: (context) {
       return [
-        const TDDropdownItem(
-          value: 1,
+        TDDropdownItem(
           options: [
-            TDDropdownItemOption(label: 'test1', value: 1),
-            TDDropdownItemOption(label: 'test2', value: 2, disabled: true),
-            TDDropdownItemOption(label: 'test3', value: 3),
+            TDDropdownItemOption(label: 'test1', value: '1'),
+            TDDropdownItemOption(label: 'test2', value: '2', disabled: true),
+            TDDropdownItemOption(label: 'test3', value: '3', selected: true),
           ],
+          // ignore: unnecessary_lambdas
+          onChange: (value) {
+            print(value);
+          },
         ),
         const TDDropdownItem(label: 'test2', disabled: true)
       ];
     },
   );
+}
+
+
+@Demo(group: 'dropdownMenu')
+TDDropdownMenu _buildDownSimple(BuildContext context) {
+  return TDDropdownMenu(direction: TDDropdownMenuDirection.down, builder: (context) {
+    return [
+      TDDropdownItem(
+        multiple: true,
+        options: [
+            TDDropdownItemOption(label: 'test1', value: '1'),
+            TDDropdownItemOption(label: 'test2', value: '2', disabled: true),
+            TDDropdownItemOption(label: 'test3', value: '3', selected: true),
+        ],
+      ),
+      TDDropdownItem(
+        label: 'test2',
+        multiple: true,
+        optionsColumns: 2,
+        options: [
+            TDDropdownItemOption(label: 'test1，是的是的是', value: '1'),
+            TDDropdownItemOption(label: 'test2', value: '2', disabled: true),
+            TDDropdownItemOption(label: 'test3', value: '3', selected: true),
+        ],
+      )
+    ];
+  });
 }
