@@ -172,7 +172,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
       duration: Duration(milliseconds: (widget.duration ?? 200).toInt()),
     );
     unawaited(_dropdownPopup!.add(_items[index]).then((value) {
-      if (widget.onMenuOpened is Function) {
+      if (widget.onMenuOpened !=  null) {
         widget.onMenuOpened!(index);
       }
     }));
@@ -203,7 +203,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
     });
     await _dropdownPopup?.remove();
     TDDropdownMenu._currentOpenedInstance = null;
-    if (index > 0 && widget.onMenuClosed is Function) {
+    if (index >= 0 && widget.onMenuClosed != null) {
       widget.onMenuClosed!(index);
     }
   }

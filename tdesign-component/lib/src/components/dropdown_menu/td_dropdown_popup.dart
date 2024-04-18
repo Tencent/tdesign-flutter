@@ -19,9 +19,7 @@ class TDDropdownPopup {
     this.showOverlay = true,
     this.closeOnClickOverlay = true,
     this.duration = const Duration(milliseconds: 200),
-  }) {
-    _init();
-  }
+  });
 
   final BuildContext parentContext;
   final Widget child;
@@ -31,7 +29,7 @@ class TDDropdownPopup {
   final bool? closeOnClickOverlay;
   final Duration? duration;
 
-  late final double _overlayTop,
+  late double _overlayTop,
       _overlayBottom,
       _initContentTop,
       _initContentBottom;
@@ -63,6 +61,7 @@ class TDDropdownPopup {
   }
 
   Future<void> add([Widget? updateChild]) async {
+    _init();
     overlayEntry?.remove();
     overlayEntry = OverlayEntry(
       builder: (BuildContext context) {
