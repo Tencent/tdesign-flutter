@@ -18,20 +18,39 @@ class TDDropdownMenuPage extends StatelessWidget {
             ExampleModule(title: '组件类型', children: [
               ExampleItem(
                 ignoreCode: true,
-                desc: '单选上拉菜单',
-                // center: false,
-                // padding: const EdgeInsets.only(left: 16),
+                desc: '单选下拉菜单',
                 builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildUpSimple);
+                  return const CodeWrapper(builder: _buildDownSimple);
                 },
               ),
               ExampleItem(
                 ignoreCode: true,
-                desc: '单选下拉菜单',
-                // center: false,
-                // padding: const EdgeInsets.only(left: 16),
+                desc: '分栏下拉菜单',
                 builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildDownSimple);
+                  return const CodeWrapper(builder: _buildDownChunk);
+                },
+              ),
+              ExampleItem(
+                ignoreCode: true,
+                desc: '向上展开',
+                builder: (BuildContext context) {
+                  return const CodeWrapper(builder: _buildUp);
+                },
+              ),
+            ]),
+            ExampleModule(title: '组件状态', children: [
+              ExampleItem(
+                ignoreCode: true,
+                desc: '禁用状态',
+                builder: (BuildContext context) {
+                  return const CodeWrapper(builder: _buildDisabled);
+                },
+              ),
+              ExampleItem(
+                ignoreCode: true,
+                desc: '分组菜单',
+                builder: (BuildContext context) {
+                  return const CodeWrapper(builder: _buildGroup);
                 },
               ),
             ]),
@@ -41,51 +60,186 @@ class TDDropdownMenuPage extends StatelessWidget {
 }
 
 @Demo(group: 'dropdownMenu')
-TDDropdownMenu _buildUpSimple(BuildContext context) {
+TDDropdownMenu _buildDownSimple(BuildContext context) {
   return TDDropdownMenu(
-    direction: TDDropdownMenuDirection.up,
+    onMenuOpened: (value) {
+      print('打开第$value个菜单');
+    },
+    onMenuClosed: (value) {
+      print('关闭第$value个菜单');
+    },
     builder: (context) {
       return [
         TDDropdownItem(
           options: [
-            TDDropdownItemOption(label: 'test1', value: '1'),
-            TDDropdownItemOption(label: 'test2', value: '2', disabled: true),
-            TDDropdownItemOption(label: 'test3', value: '3', selected: true),
+            TDDropdownItemOption(label: '全部产品', value: 'all', selected: true),
+            TDDropdownItemOption(label: '最新产品', value: 'new'),
+            TDDropdownItemOption(label: '最火产品', value: 'hot'),
           ],
-          // ignore: unnecessary_lambdas
           onChange: (value) {
-            print(value);
+            print('选择：$value');
           },
         ),
-        const TDDropdownItem(label: 'test2', disabled: true)
+        TDDropdownItem(
+          options: [
+            TDDropdownItemOption(
+                label: '默认排序', value: 'default', selected: true),
+            TDDropdownItemOption(label: '价格从高到低', value: 'price'),
+          ],
+        ),
       ];
     },
   );
 }
 
+@Demo(group: 'dropdownMenu')
+TDDropdownMenu _buildDownChunk(BuildContext context) {
+  return TDDropdownMenu(
+    builder: (context) {
+      return [
+        TDDropdownItem(
+          label: '单列多选',
+          multiple: true,
+          options: [
+            TDDropdownItemOption(label: '选项1', value: '1', selected: true),
+            TDDropdownItemOption(label: '选项2', value: '2'),
+            TDDropdownItemOption(label: '选项3', value: '3'),
+            TDDropdownItemOption(label: '选项4', value: '4'),
+            TDDropdownItemOption(label: '选项5', value: '5'),
+            TDDropdownItemOption(label: '选项6', value: '6'),
+            TDDropdownItemOption(label: '选项7', value: '7'),
+            TDDropdownItemOption(label: '选项8', value: '8'),
+            TDDropdownItemOption(label: '禁用选项', value: '9', disabled: true),
+          ],
+          onChange: (value) {
+            print('选择：$value');
+          },
+          onConfirm: (value) {
+            print('确定选择：$value');
+          },
+          onReset: () {
+            print('清空选择');
+          },
+        ),
+        TDDropdownItem(
+          label: '双列多选',
+          multiple: true,
+          optionsColumns: 2,
+          options: [
+            TDDropdownItemOption(label: '选项1', value: '1', selected: true),
+            TDDropdownItemOption(label: '选项2', value: '2', selected: true),
+            TDDropdownItemOption(label: '选项3', value: '3'),
+            TDDropdownItemOption(label: '选项4', value: '4'),
+            TDDropdownItemOption(label: '选项5', value: '5'),
+            TDDropdownItemOption(label: '选项6', value: '6'),
+            TDDropdownItemOption(label: '选项7', value: '7'),
+            TDDropdownItemOption(label: '选项8', value: '8'),
+            TDDropdownItemOption(label: '禁用选项', value: '9', disabled: true),
+            TDDropdownItemOption(label: '禁用选项', value: '10', disabled: true),
+          ],
+        ),
+        TDDropdownItem(
+          label: '三列多选',
+          multiple: true,
+          optionsColumns: 3,
+          options: [
+            TDDropdownItemOption(label: '选项1', value: '1', selected: true),
+            TDDropdownItemOption(label: '选项2', value: '2', selected: true),
+            TDDropdownItemOption(label: '选项3', value: '3', selected: true),
+            TDDropdownItemOption(label: '选项4', value: '4'),
+            TDDropdownItemOption(label: '选项5', value: '5'),
+            TDDropdownItemOption(label: '选项6', value: '6'),
+            TDDropdownItemOption(label: '选项7', value: '7'),
+            TDDropdownItemOption(label: '选项8', value: '8'),
+            TDDropdownItemOption(label: '选项9', value: '9'),
+            TDDropdownItemOption(label: '禁用选项', value: '10', disabled: true),
+            TDDropdownItemOption(label: '禁用选项', value: '11', disabled: true),
+            TDDropdownItemOption(label: '禁用选项', value: '12', disabled: true),
+          ],
+        ),
+      ];
+    },
+  );
+}
 
 @Demo(group: 'dropdownMenu')
-TDDropdownMenu _buildDownSimple(BuildContext context) {
-  return TDDropdownMenu(direction: TDDropdownMenuDirection.down, builder: (context) {
-    return [
-      TDDropdownItem(
-        multiple: true,
-        options: [
-            TDDropdownItemOption(label: 'test1', value: '1'),
-            TDDropdownItemOption(label: 'test2', value: '2', disabled: true),
-            TDDropdownItemOption(label: 'test3', value: '3', selected: true),
-        ],
-      ),
-      TDDropdownItem(
-        label: 'test2',
-        multiple: true,
-        optionsColumns: 2,
-        options: [
-            TDDropdownItemOption(label: 'test1，是的是的是', value: '1'),
-            TDDropdownItemOption(label: 'test2', value: '2', disabled: true),
-            TDDropdownItemOption(label: 'test3', value: '3', selected: true),
-        ],
-      )
-    ];
-  });
+TDDropdownMenu _buildUp(BuildContext context) {
+  return TDDropdownMenu(
+    direction: TDDropdownMenuDirection.up,
+    onMenuOpened: (value) {
+      print('打开第$value个菜单');
+    },
+    onMenuClosed: (value) {
+      print('关闭第$value个菜单');
+    },
+    builder: (context) {
+      return [
+        TDDropdownItem(
+          options: [
+            TDDropdownItemOption(label: '全部产品', value: 'all', selected: true),
+            TDDropdownItemOption(label: '最新产品', value: 'new'),
+            TDDropdownItemOption(label: '最火产品', value: 'hot'),
+          ],
+          onChange: (value) {
+            print('选择：$value');
+          },
+        ),
+        TDDropdownItem(
+          options: [
+            TDDropdownItemOption(
+                label: '默认排序', value: 'default', selected: true),
+            TDDropdownItemOption(label: '价格从高到低', value: 'price'),
+          ],
+        ),
+      ];
+    },
+  );
+}
+
+@Demo(group: 'dropdownMenu')
+TDDropdownMenu _buildDisabled(BuildContext context) {
+  return TDDropdownMenu(
+    builder: (context) {
+      return [
+        const TDDropdownItem(
+          disabled: true,
+          label: '禁用菜单',
+        ),
+        const TDDropdownItem(
+          disabled: true,
+          label: '禁用菜单',
+        ),
+      ];
+    },
+  );
+}
+
+@Demo(group: 'dropdownMenu')
+TDDropdownMenu _buildGroup(BuildContext context) {
+  return TDDropdownMenu(
+    direction: TDDropdownMenuDirection.up,
+    builder: (context) {
+      return [
+        TDDropdownItem(
+          label: '分组菜单',
+          multiple: true,
+          optionsColumns: 3,
+          options: [
+            TDDropdownItemOption(label: '选项1', value: '1', selected: true, group: '类型'),
+            TDDropdownItemOption(label: '选项2', value: '2', group: '类型'),
+            TDDropdownItemOption(label: '选项3', value: '3', group: '类型'),
+            TDDropdownItemOption(label: '选项4', value: '4', group: '类型'),
+            TDDropdownItemOption(label: '选项5', value: '5', group: '角色'),
+            TDDropdownItemOption(label: '选项6', value: '6', group: '角色'),
+            TDDropdownItemOption(label: '选项7', value: '7', group: '角色'),
+            TDDropdownItemOption(label: '选项8', value: '8', group: '角色'),
+            TDDropdownItemOption(label: '禁用选项', value: '9', disabled: true, group: '角色'),
+          ],
+          onChange: (value) {
+            print('选择：$value');
+          },
+        ),
+      ];
+    },
+  );
 }

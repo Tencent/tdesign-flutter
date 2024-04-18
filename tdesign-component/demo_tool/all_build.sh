@@ -86,7 +86,7 @@
 # dialog
 ./bin/demo_tool generate --folder ../lib/src/components/dialog --name TDAlertDialog,TDConfirmDialog,TDDialogButtonOptions,TDDialogButtonStyle,TDDialogScaffold,TDDialogTitle,TDDialogContent,TDDialogInfoWidget,HorizontalNormalButtons,HorizontalTextButtons,TDDialogButton,TDDialogImagePosition,TDImageDialog,TDInputDialog --folder-name dialog --output ../example/assets/api/ --only-api
 # dropdown_menu
-./bin/demo_tool generate --folder ../lib/src/components/dropdown_menu --name TDDropdownMenu,TDDropdownMenuDirection,TDDropdownItem,TDDropdownItemKeys,TDDropdownItemOptions --folder-name dropdown-menu --output ../example/assets/api/ --only-api --get-comments
+./bin/demo_tool generate --folder ../lib/src/components/dropdown_menu --name TDDropdownMenu,TDDropdownMenuDirection,TDDropdownItem,TDDropdownItemOption --folder-name dropdown-menu --output ../example/assets/api/ --only-api --get-comments
 # loading
 ./bin/demo_tool generate --file ../lib/src/components/loading/td_loading.dart --name TDLoading --folder-name loading --output ../example/assets/api/ --only-api
 # message
