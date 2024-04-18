@@ -86,8 +86,10 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
   }
 
   @override
-  void dispose() async {
-    await _closeMenu();
+  void dispose() {
+    _dropdownPopup?.overlayEntry?.remove();
+    _dropdownPopup?.overlayEntry = null;
+    TDDropdownMenu._currentOpenedInstance = null;
     _iconControllers.forEach((controller) {
       controller.dispose();
     });
