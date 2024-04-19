@@ -29,7 +29,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | timeWidth | double? | - | 时间容器宽度 |
-| timeHeight | double? | - | 时间容器宽度 |
+| timeHeight | double? | - | 时间容器高度 |
 | timePadding | EdgeInsets? | - | 时间容器内边距 |
 | timeMargin | EdgeInsets? | - | 时间容器外边距 |
 | timeBox | BoxDecoration? | - | 时间容器装饰 |
