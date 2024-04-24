@@ -125,18 +125,9 @@ class _TDTabsPageState extends State<TDTabsPage>
           ]),
         ],
     test: [
-      ExampleItem(desc: '自定义下标属性', builder: (context){
-        return TDTabBar(
-          tabs: subList(2),
-          controller: _tabController1,
-          backgroundColor: Colors.white,
-          showIndicator: true,
-          indicatorColor: Colors.red,
-          indicatorHeight: 20,
-          indicatorWidth: 10,
-          indicatorPadding: const EdgeInsets.only(left: 20),
-        );
-      }),
+      ExampleItem(desc: '自定义下标属性', builder: _customIndicatorStyle),
+      ExampleItem(desc: '自定义下划线样式', builder: _customDividerStyle),
+      ExampleItem(desc: '不展示下划线-高度为0', builder: _hideBottomDivider),
     ],);
   }
 
@@ -401,5 +392,43 @@ class _TDTabsPageState extends State<TDTabsPage>
         controller: TabController(length: 4, vsync: this),
         backgroundColor: Colors.white,
         showIndicator: false);
+  }
+
+  @Demo(group: 'tabs')
+  Widget _customIndicatorStyle(BuildContext context) {
+    return TDTabBar(
+      tabs: subList(2),
+      controller: _tabController1,
+      backgroundColor: Colors.white,
+      showIndicator: true,
+      indicatorColor: Colors.red,
+      indicatorHeight: 20,
+      indicatorWidth: 10,
+      indicatorPadding: const EdgeInsets.only(left: 20),
+    );
+  }
+
+  @Demo(group: 'tabs')
+  Widget _customDividerStyle(BuildContext context) {
+    return TDTabBar(
+      tabs: subList(2),
+      controller: _tabController1,
+      backgroundColor: Colors.white,
+      showIndicator: true,
+      dividerColor: Colors.red,
+      dividerHeight: 5,
+    );
+  }
+
+  @Demo(group: 'tabs')
+  Widget _hideBottomDivider(BuildContext context) {
+    return TDTabBar(
+      tabs: subList(2),
+      controller: _tabController1,
+      backgroundColor: Colors.white,
+      showIndicator: true,
+      dividerColor: Colors.red,
+      dividerHeight: 0,
+    );
   }
 }

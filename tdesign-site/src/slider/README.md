@@ -66,6 +66,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildSingleHandleWithNumber(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        showThumbValue: true,
+        scaleFormatter: (value) => value.toInt().toString(),
         min: 0,
         max: 100,
       ),
@@ -213,6 +215,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            showThumbValue: true,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),

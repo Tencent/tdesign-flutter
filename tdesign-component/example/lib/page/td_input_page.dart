@@ -23,7 +23,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
 
   @override
   void initState() {
-    for(var i = 0; i < 28; i++) {
+    for (var i = 0; i < 28; i++) {
       controller.add(TextEditingController());
     }
     super.initState();
@@ -40,97 +40,72 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
   void startCountdownTimer() {
     const oneSec = Duration(seconds: 1);
     var callback = (timer) => {
-      setState((){
-        if(_countdownTime < 1) {
-          _timer?.cancel();
-        } else {
-          _countdownTime = _countdownTime - 1;
-        }
-      })
-    };
+          setState(() {
+            if (_countdownTime < 1) {
+              _timer?.cancel();
+            } else {
+              _countdownTime = _countdownTime - 1;
+            }
+          })
+        };
     _timer = Timer.periodic(oneSec, callback);
   }
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        backgroundColor: const Color(0xFFF0F2F5),
-        title: tdTitle(),
-        desc: '用于在预设的一组选项中执行单项选择，并呈现选择结果。',
-        exampleCodeGroup: 'input',
-        children: [
-          ExampleModule(
-            title: '组件类型',
-            children: [
-              ExampleItem(desc: '基础输入框', builder: _basicTypeBasic),
-              ExampleItem(builder: _basicTypeRequire),
-              ExampleItem(builder: _basicTypeOptional),
-              ExampleItem(builder: _basicTypePureInput),
-              ExampleItem(builder: _basicTypeAdditionalDesc),
-              ExampleItem(desc: '带字数限制输入框', builder: _basicTypeTextLimit),
-              ExampleItem(builder: _basicTypeTextLimitChinese2),
-              ExampleItem(desc: '带操作输入框', builder: _basicTypeWithHandleIconOne),
-              ExampleItem(builder: _basicTypeWithHandleIconTwo),
-              ExampleItem(builder: _basicTypeWithHandleIconThree),
-              ExampleItem(
-                  desc: '带图标输入框', builder: _basicTypeWithLeftIconLeftLabel),
-              ExampleItem(builder: _basicTypeWithLeftIcon),
-              ExampleItem(desc: '特定类型输入框', builder: _specialTypePassword),
-              ExampleItem(builder: _specialTypeVerifyCode),
-              ExampleItem(builder: _specialTypePhoneNumber),
-              ExampleItem(builder: _specialTypePrice),
-              ExampleItem(builder: _specialTypeNumber),
-            ],
-          ),
-          ExampleModule(title: '组件状态', children: [
-            ExampleItem(desc: '输入框状态', builder: _inputStatusAdditionInfo),
-            ExampleItem(builder: _inputStatusReadOnly),
-            ExampleItem(desc: '信息超长状态', builder: _inputStatusLongLabel),
-            ExampleItem(builder: _inputStatusLongInput),
-          ]),
-          ExampleModule(title: '组件样式', children: [
-            ExampleItem(desc: '内容位置', builder: _contentLeft),
-            ExampleItem(builder: _contentCenter),
-            ExampleItem(builder: _contentRight),
-            ExampleItem(desc: '竖排样式', builder: _verticalStyle),
-            ExampleItem(desc: '非通栏样式', builder: _cardStyle),
-            ExampleItem(desc: '标签外置样式', builder: _labelOutStyle),
-            ExampleItem(desc: '自定义样式输入框', builder: _customStyle),
-          ]),
-        ],
-    test: [
-
-      ExampleItem(desc: '长文本样式', builder: (context){
-        return Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.only(top: 16, bottom: 24),
-          width: MediaQuery.of(context).size.width,
-          color: Colors.white,
-          child: TDInput(
-            type: TDInputType.longText,
-            cardStyle: TDCardStyle.topText,
-            width: MediaQuery.of(context).size.width - 32,
-            cardStyleTopText: '标签文字',
-            controller: controller[27],
-            hintText: '请输入文字',
-            rightBtn: Icon(
-              TDIcons.error_circle_filled,
-              color: TDTheme.of(context).fontGyColor3,
-            ),
-            onBtnTap: () {
-              TDToast.showText('点击右侧按钮', context: context);
-            },
-            onChanged: (text) {
-              setState(() {});
-            },
-            onClearTap: () {
-              controller[22].clear();
-              setState(() {});
-            },
-          ),
-        );
-      }),
-    ],);
+      backgroundColor: const Color(0xFFF0F2F5),
+      title: tdTitle(),
+      desc: '用于在预设的一组选项中执行单项选择，并呈现选择结果。',
+      exampleCodeGroup: 'input',
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(desc: '基础输入框', builder: _basicTypeBasic),
+            ExampleItem(builder: _basicTypeRequire),
+            ExampleItem(builder: _basicTypeOptional),
+            ExampleItem(builder: _basicTypePureInput),
+            ExampleItem(builder: _basicTypeAdditionalDesc),
+            ExampleItem(desc: '带字数限制输入框', builder: _basicTypeTextLimit),
+            ExampleItem(builder: _basicTypeTextLimitChinese2),
+            ExampleItem(desc: '带操作输入框', builder: _basicTypeWithHandleIconOne),
+            ExampleItem(builder: _basicTypeWithHandleIconTwo),
+            ExampleItem(builder: _basicTypeWithHandleIconThree),
+            ExampleItem(desc: '带图标输入框', builder: _basicTypeWithLeftIconLeftLabel),
+            ExampleItem(builder: _basicTypeWithLeftIcon),
+            ExampleItem(desc: '特定类型输入框', builder: _specialTypePassword),
+            ExampleItem(builder: _specialTypeVerifyCode),
+            ExampleItem(builder: _specialTypePhoneNumber),
+            ExampleItem(builder: _specialTypePrice),
+            ExampleItem(builder: _specialTypeNumber),
+            ExampleItem(builder: (context) {
+              return Container();
+            }),
+          ],
+        ),
+        ExampleModule(title: '组件状态', children: [
+          ExampleItem(desc: '输入框状态', builder: _inputStatusAdditionInfo),
+          ExampleItem(builder: _inputStatusReadOnly),
+          ExampleItem(desc: '信息超长状态', builder: _inputStatusLongLabel),
+          ExampleItem(builder: _inputStatusLongInput),
+        ]),
+        ExampleModule(title: '组件样式', children: [
+          ExampleItem(desc: '内容位置', builder: _contentLeft),
+          ExampleItem(builder: _contentCenter),
+          ExampleItem(builder: _contentRight),
+          ExampleItem(desc: '竖排样式', builder: _verticalStyle),
+          ExampleItem(desc: '非通栏样式', builder: _cardStyle),
+          ExampleItem(desc: '标签外置样式', builder: _labelOutStyle),
+          ExampleItem(desc: '自定义样式输入框', builder: _customStyle),
+        ]),
+      ],
+      test: [
+        ExampleItem(desc: '长文本样式', builder: _customLongTextStyle),
+        ExampleItem(desc: '隐藏底部分割线', builder: _hideBottomDivider),
+        ExampleItem(desc: '自定义高度-使用SizeBox', builder: _customHeight),
+      ],
+    );
   }
 
   @Demo(group: 'input')
@@ -340,12 +315,13 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
             width: 73,
             height: 28,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                color: TDTheme.of(context).brandNormalColor),
+              borderRadius: BorderRadius.circular(6),
+              color: TDTheme.of(context).brandNormalColor,
+            ),
             child: const TDButton(
               text: '操作按钮',
               size: TDButtonSize.extraSmall,
-              theme: TDButtonTheme.primary
+              theme: TDButtonTheme.primary,
             ),
           ),
           onBtnTap: () {
@@ -367,7 +343,10 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       controller: controller[9],
       backgroundColor: Colors.white,
       hintText: '请输入文字',
-      rightBtn: Icon(TDIcons.user_avatar, color: TDTheme.of(context).fontGyColor3,),
+      rightBtn: Icon(
+        TDIcons.user_avatar,
+        color: TDTheme.of(context).fontGyColor3,
+      ),
       onBtnTap: () {
         TDToast.showText('点击操作按钮', context: context);
       },
@@ -441,13 +420,15 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           leftLabel: '输入密码',
           hintText: '请输入密码',
           backgroundColor: Colors.white,
-          rightBtn: browseOn ? Icon(
-            TDIcons.browse,
-            color: TDTheme.of(context).fontGyColor3,
-          ) : Icon(
-            TDIcons.browse_off,
-            color: TDTheme.of(context).fontGyColor3,
-          ),
+          rightBtn: browseOn
+              ? Icon(
+                  TDIcons.browse,
+                  color: TDTheme.of(context).fontGyColor3,
+                )
+              : Icon(
+                  TDIcons.browse_off,
+                  color: TDTheme.of(context).fontGyColor3,
+                ),
           onBtnTap: () {
             setState(() {
               browseOn = !browseOn;
@@ -527,7 +508,10 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                   ),
                 ),
                 _countdownTime > 0
-                    ? TDText('${countDownText}(${_countdownTime}秒)', textColor: TDTheme.of(context).fontGyColor4,)
+                    ? TDText(
+                        '${countDownText}(${_countdownTime}秒)',
+                        textColor: TDTheme.of(context).fontGyColor4,
+                      )
                     : TDText(confirmText, textColor: TDTheme.of(context).brandNormalColor),
               ],
             ),
@@ -815,16 +799,10 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       leftLabel: '标签文字',
       controller: controller[26],
       backgroundColor: TDTheme.of(context).grayColor12,
-      leftLabelStyle: TextStyle(
-        color: TDTheme.of(context).fontWhColor1
-      ),
-      textStyle: TextStyle(
-          color: TDTheme.of(context).fontWhColor1
-      ),
+      leftLabelStyle: TextStyle(color: TDTheme.of(context).fontWhColor1),
+      textStyle: TextStyle(color: TDTheme.of(context).fontWhColor1),
       hintText: '请输入文字',
-      hintTextStyle: TextStyle(
-          color: TDTheme.of(context).fontWhColor3
-      ),
+      hintTextStyle: TextStyle(color: TDTheme.of(context).fontWhColor3),
       onChanged: (text) {
         setState(() {});
       },
@@ -833,6 +811,85 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         controller[26].clear();
         setState(() {});
       },
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _customLongTextStyle(BuildContext context) {
+    var controller = TextEditingController();
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.only(top: 16, bottom: 24),
+      width: MediaQuery.of(context).size.width,
+      color: Colors.white,
+      child: TDInput(
+        type: TDInputType.longText,
+        cardStyle: TDCardStyle.topText,
+        width: MediaQuery.of(context).size.width - 32,
+        cardStyleTopText: '标签文字',
+        controller: controller,
+        hintText: '请输入文字',
+        rightBtn: Icon(
+          TDIcons.error_circle_filled,
+          color: TDTheme.of(context).fontGyColor3,
+        ),
+        onBtnTap: () {
+          TDToast.showText('点击右侧按钮', context: context);
+        },
+        onChanged: (text) {
+          setState(() {});
+        },
+        onClearTap: () {
+          controller.clear();
+          setState(() {});
+        },
+      ),
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _hideBottomDivider(BuildContext context) {
+    var controller = TextEditingController();
+    return TDInput(
+      leftLabel: '标签文字',
+      controller: controller,
+      backgroundColor: Colors.white,
+      hintText: '请输入文字',
+      onChanged: (text) {
+        setState(() {});
+      },
+      onClearTap: () {
+        controller.clear();
+        setState(() {});
+      },
+      showBottomDivider: false,
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _customHeight(BuildContext context) {
+    var controller = TextEditingController();
+    return Container(
+      color: Colors.yellow,
+      alignment: Alignment.center,
+      height: 90,
+      child: SizedBox(
+        height: 60,
+        child: TDInput(
+          size: TDInputSize.small,
+          leftLabel: '标签文字',
+          controller: controller,
+          backgroundColor: Colors.white,
+          hintText: '请输入文字',
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller.clear();
+            setState(() {});
+          },
+        ),
+      ),
     );
   }
 }

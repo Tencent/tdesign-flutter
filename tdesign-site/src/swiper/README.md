@@ -11,7 +11,8 @@ isComponent: true
 在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
 
 ```dart
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart'; 
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 ```
 
 ## 代码演示

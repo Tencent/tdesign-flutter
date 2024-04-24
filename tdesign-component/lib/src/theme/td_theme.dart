@@ -91,19 +91,19 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
   /// 名称
   late String name;
   /// 颜色
-  late _TDMap<String, Color> colorMap;
+  late TDMap<String, Color> colorMap;
   /// 字体尺寸
-  late _TDMap<String, Font> fontMap;
+  late TDMap<String, Font> fontMap;
   /// 圆角
-  late _TDMap<String, double> radiusMap;
+  late TDMap<String, double> radiusMap;
   /// 字体样式
-  late _TDMap<String, FontFamily> fontFamilyMap;
+  late TDMap<String, FontFamily> fontFamilyMap;
   /// 阴影
-  late _TDMap<String, List<BoxShadow>> shadowMap;
+  late TDMap<String, List<BoxShadow>> shadowMap;
   /// 间隔
-  late _TDMap<String, double> spacerMap;
+  late TDMap<String, double> spacerMap;
   /// 映射关系
-  late _TDMap<String, String> refMap;
+  late TDMap<String, String> refMap;
   /// 额外定义的结构
   late TDExtraThemeData? extraThemeData;
 
@@ -168,8 +168,8 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
   }
 
   /// 拷贝Map,防止内层
-  _TDMap<String, T> _copyMap<T>(_TDMap<String, T> src, Map<String, T>? add) {
-    var map = _TDMap<String, T>(factory: ()=>src);
+  TDMap<String, T> _copyMap<T>(TDMap<String, T> src, Map<String, T>? add) {
+    var map = TDMap<String, T>(factory: ()=>src);
 
     src.forEach((key, value) {
       map[key] = value;
@@ -183,15 +183,15 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
   /// 创建空对象
   static TDThemeData _emptyData(String name,
       {TDExtraThemeData? extraThemeData}) {
-    var refMap = _TDMap<String, String>();
+    var refMap = TDMap<String, String>();
     return TDThemeData(
         name: name,
-        colorMap: _TDMap(factory: () => _defaultThemeData?.colorMap, refs: refMap),
-        fontMap: _TDMap(factory: () => _defaultThemeData?.fontMap, refs:refMap),
-        radiusMap: _TDMap(factory: () => _defaultThemeData?.radiusMap, refs: refMap),
-        fontFamilyMap: _TDMap(factory: () => _defaultThemeData?.fontFamilyMap, refs:refMap),
-        shadowMap: _TDMap(factory: () => _defaultThemeData?.shadowMap, refs: refMap),
-        spacerMap: _TDMap(factory: () => _defaultThemeData?.spacerMap, refs: refMap),
+        colorMap: TDMap(factory: () => _defaultThemeData?.colorMap, refs: refMap),
+        fontMap: TDMap(factory: () => _defaultThemeData?.fontMap, refs:refMap),
+        radiusMap: TDMap(factory: () => _defaultThemeData?.radiusMap, refs: refMap),
+        fontFamilyMap: TDMap(factory: () => _defaultThemeData?.fontFamilyMap, refs:refMap),
+        shadowMap: TDMap(factory: () => _defaultThemeData?.shadowMap, refs: refMap),
+        spacerMap: TDMap(factory: () => _defaultThemeData?.spacerMap, refs: refMap),
         refMap: refMap);
   }
 
@@ -345,14 +345,14 @@ abstract class TDExtraThemeData {
   void parse(String name, Map<String, dynamic> curThemeMap);
 }
 
-typedef DefaultMapFactory = _TDMap? Function();
+typedef DefaultMapFactory = TDMap? Function();
 
 /// 自定义Map
-class _TDMap<K,V> extends SplayTreeMap<K, V>{
+class TDMap<K,V> extends SplayTreeMap<K, V>{
 
-  _TDMap({this.factory, this.refs});
+  TDMap({this.factory, this.refs});
 DefaultMapFactory? factory;
-_TDMap? refs;
+TDMap? refs;
 
   @override
   V? operator [](Object? key) {

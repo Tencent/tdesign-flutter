@@ -1,0 +1,39 @@
+
+  Widget _customFont(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      contentDirection: TDContentDirection.right,
+      selectIds: const ['0'],
+      child: Column(
+        children:  [
+          TDCheckbox(
+            id: '0',
+            title: '选项禁用-已选',
+            subTitle: '描述文本',
+            style: TDCheckboxStyle.circle,
+            enable: false,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+          TDCheckbox(
+            id: '1',
+            title: '选项禁用-默认',
+            subTitle: '描述文本',
+            style: TDCheckboxStyle.circle,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+
+          TDCheckbox(
+            id: 'index:0',
+            title: '多选',
+            subTitle: '描述信息',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            cardMode: true,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+          ),
+        ],
+      ),
+    );
+  }

@@ -1,0 +1,28 @@
+
+  Widget _showBottomLine(BuildContext context) {
+    return TDRadioGroup(
+      selectId: 'index:1',
+      direction: Axis.horizontal,
+      showDivider: true,
+      directionalTdRadios: const [
+        TDRadio(
+          id: '0',
+          title: '单选标题',
+          radioStyle: TDRadioStyle.circle,
+          showDivider: false,
+        ),
+        TDRadio(
+          id: '1',
+          title: '单选标题',
+          radioStyle: TDRadioStyle.circle,
+          showDivider: false,
+        ),
+        TDRadio(
+          id: '2',
+          title: '上限四字',
+          radioStyle: TDRadioStyle.circle,
+          showDivider: false,
+        ),
+      ],
+    );
+  }

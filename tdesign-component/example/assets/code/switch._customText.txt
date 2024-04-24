@@ -1,0 +1,12 @@
+
+  Widget _customText(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(
+        type: TDSwitchType.text,
+        openText: '1111',
+        closeText: '—',
+      ),
+      title: '基础开关',
+    );
+  }
