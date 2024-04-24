@@ -66,14 +66,13 @@ class TDDropdownPopup {
     overlayEntry = OverlayEntry(
       builder: (BuildContext context) {
         return Stack(children: [
-          Positioned(
+          showOverlay == true ? Positioned(
             top: _overlayTop,
             bottom: _overlayBottom,
             left: 0,
             right: 0,
             child: Container(
-              color:
-                  (showOverlay ?? true) ? Colors.black54 : Colors.transparent,
+              color:Colors.black54,
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
@@ -88,7 +87,7 @@ class TDDropdownPopup {
                 },
               ),
             ),
-          ),
+          ) : const SizedBox.shrink(),
           TDDropdownInherited(
               state: this,
               child: TDDropdownPanel(
