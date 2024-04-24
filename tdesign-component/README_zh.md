@@ -38,6 +38,7 @@
 
 # 自定义主题
 
+## 基础用法
 设置自定义主题的方式:
 ```
     MaterialApp(
@@ -66,6 +67,31 @@
   ''';
 ```
 
+## 主题生成器
+如果你不想自定义太多颜色,但是想要拥有好看的自定义主题,"主题生成器"是个不错的选择.
+
+1.进入[TDesign官网](https://tdesign.tencent.com/vue/custom-theme) ,点击下方的主题生成器,然后再右边生成器里选择想要的颜色,点击下载
+
+![img.png](../tdesign-site/site/public/assets/theme_generator.png)
+
+![img.png](../tdesign-site/site/public/assets/select_color.png)
+
+2.此时你得到是一个theme.css文件,可以将该文件放到tdesign-component/example/shell/theme/文件夹下,把该文件夹下的css2JsonTheme.dart修改为你自己的文件名、主题名和输出路径,即可得到一个theme.json文件
+![img.png](../tdesign-site/site/public/assets/dart_modify.png)
+
+3.将主题json加载进TDTheme,美观的自定义主题就设置完成了.
+```
+    var jsonString = await rootBundle.loadString('assets/theme.json');
+    var _themeData = TDThemeData.fromJson('green', jsonString);
+    // ……
+    MaterialApp(
+      title: 'TDesign Flutter Example',
+      theme: ThemeData(
+      extensions: [_themeData],
+      home: MyHomePage(title: 'TDesign Flutter 组件库'),
+    );
+```
+
 # 开发规范
 - 组件命名规范：以TD为前缀，组件名称、API名称参考TDesign现有组件和API命名，可以根据flutter原生Widget的特点进行修改。组件API以满足设计要求和使用为准，可根据flutter特点做精简或定制。
 - 组件库用到的所有色值、圆角、字体字号等样式属性需全部定义在主题中。
@@ -85,6 +111,11 @@
 - 单元测试：添加未在示例稿中体现，但有必要验证的组件样式，请添加到ExamplePage的'test'参数中。
 - 合并代码: 上述检查完成后，请发起pr，合并到dev分支，并同步项目组验收。
 
+## 常见问题
+
+- Flutter 3.16之后,修改了渲染引擎,导致启用forceVerticalCenter参数的组件字体偏移更多,不再居中.可以通过设置kTextForceVerticalCenterEnable=false来禁用字体居中功能,让组件显示与官方Text一致
+
+
 # SDK依赖版本
 dart: ">=2.19.0 <4.0.0"
 
@@ -103,3 +134,10 @@ flutter: ">=3.7.0"
 # 开源协议
 
 TDesign 遵循 [MIT 协议](https://github.com/Tencent/tdesing-flutter/blob/main/tdesign-component/LICENSE)
+
+# 致谢
+TDesign Flutter 依赖以下组件库,感谢作者的开源贡献:
+
+[flutter_easyrefresh](https://pub-web.flutter-io.cn/packages/easy_refresh)
+
+[flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)

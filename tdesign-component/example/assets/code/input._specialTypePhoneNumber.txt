@@ -22,7 +22,10 @@
                   ),
                 ),
                 _countdownTime > 0
-                    ? TDText('${countDownText}(${_countdownTime}秒)', textColor: TDTheme.of(context).fontGyColor4,)
+                    ? TDText(
+                        '${countDownText}(${_countdownTime}秒)',
+                        textColor: TDTheme.of(context).fontGyColor4,
+                      )
                     : TDText(confirmText, textColor: TDTheme.of(context).brandNormalColor),
               ],
             ),

@@ -11,7 +11,8 @@ isComponent: true
 在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
 
 ```dart
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart'; 
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 ```
 
 ## 代码演示
