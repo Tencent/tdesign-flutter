@@ -1,0 +1,29 @@
+
+  Widget _verticalCheckbox(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      selectIds: const ['index:1'],
+      child: ListView.builder(
+        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (BuildContext context, int index) {
+          var title = '多选';
+          var subTitle = '';
+          if (index == 2) {
+            title = '多选标题多行多选标题多行多选标题多行多选标题多行多选标题多行多选标题多行';
+          }
+          if (index == 3) {
+            subTitle = '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息';
+          }
+          return TDCheckbox(
+            id: 'index:$index',
+            title: title,
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            subTitle: subTitle,
+          );
+        },
+        itemCount: 4,
+      ),
+    );
+  }

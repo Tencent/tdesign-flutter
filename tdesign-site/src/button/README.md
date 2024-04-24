@@ -776,7 +776,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | child | Widget? | - | 自控件 |
 | disabled | bool | false | 禁止点击 |
 | isBlock | bool | false | 是否为通栏按钮 |
-| style | TDButtonStyle? | - | 自定义样式，有则优先用它，没有则根据type和theme选取 |
+| style | TDButtonStyle? | - | 自定义样式，有则优先用它，没有则根据type和theme选取.如果设置了style,则activeStyle和disableStyle也应该设置 |
 | activeStyle | TDButtonStyle? | - | 自定义点击样式，有则优先用它，没有则根据type和theme选取 |
 | disableStyle | TDButtonStyle? | - | 自定义禁用样式，有则优先用它，没有则根据type和theme选取 |
 | textStyle | TextStyle? | - | 自定义可点击状态文本样式 |

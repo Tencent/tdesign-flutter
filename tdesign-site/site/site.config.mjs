@@ -308,13 +308,13 @@ export default {
         //   path: '/flutter/components/collapse',
         //   component: () => import('@/collapse/README.md'),
         // },
-        // {
-        //   title: 'CountDown 倒计时',
-        //   name: 'countdown',
-        //   meta: { docType: 'data' },
-        //   path: '/flutter/components/count-down',
-        //   component: () => import('@/count-down/README.md'),
-        // },
+        {
+          title: 'CountDown 倒计时',
+          name: 'countdown',
+          meta: { docType: 'data' },
+          path: '/flutter/components/count-down',
+          component: () => import('@/count-down/README.md'),
+        },
         {
           title: 'Empty 空状态',
           name: 'empty',
