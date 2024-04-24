@@ -55,6 +55,15 @@ class TDDropdownMenuPage extends StatelessWidget {
               ),
             ]),
           ],
+          test: [
+            ExampleItem(
+              ignoreCode: true,
+              desc: '隐藏遮罩层',
+              builder: (BuildContext context) {
+                return const CodeWrapper(builder: _buildHidden);
+              },
+            ),
+          ],
         ));
   }
 }
@@ -82,8 +91,7 @@ TDDropdownMenu _buildDownSimple(BuildContext context) {
         ),
         TDDropdownItem(
           options: [
-            TDDropdownItemOption(
-                label: '默认排序', value: 'default', selected: true),
+            TDDropdownItemOption(label: '默认排序', value: 'default', selected: true),
             TDDropdownItemOption(label: '价格从高到低', value: 'price'),
           ],
         ),
@@ -186,8 +194,7 @@ TDDropdownMenu _buildUp(BuildContext context) {
         ),
         TDDropdownItem(
           options: [
-            TDDropdownItemOption(
-                label: '默认排序', value: 'default', selected: true),
+            TDDropdownItemOption(label: '默认排序', value: 'default', selected: true),
             TDDropdownItemOption(label: '价格从高到低', value: 'price'),
           ],
         ),
@@ -218,6 +225,37 @@ TDDropdownMenu _buildDisabled(BuildContext context) {
 TDDropdownMenu _buildGroup(BuildContext context) {
   return TDDropdownMenu(
     direction: TDDropdownMenuDirection.up,
+    builder: (context) {
+      return [
+        TDDropdownItem(
+          label: '分组菜单',
+          multiple: true,
+          optionsColumns: 3,
+          options: [
+            TDDropdownItemOption(label: '选项1', value: '1', selected: true, group: '类型'),
+            TDDropdownItemOption(label: '选项2', value: '2', group: '类型'),
+            TDDropdownItemOption(label: '选项3', value: '3', group: '类型'),
+            TDDropdownItemOption(label: '选项4', value: '4', group: '类型'),
+            TDDropdownItemOption(label: '选项5', value: '5', group: '角色'),
+            TDDropdownItemOption(label: '选项6', value: '6', group: '角色'),
+            TDDropdownItemOption(label: '选项7', value: '7', group: '角色'),
+            TDDropdownItemOption(label: '选项8', value: '8', group: '角色'),
+            TDDropdownItemOption(label: '禁用选项', value: '9', disabled: true, group: '角色'),
+          ],
+          onChange: (value) {
+            print('选择：$value');
+          },
+        ),
+      ];
+    },
+  );
+}
+
+@Demo(group: 'dropdownMenu')
+TDDropdownMenu _buildHidden(BuildContext context) {
+  return TDDropdownMenu(
+    direction: TDDropdownMenuDirection.up,
+    showOverlay: false,
     builder: (context) {
       return [
         TDDropdownItem(
