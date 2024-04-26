@@ -10,7 +10,7 @@ import '../text/td_text.dart';
 import 'td_dropdown_popup.dart';
 
 /// 菜单展开方向
-enum TDDropdownMenuDirection { down, up }
+enum TDDropdownMenuDirection { down, up, auto }
 
 /// 下拉菜单构建器
 typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(
@@ -22,7 +22,7 @@ class TDDropdownMenu extends StatefulWidget {
     Key? key,
     required this.builder,
     this.closeOnClickOverlay = true,
-    this.direction = TDDropdownMenuDirection.down,
+    this.direction = TDDropdownMenuDirection.auto,
     this.duration = 200.0,
     this.showOverlay = true,
     this.arrowIcon,
@@ -139,9 +139,9 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
 
   Widget _getIcon(int index) {
     var arrowIcon = widget.arrowIcon ??
-        (widget.direction == TDDropdownMenuDirection.down
-            ? TDIcons.caret_down_small
-            : TDIcons.caret_up_small);
+        (widget.direction == TDDropdownMenuDirection.up
+            ? TDIcons.caret_up_small
+            : TDIcons.caret_down_small);
     return RotationTransition(
       turns: _iconAnimations[index],
       child: Icon(

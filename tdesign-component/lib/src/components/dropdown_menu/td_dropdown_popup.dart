@@ -15,7 +15,7 @@ class TDDropdownPopup {
     required this.parentContext,
     required this.child,
     this.handleClose,
-    this.direction = TDDropdownPopupDirection.down,
+    this.direction = TDDropdownPopupDirection.auto,
     this.showOverlay = true,
     this.closeOnClickOverlay = true,
     this.duration = const Duration(milliseconds: 200),
@@ -32,15 +32,19 @@ class TDDropdownPopup {
   /// _overlay1：下拉方向的
   /// _overlay2：menu部分的
   /// _overlay3：下拉反方向的
+  /// _overlay3Height：下拉反方向的高度，用于判断auto方向
+  /// _initContent：初始内容
   late double _overlay1Top,
       _overlay1Bottom,
       _overlay2Top,
       _overlay2Bottom,
       _overlay3Top,
       _overlay3Bottom,
+      _overlay3Height,
       _initContentTop,
       _initContentBottom;
   late VoidCallback _closeContent;
+  final directionListenable = ValueNotifier<TDDropdownPopupDirection>(TDDropdownPopupDirection.auto);
 
   OverlayEntry? overlayEntry;
 
@@ -48,13 +52,12 @@ class TDDropdownPopup {
 
   double get maxContentHeight => direction == TDDropdownPopupDirection.down ? _initContentBottom : _initContentTop;
 
-  void _init() {
+  void _init(TDDropdownPopupDirection d) {
     var renderBox = parentContext.findRenderObject() as RenderBox;
     var position = renderBox.localToGlobal(Offset.zero);
     var size = renderBox.size;
     var screenHeight = MediaQuery.of(parentContext).size.height;
-    var isDown = direction == TDDropdownPopupDirection.down;
-    if (isDown) {
+    if (d == TDDropdownPopupDirection.down) {
       _overlay1Top = position.dy + size.height;
       _overlay2Top = position.dy;
       _overlay3Top = 0;
@@ -63,6 +66,8 @@ class TDDropdownPopup {
       _overlay1Bottom = 0;
       _overlay2Bottom = screenHeight - position.dy - size.height;
       _overlay3Bottom = screenHeight - position.dy;
+
+      _overlay3Height = position.dy;
       _initContentBottom = screenHeight - position.dy - size.height;
     } else {
       _overlay1Top = 0;
@@ -73,35 +78,53 @@ class TDDropdownPopup {
       _overlay1Bottom = screenHeight - position.dy;
       _overlay2Bottom = screenHeight - position.dy - size.height;
       _overlay3Bottom = 0;
+
+      _overlay3Height = screenHeight - position.dy - size.height;
       _initContentBottom = screenHeight - position.dy;
     }
   }
 
   Future<void> add([TDDropdownItem? updateChild]) async {
-    _init();
+    directionListenable.value = direction ?? TDDropdownPopupDirection.auto;
     overlayEntry?.remove();
     overlayEntry = OverlayEntry(
       builder: (BuildContext context) {
-        return Stack(children: [
-          _getOverlay1(),
-          _getOverlay2(),
-          _getOverlay3(),
-          TDDropdownInherited(
-              state: this,
-              child: TDDropdownPanel(
-                duration: _duration,
-                direction: direction ?? TDDropdownPopupDirection.down,
-                initContentBottom: _initContentBottom,
-                initContentTop: _initContentTop,
-                closeCallback: _closeCallback,
-                child: updateChild ?? child,
-              )),
-        ]);
+        return directionListenable.value == TDDropdownPopupDirection.auto
+            ? ValueListenableBuilder(
+                valueListenable: directionListenable,
+                builder: (context, value, child) => value == TDDropdownPopupDirection.auto
+                    ? child!
+                    : _getPopup(value, updateChild), // 每次重新渲染item，更新高度
+                child: _getPopup(TDDropdownPopupDirection.down, updateChild),
+              )
+            : _getPopup(directionListenable.value, updateChild);
       },
     );
 
     Overlay.of(parentContext).insert(overlayEntry!);
     await Future.delayed(_duration);
+  }
+
+  Widget _getPopup(TDDropdownMenuDirection value, TDDropdownItem? updateChild) {
+    _init(value);
+    return Stack(children: [
+      _getOverlay1(),
+      _getOverlay2(),
+      _getOverlay3(),
+      TDDropdownInherited(
+          popupState: this,
+          directionListenable: directionListenable,
+          child: TDDropdownPanel(
+            duration: _duration,
+            direction: value,
+            directionListenable: directionListenable,
+            initContentBottom: _initContentBottom,
+            initContentTop: _initContentTop,
+            reverseHeight: _overlay3Height,
+            closeCallback: _closeCallback,
+            child: updateChild ?? child,
+          )),
+    ]);
   }
 
   Widget _getOverlay1() {
