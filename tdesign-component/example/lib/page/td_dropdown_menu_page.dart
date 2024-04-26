@@ -58,7 +58,7 @@ class TDDropdownMenuPage extends StatelessWidget {
           test: [
             ExampleItem(
               ignoreCode: true,
-              desc: '隐藏遮罩层',
+              desc: '隐藏遮罩层&自动弹出方向',
               builder: (BuildContext context) {
                 return const CodeWrapper(builder: _buildHidden);
               },
@@ -254,7 +254,7 @@ TDDropdownMenu _buildGroup(BuildContext context) {
 @Demo(group: 'dropdownMenu')
 TDDropdownMenu _buildHidden(BuildContext context) {
   return TDDropdownMenu(
-    direction: TDDropdownMenuDirection.up,
+    direction: TDDropdownMenuDirection.auto,
     showOverlay: false,
     builder: (context) {
       return [
