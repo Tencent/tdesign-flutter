@@ -69,8 +69,6 @@ class TDDropdownItem<T> extends StatefulWidget {
   /// 点击重置时触发
   final VoidCallback? onReset;
 
-  // TODO minHeight,maxHeight
-
   static const double operateHeight = 73;
 
   @override
@@ -89,11 +87,13 @@ class TDDropdownItem<T> extends StatefulWidget {
 }
 
 class _TDDropdownItemState extends State<TDDropdownItem> {
-  late TDDropdownPopup? popupState;
+  late TDDropdownPopup popupState;
+  late ValueNotifier<TDDropdownMenuDirection> directionListenable;
 
   @override
   Widget build(BuildContext context) {
-    popupState = TDDropdownInherited.of(context)?.state;
+    popupState = TDDropdownInherited.of(context)!.popupState;
+    directionListenable = TDDropdownInherited.of(context)!.directionListenable;
     if (widget.builder != null) {
       return widget.builder!(context, this, popupState);
     }
@@ -103,7 +103,9 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
   Widget _getCheckboxList() {
     var paddingNum = TDTheme.of(context).spacer16;
     var groupCunck = _groupChunkOptions();
-    var maxContentHeight = max<double>(popupState!.maxContentHeight - TDDropdownItem.operateHeight, 0);
+    var maxContentHeight = directionListenable.value == TDDropdownMenuDirection.auto
+        ? double.infinity
+        : max<double>(popupState.maxContentHeight - TDDropdownItem.operateHeight, 0);
     var selectIds = _getSelected(widget.options).map((e) => e!.value).toList();
     return Column(
       children: [
@@ -224,7 +226,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
             color: TDTheme.of(context).grayColor4,
             width: 1,
           ),
-          bottom: popupState?.direction == TDDropdownMenuDirection.up
+          bottom: directionListenable.value == TDDropdownMenuDirection.up
               ? BorderSide(
                   color: TDTheme.of(context).grayColor4,
                   width: 1,
@@ -309,7 +311,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
     if (widget.multiple != true) {
       await Future.delayed(const Duration(milliseconds: 100));
     }
-    var handleClose = popupState?.handleClose;
+    var handleClose = popupState.handleClose;
     if (handleClose != null) {
       unawaited(handleClose());
     }
