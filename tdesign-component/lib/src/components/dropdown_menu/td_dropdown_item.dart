@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -10,8 +11,8 @@ import '../tag/td_tag_styles.dart';
 import 'td_dropdown_inherited.dart';
 import 'td_dropdown_popup.dart';
 
-typedef TDDropdownItemContentBuilder = Widget Function(BuildContext context,
-    _TDDropdownItemState itemState, TDDropdownPopup? popupState);
+typedef TDDropdownItemContentBuilder = Widget Function(
+    BuildContext context, _TDDropdownItemState itemState, TDDropdownPopup? popupState);
 
 List<TDDropdownItemOption?> _getSelected(List<TDDropdownItemOption>? options) {
   return options?.where((element) => element.selected == true).toList() ?? [];
@@ -68,6 +69,10 @@ class TDDropdownItem<T> extends StatefulWidget {
   /// 点击重置时触发
   final VoidCallback? onReset;
 
+  // TODO minHeight,maxHeight
+
+  static const double operateHeight = 73;
+
   @override
   _TDDropdownItemState createState() => _TDDropdownItemState();
 
@@ -98,12 +103,12 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
   Widget _getCheckboxList() {
     var paddingNum = TDTheme.of(context).spacer16;
     var groupCunck = _groupChunkOptions();
-    var maxHeight = (popupState?.maxContentHeight ?? 300) - 73;
+    var maxContentHeight = max<double>(popupState!.maxContentHeight - TDDropdownItem.operateHeight, 0);
     var selectIds = _getSelected(widget.options).map((e) => e!.value).toList();
     return Column(
       children: [
         ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: maxHeight),
+          constraints: BoxConstraints(maxHeight: maxContentHeight),
           child: SingleChildScrollView(
             child: Column(
               children: List.generate(groupCunck.length, (index) {
@@ -115,13 +120,9 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
                         ? const SizedBox()
                         : Container(
                             width: double.infinity,
-                            padding: EdgeInsets.only(
-                                left: paddingNum,
-                                top: paddingNum,
-                                right: paddingNum),
+                            padding: EdgeInsets.only(left: paddingNum, top: paddingNum, right: paddingNum),
                             color: TDTheme.of(context).whiteColor1,
-                            child: TDText(
-                                entry.key == '__default__' ? '其它' : entry.key),
+                            child: TDText(entry.key == '__default__' ? '其它' : entry.key),
                           ),
                     Container(
                       padding: EdgeInsets.all(paddingNum),
@@ -193,9 +194,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
       customContentBuilder: (context, checked, content) => Container(
         height: 40,
         decoration: BoxDecoration(
-          color: checked
-              ? TDTheme.of(context).brandLightColor
-              : TDTheme.of(context).grayColor3,
+          color: checked ? TDTheme.of(context).brandLightColor : TDTheme.of(context).grayColor3,
           borderRadius: BorderRadius.all(
             Radius.circular(TDTheme.of(context).radiusDefault),
           ),
@@ -216,6 +215,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
 
   Widget _getCheckboxOperate(List<String> selectIds) {
     return Container(
+      height: TDDropdownItem.operateHeight,
       padding: EdgeInsets.all(TDTheme.of(context).spacer16),
       decoration: BoxDecoration(
         color: TDTheme.of(context).whiteColor1,
@@ -279,9 +279,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
   }
 
   Map<String, List<List<TDDropdownItemOption>>> _groupChunkOptions() {
-    var groupedOptions = widget.options
-            ?.groupBy<String>((option) => option.group ?? '__default__') ??
-        {};
+    var groupedOptions = widget.options?.groupBy<String>((option) => option.group ?? '__default__') ?? {};
     var groupedChunkOptions = <String, List<List<TDDropdownItemOption>>>{};
     var def = groupedOptions.remove('__default__');
     if (def != null) {
@@ -295,9 +293,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
 
   void _handleSelectChange(selected) async {
     widget.options?.forEach((element) {
-      element.selected = selected is List<String>
-          ? selected.contains(element.value)
-          : element.value == selected;
+      element.selected = selected is List<String> ? selected.contains(element.value) : element.value == selected;
     });
     if (widget.onChange != null) {
       widget.onChange!(selected);
