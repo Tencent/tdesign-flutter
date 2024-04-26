@@ -71,9 +71,9 @@ class TDDropdownPanelState extends State<TDDropdownPanel> {
       var size = renderBox.size;
       setState(() {
         if (widget.direction == TDDropdownPopupDirection.down) {
-          contentBottom = max(0, widget.initContentBottom - size.height);
+          contentBottom = widget.initContentBottom - size.height; // max(0, widget.initContentBottom - size.height);
         } else {
-          contentTop = max(0, widget.initContentTop - size.height);
+          contentTop = widget.initContentTop - size.height; // max(0, widget.initContentTop - size.height);
         }
       });
     });
