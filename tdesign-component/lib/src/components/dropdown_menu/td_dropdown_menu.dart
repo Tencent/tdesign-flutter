@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import './td_dropdown_item.dart';
 import '../../theme/td_colors.dart';
+import '../../theme/td_fonts.dart';
 import '../../theme/td_theme.dart';
 import '../icon/td_icons.dart';
 import '../text/td_text.dart';
@@ -13,8 +14,7 @@ import 'td_dropdown_popup.dart';
 enum TDDropdownMenuDirection { down, up, auto }
 
 /// 下拉菜单构建器
-typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(
-    BuildContext context);
+typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(BuildContext context);
 
 /// 下拉菜单
 class TDDropdownMenu extends StatefulWidget {
@@ -60,8 +60,7 @@ class TDDropdownMenu extends StatefulWidget {
   _TDDropdownMenuState createState() => _TDDropdownMenuState();
 }
 
-class _TDDropdownMenuState extends State<TDDropdownMenu>
-    with TickerProviderStateMixin {
+class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStateMixin {
   late final List<TDDropdownItem> _items;
   late final List<AnimationController> _iconControllers;
   late final List<Animation<double>> _iconAnimations;
@@ -75,13 +74,10 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
     _iconControllers = List.generate(
         _items.length,
         (index) => AnimationController(
-              duration:
-                  Duration(milliseconds: (widget.duration ?? 200).toInt()),
+              duration: Duration(milliseconds: (widget.duration ?? 200).toInt()),
               vsync: this,
             ));
-    _iconAnimations = _iconControllers
-        .map((e) => Tween<double>(begin: 0, end: 0.5).animate(e))
-        .toList();
+    _iconAnimations = _iconControllers.map((e) => Tween<double>(begin: 0, end: 0.5).animate(e)).toList();
     _isOpened = List.filled(_items.length, false);
   }
 
@@ -104,7 +100,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
         color: TDTheme.of(context).whiteColor1,
         border: Border(
           bottom: BorderSide(
-            color: TDTheme.of(context).grayColor4,
+            color: TDTheme.of(context).grayColor3,
             width: 1,
           ),
         ),
@@ -134,19 +130,17 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
         : _isOpened[index]
             ? TDTheme.of(context).brandColor7
             : TDTheme.of(context).fontGyColor1;
-    return TDText(_items[index].getLabel(), textColor: textColor);
+    return TDText(_items[index].getLabel(), font: TDTheme.of(context).fontBodyMedium, textColor: textColor);
   }
 
   Widget _getIcon(int index) {
     var arrowIcon = widget.arrowIcon ??
-        (widget.direction == TDDropdownMenuDirection.up
-            ? TDIcons.caret_up_small
-            : TDIcons.caret_down_small);
+        (widget.direction == TDDropdownMenuDirection.up ? TDIcons.caret_up_small : TDIcons.caret_down_small);
     return RotationTransition(
       turns: _iconAnimations[index],
       child: Icon(
         arrowIcon,
-        size: 48 / 1.4,
+        size: 24,
         color: _disabled(index)
             ? TDTheme.of(context).fontGyColor4
             : _isOpened[index]
@@ -174,7 +168,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
       duration: Duration(milliseconds: (widget.duration ?? 200).toInt()),
     );
     unawaited(_dropdownPopup!.add(_items[index]).then((value) {
-      if (widget.onMenuOpened !=  null) {
+      if (widget.onMenuOpened != null) {
         widget.onMenuOpened!(index);
       }
     }));
