@@ -9,7 +9,7 @@
 | key |  | - |  |
 | builder | TDDropdownItemBuilder | - | 下拉菜单构建器 |
 | closeOnClickOverlay | bool? | true | 是否在点击遮罩层后关闭菜单 |
-| direction | TDDropdownMenuDirection? | TDDropdownMenuDirection.auto | 菜单展开方向 |
+| direction | TDDropdownMenuDirection? | TDDropdownMenuDirection.auto | 菜单展开方向（down、up、auto） |
 | duration | double? | 200.0 | 动画时长，毫秒 |
 | showOverlay | bool? | true | 是否显示遮罩层 |
 | arrowIcon | IconData? | - | 自定义箭头图标 |
@@ -35,6 +35,8 @@
 | onChange | ValueChanged<T?>? | - | 值改变时触发 |
 | onConfirm | ValueChanged<T?>? | - | 点击确认时触发 |
 | onReset | VoidCallback? | - | 点击重置时触发 |
+| minHeight | double? | - | 内容最小高度 |
+| maxHeight | double? | - | 内容最大高度 |
 
 ```
 ```

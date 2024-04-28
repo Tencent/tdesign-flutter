@@ -40,6 +40,8 @@ class TDDropdownItem<T> extends StatefulWidget {
     this.onChange,
     this.onConfirm,
     this.onReset,
+    this.minHeight,
+    this.maxHeight,
   }) : super(key: key);
 
   /// 是否禁用
@@ -69,7 +71,18 @@ class TDDropdownItem<T> extends StatefulWidget {
   /// 点击重置时触发
   final VoidCallback? onReset;
 
+  /// 内容最小高度
+  final double? minHeight;
+
+  /// 内容最大高度
+  final double? maxHeight;
+
   static const double operateHeight = 73;
+
+  double? get minContenHeight =>
+      multiple == true ? (minHeight != null ? minHeight! + TDDropdownItem.operateHeight : null) : minHeight;
+  double? get maxContenHeight =>
+      multiple == true ? (maxHeight != null ? maxHeight! + TDDropdownItem.operateHeight : null) : maxHeight;
 
   @override
   _TDDropdownItemState createState() => _TDDropdownItemState();
@@ -103,14 +116,16 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
   Widget _getCheckboxList() {
     var paddingNum = TDTheme.of(context).spacer16;
     var groupCunck = _groupChunkOptions();
-    var maxContentHeight = directionListenable.value == TDDropdownMenuDirection.auto
-        ? double.infinity
-        : max<double>(popupState.maxContentHeight - TDDropdownItem.operateHeight, 0);
+    var maxContentHeight = widget.maxContenHeight != null
+        ? widget.maxContenHeight!
+        : directionListenable.value == TDDropdownMenuDirection.auto
+            ? double.infinity
+            : max<double>(popupState.maxContentHeight - TDDropdownItem.operateHeight, 0);
     var selectIds = _getSelected(widget.options).map((e) => e!.value).toList();
     return Column(
       children: [
         ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: maxContentHeight),
+          constraints: BoxConstraints(minHeight: widget.minContenHeight ?? 0.0, maxHeight: maxContentHeight),
           child: SingleChildScrollView(
             child: Column(
               children: List.generate(groupCunck.length, (index) {
@@ -119,7 +134,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
                 return Column(
                   children: [
                     groupCunck.length == 1 && entry.key == '__default__'
-                        ? const SizedBox()
+                        ? const SizedBox.shrink()
                         : Container(
                             width: double.infinity,
                             padding: EdgeInsets.only(left: paddingNum, top: paddingNum, right: paddingNum),
@@ -165,7 +180,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
 
   Widget _getRadioList() {
     var selected = _getSelected(widget.options);
-    return TDRadioGroup(
+    var radios = TDRadioGroup(
       onRadioGroupChange: _handleSelectChange,
       radioCheckStyle: TDRadioStyle.check,
       selectId: selected.isEmpty ? null : selected[0]?.value,
@@ -180,6 +195,13 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
         ),
       ),
     );
+    return widget.minContenHeight != null || widget.maxContenHeight != null
+        ? ConstrainedBox(
+            constraints: BoxConstraints(
+                minHeight: widget.minContenHeight ?? 0.0, maxHeight: widget.maxContenHeight ?? double.infinity),
+            child: widget.maxContenHeight != null ? SingleChildScrollView(child: radios) : radios,
+          )
+        : radios;
   }
 
   Widget? _getCheckboxItem(List<TDDropdownItemOption> cols, int index) {
