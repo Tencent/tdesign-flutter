@@ -223,12 +223,12 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
         color: TDTheme.of(context).whiteColor1,
         border: Border(
           top: BorderSide(
-            color: TDTheme.of(context).grayColor4,
+            color: TDTheme.of(context).grayColor3,
             width: 1,
           ),
           bottom: directionListenable.value == TDDropdownMenuDirection.up
               ? BorderSide(
-                  color: TDTheme.of(context).grayColor4,
+                  color: TDTheme.of(context).grayColor3,
                   width: 1,
                 )
               : BorderSide.none,
