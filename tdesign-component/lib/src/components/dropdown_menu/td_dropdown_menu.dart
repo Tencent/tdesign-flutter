@@ -11,7 +11,14 @@ import '../text/td_text.dart';
 import 'td_dropdown_popup.dart';
 
 /// 菜单展开方向
-enum TDDropdownMenuDirection { down, up, auto }
+enum TDDropdownMenuDirection {
+  /// 向下
+  down,
+  /// 向上
+  up,
+  /// 根据内容高度动态展示方向
+  auto,
+}
 
 /// 下拉菜单构建器
 typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(BuildContext context);
@@ -36,7 +43,7 @@ class TDDropdownMenu extends StatefulWidget {
   /// 是否在点击遮罩层后关闭菜单
   final bool? closeOnClickOverlay;
 
-  /// 菜单展开方向
+  /// 菜单展开方向（down、up、auto）
   final TDDropdownMenuDirection? direction;
 
   /// 动画时长，毫秒
