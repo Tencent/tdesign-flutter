@@ -218,7 +218,11 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
       customContentBuilder: (context, checked, content) => Container(
         height: 40,
         decoration: BoxDecoration(
-          color: checked ? TDTheme.of(context).brandLightColor : TDTheme.of(context).grayColor3,
+          color: enable
+              ? checked
+                  ? TDTheme.of(context).brandLightColor
+                  : TDTheme.of(context).grayColor1
+              : TDTheme.of(context).grayColor2,
           borderRadius: BorderRadius.all(
             Radius.circular(TDTheme.of(context).radiusDefault),
           ),
