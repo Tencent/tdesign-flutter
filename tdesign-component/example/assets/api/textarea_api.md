@@ -30,7 +30,6 @@
 | hintTextStyle | TextStyle? | - | 提示文本颜色，默认为文本颜色 |
 | labelWidget | Widget? | - | label组件，支持自定义 |
 | textInputBackgroundColor | Color? | - | 文本框背景色 |
-| contentPadding | EdgeInsetsGeometry? | - | textInput内边距 |
 | size | TDInputSize? | TDInputSize.large | 输入框规格 |
 | maxLength | int? | - | 最大字数限制 |
 | additionInfo | String? | '' | 错误提示信息 |
@@ -44,3 +43,4 @@
 | labelWidth | double? | - | 输入框标题宽度 |
 | margin | EdgeInsetsGeometry? | - | 外边距 |
 | textareaDecoration | Decoration? | - | 输入框样式(不包括标签) |
+| bordered | bool? | - | 是否显示外边框 |

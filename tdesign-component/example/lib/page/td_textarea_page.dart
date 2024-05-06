@@ -194,10 +194,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       maxLength: 500,
       indicator: true,
       layout: TDTextareaLayout.vertical,
-      textareaDecoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
-        border: Border.all(color: const Color.fromARGB(255, 220, 220, 220)),
-      ),
+      bordered: true,
       onChanged: (value) {
         setState(() {});
       },
