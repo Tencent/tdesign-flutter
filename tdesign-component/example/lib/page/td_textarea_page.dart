@@ -71,6 +71,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
         ExampleItem(desc: '自定义宽度', builder: _setWidth),
         ExampleItem(desc: '自定义标题', builder: _setLabel),
         ExampleItem(desc: '必填和辅助说明', builder: _setStatus),
+        ExampleItem(desc: '小尺寸', builder: _smallSize),
       ],
     );
   }
@@ -258,6 +259,24 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       layout: TDTextareaLayout.vertical,
       required: true,
       additionInfo: '辅助说明',
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }
+
+  @Demo(group: 'textarea')
+  Widget _smallSize(BuildContext context) {
+    return TDTextarea(
+      controller: controller[10],
+      label: '标签文字',
+      hintText: '请输入文字',
+      maxLines: 4,
+      minLines: 4,
+      maxLength: 500,
+      indicator: true,
+      layout: TDTextareaLayout.vertical,
+      size: TDInputSize.small,
       onChanged: (value) {
         setState(() {});
       },
