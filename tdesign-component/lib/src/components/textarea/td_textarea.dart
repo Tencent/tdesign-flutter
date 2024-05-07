@@ -171,13 +171,36 @@ class TDTextarea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var padding = _getInputPadding(context);
+    var textareaView = _getTextareaView(context, _getInputView(context), _getIndicatorView(context));
+    var container = _getContainer(context, _getLabelView(context), textareaView);
+    return bordered == true || decoration != null
+        ? container
+        : Stack(
+            children: [
+              container,
+              Positioned(
+                bottom: 0,
+                left: padding,
+                right: 0,
+                child: Container(
+                  height: 0.5,
+                  color: TDTheme.of(context).grayColor3,
+                ),
+              ),
+            ],
+          );
+  }
+
+  Widget _getLabelView(BuildContext context) {
+    var padding = _getInputPadding(context);
     var isHorizontal = layout == TDTextareaLayout.horizontal;
     var fontSize = isHorizontal ? TDTheme.of(context).fontBodyLarge?.size : TDTheme.of(context).fontBodyMedium?.size;
-    var labelView = (label == null || label == '') && labelIcon == null && labelWidget == null
+    return (label == null || label == '') && labelIcon == null && labelWidget == null
         ? const SizedBox.shrink()
         : Container(
             width: labelWidth,
-            padding: isHorizontal ? EdgeInsets.only(right: padding) : EdgeInsets.only(bottom: TDTheme.of(context).spacer8),
+            padding:
+                isHorizontal ? EdgeInsets.only(right: padding) : EdgeInsets.only(bottom: TDTheme.of(context).spacer8),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -208,7 +231,10 @@ class TDTextarea extends StatelessWidget {
               ],
             ),
           );
-    var inputView = Column(
+  }
+
+  Widget _getInputView(BuildContext context) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SingleChildScrollView(
@@ -256,7 +282,10 @@ class TDTextarea extends StatelessWidget {
         ),
       ],
     );
-    var indicatorView = Visibility(
+  }
+
+  Widget _getIndicatorView(BuildContext context) {
+    return Visibility(
       visible: indicator == true && maxLength != null,
       child: Text(
         '${controller?.text.length ?? 0}/${maxLength}',
@@ -267,7 +296,11 @@ class TDTextarea extends StatelessWidget {
             color: TDTheme.of(context).fontGyColor3),
       ),
     );
-    var textareaView = Container(
+  }
+
+  Widget _getTextareaView(BuildContext context, Widget inputView, Widget indicatorView) {
+    var padding = _getInputPadding(context);
+    return Container(
       decoration: textareaDecoration ??
           (bordered == true
               ? BoxDecoration(
@@ -284,6 +317,11 @@ class TDTextarea extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _getContainer(BuildContext context, Widget labelView, Widget textareaView) {
+    var padding = _getInputPadding(context);
+    var isHorizontal = layout == TDTextareaLayout.horizontal;
     return Container(
       width: width,
       color: decoration != null ? null : (backgroundColor ?? Colors.white),
