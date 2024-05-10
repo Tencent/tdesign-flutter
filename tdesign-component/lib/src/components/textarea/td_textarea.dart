@@ -290,8 +290,6 @@ class TDTextarea extends StatelessWidget {
       child: Text(
         '${controller?.text.length ?? 0}/${maxLength}',
         style: TextStyle(
-            fontFamily: TDTheme.defaultData().numberFontFamily?.fontFamily,
-            package: TDTheme.defaultData().numberFontFamily?.package,
             fontSize: TDTheme.of(context).fontBodySmall?.size,
             color: TDTheme.of(context).fontGyColor3),
       ),
@@ -305,7 +303,7 @@ class TDTextarea extends StatelessWidget {
           (bordered == true
               ? BoxDecoration(
                   borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
-                  border: Border.all(color: TDTheme.of(context).fontGyColor4),
+                  border: Border.all(color: TDTheme.of(context).grayColor4),
                 )
               : null),
       padding: bordered == true ? EdgeInsets.all(padding) : null,
