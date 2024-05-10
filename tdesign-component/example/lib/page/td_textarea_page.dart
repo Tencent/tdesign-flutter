@@ -245,8 +245,8 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
   Widget _setStatus(BuildContext context) {
     return TDTextarea(
       controller: controller[9],
-      label: '标签文字标签文字标签文字',
-      labelWidth: 100,
+      label: '标签文字',
+      // labelWidth: 100,
       labelIcon: Icon(
         TDIcons.error_circle_filled,
         color: TDTheme.of(context).fontGyColor3,
