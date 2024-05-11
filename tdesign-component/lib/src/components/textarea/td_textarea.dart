@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -16,7 +18,7 @@ enum TDTextareaLayout { vertical, horizontal }
 
 /// 用于多行文本信息输入
 class TDTextarea extends StatelessWidget {
-  const TDTextarea({
+  TDTextarea({
     Key? key,
     this.width,
     this.textStyle,
@@ -168,8 +170,14 @@ class TDTextarea extends StatelessWidget {
   /// 是否显示外边框
   final bool? bordered;
 
+  final _hasFocus = ValueNotifier<bool>(false);
+  late FocusNode _focusNode;
+
   @override
   Widget build(BuildContext context) {
+    _focusNode = focusNode ?? FocusNode();
+    _focusNode.removeListener(_focusListener);
+    _focusNode.addListener(_focusListener);
     var padding = _getInputPadding(context);
     var textareaView = _getTextareaView(context, _getInputView(context), _getIndicatorView(context));
     var container = _getContainer(context, _getLabelView(context), textareaView);
@@ -224,7 +232,7 @@ class TDTextarea extends StatelessWidget {
                         padding: EdgeInsets.only(left: TDTheme.of(context).spacer4),
                         child: Text(
                           '*',
-                          style: TextStyle(color: TDTheme.of(context).errorColor6, fontSize: fontSize),
+                          style: TextStyle(color: TDTheme.of(context).errorColor6, fontSize: fontSize, height: 1.3),
                         ),
                       )
                     : const SizedBox.shrink(),
@@ -234,64 +242,78 @@ class TDTextarea extends StatelessWidget {
   }
 
   Widget _getInputView(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: 24), // 设置最小高度为24
-            child: TDInputView(
-              textStyle: textStyle ?? TextStyle(color: TDTheme.of(context).fontGyColor1),
-              readOnly: readOnly ?? false,
-              autofocus: autofocus ?? false,
-              onEditingComplete: onEditingComplete,
-              onSubmitted: onSubmitted,
-              hintText: hintText,
-              inputType: inputType,
-              textAlign: textAlign,
-              onChanged: onChanged,
-              inputFormatters:
-                  inputFormatters ?? (maxLength != null ? [LengthLimitingTextInputFormatter(maxLength)] : null),
-              inputDecoration: inputDecoration,
-              minLines: minLines,
-              maxLines: autosize == true ? null : maxLines,
-              focusNode: focusNode,
-              isCollapsed: true,
-              hintTextStyle: hintTextStyle ??
-                  TextStyle(
-                      color: readOnly == true ? TDTheme.of(context).fontGyColor4 : TDTheme.of(context).fontGyColor3),
-              cursorColor: cursorColor,
-              textInputBackgroundColor: textInputBackgroundColor,
-              controller: controller,
-              contentPadding: EdgeInsets.zero,
-            ),
-          ),
+    return SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 24), // 设置最小高度为24
+        child: TDInputView(
+          textStyle: textStyle ?? TextStyle(color: TDTheme.of(context).fontGyColor1),
+          readOnly: readOnly ?? false,
+          autofocus: autofocus ?? false,
+          onEditingComplete: onEditingComplete,
+          onSubmitted: onSubmitted,
+          hintText: hintText,
+          inputType: inputType,
+          textAlign: textAlign,
+          onChanged: onChanged,
+          inputFormatters:
+              inputFormatters ?? (maxLength != null ? [LengthLimitingTextInputFormatter(maxLength)] : null),
+          inputDecoration: inputDecoration,
+          minLines: minLines,
+          maxLines: autosize == true ? null : maxLines,
+          focusNode: _focusNode,
+          isCollapsed: true,
+          hintTextStyle: hintTextStyle ??
+              TextStyle(color: readOnly == true ? TDTheme.of(context).fontGyColor4 : TDTheme.of(context).fontGyColor3),
+          cursorColor: cursorColor,
+          textInputBackgroundColor: textInputBackgroundColor,
+          controller: controller,
+          contentPadding: EdgeInsets.zero,
         ),
-        Visibility(
-          child: Padding(
-            padding: EdgeInsets.only(top: TDTheme.of(context).spacer8),
-            child: Text(
-              additionInfo!,
-              style: TextStyle(
-                fontSize: TDTheme.of(context).fontBodySmall?.size,
-                color: additionInfoColor ?? TDTheme.of(context).fontGyColor3,
-              ),
-            ),
-          ),
-          visible: additionInfo != '' && additionInfo != null,
-        ),
-      ],
+      ),
     );
   }
 
   Widget _getIndicatorView(BuildContext context) {
-    return Visibility(
-      visible: indicator == true && maxLength != null,
-      child: Text(
+    var padding = _getInputPadding(context);
+    var showAdditionInfo = additionInfo != '' && additionInfo != null;
+    var showIndicator = indicator == true && maxLength != null;
+    var widgetList = <Widget>[];
+    if (showAdditionInfo) {
+      widgetList.add(
+        Expanded(
+          child: ValueListenableBuilder(
+            valueListenable: _hasFocus,
+            builder: (context, value, child) {
+              return Opacity(
+                opacity: value ? 0 : 1,
+                child: Text(
+                  additionInfo!,
+                  style: TextStyle(
+                    fontSize: TDTheme.of(context).fontBodySmall?.size,
+                    color: additionInfoColor ?? TDTheme.of(context).fontGyColor3,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+    }
+    if (showAdditionInfo && showIndicator) {
+      widgetList.add(SizedBox(width: padding));
+    }
+    if (showIndicator) {
+      widgetList.add(Text(
         '${controller?.text.length ?? 0}/${maxLength}',
-        style: TextStyle(
-            fontSize: TDTheme.of(context).fontBodySmall?.size,
-            color: TDTheme.of(context).fontGyColor3),
+        style: TextStyle(fontSize: TDTheme.of(context).fontBodySmall?.size, color: TDTheme.of(context).fontGyColor3),
+      ));
+    }
+    return Visibility(
+      visible: showIndicator || showAdditionInfo,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: widgetList,
       ),
     );
   }
@@ -308,7 +330,6 @@ class TDTextarea extends StatelessWidget {
               : null),
       padding: bordered == true ? EdgeInsets.all(padding) : null,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           inputView,
           indicatorView,
@@ -344,6 +365,10 @@ class TDTextarea extends StatelessWidget {
               ],
             ),
     );
+  }
+
+  void _focusListener() {
+    _hasFocus.value = _focusNode.hasFocus;
   }
 
   /// 获取输入框规格

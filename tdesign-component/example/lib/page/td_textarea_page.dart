@@ -64,13 +64,13 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
           title: '特殊样式',
           children: [
             ExampleItem(desc: '标签外置输入框', builder: _extensionStyle),
+            ExampleItem(desc: '自定义标题', builder: _setLabel),
+            ExampleItem(desc: '必填和辅助说明', builder: _setStatus),
           ],
         ),
       ],
       test: [
-        ExampleItem(desc: '自定义宽度', builder: _setWidth),
-        ExampleItem(desc: '自定义标题', builder: _setLabel),
-        ExampleItem(desc: '必填和辅助说明', builder: _setStatus),
+        ExampleItem(desc: '自定义宽度', center: false, builder: _setWidth),
         ExampleItem(desc: '小尺寸', builder: _smallSize),
       ],
     );
@@ -223,11 +223,12 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
   Widget _setLabel(BuildContext context) {
     return TDTextarea(
       controller: controller[9],
-      label: '标签文字标签文字标签文字',
-      labelWidth: 100,
+      label: '地址信息',
+      // labelWidth: 100,
       labelIcon: Icon(
-        TDIcons.error_circle_filled,
-        color: TDTheme.of(context).fontGyColor3,
+        TDIcons.location,
+        size: 20,
+        color: TDTheme.of(context).fontGyColor1,
       ),
       hintText: '请输入文字',
       maxLines: 4,
@@ -240,17 +241,11 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
     );
   }
 
-
   @Demo(group: 'textarea')
   Widget _setStatus(BuildContext context) {
     return TDTextarea(
       controller: controller[9],
       label: '标签文字',
-      // labelWidth: 100,
-      labelIcon: Icon(
-        TDIcons.error_circle_filled,
-        color: TDTheme.of(context).fontGyColor3,
-      ),
       hintText: '请输入文字',
       maxLines: 4,
       minLines: 4,
