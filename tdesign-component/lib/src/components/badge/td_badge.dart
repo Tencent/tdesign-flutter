@@ -121,12 +121,9 @@ class _TDBadgeState extends State<TDBadge> {
   }
 
   bool getVisibility() {
-    if(widget.showZero!) {
-      return true;
-    }
     var value = getVal();
     try {
-      return double.parse(value) != 0;
+      return widget.showZero! || double.parse(value) != 0;
     } catch(e) {
       return true;
     }

@@ -474,6 +474,7 @@ Medium
 | widthLarge | double | 32 | 角标大三角形宽 |
 | widthSmall | double | 12 | 角标小三角形宽 |
 | padding | EdgeInsetsGeometry? | - | 角标自定义padding |
+| showZero   | bool?               | false               | count或message为0时是否显示角标 |
 
 
   
