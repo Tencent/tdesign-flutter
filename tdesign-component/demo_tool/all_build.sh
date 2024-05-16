@@ -15,6 +15,7 @@
 # 导航
 # back_top
 # drawer
+./bin/demo_tool generate --folder ../lib/src/components/drawer --name TDDrawer,TDDrawerItem,TDDrawerStyle --folder-name drawer --output ../example/assets/api/ --only-api --get-comments
 # indexes
 # navbar
 ./bin/demo_tool generate --file ../lib/src/components/navbar/td_nav_bar.dart --name TDNavBar,TDNavBarItem, --folder-name navbar --output ../example/assets/api/ --only-api
