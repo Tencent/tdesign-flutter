@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
@@ -27,16 +25,32 @@ class TDDrawerPage extends StatelessWidget {
               ),
             ]),
           ],
-          test: [],
+          test: const [],
         ));
   }
 }
 
 @Demo(group: 'drawer')
 Widget _buildBaseSimple(BuildContext context) {
-  return TDDrawer(
-    items: [
-      TDDrawerItem(title: '菜单一'),
-    ],
+  return TDButton(
+    text: '基础抽屉',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDDrawer(
+        context,
+        visible: true,
+        items: [
+          TDDrawerItem(title: '菜单一'),
+          TDDrawerItem(title: '菜单儿'),
+          TDDrawerItem(title: '菜单三'),
+          TDDrawerItem(title: '菜单四'),
+          TDDrawerItem(title: '菜单五'),
+          TDDrawerItem(title: '菜单六'),
+        ],
+      );
+    },
   );
 }
