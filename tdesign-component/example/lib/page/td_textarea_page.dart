@@ -16,7 +16,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
 
   @override
   void initState() {
-    for (var i = 0; i < 28; i++) {
+    for (var i = 0; i < 20; i++) {
       controller.add(TextEditingController());
     }
     super.initState();
@@ -244,7 +244,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
   @Demo(group: 'textarea')
   Widget _setStatus(BuildContext context) {
     return TDTextarea(
-      controller: controller[9],
+      controller: controller[10],
       label: '标签文字',
       hintText: '请输入文字',
       maxLines: 4,
@@ -263,7 +263,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
   @Demo(group: 'textarea')
   Widget _smallSize(BuildContext context) {
     return TDTextarea(
-      controller: controller[10],
+      controller: controller[11],
       label: '标签文字',
       hintText: '请输入文字',
       maxLines: 4,
