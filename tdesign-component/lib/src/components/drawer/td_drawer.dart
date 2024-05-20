@@ -8,9 +8,9 @@ typedef TDDrawerItemClickCallback = void Function(int index, TDDrawerItem item);
 enum TDDrawerPlacement { left, right }
 
 /// 抽屉组件
-class TDDrawer extends StatefulWidget {
-  const TDDrawer({
-    Key? key,
+class TDDrawer {
+  TDDrawer(
+    this.context, {
     this.closeOnOverlayClick,
     this.footer,
     this.items,
@@ -20,7 +20,14 @@ class TDDrawer extends StatefulWidget {
     this.visible,
     this.onClose,
     this.onItemClick,
-  }) : super(key: key);
+  }) {
+    if (visible == true) {
+      show();
+    }
+  }
+
+  /// 上下文
+  final BuildContext context;
 
   /// 点击蒙层时是否关闭抽屉
   final bool? closeOnOverlayClick;
@@ -49,22 +56,18 @@ class TDDrawer extends StatefulWidget {
   /// 点击抽屉里的列表项触发
   final TDDrawerItemClickCallback? onItemClick;
 
-  @override
-  _TDDrawerState createState() => _TDDrawerState();
-}
+  static TDSlidePopupRoute? _drawerRoute;
 
-class _TDDrawerState extends State<TDDrawer> {
-  // 定义一个变量用来存储当前抽屉的路由
-  TDSlidePopupRoute? _drawerRoute;
-
-  // 显示抽屉
-  void _showDrawer() {
+  void show() {
     if (_drawerRoute != null) {
       return; // 如果抽屉已经显示了，就不要再显示
     }
-
     _drawerRoute = TDSlidePopupRoute(
-      slideTransitionFrom: SlideTransitionFrom.left,
+      slideTransitionFrom: (placement ?? TDDrawerPlacement.right) == TDDrawerPlacement.right
+          ? SlideTransitionFrom.right
+          : SlideTransitionFrom.left,
+      isDismissible: (showOverlay ?? true) ? (closeOnOverlayClick ?? true) : false,
+      modalBarrierColor: (showOverlay ?? true) ? null : Colors.transparent,
       builder: (context) {
         return Container(
           color: Colors.white,
@@ -72,40 +75,38 @@ class _TDDrawerState extends State<TDDrawer> {
         );
       },
     );
-
     Navigator.of(context).push(_drawerRoute!).then((_) {
       // 当抽屉关闭时，将_drawerRoute置为null
-      _drawerRoute = null;
+      _deleteRouter();
     });
   }
 
-  // 隐藏抽屉
-  void _hideDrawer() {
+  @mustCallSuper
+  void close() {
     if (_drawerRoute != null) {
       Navigator.of(context).removeRoute(_drawerRoute!);
-      _drawerRoute = null;
+      _deleteRouter();
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (widget.visible ?? false) {
-      _showDrawer();
-    } else {
-      _hideDrawer();
+  void _deleteRouter() {
+    _drawerRoute = null;
+    if (onClose != null) {
+      onClose!();
     }
-
-    return const SizedBox.shrink();
   }
 }
 
 /// 抽屉里的列表项
 class TDDrawerItem {
-  TDDrawerItem({required this.title, this.icon});
+  TDDrawerItem({required this.title, this.icon, this.content});
 
   /// 每列标题
   final String title;
 
   /// 每列图标
   final Widget? icon;
+
+  /// 完全自定义
+  final Widget? content;
 }
