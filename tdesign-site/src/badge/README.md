@@ -415,10 +415,11 @@ Large
   }</pre>
 
 </td-code-block>
-                                  
+
+
 
 Medium
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -474,6 +475,7 @@ Medium
 | widthLarge | double | 32 | 角标大三角形宽 |
 | widthSmall | double | 12 | 角标小三角形宽 |
 | padding | EdgeInsetsGeometry? | - | 角标自定义padding |
+| showZeor | bool | true | 值为0是否显示角标 |
 
 
   
