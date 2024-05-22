@@ -68,7 +68,9 @@ class TDCheckbox extends StatefulWidget {
       this.cardMode = false,
       this.showDivider = true,
       this.contentDirection = TDContentDirection.right,
-      this.onCheckBoxChanged})
+      this.onCheckBoxChanged,
+      this.titleColor,
+      this.subTitleColor})
       : super(key: key);
 
   /// id
@@ -138,6 +140,12 @@ class TDCheckbox extends StatefulWidget {
 
   /// 禁用选择颜色
   final Color? disableColor;
+
+  /// 标题文字颜色
+  final Color? titleColor;
+
+  /// 副标题文字颜色
+  final Color? subTitleColor;
 
   @override
   State createState() => TDCheckboxState();

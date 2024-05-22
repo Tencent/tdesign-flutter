@@ -406,6 +406,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | showDivider | bool | true | 是否展示分割线 |
 | contentDirection | TDContentDirection | TDContentDirection.right | 文字相对icon的方位 |
 | onCheckBoxChanged | OnCheckValueChanged? | - | 切换监听 |
+| titleColor | Color? | TDTheme.of(context).fontGyColor1 | 标题文字颜色 |
+| subTitleColor | Color? | TDTheme.of(context).fontGyColor3 | 副标题文字颜色 |
 
 ```
 ```
