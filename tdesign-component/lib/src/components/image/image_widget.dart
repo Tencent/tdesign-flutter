@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
+import 'dart:io';
 
 ///封装图片加载控件，增加图片加载失败时加载默认图片
 class ImageWidget extends StatefulWidget {
@@ -8,6 +9,9 @@ class ImageWidget extends StatefulWidget {
 
   /// 本地图片地址
   final String? assetUrl;
+
+  /// 图片文件路径
+  final File? imageFile;
 
   /// 图片宽度
   final double width;
@@ -87,7 +91,8 @@ class ImageWidget extends StatefulWidget {
       this.loadingWidget,
       this.cacheWidth,
       this.cacheHeight,
-      this.assetUrl})
+      this.assetUrl,
+      this.imageFile})
       : super(key: key);
 
   ImageWidget.network(this.src,
@@ -116,22 +121,62 @@ class ImageWidget extends StatefulWidget {
       Map<String, String>? headers,
       this.cacheWidth,
       this.assetUrl,
-      this.cacheHeight})
+      this.cacheHeight,
+      this.imageFile})
       : image = ResizeImage.resizeIfNeeded(
             cacheWidth, cacheHeight, NetworkImage(src ?? '', scale: scale, headers: headers)),
         assert(cacheWidth == null || cacheWidth > 0),
         assert(cacheHeight == null || cacheHeight > 0),
         super(key: key);
 
-  ImageWidget.asset(
-    this.assetUrl, {
+  ImageWidget.asset(this.assetUrl,
+      {Key? key,
+      AssetBundle? bundle,
+      this.frameBuilder,
+      this.errorBuilder,
+      this.semanticLabel,
+      this.excludeFromSemantics = false,
+      double? scale,
+      required this.width,
+      required this.height,
+      this.color,
+      this.opacity,
+      this.colorBlendMode,
+      this.fit = BoxFit.none,
+      this.alignment = Alignment.center,
+      this.repeat = ImageRepeat.noRepeat,
+      this.centerSlice,
+      this.matchTextDirection = false,
+      this.gaplessPlayback = false,
+      this.isAntiAlias = false,
+      String? package,
+      this.filterQuality = FilterQuality.low,
+      this.cacheWidth,
+      this.cacheHeight,
+      this.src,
+      this.errorWidget,
+      this.loadingWidget,
+      this.imageFile})
+      : image = ResizeImage.resizeIfNeeded(
+          cacheWidth,
+          cacheHeight,
+          scale != null
+              ? ExactAssetImage(assetUrl ?? '', bundle: bundle, scale: scale, package: package)
+              : AssetImage(assetUrl ?? '', bundle: bundle, package: package),
+        ),
+        loadingBuilder = null,
+        assert(cacheWidth == null || cacheWidth > 0),
+        assert(cacheHeight == null || cacheHeight > 0),
+        super(key: key);
+
+  ImageWidget.file(
+    this.imageFile, {
     Key? key,
-    AssetBundle? bundle,
+    double scale = 1.0,
     this.frameBuilder,
     this.errorBuilder,
     this.semanticLabel,
     this.excludeFromSemantics = false,
-    double? scale,
     required this.width,
     required this.height,
     this.color,
@@ -144,25 +189,23 @@ class ImageWidget extends StatefulWidget {
     this.matchTextDirection = false,
     this.gaplessPlayback = false,
     this.isAntiAlias = false,
-    String? package,
     this.filterQuality = FilterQuality.low,
+    this.assetUrl,
     this.cacheWidth,
     this.cacheHeight,
-    this.src,
     this.errorWidget,
     this.loadingWidget,
-  })  : image = ResizeImage.resizeIfNeeded(
-          cacheWidth,
-          cacheHeight,
-          scale != null
-              ? ExactAssetImage(assetUrl ?? '', bundle: bundle, scale: scale, package: package)
-              : AssetImage(assetUrl ?? '', bundle: bundle, package: package),
-        ),
+    this.src,
+  })  : image = ResizeImage.resizeIfNeeded(cacheWidth, cacheHeight, FileImage(imageFile!, scale: scale)),
         loadingBuilder = null,
+        assert(alignment != null),
+        assert(repeat != null),
+        assert(filterQuality != null),
+        assert(matchTextDirection != null),
         assert(cacheWidth == null || cacheWidth > 0),
         assert(cacheHeight == null || cacheHeight > 0),
+        assert(isAntiAlias != null),
         super(key: key);
-
   @override
   State<StatefulWidget> createState() {
     return _StateImageWidget();
@@ -185,31 +228,53 @@ class _StateImageWidget extends State<ImageWidget> {
   }
 
   void initImage() {
-    _image = widget.assetUrl == null
-        ? Image.network(
-            widget.src ?? '',
-            width: widget.width,
-            height: widget.height,
-            fit: widget.fit,
-            color: widget.color,
-            frameBuilder: widget.frameBuilder,
-            loadingBuilder: widget.loadingBuilder,
-            errorBuilder: widget.errorBuilder,
-            semanticLabel: widget.semanticLabel,
-            excludeFromSemantics: widget.excludeFromSemantics,
-            colorBlendMode: widget.colorBlendMode,
-            alignment: widget.alignment,
-            repeat: widget.repeat,
-            centerSlice: widget.centerSlice,
-            matchTextDirection: widget.matchTextDirection,
-            gaplessPlayback: widget.gaplessPlayback,
-            filterQuality: widget.filterQuality,
-            isAntiAlias: widget.isAntiAlias,
-            cacheWidth: widget.cacheWidth,
-            cacheHeight: widget.cacheHeight,
-          )
-        : Image.asset(
-            widget.assetUrl ?? '',
+    _image = widget.imageFile == null
+        ? widget.assetUrl == null
+            ? Image.network(
+                widget.src ?? '',
+                width: widget.width,
+                height: widget.height,
+                fit: widget.fit,
+                color: widget.color,
+                frameBuilder: widget.frameBuilder,
+                loadingBuilder: widget.loadingBuilder,
+                errorBuilder: widget.errorBuilder,
+                semanticLabel: widget.semanticLabel,
+                excludeFromSemantics: widget.excludeFromSemantics,
+                colorBlendMode: widget.colorBlendMode,
+                alignment: widget.alignment,
+                repeat: widget.repeat,
+                centerSlice: widget.centerSlice,
+                matchTextDirection: widget.matchTextDirection,
+                gaplessPlayback: widget.gaplessPlayback,
+                filterQuality: widget.filterQuality,
+                isAntiAlias: widget.isAntiAlias,
+                cacheWidth: widget.cacheWidth,
+                cacheHeight: widget.cacheHeight,
+              )
+            : Image.asset(
+                widget.assetUrl ?? '',
+                width: widget.width,
+                height: widget.height,
+                fit: widget.fit,
+                color: widget.color,
+                frameBuilder: widget.frameBuilder,
+                errorBuilder: widget.errorBuilder,
+                semanticLabel: widget.semanticLabel,
+                excludeFromSemantics: widget.excludeFromSemantics,
+                colorBlendMode: widget.colorBlendMode,
+                alignment: widget.alignment,
+                repeat: widget.repeat,
+                centerSlice: widget.centerSlice,
+                matchTextDirection: widget.matchTextDirection,
+                gaplessPlayback: widget.gaplessPlayback,
+                filterQuality: widget.filterQuality,
+                isAntiAlias: widget.isAntiAlias,
+                cacheWidth: widget.cacheWidth,
+                cacheHeight: widget.cacheHeight,
+              )
+        : Image.file(
+            widget.imageFile!,
             width: widget.width,
             height: widget.height,
             fit: widget.fit,
