@@ -170,6 +170,15 @@ class TDImageState extends State<TDImagePage>
                   type: TDImageType.fitWidth,
                 ),
               ),
+              // Container(
+              //   width: 72,
+              //   height: 89,
+              //   color: Colors.black,
+              //   child:  TDImage(
+              //     imageFile: File(''),
+              //     type: TDImageType.fitWidth,
+              //   ),
+              // ),
             ],
           ),
         ],
