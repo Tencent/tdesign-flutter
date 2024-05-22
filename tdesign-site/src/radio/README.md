@@ -335,6 +335,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | radioStyle | TDRadioStyle | TDRadioStyle.circle | 单选框按钮样式 |
 | contentDirection |  | TDContentDirection.right |  |
 | customIconBuilder |  | - |  |
+| backgroundColor | Color? | - | 背景颜色 |
+| titleColor | Color? | TDTheme.of(context).fontGyColor1 | 标题文字颜色 |
+| subTitleColor | Color? | TDTheme.of(context).fontGyColor3 | 副标题文字颜色 |
 
 ```
 ```
