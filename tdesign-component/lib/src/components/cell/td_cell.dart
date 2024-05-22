@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
-import 'td_cell_style.dart';
 
 typedef TDCellClick = void Function(TDCell cell);
 
@@ -38,7 +37,7 @@ class TDCell extends StatefulWidget {
   /// 是否显示右侧箭头
   final bool? arrow;
 
-  /// 是否显示下边框
+  /// 是否显示下边框，仅在TDCellGroup组件下起作用
   final bool? bordered;
 
   /// 下方内容描述文字
@@ -96,7 +95,7 @@ class TDCell extends StatefulWidget {
 class _TDCellState extends State<TDCell> {
   @override
   Widget build(BuildContext context) {
-    var style = widget.style ?? TDCellStyle.generateStyle(context);
+    var style = widget.style ?? TDCellStyle.cellStyle(context);
     var imageSize = widget.imageSize ?? 48;
     var crossAxisAlignment = _getAlign();
     return InkWell(
@@ -106,63 +105,54 @@ class _TDCellState extends State<TDCell> {
           widget.onClick!(widget);
         }
       },
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Container(
-            padding: EdgeInsets.all(TDTheme.of(context).spacer16),
-            child: Row(
-              crossAxisAlignment: crossAxisAlignment,
-              children: [
-                if (widget.image != null || widget.imageWidget != null) ...[
-                  widget.imageWidget ?? Image(image: widget.image!, width: imageSize, height: imageSize),
-                  SizedBox(width: TDTheme.of(context).spacer12),
-                ],
-                Expanded(
-                  child: Row(
+      child: Container(
+        padding: EdgeInsets.all(TDTheme.of(context).spacer16),
+        child: Row(
+          crossAxisAlignment: crossAxisAlignment,
+          children: [
+            if (widget.image != null || widget.imageWidget != null) ...[
+              widget.imageWidget ?? Image(image: widget.image!, width: imageSize, height: imageSize),
+              SizedBox(width: TDTheme.of(context).spacer12),
+            ],
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (widget.leftIcon != null || widget.leftIconWidget != null) ...[
+                    widget.leftIconWidget ?? Icon(widget.leftIcon, size: 24, color: style.leftIconColor),
+                    SizedBox(width: TDTheme.of(context).spacer12),
+                  ],
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (widget.leftIcon != null || widget.leftIconWidget != null) ...[
-                        widget.leftIconWidget ?? Icon(widget.leftIcon, size: 24, color: style.leftIconColor),
-                        SizedBox(width: TDTheme.of(context).spacer12),
-                      ],
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              if (widget.titleWidget != null)
-                                widget.titleWidget!
-                              else if (widget.title != null)
-                                Text(widget.title!, style: style.titleStyle),
-                              if (widget.required ?? false) Text('*', style: style.requiredStyle),
-                            ],
-                          ),
-                          SizedBox(height: TDTheme.of(context).spacer4),
-                          if (widget.descriptionWidget != null)
-                            widget.descriptionWidget!
-                          else if (widget.description != null)
-                            Text(widget.description!, style: style.descriptionStyle),
+                          if (widget.titleWidget != null)
+                            widget.titleWidget!
+                          else if (widget.title != null)
+                            Text(widget.title!, style: style.titleStyle),
+                          if (widget.required ?? false) Text('*', style: style.requiredStyle),
                         ],
                       ),
+                      SizedBox(height: TDTheme.of(context).spacer4),
+                      if (widget.descriptionWidget != null)
+                        widget.descriptionWidget!
+                      else if (widget.description != null)
+                        Text(widget.description!, style: style.descriptionStyle),
                     ],
                   ),
-                ),
-                if (widget.noteWidget != null)
-                  widget.noteWidget!
-                else if (widget.note != null)
-                  Text(widget.note!, style: style.noteStyle),
-                if ((widget.noteWidget != null || widget.note != null) && (widget.arrow ?? false))
-                  SizedBox(width: TDTheme.of(context).spacer4),
-                if (widget.arrow ?? false) Icon(TDIcons.chevron_right, size: 24, color: style.arrowColor),
-              ],
+                ],
+              ),
             ),
-          ),
-          if (widget.bordered ?? true)
-            TDDivider(
-              margin: EdgeInsets.only(left: TDTheme.of(context).spacer16),
-            ),
-        ],
+            if (widget.noteWidget != null)
+              widget.noteWidget!
+            else if (widget.note != null)
+              Text(widget.note!, style: style.noteStyle),
+            if ((widget.noteWidget != null || widget.note != null) && (widget.arrow ?? false))
+              SizedBox(width: TDTheme.of(context).spacer4),
+            if (widget.arrow ?? false) Icon(TDIcons.chevron_right, size: 24, color: style.arrowColor),
+          ],
+        ),
       ),
     );
   }

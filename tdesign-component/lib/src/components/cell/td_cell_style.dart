@@ -11,6 +11,8 @@ class TDCellStyle {
     this.descriptionStyle,
     this.noteStyle,
     this.arrowColor,
+    this.borderedColor,
+    this.groupBorderedColor,
   });
 
   /// 左侧图标颜色
@@ -31,8 +33,14 @@ class TDCellStyle {
   /// 箭头颜色
   Color? arrowColor;
 
+  /// 单元格边框颜色
+  Color? borderedColor;
+
+  /// 单元格组边框颜色
+  Color? groupBorderedColor;
+
   /// 生成默认样式
-  TDCellStyle.generateStyle(BuildContext context) {
+  TDCellStyle.cellStyle(BuildContext context) {
     leftIconColor = TDTheme.of(context).brandColor7;
     titleStyle = TextStyle(
       color: TDTheme.of(context).fontGyColor1,
@@ -49,5 +57,10 @@ class TDCellStyle {
     );
     noteStyle = titleStyle!.copyWith(color: TDTheme.of(context).fontGyColor3);
     arrowColor = TDTheme.of(context).fontGyColor3;
+    borderedColor = TDTheme.of(context).grayColor3;
+  }
+
+  TDCellStyle.cellGroupStyle(BuildContext context) {
+    groupBorderedColor = TDTheme.of(context).grayColor3;
   }
 }
