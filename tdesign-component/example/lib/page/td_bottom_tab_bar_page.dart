@@ -63,14 +63,6 @@ class TDBottomTabBarPage extends StatelessWidget {
             }),
             ExampleItem(
                 ignoreCode: true,
-                desc: '设置文本标签栏背景',
-                builder: (context) {
-                  return Container(
-                    child:CodeWrapper(builder:_customBgTypeTabBar),
-                  );
-                }),
-            ExampleItem(
-                ignoreCode: true,
                 desc: '图标加文本标签栏', builder: (context){
               return Container(
                 padding: const EdgeInsets.only(bottom: 16),
@@ -160,8 +152,11 @@ class TDBottomTabBarPage extends StatelessWidget {
             desc: '自定义选择的背景颜色',
             builder: _customBgColor),
         ExampleItem(
+            ignoreCode: true,
             desc: '设置文本标签栏背景',
-            builder:_customBgTypeTabBar),
+            builder: (context) {
+              return CodeWrapper(builder:_customBgTypeTabBar);
+            }),
       ],
     );
   }
