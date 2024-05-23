@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 import '../../util/list_ext.dart';
 import '../tag/td_select_tag.dart';
 import '../tag/td_tag_styles.dart';
@@ -139,7 +140,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
                             width: double.infinity,
                             padding: EdgeInsets.only(left: paddingNum, top: paddingNum, right: paddingNum),
                             color: TDTheme.of(context).whiteColor1,
-                            child: TDText(entry.key == '__default__' ? '其它' : entry.key),
+                            child: TDText(entry.key == '__default__' ? context.resource.other : entry.key),
                           ),
                     Container(
                       padding: EdgeInsets.all(paddingNum),
@@ -263,7 +264,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
       child: Row(children: [
         Expanded(
           child: TDButton(
-            text: '重置',
+            text: context.resource.reset,
             theme: TDButtonTheme.light,
             // disabled: selectIds.isEmpty,
             onTap: () {
@@ -280,7 +281,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
         SizedBox(width: TDTheme.of(context).spacer16),
         Expanded(
           child: TDButton(
-            text: '确定',
+            text: context.resource.confirm,
             theme: TDButtonTheme.primary,
             // disabled: selectIds.isEmpty,
             onTap: () {

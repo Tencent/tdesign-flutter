@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 
 typedef PopupClick = Function();
 
@@ -173,7 +174,7 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 16),
               child: TDText(
-                leftText ?? '取消',
+                leftText ?? context.resource.cancel,
                 textColor: leftTextColor ?? TDTheme.of(context).fontGyColor2,
                 font: TDTheme.of(context).fontTitleMedium,
               ),
@@ -196,7 +197,7 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(right: 16),
               child: TDText(
-                rightText ?? '确定',
+                rightText ?? context.resource.confirm,
                 textColor:
                 rightTextColor ?? TDTheme.of(context).brandNormalColor,
                 font: TDTheme.of(context).fontTitleMedium,
