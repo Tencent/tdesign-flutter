@@ -190,9 +190,11 @@ class _TDButtonState extends State<TDButton> {
           return;
         }
         Future.delayed(Duration(milliseconds: 100),() {
-          setState(() {
-            _buttonStatus = TDButtonStatus.defaultState;
-          });
+          if(mounted){
+            setState(() {
+              _buttonStatus = TDButtonStatus.defaultState;
+            });
+          }
         });
       },
       onTapCancel: (){
