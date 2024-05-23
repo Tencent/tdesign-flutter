@@ -209,7 +209,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         text: 'Dialog 对话框', name: 'dialog', pageBuilder: _wrapInheritedTheme((context) => const TDDialogPage())),
     ExamplePageModel(
         text: 'DropdownMenu 下拉菜单',
-        name: 'dropdown_menu',
+        name: 'dropdown-menu',
         pageBuilder: _wrapInheritedTheme((context) => const TDDropdownMenuPage())),
     ExamplePageModel(
         text: 'Loading 加载', name: 'loading', pageBuilder: _wrapInheritedTheme((context) => const TDLoadingPage())),
