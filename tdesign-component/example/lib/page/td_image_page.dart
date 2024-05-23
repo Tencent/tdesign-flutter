@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
-
+import 'dart:io';
 class TDImagePage extends StatefulWidget {
   const TDImagePage({Key? key}) : super(key: key);
 
@@ -15,7 +16,6 @@ class TDImageState extends State<TDImagePage>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
-
   @override
   void initState() {
     super.initState();
@@ -55,9 +55,9 @@ class TDImageState extends State<TDImagePage>
           )
         ]);
   }
-
   @Demo(group: 'image')
-  Widget _imageClip(BuildContext context) {
+  Widget _imageClip(BuildContext context)  {
+
     return Row(
       children: [
         const SizedBox(
@@ -74,9 +74,9 @@ class TDImageState extends State<TDImagePage>
                 textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
               ),
             ),
-            const TDImage(
-              assetUrl: 'assets/img/image.png',
-              type: TDImageType.clip,
+             TDImage(
+               assetUrl: 'assets/img/image.png',
+               type: TDImageType.clip,
             ),
           ],
         ),
@@ -170,6 +170,15 @@ class TDImageState extends State<TDImagePage>
                   type: TDImageType.fitWidth,
                 ),
               ),
+              // Container(
+              //   width: 72,
+              //   height: 89,
+              //   color: Colors.black,
+              //   child:  TDImage(
+              //     imageFile: File(''),
+              //     type: TDImageType.fitWidth,
+              //   ),
+              // ),
             ],
           ),
         ],

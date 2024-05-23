@@ -63,6 +63,14 @@ class TDBottomTabBarPage extends StatelessWidget {
             }),
             ExampleItem(
                 ignoreCode: true,
+                desc: '设置文本标签栏背景',
+                builder: (context) {
+                  return Container(
+                    child:CodeWrapper(builder:_customBgTypeTabBar),
+                  );
+                }),
+            ExampleItem(
+                ignoreCode: true,
                 desc: '图标加文本标签栏', builder: (context){
               return Container(
                 padding: const EdgeInsets.only(bottom: 16),
@@ -151,10 +159,35 @@ class TDBottomTabBarPage extends StatelessWidget {
         ExampleItem(
             desc: '自定义选择的背景颜色',
             builder: _customBgColor),
+        ExampleItem(
+            desc: '设置文本标签栏背景',
+            builder:_customBgTypeTabBar),
       ],
     );
   }
-
+  @Demo(group: 'bottomTabBar')
+  Widget _customBgTypeTabBar(BuildContext context){
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        backgroundColor: TDTheme.of(context).successColor6,
+        selectedBgColor: TDTheme.of(context).errorColor1,
+        unselectedBgColor: TDTheme.of(context).brandColor1,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+             unselectTabTextStyle:TextStyle(color: TDTheme.of(context).fontGyColor1),
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
+  }
   @Demo(group: 'bottomTabBar')
   Widget _textTypeTabBar(BuildContext context) {
     return TDBottomTabBar(TDBottomTabBarBasicType.text,
@@ -203,7 +236,8 @@ class TDBottomTabBarPage extends StatelessWidget {
 
   @Demo(group: 'bottomTabBar')
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+    return TDBottomTabBar(
+        TDBottomTabBarBasicType.text,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
@@ -462,7 +496,6 @@ class TDBottomTabBarPage extends StatelessWidget {
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
               onTap: () {
