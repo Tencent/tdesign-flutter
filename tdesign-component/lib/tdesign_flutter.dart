@@ -50,6 +50,7 @@ export 'src/components/text/td_text.dart';
 export 'src/components/textarea/td_textarea.dart';
 export 'src/components/toast/td_toast.dart';
 export 'src/theme/basic.dart';
+export 'src/theme/resource_delegate.dart';
 export 'src/theme/td_colors.dart';
 export 'src/theme/td_font_family.dart';
 export 'src/theme/td_fonts.dart';

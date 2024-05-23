@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 
 enum TDBadgeType {
   /// 红点样式
@@ -134,7 +135,7 @@ class _TDBadgeState extends State<TDBadge> {
         ? widget.message
         : (widget.count ?? '').isNotEmpty
             ? widget.count
-            : '0') as String;
+            : context.resource.badgeZero) as String;
   }
 
   @override

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 
 /// TDesign刷新头部
 /// 结合EasyRefresh类实现下拉刷新,继承自Header类，字段含义与父类一致
@@ -108,7 +109,7 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget> with TickerProvi
     icon: widget.loadingIcon,
     iconColor: TDTheme.of(context).brandNormalColor,
     axis: Axis.horizontal,
-    text: '正在刷新',
+    text: context.resource.refreshing,
     textColor: TDTheme.of(context).fontGyColor3,
   );
 
@@ -119,7 +120,7 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget> with TickerProvi
         alignment: Alignment.center,
         child: constraint.maxHeight < 48.0
             ? Container()
-            : TDText('松开刷新',font: TDTheme.of(context).fontBodyMedium, textColor: TDTheme.of(context).fontGyColor3,),
+            : TDText(context.resource.releaseRefresh,font: TDTheme.of(context).fontBodyMedium, textColor: TDTheme.of(context).fontGyColor3,),
         color: widget.backgroundColor,
       ),
     );
