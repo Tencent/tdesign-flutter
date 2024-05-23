@@ -1,0 +1,18 @@
+{
+  "components": "TDesign Flutter 组件库",
+  "about": "关于",
+  "defaultTheme": "默认主题",
+  "greenTheme": "绿色主题",
+  "redTheme": "红色主题",
+  "cancel": "取消",
+  "confirm": "确认",
+  "switchClose": "关",
+  "switchOpen": "开",
+  "knew": "知道了",
+  "loading": "加载中",
+  "loadingWithPoint": "加载中...",
+  "other": "其它",
+  "refreshing": "正在刷新",
+  "releaseRefresh": "松开刷新",
+  "reset": "重置"
+}

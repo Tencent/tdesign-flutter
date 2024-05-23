@@ -1,0 +1,18 @@
+{
+  "components": "TD Flutter Components",
+  "about": "About",
+  "defaultTheme": "defaultTheme",
+  "greenTheme": "greenTheme",
+  "redTheme": "redTheme",
+  "cancel": "cancel",
+  "confirm": "confirm",
+  "switchClose": "C",
+  "switchOpen": "O",
+  "knew": "knew",
+  "loading": "loading",
+  "loadingWithPoint": "loading...",
+  "other": "other",
+  "refreshing": "refreshing",
+  "releaseRefresh": "releaseRefresh",
+  "reset": "reset"
+}
