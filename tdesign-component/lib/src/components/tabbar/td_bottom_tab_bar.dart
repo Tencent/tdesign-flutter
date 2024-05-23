@@ -138,6 +138,8 @@ class TDBottomTabBar extends StatefulWidget {
     this.useSafeArea = true,
     this.selectedBgColor,
     this.unselectedBgColor,
+    this.backgroundColor,
+    this.centerDistance,
   })  : assert(() {
           if (navigationTabs.isEmpty) {
             throw FlutterError('[TDBottomTabBar] please set at least one tab!');
@@ -211,6 +213,11 @@ class TDBottomTabBar extends StatefulWidget {
   /// 未选中时背景颜色
   final Color? unselectedBgColor;
 
+  /// 背景颜色 （可选）
+  final Color? backgroundColor;
+
+  /// icon与文本中间距离（可选）
+  final double? centerDistance;
   @override
   State<TDBottomTabBar> createState() => _TDBottomTabBarState();
 }
@@ -237,7 +244,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
             alignment: Alignment.center,
             margin: isCapsuleOutlineType ? const EdgeInsets.symmetric(horizontal: 16) : null,
             decoration: BoxDecoration(
-                color: Colors.white,
+                color: widget.backgroundColor ?? Colors.white,
                 borderRadius: isCapsuleOutlineType ? BorderRadius.circular(56) : null,
                 border: widget.showTopBorder! && !isCapsuleOutlineType
                     ? Border(top: widget.topBorder ?? BorderSide(color: TDTheme.of(context).grayColor3, width: 0.5))
@@ -286,6 +293,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
           tabsLength: widget.navigationTabs.length,
           selectedBgColor: widget.selectedBgColor,
           unselectedBgColor: widget.unselectedBgColor,
+          centerDistance: widget.centerDistance ?? 0,
           onTap: () {
             _onTap(index);
           },
@@ -327,6 +335,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
     required this.tabsLength,
     required this.selectedBgColor,
     required this.unselectedBgColor,
+    required this.centerDistance,
   }) : super(key: key);
 
   /// tab基本类型
@@ -362,6 +371,8 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
   /// 未选中时背景颜色
   final Color? unselectedBgColor;
 
+  /// icon与文本中间距离
+  final double centerDistance;
   @override
   Widget build(BuildContext context) {
     var popUpButtonConfig = itemConfig.popUpButtonConfig;
@@ -462,10 +473,11 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
       var selectedIcon = itemConfig.selectedIcon;
       var unSelectedIcon = itemConfig.unselectedIcon;
       child = Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           isSelected ? selectedIcon! : unSelectedIcon!,
+          if(centerDistance>0)SizedBox(height: centerDistance,),
           _textItem(
             context,
             itemConfig,
