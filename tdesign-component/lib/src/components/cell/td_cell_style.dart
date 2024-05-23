@@ -13,10 +13,14 @@ class TDCellStyle {
     this.arrowColor,
     this.borderedColor,
     this.groupBorderedColor,
+    this.backgroundColor,
   });
 
   /// 左侧图标颜色
   Color? leftIconColor;
+
+  /// 右侧图标颜色
+  Color? rightIconColor;
 
   /// 标题文字样式
   TextStyle? titleStyle;
@@ -39,28 +43,44 @@ class TDCellStyle {
   /// 单元格组边框颜色
   Color? groupBorderedColor;
 
-  /// 生成默认样式
+  /// 默认状态背景颜色
+  Color? backgroundColor;
+
+  /// 点击状态背景颜色
+  Color? clickBackgroundColor;
+
+  /// 单元组标题文字样式
+  TextStyle? groupTitleStyle;
+
+  /// 生成单元格默认样式
   TDCellStyle.cellStyle(BuildContext context) {
+    backgroundColor = Colors.white;
+    clickBackgroundColor = TDTheme.of(context).grayColor1;
     leftIconColor = TDTheme.of(context).brandColor7;
+    rightIconColor = TDTheme.of(context).brandColor7;
     titleStyle = TextStyle(
       color: TDTheme.of(context).fontGyColor1,
       fontSize: TDTheme.of(context).fontBodyLarge?.size ?? 16,
       height: TDTheme.of(context).fontBodyLarge?.height ?? 24,
-      fontWeight: TDTheme.of(context).fontBodyLarge?.fontWeight ?? FontWeight.w400,
+      fontWeight: FontWeight.w400,
     );
     requiredStyle = titleStyle!.copyWith(color: TDTheme.of(context).errorColor6);
     descriptionStyle = TextStyle(
       color: TDTheme.of(context).fontGyColor2,
       fontSize: TDTheme.of(context).fontBodyMedium?.size ?? 14,
       height: TDTheme.of(context).fontBodyMedium?.height ?? 22,
-      fontWeight: TDTheme.of(context).fontBodyMedium?.fontWeight ?? FontWeight.w400,
+      fontWeight: FontWeight.w400,
     );
     noteStyle = titleStyle!.copyWith(color: TDTheme.of(context).fontGyColor3);
     arrowColor = TDTheme.of(context).fontGyColor3;
-    borderedColor = TDTheme.of(context).grayColor3;
-  }
 
-  TDCellStyle.cellGroupStyle(BuildContext context) {
     groupBorderedColor = TDTheme.of(context).grayColor3;
+    borderedColor = TDTheme.of(context).grayColor3;
+    groupTitleStyle = TextStyle(
+      color: TDTheme.of(context).fontGyColor1,
+      fontSize: TDTheme.of(context).fontTitleLarge?.size ?? 18,
+      height: TDTheme.of(context).fontTitleLarge?.height ?? 26,
+      fontWeight: TDTheme.of(context).fontTitleLarge?.fontWeight ?? FontWeight.w600,
+    );
   }
 }
