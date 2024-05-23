@@ -50,6 +50,7 @@
 # switch
 ./bin/demo_tool generate --file ../lib/src/components/switch/td_switch.dart --name TDSwitch --folder-name switch --output ../example/assets/api/ --only-api
 # textarea
+./bin/demo_tool generate --file ../lib/src/components/textarea/td_textarea.dart --name TDTextarea --folder-name textarea --output ../example/assets/api/ --only-api --get-comments
 # tree_select
 # upload
 
