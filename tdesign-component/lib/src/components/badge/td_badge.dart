@@ -83,7 +83,7 @@ class TDBadge extends StatefulWidget {
   /// 角标自定义padding
   final EdgeInsetsGeometry? padding;
 
-  // 值为0是否显示
+  /// 值为0是否显示
   final bool showZero;
 
   @override
