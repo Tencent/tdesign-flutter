@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import 'td_cell_inherited.dart';
 
 typedef TDCellClick = void Function(TDCell cell);
 
@@ -29,6 +30,10 @@ class TDCell extends StatefulWidget {
     this.titleWidget,
     this.onClick,
     this.style,
+    this.rightIcon,
+    this.rightIconWidget,
+    this.disabled = false,
+    this.imageCircle = 50,
   }) : super(key: key);
 
   /// 内容的对齐方式，默认居中对齐。可选项：top/middle/bottom
@@ -55,6 +60,9 @@ class TDCell extends StatefulWidget {
   /// 主图尺寸
   final double? imageSize;
 
+  /// 主图圆角，默认50（圆形）
+  final double? imageCircle;
+
   /// 主图组件
   final Widget? imageWidget;
 
@@ -74,7 +82,10 @@ class TDCell extends StatefulWidget {
   final bool? required;
 
   /// 最右侧图标
-  // final Widget? rightIcon;
+  final IconData? rightIcon;
+
+  /// 最右侧图标组件
+  final Widget? rightIconWidget;
 
   /// 标题
   final String? title;
@@ -88,32 +99,43 @@ class TDCell extends StatefulWidget {
   /// 自定义样式
   final TDCellStyle? style;
 
+  /// 禁用
+  final bool? disabled;
+
   @override
   _TDCellState createState() => _TDCellState();
 }
 
 class _TDCellState extends State<TDCell> {
+  var _status = 'default';
+
   @override
   Widget build(BuildContext context) {
-    var style = widget.style ?? TDCellStyle.cellStyle(context);
-    var imageSize = widget.imageSize ?? 48;
+    var style = widget.style ?? TDCellInherited.of(context)?.style ?? TDCellStyle.cellStyle(context);
     var crossAxisAlignment = _getAlign();
-    return InkWell(
-      highlightColor: (widget.hover ?? true) ? null : Colors.transparent,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
-        if (widget.onClick != null) {
+        if (widget.onClick != null && !(widget.disabled ?? false)) {
           widget.onClick!(widget);
         }
       },
+      onTapDown: (details) {
+        _setStatus('active', 0);
+      },
+      onTapUp: (details) {
+        _setStatus('default', 100);
+      },
+      onTapCancel: () {
+        _setStatus('default', 0);
+      },
       child: Container(
+        color: _status == 'default' ? style.backgroundColor : style.clickBackgroundColor,
         padding: EdgeInsets.all(TDTheme.of(context).spacer16),
         child: Row(
           crossAxisAlignment: crossAxisAlignment,
           children: [
-            if (widget.image != null || widget.imageWidget != null) ...[
-              widget.imageWidget ?? Image(image: widget.image!, width: imageSize, height: imageSize),
-              SizedBox(width: TDTheme.of(context).spacer12),
-            ],
+            ..._getImage(),
             Expanded(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,35 +144,47 @@ class _TDCellState extends State<TDCell> {
                     widget.leftIconWidget ?? Icon(widget.leftIcon, size: 24, color: style.leftIconColor),
                     SizedBox(width: TDTheme.of(context).spacer12),
                   ],
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          if (widget.titleWidget != null)
-                            widget.titleWidget!
-                          else if (widget.title != null)
-                            Text(widget.title!, style: style.titleStyle),
-                          if (widget.required ?? false) Text('*', style: style.requiredStyle),
-                        ],
-                      ),
-                      SizedBox(height: TDTheme.of(context).spacer4),
-                      if (widget.descriptionWidget != null)
-                        widget.descriptionWidget!
-                      else if (widget.description != null)
-                        Text(widget.description!, style: style.descriptionStyle),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            if (widget.titleWidget != null)
+                              Flexible(child: widget.titleWidget!)
+                            else if (widget.title != null)
+                              Flexible(child: Text(widget.title!, style: style.titleStyle)),
+                            if (widget.required ?? false) Text(' *', style: style.requiredStyle),
+                          ],
+                        ),
+                        if ((widget.titleWidget != null || widget.title != null) &&
+                            (widget.descriptionWidget != null || widget.description != null))
+                          SizedBox(height: TDTheme.of(context).spacer4),
+                        if (widget.descriptionWidget != null)
+                          widget.descriptionWidget!
+                        else if (widget.description != null)
+                          Text(widget.description!, style: style.descriptionStyle),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            if (widget.noteWidget != null)
-              widget.noteWidget!
-            else if (widget.note != null)
-              Text(widget.note!, style: style.noteStyle),
-            if ((widget.noteWidget != null || widget.note != null) && (widget.arrow ?? false))
-              SizedBox(width: TDTheme.of(context).spacer4),
-            if (widget.arrow ?? false) Icon(TDIcons.chevron_right, size: 24, color: style.arrowColor),
+            Wrap(
+              spacing: TDTheme.of(context).spacer4,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                if (widget.noteWidget != null)
+                  widget.noteWidget!
+                else if (widget.note != null)
+                  Text(widget.note!, style: style.noteStyle),
+                if (widget.rightIconWidget != null)
+                  widget.rightIconWidget!
+                else if (widget.rightIcon != null)
+                  Icon(widget.rightIcon, size: 24, color: style.rightIconColor),
+                if (widget.arrow ?? false) Icon(TDIcons.chevron_right, size: 24, color: style.arrowColor),
+              ],
+            ),
           ],
         ),
       ),
@@ -168,5 +202,45 @@ class _TDCellState extends State<TDCell> {
       default:
         return CrossAxisAlignment.center;
     }
+  }
+
+  void _setStatus(String status, int milliseconds) {
+    if ((widget.disabled ?? false) || !(widget.hover ?? true)) {
+      return;
+    }
+    if (milliseconds == 0) {
+      setState(() {
+        _status = status;
+      });
+      return;
+    }
+    Future.delayed(Duration(milliseconds: milliseconds), () {
+      setState(() {
+        _status = status;
+      });
+    });
+  }
+
+  List<Widget> _getImage() {
+    var imageSize = widget.imageSize ?? 48;
+    var list = <Widget>[];
+    if (widget.imageWidget != null) {
+      list.add(widget.imageWidget!);
+    } else if (widget.image != null) {
+        list.add(ClipRRect(
+          borderRadius: BorderRadius.circular(widget.imageCircle ?? 50),
+          child: Image(
+            image: widget.image!,
+            width: imageSize,
+            height: imageSize,
+            fit: BoxFit.cover,
+          ),
+        ));
+    }
+    if (list.isEmpty) {
+      return list;
+    }
+    list.add(SizedBox(width: TDTheme.of(context).spacer12));
+    return list;
   }
 }
