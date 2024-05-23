@@ -22,6 +22,9 @@ class TDInputView extends StatelessWidget {
 
   /// 最大输入行数
   final int? maxLines;
+  
+  /// 最小输入行数
+  final int? minLines;
 
   /// 最大输入长度
   final int? maxLength;
@@ -78,6 +81,7 @@ class TDInputView extends StatelessWidget {
       this.inputFormatters,
       this.inputDecoration,
       this.maxLines,
+      this.minLines,
       this.maxLength,
       this.focusNode,
       this.hintTextStyle,
@@ -106,6 +110,7 @@ class TDInputView extends StatelessWidget {
       focusNode: focusNode,
       cursorColor: cursorColor,
       maxLines: maxLines,
+      minLines: minLines,
       maxLength: maxLength,
       style: textStyle,
       textAlign: textAlign ?? TextAlign.start,
