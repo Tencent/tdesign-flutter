@@ -8,6 +8,8 @@ export 'src/components/count_down/td_count_down.dart';
 export 'src/components/count_down/td_count_down_style.dart';
 export 'src/components/dialog/td_dialog.dart';
 export 'src/components/divider/td_divider.dart';
+export 'src/components/dropdown_menu/td_dropdown_item.dart';
+export 'src/components/dropdown_menu/td_dropdown_menu.dart';
 export 'src/components/empty/td_empty.dart';
 export 'src/components/icon/td_icons.dart';
 export 'src/components/image/image_widget.dart';

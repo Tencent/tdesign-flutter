@@ -48,7 +48,7 @@ class TDCountDownStyle {
   /// 时间容器宽度
   double? timeWidth;
 
-  /// 时间容器宽度
+  /// 时间容器高度
   double? timeHeight;
 
   /// 时间容器内边距
