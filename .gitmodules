@@ -1,3 +1,4 @@
 [submodule "tdesign-site/src/_common"]
 	path = tdesign-site/src/_common
 	url = https://github.com/Tencent/tdesign-common.git
+	branch = develop
