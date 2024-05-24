@@ -23,7 +23,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _imageClip(BuildContext context) {
+  Widget _imageClip(BuildContext context)  {
+
     return Row(
       children: [
         const SizedBox(
@@ -40,9 +41,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
               ),
             ),
-            const TDImage(
-              assetUrl: 'assets/img/image.png',
-              type: TDImageType.clip,
+             const TDImage(
+               assetUrl: 'assets/img/image.png',
+               type: TDImageType.clip,
             ),
           ],
         ),

@@ -19,97 +19,244 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### 1 组件类型
 
 基础多文本输入框
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _basicType(BuildContext context) {
+    return TDTextarea(
+      controller: controller[0],
+      hintText: '请输入文字',
+      maxLines: 4,
+      minLines: 4,
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }</pre>
 
 </td-code-block>
-                
+                                  
 
 带标题多文本输入框
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _basicTypeByTitle(BuildContext context) {
+    return TDTextarea(
+      controller: controller[1],
+      label: '标签文字',
+      hintText: '请输入文字',
+      maxLines: 4,
+      minLines: 4,
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }</pre>
 
 </td-code-block>
-                
+                                  
 
 自动增高多文本输入框
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _autoHeightType(BuildContext context) {
+    return TDTextarea(
+      controller: controller[2],
+      hintText: '请输入文字',
+      minLines: 1,
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }</pre>
 
 </td-code-block>
-                
+                                  
 
 设置字符数限制
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _maxLengthType(BuildContext context) {
+    return TDTextarea(
+      controller: controller[3],
+      label: '标签文字',
+      hintText: '请输入文字',
+      maxLines: 4,
+      minLines: 4,
+      maxLength: 500,
+      indicator: true,
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }</pre>
 
 </td-code-block>
-                
+                                  
 ### 1 组件状态
 
 禁用状态
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _disabledState(BuildContext context) {
+    return TDTextarea(
+      controller: controller[4],
+      label: '标签文字',
+      hintText: '不可编辑文字',
+      maxLines: 4,
+      minLines: 4,
+      readOnly: true,
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }</pre>
 
 </td-code-block>
-                
+                                  
 ### 1 组件样式
 
 竖排样式
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _verticalStyle(BuildContext context) {
+    return TDTextarea(
+      controller: controller[5],
+      label: '标签文字',
+      hintText: '请输入文字',
+      maxLines: 4,
+      minLines: 4,
+      maxLength: 500,
+      indicator: true,
+      layout: TDTextareaLayout.vertical,
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }</pre>
 
 </td-code-block>
-                
+                                  
 
 卡片样式
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _cardStyle(BuildContext context) {
+    return TDTextarea(
+      controller: controller[6],
+      label: '标签文字',
+      hintText: '请输入文字',
+      maxLines: 4,
+      minLines: 4,
+      maxLength: 500,
+      indicator: true,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
+      ),
+      margin: EdgeInsets.only(right: TDTheme.of(context).spacer16, left: TDTheme.of(context).spacer16),
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }</pre>
 
 </td-code-block>
-                
+                                  
 ### 1 特殊样式
 
 标签外置输入框
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _extensionStyle(BuildContext context) {
+    return TDTextarea(
+      controller: controller[7],
+      label: '标签文字',
+      hintText: '请输入文字',
+      maxLines: 4,
+      minLines: 4,
+      maxLength: 500,
+      indicator: true,
+      layout: TDTextareaLayout.vertical,
+      bordered: true,
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }</pre>
 
 </td-code-block>
-                
+                                  
 
 自定义标题
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _setLabel(BuildContext context) {
+    return TDTextarea(
+      controller: controller[9],
+      label: '地址信息',
+      // labelWidth: 100,
+      labelIcon: Icon(
+        TDIcons.location,
+        size: 20,
+        color: TDTheme.of(context).fontGyColor1,
+      ),
+      hintText: '请输入文字',
+      maxLines: 4,
+      minLines: 4,
+      maxLength: 500,
+      indicator: true,
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }</pre>
 
 </td-code-block>
-                
+                                  
 
 必填和辅助说明
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _setStatus(BuildContext context) {
+    return TDTextarea(
+      controller: controller[10],
+      label: '标签文字',
+      hintText: '请输入文字',
+      maxLines: 4,
+      minLines: 4,
+      maxLength: 500,
+      indicator: true,
+      layout: TDTextareaLayout.vertical,
+      required: true,
+      additionInfo: '辅助说明',
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }</pre>
 
 </td-code-block>
-                
+                                  
 
 
 ## API

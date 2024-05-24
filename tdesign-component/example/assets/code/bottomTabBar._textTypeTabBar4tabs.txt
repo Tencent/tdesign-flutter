@@ -1,6 +1,7 @@
 
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+    return TDBottomTabBar(
+        TDBottomTabBarBasicType.text,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
