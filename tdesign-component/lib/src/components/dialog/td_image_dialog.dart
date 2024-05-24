@@ -163,10 +163,10 @@ class TDImageDialog extends StatelessWidget {
   Widget _horizontalButtons(BuildContext context) {
     final left = leftBtn ??
         TDDialogButtonOptions(
-            title: context.resource.cancel, theme: TDButtonTheme.light, action: () {});
+            title: context.resource.cancel, theme: TDButtonTheme.light, action: null);
     final right = rightBtn ??
         TDDialogButtonOptions(
-            title: context.resource.confirm, theme: TDButtonTheme.primary, action: () {});
+            title: context.resource.confirm, theme: TDButtonTheme.primary, action: null);
     return HorizontalNormalButtons(
       leftBtn: left,
       rightBtn: right,
