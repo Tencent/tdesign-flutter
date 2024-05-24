@@ -48,6 +48,7 @@ class TDInput extends StatelessWidget {
       this.additionInfo = '',
       this.additionInfoColor,
       this.textAlign,
+      this.clearIconSize,
       this.onClearTap,
       this.needClear = true,
       this.clearBtnColor,
@@ -155,6 +156,9 @@ class TDInput extends StatelessWidget {
 
   /// 游标颜色
   final Color? cursorColor;
+
+  /// 清除按钮图标大小
+  final double? clearIconSize;
 
   /// 右侧按钮
   final Widget? rightBtn;
@@ -355,6 +359,7 @@ class TDInput extends StatelessWidget {
                     child: Container(
                       margin: EdgeInsets.only(left: 17.5, right: 16, top: additionInfo != '' ? getInputPadding() : 0),
                       child: Icon(
+                        size:clearIconSize,
                         TDIcons.close_circle_filled,
                         color: clearBtnColor ?? TDTheme.of(context).fontGyColor3,
                       ),
@@ -496,6 +501,7 @@ class TDInput extends StatelessWidget {
                         child: Container(
                           margin: const EdgeInsets.only(left: 17.5, right: 16),
                           child: Icon(
+                            size:clearIconSize,
                             TDIcons.close_circle_filled,
                             color: clearBtnColor ?? TDTheme.of(context).fontGyColor3,
                           ),
