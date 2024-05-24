@@ -598,12 +598,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 buttons: [
                   TDDialogButtonOptions(
                       title: '主要按钮',
-                      action: () {},
+                      action: () {
+                        Navigator.pop(context);
+                      },
                       theme: TDButtonTheme.primary),
                   TDDialogButtonOptions(
                       title: '次要按钮',
                       titleColor: TDTheme.of(context).brandColor7,
-                      action: () {},
+                      action: () {
+                        Navigator.pop(context);
+                      },
                       theme: TDButtonTheme.light),
                 ]);
           },
@@ -637,17 +641,23 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 buttons: [
                   TDDialogButtonOptions(
                       title: '主要按钮',
-                      action: () {},
+                      action: () {
+                        Navigator.pop(context);
+                      },
                       theme: TDButtonTheme.primary),
                   TDDialogButtonOptions(
                       title: '次要按钮',
                       titleColor: TDTheme.of(context).brandColor7,
-                      action: () {},
+                      action: () {
+                        Navigator.pop(context);
+                      },
                       theme: TDButtonTheme.light),
                   TDDialogButtonOptions(
                       title: '次要按钮',
                       titleColor: TDTheme.of(context).brandColor7,
-                      action: () {},
+                      action: () {
+                        Navigator.pop(context);
+                      },
                       theme: TDButtonTheme.light),
                 ]);
           },

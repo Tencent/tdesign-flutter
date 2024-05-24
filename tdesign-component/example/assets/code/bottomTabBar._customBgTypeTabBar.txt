@@ -1,5 +1,5 @@
 
-  Widget _customBgTypeTabBar(BuildContext context){
+  Widget _customBgTypeTabBar(BuildContext context) {
     return TDBottomTabBar(TDBottomTabBarBasicType.text,
         backgroundColor: TDTheme.of(context).successColor6,
         selectedBgColor: TDTheme.of(context).errorColor1,
@@ -14,7 +14,7 @@
           ),
           TDBottomTabBarTabConfig(
             tabText: '标签',
-             unselectTabTextStyle:TextStyle(color: TDTheme.of(context).fontGyColor1),
+            unselectTabTextStyle: TextStyle(color: TDTheme.of(context).fontGyColor1),
             onTap: () {
               onTapTab(context, '标签1');
             },
