@@ -85,7 +85,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+    return TDBottomTabBar(
+        TDBottomTabBarBasicType.text,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
@@ -332,7 +333,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
               onTap: () {
@@ -453,7 +453,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+    return TDBottomTabBar(
+        TDBottomTabBarBasicType.text,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
@@ -700,7 +701,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
               onTap: () {
@@ -821,7 +821,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+    return TDBottomTabBar(
+        TDBottomTabBarBasicType.text,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
@@ -1068,7 +1069,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
               onTap: () {
@@ -1221,7 +1221,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+    return TDBottomTabBar(
+        TDBottomTabBarBasicType.text,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
@@ -1468,7 +1469,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
               onTap: () {
@@ -1589,7 +1589,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+    return TDBottomTabBar(
+        TDBottomTabBarBasicType.text,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
@@ -1836,7 +1837,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
               onTap: () {
@@ -1957,7 +1957,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+    return TDBottomTabBar(
+        TDBottomTabBarBasicType.text,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
@@ -2204,7 +2205,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
               onTap: () {
@@ -2354,7 +2354,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+    return TDBottomTabBar(
+        TDBottomTabBarBasicType.text,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
@@ -2601,7 +2602,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
               onTap: () {
@@ -2722,7 +2722,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+    return TDBottomTabBar(
+        TDBottomTabBarBasicType.text,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
@@ -2969,7 +2970,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
               onTap: () {
@@ -3090,7 +3090,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+    return TDBottomTabBar(
+        TDBottomTabBarBasicType.text,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
@@ -3337,7 +3338,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         useVerticalDivider: true,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
               onTap: () {
