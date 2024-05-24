@@ -20,6 +20,7 @@ class TDInput extends StatelessWidget {
       this.leftIcon, // leftIcon is default designed 24 in size.
       this.leftLabel,
       this.leftLabelStyle,
+      this.leftLabelSpace,
       this.required,
       this.readOnly = false,
       this.autofocus = false,
@@ -90,6 +91,9 @@ class TDInput extends StatelessWidget {
 
   /// 输入框左侧文案
   final String? leftLabel;
+
+  /// 输入框左侧文案间距
+  final double? leftLabelSpace;
 
   /// 是否必填标志（红色*）
   final bool? required;
@@ -256,8 +260,8 @@ class TDInput extends StatelessWidget {
             children: <Widget>[
               Visibility(
                 visible: hasLeftWidget,
-                child: const SizedBox(
-                  width: 16,
+                child: SizedBox(
+                  width:leftLabelSpace ?? 16,
                 ),
               ),
               SizedBox(
@@ -445,7 +449,7 @@ class TDInput extends StatelessWidget {
                         child: Container(
                           constraints: const BoxConstraints(maxWidth: 81),
                           padding: EdgeInsets.only(
-                              left: 12.0,top: 10.0),
+                              left: leftLabelSpace ?? 12.0,top: 10.0),
                           child: Column(
                             children: [
                               TDText(
@@ -635,7 +639,7 @@ class TDInput extends StatelessWidget {
               Visibility(
                 visible: leftLabel != null,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 16, top: getInputPadding(), bottom: getInputPadding()),
+                  padding: EdgeInsets.only(left:leftLabelSpace ?? 16, top: getInputPadding(), bottom: getInputPadding()),
                   child: leftInfoWidth != null
                       ? SizedBox(
                           width: leftInfoWidth,
