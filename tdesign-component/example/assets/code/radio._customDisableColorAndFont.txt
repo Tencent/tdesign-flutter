@@ -4,7 +4,7 @@
       contentDirection: TDContentDirection.right,
       selectId: '0',
       child: Column(
-        children:  [
+        children: [
           TDRadio(
             id: '0',
             title: '选项禁用-已选',
