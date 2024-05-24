@@ -745,7 +745,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | content | String? | - | 内容 |
 | contentColor | Color? | - | 内容颜色 |
 | contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
-| buttonText | String? | '知道了' | 按钮文字 |
+| buttonText | String? | - | 按钮文字 |
 | buttonTextColor | Color? | - | 按钮文字颜色 |
 | buttonStyle | TDDialogButtonStyle | TDDialogButtonStyle.normal | 按钮样式 |
 | showCloseButton | bool? | - | 右上角关闭按钮 |
@@ -826,7 +826,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | key |  | - |  |
-| title | String | '对话框标题' | 标题文字 |
+| title | String? | - | 标题文字 |
 | titleColor | Color | Colors.black | 标题颜色 |
 
 ```
@@ -837,7 +837,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | key |  | - |  |
-| content | String | '当前弹窗内容' | 标题文字 |
+| content | String? | - | 标题文字 |
 | contentColor | Color | const Color(0x99000000) | 标题颜色 |
 
 ```
@@ -887,7 +887,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | key |  | - |  |
-| buttonText | String? | '按钮' | 按钮文字 |
+| buttonText | String? | - | 按钮文字 |
 | buttonTextColor | Color? | - | 按钮文字颜色 |
 | buttonTextFontWeight | FontWeight? | FontWeight.w600 | 按钮文字粗细 |
 | buttonStyle | TDButtonStyle? | - | 按钮样式 |

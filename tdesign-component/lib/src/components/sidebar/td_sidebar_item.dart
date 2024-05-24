@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-class TDSideBarItem extends StatelessWidget {
+class TDSideBarItem {
   const TDSideBarItem({
     Key? key,
     this.badge,
@@ -13,7 +13,7 @@ class TDSideBarItem extends StatelessWidget {
     this.textStyle,
     this.label = '',
     this.value = -1,
-  }) : super(key: key);
+  });
 
   /// 徽标
   final TDBadge? badge;
@@ -32,10 +32,4 @@ class TDSideBarItem extends StatelessWidget {
 
   /// 值
   final int value;
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
 }

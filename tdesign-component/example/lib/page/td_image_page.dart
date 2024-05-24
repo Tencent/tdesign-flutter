@@ -53,7 +53,10 @@ class TDImageState extends State<TDImagePage>
               ExampleItem(desc: '', builder: _fail),
             ],
           )
-        ]);
+        ],
+     test: [
+       ExampleItem(desc: '加载本地文件', builder: _imageFile),
+     ],);
   }
   @Demo(group: 'image')
   Widget _imageClip(BuildContext context)  {
@@ -74,7 +77,7 @@ class TDImageState extends State<TDImagePage>
                 textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
               ),
             ),
-             TDImage(
+             const TDImage(
                assetUrl: 'assets/img/image.png',
                type: TDImageType.clip,
             ),
@@ -170,15 +173,6 @@ class TDImageState extends State<TDImagePage>
                   type: TDImageType.fitWidth,
                 ),
               ),
-              // Container(
-              //   width: 72,
-              //   height: 89,
-              //   color: Colors.black,
-              //   child:  TDImage(
-              //     imageFile: File(''),
-              //     type: TDImageType.fitWidth,
-              //   ),
-              // ),
             ],
           ),
         ],
@@ -414,6 +408,18 @@ class TDImageState extends State<TDImagePage>
             width: 24,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _imageFile(BuildContext context) {
+
+    return Container(
+      width: 72,
+      height: 72,
+      child:  TDImage(
+        imageFile: File('/sdcard/td/test.jpg'),
+        type: TDImageType.fitWidth,
       ),
     );
   }

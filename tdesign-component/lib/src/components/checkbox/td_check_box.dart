@@ -68,7 +68,9 @@ class TDCheckbox extends StatefulWidget {
       this.cardMode = false,
       this.showDivider = true,
       this.contentDirection = TDContentDirection.right,
-      this.onCheckBoxChanged})
+      this.onCheckBoxChanged,
+      this.titleColor,
+      this.subTitleColor})
       : super(key: key);
 
   /// id
@@ -138,6 +140,12 @@ class TDCheckbox extends StatefulWidget {
 
   /// 禁用选择颜色
   final Color? disableColor;
+
+  /// 标题文字颜色
+  final Color? titleColor;
+
+  /// 副标题文字颜色
+  final Color? subTitleColor;
 
   @override
   State createState() => TDCheckboxState();
@@ -280,7 +288,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                               maxLines: widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
                               textColor:
-                                  widget.enable ? TDTheme.of(context).fontGyColor3 : TDTheme.of(context).fontGyColor4,
+                                  widget.enable ? (widget.subTitleColor ?? TDTheme.of(context).fontGyColor3) : TDTheme.of(context).fontGyColor4,
                               font: TDTheme.of(context).fontBodyMedium),
                         ),
                       )
@@ -333,7 +341,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                               maxLines: widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
                               textColor:
-                                  widget.enable ? TDTheme.of(context).fontGyColor3 : TDTheme.of(context).fontGyColor4,
+                                  widget.enable ? (widget.subTitleColor ?? TDTheme.of(context).fontGyColor3) : TDTheme.of(context).fontGyColor4,
                               font: widget.subTitleFont ?? TDTheme.of(context).fontBodyMedium),
                         ),
                       )
@@ -452,7 +460,7 @@ class TDCheckboxState extends State<TDCheckbox> {
         content = TDText(title,
             maxLines: widget.titleMaxLine ?? groupState?.widget.titleMaxLine,
             overflow: TextOverflow.ellipsis,
-            textColor: widget.enable ? TDTheme.of(context).fontGyColor1 : TDTheme.of(context).fontGyColor4,
+            textColor: widget.enable ? (widget.titleColor ?? TDTheme.of(context).fontGyColor1) : TDTheme.of(context).fontGyColor4,
             font: widget.titleFont ??
                 TDTheme.of(context)
                     .fontBodyLarge); // TODO custom fontSize https://github.com/Tencent/tdesign-flutter/issues/66
