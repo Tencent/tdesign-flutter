@@ -218,6 +218,7 @@ class TDBottomTabBar extends StatefulWidget {
 
   /// icon与文本中间距离（可选）
   final double? centerDistance;
+
   @override
   State<TDBottomTabBar> createState() => _TDBottomTabBarState();
 }
@@ -373,6 +374,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
 
   /// icon与文本中间距离
   final double centerDistance;
+
   @override
   Widget build(BuildContext context) {
     var popUpButtonConfig = itemConfig.popUpButtonConfig;
@@ -477,7 +479,10 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           isSelected ? selectedIcon! : unSelectedIcon!,
-          if(centerDistance>0)SizedBox(height: centerDistance,),
+          if (centerDistance > 0)
+            SizedBox(
+              height: centerDistance,
+            ),
           _textItem(
             context,
             itemConfig,

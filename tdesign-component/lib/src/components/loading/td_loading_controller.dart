@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../util/context_extension.dart';
 import 'td_loading.dart';
 
 class TDLoadingController {
@@ -13,7 +14,7 @@ class TDLoadingController {
       TDLoadingSize size = TDLoadingSize.medium,
       TDLoadingIcon? icon = TDLoadingIcon.circle,
       Color? iconColor,
-      String text = '加载中',
+      String? text,
       Widget? refreshWidget,
       Color textColor = Colors.black,
       Axis axis = Axis.vertical,
@@ -32,7 +33,7 @@ class TDLoadingController {
               size: size,
               icon: icon,
               customIcon: customIcon,
-              text: text,
+              text: text ?? context.resource.loading,
               textColor: textColor,
               refreshWidget: refreshWidget,
               duration: duration,
