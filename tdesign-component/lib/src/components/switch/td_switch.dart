@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 import 'td_cupertino_switch.dart';
 
 /// 开关改变事件处理
@@ -157,7 +158,7 @@ class TDSwitchState extends State<TDSwitch> {
             alignment: Alignment.center,
             width: 16,
             child: TDText(
-              isOn ? (widget.openText ?? '开') : (widget.closeText ?? '关'),
+              isOn ? (widget.openText ?? context.resource.open) : (widget.closeText ?? context.resource.close),
               style: TextStyle(color: isOn ? thumbContentOnColor : thumbContentOffColor, fontSize: 14),
               forceVerticalCenter: true,
               maxLines: 1,
