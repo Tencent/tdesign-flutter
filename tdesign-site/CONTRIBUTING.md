@@ -18,6 +18,7 @@ spline: explain
 - 对于系统原有组件，如Text,Image等，应兼容系统原组件功能，只能扩展，不能阉割，以免业务需要使用系统功能时，必须放弃TDesign控件。
 - 示例页面尽量使用ExamplePage+ExampleModule+ExampleItem组合，按照示例稿的布局实现；页面写完后，在main.dart中修改exampleMap对应组件的isTodo属性即可。
 - 组件API和演示代码，请参考`demo_tool/README.md`文件。
+- 组件内部的固定文案,都应该抽离到TDResourceDelegate中统一管理,方便业务进行国际化适配
 
 ### 共建流程
 - 拉取开发分支：建议将项目fork到自己github,每个组件从main分支拉取对应开发分支，命名为feature/组件名小写_下划线
