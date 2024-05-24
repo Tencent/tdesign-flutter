@@ -140,6 +140,7 @@ class TDBottomTabBar extends StatefulWidget {
     this.unselectedBgColor,
     this.backgroundColor,
     this.centerDistance,
+    this.currentIndex,
   })  : assert(() {
           if (navigationTabs.isEmpty) {
             throw FlutterError('[TDBottomTabBar] please set at least one tab!');
@@ -166,6 +167,9 @@ class TDBottomTabBar extends StatefulWidget {
                     'but not set tabText or icon.');
               }
             }
+          }
+          if (currentIndex != null && (currentIndex < 0 || currentIndex >= navigationTabs.length)) {
+            throw FlutterError('[TDBottomTabBar] currentIndex must in [0,navigationTabs.length)');
           }
           return true;
         }()),
@@ -219,12 +223,27 @@ class TDBottomTabBar extends StatefulWidget {
   /// icon与文本中间距离（可选）
   final double? centerDistance;
 
+  /// 选中的index（可选）
+  final int? currentIndex;
+
   @override
   State<TDBottomTabBar> createState() => _TDBottomTabBarState();
 }
 
 class _TDBottomTabBarState extends State<TDBottomTabBar> {
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.currentIndex ?? 0;
+  }
+
+  @override
+  void didUpdateWidget(covariant TDBottomTabBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _selectedIndex = widget.currentIndex ?? _selectedIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
