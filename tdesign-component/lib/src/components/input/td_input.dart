@@ -359,7 +359,7 @@ class TDInput extends StatelessWidget {
                     child: Container(
                       margin: EdgeInsets.only(left: 17.5, right: 16, top: additionInfo != '' ? getInputPadding() : 0),
                       child: Icon(
-                        size:clearIconSize,
+                        size: clearIconSize,
                         TDIcons.close_circle_filled,
                         color: clearBtnColor ?? TDTheme.of(context).fontGyColor3,
                       ),
@@ -437,28 +437,46 @@ class TDInput extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Visibility(
-                visible: leftLabel != null,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 12),
-                  child: leftInfoWidth != null
-                      ? SizedBox(
-                          width: leftInfoWidth,
-                          child: TDText(
-                            leftLabel,
-                            maxLines: 1,
-                            style: leftLabelStyle,
-                            font: TDTheme.of(context).fontBodyMedium,
-                            fontWeight: FontWeight.w400,
+                  visible: leftLabel != null,
+                  child: Row(
+                    children: [
+                      Visibility(
+                        visible: leftLabel != null,
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 81),
+                          padding: EdgeInsets.only(
+                              left: 12.0,top: 10.0),
+                          child: Column(
+                            children: [
+                              TDText(
+                                leftLabel,
+                                maxLines: 2,
+                                style: leftLabelStyle,
+                                font: TDTheme.of(context).fontBodyLarge,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ],
                           ),
-                        )
-                      : TDText(
-                          leftLabel,
-                          maxLines: 1,
-                          font: TDTheme.of(context).fontBodyMedium,
-                          fontWeight: FontWeight.w400,
                         ),
-                ),
-              ),
+                      ),
+                      Visibility(
+                        visible: labelWidget != null,
+                        child: labelWidget ?? const SizedBox.shrink(),
+                      ),
+                      Visibility(
+                          visible: required ?? false,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 1.0),
+                            child: TDText(
+                              '*',
+                              maxLines: 1,
+                              style: TextStyle(color: TDTheme.of(context).errorColor6),
+                              font: TDTheme.of(context).fontBodyLarge,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          )),
+                    ],
+                  )),
               Container(
                 padding: const EdgeInsets.only(bottom: 12, top: 7),
                 alignment: Alignment.center,
@@ -501,7 +519,7 @@ class TDInput extends StatelessWidget {
                         child: Container(
                           margin: const EdgeInsets.only(left: 17.5, right: 16),
                           child: Icon(
-                            size:clearIconSize,
+                            size: clearIconSize,
                             TDIcons.close_circle_filled,
                             color: clearBtnColor ?? TDTheme.of(context).fontGyColor3,
                           ),
