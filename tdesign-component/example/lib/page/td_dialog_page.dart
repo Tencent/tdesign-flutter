@@ -520,12 +520,16 @@ class _TDDialogPageState extends State<TDDialogPage> {
                 buttons: [
                   TDDialogButtonOptions(
                       title: '主要按钮',
-                      action: () {},
+                      action: () {
+                        Navigator.pop(context);
+                      },
                       theme: TDButtonTheme.primary),
                   TDDialogButtonOptions(
                       title: '次要按钮',
                       titleColor: TDTheme.of(context).brandColor7,
-                      action: () {},
+                      action: () {
+                        Navigator.pop(context);
+                      },
                       theme: TDButtonTheme.light),
                 ]);
           },
@@ -552,17 +556,23 @@ class _TDDialogPageState extends State<TDDialogPage> {
                 buttons: [
                   TDDialogButtonOptions(
                       title: '主要按钮',
-                      action: () {},
+                      action: () {
+                        Navigator.pop(context);
+                      },
                       theme: TDButtonTheme.primary),
                   TDDialogButtonOptions(
                       title: '次要按钮',
                       titleColor: TDTheme.of(context).brandColor7,
-                      action: () {},
+                      action: () {
+                        Navigator.pop(context);
+                      },
                       theme: TDButtonTheme.light),
                   TDDialogButtonOptions(
                       title: '次要按钮',
                       titleColor: TDTheme.of(context).brandColor7,
-                      action: () {},
+                      action: () {
+                        Navigator.pop(context);
+                      },
                       theme: TDButtonTheme.light),
                 ]);
           },
@@ -679,12 +689,16 @@ class _TDDialogPageState extends State<TDDialogPage> {
                 buttons: [
                   TDDialogButtonOptions(
                       title: '主要按钮',
-                      action: () {},
+                      action: () {
+                        Navigator.pop(context);
+                      },
                       theme: TDButtonTheme.primary),
                   TDDialogButtonOptions(
                       title: '次要按钮',
                       titleColor: TDTheme.of(context).brandColor7,
-                      action: () {},
+                      action: () {
+                        Navigator.pop(context);
+                      },
                       theme: TDButtonTheme.light),
                 ]);
           },
