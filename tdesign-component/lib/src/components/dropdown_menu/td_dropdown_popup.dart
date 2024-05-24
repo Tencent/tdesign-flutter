@@ -108,9 +108,11 @@ class TDDropdownPopup {
   Widget _getPopup(TDDropdownMenuDirection value, TDDropdownItem? updateChild) {
     _init(value);
     return Stack(children: [
-      _getOverlay1(),
-      _getOverlay2(),
-      _getOverlay3(),
+      if (directionListenable.value != TDDropdownPopupDirection.auto) ...[
+        _getOverlay1(),
+        _getOverlay2(),
+        _getOverlay3(),
+      ],
       TDDropdownInherited(
           popupState: this,
           directionListenable: directionListenable,
@@ -190,7 +192,7 @@ class TDDropdownPopup {
 
   Future<void> remove() async {
     _closeContent();
-    await Future.delayed(Duration(milliseconds: _duration.inMilliseconds ~/ 2));
+    await Future.delayed(Duration(milliseconds: _duration.inMilliseconds));
     overlayEntry?.remove();
     overlayEntry = null;
   }
