@@ -37,6 +37,7 @@ class TDRadio extends TDCheckbox {
     Color? titleColor,
     Color? subTitleColor,
     Color? backgroundColor,
+   double? checkBoxLeftSpace
   }) : super(
           id: id,
           key: key,
@@ -59,6 +60,7 @@ class TDRadio extends TDCheckbox {
           titleColor: titleColor,
           subTitleColor: subTitleColor,
           backgroundColor: backgroundColor,
+          checkBoxLeftSpace:checkBoxLeftSpace
         );
 
   @override
@@ -137,7 +139,7 @@ class TDRadioState extends TDCheckboxState {
         canNotCancel = true;
       }
     }
-    return super.build(context);
+    return  super.build(context);
   }
 }
 

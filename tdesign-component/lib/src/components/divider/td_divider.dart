@@ -20,6 +20,7 @@ class TDDivider extends StatelessWidget {
     this.width,
     this.height,
     this.text,
+    this.textStyle,
     this.widget,
     this.gapPadding,
     this.hideLine = false,
@@ -48,6 +49,9 @@ class TDDivider extends StatelessWidget {
 
   /// 文本字符串，使用默认样式
   final String? text;
+
+  /// 自定义文本样式
+  final TextStyle? textStyle;
 
   /// 中间控件，可自定义样式
   final Widget? widget;
@@ -204,6 +208,7 @@ class TDDivider extends StatelessWidget {
           font: TDTheme.of(context).fontBodySmall,
           textColor: TDTheme.of(context).fontGyColor3,
           forceVerticalCenter: true,
+          style: textStyle,
         );
   }
 }
