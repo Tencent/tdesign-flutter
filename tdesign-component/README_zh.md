@@ -125,7 +125,7 @@ class IntlResourceDelegate extends TDResourceDelegate {
     return MaterialApp(
       home: Builder(
         builder: (context) {
-          // 设置文案代理,国家化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
+          // 设置文案代理,国际化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
           TDTheme.setResourceBuilder((context) => delegate..updateContext(context), needAlwaysBuild: true);
           return MyHomePage(
             title: AppLocalizations.of(context)?.components ?? '',
@@ -138,6 +138,8 @@ class IntlResourceDelegate extends TDResourceDelegate {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
     );
 ```
+
+3.flutter国际化配置方法官方:[Flutter 应用里的国际化](https://docs.flutter.cn/ui/accessibility-and-internationalization/internationalization)
 
 # 开发规范
 - 组件命名规范：以TD为前缀，组件名称、API名称参考TDesign现有组件和API命名，可以根据flutter原生Widget的特点进行修改。组件API以满足设计要求和使用为准，可根据flutter特点做精简或定制。
