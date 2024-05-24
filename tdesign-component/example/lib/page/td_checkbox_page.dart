@@ -353,8 +353,6 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
     );
   }
 
-
-
   @Demo(group: 'checkbox')
   Widget _customIconBuildStyle(BuildContext context) {
     return TDCheckboxGroupContainer(
@@ -405,6 +403,18 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             id: 'index:0',
             title: '多选',
             subTitle: '描述信息',
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            cardMode: true,
+          ),
+
+          TDCheckbox(
+            selectColor: TDTheme.of(context).errorColor3,
+            id: 'index:1',
+            title: '多选',
+            titleColor: Colors.green,
+            subTitle: '描述信息',
+            subTitleColor: Colors.blue,
             titleMaxLine: 2,
             subTitleMaxLine: 2,
             cardMode: true,

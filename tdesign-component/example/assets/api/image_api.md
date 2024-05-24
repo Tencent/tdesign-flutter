@@ -29,3 +29,4 @@
 | cacheHeight |  | - |  |
 | cacheWidth |  | - |  |
 | assetUrl | String? | - | 本地素材地址 |
+| imageFile | File? | - | 图片文件路径 |

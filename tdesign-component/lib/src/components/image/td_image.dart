@@ -62,7 +62,7 @@ class TDImage extends StatefulWidget {
 
   /// 本地素材地址
   final String? assetUrl;
-  
+
   /// 图片文件路径
   final File? imageFile;
 
@@ -116,8 +116,6 @@ class TDImage extends StatefulWidget {
   final int? cacheHeight;
 
   final int? cacheWidth;
-
-
 
   @override
   State<StatefulWidget> createState() => _TDImageState();
@@ -509,34 +507,59 @@ class _TDImageState extends State<TDImage> {
             width: widget.width ?? 72,
             clipBehavior: Clip.hardEdge,
             decoration: const BoxDecoration(shape: BoxShape.circle),
-            child: widget.assetUrl == null
-                ? ImageWidget.network(
-                    widget.imgUrl,
-                    height: widget.height ?? 72,
-                    width: widget.width ?? 72,
-                    errorWidget: widget.errorWidget,
-                    loadingWidget: widget.loadingWidget,
-                    fit: BoxFit.cover,
-                    color: widget.color,
-                    frameBuilder: widget.frameBuilder,
-                    loadingBuilder: widget.loadingBuilder,
-                    errorBuilder: widget.errorBuilder,
-                    semanticLabel: widget.semanticLabel,
-                    excludeFromSemantics: widget.excludeFromSemantics,
-                    opacity: widget.opacity,
-                    colorBlendMode: widget.colorBlendMode,
-                    alignment: widget.alignment,
-                    repeat: widget.repeat,
-                    centerSlice: widget.centerSlice,
-                    matchTextDirection: widget.matchTextDirection,
-                    gaplessPlayback: widget.gaplessPlayback,
-                    filterQuality: widget.filterQuality,
-                    isAntiAlias: widget.isAntiAlias,
-                    cacheHeight: widget.cacheHeight,
-                    cacheWidth: widget.cacheWidth,
-                  )
-                : ImageWidget.asset(
-                    widget.assetUrl!,
+            child: widget.imageFile == null
+                ? (widget.assetUrl == null
+                    ? ImageWidget.network(
+                        widget.imgUrl,
+                        height: widget.height ?? 72,
+                        width: widget.width ?? 72,
+                        errorWidget: widget.errorWidget,
+                        loadingWidget: widget.loadingWidget,
+                        fit: BoxFit.cover,
+                        color: widget.color,
+                        frameBuilder: widget.frameBuilder,
+                        loadingBuilder: widget.loadingBuilder,
+                        errorBuilder: widget.errorBuilder,
+                        semanticLabel: widget.semanticLabel,
+                        excludeFromSemantics: widget.excludeFromSemantics,
+                        opacity: widget.opacity,
+                        colorBlendMode: widget.colorBlendMode,
+                        alignment: widget.alignment,
+                        repeat: widget.repeat,
+                        centerSlice: widget.centerSlice,
+                        matchTextDirection: widget.matchTextDirection,
+                        gaplessPlayback: widget.gaplessPlayback,
+                        filterQuality: widget.filterQuality,
+                        isAntiAlias: widget.isAntiAlias,
+                        cacheHeight: widget.cacheHeight,
+                        cacheWidth: widget.cacheWidth,
+                      )
+                    : ImageWidget.asset(
+                        widget.assetUrl!,
+                        width: widget.width ?? 72,
+                        height: widget.height ?? 72,
+                        errorWidget: widget.errorWidget,
+                        loadingWidget: widget.loadingWidget,
+                        fit: BoxFit.cover,
+                        color: widget.color,
+                        frameBuilder: widget.frameBuilder,
+                        errorBuilder: widget.errorBuilder,
+                        semanticLabel: widget.semanticLabel,
+                        excludeFromSemantics: widget.excludeFromSemantics,
+                        opacity: widget.opacity,
+                        colorBlendMode: widget.colorBlendMode,
+                        alignment: widget.alignment,
+                        repeat: widget.repeat,
+                        centerSlice: widget.centerSlice,
+                        matchTextDirection: widget.matchTextDirection,
+                        gaplessPlayback: widget.gaplessPlayback,
+                        filterQuality: widget.filterQuality,
+                        isAntiAlias: widget.isAntiAlias,
+                        cacheHeight: widget.cacheHeight,
+                        cacheWidth: widget.cacheWidth,
+                      ))
+                : ImageWidget.file(
+                    widget.imageFile!,
                     width: widget.width ?? 72,
                     height: widget.height ?? 72,
                     errorWidget: widget.errorWidget,
@@ -611,8 +634,8 @@ class _TDImageState extends State<TDImage> {
                     cacheHeight: widget.cacheHeight,
                     cacheWidth: widget.cacheWidth,
                   ))
-            : ImageWidget.asset(
-                widget.assetUrl!,
+            : ImageWidget.file(
+                widget.imageFile!,
                 width: widget.width ?? 72,
                 height: widget.height ?? 72,
                 errorWidget: widget.errorWidget,

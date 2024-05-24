@@ -1,0 +1,13 @@
+
+  Widget _basicTypeByTitle(BuildContext context) {
+    return TDTextarea(
+      controller: controller[1],
+      label: '标签文字',
+      hintText: '请输入文字',
+      maxLines: 4,
+      minLines: 4,
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }

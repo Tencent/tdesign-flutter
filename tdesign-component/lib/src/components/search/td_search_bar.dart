@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 
 ///
 /// 搜索框的样式
@@ -276,7 +277,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                 },
                 child: Container(
                   padding: const EdgeInsets.only(left: 16),
-                  child: Text('取消',
+                  child: Text(context.resource.cancel,
                       style: TextStyle(
                           fontSize: getSize(context)?.size,
                           color: TDTheme.of(context).brandNormalColor)),

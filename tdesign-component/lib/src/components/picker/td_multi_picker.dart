@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
+import '../../util/context_extension.dart';
 import 'no_wave_behavior.dart';
 
 typedef MultiPickerCallback = void Function(List selected);
@@ -208,7 +209,7 @@ class TDMultiPicker extends StatelessWidget {
               },
               behavior: HitTestBehavior.opaque,
               child: TDText(
-                '取消',
+                context.resource.cancel,
                 style: leftTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontBodyLarge!.size,
                   color: TDTheme.of(context).fontGyColor2
@@ -243,7 +244,7 @@ class TDMultiPicker extends StatelessWidget {
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
-              '确定',
+              context.resource.confirm,
               style: rightTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontBodyLarge!.size,
                   color: TDTheme.of(context).brandNormalColor
@@ -549,7 +550,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               },
               behavior: HitTestBehavior.opaque,
               child: TDText(
-                '取消',
+                context.resource.cancel,
                 style: widget.leftTextStyle ?? TextStyle(
                   fontSize: TDTheme.of(context).fontBodyLarge!.size,
                   color: TDTheme.of(context).fontGyColor2,
@@ -581,7 +582,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
-              '确定',
+              context.resource.confirm,
               style: widget.rightTextStyle ?? TextStyle(
                 fontSize: TDTheme.of(context).fontBodyLarge!.size,
                 color: TDTheme.of(context).brandNormalColor,

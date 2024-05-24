@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 
 enum IconTextDirection {
   horizontal,       //横向
@@ -199,7 +200,7 @@ class _TDToastLoading extends StatelessWidget {
           children: [
           TDCircleIndicator(color: TDTheme.of(context).whiteColor1, size: 26, lineWidth: 4,),
           const SizedBox(height: 8,),
-          TDText(text ?? '加载中...',
+          TDText(text ?? context.resource.loadingWithPoint,
             font: TDTheme.of(context).fontBodyMedium,
             fontWeight: FontWeight.w400,
             maxLines: 1,

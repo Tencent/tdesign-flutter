@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../../tdesign_flutter.dart';
 import '../util/log.dart';
 import '../util/string_util.dart';
-import 'basic.dart';
 import 'td_default_theme.dart';
 
 /// 主题控件
@@ -46,6 +45,13 @@ class TDTheme extends StatelessWidget {
   /// 开启多套主题功能
   static void needMultiTheme([bool value = true]) {
     _needMultiTheme = value;
+  }
+
+  /// 设置资源代理,
+  /// needAlwaysBuild=true:每次都会走build方法;如果全局有多个Delegate,需要区分情况去获取,则可以设置needAlwaysBuild为true,业务自己判断返回哪个delegate
+  /// needAlwaysBuild=false:返回delegate为null,则每次都会走build方法,返回了
+  static void setResourceBuilder(TDTDResourceBuilder delegate,{bool needAlwaysBuild = false}){
+    TDResourceManager.instance.setResourceBuilder(delegate,needAlwaysBuild);
   }
 
   /// 获取默认主题数据，全局唯一
