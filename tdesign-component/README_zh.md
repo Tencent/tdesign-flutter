@@ -139,7 +139,7 @@ class IntlResourceDelegate extends TDResourceDelegate {
     );
 ```
 
-3.flutter国际化配置方法官方:[Flutter 应用里的国际化](https://docs.flutter.cn/ui/accessibility-and-internationalization/internationalization)
+3.flutter国际化配置方法,官方文档:[Flutter 应用里的国际化](https://docs.flutter.cn/ui/accessibility-and-internationalization/internationalization)
 
 # 开发规范
 - 组件命名规范：以TD为前缀，组件名称、API名称参考TDesign现有组件和API命名，可以根据flutter原生Widget的特点进行修改。组件API以满足设计要求和使用为准，可根据flutter特点做精简或定制。
