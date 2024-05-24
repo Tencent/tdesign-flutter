@@ -98,6 +98,56 @@ iOS请运行项目预览 ↓
     );
 ```
 
+
+## 国际化
+TD组件库内部不内置国际化语言,但支持与flutter的国际化能力搭配使用.可以继承TDResourceDelegate类,该类抽离了组件内部所有文字资源,重新获取文字的方法,进行国际化处理,并通过 TDTheme.setResourceBuilder 注入.
+示例代码:
+
+1. 重写TDResourceDelegate类:
+```
+/// 国际化资源代理
+class IntlResourceDelegate extends TDResourceDelegate {
+  IntlResourceDelegate(this.context);
+
+  BuildContext context;
+
+  /// 国际化需要每次更新context
+  updateContext(BuildContext context){
+    this.context = context;
+  }
+
+  @override
+  String get cancel => AppLocalizations.of(context)!.cancel;
+
+  @override
+  String get confirm => AppLocalizations.of(context)!.confirm;
+
+}
+```
+
+
+2.注入TDResourceDelegate类:
+```
+    var delegate = IntlResourceDelegate(context);
+    return MaterialApp(
+      home: Builder(
+        builder: (context) {
+          // 设置文案代理,国际化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
+          TDTheme.setResourceBuilder((context) => delegate..updateContext(context), needAlwaysBuild: true);
+          return MyHomePage(
+            title: AppLocalizations.of(context)?.components ?? '',
+          );
+        },
+      ),
+      // 设置国际化处理
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+    );
+```
+
+3.flutter国际化配置方法,官方文档:[Flutter 应用里的国际化](https://docs.flutter.cn/ui/accessibility-and-internationalization/internationalization)
+
 ## 常见问题
 
 - Flutter 3.16之后,修改了渲染引擎,导致启用forceVerticalCenter参数的组件字体偏移更多,不再居中.可以通过设置kTextForceVerticalCenterEnable=false来禁用字体居中功能,让组件显示与官方Text一致

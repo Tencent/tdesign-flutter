@@ -210,7 +210,7 @@ spline: explain
       <p class="name">Switch 开关</p>
     </a>
   </div>
-  <!-- <div class="image-wrapper">
+ <div class="image-wrapper">
     <a class="item" href="/flutter/components/textarea">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-textarea.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-textarea-dark.png" />
@@ -218,7 +218,7 @@ spline: explain
     </a>
   </div>
 
-  <div class="image-wrapper">
+   <!-- <div class="image-wrapper">
     <a class="item" href="/flutter/components/tree-select">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-treeselect.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-treeselect-dark.png" />
@@ -384,13 +384,13 @@ spline: explain
     </a>
   </div>
 
-  <!-- <div class="image-wrapper">
+  <div class="image-wrapper">
     <a class="item" href="/flutter/components/dropdown-menu">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-dropdownmenu.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-dropdownmenu-dark.png" />
       <p class="name">DropdownMenu 下拉菜单</p>
     </a>
-  </div> -->
+  </div>
 
   <div class="image-wrapper">
     <a class="item" href="/flutter/components/loading">
