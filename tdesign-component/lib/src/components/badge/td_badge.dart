@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 
 enum TDBadgeType {
   /// 红点样式
@@ -49,7 +50,8 @@ class TDBadge extends StatefulWidget {
       this.message,
       this.widthLarge = 32,
       this.widthSmall = 12,
-      this.padding})
+      this.padding,
+      this.showZero = true})
       : super(key: key);
 
   /// 红点数量
@@ -81,6 +83,9 @@ class TDBadge extends StatefulWidget {
 
   /// 角标自定义padding
   final EdgeInsetsGeometry? padding;
+
+  /// 值为0是否显示
+  final bool showZero;
 
   @override
   State<StatefulWidget> createState() => _TDBadgeState();
@@ -116,6 +121,23 @@ class _TDBadgeState extends State<TDBadge> {
     }
   }
 
+  bool isVisible() {
+    var value = getValue();
+    try {
+      return widget.showZero || double.parse(value) != 0;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  String getValue() {
+    return ((widget.message ?? '').isNotEmpty
+        ? widget.message
+        : (widget.count ?? '').isNotEmpty
+            ? widget.count
+            : context.resource.badgeZero) as String;
+  }
+
   @override
   Widget build(BuildContext context) {
     updateBadgeNum(widget.count);
@@ -130,39 +152,45 @@ class _TDBadgeState extends State<TDBadge> {
               borderRadius: BorderRadius.circular(getBadgeSize() / 4)),
         );
       case TDBadgeType.message:
-        return badgeNum.length == 1 ? Container(
-            height: getBadgeSize(),
-            width: getBadgeSize(),
-            decoration: BoxDecoration(
-              color: widget.color ?? TDTheme.of(context).errorColor6,
-              borderRadius: BorderRadius.circular(getBadgeSize() / 2),
-            ),
-            child: Center(
-              child: TDText(
-                widget.message ?? '$badgeNum',
-                forceVerticalCenter: true,
-                font: getBadgeFont(context),
-                fontWeight: FontWeight.w500,
-                textColor: widget.textColor ?? TDTheme.of(context).whiteColor1,
-                textAlign: TextAlign.center,
-              ),
-            ))
-        : Container(
-            height: getBadgeSize(),
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            decoration: BoxDecoration(
-              color: widget.color ?? TDTheme.of(context).errorColor6,
-              borderRadius: BorderRadius.circular(getBadgeSize() / 2),
-            ),
-            child: Center(
-              child: TDText(
-                widget.message ?? '$badgeNum',
-                forceVerticalCenter: true,
-                font: getBadgeFont(context),
-                fontWeight: FontWeight.w500,
-                textColor: widget.textColor ?? TDTheme.of(context).whiteColor1,
-                textAlign: TextAlign.center,
-              ),
+        return Visibility(
+            visible: isVisible(),
+            child: badgeNum.length == 1
+                ? Container(
+                    height: getBadgeSize(),
+                    width: getBadgeSize(),
+                    decoration: BoxDecoration(
+                      color: widget.color ?? TDTheme.of(context).errorColor6,
+                      borderRadius: BorderRadius.circular(getBadgeSize() / 2),
+                    ),
+                    child: Center(
+                      child: TDText(
+                        widget.message ?? '$badgeNum',
+                        forceVerticalCenter: true,
+                        font: getBadgeFont(context),
+                        fontWeight: FontWeight.w500,
+                        textColor:
+                            widget.textColor ?? TDTheme.of(context).whiteColor1,
+                        textAlign: TextAlign.center,
+                      ),
+                    ))
+                : Container(
+                    height: getBadgeSize(),
+                    padding: const EdgeInsets.only(left: 5, right: 5),
+                    decoration: BoxDecoration(
+                      color: widget.color ?? TDTheme.of(context).errorColor6,
+                      borderRadius: BorderRadius.circular(getBadgeSize() / 2),
+                    ),
+                    child: Center(
+                      child: TDText(
+                        widget.message ?? '$badgeNum',
+                        forceVerticalCenter: true,
+                        font: getBadgeFont(context),
+                        fontWeight: FontWeight.w500,
+                        textColor:
+                            widget.textColor ?? TDTheme.of(context).whiteColor1,
+                        textAlign: TextAlign.center,
+                      ),
+                  ),
             ));
       case TDBadgeType.subscript:
         return ClipPath(
@@ -189,46 +217,54 @@ class _TDBadgeState extends State<TDBadge> {
           ),
         );
       case TDBadgeType.bubble:
-        return Container(
-            height: 16,
-            padding: const EdgeInsets.only(left: 4, right: 4),
-            decoration: BoxDecoration(
-              color: widget.color ?? TDTheme.of(context).errorColor6,
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(1)),
-            ),
-            child: Center(
-              child: TDText(
-                widget.message ?? '$badgeNum',
-                forceVerticalCenter: true,
-                font: getBadgeFont(context),
-                fontWeight: FontWeight.w500,
-                textColor: widget.textColor ?? TDTheme.of(context).whiteColor1,
-                textAlign: TextAlign.center,
+        return Visibility(
+            visible: isVisible(),
+            child: Container(
+              height: 16,
+              padding: const EdgeInsets.only(left: 4, right: 4),
+              decoration: BoxDecoration(
+                color: widget.color ?? TDTheme.of(context).errorColor6,
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(1)),
+              ),
+              child: Center(
+                child: TDText(
+                  widget.message ?? '$badgeNum',
+                  forceVerticalCenter: true,
+                  font: getBadgeFont(context),
+                  fontWeight: FontWeight.w500,
+                  textColor:
+                      widget.textColor ?? TDTheme.of(context).whiteColor1,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ));
       case TDBadgeType.square:
-        return Container(
-            height: getBadgeSize(),
-            width: getBadgeSize(),
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            decoration: BoxDecoration(
-              color: widget.color ?? TDTheme.of(context).errorColor6,
-              borderRadius: widget.border == TDBadgeBorder.large
-                  ? BorderRadius.circular(8)
-                  : BorderRadius.circular(2),
-            ),
-            child: Center(
-              child: TDText(
-                widget.message ?? '$badgeNum',
-                forceVerticalCenter: true,
-                font: getBadgeFont(context),
-                fontWeight: FontWeight.w500,
-                textColor: widget.textColor ?? TDTheme.of(context).whiteColor1,
-                textAlign: TextAlign.center,
+        return Visibility(
+            visible: isVisible(),
+            child: Container(
+              height: getBadgeSize(),
+              width: getBadgeSize(),
+              padding: const EdgeInsets.only(left: 5, right: 5),
+              decoration: BoxDecoration(
+                color: widget.color ?? TDTheme.of(context).errorColor6,
+                borderRadius: widget.border == TDBadgeBorder.large
+                    ? BorderRadius.circular(8)
+                    : BorderRadius.circular(2),
+              ),
+              child: Center(
+                child: TDText(
+                  widget.message ?? '$badgeNum',
+                  forceVerticalCenter: true,
+                  font: getBadgeFont(context),
+                  fontWeight: FontWeight.w500,
+                  textColor:
+                      widget.textColor ?? TDTheme.of(context).whiteColor1,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ));
     }
