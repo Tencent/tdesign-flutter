@@ -32,11 +32,14 @@ class TDSideBar extends StatefulWidget {
     Key? key,
     this.value,
     this.defaultValue,
+    this.selectedColor,
     this.children = const [],
     this.onChanged,
     this.onSelected,
     this.height,
     this.controller,
+    this.contentPadding,
+    this.selectedTextStyle,
     this.style = TDSideBarStyle.normal,
   }) : super(key: key);
 
@@ -55,11 +58,20 @@ class TDSideBar extends StatefulWidget {
   /// 选中值发生变化（点击事件）
   final ValueChanged<int>? onSelected;
 
+  /// 选中值后颜色
+  final Color? selectedColor;
+
+  /// 选中样式
+  final TextStyle? selectedTextStyle;
+
   /// 样式
   final TDSideBarStyle style;
 
   /// 高度
   final double? height;
+
+  /// 自定义文本框内边距
+  final EdgeInsetsGeometry? contentPadding;
 
   /// 控制器
   final TDSideBarController? controller;
@@ -202,6 +214,9 @@ class _TDSideBarState extends State<TDSideBar> {
                         badge: ele.badge,
                         textStyle: ele.textStyle,
                         selected: currentIndex == ele.index,
+                        selectedColor:widget.selectedColor,
+                        selectedTextStyle:widget.selectedTextStyle,
+                        contentPadding:widget.contentPadding,
                         topAdjacent: currentIndex != null &&
                             currentIndex! + 1 == ele.index,
                         bottomAdjacent: currentIndex != null &&
