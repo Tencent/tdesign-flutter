@@ -4,19 +4,21 @@
   </a>
 </p>
 
-TDesign Flutter技术栈组件库，适合在移动端项目中使用。
+TDesign Flutter 技术栈组件库，适合在移动端项目中使用。
 
 # 简介
-Flutter组件库项目在tdesign-component文件夹下，相关使用详见[tdesign-component/README_zh.md](./tdesign-component/README_zh.md)
+
+Flutter 组件库项目在 tdesign-component 文件夹下，相关使用详见[tdesign-component/README_zh.md](./tdesign-component/README_zh.md)
 
 # 其他技术栈实现
+
 - 桌面端 Vue 3 实现：[web-vue-next](https://github.com/Tencent/tdesign-vue-next)
 - 桌面端 React 实现： [web-react](https://github.com/Tencent/tdesign-react)
 - 移动端小程序实现： [小程序](https://github.com/Tencent/tdesign-miniprogram)
 
 # 交流反馈
 
- <img src="feedback.png" width = "200" height = "200" alt="feedback" align=center />
+<img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/components/src/images/groups/flutter-group.png" width="200" />
 
 # 开源协议
 
