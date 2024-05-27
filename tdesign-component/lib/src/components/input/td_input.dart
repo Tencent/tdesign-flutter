@@ -358,7 +358,14 @@ class TDInput extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: controller != null && controller!.text.isNotEmpty && needClear,
+                visible: rightWidget != null,
+                child: Container(
+                  margin: EdgeInsets.only(top: getInputPadding(), bottom: getInputPadding(), right: 16),
+                  child: rightWidget,
+                ),
+              ),
+              Visibility(
+                visible: controller != null && controller!.text.isNotEmpty && needClear && rightWidget == null,
                 child: GestureDetector(
                     child: Container(
                       margin: EdgeInsets.only(left: 17.5, right: 16, top: additionInfo != '' ? getInputPadding() : 0),
