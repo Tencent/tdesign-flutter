@@ -729,7 +729,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | title | String | - | 标题内容 |
-| action |  Function() | - | 点击操作 |
+| action |  Function()? | - | 点击操作 |
 | titleColor | Color? | - | 标题颜色 |
 | style | TDButtonStyle? | - | 按钮样式 |
 | type | TDButtonType? | - | 按钮类型 |
