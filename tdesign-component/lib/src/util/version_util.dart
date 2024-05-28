@@ -11,7 +11,7 @@ class VersionUtil {
     return  Platform.version.split(' ').first;
   }
 
-  /// 是否大于等于当前版本号
+  /// 当前版本号是否大于等于目标版本号
   static bool isAfterThen(String target){
     try {
       if(PlatformUtil.isWeb){
@@ -30,7 +30,7 @@ class VersionUtil {
             if(targetVersion == currentVersion){
               continue;
             }
-            return targetVersion > currentVersion;
+            return currentVersion > targetVersion;
           }
       return true;
     } catch (e) {
