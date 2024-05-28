@@ -307,7 +307,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| showText |  |   required String? text,  required BuildContext context,  Duration duration, | 普通文本Toast |
+| showText |  |   required String? text,  required BuildContext context,  Duration duration,  int? maxLines,  BoxConstraints? constraints, | 普通文本Toast |
 | showIconText |  |   required String? text,  IconData? icon,  IconTextDirection direction,  required BuildContext context,  Duration duration, | 带图标的Toast |
 | showSuccess |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration, | 成功提示Toast |
 | showWarning |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration, | 警告Toast |
