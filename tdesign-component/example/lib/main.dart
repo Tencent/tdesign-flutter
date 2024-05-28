@@ -36,7 +36,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late TDThemeData _themeData;
-  Locale? locale;
+  Locale? locale = const Locale('zh');
 
   @override
   void initState() {
