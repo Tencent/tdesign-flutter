@@ -25,6 +25,7 @@ import 'page/td_input_page.dart';
 import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
 import 'page/td_navbar_page.dart';
+import 'page/td_notice_bar_page.dart';
 import 'page/td_picker_page.dart';
 import 'page/td_popup_page.dart';
 import 'page/td_radio_page.dart';
@@ -213,6 +214,8 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TDDropdownMenuPage())),
     ExamplePageModel(
         text: 'Loading 加载', name: 'loading', pageBuilder: _wrapInheritedTheme((context) => const TDLoadingPage())),
+    ExamplePageModel(
+        text: 'NoticeBar 滚动通知', name: 'notice-bar', pageBuilder: _wrapInheritedTheme((context) => const TDNoticeBarPage())),
     ExamplePageModel(
         text: 'Message 消息通知',
         name: 'message',
