@@ -92,6 +92,7 @@
 ./bin/demo_tool generate --file ../lib/src/components/loading/td_loading.dart --name TDLoading --folder-name loading --output ../example/assets/api/ --only-api
 # message
 # noticeBar
+./bin/demo_tool generate --file ./lib/src/components/notice_bar/td_notice_bar.dart --name TDNoticeBar --folder-name notice-bar --output ../example/assets/api/ --only-api --get-comments
 # overlay
 # popup
 ./bin/demo_tool generate --folder ../lib/src/components/popup --name TDSlidePopupRoute,TDPopupBottomDisplayPanel,TDPopupBottomConfirmPanel,TDPopupCenterPanel --folder-name popup --output ../example/assets/api/ --only-api --get-comments
