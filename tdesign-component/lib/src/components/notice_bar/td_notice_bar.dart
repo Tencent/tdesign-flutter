@@ -11,6 +11,7 @@ enum TdNoticeBarType {
   step,
 }
 
+/// 用于警告或提示
 class TDNoticeBar extends StatefulWidget {
   const TDNoticeBar({
     super.key,
