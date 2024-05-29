@@ -16,7 +16,7 @@ class TDNoticeBarPage extends StatelessWidget {
     return ExamplePage(
       title: tdTitle(context),
       exampleCodeGroup: 'noticeBar',
-      desc: '用于反馈或提示。',
+      desc: '用于警告或提示。',
       children: [
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '纯文字通知', builder: _textNoticeBar),
