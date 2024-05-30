@@ -22,9 +22,9 @@ class TDNoticeBar extends StatefulWidget {
     this.right,
     this.backgroundColor = Colors.white,
     this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-    this.duration = 2000,
-    this.stepDuration = 2000,
-    this.type = TdNoticeBarType.none,
+    this.duration = 3000,
+    this.interval = 2000,
+    this.type = TdNoticeBarType.scroll,
   });
 
   /// 显示内容
@@ -48,11 +48,11 @@ class TDNoticeBar extends StatefulWidget {
   /// 内边距
   final EdgeInsetsGeometry? padding;
 
-  /// 滚动周期
+  /// 滚动周期（毫秒）
   final int? duration;
 
-  /// 步进滚动停留时间
-  final int? stepDuration;
+  /// 步进滚动间隔时间（毫秒）
+  final int? interval;
 
   /// 滚动类型
   final TdNoticeBarType? type;
@@ -73,7 +73,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     if (widget.duration! <= 0) {
       throw Exception('duration must not be less than 0');
     }
-    if (widget.stepDuration! <= 0) {
+    if (widget.interval! <= 0) {
       throw Exception('stepDuration must not be less than 0');
     }
     _scrollController = ScrollController();
@@ -121,7 +121,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     var index = 0;
     var offset = 0.0;
     _scrollController.jumpTo(0);
-    await Future.delayed(Duration(milliseconds: widget.stepDuration!), () {
+    await Future.delayed(Duration(milliseconds: widget.interval!), () {
       offset += _size.width;
       _scrollController.animateTo(offset,
           duration: Duration(milliseconds: widget.duration!),
@@ -129,7 +129,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
       index++;
     });
     _timer = Timer.periodic(
-        Duration(milliseconds: widget.stepDuration! + widget.duration!),
+        Duration(milliseconds: widget.interval! + widget.duration!),
         (Timer timer) {
       if (index > widget.textList!.length - 1) {
         index = 0;

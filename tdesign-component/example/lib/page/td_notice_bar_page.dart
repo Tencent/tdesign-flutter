@@ -53,7 +53,7 @@ Widget _stepNoticeBar(BuildContext context) {
   return const TDNoticeBar(
     textList: ['这是第一条通知', '这是第二条通知', '这是第三条通知'],
     type: TdNoticeBarType.step,
-    stepDuration: 2000,
+    interval: 2000,
     duration: 1000,
   );
 }
@@ -74,7 +74,7 @@ Widget _stepIconNoticeBar(BuildContext context) {
   return TDNoticeBar(
     textList: const ['这是第一条通知', '这是第二条通知', '这是第三条通知'],
     type: TdNoticeBarType.step,
-    stepDuration: 2000,
+    interval: 2000,
     duration: 1000,
     left: Icon(TDIcons.sound, color: TDTheme.of(context).brandNormalColor),
     right: Icon(TDIcons.chevron_right, color: TDTheme.of(context).grayColor8),
