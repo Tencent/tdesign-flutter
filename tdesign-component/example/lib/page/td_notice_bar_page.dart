@@ -36,7 +36,7 @@ class TDNoticeBarPage extends StatelessWidget {
 
 @Demo(group: 'noticeBar')
 Widget _textNoticeBar(BuildContext context) {
-  return const TDNoticeBar(text: '这是静止的通知内容');
+  return const TDNoticeBar(text: '这是静止的通知内容', type: TdNoticeBarType.none);
 }
 
 @Demo(group: 'noticeBar')
