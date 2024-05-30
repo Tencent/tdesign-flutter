@@ -15,8 +15,8 @@ enum TdNoticeBarType {
 class TDNoticeBar extends StatefulWidget {
   const TDNoticeBar({
     super.key,
-    this.text,
-    this.textList,
+    this.context,
+    this.contexts,
     this.textStyle,
     this.left,
     this.right,
@@ -25,13 +25,14 @@ class TDNoticeBar extends StatefulWidget {
     this.duration = 3000,
     this.interval = 2000,
     this.type = TdNoticeBarType.scroll,
+    this.direction = Axis.horizontal,
   });
 
-  /// 显示内容
-  final String? text;
+  /// 文本内容
+  final String? context;
 
   /// 步进滚动内容
-  final List<String>? textList;
+  final List<String>? contexts;
 
   /// 文字样式
   final TextStyle? textStyle;
@@ -56,6 +57,9 @@ class TDNoticeBar extends StatefulWidget {
 
   /// 滚动类型
   final TdNoticeBarType? type;
+
+  /// 滚动方向（步进可选）
+  final Axis? direction;
 
   @override
   State<StatefulWidget> createState() => _TDNoticeBarState();
@@ -98,8 +102,11 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
   }
 
   void _scrollScroll() {
-    if (widget.text == null) {
+    if (widget.context == null) {
       throw Exception('text must not be null when type is scroll');
+    }
+    if (widget.direction == Axis.vertical) {
+      throw Exception('direction must be horizontal when type is scroll');
     }
     _scrollController.jumpTo(0);
     _scrollController.animateTo(_size.width,
@@ -115,14 +122,16 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
   }
 
   Future<void> _stepScroll() async {
-    if (widget.textList == null) {
+    if (widget.contexts == null || widget.contexts!.isEmpty) {
       throw Exception('textList must not be null when type is step');
     }
     var index = 0;
     var offset = 0.0;
+    var scrollDistance =
+        widget.direction == Axis.horizontal ? _size.width : _getFontSize();
     _scrollController.jumpTo(0);
     await Future.delayed(Duration(milliseconds: widget.interval!), () {
-      offset += _size.width;
+      offset += scrollDistance;
       _scrollController.animateTo(offset,
           duration: Duration(milliseconds: widget.duration!),
           curve: Curves.linear);
@@ -131,12 +140,12 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     _timer = Timer.periodic(
         Duration(milliseconds: widget.interval! + widget.duration!),
         (Timer timer) {
-      if (index > widget.textList!.length - 1) {
+      if (index > widget.contexts!.length - 1) {
         index = 0;
         offset = 0;
         _scrollController.jumpTo(0);
       }
-      offset += _size.width;
+      offset += scrollDistance;
       index++;
       _scrollController.animateTo(offset,
           duration: Duration(milliseconds: widget.duration!),
@@ -144,46 +153,64 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     });
   }
 
-  Widget _children() {
-    if (widget.textList != null) {
-      return Row(
-        children: [
-          for (var i = 0; i < widget.textList!.length; i++)
-            SizedBox(
-              width: _size.width,
-              child: Text(
-                widget.textList![i],
-                style: widget.textStyle,
-              ),
-            ),
-          SizedBox(width: _size.width, child: Text(widget.textList![0]))
-        ],
-      );
+  Widget _buildWidget() {
+    if (widget.direction == Axis.horizontal) {
+      return Row(children: _children());
     }
-    return Row(
-      children: [
-        SizedBox(
-          width: _size.width,
-          child: Text(
-            widget.text!,
-            style: widget.textStyle,
+    return Column(children: _children());
+  }
+
+  List<Widget> _children() {
+    if (widget.contexts != null) {
+      var items = <Widget>[];
+      for (var i = 0; i < widget.contexts!.length; i++) {
+        items.add(
+          SizedBox(
+            width: _size.width,
+            child: Text(
+              widget.contexts![i],
+              style: widget.textStyle,
+            ),
           ),
+        );
+      }
+      items.add(SizedBox(width: _size.width, child: Text(widget.contexts![0])));
+      return items;
+    }
+    return [
+      SizedBox(
+        width: _size.width,
+        child: Text(
+          widget.context!,
+          style: widget.textStyle,
         ),
-        SizedBox(
-          width: _size.width,
-          child: Text(
-            widget.text!,
-            style: widget.textStyle,
-          ),
-        )
-      ],
-    );
+      ),
+      SizedBox(
+        width: _size.width,
+        child: Text(
+          widget.context!,
+          style: widget.textStyle,
+        ),
+      ),
+    ];
+  }
+
+  double _getFontSize() {
+    final textPainter = TextPainter(
+      text: TextSpan(
+        text: widget.context ?? widget.contexts![0],
+        style: widget.textStyle,
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout(maxWidth: _size.width);
+    return textPainter.size.height;
   }
 
   @override
   Widget build(BuildContext context) {
     _size = MediaQuery.of(context).size;
     return Container(
+      height: _getFontSize() + widget.padding!.vertical,
       padding: widget.padding,
       decoration: BoxDecoration(
         color: widget.backgroundColor,
@@ -200,10 +227,10 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
           Expanded(
               key: _key,
               child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+                  scrollDirection: widget.direction!,
                   controller: _scrollController,
                   physics: const NeverScrollableScrollPhysics(),
-                  child: _children())),
+                  child: _buildWidget())),
           Visibility(
             visible: widget.right != null,
             child: Container(
