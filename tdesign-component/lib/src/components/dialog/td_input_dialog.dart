@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 import 'td_dialog_widget.dart';
 
 /// 带有输入框的弹窗
@@ -113,9 +114,9 @@ class TDInputDialog extends StatelessWidget {
 
   Widget _horizontalButtons(BuildContext context) {
     final left = leftBtn ??
-        TDDialogButtonOptions(title: '取消', titleColor: const Color(0xE6000000), fontWeight: FontWeight.normal, action: () {}, height: 56);
+        TDDialogButtonOptions(title: context.resource.cancel, titleColor: const Color(0xE6000000), fontWeight: FontWeight.normal, action: null, height: 56);
     final right = rightBtn ??
-        TDDialogButtonOptions(title: '确定', action: () {}, fontWeight: FontWeight.w600, height: 56);
+        TDDialogButtonOptions(title: context.resource.confirm, action: null, fontWeight: FontWeight.w600, height: 56);
     return HorizontalTextButtons(
       leftBtn: left,
       rightBtn: right,

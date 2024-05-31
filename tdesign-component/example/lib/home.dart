@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'base/example_base.dart';
@@ -13,13 +14,20 @@ var _kShowTodoComponent = false;
 /// 切换主题的回调
 typedef OnThemeChange = Function(TDThemeData themeData);
 
+/// 切换语言的回调
+typedef OnLocaleChange = Function(Locale locale);
+
 /// 示例首页
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title, this.onThemeChange}) : super(key: key);
+  const MyHomePage({Key? key, required this.title, this.onThemeChange, this.locale, this.onLocaleChange,}) : super(key: key);
 
   final String title;
 
   final OnThemeChange? onThemeChange;
+
+  final OnLocaleChange? onLocaleChange;
+
+  final Locale? locale;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -28,14 +36,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool useConch = false;
 
-  late TDThemeData _themeData;
-
   @override
   void initState() {
     super.initState();
     TDExampleRoute.init();
     sideBarExamplePage.forEach(TDExampleRoute.add);
-    _themeData = TDThemeData.defaultData();
   }
 
   @override
@@ -51,10 +56,13 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
+        backgroundColor: TDTheme.of(context).brandNormalColor,
+        titleTextStyle: TextStyle(color:TDTheme.of(context).whiteColor1, fontSize: TDTheme.of(context).fontTitleLarge?.size),
         title: Text(widget.title),
         actions: ScreenUtil.isWebLargeScreen(context)
             ? null
             : [
+
           GestureDetector(
             child: Container(
               alignment: Alignment.centerRight,
@@ -62,7 +70,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 right: 16,
               ),
               child: TDText(
-                '关于',
+                widget.locale?.languageCode == 'en' ? '中文' : 'English',
+                textColor: TDTheme.of(context).whiteColor1,
+              ),
+            ),
+            onTap: () {
+              if(widget.locale?.languageCode == 'en') {
+                widget.onLocaleChange?.call(const Locale('zh'));
+              } else {
+                widget.onLocaleChange?.call(const Locale('en'));
+              }
+            },
+          ),
+          GestureDetector(
+            child: Container(
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(
+                right: 16,
+              ),
+              child: TDText(
+                AppLocalizations.of(context)?.about,
                 textColor: TDTheme.of(context).whiteColor1,
               ),
             ),
@@ -103,32 +130,26 @@ class _MyHomePageState extends State<MyHomePage> {
           TDTheme(
               data: TDThemeData.defaultData(),
               child: TDButton(
-                text: '默认主题',
+                text: AppLocalizations.of(context)?.defaultTheme,
                 theme: TDButtonTheme.primary,
                 onTap: () {
                   widget.onThemeChange?.call(TDTheme.defaultData());
-                  // setState(() {
-                  //   _themeData = TDTheme.defaultData();
-                  // });
                 },
               )),
           TDTheme(
               data: TDThemeData.fromJson('green', greenThemeConfig) ?? TDThemeData.defaultData(),
               child: TDButton(
-                  text: '绿色主题',
+                  text: AppLocalizations.of(context)?.greenTheme,
                   theme: TDButtonTheme.primary,
                   onTap: () async {
                     var jsonString = await rootBundle.loadString('assets/theme.json');
                     var newData = TDThemeData.fromJson('green', jsonString);
                     widget.onThemeChange?.call(newData ?? TDTheme.defaultData());
-                    // setState(() {
-                    //   _themeData = newData ?? TDTheme.defaultData();
-                    // });
                   })),
           TDTheme(
               data: TDThemeData.fromJson('red', greenThemeConfig) ?? TDThemeData.defaultData(),
               child: TDButton(
-                  text: '红色主题',
+                  text: AppLocalizations.of(context)?.redTheme,
                   theme: TDButtonTheme.danger,
                   onTap: () async {
                     var jsonString = await rootBundle.loadString('assets/theme.json');
