@@ -35,8 +35,8 @@ docClass: timeline
 - `TDToast`:
   - add: Toast增加自定义文本长度的属性 ([#148](https://github.com/Tencent/tdesign-flutter/issues/148))
 - `TDSideBar`:
-  - add: 新增选中样式,以及自定义文本边框 ([#69](https://github.com/Tencent/tdesign-flutter/issues/69))
-  - add: 新增选中样式,以及自定义文本边框 ([#67](https://github.com/Tencent/tdesign-flutter/issues/67))
+  - add: 新增选中样式 ([#69](https://github.com/Tencent/tdesign-flutter/issues/69))
+  - add: 新增以及自定义文本边距 ([#67](https://github.com/Tencent/tdesign-flutter/issues/67))
 
 
 ### 🐞 Bug Fixes
