@@ -29,8 +29,8 @@
 - `TDToast`:
   - add: Toast added attribute for custom text length ([#148](https://github.com/Tencent/tdesign-flutter/issues/148))
 - `TDSideBar`:
-  - add: Added selected style, and custom text border ([#69](https://github.com/Tencent/tdesign-flutter/issues/69))
-  - add: Added selected style, and custom text border ([#67](https://github.com/Tencent/tdesign-flutter/issues/67))
+  - add: Added selected style ([#69](https://github.com/Tencent/tdesign-flutter/issues/69))
+  - add: Added custom text padding ([#67](https://github.com/Tencent/tdesign-flutter/issues/67))
 
 ### 🐞 Bug Fixes
 - `TDButton`:
