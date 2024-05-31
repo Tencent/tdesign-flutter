@@ -68,7 +68,10 @@ class TDCheckbox extends StatefulWidget {
       this.cardMode = false,
       this.showDivider = true,
       this.contentDirection = TDContentDirection.right,
-      this.onCheckBoxChanged})
+      this.onCheckBoxChanged,
+      this.titleColor,
+      this.subTitleColor,
+      this.checkBoxLeftSpace})
       : super(key: key);
 
   /// id
@@ -139,6 +142,14 @@ class TDCheckbox extends StatefulWidget {
   /// 禁用选择颜色
   final Color? disableColor;
 
+  /// 标题文字颜色
+  final Color? titleColor;
+
+  /// 副标题文字颜色
+  final Color? subTitleColor;
+
+  /// 选项框左侧间距
+  final double? checkBoxLeftSpace;
   @override
   State createState() => TDCheckboxState();
 
@@ -279,8 +290,9 @@ class TDCheckboxState extends State<TDCheckbox> {
                           child: TDText(widget.subTitle ?? '',
                               maxLines: widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
-                              textColor:
-                                  widget.enable ? TDTheme.of(context).fontGyColor3 : TDTheme.of(context).fontGyColor4,
+                              textColor: widget.enable
+                                  ? (widget.subTitleColor ?? TDTheme.of(context).fontGyColor3)
+                                  : TDTheme.of(context).fontGyColor4,
                               font: TDTheme.of(context).fontBodyMedium),
                         ),
                       )
@@ -309,7 +321,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 16),
+                            padding: EdgeInsets.only(left: widget.checkBoxLeftSpace ?? 16),
                             child: icon,
                           ),
                           SizedBox(
@@ -332,8 +344,9 @@ class TDCheckboxState extends State<TDCheckbox> {
                           child: TDText(widget.subTitle ?? '',
                               maxLines: widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
-                              textColor:
-                                  widget.enable ? TDTheme.of(context).fontGyColor3 : TDTheme.of(context).fontGyColor4,
+                              textColor: widget.enable
+                                  ? (widget.subTitleColor ?? TDTheme.of(context).fontGyColor3)
+                                  : TDTheme.of(context).fontGyColor4,
                               font: widget.subTitleFont ?? TDTheme.of(context).fontBodyMedium),
                         ),
                       )
@@ -452,7 +465,9 @@ class TDCheckboxState extends State<TDCheckbox> {
         content = TDText(title,
             maxLines: widget.titleMaxLine ?? groupState?.widget.titleMaxLine,
             overflow: TextOverflow.ellipsis,
-            textColor: widget.enable ? TDTheme.of(context).fontGyColor1 : TDTheme.of(context).fontGyColor4,
+            textColor: widget.enable
+                ? (widget.titleColor ?? TDTheme.of(context).fontGyColor1)
+                : TDTheme.of(context).fontGyColor4,
             font: widget.titleFont ??
                 TDTheme.of(context)
                     .fontBodyLarge); // TODO custom fontSize https://github.com/Tencent/tdesign-flutter/issues/66

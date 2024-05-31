@@ -1,0 +1,21 @@
+
+  Widget _setLabel(BuildContext context) {
+    return TDTextarea(
+      controller: controller[9],
+      label: '地址信息',
+      // labelWidth: 100,
+      labelIcon: Icon(
+        TDIcons.location,
+        size: 20,
+        color: TDTheme.of(context).fontGyColor1,
+      ),
+      hintText: '请输入文字',
+      maxLines: 4,
+      minLines: 4,
+      maxLength: 500,
+      indicator: true,
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }

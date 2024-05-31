@@ -74,7 +74,7 @@ class TDDialogScaffold extends StatelessWidget {
 class TDDialogTitle extends StatelessWidget {
   const TDDialogTitle({
     Key? key,
-    this.title = '对话框标题',
+    this.title,
     this.titleColor = Colors.black,
   }) : super(key: key);
 
@@ -82,7 +82,7 @@ class TDDialogTitle extends StatelessWidget {
   final Color titleColor;
 
   /// 标题文字
-  final String title;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +101,7 @@ class TDDialogTitle extends StatelessWidget {
 class TDDialogContent extends StatelessWidget {
   const TDDialogContent({
     Key? key,
-    this.content = '当前弹窗内容',
+    this.content,
     this.contentColor = const Color(0x99000000),
   }) : super(key: key);
 
@@ -109,7 +109,7 @@ class TDDialogContent extends StatelessWidget {
   final Color contentColor;
 
   /// 标题文字
-  final String content;
+  final String? content;
 
   @override
   Widget build(BuildContext context) {
@@ -238,8 +238,11 @@ class HorizontalNormalButtons extends StatelessWidget {
               height: leftBtn.height,
               buttonTextFontWeight: leftBtn.fontWeight ?? FontWeight.w600,
               onPressed: () {
-                Navigator.pop(context);
-                leftBtn.action();
+                if(leftBtn.action != null){
+                  leftBtn.action!();
+                } else {
+                  Navigator.pop(context);
+                }
               },
             ),
           ),
@@ -257,8 +260,11 @@ class HorizontalNormalButtons extends StatelessWidget {
               height: rightBtn.height,
               buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
               onPressed: () {
-                Navigator.pop(context);
-                rightBtn.action();
+                if(rightBtn.action != null) {
+                  rightBtn.action!();
+                } else {
+                  Navigator.pop(context);
+                }
               },
             ),
           ),
@@ -301,8 +307,11 @@ class HorizontalTextButtons extends StatelessWidget {
                 height: leftBtn.height,
                 buttonTextFontWeight: leftBtn.fontWeight,
                 onPressed: () {
-                  Navigator.pop(context);
-                  leftBtn.action();
+                  if(leftBtn.action != null){
+                    leftBtn.action!();
+                  } else {
+                    Navigator.pop(context);
+                  }
                 },
               ),
             ),
@@ -320,8 +329,11 @@ class HorizontalTextButtons extends StatelessWidget {
                 height: rightBtn.height,
                 buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
                 onPressed: () {
-                  Navigator.pop(context);
-                  rightBtn.action();
+                  if(rightBtn.action != null){
+                    rightBtn.action!();
+                  } else {
+                    Navigator.pop(context);
+                  }
                 },
               ),
             ),
@@ -336,7 +348,7 @@ class HorizontalTextButtons extends StatelessWidget {
 class TDDialogButton extends StatelessWidget {
   const TDDialogButton({
     Key? key,
-    this.buttonText = '按钮',
+    this.buttonText,
     this.buttonTextColor,
     this.buttonTextFontWeight = FontWeight.w600,
     this.buttonStyle,

@@ -34,6 +34,10 @@ class TDRadio extends TDCheckbox {
     this.radioStyle = TDRadioStyle.circle,
     TDContentDirection contentDirection = TDContentDirection.right,
     IconBuilder? customIconBuilder,
+    Color? titleColor,
+    Color? subTitleColor,
+    Color? backgroundColor,
+   double? checkBoxLeftSpace
   }) : super(
           id: id,
           key: key,
@@ -53,6 +57,10 @@ class TDRadio extends TDCheckbox {
           customIconBuilder: customIconBuilder,
           selectColor: selectColor,
           disableColor: disableColor,
+          titleColor: titleColor,
+          subTitleColor: subTitleColor,
+          backgroundColor: backgroundColor,
+          checkBoxLeftSpace:checkBoxLeftSpace
         );
 
   @override
@@ -131,7 +139,7 @@ class TDRadioState extends TDCheckboxState {
         canNotCancel = true;
       }
     }
-    return super.build(context);
+    return  super.build(context);
   }
 }
 

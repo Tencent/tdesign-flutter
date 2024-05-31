@@ -23,7 +23,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _imageClip(BuildContext context) {
+  Widget _imageClip(BuildContext context)  {
+
     return Row(
       children: [
         const SizedBox(
@@ -40,9 +41,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
               ),
             ),
-            const TDImage(
-              assetUrl: 'assets/img/image.png',
-              type: TDImageType.clip,
+             const TDImage(
+               assetUrl: 'assets/img/image.png',
+               type: TDImageType.clip,
             ),
           ],
         ),
@@ -421,6 +422,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | loadingWidget | Widget? | - | 加载自定义提示 |
 | width | double? | - | 自定义宽 |
 | height | double? | - | 自定义高 |
+| fit | BoxFit? | - | 适配样式 |
 | frameBuilder | ImageFrameBuilder? | - | 以下系统Image属性，释义请参考系统[Image]中注释 |
 | loadingBuilder |  | - |  |
 | errorBuilder |  | - |  |
@@ -439,6 +441,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | cacheHeight |  | - |  |
 | cacheWidth |  | - |  |
 | assetUrl | String? | - | 本地素材地址 |
+| imageFile | File? | - | 图片文件路径 |
 
 
   

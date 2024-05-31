@@ -92,6 +92,55 @@
     );
 ```
 
+# 国际化
+TD组件库内部不内置国际化语言,但支持与flutter的国际化能力搭配使用.可以继承TDResourceDelegate类,该类抽离了组件内部所有文字资源,重新获取文字的方法,进行国际化处理,并通过 TDTheme.setResourceBuilder 注入.
+示例代码:
+
+1. 重写TDResourceDelegate类:
+```
+/// 国际化资源代理
+class IntlResourceDelegate extends TDResourceDelegate {
+  IntlResourceDelegate(this.context);
+
+  BuildContext context;
+
+  /// 国际化需要每次更新context
+  updateContext(BuildContext context){
+    this.context = context;
+  }
+
+  @override
+  String get cancel => AppLocalizations.of(context)!.cancel;
+
+  @override
+  String get confirm => AppLocalizations.of(context)!.confirm;
+
+}
+```
+
+
+2.注入TDResourceDelegate类:
+```
+    var delegate = IntlResourceDelegate(context);
+    return MaterialApp(
+      home: Builder(
+        builder: (context) {
+          // 设置文案代理,国际化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
+          TDTheme.setResourceBuilder((context) => delegate..updateContext(context), needAlwaysBuild: true);
+          return MyHomePage(
+            title: AppLocalizations.of(context)?.components ?? '',
+          );
+        },
+      ),
+      // 设置国际化处理
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+    );
+```
+
+3.flutter国际化配置方法,官方文档:[Flutter 应用里的国际化](https://docs.flutter.cn/ui/accessibility-and-internationalization/internationalization)
+
 # 开发规范
 - 组件命名规范：以TD为前缀，组件名称、API名称参考TDesign现有组件和API命名，可以根据flutter原生Widget的特点进行修改。组件API以满足设计要求和使用为准，可根据flutter特点做精简或定制。
 - 组件库用到的所有色值、圆角、字体字号等样式属性需全部定义在主题中。
@@ -99,6 +148,7 @@
 - 对于系统原有组件，如Text,Image等，应兼容系统原组件功能，只能扩展，不能阉割，以免业务需要使用系统功能时，必须放弃TDesign控件。
 - 示例页面尽量使用ExamplePage+ExampleModule+ExampleItem组合，按照示例稿的布局实现；页面写完后，在main.dart中修改exampleMap对应组件的isTodo属性即可。
 - 组件API和演示代码，请参考`demo_tool/README.md`文件。
+- 组件内部的固定文案,都应该抽离到TDResourceDelegate中统一管理,方便业务进行国际化适配
 
 # 共建流程
 - 拉取开发分支：建议将项目fork到自己github,每个组件从main分支拉取对应开发分支，命名为feature/组件名小写_下划线
@@ -113,7 +163,10 @@
 
 ## 常见问题
 
-- Flutter 3.16之后,修改了渲染引擎,导致启用forceVerticalCenter参数的组件字体偏移更多,不再居中.可以通过设置kTextForceVerticalCenterEnable=false来禁用字体居中功能,让组件显示与官方Text一致
+- 文本居中:
+ > 0.1.4版本:Flutter 3.16之后,修改了渲染引擎,导致启用forceVerticalCenter参数的组件字体偏移更多,不再居中.可以通过设置kTextForceVerticalCenterEnable=false来禁用字体居中功能,让组件显示与官方Text一致
+ > 
+ > 0.1.5版本:适配了Android和iOS双端基础系统字体的中文居中,其他语言的字体,可以通过重写TDTextPaddingConfig的paddingRate和paddingExtraRate进行自定义适配,TDTextPaddingConfig使用方法可参考TDTextPage.
 
 
 # SDK依赖版本
@@ -128,7 +181,7 @@ flutter: ">=3.7.0"
 
 # 交流反馈
 
- <img src="../feedback.png" width = "200" height = "200" alt="feedback" align=center />
+ <img src="../tdesign-site/site/public/assets/qrcode/feedback.png" width = "200" height = "200" alt="feedback" align=center />
 
 
 # 开源协议

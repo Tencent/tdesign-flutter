@@ -1,0 +1,14 @@
+
+  Widget _disabledState(BuildContext context) {
+    return TDTextarea(
+      controller: controller[4],
+      label: '标签文字',
+      hintText: '不可编辑文字',
+      maxLines: 4,
+      minLines: 4,
+      readOnly: true,
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }
