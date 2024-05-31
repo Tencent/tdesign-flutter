@@ -1,0 +1,17 @@
+
+  Widget _extensionStyle(BuildContext context) {
+    return TDTextarea(
+      controller: controller[7],
+      label: '标签文字',
+      hintText: '请输入文字',
+      maxLines: 4,
+      minLines: 4,
+      maxLength: 500,
+      indicator: true,
+      layout: TDTextareaLayout.vertical,
+      bordered: true,
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }

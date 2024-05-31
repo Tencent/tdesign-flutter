@@ -36,6 +36,7 @@ class TDImage extends StatefulWidget {
     this.loadingWidget,
     this.width,
     this.height,
+    this.fit,
     this.frameBuilder,
     this.loadingBuilder,
     this.errorBuilder,
@@ -62,7 +63,7 @@ class TDImage extends StatefulWidget {
 
   /// 本地素材地址
   final String? assetUrl;
-  
+
   /// 图片文件路径
   final File? imageFile;
 
@@ -80,6 +81,9 @@ class TDImage extends StatefulWidget {
 
   /// 自定义高
   final double? height;
+
+  /// 适配样式
+  final BoxFit? fit;
 
   /// 以下系统Image属性，释义请参考系统[Image]中注释
 
@@ -117,8 +121,6 @@ class TDImage extends StatefulWidget {
 
   final int? cacheWidth;
 
-
-
   @override
   State<StatefulWidget> createState() => _TDImageState();
 }
@@ -136,7 +138,7 @@ class _TDImageState extends State<TDImage> {
                     width: widget.width ?? 72,
                     errorWidget: widget.errorWidget,
                     loadingWidget: widget.loadingWidget,
-                    fit: BoxFit.none,
+                    fit: widget.fit ?? BoxFit.none,
                     color: widget.color,
                     frameBuilder: widget.frameBuilder,
                     loadingBuilder: widget.loadingBuilder,
@@ -161,7 +163,7 @@ class _TDImageState extends State<TDImage> {
                     height: widget.height ?? 72,
                     errorWidget: widget.errorWidget,
                     loadingWidget: widget.loadingWidget,
-                    fit: BoxFit.none,
+                    fit: widget.fit ?? BoxFit.none,
                     color: widget.color,
                     frameBuilder: widget.frameBuilder,
                     errorBuilder: widget.errorBuilder,
@@ -183,7 +185,7 @@ class _TDImageState extends State<TDImage> {
                 widget.imageFile,
                 width: widget.width ?? 72,
                 height: widget.height ?? 72,
-                fit: BoxFit.none,
+                fit: widget.fit ?? BoxFit.none,
                 color: widget.color,
                 frameBuilder: widget.frameBuilder,
                 errorBuilder: widget.errorBuilder,
@@ -209,7 +211,7 @@ class _TDImageState extends State<TDImage> {
                     width: widget.width ?? 72,
                     errorWidget: widget.errorWidget,
                     loadingWidget: widget.loadingWidget,
-                    fit: BoxFit.fitHeight,
+                    fit: widget.fit ?? BoxFit.fitHeight,
                     color: widget.color,
                     frameBuilder: widget.frameBuilder,
                     loadingBuilder: widget.loadingBuilder,
@@ -234,7 +236,7 @@ class _TDImageState extends State<TDImage> {
                     height: widget.height ?? 72,
                     errorWidget: widget.errorWidget,
                     loadingWidget: widget.loadingWidget,
-                    fit: BoxFit.fitHeight,
+                    fit: widget.fit ?? BoxFit.fitHeight,
                     color: widget.color,
                     frameBuilder: widget.frameBuilder,
                     errorBuilder: widget.errorBuilder,
@@ -256,7 +258,7 @@ class _TDImageState extends State<TDImage> {
                 widget.imageFile,
                 width: widget.width ?? 72,
                 height: widget.height ?? 72,
-                fit: BoxFit.fitHeight,
+                fit: widget.fit ?? BoxFit.fitHeight,
                 color: widget.color,
                 frameBuilder: widget.frameBuilder,
                 errorBuilder: widget.errorBuilder,
@@ -284,7 +286,7 @@ class _TDImageState extends State<TDImage> {
                       width: widget.width ?? 72,
                       errorWidget: widget.errorWidget,
                       loadingWidget: widget.loadingWidget,
-                      fit: BoxFit.fill,
+                      fit: widget.fit ?? BoxFit.fill,
                       color: widget.color,
                       frameBuilder: widget.frameBuilder,
                       loadingBuilder: widget.loadingBuilder,
@@ -312,7 +314,7 @@ class _TDImageState extends State<TDImage> {
                       height: widget.height ?? 72,
                       errorWidget: widget.errorWidget,
                       loadingWidget: widget.loadingWidget,
-                      fit: BoxFit.fill,
+                      fit: widget.fit ?? BoxFit.fill,
                       color: widget.color,
                       frameBuilder: widget.frameBuilder,
                       errorBuilder: widget.errorBuilder,
@@ -335,7 +337,7 @@ class _TDImageState extends State<TDImage> {
                 widget.imageFile,
                 width: widget.width ?? 72,
                 height: widget.height ?? 72,
-                fit: BoxFit.fill,
+                fit: widget.fit ?? BoxFit.fill,
                 color: widget.color,
                 frameBuilder: widget.frameBuilder,
                 errorBuilder: widget.errorBuilder,
@@ -361,7 +363,7 @@ class _TDImageState extends State<TDImage> {
                     width: widget.width ?? 72,
                     errorWidget: widget.errorWidget,
                     loadingWidget: widget.loadingWidget,
-                    fit: BoxFit.cover,
+                    fit: widget.fit ?? BoxFit.cover,
                     color: widget.color,
                     frameBuilder: widget.frameBuilder,
                     loadingBuilder: widget.loadingBuilder,
@@ -386,7 +388,7 @@ class _TDImageState extends State<TDImage> {
                     height: widget.height ?? 72,
                     errorWidget: widget.errorWidget,
                     loadingWidget: widget.loadingWidget,
-                    fit: BoxFit.cover,
+                    fit: widget.fit ?? BoxFit.cover,
                     color: widget.color,
                     frameBuilder: widget.frameBuilder,
                     errorBuilder: widget.errorBuilder,
@@ -408,7 +410,7 @@ class _TDImageState extends State<TDImage> {
                 widget.imageFile,
                 width: widget.width ?? 72,
                 height: widget.height ?? 72,
-                fit: BoxFit.cover,
+                fit: widget.fit ?? BoxFit.cover,
                 color: widget.color,
                 frameBuilder: widget.frameBuilder,
                 errorBuilder: widget.errorBuilder,
@@ -439,7 +441,7 @@ class _TDImageState extends State<TDImage> {
                         width: widget.width ?? 72,
                         errorWidget: widget.errorWidget,
                         loadingWidget: widget.loadingWidget,
-                        fit: BoxFit.cover,
+                        fit: widget.fit ?? BoxFit.cover,
                         color: widget.color,
                         frameBuilder: widget.frameBuilder,
                         loadingBuilder: widget.loadingBuilder,
@@ -464,7 +466,7 @@ class _TDImageState extends State<TDImage> {
                         height: widget.height ?? 72,
                         errorWidget: widget.errorWidget,
                         loadingWidget: widget.loadingWidget,
-                        fit: BoxFit.cover,
+                        fit: widget.fit ?? BoxFit.cover,
                         color: widget.color,
                         frameBuilder: widget.frameBuilder,
                         errorBuilder: widget.errorBuilder,
@@ -486,7 +488,7 @@ class _TDImageState extends State<TDImage> {
                     widget.imageFile,
                     width: widget.width ?? 72,
                     height: widget.height ?? 72,
-                    fit: BoxFit.cover,
+                    fit: widget.fit ?? BoxFit.cover,
                     color: widget.color,
                     frameBuilder: widget.frameBuilder,
                     errorBuilder: widget.errorBuilder,
@@ -509,39 +511,64 @@ class _TDImageState extends State<TDImage> {
             width: widget.width ?? 72,
             clipBehavior: Clip.hardEdge,
             decoration: const BoxDecoration(shape: BoxShape.circle),
-            child: widget.assetUrl == null
-                ? ImageWidget.network(
-                    widget.imgUrl,
-                    height: widget.height ?? 72,
+            child: widget.imageFile == null
+                ? (widget.assetUrl == null
+                    ? ImageWidget.network(
+                        widget.imgUrl,
+                        height: widget.height ?? 72,
+                        width: widget.width ?? 72,
+                        errorWidget: widget.errorWidget,
+                        loadingWidget: widget.loadingWidget,
+                        fit: widget.fit ?? BoxFit.cover,
+                        color: widget.color,
+                        frameBuilder: widget.frameBuilder,
+                        loadingBuilder: widget.loadingBuilder,
+                        errorBuilder: widget.errorBuilder,
+                        semanticLabel: widget.semanticLabel,
+                        excludeFromSemantics: widget.excludeFromSemantics,
+                        opacity: widget.opacity,
+                        colorBlendMode: widget.colorBlendMode,
+                        alignment: widget.alignment,
+                        repeat: widget.repeat,
+                        centerSlice: widget.centerSlice,
+                        matchTextDirection: widget.matchTextDirection,
+                        gaplessPlayback: widget.gaplessPlayback,
+                        filterQuality: widget.filterQuality,
+                        isAntiAlias: widget.isAntiAlias,
+                        cacheHeight: widget.cacheHeight,
+                        cacheWidth: widget.cacheWidth,
+                      )
+                    : ImageWidget.asset(
+                        widget.assetUrl!,
+                        width: widget.width ?? 72,
+                        height: widget.height ?? 72,
+                        errorWidget: widget.errorWidget,
+                        loadingWidget: widget.loadingWidget,
+                        fit: widget.fit ?? BoxFit.cover,
+                        color: widget.color,
+                        frameBuilder: widget.frameBuilder,
+                        errorBuilder: widget.errorBuilder,
+                        semanticLabel: widget.semanticLabel,
+                        excludeFromSemantics: widget.excludeFromSemantics,
+                        opacity: widget.opacity,
+                        colorBlendMode: widget.colorBlendMode,
+                        alignment: widget.alignment,
+                        repeat: widget.repeat,
+                        centerSlice: widget.centerSlice,
+                        matchTextDirection: widget.matchTextDirection,
+                        gaplessPlayback: widget.gaplessPlayback,
+                        filterQuality: widget.filterQuality,
+                        isAntiAlias: widget.isAntiAlias,
+                        cacheHeight: widget.cacheHeight,
+                        cacheWidth: widget.cacheWidth,
+                      ))
+                : ImageWidget.file(
+                    widget.imageFile!,
                     width: widget.width ?? 72,
+                    height: widget.height ?? 72,
                     errorWidget: widget.errorWidget,
                     loadingWidget: widget.loadingWidget,
-                    fit: BoxFit.cover,
-                    color: widget.color,
-                    frameBuilder: widget.frameBuilder,
-                    loadingBuilder: widget.loadingBuilder,
-                    errorBuilder: widget.errorBuilder,
-                    semanticLabel: widget.semanticLabel,
-                    excludeFromSemantics: widget.excludeFromSemantics,
-                    opacity: widget.opacity,
-                    colorBlendMode: widget.colorBlendMode,
-                    alignment: widget.alignment,
-                    repeat: widget.repeat,
-                    centerSlice: widget.centerSlice,
-                    matchTextDirection: widget.matchTextDirection,
-                    gaplessPlayback: widget.gaplessPlayback,
-                    filterQuality: widget.filterQuality,
-                    isAntiAlias: widget.isAntiAlias,
-                    cacheHeight: widget.cacheHeight,
-                    cacheWidth: widget.cacheWidth,
-                  )
-                : ImageWidget.asset(
-                    widget.assetUrl!,
-                    width: widget.width ?? 72,
-                    height: widget.height ?? 72,
-                    errorWidget: widget.errorWidget,
-                    loadingWidget: widget.loadingWidget,
-                    fit: BoxFit.cover,
+                    fit: widget.fit ?? BoxFit.cover,
                     color: widget.color,
                     frameBuilder: widget.frameBuilder,
                     errorBuilder: widget.errorBuilder,
@@ -568,7 +595,7 @@ class _TDImageState extends State<TDImage> {
                     width: widget.width ?? 72,
                     errorWidget: widget.errorWidget,
                     loadingWidget: widget.loadingWidget,
-                    fit: BoxFit.fitWidth,
+                    fit: widget.fit ?? BoxFit.fitWidth,
                     color: widget.color,
                     frameBuilder: widget.frameBuilder,
                     loadingBuilder: widget.loadingBuilder,
@@ -593,7 +620,7 @@ class _TDImageState extends State<TDImage> {
                     height: widget.height ?? 72,
                     errorWidget: widget.errorWidget,
                     loadingWidget: widget.loadingWidget,
-                    fit: BoxFit.fitWidth,
+                    fit: widget.fit ?? BoxFit.fitWidth,
                     color: widget.color,
                     frameBuilder: widget.frameBuilder,
                     errorBuilder: widget.errorBuilder,
@@ -611,13 +638,13 @@ class _TDImageState extends State<TDImage> {
                     cacheHeight: widget.cacheHeight,
                     cacheWidth: widget.cacheWidth,
                   ))
-            : ImageWidget.asset(
-                widget.assetUrl!,
+            : ImageWidget.file(
+                widget.imageFile!,
                 width: widget.width ?? 72,
                 height: widget.height ?? 72,
                 errorWidget: widget.errorWidget,
                 loadingWidget: widget.loadingWidget,
-                fit: BoxFit.fitWidth,
+                fit: widget.fit ?? BoxFit.fitWidth,
                 color: widget.color,
                 frameBuilder: widget.frameBuilder,
                 errorBuilder: widget.errorBuilder,

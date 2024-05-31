@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 import 'td_dialog_widget.dart';
 
 enum TDDialogImagePosition {
@@ -162,10 +163,10 @@ class TDImageDialog extends StatelessWidget {
   Widget _horizontalButtons(BuildContext context) {
     final left = leftBtn ??
         TDDialogButtonOptions(
-            title: '取消', theme: TDButtonTheme.light, action: () {});
+            title: context.resource.cancel, theme: TDButtonTheme.light, action: null);
     final right = rightBtn ??
         TDDialogButtonOptions(
-            title: '确定', theme: TDButtonTheme.primary, action: () {});
+            title: context.resource.confirm, theme: TDButtonTheme.primary, action: null);
     return HorizontalNormalButtons(
       leftBtn: left,
       rightBtn: right,

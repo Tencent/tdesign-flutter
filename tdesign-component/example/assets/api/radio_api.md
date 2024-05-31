@@ -25,6 +25,10 @@
 | radioStyle | TDRadioStyle | TDRadioStyle.circle | 单选框按钮样式 |
 | contentDirection |  | TDContentDirection.right |  |
 | customIconBuilder |  | - |  |
+| titleColor |  | - |  |
+| subTitleColor |  | - |  |
+| backgroundColor |  | - |  |
+| checkBoxLeftSpace |  | - |  |
 
 ```
 ```

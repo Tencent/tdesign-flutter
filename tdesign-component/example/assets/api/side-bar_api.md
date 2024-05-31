@@ -22,9 +22,12 @@
 | key |  | - |  |
 | value | int? | - | 选项值 |
 | defaultValue | int? | - | 默认值 |
+| selectedColor | Color? | - | 选中值后颜色 |
 | children | List<TDSideBarItem> | const [] | 单项 |
 | onChanged | ValueChanged<int>? | - | 选中值发生变化（Controller控制） |
 | onSelected | ValueChanged<int>? | - | 选中值发生变化（点击事件） |
 | height | double? | - | 高度 |
 | controller | TDSideBarController? | - | 控制器 |
+| contentPadding | EdgeInsetsGeometry? | - | 自定义文本框内边距 |
+| selectedTextStyle | TextStyle? | - | 选中样式 |
 | style | TDSideBarStyle | TDSideBarStyle.normal | 样式 |

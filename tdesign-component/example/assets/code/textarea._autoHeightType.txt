@@ -1,0 +1,11 @@
+
+  Widget _autoHeightType(BuildContext context) {
+    return TDTextarea(
+      controller: controller[2],
+      hintText: '请输入文字',
+      minLines: 1,
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }

@@ -25,32 +25,33 @@ class TDRadioPageState extends State<TDRadioPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
-        exampleCodeGroup: 'radio',
-        backgroundColor: const Color(0xfff6f6f6),
-        children: [
-          ExampleModule(title: '组件类型', children: [
-            ExampleItem(desc: '纵向单选框', builder: _verticleRadios),
-            ExampleItem(desc: '横向单选框', builder: _horizontalRadios),
-          ]),
-          ExampleModule(title: '组件状态', children: [
-            ExampleItem(desc: '单选框状态', builder: _radioStatus),
-          ]),
-          ExampleModule(title: '组件样式', children: [
-            ExampleItem(desc: '勾选样式', builder: _checkStyle),
-            ExampleItem(desc: '勾选显示位置', builder: _checkPosition),
-            ExampleItem(desc: '非通栏单选样式', builder: _passThroughStyle),
-          ]),
-          ExampleModule(title: '特殊样式', children: [
-            ExampleItem(desc: '纵向卡片单选框', builder: _verticalCardStyle),
-            ExampleItem(desc: '横向卡片单选框', builder: _horizontalCardStyle),
-          ]),
-        ],
+      title: tdTitle(),
+      exampleCodeGroup: 'radio',
+      backgroundColor: const Color(0xfff6f6f6),
+      children: [
+        ExampleModule(title: '组件类型', children: [
+          ExampleItem(desc: '纵向单选框', builder: _verticleRadios),
+          ExampleItem(desc: '横向单选框', builder: _horizontalRadios),
+        ]),
+        ExampleModule(title: '组件状态', children: [
+          ExampleItem(desc: '单选框状态', builder: _radioStatus),
+        ]),
+        ExampleModule(title: '组件样式', children: [
+          ExampleItem(desc: '勾选样式', builder: _checkStyle),
+          ExampleItem(desc: '勾选显示位置', builder: _checkPosition),
+          ExampleItem(desc: '非通栏单选样式', builder: _passThroughStyle),
+        ]),
+        ExampleModule(title: '特殊样式', children: [
+          ExampleItem(desc: '纵向卡片单选框', builder: _verticalCardStyle),
+          ExampleItem(desc: '横向卡片单选框', builder: _horizontalCardStyle),
+        ]),
+      ],
       test: [
         ExampleItem(desc: '横向单选框-显示下划线', builder: _showBottomLine),
         ExampleItem(desc: '横向单选框-自定义下划线', builder: _customBottomLine),
         ExampleItem(desc: '横向单选框-自定义颜色和字体尺寸', builder: _customColorAndFont),
         ExampleItem(desc: '横向单选框-自定义禁用字体颜色', builder: _customDisableColorAndFont),
+        ExampleItem(desc: '横向单选框-自定义选框左侧间距', builder: _customRadioLeftSpace),
       ],
     );
   }
@@ -320,7 +321,10 @@ class TDRadioPageState extends State<TDRadioPage> {
       selectId: 'index:1',
       direction: Axis.horizontal,
       showDivider: true,
-      divider: const TDDivider(height: 20, color: Colors.red,),
+      divider: const TDDivider(
+        height: 20,
+        color: Colors.red,
+      ),
       directionalTdRadios: const [
         TDRadio(
           id: '0',
@@ -394,6 +398,19 @@ class TDRadioPageState extends State<TDRadioPage> {
             radioStyle: TDRadioStyle.hollowCircle,
           ),
           TDRadio(
+            id: 'index:6',
+            title: '绿色',
+            titleColor: Colors.green,
+            titleMaxLine: 2,
+            subTitleMaxLine: 2,
+            subTitle: '我是蓝色并且有灰色背景',
+            subTitleColor: Colors.blue,
+            selectColor: TDTheme.of(context).errorColor3,
+            titleFont: TDTheme.of(context).fontBodySmall,
+            subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+            backgroundColor: TDTheme.of(context).grayColor2,
+          ),
+          TDRadio(
             id: 'index:5',
             title: '单选',
             titleMaxLine: 2,
@@ -409,15 +426,13 @@ class TDRadioPageState extends State<TDRadioPage> {
     );
   }
 
-
-
   @Demo(group: 'radio')
   Widget _customDisableColorAndFont(BuildContext context) {
     return TDRadioGroup(
       contentDirection: TDContentDirection.right,
       selectId: '0',
       child: Column(
-        children:  [
+        children: [
           TDRadio(
             id: '0',
             title: '选项禁用-已选',
@@ -439,6 +454,20 @@ class TDRadioPageState extends State<TDRadioPage> {
           ),
         ],
       ),
+    );
+  }
+
+  @Demo(group: '')
+  Widget _customRadioLeftSpace(BuildContext context) {
+    return  TDRadio(
+        id: '0',
+        title: '选项禁用-已选',
+        subTitle: '描述信息',
+        radioStyle: TDRadioStyle.circle,
+        checkBoxLeftSpace: 0,
+        disableColor: TDTheme.of(context).errorColor1,
+        titleFont: TDTheme.of(context).fontBodySmall,
+        subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
     );
   }
 }

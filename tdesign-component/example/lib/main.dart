@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tdesign_flutter/src/util/log.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'base/example_route.dart';
+import 'base/intl_resouce_delegate.dart';
 import 'config.dart';
 import 'home.dart';
 
@@ -33,8 +35,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   late TDThemeData _themeData;
+  Locale? locale = const Locale('zh');
 
   @override
   void initState() {
@@ -47,18 +49,35 @@ class _MyAppState extends State<MyApp> {
     // 使用多套主题
     TDTheme.needMultiTheme();
     // 适配3.16的字体居中前,先禁用字体居中功能
-    kTextForceVerticalCenterEnable = false;
-
+    // kTextForceVerticalCenterEnable = false;
+    var delegate = IntlResourceDelegate(context);
     return MaterialApp(
       title: 'TDesign Flutter Example',
-      theme: ThemeData(
-          extensions: [_themeData],
-          colorScheme: ColorScheme.light(primary: _themeData.brandNormalColor)),
-      home: PlatformUtil.isWeb ? null :  MyHomePage(title: 'TDesign Flutter 组件库', onThemeChange: (themeData){
-        setState(() {
-          _themeData = themeData;
-        });
-      },),
+      theme: ThemeData(extensions: [_themeData], colorScheme: ColorScheme.light(primary: _themeData.brandNormalColor)),
+      home: PlatformUtil.isWeb ? null : Builder(
+        builder: (context) {
+          // 设置文案代理,国际化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
+          TDTheme.setResourceBuilder((context) => delegate..updateContext(context), needAlwaysBuild: true);
+          return MyHomePage(
+            title: AppLocalizations.of(context)?.components ?? '',
+            locale: locale,
+            onLocaleChange: (locale){
+              setState(() {
+                this.locale = locale;
+              });
+            },
+            onThemeChange: (themeData) {
+              setState(() {
+                _themeData = themeData;
+              });
+            },
+          );
+        },
+      ),
+      // 设置国际化处理
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       onGenerateRoute: TDExampleRoute.onGenerateRoute,
       routes: _getRoutes(),
     );

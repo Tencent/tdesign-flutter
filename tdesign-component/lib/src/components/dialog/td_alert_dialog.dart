@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 import 'td_dialog_widget.dart';
 
 /// 弹窗控件
@@ -145,10 +146,10 @@ class TDAlertDialog extends StatelessWidget {
   Widget _horizontalButtons(BuildContext context) {
     final left = leftBtn ??
         TDDialogButtonOptions(
-            title: '取消', theme: TDButtonTheme.light, action: leftBtnAction ?? () {});
+            title: context.resource.cancel, theme: TDButtonTheme.light, action: leftBtnAction);
     final right = rightBtn ??
         TDDialogButtonOptions(
-            title: '确定', theme: TDButtonTheme.primary, action: rightBtnAction ?? () {});
+            title: context.resource.confirm, theme: TDButtonTheme.primary, action: rightBtnAction);
     return _buttonStyle == TDDialogButtonStyle.text
         ? HorizontalTextButtons(leftBtn: left, rightBtn: right)
         : HorizontalNormalButtons(
@@ -169,8 +170,11 @@ class TDAlertDialog extends StatelessWidget {
         buttonTheme: value.theme,
         buttonType: value.type,
         onPressed: () {
-          Navigator.pop(context);
-          value.action();
+          if(value.action != null){
+            value.action!();
+          } else {
+            Navigator.pop(context);
+          }
         },
       );
       widgets.add(btn);

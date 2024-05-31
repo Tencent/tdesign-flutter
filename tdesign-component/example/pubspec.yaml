@@ -32,6 +32,7 @@ dependencies:
 
   #轮播图组件
   flutter_swiper_null_safety: ^1.0.2
+  intl: any
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -45,7 +46,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  flutter_localizations:
+    sdk: flutter
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -63,6 +65,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  # 国际化配置
+  generate: true # Add this line
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -101,4 +106,3 @@ flutter:
     - assets/version
     - assets/img/
     - assets/theme.json
-    - assets/theme1.json

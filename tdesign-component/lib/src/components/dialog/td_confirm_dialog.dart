@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 import 'td_dialog_widget.dart';
 
 /// 只有一个按钮的弹窗控件
@@ -25,7 +26,7 @@ class TDConfirmDialog extends StatelessWidget {
     this.content,
     this.contentColor,
     this.contentMaxHeight = 0,
-    this.buttonText = '知道了',
+    this.buttonText,
     this.buttonTextColor,
     this.buttonStyle = TDDialogButtonStyle.normal,
     this.showCloseButton,
@@ -81,15 +82,16 @@ class TDConfirmDialog extends StatelessWidget {
           const TDDivider(height: 23, color: Colors.transparent),
           const TDDivider(height: 1),
           TDDialogButton(
-            buttonText: buttonText,
+            buttonText: buttonText ?? context.resource.knew,
             buttonTextColor: buttonTextColor,
             buttonType: TDButtonType.text,
             buttonTheme: TDButtonTheme.primary,
             height: 56,
             onPressed: () {
-              Navigator.pop(context);
               if (action != null) {
                 action!();
+              } else {
+                Navigator.pop(context);
               }
             },
           )
@@ -99,13 +101,14 @@ class TDConfirmDialog extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
         child: TDDialogButton(
-          buttonText: buttonText,
+          buttonText: buttonText ?? context.resource.knew,
           buttonTextColor: buttonTextColor,
           buttonTheme: TDButtonTheme.primary,
           onPressed: () {
-            Navigator.pop(context);
             if (action != null) {
               action!();
+            } else {
+              Navigator.pop(context);
             }
           },
         ),

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 import 'no_wave_behavior.dart';
 
 typedef DatePickerCallback = void Function(Map<String, int> selected);
@@ -13,8 +14,8 @@ class TDDatePicker extends StatefulWidget {
   const TDDatePicker(
       {required this.title,
         required this.onConfirm,
-        this.rightText = '确认',
-        this.leftText = '取消',
+        this.rightText,
+        this.leftText,
         this.onCancel,
         this.backgroundColor,
         this.titleDividerColor,
@@ -39,10 +40,10 @@ class TDDatePicker extends StatefulWidget {
   final String title;
 
   /// 右侧按钮文案
-  final String rightText;
+  final String? rightText;
 
   /// 左侧按钮文案
-  final String leftText;
+  final String? leftText;
 
   /// 选择器确认按钮回调
   final DatePickerCallback? onConfirm;
@@ -321,7 +322,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                 }
               },
               behavior: HitTestBehavior.opaque,
-              child: TDText(widget.leftText,
+              child: TDText(widget.leftText ?? context.resource.cancel,
                   style: widget.leftTextStyle ??
                       TextStyle(fontSize: TDTheme.of(context).fontBodyLarge!.size, color: TDTheme.of(context).fontGyColor2))),
 
@@ -366,7 +367,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
-              widget.rightText,
+              widget.rightText ?? context.resource.confirm,
               style: widget.rightTextStyle ??
                   TextStyle(fontSize: TDTheme.of(context).fontBodyLarge!.size, color: TDTheme.of(context).brandNormalColor),
             ),

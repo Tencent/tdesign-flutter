@@ -2,63 +2,94 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 
 enum IconTextDirection {
-  horizontal,       //横向
-  vertical          //竖向
+  horizontal, //横向
+  vertical //竖向
 }
-class TDToast {
 
+class TDToast {
   /// 普通文本Toast
-  static void showText(String? text, {required BuildContext context,
-      Duration duration = TDToast._defaultDisPlayDuration}) {
-    _showOverlay(_TDTextToast(text: text,), context: context);
+  static void showText(String? text,
+      {required BuildContext context,
+      Duration duration = TDToast._defaultDisPlayDuration,
+      int? maxLines,
+      BoxConstraints? constraints}) {
+    _showOverlay(_TDTextToast(text: text, maxLines: maxLines, constraints: constraints), context: context);
   }
 
   /// 带图标的Toast
-  static void showIconText(String? text, {
-                            IconData? icon,
-                            IconTextDirection direction = IconTextDirection.horizontal,
-                            required BuildContext context,
-                            Duration duration = TDToast._defaultDisPlayDuration}) {
-    _showOverlay(_TDIconTextToast(text: text, iconData: icon, iconTextDirection: direction,), context: context);
+  static void showIconText(String? text,
+      {IconData? icon,
+      IconTextDirection direction = IconTextDirection.horizontal,
+      required BuildContext context,
+      Duration duration = TDToast._defaultDisPlayDuration}) {
+    _showOverlay(
+        _TDIconTextToast(
+          text: text,
+          iconData: icon,
+          iconTextDirection: direction,
+        ),
+        context: context);
   }
 
   /// 成功提示Toast
-  static void showSuccess(String? text, {
-                          IconTextDirection direction = IconTextDirection.horizontal,
-                          required BuildContext context,
-                          Duration duration = TDToast._defaultDisPlayDuration}) {
-    _showOverlay(_TDIconTextToast(text: text, iconData: TDIcons.check_circle, iconTextDirection: direction,), context: context);
+  static void showSuccess(String? text,
+      {IconTextDirection direction = IconTextDirection.horizontal,
+      required BuildContext context,
+      Duration duration = TDToast._defaultDisPlayDuration}) {
+    _showOverlay(
+        _TDIconTextToast(
+          text: text,
+          iconData: TDIcons.check_circle,
+          iconTextDirection: direction,
+        ),
+        context: context);
   }
 
   /// 警告Toast
-  static void showWarning(String? text, {
-                          IconTextDirection direction = IconTextDirection.horizontal,
-                          required BuildContext context,
-                          Duration duration = TDToast._defaultDisPlayDuration}) {
-    _showOverlay(_TDIconTextToast(text: text, iconData: TDIcons.error_circle, iconTextDirection: direction,), context: context);
+  static void showWarning(String? text,
+      {IconTextDirection direction = IconTextDirection.horizontal,
+      required BuildContext context,
+      Duration duration = TDToast._defaultDisPlayDuration}) {
+    _showOverlay(
+        _TDIconTextToast(
+          text: text,
+          iconData: TDIcons.error_circle,
+          iconTextDirection: direction,
+        ),
+        context: context);
   }
 
   /// 失败提示Toast
-  static void showFail(String? text, {
-    IconTextDirection direction = IconTextDirection.horizontal,
-    required BuildContext context,
-    Duration duration = TDToast._defaultDisPlayDuration}) {
-    _showOverlay(_TDIconTextToast(text: text, iconData: TDIcons.close_circle, iconTextDirection: direction,), context: context);
+  static void showFail(String? text,
+      {IconTextDirection direction = IconTextDirection.horizontal,
+      required BuildContext context,
+      Duration duration = TDToast._defaultDisPlayDuration}) {
+    _showOverlay(
+        _TDIconTextToast(
+          text: text,
+          iconData: TDIcons.close_circle,
+          iconTextDirection: direction,
+        ),
+        context: context);
   }
 
   /// 带文案的加载Toast
-  static void showLoading({required BuildContext context,
-                           String? text,
-                           Duration duration = TDToast._defaultDisPlayDuration}) {
-    _showOverlay(_TDToastLoading(text: text,), context: context, duration: TDToast._infiniteDuration);
+  static void showLoading(
+      {required BuildContext context, String? text, Duration duration = TDToast._defaultDisPlayDuration}) {
+    _showOverlay(
+        _TDToastLoading(
+          text: text,
+        ),
+        context: context,
+        duration: TDToast._infiniteDuration);
   }
 
   /// 不带文案的加载Toast
-  static void showLoadingWithoutText({required BuildContext context,
-    String? text,
-    Duration duration = TDToast._defaultDisPlayDuration}) {
+  static void showLoadingWithoutText(
+      {required BuildContext context, String? text, Duration duration = TDToast._defaultDisPlayDuration}) {
     _showOverlay(const _TDToastLoadingWithoutText(), context: context, duration: TDToast._infiniteDuration);
   }
 
@@ -67,21 +98,19 @@ class TDToast {
     _cancel();
   }
 
-  static void _showOverlay(Widget? widget, {required BuildContext context,
-    Duration duration = TDToast._defaultDisPlayDuration}) {
+  static void _showOverlay(Widget? widget,
+      {required BuildContext context, Duration duration = TDToast._defaultDisPlayDuration}) {
     _cancel();
     _showing = true;
     var overlayState = Overlay.of(context);
     _overlayEntry = OverlayEntry(
         builder: (BuildContext context) => Center(
-          child: AnimatedOpacity(
-            opacity: _showing ? 1.0 : 0.0,
-            duration: _showing
-                ? const Duration(milliseconds: 100)
-                : const Duration(milliseconds: 200),
-            child: widget,
-          ),
-        ));
+              child: AnimatedOpacity(
+                opacity: _showing ? 1.0 : 0.0,
+                duration: _showing ? const Duration(milliseconds: 100) : const Duration(milliseconds: 200),
+                child: widget,
+              ),
+            ));
     if (_overlayEntry != null) {
       overlayState?.insert(_overlayEntry!);
     }
@@ -125,63 +154,88 @@ class _TDIconTextToast extends StatelessWidget {
   final String? text;
   final IconData? iconData;
   final IconTextDirection iconTextDirection;
+
   const _TDIconTextToast({this.text, this.iconData, this.iconTextDirection = IconTextDirection.horizontal});
 
   Widget buildHorizontalWidgets(BuildContext context) {
-    return ConstrainedBox(constraints: const BoxConstraints(maxWidth: 191, maxHeight: 94), child: Container(
-        padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
-        decoration: BoxDecoration(
-          color: TDTheme.of(context).fontGyColor1,
-          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-          Icon(iconData, size: 24, color: TDTheme.of(context).whiteColor1,),
-          const SizedBox(width: 8,),
-          TDText(text ?? '',
-            font: TDTheme.of(context).fontBodyMedium,
-            fontWeight: FontWeight.w400,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textColor: TDTheme.of(context).whiteColor1,)
-        ],)
-    ),);
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 191, maxHeight: 94),
+      child: Container(
+          padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
+          decoration: BoxDecoration(
+            color: TDTheme.of(context).fontGyColor1,
+            borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                iconData,
+                size: 24,
+                color: TDTheme.of(context).whiteColor1,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              TDText(
+                text ?? '',
+                font: TDTheme.of(context).fontBodyMedium,
+                fontWeight: FontWeight.w400,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textColor: TDTheme.of(context).whiteColor1,
+              )
+            ],
+          )),
+    );
   }
 
   Widget buildVerticalWidgets(BuildContext context) {
-    return ConstrainedBox(constraints: const BoxConstraints(maxWidth: 136, maxHeight: 130), child: Container(
-        height: 110,
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: TDTheme.of(context).fontGyColor1,
-          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-          Icon(iconData, size: 32, color: TDTheme.of(context).whiteColor1,),
-          const SizedBox(height: 8,),
-          TDText(text ?? '',
-            font: TDTheme.of(context).fontBodyMedium,
-            fontWeight: FontWeight.w400,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textColor: TDTheme.of(context).whiteColor1,)
-        ],)
-    ));
+    return ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 136, maxHeight: 130),
+        child: Container(
+            height: 110,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: TDTheme.of(context).fontGyColor1,
+              borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  iconData,
+                  size: 32,
+                  color: TDTheme.of(context).whiteColor1,
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                TDText(
+                  text ?? '',
+                  font: TDTheme.of(context).fontBodyMedium,
+                  fontWeight: FontWeight.w400,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textColor: TDTheme.of(context).whiteColor1,
+                )
+              ],
+            )));
   }
 
   @override
   Widget build(BuildContext context) {
-    return iconTextDirection == IconTextDirection.horizontal ? buildHorizontalWidgets(context) : buildVerticalWidgets(context);
+    return iconTextDirection == IconTextDirection.horizontal
+        ? buildHorizontalWidgets(context)
+        : buildVerticalWidgets(context);
   }
 }
 
 class _TDToastLoading extends StatelessWidget {
   final String? text;
+
   const _TDToastLoading({this.text});
 
   @override
@@ -197,16 +251,24 @@ class _TDToastLoading extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-          TDCircleIndicator(color: TDTheme.of(context).whiteColor1, size: 26, lineWidth: 4,),
-          const SizedBox(height: 8,),
-          TDText(text ?? '加载中...',
-            font: TDTheme.of(context).fontBodyMedium,
-            fontWeight: FontWeight.w400,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textColor: TDTheme.of(context).whiteColor1,)
-        ],)
-    );
+            TDCircleIndicator(
+              color: TDTheme.of(context).whiteColor1,
+              size: 26,
+              lineWidth: 4,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            TDText(
+              text ?? context.resource.loadingWithPoint,
+              font: TDTheme.of(context).fontBodyMedium,
+              fontWeight: FontWeight.w400,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textColor: TDTheme.of(context).whiteColor1,
+            )
+          ],
+        ));
   }
 }
 
@@ -223,30 +285,41 @@ class _TDToastLoadingWithoutText extends StatelessWidget {
           color: TDTheme.of(context).fontGyColor1,
           borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
         ),
-        child: TDCircleIndicator(color: TDTheme.of(context).whiteColor1, size: 26, lineWidth: 4,)
-    );
+        child: TDCircleIndicator(
+          color: TDTheme.of(context).whiteColor1,
+          size: 26,
+          lineWidth: 4,
+        ));
   }
 }
 
 class _TDTextToast extends StatelessWidget {
   final String? text;
-  const _TDTextToast({this.text});
+
+  final int? maxLines;
+
+  final BoxConstraints? constraints;
+
+  const _TDTextToast({this.text, this.maxLines, this.constraints});
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(constraints: const BoxConstraints(maxWidth: 191, maxHeight: 94), child: Container(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
-        decoration: BoxDecoration(
-          color: TDTheme.of(context).fontGyColor1,
-          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
-        ),
-        child: TDText(text ?? '',
-          font: TDTheme.of(context).fontBodyMedium,
-          fontWeight: FontWeight.w400,
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
-          textColor: TDTheme.of(context).whiteColor1,)
-    ),);
+    return ConstrainedBox(
+      constraints: constraints ?? const BoxConstraints(maxWidth: 191, maxHeight: 94),
+      child: Container(
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
+          decoration: BoxDecoration(
+            color: TDTheme.of(context).fontGyColor1,
+            borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+          ),
+          child: TDText(
+            text ?? '',
+            font: TDTheme.of(context).fontBodyMedium,
+            fontWeight: FontWeight.w400,
+            maxLines: maxLines ?? 3,
+            overflow: TextOverflow.ellipsis,
+            textColor: TDTheme.of(context).whiteColor1,
+          )),
+    );
   }
 }
-
