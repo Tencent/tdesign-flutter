@@ -25,6 +25,7 @@ import 'page/td_input_page.dart';
 import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
 import 'page/td_navbar_page.dart';
+import 'page/td_notice_bar_page.dart';
 import 'page/td_picker_page.dart';
 import 'page/td_popup_page.dart';
 import 'page/td_radio_page.dart';
@@ -219,10 +220,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         isTodo: true,
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
-        text: 'NoticeBar 公告栏',
-        name: 'notice_bar',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        text: 'NoticeBar 公告栏', name: 'notice-bar', pageBuilder: _wrapInheritedTheme((context) => const TDNoticeBarPage())),
     ExamplePageModel(
         text: 'Overlay 遮罩层',
         name: 'overlay',
