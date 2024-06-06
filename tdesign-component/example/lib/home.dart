@@ -56,6 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
+        backgroundColor: TDTheme.of(context).brandNormalColor,
+        titleTextStyle: TextStyle(color:TDTheme.of(context).whiteColor1, fontSize: TDTheme.of(context).fontTitleLarge?.size),
         title: Text(widget.title),
         actions: ScreenUtil.isWebLargeScreen(context)
             ? null

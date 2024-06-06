@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/version_util.dart';
 
 /// 是否启用强制居中
 var kTextForceVerticalCenterEnable = true;
@@ -396,11 +397,21 @@ class TDTextPaddingConfig {
   }
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
-  double get paddingRate => PlatformUtil.isWeb
-      ? 3 / 8
-      : PlatformUtil.isAndroid
-          ? -7 / 128
-          : 0;
+  double get paddingRate{
+    if(VersionUtil.isAfterThen('3.2.0')){
+      // Dart 3.2.0之后,文字渲染高度有改变.
+      return  PlatformUtil.isWeb
+          ? 29 / 128
+          : PlatformUtil.isAndroid
+          ? -20 / 128
+          : -10 / 128;
+    }
+    return PlatformUtil.isWeb
+        ? 3 / 8
+        : PlatformUtil.isAndroid
+        ? -7 / 128
+        : 0;
+  }
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
   double get paddingExtraRate => PlatformUtil.isAndroid ? 115 / 256 : 97 / 240;

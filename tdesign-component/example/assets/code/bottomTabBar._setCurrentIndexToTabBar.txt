@@ -1,0 +1,47 @@
+
+  Widget _setCurrentIndexToTabBar(BuildContext context) {
+    return SizedBox(
+      height: 200,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+              child: PageView(
+            children: const [
+              Center(
+                child: TDText('页面1,手指左滑查看页面2'),
+              ),
+              Center(
+                child: TDText('页面2,手指右滑查看页面1'),
+              ),
+            ],
+            onPageChanged: (index) {
+              setState(() {
+                // 修改选择index
+                currentIndex = index;
+              });
+            },
+          )),
+          TDBottomTabBar(
+            // 设置选择index
+              currentIndex: currentIndex,
+              TDBottomTabBarBasicType.icon,
+              useVerticalDivider: true,
+              navigationTabs: [
+                TDBottomTabBarTabConfig(
+                    selectedIcon: _selectedIcon,
+                    unselectedIcon: _unSelectedIcon,
+                    onTap: () {
+                      onTapTab(context, '标签1');
+                    }),
+                TDBottomTabBarTabConfig(
+                    selectedIcon: _selectedIcon,
+                    unselectedIcon: _unSelectedIcon,
+                    onTap: () {
+                      onTapTab(context, '标签2');
+                    })
+              ])
+        ],
+      ),
+    );
+  }

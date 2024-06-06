@@ -36,7 +36,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late TDThemeData _themeData;
-  Locale? locale;
+  Locale? locale = const Locale('zh');
 
   @override
   void initState() {
@@ -49,12 +49,12 @@ class _MyAppState extends State<MyApp> {
     // 使用多套主题
     TDTheme.needMultiTheme();
     // 适配3.16的字体居中前,先禁用字体居中功能
-    kTextForceVerticalCenterEnable = false;
+    // kTextForceVerticalCenterEnable = false;
     var delegate = IntlResourceDelegate(context);
     return MaterialApp(
       title: 'TDesign Flutter Example',
       theme: ThemeData(extensions: [_themeData], colorScheme: ColorScheme.light(primary: _themeData.brandNormalColor)),
-      home: Builder(
+      home: PlatformUtil.isWeb ? null : Builder(
         builder: (context) {
           // 设置文案代理,国际化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
           TDTheme.setResourceBuilder((context) => delegate..updateContext(context), needAlwaysBuild: true);

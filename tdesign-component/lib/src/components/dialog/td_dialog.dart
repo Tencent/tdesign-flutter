@@ -59,5 +59,5 @@ class TDDialogButtonOptions {
   final double? height;
 
   /// 点击操作
-  final Function() action;
+  final Function()? action;
 }
