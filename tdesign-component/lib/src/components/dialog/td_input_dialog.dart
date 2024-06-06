@@ -114,9 +114,9 @@ class TDInputDialog extends StatelessWidget {
 
   Widget _horizontalButtons(BuildContext context) {
     final left = leftBtn ??
-        TDDialogButtonOptions(title: context.resource.cancel, titleColor: const Color(0xE6000000), fontWeight: FontWeight.normal, action: () {}, height: 56);
+        TDDialogButtonOptions(title: context.resource.cancel, titleColor: const Color(0xE6000000), fontWeight: FontWeight.normal, action: null, height: 56);
     final right = rightBtn ??
-        TDDialogButtonOptions(title: context.resource.confirm, action: () {}, fontWeight: FontWeight.w600, height: 56);
+        TDDialogButtonOptions(title: context.resource.confirm, action: null, fontWeight: FontWeight.w600, height: 56);
     return HorizontalTextButtons(
       leftBtn: left,
       rightBtn: right,

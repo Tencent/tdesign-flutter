@@ -253,13 +253,13 @@ export default {
           path: '/flutter/components/switch',
           component: () => import('@/switch/README.md'),
         },
-        // {
-        //   title: 'Textarea 多行文本框',
-        //   name: 'textarea',
-        //   meta: { docType: 'form' },
-        //   path: '/flutter/components/textarea',
-        //   component: () => import('@/textarea/README.md'),
-        // },
+        {
+          title: 'Textarea 多行文本框',
+          name: 'textarea',
+          meta: { docType: 'form' },
+          path: '/flutter/components/textarea',
+          component: () => import('@/textarea/README.md'),
+        },
         // {
         //   title: 'TreeSelect 树形选择',
         //   name: 'treeSelect',
@@ -412,13 +412,13 @@ export default {
           path: '/flutter/components/dialog',
           component: () => import('@/dialog/README.md'),
         },
-        // {
-        //   title: 'DropdownMenu 下拉菜单',
-        //   name: 'dropdown-menu',
-        //   meta: { docType: 'navigation' },
-        //   path: '/flutter/components/dropdown-menu',
-        //   component: () => import('@/dropdown-menu/README.md'),
-        // },
+        {
+          title: 'DropdownMenu 下拉菜单',
+          name: 'dropdown-menu',
+          meta: { docType: 'navigation' },
+          path: '/flutter/components/dropdown-menu',
+          component: () => import('@/dropdown-menu/README.md'),
+        },
         {
           title: 'Loading 加载',
           name: 'loading',

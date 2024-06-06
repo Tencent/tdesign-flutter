@@ -1,0 +1,18 @@
+
+TDDropdownMenu _buildDisabled(BuildContext context) {
+  return TDDropdownMenu(
+    direction: TDDropdownMenuDirection.down,
+    builder: (context) {
+      return [
+        const TDDropdownItem(
+          disabled: true,
+          label: '禁用菜单',
+        ),
+        const TDDropdownItem(
+          disabled: true,
+          label: '禁用菜单',
+        ),
+      ];
+    },
+  );
+}

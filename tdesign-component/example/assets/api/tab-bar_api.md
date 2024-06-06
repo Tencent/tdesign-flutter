@@ -47,6 +47,9 @@
 | useSafeArea | bool | true | 使用安全区域 |
 | selectedBgColor | Color? | - | 选中时背景颜色 |
 | unselectedBgColor | Color? | - | 未选中时背景颜色 |
+| backgroundColor | Color? | - | 背景颜色 （可选） |
+| centerDistance | double? | - | icon与文本中间距离（可选） |
+| currentIndex | int? | - | 选中的index（可选） |
 
 ```
 ```

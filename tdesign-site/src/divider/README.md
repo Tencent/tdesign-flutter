@@ -171,6 +171,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | width | double? | - | 宽度，需要竖向线条时使用 |
 | height | double? | - | 高度，横向线条使用 |
 | text | String? | - | 文本字符串，使用默认样式 |
+| textStyle | TextStyle? | - | 自定义文本样式 |
 | widget | Widget? | - | 中间控件，可自定义样式 |
 | gapPadding | EdgeInsetsGeometry? | - | 线条和中间文本之间的填充 |
 | hideLine | bool | false | 隐藏线条，使用纯文本分割 |

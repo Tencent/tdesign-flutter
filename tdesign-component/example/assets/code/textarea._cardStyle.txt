@@ -1,0 +1,20 @@
+
+  Widget _cardStyle(BuildContext context) {
+    return TDTextarea(
+      controller: controller[6],
+      label: '标签文字',
+      hintText: '请输入文字',
+      maxLines: 4,
+      minLines: 4,
+      maxLength: 500,
+      indicator: true,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
+      ),
+      margin: EdgeInsets.only(right: TDTheme.of(context).spacer16, left: TDTheme.of(context).spacer16),
+      onChanged: (value) {
+        setState(() {});
+      },
+    );
+  }
