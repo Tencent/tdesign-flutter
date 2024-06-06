@@ -338,6 +338,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | titleColor |  | - |  |
 | subTitleColor |  | - |  |
 | backgroundColor |  | - |  |
+| checkBoxLeftSpace |  | - |  |
 
 ```
 ```

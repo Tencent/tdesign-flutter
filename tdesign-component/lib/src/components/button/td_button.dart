@@ -189,7 +189,7 @@ class _TDButtonState extends State<TDButton> {
         if(widget.disabled){
           return;
         }
-        Future.delayed(Duration(milliseconds: 100),() {
+        Future.delayed(const Duration(milliseconds: 100),() {
           if(mounted){
             setState(() {
               _buttonStatus = TDButtonStatus.defaultState;
