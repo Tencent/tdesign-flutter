@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../components/badge/td_badge.dart';
-import '../components/dialog/td_alert_dialog.dart';
-import '../components/switch/td_switch.dart';
+import '../../tdesign_flutter.dart';
 
 typedef TDTDResourceBuilder = TDResourceDelegate? Function(BuildContext context);
 
@@ -87,6 +85,21 @@ abstract class TDResourceDelegate {
 
   /// [TDRefreshHeader] 松开刷新
   String get releaseRefresh;
+
+  /// [TDCountDown] 天
+  String get days;
+
+  /// [TDCountDown] 时
+  String get hours;
+
+  /// [TDCountDown] 分
+  String get minutes;
+
+  /// [TDCountDown] 秒
+  String get seconds;
+
+  /// [TDCountDown] 毫秒
+  String get milliseconds;
 }
 
 /// 如果用户要重写,就应该全部重写,不开放只重新部分资源
@@ -126,4 +139,19 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
 
   @override
   String get releaseRefresh => '松开刷新';
+  
+  @override
+  String get days => '天';
+
+  @override
+  String get hours => '时';
+
+  @override
+  String get minutes => '分';
+
+  @override
+  String get seconds => '秒';
+
+  @override
+  String get milliseconds => '毫秒';
 }

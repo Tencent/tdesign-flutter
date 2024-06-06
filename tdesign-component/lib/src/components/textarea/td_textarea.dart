@@ -238,7 +238,7 @@ class _TDTextareaState extends State<TDTextarea> {
               ? Flexible(
                   child: Padding(
                     padding: EdgeInsets.only(left: widget.labelIcon != null ? TDTheme.of(context).spacer4 : 0),
-                    child: Text(
+                    child: TDText(
                       widget.label!,
                       maxLines: isHorizontal ? 2 : 1,
                       overflow: TextOverflow.ellipsis,
@@ -251,7 +251,7 @@ class _TDTextareaState extends State<TDTextarea> {
           widget.required == true
               ? Padding(
                   padding: EdgeInsets.only(left: TDTheme.of(context).spacer4),
-                  child: Text(
+                  child: TDText(
                     '*',
                     style: TextStyle(color: TDTheme.of(context).errorColor6, fontSize: fontSize, height: 1.3),
                   ),
@@ -308,7 +308,7 @@ class _TDTextareaState extends State<TDTextarea> {
             builder: (context, value, child) {
               return Opacity(
                 opacity: value ? 0 : 1,
-                child: Text(
+                child: TDText(
                   widget.additionInfo!,
                   style: TextStyle(
                     fontSize: TDTheme.of(context).fontBodySmall?.size,
@@ -325,7 +325,7 @@ class _TDTextareaState extends State<TDTextarea> {
       widgetList.add(SizedBox(width: padding));
     }
     if (showIndicator) {
-      widgetList.add(Text(
+      widgetList.add(TDText(
         '${widget.controller?.text.length ?? 0}/${widget.maxLength}',
         style: TextStyle(fontSize: TDTheme.of(context).fontBodySmall?.size, color: TDTheme.of(context).fontGyColor3),
       ));

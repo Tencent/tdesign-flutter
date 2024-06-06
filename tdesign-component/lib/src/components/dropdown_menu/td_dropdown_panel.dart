@@ -34,26 +34,27 @@ class TDDropdownPanel extends StatefulWidget {
   TDDropdownPanelState createState() => TDDropdownPanelState();
 }
 
-class TDDropdownPanelState extends State<TDDropdownPanel> {
-  bool isClose = false;
+class TDDropdownPanelState extends State<TDDropdownPanel> with SingleTickerProviderStateMixin {
   double? contentTop, contentBottom;
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(vsync: this, duration: widget.duration);
     widget.closeCallback(close);
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return AnimatedPositioned(
-      top: contentTop ?? widget.initContentTop,
-      bottom: contentBottom ?? widget.initContentBottom,
-      left: 0,
-      right: 0,
-      duration: contentBottom != null || contentTop != null
-          ? widget.duration
-          : widget.duration ~/ 2,
+    return PositionedTransition(
+      rect: _getAnimation(),
       child: SingleChildScrollView(
         child: Builder(
           builder: (BuildContext context) {
@@ -66,10 +67,9 @@ class TDDropdownPanelState extends State<TDDropdownPanel> {
   }
 
   void open(BuildContext itemContext) {
-    if (contentBottom != null || contentTop != null || isClose == true) {
+    if (contentBottom != null || contentTop != null) {
       return;
     }
-    isClose = false;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var renderBox = itemContext.findRenderObject() as RenderBox;
       var size = renderBox.size;
@@ -99,20 +99,28 @@ class TDDropdownPanelState extends State<TDDropdownPanel> {
         }
         return;
       }
-      setState(() {
-        if (widget.direction == TDDropdownPopupDirection.down) {
-          contentBottom = widget.initContentBottom - size.height; // max(0, widget.initContentBottom - size.height);
-        } else {
-          contentTop = widget.initContentTop - size.height; // max(0, widget.initContentTop - size.height);
+      if (widget.direction == TDDropdownPopupDirection.down) {
+        contentBottom = widget.initContentBottom - size.height;
+      } else {
+        contentTop = widget.initContentTop - size.height;
+      }
+      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_controller.status == AnimationStatus.dismissed) {
+          _controller.forward();
         }
       });
     });
   }
 
+  Animation<RelativeRect> _getAnimation() {
+    return RelativeRectTween(
+      begin: RelativeRect.fromLTRB(0, widget.initContentTop, 0, widget.initContentBottom),
+      end: RelativeRect.fromLTRB(0, contentTop ?? widget.initContentTop, 0, contentBottom ?? widget.initContentBottom),
+    ).animate(_controller);
+  }
+
   void close() {
-    isClose = true;
-    setState(() {
-      contentBottom = contentTop = null;
-    });
+    _controller.reverse();
   }
 }
