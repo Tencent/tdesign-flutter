@@ -3,20 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 
-Map<String, String> timeUnitMap = {
-  'DD': '天',
-  'HH': '时',
-  'mm': '分',
-  'ss': '秒',
-  'SSS': '毫秒',
-};
+RegExp _timeReg = RegExp(r'D{2}|H{2}|m{2}|s{2}|S{3}');
 
-RegExp timeReg = RegExp(r'D{2}|H{2}|m{2}|s{2}|S{3}');
+String _toDigits(int n, int l) => n.toString().padLeft(l, '0');
 
-String toDigits(int n, int l) => n.toString().padLeft(l, '0');
-
-String getMark(String format, String? type) {
+String _getMark(String format, String? type) {
   var part = format.split(type ?? '')[1];
   if (part.isEmpty) {
     return '';
@@ -78,8 +71,7 @@ class TDCountDown extends StatefulWidget {
   _TDCountDownState createState() => _TDCountDownState();
 }
 
-class _TDCountDownState extends State<TDCountDown>
-    with SingleTickerProviderStateMixin {
+class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStateMixin {
   late Ticker _ticker;
   int _time = 0;
 
@@ -118,9 +110,7 @@ class _TDCountDownState extends State<TDCountDown>
   @override
   Widget build(BuildContext context) {
     if (widget.content == 'default') {
-      return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: _buildTimeWidget(context));
+      return Row(mainAxisSize: MainAxisSize.min, children: _buildTimeWidget(context));
     }
     if (widget.content is Function) {
       return widget.content(_time);
@@ -129,10 +119,15 @@ class _TDCountDownState extends State<TDCountDown>
   }
 
   List<Widget> _buildTimeWidget(BuildContext context) {
-    var format = widget.millisecond
-        ? '${widget.format.replaceAll(':SSS', '')}:SSS'
-        : widget.format;
-    var matches = timeReg.allMatches(format);
+    var timeUnitMap = {
+      'DD': context.resource.days,
+      'HH': context.resource.hours,
+      'mm': context.resource.minutes,
+      'ss': context.resource.seconds,
+      'SSS': context.resource.milliseconds,
+    };
+    var format = widget.millisecond ? '${widget.format.replaceAll(':SSS', '')}:SSS' : widget.format;
+    var matches = _timeReg.allMatches(format);
     var timeMap = _getTimeMap(_time);
     return matches
         .map((match) {
@@ -140,12 +135,10 @@ class _TDCountDownState extends State<TDCountDown>
           var timeData = timeUnitMap[timeType] ?? '';
           return _buildTextWidget(
               timeMap[timeType] ?? '0',
-              widget.splitWithUnit ? timeData : getMark(format, timeType),
+              widget.splitWithUnit ? timeData : _getMark(format, timeType),
               widget.style ??
                   TDCountDownStyle.generateStyle(context,
-                      size: widget.size,
-                      theme: widget.theme,
-                      splitWithUnit: widget.splitWithUnit));
+                      size: widget.size, theme: widget.theme, splitWithUnit: widget.splitWithUnit));
         })
         .expand((element) => element)
         .toList();
@@ -164,7 +157,7 @@ class _TDCountDownState extends State<TDCountDown>
         margin: style.timeMargin,
         decoration: style.timeBox,
         child: Center(
-            child: Text(time,
+            child: TDText(time,
                 style: TextStyle(
                     fontFamily: style.timeFontFamily?.fontFamily,
                     package: style.timeFontFamily?.package,
@@ -177,7 +170,7 @@ class _TDCountDownState extends State<TDCountDown>
     if (split.isNotEmpty) {
       children.addAll([
         SizedBox(width: style.space),
-        Text(split,
+        TDText(split,
             style: TextStyle(
                 fontSize: style.splitFontSize,
                 height: style.splitFontHeight,
@@ -191,17 +184,11 @@ class _TDCountDownState extends State<TDCountDown>
 
   Map<String, String> _getTimeMap(int m) {
     var duration = Duration(milliseconds: m);
-    var days = toDigits(duration.inDays, 2);
-    var hours = toDigits(duration.inHours, 2);
-    var minutes = toDigits(duration.inMinutes.remainder(60), 2);
-    var seconds = toDigits(duration.inSeconds.remainder(60), 2);
-    var milliseconds = toDigits(duration.inMilliseconds.remainder(1000), 3);
-    return {
-      'DD': days,
-      'HH': hours,
-      'mm': minutes,
-      'ss': seconds,
-      'SSS': milliseconds
-    };
+    var days = _toDigits(duration.inDays, 2);
+    var hours = _toDigits(duration.inHours, 2);
+    var minutes = _toDigits(duration.inMinutes.remainder(60), 2);
+    var seconds = _toDigits(duration.inSeconds.remainder(60), 2);
+    var milliseconds = _toDigits(duration.inMilliseconds.remainder(1000), 3);
+    return {'DD': days, 'HH': hours, 'mm': minutes, 'ss': seconds, 'SSS': milliseconds};
   }
 }
