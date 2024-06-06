@@ -1,20 +1,17 @@
 
   Widget _iconTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
-        useVerticalDivider: true,
-        navigationTabs: [
-          TDBottomTabBarTabConfig(
-              selectedIcon: _selectedIcon,
-              unselectedIcon: _unSelectedIcon,
-              onTap: () {
-                onTapTab(context, '标签1');
-              }),
-          TDBottomTabBarTabConfig(
-
-            selectedIcon: _selectedIcon,
-            unselectedIcon: _unSelectedIcon,
-              onTap: () {
-                onTapTab(context, '标签2');
-              })
-        ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
+      TDBottomTabBarTabConfig(
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
+          onTap: () {
+            onTapTab(context, '标签1');
+          }),
+      TDBottomTabBarTabConfig(
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
+          onTap: () {
+            onTapTab(context, '标签2');
+          })
+    ]);
   }

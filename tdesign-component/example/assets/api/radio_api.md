@@ -28,6 +28,7 @@
 | titleColor |  | - |  |
 | subTitleColor |  | - |  |
 | backgroundColor |  | - |  |
+| checkBoxLeftSpace |  | - |  |
 
 ```
 ```

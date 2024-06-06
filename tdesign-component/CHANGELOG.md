@@ -1,3 +1,49 @@
+
+## 🌈 0.1.5 `2024-05-31`
+
+### 🚀 Features
+- `TDDropdownMenu`:
+  - add: Added TDDropdownMenu dropdown menu component @hkaikai
+- `TDTextarea`:
+  - add: Added Textarea multiline text box component @hkaikai
+- `TDBottomTabBar`:
+  - add: Support for custom background color and distance between icon and text ([#138](https://github.com/Tencent/tdesign-flutter/issues/138))
+  - add: TDBottomTabBar supports externally setting currentIndex ([#110](https://github.com/Tencent/tdesign-flutter/issues/110))
+- `TDBadge`:
+  - add: TDBadge badge visibility setting when value is 0 @ccXxx1aoBai
+- `TDRadio`:
+  - add: TDRadio added custom background color and text color @ccXxx1aoBai ([#135](https://github.com/Tencent/tdesign-flutter/issues/135))
+  - add: Added API to remove left margin ([#128](https://github.com/Tencent/tdesign-flutter/issues/128))
+- `TDCheckbox`:
+  - add: TDCheckbox added custom text color
+  - add: Added API to remove left margin
+- `TDImage`:
+  - add: Added Image.file ([#133](https://github.com/Tencent/tdesign-flutter/issues/133))
+  - add: Allow external customization of TDImage's fit method ([#114](https://github.com/Tencent/tdesign-flutter/issues/114))
+- `TDInput`:
+  - add: Added custom size for Input clear button ([#147](https://github.com/Tencent/tdesign-flutter/issues/147))
+  - add: Added left margin for label text ([#147](https://github.com/Tencent/tdesign-flutter/issues/147))
+  - add: Added rightWidget for carType type ([#147](https://github.com/Tencent/tdesign-flutter/issues/32))
+- `TDDivider`:
+  - add: Added text style size setting for divider component ([#134](https://github.com/Tencent/tdesign-flutter/issues/134))
+- `TDToast`:
+  - add: Toast added attribute for custom text length ([#148](https://github.com/Tencent/tdesign-flutter/issues/148))
+- `TDSideBar`:
+  - add: Added selected style ([#69](https://github.com/Tencent/tdesign-flutter/issues/69))
+  - add: Added custom text padding ([#67](https://github.com/Tencent/tdesign-flutter/issues/67))
+
+### 🐞 Bug Fixes
+- `TDButton`:
+  - fix: Added mounted judgment before setState() ([#122](https://github.com/Tencent/tdesign-flutter/issues/112))
+- `TDDialog`:
+  - fix: Modified Dialog to only auto-close when no action is set, if action is set, closing time is handled by the business itself ([#117](https://github.com/Tencent/tdesign-flutter/issues/117))
+
+### 🚧 Others
+- Added international language adaptation function
+- Adapted to 3.16 text centering, added TDTextConfig usage document
+
+
+
 ## 🌈 0.1.4 `2024-04-08`
 
 ### 🚀 Features

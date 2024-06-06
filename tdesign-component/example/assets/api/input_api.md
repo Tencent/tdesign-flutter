@@ -12,6 +12,7 @@
 | leftIcon | Widget? | - | 带图标的输入框 |
 | leftLabel | String? | - | 输入框左侧文案 |
 | leftLabelStyle | TextStyle? | - | 左侧标签样式 |
+| leftLabelSpace | double? | - | 输入框左侧文案间距 |
 | required | bool? | - | 是否必填标志（红色*） |
 | readOnly | bool | false | 是否只读 |
 | autofocus | bool | false | 是否自动获取焦点 |
@@ -40,6 +41,7 @@
 | additionInfo | String? | '' | 错误提示信息 |
 | additionInfoColor | Color? | - | 错误提示颜色 |
 | textAlign | TextAlign? | - | 文字对齐方向 |
+| clearIconSize | double? | - | 清除按钮图标大小 |
 | onClearTap | GestureTapCallback? | - | 右侧删除点击 |
 | needClear | bool | true | 是否需要右侧按钮变为删除 |
 | clearBtnColor | Color? | - | 右侧删除按钮颜色 |
