@@ -8,7 +8,7 @@
       useVerticalDivider: false,
       navigationTabs: [
         TDBottomTabBarTabConfig(
-         selectedIcon: _selectedIcon,
+          selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBage: true,
@@ -22,7 +22,7 @@
           },
         ),
         TDBottomTabBarTabConfig(
-         selectedIcon: _selectedIcon,
+          selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
@@ -30,7 +30,7 @@
           },
         ),
         TDBottomTabBarTabConfig(
-         selectedIcon: _selectedIcon,
+          selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
           tabText: '标签',
           onTap: () {
