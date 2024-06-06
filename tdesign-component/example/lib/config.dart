@@ -11,6 +11,7 @@ import 'page/td_avatar_page.dart';
 import 'page/td_badge_page.dart';
 import 'page/td_bottom_tab_bar_page.dart';
 import 'page/td_button_page.dart';
+import 'page/td_cell_page.dart';
 import 'page/td_checkbox_page.dart';
 import 'page/td_count_down_page.dart';
 import 'page/td_date_picker_page.dart';
@@ -149,7 +150,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Badge 徽标', name: 'badge', pageBuilder: _wrapInheritedTheme((context) => const TDBadgePage())),
     ExamplePageModel(
-        text: 'Cell 单元格', name: 'cell', isTodo: true, pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        text: 'Cell 单元格', name: 'cell', pageBuilder: _wrapInheritedTheme((context) => const TDCellPage())),
     ExamplePageModel(
         text: 'CountDown 倒计时',
         name: 'count-down',
