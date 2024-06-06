@@ -153,8 +153,8 @@ class _TDCellState extends State<TDCell> {
                             if (widget.titleWidget != null)
                               Flexible(child: widget.titleWidget!)
                             else if (widget.title != null)
-                              Flexible(child: Text(widget.title!, style: style.titleStyle)),
-                            if (widget.required ?? false) Text(' *', style: style.requiredStyle),
+                              Flexible(child: TDText(widget.title!, style: style.titleStyle)),
+                            if (widget.required ?? false) TDText(' *', style: style.requiredStyle),
                           ],
                         ),
                         if ((widget.titleWidget != null || widget.title != null) &&
@@ -163,7 +163,7 @@ class _TDCellState extends State<TDCell> {
                         if (widget.descriptionWidget != null)
                           widget.descriptionWidget!
                         else if (widget.description != null)
-                          Text(widget.description!, style: style.descriptionStyle),
+                          TDText(widget.description!, style: style.descriptionStyle),
                       ],
                     ),
                   ),
@@ -177,7 +177,7 @@ class _TDCellState extends State<TDCell> {
                 if (widget.noteWidget != null)
                   widget.noteWidget!
                 else if (widget.note != null)
-                  Text(widget.note!, style: style.noteStyle),
+                  TDText(widget.note!, style: style.noteStyle),
                 if (widget.rightIconWidget != null)
                   widget.rightIconWidget!
                 else if (widget.rightIcon != null)
