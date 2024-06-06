@@ -106,7 +106,7 @@ Widget _buildDesSimple(BuildContext context) {
         title: '多行带图片',
         description: '一段很长很长的内容文字',
         image: AssetImage('assets/img/image.png'),
-        imageCircle: 0,
+        imageCircle: 8,
       ),
     ],
   );
