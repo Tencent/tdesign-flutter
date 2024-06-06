@@ -15,3 +15,4 @@
 | widthLarge | double | 32 | 角标大三角形宽 |
 | widthSmall | double | 12 | 角标小三角形宽 |
 | padding | EdgeInsetsGeometry? | - | 角标自定义padding |
+| showZero | bool | true | 值为0是否显示 |

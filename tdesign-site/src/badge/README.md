@@ -218,6 +218,61 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               ],
             ),
           ),
+          const SizedBox(width: 40),
+          SizedBox(
+            width: 64,
+            height: 56,
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                Container(
+                  child: const Icon(TDIcons.notification),
+                  decoration: BoxDecoration(
+                      color: TDTheme.of(context).grayColor2,
+                      borderRadius: BorderRadius.circular(
+                          TDTheme.of(context).radiusDefault)),
+                  height: 48,
+                  width: 48,
+                ),
+                const Positioned(
+                  child: TDBadge(
+                    TDBadgeType.message,
+                    count: '0',
+                  ),
+                  right: 0,
+                  top: 0,
+                )
+              ],
+            ),
+          ),
+          const SizedBox(width: 40),
+          SizedBox(
+            width: 64,
+            height: 56,
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                Container(
+                  child: const Icon(TDIcons.notification),
+                  decoration: BoxDecoration(
+                      color: TDTheme.of(context).grayColor2,
+                      borderRadius: BorderRadius.circular(
+                          TDTheme.of(context).radiusDefault)),
+                  height: 48,
+                  width: 48,
+                ),
+                const Positioned(
+                  child: TDBadge(
+                    TDBadgeType.message,
+                    count: '0',
+                    showZero: false,
+                  ),
+                  right: 0,
+                  top: 0,
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -415,11 +470,10 @@ Large
   }</pre>
 
 </td-code-block>
-
-
+                                  
 
 Medium
-
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -475,7 +529,7 @@ Medium
 | widthLarge | double | 32 | 角标大三角形宽 |
 | widthSmall | double | 12 | 角标小三角形宽 |
 | padding | EdgeInsetsGeometry? | - | 角标自定义padding |
-| showZeor | bool | true | 值为0是否显示角标 |
+| showZero | bool | true | 值为0是否显示 |
 
 
   

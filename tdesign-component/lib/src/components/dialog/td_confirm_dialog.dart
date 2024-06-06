@@ -88,9 +88,10 @@ class TDConfirmDialog extends StatelessWidget {
             buttonTheme: TDButtonTheme.primary,
             height: 56,
             onPressed: () {
-              Navigator.pop(context);
               if (action != null) {
                 action!();
+              } else {
+                Navigator.pop(context);
               }
             },
           )
@@ -104,9 +105,10 @@ class TDConfirmDialog extends StatelessWidget {
           buttonTextColor: buttonTextColor,
           buttonTheme: TDButtonTheme.primary,
           onPressed: () {
-            Navigator.pop(context);
             if (action != null) {
               action!();
+            } else {
+              Navigator.pop(context);
             }
           },
         ),

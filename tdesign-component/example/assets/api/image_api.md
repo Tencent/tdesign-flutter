@@ -11,6 +11,7 @@
 | loadingWidget | Widget? | - | 加载自定义提示 |
 | width | double? | - | 自定义宽 |
 | height | double? | - | 自定义高 |
+| fit | BoxFit? | - | 适配样式 |
 | frameBuilder | ImageFrameBuilder? | - | 以下系统Image属性，释义请参考系统[Image]中注释 |
 | loadingBuilder |  | - |  |
 | errorBuilder |  | - |  |
@@ -29,3 +30,4 @@
 | cacheHeight |  | - |  |
 | cacheWidth |  | - |  |
 | assetUrl | String? | - | 本地素材地址 |
+| imageFile | File? | - | 图片文件路径 |
