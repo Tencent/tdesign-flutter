@@ -44,23 +44,23 @@ class TDCellPage extends StatelessWidget {
               ),
             ]),
           ],
-          test: [
-            ExampleItem(
-              ignoreCode: true,
-              desc: '显示外边框',
-              center: false,
-              builder: (BuildContext context) {
-                return const CodeWrapper(builder: _buildBorder);
-              },
-            ),
-            ExampleItem(
-              ignoreCode: true,
-              desc: '显示标题',
-              center: false,
-              builder: (BuildContext context) {
-                return const CodeWrapper(builder: _buildTitle);
-              },
-            ),
+          test: const [
+            // ExampleItem(
+            //   ignoreCode: true,
+            //   desc: '显示外边框',
+            //   center: false,
+            //   builder: (BuildContext context) {
+            //     return const CodeWrapper(builder: _buildBorder);
+            //   },
+            // ),
+            // ExampleItem(
+            //   ignoreCode: true,
+            //   desc: '显示标题',
+            //   center: false,
+            //   builder: (BuildContext context) {
+            //     return const CodeWrapper(builder: _buildTitle);
+            //   },
+            // ),
           ],
         ));
   }
@@ -95,16 +95,19 @@ Widget _buildDesSimple(BuildContext context) {
       TDCell(arrow: false, title: '单行标题', description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
       TDCell(arrow: false, title: '多行高度不定，长文本自动换行，该选项的描述是一段很长的内容', description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
       TDCell(
-          arrow: true,
-          title: '多行带头像',
-          description: '一段很长很长的内容文字',
-          image: NetworkImage('https://tdesign.gtimg.com/mobile/demos/avatar1.png')),
+        arrow: true,
+        title: '多行带头像',
+        description: '一段很长很长的内容文字',
+        image: AssetImage('assets/img/td_avatar_1.png'),
+      ),
+      // NetworkImage('https://tdesign.gtimg.com/mobile/demos/avatar1.png')),
       TDCell(
-          arrow: true,
-          title: '多行带图片',
-          description: '一段很长很长的内容文字',
-          image: NetworkImage('https://tdesign.gtimg.com/mobile/demos/example4.png'),
-          imageCircle: 0),
+        arrow: true,
+        title: '多行带图片',
+        description: '一段很长很长的内容文字',
+        image: AssetImage('assets/img/image.png'),
+        imageCircle: 0,
+      ),
     ],
   );
 }
@@ -121,30 +124,30 @@ Widget _buildCard(BuildContext context) {
   );
 }
 
-@Demo(group: 'cell')
-Widget _buildBorder(BuildContext context) {
-  return const TDCellGroup(
-    theme: TDCellGroupTheme.cardTheme,
-    bordered: true,
-    cells: [
-      TDCell(arrow: true, title: '单行标题'),
-      TDCell(arrow: true, title: '单行标题', required: true),
-      TDCell(arrow: true, title: '单行标题'),
-    ],
-  );
-}
+// @Demo(group: 'cell')
+// Widget _buildBorder(BuildContext context) {
+//   return const TDCellGroup(
+//     theme: TDCellGroupTheme.cardTheme,
+//     bordered: true,
+//     cells: [
+//       TDCell(arrow: true, title: '单行标题'),
+//       TDCell(arrow: true, title: '单行标题', required: true),
+//       TDCell(arrow: true, title: '单行标题'),
+//     ],
+//   );
+// }
 
-@Demo(group: 'cell')
-Widget _buildTitle(BuildContext context) {
-  var style = TDCellStyle.cellStyle(context);
-  style.leftIconColor = TDTheme.of(context).fontGyColor1;
-  return TDCellGroup(
-    title: '标题',
-    style: style,
-    cells: const [
-      TDCell(title: 'item', leftIcon: TDIcons.app),
-      TDCell(title: 'item', leftIcon: TDIcons.app),
-      TDCell(title: 'item', leftIcon: TDIcons.app),
-    ],
-  );
-}
+// @Demo(group: 'cell')
+// Widget _buildTitle(BuildContext context) {
+//   var style = TDCellStyle.cellStyle(context);
+//   style.leftIconColor = TDTheme.of(context).fontGyColor1;
+//   return TDCellGroup(
+//     title: '标题',
+//     style: style,
+//     cells: const [
+//       TDCell(title: 'item', leftIcon: TDIcons.app),
+//       TDCell(title: 'item', leftIcon: TDIcons.app),
+//       TDCell(title: 'item', leftIcon: TDIcons.app),
+//     ],
+//   );
+// }

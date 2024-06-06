@@ -61,7 +61,7 @@ class _TDCellGroupState extends State<TDCellGroup> {
                 top: TDTheme.of(context).spacer24,
                 bottom: TDTheme.of(context).spacer8,
               ),
-              child: widget.titleWidget ?? Text(widget.title!, style: style.groupTitleStyle),
+              child: widget.titleWidget ?? TDText(widget.title!, style: style.groupTitleStyle),
             ),
           Padding(
             padding: widget.theme == TDCellGroupTheme.cardTheme
