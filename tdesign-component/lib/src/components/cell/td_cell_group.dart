@@ -72,6 +72,7 @@ class _TDCellGroupState extends State<TDCellGroup> {
               child: ClipRRect(
                 borderRadius: radius,
                 child: ListView.separated(
+                  padding: EdgeInsets.zero,
                   shrinkWrap: true, // 设置为true以避免无限制地增长
                   physics: const NeverScrollableScrollPhysics(), // 禁用ListView的滚动
                   itemCount: itemCount,

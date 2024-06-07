@@ -43,12 +43,12 @@ Widget _buildBaseSimple(BuildContext context) {
         context,
         visible: true,
         items: [
-          TDDrawerItem(title: '菜单一'),
-          TDDrawerItem(title: '菜单儿'),
-          TDDrawerItem(title: '菜单三'),
-          TDDrawerItem(title: '菜单四'),
-          TDDrawerItem(title: '菜单五'),
-          TDDrawerItem(title: '菜单六'),
+          TDDrawerItem(title: '菜单一', icon: const Icon(TDIcons.app)),
+          TDDrawerItem(title: '菜单二', icon: const Icon(TDIcons.app)),
+          TDDrawerItem(title: '菜单三', icon: const Icon(TDIcons.app)),
+          TDDrawerItem(title: '菜单四', icon: const Icon(TDIcons.app)),
+          TDDrawerItem(title: '菜单五', icon: const Icon(TDIcons.app)),
+          TDDrawerItem(title: '菜单六', icon: const Icon(TDIcons.app)),
         ],
       );
     },
