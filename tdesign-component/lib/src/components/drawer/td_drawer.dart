@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/td_colors.dart';
+import '../../theme/td_theme.dart';
+import '../cell/td_cell.dart';
+import '../cell/td_cell_group.dart';
+import '../cell/td_cell_style.dart';
+import '../icon/td_icons.dart';
 import '../popup/td_popup_route.dart';
 
 typedef TDDrawerItemClickCallback = void Function(int index, TDDrawerItem item);
@@ -17,9 +23,12 @@ class TDDrawer {
     this.placement,
     this.showOverlay,
     this.title,
+    this.titleWidget,
     this.visible,
     this.onClose,
     this.onItemClick,
+    this.width = 280,
+    this.style,
   }) {
     if (visible == true) {
       show();
@@ -45,7 +54,10 @@ class TDDrawer {
   final bool? showOverlay;
 
   /// 抽屉的标题
-  final Widget? title;
+  final String? title;
+
+  /// 抽屉的标题组件
+  final Widget? titleWidget;
 
   /// 组件是否可见
   final bool? visible;
@@ -55,6 +67,12 @@ class TDDrawer {
 
   /// 点击抽屉里的列表项触发
   final TDDrawerItemClickCallback? onItemClick;
+
+  /// 宽度
+  final double? width;
+
+  /// 列表自定义样式
+  final TDCellStyle? style;
 
   static TDSlidePopupRoute? _drawerRoute;
 
@@ -69,9 +87,21 @@ class TDDrawer {
       isDismissible: (showOverlay ?? true) ? (closeOnOverlayClick ?? true) : false,
       modalBarrierColor: (showOverlay ?? true) ? null : Colors.transparent,
       builder: (context) {
+        var cellStyle = style;
+        if (cellStyle == null) {
+          cellStyle = TDCellStyle.cellStyle(context);
+          cellStyle.leftIconColor = TDTheme.of(context).fontGyColor1;
+        }
+        var cells = items?.map((e) => TDCell(titleWidget: e.content, title: e.title, leftIconWidget: e.icon)).toList();
         return Container(
           color: Colors.white,
-          width: 280,
+          width: width ?? 280,
+          child: TDCellGroup(
+            title: title,
+            titleWidget: titleWidget,
+            style: cellStyle,
+            cells: cells ?? [],
+          ),
         );
       },
     );
@@ -99,10 +129,10 @@ class TDDrawer {
 
 /// 抽屉里的列表项
 class TDDrawerItem {
-  TDDrawerItem({required this.title, this.icon, this.content});
+  TDDrawerItem({this.title, this.icon, this.content});
 
   /// 每列标题
-  final String title;
+  final String? title;
 
   /// 每列图标
   final Widget? icon;
