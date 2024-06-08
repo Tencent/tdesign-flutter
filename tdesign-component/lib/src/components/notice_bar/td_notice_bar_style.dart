@@ -16,6 +16,7 @@ enum TDNoticeBarType {
   step
 }
 
+/// 公告栏主题
 enum TDNoticeBarTheme {
   /// 默认
   info,
@@ -69,8 +70,10 @@ class TDNoticeBarStyle {
       TextStyle(
           color: TDTheme.of(context).fontGyColor1, fontSize: 16, height: 1);
 
+  /// 根据主题生成样式
   TDNoticeBarStyle.generateTheme(BuildContext context,
       {TDNoticeBarTheme? theme = TDNoticeBarTheme.info}) {
+    rightIconColor = TDTheme.of(context).grayColor7;
     switch (theme) {
       case TDNoticeBarTheme.warning:
         leftIconColor = TDTheme.of(context).warningNormalColor;
