@@ -18,7 +18,7 @@ enum TDCountDownStatus {
   idle,
 }
 
-/// 倒计时组件控制器，可控制开始/暂停/继续/重置
+/// 倒计时组件控制器，可控制开始(`start()`)/暂停(`pause()`)/继续(`resume()`)/重置(`reset([int? time])`)
 class TDCountDownController extends ValueNotifier<TDCountDownStatus> {
   TDCountDownController() : super(TDCountDownStatus.idle);
 
