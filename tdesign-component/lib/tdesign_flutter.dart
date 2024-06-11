@@ -8,6 +8,7 @@ export 'src/components/cell/td_cell_style.dart';
 export 'src/components/checkbox/td_check_box.dart';
 export 'src/components/checkbox/td_check_box_group.dart';
 export 'src/components/count_down/td_count_down.dart';
+export 'src/components/count_down/td_count_down_controller.dart';
 export 'src/components/count_down/td_count_down_style.dart';
 export 'src/components/dialog/td_dialog.dart';
 export 'src/components/divider/td_divider.dart';
