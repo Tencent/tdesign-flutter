@@ -15,8 +15,8 @@ class TDCascader {
         Duration duration = const Duration(milliseconds: 100),
         Color? barrierColor,
         double cascaderHeight = 500,
-        int cascaderItemCount = 5,
         String? initialData,
+        List<String>? subTitles,
         Function? onClose}) {
     showModalBottomSheet(
         context: context,
@@ -29,10 +29,10 @@ class TDCascader {
             data: data,
             initialIndexes: initialIndexes,
             cascaderHeight: cascaderHeight,
-            cascaderItemCount: cascaderItemCount,
             initialData:initialData,
             onChange: onChange,
             theme: theme,
+              subTitles:subTitles
           );
         });
   }

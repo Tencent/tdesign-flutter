@@ -37,6 +37,8 @@ class _TDCustomTabState extends State<TDCustomTab> {
                   setState(() {
                     _currentTabIndex = index;
                   });
+                  final ScrollPosition position = _scrollController!.position;
+                  print('position---$position');
                   _scrollToListIndex(index);
                   _onChangeTab(index);
                 },
@@ -80,11 +82,12 @@ class _TDCustomTabState extends State<TDCustomTab> {
   /// 定位选项在列表中位置
   void _scrollToListIndex(int index) {
     // 计算列表中特定索引的位置
-    double scrollTo = index * 96.0; // 每个列表项的高度是56.0
+    double scrollTo = index * 96.0;
+
     _scrollController.animateTo(
       scrollTo,
       duration: Duration(milliseconds: 100),
-      curve: Curves.easeInToLinear,
+      curve: Curves.ease,
     );
   }
 }

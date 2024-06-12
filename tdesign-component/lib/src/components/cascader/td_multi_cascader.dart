@@ -14,13 +14,10 @@ class TDMultiCascader extends StatefulWidget {
   final String? theme;
 
   ///	每级展示的次标题
-  final String? subTitles;
+  final List<String>? subTitles;
 
   /// 选择器List的视窗高度，默认200
   final double cascaderHeight;
-
-  /// 选择器List视窗中item个数，cascaderHeight / cascaderItemCount即item高度
-  final int cascaderItemCount;
 
   /// 若为null表示全部从零开始
   final List<int>? initialIndexes;
@@ -50,7 +47,6 @@ class TDMultiCascader extends StatefulWidget {
       this.subTitles,
       required this.data,
       required this.cascaderHeight,
-      required this.cascaderItemCount,
       this.initialIndexes,
       this.initialData,
       this.backgroundColor,
@@ -63,7 +59,6 @@ class TDMultiCascader extends StatefulWidget {
 }
 
 class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderStateMixin {
-  double _cascaderHeight = 0;
 
   List<MultiCascaderListModel> _tabListData = [];
 
@@ -84,15 +79,14 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
 
   final ScrollController _scrollListController = ScrollController();
 
-  late TabController _tabCon;
   @override
   void initState() {
     super.initState();
-    _cascaderHeight = widget.cascaderHeight;
     List.generate(widget.data.length, (index) {
       MultiCascaderListModel item = MultiCascaderListModel(
         label: widget.data[index]['label'],
         value: widget.data[index]['value'],
+        segmentValue:widget.data[index]['segmentValue'],
         level: 0,
       );
       _listData.add(item);
@@ -100,6 +94,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
         _buildRecursiveList(1, widget.data[index]['value'], widget.data[index]['children']);
       }
     });
+    _listDataSegmenter();
     _selectListData = _listData.where((element) => element.level == 0).toList();
 
     _tabListData.add(MultiCascaderListModel(
@@ -109,13 +104,12 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
       _tabListData.clear();
       _initLocation(widget.initialData!);
       _currentTabIndex = _tabListData.length - 1;
+      _level=_currentTabIndex;
       _tabListData = _tabListData.reversed.toList();
       _selectTabValue = widget.initialData;
       _selectListData =
           _listData.where((element) => element.parentValue == _tabListData[_currentTabIndex].parentValue).toList();
     }
-    _tabCon = TabController(length: _tabListData.length, vsync: this);
-    print(_tabListData);
   }
 
   @override
@@ -177,16 +171,26 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     }
   }
 
+  void _listDataSegmenter(){
+    _listData.sort((a,b){
+      if(a.segmentValue==null){
+         return 0;
+      }else{
+        return a.segmentValue!.toLowerCase().compareTo(b.segmentValue!.toLowerCase());
+      }
+    });
+  }
+
   void _buildRecursiveList(int depth, String parentValue, List<Map> data) {
     List.generate(data.length, (index) {
       MultiCascaderListModel item = MultiCascaderListModel(
         label: data[index]['label'],
         value: data[index]['value'],
         parentValue: parentValue,
+        segmentValue:data[index]['segmentValue'],
         level: depth,
       );
       _listData.add(item);
-      _level = depth;
       if (data[index]['children'] != null && data[index]['children'].length > 0) {
         _buildRecursiveList(depth + 1, data[index]['value'], data[index]['children']);
       }
@@ -235,8 +239,8 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   }
 
   Widget _buildTabThemeBox(BuildContext context) {
-    String them = widget.theme ?? 'setp';
-    return them == 'setp' ? _buildStepBox(context) : _buildTabBox(context);
+    String them = widget.theme ?? 'step';
+    return them == 'step' ? _buildStepBox(context) : _buildTabBox(context);
   }
 
   Widget _buildStepBox(BuildContext context) {
@@ -311,61 +315,92 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
         decoration: BoxDecoration(border: Border(top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.1)))),
         width: maxWidth,
         padding: EdgeInsets.only(left: 16, right: 16),
-        child: PageView(
-          scrollDirection: Axis.horizontal,
-          reverse: false,
-          controller: PageController(initialPage: 1, keepPage: false),
-          children: List.generate(1, (index) {
-            return ListView.builder(
-              controller: _scrollListController,
-              itemCount: _selectListData.length,
-              itemBuilder: (context, index) {
-                MultiCascaderListModel item = _selectListData[index];
-                return GestureDetector(
-                  onTap: () {
-                    int level = 0;
-                    if (_tabListData.length > 2 && _currentTabIndex == 0) {
-                      _tabListData.clear();
-                      _tabListData.add(MultiCascaderListModel(
-                        label: '选择选项',
-                      ));
-                    }
-                    if (item.level != null) {
-                      level = item.level!;
-                    }
-                    List isList = _tabListData.where((element) => element.level == item.level).toList();
-                    if (isList.isNotEmpty) {
-                      _tabListData.removeAt(level);
-                    }
-                    setState(() {
-                      _tabListData.insert(level, item);
-                      _selectTabValue = item.value;
-                      //下一级查询
-                      _getChildenListData(level + 1, item.value!);
-                    });
-                  },
-                  child: Container(
-                      height: 56,
-                      decoration: BoxDecoration(border: Border.all(color: Colors.transparent)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          TDText(
-                            '${item.label}',
-                            font: Font(size: 16, lineHeight: 24),
-                          ),
-                          if (_selectTabValue == item.value)
-                            Icon(
-                              TDIcons.check,
-                              color: TDTheme.of(context).brandNormalColor,
-                            )
-                        ],
-                      )),
-                );
-              },
-            );
-          }),
+        child:Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+                if(widget.subTitles!=null)
+               Container(
+                 height: 50,
+                 alignment: Alignment.centerLeft,
+                 child:TDText(widget.subTitles![_level],style: TextStyle(fontSize: 14,color: Color.fromRGBO(0, 0, 0, 0.4)),)  //,
+               ),
+              Expanded(child: PageView(
+                scrollDirection: Axis.horizontal,
+                reverse: false,
+                controller: PageController(initialPage: 1, keepPage: false),
+                children: List.generate(1, (index) {
+                  return ListView.builder(
+                    controller: _scrollListController,
+                    itemCount: _selectListData.length,
+                    itemBuilder: (context, index) {
+                      MultiCascaderListModel item = _selectListData[index];
+                      MultiCascaderListModel preItem =index==0?MultiCascaderListModel():_selectListData[index-1];
+                      return GestureDetector(
+                        onTap: () {
+                          int level = 0;
+                          if (_tabListData.length > 2 && _currentTabIndex == 0) {
+                            _tabListData.clear();
+                            _tabListData.add(MultiCascaderListModel(
+                              label: '选择选项',
+                            ));
+                          }
+                          if (item.level != null) {
+                            level = item.level!;
+                          }
+
+                          if(widget.subTitles!=null&&widget.subTitles!.length-1>_level){
+                            _level=level+1;
+                          }
+                          List isList = _tabListData.where((element) => element.level == item.level).toList();
+                          if (isList.isNotEmpty) {
+                            _tabListData.removeAt(level);
+                          }
+                          setState(() {
+                            _tabListData.insert(level, item);
+                            _selectTabValue = item.value;
+                            //下一级查询
+                            _getChildenListData(level + 1, item.value!);
+                          });
+                        },
+                        child: Container(
+                            height: 56,
+                            decoration: BoxDecoration(border: Border.all(color: Colors.transparent)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      if(item.segmentValue!=null)
+                                        SizedBox(
+                                          width:32,
+                                          child:item.segmentValue!=preItem.segmentValue?TDText(
+                                            '${item.segmentValue}',
+                                            font: Font(size: 16, lineHeight: 24),
+                                          ):null,
+                                        ),
+                                      TDText(
+                                        '${item.label}',
+                                        font: Font(size: 16, lineHeight: 24),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                if (_selectTabValue == item.value)
+                                  Icon(
+                                    TDIcons.check,
+                                    color: TDTheme.of(context).brandNormalColor,
+                                  )
+                              ],
+                            )),
+                      );
+                    },
+                  );
+                }),
+              ))
+            ],
         ));
   }
 
@@ -380,6 +415,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     } else {
       _getFindListData(level: index, parentValue: _tabListData[index - 1].value);
     }
+    _level=index;
     setState(() {});
   }
 
@@ -418,13 +454,13 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   }
 
   /// 定位选项在列表中位置
-  void _scrollToListIndex(int index) {
+  void _scrollToListIndex(int index) async{
     // 计算列表中特定索引的位置
     double scrollTo = index * 56.0; // 每个列表项的高度是56.0
     _scrollListController.animateTo(
       scrollTo,
-      duration: Duration(milliseconds: 100),
-      curve: Curves.easeInToLinear,
+      duration: Duration(milliseconds: 1),
+      curve: Curves.ease,
     );
   }
 }
@@ -502,6 +538,9 @@ class MultiCascaderListModel {
   /// 父级值
   String? parentValue;
 
+  /// 分组值
+  String? segmentValue;
+
   int? level;
-  MultiCascaderListModel({this.label, this.value, this.parentValue, this.level});
+  MultiCascaderListModel({this.label, this.value, this.parentValue, this.level,this.segmentValue});
 }
