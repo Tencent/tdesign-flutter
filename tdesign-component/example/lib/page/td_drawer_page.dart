@@ -66,6 +66,9 @@ Widget _buildBaseSimple(BuildContext context) {
         context,
         visible: true,
         items: List.generate(30, (index) => TDDrawerItem(title: '菜单${index}')).toList(),
+        onItemClick: (index, item) {
+          print('drawer item被点击，index：$index，title：${item.title}');
+        },
       );
     },
   );
