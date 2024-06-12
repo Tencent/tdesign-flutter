@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/td_colors.dart';
+import '../../theme/td_spacers.dart';
 import '../../theme/td_theme.dart';
 import '../cell/td_cell.dart';
 import '../cell/td_cell_group.dart';
@@ -29,6 +30,7 @@ class TDDrawer {
     this.onItemClick,
     this.width = 280,
     this.style,
+    this.hover = false,
   }) {
     if (visible == true) {
       show();
@@ -74,6 +76,9 @@ class TDDrawer {
   /// 列表自定义样式
   final TDCellStyle? style;
 
+  /// 是否开启点击反馈
+  final bool? hover;
+
   static TDSlidePopupRoute? _drawerRoute;
 
   void show() {
@@ -92,15 +97,49 @@ class TDDrawer {
           cellStyle = TDCellStyle.cellStyle(context);
           cellStyle.leftIconColor = TDTheme.of(context).fontGyColor1;
         }
-        var cells = items?.map((e) => TDCell(titleWidget: e.content, title: e.title, leftIconWidget: e.icon)).toList();
+        var cells = items
+            ?.asMap()
+            .map(
+              (index, item) => MapEntry(
+                index,
+                TDCell(
+                  titleWidget: item.content,
+                  title: item.title,
+                  leftIconWidget: item.icon,
+                  hover: hover,
+                  onClick: (cell) {
+                    if (onItemClick == null) {
+                      return;
+                    }
+                    onItemClick!(index, items![index]);
+                  },
+                ),
+              ),
+            )
+            .values
+            .toList();
         return Container(
           color: Colors.white,
           width: width ?? 280,
-          child: TDCellGroup(
-            title: title,
-            titleWidget: titleWidget,
-            style: cellStyle,
-            cells: cells ?? [],
+          height: double.infinity,
+          child: Column(
+            children: [
+              Expanded(
+                child: TDCellGroup(
+                  title: title,
+                  titleWidget: titleWidget,
+                  style: cellStyle,
+                  scrollable: true,
+                  isShowLastBordered: true,
+                  cells: cells ?? [],
+                ),
+              ),
+              if (footer != null)
+                Container(
+                  padding: EdgeInsets.all(TDTheme.of(context).spacer16),
+                  child: footer,
+                ),
+            ],
           ),
         );
       },
