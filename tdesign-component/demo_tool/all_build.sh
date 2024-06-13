@@ -35,7 +35,7 @@
 # date_picker
 ./bin/demo_tool generate --folder ../lib/src/components/picker --name TDPicker,TDDatePicker --folder-name date-time-picker --output ../example/assets/api/ --only-api
 # input
-./bin/demo_tool generate --file ../lib/src/components/input/td_input.dart --name TDInput --folder-name input --output ../example/assets/api/ --only-api
+./bin/demo_tool generate --file ../lib/src/components/input/td_input.dart --name TDInput, TDInputSpacer --folder-name input --output ../example/assets/api/ --only-api
 # picker
 ./bin/demo_tool generate --folder ../lib/src/components/picker --name TDPicker,TDMultiPicker,TDMultiLinkedPicker,MultiLinkedPickerModel --folder-name picker --output ../example/assets/api/ --only-api
 # radio
