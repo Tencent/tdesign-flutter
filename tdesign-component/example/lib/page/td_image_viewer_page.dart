@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../annotation/demo.dart';
@@ -20,31 +20,107 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
       desc: '用于图片内容的缩略展示与查看。',
       exampleCodeGroup: 'image_viewer',
       children: [
-        ExampleModule(
-          title: '组件类型',
-          children: [
-            ExampleItem(
-              desc: '基础图片预览',
-                builder: _basicImageViewer)
-          ]
-        ),
+        ExampleModule(title: '组件类型', children: [
+          ExampleItem(desc: '基础图片预览', builder: _basicImageViewer),
+          ExampleItem(desc: '带操作图片预览', builder: _actionImageViewer)
+        ]),
       ],
+      test: [ExampleItem(desc: '长按图片', builder: _longPressImageViewer)],
     );
   }
-}
 
-@Demo(group: 'image_viewer')
-Widget _basicImageViewer(BuildContext context) {
-  var images = ['https://tdesign.gtimg.com/mobile/demos/swiper1.png',
-    'https://tdesign.gtimg.com/mobile/demos/swiper2.png',];
-  return TDButton(
-    type: TDButtonType.ghost,
-    theme: TDButtonTheme.primary,
-    isBlock: true,
-    size: TDButtonSize.large,
-    text: '基础图片预览',
-    onTap: () {
-      TDImageViewer.showImageViewer(context: context, images: images);
-    },
-  );
+  var images = [
+    'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
+    'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
+  ];
+
+  @Demo(group: 'image_viewer')
+  Widget _basicImageViewer(BuildContext context) {
+    return TDButton(
+      type: TDButtonType.ghost,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      size: TDButtonSize.large,
+      text: '基础图片预览',
+      onTap: () {
+        TDImageViewer.showImageViewer(context: context, images: images);
+      },
+    );
+  }
+
+  @Demo(group: 'image_viewer')
+  Widget _actionImageViewer(BuildContext context) {
+    return TDButton(
+      type: TDButtonType.ghost,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      size: TDButtonSize.large,
+      text: '带操作图片预览',
+      onTap: () {
+        TDImageViewer.showImageViewer(
+          context: context,
+          images: images,
+          showIndex: true,
+          deleteBtn: true,
+        );
+      },
+    );
+  }
+
+  @Demo(group: 'image_viewer')
+  Widget _longPressImageViewer(BuildContext context) {
+    return TDButton(
+      type: TDButtonType.ghost,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      size: TDButtonSize.large,
+      text: '长按图片',
+      onTap: () {
+        TDImageViewer.showImageViewer(
+          context: context,
+          images: images,
+          deleteBtn: true,
+          showIndex: true,
+          onLongPress: (index) {
+            Navigator.of(context).push(TDSlidePopupRoute(
+              slideTransitionFrom: SlideTransitionFrom.bottom,
+              builder: _getSheetItem,
+            ));
+          },
+        );
+      },
+    );
+  }
+
+  Widget _getSheetItem(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 120,
+      color: Colors.white,
+      child: Column(
+        children: [
+          const SizedBox(height: 16),
+          Text(
+            '保存图片',
+            style: TextStyle(
+              color: TDTheme.of(context).fontGyColor1,
+              decoration: TextDecoration.none,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          const TDDivider(margin: EdgeInsets.symmetric(vertical: 10),),
+          Text(
+            '删除图片',
+            style: TextStyle(
+              color: TDTheme.of(context).fontGyColor1,
+              decoration: TextDecoration.none,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
