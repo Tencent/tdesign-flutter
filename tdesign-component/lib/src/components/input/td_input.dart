@@ -368,7 +368,7 @@ class TDInput extends StatelessWidget {
                 visible: controller != null && controller!.text.isNotEmpty && needClear && rightWidget == null,
                 child: GestureDetector(
                     child: Container(
-                      margin: EdgeInsets.only(left: 17.5, right: 16, top: additionInfo != '' ? getInputPadding() : 0),
+                      margin: EdgeInsets.only(right: 16, top: additionInfo != '' ? getInputPadding() : 0),
                       child: Icon(
                         size: clearIconSize,
                         TDIcons.close_circle_filled,
