@@ -5,6 +5,51 @@ toc: false
 docClass: timeline
 ---
 
+## 🌈 0.1.5 `2024-05-31`
+
+### 🚀 Features
+- `TDDropdownMenu`:
+  - add: 新增TDDropdownMenu 下拉菜单 组件 @hkaikai
+- `TDTextarea`:
+  - add: 新增Textarea 多行文本框 组件 @hkaikai
+- `TDBottomTabBar`:
+  - add:支持自定义背景颜色和icon与文本中间距离([#138](https://github.com/Tencent/tdesign-flutter/issues/138))
+  - add:TDBottomTabBar支持外部设置currentIndex ([#110](https://github.com/Tencent/tdesign-flutter/issues/110))
+- `TDBadge`:
+  - add: TDBadge当值为0时角标显隐设置  @ccXxx1aoBai
+- `TDRadio`:
+  - add: TDRadio增加自定义背景色和文字颜色 @ccXxx1aoBai ([#135](https://github.com/Tencent/tdesign-flutter/issues/135))
+  - add: 新增去掉左边边距API([#128](https://github.com/Tencent/tdesign-flutter/issues/128))
+- `TDCheckbox`:
+  - add: TDCheckbox增加自定义文字颜色
+  - add: 新增去掉左边边距API
+- `TDImage`:
+  - add: 新增Image.file([#133](https://github.com/Tencent/tdesign-flutter/issues/133))
+  - add: 允许外部自定义TDImage的fit方式([#114](https://github.com/Tencent/tdesign-flutter/issues/114))
+- `TDInput`:
+  - add: 新增Input清除按钮自定义尺寸 ([#147](https://github.com/Tencent/tdesign-flutter/issues/147))
+  - add: 新增label文本左侧间距 ([#147](https://github.com/Tencent/tdesign-flutter/issues/147))
+  - add: 新增carType类型的rightWidget ([#147](https://github.com/Tencent/tdesign-flutter/issues/32))
+- `TDDivider`:
+  - add: 新增分割线组件设置文字样式大小 ([#134](https://github.com/Tencent/tdesign-flutter/issues/134))
+- `TDToast`:
+  - add: Toast增加自定义文本长度的属性 ([#148](https://github.com/Tencent/tdesign-flutter/issues/148))
+- `TDSideBar`:
+  - add: 新增选中样式 ([#69](https://github.com/Tencent/tdesign-flutter/issues/69))
+  - add: 新增以及自定义文本边距 ([#67](https://github.com/Tencent/tdesign-flutter/issues/67))
+
+
+### 🐞 Bug Fixes
+- `TDButton`:
+  - fix: setState()前增加mounted判断 ([#122](https://github.com/Tencent/tdesign-flutter/issues/112))
+- `TDDialog`:
+  - fix: 修改Dialog只有未设置action的时候,内部才会自动关闭,如果有设置action,则关闭时机交给业务自己处理 ([#117](https://github.com/Tencent/tdesign-flutter/issues/117))
+
+### 🚧 Others
+- 增加国际化语言适配功能
+- 适配3.16后文本居中,增加TDTextConfig使用文档
+
+
 ## 🌈 0.1.4 `2024-04-08`
 
 ### 🚀 Features
