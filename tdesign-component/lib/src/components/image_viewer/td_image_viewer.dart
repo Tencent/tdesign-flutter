@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/td_colors.dart';
 import '../../theme/td_theme.dart';
 import '../popup/td_popup_route.dart';
-import 'image_viewer_widget.dart';
+import 'td_image_viewer_widget.dart';
 
 class TDImageViewer {
   static void showImageViewer({
@@ -16,6 +16,7 @@ class TDImageViewer {
     OnIndexChange? onIndexChange,
     OnClose? onClose,
     OnDelete? onDelete,
+    OnLongPress? onLongPress,
   }) {
     var modalBarrierColor = TDTheme.of(context).fontGyColor1;
     showDialog(
@@ -24,16 +25,16 @@ class TDImageViewer {
       barrierColor: modalBarrierColor,
       useSafeArea: false,
       builder: (context) {
-        return ImageViewerWidget(
+        return TDImageViewerWidget(
           images: images,
           closeBtn: closeBtn,
           deleteBtn: deleteBtn,
           showIndex: showIndex,
           defaultIndex: defaultIndex,
           onIndexChange: onIndexChange,
-          modalBarrierColor: modalBarrierColor,
           onClose: onClose,
           onDelete: onDelete,
+          onLongPress: onLongPress,
         );
       },
     );
