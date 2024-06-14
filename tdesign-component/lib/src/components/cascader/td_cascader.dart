@@ -16,6 +16,7 @@ class TDCascader {
         Color? barrierColor,
         double cascaderHeight = 500,
         String? initialData,
+        String? closeText,
         List<String>? subTitles,
         Function? onClose}) {
     showModalBottomSheet(
@@ -31,6 +32,7 @@ class TDCascader {
             cascaderHeight: cascaderHeight,
             initialData:initialData,
             onChange: onChange,
+              closeText:closeText,
             theme: theme,
               subTitles:subTitles
           );

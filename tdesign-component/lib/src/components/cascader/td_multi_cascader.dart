@@ -34,6 +34,9 @@ class TDMultiCascader extends StatefulWidget {
   /// 顶部圆角
   final double? topRadius;
 
+  /// 关闭按钮文本
+  final String? closeText;
+
   /// 选择器关闭按钮回调
   final Function? onClose;
 
@@ -51,6 +54,7 @@ class TDMultiCascader extends StatefulWidget {
       this.initialData,
       this.backgroundColor,
       this.topRadius,
+      this.closeText,
       this.onClose,
       required this.onChange});
 
@@ -173,7 +177,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
 
   void _listDataSegmenter(){
     _listData.sort((a,b){
-      if(a.segmentValue==null){
+      if(a.segmentValue==null||b.segmentValue==null){
          return 0;
       }else{
         return a.segmentValue!.toLowerCase().compareTo(b.segmentValue!.toLowerCase());
@@ -225,12 +229,15 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                   },
                   child: Container(
                     height: 58,
-                    child: Padding(
+                    alignment: Alignment.center,
+                    child:Padding(
                       padding: const EdgeInsets.only(left: 2, right: 16),
-                      child: Icon(
+                      child: widget.closeText==null ? Icon(
                         TDIcons.close,
                         color: TDTheme.of(context).fontGyColor1,
-                      ),
+                      ):TDText(widget.closeText,style:TextStyle(
+                          fontSize: TDTheme.of(context).fontTitleMedium!.size,
+                          color: TDTheme.of(context).fontGyColor1),),
                     ),
                   ))),
         ],

@@ -71,7 +71,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
           "segmentValue":'B',
           "children": [
             {"value": '110101', "label": '东城区',"segmentValue":'D',},
-            {"value": '1101022', "label": '东区',"segmentValue":'D'},
+            {"value": '1101022',"label": '东区',"segmentValue":'D'},
             {"value": '110102', "label": '西城区',"segmentValue":'X'},
             {"value": '110105', "label": '朝阳区',"segmentValue":'C'},
             {"value": '110106', "label": '丰台区',"segmentValue":'F'},
@@ -119,14 +119,14 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
           "value": '110100',
           "label": '部门一',
           "children": [
-            {"value": '110101', "label": '张雷1'},
-            {"value": '110102', "label": '张雷2'},
-            {"value": '110102', "label": '张雷3'},
-            {"value": '110105', "label": '张雷4'},
-            {"value": '110106', "label": '张雷5'},
-            {"value": '110107', "label": '张雷6'},
-            {"value": '110108', "label": '张雷7'},
-            {"value": '110109', "label": '张雷8'},
+            {"value": '110101', "label": '洪磊',"segmentValue":'H'},
+            {"value": '110102', "label": '洪磊2',"segmentValue":'H'},
+            {"value": '1101022', "label": '洪磊3',"segmentValue":'H'},
+            {"value": '110105', "label": '洪磊4',"segmentValue":'H'},
+            {"value": '110106', "label": '郭天1',"segmentValue":'G'},
+            {"value": '110107', "label": '郭天2',"segmentValue":'G'},
+            {"value": '110108', "label": '郭天3',"segmentValue":'G'},
+            {"value": '110109', "label": '冯笑1',"segmentValue":'F'},
           ],
         },
         {
@@ -135,7 +135,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
           "children": [
             {"value": '110201', "label": '张雷1'},
             {"value": '110202', "label": '张雷2'},
-            {"value": '110202', "label": '张雷3'},
+            {"value": '1102022', "label": '张雷3'},
             {"value": '110205', "label": '张雷4'},
             {"value": '110206', "label": '张雷5'},
             {"value": '110207', "label": '张雷6'},
@@ -201,7 +201,8 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
   Widget _buildVerticalCascader(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TDCascader.showMultiCascader(context, title: '选择地址', data: _data, initialData: _initData, theme: 'step',
+        TDCascader.showMultiCascader(context, title: '选择地址',
+            data: _data, initialData: _initData, theme: 'step',
             onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
             List result = [];
@@ -247,7 +248,12 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
   Widget _buildHorizontalCascader(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TDCascader.showMultiCascader(context, title: '选择地址',subTitles:['请选择省份', '请选择城市', '请选择区/县'], data: _data, initialData: _initData, theme: 'tab',
+        TDCascader.showMultiCascader(context,
+            title: '选择地址',
+            subTitles:['请选择省份', '请选择城市', '请选择区/县'],
+            data: _data,
+            initialData: _initData,
+            theme: 'tab',
             onChange: (List<MultiCascaderListModel> selectData) {
               setState(() {
                 List result = [];
@@ -258,9 +264,11 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
                 });
                 _selected_1 = result.join('/');
               });
-            }, onClose: () {
+            },
+            onClose: () {
               Navigator.of(context).pop();
-            });
+            }
+            );
       },
       child: _buildSelectRow(context, _selected_1, '选择地区'),
     );
@@ -270,7 +278,11 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
   Widget _buildHorizontalLetterCascader(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TDCascader.showMultiCascader(context, title: '选择地址', data: _data_2, initialData: _initData_2, theme: 'tab',
+        TDCascader.showMultiCascader(context,
+            title: '选择地址',
+            data: _data_2,
+            initialData: _initData_2,
+            theme: 'tab',
             onChange: (List<MultiCascaderListModel> selectData) {
               setState(() {
                 List result = [];
