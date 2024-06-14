@@ -72,6 +72,7 @@
 # image
 ./bin/demo_tool generate --file ../lib/src/components/image/td_image.dart --name TDImage --folder-name image --output ../example/assets/api/ --only-api
 # imageViewer
+./bin/demo_tool generate --file ../lib/src/components/image_viewer  --name TDImageViewer, TDImageViewerWidget  --folder-name image --output ../example/assets/api/ --only-api
 # progress
 # result
 # skeleton
