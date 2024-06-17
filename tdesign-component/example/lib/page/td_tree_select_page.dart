@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/demo.dart';
-import '../../base/example_widget.dart';
+import '../annotation/demo.dart';
+import '../base/example_widget.dart';
 
 class TDTreeSelectPage extends StatefulWidget {
   const TDTreeSelectPage({Key? key}) : super(key: key);

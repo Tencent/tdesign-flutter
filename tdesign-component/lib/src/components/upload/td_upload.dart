@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../td_export.dart';
+import '../../../tdesign_flutter.dart';
+
 
 enum TDUploadMediaType {
   image, // 图片
