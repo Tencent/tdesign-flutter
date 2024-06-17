@@ -112,7 +112,7 @@ class _TDCellGroupState extends State<TDCellGroup> {
     );
   }
 
-  BorderRadius? _getBorderRadius() {
+  BorderRadius _getBorderRadius() {
     if (widget.theme == TDCellGroupTheme.cardTheme) {
       return BorderRadius.all(Radius.circular(TDTheme.of(context).radiusLarge));
     }

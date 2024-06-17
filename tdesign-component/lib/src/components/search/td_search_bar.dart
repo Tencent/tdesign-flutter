@@ -130,23 +130,6 @@ class _TDSearchBarState extends State<TDSearchBar>
         });
       }
     });
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   var phBox = _phKey.currentContext?.findRenderObject() as RenderBox?;
-    //   if (phBox != null) {
-    //     setState(() {
-    //       if (widget.alignment != TDSearchAlignment.center) {
-    //         return;
-    //       }
-    //       var dx = (phBox.size.width / 2 - 24) / phBox.size.width;
-    //       if (dx < 0) {
-    //         return;
-    //       }
-
-    //       _animation ??= Tween(begin: Offset.zero, end: Offset(-dx, 0))
-    //           .animate(_animationController);
-    //     });
-    //   }
-    // });
   }
 
   void _updateClearBtnVisible(bool visible) {
