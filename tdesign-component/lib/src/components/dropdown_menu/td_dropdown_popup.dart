@@ -192,7 +192,7 @@ class TDDropdownPopup {
 
   Future<void> remove() async {
     _closeContent();
-    await Future.delayed(Duration(milliseconds: _duration.inMilliseconds));
+    await Future.delayed(_duration);
     overlayEntry?.remove();
     overlayEntry = null;
   }
