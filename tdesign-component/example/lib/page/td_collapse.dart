@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/td_export.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
-
 class TDCollapsePage extends StatefulWidget {
   const TDCollapsePage({Key? key}) : super(key: key);
 
