@@ -14,6 +14,7 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
     required this.builder,
     this.modalBarrierColor = Colors.black54,
     this.isDismissible = true,
+    this.modalBarrierFull = false,
     this.slideTransitionFrom = SlideTransitionFrom.bottom,
     this.modalWidth,
     this.modalHeight,
@@ -29,6 +30,9 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
 
   /// 点击蒙层能否关闭
   final bool isDismissible;
+
+  /// 是否全屏显示蒙层
+  final bool modalBarrierFull;
 
   /// 设置从屏幕的哪个方向滑出
   final SlideTransitionFrom slideTransitionFrom;
@@ -62,41 +66,37 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
           var _modalWidth = (modalWidth ?? screenSize.width).clamp(0, screenSize.width - _modalLeft).toDouble();
           return ValueListenableBuilder(
             valueListenable: _size,
-            builder: (BuildContext context, value, Widget? child) {
+            builder: (BuildContext valueContext, value, Widget? child) {
               var color = modalBarrierColor ?? Colors.black54;
               var transparentColor = color.withAlpha(0);
               var duration = value != null ? _bottomSheetEnterDuration : _bottomSheetExitDuration;
               var position = _getPosition(screenSize, value, _modalTop, _modalLeft, _modalHeight, _modalWidth);
+              var modalBarrierClick = GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  if (isDismissible) {
+                    Navigator.maybePop(context);
+                  }
+                },
+              );
+              var modalBarrier = AnimatedContainer(
+                color: value == null ? transparentColor : color,
+                duration: duration,
+                child: modalBarrierClick,
+              );
               return Stack(
                 children: [
                   Positioned(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        if (isDismissible) {
-                          Navigator.maybePop(context);
-                        }
-                      },
-                    ),
+                    child: modalBarrierFull ? modalBarrier : modalBarrierClick,
                   ),
-                  Positioned(
-                    top: _modalTop,
-                    bottom: screenSize.height - _modalTop - _modalHeight,
-                    left: _modalLeft,
-                    right: screenSize.width - _modalLeft - _modalWidth,
-                    child: AnimatedContainer(
-                      color: value == null ? transparentColor : color,
-                      duration: duration,
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          if (isDismissible) {
-                            Navigator.maybePop(context);
-                          }
-                        },
-                      ),
+                  if (!modalBarrierFull)
+                    Positioned(
+                      top: _modalTop,
+                      bottom: screenSize.height - _modalTop - _modalHeight,
+                      left: _modalLeft,
+                      right: screenSize.width - _modalLeft - _modalWidth,
+                      child: modalBarrier,
                     ),
-                  ),
                   AnimatedPositioned(
                     top: position['top'],
                     bottom: position['bottom'],
