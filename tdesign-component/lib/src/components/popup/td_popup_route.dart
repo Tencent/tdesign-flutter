@@ -47,8 +47,6 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
 
   late final _size = ValueNotifier<Size?>(null);
 
-  late BuildContext? _context;
-
   var _close = false;
 
   @override
@@ -56,22 +54,36 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
     return [
       OverlayEntry(
         builder: (BuildContext context) {
-          _context = context;
+          var buildWidget = builder(context);
           var screenSize = MediaQuery.of(context).size;
+          var _modalTop = (modalTop ?? 0).clamp(0, screenSize.height).toDouble();
+          var _modalLeft = (modalLeft ?? 0).clamp(0, screenSize.width).toDouble();
+          var _modalHeight = (modalHeight ?? screenSize.height).clamp(0, screenSize.height - _modalTop).toDouble();
+          var _modalWidth = (modalWidth ?? screenSize.width).clamp(0, screenSize.width - _modalLeft).toDouble();
           return ValueListenableBuilder(
             valueListenable: _size,
             builder: (BuildContext context, value, Widget? child) {
               var color = modalBarrierColor ?? Colors.black54;
               var transparentColor = color.withAlpha(0);
               var duration = value != null ? _bottomSheetEnterDuration : _bottomSheetExitDuration;
-              var position = _getPosition(context, value);
+              var position = _getPosition(screenSize, value, _modalTop, _modalLeft, _modalHeight, _modalWidth);
               return Stack(
                 children: [
                   Positioned(
-                    top: modalTop ?? 0,
-                    bottom: screenSize.height - (modalTop ?? 0) - (modalHeight ?? screenSize.height),
-                    left: modalLeft ?? 0,
-                    right: screenSize.width - (modalLeft ?? 0) - (modalWidth ?? screenSize.width),
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        if (isDismissible) {
+                          Navigator.maybePop(context);
+                        }
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    top: _modalTop,
+                    bottom: screenSize.height - _modalTop - _modalHeight,
+                    left: _modalLeft,
+                    right: screenSize.width - _modalLeft - _modalWidth,
                     child: AnimatedContainer(
                       color: value == null ? transparentColor : color,
                       duration: duration,
@@ -79,7 +91,7 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
                           if (isDismissible) {
-                            close();
+                            Navigator.maybePop(context);
                           }
                         },
                       ),
@@ -91,14 +103,7 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
                     left: position['left'],
                     right: position['right'],
                     duration: duration,
-                    child: SingleChildScrollView(
-                      child: Builder(
-                        builder: (BuildContext context) {
-                          _open(context);
-                          return builder(context);
-                        },
-                      ),
-                    ),
+                    child: _getContent(context, buildWidget),
                   ),
                 ],
               );
@@ -109,22 +114,66 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
     ];
   }
 
-  Map<String, double> _getPosition(BuildContext context, Size? size) {
-    var screenSize = MediaQuery.of(context).size;
+  @override
+  Future<RoutePopDisposition> willPop() async {
+    _size.value = null;
+    _close = true;
+    await Future.delayed(_bottomSheetExitDuration);
+    return RoutePopDisposition.pop;
+  }
+
+  Widget _getContent(BuildContext context, Widget child) {
+    var childWidget = Builder(
+      builder: (BuildContext context) {
+        if (_size.value != null) {
+          return child;
+        }
+        if (_close) {
+          _close = false;
+          return child;
+        }
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          var renderBox = context.findRenderObject() as RenderBox;
+          _size.value = renderBox.size;
+        });
+        return child;
+      },
+    );
+    var vertical = slideTransitionFrom == SlideTransitionFrom.top || slideTransitionFrom == SlideTransitionFrom.bottom;
+    return slideTransitionFrom == SlideTransitionFrom.center
+        ? SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: childWidget,
+            ),
+          )
+        : SingleChildScrollView(
+            scrollDirection: vertical ? Axis.vertical : Axis.horizontal,
+            child: childWidget,
+          );
+  }
+
+  Map<String, double> _getPosition(
+    Size screenSize,
+    Size? size,
+    double _modalTop,
+    double _modalLeft,
+    double _modalHeight,
+    double _modalWidth,
+  ) {
     var position = <String, double>{};
-    var _modalTop = (modalTop ?? 0).clamp(0, screenSize.height).toDouble();
-    var _modalLeft = (modalLeft ?? 0).clamp(0, screenSize.width).toDouble();
-    var _modalHeight = (modalHeight ?? screenSize.height).clamp(0, screenSize.height - _modalTop).toDouble();
-    var _modalWidth = (modalWidth ?? screenSize.width).clamp(0, screenSize.width - _modalLeft).toDouble();
+    var height = size?.height ?? 0;
+    var width = size?.width ?? 0;
     switch (slideTransitionFrom) {
       case SlideTransitionFrom.top:
         position['top'] = _modalTop;
-        position['bottom'] = screenSize.height - _modalTop - min(size?.height ?? 0, _modalHeight); // 移动
+        position['bottom'] = screenSize.height - _modalTop - min(height, _modalHeight); // 移动
         position['left'] = _modalLeft;
         position['right'] = screenSize.width - _modalLeft - _modalWidth;
         break;
       case SlideTransitionFrom.bottom:
-        position['top'] = max(_modalTop + _modalHeight - (size?.height ?? 0), 0); // 移动
+        position['top'] = max(_modalTop + _modalHeight - height, 0); // 移动
         position['bottom'] = screenSize.height - _modalTop - _modalHeight;
         position['left'] = _modalLeft;
         position['right'] = screenSize.width - _modalLeft - _modalWidth;
@@ -133,47 +182,21 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
         position['top'] = _modalTop;
         position['bottom'] = screenSize.height - _modalTop - _modalHeight;
         position['left'] = _modalLeft;
-        position['right'] = max(screenSize.width - _modalLeft - (size?.width ?? 0), 0); // 移动
+        position['right'] = max(screenSize.width - _modalLeft - width, 0); // 移动
         break;
       case SlideTransitionFrom.right:
         position['top'] = _modalTop;
         position['bottom'] = screenSize.height - _modalTop - _modalHeight;
-        position['left'] = max(_modalLeft + _modalWidth - (size?.width ?? 0), 0); // 移动
-        position['right'] = screenSize.width - _modalLeft;
+        position['left'] = max(_modalLeft + _modalWidth - width, 0); // 移动
+        position['right'] = screenSize.width - _modalLeft - _modalWidth;
         break;
       case SlideTransitionFrom.center:
+        position['top'] = max(_modalTop + _modalHeight - height, 0) / 2; // 移动
+        position['bottom'] = (screenSize.height - _modalTop - min(height, _modalHeight)) / 2; // 移动
+        position['left'] = max(_modalLeft + _modalWidth - width, 0) / 2; // 移动
+        position['right'] = max(screenSize.width - _modalLeft - width, 0) / 2; // 移动
         break;
     }
     return position;
-  }
-
-  void _open(BuildContext context) {
-    if (_size.value != null || _close) {
-      return;
-    }
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var renderBox = context.findRenderObject() as RenderBox;
-      _size.value = renderBox.size;
-    });
-  }
-
-  /// 关闭
-  void close() {
-    if (_size.value != null) {
-      _size.value = null;
-      _close = true;
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-        await Future.delayed(_bottomSheetExitDuration);
-        if (_context != null) {
-          Navigator.pop(_context!);
-          _context = null;
-        }
-      });
-    } else {
-      if (_context != null) {
-        Navigator.pop(_context!);
-        _context = null;
-      }
-    }
   }
 }
