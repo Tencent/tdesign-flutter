@@ -10,7 +10,7 @@ TDesign Flutter组件示例应用
 <br/>
 Android请扫码下载预览 ↓
 <br/>
-<img width="260" src="/flutter/assets/qrcode/td_apk_qrcode.png" />
+<img width="260" src="/flutter/assets/qrcode/apk_qrcode.png" />
 <br/>
 iOS请运行项目预览 ↓
 <br/>
@@ -150,7 +150,10 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
 ## 常见问题
 
-- Flutter 3.16之后,修改了渲染引擎,导致启用forceVerticalCenter参数的组件字体偏移更多,不再居中.可以通过设置kTextForceVerticalCenterEnable=false来禁用字体居中功能,让组件显示与官方Text一致
+- 文本居中:
+> 0.1.4版本:Flutter 3.16之后,修改了渲染引擎,导致启用forceVerticalCenter参数的组件字体偏移更多,不再居中.可以通过设置kTextForceVerticalCenterEnable=false来禁用字体居中功能,让组件显示与官方Text一致
+>
+> 0.1.5版本:适配了Android和iOS双端基础系统字体的中文居中,其他语言的字体,可以通过重写TDTextPaddingConfig的paddingRate和paddingExtraRate进行自定义适配,TDTextPaddingConfig使用方法可参考TDTextPage.
 
 ## 基础库版本
 
