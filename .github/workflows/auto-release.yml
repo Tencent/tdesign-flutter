@@ -23,6 +23,7 @@ jobs:
         id: tag-action
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          version_file: ./tdesign-component/pubspec.yaml
       - uses: TDesignOteam/tdesign-changelog-action@main
         id: changelog
         env:
@@ -85,7 +86,8 @@ jobs:
       - uses: TDesignOteam/tdesign-tag-action@main
         id: tag-action
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}    
+          token: ${{ secrets.GITHUB_TOKEN }}  
+          version_file: ./tdesign-component/pubspec.yaml  
       - name: tag and push if needed
         run: |
           echo "${{ steps.tag-action.outputs.version }}"
