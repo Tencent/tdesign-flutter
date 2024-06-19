@@ -16,6 +16,7 @@ class TDDropdownPanel extends StatefulWidget {
     required this.reverseHeight,
     required this.duration,
     required this.directionListenable,
+    required this.colorAlphaListenable,
     required this.direction,
     required this.closeCallback,
     required this.child,
@@ -26,6 +27,7 @@ class TDDropdownPanel extends StatefulWidget {
   final double reverseHeight;
   final Duration duration;
   final ValueNotifier<TDDropdownPopupDirection> directionListenable;
+  final ValueNotifier<bool> colorAlphaListenable;
   final TDDropdownPopupDirection direction;
   final FutureParamCallback closeCallback;
   final Widget child;
@@ -107,6 +109,7 @@ class TDDropdownPanelState extends State<TDDropdownPanel> with SingleTickerProvi
       setState(() {});
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_controller.status == AnimationStatus.dismissed) {
+          widget.colorAlphaListenable.value = true;
           _controller.forward();
         }
       });
@@ -121,6 +124,7 @@ class TDDropdownPanelState extends State<TDDropdownPanel> with SingleTickerProvi
   }
 
   void close() {
+    widget.colorAlphaListenable.value = false;
     _controller.reverse();
   }
 }

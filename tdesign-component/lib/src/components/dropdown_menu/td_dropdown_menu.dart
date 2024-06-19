@@ -14,8 +14,10 @@ import 'td_dropdown_popup.dart';
 enum TDDropdownMenuDirection {
   /// 向下
   down,
+
   /// 向上
   up,
+
   /// 根据内容高度动态展示方向
   auto,
 }
@@ -101,33 +103,45 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 48,
-      decoration: BoxDecoration(
-        color: TDTheme.of(context).whiteColor1,
-        border: Border(
-          bottom: BorderSide(
-            color: TDTheme.of(context).grayColor3,
-            width: 1,
+    return WillPopScope(
+      onWillPop: () async {
+        var isClose = await _closeMenu();
+        return !isClose;
+      },
+      child: Container(
+        height: 48,
+        decoration: BoxDecoration(
+          color: TDTheme.of(context).whiteColor1,
+          border: Border(
+            bottom: BorderSide(
+              color: TDTheme.of(context).grayColor3,
+              width: 1,
+            ),
+          ),
+        ),
+        child: Row(
+          children: List.generate(
+            _items.length,
+            (index) {
+              return Expanded(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    if (_disabled(index)) {
+                      return;
+                    }
+                    _isOpened[index] ? _closeMenu() : _openMenu(index);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [_getText(index), _getIcon(index)],
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),
-      child: Row(
-          children: List.generate(_items.length, (index) {
-        return Expanded(
-            child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  if (_disabled(index)) {
-                    return;
-                  }
-                  _isOpened[index] ? _closeMenu() : _openMenu(index);
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [_getText(index), _getIcon(index)],
-                )));
-      })),
     );
   }
 
@@ -194,11 +208,13 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
   }
 
   /// 关闭菜单
-  Future<void> _closeMenu() async {
+  Future<bool> _closeMenu() async {
     var index = _isOpened.indexOf(true);
-    setState(() {
-      _isOpened = List.filled(_items.length, false);
-    });
+    if (index < 0) {
+      return false;
+    }
+    _isOpened = List.filled(_items.length, false);
+    setState(() {});
     _iconControllers.forEach((value) {
       if (value.status == AnimationStatus.completed) {
         value.reverse();
@@ -209,5 +225,6 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
     if (index >= 0 && widget.onMenuClosed != null) {
       widget.onMenuClosed!(index);
     }
+    return true;
   }
 }
