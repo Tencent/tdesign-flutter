@@ -23,95 +23,92 @@ class TDPopupPageState extends State<TDPopupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(title: tdTitle(),
-        padding: const EdgeInsets.only(top: 16),
-        exampleCodeGroup: 'popup',
-        children: [
-      ExampleModule(
-        title: '组件类型',
-        children: [
-          ExampleItem(builder: _buildPopFromTop),
-          ExampleItem(
-              builder: _buildPopFromLeft),
-          ExampleItem(
-              builder: _buildPopFromCenter),
-          ExampleItem(
-              builder: _buildPopFromBottom),
-          ExampleItem(
-              builder: _buildPopFromRight),
-        ],
-      ),
-      ExampleModule(
-        title: '组件示例',
-        children: [
-          ExampleItem(builder: _buildPopFromBottomWithOperationAndTitle),
-          ExampleItem(builder: _buildPopFromBottomWithOperation),
-          ExampleItem(builder: _buildPopFromBottomWithCloseAndTitle),
-          ExampleItem(builder: _buildPopFromBottomWithCloseAndLeftTitle),
-          ExampleItem(builder: _buildPopFromBottomWithClose),
-          ExampleItem(builder: _buildPopFromBottomWithTitle),
-          ExampleItem(builder: _buildPopFromCenterWithClose),
-          ExampleItem(builder: _buildPopFromCenterWithUnderClose),
-        ],
-      ),
-    ],
-    test: [
-      ExampleItem(
-          desc: '操作栏超长文本,指定颜色',
-          builder:(_){
-        return TDButton(
-          text: '底部弹出层-带标题及操作',
-          theme: TDButtonTheme.primary,
-          type: TDButtonType.outline,
-          onTap: () {
-            Navigator.of(context).push(TDSlidePopupRoute(
-                slideTransitionFrom: SlideTransitionFrom.bottom,
-                builder: (context) {
-                  return TDPopupBottomConfirmPanel(
-                    title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                    leftText: '点这里确认!',
-                    leftTextColor: TDTheme.of(context).brandNormalColor,
-                    leftClick: (){
-                      TDToast.showText('确认', context: context);
-                      Navigator.pop(context);
-                    },
-                    rightText: '关闭',
-                    rightTextColor: TDTheme.of(context).errorNormalColor,
-                    rightClick: (){
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      height: 200,
-                    ),
-                  );
-                }));
-          },
-        );
-      }),
-      ExampleItem(
-          desc: '带关闭超长文本',
-          builder:(_){
-        return TDButton(
-          text: '底部弹出层-带标题及操作',
-          theme: TDButtonTheme.primary,
-          type: TDButtonType.outline,
-          onTap: () {
-            Navigator.of(context).push(TDSlidePopupRoute(
-                slideTransitionFrom: SlideTransitionFrom.bottom,
-                builder: (context) {
-                  return TDPopupBottomDisplayPanel(
-                    title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                    closeColor: TDTheme.of(context).errorNormalColor,
-                    closeClick: (){
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      height: 200,
-                    ),
-                  );
-                }));
-          },
-        );
+    return ExamplePage(
+      title: tdTitle(),
+      padding: const EdgeInsets.only(top: 16),
+      exampleCodeGroup: 'popup',
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(builder: _buildPopFromTop),
+            ExampleItem(builder: _buildPopFromLeft),
+            ExampleItem(builder: _buildPopFromCenter),
+            ExampleItem(builder: _buildPopFromBottom),
+            ExampleItem(builder: _buildPopFromRight),
+          ],
+        ),
+        ExampleModule(
+          title: '组件示例',
+          children: [
+            ExampleItem(builder: _buildPopFromBottomWithOperationAndTitle),
+            ExampleItem(builder: _buildPopFromBottomWithOperation),
+            ExampleItem(builder: _buildPopFromBottomWithCloseAndTitle),
+            ExampleItem(builder: _buildPopFromBottomWithCloseAndLeftTitle),
+            ExampleItem(builder: _buildPopFromBottomWithClose),
+            ExampleItem(builder: _buildPopFromBottomWithTitle),
+            ExampleItem(builder: _buildPopFromCenterWithClose),
+            ExampleItem(builder: _buildPopFromCenterWithUnderClose),
+          ],
+        ),
+      ],
+      test: [
+        ExampleItem(
+            desc: '操作栏超长文本,指定颜色',
+            builder: (_) {
+              return TDButton(
+                text: '底部弹出层-带标题及操作',
+                theme: TDButtonTheme.primary,
+                type: TDButtonType.outline,
+                onTap: () {
+                  Navigator.of(context).push(TDSlidePopupRoute(
+                      slideTransitionFrom: SlideTransitionFrom.bottom,
+                      builder: (context) {
+                        return TDPopupBottomConfirmPanel(
+                          title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                          leftText: '点这里确认!',
+                          leftTextColor: TDTheme.of(context).brandNormalColor,
+                          leftClick: () {
+                            TDToast.showText('确认', context: context);
+                            Navigator.maybePop(context);
+                          },
+                          rightText: '关闭',
+                          rightTextColor: TDTheme.of(context).errorNormalColor,
+                          rightClick: () {
+                            Navigator.maybePop(context);
+                          },
+                          child: Container(
+                            height: 200,
+                          ),
+                        );
+                      }));
+                },
+              );
+            }),
+        ExampleItem(
+            desc: '带关闭超长文本',
+            builder: (_) {
+              return TDButton(
+                text: '底部弹出层-带标题及操作',
+                theme: TDButtonTheme.primary,
+                type: TDButtonType.outline,
+                onTap: () {
+                  Navigator.of(context).push(TDSlidePopupRoute(
+                      slideTransitionFrom: SlideTransitionFrom.bottom,
+                      builder: (context) {
+                        return TDPopupBottomDisplayPanel(
+                          title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                          closeColor: TDTheme.of(context).errorNormalColor,
+                          closeClick: () {
+                            Navigator.maybePop(context);
+                          },
+                          child: Container(
+                            height: 200,
+                          ),
+                        );
+                      }));
+                },
+              );
             }),
         ExampleItem(
             desc: '修改圆角',
@@ -134,7 +131,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                                 title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
                                 closeColor: TDTheme.of(context).errorNormalColor,
                                 closeClick: () {
-                                  Navigator.pop(context);
+                                  Navigator.maybePop(context);
                                 },
                                 child: Container(
                                   height: 200,
@@ -161,12 +158,12 @@ class TDPopupPageState extends State<TDPopupPage> {
                                   leftTextColor: TDTheme.of(context).brandNormalColor,
                                   leftClick: () {
                                     TDToast.showText('确认', context: context);
-                                    Navigator.pop(context);
+                                    Navigator.maybePop(context);
                                   },
                                   rightText: '关闭',
                                   rightTextColor: TDTheme.of(context).errorNormalColor,
                                   rightClick: () {
-                                    Navigator.pop(context);
+                                    Navigator.maybePop(context);
                                   },
                                   child: Container(
                                     height: 200,
@@ -186,18 +183,18 @@ class TDPopupPageState extends State<TDPopupPage> {
                           Navigator.of(context).push(TDSlidePopupRoute(
                               slideTransitionFrom: SlideTransitionFrom.center,
                               builder: (context) {
-                            return TDPopupCenterPanel(
-                              closeColor: TDTheme.of(context).errorNormalColor,
-                              closeClick: () {
-                                Navigator.pop(context);
-                              },
-                              child: const SizedBox(
-                                height: 240,
-                                width: 240,
-                              ),
-                              radius: 6,
-                            );
-                          }));
+                                return TDPopupCenterPanel(
+                                  closeColor: TDTheme.of(context).errorNormalColor,
+                                  closeClick: () {
+                                    Navigator.maybePop(context);
+                                  },
+                                  child: const SizedBox(
+                                    height: 240,
+                                    width: 240,
+                                  ),
+                                  radius: 6,
+                                );
+                              }));
                         },
                       )),
                   Container(
@@ -210,23 +207,79 @@ class TDPopupPageState extends State<TDPopupPage> {
                           Navigator.of(context).push(TDSlidePopupRoute(
                               slideTransitionFrom: SlideTransitionFrom.center,
                               builder: (context) {
-                            return TDPopupCenterPanel(
-                              closeUnderBottom: true,
-                              closeClick: () {
-                                Navigator.pop(context);
-                              },
-                              child: const SizedBox(
-                                height: 240,
-                                width: 240,
-                              ),
-                              radius: 6,
-                            );
-                          }));
+                                return TDPopupCenterPanel(
+                                  closeUnderBottom: true,
+                                  closeClick: () {
+                                    Navigator.maybePop(context);
+                                  },
+                                  child: const SizedBox(
+                                    height: 240,
+                                    width: 240,
+                                  ),
+                                  radius: 6,
+                                );
+                              }));
                         },
                       )),
                 ],
               );
             }),
+        ExampleItem(
+          desc: '自定义位置',
+          builder: (_) {
+            return TDButton(
+              text: '自定义位置',
+              theme: TDButtonTheme.primary,
+              type: TDButtonType.outline,
+              onTap: () {
+                var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+                Navigator.of(context).push(
+                  TDSlidePopupRoute(
+                    slideTransitionFrom: SlideTransitionFrom.right,
+                    modalTop: renderBox.size.height,
+                    builder: (context) {
+                      return Container(
+                        color: Colors.white,
+                        width: 280,
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+          },
+        ),
+
+        ExampleItem(
+          desc: '自定义大小位置',
+          builder: (_) {
+            return TDButton(
+              text: '自定义大小位置',
+              theme: TDButtonTheme.primary,
+              type: TDButtonType.outline,
+              onTap: () {
+                Navigator.of(context).push(
+                  TDSlidePopupRoute(
+                    slideTransitionFrom: SlideTransitionFrom.center,
+                    modalTop: 500,
+                    modalLeft: 150,
+                    modalWidth: 100,
+                    modalHeight: 200,
+                    modalBarrierFull: true,
+                    builder: (context) {
+                      return Container(
+                        color: Colors.white,
+                        height: 300,
+                        width: 200,
+                        child: const TDText('自定义大小位置'),
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ],
     );
   }
@@ -339,12 +392,12 @@ class TDPopupPageState extends State<TDPopupPage> {
             builder: (context) {
               return TDPopupBottomConfirmPanel(
                 title: '标题文字',
-                leftClick: (){
-                  Navigator.pop(context);
+                leftClick: () {
+                  Navigator.maybePop(context);
                 },
-                rightClick: (){
+                rightClick: () {
                   TDToast.showText('确定', context: context);
-                  Navigator.pop(context);
+                  Navigator.maybePop(context);
                 },
                 child: Container(
                   height: 200,
@@ -366,12 +419,12 @@ class TDPopupPageState extends State<TDPopupPage> {
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
               return TDPopupBottomConfirmPanel(
-                leftClick: (){
-                  Navigator.pop(context);
+                leftClick: () {
+                  Navigator.maybePop(context);
                 },
-                rightClick: (){
+                rightClick: () {
                   TDToast.showText('确定', context: context);
-                  Navigator.pop(context);
+                  Navigator.maybePop(context);
                 },
                 child: Container(
                   height: 200,
@@ -394,8 +447,8 @@ class TDPopupPageState extends State<TDPopupPage> {
             builder: (context) {
               return TDPopupBottomDisplayPanel(
                 title: '标题文字',
-                closeClick: (){
-                  Navigator.pop(context);
+                closeClick: () {
+                  Navigator.maybePop(context);
                 },
                 child: Container(
                   height: 200,
@@ -419,8 +472,8 @@ class TDPopupPageState extends State<TDPopupPage> {
               return TDPopupBottomDisplayPanel(
                 title: '标题文字',
                 titleLeft: true,
-                closeClick: (){
-                  Navigator.pop(context);
+                closeClick: () {
+                  Navigator.maybePop(context);
                 },
                 child: Container(
                   height: 200,
@@ -442,8 +495,8 @@ class TDPopupPageState extends State<TDPopupPage> {
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
               return TDPopupBottomDisplayPanel(
-                closeClick: (){
-                  Navigator.pop(context);
+                closeClick: () {
+                  Navigator.maybePop(context);
                 },
                 child: Container(
                   height: 200,
@@ -467,8 +520,8 @@ class TDPopupPageState extends State<TDPopupPage> {
               return TDPopupBottomDisplayPanel(
                 title: '标题文字',
                 hideClose: true,
-                closeClick: (){
-                  Navigator.pop(context);
+                closeClick: () {
+                  Navigator.maybePop(context);
                 },
                 child: Container(
                   height: 200,
@@ -487,12 +540,12 @@ class TDPopupPageState extends State<TDPopupPage> {
       type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
-            isDismissible:false,
+            isDismissible: false,
             slideTransitionFrom: SlideTransitionFrom.center,
             builder: (context) {
               return TDPopupCenterPanel(
-                closeClick: (){
-                  Navigator.pop(context);
+                closeClick: () {
+                  Navigator.maybePop(context);
                 },
                 child: const SizedBox(
                   width: 240,
@@ -512,13 +565,13 @@ class TDPopupPageState extends State<TDPopupPage> {
       type: TDButtonType.outline,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
-            isDismissible:false,
+            isDismissible: false,
             slideTransitionFrom: SlideTransitionFrom.center,
             builder: (context) {
               return TDPopupCenterPanel(
                 closeUnderBottom: true,
-                closeClick: (){
-                  Navigator.pop(context);
+                closeClick: () {
+                  Navigator.maybePop(context);
                 },
                 child: const SizedBox(
                   width: 240,
