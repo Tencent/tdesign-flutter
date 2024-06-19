@@ -44,7 +44,8 @@ class TDDropdownPopup {
       _initContentTop,
       _initContentBottom;
   late VoidCallback _closeContent;
-  final directionListenable = ValueNotifier<TDDropdownPopupDirection>(TDDropdownPopupDirection.auto);
+  final _directionListenable = ValueNotifier<TDDropdownPopupDirection>(TDDropdownPopupDirection.auto);
+  final _colorAlphaListenable = ValueNotifier<bool>(false);
 
   OverlayEntry? overlayEntry;
 
@@ -85,19 +86,18 @@ class TDDropdownPopup {
   }
 
   Future<void> add([TDDropdownItem? updateChild]) async {
-    directionListenable.value = direction ?? TDDropdownPopupDirection.auto;
+    _directionListenable.value = direction ?? TDDropdownPopupDirection.auto;
     overlayEntry?.remove();
     overlayEntry = OverlayEntry(
       builder: (BuildContext context) {
-        return directionListenable.value == TDDropdownPopupDirection.auto
+        return _directionListenable.value == TDDropdownPopupDirection.auto
             ? ValueListenableBuilder(
-                valueListenable: directionListenable,
-                builder: (context, value, child) => value == TDDropdownPopupDirection.auto
-                    ? child!
-                    : _getPopup(value, updateChild), // 每次重新渲染item，更新高度
+                valueListenable: _directionListenable,
+                builder: (context, value, child) =>
+                    value == TDDropdownPopupDirection.auto ? child! : _getPopup(value, updateChild), // 每次重新渲染item，更新高度
                 child: _getPopup(TDDropdownPopupDirection.down, updateChild),
               )
-            : _getPopup(directionListenable.value, updateChild);
+            : _getPopup(_directionListenable.value, updateChild);
       },
     );
 
@@ -108,18 +108,19 @@ class TDDropdownPopup {
   Widget _getPopup(TDDropdownMenuDirection value, TDDropdownItem? updateChild) {
     _init(value);
     return Stack(children: [
-      if (directionListenable.value != TDDropdownPopupDirection.auto) ...[
+      if (_directionListenable.value != TDDropdownPopupDirection.auto) ...[
         _getOverlay1(),
         _getOverlay2(),
         _getOverlay3(),
       ],
       TDDropdownInherited(
           popupState: this,
-          directionListenable: directionListenable,
+          directionListenable: _directionListenable,
           child: TDDropdownPanel(
             duration: _duration,
             direction: value,
-            directionListenable: directionListenable,
+            directionListenable: _directionListenable,
+            colorAlphaListenable: _colorAlphaListenable,
             initContentBottom: _initContentBottom,
             initContentTop: _initContentTop,
             reverseHeight: _overlay3Height,
@@ -136,12 +137,18 @@ class TDDropdownPopup {
             bottom: _overlay1Bottom,
             left: 0,
             right: 0,
-            child: Container(
-              color: Colors.black54,
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: _overlayClick,
-              ),
+            child: ValueListenableBuilder(
+              builder: (BuildContext context, value, Widget? child) {
+                return AnimatedContainer(
+                  color: value ? Colors.black54 : Colors.black54.withAlpha(0),
+                  duration: _duration,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: _overlayClick,
+                  ),
+                );
+              },
+              valueListenable: _colorAlphaListenable,
             ),
           )
         : const SizedBox.shrink();
@@ -192,7 +199,7 @@ class TDDropdownPopup {
 
   Future<void> remove() async {
     _closeContent();
-    await Future.delayed(Duration(milliseconds: _duration.inMilliseconds));
+    await Future.delayed(_duration);
     overlayEntry?.remove();
     overlayEntry = null;
   }
