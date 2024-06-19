@@ -249,6 +249,37 @@ class TDPopupPageState extends State<TDPopupPage> {
             );
           },
         ),
+
+        ExampleItem(
+          desc: '自定义大小位置',
+          builder: (_) {
+            return TDButton(
+              text: '自定义大小位置',
+              theme: TDButtonTheme.primary,
+              type: TDButtonType.outline,
+              onTap: () {
+                Navigator.of(context).push(
+                  TDSlidePopupRoute(
+                    slideTransitionFrom: SlideTransitionFrom.center,
+                    modalTop: 500,
+                    modalLeft: 150,
+                    modalWidth: 100,
+                    modalHeight: 200,
+                    modalBarrierFull: true,
+                    builder: (context) {
+                      return Container(
+                        color: Colors.white,
+                        height: 300,
+                        width: 200,
+                        child: const TDText('自定义大小位置'),
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ],
     );
   }
