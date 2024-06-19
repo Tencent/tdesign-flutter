@@ -173,7 +173,7 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
         position['right'] = screenSize.width - _modalLeft - _modalWidth;
         break;
       case SlideTransitionFrom.bottom:
-        position['top'] = max(_modalTop + _modalHeight - height, 0); // 移动
+        position['top'] = _modalTop + _modalHeight - min(height, _modalHeight); // 移动
         position['bottom'] = screenSize.height - _modalTop - _modalHeight;
         position['left'] = _modalLeft;
         position['right'] = screenSize.width - _modalLeft - _modalWidth;
@@ -182,19 +182,19 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
         position['top'] = _modalTop;
         position['bottom'] = screenSize.height - _modalTop - _modalHeight;
         position['left'] = _modalLeft;
-        position['right'] = max(screenSize.width - _modalLeft - width, 0); // 移动
+        position['right'] = screenSize.width - _modalLeft - min(width, _modalWidth); // 移动
         break;
       case SlideTransitionFrom.right:
         position['top'] = _modalTop;
         position['bottom'] = screenSize.height - _modalTop - _modalHeight;
-        position['left'] = max(_modalLeft + _modalWidth - width, 0); // 移动
+        position['left'] = _modalLeft + _modalWidth - min(width, _modalWidth); // 移动
         position['right'] = screenSize.width - _modalLeft - _modalWidth;
         break;
       case SlideTransitionFrom.center:
-        position['top'] = max(_modalTop + _modalHeight - height, 0) / 2; // 移动
-        position['bottom'] = (screenSize.height - _modalTop - min(height, _modalHeight)) / 2; // 移动
-        position['left'] = max(_modalLeft + _modalWidth - width, 0) / 2; // 移动
-        position['right'] = max(screenSize.width - _modalLeft - width, 0) / 2; // 移动
+        position['top'] = _modalTop + (_modalHeight - min(height, _modalHeight)) / 2; // 移动
+        position['bottom'] = screenSize.height - _modalTop - (_modalHeight + min(height, _modalHeight)) / 2; // 移动
+        position['left'] = _modalLeft + (_modalWidth - min(width, _modalWidth)) / 2; // 移动
+        position['right'] = screenSize.width - _modalLeft - (_modalWidth + min(width, _modalWidth)) / 2; // 移动
         break;
     }
     return position;
