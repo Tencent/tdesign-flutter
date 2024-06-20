@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 import '../../theme/td_colors.dart';
 import '../../theme/td_theme.dart';
 import '../popup/td_popup_route.dart';
-import 'td_image_viewer_widget.dart';
+import 'td_preview_widget.dart';
 
-class TDImageViewer {
-  static void showImageViewer({
+class TDPreview {
+  static void showPreview({
     required BuildContext context,
     required List<dynamic> images,
     bool? closeBtn = true,
     bool? deleteBtn = false,
     bool? showIndex = false,
     int? defaultIndex,
+    double? width,
+    double? height,
     OnIndexChange? onIndexChange,
     OnClose? onClose,
     OnDelete? onDelete,
@@ -25,13 +27,15 @@ class TDImageViewer {
       barrierColor: modalBarrierColor,
       useSafeArea: false,
       builder: (context) {
-        return TDImageViewerWidget(
+        return TDPreviewWidget(
           images: images,
           closeBtn: closeBtn,
           deleteBtn: deleteBtn,
           showIndex: showIndex,
           defaultIndex: defaultIndex,
           onIndexChange: onIndexChange,
+          width: width,
+          height: height,
           onClose: onClose,
           onDelete: onDelete,
           onLongPress: onLongPress,
