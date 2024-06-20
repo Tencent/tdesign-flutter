@@ -14,8 +14,8 @@ typedef OnClose = Function(int index);
 typedef OnDelete = Function(int index);
 typedef OnLongPress = Function(int index);
 
-class TDImageViewerWidget extends StatefulWidget {
-  const TDImageViewerWidget({
+class TDPreviewWidget extends StatefulWidget {
+  const TDPreviewWidget({
     Key? key,
     this.closeBtn,
     this.deleteBtn,
@@ -23,6 +23,8 @@ class TDImageViewerWidget extends StatefulWidget {
     this.showIndex,
     this.defaultIndex,
     this.onIndexChange,
+    this.width,
+    this.height,
     this.onClose,
     this.onDelete,
     this.onLongPress,
@@ -55,13 +57,19 @@ class TDImageViewerWidget extends StatefulWidget {
   /// 长按图片
   final OnLongPress? onLongPress;
 
+  /// 图片宽度
+  final double? width;
+
+  /// 图片高度
+  final double? height;
+
   @override
   State<StatefulWidget> createState() {
     return _TDImageViewerWidgetState();
   }
 }
 
-class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
+class _TDImageViewerWidgetState extends State<TDPreviewWidget> {
   int _index = 1;
 
   @override
@@ -71,22 +79,39 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
   }
 
   Widget _getImage(dynamic image) {
-    if(image is File) {
-      return TDImage(
-        imageFile: image,
-        type: TDImageType.fitWidth,
+    var size = MediaQuery.of(context).size;
+    var boxFit = ((widget.width != null) || (widget.height != null)) ? BoxFit.fill : BoxFit.fitWidth;
+    var horizontal = widget.width != null ? (size.width - (widget.width ?? 0)) / 2 : 0.0;
+    var vertical = widget.height != null ? (size.height - (widget.height ?? 0)) / 2 : 0.0;
+    var margin = EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical);
+    if (image is File) {
+      return Container(
+        margin: margin,
+        child: TDImage(
+          imageFile: image,
+          fit: boxFit,
+          type: TDImageType.fitWidth,
+        ),
       );
     }
-    if(image is String) {
-      if(image.startsWith('http')) {
-        return TDImage(
-          imgUrl: image,
-          type: TDImageType.fitWidth,
+    if (image is String) {
+      if (image.startsWith('http')) {
+        return Container(
+          margin: margin,
+          child: TDImage(
+            imgUrl: image,
+            fit: boxFit,
+            type: TDImageType.fitWidth,
+          ),
         );
       }
-      return TDImage(
-        assetUrl: image,
-        type: TDImageType.fitWidth,
+      return Container(
+        margin: margin,
+        child: TDImage(
+          assetUrl: image,
+          fit: boxFit,
+          type: TDImageType.fitWidth,
+        ),
       );
     }
     throw FlutterError('image ${image} type is not supported');
