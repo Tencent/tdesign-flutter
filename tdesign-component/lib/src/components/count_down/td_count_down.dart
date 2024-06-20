@@ -32,12 +32,13 @@ class TDCountDown extends StatefulWidget {
     this.style,
     this.onChange,
     this.onFinish,
+    this.controller,
   }) : super(key: key);
 
   /// 是否自动开始倒计时
   final bool autoStart;
 
-  /// 'default'/Widget Function(int time)/Widget
+  /// 'default' / Widget Function(int time) / Widget
   final dynamic content;
 
   /// 时间格式，DD-日，HH-时，mm-分，ss-秒，SSS-毫秒
@@ -67,44 +68,123 @@ class TDCountDown extends StatefulWidget {
   /// 倒计时结束时触发回调
   final VoidCallback? onFinish;
 
+  /// 控制器，可控制开始/暂停/继续/重置
+  final TDCountDownController? controller;
+
   @override
   _TDCountDownState createState() => _TDCountDownState();
 }
 
 class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStateMixin {
-  late Ticker _ticker;
+  late TDCountDownStyle _style;
+  late Map<String, String> timeUnitMap;
+  Ticker? _ticker;
   int _time = 0;
+  int _tempMilliseconds = 0;
 
   @override
   void initState() {
     super.initState();
     _time = widget.time;
-    if (_time > 0 && widget.autoStart) {
+    if (widget.autoStart) {
       startTimer();
+    }
+    widget.controller?.addListener(_onControllerChanged);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _style = widget.style ??
+        TDCountDownStyle.generateStyle(
+          context,
+          size: widget.size,
+          theme: widget.theme,
+          splitWithUnit: widget.splitWithUnit,
+        );
+    timeUnitMap = {
+      'DD': context.resource.days,
+      'HH': context.resource.hours,
+      'mm': context.resource.minutes,
+      'ss': context.resource.seconds,
+      'SSS': context.resource.milliseconds,
+    };
+  }
+
+  @override
+  void didUpdateWidget(TDCountDown oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != oldWidget.controller) {
+      oldWidget.controller?.removeListener(_onControllerChanged);
+      widget.controller?.addListener(_onControllerChanged);
     }
   }
 
   @override
   void dispose() {
-    _ticker.dispose();
+    _ticker?.dispose();
+    widget.controller?.removeListener(_onControllerChanged);
     super.dispose();
   }
 
+  /// 开始倒计时
   void startTimer() {
-    var tempMilliseconds = 0;
-    _ticker = createTicker((Duration elapsed) {
+    if (_ticker?.isActive == true) {
+      return;
+    }
+    _tempMilliseconds = 0;
+    _ticker ??= createTicker((Duration elapsed) {
       if (_time > 0) {
-        setState(() {
-          _time = max(_time - (elapsed.inMilliseconds - tempMilliseconds), 0);
-        });
-        tempMilliseconds = elapsed.inMilliseconds;
+        _time = max(_time - (elapsed.inMilliseconds - _tempMilliseconds), 0);
+        _tempMilliseconds = elapsed.inMilliseconds;
         widget.onChange?.call(_time);
       } else {
-        _ticker.dispose();
+        _time = 0;
+        _ticker!.stop();
         widget.onFinish?.call();
       }
+      setState(() {});
     });
-    _ticker.start();
+    _ticker!.start();
+  }
+
+  /// 暂停
+  void pauseTimer() {
+    _ticker?.stop();
+  }
+
+  /// 继续
+  void resumeTimer() {
+    startTimer();
+  }
+
+  /// 重置倒计时
+  void resetTimer([int? time]) {
+    _ticker?.stop();
+    _time = time ?? widget.time;
+    setState(() {});
+    if (widget.autoStart) {
+      startTimer();
+    }
+  }
+
+  void _onControllerChanged() {
+    switch (widget.controller?.value) {
+      case TDCountDownStatus.start:
+        startTimer();
+        break;
+      case TDCountDownStatus.pause:
+        pauseTimer();
+        break;
+      case TDCountDownStatus.resume:
+        resumeTimer();
+        break;
+      case TDCountDownStatus.reset:
+        resetTimer(widget.controller?.time);
+        break;
+      default:
+        break;
+    }
   }
 
   @override
@@ -119,13 +199,6 @@ class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStat
   }
 
   List<Widget> _buildTimeWidget(BuildContext context) {
-    var timeUnitMap = {
-      'DD': context.resource.days,
-      'HH': context.resource.hours,
-      'mm': context.resource.minutes,
-      'ss': context.resource.seconds,
-      'SSS': context.resource.milliseconds,
-    };
     var format = widget.millisecond ? '${widget.format.replaceAll(':SSS', '')}:SSS' : widget.format;
     var matches = _timeReg.allMatches(format);
     var timeMap = _getTimeMap(_time);
@@ -134,11 +207,9 @@ class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStat
           var timeType = match.group(0);
           var timeData = timeUnitMap[timeType] ?? '';
           return _buildTextWidget(
-              timeMap[timeType] ?? '0',
-              widget.splitWithUnit ? timeData : _getMark(format, timeType),
-              widget.style ??
-                  TDCountDownStyle.generateStyle(context,
-                      size: widget.size, theme: widget.theme, splitWithUnit: widget.splitWithUnit));
+            timeMap[timeType] ?? '0',
+            widget.splitWithUnit ? timeData : _getMark(format, timeType),
+          );
         })
         .expand((element) => element)
         .toList();
@@ -147,36 +218,42 @@ class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStat
   List<Widget> _buildTextWidget(
     String time,
     String split,
-    TDCountDownStyle style,
   ) {
     var children = <Widget>[
       Container(
-        width: style.timeWidth,
-        height: style.timeHeight,
-        padding: style.timePadding,
-        margin: style.timeMargin,
-        decoration: style.timeBox,
+        width: _style.timeWidth,
+        height: _style.timeHeight,
+        padding: _style.timePadding,
+        margin: _style.timeMargin,
+        decoration: _style.timeBox,
         child: Center(
-            child: TDText(time,
-                style: TextStyle(
-                    fontFamily: style.timeFontFamily?.fontFamily,
-                    package: style.timeFontFamily?.package,
-                    fontSize: style.timeFontSize,
-                    height: style.timeFontHeight,
-                    fontWeight: style.timeFontWeight,
-                    color: style.timeColor))),
+          child: TDText(
+            time,
+            style: TextStyle(
+              fontFamily: _style.timeFontFamily?.fontFamily,
+              package: _style.timeFontFamily?.package,
+              fontSize: _style.timeFontSize,
+              height: _style.timeFontHeight,
+              fontWeight: _style.timeFontWeight,
+              color: _style.timeColor,
+            ),
+          ),
+        ),
       ),
     ];
     if (split.isNotEmpty) {
       children.addAll([
-        SizedBox(width: style.space),
-        TDText(split,
-            style: TextStyle(
-                fontSize: style.splitFontSize,
-                height: style.splitFontHeight,
-                fontWeight: style.splitFontWeight,
-                color: style.splitColor)),
-        SizedBox(width: style.space),
+        SizedBox(width: _style.space),
+        TDText(
+          split,
+          style: TextStyle(
+            fontSize: _style.splitFontSize,
+            height: _style.splitFontHeight,
+            fontWeight: _style.splitFontWeight,
+            color: _style.splitColor,
+          ),
+        ),
+        SizedBox(width: _style.space),
       ]);
     }
     return children;

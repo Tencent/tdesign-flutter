@@ -14,6 +14,8 @@ import 'example_route.dart';
 import 'notification_center.dart';
 import 'web_md_tool.dart';
 
+var navBarkey = GlobalKey();
+
 /// 示例页面控件，建议每个页面返回一个ExampleWidget即可，不用独自封装
 class ExamplePage extends StatefulWidget {
   const ExamplePage({
@@ -237,6 +239,7 @@ class _ExamplePageState extends State<ExamplePage> {
       }
     }
     return TDNavBar(
+      key: navBarkey,
       title: widget.title,
       rightBarItems: rightBarItems,
     );

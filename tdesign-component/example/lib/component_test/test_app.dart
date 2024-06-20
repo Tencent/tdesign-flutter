@@ -4,11 +4,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  var jsonString = await rootBundle.loadString('assets/theme1.json');
+  var jsonString = await rootBundle.loadString('assets/theme.json');
   print('jsonString:$jsonString');
   TDTheme.needMultiTheme(true);
   TDTheme.defaultData();
-  var themeData = TDThemeData.fromJson('theme', jsonString);
+  var themeData = TDThemeData.fromJson('green', jsonString);
   runApp(MaterialApp(
     home: Theme(
         data: ThemeData(extensions: [themeData!]),

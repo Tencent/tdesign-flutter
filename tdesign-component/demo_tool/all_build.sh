@@ -36,7 +36,7 @@
 # date_picker
 ./bin/demo_tool generate --folder ../lib/src/components/picker --name TDPicker,TDDatePicker --folder-name date-time-picker --output ../example/assets/api/ --only-api
 # input
-./bin/demo_tool generate --file ../lib/src/components/input/td_input.dart --name TDInput --folder-name input --output ../example/assets/api/ --only-api
+./bin/demo_tool generate --file ../lib/src/components/input/td_input.dart --name TDInput, TDInputSpacer --folder-name input --output ../example/assets/api/ --only-api
 # picker
 ./bin/demo_tool generate --folder ../lib/src/components/picker --name TDPicker,TDMultiPicker,TDMultiLinkedPicker,MultiLinkedPickerModel --folder-name picker --output ../example/assets/api/ --only-api
 # radio
@@ -64,7 +64,7 @@
 # cell
 ./bin/demo_tool generate --folder ../lib/src/components/cell --name TDCell,TDCellGroup,TDCellStyle --folder-name cell --output ../example/assets/api/ --only-api --get-comments
 # countDown
-./bin/demo_tool generate --folder ../lib/src/components/count_down --name TDCountDown,TDCountDownStyle,TDCountDownTheme,TDCountDownSize --folder-name count-down --output ../example/assets/api/ --only-api --get-comments
+./bin/demo_tool generate --folder ../lib/src/components/count_down --name TDCountDown,TDCountDownController,TDCountDownStyle --folder-name count-down --output ../example/assets/api/ --only-api --get-comments
 # collapse
 # empty
 ./bin/demo_tool generate --file ../lib/src/components/empty/td_empty.dart --name TDEmpty --folder-name empty --output ../example/assets/api/ --only-api
