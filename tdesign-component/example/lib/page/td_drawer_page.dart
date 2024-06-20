@@ -3,6 +3,39 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
+const _nums = [
+  '一',
+  '二',
+  '三',
+  '四',
+  '五',
+  '六',
+  '七',
+  '八',
+  '九',
+  '十',
+  '十一',
+  '十二',
+  '十三',
+  '十四',
+  '十五',
+  '十六',
+  '十七',
+  '十八',
+  '十九',
+  '二十',
+  '二一',
+  '二二',
+  '二三',
+  '二四',
+  '二五',
+  '二六',
+  '二七',
+  '二八',
+  '二九',
+  '三十',
+];
+
 class TDDrawerPage extends StatelessWidget {
   const TDDrawerPage({super.key});
 
@@ -55,6 +88,8 @@ class TDDrawerPage extends StatelessWidget {
 
 @Demo(group: 'drawer')
 Widget _buildBaseSimple(BuildContext context) {
+  /// 获取navBar尺寸
+  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
   return TDButton(
     text: '基础抽屉',
     isBlock: true,
@@ -65,7 +100,8 @@ Widget _buildBaseSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        items: List.generate(30, (index) => TDDrawerItem(title: '菜单${index}')).toList(),
+        drawerTop: renderBox.size.height,
+        items: List.generate(30, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
         onItemClick: (index, item) {
           print('drawer item被点击，index：$index，title：${item.title}');
         },
@@ -76,6 +112,8 @@ Widget _buildBaseSimple(BuildContext context) {
 
 @Demo(group: 'drawer')
 Widget _buildIconSimple(BuildContext context) {
+  /// 获取navBar尺寸
+  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
   return TDButton(
     text: '带图标抽屉',
     isBlock: true,
@@ -86,7 +124,8 @@ Widget _buildIconSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        items: List.generate(30, (index) => TDDrawerItem(title: '菜单${index}', icon: const Icon(TDIcons.app))).toList(),
+        drawerTop: renderBox.size.height,
+        items: List.generate(30, (index) => TDDrawerItem(title: '菜单${_nums[index]}', icon: const Icon(TDIcons.app))).toList(),
       );
     },
   );
@@ -94,6 +133,8 @@ Widget _buildIconSimple(BuildContext context) {
 
 @Demo(group: 'drawer')
 Widget _buildTitleSimple(BuildContext context) {
+  /// 获取navBar尺寸
+  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
   return TDButton(
     text: '带图标抽屉',
     isBlock: true,
@@ -104,9 +145,10 @@ Widget _buildTitleSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
+        drawerTop: renderBox.size.height,
         title: '标题',
         placement: TDDrawerPlacement.left,
-        items: List.generate(10, (index) => TDDrawerItem(title: '菜单${index}')).toList(),
+        items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
       );
     },
   );
@@ -114,6 +156,8 @@ Widget _buildTitleSimple(BuildContext context) {
 
 @Demo(group: 'drawer')
 Widget _buildBottomSimple(BuildContext context) {
+  /// 获取navBar尺寸
+  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
   return TDButton(
     text: '带底部插槽样式',
     isBlock: true,
@@ -124,9 +168,10 @@ Widget _buildBottomSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
+        drawerTop: renderBox.size.height,
         title: '标题',
         placement: TDDrawerPlacement.left,
-        items: List.generate(10, (index) => TDDrawerItem(title: '菜单${index}')).toList(),
+        items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
         footer: const TDButton(
           text: '操作',
           type: TDButtonType.outline,

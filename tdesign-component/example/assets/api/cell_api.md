@@ -72,3 +72,5 @@
 | cells | List<TDCell> | - | 单元格列表 |
 | style | TDCellStyle? | - | 自定义样式 |
 | titleWidget | Widget? | - | 单元格组标题组件 |
+| scrollable | bool? | false | 可滚动 |
+| isShowLastBordered | bool? | false | 是否显示最后一个cell的下边框 |
