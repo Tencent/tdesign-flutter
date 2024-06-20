@@ -29,6 +29,7 @@ class TDDrawer {
     this.onClose,
     this.onItemClick,
     this.width = 280,
+    this.drawerTop,
     this.style,
     this.hover = false,
   }) {
@@ -73,6 +74,9 @@ class TDDrawer {
   /// 宽度
   final double? width;
 
+  /// 距离顶部的距离
+  final double? drawerTop;
+
   /// 列表自定义样式
   final TDCellStyle? style;
 
@@ -91,6 +95,7 @@ class TDDrawer {
           : SlideTransitionFrom.left,
       isDismissible: (showOverlay ?? true) ? (closeOnOverlayClick ?? true) : false,
       modalBarrierColor: (showOverlay ?? true) ? null : Colors.transparent,
+      modalTop: drawerTop,
       builder: (context) {
         var cellStyle = style;
         if (cellStyle == null) {

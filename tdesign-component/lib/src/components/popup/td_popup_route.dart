@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'td_popup_scale.dart';
+
 const Duration _bottomSheetEnterDuration = Duration(milliseconds: 250);
 const Duration _bottomSheetExitDuration = Duration(milliseconds: 200);
 
@@ -49,12 +51,15 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
   /// 弹出框左侧距离
   final double? modalLeft;
 
-  late final _size = ValueNotifier<Size?>(null);
-
+  final _size = ValueNotifier<Size?>(null);
+  final _scaleCenterController = ValueNotifier(TDPopupScaleStatus.idle);
+  final _position = <String, double>{};
   var _close = false;
 
   @override
   Iterable<OverlayEntry> createOverlayEntries() {
+    var color = modalBarrierColor ?? Colors.black54;
+    var transparentColor = color.withAlpha(0);
     return [
       OverlayEntry(
         builder: (BuildContext context) {
@@ -67,10 +72,12 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
           return ValueListenableBuilder(
             valueListenable: _size,
             builder: (BuildContext valueContext, value, Widget? child) {
-              var color = modalBarrierColor ?? Colors.black54;
-              var transparentColor = color.withAlpha(0);
-              var duration = value != null ? _bottomSheetEnterDuration : _bottomSheetExitDuration;
-              var position = _getPosition(screenSize, value, _modalTop, _modalLeft, _modalHeight, _modalWidth);
+              _getPosition(screenSize, value, _modalTop, _modalLeft, _modalHeight, _modalWidth);
+              if (value != null) {
+                _scaleCenterController.value = TDPopupScaleStatus.enter;
+              } else {
+                _scaleCenterController.value = TDPopupScaleStatus.exit;
+              }
               var modalBarrierClick = GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
@@ -81,7 +88,7 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
               );
               var modalBarrier = AnimatedContainer(
                 color: value == null ? transparentColor : color,
-                duration: duration,
+                duration: value != null ? _bottomSheetEnterDuration : _bottomSheetExitDuration,
                 child: modalBarrierClick,
               );
               return Stack(
@@ -97,14 +104,29 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
                       right: screenSize.width - _modalLeft - _modalWidth,
                       child: modalBarrier,
                     ),
-                  AnimatedPositioned(
-                    top: position['top'],
-                    bottom: position['bottom'],
-                    left: position['left'],
-                    right: position['right'],
-                    duration: duration,
-                    child: _getContent(context, buildWidget),
-                  ),
+                  if (slideTransitionFrom != SlideTransitionFrom.center)
+                    AnimatedPositioned(
+                      top: _position['top'],
+                      bottom: _position['bottom'],
+                      left: _position['left'],
+                      right: _position['right'],
+                      duration: value != null ? _bottomSheetEnterDuration : _bottomSheetExitDuration,
+                      child: _getContent(context, buildWidget),
+                    )
+                  else
+                    Positioned(
+                      top: _position['top'],
+                      bottom: _position['bottom'],
+                      left: _position['left'],
+                      right: _position['right'],
+                      child: TDPopupScale(
+                        child: _getContent(context, buildWidget),
+                        enterDuration: _bottomSheetEnterDuration,
+                        exitDuration: _bottomSheetExitDuration,
+                        slideTransitionFrom: slideTransitionFrom,
+                        controller: _scaleCenterController,
+                      ),
+                    ),
                 ],
               );
             },
@@ -154,7 +176,7 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
           );
   }
 
-  Map<String, double> _getPosition(
+  void _getPosition(
     Size screenSize,
     Size? size,
     double _modalTop,
@@ -162,41 +184,49 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
     double _modalHeight,
     double _modalWidth,
   ) {
-    var position = <String, double>{};
-    var height = size?.height ?? 0;
-    var width = size?.width ?? 0;
+    if (SlideTransitionFrom.center == slideTransitionFrom) {
+      if (_close) {
+        return;
+      }
+      if (size == null) {
+        _position['top'] = 0;
+        _position['bottom'] = screenSize.height;
+        _position['left'] = 0;
+        _position['right'] = screenSize.width;
+        return;
+      }
+      _position['top'] = _modalTop + (_modalHeight - min(size.height, _modalHeight)) / 2; // 移动
+      _position['bottom'] = screenSize.height - _modalTop - (_modalHeight + min(size.height, _modalHeight)) / 2; // 移动
+      _position['left'] = _modalLeft + (_modalWidth - min(size.width, _modalWidth)) / 2; // 移动
+      _position['right'] = screenSize.width - _modalLeft - (_modalWidth + min(size.width, _modalWidth)) / 2; // 移动
+    }
     switch (slideTransitionFrom) {
       case SlideTransitionFrom.top:
-        position['top'] = _modalTop;
-        position['bottom'] = screenSize.height - _modalTop - min(height, _modalHeight); // 移动
-        position['left'] = _modalLeft;
-        position['right'] = screenSize.width - _modalLeft - _modalWidth;
+        _position['top'] = _modalTop;
+        _position['bottom'] = screenSize.height - _modalTop - min(size?.height ?? 0, _modalHeight); // 移动
+        _position['left'] = _modalLeft;
+        _position['right'] = screenSize.width - _modalLeft - _modalWidth;
         break;
       case SlideTransitionFrom.bottom:
-        position['top'] = _modalTop + _modalHeight - min(height, _modalHeight); // 移动
-        position['bottom'] = screenSize.height - _modalTop - _modalHeight;
-        position['left'] = _modalLeft;
-        position['right'] = screenSize.width - _modalLeft - _modalWidth;
+        _position['top'] = _modalTop + _modalHeight - min(size?.height ?? 0, _modalHeight); // 移动
+        _position['bottom'] = screenSize.height - _modalTop - _modalHeight;
+        _position['left'] = _modalLeft;
+        _position['right'] = screenSize.width - _modalLeft - _modalWidth;
         break;
       case SlideTransitionFrom.left:
-        position['top'] = _modalTop;
-        position['bottom'] = screenSize.height - _modalTop - _modalHeight;
-        position['left'] = _modalLeft;
-        position['right'] = screenSize.width - _modalLeft - min(width, _modalWidth); // 移动
+        _position['top'] = _modalTop;
+        _position['bottom'] = screenSize.height - _modalTop - _modalHeight;
+        _position['left'] = _modalLeft;
+        _position['right'] = screenSize.width - _modalLeft - min(size?.width ?? 0, _modalWidth); // 移动
         break;
       case SlideTransitionFrom.right:
-        position['top'] = _modalTop;
-        position['bottom'] = screenSize.height - _modalTop - _modalHeight;
-        position['left'] = _modalLeft + _modalWidth - min(width, _modalWidth); // 移动
-        position['right'] = screenSize.width - _modalLeft - _modalWidth;
+        _position['top'] = _modalTop;
+        _position['bottom'] = screenSize.height - _modalTop - _modalHeight;
+        _position['left'] = _modalLeft + _modalWidth - min(size?.width ?? 0, _modalWidth); // 移动
+        _position['right'] = screenSize.width - _modalLeft - _modalWidth;
         break;
-      case SlideTransitionFrom.center:
-        position['top'] = _modalTop + (_modalHeight - min(height, _modalHeight)) / 2; // 移动
-        position['bottom'] = screenSize.height - _modalTop - (_modalHeight + min(height, _modalHeight)) / 2; // 移动
-        position['left'] = _modalLeft + (_modalWidth - min(width, _modalWidth)) / 2; // 移动
-        position['right'] = screenSize.width - _modalLeft - (_modalWidth + min(width, _modalWidth)) / 2; // 移动
+      default:
         break;
     }
-    return position;
   }
 }
