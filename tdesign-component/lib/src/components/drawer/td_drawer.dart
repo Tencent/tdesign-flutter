@@ -31,7 +31,7 @@ class TDDrawer {
     this.width = 280,
     this.drawerTop,
     this.style,
-    this.hover = false,
+    this.hover = true,
   }) {
     if (visible == true) {
       show();

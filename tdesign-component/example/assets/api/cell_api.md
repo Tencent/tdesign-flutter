@@ -70,6 +70,7 @@
 | theme | TDCellGroupTheme? | TDCellGroupTheme.defaultTheme | 单元格组风格。可选项：default/card |
 | title | String? | - | 单元格组标题 |
 | cells | List<TDCell> | - | 单元格列表 |
+| builder | CellBuilder? | - | cell构建器，可自定义cell父组件，如Dismissible |
 | style | TDCellStyle? | - | 自定义样式 |
 | titleWidget | Widget? | - | 单元格组标题组件 |
 | scrollable | bool? | false | 可滚动 |

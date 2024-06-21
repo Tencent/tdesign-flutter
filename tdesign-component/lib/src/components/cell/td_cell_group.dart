@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import 'td_cell_inherited.dart';
 
+typedef CellBuilder = Widget Function(BuildContext context, TDCell cell);
+
 enum TDCellGroupTheme { defaultTheme, cardTheme }
 
 /// 单元格组组件
@@ -13,6 +15,7 @@ class TDCellGroup extends StatefulWidget {
     this.theme = TDCellGroupTheme.defaultTheme,
     this.title,
     required this.cells,
+    this.builder,
     this.style,
     this.titleWidget,
     this.scrollable = false,
@@ -33,6 +36,9 @@ class TDCellGroup extends StatefulWidget {
 
   /// 单元格列表
   final List<TDCell> cells;
+
+  /// cell构建器，可自定义cell父组件，如Dismissible
+  final CellBuilder? builder;
 
   /// 自定义样式
   final TDCellStyle? style;
@@ -86,10 +92,12 @@ class _TDCellGroupState extends State<TDCellGroup> {
                   physics: widget.scrollable == false ? const NeverScrollableScrollPhysics() : null, // 禁用ListView的滚动
                   itemCount: itemCount,
                   itemBuilder: (context, index) {
+                    final item = widget.cells[index];
+                    final cell = widget.builder == null ? item : widget.builder!(context, item);
                     if (itemCount - 1 == index && (widget.isShowLastBordered ?? false)) {
-                      return Column(children: [widget.cells[index], _borderWidget(style)]);
+                      return Column(children: [cell, _borderWidget(style)]);
                     }
-                    return widget.cells[index];
+                    return cell;
                   },
                   separatorBuilder: (context, index) {
                     if (!(widget.cells[index].bordered ?? true)) {
