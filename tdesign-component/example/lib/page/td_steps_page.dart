@@ -64,6 +64,27 @@ class _TDStepsPageState extends State<TDStepsPage> {
               desc: '水平错误状态简略步骤条',
               builder: _buildHErrorSteps3),
         ]),
+
+        ExampleModule(title: '垂直步骤条', children: [
+          ExampleItem(
+              desc: '垂直默认步骤条',
+              builder: _buildVBasicSteps),
+          ExampleItem(
+              desc: '垂直图标步骤条',
+              builder: _buildVIconSteps),
+          ExampleItem(
+              desc: '垂直简略步骤条',
+              builder: _buildVSimpleSteps),
+          ExampleItem(
+              desc: '垂直错误状态基本步骤条',
+              builder: _buildVErrorBasicSteps),
+          ExampleItem(
+              desc: '垂直错误状态图标步骤条',
+              builder: _buildVErrorIconSteps),
+          ExampleItem(
+              desc: '垂直错误状态简略步骤条',
+              builder: _buildVErrorSimpleSteps),
+        ]),
       ],
     );
   }
@@ -375,6 +396,167 @@ class _TDStepsPageState extends State<TDStepsPage> {
               activeIndex: 1,
               status: StepsStatus.error,
               simple: true,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  List<StepsItemData> vBasicStepsListData = [
+    StepsItemData(title: 'Filish', content: 'Customize content'),
+    StepsItemData(title: 'Process', content: 'Customize content'),
+    StepsItemData(title: 'Default', content: 'Customize content'),
+    StepsItemData(title: 'Default', content: 'Customize content'),
+  ];
+  /// 垂直默认步骤条
+  @Demo(group: 'steps')
+  Widget _buildVBasicSteps(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: vBasicStepsListData,
+              direction: StatusDirection.vertical,
+              activeIndex: 1,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  List<StepsItemData> vIconStepsListData = [
+    StepsItemData(title: 'Filish', content: 'Customize content', successIcon: TDIcons.cart),
+    StepsItemData(title: 'Process', content: 'Customize content', successIcon: TDIcons.cart),
+    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+  ];
+  /// 垂直图标步骤条
+  @Demo(group: 'steps')
+  Widget _buildVIconSteps(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: vIconStepsListData,
+              direction: StatusDirection.vertical,
+              activeIndex: 1,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  List<StepsItemData> vSimpleStepsListData = [
+    StepsItemData(title: 'Filish', content: 'Customize content', successIcon: TDIcons.cart),
+    StepsItemData(title: 'Process', content: 'Customize content', successIcon: TDIcons.cart),
+    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+  ];
+  /// 垂直简略步骤条
+  @Demo(group: 'steps')
+  Widget _buildVSimpleSteps(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: vSimpleStepsListData,
+              direction: StatusDirection.vertical,
+              activeIndex: 1,
+              simple: true,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  List<StepsItemData> vErrorBasicStepsListData = [
+    StepsItemData(title: 'Filish', content: 'Customize content'),
+    StepsItemData(title: 'Process', content: 'Customize content'),
+    StepsItemData(title: 'Default', content: 'Customize content'),
+    StepsItemData(title: 'Default', content: 'Customize content'),
+  ];
+  /// 垂直错误状态基本步骤条
+  @Demo(group: 'steps')
+  Widget _buildVErrorBasicSteps(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: vErrorBasicStepsListData,
+              direction: StatusDirection.vertical,
+              activeIndex: 1,
+              status: StepsStatus.error,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  List<StepsItemData> vErrorIconStepsListData = [
+    StepsItemData(title: 'Filish', content: 'Customize content', successIcon: TDIcons.cart),
+    StepsItemData(title: 'Process', content: 'Customize content', successIcon: TDIcons.cart, errorIcon: TDIcons.close_circle),
+    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+  ];
+  /// 垂直错误状态图标步骤条
+  @Demo(group: 'steps')
+  Widget _buildVErrorIconSteps(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: vErrorIconStepsListData,
+              direction: StatusDirection.vertical,
+              activeIndex: 1,
+              status: StepsStatus.error,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  List<StepsItemData> vErrorSimpleStepsListData = [
+    StepsItemData(title: 'Filish', content: 'Customize content', successIcon: TDIcons.cart),
+    StepsItemData(title: 'Process', content: 'Customize content', successIcon: TDIcons.cart),
+    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+  ];
+  /// 垂直错误状态图标步骤条
+  @Demo(group: 'steps')
+  Widget _buildVErrorSimpleSteps(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: vErrorSimpleStepsListData,
+              direction: StatusDirection.vertical,
+              activeIndex: 1,
+              simple: true,
+              status: StepsStatus.error,
             ),
           )
         ],
