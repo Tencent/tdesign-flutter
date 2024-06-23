@@ -32,7 +32,12 @@ class TDStepsHorizontalItem extends StatelessWidget {
     /// 简略步骤条icon颜色
     var simpleStepsIconColor = TDTheme.of(context).brandColor7;
 
+    /// 是否要设置步骤图标widget的Decoration
+    bool shouldSetIconWidgetDecoration = true;
+
     Widget? completeIconWidget;
+    /// 错误icon图标显示
+    Widget errorIconWidget = Icon(TDIcons.close, color: TDTheme.of(context).errorColor6, size: 16,);
 
     /// 激活索引大于当前索引
     if (activeIndex > index) {
@@ -65,18 +70,37 @@ class TDStepsHorizontalItem extends StatelessWidget {
       stepsIconWidget = completeIconWidget;
     }
 
-    /// 步骤条icon图标背景和形状
-    BoxDecoration? iconWidgetDecoration = BoxDecoration(
-      color: stepsNumberBgColor,
-      shape: BoxShape.circle,
-    );
-
-    /// 传递了成功的icon图标
+    /// 传递了成功的icon图标, 已完成的step都需要显示
     if (data.successIcon != null) {
       stepsIconWidget = Icon(data.successIcon, color: stepsIconColor, size: 22,);
       /// 传了图标则不用设置背景色
-      iconWidgetDecoration = null;
+      shouldSetIconWidgetDecoration = false;
     }
+
+    /// 状态是错误状态，激活索引是当前索引，只有当前激活索引才需要显示
+    if (status == StepsStatus.error && activeIndex == index) {
+      /// 显示错误颜色
+      stepsNumberBgColor = TDTheme.of(context).errorColor1;
+      stepsTitleColor = TDTheme.of(context).errorColor6;
+      /// 显示错误图标
+      stepsIconWidget = errorIconWidget;
+      if (data.errorIcon != null) {
+        stepsIconWidget = Icon(data.errorIcon, color: TDTheme.of(context).errorColor6, size: 22,);
+      }
+      /// 传了图标则不用设置背景色等Decoration
+      shouldSetIconWidgetDecoration = data.errorIcon == null;
+      if (simple) {
+        simpleStepsIconColor = TDTheme.of(context).errorColor6;
+      }
+    }
+
+    /// 步骤条icon图标背景和形状
+    BoxDecoration? iconWidgetDecoration = shouldSetIconWidgetDecoration ? BoxDecoration(
+      color: stepsNumberBgColor,
+      shape: BoxShape.circle,
+    ): null;
+
+
     // icon组件容器大小
     double iconContainerSize = 22;
 
@@ -95,7 +119,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
       );
       if (activeIndex == index) {
         simpleDecoration = BoxDecoration(
-          color: TDTheme.of(context).brandColor7,
+          color: simpleStepsIconColor,
           shape: BoxShape.circle,
         );
       }
