@@ -58,7 +58,7 @@ class _TDStepsState extends State<TDSteps> {
     final currentActiveIndex = widget.activeIndex < 0 ? 0 : (widget.activeIndex >= widget.steps.length ? widget.steps.length - 1 : widget.activeIndex);
     return widget.direction == StatusDirection.horizontal ?
       TDStepsHorizontal(steps: widget.steps, activeIndex: currentActiveIndex, status: widget.status, simple: widget.simple):
-      Container();
+      TDStepsVertical(steps: widget.steps, activeIndex: currentActiveIndex, status: widget.status, simple: widget.simple);
   }
 
 }
