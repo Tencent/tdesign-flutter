@@ -11,11 +11,14 @@ class StepsItemData {
   final IconData? successIcon;
   final IconData? errorIcon;
 
+  final Widget? customContent;
+
   StepsItemData({
     required this.title,
     required this.content,
     this.successIcon,
     this.errorIcon,
+    this.customContent,
   });
 }
 
@@ -38,6 +41,7 @@ class TDSteps extends StatefulWidget {
   final int activeIndex;
   final StepsStatus status;
   final bool simple;
+  final bool readOnly;
   const TDSteps({
     super.key,
     required this.steps,
@@ -45,6 +49,7 @@ class TDSteps extends StatefulWidget {
     this.direction = StatusDirection.horizontal,
     this.status = StepsStatus.success,
     this.simple = false,
+    this.readOnly = false,
   });
 
   @override
@@ -55,10 +60,23 @@ class _TDStepsState extends State<TDSteps> {
   @override
   Widget build(BuildContext context) {
     /// 当前激活的step索引
-    final currentActiveIndex = widget.activeIndex < 0 ? 0 : (widget.activeIndex >= widget.steps.length ? widget.steps.length - 1 : widget.activeIndex);
+    final currentActiveIndex = widget.activeIndex < 0 ? 0 :
+      (widget.activeIndex >= widget.steps.length ? widget.steps.length - 1 : widget.activeIndex);
     return widget.direction == StatusDirection.horizontal ?
-      TDStepsHorizontal(steps: widget.steps, activeIndex: currentActiveIndex, status: widget.status, simple: widget.simple):
-      TDStepsVertical(steps: widget.steps, activeIndex: currentActiveIndex, status: widget.status, simple: widget.simple);
+      TDStepsHorizontal(
+        steps: widget.steps,
+        activeIndex: currentActiveIndex,
+        status: widget.status,
+        simple: widget.simple,
+        readOnly: widget.readOnly
+      ):
+      TDStepsVertical(
+        steps: widget.steps,
+        activeIndex: currentActiveIndex,
+        status: widget.status,
+        simple: widget.simple,
+        readOnly: widget.readOnly,
+      );
   }
 
 }
