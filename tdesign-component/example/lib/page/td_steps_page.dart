@@ -84,6 +84,17 @@ class _TDStepsPageState extends State<TDStepsPage> {
           ExampleItem(
               desc: '垂直错误状态简略步骤条',
               builder: _buildVErrorSimpleSteps),
+          ExampleItem(
+              desc: '垂直自定义内容基本步骤条',
+              builder: _buildVCustomContentBaseSteps),
+        ]),
+        ExampleModule(title: 'Extension步骤条', children: [
+          ExampleItem(
+              desc: 'Read-only Steps 纯展示水平步骤条',
+              builder: _buildHReadOnlySteps),
+          ExampleItem(
+              desc: 'Read-only Steps 纯展示垂直步骤条',
+              builder: _buildVReadOnlySteps),
         ]),
       ],
     );
@@ -557,6 +568,90 @@ class _TDStepsPageState extends State<TDStepsPage> {
               activeIndex: 1,
               simple: true,
               status: StepsStatus.error,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  List<StepsItemData> vCustomContentBasicStepsListData = [
+    StepsItemData(title: 'Filish', content: 'Customize content'),
+    StepsItemData(title: 'Process', content: 'Customize content', customContent: const TDImage(
+      assetUrl: 'assets/img/image.png',
+      type: TDImageType.square,
+    )),
+    StepsItemData(title: 'Default', content: 'Customize content'),
+    StepsItemData(title: 'Default', content: 'Customize content'),
+  ];
+  /// 垂直自定义内容基本步骤条
+  @Demo(group: 'steps')
+  Widget _buildVCustomContentBaseSteps(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: vCustomContentBasicStepsListData,
+              direction: StatusDirection.vertical,
+              activeIndex: 1,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  List<StepsItemData> hReadOnlyStepsListData = [
+    StepsItemData(title: 'Filish', content: 'content'),
+    StepsItemData(title: 'Process', content: 'content'),
+    StepsItemData(title: 'Default', content: 'content'),
+    StepsItemData(title: 'Default', content: 'content'),
+  ];
+  /// 水平自定义内容基本步骤条
+  @Demo(group: 'steps')
+  Widget _buildHReadOnlySteps(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: hReadOnlyStepsListData,
+              direction: StatusDirection.horizontal,
+              activeIndex: 0,
+              readOnly: true,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+
+  List<StepsItemData> vReadOnlyStepsListData = [
+    StepsItemData(title: 'Filish', content: 'Customize content'),
+    StepsItemData(title: 'Process', content: 'Customize content'),
+    StepsItemData(title: 'Default', content: 'Customize content'),
+    StepsItemData(title: 'Default', content: 'Customize content'),
+  ];
+  /// 垂直自定义内容基本步骤条
+  @Demo(group: 'steps')
+  Widget _buildVReadOnlySteps(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: vReadOnlyStepsListData,
+              direction: StatusDirection.vertical,
+              activeIndex: 0,
+              readOnly: true,
             ),
           )
         ],

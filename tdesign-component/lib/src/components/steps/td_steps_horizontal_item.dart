@@ -9,6 +9,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
   final int activeIndex;
   final StepsStatus status;
   final bool simple;
+  final bool readOnly;
   const TDStepsHorizontalItem({
     super.key,
     required this.data,
@@ -17,6 +18,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
     required this.activeIndex,
     required this.status,
     required this.simple,
+    required this.readOnly,
   });
 
   @override
@@ -105,7 +107,12 @@ class TDStepsHorizontalItem extends StatelessWidget {
     double iconContainerSize = 22;
 
     /// 简略步骤条
-    if (simple) {
+    if (simple || readOnly) {
+      /// readOnly纯展示
+      if (readOnly) {
+        simpleStepsIconColor = TDTheme.of(context).brandColor7;
+        stepsTitleColor = TDTheme.of(context).fontGyColor1;
+      }
       iconContainerSize = 8;
       stepsIconWidget = null;
       /// 简略步骤条BoxDecoration
@@ -117,7 +124,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
           width: 1,
         ),
       );
-      if (activeIndex == index) {
+      if (activeIndex == index && !readOnly) {
         simpleDecoration = BoxDecoration(
           color: simpleStepsIconColor,
           shape: BoxShape.circle,
@@ -140,7 +147,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   height: 1,
-                  color: activeIndex >= index ? TDTheme.of(context).brandColor7 : TDTheme.of(context).grayColor4
+                  color: (activeIndex >= index || readOnly) ? TDTheme.of(context).brandColor7 : TDTheme.of(context).grayColor4
                 ),
               ),
             ),
@@ -159,7 +166,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   height: 1,
-                  color: activeIndex > index ? TDTheme.of(context).brandColor7 : TDTheme.of(context).grayColor4,
+                  color: (activeIndex > index || readOnly) ? TDTheme.of(context).brandColor7 : TDTheme.of(context).grayColor4,
                 ),
               ),
             ),
@@ -171,7 +178,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
           child: TDText(
             data.title,
             style: TextStyle(
-              fontWeight: activeIndex == index ? FontWeight.w600 : FontWeight.w400,
+              fontWeight: (activeIndex == index && !readOnly)  ? FontWeight.w600 : FontWeight.w400,
               color: stepsTitleColor,
               fontSize: 14,
             ),

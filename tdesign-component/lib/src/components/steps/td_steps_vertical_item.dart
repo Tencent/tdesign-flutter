@@ -9,6 +9,7 @@ class TDStepsVerticalItem extends StatelessWidget {
   final int activeIndex;
   final StepsStatus status;
   final bool simple;
+  final bool readOnly;
   const TDStepsVerticalItem({
     super.key,
     required this.data,
@@ -17,6 +18,7 @@ class TDStepsVerticalItem extends StatelessWidget {
     required this.activeIndex,
     required this.status,
     required this.simple,
+    required this.readOnly,
   });
 
   @override
@@ -105,7 +107,12 @@ class TDStepsVerticalItem extends StatelessWidget {
     double iconContainerSize = 22;
 
     /// 简略步骤条
-    if (simple) {
+    if (simple || readOnly) {
+      /// readOnly纯展示
+      if (readOnly) {
+        simpleStepsIconColor = TDTheme.of(context).brandColor7;
+        stepsTitleColor = TDTheme.of(context).fontGyColor1;
+      }
       iconContainerSize = 8;
       stepsIconWidget = null;
       /// 简略步骤条BoxDecoration
@@ -117,7 +124,7 @@ class TDStepsVerticalItem extends StatelessWidget {
           width: 1,
         ),
       );
-      if (activeIndex == index) {
+      if (activeIndex == index && !readOnly) {
         simpleDecoration = BoxDecoration(
           color: simpleStepsIconColor,
           shape: BoxShape.circle,
@@ -125,6 +132,12 @@ class TDStepsVerticalItem extends StatelessWidget {
       }
       iconWidgetDecoration = simpleDecoration;
     }
+
+    /// 自定义内容
+    var customContent = data.customContent != null ? Container(
+      margin: const EdgeInsets.only(top: 4),
+      child: data.customContent!,
+    ) : Container();
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -156,7 +169,7 @@ class TDStepsVerticalItem extends StatelessWidget {
                         child: Container(
                           width: 1,
                           height: double.infinity,
-                          color: activeIndex > index ? TDTheme.of(context).brandColor7 : TDTheme.of(context).grayColor4,
+                          color: (activeIndex > index || readOnly) ? TDTheme.of(context).brandColor7 : TDTheme.of(context).grayColor4,
                         ),
                       ),
                     ),
@@ -177,22 +190,27 @@ class TDStepsVerticalItem extends StatelessWidget {
                   child: TDText(
                     data.title,
                     style: TextStyle(
-                      fontWeight: activeIndex == index ? FontWeight.w600 : FontWeight.w400,
+                      fontWeight: (activeIndex == index && !readOnly) ? FontWeight.w600 : FontWeight.w400,
                       color: stepsTitleColor,
                       fontSize: 14,
                       height: 1.4,
                     ),
                   ),
                 ),
-                Container(
-                  child: TDText(
-                    data.content,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: TDTheme.of(context).fontGyColor3,
-                      fontSize: 12,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TDText(
+                      data.content,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: TDTheme.of(context).fontGyColor3,
+                        fontSize: 12,
+                      ),
                     ),
-                  ),
+                    customContent,
+                  ]
                 ),
               ],
             ),
