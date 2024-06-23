@@ -54,8 +54,10 @@ class TDSteps extends StatefulWidget {
 class _TDStepsState extends State<TDSteps> {
   @override
   Widget build(BuildContext context) {
+    /// 当前激活的step索引
+    final currentActiveIndex = widget.activeIndex < 0 ? 0 : (widget.activeIndex >= widget.steps.length ? widget.steps.length - 1 : widget.activeIndex);
     return widget.direction == StatusDirection.horizontal ?
-      TDStepsHorizontal(steps: widget.steps, activeIndex: widget.activeIndex, status: widget.status, simple: widget.simple):
+      TDStepsHorizontal(steps: widget.steps, activeIndex: currentActiveIndex, status: widget.status, simple: widget.simple):
       Container();
   }
 

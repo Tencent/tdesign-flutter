@@ -53,6 +53,17 @@ class _TDStepsPageState extends State<TDStepsPage> {
               desc: '水平简略步骤条3',
               builder: _buildSimpleHSteps3),
         ]),
+        ExampleModule(title: '水平错误状态步骤条', children: [
+          ExampleItem(
+              desc: '水平错误状态基本步骤条',
+              builder: _buildHErrorSteps1),
+          ExampleItem(
+              desc: '水平错误状态图标步骤条',
+              builder: _buildHErrorSteps2),
+          ExampleItem(
+              desc: '水平错误状态简略步骤条',
+              builder: _buildHErrorSteps3),
+        ]),
       ],
     );
   }
@@ -288,4 +299,87 @@ class _TDStepsPageState extends State<TDStepsPage> {
       ),
     );
   }
+
+  List<StepsItemData> hErrorStepsListData1 = [
+    StepsItemData(title: 'steps1', content: 'content1'),
+    StepsItemData(title: 'Error', content: 'content2'),
+    StepsItemData(title: 'steps3', content: 'content3'),
+    StepsItemData(title: 'steps3', content: 'content3'),
+  ];
+  /// 水平简略步骤条3
+  @Demo(group: 'steps')
+  Widget _buildHErrorSteps1(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: hErrorStepsListData1,
+              direction: StatusDirection.horizontal,
+              activeIndex: 1,
+              status: StepsStatus.error,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  List<StepsItemData> hErrorStepsListData2 = [
+    StepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
+    StepsItemData(title: 'Error', content: 'content2', successIcon: TDIcons.call, errorIcon: TDIcons.close_circle),
+    StepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
+    StepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
+  ];
+  /// 水平简略步骤条3
+  @Demo(group: 'steps')
+  Widget _buildHErrorSteps2(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: hErrorStepsListData2,
+              direction: StatusDirection.horizontal,
+              activeIndex: 1,
+              status: StepsStatus.error,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  List<StepsItemData> hErrorStepsListData3 = [
+    StepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
+    StepsItemData(title: 'Error', content: 'content2', successIcon: TDIcons.call, errorIcon: TDIcons.close_circle),
+    StepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
+    StepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
+  ];
+  /// 水平简略步骤条3
+  @Demo(group: 'steps')
+  Widget _buildHErrorSteps3(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: hErrorStepsListData3,
+              direction: StatusDirection.horizontal,
+              activeIndex: 1,
+              status: StepsStatus.error,
+              simple: true,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
 }
