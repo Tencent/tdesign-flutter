@@ -3,11 +3,11 @@ import '../../../tdesign_flutter.dart';
 
 /// Steps步骤条，水平步骤item
 class TDStepsHorizontalItem extends StatelessWidget {
-  final StepsItemData data;
+  final TDStepsItemData data;
   final int index;
   final int stepsCount;
   final int activeIndex;
-  final StepsStatus status;
+  final TDStepsStatus status;
   final bool simple;
   final bool readOnly;
   const TDStepsHorizontalItem({
@@ -80,7 +80,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
     }
 
     /// 状态是错误状态，激活索引是当前索引，只有当前激活索引才需要显示
-    if (status == StepsStatus.error && activeIndex == index) {
+    if (status == TDStepsStatus.error && activeIndex == index) {
       /// 显示错误颜色
       stepsNumberBgColor = TDTheme.of(context).errorColor1;
       stepsTitleColor = TDTheme.of(context).errorColor6;

@@ -100,9 +100,9 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> basicHStepsListData1 = [
-    StepsItemData(title: 'steps1', content: 'content1'),
-    StepsItemData(title: 'steps2', content: 'content2'),
+  List<TDStepsItemData> basicHStepsListData1 = [
+    TDStepsItemData(title: 'steps1', content: 'content1'),
+    TDStepsItemData(title: 'steps2', content: 'content2'),
   ];
   /// 基本步骤1
   @Demo(group: 'steps')
@@ -115,7 +115,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: basicHStepsListData1,
-              direction: StatusDirection.horizontal,
+              direction: TDStepsDirection.horizontal,
               activeIndex: 0,
             ),
           )
@@ -123,10 +123,10 @@ class _TDStepsPageState extends State<TDStepsPage> {
       ),
     );
   }
-  List<StepsItemData> basicHStepsListData2 = [
-    StepsItemData(title: 'steps1', content: 'content1'),
-    StepsItemData(title: 'steps2', content: 'content2'),
-    StepsItemData(title: 'steps3', content: 'content3'),
+  List<TDStepsItemData> basicHStepsListData2 = [
+    TDStepsItemData(title: 'steps1', content: 'content1'),
+    TDStepsItemData(title: 'steps2', content: 'content2'),
+    TDStepsItemData(title: 'steps3', content: 'content3'),
   ];
   /// 基本步骤2
   @Demo(group: 'steps')
@@ -139,7 +139,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: basicHStepsListData2,
-              direction: StatusDirection.horizontal,
+              direction: TDStepsDirection.horizontal,
               activeIndex: 1,
             ),
           )
@@ -147,17 +147,17 @@ class _TDStepsPageState extends State<TDStepsPage> {
       ),
     );
   }
-  List<StepsItemData> basicHStepsListData3 = [
-    StepsItemData(title: 'steps1', content: 'content1'),
-    StepsItemData(title: 'steps2', content: 'content2'),
-    StepsItemData(title: 'steps3', content: 'content3'),
-    StepsItemData(title: 'steps4', content: 'content4'),
+  List<TDStepsItemData> basicHStepsListData3 = [
+    TDStepsItemData(title: 'steps1', content: 'content1'),
+    TDStepsItemData(title: 'steps2', content: 'content2'),
+    TDStepsItemData(title: 'steps3', content: 'content3'),
+    TDStepsItemData(title: 'steps4', content: 'content4'),
   ];
-  List<StepsItemData> basicStepsListData4 = [
-    StepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
-    StepsItemData(title: 'steps2', content: 'content2'),
-    StepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
-    StepsItemData(title: 'steps4', content: 'content4', successIcon: TDIcons.call),
+  List<TDStepsItemData> basicStepsListData4 = [
+    TDStepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
+    TDStepsItemData(title: 'steps2', content: 'content2'),
+    TDStepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
+    TDStepsItemData(title: 'steps4', content: 'content4', successIcon: TDIcons.call),
   ];
   /// 基本步骤3
   @Demo(group: 'steps')
@@ -170,7 +170,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: basicHStepsListData3,
-              direction: StatusDirection.horizontal,
+              direction: TDStepsDirection.horizontal,
               activeIndex: 1,
             ),
           )
@@ -179,9 +179,9 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> hIconStepsListData1 = [
-    StepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
-    StepsItemData(title: 'steps2', content: 'content2', successIcon: TDIcons.call),
+  List<TDStepsItemData> hIconStepsListData1 = [
+    TDStepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
+    TDStepsItemData(title: 'steps2', content: 'content2', successIcon: TDIcons.call),
   ];
   /// 水平图标步骤条1
   @Demo(group: 'steps')
@@ -194,7 +194,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: hIconStepsListData1,
-              direction: StatusDirection.horizontal,
+              direction: TDStepsDirection.horizontal,
               activeIndex: 0,
             ),
           )
@@ -203,10 +203,10 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> hIconStepsListData2 = [
-    StepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
-    StepsItemData(title: 'steps2', content: 'content2', successIcon: TDIcons.call),
-    StepsItemData(title: 'steps2', content: 'content2', successIcon: TDIcons.call),
+  List<TDStepsItemData> hIconStepsListData2 = [
+    TDStepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
+    TDStepsItemData(title: 'steps2', content: 'content2', successIcon: TDIcons.call),
+    TDStepsItemData(title: 'steps2', content: 'content2', successIcon: TDIcons.call),
   ];
   /// 水平图标步骤条1
   @Demo(group: 'steps')
@@ -219,7 +219,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: hIconStepsListData2,
-              direction: StatusDirection.horizontal,
+              direction: TDStepsDirection.horizontal,
               activeIndex: 1,
             ),
           )
@@ -228,11 +228,11 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> hIconStepsListData3 = [
-    StepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
-    StepsItemData(title: 'steps2', content: 'content2', successIcon: TDIcons.call),
-    StepsItemData(title: 'steps2', content: 'content2', successIcon: TDIcons.call),
-    StepsItemData(title: 'steps2', content: 'content2', successIcon: TDIcons.call),
+  List<TDStepsItemData> hIconStepsListData3 = [
+    TDStepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
+    TDStepsItemData(title: 'steps2', content: 'content2', successIcon: TDIcons.call),
+    TDStepsItemData(title: 'steps2', content: 'content2', successIcon: TDIcons.call),
+    TDStepsItemData(title: 'steps2', content: 'content2', successIcon: TDIcons.call),
   ];
   /// 水平图标步骤条1
   @Demo(group: 'steps')
@@ -245,7 +245,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: hIconStepsListData3,
-              direction: StatusDirection.horizontal,
+              direction: TDStepsDirection.horizontal,
               activeIndex: 1,
             ),
           )
@@ -254,9 +254,9 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> simpleHStepsListData1 = [
-    StepsItemData(title: 'steps1', content: 'content1'),
-    StepsItemData(title: 'steps2', content: 'content2'),
+  List<TDStepsItemData> simpleHStepsListData1 = [
+    TDStepsItemData(title: 'steps1', content: 'content1'),
+    TDStepsItemData(title: 'steps2', content: 'content2'),
   ];
   /// 水平简略步骤条1
   @Demo(group: 'steps')
@@ -269,7 +269,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: simpleHStepsListData1,
-              direction: StatusDirection.horizontal,
+              direction: TDStepsDirection.horizontal,
               activeIndex: 0,
               simple: true,
             ),
@@ -279,10 +279,10 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> simpleHStepsListData2 = [
-    StepsItemData(title: 'steps1', content: 'content1'),
-    StepsItemData(title: 'steps2', content: 'content2'),
-    StepsItemData(title: 'steps3', content: 'content3'),
+  List<TDStepsItemData> simpleHStepsListData2 = [
+    TDStepsItemData(title: 'steps1', content: 'content1'),
+    TDStepsItemData(title: 'steps2', content: 'content2'),
+    TDStepsItemData(title: 'steps3', content: 'content3'),
   ];
   /// 水平简略步骤条2
   @Demo(group: 'steps')
@@ -295,7 +295,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: simpleHStepsListData2,
-              direction: StatusDirection.horizontal,
+              direction: TDStepsDirection.horizontal,
               activeIndex: 1,
               simple: true,
             ),
@@ -305,11 +305,11 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> simpleHStepsListData3 = [
-    StepsItemData(title: 'steps1', content: 'content1'),
-    StepsItemData(title: 'steps2', content: 'content2'),
-    StepsItemData(title: 'steps3', content: 'content3'),
-    StepsItemData(title: 'steps3', content: 'content3'),
+  List<TDStepsItemData> simpleHStepsListData3 = [
+    TDStepsItemData(title: 'steps1', content: 'content1'),
+    TDStepsItemData(title: 'steps2', content: 'content2'),
+    TDStepsItemData(title: 'steps3', content: 'content3'),
+    TDStepsItemData(title: 'steps3', content: 'content3'),
   ];
   /// 水平简略步骤条3
   @Demo(group: 'steps')
@@ -322,7 +322,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: simpleHStepsListData3,
-              direction: StatusDirection.horizontal,
+              direction: TDStepsDirection.horizontal,
               activeIndex: 1,
               simple: true,
             ),
@@ -332,11 +332,11 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> hErrorStepsListData1 = [
-    StepsItemData(title: 'steps1', content: 'content1'),
-    StepsItemData(title: 'Error', content: 'content2'),
-    StepsItemData(title: 'steps3', content: 'content3'),
-    StepsItemData(title: 'steps3', content: 'content3'),
+  List<TDStepsItemData> hErrorStepsListData1 = [
+    TDStepsItemData(title: 'steps1', content: 'content1'),
+    TDStepsItemData(title: 'Error', content: 'content2'),
+    TDStepsItemData(title: 'steps3', content: 'content3'),
+    TDStepsItemData(title: 'steps3', content: 'content3'),
   ];
   /// 水平简略步骤条3
   @Demo(group: 'steps')
@@ -349,9 +349,9 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: hErrorStepsListData1,
-              direction: StatusDirection.horizontal,
+              direction: TDStepsDirection.horizontal,
               activeIndex: 1,
-              status: StepsStatus.error,
+              status: TDStepsStatus.error,
             ),
           )
         ],
@@ -359,11 +359,11 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> hErrorStepsListData2 = [
-    StepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
-    StepsItemData(title: 'Error', content: 'content2', successIcon: TDIcons.call, errorIcon: TDIcons.close_circle),
-    StepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
-    StepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
+  List<TDStepsItemData> hErrorStepsListData2 = [
+    TDStepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
+    TDStepsItemData(title: 'Error', content: 'content2', successIcon: TDIcons.call, errorIcon: TDIcons.close_circle),
+    TDStepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
+    TDStepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
   ];
   /// 水平简略步骤条3
   @Demo(group: 'steps')
@@ -376,9 +376,9 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: hErrorStepsListData2,
-              direction: StatusDirection.horizontal,
+              direction: TDStepsDirection.horizontal,
               activeIndex: 1,
-              status: StepsStatus.error,
+              status: TDStepsStatus.error,
             ),
           )
         ],
@@ -386,11 +386,11 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> hErrorStepsListData3 = [
-    StepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
-    StepsItemData(title: 'Error', content: 'content2', successIcon: TDIcons.call, errorIcon: TDIcons.close_circle),
-    StepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
-    StepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
+  List<TDStepsItemData> hErrorStepsListData3 = [
+    TDStepsItemData(title: 'steps1', content: 'content1', successIcon: TDIcons.call),
+    TDStepsItemData(title: 'Error', content: 'content2', successIcon: TDIcons.call, errorIcon: TDIcons.close_circle),
+    TDStepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
+    TDStepsItemData(title: 'steps3', content: 'content3', successIcon: TDIcons.call),
   ];
   /// 水平简略步骤条3
   @Demo(group: 'steps')
@@ -403,9 +403,9 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: hErrorStepsListData3,
-              direction: StatusDirection.horizontal,
+              direction: TDStepsDirection.horizontal,
               activeIndex: 1,
-              status: StepsStatus.error,
+              status: TDStepsStatus.error,
               simple: true,
             ),
           )
@@ -414,11 +414,11 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> vBasicStepsListData = [
-    StepsItemData(title: 'Filish', content: 'Customize content'),
-    StepsItemData(title: 'Process', content: 'Customize content'),
-    StepsItemData(title: 'Default', content: 'Customize content'),
-    StepsItemData(title: 'Default', content: 'Customize content'),
+  List<TDStepsItemData> vBasicStepsListData = [
+    TDStepsItemData(title: 'Filish', content: 'Customize content'),
+    TDStepsItemData(title: 'Process', content: 'Customize content'),
+    TDStepsItemData(title: 'Default', content: 'Customize content'),
+    TDStepsItemData(title: 'Default', content: 'Customize content'),
   ];
   /// 垂直默认步骤条
   @Demo(group: 'steps')
@@ -431,7 +431,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: vBasicStepsListData,
-              direction: StatusDirection.vertical,
+              direction: TDStepsDirection.vertical,
               activeIndex: 1,
             ),
           )
@@ -440,11 +440,11 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> vIconStepsListData = [
-    StepsItemData(title: 'Filish', content: 'Customize content', successIcon: TDIcons.cart),
-    StepsItemData(title: 'Process', content: 'Customize content', successIcon: TDIcons.cart),
-    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
-    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+  List<TDStepsItemData> vIconStepsListData = [
+    TDStepsItemData(title: 'Filish', content: 'Customize content', successIcon: TDIcons.cart),
+    TDStepsItemData(title: 'Process', content: 'Customize content', successIcon: TDIcons.cart),
+    TDStepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+    TDStepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
   ];
   /// 垂直图标步骤条
   @Demo(group: 'steps')
@@ -457,7 +457,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: vIconStepsListData,
-              direction: StatusDirection.vertical,
+              direction: TDStepsDirection.vertical,
               activeIndex: 1,
             ),
           )
@@ -466,11 +466,11 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> vSimpleStepsListData = [
-    StepsItemData(title: 'Filish', content: 'Customize content', successIcon: TDIcons.cart),
-    StepsItemData(title: 'Process', content: 'Customize content', successIcon: TDIcons.cart),
-    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
-    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+  List<TDStepsItemData> vSimpleStepsListData = [
+    TDStepsItemData(title: 'Filish', content: 'Customize content', successIcon: TDIcons.cart),
+    TDStepsItemData(title: 'Process', content: 'Customize content', successIcon: TDIcons.cart),
+    TDStepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+    TDStepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
   ];
   /// 垂直简略步骤条
   @Demo(group: 'steps')
@@ -483,7 +483,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: vSimpleStepsListData,
-              direction: StatusDirection.vertical,
+              direction: TDStepsDirection.vertical,
               activeIndex: 1,
               simple: true,
             ),
@@ -493,11 +493,11 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> vErrorBasicStepsListData = [
-    StepsItemData(title: 'Filish', content: 'Customize content'),
-    StepsItemData(title: 'Process', content: 'Customize content'),
-    StepsItemData(title: 'Default', content: 'Customize content'),
-    StepsItemData(title: 'Default', content: 'Customize content'),
+  List<TDStepsItemData> vErrorBasicStepsListData = [
+    TDStepsItemData(title: 'Filish', content: 'Customize content'),
+    TDStepsItemData(title: 'Process', content: 'Customize content'),
+    TDStepsItemData(title: 'Default', content: 'Customize content'),
+    TDStepsItemData(title: 'Default', content: 'Customize content'),
   ];
   /// 垂直错误状态基本步骤条
   @Demo(group: 'steps')
@@ -510,9 +510,9 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: vErrorBasicStepsListData,
-              direction: StatusDirection.vertical,
+              direction: TDStepsDirection.vertical,
               activeIndex: 1,
-              status: StepsStatus.error,
+              status: TDStepsStatus.error,
             ),
           )
         ],
@@ -520,11 +520,11 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> vErrorIconStepsListData = [
-    StepsItemData(title: 'Filish', content: 'Customize content', successIcon: TDIcons.cart),
-    StepsItemData(title: 'Process', content: 'Customize content', successIcon: TDIcons.cart, errorIcon: TDIcons.close_circle),
-    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
-    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+  List<TDStepsItemData> vErrorIconStepsListData = [
+    TDStepsItemData(title: 'Filish', content: 'Customize content', successIcon: TDIcons.cart),
+    TDStepsItemData(title: 'Process', content: 'Customize content', successIcon: TDIcons.cart, errorIcon: TDIcons.close_circle),
+    TDStepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+    TDStepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
   ];
   /// 垂直错误状态图标步骤条
   @Demo(group: 'steps')
@@ -537,9 +537,9 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: vErrorIconStepsListData,
-              direction: StatusDirection.vertical,
+              direction: TDStepsDirection.vertical,
               activeIndex: 1,
-              status: StepsStatus.error,
+              status: TDStepsStatus.error,
             ),
           )
         ],
@@ -547,11 +547,11 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> vErrorSimpleStepsListData = [
-    StepsItemData(title: 'Filish', content: 'Customize content', successIcon: TDIcons.cart),
-    StepsItemData(title: 'Process', content: 'Customize content', successIcon: TDIcons.cart),
-    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
-    StepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+  List<TDStepsItemData> vErrorSimpleStepsListData = [
+    TDStepsItemData(title: 'Filish', content: 'Customize content', successIcon: TDIcons.cart),
+    TDStepsItemData(title: 'Process', content: 'Customize content', successIcon: TDIcons.cart),
+    TDStepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
+    TDStepsItemData(title: 'Default', content: 'Customize content', successIcon: TDIcons.cart),
   ];
   /// 垂直错误状态图标步骤条
   @Demo(group: 'steps')
@@ -564,10 +564,10 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: vErrorSimpleStepsListData,
-              direction: StatusDirection.vertical,
+              direction: TDStepsDirection.vertical,
               activeIndex: 1,
               simple: true,
-              status: StepsStatus.error,
+              status: TDStepsStatus.error,
             ),
           )
         ],
@@ -575,14 +575,14 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> vCustomContentBasicStepsListData = [
-    StepsItemData(title: 'Filish', content: 'Customize content'),
-    StepsItemData(title: 'Process', content: 'Customize content', customContent: const TDImage(
+  List<TDStepsItemData> vCustomContentBasicStepsListData = [
+    TDStepsItemData(title: 'Filish', content: 'Customize content'),
+    TDStepsItemData(title: 'Process', content: 'Customize content', customContent: const TDImage(
       assetUrl: 'assets/img/image.png',
       type: TDImageType.square,
     )),
-    StepsItemData(title: 'Default', content: 'Customize content'),
-    StepsItemData(title: 'Default', content: 'Customize content'),
+    TDStepsItemData(title: 'Default', content: 'Customize content'),
+    TDStepsItemData(title: 'Default', content: 'Customize content'),
   ];
   /// 垂直自定义内容基本步骤条
   @Demo(group: 'steps')
@@ -595,7 +595,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: vCustomContentBasicStepsListData,
-              direction: StatusDirection.vertical,
+              direction: TDStepsDirection.vertical,
               activeIndex: 1,
             ),
           )
@@ -604,11 +604,11 @@ class _TDStepsPageState extends State<TDStepsPage> {
     );
   }
 
-  List<StepsItemData> hReadOnlyStepsListData = [
-    StepsItemData(title: 'Filish', content: 'content'),
-    StepsItemData(title: 'Process', content: 'content'),
-    StepsItemData(title: 'Default', content: 'content'),
-    StepsItemData(title: 'Default', content: 'content'),
+  List<TDStepsItemData> hReadOnlyStepsListData = [
+    TDStepsItemData(title: 'Filish', content: 'content'),
+    TDStepsItemData(title: 'Process', content: 'content'),
+    TDStepsItemData(title: 'Default', content: 'content'),
+    TDStepsItemData(title: 'Default', content: 'content'),
   ];
   /// 水平自定义内容基本步骤条
   @Demo(group: 'steps')
@@ -621,7 +621,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: hReadOnlyStepsListData,
-              direction: StatusDirection.horizontal,
+              direction: TDStepsDirection.horizontal,
               activeIndex: 0,
               readOnly: true,
             ),
@@ -632,11 +632,11 @@ class _TDStepsPageState extends State<TDStepsPage> {
   }
 
 
-  List<StepsItemData> vReadOnlyStepsListData = [
-    StepsItemData(title: 'Filish', content: 'Customize content'),
-    StepsItemData(title: 'Process', content: 'Customize content'),
-    StepsItemData(title: 'Default', content: 'Customize content'),
-    StepsItemData(title: 'Default', content: 'Customize content'),
+  List<TDStepsItemData> vReadOnlyStepsListData = [
+    TDStepsItemData(title: 'Filish', content: 'Customize content'),
+    TDStepsItemData(title: 'Process', content: 'Customize content'),
+    TDStepsItemData(title: 'Default', content: 'Customize content'),
+    TDStepsItemData(title: 'Default', content: 'Customize content'),
   ];
   /// 垂直自定义内容基本步骤条
   @Demo(group: 'steps')
@@ -649,7 +649,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: vReadOnlyStepsListData,
-              direction: StatusDirection.vertical,
+              direction: TDStepsDirection.vertical,
               activeIndex: 0,
               readOnly: true,
             ),

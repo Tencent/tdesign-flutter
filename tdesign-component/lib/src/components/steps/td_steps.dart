@@ -4,7 +4,7 @@ import 'package:tdesign_flutter/src/components/steps/td_steps_vertical.dart';
 import '../../../tdesign_flutter.dart';
 
 /// Steps步骤条数据类型
-class StepsItemData {
+class TDStepsItemData {
   final String title;
   final String content;
 
@@ -13,7 +13,7 @@ class StepsItemData {
 
   final Widget? customContent;
 
-  StepsItemData({
+  TDStepsItemData({
     required this.title,
     required this.content,
     this.successIcon,
@@ -23,31 +23,31 @@ class StepsItemData {
 }
 
 /// Steps步骤条方向
-enum StatusDirection {
-  vertical,
+enum TDStepsDirection {
   horizontal,
+  vertical,
 }
 
 /// steps步骤条状态
-enum StepsStatus {
+enum TDStepsStatus {
   success,
   error,
 }
 
 /// Steps步骤条
 class TDSteps extends StatefulWidget {
-  final List<StepsItemData> steps;
-  final StatusDirection direction;
+  final List<TDStepsItemData> steps;
+  final TDStepsDirection direction;
   final int activeIndex;
-  final StepsStatus status;
+  final TDStepsStatus status;
   final bool simple;
   final bool readOnly;
   const TDSteps({
     super.key,
     required this.steps,
     required this.activeIndex,
-    this.direction = StatusDirection.horizontal,
-    this.status = StepsStatus.success,
+    this.direction = TDStepsDirection.horizontal,
+    this.status = TDStepsStatus.success,
     this.simple = false,
     this.readOnly = false,
   });
@@ -62,7 +62,7 @@ class _TDStepsState extends State<TDSteps> {
     /// 当前激活的step索引
     final currentActiveIndex = widget.activeIndex < 0 ? 0 :
       (widget.activeIndex >= widget.steps.length ? widget.steps.length - 1 : widget.activeIndex);
-    return widget.direction == StatusDirection.horizontal ?
+    return widget.direction == TDStepsDirection.horizontal ?
       TDStepsHorizontal(
         steps: widget.steps,
         activeIndex: currentActiveIndex,

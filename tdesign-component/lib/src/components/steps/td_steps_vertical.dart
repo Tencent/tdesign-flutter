@@ -4,9 +4,9 @@ import '../../../tdesign_flutter.dart';
 
 /// Steps步骤条，垂直步骤
 class TDStepsVertical extends StatelessWidget {
-  final List<StepsItemData> steps;
+  final List<TDStepsItemData> steps;
   final int activeIndex;
-  final StepsStatus status;
+  final TDStepsStatus status;
   final bool simple;
   final bool readOnly;
   const TDStepsVertical({
