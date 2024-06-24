@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'base/example_base.dart';
 import 'page/sidebar/td_sidebar_page.dart';
@@ -22,6 +23,7 @@ import 'page/td_empty_page.dart';
 import 'page/td_font_page.dart';
 import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
+import 'page/td_preview_page.dart';
 import 'page/td_input_page.dart';
 import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
@@ -172,10 +174,9 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Image 图片', name: 'image', pageBuilder: _wrapInheritedTheme((context) => const TDImagePage())),
     ExamplePageModel(
-        text: 'ImageViewer 图片预览',
-        name: 'image_viewer',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        text: 'Preview 图片预览',
+        name: 'preview',
+        pageBuilder: _wrapInheritedTheme((context) => const TDPreviewPage())),
     ExamplePageModel(
         text: 'Progress 进度条',
         name: 'progress',
