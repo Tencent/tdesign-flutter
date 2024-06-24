@@ -59,8 +59,6 @@ export 'src/components/text/td_text.dart';
 export 'src/components/textarea/td_textarea.dart';
 export 'src/components/toast/td_toast.dart';
 export 'src/components/tree/td_tree_select.dart';
-export 'src/components/upload/td_upload.dart';
-export 'src/components/tree/td_tree_select.dart';
 export 'src/theme/basic.dart';
 export 'src/theme/resource_delegate.dart';
 export 'src/theme/td_colors.dart';
