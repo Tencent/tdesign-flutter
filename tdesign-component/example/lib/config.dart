@@ -35,6 +35,7 @@ import 'page/td_search_bar_page.dart';
 import 'page/td_shadows_page.dart';
 import 'page/td_slider_page.dart';
 import 'page/td_stepper_page.dart';
+import 'page/td_swipe_cell_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
 import 'page/td_tabs_page.dart';
@@ -238,8 +239,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Swipecell 滑动操作',
         name: 'swipecell',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDSwipeCellPage())),
     ExamplePageModel(
         text: 'Toast 轻提示', name: 'toast', pageBuilder: _wrapInheritedTheme((context) => const TDToastPage())),
   ],

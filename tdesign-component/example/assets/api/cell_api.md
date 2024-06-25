@@ -50,6 +50,7 @@
 | title | String? | - | 标题 |
 | titleWidget | Widget? | - | 标题组件 |
 | onClick | TDCellClick? | - | 点击事件 |
+| onLongPress | TDCellClick? | - | 长按事件 |
 | style | TDCellStyle? | - | 自定义样式 |
 | rightIcon | IconData? | - | 最右侧图标 |
 | rightIconWidget | Widget? | - | 最右侧图标组件 |
