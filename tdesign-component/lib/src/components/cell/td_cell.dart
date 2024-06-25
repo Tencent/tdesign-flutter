@@ -25,10 +25,10 @@ class TDCell extends StatefulWidget {
     this.note,
     this.noteWidget,
     this.required = false,
-    // this.rightIcon,
     this.title,
     this.titleWidget,
     this.onClick,
+    this.onLongPress,
     this.style,
     this.rightIcon,
     this.rightIconWidget,
@@ -96,6 +96,9 @@ class TDCell extends StatefulWidget {
   /// 点击事件
   final TDCellClick? onClick;
 
+  /// 长按事件
+  final TDCellClick? onLongPress;
+
   /// 自定义样式
   final TDCellStyle? style;
 
@@ -114,12 +117,16 @@ class _TDCellState extends State<TDCell> {
     var style = widget.style ?? TDCellInherited.of(context)?.style ?? TDCellStyle.cellStyle(context);
     var crossAxisAlignment = _getAlign();
     return GestureDetector(
-      behavior: HitTestBehavior.opaque,
       onTap: () {
         if (widget.onClick != null && !(widget.disabled ?? false)) {
           widget.onClick!(widget);
         }
       },
+      onLongPress: widget.onLongPress != null ? () {
+        if (!(widget.disabled ?? false)) {
+          widget.onLongPress!(widget);
+        }
+      } : null,
       onTapDown: (details) {
         _setStatus('active', 0);
       },
