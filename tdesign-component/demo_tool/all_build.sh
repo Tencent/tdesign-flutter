@@ -99,6 +99,7 @@
 # refresh
 ./bin/demo_tool generate --file ../lib/src/components/refresh/td_refresh_header.dart --name TDRefreshHeader --folder-name pull-down-refresh --output ../example/assets/api/ --only-api --get-comments
 # swipecell
+./bin/demo_tool generate --folder ../lib/src/components/swipe_cell --name TDSwipeAction,TDSwipeAutoClose,TDSwipeCell,TDSwipePanel --folder-name swipe-cell --output ../example/assets/api/ --only-api --get-comments
 # toast
 ./bin/demo_tool generate --file ../lib/src/components/toast/td_toast.dart --name TDToast --folder-name toast --output ../example/assets/api/ --only-api
 
