@@ -79,7 +79,6 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
                 _scaleCenterController.value = TDPopupScaleStatus.exit;
               }
               var modalBarrierClick = GestureDetector(
-                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   if (isDismissible) {
                     Navigator.maybePop(context);
