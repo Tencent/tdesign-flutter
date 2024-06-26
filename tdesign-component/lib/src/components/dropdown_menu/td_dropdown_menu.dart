@@ -34,6 +34,7 @@ class TDDropdownMenu extends StatefulWidget {
     this.direction = TDDropdownMenuDirection.auto,
     this.duration = 200.0,
     this.showOverlay = true,
+    this.isScrollable=false,
     this.arrowIcon,
     this.onMenuOpened,
     this.onMenuClosed,
@@ -62,6 +63,9 @@ class TDDropdownMenu extends StatefulWidget {
 
   /// 关闭菜单事件
   final ValueChanged<int>? onMenuClosed;
+
+  /// 是否开启滚动列表
+  final bool isScrollable;
 
   static _TDDropdownMenuState? _currentOpenedInstance;
 
@@ -103,46 +107,72 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+     Widget tabBar=Row(
+       children: List.generate(
+         _items.length,
+             (index) {
+           return Expanded(child: GestureDetector(
+             behavior: HitTestBehavior.opaque,
+             onTap: () {
+               if (_disabled(index)) {
+                 return;
+               }
+               _isOpened[index] ? _closeMenu() : _openMenu(index);
+             },
+             child: Row(
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: [_getText(index), _getIcon(index)],
+             ),
+             // ),
+           ));
+         },
+       ),
+     );
+   if(widget.isScrollable){
+     tabBar=SingleChildScrollView(
+       scrollDirection: Axis.horizontal,
+       physics: const BouncingScrollPhysics(),
+       child: Row(
+         children: List.generate(
+           _items.length,
+               (index) {
+             return GestureDetector(
+               behavior: HitTestBehavior.opaque,
+               onTap: () {
+                 if (_disabled(index)) {
+                   return;
+                 }
+                 _isOpened[index] ? _closeMenu() : _openMenu(index);
+               },
+               child: Row(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [_getText(index), _getIcon(index)],
+               ),
+               // ),
+             );
+           },
+         ),
+       ),
+     );
+   }
     return WillPopScope(
-      onWillPop: () async {
-        var isClose = await _closeMenu();
-        return !isClose;
-      },
-      child: Container(
-        height: 48,
-        decoration: BoxDecoration(
-          color: TDTheme.of(context).whiteColor1,
-          border: Border(
-            bottom: BorderSide(
-              color: TDTheme.of(context).grayColor3,
-              width: 1,
+        onWillPop: () async {
+          var isClose = await _closeMenu();
+          return !isClose;
+        },
+        child: Container(
+          height: 48,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: TDTheme.of(context).whiteColor1,
+            border: Border(
+              bottom: BorderSide(
+                 color: TDTheme.of(context).grayColor3,
+                  width: 1)
             ),
           ),
-        ),
-        child: Row(
-          children: List.generate(
-            _items.length,
-            (index) {
-              return Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    if (_disabled(index)) {
-                      return;
-                    }
-                    _isOpened[index] ? _closeMenu() : _openMenu(index);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [_getText(index), _getIcon(index)],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
+          child:tabBar,
+        ));
   }
 
   Widget _getText(int index) {
@@ -151,7 +181,11 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
         : _isOpened[index]
             ? TDTheme.of(context).brandColor7
             : TDTheme.of(context).fontGyColor1;
-    return TDText(_items[index].getLabel(), font: TDTheme.of(context).fontBodyMedium, textColor: textColor);
+    return TDText(
+      _items[index].getLabel(),
+      font: TDTheme.of(context).fontBodyMedium,
+      textColor: textColor,
+    );
   }
 
   Widget _getIcon(int index) {
