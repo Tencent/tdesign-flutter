@@ -18,27 +18,27 @@ typedef TDButtonEvent = void Function();
 class TDButton extends StatefulWidget {
   const TDButton(
       {Key? key,
-        this.text,
-        this.size = TDButtonSize.medium,
-        this.type = TDButtonType.fill,
-        this.shape = TDButtonShape.rectangle,
-        this.theme,
-        this.child,
-        this.disabled = false,
-        this.isBlock = false,
-        this.style,
-        this.activeStyle,
-        this.disableStyle,
-        this.textStyle,
-        this.disableTextStyle,
-        this.width,
-        this.height,
-        this.onTap,
-        this.icon,
-        this.iconWidget,
-        this.onLongPress,
-        this.margin,
-        this.padding})
+      this.text,
+      this.size = TDButtonSize.medium,
+      this.type = TDButtonType.fill,
+      this.shape = TDButtonShape.rectangle,
+      this.theme,
+      this.child,
+      this.disabled = false,
+      this.isBlock = false,
+      this.style,
+      this.activeStyle,
+      this.disableStyle,
+      this.textStyle,
+      this.disableTextStyle,
+      this.width,
+      this.height,
+      this.onTap,
+      this.icon,
+      this.iconWidget,
+      this.onLongPress,
+      this.margin,
+      this.padding})
       : super(key: key);
 
   /// 自控件
@@ -128,17 +128,17 @@ class _TDButtonState extends State<TDButton> {
     _width = _getWidth();
     _height = _getHeight();
     _margin = _getMargin();
-    _alignment =  widget.shape == TDButtonShape.filled || widget.isBlock ? Alignment.center : null;
+    _alignment = widget.shape == TDButtonShape.filled || widget.isBlock ? Alignment.center : null;
     if (widget.text != null) {
       _textStyle = widget.disabled ? widget.disableTextStyle : widget.textStyle;
     }
-    if(widget.icon != null){
+    if (widget.icon != null) {
       _iconSize = _getIconSize();
     }
   }
 
   TDButtonStyle get style {
-    switch(_buttonStatus){
+    switch (_buttonStatus) {
       case TDButtonStatus.defaultState:
         return _defaultStyle;
       case TDButtonStatus.active:
@@ -177,35 +177,31 @@ class _TDButtonState extends State<TDButton> {
       child: display,
       onTap: widget.onTap,
       onLongPress: widget.onLongPress,
-      onTapDown: (TapDownDetails details){
-        if(widget.disabled){
+      onTapDown: (TapDownDetails details) {
+        if (widget.disabled) {
           return;
         }
         setState(() {
           _buttonStatus = TDButtonStatus.active;
         });
       },
-      onTapUp: (TapUpDetails details){
-        if(widget.disabled){
-          return;
-        }
-        Future.delayed(const Duration(milliseconds: 100),() {
-          if(mounted){
+      onTapUp: (TapUpDetails details) {
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (mounted&&!widget.disabled) {
             setState(() {
               _buttonStatus = TDButtonStatus.defaultState;
             });
           }
         });
       },
-      onTapCancel: (){
-        if(widget.disabled){
+      onTapCancel: () {
+        if (widget.disabled) {
           return;
         }
         setState(() {
           _buttonStatus = TDButtonStatus.defaultState;
         });
       },
-
     );
   }
 
@@ -213,7 +209,8 @@ class _TDButtonState extends State<TDButton> {
     if (style.frameWidth != null && style.frameWidth != 0) {
       return Border.all(
         color: style.frameColor ?? TDTheme.of(context).grayColor3,
-        width: style.frameWidth!,);
+        width: style.frameWidth!,
+      );
     }
     return null;
   }
@@ -232,8 +229,7 @@ class _TDButtonState extends State<TDButton> {
       var text = TDText(
         widget.text!,
         font: _getTextFont(),
-        textColor:
-        style.textColor ?? TDTheme.of(context).fontGyColor1,
+        textColor: style.textColor ?? TDTheme.of(context).fontGyColor1,
         style: _textStyle,
         forceVerticalCenter: true,
       );
@@ -255,19 +251,18 @@ class _TDButtonState extends State<TDButton> {
     );
   }
 
-  Widget? getIcon(){
-    if(widget.iconWidget != null){
+  Widget? getIcon() {
+    if (widget.iconWidget != null) {
       return widget.iconWidget;
     }
-    if(widget.icon != null){
+    if (widget.icon != null) {
       return RichText(
         overflow: TextOverflow.visible,
         text: TextSpan(
           text: String.fromCharCode(widget.icon!.codePoint),
           style: TextStyle(
             inherit: false,
-            color:
-            style.textColor,
+            color: style.textColor,
             height: 1,
             fontSize: _iconSize,
             fontFamily: widget.icon!.fontFamily,
@@ -282,17 +277,13 @@ class _TDButtonState extends State<TDButton> {
   Font _getTextFont() {
     switch (widget.size) {
       case TDButtonSize.large:
-        return TDTheme.of(context).fontMarkLarge ??
-            Font(size: 16, lineHeight: 24);
+        return TDTheme.of(context).fontMarkLarge ?? Font(size: 16, lineHeight: 24);
       case TDButtonSize.medium:
-        return TDTheme.of(context).fontMarkLarge ??
-            Font(size: 16, lineHeight: 24);
+        return TDTheme.of(context).fontMarkLarge ?? Font(size: 16, lineHeight: 24);
       case TDButtonSize.small:
-        return TDTheme.of(context).fontMarkMedium ??
-            Font(size: 14, lineHeight: 22);
+        return TDTheme.of(context).fontMarkMedium ?? Font(size: 14, lineHeight: 22);
       case TDButtonSize.extraSmall:
-        return TDTheme.of(context).fontMarkMedium ??
-            Font(size: 14, lineHeight: 22);
+        return TDTheme.of(context).fontMarkMedium ?? Font(size: 14, lineHeight: 22);
     }
   }
 
@@ -300,9 +291,7 @@ class _TDButtonState extends State<TDButton> {
     if (widget.width != null) {
       return widget.width;
     }
-    if (!widget.isBlock
-        && (widget.shape == TDButtonShape.square ||
-            widget.shape == TDButtonShape.circle)) {
+    if (!widget.isBlock && (widget.shape == TDButtonShape.square || widget.shape == TDButtonShape.circle)) {
       switch (widget.size) {
         case TDButtonSize.large:
           return 48;
@@ -346,8 +335,8 @@ class _TDButtonState extends State<TDButton> {
     }
   }
 
-  EdgeInsetsGeometry? _getMargin(){
-    if(widget.margin != null){
+  EdgeInsetsGeometry? _getMargin() {
+    if (widget.margin != null) {
       return widget.margin;
     }
     return widget.isBlock ? const EdgeInsets.only(left: 16, right: 16) : null;
@@ -382,19 +371,15 @@ class _TDButtonState extends State<TDButton> {
     if (style.frameWidth != null && style.frameWidth != 0) {
       horizontalPadding = horizontalPadding - style.frameWidth!;
       verticalPadding = verticalPadding - style.frameWidth!;
-      if(horizontalPadding < 0){
+      if (horizontalPadding < 0) {
         horizontalPadding = 0;
       }
-      if(verticalPadding < 0){
+      if (verticalPadding < 0) {
         verticalPadding = 0;
       }
     }
     return EdgeInsets.only(
-        left: horizontalPadding,
-        right: horizontalPadding,
-        bottom: verticalPadding,
-        top: verticalPadding);
-
+        left: horizontalPadding, right: horizontalPadding, bottom: verticalPadding, top: verticalPadding);
   }
 
   @override
@@ -452,7 +437,4 @@ class _TDButtonState extends State<TDButton> {
     _innerDisableStyle = widget.style ?? _generateInnerStyle();
     return _innerDisableStyle!;
   }
-
 }
-
-
