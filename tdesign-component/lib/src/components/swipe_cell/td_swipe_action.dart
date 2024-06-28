@@ -29,7 +29,7 @@ class TDSwipeAction extends StatelessWidget {
         assert(icon != null || label != null, 'icon or label must not be null'),
         super(key: key);
 
-  /// 宽度占比，默认为 1
+  /// 宽度占比，默认为 1，[TDSwipePanel.confirms]下无效（失踪占满整个[TDSwipePanel]宽度）
   final int? flex;
 
   /// 背景颜色
@@ -81,11 +81,15 @@ class TDSwipeAction extends StatelessWidget {
         ),
       if (icon != null && label != null) SizedBox(width: spacing ?? 2),
       if (label != null)
-        TDText(
-          label,
-          font: fontSize,
-          textColor: TDTheme.of(context).fontWhColor1,
-          style: labelStyle,
+        Flexible(
+          child: TDText(
+            label,
+            font: fontSize,
+            textColor: TDTheme.of(context).fontWhColor1,
+            style: labelStyle,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
         ),
     ];
     return Expanded(
@@ -99,15 +103,11 @@ class TDSwipeAction extends StatelessWidget {
               width: double.infinity,
               height: double.infinity,
               color: backgroundColor,
-              child: (direction ?? Axis.horizontal) == Axis.horizontal
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: children,
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: children,
-                    ),
+              child: Flex(
+                mainAxisAlignment: MainAxisAlignment.center,
+                direction: direction ?? Axis.horizontal,
+                children: children,
+              ),
             ),
       ),
     );
