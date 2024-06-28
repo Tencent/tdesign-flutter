@@ -50,95 +50,106 @@ class _DemoState extends State<_Demo> {
   @override
   Widget build(BuildContext context) {
     return TDSwipeAutoClose(
-        child: Column(
-      children: [
-        TDSwipeCell(
-          groupTag: '0',
-          opened: const [true],
-          onChange: (direction, open) {
-            print(direction);
-            print(open);
-          },
-          left: TDSwipePanel(
-            dragDismissible: true,
-            children: [
-              const TDSwipeAction(
-                backgroundColor: Color.fromARGB(255, 218, 16, 16),
-                label: '删除',
-                icon: TDIcons.delete,
-                direction: Axis.vertical,
-              ),
-              const TDSwipeAction(
-                backgroundColor: Color.fromARGB(255, 17, 50, 212),
-                label: '收藏',
-                icon: TDIcons.user_avatar,
-                // direction: Axis.vertical,
-              ),
-            ],
+      child: Column(
+        children: [
+          TDSwipeCell(
+            groupTag: '0',
+            opened: const [true],
+            onChange: (direction, open) {
+              print(direction);
+              print(open);
+            },
+            left: TDSwipePanel(
+              dragDismissible: true,
+              children: [
+                const TDSwipeAction(
+                  flex: 2,
+                  backgroundColor: Color.fromARGB(255, 218, 16, 16),
+                  label: '删除',
+                  icon: TDIcons.delete,
+                  direction: Axis.vertical,
+                ),
+                const TDSwipeAction(
+                  backgroundColor: Color.fromARGB(255, 17, 50, 212),
+                  label: '收藏',
+                  icon: TDIcons.user_avatar,
+                  direction: Axis.vertical,
+                ),
+              ],
+            ),
+            right: TDSwipePanel(
+              // dragDismissible: true,
+              children: [
+                const TDSwipeAction(
+                  backgroundColor: Color.fromARGB(255, 218, 16, 16),
+                  label: '删除',
+                  icon: TDIcons.delete,
+                  direction: Axis.vertical,
+                ),
+                const TDSwipeAction(
+                  backgroundColor: Color.fromARGB(255, 17, 50, 212),
+                  label: '收藏',
+                  icon: TDIcons.user_avatar,
+                  // direction: Axis.vertical,
+                ),
+              ],
+              confirms: [
+                const TDSwipeAction(
+                  backgroundColor: Color.fromARGB(255, 218, 16, 16),
+                  label: '确认删除？',
+                  icon: TDIcons.delete,
+                  direction: Axis.vertical,
+                  confirmIndex: [1],
+                ),
+              ],
+            ),
+            cell: const ListTile(title: Text('Slide me')),
           ),
-          right: TDSwipePanel(
-            // dragDismissible: true,
-            children: [
-              const TDSwipeAction(
-                backgroundColor: Color.fromARGB(255, 218, 16, 16),
-                label: '删除',
-                icon: TDIcons.delete,
-                direction: Axis.vertical,
-              ),
-              const TDSwipeAction(
-                backgroundColor: Color.fromARGB(255, 17, 50, 212),
-                label: '收藏',
-                icon: TDIcons.user_avatar,
-                // direction: Axis.vertical,
-              ),
-            ],
+          TDSwipeCell(
+            groupTag: '0',
+            // opened: const [true],
+            onChange: (direction, open) {
+              print(direction);
+              print(open);
+            },
+            left: TDSwipePanel(
+              // dragDismissible: true,
+              children: [
+                const TDSwipeAction(
+                  backgroundColor: Color.fromARGB(255, 218, 16, 16),
+                  label: '删除',
+                  icon: TDIcons.delete,
+                  direction: Axis.vertical,
+                ),
+                const TDSwipeAction(
+                  backgroundColor: Color.fromARGB(255, 17, 50, 212),
+                  label: '收藏',
+                  icon: TDIcons.user_avatar,
+                  // direction: Axis.vertical,
+                ),
+              ],
+            ),
+            right: TDSwipePanel(
+              // dragDismissible: true,
+              children: [
+                const TDSwipeAction(
+                  backgroundColor: Color.fromARGB(255, 218, 16, 16),
+                  label: '删除',
+                  icon: TDIcons.delete,
+                  direction: Axis.vertical,
+                ),
+                const TDSwipeAction(
+                  backgroundColor: Color.fromARGB(255, 17, 50, 212),
+                  label: '收藏',
+                  icon: TDIcons.user_avatar,
+                  // direction: Axis.vertical,
+                ),
+              ],
+            ),
+            cell: const ListTile(title: Text('Slide me')),
           ),
-          cell: const ListTile(title: Text('Slide me')),
-        ),
-        TDSwipeCell(
-          groupTag: '0',
-          // opened: const [true],
-          onChange: (direction, open) {
-            print(direction);
-            print(open);
-          },
-          left: TDSwipePanel(
-            // dragDismissible: true,
-            children: [
-              const TDSwipeAction(
-                backgroundColor: Color.fromARGB(255, 218, 16, 16),
-                label: '删除',
-                icon: TDIcons.delete,
-                direction: Axis.vertical,
-              ),
-              const TDSwipeAction(
-                backgroundColor: Color.fromARGB(255, 17, 50, 212),
-                label: '收藏',
-                icon: TDIcons.user_avatar,
-                // direction: Axis.vertical,
-              ),
-            ],
-          ),
-          right: TDSwipePanel(
-            // dragDismissible: true,
-            children: [
-              const TDSwipeAction(
-                backgroundColor: Color.fromARGB(255, 218, 16, 16),
-                label: '删除',
-                icon: TDIcons.delete,
-                direction: Axis.vertical,
-              ),
-              const TDSwipeAction(
-                backgroundColor: Color.fromARGB(255, 17, 50, 212),
-                label: '收藏',
-                icon: TDIcons.user_avatar,
-                // direction: Axis.vertical,
-              ),
-            ],
-          ),
-          cell: const ListTile(title: Text('Slide me')),
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 }

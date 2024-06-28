@@ -2,8 +2,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import './td_swipe_auto_close.dart';
 import './td_swipe_panel.dart';
 import '../cell/td_cell.dart';
+import 'td_swipe_action.dart';
 
 enum TDSwipeDirection { right, left }
 
@@ -49,7 +51,7 @@ class TDSwipeCell extends StatefulWidget {
   /// 自定义控制滑动窗口
   final SlidableController? controller;
 
-  /// 同一组中只有一个被打开
+  /// 同一组中只有一个被打开，[TDSwipeCell]必须为[TDSwipeAutoClose]的后代组件才有效
   final Object? groupTag;
 
   /// 滚动时，是否关闭滑动操作项面板
@@ -104,7 +106,10 @@ class _TDSwipeCellState extends State<TDSwipeCell> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
+    final rightConfirmLength = widget.right?.confirms?.length ?? 0;
+    final leftConfirmLength = widget.left?.confirms?.length ?? 0;
+    final isHorizontal = widget.direction == Axis.horizontal;
+    final slidable = Slidable(
       key: widget.slidableKey ?? UniqueKey(),
       closeOnScroll: widget.closeOnScroll ?? true,
       child: widget.cell,
@@ -116,6 +121,41 @@ class _TDSwipeCellState extends State<TDSwipeCell> with TickerProviderStateMixin
       dragStartBehavior: widget.dragStartBehavior ?? DragStartBehavior.start,
       direction: widget.direction ?? Axis.horizontal,
     );
+    return rightConfirmLength > 0 || leftConfirmLength > 0
+        ? Stack(
+            children: [
+              slidable,
+              ...List.generate(
+                rightConfirmLength,
+                (index) => Positioned.fill(
+                  child: FractionallySizedBox(
+                    alignment: isHorizontal ? Alignment.centerRight : Alignment.bottomCenter,
+                    widthFactor: isHorizontal ? widget.right?.extentRatio ?? 0.3 : null,
+                    heightFactor: isHorizontal ? null : widget.right?.extentRatio ?? 0.3,
+                    child: ClipRect(
+                      // clipper: ,
+                      child: widget.right!.confirms![index],
+                    ),
+                  ),
+                ),
+              ),
+              ...List.generate(
+                leftConfirmLength,
+                (index) => Positioned.fill(
+                  child: FractionallySizedBox(
+                    alignment: isHorizontal ? Alignment.centerLeft : Alignment.topCenter,
+                    widthFactor: isHorizontal ? widget.left?.extentRatio ?? 0.3 : null,
+                    heightFactor: isHorizontal ? null : widget.left?.extentRatio ?? 0.3,
+                    child: ClipRect(
+                      // clipper: ,
+                      child: widget.right!.confirms![index],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
+        : slidable;
   }
 
   void _handleActionPanelTypeChanged() {
