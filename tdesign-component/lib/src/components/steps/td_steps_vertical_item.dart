@@ -141,15 +141,15 @@ class TDStepsVerticalItem extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: 8),
-            width: 22,
-            child:  IntrinsicHeight(
-              child: ConstrainedBox(
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(right: 8),
+              width: 22,
+              child:  ConstrainedBox(
                 constraints: const BoxConstraints(minHeight: 62),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -177,45 +177,45 @@ class TDStepsVerticalItem extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 22,
-                  margin: const EdgeInsets.only(bottom: 4),
-                  child: TDText(
-                    data.title,
-                    style: TextStyle(
-                      fontWeight: (activeIndex == index && !readOnly) ? FontWeight.w600 : FontWeight.w400,
-                      color: stepsTitleColor,
-                      fontSize: 14,
-                      height: 1.4,
-                    ),
-                  ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TDText(
-                      data.content,
+            Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 22,
+                    margin: const EdgeInsets.only(bottom: 4),
+                    child: TDText(
+                      data.title,
                       style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        color: TDTheme.of(context).fontGyColor3,
-                        fontSize: 12,
+                        fontWeight: (activeIndex == index && !readOnly) ? FontWeight.w600 : FontWeight.w400,
+                        color: stepsTitleColor,
+                        fontSize: 14,
+                        height: 1.4,
                       ),
                     ),
-                    customContent,
-                  ]
-                ),
-              ],
-            ),
-          )
-        ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TDText(
+                        data.content,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: TDTheme.of(context).fontGyColor3,
+                          fontSize: 12,
+                        ),
+                      ),
+                      customContent,
+                    ]
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
