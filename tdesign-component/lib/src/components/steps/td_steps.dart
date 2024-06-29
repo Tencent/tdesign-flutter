@@ -45,7 +45,7 @@ class TDSteps extends StatefulWidget {
   const TDSteps({
     super.key,
     required this.steps,
-    required this.activeIndex,
+    this.activeIndex = 0,
     this.direction = TDStepsDirection.horizontal,
     this.status = TDStepsStatus.success,
     this.simple = false,
