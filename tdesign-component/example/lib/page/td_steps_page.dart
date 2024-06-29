@@ -115,8 +115,6 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: basicHStepsListData1,
-              direction: TDStepsDirection.horizontal,
-              activeIndex: 0,
             ),
           )
         ],
@@ -621,8 +619,6 @@ class _TDStepsPageState extends State<TDStepsPage> {
             flex: 1,
             child: TDSteps(
               steps: hReadOnlyStepsListData,
-              direction: TDStepsDirection.horizontal,
-              activeIndex: 0,
               readOnly: true,
             ),
           )
