@@ -21,9 +21,123 @@ class _TDBadgePageState extends State<TDBadgePage> {
           ExampleModule(
             title: '组件类型',
             children: [
-              ExampleItem(desc: '红点徽标', builder: _buildRedPointBadge),
-              ExampleItem(desc: '数字徽标', builder: _buildNumberBadge),
-              ExampleItem(desc: '自定义徽标', builder: _buildCustomBadge),
+              ExampleItem(
+                  ignoreCode: true,
+                  desc: '红点徽标',
+                  builder: (context) {
+                    return Container(
+                      alignment: Alignment.topLeft,
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center, // 垂直方向上末端对齐
+                        children: [
+                            Container(
+                              alignment: Alignment.bottomLeft,
+                              margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                              child: CodeWrapper(
+                                builder: _buildRedPointMessageBadge,
+                                methodName: '_buildRedPointMessageBadge',
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.bottomLeft,
+                              margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                              child: CodeWrapper(
+                                builder: _buildRedPointIconBadge,
+                                methodName: '_buildRedPointIconBadge',
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.bottomLeft,
+                              margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                              child: CodeWrapper(
+                                builder: _buildRedPointButtonBadge,
+                                methodName: '_buildRedPointButtonBadge',
+                              ),
+                            ),
+
+                        ],
+                      ),
+                    );
+                  }),
+
+              ExampleItem(
+                  ignoreCode: true,
+                  desc: '数字徽标',
+                  builder: (context) {
+                    return Container(
+                      alignment: Alignment.topLeft,
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center, // 垂直方向上末端对齐
+                        children: [
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                            child: CodeWrapper(
+                              builder: _buildMessageNumberBadge,
+                              methodName: '_buildMessageNumberBadge',
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                            child: CodeWrapper(
+                              builder: _buildIconNumberBadge,
+                              methodName: '_buildIconNumberBadge',
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                            child: CodeWrapper(
+                              builder: _buildButtonNumberBadge,
+                              methodName: '_buildButtonNumberBadge',
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    );
+                  }),
+              ExampleItem(
+                  ignoreCode: true,
+                  desc: '自定义徽标',
+                  builder: (context) {
+                    return Container(
+                      alignment: Alignment.topLeft,
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center, // 垂直方向上末端对齐
+                        children: [
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                            child: CodeWrapper(
+                              builder: _buildCustomBadgeShowingNumberEight,
+                              methodName: '_buildCustomBadgeShowingNumberEight',
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                            child: CodeWrapper(
+                              builder: _buildCustomBadgeShowingNumberZero,
+                              methodName: '_buildCustomBadgeShowingNumberZero',
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                            child: CodeWrapper(
+                              builder: _buildCustomBadgeWithoutShowingNumberZero,
+                              methodName: '_buildCustomBadgeWithoutShowingNumberZero',
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
             ],
           ),
           ExampleModule(
@@ -46,251 +160,241 @@ class _TDBadgePageState extends State<TDBadgePage> {
   }
 
   @Demo(group: 'badge')
-  Widget _buildRedPointBadge(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
+  Widget _buildRedPointMessageBadge(BuildContext context) {
+    return SizedBox(
+      width: 40,
+      height: 24,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
         children: [
-          SizedBox(
-            width: 40,
-            height: 24,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                TDText(
-                  '消息',
-                  font: TDTheme.of(context).fontBodyLarge,
-                ),
-                const Positioned(
-                  child: TDBadge(TDBadgeType.redPoint),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
+          TDText(
+            '消息',
+            font: TDTheme.of(context).fontBodyLarge,
           ),
-          const SizedBox(
-            width: 40,
-          ),
-          SizedBox(
-            width: 27,
-            height: 27,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: const [
-                Icon(TDIcons.notification),
-                Positioned(
-                  child: TDBadge(TDBadgeType.redPoint),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 40,
-          ),
-          SizedBox(
-            width: 83,
-            height: 51,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: const [
-                TDButton(
-                  width: 80,
-                  height: 48,
-                  text: '按钮',
-                  size: TDButtonSize.large,
-                  type: TDButtonType.fill,
-                ),
-                Positioned(
-                  child: TDBadge(TDBadgeType.redPoint),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
-          ),
+          const Positioned(
+            child: TDBadge(TDBadgeType.redPoint),
+            right: 0,
+            top: 0,
+          )
         ],
       ),
     );
   }
 
   @Demo(group: 'badge')
-  Widget _buildNumberBadge(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
+  Widget _buildRedPointIconBadge(BuildContext context) {
+    return const SizedBox(
+      width: 27,
+      height: 27,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
         children: [
-          SizedBox(
+          Icon(TDIcons.notification),
+          Positioned(
+            child: TDBadge(TDBadgeType.redPoint),
+            right: 0,
+            top: 0,
+          )
+        ],
+      ),
+    );
+  }
+
+  @Demo(group: 'badge')
+  Widget _buildRedPointButtonBadge(BuildContext context) {
+    return const SizedBox(
+      width: 83,
+      height: 48,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          TDButton(
+            width: 80,
+            height: 48,
+            text: '按钮',
+            size: TDButtonSize.large,
+            type: TDButtonType.fill,
+          ),
+          Positioned(
+            child: TDBadge(TDBadgeType.redPoint),
+            right: 0,
+            top: 0,
+          )
+        ],
+      ),
+    );
+  }
+
+  @Demo(group: 'badge')
+  Widget _buildMessageNumberBadge(BuildContext context) {
+    return SizedBox(
+      width: 48,
+      height: 32,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          TDText(
+            '消息',
+            font: TDTheme.of(context).fontBodyLarge,
+          ),
+          const Positioned(
+            child: TDBadge(
+              TDBadgeType.message,
+              count: '8',
+            ),
+            right: 0,
+            top: 0,
+          )
+        ],
+      ),
+    );
+  }
+
+  @Demo(group: 'badge')
+  Widget _buildIconNumberBadge(BuildContext context) {
+    return const SizedBox(
+      width: 34,
+      height: 34,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          Icon(TDIcons.notification),
+          Positioned(
+            child: TDBadge(
+              TDBadgeType.message,
+              count: '8',
+            ),
+            right: 0,
+            top: 0,
+          )
+        ],
+      ),
+    );
+  }
+
+  @Demo(group: 'badge')
+  Widget _buildButtonNumberBadge(BuildContext context) {
+    return const SizedBox(
+      width: 86,
+      height: 54,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          TDButton(
+            width: 80,
+            height: 48,
+            text: '按钮',
+            size: TDButtonSize.large,
+          ),
+          Positioned(
+            child: TDBadge(
+              TDBadgeType.message,
+              count: '8',
+            ),
+            right: 0,
+            top: 0,
+          )
+        ],
+      ),
+    );
+  }
+
+  @Demo(group: 'badge')
+  Widget _buildCustomBadgeShowingNumberEight(BuildContext context) {
+    return SizedBox(
+      width: 64,
+      height: 56,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          Container(
+            child: const Icon(TDIcons.notification),
+            decoration: BoxDecoration(
+                color: TDTheme.of(context).grayColor2,
+                borderRadius: BorderRadius.circular(
+                    TDTheme.of(context).radiusDefault)),
+            height: 48,
             width: 48,
-            height: 32,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                TDText(
-                  '消息',
-                  font: TDTheme.of(context).fontBodyLarge,
-                ),
-                const Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '8',
-                  ),
-                  right: 0,
-                  top: 0,
-                )
-              ],
+          ),
+          const Positioned(
+            child: TDBadge(
+              TDBadgeType.message,
+              count: '8',
             ),
-          ),
-          const SizedBox(
-            width: 40,
-          ),
-          SizedBox(
-            width: 34,
-            height: 34,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: const [
-                Icon(TDIcons.notification),
-                Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '8',
-                  ),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 40,
-          ),
-          SizedBox(
-            width: 86,
-            height: 54,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: const [
-                TDButton(
-                  width: 80,
-                  height: 48,
-                  text: '按钮',
-                  size: TDButtonSize.large,
-                ),
-                Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '8',
-                  ),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
-          ),
+            right: 0,
+            top: 0,
+          )
         ],
       ),
     );
   }
 
   @Demo(group: 'badge')
-  Widget _buildCustomBadge(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
+  Widget _buildCustomBadgeShowingNumberZero(BuildContext context) {
+    return SizedBox(
+      width: 64,
+      height: 56,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
         children: [
-          SizedBox(
-            width: 64,
-            height: 56,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                Container(
-                  child: const Icon(TDIcons.notification),
-                  decoration: BoxDecoration(
-                      color: TDTheme.of(context).grayColor2,
-                      borderRadius: BorderRadius.circular(
-                          TDTheme.of(context).radiusDefault)),
-                  height: 48,
-                  width: 48,
-                ),
-                const Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '8',
-                  ),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
+          Container(
+            child: const Icon(TDIcons.notification),
+            decoration: BoxDecoration(
+                color: TDTheme.of(context).grayColor2,
+                borderRadius: BorderRadius.circular(
+                    TDTheme.of(context).radiusDefault)),
+            height: 48,
+            width: 48,
           ),
-          const SizedBox(width: 40),
-          SizedBox(
-            width: 64,
-            height: 56,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                Container(
-                  child: const Icon(TDIcons.notification),
-                  decoration: BoxDecoration(
-                      color: TDTheme.of(context).grayColor2,
-                      borderRadius: BorderRadius.circular(
-                          TDTheme.of(context).radiusDefault)),
-                  height: 48,
-                  width: 48,
-                ),
-                const Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '0',
-                  ),
-                  right: 0,
-                  top: 0,
-                )
-              ],
+          const Positioned(
+            child: TDBadge(
+              TDBadgeType.message,
+              count: '0',
             ),
-          ),
-          const SizedBox(width: 40),
-          SizedBox(
-            width: 64,
-            height: 56,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                Container(
-                  child: const Icon(TDIcons.notification),
-                  decoration: BoxDecoration(
-                      color: TDTheme.of(context).grayColor2,
-                      borderRadius: BorderRadius.circular(
-                          TDTheme.of(context).radiusDefault)),
-                  height: 48,
-                  width: 48,
-                ),
-                const Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '0',
-                    showZero: false,
-                  ),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
-          ),
+            right: 0,
+            top: 0,
+          )
         ],
       ),
     );
   }
+
+  @Demo(group: 'badge')
+  Widget _buildCustomBadgeWithoutShowingNumberZero(BuildContext context) {
+    return SizedBox(
+      width: 64,
+      height: 56,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          Container(
+            child: const Icon(TDIcons.notification),
+            decoration: BoxDecoration(
+                color: TDTheme.of(context).grayColor2,
+                borderRadius: BorderRadius.circular(
+                    TDTheme.of(context).radiusDefault)),
+            height: 48,
+            width: 48,
+          ),
+          const Positioned(
+            child: TDBadge(
+              TDBadgeType.message,
+              count: '0',
+              showZero: false,
+            ),
+            right: 0,
+            top: 0,
+          )
+        ],
+      ),
+    );
+  }
+
 
   @Demo(group: 'badge')
   Widget _buildCircleBadge(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
+    return const Padding(
+      padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
           SizedBox(
@@ -298,7 +402,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
             height: 34,
             child: Stack(
               alignment: Alignment.bottomLeft,
-              children: const [
+              children: [
                 Icon(TDIcons.notification),
                 Positioned(
                   child: TDBadge(
@@ -318,8 +422,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
 
   @Demo(group: 'badge')
   Widget _buildSquareBadge(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
+    return const Padding(
+      padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
           SizedBox(
@@ -327,7 +431,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
             height: 34,
             child: Stack(
               alignment: Alignment.bottomLeft,
-              children: const [
+              children: [
                 Icon(TDIcons.notification),
                 Positioned(
                   child: TDBadge(
@@ -410,8 +514,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
 
   @Demo(group: 'badge')
   Widget _buildLargeBadge(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
+    return const Padding(
+      padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
           SizedBox(
@@ -419,7 +523,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
             height: 65.5,
             child: Stack(
               alignment: Alignment.bottomLeft,
-              children: const [
+              children: [
                 TDAvatar(
                   size: TDAvatarSize.large,
                   type: TDAvatarType.icon,
@@ -443,8 +547,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
 
   @Demo(group: 'badge')
   Widget _buildMediumBadge(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
+    return const Padding(
+      padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
           SizedBox(
@@ -452,7 +556,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
             height: 49.5,
             child: Stack(
               alignment: Alignment.bottomLeft,
-              children: const [
+              children: [
                 TDAvatar(
                   size: TDAvatarSize.medium,
                   type: TDAvatarType.icon,
