@@ -1,8 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-
-import 'td_popup_scale.dart';
 
 const Duration _bottomSheetEnterDuration = Duration(milliseconds: 250);
 const Duration _bottomSheetExitDuration = Duration(milliseconds: 200);
@@ -11,9 +7,10 @@ const Duration _bottomSheetExitDuration = Duration(milliseconds: 200);
 enum SlideTransitionFrom { top, right, left, bottom, center }
 
 /// 从屏幕的某个方向滑动弹出的Dialog框的路由，比如从顶部、底部、左、右滑出页面
-class TDSlidePopupRoute<T> extends OverlayRoute<T> {
+class TDSlidePopupRoute<T> extends PopupRoute<T> {
   TDSlidePopupRoute({
     required this.builder,
+    this.barrierLabel,
     this.modalBarrierColor = Colors.black54,
     this.isDismissible = true,
     this.modalBarrierFull = false,
@@ -22,6 +19,8 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
     this.modalHeight,
     this.modalTop = 0,
     this.modalLeft = 0,
+    this.open,
+    this.opened,
   });
 
   /// 控件构建器
@@ -51,181 +50,145 @@ class TDSlidePopupRoute<T> extends OverlayRoute<T> {
   /// 弹出框左侧距离
   final double? modalLeft;
 
-  final _size = ValueNotifier<Size?>(null);
-  final _scaleCenterController = ValueNotifier(TDPopupScaleStatus.idle);
-  final _position = <String, double>{};
-  var _close = false;
+  /// 打开前事件
+  final VoidCallback? open;
+
+  /// 打开后事件
+  final VoidCallback? opened;
+
+  Color get _barrierColor => modalBarrierColor ?? Colors.black54;
 
   @override
-  Iterable<OverlayEntry> createOverlayEntries() {
-    var color = modalBarrierColor ?? Colors.black54;
-    var transparentColor = color.withAlpha(0);
-    return [
-      OverlayEntry(
-        builder: (BuildContext context) {
-          var buildWidget = builder(context);
-          var screenSize = MediaQuery.of(context).size;
-          var _modalTop = (modalTop ?? 0).clamp(0, screenSize.height).toDouble();
-          var _modalLeft = (modalLeft ?? 0).clamp(0, screenSize.width).toDouble();
-          var _modalHeight = (modalHeight ?? screenSize.height).clamp(0, screenSize.height - _modalTop).toDouble();
-          var _modalWidth = (modalWidth ?? screenSize.width).clamp(0, screenSize.width - _modalLeft).toDouble();
-          return ValueListenableBuilder(
-            valueListenable: _size,
-            builder: (BuildContext valueContext, value, Widget? child) {
-              _getPosition(screenSize, value, _modalTop, _modalLeft, _modalHeight, _modalWidth);
-              if (value != null) {
-                _scaleCenterController.value = TDPopupScaleStatus.enter;
-              } else {
-                _scaleCenterController.value = TDPopupScaleStatus.exit;
-              }
-              var modalBarrierClick = GestureDetector(
+  Duration get transitionDuration => _bottomSheetEnterDuration;
+
+  @override
+  Duration get reverseTransitionDuration => _bottomSheetExitDuration;
+
+  @override
+  bool get barrierDismissible => isDismissible;
+
+  @override
+  final String? barrierLabel;
+
+  @override
+  Color get barrierColor => modalBarrierFull ? _barrierColor : Colors.transparent;
+
+  // 实现转场动画
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    var animValue = decelerateEasing.transform(animation.value);
+    return Stack(
+      children: [
+        if (!modalBarrierFull)
+          _getPositionWidget(
+            context,
+            Container(
+              color: _barrierColor.withAlpha((animValue * _barrierColor.alpha).toInt()),
+              child: GestureDetector(
                 onTap: () {
                   if (isDismissible) {
-                    Navigator.maybePop(context);
+                    Navigator.pop(context);
                   }
                 },
-              );
-              var modalBarrier = AnimatedContainer(
-                color: value == null ? transparentColor : color,
-                duration: value != null ? _bottomSheetEnterDuration : _bottomSheetExitDuration,
-                child: modalBarrierClick,
-              );
-              return Stack(
-                children: [
-                  Positioned(
-                    child: modalBarrierFull ? modalBarrier : modalBarrierClick,
+              ),
+            ),
+          ),
+        _getPositionWidget(
+          context,
+          Align(
+            alignment: slideTransitionFromToAlignment(slideTransitionFrom),
+            child: slideTransitionFrom != SlideTransitionFrom.center
+                ? ClipRect(
+                    clipper: RectClipper(animValue, slideTransitionFrom),
+                    child: child,
+                  )
+                : Transform(
+                    transform: Matrix4.diagonal3Values(animValue, animValue, 1),
+                    alignment: Alignment.center,
+                    child: child,
                   ),
-                  if (!modalBarrierFull)
-                    Positioned(
-                      top: _modalTop,
-                      bottom: screenSize.height - _modalTop - _modalHeight,
-                      left: _modalLeft,
-                      right: screenSize.width - _modalLeft - _modalWidth,
-                      child: modalBarrier,
-                    ),
-                  if (slideTransitionFrom != SlideTransitionFrom.center)
-                    AnimatedPositioned(
-                      top: _position['top'],
-                      bottom: _position['bottom'],
-                      left: _position['left'],
-                      right: _position['right'],
-                      duration: value != null ? _bottomSheetEnterDuration : _bottomSheetExitDuration,
-                      child: _getContent(context, buildWidget),
-                    )
-                  else
-                    Positioned(
-                      top: _position['top'],
-                      bottom: _position['bottom'],
-                      left: _position['left'],
-                      right: _position['right'],
-                      child: TDPopupScale(
-                        child: _getContent(context, buildWidget),
-                        enterDuration: _bottomSheetEnterDuration,
-                        exitDuration: _bottomSheetExitDuration,
-                        slideTransitionFrom: slideTransitionFrom,
-                        controller: _scaleCenterController,
-                      ),
-                    ),
-                ],
-              );
-            },
-          );
-        },
-      ),
-    ];
+          ),
+        ),
+      ],
+    );
   }
 
   @override
-  Future<RoutePopDisposition> willPop() async {
-    _size.value = null;
-    _close = true;
-    await Future.delayed(_bottomSheetExitDuration);
-    return RoutePopDisposition.pop;
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+    return builder.call(context);
   }
 
-  Widget _getContent(BuildContext context, Widget child) {
-    var childWidget = Builder(
-      builder: (BuildContext context) {
-        if (_size.value != null) {
-          return child;
-        }
-        if (_close) {
-          _close = false;
-          return child;
-        }
-        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          var renderBox = context.findRenderObject() as RenderBox;
-          _size.value = renderBox.size;
-        });
-        return child;
-      },
-    );
-    var vertical = slideTransitionFrom == SlideTransitionFrom.top || slideTransitionFrom == SlideTransitionFrom.bottom;
-    return slideTransitionFrom == SlideTransitionFrom.center
-        ? SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: childWidget,
-            ),
-          )
-        : SingleChildScrollView(
-            scrollDirection: vertical ? Axis.vertical : Axis.horizontal,
-            child: childWidget,
-          );
-  }
-
-  void _getPosition(
-    Size screenSize,
-    Size? size,
-    double _modalTop,
-    double _modalLeft,
-    double _modalHeight,
-    double _modalWidth,
-  ) {
-    if (SlideTransitionFrom.center == slideTransitionFrom) {
-      if (_close) {
-        return;
-      }
-      if (size == null) {
-        _position['top'] = 0;
-        _position['bottom'] = screenSize.height;
-        _position['left'] = 0;
-        _position['right'] = screenSize.width;
-        return;
-      }
-      _position['top'] = _modalTop + (_modalHeight - min(size.height, _modalHeight)) / 2; // 移动
-      _position['bottom'] = screenSize.height - _modalTop - (_modalHeight + min(size.height, _modalHeight)) / 2; // 移动
-      _position['left'] = _modalLeft + (_modalWidth - min(size.width, _modalWidth)) / 2; // 移动
-      _position['right'] = screenSize.width - _modalLeft - (_modalWidth + min(size.width, _modalWidth)) / 2; // 移动
+  @override
+  TickerFuture didPush() {
+    open?.call();
+    animation?.addStatusListener((status) {
+    if (status == AnimationStatus.completed) {
+      opened?.call();
     }
+  });
+    return super.didPush();
+  }
+
+  Widget _getPositionWidget(BuildContext context, Widget child) {
+    var screenSize = MediaQuery.of(context).size;
+    var _modalTop = (modalTop ?? 0).clamp(0, screenSize.height).toDouble();
+    var _modalLeft = (modalLeft ?? 0).clamp(0, screenSize.width).toDouble();
+    var _modalHeight = (modalHeight ?? screenSize.height).clamp(0, screenSize.height - _modalTop).toDouble();
+    var _modalWidth = (modalWidth ?? screenSize.width).clamp(0, screenSize.width - _modalLeft).toDouble();
+    return Positioned(
+      top: _modalTop,
+      bottom: screenSize.height - _modalTop - _modalHeight,
+      left: _modalLeft,
+      right: screenSize.width - _modalLeft - _modalWidth,
+      child: child,
+    );
+  }
+}
+
+Alignment slideTransitionFromToAlignment(SlideTransitionFrom from) {
+  switch (from) {
+    case SlideTransitionFrom.top:
+      return Alignment.topCenter;
+    case SlideTransitionFrom.right:
+      return Alignment.centerRight;
+    case SlideTransitionFrom.left:
+      return Alignment.centerLeft;
+    case SlideTransitionFrom.bottom:
+      return Alignment.bottomCenter;
+    case SlideTransitionFrom.center:
+      return Alignment.center;
+  }
+}
+
+class RectClipper extends CustomClipper<Rect> {
+  final double animValue;
+  final SlideTransitionFrom slideTransitionFrom;
+
+  RectClipper(this.animValue, this.slideTransitionFrom);
+
+  @override
+  Rect getClip(Size size) {
     switch (slideTransitionFrom) {
       case SlideTransitionFrom.top:
-        _position['top'] = _modalTop;
-        _position['bottom'] = screenSize.height - _modalTop - min(size?.height ?? 0, _modalHeight); // 移动
-        _position['left'] = _modalLeft;
-        _position['right'] = screenSize.width - _modalLeft - _modalWidth;
-        break;
-      case SlideTransitionFrom.bottom:
-        _position['top'] = _modalTop + _modalHeight - min(size?.height ?? 0, _modalHeight); // 移动
-        _position['bottom'] = screenSize.height - _modalTop - _modalHeight;
-        _position['left'] = _modalLeft;
-        _position['right'] = screenSize.width - _modalLeft - _modalWidth;
-        break;
-      case SlideTransitionFrom.left:
-        _position['top'] = _modalTop;
-        _position['bottom'] = screenSize.height - _modalTop - _modalHeight;
-        _position['left'] = _modalLeft;
-        _position['right'] = screenSize.width - _modalLeft - min(size?.width ?? 0, _modalWidth); // 移动
-        break;
+        return Rect.fromLTWH(0, 0, size.width, size.height * animValue);
       case SlideTransitionFrom.right:
-        _position['top'] = _modalTop;
-        _position['bottom'] = screenSize.height - _modalTop - _modalHeight;
-        _position['left'] = _modalLeft + _modalWidth - min(size?.width ?? 0, _modalWidth); // 移动
-        _position['right'] = screenSize.width - _modalLeft - _modalWidth;
-        break;
+        return Rect.fromLTWH(size.width * (1 - animValue), 0, size.width, size.height);
+      case SlideTransitionFrom.left:
+        return Rect.fromLTWH(0, 0, size.width * animValue, size.height);
+      case SlideTransitionFrom.bottom:
+        return Rect.fromLTWH(0, size.height * (1 - animValue), size.width, size.height);
       default:
-        break;
+        return Rect.fromLTWH(0, 0, size.width, size.height);
     }
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Rect> oldClipper) {
+    return oldClipper != this;
   }
 }
