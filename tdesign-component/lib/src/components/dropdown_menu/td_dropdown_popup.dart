@@ -43,7 +43,7 @@ class TDDropdownPopup {
       _overlay3Height,
       _initContentTop,
       _initContentBottom;
-  late VoidCallback _closeContent;
+  late Future<void> Function() _closeContent;
   final _directionListenable = ValueNotifier<TDDropdownPopupDirection>(TDDropdownPopupDirection.auto);
   final _colorAlphaListenable = ValueNotifier<bool>(false);
 
@@ -85,7 +85,8 @@ class TDDropdownPopup {
     }
   }
 
-  Future<void> add([TDDropdownItem? updateChild]) async {
+  Future<void> add([TDDropdownItem? updateChild]) {
+    var completer = Completer<void>();
     _directionListenable.value = direction ?? TDDropdownPopupDirection.auto;
     overlayEntry?.remove();
     overlayEntry = OverlayEntry(
@@ -94,18 +95,18 @@ class TDDropdownPopup {
             ? ValueListenableBuilder(
                 valueListenable: _directionListenable,
                 builder: (context, value, child) =>
-                    value == TDDropdownPopupDirection.auto ? child! : _getPopup(value, updateChild), // 每次重新渲染item，更新高度
-                child: _getPopup(TDDropdownPopupDirection.down, updateChild),
+                    value == TDDropdownPopupDirection.auto ? child! : _getPopup(value, updateChild, completer), // 每次重新渲染item，更新高度
+                child: _getPopup(TDDropdownPopupDirection.down, updateChild, completer),
               )
-            : _getPopup(_directionListenable.value, updateChild);
+            : _getPopup(_directionListenable.value, updateChild, completer);
       },
     );
 
     Overlay.of(parentContext).insert(overlayEntry!);
-    await Future.delayed(_duration);
+    return completer.future;
   }
 
-  Widget _getPopup(TDDropdownMenuDirection value, TDDropdownItem? updateChild) {
+  Widget _getPopup(TDDropdownMenuDirection value, TDDropdownItem? updateChild, Completer<void> completer) {
     _init(value);
     return Stack(children: [
       if (_directionListenable.value != TDDropdownPopupDirection.auto) ...[
@@ -125,6 +126,9 @@ class TDDropdownPopup {
             initContentTop: _initContentTop,
             reverseHeight: _overlay3Height,
             closeCallback: _closeCallback,
+            onOpened:() {
+              completer.complete();
+            },
             child: updateChild ?? child,
           )),
     ]);
@@ -198,13 +202,12 @@ class TDDropdownPopup {
   }
 
   Future<void> remove() async {
-    _closeContent();
-    await Future.delayed(_duration);
+    await _closeContent();
     overlayEntry?.remove();
     overlayEntry = null;
   }
 
-  _closeCallback(VoidCallback fn) {
+  void _closeCallback(Future<void> Function() fn) {
     _closeContent = fn;
   }
 }
