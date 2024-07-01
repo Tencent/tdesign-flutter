@@ -94,7 +94,6 @@ class TDSwitchState extends State<TDSwitch> {
   @override
   Widget build(BuildContext context) {
     final theme = TDTheme.of(context);
-    print(theme);
     final switchEnable = widget.enable && widget.type != TDSwitchType.loading;
     final trackOnColor = widget.trackOnColor ?? theme.brandColor7;
     final trackOffColor = widget.trackOffColor ?? theme.grayColor4;
