@@ -13,6 +13,8 @@
 | trackOffColor | Color? | - | 关闭时轨道颜色 |
 | thumbContentOnColor | Color? | - | 开启时ThumbView的颜色 |
 | thumbContentOffColor | Color? | - | 关闭时ThumbView的颜色 |
+| thumbContentOnFont | double? | - | 开启时ThumbView的字体大小 |
+| thumbContentOffFont | double? | - | 关闭时ThumbView的字体大小 |
 | onChanged | OnSwitchChanged? | - | 改变事件 |
 | openText | String? | - | 打开文案 |
 | closeText | String? | - | 关闭文案 |
