@@ -251,6 +251,9 @@ TDDropdownMenu _buildGroup(BuildContext context) {
           onChange: (value) {
             print('选择：$value');
           },
+          onConfirm: (value) {
+            print('确定选择：$value');
+          },
         ),
       ];
     },
