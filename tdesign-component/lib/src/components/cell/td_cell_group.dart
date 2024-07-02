@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import 'td_cell_inherited.dart';
 
-typedef CellBuilder = Widget Function(BuildContext context, TDCell cell);
+typedef CellBuilder = Widget Function(BuildContext context, TDCell cell, int index);
 
 enum TDCellGroupTheme { defaultTheme, cardTheme }
 
@@ -93,7 +93,7 @@ class _TDCellGroupState extends State<TDCellGroup> {
                   itemCount: itemCount,
                   itemBuilder: (context, index) {
                     final item = widget.cells[index];
-                    final cell = widget.builder == null ? item : widget.builder!(context, item);
+                    final cell = widget.builder == null ? item : widget.builder!(context, item, index);
                     if (itemCount - 1 == index && (widget.isShowLastBordered ?? false)) {
                       return Column(children: [cell, _borderWidget(style)]);
                     }

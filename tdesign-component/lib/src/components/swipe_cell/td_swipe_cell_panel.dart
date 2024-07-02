@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_slidable/src/dismissible_pane.dart' as dismissible_pane;
 
-import './td_swipe_action.dart';
 import './td_swipe_cell.dart';
+import 'td_swipe_cell_action.dart';
 
 enum SwipeMotion {
   /// 滚动
@@ -20,8 +18,8 @@ enum SwipeMotion {
 }
 
 /// 滑动单元格操作面板组件
-class TDSwipePanel {
-  TDSwipePanel({
+class TDSwipeCellPanel {
+  TDSwipeCellPanel({
     this.extentRatio = 0.3,
     this.openThreshold,
     this.closeThreshold,
@@ -57,10 +55,10 @@ class TDSwipePanel {
   final SwipeMotion? motionType;
 
   /// 操作组件列表
-  final List<TDSwipeAction> children;
+  final List<TDSwipeCellAction> children;
 
   /// 二次确认操作组件列表
-  final List<TDSwipeAction>? confirms;
+  final List<TDSwipeCellAction>? confirms;
 
   /// 是否可通过拖动操作来移除 [TDSwipeCell] 组件
   final bool? dragDismissible;
@@ -78,10 +76,10 @@ class TDSwipePanel {
   final bool? closeOnCancel;
 
   /// 移除前回调，可阻止移除。dragDismissible为true才有效
-  final dismissible_pane.ConfirmDismissCallback? confirmDismiss;
+  final Future<bool> Function(BuildContext context)? confirmDismiss;
 
   /// 移除后回调。dragDismissible为true才有效
-  final VoidCallback? onDismissed;
+  final void Function(BuildContext context)? onDismissed;
 
   Duration get _dismissalDuration => dismissalDuration ?? const Duration(milliseconds: 300);
 
@@ -109,8 +107,16 @@ class TDSwipePanel {
               dismissThreshold: dismissThreshold ?? 0.75,
               dismissalDuration: _dismissalDuration,
               resizeDuration: _resizeDuration,
-              confirmDismiss: confirmDismiss,
-              onDismissed: onDismissed ?? () {},
+              confirmDismiss: () async {
+                if (confirmDismiss != null) {
+                  return confirmDismiss!(context);
+                }
+                return true;
+              },
+              onDismissed: () async {
+                await TDSwipeCell.of(context)?.close();
+                onDismissed?.call(context);
+              },
             )
           : null,
     );
