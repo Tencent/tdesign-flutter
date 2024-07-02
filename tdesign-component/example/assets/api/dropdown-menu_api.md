@@ -7,7 +7,8 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | key |  | - |  |
-| builder | TDDropdownItemBuilder | - | 下拉菜单构建器 |
+| builder | TDDropdownItemBuilder? | - | 下拉菜单构建器，优先级高于[items] |
+| items | List<TDDropdownItem>? | - | 下拉菜单 |
 | closeOnClickOverlay | bool? | true | 是否在点击遮罩层后关闭菜单 |
 | direction | TDDropdownMenuDirection? | TDDropdownMenuDirection.auto | 菜单展开方向（down、up、auto） |
 | duration | double? | 200.0 | 动画时长，毫秒 |

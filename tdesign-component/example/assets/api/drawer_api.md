@@ -20,7 +20,7 @@
 | width | double? | 280 | 宽度 |
 | drawerTop | double? | - | 距离顶部的距离 |
 | style | TDCellStyle? | - | 列表自定义样式 |
-| hover | bool? | false | 是否开启点击反馈 |
+| hover | bool? | true | 是否开启点击反馈 |
 
 ```
 ```
