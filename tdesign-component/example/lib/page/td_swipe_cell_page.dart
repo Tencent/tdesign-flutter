@@ -12,16 +12,60 @@ class TDSwipeCellPage extends StatelessWidget {
     return ExamplePage(
       title: tdTitle(context),
       exampleCodeGroup: 'swiperCell',
+      desc: '用于承载列表中的更多操作，通过左右滑动来展示，按钮的宽度固定高度根据列表高度而变化。',
       children: [
         ExampleModule(
           title: '组件类型',
           children: [
             ExampleItem(
-                desc: '用于承载列表中的更多操作，通过左右滑动来展示，按钮的宽度固定高度根据列表高度而变化。',
-                ignoreCode: true,
-                builder: (_) {
-                  return _buildSwiperCell(context);
-                }),
+              desc: '左滑单操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiperCell(context);
+              },
+            ),
+            ExampleItem(
+              desc: '左滑双操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiperMuliCell(context);
+              },
+            ),
+            ExampleItem(
+              desc: '左滑三操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiper3Cell(context);
+              },
+            ),
+            ExampleItem(
+              desc: '右滑单操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiperRightCell(context);
+              },
+            ),
+            ExampleItem(
+              desc: '左右滑操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiperRightLeftCell(context);
+              },
+            ),
+            ExampleItem(
+              desc: '带图标的滑动操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiperIconCell(context);
+              },
+            ),
+            ExampleItem(
+              desc: '带二次确认的操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiperConfirmCell(context);
+              },
+            ),
           ],
         ),
       ],
@@ -29,127 +73,289 @@ class TDSwipeCellPage extends StatelessWidget {
     );
   }
 
-  // var cl = false;
-
   @Demo(group: 'swiperCell')
   Widget _buildSwiperCell(BuildContext context) {
-    return const _Demo();
-  }
-}
-
-class _Demo extends StatefulWidget {
-  const _Demo({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  _DemoState createState() => _DemoState();
-}
-
-class _DemoState extends State<_Demo> {
-  @override
-  Widget build(BuildContext context) {
-    return TDSwipeAutoClose(
-      child: Column(
-        children: [
-          TDSwipeCell(
-            groupTag: '0',
-            opened: const [true],
-            onChange: (direction, open) {
-              print(direction);
-              print(open);
+    // 屏幕宽度
+    var screenWidth = MediaQuery.of(context).size.width;
+    var list = [
+      {'id': '1', 'title': '左滑操作', 'note': '辅助信息', 'description': ''},
+      {'id': '2', 'title': '左滑操作', 'note': '辅助信息', 'description': '一段很长很长的内容文字'},
+    ];
+    final cellLength = ValueNotifier<int>(list.length);
+    return TDSwipeCellClose(
+      child: ValueListenableBuilder(
+        valueListenable: cellLength,
+        builder: (BuildContext context, value, Widget? child) {
+          return TDCellGroup(
+            cells: list.map((e) => TDCell(title: e['title'], note: e['note'], description: e['description'])).toList(),
+            builder: (context, cell, index) {
+              return TDSwipeCell(
+                slidableKey: ValueKey(list[index]['id']),
+                groupTag: '0',
+                onChange: (direction, open) {
+                  print('打开方向：$direction');
+                  print('打开转态$open');
+                },
+                right: TDSwipeCellPanel(
+                  extentRatio: 60 / screenWidth,
+                  // dragDismissible: true,
+                  onDismissed: (context) {
+                    list.removeAt(index);
+                    cellLength.value = list.length;
+                  },
+                  children: [
+                    TDSwipeCellAction(
+                      backgroundColor: TDTheme.of(context).errorColor6,
+                      label: '删除',
+                      onPressed: (context) {
+                        print('点击action');
+                        print(TDSwipeCell.of(context));
+                        print(TDSwipeCellInherited.of(context)?.controller);
+                        list.removeAt(index);
+                        cellLength.value = list.length;
+                      },
+                    ),
+                  ],
+                ),
+                cell: cell,
+              );
             },
-            left: TDSwipePanel(
-              dragDismissible: true,
-              children: [
-                const TDSwipeAction(
-                  flex: 2,
-                  backgroundColor: Color.fromARGB(255, 218, 16, 16),
-                  label: '删除',
-                  icon: TDIcons.delete,
-                  direction: Axis.vertical,
-                ),
-                const TDSwipeAction(
-                  backgroundColor: Color.fromARGB(255, 17, 50, 212),
-                  label: '收藏',
-                  icon: TDIcons.user_avatar,
-                  direction: Axis.vertical,
-                ),
-              ],
-            ),
-            right: TDSwipePanel(
-              // dragDismissible: true,
-              children: [
-                const TDSwipeAction(
-                  backgroundColor: Color.fromARGB(255, 218, 16, 16),
-                  label: '删除',
-                  icon: TDIcons.delete,
-                  direction: Axis.vertical,
-                ),
-                const TDSwipeAction(
-                  backgroundColor: Color.fromARGB(255, 17, 50, 212),
-                  label: '收藏',
-                  icon: TDIcons.user_avatar,
-                  // direction: Axis.vertical,
-                ),
-              ],
-              confirms: [
-                const TDSwipeAction(
-                  backgroundColor: Color.fromARGB(255, 218, 16, 16),
-                  label: '确认删除？',
-                  icon: TDIcons.delete,
-                  direction: Axis.vertical,
-                  confirmIndex: [1],
-                ),
-              ],
-            ),
-            cell: const ListTile(title: Text('Slide me')),
-          ),
-          TDSwipeCell(
-            groupTag: '0',
-            // opened: const [true],
-            onChange: (direction, open) {
-              print(direction);
-              print(open);
-            },
-            left: TDSwipePanel(
-              // dragDismissible: true,
-              children: [
-                const TDSwipeAction(
-                  backgroundColor: Color.fromARGB(255, 218, 16, 16),
-                  label: '删除',
-                  icon: TDIcons.delete,
-                  direction: Axis.vertical,
-                ),
-                const TDSwipeAction(
-                  backgroundColor: Color.fromARGB(255, 17, 50, 212),
-                  label: '收藏',
-                  icon: TDIcons.user_avatar,
-                  // direction: Axis.vertical,
-                ),
-              ],
-            ),
-            right: TDSwipePanel(
-              // dragDismissible: true,
-              children: [
-                const TDSwipeAction(
-                  backgroundColor: Color.fromARGB(255, 218, 16, 16),
-                  label: '删除',
-                  icon: TDIcons.delete,
-                  direction: Axis.vertical,
-                ),
-                const TDSwipeAction(
-                  backgroundColor: Color.fromARGB(255, 17, 50, 212),
-                  label: '收藏',
-                  icon: TDIcons.user_avatar,
-                  // direction: Axis.vertical,
-                ),
-              ],
-            ),
-            cell: const ListTile(title: Text('Slide me')),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
+
+  @Demo(group: 'swiperCell')
+  Widget _buildSwiperMuliCell(BuildContext context) {
+    // 屏幕宽度
+    var screenWidth = MediaQuery.of(context).size.width;
+    return TDSwipeCell(
+      right: TDSwipeCellPanel(
+        extentRatio: 135 / screenWidth,
+        children: [
+          TDSwipeCellAction(
+            flex: 60,
+            backgroundColor: TDTheme.of(context).warningColor4,
+            label: '编辑',
+          ),
+          TDSwipeCellAction(
+            flex: 75,
+            backgroundColor: TDTheme.of(context).errorColor6,
+            label: '删除',
+          ),
+        ],
+      ),
+      cell: const TDCell(
+        title: '左滑操作',
+        note: '辅助信息',
+      ),
+    );
+  }
+
+  @Demo(group: 'swiperCell')
+  Widget _buildSwiper3Cell(BuildContext context) {
+    // 屏幕宽度
+    var screenWidth = MediaQuery.of(context).size.width;
+    return TDSwipeCell(
+      right: TDSwipeCellPanel(
+        extentRatio: 200 / screenWidth,
+        children: [
+          TDSwipeCellAction(
+            flex: 65,
+            backgroundColor: TDTheme.of(context).brandColor7,
+            label: '保存',
+          ),
+          TDSwipeCellAction(
+            flex: 60,
+            backgroundColor: TDTheme.of(context).warningColor4,
+            label: '编辑',
+          ),
+          TDSwipeCellAction(
+            flex: 75,
+            backgroundColor: TDTheme.of(context).errorColor6,
+            label: '删除',
+          ),
+        ],
+      ),
+      cell: const TDCell(
+        title: '左滑操作',
+        note: '辅助信息',
+      ),
+    );
+  }
+
+  @Demo(group: 'swiperCell')
+  Widget _buildSwiperRightCell(BuildContext context) {
+    // 屏幕宽度
+    var screenWidth = MediaQuery.of(context).size.width;
+    return TDSwipeCell(
+      left: TDSwipeCellPanel(
+        extentRatio: 80 / screenWidth,
+        children: [
+          TDSwipeCellAction(
+            backgroundColor: TDTheme.of(context).brandColor7,
+            label: '选择',
+          ),
+        ],
+      ),
+      cell: const TDCell(
+        title: '右滑操作',
+        note: '辅助信息',
+      ),
+    );
+  }
+
+  @Demo(group: 'swiperCell')
+  Widget _buildSwiperRightLeftCell(BuildContext context) {
+    // 屏幕宽度
+    var screenWidth = MediaQuery.of(context).size.width;
+    return TDSwipeCell(
+      left: TDSwipeCellPanel(
+        extentRatio: 80 / screenWidth,
+        children: [
+          TDSwipeCellAction(
+            backgroundColor: TDTheme.of(context).brandColor7,
+            label: '选择',
+          ),
+        ],
+      ),
+      right: TDSwipeCellPanel(
+        extentRatio: 135 / screenWidth,
+        children: [
+          TDSwipeCellAction(
+            flex: 60,
+            backgroundColor: TDTheme.of(context).warningColor4,
+            label: '编辑',
+          ),
+          TDSwipeCellAction(
+            flex: 75,
+            backgroundColor: TDTheme.of(context).errorColor6,
+            label: '删除',
+          ),
+        ],
+      ),
+      cell: const TDCell(
+        title: '左右滑操作',
+        note: '辅助信息',
+      ),
+    );
+  }
+
+  @Demo(group: 'swiperCell')
+  Widget _buildSwiperIconCell(BuildContext context) {
+    // 屏幕宽度
+    var screenWidth = MediaQuery.of(context).size.width;
+    return Column(
+      children: [
+        TDSwipeCell(
+          right: TDSwipeCellPanel(
+            extentRatio: (80 + 90) / screenWidth,
+            children: [
+              TDSwipeCellAction(
+                flex: 80,
+                backgroundColor: TDTheme.of(context).warningColor4,
+                icon: TDIcons.edit,
+                label: '编辑',
+              ),
+              TDSwipeCellAction(
+                flex: 90,
+                backgroundColor: TDTheme.of(context).errorColor6,
+                icon: TDIcons.delete,
+                label: '删除',
+              ),
+            ],
+          ),
+          cell: const TDCell(
+            title: '左右滑操作',
+            note: '辅助信息',
+          ),
+        ),
+        const SizedBox(height: 24),
+        TDSwipeCell(
+          right: TDSwipeCellPanel(
+            extentRatio: 100 / screenWidth,
+            children: [
+              TDSwipeCellAction(
+                flex: 50,
+                backgroundColor: TDTheme.of(context).warningColor4,
+                icon: TDIcons.edit,
+              ),
+              TDSwipeCellAction(
+                flex: 50,
+                backgroundColor: TDTheme.of(context).errorColor6,
+                icon: TDIcons.delete,
+              ),
+            ],
+          ),
+          cell: const TDCell(
+            title: '左右滑操作',
+            note: '辅助信息',
+          ),
+        ),
+        const SizedBox(height: 24),
+        TDSwipeCell(
+          right: TDSwipeCellPanel(
+            extentRatio: 135 / screenWidth,
+            children: [
+              TDSwipeCellAction(
+                flex: 60,
+                backgroundColor: TDTheme.of(context).warningColor4,
+                direction: Axis.vertical,
+                icon: TDIcons.edit,
+                label: '编辑',
+              ),
+              TDSwipeCellAction(
+                flex: 75,
+                backgroundColor: TDTheme.of(context).errorColor6,
+                direction: Axis.vertical,
+                icon: TDIcons.delete,
+                label: '删除',
+              ),
+            ],
+          ),
+          cell: const TDCell(
+            title: '左右滑操作',
+            note: '辅助信息',
+            description: '一段很长很长的内容文字',
+          ),
+        )
+      ],
+    );
+  }
+
+  @Demo(group: 'swiperCell')
+  Widget _buildSwiperConfirmCell(BuildContext context) {
+    // 屏幕宽度
+    var screenWidth = MediaQuery.of(context).size.width;
+    return TDSwipeCell(
+      right: TDSwipeCellPanel(
+        extentRatio: (60 + 75) / screenWidth,
+        children: [
+          TDSwipeCellAction(
+            flex: 60,
+            backgroundColor: TDTheme.of(context).warningColor4,
+            label: '编辑',
+          ),
+          TDSwipeCellAction(
+            flex: 75,
+            backgroundColor: TDTheme.of(context).errorColor6,
+            label: '删除',
+          ),
+        ],
+        confirms: [
+          TDSwipeCellAction(
+            backgroundColor: TDTheme.of(context).errorColor6,
+            label: '确认删除？',
+            confirmIndex: const [1],
+          ),
+        ]
+      ),
+      cell: const TDCell(
+        title: '右滑操作',
+        note: '辅助信息',
+      ),
+    );
+  }
+  
 }

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
-import './td_swipe_panel.dart';
 import '../../theme/basic.dart';
 import '../../theme/td_colors.dart';
 import '../../theme/td_fonts.dart';
 import '../../theme/td_theme.dart';
 import '../text/td_text.dart';
+import 'td_swipe_cell_inherited.dart';
+import 'td_swipe_cell_panel.dart';
 
 /// 滑动单元格操作按钮
-class TDSwipeAction extends StatelessWidget {
-  const TDSwipeAction({
+class TDSwipeCellAction extends StatelessWidget {
+  const TDSwipeCellAction({
     Key? key,
     this.flex = 1,
     this.backgroundColor,
@@ -29,7 +29,7 @@ class TDSwipeAction extends StatelessWidget {
         assert(icon != null || label != null, 'icon or label must not be null'),
         super(key: key);
 
-  /// 宽度占比，默认为 1，[TDSwipePanel.confirms]下无效（失踪占满整个[TDSwipePanel]宽度）
+  /// 宽度占比，默认为 1，[TDSwipeCellPanel.confirms]下无效（失踪占满整个[TDSwipeCellPanel]宽度）
   final int? flex;
 
   /// 背景颜色
@@ -39,7 +39,7 @@ class TDSwipeAction extends StatelessWidget {
   final bool? autoClose;
 
   /// 点击回调
-  final VoidCallback? onPressed;
+  final void Function(BuildContext context)? onPressed;
 
   /// 图标
   final IconData? icon;
@@ -62,8 +62,8 @@ class TDSwipeAction extends StatelessWidget {
   /// 图标和标题的排列方向
   final Axis? direction;
 
-  /// 指定[TDSwipePanel.children]的索引，来打开该[TDSwipeAction]
-  /// [TDSwipePanel.confirms]参数下才配置该参数
+  /// 指定[TDSwipeCellPanel.children]的索引，来打开该[TDSwipeCellAction]
+  /// [TDSwipeCellPanel.confirms]参数下才配置该参数
   final List<int>? confirmIndex;
 
   /// 自定义构建
@@ -92,31 +92,39 @@ class TDSwipeAction extends StatelessWidget {
           ),
         ),
     ];
-    return Expanded(
-      flex: flex ?? 1,
-      child: GestureDetector(
-        onTap: () {
-          _handleTap(context);
-        },
-        child: builder?.call(context) ??
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: backgroundColor,
-              child: Flex(
-                mainAxisAlignment: MainAxisAlignment.center,
-                direction: direction ?? Axis.horizontal,
-                children: children,
-              ),
+    final child = GestureDetector(
+      onTap: () {
+        _handleTap(context);
+      },
+      child: builder?.call(context) ??
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: backgroundColor,
+            child: Flex(
+              mainAxisAlignment: MainAxisAlignment.center,
+              direction: direction ?? Axis.horizontal,
+              children: children,
             ),
-      ),
+          ),
     );
+    return confirmIndex?.isNotEmpty == true
+        ? child
+        : Expanded(
+            flex: flex ?? 1,
+            child: child,
+          );
   }
 
   void _handleTap(BuildContext context) {
-    onPressed?.call();
+    final swipeInherited = TDSwipeCellInherited.of(context)!;
+    var openConfirm = swipeInherited.actionClick(this);
+    if (openConfirm == true) {
+      return;
+    }
+    onPressed?.call(context);
     if (autoClose ?? true) {
-      Slidable.of(context)?.close();
+      swipeInherited.controller.close(duration: swipeInherited.duration);
     }
   }
 }
