@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
@@ -29,38 +30,36 @@ class _TDBadgePageState extends State<TDBadgePage> {
                       alignment: Alignment.topLeft,
                       padding: const EdgeInsets.only(left: 16),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center, // 垂直方向上末端对齐
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                            Container(
-                              alignment: Alignment.bottomLeft,
-                              margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
-                              child: CodeWrapper(
-                                builder: _buildRedPointMessageBadge,
-                                methodName: '_buildRedPointMessageBadge',
-                              ),
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            margin: const EdgeInsets.only(
+                                top: 8, left: 16, right: 16, bottom: 8),
+                            child: CodeWrapper(
+                              builder: _buildRedPointMessageBadge,
                             ),
-                            Container(
-                              alignment: Alignment.bottomLeft,
-                              margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
-                              child: CodeWrapper(
-                                builder: _buildRedPointIconBadge,
-                                methodName: '_buildRedPointIconBadge',
-                              ),
+                          ),
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            margin: const EdgeInsets.only(
+                                top: 8, left: 16, right: 16, bottom: 8),
+                            child: CodeWrapper(
+                              builder: _buildRedPointIconBadge,
                             ),
-                            Container(
-                              alignment: Alignment.bottomLeft,
-                              margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
-                              child: CodeWrapper(
-                                builder: _buildRedPointButtonBadge,
-                                methodName: '_buildRedPointButtonBadge',
-                              ),
+                          ),
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            margin: const EdgeInsets.only(
+                                top: 8, left: 16, right: 16, bottom: 8),
+                            child: CodeWrapper(
+                              builder: _buildRedPointButtonBadge,
                             ),
-
+                          ),
                         ],
                       ),
                     );
                   }),
-
               ExampleItem(
                   ignoreCode: true,
                   desc: '数字徽标',
@@ -69,33 +68,33 @@ class _TDBadgePageState extends State<TDBadgePage> {
                       alignment: Alignment.topLeft,
                       padding: const EdgeInsets.only(left: 16),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center, // 垂直方向上末端对齐
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        // 垂直方向上末端对齐
                         children: [
                           Container(
                             alignment: Alignment.bottomLeft,
-                            margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                            margin: const EdgeInsets.only(
+                                top: 8, left: 16, right: 16, bottom: 8),
                             child: CodeWrapper(
                               builder: _buildMessageNumberBadge,
-                              methodName: '_buildMessageNumberBadge',
                             ),
                           ),
                           Container(
                             alignment: Alignment.bottomLeft,
-                            margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                            margin: const EdgeInsets.only(
+                                top: 8, left: 16, right: 16, bottom: 8),
                             child: CodeWrapper(
                               builder: _buildIconNumberBadge,
-                              methodName: '_buildIconNumberBadge',
                             ),
                           ),
                           Container(
                             alignment: Alignment.bottomLeft,
-                            margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                            margin: const EdgeInsets.only(
+                                top: 8, left: 16, right: 16, bottom: 8),
                             child: CodeWrapper(
                               builder: _buildButtonNumberBadge,
-                              methodName: '_buildButtonNumberBadge',
                             ),
                           ),
-
                         ],
                       ),
                     );
@@ -108,30 +107,32 @@ class _TDBadgePageState extends State<TDBadgePage> {
                       alignment: Alignment.topLeft,
                       padding: const EdgeInsets.only(left: 16),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center, // 垂直方向上末端对齐
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        // 垂直方向上末端对齐
                         children: [
                           Container(
                             alignment: Alignment.bottomLeft,
-                            margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                            margin: const EdgeInsets.only(
+                                top: 8, left: 16, right: 16, bottom: 8),
                             child: CodeWrapper(
                               builder: _buildCustomBadgeShowingNumberEight,
-                              methodName: '_buildCustomBadgeShowingNumberEight',
                             ),
                           ),
                           Container(
                             alignment: Alignment.bottomLeft,
-                            margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                            margin: const EdgeInsets.only(
+                                top: 8, left: 16, right: 16, bottom: 8),
                             child: CodeWrapper(
                               builder: _buildCustomBadgeShowingNumberZero,
-                              methodName: '_buildCustomBadgeShowingNumberZero',
                             ),
                           ),
                           Container(
                             alignment: Alignment.bottomLeft,
-                            margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                            margin: const EdgeInsets.only(
+                                top: 8, left: 16, right: 16, bottom: 8),
                             child: CodeWrapper(
-                              builder: _buildCustomBadgeWithoutShowingNumberZero,
-                              methodName: '_buildCustomBadgeWithoutShowingNumberZero',
+                              builder:
+                                  _buildCustomBadgeWithoutShowingNumberZero,
                             ),
                           ),
                         ],
@@ -154,6 +155,55 @@ class _TDBadgePageState extends State<TDBadgePage> {
             children: [
               ExampleItem(desc: 'Large', builder: _buildLargeBadge),
               ExampleItem(desc: 'Medium', builder: _buildMediumBadge)
+            ],
+          ),
+          ExampleModule(
+            title: '最大数字上限',
+            children: [
+              ExampleItem(
+                  ignoreCode: true,
+                  desc: '未超过上限',
+                  builder: (context) {
+                    return Container(
+                      alignment: Alignment.topLeft,
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            margin: const EdgeInsets.only(
+                                left: 16, right: 16, bottom: 8),
+                            child: CodeWrapper(
+                              builder: _buildLessThanMaxCountBadge,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+              ExampleItem(
+                  ignoreCode: true,
+                  desc: '超过上限',
+                  builder: (context) {
+                    return Container(
+                      alignment: Alignment.topLeft,
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            margin: const EdgeInsets.only(
+                                left: 16, right: 16, bottom: 8),
+                            child: CodeWrapper(
+                              builder: _buildMoreThanMaxCountBadge,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
             ],
           )
         ]);
@@ -228,8 +278,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @Demo(group: 'badge')
   Widget _buildMessageNumberBadge(BuildContext context) {
     return SizedBox(
-      width: 48,
-      height: 32,
+      width: 54,
+      height: 36,
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
@@ -242,8 +292,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
               TDBadgeType.message,
               count: '8',
             ),
-            right: 0,
-            top: 0,
+            left: 28,
+            bottom: 18,
           )
         ],
       ),
@@ -253,8 +303,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @Demo(group: 'badge')
   Widget _buildIconNumberBadge(BuildContext context) {
     return const SizedBox(
-      width: 34,
-      height: 34,
+      width: 42,
+      height: 36,
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
@@ -264,8 +314,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
               TDBadgeType.message,
               count: '8',
             ),
-            right: 0,
-            top: 0,
+            left: 18,
+            bottom: 18,
           )
         ],
       ),
@@ -311,8 +361,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
             child: const Icon(TDIcons.notification),
             decoration: BoxDecoration(
                 color: TDTheme.of(context).grayColor2,
-                borderRadius: BorderRadius.circular(
-                    TDTheme.of(context).radiusDefault)),
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             height: 48,
             width: 48,
           ),
@@ -341,8 +391,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
             child: const Icon(TDIcons.notification),
             decoration: BoxDecoration(
                 color: TDTheme.of(context).grayColor2,
-                borderRadius: BorderRadius.circular(
-                    TDTheme.of(context).radiusDefault)),
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             height: 48,
             width: 48,
           ),
@@ -371,8 +421,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
             child: const Icon(TDIcons.notification),
             decoration: BoxDecoration(
                 color: TDTheme.of(context).grayColor2,
-                borderRadius: BorderRadius.circular(
-                    TDTheme.of(context).radiusDefault)),
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             height: 48,
             width: 48,
           ),
@@ -390,7 +440,6 @@ class _TDBadgePageState extends State<TDBadgePage> {
     );
   }
 
-
   @Demo(group: 'badge')
   Widget _buildCircleBadge(BuildContext context) {
     return const Padding(
@@ -398,7 +447,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
       child: Row(
         children: [
           SizedBox(
-            width: 34,
+            width: 48,
             height: 34,
             child: Stack(
               alignment: Alignment.bottomLeft,
@@ -407,10 +456,10 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 Positioned(
                   child: TDBadge(
                     TDBadgeType.message,
-                    count: '8',
+                    count: '16',
                   ),
-                  right: 0,
-                  top: 0,
+                  left: 18,
+                  bottom: 18,
                 )
               ],
             ),
@@ -427,7 +476,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
       child: Row(
         children: [
           SizedBox(
-            width: 34,
+            width: 48,
             height: 34,
             child: Stack(
               alignment: Alignment.bottomLeft,
@@ -437,10 +486,10 @@ class _TDBadgePageState extends State<TDBadgePage> {
                   child: TDBadge(
                     TDBadgeType.square,
                     border: TDBadgeBorder.small,
-                    count: '8',
+                    count: '16',
                   ),
-                  right: 0,
-                  top: 0,
+                  left: 20,
+                  bottom: 18,
                 )
               ],
             ),
@@ -520,7 +569,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
         children: [
           SizedBox(
             width: 68,
-            height: 65.5,
+            height: 70,
             child: Stack(
               alignment: Alignment.bottomLeft,
               children: [
@@ -534,8 +583,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
                     size: TDBadgeSize.large,
                     count: '8',
                   ),
-                  right: 0,
-                  top: 0,
+                  left: 48,
+                  bottom: 48,
                 )
               ],
             ),
@@ -547,13 +596,13 @@ class _TDBadgePageState extends State<TDBadgePage> {
 
   @Demo(group: 'badge')
   Widget _buildMediumBadge(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(left: 16),
-      child: Row(
+    return Container(
+      padding: const EdgeInsets.only(left: 16),
+      child: const Row(
         children: [
           SizedBox(
-            width: 51,
-            height: 49.5,
+            width: 120,
+            height: 54,
             child: Stack(
               alignment: Alignment.bottomLeft,
               children: [
@@ -566,11 +615,67 @@ class _TDBadgePageState extends State<TDBadgePage> {
                     TDBadgeType.message,
                     count: '8',
                   ),
-                  right: 0,
-                  top: 0,
+                  left: 36,
+                  bottom: 36,
                 )
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @Demo(group: 'badge')
+  Widget _buildLessThanMaxCountBadge(BuildContext context) {
+    return const SizedBox(
+      width: 60,
+      height: 50,
+      child: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            bottom: 0,
+            child: Icon(TDIcons.notification),
+          ),
+          Positioned(
+            child: TDBadge(
+              TDBadgeType.square,
+              count: '8888',
+              maxCount: '9000',
+              size: TDBadgeSize.large,
+              border: TDBadgeBorder.large,
+            ),
+            left: 18,
+            bottom: 18,
+          ),
+        ],
+      ),
+    );
+  }
+
+  @Demo(group: 'badge')
+  Widget _buildMoreThanMaxCountBadge(BuildContext context) {
+    return const SizedBox(
+      width: 60,
+      height: 50,
+      child: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            bottom: 0,
+            child: Icon(TDIcons.notification),
+          ),
+          Positioned(
+            child: TDBadge(
+              TDBadgeType.square,
+              count: '888',
+              maxCount: '99',
+              size: TDBadgeSize.large,
+              border: TDBadgeBorder.large,
+            ),
+            left: 18,
+            bottom: 18,
           ),
         ],
       ),
