@@ -10,10 +10,10 @@ class TDSwipeCellClose extends StatelessWidget {
     required this.child,
   }) : super(key: key);
 
-  /// 打开[TDSwipeCell]前是否自动关闭其它
+  /// 当同一组（[TDSwipeCell.groupTag]）中的一个[TDSwipeCell]打开时，是否应该关闭组中的所有其他[TDSwipeCell]
   final bool? closeWhenOpened;
 
-  /// 点击[TDSwipeCellClose]组件时，关闭全部[TDSwipeCell]
+  /// 当同一组（[TDSwipeCell.groupTag]）中的一个[TDSwipeCell]被点击时，是否应该关闭组中的所有[TDSwipeCell]
   final bool? closeWhenTapped;
 
   /// 其后代必须有[TDSwipeCell]
