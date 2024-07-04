@@ -285,16 +285,16 @@ class TDPopupPageState extends State<TDPopupPage> {
                 Navigator.of(context).push(
                   TDSlidePopupRoute(
                     modalBarrierColor: TDTheme.of(context).fontGyColor2,
-                    slideTransitionFrom: SlideTransitionFrom.center,
+                    slideTransitionFrom: SlideTransitionFrom.left,
                     modalTop: 500,
-                    modalLeft: 150,
-                    modalWidth: 100,
-                    modalHeight: 200,
-                    modalBarrierFull: true,
+                    // modalLeft: 150,
+                    // modalWidth: 200,
+                    // modalHeight: 200,
+                    // modalBarrierFull: true,
                     builder: (context) {
                       return Container(
                         color: Colors.white,
-                        height: 300,
+                        height: double.infinity,
                         width: 200,
                         child: const TDText('自定义大小位置'),
                       );
