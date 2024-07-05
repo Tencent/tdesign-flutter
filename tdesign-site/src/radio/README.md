@@ -23,7 +23,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _verticleRadios(BuildContext context) {
+  Widget _verticalRadios(BuildContext context) {
     return TDRadioGroup(
       selectId: 'index:1',
       child: ListView.builder(
