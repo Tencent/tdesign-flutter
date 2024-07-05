@@ -1,5 +1,5 @@
 
-  Widget _verticleRadios(BuildContext context) {
+  Widget _verticalRadios(BuildContext context) {
     return TDRadioGroup(
       selectId: 'index:1',
       child: ListView.builder(
