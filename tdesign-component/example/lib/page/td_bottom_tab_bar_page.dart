@@ -144,7 +144,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
                 }),
             ExampleItem(
               desc: '双层级文本标签栏',
-              builder: _expansionPannelTypeTabBar,
+              builder: _expansionPanelTypeTabBar,
             ),
           ],
         ),
@@ -552,7 +552,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
   }
 
   @Demo(group: 'bottomTabBar')
-  Widget _expansionPannelTypeTabBar(BuildContext context) {
+  Widget _expansionPanelTypeTabBar(BuildContext context) {
     return TDBottomTabBar(
       TDBottomTabBarBasicType.expansionPanel,
       useVerticalDivider: true,
