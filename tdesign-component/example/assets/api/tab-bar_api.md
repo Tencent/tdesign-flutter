@@ -4,8 +4,8 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| showBage | bool | - | 是否展示消息 |
-| tdBadge | TDBadge? | - | 消息样式(未设置但showBage为true，则默认使用红点) |
+| showBadge | bool | - | 是否展示消息 |
+| tdBadge | TDBadge? | - | 消息样式(未设置但showBadge为true，则默认使用红点) |
 | badgeTopOffset | double? | - | 消息顶部偏移量 |
 | badgeRightOffset | double? | - | 消息右侧偏移量 |
 
