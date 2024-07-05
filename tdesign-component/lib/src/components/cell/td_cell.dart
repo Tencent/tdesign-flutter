@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../theme/td_spacers.dart';
+import '../../theme/td_theme.dart';
+import '../icon/td_icons.dart';
+import '../swipe_cell/td_swipe_cell_inherited.dart';
+import '../text/td_text.dart';
 import 'td_cell_inherited.dart';
+import 'td_cell_style.dart';
 
 typedef TDCellClick = void Function(TDCell cell);
 
@@ -121,6 +126,7 @@ class _TDCellState extends State<TDCell> {
         if (widget.onClick != null && !(widget.disabled ?? false)) {
           widget.onClick!(widget);
         }
+        TDSwipeCellInherited.of(context)?.cellClick();
       },
       onLongPress: widget.onLongPress != null ? () {
         if (!(widget.disabled ?? false)) {

@@ -9,69 +9,67 @@ class TDSwipeCellPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TDSwipeCellClose(
-      child: ExamplePage(
-        title: tdTitle(context),
-        exampleCodeGroup: 'swiperCell',
-        desc: '用于承载列表中的更多操作，通过左右滑动来展示，按钮的宽度固定高度根据列表高度而变化。',
-        children: [
-          ExampleModule(
-            title: '组件类型',
-            children: [
-              ExampleItem(
-                desc: '左滑单操作',
-                ignoreCode: true,
-                builder: (_) {
-                  return _buildSwiperCell(context);
-                },
-              ),
-              ExampleItem(
-                desc: '左滑双操作',
-                ignoreCode: true,
-                builder: (_) {
-                  return _buildSwiperMuliCell(context);
-                },
-              ),
-              ExampleItem(
-                desc: '左滑三操作',
-                ignoreCode: true,
-                builder: (_) {
-                  return _buildSwiper3Cell(context);
-                },
-              ),
-              ExampleItem(
-                desc: '右滑单操作',
-                ignoreCode: true,
-                builder: (_) {
-                  return _buildSwiperRightCell(context);
-                },
-              ),
-              ExampleItem(
-                desc: '左右滑操作',
-                ignoreCode: true,
-                builder: (_) {
-                  return _buildSwiperRightLeftCell(context);
-                },
-              ),
-              ExampleItem(
-                desc: '带图标的滑动操作',
-                ignoreCode: true,
-                builder: (_) {
-                  return _buildSwiperIconCell(context);
-                },
-              ),
-              ExampleItem(
-                desc: '带二次确认的操作',
-                ignoreCode: true,
-                builder: (_) {
-                  return _buildSwiperConfirmCell(context);
-                },
-              ),
-            ],
-          ),
-        ],
-        test: const [],
-      ),
+    return ExamplePage(
+      title: tdTitle(context),
+      exampleCodeGroup: 'swiperCell',
+      desc: '用于承载列表中的更多操作，通过左右滑动来展示，按钮的宽度固定高度根据列表高度而变化。',
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(
+              desc: '左滑单操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiperCell(context);
+              },
+            ),
+            ExampleItem(
+              desc: '左滑双操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiperMuliCell(context);
+              },
+            ),
+            ExampleItem(
+              desc: '左滑三操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiper3Cell(context);
+              },
+            ),
+            ExampleItem(
+              desc: '右滑单操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiperRightCell(context);
+              },
+            ),
+            ExampleItem(
+              desc: '左右滑操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiperRightLeftCell(context);
+              },
+            ),
+            ExampleItem(
+              desc: '带图标的滑动操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiperIconCell(context);
+              },
+            ),
+            ExampleItem(
+              desc: '带二次确认的操作',
+              ignoreCode: true,
+              builder: (_) {
+                return _buildSwiperConfirmCell(context);
+              },
+            ),
+          ],
+        ),
+      ],
+      test: const [],
     );
   }
 
@@ -93,7 +91,6 @@ class TDSwipeCellPage extends StatelessWidget {
             return TDSwipeCell(
               slidableKey: ValueKey(list[index]['id']),
               groupTag: 'test',
-              closeOnScroll: false,
               onChange: (direction, open) {
                 print('打开方向：$direction');
                 print('打开转态$open');
@@ -133,9 +130,8 @@ class TDSwipeCellPage extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     return TDSwipeCell(
       groupTag: 'test',
-      closeOnScroll: false,
       right: TDSwipeCellPanel(
-        extentRatio: 135 / screenWidth,
+        extentRatio: 120 / screenWidth,
         children: [
           TDSwipeCellAction(
             flex: 60,
@@ -143,7 +139,7 @@ class TDSwipeCellPage extends StatelessWidget {
             label: '编辑',
           ),
           TDSwipeCellAction(
-            flex: 75,
+            flex: 60,
             backgroundColor: TDTheme.of(context).errorColor6,
             label: '删除',
           ),
@@ -162,12 +158,11 @@ class TDSwipeCellPage extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     return TDSwipeCell(
       groupTag: 'test',
-      closeOnScroll: false,
       right: TDSwipeCellPanel(
-        extentRatio: 200 / screenWidth,
+        extentRatio: 180 / screenWidth,
         children: [
           TDSwipeCellAction(
-            flex: 65,
+            flex: 60,
             backgroundColor: TDTheme.of(context).brandColor7,
             label: '保存',
           ),
@@ -177,7 +172,7 @@ class TDSwipeCellPage extends StatelessWidget {
             label: '编辑',
           ),
           TDSwipeCellAction(
-            flex: 75,
+            flex: 60,
             backgroundColor: TDTheme.of(context).errorColor6,
             label: '删除',
           ),
@@ -196,9 +191,8 @@ class TDSwipeCellPage extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     return TDSwipeCell(
       groupTag: 'test',
-      closeOnScroll: false,
       left: TDSwipeCellPanel(
-        extentRatio: 80 / screenWidth,
+        extentRatio: 60 / screenWidth,
         children: [
           TDSwipeCellAction(
             backgroundColor: TDTheme.of(context).brandColor7,
@@ -219,9 +213,8 @@ class TDSwipeCellPage extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     return TDSwipeCell(
       groupTag: 'test',
-      closeOnScroll: false,
       left: TDSwipeCellPanel(
-        extentRatio: 80 / screenWidth,
+        extentRatio: 60 / screenWidth,
         children: [
           TDSwipeCellAction(
             backgroundColor: TDTheme.of(context).brandColor7,
@@ -230,7 +223,7 @@ class TDSwipeCellPage extends StatelessWidget {
         ],
       ),
       right: TDSwipeCellPanel(
-        extentRatio: 135 / screenWidth,
+        extentRatio: 120 / screenWidth,
         children: [
           TDSwipeCellAction(
             flex: 60,
@@ -238,7 +231,7 @@ class TDSwipeCellPage extends StatelessWidget {
             label: '编辑',
           ),
           TDSwipeCellAction(
-            flex: 75,
+            flex: 60,
             backgroundColor: TDTheme.of(context).errorColor6,
             label: '删除',
           ),
@@ -263,9 +256,8 @@ class TDSwipeCellPage extends StatelessWidget {
         if (index == 0) {
           return TDSwipeCell(
             groupTag: 'test',
-            closeOnScroll: false,
             right: TDSwipeCellPanel(
-              extentRatio: (80 + 90) / screenWidth,
+              extentRatio: (80 + 80) / screenWidth,
               children: [
                 TDSwipeCellAction(
                   flex: 80,
@@ -274,7 +266,7 @@ class TDSwipeCellPage extends StatelessWidget {
                   label: '编辑',
                 ),
                 TDSwipeCellAction(
-                  flex: 90,
+                  flex: 80,
                   backgroundColor: TDTheme.of(context).errorColor6,
                   icon: TDIcons.delete,
                   label: '删除',
@@ -282,40 +274,38 @@ class TDSwipeCellPage extends StatelessWidget {
               ],
             ),
             cell: const TDCell(
-              title: '左右滑操作',
+              title: '右滑操作',
               note: '辅助信息',
             ),
           );
         } else if (index == 1) {
           return TDSwipeCell(
             groupTag: 'test',
-            closeOnScroll: false,
             right: TDSwipeCellPanel(
-              extentRatio: 100 / screenWidth,
+              extentRatio: 120 / screenWidth,
               children: [
                 TDSwipeCellAction(
-                  flex: 50,
+                  flex: 60,
                   backgroundColor: TDTheme.of(context).warningColor4,
                   icon: TDIcons.edit,
                 ),
                 TDSwipeCellAction(
-                  flex: 50,
+                  flex: 60,
                   backgroundColor: TDTheme.of(context).errorColor6,
                   icon: TDIcons.delete,
                 ),
               ],
             ),
             cell: const TDCell(
-              title: '左右滑操作',
+              title: '右滑操作',
               note: '辅助信息',
             ),
           );
         } else {
           return TDSwipeCell(
             groupTag: 'test',
-            closeOnScroll: false,
             right: TDSwipeCellPanel(
-              extentRatio: 135 / screenWidth,
+              extentRatio: 120 / screenWidth,
               children: [
                 TDSwipeCellAction(
                   flex: 60,
@@ -325,7 +315,7 @@ class TDSwipeCellPage extends StatelessWidget {
                   label: '编辑',
                 ),
                 TDSwipeCellAction(
-                  flex: 75,
+                  flex: 60,
                   backgroundColor: TDTheme.of(context).errorColor6,
                   direction: Axis.vertical,
                   icon: TDIcons.delete,
@@ -334,7 +324,7 @@ class TDSwipeCellPage extends StatelessWidget {
               ],
             ),
             cell: const TDCell(
-              title: '左右滑操作',
+              title: '右滑操作',
               note: '辅助信息',
               description: '一段很长很长的内容文字',
             ),
@@ -353,25 +343,28 @@ class TDSwipeCellPage extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     return TDSwipeCell(
       groupTag: 'test',
-      closeOnScroll: false,
-      right: TDSwipeCellPanel(extentRatio: (60 + 75) / screenWidth, children: [
-        TDSwipeCellAction(
-          flex: 60,
-          backgroundColor: TDTheme.of(context).warningColor4,
-          label: '编辑',
-        ),
-        TDSwipeCellAction(
-          flex: 75,
-          backgroundColor: TDTheme.of(context).errorColor6,
-          label: '删除',
-        ),
-      ], confirms: [
-        TDSwipeCellAction(
-          backgroundColor: TDTheme.of(context).errorColor6,
-          label: '确认删除？',
-          confirmIndex: const [1],
-        ),
-      ]),
+      right: TDSwipeCellPanel(
+        extentRatio: (60 + 60) / screenWidth,
+        children: [
+          TDSwipeCellAction(
+            flex: 60,
+            backgroundColor: TDTheme.of(context).warningColor4,
+            label: '编辑',
+          ),
+          TDSwipeCellAction(
+            flex: 60,
+            backgroundColor: TDTheme.of(context).errorColor6,
+            label: '删除',
+          ),
+        ],
+        confirms: [
+          TDSwipeCellAction(
+            backgroundColor: TDTheme.of(context).errorColor6,
+            label: '确认删除',
+            confirmIndex: const [1],
+          ),
+        ],
+      ),
       cell: const TDCell(
         title: '右滑操作',
         note: '辅助信息',
