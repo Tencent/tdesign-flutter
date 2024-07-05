@@ -56,16 +56,16 @@ enum TDBottomTabBarOutlineType {
 /// 飘新配置
 class BadgeConfig {
   BadgeConfig({
-    required this.showBage,
+    required this.showBadge,
     TDBadge? tdBadge,
     this.badgeTopOffset,
     this.badgeRightOffset,
   }) : tdBadge = tdBadge ?? const TDBadge(TDBadgeType.redPoint);
 
   /// 是否展示消息
-  final bool showBage;
+  final bool showBadge;
 
-  /// 消息样式(未设置但showBage为true，则默认使用红点)
+  /// 消息样式(未设置但showBadge为true，则默认使用红点)
   final TDBadge? tdBadge;
 
   /// 消息顶部偏移量
@@ -87,7 +87,7 @@ class TDBottomTabBarTabConfig {
     this.badgeConfig,
     this.popUpButtonConfig,
   }) : assert(() {
-          if (badgeConfig?.showBage ?? false) {
+          if (badgeConfig?.showBadge ?? false) {
             if (badgeConfig?.tdBadge == null) {
               throw FlutterError('[NavigationTab] if set showBadge = true, '
                   'you must set a tdBadge instance');
@@ -453,7 +453,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
   }
 
   Widget _badge(BadgeConfig? badgeConfig) {
-    if (badgeConfig?.showBage ?? false) {
+    if (badgeConfig?.showBadge ?? false) {
       if (badgeConfig?.tdBadge != null) {
         return badgeConfig!.tdBadge!;
       }
@@ -519,7 +519,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
       children: [
         child,
         Visibility(
-            visible: badgeConfig?.showBage ?? false,
+            visible: badgeConfig?.showBadge ?? false,
             child: Positioned(top: top, right: right, child: _badge(badgeConfig))),
       ],
     );
