@@ -580,7 +580,7 @@ class TDBottomTabBarPopUpShapeConfig {
   /// 弹窗背景颜色
   final Color? backgroundColor;
 
-  /// pannel圆角 默认0
+  /// panel圆角 默认0
   final double? radius;
 
   /// 箭头宽度 默认13.5
@@ -732,7 +732,7 @@ class PopupDialogState extends State<PopupDialog> {
                   height: popUpitemHeight * widget.items.length + (widget.config?.arrowHeight ?? _kArrowHeight),
                   decoration: BoxDecoration(boxShadow: TDTheme.of(context).shadowsTop),
                   child: CustomPaint(
-                    painter: PannelWithDownArrow(config: widget.config),
+                    painter: PanelWithDownArrow(config: widget.config),
                     child: Container(
                       alignment: Alignment.topCenter,
                       height: popUpitemHeight * widget.items.length,
@@ -767,11 +767,11 @@ class PopupDialogState extends State<PopupDialog> {
   }
 }
 
-/// 带下箭头的展开pannel
-class PannelWithDownArrow extends CustomPainter {
+/// 带下箭头的展开panel
+class PanelWithDownArrow extends CustomPainter {
   TDBottomTabBarPopUpShapeConfig? config;
 
-  PannelWithDownArrow({
+  PanelWithDownArrow({
     this.config,
   });
 
@@ -782,29 +782,29 @@ class PannelWithDownArrow extends CustomPainter {
       ..color = config?.backgroundColor ?? Colors.white
       ..style = PaintingStyle.fill;
     var path = Path();
-    var pannelWidth = size.width;
-    var pannelHeight = size.height - (config?.arrowHeight ?? _kArrowHeight);
+    var panelWidth = size.width;
+    var panelHeight = size.height - (config?.arrowHeight ?? _kArrowHeight);
 
     canvas.drawRRect(
-        RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, pannelWidth, pannelHeight), Radius.circular(config?.radius ?? 0.0)),
+        RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, panelWidth, panelHeight), Radius.circular(config?.radius ?? 0.0)),
         paint);
 
     /// 下方箭头
     if (config?.arrowWidth != 0.0 && config?.arrowHeight != 0.0) {
-      var left = (pannelWidth - _kArrowWidth) / 2;
-      var right = (pannelWidth + _kArrowWidth) / 2;
-      var bottom = pannelHeight + _kArrowHeight;
+      var left = (panelWidth - _kArrowWidth) / 2;
+      var right = (panelWidth + _kArrowWidth) / 2;
+      var bottom = panelHeight + _kArrowHeight;
       if (config?.arrowWidth != null) {
-        left = (pannelWidth - config!.arrowWidth!) / 2;
-        right = (pannelWidth + config!.arrowWidth!) / 2;
+        left = (panelWidth - config!.arrowWidth!) / 2;
+        right = (panelWidth + config!.arrowWidth!) / 2;
       }
       if (config?.arrowHeight != null) {
-        bottom = pannelHeight + config!.arrowHeight!;
+        bottom = panelHeight + config!.arrowHeight!;
       }
 
-      path.moveTo(left, pannelHeight);
-      path.lineTo(pannelWidth / 2, bottom);
-      path.lineTo(right, pannelHeight);
+      path.moveTo(left, panelHeight);
+      path.lineTo(panelWidth / 2, bottom);
+      path.lineTo(right, panelHeight);
       canvas.drawPath(path, paint);
     }
   }

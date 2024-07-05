@@ -3255,7 +3255,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _expansionPannelTypeTabBar(BuildContext context) {
+  Widget _expansionPanelTypeTabBar(BuildContext context) {
     return TDBottomTabBar(
       TDBottomTabBarBasicType.expansionPanel,
       useVerticalDivider: true,
@@ -3664,7 +3664,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | popUpWidth | double? | - | 弹窗宽度（不设置，默认为按钮宽度 - 20） |
 | popUpitemHeight | double? | _kDefaultMenuItemHeight | 单个选项高度 所有选项等高 不设置则使用默认值 48 |
 | backgroundColor | Color? | - | 弹窗背景颜色 |
-| radius | double? | - | pannel圆角 默认0 |
+| radius | double? | - | panel圆角 默认0 |
 | arrowWidth | double? | - | 箭头宽度 默认13.5 |
 | arrowHeight | double? | - | 箭头高度 默认8 |
 
