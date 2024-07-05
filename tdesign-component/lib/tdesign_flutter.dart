@@ -44,7 +44,6 @@ export 'src/components/slider/td_slider_theme.dart';
 export 'src/components/stepper/td_stepper.dart';
 export 'src/components/swipe_cell/td_swipe_cell.dart';
 export 'src/components/swipe_cell/td_swipe_cell_action.dart';
-export 'src/components/swipe_cell/td_swipe_cell_close.dart';
 export 'src/components/swipe_cell/td_swipe_cell_inherited.dart';
 export 'src/components/swipe_cell/td_swipe_cell_panel.dart';
 export 'src/components/swiper/td_page_transform.dart';

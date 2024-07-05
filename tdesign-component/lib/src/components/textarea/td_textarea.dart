@@ -43,6 +43,8 @@ class TDTextarea extends StatefulWidget {
     this.textInputBackgroundColor,
     this.size = TDInputSize.large,
     this.maxLength,
+    this.maxLengthEnforcement,
+    this.allowInputOverMax = false,
     this.additionInfo = '',
     this.additionInfoColor,
     this.textAlign,
@@ -140,6 +142,12 @@ class TDTextarea extends StatefulWidget {
 
   /// 最大字数限制
   final int? maxLength;
+
+  /// 如何执行输入长度限制
+  final MaxLengthEnforcement? maxLengthEnforcement;
+
+  /// 超出[maxLength]之后是否还允许输入
+  final bool? allowInputOverMax;
 
   /// 错误提示信息
   final String? additionInfo;
@@ -276,8 +284,17 @@ class _TDTextareaState extends State<TDTextarea> {
           inputType: widget.inputType,
           textAlign: widget.textAlign,
           onChanged: widget.onChanged,
-          inputFormatters: widget.inputFormatters ??
-              (widget.maxLength != null ? [LengthLimitingTextInputFormatter(widget.maxLength)] : null),
+          inputFormatters: [
+            ...(widget.inputFormatters ?? []),
+            ...(widget.maxLength != null && !(widget.allowInputOverMax ?? false)
+                ? [
+                    LengthLimitingTextInputFormatter(
+                      widget.maxLength,
+                      maxLengthEnforcement: widget.maxLengthEnforcement,
+                    )
+                  ]
+                : [])
+          ],
           inputDecoration: widget.inputDecoration,
           minLines: widget.minLines,
           maxLines: widget.autosize == true ? null : widget.maxLines,

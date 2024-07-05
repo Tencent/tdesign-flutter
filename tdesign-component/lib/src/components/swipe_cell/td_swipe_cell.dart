@@ -5,7 +5,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import '../../util/list_ext.dart';
 import '../cell/td_cell.dart';
 import 'td_swipe_cell_action.dart';
-import 'td_swipe_cell_close.dart';
 import 'td_swipe_cell_inherited.dart';
 import 'td_swipe_cell_panel.dart';
 
@@ -26,7 +25,8 @@ class TDSwipeCell extends StatefulWidget {
     this.onChange,
     this.controller,
     this.groupTag,
-    this.closeOnScroll = true,
+    this.closeWhenOpened = true,
+    this.closeWhenTapped = true,
     this.dragStartBehavior = DragStartBehavior.start,
     this.direction = Axis.horizontal,
     this.duration = const Duration(milliseconds: 200),
@@ -56,11 +56,16 @@ class TDSwipeCell extends StatefulWidget {
   /// 自定义控制滑动窗口
   final SlidableController? controller;
 
-  /// 同一组中只有一个被打开，[TDSwipeCell]必须为[TDSwipeCellClose]的后代组件才有效
+  /// 组，配置后，[closeWhenOpened]、[closeWhenTapped]才起作用
   final Object? groupTag;
 
-  /// 滚动时，是否关闭滑动操作项面板
-  final bool? closeOnScroll;
+  /// 当同一组（[groupTag]）中的一个[TDSwipeCell]打开时，是否关闭组中的所有其他[TDSwipeCell]
+  final bool? closeWhenOpened;
+
+  /// 当同一组（[groupTag]）中的一个[TDSwipeCell]被点击时，是否应该关闭组中的所有[TDSwipeCell]
+  ///
+  /// [cell]组件被点击时必须传递点击事件，执行`TDSwipeCellInherited.of(context)?.cellClick()`
+  final bool? closeWhenTapped;
 
   /// 处理拖动开始行为的方式[GestureDetector.dragStartBehavior]
   final DragStartBehavior? dragStartBehavior;
@@ -73,12 +78,49 @@ class TDSwipeCell extends StatefulWidget {
 
   Duration get getDuration => duration ?? const Duration(milliseconds: 200);
 
-  @override
-  _TDSwipeCellState createState() => _TDSwipeCellState();
+  static final Map<Object, List<SlidableController>> _controllers = {};
 
+  static void _pushController(SlidableController controller, Object? tag, {bool del = false}) {
+    if (tag == null) {
+      return;
+    }
+    if (del) {
+      if (_controllers.keys.contains(tag)) {
+        _controllers[tag]!.remove(controller);
+      }
+    } else {
+      if (_controllers.keys.contains(tag)) {
+        if (!_controllers[tag]!.contains(controller)) {
+          _controllers[tag]!.add(controller);
+        }
+      } else {
+        _controllers[tag] = [controller];
+      }
+    }
+  }
+
+  /// 根据[groupTag]关闭[TDSwipeCell]
+  /// 
+  /// current：保留当前不关闭
+  static void close(Object? tag, {SlidableController? current}) {
+    if (tag == null || !_controllers.keys.contains(tag)) {
+      return;
+    }
+    _controllers[tag]!.forEach((element) {
+      if (element != current) {
+        element.close();
+      }
+    });
+  }
+
+  /// 获取上下文最近的[controller]
   static SlidableController? of(BuildContext context) {
     return Slidable.of(context);
   }
+
+  @override
+  _TDSwipeCellState createState() => _TDSwipeCellState();
+
 }
 
 class _TDSwipeCellState extends State<TDSwipeCell> with TickerProviderStateMixin {
@@ -94,6 +136,7 @@ class _TDSwipeCellState extends State<TDSwipeCell> with TickerProviderStateMixin
       ..animation.addStatusListener((status) {
         confirmListenable.value = null;
       });
+    TDSwipeCell._pushController(controller, widget.groupTag);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if ((widget.opened?.length ?? 0) > 0 && widget.opened![0] == true) {
         controller.openStartActionPane(duration: widget.getDuration);
@@ -109,9 +152,10 @@ class _TDSwipeCellState extends State<TDSwipeCell> with TickerProviderStateMixin
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
       controller.actionPaneType.removeListener(_handleActionPanelTypeChanged);
-
+      TDSwipeCell._pushController(controller, widget.groupTag, del: true);
       controller = (widget.controller ?? SlidableController(this))
         ..actionPaneType.addListener(_handleActionPanelTypeChanged);
+      TDSwipeCell._pushController(controller, widget.groupTag);
     }
   }
 
@@ -119,6 +163,7 @@ class _TDSwipeCellState extends State<TDSwipeCell> with TickerProviderStateMixin
   void dispose() {
     controller.actionPaneType.removeListener(_handleActionPanelTypeChanged);
     controller.dispose();
+    TDSwipeCell._pushController(controller, widget.groupTag, del: true);
     super.dispose();
   }
 
@@ -129,7 +174,7 @@ class _TDSwipeCellState extends State<TDSwipeCell> with TickerProviderStateMixin
 
     final slidable = Slidable(
       key: widget.slidableKey ?? UniqueKey(),
-      closeOnScroll: widget.closeOnScroll ?? true,
+      closeOnScroll: false,
       child: widget.cell,
       controller: controller,
       enabled: !(widget.disabled ?? false),
@@ -142,6 +187,11 @@ class _TDSwipeCellState extends State<TDSwipeCell> with TickerProviderStateMixin
     return TDSwipeCellInherited(
       duration: widget.getDuration,
       controller: controller,
+      cellClick: () {
+        if (widget.closeWhenTapped == true) {
+          TDSwipeCell.close(widget.groupTag);
+        }
+      },
       actionClick: (action) {
         final isLeft = openDirection == TDSwipeDirection.left;
         final panel = isLeft ? widget.left! : widget.right!;
@@ -202,10 +252,16 @@ class _TDSwipeCellState extends State<TDSwipeCell> with TickerProviderStateMixin
         openDirection = null;
         break;
       case ActionPaneType.start:
+        if (widget.closeWhenOpened == true) {
+          TDSwipeCell.close(widget.groupTag, current: controller);
+        }
         openDirection = TDSwipeDirection.left;
         widget.onChange?.call(openDirection!, true);
         break;
       case ActionPaneType.end:
+        if (widget.closeWhenOpened == true) {
+          TDSwipeCell.close(widget.groupTag, current: controller);
+        }
         openDirection = TDSwipeDirection.right;
         widget.onChange?.call(openDirection!, true);
         break;

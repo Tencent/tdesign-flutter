@@ -78,21 +78,22 @@ class TDPopupBottomDisplayPanel extends StatelessWidget {
       result = Stack(
         alignment: Alignment.centerLeft,
         children: [
-          Padding(padding: const EdgeInsets.only(right: 56), child: result),
+          Padding(padding: const EdgeInsets.only(right: 40, left: 40), child: result),
           Positioned(
-              right: 0,
-              child: GestureDetector(
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Icon(
-                    TDIcons.close,
-                    color: closeColor,
-                    size: 24,
-                  ),
+            right: 0,
+            child: GestureDetector(
+              child: Container(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 16),
+                child: Icon(
+                  TDIcons.close,
+                  color: closeColor,
+                  size: 24,
                 ),
-                onTap: closeClick,
-              ))
+              ),
+              onTap: closeClick,
+            ),
+          ),
         ],
       );
     }
@@ -267,13 +268,6 @@ class TDPopupCenterPanel extends StatelessWidget {
               color: closeColor ?? TDTheme.of(context).fontWhColor1,
               size: TDTheme.of(context).spacer40,
             ),
-            // Container(
-            //   width: 32,
-            //   height: 32,
-            //   // decoration: BoxDecoration(borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
-            //   //     border: Border.all(color: TDTheme.of(context).fontWhColor1, width: 1)),
-            //   child:
-            // ),
             onTap: closeClick,
           )
         ],

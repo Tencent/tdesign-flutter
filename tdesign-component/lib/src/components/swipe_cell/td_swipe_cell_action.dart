@@ -71,7 +71,7 @@ class TDSwipeCellAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = TDTheme.of(context).fontBodyMedium ?? Font(size: 14, lineHeight: 22);
+    final fontSize = TDTheme.of(context).fontMarkMedium ?? Font(size: 14, lineHeight: 22, fontWeight: FontWeight.w600);
     final children = <Widget>[
       if (icon != null)
         Icon(

@@ -7,12 +7,14 @@ class TDSwipeCellInherited extends InheritedWidget {
   const TDSwipeCellInherited({
     Key? key,
     required Widget child,
+    required this.cellClick,
     required this.actionClick,
     required this.duration,
     required this.controller,
   }) : super(child: child, key: key);
 
   final Duration duration;
+  final void Function() cellClick;
   final bool Function(TDSwipeCellAction action) actionClick;
   final SlidableController controller;
 

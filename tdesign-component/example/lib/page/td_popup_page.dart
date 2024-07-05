@@ -321,6 +321,12 @@ class TDPopupPageState extends State<TDPopupPage> {
         Navigator.of(context).push(TDSlidePopupRoute(
             modalBarrierColor: TDTheme.of(context).fontGyColor2,
             slideTransitionFrom: SlideTransitionFrom.top,
+            open: () {
+              print('open');
+            },
+            opened: () {
+              print('opened');
+            },
             builder: (context) {
               return Container(
                 color: Colors.white,
