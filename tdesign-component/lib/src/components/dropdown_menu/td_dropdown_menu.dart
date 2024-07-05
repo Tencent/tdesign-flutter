@@ -151,11 +151,11 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
 
   void _init() {
     var items = widget.builder?.call(context) ?? widget.items ?? [];
-    _isOpened = List.filled(items.length, false);
     if (items.length == _items?.length) {
       _items = items;
       return;
     }
+    _isOpened = List.filled(items.length, false);
     _items = items;
     _iconControllers?.forEach((controller) {
       controller.dispose();
