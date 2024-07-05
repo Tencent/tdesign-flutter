@@ -199,7 +199,7 @@ class TDRadioPageState extends State<TDRadioPage> {
         padding: const EdgeInsets.all(0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (contet, index) {
+        itemBuilder: (context, index) {
           var title = '单选';
           return TDRadio(
             id: 'index:$index',
