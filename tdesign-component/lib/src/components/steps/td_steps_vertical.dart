@@ -9,6 +9,7 @@ class TDStepsVertical extends StatelessWidget {
   final TDStepsStatus status;
   final bool simple;
   final bool readOnly;
+  final bool verticalSelect;
   const TDStepsVertical({
     super.key,
     required this.steps,
@@ -16,6 +17,7 @@ class TDStepsVertical extends StatelessWidget {
     required this.status,
     required this.simple,
     required this.readOnly,
+    required this.verticalSelect,
   });
 
   @override
@@ -30,6 +32,7 @@ class TDStepsVertical extends StatelessWidget {
         status: status,
         simple: simple,
         readOnly: readOnly,
+        verticalSelect: verticalSelect,
       );
     }).toList();
 

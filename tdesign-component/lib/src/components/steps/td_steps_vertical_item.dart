@@ -10,6 +10,7 @@ class TDStepsVerticalItem extends StatelessWidget {
   final TDStepsStatus status;
   final bool simple;
   final bool readOnly;
+  final bool verticalSelect;
   const TDStepsVerticalItem({
     super.key,
     required this.data,
@@ -19,6 +20,7 @@ class TDStepsVerticalItem extends StatelessWidget {
     required this.status,
     required this.simple,
     required this.readOnly,
+    required this.verticalSelect,
   });
 
   @override
@@ -97,14 +99,17 @@ class TDStepsVerticalItem extends StatelessWidget {
     }
 
     /// 步骤条icon图标背景和形状
-    BoxDecoration? iconWidgetDecoration = shouldSetIconWidgetDecoration ? BoxDecoration(
+    var iconWidgetDecoration = shouldSetIconWidgetDecoration ? BoxDecoration(
       color: stepsNumberBgColor,
       shape: BoxShape.circle,
     ): null;
 
 
-    // icon组件容器大小
+    /// icon组件容器大小
     double iconContainerSize = 22;
+
+    /// icon组件容器margin
+    double iconMarginBottom = 8;
 
     /// 简略步骤条
     if (simple || readOnly) {
@@ -114,6 +119,7 @@ class TDStepsVerticalItem extends StatelessWidget {
         stepsTitleColor = TDTheme.of(context).fontGyColor1;
       }
       iconContainerSize = 8;
+      iconMarginBottom = 4;
       stepsIconWidget = null;
       /// 简略步骤条BoxDecoration
       var simpleDecoration = BoxDecoration(
@@ -158,7 +164,7 @@ class TDStepsVerticalItem extends StatelessWidget {
                       width: iconContainerSize,
                       height: 22,
                       alignment: Alignment.center,
-                      margin: const EdgeInsets.only(bottom: 8),
+                      margin: EdgeInsets.only(bottom: iconMarginBottom),
                       decoration: iconWidgetDecoration,
                       child: stepsIconWidget,
                     ),
@@ -186,14 +192,20 @@ class TDStepsVerticalItem extends StatelessWidget {
                   Container(
                     height: 22,
                     margin: const EdgeInsets.only(bottom: 4),
-                    child: TDText(
-                      data.title,
-                      style: TextStyle(
-                        fontWeight: (activeIndex == index && !readOnly) ? FontWeight.w600 : FontWeight.w400,
-                        color: stepsTitleColor,
-                        fontSize: 14,
-                        height: 1.4,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TDText(
+                          data.title,
+                          style: TextStyle(
+                            fontWeight: (activeIndex == index && !readOnly) ? FontWeight.w600 : FontWeight.w400,
+                            color: stepsTitleColor,
+                            fontSize: 14,
+                            height: 1.2,
+                          ),
+                        ),
+                        verticalSelect ? Icon(TDIcons.chevron_right, color: TDTheme.of(context).fontGyColor1, size: 16,): Container(),
+                      ],
                     ),
                   ),
                   Column(
