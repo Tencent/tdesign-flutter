@@ -36,12 +36,21 @@ enum TDStepsStatus {
 
 /// Steps步骤条
 class TDSteps extends StatefulWidget {
+  /// 步骤条数据
   final List<TDStepsItemData> steps;
+  /// 步骤条方向
   final TDStepsDirection direction;
+  /// 步骤条当前激活的索引
   final int activeIndex;
+  /// 步骤条状态
   final TDStepsStatus status;
+  /// 步骤条simple模式
   final bool simple;
+  /// 步骤条readOnly模式
   final bool readOnly;
+  /// 步骤条垂直自定义步骤条选择模式
+  final bool verticalSelect;
+
   const TDSteps({
     super.key,
     required this.steps,
@@ -50,6 +59,7 @@ class TDSteps extends StatefulWidget {
     this.status = TDStepsStatus.success,
     this.simple = false,
     this.readOnly = false,
+    this.verticalSelect = false,
   });
 
   @override
@@ -76,6 +86,7 @@ class _TDStepsState extends State<TDSteps> {
         status: widget.status,
         simple: widget.simple,
         readOnly: widget.readOnly,
+        verticalSelect: widget.verticalSelect,
       );
   }
 
