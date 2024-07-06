@@ -10,6 +10,7 @@
 | status | TDStepsStatus.success/TDStepsStatus.error | TDStepsStatus.success | 否 | 步骤条状态 |
 | simple | bool | false | 否 | 是否简略模式 |
 | readOnly | bool | false | 否 | 是否纯展示readOnly模式 |
+| verticalSelect | bool | false | 否 | 是否是垂直自定义步骤条选择模式 |
 
 
 
