@@ -103,9 +103,12 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
           Align(
             alignment: slideTransitionFromToAlignment(slideTransitionFrom),
             child: slideTransitionFrom != SlideTransitionFrom.center
-                ? ClipRect(
-                    clipper: RectClipper(animValue, slideTransitionFrom),
-                    child: child,
+                ? FractionalTranslation(
+                    translation: _getOffset(animValue, slideTransitionFrom),
+                    child: ClipRect(
+                      clipper: RectClipper(animValue, slideTransitionFrom),
+                      child: child,
+                    ),
                   )
                 : Transform(
                     transform: Matrix4.diagonal3Values(animValue, animValue, 1),
@@ -127,10 +130,10 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
   TickerFuture didPush() {
     open?.call();
     animation?.addStatusListener((status) {
-    if (status == AnimationStatus.completed) {
-      opened?.call();
-    }
-  });
+      if (status == AnimationStatus.completed) {
+        opened?.call();
+      }
+    });
     return super.didPush();
   }
 
@@ -147,6 +150,21 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
       right: screenSize.width - _modalLeft - _modalWidth,
       child: child,
     );
+  }
+
+  Offset _getOffset(double animValue, SlideTransitionFrom slideTransitionFrom) {
+    switch (slideTransitionFrom) {
+      case SlideTransitionFrom.top:
+        return Offset(0, animValue - 1);
+      case SlideTransitionFrom.right:
+        return Offset(1 - animValue, 0);
+      case SlideTransitionFrom.left:
+        return Offset(animValue - 1, 0);
+      case SlideTransitionFrom.bottom:
+        return Offset(0, 1 - animValue);
+      default:
+        return const Offset(0, 0);
+    }
   }
 }
 
@@ -175,13 +193,13 @@ class RectClipper extends CustomClipper<Rect> {
   Rect getClip(Size size) {
     switch (slideTransitionFrom) {
       case SlideTransitionFrom.top:
-        return Rect.fromLTWH(0, 0, size.width, size.height * animValue);
-      case SlideTransitionFrom.right:
-        return Rect.fromLTWH(size.width * (1 - animValue), 0, size.width, size.height);
-      case SlideTransitionFrom.left:
-        return Rect.fromLTWH(0, 0, size.width * animValue, size.height);
-      case SlideTransitionFrom.bottom:
         return Rect.fromLTWH(0, size.height * (1 - animValue), size.width, size.height);
+      case SlideTransitionFrom.right:
+        return Rect.fromLTWH(0, 0, size.width * animValue, size.height);
+      case SlideTransitionFrom.left:
+        return Rect.fromLTWH(size.width * (1 - animValue), 0, size.width, size.height);
+      case SlideTransitionFrom.bottom:
+        return Rect.fromLTWH(0, 0, size.width, size.height * animValue);
       default:
         return Rect.fromLTWH(0, 0, size.width, size.height);
     }
