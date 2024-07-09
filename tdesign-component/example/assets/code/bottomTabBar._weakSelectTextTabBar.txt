@@ -7,7 +7,7 @@
       navigationTabs: [
         TDBottomTabBarTabConfig(
           badgeConfig: BadgeConfig(
-            showBage: true,
+            showBadge: true,
             tdBadge: const TDBadge(TDBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
