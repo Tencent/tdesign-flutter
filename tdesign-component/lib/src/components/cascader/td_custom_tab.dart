@@ -37,14 +37,13 @@ class _TDCustomTabState extends State<TDCustomTab> {
                   setState(() {
                     _currentTabIndex = index;
                   });
-                  final ScrollPosition position = _scrollController!.position;
-                  print('position---$position');
-                  _scrollToListIndex(index);
+                  // final ScrollPosition position = _scrollController!.position;
+                  // _scrollToListIndex(index);
                   _onChangeTab(index);
                 },
                 child: Container(
                     width: 96,
-                    height: 48,
+                    height: 52,
                     child: Stack(
                       children: [
                         Center(
@@ -53,6 +52,7 @@ class _TDCustomTabState extends State<TDCustomTab> {
                             style: TextStyle(
                                 fontSize: 16,
                                 color: _currentTabIndex == index ? TDTheme.of(context).brandNormalColor : Colors.black),
+                                fontWeight: _currentTabIndex == index ?FontWeight.w600:FontWeight.w400,
                           ),
                         ),
                         if (_currentTabIndex == index)
@@ -62,7 +62,7 @@ class _TDCustomTabState extends State<TDCustomTab> {
                             child: Center(
                               child: Container(
                                 width: 20,
-                                height: 1,
+                                height: 1.5,
                                 color: TDTheme.of(context).brandNormalColor,
                               ),
                             ),
