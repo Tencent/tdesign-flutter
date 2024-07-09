@@ -78,7 +78,7 @@ class TDPopupBottomDisplayPanel extends StatelessWidget {
       result = Stack(
         alignment: Alignment.centerLeft,
         children: [
-          Padding(padding: const EdgeInsets.only(right: 40, left: 40), child: result),
+          Padding(padding: EdgeInsets.only(right: 40, left: titleLeft ? 0 : 40), child: result),
           Positioned(
             right: 0,
             child: GestureDetector(
