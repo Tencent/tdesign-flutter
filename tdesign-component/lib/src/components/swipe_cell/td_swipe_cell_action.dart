@@ -84,6 +84,7 @@ class TDSwipeCellAction extends StatelessWidget {
         Flexible(
           child: TDText(
             label,
+            forceVerticalCenter: true,
             font: fontSize,
             textColor: TDTheme.of(context).fontWhColor1,
             style: labelStyle,
