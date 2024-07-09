@@ -55,8 +55,13 @@ class _TDFooterPageState extends State<TDFooterPage> {
       LinkObj(name: '底部链接', uri: Uri.parse('https://example.com')),
       LinkObj(name: '底部链接', uri: Uri.parse('https://example.com')),
     ];
-    return TDFooter(
-      links: links,
+    return Column(
+      children: [
+        SizedBox(height: 12),
+        TDFooter(
+          links: links,
+        )
+      ],
     );
   }
 
