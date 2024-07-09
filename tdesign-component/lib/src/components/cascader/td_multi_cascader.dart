@@ -133,13 +133,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
         mainAxisSize: MainAxisSize.min,
         children: [
           _buildTitle(context),
-          const SizedBox(
-            height: 8,
-          ),
           _buildTabThemeBox(context),
-          const SizedBox(
-            height: 4,
-          ),
           Expanded(child: _buildContentBox(context))
         ],
       ),
@@ -284,6 +278,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                             style: TextStyle(
                                 fontSize: 14,
                                 color: _currentTabIndex == index ? TDTheme.of(context).brandNormalColor : Colors.black),
+                            fontWeight: _currentTabIndex == index?FontWeight.w600:FontWeight.w400,
                           ),
                         ),
                         Padding(
@@ -302,7 +297,8 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   Widget _buildTabBox(BuildContext context) {
     var maxWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: 60,
+      height: 48,
+      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.1),width: 0.5))),
       width: maxWidth,
       child: TDCustomTab(
         tabs: List.generate(_tabListData.length, (index) {
@@ -319,7 +315,6 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   Widget _buildContentBox(BuildContext context) {
     var maxWidth = MediaQuery.of(context).size.width;
     return Container(
-        decoration: BoxDecoration(border: Border(top: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.1)))),
         width: maxWidth,
         padding: EdgeInsets.only(left: 16, right: 16),
         child:Column(
@@ -515,7 +510,7 @@ class LeftLinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double lineWidth = 2;
+    double lineWidth = 1;
     double topHeight = size.height / 2;
     double centerX = size.width / 2;
     Paint linePain = Paint();
