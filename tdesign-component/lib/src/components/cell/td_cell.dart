@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../theme/td_spacers.dart';
+import '../../theme/td_theme.dart';
+import '../icon/td_icons.dart';
+import '../swipe_cell/td_swipe_cell_inherited.dart';
+import '../text/td_text.dart';
 import 'td_cell_inherited.dart';
+import 'td_cell_style.dart';
 
 typedef TDCellClick = void Function(TDCell cell);
 
@@ -25,10 +30,10 @@ class TDCell extends StatefulWidget {
     this.note,
     this.noteWidget,
     this.required = false,
-    // this.rightIcon,
     this.title,
     this.titleWidget,
     this.onClick,
+    this.onLongPress,
     this.style,
     this.rightIcon,
     this.rightIconWidget,
@@ -96,6 +101,9 @@ class TDCell extends StatefulWidget {
   /// 点击事件
   final TDCellClick? onClick;
 
+  /// 长按事件
+  final TDCellClick? onLongPress;
+
   /// 自定义样式
   final TDCellStyle? style;
 
@@ -114,12 +122,17 @@ class _TDCellState extends State<TDCell> {
     var style = widget.style ?? TDCellInherited.of(context)?.style ?? TDCellStyle.cellStyle(context);
     var crossAxisAlignment = _getAlign();
     return GestureDetector(
-      behavior: HitTestBehavior.opaque,
       onTap: () {
         if (widget.onClick != null && !(widget.disabled ?? false)) {
           widget.onClick!(widget);
         }
+        TDSwipeCellInherited.of(context)?.cellClick();
       },
+      onLongPress: widget.onLongPress != null ? () {
+        if (!(widget.disabled ?? false)) {
+          widget.onLongPress!(widget);
+        }
+      } : null,
       onTapDown: (details) {
         _setStatus('active', 0);
       },
@@ -152,17 +165,17 @@ class _TDCellState extends State<TDCell> {
                           children: [
                             if (widget.titleWidget != null)
                               Flexible(child: widget.titleWidget!)
-                            else if (widget.title != null)
+                            else if (widget.title?.isNotEmpty == true)
                               Flexible(child: TDText(widget.title!, style: style.titleStyle)),
                             if (widget.required ?? false) TDText(' *', style: style.requiredStyle),
                           ],
                         ),
                         if ((widget.titleWidget != null || widget.title != null) &&
-                            (widget.descriptionWidget != null || widget.description != null))
+                            (widget.descriptionWidget != null || widget.description?.isNotEmpty == true))
                           SizedBox(height: TDTheme.of(context).spacer4),
                         if (widget.descriptionWidget != null)
                           widget.descriptionWidget!
-                        else if (widget.description != null)
+                        else if (widget.description?.isNotEmpty == true)
                           TDText(widget.description!, style: style.descriptionStyle),
                       ],
                     ),
@@ -176,7 +189,7 @@ class _TDCellState extends State<TDCell> {
               children: [
                 if (widget.noteWidget != null)
                   widget.noteWidget!
-                else if (widget.note != null)
+                else if (widget.note?.isNotEmpty == true)
                   TDText(widget.note!, style: style.noteStyle),
                 if (widget.rightIconWidget != null)
                   widget.rightIconWidget!
