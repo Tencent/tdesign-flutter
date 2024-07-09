@@ -55,6 +55,7 @@ class TDTextarea extends StatefulWidget {
     this.labelIcon,
     this.labelWidth,
     this.margin,
+    this.padding,
     this.textareaDecoration,
     this.bordered,
   }) : super(key: key);
@@ -167,11 +168,14 @@ class TDTextarea extends StatefulWidget {
   /// 标题输入框布局方式。可选项：vertical/horizontal
   final TDTextareaLayout? layout;
 
-  /// 是否自动增高，值为 autosize 时，maxLines 不生效
+  /// 是否自动增高，值为 true 时，[maxLines]不生效
   final bool? autosize;
 
   /// 外边距
   final EdgeInsetsGeometry? margin;
+
+  /// 内边距
+  final EdgeInsetsGeometry? padding;
 
   /// 是否显示外边框
   final bool? bordered;
@@ -384,7 +388,7 @@ class _TDTextareaState extends State<TDTextarea> {
       width: widget.width,
       color: widget.decoration != null ? null : (widget.backgroundColor ?? Colors.white),
       decoration: widget.decoration,
-      padding: EdgeInsets.all(padding),
+      padding: widget.padding ?? EdgeInsets.all(padding),
       margin: widget.margin,
       child: isHorizontal
           ? Row(
