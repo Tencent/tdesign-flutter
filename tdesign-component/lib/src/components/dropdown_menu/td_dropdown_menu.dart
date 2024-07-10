@@ -35,6 +35,7 @@ class TDDropdownMenu extends StatefulWidget {
     this.direction = TDDropdownMenuDirection.auto,
     this.duration = 200.0,
     this.showOverlay = true,
+    this.isScrollable=false,
     this.arrowIcon,
     this.onMenuOpened,
     this.onMenuClosed,
@@ -69,6 +70,8 @@ class TDDropdownMenu extends StatefulWidget {
 
   static _TDDropdownMenuState? _currentOpenedInstance;
 
+  /// 是否开启滚动列表
+  final bool isScrollable;
   @override
   _TDDropdownMenuState createState() => _TDDropdownMenuState();
 }
@@ -107,6 +110,54 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    Widget tabBar=Row(
+      children: List.generate(
+        _items?.length ?? 0,
+            (index) {
+          return Expanded(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                if (_disabled(index)) {
+                  return;
+                }
+                _isOpened[index] ? _closeMenu() : _openMenu(index);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [_getText(index), _getIcon(index)],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+    if(widget.isScrollable){
+      tabBar=SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        child:Row(
+          children: List.generate(
+            _items?.length ?? 0,
+                (index) {
+              return  GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    if (_disabled(index)) {
+                      return;
+                    }
+                    _isOpened[index] ? _closeMenu() : _openMenu(index);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [_getText(index), _getIcon(index)],
+                  ),
+              );
+            },
+          ),
+        ),
+      );
+    }
     return WillPopScope(
       onWillPop: () async {
         var isClose = await _closeMenu();
@@ -123,28 +174,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
             ),
           ),
         ),
-        child: Row(
-          children: List.generate(
-            _items?.length ?? 0,
-            (index) {
-              return Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    if (_disabled(index)) {
-                      return;
-                    }
-                    _isOpened[index] ? _closeMenu() : _openMenu(index);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [_getText(index), _getIcon(index)],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
+        child: tabBar,
       ),
     );
   }
