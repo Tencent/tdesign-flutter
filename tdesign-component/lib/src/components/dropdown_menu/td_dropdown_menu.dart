@@ -86,10 +86,10 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
     _items = widget.builder(context);
     _iconControllers = List.generate(
         _items.length,
-        (index) => AnimationController(
-              duration: Duration(milliseconds: (widget.duration ?? 200).toInt()),
-              vsync: this,
-            ));
+            (index) => AnimationController(
+          duration: Duration(milliseconds: (widget.duration ?? 200).toInt()),
+          vsync: this,
+        ));
     _iconAnimations = _iconControllers.map((e) => Tween<double>(begin: 0, end: 0.5).animate(e)).toList();
     _isOpened = List.filled(_items.length, false);
   }
@@ -107,54 +107,54 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-     Widget tabBar=Row(
-       children: List.generate(
-         _items.length,
-             (index) {
-           return Expanded(child: GestureDetector(
-             behavior: HitTestBehavior.opaque,
-             onTap: () {
-               if (_disabled(index)) {
-                 return;
-               }
-               _isOpened[index] ? _closeMenu() : _openMenu(index);
-             },
-             child: Row(
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: [_getText(index), _getIcon(index)],
-             ),
-             // ),
-           ));
-         },
-       ),
-     );
-   if(widget.isScrollable){
-     tabBar=SingleChildScrollView(
-       scrollDirection: Axis.horizontal,
-       physics: const BouncingScrollPhysics(),
-       child: Row(
-         children: List.generate(
-           _items.length,
-               (index) {
-             return GestureDetector(
-               behavior: HitTestBehavior.opaque,
-               onTap: () {
-                 if (_disabled(index)) {
-                   return;
-                 }
-                 _isOpened[index] ? _closeMenu() : _openMenu(index);
-               },
-               child: Row(
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 children: [_getText(index), _getIcon(index)],
-               ),
-               // ),
-             );
-           },
-         ),
-       ),
-     );
-   }
+    Widget tabBar=Row(
+      children: List.generate(
+        _items.length,
+            (index) {
+          return Expanded(child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              if (_disabled(index)) {
+                return;
+              }
+              _isOpened[index] ? _closeMenu() : _openMenu(index);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [_getText(index), _getIcon(index)],
+            ),
+            // ),
+          ));
+        },
+      ),
+    );
+    if(widget.isScrollable){
+      tabBar=SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        child: Row(
+          children: List.generate(
+            _items.length,
+                (index) {
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  if (_disabled(index)) {
+                    return;
+                  }
+                  _isOpened[index] ? _closeMenu() : _openMenu(index);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [_getText(index), _getIcon(index)],
+                ),
+                // ),
+              );
+            },
+          ),
+        ),
+      );
+    }
     return WillPopScope(
         onWillPop: () async {
           var isClose = await _closeMenu();
@@ -166,9 +166,9 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
           decoration: BoxDecoration(
             color: TDTheme.of(context).whiteColor1,
             border: Border(
-              bottom: BorderSide(
-                 color: TDTheme.of(context).grayColor3,
-                  width: 1)
+                bottom: BorderSide(
+                    color: TDTheme.of(context).grayColor3,
+                    width: 1)
             ),
           ),
           child:tabBar,
@@ -179,8 +179,8 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
     var textColor = _disabled(index)
         ? TDTheme.of(context).fontGyColor4
         : _isOpened[index]
-            ? TDTheme.of(context).brandColor7
-            : TDTheme.of(context).fontGyColor1;
+        ? TDTheme.of(context).brandColor7
+        : TDTheme.of(context).fontGyColor1;
     return TDText(
       _items[index].getLabel(),
       font: TDTheme.of(context).fontBodyMedium,
@@ -199,8 +199,8 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
         color: _disabled(index)
             ? TDTheme.of(context).fontGyColor4
             : _isOpened[index]
-                ? TDTheme.of(context).brandColor7
-                : null,
+            ? TDTheme.of(context).brandColor7
+            : null,
       ),
     );
   }
