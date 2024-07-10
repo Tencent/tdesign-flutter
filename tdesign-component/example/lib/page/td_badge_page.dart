@@ -23,6 +23,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
           children: [
             ExampleItem(
                 desc: '红点徽标',
+                ignoreCode: true,
                 builder: (context) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -39,8 +40,10 @@ class _TDBadgePageState extends State<TDBadgePage> {
                     ],
                   );
                 }),
+
             ExampleItem(
                 desc: '数字徽标',
+                ignoreCode: true,
                 builder: (context) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,6 +62,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 }),
             ExampleItem(
                 desc: '自定义徽标',
+                ignoreCode: true,
                 builder: (context) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
