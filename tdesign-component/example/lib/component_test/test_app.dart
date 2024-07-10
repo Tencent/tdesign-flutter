@@ -5,44 +5,49 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 void main() async {
+  kTextNeedGlobalFontFamily = true;
   WidgetsFlutterBinding.ensureInitialized();
   var jsonString = await rootBundle.loadString('assets/theme.json');
   print('jsonString:$jsonString');
   TDTheme.needMultiTheme(true);
   TDTheme.defaultData();
   var themeData = TDThemeData.fromJson('green', jsonString);
+  await TDFontLoader.load(name: 'test1', fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf');
   runApp(MaterialApp(
-    home: Theme(
-        data: ThemeData(extensions: [themeData!]),
-        child: Builder(
-          builder: (context) {
-            return Scaffold(
-              // appBar: TDNavBar(),
-              appBar: _buildAppBar(context),
-              body:  Center(
-                // 先显示再加载
-                child: TDText(
-                  '测试文案',
-                  textColor: TDTheme.of(context).brandNormalColor,
-                  fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf',
-                  fontFamily: FontFamily(fontFamily: 'test'),
+    home: TDTextConfiguration(
+      globalFontFamily: FontFamily(fontFamily: 'test1',),
+      child: Theme(
+          data: ThemeData(extensions: [themeData!]),
+          child: Builder(
+            builder: (context) {
+              return Scaffold(
+                // appBar: TDNavBar(),
+                appBar: _buildAppBar(context),
+                body:  Center(
+                  // 先显示再加载
+                  child: TDText(
+                    '测试文案',
+                    textColor: TDTheme.of(context).brandNormalColor,
+                    fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf',
+                    fontFamily: FontFamily(fontFamily: 'test'),
+                  ),
+                  //  // 先加载再显示
+                  // child: FutureBuilder(
+                  //     future:TDFontLoader.load(name: 'test1', fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf'),
+                  //   initialData: false,
+                  //   builder: (_,data)=>TDText(
+                  //     (data.data ?? false) ? '测试文案' : '',
+                  //     textColor: TDTheme.of(context).brandNormalColor,
+                  //     fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf',
+                  //     fontFamily: FontFamily(fontFamily: 'test1'),
+                  //   ),
+                  // ),
                 ),
-                //  // 先加载再显示
-                // child: FutureBuilder(
-                //     future:TDFontLoader.load(name: 'test1', fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf'),
-                //   initialData: false,
-                //   builder: (_,data)=>TDText(
-                //     (data.data ?? false) ? '测试文案' : '',
-                //     textColor: TDTheme.of(context).brandNormalColor,
-                //     fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf',
-                //     fontFamily: FontFamily(fontFamily: 'test1'),
-                //   ),
-                // ),
-              ),
-              bottomNavigationBar: _buildBottomTabBar(),
-            );
-          },
-        )),
+                bottomNavigationBar: _buildBottomTabBar(),
+              );
+            },
+          )),
+    ),
   ));
 }
 
