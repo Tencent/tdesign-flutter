@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var jsonString = await rootBundle.loadString('assets/theme.json');
@@ -18,8 +20,12 @@ void main() async {
               // appBar: TDNavBar(),
               appBar: _buildAppBar(context),
               body:  Center(
-                child: TDText('测试文案', textColor: TDTheme.of(context)
-                    .brandNormalColor,),
+                child: TDText(
+                  '测试文案',
+                  textColor: TDTheme.of(context).brandNormalColor,
+                  fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf',
+                  fontFamily: FontFamily(fontFamily: 'test'),
+                ),
               ),
               bottomNavigationBar: _buildBottomTabBar(),
             );
