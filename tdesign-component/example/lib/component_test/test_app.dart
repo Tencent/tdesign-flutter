@@ -10,7 +10,6 @@ void main() async {
   var jsonString = await rootBundle.loadString('assets/theme.json');
   print('jsonString:$jsonString');
   TDTheme.needMultiTheme(true);
-  TDTheme.defaultData();
   var themeData = TDThemeData.fromJson('green', jsonString);
   await TDFontLoader.load(name: 'test1', fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf');
   runApp(MaterialApp(
