@@ -4,9 +4,38 @@ import 'package:flutter/services.dart';
 
 import '../../../tdesign_flutter.dart';
 
-/// 懒加载Font
-class TDFontLoader extends StatefulWidget {
-  const TDFontLoader({Key? key, required this.textWidget, required this.fontFamilyUrl}) : super(key: key);
+/// 线上字体加载工具
+class TDFontLoader{
+
+  /// 缓存字体FontLoader,防止重复加载
+  static final _record = <String,bool>{};
+
+  /// 加载字体资源
+  static Future<bool> load({required String name, required String fontFamilyUrl}) async {
+    try {
+      if(!(_record[name] ?? false)) {
+        var fontLoader = FontLoader(name);
+
+        fontLoader.addFont(Future(() async {
+          var uri = Uri.parse(fontFamilyUrl);
+          var bundle = NetworkAssetBundle(uri);
+          return await bundle.load('');
+        }));
+
+        await fontLoader.load();
+        _record[name] = true;
+      }
+      return true;
+    } catch (e) {
+      print('TDFontLoader load error, name: ${name}, fontFamilyUrl: $fontFamilyUrl}, e: $e');
+    }
+    return false;
+  }
+}
+
+/// 懒加载FontWidget
+class TDFontLoaderWidget extends StatefulWidget {
+  const TDFontLoaderWidget({Key? key, required this.textWidget, required this.fontFamilyUrl}) : super(key: key);
 
   final TDText textWidget;
 
@@ -14,10 +43,10 @@ class TDFontLoader extends StatefulWidget {
   final String fontFamilyUrl;
 
   @override
-  State<TDFontLoader> createState() => _TDFontLoaderState();
+  State<TDFontLoaderWidget> createState() => _TDFontLoaderWidgetState();
 }
 
-class _TDFontLoaderState extends State<TDFontLoader> {
+class _TDFontLoaderWidgetState extends State<TDFontLoaderWidget> {
   bool fontFamilyLoaded = false;
   @override
   void initState() {
@@ -29,15 +58,9 @@ class _TDFontLoaderState extends State<TDFontLoader> {
     if ((widget.textWidget.fontFamily?.fontFamily.isNotEmpty ?? false)
         && widget.fontFamilyUrl.isNotEmpty) {
       try {
-        Future<ByteData> readFont() async {
-          var uri = Uri.parse(widget.fontFamilyUrl);
-          var bundle = NetworkAssetBundle(uri);
-          return await bundle.load('');
+        if(await TDFontLoader.load(name: widget.textWidget.fontFamily!.fontFamily, fontFamilyUrl: widget.fontFamilyUrl)){
+          setState(() {});
         }
-        var fontLoader =  FontLoader(widget.textWidget.fontFamily!.fontFamily);
-        fontLoader.addFont(readFont());
-        await fontLoader.load();
-        setState(() {});
       } catch (e) {
         print('TDFontLoader loadFont error, data: ${widget.textWidget.data}, fontFamily: ${widget.textWidget.fontFamilyUrl}, e: $e');
       }

@@ -161,7 +161,7 @@ class TDText extends StatelessWidget {
   Widget build(BuildContext context) {
     if (fontFamilyUrl?.isNotEmpty ?? false) {
       // 如果设置了Url,则使用TGFontLoader
-      return TDFontLoader(
+      return TDFontLoaderWidget(
         textWidget: this,
         fontFamilyUrl: fontFamilyUrl!,
       );
