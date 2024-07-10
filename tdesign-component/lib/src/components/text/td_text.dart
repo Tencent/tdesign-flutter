@@ -10,6 +10,8 @@ import '../../util/version_util.dart';
 
 /// 是否启用强制居中
 var kTextForceVerticalCenterEnable = true;
+/// 是否启用全局字体
+var kTextNeedGlobalFontFamily = true;
 
 /// 文本控件
 /// 设计原则：
@@ -198,11 +200,16 @@ class TDText extends StatelessWidget {
     return context.dependOnInheritedWidgetOfExactType<TDTextConfiguration>();
   }
 
-  TextStyle? getTextStyle(BuildContext? context, {double? height, Color? backgroundColor}) {
+  TextStyle? getTextStyle(BuildContext context, {double? height, Color? backgroundColor}) {
     var textFont = font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
 
     var stylePackage = package ?? fontFamily?.package;
     var styleFontFamily = style?.fontFamily ?? fontFamily?.fontFamily;
+    if(kTextNeedGlobalFontFamily){
+      var globalFontFamily = getConfiguration(context)?.globalFontFamily;
+      styleFontFamily ??= globalFontFamily?.fontFamily;
+      stylePackage ??= globalFontFamily?.package;
+    }
     var realFontWeight = style?.fontWeight ?? fontWeight;
     // Flutter 3.0之后，iOS w500之下字体不生效，需要替换字体
     if (PlatformUtil.isIOS &&
@@ -245,11 +252,11 @@ class TDText extends StatelessWidget {
 
   /// 获取系统原始Text，以便使用到只能接收系统Text组件的地方
   /// 转化为系统原始Text后，将失去padding和background属性
-  Text getRawText({BuildContext? context}) {
+  Text getRawText({required BuildContext context}) {
     return _getRawText(context: context, backgroundColor: backgroundColor);
   }
 
-  Text _getRawText({BuildContext? context, TextStyle? textStyle, Color? backgroundColor}) {
+  Text _getRawText({required BuildContext context, TextStyle? textStyle, Color? backgroundColor}) {
     return textSpan == null
         ? Text(
             data,
@@ -363,7 +370,10 @@ class TDTextConfiguration extends InheritedWidget {
   /// forceVerticalCenter=true时，内置padding配置
   final TDTextPaddingConfig? paddingConfig;
 
-  const TDTextConfiguration({this.paddingConfig, Key? key, required Widget child}) : super(key: key, child: child);
+  /// 全局字体,kTextNeedGlobalFontFamily=true时生效
+  final FontFamily? globalFontFamily;
+
+  const TDTextConfiguration({Key? key, required Widget child,this.paddingConfig, this.globalFontFamily}) : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(covariant TDTextConfiguration oldWidget) {
