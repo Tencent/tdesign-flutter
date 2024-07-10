@@ -58,6 +58,8 @@ class TDText extends StatelessWidget {
     this.textWidthBasis,
     this.textHeightBehavior,
     this.forceVerticalCenter = false,
+    this.isInFontLoader = false,
+    this.fontFamilyUrl,
     Key? key,
   })  : textSpan = null,
         super(key: key);
@@ -87,6 +89,8 @@ class TDText extends StatelessWidget {
     this.textWidthBasis,
     this.textHeightBehavior,
     this.forceVerticalCenter = false,
+    this.isInFontLoader = false,
+    this.fontFamilyUrl,
   })  : data = null,
         super(key: key);
 
@@ -144,10 +148,24 @@ class TDText extends StatelessWidget {
 
   final InlineSpan? textSpan;
 
+  /// 是否强制居中
   final bool forceVerticalCenter;
+
+  /// 是否在FontLoader中使用
+  final bool isInFontLoader;
+
+  /// 是否禁用懒加载FontFamily的能力
+  final String? fontFamilyUrl;
 
   @override
   Widget build(BuildContext context) {
+    if (fontFamilyUrl?.isNotEmpty ?? false) {
+      // 如果设置了Url,则使用TGFontLoader
+      return TDFontLoader(
+        textWidget: this,
+        fontFamilyUrl: fontFamilyUrl!,
+      );
+    }
     if (forceVerticalCenter && kTextForceVerticalCenterEnable) {
       var config = getConfiguration(context);
       var paddingConfig = config?.paddingConfig;
@@ -166,7 +184,7 @@ class TDText extends StatelessWidget {
       );
     }
     var bgColor = style?.backgroundColor ?? backgroundColor;
-    if(bgColor == null){
+    if (bgColor == null) {
       return _getRawText(context: context);
     }
     return Container(
@@ -218,9 +236,10 @@ class TDText extends StatelessWidget {
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
+      // 如果需要字体懒加载,则清空fontFamily
       fontFamily: styleFontFamily,
       fontFamilyFallback: style?.fontFamilyFallback,
-      package: stylePackage,
+      package: isInFontLoader ? null : stylePackage,
     );
   }
 
@@ -366,7 +385,7 @@ class TDTextPaddingConfig {
   /// 获取padding
   EdgeInsetsGeometry getPadding(String? data, double fontSize, double height) {
     var cache = _cacheMap[fontSize]?[height];
-    if(cache != null){
+    if (cache != null) {
       return cache;
     }
     var paddingFont = fontSize * paddingRate;
@@ -388,7 +407,7 @@ class TDTextPaddingConfig {
 
     // 记录缓存
     var heightMap = _cacheMap[fontSize];
-    if(heightMap == null){
+    if (heightMap == null) {
       heightMap = {};
       _cacheMap[fontSize] = heightMap;
     }
@@ -397,20 +416,20 @@ class TDTextPaddingConfig {
   }
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
-  double get paddingRate{
-    if(VersionUtil.isAfterThen('3.2.0')){
+  double get paddingRate {
+    if (VersionUtil.isAfterThen('3.2.0')) {
       // Dart 3.2.0之后,文字渲染高度有改变.
-      return  PlatformUtil.isWeb
+      return PlatformUtil.isWeb
           ? 29 / 128
           : PlatformUtil.isAndroid
-          ? -20 / 128
-          : -10 / 128;
+              ? -20 / 128
+              : -10 / 128;
     }
     return PlatformUtil.isWeb
         ? 3 / 8
         : PlatformUtil.isAndroid
-        ? -7 / 128
-        : 0;
+            ? -7 / 128
+            : 0;
   }
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
