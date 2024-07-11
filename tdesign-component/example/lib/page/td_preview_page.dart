@@ -109,7 +109,7 @@ class _TDPreviewPageState extends State<TDPreviewPage> {
           context: context,
           images: images,
           showIndex: true,
-          height: 80,
+          height: 140,
           onLongPress: (index) {
             Navigator.of(context).push(TDSlidePopupRoute(
               slideTransitionFrom: SlideTransitionFrom.bottom,
