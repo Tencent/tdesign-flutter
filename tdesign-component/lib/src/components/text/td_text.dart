@@ -410,6 +410,8 @@ class TDTextPaddingConfig {
         ? 3 / 8
         : PlatformUtil.isAndroid
         ? -7 / 128
+        : PlatformUtil.isOhos
+        ? 43 / 128
         : 0;
   }
 

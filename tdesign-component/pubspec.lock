@@ -75,7 +75,7 @@ packages:
     description:
       name: flutter_slidable
       sha256: "673403d2eeef1f9e8483bd6d8d92aae73b1d8bd71f382bc3930f699c731bc27c"
-      url: "https://pub.dev"
+      url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.1.0"
   flutter_swiper_null_safety:
