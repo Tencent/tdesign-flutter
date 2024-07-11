@@ -193,6 +193,7 @@ class _TDSideBarState extends State<TDSideBar> {
             minWidth: 106,
             maxHeight: MediaQuery.of(context).size.height -
                 MediaQuery.of(context).padding.top),
+
         child: SizedBox(
             height: widget.height ?? MediaQuery.of(context).size.height,
             child: MediaQuery.removePadding(
