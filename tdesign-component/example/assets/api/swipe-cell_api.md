@@ -10,7 +10,7 @@
 | slidableKey | Key? | - | 滑动组件的 Key |
 | cell | Widget | - | 单元格 [TDCell] |
 | disabled | bool? | false | 是否禁用滑动 |
-| opened | List<bool>? | const [false, false] | 默认打开，[left, rigth] |
+| opened | List<bool>? | const [false, false] | 默认打开，[left, right] |
 | right | TDSwipeCellPanel? | - | 右侧滑动操作项面板 |
 | left | TDSwipeCellPanel? | - | 左侧滑动操作项面板 |
 | onChange |  Function(TDSwipeDirection direction, bool open)? | - | 滑动展开事件 |
