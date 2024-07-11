@@ -22,7 +22,7 @@ export PATH=$TOOL_HOME/hvigor/bin:$PATH
 # 开发环境
 node16
 java jdk 17
-python3
+python3.11
 DevEco Studio NEXT Developer
 https://gitee.com/openharmony-sig/flutter_engine/blob/master/README.md
 https://gitee.com/openharmony-sig/flutter_flutter
