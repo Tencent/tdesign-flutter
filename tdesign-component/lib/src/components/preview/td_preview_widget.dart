@@ -80,10 +80,15 @@ class _TDImageViewerWidgetState extends State<TDPreviewWidget> {
 
   Widget _getImage(dynamic image) {
     var size = MediaQuery.of(context).size;
-    var boxFit = ((widget.width != null) || (widget.height != null)) ? BoxFit.fill : BoxFit.fitWidth;
-    var horizontal = widget.width != null ? (size.width - (widget.width ?? 0)) / 2 : 0.0;
-    var vertical = widget.height != null ? (size.height - (widget.height ?? 0)) / 2 : 0.0;
-    var margin = EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical);
+    var boxFit = ((widget.width != null) || (widget.height != null))
+        ? BoxFit.fill
+        : BoxFit.fitWidth;
+    var horizontal =
+        widget.width != null ? (size.width - (widget.width ?? 0)) / 2 : 0.0;
+    var vertical =
+        widget.height != null ? (size.height - (widget.height ?? 0)) / 2 : 0.0;
+    var margin =
+        EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical);
     if (image is File) {
       return Container(
         margin: margin,
@@ -119,6 +124,7 @@ class _TDImageViewerWidgetState extends State<TDPreviewWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var safeAreaHeight = MediaQuery.of(context).padding.top ?? 0;
     return Stack(
       children: [
         Positioned(
@@ -131,7 +137,7 @@ class _TDImageViewerWidgetState extends State<TDPreviewWidget> {
           ),
         ),
         Positioned(
-          top: 0,
+          top: safeAreaHeight,
           bottom: 0,
           left: 0,
           right: 0,
@@ -155,37 +161,49 @@ class _TDImageViewerWidgetState extends State<TDPreviewWidget> {
           ),
         ),
         SafeArea(
-          child: TDNavBar(
-            backgroundColor: Colors.transparent,
-            useDefaultBack: false,
-            title: (widget.showIndex ?? false)
-                ? '$_index / ${widget.images.length}'
-                : '',
-            titleColor: TDTheme.of(context).whiteColor1,
-            leftBarItems: [
-              TDNavBarItem(
-                  icon: TDIcons.close,
-                  iconColor: TDTheme.of(context).whiteColor1,
-                  action: () {
+          child: Container(
+            color: const Color(0x66000000),
+            height: 44,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
                     if (widget.onClose != null) {
                       widget.onClose!.call(_index - 1);
                     } else {
                       Navigator.of(context).pop();
                     }
-                  })
-            ],
-            rightBarItems: [
-              if (widget.deleteBtn ?? false)
-                TDNavBarItem(
-                  icon: TDIcons.delete,
-                  iconColor: TDTheme.of(context).whiteColor1,
-                  action: () {
-                    widget.images.removeAt(_index - 1);
-                    widget.onDelete?.call(_index - 1);
-                    setState(() {});
                   },
+                  child: Icon(
+                    TDIcons.close,
+                    color: TDTheme.of(context).whiteColor1,
+                  ),
                 ),
-            ],
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    (widget.showIndex ?? false)
+                        ? '$_index / ${widget.images.length}'
+                        : '',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: TDTheme.of(context).whiteColor1),
+                  ),
+                ),
+                if (widget.deleteBtn ?? false)
+                  GestureDetector(
+                    onTap: () {
+                      widget.images.removeAt(_index - 1);
+                      widget.onDelete?.call(_index - 1);
+                      setState(() {});
+                    },
+                    child: Icon(
+                      TDIcons.delete,
+                      color: TDTheme.of(context).whiteColor1,
+                    ),
+                  )
+              ],
+            ),
           ),
         ),
       ],
