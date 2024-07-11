@@ -23,6 +23,15 @@ class PlatformUtil {
     return !kIsWeb && Platform.isMacOS;
   }
 
+  static bool get isOhos {
+    try {
+      // ignore: undefined_getter
+      return !kIsWeb && Platform.isOhos;
+    } catch (e) {
+      return false;
+    }
+  }
+
   static bool get isWindows {
     return !kIsWeb && Platform.isWindows;
   }
