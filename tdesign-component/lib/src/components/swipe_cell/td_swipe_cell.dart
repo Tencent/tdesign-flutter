@@ -41,7 +41,7 @@ class TDSwipeCell extends StatefulWidget {
   /// 是否禁用滑动
   final bool? disabled;
 
-  /// 默认打开，[left, rigth]
+  /// 默认打开，[left, right]
   final List<bool>? opened;
 
   /// 右侧滑动操作项面板
