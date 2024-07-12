@@ -24,12 +24,7 @@ class PlatformUtil {
   }
 
   static bool get isOhos {
-    try {
-      // ignore: undefined_getter
-      return !kIsWeb && Platform.isOhos;
-    } catch (e) {
-      return false;
-    }
+    return !kIsWeb && Platform.operatingSystem == 'ohos';
   }
 
   static bool get isWindows {
