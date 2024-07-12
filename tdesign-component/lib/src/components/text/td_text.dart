@@ -10,6 +10,7 @@ import '../../util/version_util.dart';
 
 /// 是否启用强制居中
 var kTextForceVerticalCenterEnable = true;
+
 /// 是否启用全局字体
 var kTextNeedGlobalFontFamily = true;
 
@@ -205,7 +206,7 @@ class TDText extends StatelessWidget {
 
     var stylePackage = package ?? fontFamily?.package;
     var styleFontFamily = style?.fontFamily ?? fontFamily?.fontFamily;
-    if(kTextNeedGlobalFontFamily){
+    if (kTextNeedGlobalFontFamily) {
       var globalFontFamily = getConfiguration(context)?.globalFontFamily;
       styleFontFamily ??= globalFontFamily?.fontFamily;
       stylePackage ??= globalFontFamily?.package;
@@ -373,7 +374,8 @@ class TDTextConfiguration extends InheritedWidget {
   /// 全局字体,kTextNeedGlobalFontFamily=true时生效
   final FontFamily? globalFontFamily;
 
-  const TDTextConfiguration({Key? key, required Widget child,this.paddingConfig, this.globalFontFamily}) : super(key: key, child: child);
+  const TDTextConfiguration({Key? key, required Widget child, this.paddingConfig, this.globalFontFamily})
+      : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(covariant TDTextConfiguration oldWidget) {
@@ -439,7 +441,9 @@ class TDTextPaddingConfig {
         ? 3 / 8
         : PlatformUtil.isAndroid
             ? -7 / 128
-            : 0;
+            : PlatformUtil.isOhos
+                ? 43 / 128
+                : 0;
   }
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
