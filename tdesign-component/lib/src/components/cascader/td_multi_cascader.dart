@@ -247,7 +247,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   Widget _buildStepBox(BuildContext context) {
     var maxWidth = MediaQuery.of(context).size.width;
     return Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.transparent)),
+        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.1),width: 0.5))),
         padding: EdgeInsets.only(bottom: 16),
         width: maxWidth,
         child: ListView(
@@ -323,8 +323,8 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                 if(widget.subTitles!=null)
                Container(
                  height: 50,
-                 alignment: Alignment.centerLeft,
-                 child:TDText(widget.subTitles![_level],style: TextStyle(fontSize: 14,color: Color.fromRGBO(0, 0, 0, 0.4)),)  //,
+                 padding: EdgeInsets.only(top: 20,),
+                 child:TDText(widget.subTitles![_level],style: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.4)),font: TDTheme.of(context).fontTitleSmall,)  //,
                ),
               Expanded(child: PageView(
                 scrollDirection: Axis.horizontal,
@@ -520,7 +520,7 @@ class LeftLinePainter extends CustomPainter {
     canvas.drawLine(Offset(centerX, 0), Offset(centerX, topHeight), linePain);
     Paint circlePaint = Paint();
     circlePaint.color = _lightColor;
-    circlePaint.strokeWidth = 2;
+    circlePaint.strokeWidth = 1;
     circlePaint.style = isCircleFill ? PaintingStyle.fill : PaintingStyle.stroke;
     linePain.color = isShowTopLine ? (topLineColor ?? _lightColor) : Colors.transparent;
     canvas.drawLine(Offset(centerX, -size.height), Offset(centerX, -size.height - _topHeight), linePain);
