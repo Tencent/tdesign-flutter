@@ -55,14 +55,14 @@ class TDImageState extends State<TDImagePage>
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _imageClip,
-                            methodName: '_imageClip',
+                            methodName: '_imageClip', // 裁剪
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _imageStretch,
-                            methodName: '_imageStretch',
+                            methodName: '_imageStretch', // 拉伸
                           ),
                         ),
                       ],
@@ -82,11 +82,11 @@ class TDImageState extends State<TDImagePage>
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _imageFitHeight,
-                            methodName: '_imageFitHeight',
+                            methodName: '_imageFitHeight', // 适应高
                           ),
                         ),
                         Container(
-                          margin: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.all(8), // 适应宽
                           child: CodeWrapper(
                             builder: _imageFitWidth,
                             methodName: '_imageFitWidth',
@@ -109,21 +109,21 @@ class TDImageState extends State<TDImagePage>
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _imageSquare,
-                            methodName: '_imageSquare',
+                            methodName: '_imageSquare', // 方形
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _imageRoundedSquare,
-                            methodName: '_imageRoundedSquare',
+                            methodName: '_imageRoundedSquare', // 圆角方形
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _imageCircle,
-                            methodName: '_imageCircle',
+                            methodName: '_imageCircle', // 圆形
                           ),
                         ),
                       ],
@@ -148,14 +148,14 @@ class TDImageState extends State<TDImagePage>
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _loadingDefault,
-                            methodName: '_loadingDefault',
+                            methodName: '_loadingDefault', // 加载默认
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _loadingCustom,
-                            methodName: '_loadingCustom',
+                            methodName: '_loadingCustom', // 加载自定义
                           ),
                         ),
                       ],
@@ -175,14 +175,14 @@ class TDImageState extends State<TDImagePage>
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _failDefault,
-                            methodName: '_failDefault',
+                            methodName: '_failDefault', // 失败默认
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _failCustom,
-                            methodName: '_failCustom',
+                            methodName: '_failCustom', // 失败自定义
                           ),
                         ),
                       ],
@@ -217,88 +217,7 @@ class TDImageState extends State<TDImagePage>
     );
   }
 
-  //     children: [
-  //       const SizedBox(
-  //         width: 16,
-  //       ),
-  //       Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Padding(
-  //             padding: const EdgeInsets.only(bottom: 16),
-  //             child: TDText(
-  //               '裁剪',
-  //               font: TDTheme.of(context).fontBodyMedium,
-  //               textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-  //             ),
-  //           ),
-  //            const TDImage(
-  //              assetUrl: 'assets/img/image.png',
-  //              type: TDImageType.clip,
-  //           ),
-  //         ],
-  //       ),
-  //       const SizedBox(
-  //         width: 24,
-  //       ),
-  //       Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Padding(
-  //             padding: const EdgeInsets.only(bottom: 16),
-  //             child: TDText(
-  //               '适应高',
-  //               font: TDTheme.of(context).fontBodyMedium,
-  //               textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-  //             ),
-  //           ),
-  //           Container(
-  //             width: 89,
-  //             height: 72,
-  //             color: Colors.black,
-  //             child: const TDImage(
-  //               assetUrl: 'assets/img/image.png',
-  //               type: TDImageType.fitHeight,
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //       const SizedBox(
-  //         width: 24,
-  //       ),
-  //       Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Padding(
-  //             padding: const EdgeInsets.only(bottom: 16),
-  //             child: TDText(
-  //               '拉伸',
-  //               font: TDTheme.of(context).fontBodyMedium,
-  //               textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-  //             ),
-  //           ),
-  //           Container(
-  //             color: Colors.black,
-  //             width: 121,
-  //             height: 72,
-  //             child: Stack(
-  //               alignment: Alignment.center,
-  //               children: const [
-  //                 TDImage(
-  //                   assetUrl: 'assets/img/image.png',
-  //                   width: 121,
-  //                   height: 50,
-  //                   type: TDImageType.stretch,
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ],
-  //       )
-  //     ],
-  //   );
-  // }
-
+/* 图片裁剪 */
   @Demo(group: 'image')
   Widget _imageClip(BuildContext context) {
     return Column(
@@ -319,33 +238,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
-
-  @Demo(group: 'image')
-  Widget _imageFitHeight(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
-            '适应高',
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-          ),
-        ),
-        Container(
-          width: 89,
-          height: 72,
-          color: Colors.black,
-          child: const TDImage(
-            assetUrl: 'assets/img/image.png',
-            type: TDImageType.fitHeight,
-          ),
-        ),
-      ],
-    );
-  }
-
+/* 图片拉伸 */
   @Demo(group: 'image')
   Widget _imageStretch(BuildContext context) {
     return Column(
@@ -378,7 +271,33 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
-
+/* 图片适应高 */
+  @Demo(group: 'image')
+  Widget _imageFitHeight(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '适应高',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          width: 89,
+          height: 72,
+          color: Colors.black,
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.fitHeight,
+          ),
+        ),
+      ],
+    );
+  }
+  /* 图片适应宽 */
   @Demo(group: 'image')
   Widget _imageFitWidth(BuildContext context) {
     return Column(
@@ -404,7 +323,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
-
+/* 方形 */
   @Demo(group: 'image')
   Widget _imageSquare(BuildContext context) {
     return Column(
@@ -425,7 +344,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
-
+/* 圆角方形 */
   @Demo(group: 'image')
   Widget _imageRoundedSquare(BuildContext context) {
     return Column(
@@ -448,7 +367,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
-
+/* 圆形 */
   @Demo(group: 'image')
   Widget _imageCircle(BuildContext context) {
     return Column(
@@ -471,7 +390,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
-
+/* 加载默认提示 */
   @Demo(group: 'image')
   Widget _loadingDefault(BuildContext context) {
     return Column(
@@ -509,7 +428,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
-
+/* 加载自定义提示 */
   @Demo(group: 'image')
   Widget _loadingCustom(BuildContext context) {
     return Column(
@@ -558,7 +477,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
-
+/* 失败默认提示 */
   @Demo(group: 'image')
   Widget _failDefault(BuildContext context) {
     return Column(
@@ -579,7 +498,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
-
+/* 失败自定义提示 */
   @Demo(group: 'image')
   Widget _failCustom(BuildContext context) {
     return Column(
