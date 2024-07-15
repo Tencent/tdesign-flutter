@@ -1,4 +1,4 @@
 const TDImage(
             assetUrl: 'assets/img/image.png',
-            type: TDImageType.fitWidth
-            )
+            type: TDImageType.fitHeight,
+          )
