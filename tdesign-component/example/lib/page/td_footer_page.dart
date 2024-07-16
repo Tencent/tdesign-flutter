@@ -34,18 +34,27 @@ class _TDFooterPageState extends State<TDFooterPage> {
 
   @Demo(group: 'footer')
   Widget _buildFooter(BuildContext context) {
-    return TDFooter();
+    return SizedBox(
+      height: 30,
+      child:  TDFooter(
+        TDFooterType.text,
+        text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
+      ),
+    );
+
   }
 
   @Demo(group: 'footer')
   Widget _buildSingleLinkFooter(BuildContext context) {
     // 示例链接列表
     final singleLink = <LinkObj>[
-      LinkObj(name: '底部链接', uri: Uri.parse('https://example.com')),
+      LinkObj(name: '底部链接', uri: Uri.parse('https://www.baidu.com')),
     ];
 
     return TDFooter(
+      TDFooterType.link,
       links: singleLink,
+      text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
   }
 
@@ -59,7 +68,9 @@ class _TDFooterPageState extends State<TDFooterPage> {
       children: [
         SizedBox(height: 12),
         TDFooter(
+          TDFooterType.link,
           links: links,
+          text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
         )
       ],
     );
@@ -68,6 +79,7 @@ class _TDFooterPageState extends State<TDFooterPage> {
   @Demo(group: 'footer')
   Widget _buildBrandFooter(BuildContext context) {
     return TDFooter(
+      TDFooterType.brand,
       logo: 'assets/img/td_brand.png',
       width: 204,
       height: 48,
