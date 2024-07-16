@@ -1,0 +1,6 @@
+default.check-filename = true
+
+[default.extend-words]
+
+[files]
+extend-exclude = ["project.pbxproj","aop_flutter_sdk.patch"]

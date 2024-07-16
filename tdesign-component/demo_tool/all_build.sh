@@ -15,6 +15,7 @@
 # 导航
 # back_top
 # drawer
+./bin/demo_tool generate --folder ../lib/src/components/drawer --name TDDrawer,TDDrawerItem,TDDrawerStyle --folder-name drawer --output ../example/assets/api/ --only-api --get-comments
 # indexes
 # navbar
 ./bin/demo_tool generate --file ../lib/src/components/navbar/td_nav_bar.dart --name TDNavBar,TDNavBarItem, --folder-name navbar --output ../example/assets/api/ --only-api
@@ -72,6 +73,7 @@
 # image
 ./bin/demo_tool generate --file ../lib/src/components/image/td_image.dart --name TDImage --folder-name image --output ../example/assets/api/ --only-api
 # imageViewer
+./bin/demo_tool generate --file ../lib/src/components/preview  --name TDPreview, TDPreviewWidget  --folder-name image --output ../example/assets/api/ --only-api
 # progress
 # result
 # skeleton
@@ -99,6 +101,7 @@
 # refresh
 ./bin/demo_tool generate --file ../lib/src/components/refresh/td_refresh_header.dart --name TDRefreshHeader --folder-name pull-down-refresh --output ../example/assets/api/ --only-api --get-comments
 # swipecell
+./bin/demo_tool generate --folder ../lib/src/components/swipe_cell --name TDSwipeAction,TDSwipeAutoClose,TDSwipeCell,TDSwipePanel --folder-name swipe-cell --output ../example/assets/api/ --only-api --get-comments
 # toast
 ./bin/demo_tool generate --file ../lib/src/components/toast/td_toast.dart --name TDToast --folder-name toast --output ../example/assets/api/ --only-api
 
