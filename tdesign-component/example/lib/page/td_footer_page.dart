@@ -48,7 +48,7 @@ class _TDFooterPageState extends State<TDFooterPage> {
   Widget _buildSingleLinkFooter(BuildContext context) {
     // 示例链接列表
     final singleLink = <LinkObj>[
-      LinkObj(name: '底部链接', uri: Uri.parse('https://www.baidu.com')),
+      LinkObj(name: '底部链接', uri: Uri.parse('https://example.com')),
     ];
 
     return TDFooter(
