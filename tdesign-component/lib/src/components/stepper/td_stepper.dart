@@ -77,15 +77,15 @@ class TDStepper extends StatefulWidget {
 class _TDStepperState extends State<TDStepper> {
   late int value;
   late TextEditingController _controller;
-  final FocusNode _focuseNode = FocusNode();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     value = widget.value ?? widget.defaultValue ?? 0;
     _controller = TextEditingController(text: value.toString());
-    _focuseNode.addListener(() {
-      if (!_focuseNode.hasFocus) {
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
         if (widget.onBlur != null) {
           widget.onBlur!();
         }
@@ -96,7 +96,7 @@ class _TDStepperState extends State<TDStepper> {
   @override
   void dispose() {
     _controller.dispose();
-    _focuseNode.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -218,7 +218,7 @@ class _TDStepperState extends State<TDStepper> {
           affinity: TextAffinity.downstream,
           offset: value.toString().length,
         )));
-    _focuseNode.unfocus();
+    _focusNode.unfocus();
 
     if (widget.onChange != null) {
       widget.onChange!(value);
@@ -265,7 +265,7 @@ class _TDStepperState extends State<TDStepper> {
                     child: TextField(
                       controller: _controller,
                       enabled: !widget.disabled && !widget.disableInput,
-                      focusNode: _focuseNode,
+                      focusNode: _focusNode,
                       style: TextStyle(
                           fontSize: _getFontSize(),
                           color: widget.disabled

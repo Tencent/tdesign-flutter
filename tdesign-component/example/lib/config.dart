@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'base/example_base.dart';
 import 'page/sidebar/td_sidebar_page.dart';
@@ -11,17 +12,20 @@ import 'page/td_avatar_page.dart';
 import 'page/td_badge_page.dart';
 import 'page/td_bottom_tab_bar_page.dart';
 import 'page/td_button_page.dart';
+import 'page/td_cell_page.dart';
 import 'page/td_checkbox_page.dart';
 import 'page/td_count_down_page.dart';
 import 'page/td_date_picker_page.dart';
 import 'page/td_dialog_page.dart';
 import 'page/td_divider_page.dart';
+import 'page/td_drawer_page.dart';
 import 'page/td_dropdown_menu_page.dart';
 import 'page/td_empty_page.dart';
 import 'page/td_font_page.dart';
 import 'page/td_footer_page.dart';
 import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
+import 'page/td_preview_page.dart';
 import 'page/td_input_page.dart';
 import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
@@ -35,6 +39,7 @@ import 'page/td_search_bar_page.dart';
 import 'page/td_shadows_page.dart';
 import 'page/td_slider_page.dart';
 import 'page/td_stepper_page.dart';
+import 'page/td_swipe_cell_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
 import 'page/td_tabs_page.dart';
@@ -76,8 +81,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Drawer 抽屉',
         name: 'drawer',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDDrawerPage())),
     ExamplePageModel(
         text: 'Indexes 索引',
         name: 'indexes',
@@ -150,7 +154,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Badge 徽标', name: 'badge', pageBuilder: _wrapInheritedTheme((context) => const TDBadgePage())),
     ExamplePageModel(
-        text: 'Cell 单元格', name: 'cell', isTodo: true, pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        text: 'Cell 单元格', name: 'cell', pageBuilder: _wrapInheritedTheme((context) => const TDCellPage())),
     ExamplePageModel(
         text: 'CountDown 倒计时',
         name: 'count-down',
@@ -169,10 +173,9 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Image 图片', name: 'image', pageBuilder: _wrapInheritedTheme((context) => const TDImagePage())),
     ExamplePageModel(
-        text: 'ImageViewer 图片预览',
-        name: 'image_viewer',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        text: 'Preview 图片预览',
+        name: 'preview',
+        pageBuilder: _wrapInheritedTheme((context) => const TDPreviewPage())),
     ExamplePageModel(
         text: 'Progress 进度条',
         name: 'progress',
@@ -235,8 +238,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Swipecell 滑动操作',
         name: 'swipecell',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDSwipeCellPage())),
     ExamplePageModel(
         text: 'Toast 轻提示', name: 'toast', pageBuilder: _wrapInheritedTheme((context) => const TDToastPage())),
   ],

@@ -134,7 +134,7 @@ linter:
     - empty_statements
     # 不要出现可以在编译阶段推算出恒true或者false的条件判断
     - invariant_booleans
-    # 当containns方法的参数和可枚举的类型不同，不要触发可枚举类型的contains方法
+    # 当contains方法的参数和可枚举的类型不同，不要触发可枚举类型的contains方法
     - iterable_contains_unrelated_type
     # 用小写加下划线做库的命名
     - library_prefixes

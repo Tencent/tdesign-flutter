@@ -16,7 +16,7 @@ class TDToast {
       Duration duration = TDToast._defaultDisPlayDuration,
       int? maxLines,
       BoxConstraints? constraints}) {
-    _showOverlay(_TDTextToast(text: text, maxLines: maxLines, constraints: constraints), context: context);
+    _showOverlay(_TDTextToast(text: text, maxLines: maxLines, constraints: constraints), context: context, duration: duration);
   }
 
   /// 带图标的Toast
@@ -31,7 +31,8 @@ class TDToast {
           iconData: icon,
           iconTextDirection: direction,
         ),
-        context: context);
+        context: context,
+        duration: duration);
   }
 
   /// 成功提示Toast
@@ -45,7 +46,8 @@ class TDToast {
           iconData: TDIcons.check_circle,
           iconTextDirection: direction,
         ),
-        context: context);
+        context: context,
+        duration: duration);
   }
 
   /// 警告Toast
@@ -59,7 +61,8 @@ class TDToast {
           iconData: TDIcons.error_circle,
           iconTextDirection: direction,
         ),
-        context: context);
+        context: context,
+        duration: duration);
   }
 
   /// 失败提示Toast
@@ -73,24 +76,25 @@ class TDToast {
           iconData: TDIcons.close_circle,
           iconTextDirection: direction,
         ),
-        context: context);
+        context: context,
+        duration: duration);
   }
 
   /// 带文案的加载Toast
   static void showLoading(
-      {required BuildContext context, String? text, Duration duration = TDToast._defaultDisPlayDuration}) {
+      {required BuildContext context, String? text, Duration duration = TDToast._infiniteDuration}) {
     _showOverlay(
         _TDToastLoading(
           text: text,
         ),
         context: context,
-        duration: TDToast._infiniteDuration);
+        duration: duration);
   }
 
   /// 不带文案的加载Toast
   static void showLoadingWithoutText(
-      {required BuildContext context, String? text, Duration duration = TDToast._defaultDisPlayDuration}) {
-    _showOverlay(const _TDToastLoadingWithoutText(), context: context, duration: TDToast._infiniteDuration);
+      {required BuildContext context, String? text, Duration duration = TDToast._infiniteDuration}) {
+    _showOverlay(const _TDToastLoadingWithoutText(), context: context, duration: duration);
   }
 
   /// 关闭加载Toast

@@ -48,5 +48,20 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
   @override
   String get reset => AppLocalizations.of(context)!.reset;
+  
+  @override
+  String get days => AppLocalizations.of(context)!.days;
+  
+  @override
+  String get hours => AppLocalizations.of(context)!.hours;
+  
+  @override
+  String get milliseconds => AppLocalizations.of(context)!.milliseconds;
+  
+  @override
+  String get minutes => AppLocalizations.of(context)!.minutes;
+  
+  @override
+  String get seconds => AppLocalizations.of(context)!.seconds;
 
 }
