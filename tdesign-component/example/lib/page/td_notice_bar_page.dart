@@ -19,6 +19,7 @@ class TDNoticeBarPage extends StatelessWidget {
       title: tdTitle(context),
       exampleCodeGroup: 'noticeBar',
       desc: '在导航栏下方，用于给用户显示提示消息。',
+      backgroundColor: Colors.white,
       children: [
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '纯文字的公告栏', builder: _textNoticeBar),
