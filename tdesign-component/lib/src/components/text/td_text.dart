@@ -11,6 +11,9 @@ import '../../util/version_util.dart';
 /// 是否启用强制居中
 var kTextForceVerticalCenterEnable = true;
 
+/// 是否启用全局字体
+var kTextNeedGlobalFontFamily = true;
+
 /// 文本控件
 /// 设计原则：
 /// 1.为了使用更方便，所以对系统组件进行的扩展，需兼容系统控件所有功能，不能让用户使用TDesign时，因不能满足系统功能而弃用。
@@ -58,6 +61,8 @@ class TDText extends StatelessWidget {
     this.textWidthBasis,
     this.textHeightBehavior,
     this.forceVerticalCenter = false,
+    this.isInFontLoader = false,
+    this.fontFamilyUrl,
     Key? key,
   })  : textSpan = null,
         super(key: key);
@@ -87,6 +92,8 @@ class TDText extends StatelessWidget {
     this.textWidthBasis,
     this.textHeightBehavior,
     this.forceVerticalCenter = false,
+    this.isInFontLoader = false,
+    this.fontFamilyUrl,
   })  : data = null,
         super(key: key);
 
@@ -144,10 +151,24 @@ class TDText extends StatelessWidget {
 
   final InlineSpan? textSpan;
 
+  /// 是否强制居中
   final bool forceVerticalCenter;
+
+  /// 是否在FontLoader中使用
+  final bool isInFontLoader;
+
+  /// 是否禁用懒加载FontFamily的能力
+  final String? fontFamilyUrl;
 
   @override
   Widget build(BuildContext context) {
+    if (fontFamilyUrl?.isNotEmpty ?? false) {
+      // 如果设置了Url,则使用TGFontLoader
+      return TDFontLoaderWidget(
+        textWidget: this,
+        fontFamilyUrl: fontFamilyUrl!,
+      );
+    }
     if (forceVerticalCenter && kTextForceVerticalCenterEnable) {
       var config = getConfiguration(context);
       var paddingConfig = config?.paddingConfig;
@@ -166,7 +187,7 @@ class TDText extends StatelessWidget {
       );
     }
     var bgColor = style?.backgroundColor ?? backgroundColor;
-    if(bgColor == null){
+    if (bgColor == null) {
       return _getRawText(context: context);
     }
     return Container(
@@ -180,11 +201,16 @@ class TDText extends StatelessWidget {
     return context.dependOnInheritedWidgetOfExactType<TDTextConfiguration>();
   }
 
-  TextStyle? getTextStyle(BuildContext? context, {double? height, Color? backgroundColor}) {
+  TextStyle? getTextStyle(BuildContext context, {double? height, Color? backgroundColor}) {
     var textFont = font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
 
     var stylePackage = package ?? fontFamily?.package;
     var styleFontFamily = style?.fontFamily ?? fontFamily?.fontFamily;
+    if (kTextNeedGlobalFontFamily) {
+      var globalFontFamily = getConfiguration(context)?.globalFontFamily;
+      styleFontFamily ??= globalFontFamily?.fontFamily;
+      stylePackage ??= globalFontFamily?.package;
+    }
     var realFontWeight = style?.fontWeight ?? fontWeight;
     // Flutter 3.0之后，iOS w500之下字体不生效，需要替换字体
     if (PlatformUtil.isIOS &&
@@ -218,19 +244,20 @@ class TDText extends StatelessWidget {
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
+      // 如果需要字体懒加载,则清空fontFamily
       fontFamily: styleFontFamily,
       fontFamilyFallback: style?.fontFamilyFallback,
-      package: stylePackage,
+      package: isInFontLoader ? null : stylePackage,
     );
   }
 
   /// 获取系统原始Text，以便使用到只能接收系统Text组件的地方
   /// 转化为系统原始Text后，将失去padding和background属性
-  Text getRawText({BuildContext? context}) {
+  Text getRawText({required BuildContext context}) {
     return _getRawText(context: context, backgroundColor: backgroundColor);
   }
 
-  Text _getRawText({BuildContext? context, TextStyle? textStyle, Color? backgroundColor}) {
+  Text _getRawText({required BuildContext context, TextStyle? textStyle, Color? backgroundColor}) {
     return textSpan == null
         ? Text(
             data,
@@ -344,7 +371,11 @@ class TDTextConfiguration extends InheritedWidget {
   /// forceVerticalCenter=true时，内置padding配置
   final TDTextPaddingConfig? paddingConfig;
 
-  const TDTextConfiguration({this.paddingConfig, Key? key, required Widget child}) : super(key: key, child: child);
+  /// 全局字体,kTextNeedGlobalFontFamily=true时生效
+  final FontFamily? globalFontFamily;
+
+  const TDTextConfiguration({Key? key, required Widget child, this.paddingConfig, this.globalFontFamily})
+      : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(covariant TDTextConfiguration oldWidget) {
@@ -366,7 +397,7 @@ class TDTextPaddingConfig {
   /// 获取padding
   EdgeInsetsGeometry getPadding(String? data, double fontSize, double height) {
     var cache = _cacheMap[fontSize]?[height];
-    if(cache != null){
+    if (cache != null) {
       return cache;
     }
     var paddingFont = fontSize * paddingRate;
@@ -388,7 +419,7 @@ class TDTextPaddingConfig {
 
     // 记录缓存
     var heightMap = _cacheMap[fontSize];
-    if(heightMap == null){
+    if (heightMap == null) {
       heightMap = {};
       _cacheMap[fontSize] = heightMap;
     }
@@ -397,20 +428,22 @@ class TDTextPaddingConfig {
   }
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
-  double get paddingRate{
-    if(VersionUtil.isAfterThen('3.2.0')){
+  double get paddingRate {
+    if (VersionUtil.isAfterThen('3.2.0')) {
       // Dart 3.2.0之后,文字渲染高度有改变.
-      return  PlatformUtil.isWeb
+      return PlatformUtil.isWeb
           ? 29 / 128
           : PlatformUtil.isAndroid
-          ? -20 / 128
-          : -10 / 128;
+              ? -20 / 128
+              : -10 / 128;
     }
     return PlatformUtil.isWeb
         ? 3 / 8
         : PlatformUtil.isAndroid
-        ? -7 / 128
-        : 0;
+            ? -7 / 128
+            : PlatformUtil.isOhos
+                ? 43 / 128
+                : 0;
   }
 
   /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器

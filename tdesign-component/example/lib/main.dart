@@ -5,7 +5,7 @@ import 'package:tdesign_flutter/src/util/log.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'base/example_route.dart';
-import 'base/intl_resouce_delegate.dart';
+import 'base/intl_resource_delegate.dart';
 import 'config.dart';
 import 'home.dart';
 
@@ -86,7 +86,7 @@ class _MyAppState extends State<MyApp> {
   Map<String, WidgetBuilder> _getRoutes() {
     if (PlatformUtil.isWeb) {
       return {for (var model in examplePageList) model.name: (context) => model.pageBuilder.call(context, model)}
-        ..putIfAbsent('/', () => (context) => const MyHomePage(title: 'TDesgin Flutter 组件库'));
+        ..putIfAbsent('/', () => (context) => const MyHomePage(title: 'TDesign Flutter 组件库'));
     } else {
       return const {};
     }
