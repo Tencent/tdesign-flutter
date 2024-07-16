@@ -23,6 +23,10 @@ class PlatformUtil {
     return !kIsWeb && Platform.isMacOS;
   }
 
+  static bool get isOhos {
+    return !kIsWeb && Platform.operatingSystem == 'ohos';
+  }
+
   static bool get isWindows {
     return !kIsWeb && Platform.isWindows;
   }
