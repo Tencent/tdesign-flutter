@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
+import '../../../tdesign_flutter.dart';
 import '../../theme/td_colors.dart';
 import '../../theme/td_theme.dart';
 import '../icon/td_icons.dart';
@@ -107,6 +109,18 @@ class _TDImageViewerWidgetState extends State<TDPreviewWidget> {
             imgUrl: image,
             fit: boxFit,
             type: TDImageType.fitWidth,
+            loadingWidget: Container(
+              width: size.width,
+              height: size.height,
+              color: TDTheme.of(context).fontGyColor1,
+              child: Center(
+                child: TDLoading(
+                  icon: TDLoadingIcon.circle,
+                  size: TDLoadingSize.large,
+                  iconColor: TDTheme.of(context).brandNormalColor,
+                ),
+              ),
+            ),
           ),
         );
       }
@@ -124,7 +138,9 @@ class _TDImageViewerWidgetState extends State<TDPreviewWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var safeAreaHeight = MediaQuery.of(context).padding.top ?? 0;
+    var media =  MediaQuery.of(context);
+    var safeAreaHeight = media.padding.top ?? 0;
+    var width = media.size.width ?? 0;
     return Stack(
       children: [
         Positioned(
