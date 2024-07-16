@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tdesign_flutter/src/components/input/td_input_spacer.dart';
 
 import '../../../tdesign_flutter.dart';
 
@@ -62,14 +61,15 @@ class TDInput extends StatelessWidget {
       this.inputAction,
       TDInputSpacer? spacer,
       this.cardStyleBottomText})
-      : assert(() {
-          if (type == TDInputType.cardStyle) {
-            // card style must be shorter than the screen width, so please set a
-            // width to show.
-            assert(width != null);
-          }
-          return true;
-        }()),
+      :
+        // assert(() {
+        //   if (type == TDInputType.cardStyle) {
+        //     // card style must be shorter than the screen width, so please set a
+        //     // width to show.
+        //     assert(width != null);
+        //   }
+        //   return true;
+        // }()),
         // 生成默认间距
         // leftIcon与label 4
         // label与inputView 17.5
@@ -83,7 +83,8 @@ class TDInput extends StatelessWidget {
         leftInfoWidth = leftInfoWidth ??
             ((leftLabel == null && leftIcon == null && !(required ?? false))
                 ? 0
-                : ((leftLabel?.length == null ? 0 : leftLabel!.length) * (leftLabelStyle != null ? (leftLabelStyle.fontSize ?? 16) : 16) +
+                : ((leftLabel?.length == null ? 0 : leftLabel!.length) *
+                            (leftLabelStyle != null ? (leftLabelStyle.fontSize ?? 16) : 16) +
                         1 +
                         (leftIcon != null ? 1 : 0) * ((leftIcon is Icon) ? (leftIcon.size ?? 24) : 24)) +
                     (required == true ? 1 : 0) * 14),
@@ -280,53 +281,49 @@ class TDInput extends StatelessWidget {
               Visibility(
                 visible: hasLeftWidget,
                 child: SizedBox(
-                  width:leftLabelSpace ?? 16,
+                  width: leftLabelSpace ?? 16,
                 ),
               ),
-              SizedBox(
-                child: Row(
-                  children: [
-                    Visibility(
-                      visible: leftIcon != null,
-                      child: leftIcon ?? const SizedBox.shrink(),
-                    ),
-                    Visibility(
-                      visible: leftLabel != null,
-                      child: Container(
-                        constraints: BoxConstraints(maxWidth: _leftLabelWidth),
-                        padding: EdgeInsets.only(
-                            left: leftIcon != null ? spacer.iconLabelSpace! : 0, top: getInputPadding(), bottom: getInputPadding()),
-                        child: Column(
-                          children: [
-                            TDText(
-                              leftLabel,
-                              maxLines: 2,
-                              style: leftLabelStyle,
-                              font: TDTheme.of(context).fontBodyLarge,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ],
-                        ),
+              Row(
+                children: [
+                  Visibility(
+                    visible: leftIcon != null,
+                    child: leftIcon ?? const SizedBox.shrink(),
+                  ),
+                  Visibility(
+                    visible: leftLabel != null,
+                    child: Container(
+                      constraints: BoxConstraints(maxWidth: _leftLabelWidth),
+                      padding: EdgeInsets.only(
+                          left: leftIcon != null ? spacer.iconLabelSpace! : 0,
+                          top: getInputPadding(),
+                          bottom: getInputPadding()),
+                      child: TDText(
+                        leftLabel,
+                        maxLines: 2,
+                        style: leftLabelStyle,
+                        font: TDTheme.of(context).fontBodyLarge,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Visibility(
-                      visible: labelWidget != null,
-                      child: labelWidget ?? const SizedBox.shrink(),
-                    ),
-                    Visibility(
-                        visible: required ?? false,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 4.0),
-                          child: TDText(
-                            '*',
-                            maxLines: 1,
-                            style: TextStyle(color: TDTheme.of(context).errorColor6),
-                            font: TDTheme.of(context).fontBodyLarge,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        )),
-                  ],
-                ),
+                  ),
+                  Visibility(
+                    visible: labelWidget != null,
+                    child: labelWidget ?? const SizedBox.shrink(),
+                  ),
+                  Visibility(
+                      visible: required ?? false,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 4.0),
+                        child: TDText(
+                          '*',
+                          maxLines: 1,
+                          style: TextStyle(color: TDTheme.of(context).errorColor6),
+                          font: TDTheme.of(context).fontBodyLarge,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      )),
+                ],
               ),
               Expanded(
                 flex: 1,
@@ -387,7 +384,10 @@ class TDInput extends StatelessWidget {
                 visible: controller != null && controller!.text.isNotEmpty && needClear && rightWidget == null,
                 child: GestureDetector(
                     child: Container(
-                      margin: EdgeInsets.only(left: spacer.inputRightSpace! / 2, right: spacer.rightSpace!, top: additionInfo != '' ? getInputPadding() : 0),
+                      margin: EdgeInsets.only(
+                          left: spacer.inputRightSpace! / 2,
+                          right: spacer.rightSpace!,
+                          top: additionInfo != '' ? getInputPadding() : 0),
                       child: Icon(
                         size: clearIconSize,
                         TDIcons.close_circle_filled,
@@ -403,7 +403,10 @@ class TDInput extends StatelessWidget {
                   child: GestureDetector(
                     onTap: onBtnTap,
                     child: Container(
-                      margin: EdgeInsets.only(left: spacer.inputRightSpace! / 2, right: spacer.rightSpace!, top: additionInfo != '' ? getInputPadding() : 0),
+                      margin: EdgeInsets.only(
+                          left: spacer.inputRightSpace! / 2,
+                          right: spacer.rightSpace!,
+                          top: additionInfo != '' ? getInputPadding() : 0),
                       child: rightBtn,
                     ),
                   ),
@@ -474,8 +477,7 @@ class TDInput extends StatelessWidget {
                         visible: leftLabel != null,
                         child: Container(
                           constraints: BoxConstraints(maxWidth: _leftLabelWidth + (leftLabelSpace ?? 12)),
-                          padding: EdgeInsets.only(
-                              left: leftLabelSpace ?? 12.0,top: 10.0),
+                          padding: EdgeInsets.only(left: leftLabelSpace ?? 12.0, top: 10.0),
                           child: Column(
                             children: [
                               TDText(
@@ -540,7 +542,8 @@ class TDInput extends StatelessWidget {
                         cursorColor: cursorColor,
                         textInputBackgroundColor: textInputBackgroundColor,
                         controller: controller,
-                        contentPadding: contentPadding ?? EdgeInsets.only(left: spacer.labelInputSpace!, right: spacer.inputRightSpace! / 2),
+                        contentPadding: contentPadding ??
+                            EdgeInsets.only(left: spacer.labelInputSpace!, right: spacer.inputRightSpace! / 2),
                         inputAction: inputAction,
                       ),
                     ),
@@ -667,7 +670,8 @@ class TDInput extends StatelessWidget {
               Visibility(
                 visible: leftLabel != null,
                 child: Padding(
-                  padding: EdgeInsets.only(left:leftLabelSpace ?? 16, top: getInputPadding(), bottom: getInputPadding()),
+                  padding:
+                      EdgeInsets.only(left: leftLabelSpace ?? 16, top: getInputPadding(), bottom: getInputPadding()),
                   child: leftInfoWidth != null
                       ? SizedBox(
                           width: _leftLabelWidth,
@@ -714,8 +718,9 @@ class TDInput extends StatelessWidget {
                     textInputBackgroundColor: textInputBackgroundColor,
                     controller: controller,
                     textAlign: textAlign,
-                    contentPadding:
-                        contentPadding ?? EdgeInsets.only(right: spacer.inputRightSpace!, bottom: getInputPadding(), top: getInputPadding()),
+                    contentPadding: contentPadding ??
+                        EdgeInsets.only(
+                            right: spacer.inputRightSpace!, bottom: getInputPadding(), top: getInputPadding()),
                     inputAction: inputAction,
                   ),
                 ),
@@ -773,8 +778,8 @@ class TDInput extends StatelessWidget {
               Text(
                 cardStyleTopText ?? '',
                 style: TextStyle(
-                    fontSize: TDTheme.of(context).fontBodySmall!.size,
-                    height: TDTheme.of(context).fontBodySmall!.height),
+                    fontSize: TDTheme.of(context).fontBodyMedium!.size,
+                    height: TDTheme.of(context).fontBodyMedium!.height),
               ),
               const SizedBox(
                 height: 8,
