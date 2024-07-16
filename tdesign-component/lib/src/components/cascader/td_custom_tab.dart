@@ -21,11 +21,18 @@ class _TDCustomTabState extends State<TDCustomTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _currentTabIndex=widget.initialIndex??0;
+  }
 
+  @override
+  void didUpdateWidget(TDCustomTab oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if(widget.initialIndex!=oldWidget.initialIndex){
+      _currentTabIndex=widget.initialIndex!;
+    }
   }
   @override
   Widget build(BuildContext context) {
-    _currentTabIndex=widget.initialIndex??0;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       controller: _scrollController,
@@ -34,11 +41,6 @@ class _TDCustomTabState extends State<TDCustomTab> {
           children: List.generate(widget.tabs.length, (index) {
             return GestureDetector(
                 onTap:(){
-                  setState(() {
-                    _currentTabIndex = index;
-                  });
-                  // final ScrollPosition position = _scrollController!.position;
-                  // _scrollToListIndex(index);
                   _onChangeTab(index);
                 },
                 child: Container(
@@ -76,18 +78,7 @@ class _TDCustomTabState extends State<TDCustomTab> {
 
   void _onChangeTab(int index) {
     if (widget.onTap != null) {
-      widget.onTap!(index);
+       widget.onTap!(index);
     }
-  }
-  /// 定位选项在列表中位置
-  void _scrollToListIndex(int index) {
-    // 计算列表中特定索引的位置
-    double scrollTo = index * 96.0;
-
-    _scrollController.animateTo(
-      scrollTo,
-      duration: Duration(milliseconds: 100),
-      curve: Curves.ease,
-    );
   }
 }
