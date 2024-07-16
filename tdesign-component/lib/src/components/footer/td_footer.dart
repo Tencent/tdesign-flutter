@@ -2,12 +2,23 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
+enum TDFooterType {
+  /// 文字样式
+  text,
+
+  /// 链接样式
+  link,
+
+  /// 品牌样式
+  brand,
+
+}
 
 class TDFooter extends StatefulWidget {
-  const TDFooter({
-    Key? key,
+  const TDFooter( this.type,
+    {Key? key,
     this.logo,
-    this.text = 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
+    this.text = '',
     this.links = const [],
     this.width,
     this.height,
@@ -15,6 +26,9 @@ class TDFooter extends StatefulWidget {
 
   /// 品牌图片
   final String? logo;
+
+  /// 样式
+  final TDFooterType type;
 
   /// 文字
   final String text;
@@ -35,44 +49,66 @@ class TDFooter extends StatefulWidget {
 class _TDFooterState extends State<TDFooter> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (widget.logo != null)
-            _renderLogo()
-          else if (widget.links.isNotEmpty)
-            _renderLinks()
-          else
-            _renderText(),
-        ],
-      ),
-    );
+    switch (widget.type) {
+      case TDFooterType.text:
+        return Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _renderText(),
+            ],
+          ),
+        );
+    case TDFooterType.link:
+      return Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (widget.links.isNotEmpty)
+              _renderLinks()
+            else
+              _renderText(),
+          ],
+        ),
+      );
+    case TDFooterType.brand:
+      return Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (widget.logo != null)
+              _renderLogo()
+            else
+              _renderText(),
+          ],
+        ),
+      );
+    }
   }
 
   Widget _renderLogo() {
-    return Container(
-        color: TDTheme.of(context).whiteColor1,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 4, bottom: 4),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TDImage(
-                      assetUrl: widget.logo,
-                      type: TDImageType.clip,
-                      width: widget.width,
-                      height: widget.height,
-                    ),
-                  ]
-              ),
-            )
-          ]
-        ));
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 4, bottom: 4),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TDImage(
+                  assetUrl: widget.logo,
+                  type: TDImageType.clip,
+                  width: widget.width,
+                  height: widget.height,
+                ),
+              ]
+          ),
+        )
+      ]
+    );
   }
 
   Widget _renderLinks() {
