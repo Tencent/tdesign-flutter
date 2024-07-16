@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'td_dropdown_menu.dart';
 import 'td_dropdown_popup.dart';
 
-typedef FutureParamCallback = void Function(VoidCallback);
+typedef FutureParamCallback = void Function(Future<void> Function());
 
 class TDDropdownPanel extends StatefulWidget {
   const TDDropdownPanel({
@@ -16,8 +16,10 @@ class TDDropdownPanel extends StatefulWidget {
     required this.reverseHeight,
     required this.duration,
     required this.directionListenable,
+    required this.colorAlphaListenable,
     required this.direction,
     required this.closeCallback,
+    required this.onOpened,
     required this.child,
   }) : super(key: key);
 
@@ -26,15 +28,17 @@ class TDDropdownPanel extends StatefulWidget {
   final double reverseHeight;
   final Duration duration;
   final ValueNotifier<TDDropdownPopupDirection> directionListenable;
+  final ValueNotifier<bool> colorAlphaListenable;
   final TDDropdownPopupDirection direction;
   final FutureParamCallback closeCallback;
+  final VoidCallback onOpened;
   final Widget child;
 
   @override
-  TDDropdownPanelState createState() => TDDropdownPanelState();
+  _TDDropdownPanelState createState() => _TDDropdownPanelState();
 }
 
-class TDDropdownPanelState extends State<TDDropdownPanel> with SingleTickerProviderStateMixin {
+class _TDDropdownPanelState extends State<TDDropdownPanel> with SingleTickerProviderStateMixin {
   double? contentTop, contentBottom;
   late AnimationController _controller;
 
@@ -107,7 +111,10 @@ class TDDropdownPanelState extends State<TDDropdownPanel> with SingleTickerProvi
       setState(() {});
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_controller.status == AnimationStatus.dismissed) {
-          _controller.forward();
+          widget.colorAlphaListenable.value = true;
+          _controller.forward().whenCompleteOrCancel(() {
+            widget.onOpened();
+          });
         }
       });
     });
@@ -120,7 +127,8 @@ class TDDropdownPanelState extends State<TDDropdownPanel> with SingleTickerProvi
     ).animate(_controller);
   }
 
-  void close() {
-    _controller.reverse();
+  Future<void> close() {
+    widget.colorAlphaListenable.value = false;
+    return _controller.reverse();
   }
 }
