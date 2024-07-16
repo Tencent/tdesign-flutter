@@ -18,11 +18,18 @@ jobs:
       startsWith(github.head_ref, 'release/')
     steps:
       - run: echo "The head of this PR starts with 'release/'"
-      - uses: actions/checkout@v3
-      - uses: 94dreamer/auto-release@develop
+      - uses: actions/checkout@v4
+      - uses: TDesignOteam/tdesign-tag-action@main
+        id: tag-action
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version_file: ./tdesign-component/pubspec.yaml
+      - uses: TDesignOteam/tdesign-changelog-action@main
         id: changelog
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag: ${{ steps.tag-action.outputs.version }}  
       - name: Add comment
         uses: peter-evans/create-or-update-comment@v1
         with:
@@ -72,18 +79,20 @@ jobs:
       github.event.pull_request.merged == true &&
       startsWith(github.head_ref, 'release/')
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: develop
           token: ${{ secrets.PERSONAL_TOKEN }}
+      - uses: TDesignOteam/tdesign-tag-action@main
+        id: tag-action
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  
+          version_file: ./tdesign-component/pubspec.yaml  
       - name: tag and push if needed
         run: |
-          data=$(cat tdesign-component/pubspec.yaml)
-          re="\"version\": \"([^\"]*)\""
-          [[ $data =~ $re ]]
-          echo "${BASH_REMATCH[1]}"
+          echo "${{ steps.tag-action.outputs.version }}"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git tag ${BASH_REMATCH[1]}
-          git push origin ${BASH_REMATCH[1]}
-          echo "pushed tag ${BASH_REMATCH[1]}"
+          git tag ${{ steps.tag-action.outputs.version }}
+          git push origin ${{ steps.tag-action.outputs.version }}
+          echo "pushed tag ${{ steps.tag-action.outputs.version }}"

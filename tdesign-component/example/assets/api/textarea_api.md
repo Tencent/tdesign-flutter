@@ -32,6 +32,8 @@
 | textInputBackgroundColor | Color? | - | 文本框背景色 |
 | size | TDInputSize? | TDInputSize.large | 输入框规格 |
 | maxLength | int? | - | 最大字数限制 |
+| maxLengthEnforcement | MaxLengthEnforcement? | - | 如何执行输入长度限制 |
+| allowInputOverMax | bool? | false | 超出[maxLength]之后是否还允许输入 |
 | additionInfo | String? | '' | 错误提示信息 |
 | additionInfoColor | Color? | - | 错误提示颜色 |
 | textAlign | TextAlign? | - | 文字对齐方向 |
