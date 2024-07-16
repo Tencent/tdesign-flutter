@@ -9,15 +9,15 @@ typedef PopupClick = Function();
 class TDPopupBottomDisplayPanel extends StatelessWidget {
   const TDPopupBottomDisplayPanel(
       {required this.child,
-        this.title,
-        this.titleColor,
-        this.titleLeft = false,
-        this.hideClose = false,
-        this.closeColor,
-        this.closeClick,
-        this.backgroundColor,
-        this.radius,
-        Key? key})
+      this.title,
+      this.titleColor,
+      this.titleLeft = false,
+      this.hideClose = false,
+      this.closeColor,
+      this.closeClick,
+      this.backgroundColor,
+      this.radius,
+      Key? key})
       : super(key: key);
 
   /// 子控件
@@ -52,8 +52,8 @@ class TDPopupBottomDisplayPanel extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: backgroundColor ?? TDTheme.of(context).whiteColor1,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(radius ?? 12), topRight: Radius.circular(radius ?? 12))),
+          borderRadius:
+              BorderRadius.only(topLeft: Radius.circular(radius ?? 12), topRight: Radius.circular(radius ?? 12))),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [_buildTop(context), child],
@@ -74,22 +74,25 @@ class TDPopupBottomDisplayPanel extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       ),
     );
-    if(!hideClose){
-      result = Stack(
-        alignment: Alignment.centerLeft,
-        children: [
-          result,
-          Positioned(
-              right: 0,
-              child: GestureDetector(
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Icon(TDIcons.close, color: closeColor, size: 24,),
+    if (!hideClose) {
+      result =Row(
+          children: [
+            SizedBox(width: 40,),
+            Expanded(child: result),
+            GestureDetector(
+              child: Container(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 16),
+                width: 40,
+                child: Icon(
+                  TDIcons.close,
+                  color: closeColor,
+                  size: 24,
                 ),
-                onTap: closeClick,
-              ))
-        ],
+              ),
+              onTap: closeClick,
+            )
+          ],
       );
     }
     return SizedBox(
@@ -111,8 +114,8 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
       this.rightText,
       this.rightTextColor,
       this.rightClick,
-        this.backgroundColor,
-        this.radius,
+      this.backgroundColor,
+      this.radius,
       Key? key})
       : super(key: key);
 
@@ -153,9 +156,9 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: backgroundColor ?? TDTheme.of(context).whiteColor1,
-          borderRadius:  BorderRadius.only(
-              topLeft: Radius.circular(radius ?? 12), topRight: Radius.circular(radius ?? 12))),
+          color: backgroundColor ?? TDTheme.of(context).whiteColor1,
+          borderRadius:
+              BorderRadius.only(topLeft: Radius.circular(radius ?? 12), topRight: Radius.circular(radius ?? 12))),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [_buildTop(context), child],
@@ -166,8 +169,7 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
   Widget _buildTop(BuildContext context) {
     return SizedBox(
       height: 58,
-      child:
-      Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
@@ -177,11 +179,13 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
                 leftText ?? context.resource.cancel,
                 textColor: leftTextColor ?? TDTheme.of(context).fontGyColor2,
                 font: TDTheme.of(context).fontTitleMedium,
+                fontWeight: FontWeight.w400,
               ),
             ),
             onTap: leftClick,
           ),
-          Expanded(child: Container(
+          Expanded(
+              child: Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: TDText(
@@ -198,10 +202,9 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
               padding: const EdgeInsets.only(right: 16),
               child: TDText(
                 rightText ?? context.resource.confirm,
-                textColor:
-                rightTextColor ?? TDTheme.of(context).brandNormalColor,
+                textColor: rightTextColor ?? TDTheme.of(context).brandNormalColor,
                 font: TDTheme.of(context).fontTitleMedium,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
               ),
             ),
             onTap: rightClick,
@@ -212,19 +215,17 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
   }
 }
 
-
 /// 居中浮层面板
 class TDPopupCenterPanel extends StatelessWidget {
   const TDPopupCenterPanel(
       {required this.child,
-        this.closeUnderBottom = false,
-        this.closeColor,
-        this.closeClick,
-        this.backgroundColor,
-        this.radius,
-        Key? key})
+      this.closeUnderBottom = false,
+      this.closeColor,
+      this.closeClick,
+      this.backgroundColor,
+      this.radius,
+      Key? key})
       : super(key: key);
-
 
   /// 子控件
   final Widget child;
@@ -246,7 +247,7 @@ class TDPopupCenterPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(closeUnderBottom){
+    if (closeUnderBottom) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -255,18 +256,23 @@ class TDPopupCenterPanel extends StatelessWidget {
           ),
           Container(
             margin: const EdgeInsets.only(top: 24, bottom: 24),
-              decoration: BoxDecoration(
-                  color: backgroundColor ?? TDTheme.of(context).whiteColor1,
-                  borderRadius: BorderRadius.all(Radius.circular(radius ?? 12))),
+            decoration: BoxDecoration(
+                color: backgroundColor ?? TDTheme.of(context).whiteColor1,
+                borderRadius: BorderRadius.all(Radius.circular(radius ?? 12))),
             child: child,
           ),
           GestureDetector(
             child: Container(
               width: 32,
               height: 32,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
-                  border: Border.all(color: TDTheme.of(context).fontWhColor1, width: 1)),
-              child: Icon(TDIcons.close, color: closeColor ?? TDTheme.of(context).fontWhColor1, size: 20,),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
+                  border: Border.all(color: TDTheme.of(context).fontWhColor1, width: 2)),
+              child: Icon(
+                TDIcons.close,
+                color: closeColor ?? TDTheme.of(context).fontWhColor1,
+                size: 20,
+              ),
             ),
             onTap: closeClick,
           )
@@ -280,17 +286,22 @@ class TDPopupCenterPanel extends StatelessWidget {
         child: Stack(
           children: [
             child,
-            closeUnderBottom ? Container() :Positioned(
-                top: 8,
-                right: 8,
-                child: GestureDetector(
-                  child: Icon(TDIcons.close, color: closeColor, size: 24,),
-                  onTap: closeClick,
-                ))
+            closeUnderBottom
+                ? Container()
+                : Positioned(
+                    top: 11,
+                    right: 11,
+                    child: GestureDetector(
+                      child: Icon(
+                        TDIcons.close,
+                        color: closeColor,
+                        size: 24,
+                      ),
+                      onTap: closeClick,
+                    ))
           ],
         ),
       );
     }
-
   }
 }

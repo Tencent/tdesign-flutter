@@ -75,9 +75,11 @@ class _TDBackTopState extends State<TDBackTop> {
           vertical: widget.showText ? 6 : 13, horizontal: 13),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(999),
+          border:Border.all(color: widget.theme== TDBackTopTheme.dark?Color.fromRGBO(94, 94, 94, 1):Color.fromRGBO(220, 220, 220, 1),width: 0.5),
           color: widget.theme == TDBackTopTheme.light
               ? Colors.white
               : TDTheme.of(context).grayColor14),
+
       child: Center(
           child: Column(
         children: [
@@ -115,7 +117,10 @@ class _TDBackTopState extends State<TDBackTop> {
                   : TDTheme.of(context).grayColor14,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(999),
-                  bottomLeft: Radius.circular(999))),
+                  bottomLeft: Radius.circular(999)
+              ),
+              border:Border.all(color: widget.theme== TDBackTopTheme.dark?Color.fromRGBO(94, 94, 94, 1):Color.fromRGBO(220, 220, 220, 1),width: 0.5)
+          ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,

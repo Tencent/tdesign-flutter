@@ -44,7 +44,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
   final String? barrierLabel;
 
   @override
-  Color get barrierColor => modalBarrierColor ?? Colors.black54;
+  Color get barrierColor => modalBarrierColor ?? Color.fromRGBO(0, 0, 0, 0.6);
 
   // 实现转场动画
   @override
