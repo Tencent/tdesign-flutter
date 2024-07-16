@@ -248,7 +248,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     var maxWidth = MediaQuery.of(context).size.width;
     return Container(
         decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.1),width: 0.5))),
-        padding: EdgeInsets.only(bottom: 16),
+        padding: EdgeInsets.only(bottom: 11),
         width: maxWidth,
         child: ListView(
             shrinkWrap: true,
