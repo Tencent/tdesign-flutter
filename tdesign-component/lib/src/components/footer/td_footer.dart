@@ -123,7 +123,7 @@ class _TDFooterState extends State<TDFooter> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: TDLink(
-                    type: TDLinkType.basic,
+                    type: TDLinkType.withUnderline,
                     style: TDLinkStyle.primary,
                     label: link.name,
                     uri: link.uri)
