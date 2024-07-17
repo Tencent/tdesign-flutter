@@ -29,18 +29,23 @@ typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(BuildContext conte
 class TDDropdownMenu extends StatefulWidget {
   const TDDropdownMenu({
     Key? key,
-    required this.builder,
+    this.builder,
+    this.items,
     this.closeOnClickOverlay = true,
     this.direction = TDDropdownMenuDirection.auto,
     this.duration = 200.0,
     this.showOverlay = true,
+    this.isScrollable=false,
     this.arrowIcon,
     this.onMenuOpened,
     this.onMenuClosed,
   }) : super(key: key);
 
-  /// 下拉菜单构建器
-  final TDDropdownItemBuilder builder;
+  /// 下拉菜单构建器，优先级高于[items]
+  final TDDropdownItemBuilder? builder;
+
+  /// 下拉菜单
+  final List<TDDropdownItem>? items;
 
   /// 是否在点击遮罩层后关闭菜单
   final bool? closeOnClickOverlay;
@@ -65,29 +70,23 @@ class TDDropdownMenu extends StatefulWidget {
 
   static _TDDropdownMenuState? _currentOpenedInstance;
 
+  /// 是否开启滚动列表
+  final bool isScrollable;
   @override
   _TDDropdownMenuState createState() => _TDDropdownMenuState();
 }
 
 class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStateMixin {
-  late final List<TDDropdownItem> _items;
-  late final List<AnimationController> _iconControllers;
-  late final List<Animation<double>> _iconAnimations;
+  List<TDDropdownItem>? _items;
+  List<AnimationController>? _iconControllers;
+  late List<Animation<double>> _iconAnimations;
   late List<bool> _isOpened;
   TDDropdownPopup? _dropdownPopup;
 
   @override
   void initState() {
     super.initState();
-    _items = widget.builder(context);
-    _iconControllers = List.generate(
-        _items.length,
-        (index) => AnimationController(
-              duration: Duration(milliseconds: (widget.duration ?? 200).toInt()),
-              vsync: this,
-            ));
-    _iconAnimations = _iconControllers.map((e) => Tween<double>(begin: 0, end: 0.5).animate(e)).toList();
-    _isOpened = List.filled(_items.length, false);
+    _init();
   }
 
   @override
@@ -95,14 +94,70 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
     _dropdownPopup?.overlayEntry?.remove();
     _dropdownPopup?.overlayEntry = null;
     TDDropdownMenu._currentOpenedInstance = null;
-    _iconControllers.forEach((controller) {
+    _iconControllers?.forEach((controller) {
       controller.dispose();
     });
     super.dispose();
   }
 
+    @override
+  void didUpdateWidget(TDDropdownMenu oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.builder != oldWidget.builder || widget.items != oldWidget.items) {
+      _init();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget tabBar=Row(
+      children: List.generate(
+        _items?.length ?? 0,
+            (index) {
+          return Expanded(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                if (_disabled(index)) {
+                  return;
+                }
+                _isOpened[index] ? _closeMenu() : _openMenu(index);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [_getText(index), _getIcon(index)],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+    if(widget.isScrollable){
+      tabBar=SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        child:Row(
+          children: List.generate(
+            _items?.length ?? 0,
+                (index) {
+              return  GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    if (_disabled(index)) {
+                      return;
+                    }
+                    _isOpened[index] ? _closeMenu() : _openMenu(index);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [_getText(index), _getIcon(index)],
+                  ),
+              );
+            },
+          ),
+        ),
+      );
+    }
     return WillPopScope(
       onWillPop: () async {
         var isClose = await _closeMenu();
@@ -119,30 +174,29 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
             ),
           ),
         ),
-        child: Row(
-          children: List.generate(
-            _items.length,
-            (index) {
-              return Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    if (_disabled(index)) {
-                      return;
-                    }
-                    _isOpened[index] ? _closeMenu() : _openMenu(index);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [_getText(index), _getIcon(index)],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
+        child: tabBar,
       ),
     );
+  }
+
+  void _init() {
+    var items = widget.builder?.call(context) ?? widget.items ?? [];
+    if (items.length == _items?.length) {
+      _items = items;
+      return;
+    }
+    _isOpened = List.filled(items.length, false);
+    _items = items;
+    _iconControllers?.forEach((controller) {
+      controller.dispose();
+    });
+    _iconControllers = List.generate(
+        _items?.length ?? 0,
+        (index) => AnimationController(
+              duration: Duration(milliseconds: (widget.duration ?? 200).toInt()),
+              vsync: this,
+            ));
+    _iconAnimations = _iconControllers?.map((e) => Tween<double>(begin: 0, end: 0.5).animate(e)).toList() ?? [];
   }
 
   Widget _getText(int index) {
@@ -151,7 +205,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
         : _isOpened[index]
             ? TDTheme.of(context).brandColor7
             : TDTheme.of(context).fontGyColor1;
-    return TDText(_items[index].getLabel(), font: TDTheme.of(context).fontBodyMedium, textColor: textColor);
+    return TDText(_items![index].getLabel(), font: TDTheme.of(context).fontBodyMedium, textColor: textColor);
   }
 
   Widget _getIcon(int index) {
@@ -172,7 +226,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
   }
 
   bool _disabled(int index) {
-    return _items[index].disabled == true;
+    return _items![index].disabled == true;
   }
 
   /// 打开菜单
@@ -180,7 +234,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
     await TDDropdownMenu._currentOpenedInstance?._closeMenu();
     TDDropdownMenu._currentOpenedInstance = this;
     _dropdownPopup ??= TDDropdownPopup(
-      child: _items[index],
+      child: _items![index],
       parentContext: context,
       handleClose: _closeMenu,
       direction: widget.direction,
@@ -188,17 +242,16 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
       closeOnClickOverlay: widget.closeOnClickOverlay,
       duration: Duration(milliseconds: (widget.duration ?? 200).toInt()),
     );
-    unawaited(_dropdownPopup!.add(_items[index]).then((value) {
+    unawaited(_dropdownPopup!.add(_items![index]).then((value) {
       if (widget.onMenuOpened != null) {
         widget.onMenuOpened!(index);
       }
     }));
 
-    setState(() {
-      _isOpened = List.filled(_items.length, false);
-      _isOpened[index] = true;
-    });
-    _iconControllers.asMap().forEach((key, value) {
+    _isOpened = List.filled(_items?.length ?? 0, false);
+    _isOpened[index] = true;
+    setState(() {});
+    _iconControllers?.asMap().forEach((key, value) {
       if (value.status == AnimationStatus.completed) {
         value.reverse();
       } else if (key == index) {
@@ -213,9 +266,9 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
     if (index < 0) {
       return false;
     }
-    _isOpened = List.filled(_items.length, false);
+    _isOpened = List.filled(_items?.length ?? 0, false);
     setState(() {});
-    _iconControllers.forEach((value) {
+    _iconControllers?.forEach((value) {
       if (value.status == AnimationStatus.completed) {
         value.reverse();
       }
