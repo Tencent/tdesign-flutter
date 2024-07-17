@@ -80,7 +80,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
   '导航': [
     ExamplePageModel(
         text: 'BackTop 返回顶部',
-        name: 'back_top',
+        name: 'back-top',
         pageBuilder: _wrapInheritedTheme((context) => const TDBackTopPage())),
     ExamplePageModel(
         text: 'Drawer 抽屉',
