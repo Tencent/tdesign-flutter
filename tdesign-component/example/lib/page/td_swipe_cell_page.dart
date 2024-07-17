@@ -11,7 +11,7 @@ class TDSwipeCellPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tdTitle(context),
-      exampleCodeGroup: 'swiperCell',
+      exampleCodeGroup: 'swipecell',
       desc: '用于承载列表中的更多操作，通过左右滑动来展示，按钮的宽度固定高度根据列表高度而变化。',
       children: [
         ExampleModule(
@@ -19,52 +19,31 @@ class TDSwipeCellPage extends StatelessWidget {
           children: [
             ExampleItem(
               desc: '左滑单操作',
-              ignoreCode: true,
-              builder: (_) {
-                return _buildSwiperCell(context);
-              },
+              builder: _buildSwiperCell,
             ),
             ExampleItem(
               desc: '左滑双操作',
-              ignoreCode: true,
-              builder: (_) {
-                return _buildSwiperMuliCell(context);
-              },
+              builder: _buildSwiperMuliCell,
             ),
             ExampleItem(
               desc: '左滑三操作',
-              ignoreCode: true,
-              builder: (_) {
-                return _buildSwiper3Cell(context);
-              },
+              builder: _buildSwiper3Cell,
             ),
             ExampleItem(
               desc: '右滑单操作',
-              ignoreCode: true,
-              builder: (_) {
-                return _buildSwiperRightCell(context);
-              },
+              builder: _buildSwiperRightCell,
             ),
             ExampleItem(
               desc: '左右滑操作',
-              ignoreCode: true,
-              builder: (_) {
-                return _buildSwiperRightLeftCell(context);
-              },
+              builder: _buildSwiperRightLeftCell,
             ),
             ExampleItem(
               desc: '带图标的滑动操作',
-              ignoreCode: true,
-              builder: (_) {
-                return _buildSwiperIconCell(context);
-              },
+              builder: _buildSwiperIconCell,
             ),
             ExampleItem(
               desc: '带二次确认的操作',
-              ignoreCode: true,
-              builder: (_) {
-                return _buildSwiperConfirmCell(context);
-              },
+              builder: _buildSwiperConfirmCell,
             ),
           ],
         ),
@@ -73,7 +52,7 @@ class TDSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'swiperCell')
+  @Demo(group: 'swipecell')
   Widget _buildSwiperCell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
@@ -124,7 +103,7 @@ class TDSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'swiperCell')
+  @Demo(group: 'swipecell')
   Widget _buildSwiperMuliCell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
@@ -152,7 +131,7 @@ class TDSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'swiperCell')
+  @Demo(group: 'swipecell')
   Widget _buildSwiper3Cell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
@@ -185,7 +164,7 @@ class TDSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'swiperCell')
+  @Demo(group: 'swipecell')
   Widget _buildSwiperRightCell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
@@ -207,7 +186,7 @@ class TDSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'swiperCell')
+  @Demo(group: 'swipecell')
   Widget _buildSwiperRightLeftCell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
@@ -244,7 +223,7 @@ class TDSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'swiperCell')
+  @Demo(group: 'swipecell')
   Widget _buildSwiperIconCell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
@@ -337,7 +316,7 @@ class TDSwipeCellPage extends StatelessWidget {
     );
   }
 
-  @Demo(group: 'swiperCell')
+  @Demo(group: 'swipecell')
   Widget _buildSwiperConfirmCell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;

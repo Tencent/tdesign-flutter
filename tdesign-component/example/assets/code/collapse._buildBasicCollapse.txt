@@ -1,0 +1,20 @@
+
+  Widget _buildBasicCollapse(BuildContext context) {
+    return TDCollapse(
+      style: TDCollapseStyle.block,
+      expansionCallback: (int index, bool isExpanded) {
+        setState(() {
+          _basicData[index].isExpanded = !isExpanded;
+        });
+      },
+      children: _basicData.map((CollapseDataItem item) {
+        return TDCollapsePanel(
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return Text(item.headerValue);
+          },
+          isExpanded: item.isExpanded,
+          body: const Text(randomString),
+        );
+      }).toList(),
+    );
+  }
