@@ -30,7 +30,7 @@ class TDRadioPageState extends State<TDRadioPage> {
       backgroundColor: const Color(0xfff6f6f6),
       children: [
         ExampleModule(title: '组件类型', children: [
-          ExampleItem(desc: '纵向单选框', builder: _verticleRadios),
+          ExampleItem(desc: '纵向单选框', builder: _verticalRadios),
           ExampleItem(desc: '横向单选框', builder: _horizontalRadios),
         ]),
         ExampleModule(title: '组件状态', children: [
@@ -57,7 +57,7 @@ class TDRadioPageState extends State<TDRadioPage> {
   }
 
   @Demo(group: 'radio')
-  Widget _verticleRadios(BuildContext context) {
+  Widget _verticalRadios(BuildContext context) {
     return TDRadioGroup(
       selectId: 'index:1',
       child: ListView.builder(
@@ -199,7 +199,7 @@ class TDRadioPageState extends State<TDRadioPage> {
         padding: const EdgeInsets.all(0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (contet, index) {
+        itemBuilder: (context, index) {
           var title = '单选';
           return TDRadio(
             id: 'index:$index',
