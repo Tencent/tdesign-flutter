@@ -1,5 +1,5 @@
 
- Widget _buildThemeFab(BuildContext context) {
+  Widget _buildThemeFab(BuildContext context) {
     return _buildRowDemoWidthDescription([
       {
         'component': const TDFab(

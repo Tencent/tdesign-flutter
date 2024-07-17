@@ -1,0 +1,60 @@
+
+Widget _buildControl(BuildContext context) {
+  var controller = TDCountDownController();
+  return Wrap(
+    direction: Axis.vertical,
+    spacing: 8,
+    children: [
+      Wrap(
+        spacing: 8,
+        children: [
+          TDButton(
+            text: '开始',
+            size: TDButtonSize.extraSmall,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              controller.start();
+            },
+          ),
+          TDButton(
+            text: '结束',
+            size: TDButtonSize.extraSmall,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              controller.reset(0);
+            },
+          ),
+          TDButton(
+            text: '重置',
+            size: TDButtonSize.extraSmall,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              controller.reset();
+            },
+          ),
+          TDButton(
+            text: '暂停',
+            size: TDButtonSize.extraSmall,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              controller.pause();
+            },
+          ),
+          TDButton(
+            text: '继续',
+            size: TDButtonSize.extraSmall,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              controller.resume();
+            },
+          ),
+        ],
+      ),
+      TDCountDown(
+        time: 60 * 60 * 1000,
+        controller: controller,
+        autoStart: false,
+      ),
+    ],
+  );
+}

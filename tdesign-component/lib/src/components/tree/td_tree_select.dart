@@ -8,8 +8,13 @@ class TDSelectOption {
   TDSelectOption(
       {required this.label, required this.value, this.children = const []});
 
+  /// 标签
   final String label;
+
+  /// 值
   final int value;
+
+  /// 子选项
   List<TDSelectOption> children;
 }
 

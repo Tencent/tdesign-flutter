@@ -211,21 +211,18 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
         desc: '用于多层级数据的逐级选择',
         children: [
           ExampleModule(title: '组件类型', children: [
-            ExampleItem(desc: '垂直级联选择器', ignoreCode: true, builder: _buildVerticalCascader),
-            ExampleItem(desc: '垂直级联选择器-带字母定位', ignoreCode: true, builder: _buildVerticalLetterCascader),
-            ExampleItem(desc: '水平级联选择器', ignoreCode: true, builder: _buildHorizontalCascader),
-            ExampleItem(desc: '水平级联选择器-带字母定位', ignoreCode: true, builder: _buildHorizontalLetterCascader),
-            ExampleItem(desc: '水平级联选择器-部门', ignoreCode: true, builder: _buildHorizontalCompanyCascader),
-            ExampleItem(desc: '垂直级联选择器-部门', ignoreCode: true, builder: _buildVerticalCompanyCascader),
+            ExampleItem(desc: '垂直级联选择器',  builder: _buildVerticalCascader),
+            ExampleItem(desc: '垂直级联选择器-带字母定位',  builder: _buildVerticalLetterCascader),
+            ExampleItem(desc: '水平级联选择器', builder: _buildHorizontalCascader),
+            ExampleItem(desc: '水平级联选择器-带字母定位',  builder: _buildHorizontalLetterCascader),
+            ExampleItem(desc: '水平级联选择器-部门', builder: _buildHorizontalCompanyCascader),
+            ExampleItem(desc: '垂直级联选择器-部门', builder: _buildVerticalCompanyCascader),
           ]),
         ],
         test: [
           ExampleItem(
-              ignoreCode: true,
               desc: '测试使用次标题',
-              builder: (context) {
-                return CodeWrapper(builder: _buildVerticalSubTitleCascader);
-              }),
+              builder: _buildVerticalSubTitleCascader),
         ],
       ),
     );

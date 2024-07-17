@@ -4,14 +4,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-class TDPreviewPage extends StatefulWidget {
-  const TDPreviewPage({Key? key}) : super(key: key);
+class TDImageViewerPage extends StatefulWidget {
+  const TDImageViewerPage({Key? key}) : super(key: key);
 
   @override
-  State<TDPreviewPage> createState() => _TDPreviewPageState();
+  State<TDImageViewerPage> createState() => _TDImageViewerPageState();
 }
 
-class _TDPreviewPageState extends State<TDPreviewPage> {
+class _TDImageViewerPageState extends State<TDImageViewerPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -21,14 +21,14 @@ class _TDPreviewPageState extends State<TDPreviewPage> {
       exampleCodeGroup: 'image_viewer',
       children: [
         ExampleModule(title: '组件类型', children: [
-          ExampleItem(desc: '基础图片预览', builder: _basicPreview),
-          ExampleItem(desc: '带操作图片预览', builder: _actionPreview)
+          ExampleItem(desc: '基础图片预览', builder: _basicImageViewer),
+          ExampleItem(desc: '带操作图片预览', builder: _actionImageViewer)
         ]),
       ],
       test: [
-        ExampleItem(desc: '长按图片', builder: _longPressPreview),
-        ExampleItem(desc: '图片超宽情况', builder: _ultraWidthPreview),
-        ExampleItem(desc: '图片超高情况', builder: _ultraHeightPreview),
+        ExampleItem(desc: '长按图片', builder: _longPressImageViewer),
+        ExampleItem(desc: '图片超宽情况', builder: _ultraWidthImageViewer),
+        ExampleItem(desc: '图片超高情况', builder: _ultraHeightImageViewer),
       ],
     );
   }
@@ -38,8 +38,8 @@ class _TDPreviewPageState extends State<TDPreviewPage> {
     'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
   ];
 
-  @Demo(group: 'preview')
-  Widget _basicPreview(BuildContext context) {
+  @Demo(group: 'image_viewer')
+  Widget _basicImageViewer(BuildContext context) {
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -47,13 +47,13 @@ class _TDPreviewPageState extends State<TDPreviewPage> {
       size: TDButtonSize.large,
       text: '基础图片预览',
       onTap: () {
-        TDPreview.showPreview(context: context, images: images);
+        TDImageViewer.showImageViewer(context: context, images: images);
       },
     );
   }
 
-  @Demo(group: 'preview')
-  Widget _actionPreview(BuildContext context) {
+  @Demo(group: 'image_viewer')
+  Widget _actionImageViewer(BuildContext context) {
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -61,7 +61,7 @@ class _TDPreviewPageState extends State<TDPreviewPage> {
       size: TDButtonSize.large,
       text: '带操作图片预览',
       onTap: () {
-        TDPreview.showPreview(
+        TDImageViewer.showImageViewer(
           context: context,
           images: images,
           showIndex: true,
@@ -71,8 +71,8 @@ class _TDPreviewPageState extends State<TDPreviewPage> {
     );
   }
 
-  @Demo(group: 'preview')
-  Widget _longPressPreview(BuildContext context) {
+  @Demo(group: 'image_viewer')
+  Widget _longPressImageViewer(BuildContext context) {
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -80,7 +80,7 @@ class _TDPreviewPageState extends State<TDPreviewPage> {
       size: TDButtonSize.large,
       text: '长按图片',
       onTap: () {
-        TDPreview.showPreview(
+        TDImageViewer.showImageViewer(
           context: context,
           images: images,
           deleteBtn: true,
@@ -96,8 +96,8 @@ class _TDPreviewPageState extends State<TDPreviewPage> {
     );
   }
 
-  @Demo(group: 'preview')
-  Widget _ultraWidthPreview(BuildContext context) {
+  @Demo(group: 'image_viewer')
+  Widget _ultraWidthImageViewer(BuildContext context) {
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -105,7 +105,7 @@ class _TDPreviewPageState extends State<TDPreviewPage> {
       size: TDButtonSize.large,
       text: '图片超宽情况',
       onTap: () {
-        TDPreview.showPreview(
+        TDImageViewer.showImageViewer(
           context: context,
           images: images,
           showIndex: true,
@@ -121,8 +121,8 @@ class _TDPreviewPageState extends State<TDPreviewPage> {
     );
   }
 
-  @Demo(group: 'preview')
-  Widget _ultraHeightPreview(BuildContext context) {
+  @Demo(group: 'image_viewer')
+  Widget _ultraHeightImageViewer(BuildContext context) {
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -130,7 +130,7 @@ class _TDPreviewPageState extends State<TDPreviewPage> {
       size: TDButtonSize.large,
       text: '图片超高情况',
       onTap: () {
-        TDPreview.showPreview(
+        TDImageViewer.showImageViewer(
           context: context,
           images: images,
           showIndex: true,

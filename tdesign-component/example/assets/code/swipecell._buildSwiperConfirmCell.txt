@@ -1,0 +1,34 @@
+
+  Widget _buildSwiperConfirmCell(BuildContext context) {
+    // 屏幕宽度
+    var screenWidth = MediaQuery.of(context).size.width;
+    return TDSwipeCell(
+      groupTag: 'test',
+      right: TDSwipeCellPanel(
+        extentRatio: (60 + 60) / screenWidth,
+        children: [
+          TDSwipeCellAction(
+            flex: 60,
+            backgroundColor: TDTheme.of(context).warningColor4,
+            label: '编辑',
+          ),
+          TDSwipeCellAction(
+            flex: 60,
+            backgroundColor: TDTheme.of(context).errorColor6,
+            label: '删除',
+          ),
+        ],
+        confirms: [
+          TDSwipeCellAction(
+            backgroundColor: TDTheme.of(context).errorColor6,
+            label: '确认删除',
+            confirmIndex: const [1],
+          ),
+        ],
+      ),
+      cell: const TDCell(
+        title: '右滑操作',
+        note: '辅助信息',
+      ),
+    );
+  }

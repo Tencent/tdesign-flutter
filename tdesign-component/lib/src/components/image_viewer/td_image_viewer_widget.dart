@@ -16,8 +16,8 @@ typedef OnClose = Function(int index);
 typedef OnDelete = Function(int index);
 typedef OnLongPress = Function(int index);
 
-class TDPreviewWidget extends StatefulWidget {
-  const TDPreviewWidget({
+class TDImageViewerWidget extends StatefulWidget {
+  const TDImageViewerWidget({
     Key? key,
     this.closeBtn,
     this.deleteBtn,
@@ -71,7 +71,7 @@ class TDPreviewWidget extends StatefulWidget {
   }
 }
 
-class _TDImageViewerWidgetState extends State<TDPreviewWidget> {
+class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
   int _index = 1;
 
   @override
