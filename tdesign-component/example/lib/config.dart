@@ -27,7 +27,7 @@ import 'page/td_fab_page.dart';
 import 'page/td_font_page.dart';
 import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
-import 'page/td_preview_page.dart';
+import 'page/td_image_viewer_page.dart';
 import 'page/td_input_page.dart';
 import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
@@ -177,9 +177,9 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Image 图片', name: 'image', pageBuilder: _wrapInheritedTheme((context) => const TDImagePage())),
     ExamplePageModel(
-        text: 'Preview 图片预览',
-        name: 'preview',
-        pageBuilder: _wrapInheritedTheme((context) => const TDPreviewPage())),
+        text: 'ImageViewer 图片预览',
+        name: 'image_viewer',
+        pageBuilder: _wrapInheritedTheme((context) => const TDImageViewerPage())),
     ExamplePageModel(
         text: 'Progress 进度条',
         name: 'progress',

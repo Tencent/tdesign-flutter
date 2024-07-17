@@ -1,0 +1,34 @@
+
+  Widget _buildCustomDecoration(BuildContext context) {
+    return Column(
+      children: [
+        TDSlider(
+          sliderThemeData: TDSliderThemeData(
+            min: 0,
+            max: 100,
+          ),
+          value: 40,
+          boxDecoration: BoxDecoration(
+             color: Colors.amber
+          ),
+          // divisions: 5,
+          onChanged: (value) {},
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData.capsule(
+            min: 0,
+            max: 100,
+            scaleFormatter: (value) => value.toInt().toString(),
+          ),
+          boxDecoration: BoxDecoration(
+              color: Colors.deepOrangeAccent
+          ),
+          value: const RangeValues(20, 60),
+          onChanged: (value) {},
+        ),
+      ],
+    );
+  }
