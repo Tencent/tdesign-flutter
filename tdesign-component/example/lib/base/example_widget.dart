@@ -30,6 +30,7 @@ class ExamplePage extends StatefulWidget {
     this.showSingleChild = false,
     this.singleChild,
     this.scrollController,
+    this.floatingActionButton,
   })  : assert(children.length > 0 || (showSingleChild && singleChild != null),
             'children or singleChild must have at least one'),
         super(key: key);
@@ -64,6 +65,9 @@ class ExamplePage extends StatefulWidget {
   /// 滚动控制组件
   final ScrollController? scrollController;
 
+  /// 悬浮按钮
+  final Widget? floatingActionButton;
+
   @override
   State<ExamplePage> createState() => _ExamplePageState();
 }
@@ -92,6 +96,7 @@ class _ExamplePageState extends State<ExamplePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: widget.floatingActionButton,
         backgroundColor:
             widget.backgroundColor ?? TDTheme.of(context).grayColor1,
         body: ScrollbarTheme(
