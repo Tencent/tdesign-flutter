@@ -47,6 +47,7 @@ import 'page/td_text_page.dart';
 import 'page/td_textarea_page.dart';
 import 'page/td_theme_page.dart';
 import 'page/td_toast_page.dart';
+import 'page/td_cascader_page.dart';
 import 'page/todo_page.dart';
 
 PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
@@ -108,8 +109,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Cascader 级联选择器',
         name: 'cascader',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDCascaderPage())),
     ExamplePageModel(
         text: 'Checkbox 多选框', name: 'checkbox', pageBuilder: _wrapInheritedTheme((context) => const TDCheckboxPage())),
     ExamplePageModel(
