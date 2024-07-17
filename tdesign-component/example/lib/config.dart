@@ -9,11 +9,13 @@ import 'page/sidebar/td_sidebar_page_icon.dart';
 import 'page/sidebar/td_sidebar_page_outline.dart';
 import 'page/sidebar/td_sidebar_page_pagination.dart';
 import 'page/td_avatar_page.dart';
+import 'page/td_backtop_page.dart';
 import 'page/td_badge_page.dart';
 import 'page/td_bottom_tab_bar_page.dart';
 import 'page/td_button_page.dart';
 import 'page/td_cell_page.dart';
 import 'page/td_checkbox_page.dart';
+import 'page/td_collapse.dart';
 import 'page/td_count_down_page.dart';
 import 'page/td_date_picker_page.dart';
 import 'page/td_dialog_page.dart';
@@ -21,6 +23,7 @@ import 'page/td_divider_page.dart';
 import 'page/td_drawer_page.dart';
 import 'page/td_dropdown_menu_page.dart';
 import 'page/td_empty_page.dart';
+import 'page/td_fab_page.dart';
 import 'page/td_font_page.dart';
 import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
@@ -47,6 +50,7 @@ import 'page/td_text_page.dart';
 import 'page/td_textarea_page.dart';
 import 'page/td_theme_page.dart';
 import 'page/td_toast_page.dart';
+import 'page/td_tree_select_page.dart';
 import 'page/td_cascader_page.dart';
 import 'page/todo_page.dart';
 
@@ -66,7 +70,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Divider 分割线', name: 'divider', pageBuilder: _wrapInheritedTheme((context) => const TDDividerPage())),
     ExamplePageModel(
-        text: 'Fab 悬浮按钮', name: 'fab', isTodo: true, pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        text: 'Fab 悬浮按钮', name: 'fab',  pageBuilder: _wrapInheritedTheme((context) => const TDFabPage())),
     ExamplePageModel(text: 'Icon 图标', name: 'icon', pageBuilder: _wrapInheritedTheme((context) => const TDIconPage())),
     ExamplePageModel(
         text: 'Link 链接', name: 'link', pageBuilder: _wrapInheritedTheme((context) => const TDLinkViewPage())),
@@ -76,8 +80,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'BackTop 返回顶部',
         name: 'back_top',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDBackTopPage())),
     ExamplePageModel(
         text: 'Drawer 抽屉',
         name: 'drawer',
@@ -139,8 +142,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'TreeSelect 树形选择器',
         name: 'tree_select',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDTreeSelectPage())),
     ExamplePageModel(
         text: 'Upload 上传',
         name: 'upload',
@@ -161,8 +163,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Collapse 折叠面板',
         name: 'collapse',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDCollapsePage())),
     ExamplePageModel(
         text: 'Empty 空状态', name: 'empty', pageBuilder: _wrapInheritedTheme((context) => const TDEmptyPage())),
     ExamplePageModel(
