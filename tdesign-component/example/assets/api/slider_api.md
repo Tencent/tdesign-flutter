@@ -6,6 +6,7 @@
 | --- | --- | --- | --- |
 | key |  | - |  |
 | value | RangeValues | - | 默认值 |
+| boxDecoration | Decoration? | - | 自定义盒子样式 |
 | onChanged | ValueChanged<RangeValues>? | - | 滑动变化监听 |
 | sliderThemeData | TDSliderThemeData? | - | 样式 |
 | leftLabel | String? | - | 左侧标签 |
@@ -22,6 +23,7 @@
 | --- | --- | --- | --- |
 | key |  | - |  |
 | value | RangeValues | - | 默认值 |
+| boxDecoration | Decoration? | - | 自定义盒子样式 |
 | onChanged | ValueChanged<RangeValues>? | - | 滑动变化监听 |
 | sliderThemeData | TDSliderThemeData? | - | 样式 |
 | leftLabel | String? | - | 左侧标签 |

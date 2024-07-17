@@ -1,0 +1,18 @@
+
+  Widget _actionImageViewer(BuildContext context) {
+    return TDButton(
+      type: TDButtonType.ghost,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      size: TDButtonSize.large,
+      text: '带操作图片预览',
+      onTap: () {
+        TDImageViewer.showImageViewer(
+          context: context,
+          images: images,
+          showIndex: true,
+          deleteBtn: true,
+        );
+      },
+    );
+  }
