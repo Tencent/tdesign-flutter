@@ -361,7 +361,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                             _tabListData.insert(level, item);
                             _selectTabValue = item.value;
                             //下一级查询
-                            _getChildenListData(level + 1, item.value!);
+                            _getChildrenListData(level + 1, item.value!);
                           });
                         },
                         child: Container(
@@ -422,18 +422,18 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     setState(() {});
   }
 
-  void _getChildenListData(int level, String value) {
+  void _getChildrenListData(int level, String value) {
     //查询层级数据
-    List<MultiCascaderListModel> selectLevelData = _listData.where((element) => element.level == (level)).toList();
+    var selectLevelData = _listData.where((element) => element.level == (level)).toList();
     //判断下级是否存在
     if (selectLevelData.isNotEmpty) {
       //获取下级数据
-      List<MultiCascaderListModel> childList =
+      var childList =
           selectLevelData.where((element) => element.parentValue == value).toList();
       _selectListData = childList;
       _currentTabIndex += 1;
     } else {
-      List<MultiCascaderListModel> result = _tabListData.where((element) => element.label != '选择选项').toList();
+      var result = _tabListData.where((element) => element.label != '选择选项').toList();
       widget.onChange(result);
       Navigator.of(context).pop();
     }
