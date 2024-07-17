@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import '../../theme/td_colors.dart';
 import '../../theme/td_theme.dart';
 import '../popup/td_popup_route.dart';
-import 'td_preview_widget.dart';
+import 'td_image_viewer_widget.dart';
 
-class TDPreview {
-  static void showPreview({
+/// 图片预览工具
+class TDImageViewer {
+
+  /// 显示图片预览
+  static void showImageViewer({
     required BuildContext context,
     required List<dynamic> images,
     bool? closeBtn = true,
@@ -27,7 +30,7 @@ class TDPreview {
       barrierColor: modalBarrierColor,
       useSafeArea: false,
       builder: (context) {
-        return TDPreviewWidget(
+        return TDImageViewerWidget(
           images: images,
           closeBtn: closeBtn,
           deleteBtn: deleteBtn,

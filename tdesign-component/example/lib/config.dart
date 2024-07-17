@@ -27,7 +27,7 @@ import 'page/td_fab_page.dart';
 import 'page/td_font_page.dart';
 import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
-import 'page/td_preview_page.dart';
+import 'page/td_image_viewer_page.dart';
 import 'page/td_input_page.dart';
 import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
@@ -42,6 +42,7 @@ import 'page/td_shadows_page.dart';
 import 'page/td_slider_page.dart';
 import 'page/td_stepper_page.dart';
 import 'page/td_swipe_cell_page.dart';
+import 'page/td_steps_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
 import 'page/td_tabs_page.dart';
@@ -176,9 +177,9 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Image 图片', name: 'image', pageBuilder: _wrapInheritedTheme((context) => const TDImagePage())),
     ExamplePageModel(
-        text: 'Preview 图片预览',
-        name: 'preview',
-        pageBuilder: _wrapInheritedTheme((context) => const TDPreviewPage())),
+        text: 'ImageViewer 图片预览',
+        name: 'image_viewer',
+        pageBuilder: _wrapInheritedTheme((context) => const TDImageViewerPage())),
     ExamplePageModel(
         text: 'Progress 进度条',
         name: 'progress',
@@ -202,6 +203,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Swiper 轮播图', name: 'swiper', pageBuilder: _wrapInheritedTheme((context) => const TDSwiperPage())),
     ExamplePageModel(text: 'Tag 标签', name: 'tag', pageBuilder: _wrapInheritedTheme((context) => const TDTagPage())),
+    ExamplePageModel(text: 'Steps 步骤条', name: 'steps', pageBuilder: _wrapInheritedTheme((context) => const TDStepsPage())),
   ],
   '反馈': [
     ExamplePageModel(
