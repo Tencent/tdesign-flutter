@@ -43,7 +43,7 @@ class TDDropdownPopup {
       _overlay3Height,
       _initContentTop,
       _initContentBottom;
-  late VoidCallback _closeContent;
+  late Future<void> Function() _closeContent;
   final _directionListenable = ValueNotifier<TDDropdownPopupDirection>(TDDropdownPopupDirection.auto);
   final _colorAlphaListenable = ValueNotifier<bool>(false);
 
@@ -85,7 +85,8 @@ class TDDropdownPopup {
     }
   }
 
-  Future<void> add([TDDropdownItem? updateChild]) async {
+  Future<void> add([TDDropdownItem? updateChild]) {
+    var completer = Completer<void>();
     _directionListenable.value = direction ?? TDDropdownPopupDirection.auto;
     overlayEntry?.remove();
     overlayEntry = OverlayEntry(
@@ -93,25 +94,30 @@ class TDDropdownPopup {
         return _directionListenable.value == TDDropdownPopupDirection.auto
             ? ValueListenableBuilder(
                 valueListenable: _directionListenable,
-                builder: (context, value, child) =>
-                    value == TDDropdownPopupDirection.auto ? child! : _getPopup(value, updateChild), // 每次重新渲染item，更新高度
-                child: _getPopup(TDDropdownPopupDirection.down, updateChild),
+                builder: (context, value, child) => value == TDDropdownPopupDirection.auto
+                    ? child!
+                    : _getPopup(value, updateChild, completer), // 每次重新渲染item，更新高度
+                child: _getPopup(TDDropdownPopupDirection.down, updateChild, completer),
               )
-            : _getPopup(_directionListenable.value, updateChild);
+            : _getPopup(_directionListenable.value, updateChild, completer);
       },
     );
 
     Overlay.of(parentContext).insert(overlayEntry!);
-    await Future.delayed(_duration);
+    return completer.future;
   }
 
-  Widget _getPopup(TDDropdownMenuDirection value, TDDropdownItem? updateChild) {
+  Widget _getPopup(TDDropdownMenuDirection value, TDDropdownItem? updateChild, Completer<void> completer) {
     _init(value);
+    final barrier = GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: _overlayClick,
+    );
     return Stack(children: [
       if (_directionListenable.value != TDDropdownPopupDirection.auto) ...[
-        _getOverlay1(),
+        _getOverlay1(barrier),
         _getOverlay2(),
-        _getOverlay3(),
+        _getOverlay3(barrier),
       ],
       TDDropdownInherited(
           popupState: this,
@@ -125,65 +131,57 @@ class TDDropdownPopup {
             initContentTop: _initContentTop,
             reverseHeight: _overlay3Height,
             closeCallback: _closeCallback,
+            onOpened: () {
+              completer.complete();
+            },
             child: updateChild ?? child,
           )),
     ]);
   }
 
-  Widget _getOverlay1() {
-    return showOverlay == true
-        ? Positioned(
-            top: _overlay1Top,
-            bottom: _overlay1Bottom,
-            left: 0,
-            right: 0,
-            child: ValueListenableBuilder(
+  Widget _getOverlay1(Widget barrier) {
+    return Positioned(
+      top: _overlay1Top,
+      bottom: _overlay1Bottom,
+      left: 0,
+      right: 0,
+      child: showOverlay == true
+          ? ValueListenableBuilder(
               builder: (BuildContext context, value, Widget? child) {
                 return AnimatedContainer(
                   color: value ? Colors.black54 : Colors.black54.withAlpha(0),
                   duration: _duration,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: _overlayClick,
-                  ),
+                  child: barrier,
                 );
               },
               valueListenable: _colorAlphaListenable,
-            ),
-          )
-        : const SizedBox.shrink();
+            )
+          : barrier,
+    );
   }
 
   Widget _getOverlay2() {
-    return showOverlay == true
-        ? Positioned(
-            top: _overlay2Top,
-            bottom: _overlay2Bottom,
-            left: 0,
-            right: 0,
-            child: GestureDetector(
-              onVerticalDragUpdate: (details) {},
-              onHorizontalDragUpdate: (details) {},
-              behavior: HitTestBehavior.translucent,
-              child: const SizedBox(),
-            ),
-          )
-        : const SizedBox.shrink();
+    return Positioned(
+      top: _overlay2Top,
+      bottom: _overlay2Bottom,
+      left: 0,
+      right: 0,
+      child: GestureDetector(
+        onVerticalDragUpdate: (details) {},
+        onHorizontalDragUpdate: (details) {},
+        behavior: HitTestBehavior.translucent,
+      ),
+    );
   }
 
-  Widget _getOverlay3() {
-    return showOverlay == true
-        ? Positioned(
-            top: _overlay3Top,
-            bottom: _overlay3Bottom,
-            left: 0,
-            right: 0,
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: _overlayClick,
-            ),
-          )
-        : const SizedBox.shrink();
+  Widget _getOverlay3(Widget barrier) {
+    return Positioned(
+      top: _overlay3Top,
+      bottom: _overlay3Bottom,
+      left: 0,
+      right: 0,
+      child: barrier,
+    );
   }
 
   void _overlayClick() {
@@ -198,13 +196,12 @@ class TDDropdownPopup {
   }
 
   Future<void> remove() async {
-    _closeContent();
-    await Future.delayed(_duration);
+    await _closeContent();
     overlayEntry?.remove();
     overlayEntry = null;
   }
 
-  _closeCallback(VoidCallback fn) {
+  void _closeCallback(Future<void> Function() fn) {
     _closeContent = fn;
   }
 }
