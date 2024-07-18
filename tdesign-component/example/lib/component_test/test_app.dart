@@ -3,28 +3,93 @@ import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() async {
+  kTextNeedGlobalFontFamily = true;
   WidgetsFlutterBinding.ensureInitialized();
-  var jsonString = await rootBundle.loadString('assets/theme1.json');
+  var jsonString = await rootBundle.loadString('assets/theme.json');
   print('jsonString:$jsonString');
   TDTheme.needMultiTheme(true);
   TDTheme.defaultData();
-  var themeData = TDThemeData.fromJson('theme', jsonString);
+  var themeData = TDThemeData.fromJson('green', jsonString);
+  await TDFontLoader.load(
+      name: 'test1',
+      fontFamilyUrl:
+          'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf');
   runApp(MaterialApp(
-    home: Theme(
-        data: ThemeData(extensions: [themeData!]),
-        child: Builder(
-          builder: (context) {
-            return Scaffold(
-              // appBar: TDNavBar(),
-              appBar: _buildAppBar(context),
-              body:  Center(
-                child: TDText('测试文案', textColor: TDTheme.of(context)
-                    .brandNormalColor,),
-              ),
-              bottomNavigationBar: _buildBottomTabBar(),
-            );
-          },
-        )),
+    home: TDTextConfiguration(
+      globalFontFamily: FontFamily(
+        fontFamily: 'test1',
+      ),
+      child: Theme(
+          data: ThemeData(extensions: [themeData!]),
+          child: Builder(
+            builder: (context) {
+              return Scaffold(
+                // appBar: TDNavBar(),
+                appBar: _buildAppBar(context),
+                body: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // 先显示再加载
+                      TDText(
+                        '测试文案',
+                        textColor: TDTheme.of(context).brandNormalColor,
+                        fontFamilyUrl:
+                            'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf',
+                        fontFamily: FontFamily(fontFamily: 'test'),
+                      ),
+                      //  // 先加载再显示
+                      // child: FutureBuilder(
+                      //     future:TDFontLoader.load(name: 'test1', fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf'),
+                      //   initialData: false,
+                      //   builder: (_,data)=>TDText(
+                      //     (data.data ?? false) ? '测试文案' : '',
+                      //     textColor: TDTheme.of(context).brandNormalColor,
+                      //     fontFamilyUrl: 'https://xinyue.qq.com/m/flutter_web/assets/packages/flutter_component/fonts/FZLanTingHeiS-EB-GB.ttf',
+                      //     fontFamily: FontFamily(fontFamily: 'test1'),
+                      //   ),
+                      // ),
+                      TDInput(
+                        // leftLabel: '标签文字',
+                        // controller: controller[0],
+                        type: TDInputType.cardStyle,
+                        backgroundColor: Colors.white,
+                        cardStyle: TDCardStyle.topTextWithBlueBorder,
+                        hintText: '请输入文字',
+                        cardStyleTopText: '标签文字',
+                        // onChanged: (text) {
+                        //   setState(() {});
+                        // },
+                        // onClearTap: () {
+                        //   controller[0].clear();
+                        //   setState(() {});
+                        // },
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const TDTextarea(
+                        label: '标签文字',
+                        hintText: '请输入文字',
+                        maxLines: 4,
+                        minLines: 4,
+                        maxLength: 500,
+                        padding: EdgeInsets.zero,
+                        indicator: true,
+                        // backgroundColor: Colors.white,
+                        // textInputBackgroundColor: Colors.white,
+                        layout: TDTextareaLayout.vertical,
+                        bordered: true,
+                      )
+                    ],
+                  ),
+                ),
+                bottomNavigationBar: _buildBottomTabBar(),
+              );
+            },
+          )),
+    ),
   ));
 }
 

@@ -36,6 +36,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           ]),
           ExampleModule(title: '特殊样式', children: [
             ExampleItem(desc: '胶囊型滑块', builder: _buildCapsule),
+            ExampleItem(desc: '自定义盒子样式', builder: _buildCustomDecoration),
           ]),
         ]);
   }
@@ -273,6 +274,41 @@ class _TDSliderPageState extends State<TDSliderPage> {
           // divisions: 5,
           onChanged: (value) {},
         )
+      ],
+    );
+  }
+
+  @Demo(group: 'slider')
+  Widget _buildCustomDecoration(BuildContext context) {
+    return Column(
+      children: [
+        TDSlider(
+          sliderThemeData: TDSliderThemeData(
+            min: 0,
+            max: 100,
+          ),
+          value: 40,
+          boxDecoration: BoxDecoration(
+             color: Colors.amber
+          ),
+          // divisions: 5,
+          onChanged: (value) {},
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData.capsule(
+            min: 0,
+            max: 100,
+            scaleFormatter: (value) => value.toInt().toString(),
+          ),
+          boxDecoration: BoxDecoration(
+              color: Colors.deepOrangeAccent
+          ),
+          value: const RangeValues(20, 60),
+          onChanged: (value) {},
+        ),
       ],
     );
   }

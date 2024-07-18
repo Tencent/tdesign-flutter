@@ -50,4 +50,6 @@
 | showBottomDivider | bool | true | 是否展示底部分割线 |
 | cardStyle | TDCardStyle? | - | 卡片默认样式 |
 | cardStyleTopText | String? | - | 卡片模式上方文字 |
+| inputAction | TextInputAction? | - | 键盘动作类型 |
+| spacer | TDInputSpacer | - | 组件各模块间间距 |
 | cardStyleBottomText | String? | - | 卡片模式下方文字 |

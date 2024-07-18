@@ -4,8 +4,8 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| showBage | bool | - | 是否展示消息 |
-| tdBadge | TDBadge? | - | 消息样式(未设置但showBage为true，则默认使用红点) |
+| showBadge | bool | - | 是否展示消息 |
+| tdBadge | TDBadge? | - | 消息样式(未设置但showBadge为true，则默认使用红点) |
 | badgeTopOffset | double? | - | 消息顶部偏移量 |
 | badgeRightOffset | double? | - | 消息右侧偏移量 |
 
@@ -72,7 +72,7 @@
 | popUpWidth | double? | - | 弹窗宽度（不设置，默认为按钮宽度 - 20） |
 | popUpitemHeight | double? | _kDefaultMenuItemHeight | 单个选项高度 所有选项等高 不设置则使用默认值 48 |
 | backgroundColor | Color? | - | 弹窗背景颜色 |
-| radius | double? | - | pannel圆角 默认0 |
+| radius | double? | - | panel圆角 默认0 |
 | arrowWidth | double? | - | 箭头宽度 默认13.5 |
 | arrowHeight | double? | - | 箭头高度 默认8 |
 

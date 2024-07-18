@@ -9,6 +9,9 @@ class TDSlider extends StatefulWidget {
   /// 默认值
   final double value;
 
+  /// 自定义盒子样式
+  final Decoration? boxDecoration;
+
   /// 左侧标签
   final String? leftLabel;
 
@@ -30,6 +33,7 @@ class TDSlider extends StatefulWidget {
   const TDSlider(
       {Key? key,
       required this.value,
+      this.boxDecoration,
       this.onChanged,
       this.sliderThemeData,
       this.leftLabel,
@@ -80,7 +84,10 @@ class TDSliderState extends State<TDSlider> {
         top: (tdSliderThemeData.showScaleValue || tdSliderThemeData.showThumbValue ? 16 : 0) + 8,
         bottom: 8,
       ),
-      color: Colors.white,
+      decoration: widget.boxDecoration ??
+          BoxDecoration(
+            color: Colors.white,
+          ),
       child: Row(
         children: [
           leftLabel,
@@ -120,6 +127,9 @@ class TDRangeSlider extends StatefulWidget {
   /// 默认值
   final RangeValues value;
 
+  /// 自定义盒子样式
+  final Decoration? boxDecoration;
+
   /// 左侧标签
   final String? leftLabel;
 
@@ -143,6 +153,7 @@ class TDRangeSlider extends StatefulWidget {
   const TDRangeSlider(
       {Key? key,
       required this.value,
+      this.boxDecoration,
       this.onChanged,
       this.sliderThemeData,
       this.leftLabel,
@@ -193,7 +204,10 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
         top: (tdSliderThemeData.showScaleValue || tdSliderThemeData.showThumbValue ? 16 : 0) + 8,
         bottom: 8,
       ),
-      color: Colors.white,
+      decoration: widget.boxDecoration ??
+          BoxDecoration(
+            color: Colors.white,
+          ),
       child: Row(
         children: [
           leftLabel,

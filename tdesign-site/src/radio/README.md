@@ -23,7 +23,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _verticleRadios(BuildContext context) {
+  Widget _verticalRadios(BuildContext context) {
     return TDRadioGroup(
       selectId: 'index:1',
       child: ListView.builder(
@@ -202,7 +202,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         padding: const EdgeInsets.all(0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (contet, index) {
+        itemBuilder: (context, index) {
           var title = '单选';
           return TDRadio(
             id: 'index:$index',

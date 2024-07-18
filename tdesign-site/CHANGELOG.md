@@ -166,7 +166,7 @@ docClass: timeline
 
 ## 0.0.7
 
-* 修改 exmaple的main.dart
+* 修改 example的main.dart
 
 ## 0.0.6
 

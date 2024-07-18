@@ -54,7 +54,7 @@ async function initPreviewServer() {
       fs.mkdirSync(path.dirname(filePath));
     } catch {}
 
-    console.log('\x1b[32m', `writting ${url}... \n`);
+    console.log('\x1b[32m', `writing ${url}... \n`);
     fs.writeFileSync(filePath, html);
   }
 

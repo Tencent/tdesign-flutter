@@ -202,6 +202,7 @@ class TDLink extends StatelessWidget {
             decoration: type == TDLinkType.withUnderline
                 ? TextDecoration.underline
                 : null,
+            decorationColor: getColor(context),
           ),
           forceVerticalCenter: true,
         ));

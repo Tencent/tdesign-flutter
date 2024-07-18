@@ -14,5 +14,10 @@
   "other": "other",
   "refreshing": "refreshing",
   "releaseRefresh": "releaseRefresh",
-  "reset": "reset"
+  "reset": "reset",
+  "days": "days",
+  "hours": "hours",
+  "minutes": "minutes",
+  "seconds": "seconds",
+  "milliseconds": "milliseconds"
 }

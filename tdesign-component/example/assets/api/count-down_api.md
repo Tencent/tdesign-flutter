@@ -8,7 +8,7 @@
 | --- | --- | --- | --- |
 | key |  | - |  |
 | autoStart | bool | true | 是否自动开始倒计时 |
-| content | dynamic | 'default' | 'default'/Widget Function(int time)/Widget |
+| content | dynamic | 'default' | 'default' / Widget Function(int time) / Widget |
 | format | String | 'HH:mm:ss' | 时间格式，DD-日，HH-时，mm-分，ss-秒，SSS-毫秒 |
 | millisecond | bool | false | 是否开启毫秒级渲染 |
 | size | TDCountDownSize | TDCountDownSize.medium | 倒计时尺寸 |
@@ -18,6 +18,7 @@
 | style | TDCountDownStyle? | - | 自定义样式，有则优先用它，没有则根据size和theme选取 |
 | onChange |  Function(int time)? | - | 时间变化时触发回调 |
 | onFinish | VoidCallback? | - | 倒计时结束时触发回调 |
+| controller | TDCountDownController? | - | 控制器，可控制开始/暂停/继续/重置 |
 
 ```
 ```
@@ -50,3 +51,9 @@
 | 名称  | 说明 |
 | --- |  --- |
 | TDCountDownStyle.generateStyle  | 生成默认样式 |
+
+```
+```
+ ### TDCountDownController
+#### 简介
+倒计时组件控制器，可控制开始(`start()`)/暂停(`pause()`)/继续(`resume()`)/重置(`reset([int? time])`)

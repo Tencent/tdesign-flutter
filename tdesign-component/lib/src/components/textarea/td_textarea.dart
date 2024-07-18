@@ -43,6 +43,8 @@ class TDTextarea extends StatefulWidget {
     this.textInputBackgroundColor,
     this.size = TDInputSize.large,
     this.maxLength,
+    this.maxLengthEnforcement,
+    this.allowInputOverMax = false,
     this.additionInfo = '',
     this.additionInfoColor,
     this.textAlign,
@@ -53,6 +55,7 @@ class TDTextarea extends StatefulWidget {
     this.labelIcon,
     this.labelWidth,
     this.margin,
+    this.padding,
     this.textareaDecoration,
     this.bordered,
   }) : super(key: key);
@@ -141,6 +144,12 @@ class TDTextarea extends StatefulWidget {
   /// 最大字数限制
   final int? maxLength;
 
+  /// 如何执行输入长度限制
+  final MaxLengthEnforcement? maxLengthEnforcement;
+
+  /// 超出[maxLength]之后是否还允许输入
+  final bool? allowInputOverMax;
+
   /// 错误提示信息
   final String? additionInfo;
 
@@ -159,11 +168,14 @@ class TDTextarea extends StatefulWidget {
   /// 标题输入框布局方式。可选项：vertical/horizontal
   final TDTextareaLayout? layout;
 
-  /// 是否自动增高，值为 autosize 时，maxLines 不生效
+  /// 是否自动增高，值为 true 时，[maxLines]不生效
   final bool? autosize;
 
   /// 外边距
   final EdgeInsetsGeometry? margin;
+
+  /// 内边距
+  final EdgeInsetsGeometry? padding;
 
   /// 是否显示外边框
   final bool? bordered;
@@ -238,7 +250,7 @@ class _TDTextareaState extends State<TDTextarea> {
               ? Flexible(
                   child: Padding(
                     padding: EdgeInsets.only(left: widget.labelIcon != null ? TDTheme.of(context).spacer4 : 0),
-                    child: Text(
+                    child: TDText(
                       widget.label!,
                       maxLines: isHorizontal ? 2 : 1,
                       overflow: TextOverflow.ellipsis,
@@ -251,7 +263,7 @@ class _TDTextareaState extends State<TDTextarea> {
           widget.required == true
               ? Padding(
                   padding: EdgeInsets.only(left: TDTheme.of(context).spacer4),
-                  child: Text(
+                  child: TDText(
                     '*',
                     style: TextStyle(color: TDTheme.of(context).errorColor6, fontSize: fontSize, height: 1.3),
                   ),
@@ -276,8 +288,17 @@ class _TDTextareaState extends State<TDTextarea> {
           inputType: widget.inputType,
           textAlign: widget.textAlign,
           onChanged: widget.onChanged,
-          inputFormatters: widget.inputFormatters ??
-              (widget.maxLength != null ? [LengthLimitingTextInputFormatter(widget.maxLength)] : null),
+          inputFormatters: [
+            ...(widget.inputFormatters ?? []),
+            ...(widget.maxLength != null && !(widget.allowInputOverMax ?? false)
+                ? [
+                    LengthLimitingTextInputFormatter(
+                      widget.maxLength,
+                      maxLengthEnforcement: widget.maxLengthEnforcement,
+                    )
+                  ]
+                : [])
+          ],
           inputDecoration: widget.inputDecoration,
           minLines: widget.minLines,
           maxLines: widget.autosize == true ? null : widget.maxLines,
@@ -308,7 +329,7 @@ class _TDTextareaState extends State<TDTextarea> {
             builder: (context, value, child) {
               return Opacity(
                 opacity: value ? 0 : 1,
-                child: Text(
+                child: TDText(
                   widget.additionInfo!,
                   style: TextStyle(
                     fontSize: TDTheme.of(context).fontBodySmall?.size,
@@ -325,7 +346,7 @@ class _TDTextareaState extends State<TDTextarea> {
       widgetList.add(SizedBox(width: padding));
     }
     if (showIndicator) {
-      widgetList.add(Text(
+      widgetList.add(TDText(
         '${widget.controller?.text.length ?? 0}/${widget.maxLength}',
         style: TextStyle(fontSize: TDTheme.of(context).fontBodySmall?.size, color: TDTheme.of(context).fontGyColor3),
       ));
@@ -346,6 +367,7 @@ class _TDTextareaState extends State<TDTextarea> {
       decoration: widget.textareaDecoration ??
           (widget.bordered == true
               ? BoxDecoration(
+            color: widget.decoration != null ? null : (widget.backgroundColor ?? Colors.white),
                   borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
                   border: Border.all(color: TDTheme.of(context).grayColor4),
                 )
@@ -365,9 +387,8 @@ class _TDTextareaState extends State<TDTextarea> {
     var isHorizontal = widget.layout == TDTextareaLayout.horizontal;
     return Container(
       width: widget.width,
-      color: widget.decoration != null ? null : (widget.backgroundColor ?? Colors.white),
       decoration: widget.decoration,
-      padding: EdgeInsets.all(padding),
+      padding: widget.padding ?? EdgeInsets.all(padding),
       margin: widget.margin,
       child: isHorizontal
           ? Row(

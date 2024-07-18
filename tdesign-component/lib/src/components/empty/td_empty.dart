@@ -12,7 +12,10 @@ class TDEmpty extends StatelessWidget {
         this.image,
         this.emptyText,
         this.operationText,
+        this.operationTheme,
         this.onTapEvent,
+        this.emptyTextColor,
+        this.emptyTextFont,
         Key? key})
       : super(key: key);
 
@@ -22,8 +25,14 @@ class TDEmpty extends StatelessWidget {
   final Widget? image;
   /// 描述文字
   final String? emptyText;
+  /// 描述文字颜色
+  final Color?  emptyTextColor;
+  /// 描述文字大小
+  final Font?  emptyTextFont;
   /// 操作按钮文案
   final String? operationText;
+  /// 操作按钮文案主题色
+  final TDButtonTheme? operationTheme;
   /// 类型，为operation有操作按钮，plain无按钮
   final TDEmptyType type;
 
@@ -43,8 +52,8 @@ class TDEmpty extends StatelessWidget {
           TDText(
             emptyText ?? '',
             fontWeight: FontWeight.w400,
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+            font: emptyTextFont??TDTheme.of(context).fontBodyMedium,
+            textColor: emptyTextColor??TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
           (type == TDEmptyType.operation)
               ? Padding(
@@ -52,7 +61,7 @@ class TDEmpty extends StatelessWidget {
                   child: TDButton(
                     text: operationText ?? '',
                     size: TDButtonSize.large,
-                    theme: TDButtonTheme.primary,
+                    theme: operationTheme??TDButtonTheme.primary,
                     width: 179,
                     onTap: () {
                       if (onTapEvent != null) {

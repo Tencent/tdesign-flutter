@@ -1,5 +1,5 @@
 
-  Widget _expansionPannelTypeTabBar(BuildContext context) {
+  Widget _expansionPanelTypeTabBar(BuildContext context) {
     return TDBottomTabBar(
       TDBottomTabBarBasicType.expansionPanel,
       useVerticalDivider: true,

@@ -9,7 +9,7 @@
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
-            showBage: true,
+            showBadge: true,
             tdBadge: const TDBadge(TDBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
