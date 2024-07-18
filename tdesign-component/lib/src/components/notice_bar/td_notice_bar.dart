@@ -155,19 +155,18 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
   }
 
   void _step() {
-    var textHeight = _getFontSize().height;
     var step = 0;
     var offset = 0.0;
-    _timer =
-        Timer.periodic(Duration(milliseconds: widget.interval!), (timer) {
-      var time = (textHeight / widget.speed! * 1000).round();
+    _timer = Timer.periodic(Duration(milliseconds: widget.interval!), (timer) {
+      var time = (22 / widget.speed! * 1000).round();
       if (step >= widget.context.length) {
         step = 0;
         offset = 0;
         _scrollController!.jumpTo(0);
       }
       step++;
-      offset += textHeight;
+      // 固定滚动行高（22）
+      offset += 22;
       _scrollController!.animateTo(offset,
           duration: Duration(milliseconds: time), curve: Curves.linear);
     });
@@ -197,7 +196,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
       _left = Icon(
         widget.prefixIcon,
         color: _style!.leftIconColor,
-        size: 24,
+        size: 22,
       );
     }
     if (widget.left != null) {
@@ -211,7 +210,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
       _right = Icon(
         widget.suffixIcon,
         color: _style!.rightIconColor,
-        size: 24,
+        size: 22,
       );
     }
     if (widget.right != null) {
@@ -245,11 +244,23 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     Widget? textWidget;
     if (widget.context is String) {
       valid = true;
-      textWidget = TDText(widget.context, style: _style?.getTextStyle);
+      textWidget = SizedBox(
+        height: 22,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: TDText(widget.context, style: _style?.getTextStyle, maxLines: 1),
+        ),
+      );
     }
     if (widget.context is List<String>) {
       valid = true;
-      textWidget = TDText(widget.context[0], style: _style?.getTextStyle);
+      textWidget = SizedBox(
+        height: 22,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: TDText(widget.context[0], style: _style?.getTextStyle, maxLines: 1),
+        ),
+      );
     }
     if (!valid) {
       throw Exception('context must be String or List<String>');
@@ -268,7 +279,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
             children: [
               SizedBox(
                 key: _key,
-                height: _getFontSize().height,
+                height: 22,
                 child: textWidget,
               ),
               SizedBox(width: _getEmptyWidth()),
@@ -276,7 +287,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
                 width: _getEmptyWidth() > _getContextWidth()
                     ? _getEmptyWidth()
                     : _getContextWidth(),
-                height: _getFontSize().height,
+                height: 22,
                 child: textWidget,
               )
             ],
@@ -286,7 +297,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
       case Axis.vertical:
         var contexts = widget.context as List<String>;
         child = SizedBox(
-          height: _getFontSize().height,
+          height: 22,
           child: SingleChildScrollView(
             controller: _scrollController,
             scrollDirection: Axis.vertical,
@@ -297,22 +308,30 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
                 children: [
                   for (int i = 0; i < contexts.length; i++)
                     SizedBox(
-                      child: TDText(
-                        contexts[i],
-                        style: _style!.getTextStyle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      height: 22,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: TDText(
+                          contexts[i],
+                          style: _style!.getTextStyle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                   SizedBox(
                     key: _key,
-                    child: TDText(
-                      contexts[0],
-                      style: _style?.getTextStyle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    height: 22,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: TDText(
+                        contexts[0],
+                        style: _style?.getTextStyle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  )
+                  ),
                 ]),
           ),
         );
@@ -362,9 +381,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
             visible: _right != null,
             child: GestureDetector(
               onTap: () => _onTap('suffix-icon'),
-              child: Container(
-                child: _right,
-              ),
+              child: _right,
             ),
           ),
         ],

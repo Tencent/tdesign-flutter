@@ -68,7 +68,12 @@ class TDNoticeBarStyle {
   TextStyle get getTextStyle =>
       textStyle ??
       TextStyle(
-          color: TDTheme.of(context).fontGyColor1, fontSize: 16, height: 1);
+        color: TDTheme.of(context).fontGyColor1,
+        fontSize: 14,
+        height: 1,
+        fontWeight: FontWeight.normal,
+        fontStyle: FontStyle.normal,
+      );
 
   /// 根据主题生成样式
   TDNoticeBarStyle.generateTheme(BuildContext context,
