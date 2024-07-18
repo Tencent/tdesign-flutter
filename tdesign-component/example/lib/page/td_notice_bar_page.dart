@@ -103,6 +103,9 @@ Widget _entranceNoticeBar1(BuildContext context) {
       text: '文字按钮',
       type: TDButtonType.text,
       theme: TDButtonTheme.primary,
+      size: TDButtonSize.extraSmall,
+      height: 22,
+      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
     ),
   );
 }
@@ -241,7 +244,9 @@ Widget _leftNoticeBar(BuildContext context) {
       text: '文本',
       type: TDButtonType.text,
       theme: TDButtonTheme.primary,
-      size: TDButtonSize.small,
+      size: TDButtonSize.extraSmall,
+      height: 22,
+      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
     ),
   );
 }
