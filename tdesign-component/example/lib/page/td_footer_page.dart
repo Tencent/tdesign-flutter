@@ -16,6 +16,7 @@ class _TDFooterPageState extends State<TDFooterPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tdTitle(),
+      backgroundColor: TDTheme.of(context).whiteColor1,
       desc: '可以折叠/展开的内容区域。',
       exampleCodeGroup: 'footer',
       children: [
