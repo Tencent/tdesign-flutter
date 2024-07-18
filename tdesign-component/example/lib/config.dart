@@ -95,11 +95,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         text: 'NavBar 导航栏', name: 'navbar', pageBuilder: _wrapInheritedTheme((context) => const TDNavBarPage())),
     ExamplePageModel(
         text: 'SideBar 侧边栏', name: 'side-bar', pageBuilder: _wrapInheritedTheme((context) => const TDSideBarPage())),
-    ExamplePageModel(
-        text: 'Steps 步骤条',
-        name: 'steps',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+    ExamplePageModel(text: 'Steps 步骤条', name: 'steps', pageBuilder: _wrapInheritedTheme((context) => const TDStepsPage())),
     ExamplePageModel(
         text: 'TabBar 标签栏', name: 'tab-bar', pageBuilder: _wrapInheritedTheme((context) => const TDBottomTabBarPage())),
     ExamplePageModel(text: 'Tabs 选项卡', name: 'tabs', pageBuilder: _wrapInheritedTheme((context) => const TDTabsPage())),
@@ -142,7 +138,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TDTextareaPage())),
     ExamplePageModel(
         text: 'TreeSelect 树形选择器',
-        name: 'tree_select',
+        name: 'tree-select',
         pageBuilder: _wrapInheritedTheme((context) => const TDTreeSelectPage())),
     ExamplePageModel(
         text: 'Upload 上传',
@@ -178,7 +174,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         text: 'Image 图片', name: 'image', pageBuilder: _wrapInheritedTheme((context) => const TDImagePage())),
     ExamplePageModel(
         text: 'ImageViewer 图片预览',
-        name: 'image_viewer',
+        name: 'image-viewer',
         pageBuilder: _wrapInheritedTheme((context) => const TDImageViewerPage())),
     ExamplePageModel(
         text: 'Progress 进度条',
@@ -203,7 +199,6 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Swiper 轮播图', name: 'swiper', pageBuilder: _wrapInheritedTheme((context) => const TDSwiperPage())),
     ExamplePageModel(text: 'Tag 标签', name: 'tag', pageBuilder: _wrapInheritedTheme((context) => const TDTagPage())),
-    ExamplePageModel(text: 'Steps 步骤条', name: 'steps', pageBuilder: _wrapInheritedTheme((context) => const TDStepsPage())),
   ],
   '反馈': [
     ExamplePageModel(
@@ -242,7 +237,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TdPullDownRefreshPage())),
     ExamplePageModel(
         text: 'Swipecell 滑动操作',
-        name: 'swipecell',
+        name: 'swipe-cell',
         pageBuilder: _wrapInheritedTheme((context) => const TDSwipeCellPage())),
     ExamplePageModel(
         text: 'Toast 轻提示', name: 'toast', pageBuilder: _wrapInheritedTheme((context) => const TDToastPage())),
