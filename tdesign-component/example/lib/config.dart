@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'base/example_base.dart';
 import 'page/sidebar/td_sidebar_page.dart';
@@ -13,6 +12,7 @@ import 'page/td_backtop_page.dart';
 import 'page/td_badge_page.dart';
 import 'page/td_bottom_tab_bar_page.dart';
 import 'page/td_button_page.dart';
+import 'page/td_cascader_page.dart';
 import 'page/td_cell_page.dart';
 import 'page/td_checkbox_page.dart';
 import 'page/td_collapse.dart';
@@ -41,10 +41,11 @@ import 'page/td_search_bar_page.dart';
 import 'page/td_shadows_page.dart';
 import 'page/td_slider_page.dart';
 import 'page/td_stepper_page.dart';
-import 'page/td_swipe_cell_page.dart';
 import 'page/td_steps_page.dart';
+import 'page/td_swipe_cell_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
+import 'page/td_table_page.dart';
 import 'page/td_tabs_page.dart';
 import 'page/td_tag_page.dart';
 import 'page/td_text_page.dart';
@@ -52,7 +53,6 @@ import 'page/td_textarea_page.dart';
 import 'page/td_theme_page.dart';
 import 'page/td_toast_page.dart';
 import 'page/td_tree_select_page.dart';
-import 'page/td_cascader_page.dart';
 import 'page/todo_page.dart';
 
 PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
@@ -198,6 +198,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
         text: 'Swiper 轮播图', name: 'swiper', pageBuilder: _wrapInheritedTheme((context) => const TDSwiperPage())),
+    ExamplePageModel(text: 'Table 表格', name: 'table', pageBuilder: _wrapInheritedTheme((context) => const TDTablePage())),
     ExamplePageModel(text: 'Tag 标签', name: 'tag', pageBuilder: _wrapInheritedTheme((context) => const TDTagPage())),
   ],
   '反馈': [
