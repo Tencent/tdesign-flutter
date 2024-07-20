@@ -89,6 +89,8 @@
 # sticky
 # swiper
 ./bin/demo_tool generate --folder ../lib/src/components/swiper --name TDSwiperPagination,TDPageTransformer --folder-name swiper --output ../example/assets/api/ --only-api --get-comments
+# table
+./bin/demo_tool generate --folder ../lib/src/components/table --name TDTable --folder-name table --output ../example/assets/api/ --only-api
 # tag
 ./bin/demo_tool generate --folder ../lib/src/components/tag --name TDTag,TDSelectTag,TDTagStyle --folder-name tag --output ../example/assets/api/ --only-api
 
