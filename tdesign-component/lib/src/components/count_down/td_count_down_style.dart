@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
+/// 计时组件计时方向
+enum TDCountDownDirection {
+  /// 倒计时
+  down,
+  /// 正向计时
+  up
+}
+
 /// 倒计时组件尺寸
 enum TDCountDownSize {
   /// 小

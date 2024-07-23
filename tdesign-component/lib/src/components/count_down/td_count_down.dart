@@ -39,6 +39,7 @@ class TDCountDown extends StatefulWidget {
     this.style,
     this.onChange,
     this.onFinish,
+    this.direction = TDCountDownDirection.down
   }) : super(key: key);
 
   /// 是否自动开始倒计时
@@ -74,6 +75,9 @@ class TDCountDown extends StatefulWidget {
   /// 倒计时结束时触发回调
   final VoidCallback? onFinish;
 
+  /// 计时方向，默认倒计时
+  final TDCountDownDirection direction;
+
   @override
   _TDCountDownState createState() => _TDCountDownState();
 }
@@ -86,9 +90,15 @@ class _TDCountDownState extends State<TDCountDown>
   @override
   void initState() {
     super.initState();
-    _time = widget.time;
-    if (_time > 0 && widget.autoStart) {
-      startTimer();
+    if (widget.direction == TDCountDownDirection.down) {
+      _time = widget.time;
+      if (_time > 0 && widget.autoStart) {
+        startTimer();
+      }
+    } else {
+      if (_time == 0 && widget.autoStart) {
+        startTimer();
+      }
     }
   }
 
@@ -101,15 +111,27 @@ class _TDCountDownState extends State<TDCountDown>
   void startTimer() {
     var tempMilliseconds = 0;
     _ticker = createTicker((Duration elapsed) {
-      if (_time > 0) {
-        setState(() {
-          _time = max(_time - (elapsed.inMilliseconds - tempMilliseconds), 0);
-        });
-        tempMilliseconds = elapsed.inMilliseconds;
-        widget.onChange?.call(_time);
+      if (widget.direction == TDCountDownDirection.down) {
+        if (_time > 0) {
+          setState(() {
+            _time = max(_time - (elapsed.inMilliseconds - tempMilliseconds), 0);
+          });
+          tempMilliseconds = elapsed.inMilliseconds;
+          widget.onChange?.call(_time);
+        } else {
+          _ticker.dispose();
+          widget.onFinish?.call();
+        }
       } else {
-        _ticker.dispose();
-        widget.onFinish?.call();
+        if (_time <= widget.time) {
+          setState(() {
+            _time = min(elapsed.inMilliseconds, widget.time);
+          });
+          widget.onChange?.call(_time);
+        } else {
+          _ticker.dispose();
+          widget.onFinish?.call();
+        }
       }
     });
     _ticker.start();

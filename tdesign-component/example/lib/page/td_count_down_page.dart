@@ -36,6 +36,15 @@ class TDCountDownPage extends StatelessWidget {
               ),
               ExampleItem(
                 ignoreCode: true,
+                desc: '正向计时',
+                center: false,
+                padding: const EdgeInsets.only(left: 16),
+                builder: (BuildContext context) {
+                  return const CodeWrapper(builder: _buildUpSimple);
+                },
+              ),
+              ExampleItem(
+                ignoreCode: true,
                 desc: '带方形底',
                 center: false,
                 padding: const EdgeInsets.only(left: 16),
@@ -81,9 +90,9 @@ class TDCountDownPage extends StatelessWidget {
                   return Container(
                     alignment: Alignment.topLeft,
                     child:
-                        Wrap(spacing: 8, direction: Axis.vertical, children: [
+                        const Wrap(spacing: 8, direction: Axis.vertical, children: [
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('小'),
@@ -92,7 +101,7 @@ class TDCountDownPage extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('中'),
@@ -101,7 +110,7 @@ class TDCountDownPage extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('大'),
@@ -122,9 +131,9 @@ class TDCountDownPage extends StatelessWidget {
                   return Container(
                     alignment: Alignment.topLeft,
                     child:
-                        Wrap(spacing: 8, direction: Axis.vertical, children: [
+                        const Wrap(spacing: 8, direction: Axis.vertical, children: [
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('小'),
@@ -133,7 +142,7 @@ class TDCountDownPage extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('中'),
@@ -142,7 +151,7 @@ class TDCountDownPage extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('大'),
@@ -163,9 +172,9 @@ class TDCountDownPage extends StatelessWidget {
                   return Container(
                     alignment: Alignment.topLeft,
                     child:
-                        Wrap(spacing: 8, direction: Axis.vertical, children: [
+                        const Wrap(spacing: 8, direction: Axis.vertical, children: [
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('小'),
@@ -174,7 +183,7 @@ class TDCountDownPage extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('中'),
@@ -183,7 +192,7 @@ class TDCountDownPage extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('大'),
@@ -204,9 +213,9 @@ class TDCountDownPage extends StatelessWidget {
                   return Container(
                     alignment: Alignment.topLeft,
                     child:
-                        Wrap(spacing: 8, direction: Axis.vertical, children: [
+                        const Wrap(spacing: 8, direction: Axis.vertical, children: [
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('小'),
@@ -215,7 +224,7 @@ class TDCountDownPage extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('中'),
@@ -224,7 +233,7 @@ class TDCountDownPage extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('大'),
@@ -245,9 +254,9 @@ class TDCountDownPage extends StatelessWidget {
                   return Container(
                     alignment: Alignment.topLeft,
                     child:
-                        Wrap(spacing: 8, direction: Axis.vertical, children: [
+                        const Wrap(spacing: 8, direction: Axis.vertical, children: [
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('小'),
@@ -256,7 +265,7 @@ class TDCountDownPage extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('中'),
@@ -265,7 +274,7 @@ class TDCountDownPage extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: [
                           SizedBox(
                             width: 80,
                             child: Text('大'),
@@ -291,6 +300,11 @@ TDCountDown _buildSimple(BuildContext context) {
 @Demo(group: 'countDown')
 TDCountDown _buildMillisecondSimple(BuildContext context) {
   return const TDCountDown(time: 60 * 60 * 1000, millisecond: true);
+}
+
+@Demo(group: 'countDown')
+TDCountDown _buildUpSimple(BuildContext context) {
+  return const TDCountDown(time: 60 * 60 * 1000, millisecond: true, direction: TDCountDownDirection.up,);
 }
 
 @Demo(group: 'countDown')
