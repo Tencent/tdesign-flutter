@@ -1,0 +1,9 @@
+
+  Widget _buildTextFab(BuildContext context) {
+    return _buildRowDemo([
+      const TDFab(
+        theme: TDFabTheme.primary,
+        text: 'Floating',
+      )
+    ]);
+  }
