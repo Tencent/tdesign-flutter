@@ -16,6 +16,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
+[td_count_down_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_count_down_page.dart)
+
 ### 1 组件类型
 
 时分秒
@@ -51,8 +53,7 @@ TDCountDown _buildMillisecondSimple(BuildContext context) {
 
   <pre slot="Dart" lang="javascript">
 TDCountDown _buildSquareSimple(BuildContext context) {
-  return const TDCountDown(
-      time: 60 * 60 * 1000, theme: TDCountDownTheme.square);
+  return const TDCountDown(time: 60 * 60 * 1000, theme: TDCountDownTheme.square);
 }</pre>
 
 </td-code-block>
@@ -78,10 +79,7 @@ TDCountDown _buildRoundSimple(BuildContext context) {
 
   <pre slot="Dart" lang="javascript">
 TDCountDown _buildUnitSimple(BuildContext context) {
-  return const TDCountDown(
-      time: 60 * 60 * 1000,
-      theme: TDCountDownTheme.square,
-      splitWithUnit: true);
+  return const TDCountDown(time: 60 * 60 * 1000, theme: TDCountDownTheme.square, splitWithUnit: true);
 }</pre>
 
 </td-code-block>
@@ -478,8 +476,7 @@ TDCountDown _buildUnitLargeSize(BuildContext context) {
 
   <pre slot="Dart" lang="javascript">
 TDCountDown _buildCustomUnitSmallSize(BuildContext context) {
-  var style =
-      TDCountDownStyle.generateStyle(context, size: TDCountDownSize.small);
+  var style = TDCountDownStyle.generateStyle(context, size: TDCountDownSize.small);
   style.timeColor = TDTheme.of(context).errorColor6;
   return TDCountDown(
     time: 60 * 60 * 1000,
@@ -496,8 +493,7 @@ TDCountDown _buildCustomUnitSmallSize(BuildContext context) {
 
   <pre slot="Dart" lang="javascript">
 TDCountDown _buildCustomUnitMediumSize(BuildContext context) {
-  var style =
-      TDCountDownStyle.generateStyle(context, size: TDCountDownSize.medium);
+  var style = TDCountDownStyle.generateStyle(context, size: TDCountDownSize.medium);
   style.timeColor = TDTheme.of(context).errorColor6;
   return TDCountDown(
     time: 60 * 60 * 1000,
@@ -514,8 +510,7 @@ TDCountDown _buildCustomUnitMediumSize(BuildContext context) {
 
   <pre slot="Dart" lang="javascript">
 TDCountDown _buildCustomUnitLargeSize(BuildContext context) {
-  var style =
-      TDCountDownStyle.generateStyle(context, size: TDCountDownSize.large);
+  var style = TDCountDownStyle.generateStyle(context, size: TDCountDownSize.large);
   style.timeColor = TDTheme.of(context).errorColor6;
   return TDCountDown(
     time: 60 * 60 * 1000,
@@ -532,8 +527,7 @@ TDCountDown _buildCustomUnitLargeSize(BuildContext context) {
 
   <pre slot="Dart" lang="javascript">
 TDCountDown _buildCustomUnitSmallSize(BuildContext context) {
-  var style =
-      TDCountDownStyle.generateStyle(context, size: TDCountDownSize.small);
+  var style = TDCountDownStyle.generateStyle(context, size: TDCountDownSize.small);
   style.timeColor = TDTheme.of(context).errorColor6;
   return TDCountDown(
     time: 60 * 60 * 1000,
@@ -550,8 +544,7 @@ TDCountDown _buildCustomUnitSmallSize(BuildContext context) {
 
   <pre slot="Dart" lang="javascript">
 TDCountDown _buildCustomUnitMediumSize(BuildContext context) {
-  var style =
-      TDCountDownStyle.generateStyle(context, size: TDCountDownSize.medium);
+  var style = TDCountDownStyle.generateStyle(context, size: TDCountDownSize.medium);
   style.timeColor = TDTheme.of(context).errorColor6;
   return TDCountDown(
     time: 60 * 60 * 1000,
@@ -568,8 +561,7 @@ TDCountDown _buildCustomUnitMediumSize(BuildContext context) {
 
   <pre slot="Dart" lang="javascript">
 TDCountDown _buildCustomUnitLargeSize(BuildContext context) {
-  var style =
-      TDCountDownStyle.generateStyle(context, size: TDCountDownSize.large);
+  var style = TDCountDownStyle.generateStyle(context, size: TDCountDownSize.large);
   style.timeColor = TDTheme.of(context).errorColor6;
   return TDCountDown(
     time: 60 * 60 * 1000,
@@ -592,7 +584,7 @@ TDCountDown _buildCustomUnitLargeSize(BuildContext context) {
 | --- | --- | --- | --- |
 | key |  | - |  |
 | autoStart | bool | true | 是否自动开始倒计时 |
-| content | dynamic | 'default' | 'default'/Widget Function(int time)/Widget |
+| content | dynamic | 'default' | 'default' / Widget Function(int time) / Widget |
 | format | String | 'HH:mm:ss' | 时间格式，DD-日，HH-时，mm-分，ss-秒，SSS-毫秒 |
 | millisecond | bool | false | 是否开启毫秒级渲染 |
 | size | TDCountDownSize | TDCountDownSize.medium | 倒计时尺寸 |
@@ -602,6 +594,7 @@ TDCountDown _buildCustomUnitLargeSize(BuildContext context) {
 | style | TDCountDownStyle? | - | 自定义样式，有则优先用它，没有则根据size和theme选取 |
 | onChange |  Function(int time)? | - | 时间变化时触发回调 |
 | onFinish | VoidCallback? | - | 倒计时结束时触发回调 |
+| controller | TDCountDownController? | - | 控制器，可控制开始/暂停/继续/重置 |
 
 ```
 ```
@@ -635,5 +628,10 @@ TDCountDown _buildCustomUnitLargeSize(BuildContext context) {
 | --- |  --- |
 | TDCountDownStyle.generateStyle  | 生成默认样式 |
 
+```
+```
+ ### TDCountDownController
+#### 简介
+倒计时组件控制器，可控制开始(`start()`)/暂停(`pause()`)/继续(`resume()`)/重置(`reset([int? time])`)
 
   
