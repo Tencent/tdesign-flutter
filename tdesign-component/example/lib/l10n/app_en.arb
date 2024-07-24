@@ -19,5 +19,12 @@
   "hours": "hours",
   "minutes": "minutes",
   "seconds": "seconds",
-  "milliseconds": "milliseconds"
+  "milliseconds": "milliseconds",
+  "sunday": "SUN",
+  "monday": "MON",
+  "tuesday": "TUE",
+  "wednesday": "WED",
+  "thursday": "THU",
+  "friday": "FRI",
+  "saturday": "SAT"
 }
