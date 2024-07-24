@@ -10,7 +10,7 @@ TDesign Flutter组件示例应用
 <br/>
 Android请扫码下载预览 ↓
 <br/>
-<img width="260" src="/flutter/assets/qrcode/apk_qrcode.png" />
+<img width="260" src="/flutter/assets/qrcode/td_apk_qrcode.png" />
 <br/>
 iOS请运行项目预览 ↓
 <br/>
@@ -39,9 +39,9 @@ iOS请运行项目预览 ↓
 - 使用示例：`example/lib/page/`
 
 
-# 自定义主题
+## 自定义主题
 
-## 基础用法
+### 基础用法
 设置自定义主题的方式:
 ```
     MaterialApp(
@@ -70,7 +70,7 @@ iOS请运行项目预览 ↓
   ''';
 ```
 
-## 主题生成器
+### 主题生成器
 如果你不想自定义太多颜色,但是想要拥有好看的自定义主题,"主题生成器"是个不错的选择.
 
 1.进入[TDesign官网](https://tdesign.tencent.com/vue/custom-theme) ,点击下方的主题生成器,然后再右边生成器里选择想要的颜色,点击下载
@@ -155,6 +155,14 @@ class IntlResourceDelegate extends TDResourceDelegate {
 >
 > 0.1.5版本:适配了Android和iOS双端基础系统字体的中文居中,其他语言的字体,可以通过重写TDTextPaddingConfig的paddingRate和paddingExtraRate进行自定义适配,TDTextPaddingConfig使用方法可参考TDTextPage.
 
+## 组件规划
+
+- 开发中组件: NoticeBar,Rate,Calendar,Indexs,ActionSheet,Progress,Footer,Result,Message,Popover,Table
+
+- 待开发组件: Form,Upload
+
+- 其他事项: API优化,单元测试,多端适配
+
 ## 基础库版本
 
 最低基础库版本：`^0.1.0`
@@ -176,3 +184,5 @@ TDesign Flutter 依赖以下组件库,感谢作者的开源贡献:
 [flutter_easyrefresh](https://pub-web.flutter-io.cn/packages/easy_refresh)
 
 [flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)
+
+[flutter_slidable](https://pub-web.flutter-io.cn/packages/flutter_slidable)
