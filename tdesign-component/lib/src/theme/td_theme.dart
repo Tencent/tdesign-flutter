@@ -192,12 +192,12 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
     var refMap = TDMap<String, String>();
     return TDThemeData(
         name: name,
-        colorMap: TDMap(factory: () => _defaultThemeData?.colorMap, refs: refMap),
-        fontMap: TDMap(factory: () => _defaultThemeData?.fontMap, refs:refMap),
-        radiusMap: TDMap(factory: () => _defaultThemeData?.radiusMap, refs: refMap),
-        fontFamilyMap: TDMap(factory: () => _defaultThemeData?.fontFamilyMap, refs:refMap),
-        shadowMap: TDMap(factory: () => _defaultThemeData?.shadowMap, refs: refMap),
-        spacerMap: TDMap(factory: () => _defaultThemeData?.spacerMap, refs: refMap),
+        colorMap: TDMap(factory: () => defaultData().colorMap, refs: refMap),
+        fontMap: TDMap(factory: () => defaultData().fontMap, refs:refMap),
+        radiusMap: TDMap(factory: () => defaultData().radiusMap, refs: refMap),
+        fontFamilyMap: TDMap(factory: () => defaultData().fontFamilyMap, refs:refMap),
+        shadowMap: TDMap(factory: () => defaultData().shadowMap, refs: refMap),
+        spacerMap: TDMap(factory: () => defaultData().spacerMap, refs: refMap),
         refMap: refMap);
   }
 

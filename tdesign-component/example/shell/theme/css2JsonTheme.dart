@@ -44,7 +44,7 @@ void genThemeJson({required List<ThemeItem> items, required String output}) {
 
     final jsonMap = convertCssToJson(cssContent);
 
-    var filterMap = {};
+    var filterMap = <String,String>{};
     var colorKeys = <String>['brand', 'warning', 'error', 'success', 'gray'];
     jsonMap.forEach((key, value) {
       for (var element in colorKeys) {
@@ -57,17 +57,39 @@ void genThemeJson({required List<ThemeItem> items, required String output}) {
       }
     });
 
+    var functionNames = ['Light','Focus','Disabled','Hover','Active'];
+    var defaultNames = ['brandColor','warningColor','errorColor','successColor'];
     var refMap = <String, String> {};
+    var removeKey = [];
     filterMap.forEach((key, value) {
-      if(value is String) {
-        if (value.contains('var(')) {
-          var field = value.replaceAll('var(', '')
-          .replaceAll(')', '');
-          refMap[key] = convertToCamelCase(field);
+      if (value.contains('var(')) {
+        var field = value.replaceAll('var(', '').replaceAll(')', '');
+        for (var f in functionNames) {
+          if (key.endsWith(f)) {
+            // 替换brandColorLight格式命名为brandLightColor
+            var reKey = key.replaceAll('Color$f', '${f}Color');
+            refMap[reKey] = convertToCamelCase(field);
+            removeKey.add(key);
+            return;
+          }
         }
+        for (var d in defaultNames){
+          if(key == d){
+            // 替换brandColor格式命名为brandNormalColor
+            var reKey = key.replaceAll('Color', 'NormalColor');
+            refMap[reKey] = convertToCamelCase(field);
+            removeKey.add(key);
+            return;
+          }
+        }
+        refMap[key] = convertToCamelCase(field);
+        removeKey.add(key);
       }
     });
-
+    // 清除已处理的Key
+    removeKey.forEach((key){
+      filterMap.remove(key);
+    });
     var themeMap = {};
     themeMap['ref'] = refMap;
     themeMap['color'] = filterMap;

@@ -193,6 +193,7 @@ class _TDSideBarState extends State<TDSideBar> {
             minWidth: 106,
             maxHeight: MediaQuery.of(context).size.height -
                 MediaQuery.of(context).padding.top),
+
         child: SizedBox(
             height: widget.height ?? MediaQuery.of(context).size.height,
             child: MediaQuery.removePadding(
@@ -200,6 +201,7 @@ class _TDSideBarState extends State<TDSideBar> {
                 removeTop: true,
                 removeBottom: true,
                 child: ListView.builder(
+                    physics: const ClampingScrollPhysics(),
                     itemCount: displayChildren.length,
                     controller: _scrollerController,
                     itemBuilder: (BuildContext context, int index) {

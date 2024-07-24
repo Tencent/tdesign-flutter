@@ -5,13 +5,6 @@ import '../../../tdesign_flutter.dart';
 
 /// Steps步骤条数据类型
 class TDStepsItemData {
-  final String title;
-  final String content;
-
-  final IconData? successIcon;
-  final IconData? errorIcon;
-
-  final Widget? customContent;
 
   TDStepsItemData({
     required this.title,
@@ -20,6 +13,21 @@ class TDStepsItemData {
     this.errorIcon,
     this.customContent,
   });
+
+  /// 标题
+  final String title;
+
+  /// 内容
+  final String content;
+
+  /// 成功图标
+  final IconData? successIcon;
+
+  /// 失败图标
+  final IconData? errorIcon;
+
+  /// 自定义内容
+  final Widget? customContent;
 }
 
 /// Steps步骤条方向
@@ -36,6 +44,18 @@ enum TDStepsStatus {
 
 /// Steps步骤条
 class TDSteps extends StatefulWidget {
+
+  const TDSteps({
+    super.key,
+    required this.steps,
+    this.activeIndex = 0,
+    this.direction = TDStepsDirection.horizontal,
+    this.status = TDStepsStatus.success,
+    this.simple = false,
+    this.readOnly = false,
+    this.verticalSelect = false,
+  });
+
   /// 步骤条数据
   final List<TDStepsItemData> steps;
   /// 步骤条方向
@@ -50,17 +70,6 @@ class TDSteps extends StatefulWidget {
   final bool readOnly;
   /// 步骤条垂直自定义步骤条选择模式
   final bool verticalSelect;
-
-  const TDSteps({
-    super.key,
-    required this.steps,
-    this.activeIndex = 0,
-    this.direction = TDStepsDirection.horizontal,
-    this.status = TDStepsStatus.success,
-    this.simple = false,
-    this.readOnly = false,
-    this.verticalSelect = false,
-  });
 
   @override
   _TDStepsState createState() => _TDStepsState();

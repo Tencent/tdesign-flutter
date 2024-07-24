@@ -1,0 +1,22 @@
+
+  Widget _buildHorizontalLetterCascader(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        TDCascader.showMultiCascader(context, title: '选择地址', data: _data_2, initialData: _initData_2, theme: 'tab',
+            onChange: (List<MultiCascaderListModel> selectData) {
+          setState(() {
+            List result = [];
+            int len = selectData.length;
+            _initData_2 = selectData[len - 1].value!;
+            selectData.forEach((element) {
+              result.add(element.label);
+            });
+            _selected_2 = result.join('/');
+          });
+        }, onClose: () {
+          Navigator.of(context).pop();
+        });
+      },
+      child: _buildSelectRow(context, _selected_2, '选择地区'),
+    );
+  }

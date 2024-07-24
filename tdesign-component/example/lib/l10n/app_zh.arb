@@ -14,5 +14,10 @@
   "other": "其它",
   "refreshing": "正在刷新",
   "releaseRefresh": "松开刷新",
-  "reset": "重置"
+  "reset": "重置",
+  "days": "天",
+  "hours": "时",
+  "minutes": "分",
+  "seconds": "秒",
+  "milliseconds": "毫秒"
 }

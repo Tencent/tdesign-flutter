@@ -144,7 +144,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
                 }),
             ExampleItem(
               desc: '双层级文本标签栏',
-              builder: _expansionPannelTypeTabBar,
+              builder: _expansionPanelTypeTabBar,
             ),
           ],
         ),
@@ -552,7 +552,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
   }
 
   @Demo(group: 'bottomTabBar')
-  Widget _expansionPannelTypeTabBar(BuildContext context) {
+  Widget _expansionPanelTypeTabBar(BuildContext context) {
     return TDBottomTabBar(
       TDBottomTabBarBasicType.expansionPanel,
       useVerticalDivider: true,
@@ -613,7 +613,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
       navigationTabs: [
         TDBottomTabBarTabConfig(
           badgeConfig: BadgeConfig(
-            showBage: true,
+            showBadge: true,
             tdBadge: const TDBadge(TDBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
@@ -650,7 +650,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
-            showBage: true,
+            showBadge: true,
             tdBadge: const TDBadge(TDBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
@@ -691,7 +691,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
-            showBage: true,
+            showBadge: true,
             tdBadge: const TDBadge(TDBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
@@ -770,7 +770,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
           selectedIcon: _selectedIcon,
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
-            showBage: true,
+            showBadge: true,
             tdBadge: const TDBadge(TDBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
