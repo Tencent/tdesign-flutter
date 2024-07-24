@@ -39,9 +39,9 @@ iOS请运行项目预览 ↓
 - 使用示例：`example/lib/page/`
 
 
-# 自定义主题
+## 自定义主题
 
-## 基础用法
+### 基础用法
 设置自定义主题的方式:
 ```
     MaterialApp(
@@ -70,7 +70,7 @@ iOS请运行项目预览 ↓
   ''';
 ```
 
-## 主题生成器
+### 主题生成器
 如果你不想自定义太多颜色,但是想要拥有好看的自定义主题,"主题生成器"是个不错的选择.
 
 1.进入[TDesign官网](https://tdesign.tencent.com/vue/custom-theme) ,点击下方的主题生成器,然后再右边生成器里选择想要的颜色,点击下载
@@ -176,3 +176,5 @@ TDesign Flutter 依赖以下组件库,感谢作者的开源贡献:
 [flutter_easyrefresh](https://pub-web.flutter-io.cn/packages/easy_refresh)
 
 [flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)
+
+[flutter_slidable](https://pub-web.flutter-io.cn/packages/flutter_slidable)
