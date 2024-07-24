@@ -59,7 +59,7 @@
 # textarea
 ./bin/demo_tool generate --file ../lib/src/components/textarea/td_textarea.dart --name TDTextarea --folder-name textarea --output ../example/assets/api/ --only-api --get-comments
 # tree_select
-./bin/demo_tool generate --file ../lib/src/components/tree/td_tree_select.dart --name TDTreeSelect,TDSelectOption --folder-name tree --output ../example/assets/api/ --only-api
+./bin/demo_tool generate --file ../lib/src/components/tree/td_tree_select.dart --name TDTreeSelect,TDSelectOption --folder-name tree-select --output ../example/assets/api/ --only-api
 
 # upload
 
@@ -83,7 +83,7 @@
 # image
 ./bin/demo_tool generate --file ../lib/src/components/image/td_image.dart --name TDImage --folder-name image --output ../example/assets/api/ --only-api
 # imageViewer
-./bin/demo_tool generate --folder ../lib/src/components/image_viewer  --name TDImageViewer,TDImageViewerWidget,  --folder-name image_viewer --output ../example/assets/api/ --only-api
+./bin/demo_tool generate --folder ../lib/src/components/image_viewer  --name TDImageViewer,TDImageViewerWidget,  --folder-name image-viewer --output ../example/assets/api/ --only-api
 # progress
 # result
 # skeleton
@@ -111,7 +111,7 @@
 # refresh
 ./bin/demo_tool generate --file ../lib/src/components/refresh/td_refresh_header.dart --name TDRefreshHeader --folder-name pull-down-refresh --output ../example/assets/api/ --only-api --get-comments
 # swipecell
-./bin/demo_tool generate --folder ../lib/src/components/swipe_cell --name TDSwipeAction,TDSwipeAutoClose,TDSwipeCell,TDSwipePanel --folder-name swipecell --output ../example/assets/api/ --only-api --get-comments
+./bin/demo_tool generate --folder ../lib/src/components/swipe_cell --name TDSwipeAction,TDSwipeAutoClose,TDSwipeCell,TDSwipePanel --folder-name swipe-cell --output ../example/assets/api/ --only-api --get-comments
 # toast
 ./bin/demo_tool generate --file ../lib/src/components/toast/td_toast.dart --name TDToast --folder-name toast --output ../example/assets/api/ --only-api
 

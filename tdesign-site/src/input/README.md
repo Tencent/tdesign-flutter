@@ -16,6 +16,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
+[td_input_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_input_page.dart)
+
 ### 1 组件类型
 
 基础输入框
@@ -984,6 +986,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | showBottomDivider | bool | true | 是否展示底部分割线 |
 | cardStyle | TDCardStyle? | - | 卡片默认样式 |
 | cardStyleTopText | String? | - | 卡片模式上方文字 |
+| inputAction | TextInputAction? | - | 键盘动作类型 |
+| spacer | TDInputSpacer | - | 组件各模块间间距 |
 | cardStyleBottomText | String? | - | 卡片模式下方文字 |
 
 
