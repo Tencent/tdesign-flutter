@@ -73,11 +73,13 @@ class TDInputDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return TDDialogScaffold(
       showCloseButton: showCloseButton,
-      backgroundColor: backgroundColor,
+      backgroundColor:backgroundColor,
       radius: radius,
       body: Material(
+        color:backgroundColor,
         borderRadius: BorderRadius.all(Radius.circular(radius)),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
+        child: Column(
+            mainAxisSize: MainAxisSize.min, children: [
           TDDialogInfoWidget(
             title: title,
             titleColor: titleColor,
@@ -87,9 +89,12 @@ class TDInputDialog extends StatelessWidget {
             contentColor: contentColor,
           ),
           Container(
-            color: Colors.white,
             height: 48,
             margin: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(radius)),
+            ),
             child: TextField(
               controller: textEditingController,
               autofocus: true,

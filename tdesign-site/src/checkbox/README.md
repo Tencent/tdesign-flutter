@@ -16,6 +16,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
+[td_checkbox_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_checkbox_page.dart)
+
 ### 1 组件类型
 
 纵向多选框
@@ -108,7 +110,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         padding: const EdgeInsets.all(0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (contet, index) {
+        itemBuilder: (context, index) {
           var title = '多选';
           if(index == 0){
             title = '全选';
@@ -276,7 +278,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         padding: const EdgeInsets.all(0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (contet, index) {
+        itemBuilder: (context, index) {
           var title = '多选';
           return TDCheckbox(
             id: 'index:$index',
