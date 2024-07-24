@@ -28,7 +28,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
 Widget _buildBaseSimple(BuildContext context) {
   /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TDButton(
     text: '基础抽屉',
     isBlock: true,
@@ -39,7 +39,7 @@ Widget _buildBaseSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        drawerTop: renderBox.size.height,
+        drawerTop: renderBox?.size.height,
         items: List.generate(30, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
         onItemClick: (index, item) {
           print('drawer item被点击，index：$index，title：${item.title}');
@@ -58,7 +58,7 @@ Widget _buildBaseSimple(BuildContext context) {
   <pre slot="Dart" lang="javascript">
 Widget _buildBaseSimple(BuildContext context) {
   /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TDButton(
     text: '基础抽屉',
     isBlock: true,
@@ -69,7 +69,7 @@ Widget _buildBaseSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        drawerTop: renderBox.size.height,
+        drawerTop: renderBox?.size.height,
         items: List.generate(30, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
         onItemClick: (index, item) {
           print('drawer item被点击，index：$index，title：${item.title}');
@@ -90,7 +90,7 @@ Widget _buildBaseSimple(BuildContext context) {
   <pre slot="Dart" lang="javascript">
 Widget _buildIconSimple(BuildContext context) {
   /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TDButton(
     text: '带图标抽屉',
     isBlock: true,
@@ -101,7 +101,7 @@ Widget _buildIconSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        drawerTop: renderBox.size.height,
+        drawerTop: renderBox?.size.height,
         items: List.generate(30, (index) => TDDrawerItem(title: '菜单${_nums[index]}', icon: const Icon(TDIcons.app))).toList(),
       );
     },
@@ -117,7 +117,7 @@ Widget _buildIconSimple(BuildContext context) {
   <pre slot="Dart" lang="javascript">
 Widget _buildIconSimple(BuildContext context) {
   /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TDButton(
     text: '带图标抽屉',
     isBlock: true,
@@ -128,7 +128,7 @@ Widget _buildIconSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        drawerTop: renderBox.size.height,
+        drawerTop: renderBox?.size.height,
         items: List.generate(30, (index) => TDDrawerItem(title: '菜单${_nums[index]}', icon: const Icon(TDIcons.app))).toList(),
       );
     },
@@ -147,7 +147,7 @@ Widget _buildIconSimple(BuildContext context) {
   <pre slot="Dart" lang="javascript">
 Widget _buildTitleSimple(BuildContext context) {
   /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TDButton(
     text: '带图标抽屉',
     isBlock: true,
@@ -158,7 +158,7 @@ Widget _buildTitleSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        drawerTop: renderBox.size.height,
+        drawerTop: renderBox?.size.height,
         title: '标题',
         placement: TDDrawerPlacement.left,
         items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
@@ -176,7 +176,7 @@ Widget _buildTitleSimple(BuildContext context) {
   <pre slot="Dart" lang="javascript">
 Widget _buildTitleSimple(BuildContext context) {
   /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TDButton(
     text: '带图标抽屉',
     isBlock: true,
@@ -187,7 +187,7 @@ Widget _buildTitleSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        drawerTop: renderBox.size.height,
+        drawerTop: renderBox?.size.height,
         title: '标题',
         placement: TDDrawerPlacement.left,
         items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
@@ -207,7 +207,7 @@ Widget _buildTitleSimple(BuildContext context) {
   <pre slot="Dart" lang="javascript">
 Widget _buildBottomSimple(BuildContext context) {
   /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TDButton(
     text: '带底部插槽样式',
     isBlock: true,
@@ -218,7 +218,7 @@ Widget _buildBottomSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        drawerTop: renderBox.size.height,
+        drawerTop: renderBox?.size.height,
         title: '标题',
         placement: TDDrawerPlacement.left,
         items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
@@ -242,7 +242,7 @@ Widget _buildBottomSimple(BuildContext context) {
   <pre slot="Dart" lang="javascript">
 Widget _buildBottomSimple(BuildContext context) {
   /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TDButton(
     text: '带底部插槽样式',
     isBlock: true,
@@ -253,7 +253,7 @@ Widget _buildBottomSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        drawerTop: renderBox.size.height,
+        drawerTop: renderBox?.size.height,
         title: '标题',
         placement: TDDrawerPlacement.left,
         items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
