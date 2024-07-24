@@ -100,6 +100,27 @@ abstract class TDResourceDelegate {
 
   /// [TDCountDown] 毫秒
   String get milliseconds;
+
+  /// [TDCalendarHeader] 星期日
+  String get sunday;
+
+  /// [TDCalendarHeader] 星期一
+  String get monday;
+
+  /// [TDCalendarHeader] 星期二
+  String get tuesday;
+
+  /// [TDCalendarHeader] 星期三
+  String get wednesday;
+
+  /// [TDCalendarHeader] 星期四
+  String get thursday;
+
+  /// [TDCalendarHeader] 星期五
+  String get friday;
+
+  /// [TDCalendarHeader] 星期六
+  String get saturday;
 }
 
 /// 如果用户要重写,就应该全部重写,不开放只重新部分资源
@@ -154,4 +175,25 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
 
   @override
   String get milliseconds => '毫秒';
+  
+  @override
+  String get sunday => '日';
+
+  @override
+  String get monday => '一';
+
+  @override
+  String get tuesday => '二';
+  
+  @override
+  String get wednesday => '三';
+  
+  @override
+  String get thursday => '四';
+
+  @override
+  String get friday => '五';
+  
+  @override
+  String get saturday => '六';
 }
