@@ -1,0 +1,13 @@
+
+  Widget _basicImageViewer(BuildContext context) {
+    return TDButton(
+      type: TDButtonType.ghost,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      size: TDButtonSize.large,
+      text: '基础图片预览',
+      onTap: () {
+        TDImageViewer.showImageViewer(context: context, images: images);
+      },
+    );
+  }

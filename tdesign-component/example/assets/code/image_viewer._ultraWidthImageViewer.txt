@@ -1,0 +1,24 @@
+
+  Widget _ultraWidthImageViewer(BuildContext context) {
+    return TDButton(
+      type: TDButtonType.ghost,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      size: TDButtonSize.large,
+      text: '图片超宽情况',
+      onTap: () {
+        TDImageViewer.showImageViewer(
+          context: context,
+          images: images,
+          showIndex: true,
+          height: 140,
+          onLongPress: (index) {
+            Navigator.of(context).push(TDSlidePopupRoute(
+              slideTransitionFrom: SlideTransitionFrom.bottom,
+              builder: _getSheetItem,
+            ));
+          },
+        );
+      },
+    );
+  }

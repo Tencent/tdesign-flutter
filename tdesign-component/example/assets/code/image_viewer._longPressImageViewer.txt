@@ -1,0 +1,24 @@
+
+  Widget _longPressImageViewer(BuildContext context) {
+    return TDButton(
+      type: TDButtonType.ghost,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      size: TDButtonSize.large,
+      text: '长按图片',
+      onTap: () {
+        TDImageViewer.showImageViewer(
+          context: context,
+          images: images,
+          deleteBtn: true,
+          showIndex: true,
+          onLongPress: (index) {
+            Navigator.of(context).push(TDSlidePopupRoute(
+              slideTransitionFrom: SlideTransitionFrom.bottom,
+              builder: _getSheetItem,
+            ));
+          },
+        );
+      },
+    );
+  }

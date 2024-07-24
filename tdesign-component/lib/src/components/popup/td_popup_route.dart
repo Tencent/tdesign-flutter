@@ -8,13 +8,20 @@ enum SlideTransitionFrom { top, right, left, bottom, center }
 
 /// 从屏幕的某个方向滑动弹出的Dialog框的路由，比如从顶部、底部、左、右滑出页面
 class TDSlidePopupRoute<T> extends PopupRoute<T> {
-  TDSlidePopupRoute(
-      {required this.builder,
-      this.barrierLabel,
-      this.modalBarrierColor,
-      this.isDismissible = true,
-      this.transitionAnimationController,
-      this.slideTransitionFrom = SlideTransitionFrom.bottom});
+  TDSlidePopupRoute({
+    required this.builder,
+    this.barrierLabel,
+    this.modalBarrierColor = Colors.black54,
+    this.isDismissible = true,
+    this.modalBarrierFull = false,
+    this.slideTransitionFrom = SlideTransitionFrom.bottom,
+    this.modalWidth,
+    this.modalHeight,
+    this.modalTop = 0,
+    this.modalLeft = 0,
+    this.open,
+    this.opened,
+  });
 
   /// 控件构建器
   final WidgetBuilder builder;
@@ -25,11 +32,31 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
   /// 点击蒙层能否关闭
   final bool isDismissible;
 
-  /// 动画控制器
-  final AnimationController? transitionAnimationController;
+  /// 是否全屏显示蒙层
+  final bool modalBarrierFull;
 
   /// 设置从屏幕的哪个方向滑出
   final SlideTransitionFrom slideTransitionFrom;
+
+  /// 弹出框宽度
+  final double? modalWidth;
+
+  /// 弹出框高度
+  final double? modalHeight;
+
+  /// 弹出框顶部距离
+  final double? modalTop;
+
+  /// 弹出框左侧距离
+  final double? modalLeft;
+
+  /// 打开前事件
+  final VoidCallback? open;
+
+  /// 打开后事件
+  final VoidCallback? opened;
+
+  Color get _barrierColor => modalBarrierColor ?? Colors.black54;
 
   @override
   Duration get transitionDuration => _bottomSheetEnterDuration;
@@ -44,81 +71,142 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
   final String? barrierLabel;
 
   @override
-  Color get barrierColor => modalBarrierColor ?? Colors.black54;
+  Color get barrierColor => modalBarrierFull ? _barrierColor : Colors.transparent;
 
   // 实现转场动画
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     var animValue = decelerateEasing.transform(animation.value);
-
-    return AnimatedBuilder(
-        animation: animation,
-        child: child,
-        builder: (context, child) {
-          return CustomSingleChildLayout(
-            delegate:
-                SlideTransitionLayout(animValue, slideTransitionFrom),
-            child: child,
-          );
-        });
+    return Stack(
+      children: [
+        if (!modalBarrierFull)
+          _getPositionWidget(
+            context,
+            Container(
+              color: _barrierColor.withAlpha((animValue * _barrierColor.alpha).toInt()),
+              child: GestureDetector(
+                onTap: () {
+                  if (isDismissible) {
+                    Navigator.pop(context);
+                  }
+                },
+              ),
+            ),
+          ),
+        _getPositionWidget(
+          context,
+          Align(
+            alignment: slideTransitionFromToAlignment(slideTransitionFrom),
+            child: slideTransitionFrom != SlideTransitionFrom.center
+                ? FractionalTranslation(
+                    translation: _getOffset(animValue, slideTransitionFrom),
+                    child: ClipRect(
+                      clipper: RectClipper(animValue, slideTransitionFrom),
+                      child: child,
+                    ),
+                  )
+                : Transform(
+                    transform: Matrix4.diagonal3Values(animValue, animValue, 1),
+                    alignment: Alignment.center,
+                    child: child,
+                  ),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
-    return builder.call(context) ;
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+    return builder.call(context);
+  }
+
+  @override
+  TickerFuture didPush() {
+    open?.call();
+    animation?.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        opened?.call();
+      }
+    });
+    return super.didPush();
+  }
+
+  Widget _getPositionWidget(BuildContext context, Widget child) {
+    var screenSize = MediaQuery.of(context).size;
+    var _modalTop = (modalTop ?? 0).clamp(0, screenSize.height).toDouble();
+    var _modalLeft = (modalLeft ?? 0).clamp(0, screenSize.width).toDouble();
+    var _modalHeight = (modalHeight ?? screenSize.height).clamp(0, screenSize.height - _modalTop).toDouble();
+    var _modalWidth = (modalWidth ?? screenSize.width).clamp(0, screenSize.width - _modalLeft).toDouble();
+    return Positioned(
+      top: _modalTop,
+      bottom: screenSize.height - _modalTop - _modalHeight,
+      left: _modalLeft,
+      right: screenSize.width - _modalLeft - _modalWidth,
+      child: child,
+    );
+  }
+
+  Offset _getOffset(double animValue, SlideTransitionFrom slideTransitionFrom) {
+    switch (slideTransitionFrom) {
+      case SlideTransitionFrom.top:
+        return Offset(0, animValue - 1);
+      case SlideTransitionFrom.right:
+        return Offset(1 - animValue, 0);
+      case SlideTransitionFrom.left:
+        return Offset(animValue - 1, 0);
+      case SlideTransitionFrom.bottom:
+        return Offset(0, 1 - animValue);
+      default:
+        return const Offset(0, 0);
+    }
   }
 }
 
-/// 从各个方向弹出的Transition
-/// progress为0到1区间的变化值
-class SlideTransitionLayout extends SingleChildLayoutDelegate {
-  final double progress;
+Alignment slideTransitionFromToAlignment(SlideTransitionFrom from) {
+  switch (from) {
+    case SlideTransitionFrom.top:
+      return Alignment.topCenter;
+    case SlideTransitionFrom.right:
+      return Alignment.centerRight;
+    case SlideTransitionFrom.left:
+      return Alignment.centerLeft;
+    case SlideTransitionFrom.bottom:
+      return Alignment.bottomCenter;
+    case SlideTransitionFrom.center:
+      return Alignment.center;
+  }
+}
+
+class RectClipper extends CustomClipper<Rect> {
+  final double animValue;
   final SlideTransitionFrom slideTransitionFrom;
 
-  SlideTransitionLayout(this.progress, this.slideTransitionFrom);
+  RectClipper(this.animValue, this.slideTransitionFrom);
 
   @override
-  BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
-    var width = constraints.maxWidth;
-    var height = constraints.maxHeight;
-    // if (slideTransitionFrom == SlideTransitionFrom.center) {
-    //   width = constraints.maxWidth * progress;
-    //   height = constraints.maxHeight * progress;
-    // }
-    return BoxConstraints(maxWidth: width, maxHeight: height);
-  }
-
-  @override
-  Offset getPositionForChild(Size size, Size childSize) {
-    var posY = 0.0;
-    var posX = 0.0;
-    // 弹出的方向
+  Rect getClip(Size size) {
     switch (slideTransitionFrom) {
       case SlideTransitionFrom.top:
-        posY = -(childSize.height - childSize.height * progress);
-        break;
-      case SlideTransitionFrom.left:
-        posX = -(childSize.width - childSize.width * progress);
-        break;
+        return Rect.fromLTWH(0, size.height * (1 - animValue), size.width, size.height);
       case SlideTransitionFrom.right:
-        posX = size.width - childSize.width * progress;
-        break;
+        return Rect.fromLTWH(0, 0, size.width * animValue, size.height);
+      case SlideTransitionFrom.left:
+        return Rect.fromLTWH(size.width * (1 - animValue), 0, size.width, size.height);
       case SlideTransitionFrom.bottom:
-        posY = size.height - childSize.height * progress;
-        break;
-      case SlideTransitionFrom.center:
-        posX = (size.width - childSize.width) / 2;
-        posY = (size.height - childSize.height) / 2;
-        break;
+        return Rect.fromLTWH(0, 0, size.width, size.height * animValue);
+      default:
+        return Rect.fromLTWH(0, 0, size.width, size.height);
     }
-    return Offset(posX, posY);
   }
 
   @override
-  bool shouldRelayout(SlideTransitionLayout oldDelegate) {
-    return progress != oldDelegate.progress ||
-        slideTransitionFrom != oldDelegate.slideTransitionFrom;
+  bool shouldReclip(covariant CustomClipper<Rect> oldClipper) {
+    return oldClipper != this;
   }
 }

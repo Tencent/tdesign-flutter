@@ -1,0 +1,26 @@
+
+  Widget _buildVerticalSubTitleCascader(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        TDCascader.showMultiCascader(context,
+            title: '选择地址',
+            subTitles: ['请选择省份', '请选择城市', '请选择区/县'],
+            data: _data,
+            initialData: _initData,
+            theme: 'tab', onChange: (List<MultiCascaderListModel> selectData) {
+          setState(() {
+            List result = [];
+            int len = selectData.length;
+            _initData = selectData[len - 1].value!;
+            selectData.forEach((element) {
+              result.add(element.label);
+            });
+            _selected_1 = result.join('/');
+          });
+        }, onClose: () {
+          Navigator.of(context).pop();
+        });
+      },
+      child: _buildSelectRow(context, _selected_1, '选择地区'),
+    );
+  }
