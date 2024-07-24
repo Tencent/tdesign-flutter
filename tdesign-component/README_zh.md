@@ -3,7 +3,7 @@
     <img alt="TDesign Logo" width="200" src="https://tdesign.gtimg.com/site/TDesign.png" />
   </a>
 </p>
-腾讯TDesign Flutter技术栈组件库，适合在移动端项目中使用。
+腾讯TDesign Flutter技术栈组件库，适合在移动端项目中使用。 
 
 # 特性
 
