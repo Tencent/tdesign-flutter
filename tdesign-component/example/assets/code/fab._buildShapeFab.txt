@@ -1,0 +1,19 @@
+
+  Widget _buildShapeFab(BuildContext context) {
+    return _buildRowDemoWidthDescription([
+      {
+        'component': const TDFab(
+          theme: TDFabTheme.primary,
+          shape: TDFabShape.circle,
+        ),
+        'desc': 'Circle'
+      },
+      {
+        'component': const TDFab(
+          theme: TDFabTheme.primary,
+          shape: TDFabShape.square,
+        ),
+        'desc': 'Square'
+      },
+    ]);
+  }

@@ -108,7 +108,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         padding: const EdgeInsets.all(0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (contet, index) {
+        itemBuilder: (context, index) {
           var title = '多选';
           if(index == 0){
             title = '全选';
@@ -276,7 +276,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         padding: const EdgeInsets.all(0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (contet, index) {
+        itemBuilder: (context, index) {
           var title = '多选';
           return TDCheckbox(
             id: 'index:$index',

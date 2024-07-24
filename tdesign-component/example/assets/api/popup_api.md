@@ -8,10 +8,16 @@
 | --- | --- | --- | --- |
 | builder | WidgetBuilder | - | 控件构建器 |
 | barrierLabel |  | - |  |
-| modalBarrierColor | Color? | - | 蒙层颜色 |
+| modalBarrierColor | Color? | Colors.black54 | 蒙层颜色 |
 | isDismissible | bool | true | 点击蒙层能否关闭 |
-| transitionAnimationController | AnimationController? | - | 动画控制器 |
+| modalBarrierFull | bool | false | 是否全屏显示蒙层 |
 | slideTransitionFrom | SlideTransitionFrom | SlideTransitionFrom.bottom | 设置从屏幕的哪个方向滑出 |
+| modalWidth | double? | - | 弹出框宽度 |
+| modalHeight | double? | - | 弹出框高度 |
+| modalTop | double? | 0 | 弹出框顶部距离 |
+| modalLeft | double? | 0 | 弹出框左侧距离 |
+| open | VoidCallback? | - | 打开前事件 |
+| opened | VoidCallback? | - | 打开后事件 |
 
 ```
 ```

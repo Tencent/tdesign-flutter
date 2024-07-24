@@ -18,6 +18,12 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>UploadComponentNeeded</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>UploadComponentNeeded</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>UploadComponentNeeded</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>

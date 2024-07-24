@@ -168,6 +168,8 @@ class IntlResourceDelegate extends TDResourceDelegate {
  > 
  > 0.1.5版本:适配了Android和iOS双端基础系统字体的中文居中,其他语言的字体,可以通过重写TDTextPaddingConfig的paddingRate和paddingExtraRate进行自定义适配,TDTextPaddingConfig使用方法可参考TDTextPage.
 
+- 修改全局字体:
+> 设置kTextNeedGlobalFontFamily=true,然后设置TDTextConfiguration的globalFontFamily参数.(0.1.6版本开始支持)
 
 # SDK依赖版本
 dart: ">=2.19.0 <4.0.0"

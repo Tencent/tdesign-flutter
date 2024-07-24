@@ -113,7 +113,7 @@ class TDCountDownStyle {
           timeWidth = timeHeight = null;
           font = TDTheme.of(context).fontBodyMedium;
           timeFontSize = splitFontSize = font?.size ?? 14;
-          timeFontHeight = splitFontHeight = (font?.height ?? 22) / (timeFontSize ?? 14);
+          timeFontHeight = splitFontHeight = font?.height ?? (22 / timeFontSize!);
         } else {
           timeWidth = timeHeight = 20;
           font = TDTheme.of(context).fontBodySmall;
@@ -127,7 +127,7 @@ class TDCountDownStyle {
           timeWidth = timeHeight = null;
           font = TDTheme.of(context).fontBodyLarge;
           timeFontSize = splitFontSize = font?.size ?? 16;
-          timeFontHeight = splitFontHeight = (font?.height ?? 24) / (timeFontSize ?? 16);
+          timeFontHeight = splitFontHeight = font?.height ?? (24 / timeFontSize!);
         } else {
           timeWidth = timeHeight = 24;
           font = TDTheme.of(context).fontBodyMedium;
@@ -141,7 +141,7 @@ class TDCountDownStyle {
           timeWidth = timeHeight = null;
           font = TDTheme.of(context).fontBodyExtraLarge;
           timeFontSize = splitFontSize = font?.size ?? 18;
-          timeFontHeight = splitFontHeight = (font?.height ?? 26) / (timeFontSize ?? 18);
+          timeFontHeight = splitFontHeight = font?.height ?? (26 / timeFontSize!);
         } else {
           timeWidth = timeHeight = 28;
           font = TDTheme.of(context).fontBodyLarge;
