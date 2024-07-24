@@ -155,6 +155,14 @@ class IntlResourceDelegate extends TDResourceDelegate {
 >
 > 0.1.5版本:适配了Android和iOS双端基础系统字体的中文居中,其他语言的字体,可以通过重写TDTextPaddingConfig的paddingRate和paddingExtraRate进行自定义适配,TDTextPaddingConfig使用方法可参考TDTextPage.
 
+## 组件规划
+
+- 开发中组件: NoticeBar,Rate,Calendar,Indexs,ActionSheet,Progress,Footer,Result,Message,Popover,Table
+
+- 待开发组件: Form,Upload
+
+- 其他事项: API优化,单元测试,多端适配
+
 ## 基础库版本
 
 最低基础库版本：`^0.1.0`
