@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
+import '../icon/td_icons.dart';
+import '../text/td_text.dart';
 
 class TDCalendarHeader extends StatelessWidget {
   const TDCalendarHeader({
@@ -14,7 +15,10 @@ class TDCalendarHeader extends StatelessWidget {
     this.title,
     this.titleStyle,
     this.titleWidget,
+    this.titleMaxLine,
+    this.titleOverflow,
     this.closeBtn = true,
+    this.closeColor,
     this.onClose,
   }) : super(key: key);
 
@@ -26,10 +30,13 @@ class TDCalendarHeader extends StatelessWidget {
   final String? title;
   final TextStyle? titleStyle;
   final Widget? titleWidget;
+  final int? titleMaxLine;
+  final TextOverflow? titleOverflow;
   final bool closeBtn;
+  final Color? closeColor;
   final VoidCallback? onClose;
 
-  List<String> getDays(BuildContext context) {
+  List<String> _getDays(BuildContext context) {
     final raw = [
       context.resource.sunday,
       context.resource.monday,
@@ -50,20 +57,39 @@ class TDCalendarHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final list = getDays(context);
+    final list = _getDays(context);
     return Container(
       padding: EdgeInsets.fromLTRB(padding, 0, padding, 0),
       child: Column(
         children: [
-          if (title?.isNotEmpty == true || titleWidget != null)
+          if (title?.isNotEmpty == true || titleWidget != null || closeBtn)
             Container(
               padding: EdgeInsets.fromLTRB(0, padding, 0, padding),
-              child: Center(
-                child: titleWidget ??
-                    TDText(
-                      title,
-                      style: titleStyle,
+              child: Row(
+                children: [
+                  if (closeBtn) const SizedBox(width: 24),
+                  Expanded(
+                    child: Center(
+                      child: titleWidget ??
+                          TDText(
+                            title,
+                            style: titleStyle,
+                            maxLines: titleMaxLine,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                     ),
+                  ),
+                  if (closeBtn)
+                    SizedBox(
+                      width: 24,
+                      child: GestureDetector(
+                        child: Icon(TDIcons.close, color: closeColor),
+                        onTap: () {
+                          onClose?.call();
+                        },
+                      ),
+                    ),
+                ],
               ),
             ),
           Row(
