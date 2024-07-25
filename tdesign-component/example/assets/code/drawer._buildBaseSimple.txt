@@ -1,7 +1,7 @@
 
 Widget _buildBaseSimple(BuildContext context) {
   /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TDButton(
     text: '基础抽屉',
     isBlock: true,
@@ -12,7 +12,7 @@ Widget _buildBaseSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        drawerTop: renderBox.size.height,
+        drawerTop: renderBox?.size.height,
         items: List.generate(30, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
         onItemClick: (index, item) {
           print('drawer item被点击，index：$index，title：${item.title}');
