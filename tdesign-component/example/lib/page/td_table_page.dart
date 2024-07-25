@@ -9,15 +9,15 @@ class TDTablePage extends StatelessWidget {
 
   List<dynamic> _getData(int index) {
     var data = <dynamic>[];
-    for(var i = 0; i < 10; i++) {
-      if(i == index) {
+    for (var i = 0; i < 10; i++) {
+      if (i == index) {
         data.add({
           'title1': '内容内容内容内容',
           'title2': '内容',
           'title3': '内容',
           'title4': '内容',
         });
-      }else {
+      } else {
         data.add({
           'title1': '内容',
           'title2': '内容',
@@ -31,14 +31,14 @@ class TDTablePage extends StatelessWidget {
 
   List<dynamic> _getData2() {
     var data = <dynamic>[];
-    for(var i = 0; i < 10; i++) {
-      if(i == 0) {
+    for (var i = 0; i < 10; i++) {
+      if (i == 0) {
         data.add({
           'title1': '横向平铺内容不省略',
           'title2': '横向平铺内容不省略',
           'title3': '横向平铺内容不省略',
         });
-      }else {
+      } else {
         data.add({
           'title1': '内容',
           'title2': '内容',
@@ -52,35 +52,33 @@ class TDTablePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(context),
-        desc: '表格常用于展示同类结构下的多种数据，易于组织、对比和分析等，并可对数据进行搜索、筛选、排序等操作。一般包括表头、数据行和表尾三部分。',
-        exampleCodeGroup: 'table',
-        children: [
-          ExampleModule(
-            title: '组件类型',
-            children: [
-              ExampleItem(desc: '基础表格', builder: _basicTable),
-              ExampleItem(desc: '可排序表格', builder: _sortableTable),
-              ExampleItem(desc: '带操作或按钮表格', builder: _operationBtnTable),
-              ExampleItem(builder: _operationIconTable, padding: const EdgeInsets.only(top: 16)),
-              ExampleItem(desc: '可固定首列表格', builder: _fixedFirstColTable),
-              ExampleItem(desc: '可固定尾列表格', builder: _fixedEndColTable),
-              ExampleItem(desc: '横向平铺可滚动表格', builder: _horizontalScrollTable),
-            ],
-          ),
-          ExampleModule(
-            title: '组件样式',
-            children: [
-              ExampleItem(desc: '带斑马纹表格样式', builder: _stripeTable),
-              ExampleItem(desc: '带边框表格样式', builder: _borderTable),
-            ]
-          ),
-        ],
+      title: tdTitle(context),
+      desc: '表格常用于展示同类结构下的多种数据，易于组织、对比和分析等，并可对数据进行搜索、筛选、排序等操作。一般包括表头、数据行和表尾三部分。',
+      exampleCodeGroup: 'table',
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(desc: '基础表格', builder: _basicTable),
+            ExampleItem(desc: '可排序表格', builder: _sortableTable),
+            ExampleItem(desc: '带操作或按钮表格', builder: _operationBtnTable),
+            ExampleItem(builder: _operationIconTable, padding: const EdgeInsets.only(top: 16)),
+            ExampleItem(desc: '可固定首列表格', builder: _fixedFirstColTable),
+            ExampleItem(desc: '可固定尾列表格', builder: _fixedEndColTable),
+            ExampleItem(desc: '横向平铺可滚动表格', builder: _horizontalScrollTable),
+          ],
+        ),
+        ExampleModule(title: '组件样式', children: [
+          ExampleItem(desc: '带斑马纹表格样式', builder: _stripeTable),
+          ExampleItem(desc: '带边框表格样式', builder: _borderTable),
+        ]),
+      ],
       test: [
         ExampleItem(desc: '固定表头', builder: _fixedHeaderTable),
         ExampleItem(desc: '固定列尾+滚动表格', builder: _fixedScrollTable),
         ExampleItem(desc: '内容居中表格', builder: _centerTable),
         ExampleItem(desc: '空数据表格', builder: _emptyTable),
+        ExampleItem(desc: '加载动画表格', builder: _loadingTable),
       ],
     );
   }
@@ -118,15 +116,31 @@ class TDTablePage extends StatelessWidget {
         TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
         TDTableCol(title: '标题', colKey: 'title2'),
         TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4', cellBuilder: (BuildContext context) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TDText('修改', style: TextStyle(color: TDTheme.of(context).brandNormalColor, fontSize: 14)),
-              TDText('通过', style: TextStyle(color: TDTheme.of(context).brandNormalColor, fontSize: 14)),
-            ],
-          );
-        })
+        TDTableCol(
+          title: '标题',
+          colKey: 'title4',
+          cellBuilder: (BuildContext context) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TDText(
+                  '修改',
+                  style: TextStyle(
+                    color: TDTheme.of(context).brandNormalColor,
+                    fontSize: 14,
+                  ),
+                ),
+                TDText(
+                  '通过',
+                  style: TextStyle(
+                    color: TDTheme.of(context).brandNormalColor,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            );
+          },
+        )
       ],
       data: _getData(9),
     );
@@ -139,15 +153,19 @@ class TDTablePage extends StatelessWidget {
         TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
         TDTableCol(title: '标题', colKey: 'title2'),
         TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4', cellBuilder: (BuildContext context) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(TDIcons.upload, color: TDTheme.of(context).brandNormalColor, size: 14),
-              Icon(TDIcons.delete, color: TDTheme.of(context).brandNormalColor, size: 14),
-            ],
-          );
-        })
+        TDTableCol(
+          title: '标题',
+          colKey: 'title4',
+          cellBuilder: (BuildContext context) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(TDIcons.upload, color: TDTheme.of(context).brandNormalColor, size: 14),
+                Icon(TDIcons.delete, color: TDTheme.of(context).brandNormalColor, size: 14),
+              ],
+            );
+          },
+        )
       ],
       data: _getData(9),
     );
@@ -173,15 +191,32 @@ class TDTablePage extends StatelessWidget {
         TDTableCol(title: '标题', colKey: 'title1'),
         TDTableCol(title: '标题', colKey: 'title2'),
         TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4', fixed: TDTableColFixed.right, cellBuilder: (BuildContext context) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TDText('修改', style: TextStyle(color: TDTheme.of(context).brandNormalColor, fontSize: 14)),
-              TDText('通过', style: TextStyle(color: TDTheme.of(context).brandNormalColor, fontSize: 14)),
-            ],
-          );
-        }),
+        TDTableCol(
+          title: '标题',
+          colKey: 'title4',
+          fixed: TDTableColFixed.right,
+          cellBuilder: (BuildContext context) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TDText(
+                  '修改',
+                  style: TextStyle(
+                    color: TDTheme.of(context).brandNormalColor,
+                    fontSize: 14,
+                  ),
+                ),
+                TDText(
+                  '通过',
+                  style: TextStyle(
+                    color: TDTheme.of(context).brandNormalColor,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ],
       data: _getData(10),
     );
@@ -210,7 +245,7 @@ class TDTablePage extends StatelessWidget {
         TDTableCol(title: '标题', colKey: 'title4')
       ],
       data: _getData(9),
-   );
+    );
   }
 
   @Demo(group: 'table')
@@ -224,7 +259,7 @@ class TDTablePage extends StatelessWidget {
         TDTableCol(title: '标题', colKey: 'title4')
       ],
       data: _getData(9),
-   );
+    );
   }
 
   @Demo(group: 'table')
@@ -239,7 +274,7 @@ class TDTablePage extends StatelessWidget {
         TDTableCol(title: '标题', colKey: 'title4')
       ],
       data: _getData(9),
-   );
+    );
   }
 
   @Demo(group: 'table')
@@ -249,15 +284,32 @@ class TDTablePage extends StatelessWidget {
         TDTableCol(title: '标题', colKey: 'title1', width: 200),
         TDTableCol(title: '标题', colKey: 'title2', width: 160),
         TDTableCol(title: '标题', colKey: 'title3', width: 160),
-        TDTableCol(title: '标题', colKey: 'title4', fixed: TDTableColFixed.right, cellBuilder: (BuildContext context) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TDText('修改', style: TextStyle(color: TDTheme.of(context).brandNormalColor, fontSize: 14)),
-              TDText('通过', style: TextStyle(color: TDTheme.of(context).brandNormalColor, fontSize: 14)),
-            ],
-          );
-        }),
+        TDTableCol(
+          title: '标题',
+          colKey: 'title4',
+          fixed: TDTableColFixed.right,
+          cellBuilder: (BuildContext context) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TDText(
+                  '修改',
+                  style: TextStyle(
+                    color: TDTheme.of(context).brandNormalColor,
+                    fontSize: 14,
+                  ),
+                ),
+                TDText(
+                  '通过',
+                  style: TextStyle(
+                    color: TDTheme.of(context).brandNormalColor,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ],
       data: _getData2(),
     );
@@ -279,13 +331,25 @@ class TDTablePage extends StatelessWidget {
   @Demo(group: 'table')
   Widget _emptyTable(BuildContext context) {
     return TDTable(
-      height: 400,
       columns: [
         TDTableCol(title: '标题', colKey: 'title1'),
         TDTableCol(title: '标题', colKey: 'title2'),
         TDTableCol(title: '标题', colKey: 'title3'),
         TDTableCol(title: '标题', colKey: 'title4')
       ],
+    );
+  }
+
+  @Demo(group: 'table')
+  Widget _loadingTable(BuildContext context) {
+    return TDTable(
+      columns: [
+        TDTableCol(title: '标题', colKey: 'title1'),
+        TDTableCol(title: '标题', colKey: 'title2'),
+        TDTableCol(title: '标题', colKey: 'title3'),
+        TDTableCol(title: '标题', colKey: 'title4')
+      ],
+      loading: true,
     );
   }
 }
