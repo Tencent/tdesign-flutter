@@ -363,19 +363,19 @@ class _TDButtonState extends State<TDButton> {
     double verticalPadding;
     switch (widget.size) {
       case TDButtonSize.large:
-        horizontalPadding = equalSide ? 12 : 20;
+        horizontalPadding = equalSide ? 10 : 20;
         verticalPadding = 12;
         break;
       case TDButtonSize.medium:
-        horizontalPadding = equalSide ? 10 : 16;
+        horizontalPadding = equalSide ? 8 : 16;
         verticalPadding = equalSide ? 10 : 8;
         break;
       case TDButtonSize.small:
-        horizontalPadding = equalSide ? 7 : 12;
+        horizontalPadding = equalSide ? 6 : 12;
         verticalPadding = equalSide ? 7 : 5;
         break;
       case TDButtonSize.extraSmall:
-        horizontalPadding = equalSide ? 5 : 8;
+        horizontalPadding = equalSide ? 4 : 8;
         verticalPadding = equalSide ? 5 : 3;
         break;
     }
