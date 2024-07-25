@@ -9,6 +9,8 @@ typedef CalendarFormatType = TDate Function(TDate day);
 
 enum CalendarType { single, multiple, range }
 
+enum CalendarTrigger { closeBtn, confirmBtn, overlay }
+
 /// 单元格组件
 class TDCalendar extends StatefulWidget {
   const TDCalendar({
@@ -26,6 +28,10 @@ class TDCalendar extends StatefulWidget {
     this.value,
     this.visible = false,
     this.style,
+    this.onChange,
+    this.onClose,
+    this.onConfirm,
+    this.onSelect,
   }) : super(key: key);
 
   /// 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭，不需要手动设置 visible
@@ -40,10 +46,10 @@ class TDCalendar extends StatefulWidget {
   /// 用于格式化日期的函数
   final CalendarFormatType? format;
 
-  /// 最大可选的日期，不传则默认半年后
+  /// 最大可选的日期(fromMillisecondsSinceEpoch)，不传则默认半年后
   final int? maxDate;
 
-  /// 最小可选的日期，不传则默认今天
+  /// 最小可选的日期(fromMillisecondsSinceEpoch)，不传则默认今天
   final int? minDate;
 
   /// 标题
@@ -58,7 +64,7 @@ class TDCalendar extends StatefulWidget {
   /// 是否使用弹出层包裹日历
   final bool? usePopup;
 
-  /// 当前选择的日期，不传则默认今天，当 type = single 时数组长度为1
+  /// 当前选择的日期(fromMillisecondsSinceEpoch)，不传则默认今天，当 type = single 时数组长度为1
   final List<int>? value;
 
   /// 是否显示日历；[usePopup] 为 true 时有效
@@ -66,6 +72,18 @@ class TDCalendar extends StatefulWidget {
 
   /// 自定义样式
   final TDCalendarStyle? style;
+
+  /// 选中值变化时触发
+  final void Function(List<int> value)? onChange;
+
+  /// 关闭时触发
+  final void Function(CalendarTrigger trigger)? onClose;
+
+  /// 点击确认按钮时触发
+  final void Function(List<int> value)? onConfirm;
+
+  /// 点击日期时触发
+  final void Function(int value, bool selected)? onSelect;
 
   @override
   _TDCalendarState createState() => _TDCalendarState();
@@ -84,14 +102,15 @@ class _TDCalendarState extends State<TDCalendar> {
           weekdayStyle: style.weekdayStyle,
           weekdayHeight: 46,
           title: widget.title,
-          titleStyle: widget.title?.isNotEmpty == true
-              ? TextStyle(
-                  fontSize: TDTheme.of(context).fontTitleLarge?.size,
-                  fontWeight: TDTheme.of(context).fontTitleLarge?.fontWeight,
-                  color: TDTheme.of(context).fontGyColor1,
-                )
-              : null,
+          titleStyle: style.titleStyle,
           titleWidget: widget.titleWidget,
+          titleMaxLine: style.titleMaxLine,
+          titleOverflow: TextOverflow.ellipsis,
+          closeBtn: widget.usePopup ?? true,
+          closeColor: style.closeColor,
+          onClose: () {
+            
+          },
         ),
       ],
     );

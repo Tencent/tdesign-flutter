@@ -43,7 +43,7 @@ class TDCountDownController extends ValueNotifier<TDCountDownStatus> {
 
   /// 重置
   void reset([int? time]) {
-    if (value == TDCountDownStatus.reset && _time != time) {
+    if (value == TDCountDownStatus.reset) {
        _time = time;
       notifyListeners();
     } else {
