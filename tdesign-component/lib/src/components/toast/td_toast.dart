@@ -118,40 +118,36 @@ class TDToast {
     _cancel();
     _showing = true;
     var overlayState = Overlay.of(context);
-    var body = Center(
-      child: AnimatedOpacity(
-        opacity: _showing ? 1.0 : 0.0,
-        duration: _showing ? const Duration(milliseconds: 100) : const Duration(milliseconds: 200),
-        child: widget,
-      ),
-    );
+    _overlayEntry = OverlayEntry(
+        builder: (BuildContext context) => Center(
+          child: AnimatedOpacity(
+            opacity: _showing ? 1.0 : 0.0,
+            duration: _showing ? const Duration(milliseconds: 100) : const Duration(milliseconds: 200),
+            child: widget,
+          ),
+        ));
+
     if(preventTap ?? false) {
-      body = Center(
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              right: 0,
-              bottom: 0,
-              left: 0,
-              child: Container(
-                color: Colors.transparent,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: AnimatedOpacity(
-                    opacity: _showing ? 1.0 : 0.0,
-                    duration: _showing ? const Duration(milliseconds: 100) : const Duration(milliseconds: 200),
-                    child: widget,
-                  ),
+      _overlayEntry = OverlayEntry(
+          builder: (BuildContext context) => Positioned(
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            child: Container(
+              color: Colors.transparent,
+              child: Align(
+                alignment: Alignment.center,
+                child: AnimatedOpacity(
+                  opacity: _showing ? 1.0 : 0.0,
+                  duration: _showing ? const Duration(milliseconds: 100) : const Duration(milliseconds: 200),
+                  child: widget,
                 ),
               ),
             ),
-          ],
-        ),
+          ),
       );
     }
-    _overlayEntry = OverlayEntry(
-        builder: (BuildContext context) => body);
     if (_overlayEntry != null) {
       overlayState?.insert(_overlayEntry!);
     }
