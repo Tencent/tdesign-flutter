@@ -35,7 +35,11 @@ class _TDToastPageState extends State<TDToastPage> {
             ExampleItem(desc: '失败提示', builder: _failToast),
             ExampleItem(desc: '失败提示(竖向)', builder: _failVerticalToast),
           ])
-        ]);
+        ],
+      test: [
+        ExampleItem(desc: '禁止滚动+点击', builder: _preventTapToast),
+      ],
+    );
   }
 
   @Demo(group: 'toast')
@@ -224,6 +228,21 @@ class _TDToastPageState extends State<TDToastPage> {
       theme: TDButtonTheme.primary,
       isBlock: true,
       text: '失败提示(竖向)',
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _preventTapToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showText('轻提示文字内容',
+            context: context, preventTap: true);
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '禁止滚动+点击',
     );
   }
 }
