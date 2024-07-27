@@ -18,21 +18,21 @@ String _getMark(String format, String? type) {
 }
 
 /// 倒计时组件
-class TDCountDown extends StatefulWidget {
-  const TDCountDown({
+class TDTimeCounter extends StatefulWidget {
+  const TDTimeCounter({
     Key? key,
     this.autoStart = true,
     this.content = 'default',
     this.format = 'HH:mm:ss',
     this.millisecond = false,
-    this.size = TDCountDownSize.medium,
+    this.size = TDTimeCounterSize.medium,
     this.splitWithUnit = false,
-    this.theme = TDCountDownTheme.defaultTheme,
+    this.theme = TDTimeCounterTheme.defaultTheme,
     required this.time,
     this.style,
     this.onChange,
     this.onFinish,
-    this.direction = TDCountDownDirection.down,
+    this.direction = TDTimeCounterDirection.down,
     this.controller,
   }) : super(key: key);
 
@@ -49,19 +49,19 @@ class TDCountDown extends StatefulWidget {
   final bool millisecond;
 
   /// 倒计时尺寸
-  final TDCountDownSize size;
+  final TDTimeCounterSize size;
 
   /// 使用时间单位分割
   final bool splitWithUnit;
 
   /// 倒计时风格
-  final TDCountDownTheme theme;
+  final TDTimeCounterTheme theme;
 
   /// 必需；倒计时时长，单位毫秒
   final int time;
 
   /// 自定义样式，有则优先用它，没有则根据size和theme选取
-  final TDCountDownStyle? style;
+  final TDTimeCounterStyle? style;
 
   /// 时间变化时触发回调
   final Function(int time)? onChange;
@@ -70,18 +70,18 @@ class TDCountDown extends StatefulWidget {
   final VoidCallback? onFinish;
 
   /// 计时方向，默认倒计时
-  final TDCountDownDirection direction;
+  final TDTimeCounterDirection direction;
 
   /// 控制器，可控制开始/暂停/继续/重置
-  final TDCountDownController? controller;
+  final TDTimeCounterController? controller;
 
   @override
-  _TDCountDownState createState() => _TDCountDownState();
+  _TDTimeCounterState createState() => _TDTimeCounterState();
 }
 
-class _TDCountDownState extends State<TDCountDown>
+class _TDTimeCounterState extends State<TDTimeCounter>
     with SingleTickerProviderStateMixin {
-  late TDCountDownStyle _style;
+  late TDTimeCounterStyle _style;
   late Map<String, String> timeUnitMap;
   Ticker? _ticker;
   int _time = 0;
@@ -90,7 +90,7 @@ class _TDCountDownState extends State<TDCountDown>
   @override
   void initState() {
     super.initState();
-    if (widget.direction == TDCountDownDirection.down) {
+    if (widget.direction == TDTimeCounterDirection.down) {
       _time = widget.time;
     }
     if (widget.autoStart) {
@@ -103,7 +103,7 @@ class _TDCountDownState extends State<TDCountDown>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _style = widget.style ??
-        TDCountDownStyle.generateStyle(
+        TDTimeCounterStyle.generateStyle(
           context,
           size: widget.size,
           theme: widget.theme,
@@ -119,7 +119,7 @@ class _TDCountDownState extends State<TDCountDown>
   }
 
   @override
-  void didUpdateWidget(TDCountDown oldWidget) {
+  void didUpdateWidget(TDTimeCounter oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
       oldWidget.controller?.removeListener(_onControllerChanged);
@@ -141,9 +141,9 @@ class _TDCountDownState extends State<TDCountDown>
     }
     _tempMilliseconds = 0;
     _ticker ??= createTicker((Duration elapsed) {
-      if ((widget.direction == TDCountDownDirection.down && _time > 0) || widget.direction == TDCountDownDirection.up && _time <= widget.time) {
+      if ((widget.direction == TDTimeCounterDirection.down && _time > 0) || widget.direction == TDTimeCounterDirection.up && _time <= widget.time) {
         setState(() {
-          if (widget.direction == TDCountDownDirection.down) {
+          if (widget.direction == TDTimeCounterDirection.down) {
             _time = max(_time - (elapsed.inMilliseconds - _tempMilliseconds), 0);
           } else {
             _time = min(_time + (elapsed.inMilliseconds - _tempMilliseconds), widget.time);
@@ -174,7 +174,7 @@ class _TDCountDownState extends State<TDCountDown>
   /// 重置倒计时
   void resetTimer([int? time]) {
     _ticker?.stop();
-    if (widget.direction == TDCountDownDirection.down) {
+    if (widget.direction == TDTimeCounterDirection.down) {
       _time = time ?? widget.time;
     } else {
       _time = 0;
@@ -187,16 +187,16 @@ class _TDCountDownState extends State<TDCountDown>
 
   void _onControllerChanged() {
     switch (widget.controller?.value) {
-      case TDCountDownStatus.start:
+      case TDTimeCounterStatus.start:
         startTimer();
         break;
-      case TDCountDownStatus.pause:
+      case TDTimeCounterStatus.pause:
         pauseTimer();
         break;
-      case TDCountDownStatus.resume:
+      case TDTimeCounterStatus.resume:
         resumeTimer();
         break;
-      case TDCountDownStatus.reset:
+      case TDTimeCounterStatus.reset:
         resetTimer(widget.controller?.time);
         break;
       default:

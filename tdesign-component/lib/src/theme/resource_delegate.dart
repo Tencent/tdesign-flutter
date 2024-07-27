@@ -86,19 +86,19 @@ abstract class TDResourceDelegate {
   /// [TDRefreshHeader] 松开刷新
   String get releaseRefresh;
 
-  /// [TDCountDown] 天
+  /// [TDTimeCounter] 天
   String get days;
 
-  /// [TDCountDown] 时
+  /// [TDTimeCounter] 时
   String get hours;
 
-  /// [TDCountDown] 分
+  /// [TDTimeCounter] 分
   String get minutes;
 
-  /// [TDCountDown] 秒
+  /// [TDTimeCounter] 秒
   String get seconds;
 
-  /// [TDCountDown] 毫秒
+  /// [TDTimeCounter] 毫秒
   String get milliseconds;
 }
 
