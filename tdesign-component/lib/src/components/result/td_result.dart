@@ -47,7 +47,7 @@ class TDResult extends StatelessWidget {
                 style: titleStyle,
               )),
         // 如果描述不为空，则显示描述
-        if (description != null)
+        if (description?.isNotEmpty ?? false)
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: TDText(description!,
