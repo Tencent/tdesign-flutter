@@ -16,7 +16,7 @@ import 'page/td_button_page.dart';
 import 'page/td_cell_page.dart';
 import 'page/td_checkbox_page.dart';
 import 'page/td_collapse.dart';
-import 'page/td_count_down_page.dart';
+import 'page/td_time_counter_page.dart';
 import 'page/td_date_picker_page.dart';
 import 'page/td_dialog_page.dart';
 import 'page/td_divider_page.dart';
@@ -154,9 +154,9 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Cell 单元格', name: 'cell', pageBuilder: _wrapInheritedTheme((context) => const TDCellPage())),
     ExamplePageModel(
-        text: 'CountDown 倒计时',
-        name: 'count-down',
-        pageBuilder: _wrapInheritedTheme((context) => const TDCountDownPage())),
+        text: 'TimeCounter 计时器',
+        name: 'time-counter',
+        pageBuilder: _wrapInheritedTheme((context) => const TDTimeCounterPage())),
     ExamplePageModel(
         text: 'Collapse 折叠面板',
         name: 'collapse',
