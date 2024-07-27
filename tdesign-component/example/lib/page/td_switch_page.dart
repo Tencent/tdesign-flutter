@@ -306,8 +306,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
         type: TDSwitchType.text,
         openText: '开',
         closeText: '关',
-        thumbContentOnFont: 16,
-        thumbContentOffFont: 10,
+        thumbContentOffColor: Colors.red,
+        thumbContentOnColor: Colors.green,
+        thumbContentOnFont: TextStyle(fontSize: 18),
+        thumbContentOffFont: TextStyle(fontSize: 12),
       ),
       title: '基础开关',
     );
