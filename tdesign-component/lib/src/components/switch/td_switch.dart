@@ -49,11 +49,11 @@ class TDSwitch extends StatefulWidget {
   /// 关闭时ThumbView的颜色
   final Color? thumbContentOffColor;
 
-  /// 开启时ThumbView的字体大小
-  final double? thumbContentOnFont;
+  /// 开启时ThumbView的字体样式
+  final TextStyle? thumbContentOnFont;
 
-  /// 关闭时ThumbView的字体大小
-  final double? thumbContentOffFont;
+  /// 关闭时ThumbView的字体样式
+  final TextStyle? thumbContentOffFont;
 
   /// 尺寸：大、中、小
   final TDSwitchSize? size;
@@ -101,8 +101,8 @@ class TDSwitchState extends State<TDSwitch> {
         widget.thumbContentOnColor ?? theme.brandNormalColor;
     final thumbContentOffColor =
         widget.thumbContentOffColor ?? theme.fontGyColor4;
-    final thumbContentOnFont = widget.thumbContentOnFont ?? 14;
-    final thumbContentOffFont = widget.thumbContentOffFont ?? 14;
+    final thumbContentOnFont = widget.thumbContentOnFont ?? const TextStyle(fontSize: 14);
+    final thumbContentOffFont = widget.thumbContentOffFont ?? const TextStyle(fontSize: 14);
     Widget current = TDCupertinoSwitch(
       value: isOn,
       activeColor: trackOnColor,
@@ -162,7 +162,7 @@ class TDSwitchState extends State<TDSwitch> {
     }
   }
 
-  Widget? _getThumbView(Color thumbContentOnColor, Color thumbContentOffColor, double thumbContentOnFont, double thumbContentOffFont) {
+  Widget? _getThumbView(Color thumbContentOnColor, Color thumbContentOffColor, TextStyle thumbContentOnFont, TextStyle thumbContentOffFont) {
     switch (widget.type) {
       case TDSwitchType.text:
         return Stack(
@@ -174,13 +174,10 @@ class TDSwitchState extends State<TDSwitch> {
                 isOn
                     ? (widget.openText ?? context.resource.open)
                     : (widget.closeText ?? context.resource.close),
-                style: TextStyle(
-                    color: isOn ? thumbContentOnColor : thumbContentOffColor,
-                    fontSize: isOn
-                        ? thumbContentOnFont
-                        : thumbContentOffFont),
+                textColor: isOn ? thumbContentOnColor : thumbContentOffColor,
                 forceVerticalCenter: true,
                 maxLines: 1,
+                style: isOn ? thumbContentOnFont : thumbContentOffFont,
               ),
             )
           ],
