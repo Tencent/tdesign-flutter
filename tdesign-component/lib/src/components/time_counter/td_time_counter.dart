@@ -86,10 +86,12 @@ class _TDTimeCounterState extends State<TDTimeCounter>
   Ticker? _ticker;
   int _time = 0;
   int _tempMilliseconds = 0;
+  int _maxTime = 0;
 
   @override
   void initState() {
     super.initState();
+    _maxTime = widget.time;
     if (widget.direction == TDTimeCounterDirection.down) {
       _time = widget.time;
     }
@@ -141,12 +143,12 @@ class _TDTimeCounterState extends State<TDTimeCounter>
     }
     _tempMilliseconds = 0;
     _ticker ??= createTicker((Duration elapsed) {
-      if ((widget.direction == TDTimeCounterDirection.down && _time > 0) || widget.direction == TDTimeCounterDirection.up && _time <= widget.time) {
+      if ((widget.direction == TDTimeCounterDirection.down && _time > 0) || widget.direction == TDTimeCounterDirection.up && _time <= _maxTime) {
         setState(() {
           if (widget.direction == TDTimeCounterDirection.down) {
             _time = max(_time - (elapsed.inMilliseconds - _tempMilliseconds), 0);
           } else {
-            _time = min(_time + (elapsed.inMilliseconds - _tempMilliseconds), widget.time);
+            _time = min(_time + (elapsed.inMilliseconds - _tempMilliseconds), _maxTime);
           }
         });
         _tempMilliseconds = elapsed.inMilliseconds;
@@ -178,6 +180,7 @@ class _TDTimeCounterState extends State<TDTimeCounter>
       _time = time ?? widget.time;
     } else {
       _time = 0;
+      _maxTime = time ?? widget.time;
     }
     setState(() {});
     if (widget.autoStart) {
