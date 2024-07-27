@@ -375,7 +375,7 @@ class _TDButtonState extends State<TDButton> {
         verticalPadding = equalSide ? 7 : 5;
         break;
       case TDButtonSize.extraSmall:
-        horizontalPadding = equalSide ? 7 : 8;
+        horizontalPadding = equalSide ? 5 : 8;
         verticalPadding = equalSide ? 5 : 3;
         break;
     }
