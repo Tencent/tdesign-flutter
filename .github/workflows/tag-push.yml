@@ -1,0 +1,24 @@
+# 文件名建议统一为 tag-push.yml
+# 应用 publish.yml 的 demo
+
+name: TAG_PUSH
+
+on: create
+
+jobs:
+  TAG_PUSH:
+    runs-on: ubuntu-latest
+    if: github.event.ref_type == 'tag'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.PERSONAL_TOKEN }}
+      - run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git status
+          git fetch origin
+          git merge origin/develop
+          git push origin main
