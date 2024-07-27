@@ -19,10 +19,16 @@ class _TDResultPageState extends State<TDResultPage> {
       exampleCodeGroup: 'result',
       children: [
         ExampleModule(title: '组件类型', children: [
-          ExampleItem(desc: '基础结果', builder: _buildBasicResult),
-          ExampleItem(desc: '带描述的结果', builder: _buildResultWithDescription),
-          ExampleItem(desc: '自定义结果', builder: _buildCustomResult),
-          ExampleItem(desc: '页面示例',ignoreCode: true, builder: _buildPageExample),
+          ExampleItem(
+              desc: '基础结果', ignoreCode: true, builder: _buildBasicResult),
+          ExampleItem(
+              desc: '带描述的结果',
+              ignoreCode: true,
+              builder: _buildResultWithDescription),
+          ExampleItem(
+              desc: '自定义结果', ignoreCode: true, builder: _buildCustomResult),
+          ExampleItem(
+              desc: '页面示例', ignoreCode: true, builder: _buildPageExample),
         ]),
       ],
     );
@@ -30,26 +36,38 @@ class _TDResultPageState extends State<TDResultPage> {
 
   @Demo(group: 'result')
   Widget _buildBasicResult(BuildContext context) {
-    return const Column(
-      children: const [
-        TDResult(
-          title: '成功状态',
-          theme: TDResultTheme.success,
+    return Column(
+      children: [
+        CodeWrapper(
+          builder: (_) => const TDResult(
+            title: '成功状态',
+            theme: TDResultTheme.success,
+          ),
+          methodName: '_buildBasicResult',
         ),
-        SizedBox(height: 48), // 添加间距
-        TDResult(
-          title: '失败状态',
-          theme: TDResultTheme.error,
+        const SizedBox(height: 48),
+        CodeWrapper(
+          builder: (_) => const TDResult(
+            title: '失败状态',
+            theme: TDResultTheme.error,
+          ),
+          methodName: '_buildBasicResult',
         ),
-        SizedBox(height: 48), // 添加间距
-        TDResult(
-          title: '警示状态',
-          theme: TDResultTheme.warning,
+        const SizedBox(height: 48),
+        CodeWrapper(
+          builder: (_) => const TDResult(
+            title: '警示状态',
+            theme: TDResultTheme.warning,
+          ),
+          methodName: '_buildBasicResult',
         ),
-        SizedBox(height: 48), // 添加间距
-        TDResult(
-          title: '默认状态',
-          theme: TDResultTheme.defaultTheme,
+        const SizedBox(height: 48),
+        CodeWrapper(
+          builder: (_) => const TDResult(
+            title: '默认状态',
+            theme: TDResultTheme.defaultTheme,
+          ),
+          methodName: '_buildBasicResult',
         ),
       ],
     );
@@ -57,30 +75,42 @@ class _TDResultPageState extends State<TDResultPage> {
 
   @Demo(group: 'result')
   Widget _buildResultWithDescription(BuildContext context) {
-    return const Column(
-      children: const [
-        TDResult(
-          title: '成功状态',
-          theme: TDResultTheme.success,
-          description: '描述文字',
+    return Column(
+      children: [
+        CodeWrapper(
+          builder: (_) => const TDResult(
+            title: '成功状态',
+            theme: TDResultTheme.success,
+            description: '描述文字',
+          ),
+          methodName: '_buildResultWithDescription',
         ),
-        SizedBox(height: 48), // 添加间距
-        TDResult(
-          title: '失败状态',
-          theme: TDResultTheme.error,
-          description: '描述文字',
+        const SizedBox(height: 48),
+        CodeWrapper(
+          builder: (_) => const TDResult(
+            title: '失败状态',
+            theme: TDResultTheme.error,
+            description: '描述文字',
+          ),
+          methodName: '_buildResultWithDescription',
         ),
-        SizedBox(height: 48), // 添加间距
-        TDResult(
-          title: '警示状态',
-          theme: TDResultTheme.warning,
-          description: '描述文字',
+        const SizedBox(height: 48),
+        CodeWrapper(
+          builder: (_) => const TDResult(
+            title: '警示状态',
+            theme: TDResultTheme.warning,
+            description: '描述文字',
+          ),
+          methodName: '_buildResultWithDescription',
         ),
-        SizedBox(height: 48), // 添加间距
-        TDResult(
-          title: '默认状态',
-          theme: TDResultTheme.defaultTheme,
-          description: '描述文字',
+        const SizedBox(height: 48),
+        CodeWrapper(
+          builder: (_) => const TDResult(
+            title: '默认状态',
+            theme: TDResultTheme.defaultTheme,
+            description: '描述文字',
+          ),
+          methodName: '_buildResultWithDescription',
         ),
       ],
     );
@@ -88,10 +118,14 @@ class _TDResultPageState extends State<TDResultPage> {
 
   @Demo(group: 'result')
   Widget _buildCustomResult(BuildContext context) {
-    return TDResult(
+    return CodeWrapper(
+      builder: (_) => TDResult(
         title: '自定义结果',
         icon: Image.asset('assets/img/illustration.png'),
-        description: '描述文字');
+        description: '描述文字',
+      ),
+      methodName: '_buildCustomResult',
+    );
   }
 
   @Demo(group: 'result')
@@ -106,32 +140,33 @@ class _TDResultPageState extends State<TDResultPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => Scaffold(
-                    appBar: AppBar(
-                      title: const Text('Result 结果'),
-                    ),
-                    body: Column(
-                      children: [
-                        const SizedBox(height: 48),
-                        const TDResult(
-                          title: '成功状态',
-                          theme: TDResultTheme.success,
-                          description: '描述文字',
-                        ),
-                        const SizedBox(height: 48),
-                        TDButton(
-                          text: '返回',
-                          theme: TDButtonTheme.primary,
-                          size: TDButtonSize.large,
-                          type: TDButtonType.outline,
-                          isBlock: true,
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        )
-                      ],
-                    ),
-                  )),
+            builder: (context) => Scaffold(
+              appBar: AppBar(
+                title: const Text('Result 结果'),
+              ),
+              body: Column(
+                children: [
+                  const SizedBox(height: 48),
+                  const TDResult(
+                    title: '成功状态',
+                    theme: TDResultTheme.success,
+                    description: '描述文字',
+                  ),
+                  const SizedBox(height: 48),
+                  TDButton(
+                    text: '返回',
+                    theme: TDButtonTheme.primary,
+                    size: TDButtonSize.large,
+                    type: TDButtonType.outline,
+                    isBlock: true,
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       },
     );
