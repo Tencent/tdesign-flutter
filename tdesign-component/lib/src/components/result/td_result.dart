@@ -8,6 +8,8 @@ class TDResult extends StatelessWidget {
   final String? description;
 // 图标组件，用于在结果中显示一个图标
   final Widget? icon;
+// 自定义字体样式，用于设置标题文本的样式
+  final TextStyle? titleStyle;
 // 主题样式，定义了结果组件的视觉风格
   final TDResultTheme theme;
 // 标题文本，显示结果的主要信息
@@ -18,6 +20,7 @@ class TDResult extends StatelessWidget {
     Key? key,
     this.description,
     this.icon,
+    this.titleStyle,
     this.theme = TDResultTheme.defaultTheme, // 默认主题样式为defaultTheme
     this.title = '', // 默认标题为空字符串
   }) : super(key: key);
@@ -25,11 +28,7 @@ class TDResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 根据主题获取默认的图标组件
-    Widget displayIcon = _getDefaultIconByTheme(context, theme);
-    // 如果提供了自定义图标，则使用自定义图标
-    if (icon != null) {
-      displayIcon = icon!;
-    }
+    Widget displayIcon = icon ?? _getDefaultIconByTheme(context, theme);
     // 构建组件布局
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -45,6 +44,7 @@ class TDResult extends StatelessWidget {
                 title,
                 textColor: TDTheme.of(context).fontGyColor1,
                 font: TDTheme.of(context).fontTitleExtraLarge,
+                style: titleStyle,
               )),
         // 如果描述不为空，则显示描述
         if (description != null)
