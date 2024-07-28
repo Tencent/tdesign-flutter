@@ -13,6 +13,7 @@ class TDSearchBarPage extends StatefulWidget {
 
 class _TDSearchBarPageState extends State<TDSearchBarPage> {
   String? inputText;
+  TextEditingController inputController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +28,15 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
             children: [
               ExampleItem(desc: '基础搜索框', builder: _buildDefaultSearchBar),
               ExampleItem(desc: '获取焦点后显示取消按钮', builder: _buildFocusSearchBar),
-              ExampleItem(desc: '自定义右侧按钮', builder: _buildFocusSearchBarWithAction),
             ],
           ),
           ExampleModule(title: '组件样式', children: [
             ExampleItem(desc: '搜索框形状', builder: _buildSearchBarWithShape),
             ExampleItem(desc: '默认状态其他对齐方式', builder: _buildCenterSearchBar),
-          ])
+          ]),
+        ],
+        test: [
+          ExampleItem(desc: '自定义获取焦点后显示按钮', builder: _buildFocusSearchBarWithAction),
         ]);
   }
 
@@ -69,15 +72,6 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
       placeHolder: '搜索预设文案',
       needCancel: true,
       autoFocus: true,
-    );
-  }
-
-  @Demo(group: 'search')
-  Widget _buildFocusSearchBarWithAction(BuildContext context) {
-    return const TDSearchBar(
-      placeHolder: '搜索预设文案',
-      action: '搜索',
-      needCancel: true,
     );
   }
 
@@ -122,6 +116,29 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
         setState(() {
           inputText = text;
         });
+      },
+    );
+  }
+
+  @Demo(group: 'search')
+  Widget _buildFocusSearchBarWithAction(BuildContext context) {
+    return TDSearchBar(
+      placeHolder: '搜索预设文案',
+      action: '搜索',
+      needCancel: true,
+      controller: inputController,
+      onActionClick: () {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDConfirmDialog(
+              content: inputController.text.isNotEmpty 
+                  ? '搜索关键词：${inputController.text}' 
+                  : '搜索关键词为空',
+            );
+          },
+        );
       },
     );
   }
