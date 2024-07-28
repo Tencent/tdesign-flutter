@@ -27,6 +27,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
             children: [
               ExampleItem(desc: '基础搜索框', builder: _buildDefaultSearchBar),
               ExampleItem(desc: '获取焦点后显示取消按钮', builder: _buildFocusSearchBar),
+              ExampleItem(desc: '自定义右侧按钮', builder: _buildFocusSearchBarWithAction),
             ],
           ),
           ExampleModule(title: '组件样式', children: [
@@ -68,6 +69,15 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
       placeHolder: '搜索预设文案',
       needCancel: true,
       autoFocus: true,
+    );
+  }
+
+  @Demo(group: 'search')
+  Widget _buildFocusSearchBarWithAction(BuildContext context) {
+    return const TDSearchBar(
+      placeHolder: '搜索预设文案',
+      action: '搜索',
+      needCancel: true,
     );
   }
 
