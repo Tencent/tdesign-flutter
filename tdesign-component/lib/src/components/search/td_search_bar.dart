@@ -269,10 +269,11 @@ class _TDSearchBarState extends State<TDSearchBar>
                 onTap: () {
                   if (widget.onActionClick != null) {
                     widget.onActionClick!();
-                  }
-                  _cleanInputText();
-                  if (widget.onTextChanged != null) {
-                    widget.onTextChanged!('');
+                  } else {
+                    _cleanInputText();
+                    if (widget.onTextChanged != null) {
+                      widget.onTextChanged!('');
+                    }
                   }
                   if (_animation == null) {
                     focusNode.unfocus();
