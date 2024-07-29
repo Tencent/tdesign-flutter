@@ -34,6 +34,7 @@ class TDCalendarPage extends StatelessWidget {
 @Demo(group: 'calendar')
 Widget _buildSimple(BuildContext context) {
   return const TDCalendar(
+    height: 500,
     title: '请选择日期请选择日期请选择日期请选择日期',
     // usePopup: false,
   );

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../util/context_extension.dart';
 import '../icon/td_icons.dart';
 import '../text/td_text.dart';
 
@@ -20,6 +19,7 @@ class TDCalendarHeader extends StatelessWidget {
     this.closeBtn = true,
     this.closeColor,
     this.onClose,
+    required this.weekdayNames,
   }) : super(key: key);
 
   final int firstDayOfWeek;
@@ -35,21 +35,13 @@ class TDCalendarHeader extends StatelessWidget {
   final bool closeBtn;
   final Color? closeColor;
   final VoidCallback? onClose;
+  final List<String> weekdayNames;
 
-  List<String> _getDays(BuildContext context) {
-    final raw = [
-      context.resource.sunday,
-      context.resource.monday,
-      context.resource.tuesday,
-      context.resource.wednesday,
-      context.resource.thursday,
-      context.resource.friday,
-      context.resource.saturday,
-    ];
+  List<String> _getWeeks(BuildContext context) {
     final ans = <String>[];
     var i = firstDayOfWeek % 7;
     while (ans.length < 7) {
-      ans.add(raw[i]);
+      ans.add(weekdayNames[i]);
       i = (i + 1) % 7;
     }
     return ans;
@@ -57,7 +49,7 @@ class TDCalendarHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final list = _getDays(context);
+    final list = _getWeeks(context);
     return Container(
       padding: EdgeInsets.fromLTRB(padding, 0, padding, 0),
       child: Column(
