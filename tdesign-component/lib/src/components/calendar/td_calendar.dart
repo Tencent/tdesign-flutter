@@ -33,6 +33,7 @@ class TDCalendar extends StatefulWidget {
     this.value,
     this.visible = false,
     this.displayFormat = 'year month',
+    this.cellHeight = 60,
     this.height,
     this.width,
     this.style,
@@ -84,6 +85,9 @@ class TDCalendar extends StatefulWidget {
   /// 高度
   final double? height;
 
+  /// 日期高度
+  final double? cellHeight;
+
   /// 宽度
   final double? width;
 
@@ -109,13 +113,6 @@ class TDCalendar extends StatefulWidget {
 class _TDCalendarState extends State<TDCalendar> {
   late List<String> weekdayNames;
   late List<String> monthNames;
-  final selected = ValueNotifier<List<int>>([]);
-
-  @override
-  void initState() {
-    super.initState();
-    selected.value = widget.value ?? [];
-  }
 
   @override
   void didChangeDependencies() {
@@ -165,7 +162,7 @@ class _TDCalendarState extends State<TDCalendar> {
             titleMaxLine: style.titleMaxLine,
             titleOverflow: TextOverflow.ellipsis,
             closeBtn: widget.usePopup ?? true,
-            closeColor: style.closeColor,
+            closeColor: style.titleCloseColor,
             weekdayNames: weekdayNames,
             onClose: () {},
           ),
@@ -175,18 +172,24 @@ class _TDCalendarState extends State<TDCalendar> {
               firstDayOfWeek: widget.firstDayOfWeek ?? 0,
               maxDate: widget.maxDate,
               minDate: widget.minDate,
-              value: selected.value,
+              value: widget.value,
               bodyPadding: TDTheme.of(context).spacer16,
               displayFormat: widget.displayFormat ?? 'year month',
               monthNames: monthNames,
               monthTitleStyle: style.monthTitleStyle,
-              dayGap: TDTheme.of(context).spacer4,
-              cellBuilder: (date) {
+              horizontalGap: TDTheme.of(context).spacer4,
+              verticalGap: TDTheme.of(context).spacer8,
+              builder: (date, data, index) {
                 return TDCalendarCell(
+                  height: widget.cellHeight ?? 60,
                   tdate: date,
                   format: widget.format,
                   type: widget.type ?? CalendarType.single,
-                  selected: selected,
+                  data: data,
+                  padding: TDTheme.of(context).spacer4,
+                  onChange: widget.onChange,
+                  onSelect: widget.onSelect,
+                  isRowLast: index == 6,
                 );
               },
             ),

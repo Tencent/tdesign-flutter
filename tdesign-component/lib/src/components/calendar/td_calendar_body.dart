@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import '../../util/iterable_ext.dart';
 import '../../util/list_ext.dart';
+import '../text/td_text.dart';
+import 'td_calendar.dart';
 
 class TDCalendarBody extends StatelessWidget {
   const TDCalendarBody({
@@ -13,12 +14,13 @@ class TDCalendarBody extends StatelessWidget {
     required this.type,
     this.value,
     required this.firstDayOfWeek,
-    required this.cellBuilder,
+    required this.builder,
     required this.bodyPadding,
     required this.displayFormat,
     required this.monthNames,
     this.monthTitleStyle,
-    required this.dayGap,
+    required this.verticalGap,
+    required this.horizontalGap,
   }) : super(key: key);
 
   final int? maxDate;
@@ -26,12 +28,13 @@ class TDCalendarBody extends StatelessWidget {
   final CalendarType type;
   final List<int>? value;
   final int firstDayOfWeek;
-  final TDCalendarCell Function(TDate? date) cellBuilder;
+  final TDCalendarCell Function(TDate? date, Map<DateTime, List<TDate?>> data, int index) builder;
   final double bodyPadding;
   final String displayFormat;
   final List<String> monthNames;
   final TextStyle? monthTitleStyle;
-  final double dayGap;
+  final double verticalGap;
+  final double horizontalGap;
 
   @override
   Widget build(BuildContext context) {
@@ -57,19 +60,25 @@ class TDCalendarBody extends StatelessWidget {
               TDText(monthDateText, style: monthTitleStyle),
               ...List.generate(
                 (data[monthDate]!.length / 7).ceil(),
-                (rowIndex) => Padding(
-                  padding: EdgeInsets.only(top: dayGap * 2),
-                  child: Row(
+                (rowIndex) => [
+                  SizedBox(height: verticalGap),
+                  Row(
                     children: List.generate(
                       7,
                       (colIndex) => [
-                        Expanded(child: cellBuilder(data[monthDate]![rowIndex * 7 + colIndex])),
-                        if (colIndex < 6) SizedBox(width: dayGap),
+                        Expanded(
+                          child: builder(
+                            data[monthDate]![rowIndex * 7 + colIndex],
+                            data,
+                            colIndex,
+                          ),
+                        ),
+                        if (colIndex < 6) SizedBox(width: horizontalGap),
                       ],
                     ).expand((element) => element).toList(),
                   ),
-                ),
-              ),
+                ],
+              ).expand((element) => element).toList(),
             ],
           ),
         );
@@ -104,37 +113,37 @@ class TDCalendarBody extends StatelessWidget {
     final daysInMonthCount = DateTime(year, month + 1, 0).day; // 获取下个月的第一天的前一天，即当前月的最后一天
     for (var day = 1; day <= daysInMonthCount; day++) {
       final date = DateTime(year, month, day);
-      var type = DateSelectType.empty;
+      var selectType = DateSelectType.empty;
       if (date.compareTo(min) == -1 || date.compareTo(max) == 1) {
-        type = DateSelectType.disabled;
+        selectType = DateSelectType.disabled;
       } else if (type == CalendarType.single && (value?.length ?? 0) >= 1) {
         final val = DateTime.fromMillisecondsSinceEpoch(value![0]);
         if (date.compareTo(val) == 0) {
-          type = DateSelectType.selected;
+          selectType = DateSelectType.selected;
         }
       } else if (type == CalendarType.multiple && value != null) {
         final valList = value!.map(DateTime.fromMillisecondsSinceEpoch).toList();
         if (valList.isContains((e) => date.compareTo(e) == 0)) {
-          type = DateSelectType.selected;
+          selectType = DateSelectType.selected;
         }
       } else if (type == CalendarType.range && (value?.length ?? 0) >= 1) {
         final begin = DateTime.fromMillisecondsSinceEpoch(value![0]);
         final end = (value?.length ?? 0) > 1 ? DateTime.fromMillisecondsSinceEpoch(value![1]) : null;
         if (date.compareTo(begin) == 0) {
-          type = DateSelectType.start;
+          selectType = DateSelectType.start;
         }
         if (end != null && begin.compareTo(end) < 0) {
           if (date.compareTo(end) == 0) {
-            type = DateSelectType.end;
+            selectType = DateSelectType.end;
           }
           if (date.compareTo(begin) == 1 && date.compareTo(end) == -1) {
-            type = DateSelectType.centre;
+            selectType = DateSelectType.centre;
           }
         }
       }
       daysInMonth.add(TDate(
         date: date,
-        type: type,
+        typeNotifier: ValueNotifier(selectType),
       ));
     }
     final dayLastWeek = daysInMonth.last!.date.weekday;
