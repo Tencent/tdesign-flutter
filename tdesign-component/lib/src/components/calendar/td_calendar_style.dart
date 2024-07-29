@@ -5,10 +5,14 @@ import '../../../tdesign_flutter.dart';
 class TDCalendarStyle {
   TDCalendarStyle({
     this.titleStyle,
-    this.weekdayStyle,
     this.titleMaxLine,
-    this.closeColor,
+    this.titleCloseColor,
+    this.weekdayStyle,
     this.monthTitleStyle,
+    this.cellStyle,
+    this.cellDecoration,
+    this.cellPrefixStyle,
+    this.cellSuffixStyle,
   });
 
   /// header区域 [TDCalendar.title]的样式
@@ -17,14 +21,26 @@ class TDCalendarStyle {
   /// header区域 [TDCalendar.title]的行数
   int? titleMaxLine;
 
+  /// header区域 关闭图标的颜色
+  Color? titleCloseColor;
+
   /// header区域 周 文字样式
   TextStyle? weekdayStyle;
 
-  /// header区域 关闭图标的颜色
-  Color? closeColor;
-
   /// body区域 年月文字样式
   TextStyle? monthTitleStyle;
+
+  /// 日期样式
+  TextStyle? cellStyle;
+
+  /// 日期decoration
+  Decoration? cellDecoration;
+
+  /// 日期前面的字符串的样式
+  TextStyle? cellPrefixStyle;
+
+  /// 日期后面的字符串的样式
+  TextStyle? cellSuffixStyle;
 
   /// 生成默认样式
   TDCalendarStyle.generateStyle(BuildContext context) {
@@ -33,16 +49,80 @@ class TDCalendarStyle {
       fontWeight: TDTheme.of(context).fontTitleLarge?.fontWeight,
       color: TDTheme.of(context).fontGyColor1,
     );
+    titleMaxLine = 1;
+    titleCloseColor = titleStyle?.color;
     weekdayStyle = TextStyle(
       fontSize: TDTheme.of(context).fontTitleSmall?.size,
       color: TDTheme.of(context).fontGyColor2,
     );
-    titleMaxLine = 1;
-    closeColor = titleStyle?.color;
     monthTitleStyle = TextStyle(
       fontSize: TDTheme.of(context).fontMarkMedium?.size,
       fontWeight: TDTheme.of(context).fontMarkMedium?.fontWeight,
       color: TDTheme.of(context).fontGyColor1,
     );
+  }
+
+  /// 日期样式
+  TDCalendarStyle.cellStyle(BuildContext context, DateSelectType type) {
+    final radius6 = TDTheme.of(context).radiusDefault;
+    final defStyle = TextStyle(
+      fontSize: TDTheme.of(context).fontTitleMedium?.size,
+      height: TDTheme.of(context).fontTitleMedium?.height,
+      fontWeight: TDTheme.of(context).fontTitleMedium?.fontWeight,
+    );
+    final prefixStyle = TextStyle(
+      fontSize: TDTheme.of(context).fontBodyExtraSmall?.size,
+      height: TDTheme.of(context).fontBodyExtraSmall?.height,
+      fontWeight: FontWeight.w400,
+    );
+    switch (type) {
+      case DateSelectType.empty:
+        cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontGyColor1);
+        cellPrefixStyle = prefixStyle.copyWith(color: TDTheme.of(context).errorColor6);
+        cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontGyColor3);
+        cellDecoration = null;
+        break;
+      case DateSelectType.disabled:
+        cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontGyColor4);
+        cellPrefixStyle = prefixStyle.copyWith(color: TDTheme.of(context).errorColor3);
+        cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontGyColor4);
+        cellDecoration = null;
+        break;
+      case DateSelectType.selected:
+        cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+        cellPrefixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+        cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+        cellDecoration = BoxDecoration(
+          borderRadius: BorderRadius.circular(radius6),
+          color: TDTheme.of(context).brandColor7,
+        );
+        break;
+      case DateSelectType.centre:
+        cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontGyColor1);
+        cellPrefixStyle = prefixStyle.copyWith(color: TDTheme.of(context).errorColor6);
+        cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontGyColor3);
+        cellDecoration = BoxDecoration(
+          color: TDTheme.of(context).brandColor1,
+        );
+        break;
+      case DateSelectType.start:
+        cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+        cellPrefixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+        cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+        cellDecoration = BoxDecoration(
+          color: TDTheme.of(context).brandColor7,
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(radius6), bottomLeft: Radius.circular(radius6)),
+        );
+        break;
+      case DateSelectType.end:
+        cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+        cellPrefixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+        cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+        cellDecoration = BoxDecoration(
+          color: TDTheme.of(context).brandColor7,
+          borderRadius: BorderRadius.only(topRight: Radius.circular(radius6), bottomRight: Radius.circular(radius6)),
+        );
+        break;
+    }
   }
 }
