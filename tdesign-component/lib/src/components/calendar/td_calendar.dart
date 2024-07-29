@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
-export 'td_calendar_date.dart';
+import '../../util/context_extension.dart';
+
+export 'td_calendar_body.dart';
+export 'td_calendar_cell.dart';
 export 'td_calendar_header.dart';
 export 'td_calendar_style.dart';
 
-typedef CalendarFormatType = TDate Function(TDate day);
+typedef CalendarFormat = TDate? Function(TDate? day);
 
 enum CalendarType { single, multiple, range }
 
 enum CalendarTrigger { closeBtn, confirmBtn, overlay }
+
+enum DateSelectType { selected, disabled, start, centre, end, empty }
 
 /// 单元格组件
 class TDCalendar extends StatefulWidget {
@@ -27,6 +32,9 @@ class TDCalendar extends StatefulWidget {
     this.usePopup = true,
     this.value,
     this.visible = false,
+    this.displayFormat = 'year month',
+    this.height,
+    this.width,
     this.style,
     this.onChange,
     this.onClose,
@@ -43,8 +51,8 @@ class TDCalendar extends StatefulWidget {
   /// 第一天从星期几开始，默认 0 = 周日
   final int? firstDayOfWeek;
 
-  /// 用于格式化日期的函数
-  final CalendarFormatType? format;
+  /// 用于格式化日期的函数，可定义日期前后的显示内容和日期样式
+  final CalendarFormat? format;
 
   /// 最大可选的日期(fromMillisecondsSinceEpoch)，不传则默认半年后
   final int? maxDate;
@@ -70,6 +78,15 @@ class TDCalendar extends StatefulWidget {
   /// 是否显示日历；[usePopup] 为 true 时有效
   final bool? visible;
 
+  /// 年月显示格式，`year`表示年，`month`表示月，如`year month`表示年在前、月在后、中间隔一个空格
+  final String? displayFormat;
+
+  /// 高度
+  final double? height;
+
+  /// 宽度
+  final double? width;
+
   /// 自定义样式
   final TDCalendarStyle? style;
 
@@ -83,36 +100,99 @@ class TDCalendar extends StatefulWidget {
   final void Function(List<int> value)? onConfirm;
 
   /// 点击日期时触发
-  final void Function(int value, bool selected)? onSelect;
+  final void Function(int value, DateSelectType type)? onSelect;
 
   @override
   _TDCalendarState createState() => _TDCalendarState();
 }
 
 class _TDCalendarState extends State<TDCalendar> {
+  late List<String> weekdayNames;
+  late List<String> monthNames;
+  final selected = ValueNotifier<List<int>>([]);
+
+  @override
+  void initState() {
+    super.initState();
+    selected.value = widget.value ?? [];
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    weekdayNames = [
+      context.resource.sunday,
+      context.resource.monday,
+      context.resource.tuesday,
+      context.resource.wednesday,
+      context.resource.thursday,
+      context.resource.friday,
+      context.resource.saturday,
+    ];
+    monthNames = [
+      context.resource.january,
+      context.resource.february,
+      context.resource.march,
+      context.resource.april,
+      context.resource.may,
+      context.resource.june,
+      context.resource.july,
+      context.resource.august,
+      context.resource.september,
+      context.resource.october,
+      context.resource.november,
+      context.resource.december,
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final style = widget.style ?? TDCalendarStyle.generateStyle(context);
-    return Column(
-      children: [
-        TDCalendarHeader(
-          firstDayOfWeek: widget.firstDayOfWeek ?? 0,
-          weekdayGap: TDTheme.of(context).spacer4,
-          padding: TDTheme.of(context).spacer16,
-          weekdayStyle: style.weekdayStyle,
-          weekdayHeight: 46,
-          title: widget.title,
-          titleStyle: style.titleStyle,
-          titleWidget: widget.titleWidget,
-          titleMaxLine: style.titleMaxLine,
-          titleOverflow: TextOverflow.ellipsis,
-          closeBtn: widget.usePopup ?? true,
-          closeColor: style.closeColor,
-          onClose: () {
-            
-          },
-        ),
-      ],
+    return SizedBox(
+      height: widget.height,
+      width: widget.height ?? double.infinity,
+      child: Column(
+        children: [
+          TDCalendarHeader(
+            firstDayOfWeek: widget.firstDayOfWeek ?? 0,
+            weekdayGap: TDTheme.of(context).spacer4,
+            padding: TDTheme.of(context).spacer16,
+            weekdayStyle: style.weekdayStyle,
+            weekdayHeight: 46,
+            title: widget.title,
+            titleStyle: style.titleStyle,
+            titleWidget: widget.titleWidget,
+            titleMaxLine: style.titleMaxLine,
+            titleOverflow: TextOverflow.ellipsis,
+            closeBtn: widget.usePopup ?? true,
+            closeColor: style.closeColor,
+            weekdayNames: weekdayNames,
+            onClose: () {},
+          ),
+          Expanded(
+            child: TDCalendarBody(
+              type: widget.type ?? CalendarType.single,
+              firstDayOfWeek: widget.firstDayOfWeek ?? 0,
+              maxDate: widget.maxDate,
+              minDate: widget.minDate,
+              value: selected.value,
+              bodyPadding: TDTheme.of(context).spacer16,
+              displayFormat: widget.displayFormat ?? 'year month',
+              monthNames: monthNames,
+              monthTitleStyle: style.monthTitleStyle,
+              dayGap: TDTheme.of(context).spacer4,
+              cellBuilder: (date) {
+                return TDCalendarCell(
+                  tdate: date,
+                  format: widget.format,
+                  type: widget.type ?? CalendarType.single,
+                  selected: selected,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
