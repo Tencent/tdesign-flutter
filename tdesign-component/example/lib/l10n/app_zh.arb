@@ -26,5 +26,18 @@
   "wednesday": "三",
   "thursday": "四",
   "friday": "五",
-  "saturday": "六"
+  "saturday": "六",
+  "year": " 年",
+  "january": "1 月",
+  "february": "2 月",
+  "march": "3 月",
+  "april": "4 月",
+  "may": "5 月",
+  "june": "6 月",
+  "july": "7 月",
+  "august": "8 月",
+  "september": "9 月",
+  "october": "10 月",
+  "november": "11 月",
+  "december": "12 月"
 }
