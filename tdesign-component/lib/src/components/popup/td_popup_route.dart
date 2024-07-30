@@ -195,7 +195,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     }
 
     var screenSize = mediaQuery.size;
-    var _modalTop = (modalTop ?? 0).clamp(0, screenSize.height).toDouble();
+    var _modalTop = (modalTop ?? 0).clamp(0, screenSize.height).toDouble() - bottom;
     var _modalLeft = (modalLeft ?? 0).clamp(0, screenSize.width).toDouble();
     var _modalHeight = (modalHeight ?? screenSize.height).clamp(0, screenSize.height - _modalTop).toDouble();
     var _modalWidth = (modalWidth ?? screenSize.width).clamp(0, screenSize.width - _modalLeft).toDouble();
