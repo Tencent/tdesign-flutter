@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 const Duration _bottomSheetEnterDuration = Duration(milliseconds: 250);
 const Duration _bottomSheetExitDuration = Duration(milliseconds: 200);
@@ -169,7 +170,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     var focusNode = FocusManager.instance.primaryFocus;
     if (focusNode != null && focusNode.context != null) {
       var renderObject = focusNode.context!.findRenderObject();
-      if (renderObject is RenderBox) {
+      if (renderObject is RenderPointerListener) {
         _focusY = renderObject.localToGlobal(Offset.zero).dy;
         _focusHeight = renderObject.size.height;
       }
@@ -183,7 +184,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     if (slideTransitionFrom == SlideTransitionFrom.bottom) {
       bottom = mediaQuery.viewInsets.bottom;
     } else {
-      if ((_focusY + mediaQuery.viewInsets.bottom) > mediaQuery.size.height) {
+      if ((_focusY + mediaQuery.viewInsets.bottom + _focusHeight) > mediaQuery.size.height) {
         bottom = -(mediaQuery.size.height - (_focusY + mediaQuery.viewInsets.bottom + _focusHeight + 10));
         _lastBottom = bottom;
       } else {
