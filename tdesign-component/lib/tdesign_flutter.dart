@@ -36,6 +36,8 @@ export 'src/components/loading/td_circle_indicator.dart';
 export 'src/components/loading/td_loading.dart';
 export 'src/components/loading/td_loading_controller.dart';
 export 'src/components/navbar/td_nav_bar.dart';
+export 'src/components/notice_bar/td_notice_bar.dart';
+export 'src/components/notice_bar/td_notice_bar_style.dart';
 export 'src/components/picker/td_date_picker.dart';
 export 'src/components/picker/td_item_widget.dart';
 export 'src/components/picker/td_multi_picker.dart';
