@@ -15,7 +15,7 @@ class _TDResultPageState extends State<TDResultPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: 'Result 结果',
-      desc: '用于空状态时的占位提示。',
+      desc: '反馈结果状态。',
       exampleCodeGroup: 'result',
       children: [
         ExampleModule(title: '组件类型', children: [
