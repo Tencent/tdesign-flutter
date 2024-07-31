@@ -34,101 +34,56 @@ class _TDResultPageState extends State<TDResultPage> {
     );
   }
 
-  @Demo(group: 'result')
   Widget _buildBasicResult(BuildContext context) {
     return Column(
       children: [
         CodeWrapper(
-          builder: (_) => const TDResult(
-            title: '成功状态',
-            theme: TDResultTheme.success,
-          ),
-          methodName: '_buildBasicResult',
+          builder: _buildBasicResultSuccess,
         ),
         const SizedBox(height: 48),
         CodeWrapper(
-          builder: (_) => const TDResult(
-            title: '失败状态',
-            theme: TDResultTheme.error,
-          ),
-          methodName: '_buildBasicResult',
+          builder: _buildBasicResultError,
         ),
         const SizedBox(height: 48),
         CodeWrapper(
-          builder: (_) => const TDResult(
-            title: '警示状态',
-            theme: TDResultTheme.warning,
-          ),
-          methodName: '_buildBasicResult',
+          builder: _buildBasicResultWarning,
         ),
         const SizedBox(height: 48),
         CodeWrapper(
-          builder: (_) => const TDResult(
-            title: '默认状态',
-            theme: TDResultTheme.defaultTheme,
-          ),
-          methodName: '_buildBasicResult',
+          builder: _buildBasicResultDefault,
         ),
       ],
     );
   }
 
-  @Demo(group: 'result')
   Widget _buildResultWithDescription(BuildContext context) {
     return Column(
       children: [
         CodeWrapper(
-          builder: (_) => const TDResult(
-            title: '成功状态',
-            theme: TDResultTheme.success,
-            description: '描述文字',
-          ),
-          methodName: '_buildResultWithDescription',
+          builder: _buildResultWithDescriptionSuccess,
         ),
         const SizedBox(height: 48),
         CodeWrapper(
-          builder: (_) => const TDResult(
-            title: '失败状态',
-            theme: TDResultTheme.error,
-            description: '描述文字',
-          ),
-          methodName: '_buildResultWithDescription',
+          builder: _buildResultWithDescriptionError,
         ),
         const SizedBox(height: 48),
         CodeWrapper(
-          builder: (_) => const TDResult(
-            title: '警示状态',
-            theme: TDResultTheme.warning,
-            description: '描述文字',
-          ),
-          methodName: '_buildResultWithDescription',
+          builder: _buildResultWithDescriptionWarning,
         ),
         const SizedBox(height: 48),
         CodeWrapper(
-          builder: (_) => const TDResult(
-            title: '默认状态',
-            theme: TDResultTheme.defaultTheme,
-            description: '描述文字',
-          ),
-          methodName: '_buildResultWithDescription',
+          builder: _buildResultWithDescriptionDefault,
         ),
       ],
     );
   }
 
-  @Demo(group: 'result')
   Widget _buildCustomResult(BuildContext context) {
     return CodeWrapper(
-      builder: (_) => TDResult(
-        title: '自定义结果',
-        icon: Image.asset('assets/img/illustration.png'),
-        description: '描述文字',
-      ),
-      methodName: '_buildCustomResult',
+      builder: _buildCustomResultContent,
     );
   }
 
-  @Demo(group: 'result')
   Widget _buildPageExample(BuildContext context) {
     return TDButton(
       text: '页面示例',
@@ -169,6 +124,83 @@ class _TDResultPageState extends State<TDResultPage> {
           ),
         );
       },
+    );
+  }
+
+  @Demo(group: 'result')
+  TDResult _buildBasicResultSuccess(BuildContext context) {
+    return const TDResult(
+      title: '成功状态',
+      theme: TDResultTheme.success,
+    );
+  }
+
+  @Demo(group: 'result')
+  TDResult _buildBasicResultError(BuildContext context) {
+    return const TDResult(
+      title: '失败状态',
+      theme: TDResultTheme.error,
+    );
+  }
+
+  @Demo(group: 'result')
+  TDResult _buildBasicResultWarning(BuildContext context) {
+    return const TDResult(
+      title: '警示状态',
+      theme: TDResultTheme.warning,
+    );
+  }
+
+  @Demo(group: 'result')
+  TDResult _buildBasicResultDefault(BuildContext context) {
+    return const TDResult(
+      title: '默认状态',
+      theme: TDResultTheme.defaultTheme,
+    );
+  }
+
+  @Demo(group: 'result')
+  TDResult _buildResultWithDescriptionSuccess(BuildContext context) {
+    return const TDResult(
+      title: '成功状态',
+      theme: TDResultTheme.success,
+      description: '描述文字',
+    );
+  }
+
+  @Demo(group: 'result')
+  TDResult _buildResultWithDescriptionError(BuildContext context) {
+    return const TDResult(
+      title: '失败状态',
+      theme: TDResultTheme.error,
+      description: '描述文字',
+    );
+  }
+
+  @Demo(group: 'result')
+  TDResult _buildResultWithDescriptionWarning(BuildContext context) {
+    return const TDResult(
+      title: '警示状态',
+      theme: TDResultTheme.warning,
+      description: '描述文字',
+    );
+  }
+
+  @Demo(group: 'result')
+  TDResult _buildResultWithDescriptionDefault(BuildContext context) {
+    return const TDResult(
+      title: '默认状态',
+      theme: TDResultTheme.defaultTheme,
+      description: '描述文字',
+    );
+  }
+
+  @Demo(group: 'result')
+  TDResult _buildCustomResultContent(BuildContext context) {
+    return TDResult(
+      title: '自定义结果',
+      icon: Image.asset('assets/img/illustration.png'),
+      description: '描述文字',
     );
   }
 }
