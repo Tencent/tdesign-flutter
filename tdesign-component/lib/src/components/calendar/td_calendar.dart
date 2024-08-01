@@ -6,6 +6,7 @@ import '../../util/context_extension.dart';
 export 'td_calendar_body.dart';
 export 'td_calendar_cell.dart';
 export 'td_calendar_header.dart';
+export 'td_calendar_popup.dart';
 export 'td_calendar_style.dart';
 
 typedef CalendarFormat = TDate? Function(TDate? day);
@@ -20,8 +21,6 @@ enum DateSelectType { selected, disabled, start, centre, end, empty }
 class TDCalendar extends StatefulWidget {
   const TDCalendar({
     Key? key,
-    this.autoClose = true,
-    this.confirmBtn,
     this.firstDayOfWeek = 0,
     this.format,
     this.maxDate,
@@ -29,25 +28,15 @@ class TDCalendar extends StatefulWidget {
     this.title,
     this.titleWidget,
     this.type = CalendarType.single,
-    this.usePopup = true,
     this.value,
-    this.visible = false,
     this.displayFormat = 'year month',
     this.cellHeight = 60,
     this.height,
     this.width,
     this.style,
     this.onChange,
-    this.onClose,
-    this.onConfirm,
-    this.onSelect,
+    this.onCellClick,
   }) : super(key: key);
-
-  /// 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭，不需要手动设置 visible
-  final bool? autoClose;
-
-  /// 自定义确认按钮
-  final Widget? confirmBtn;
 
   /// 第一天从星期几开始，默认 0 = 周日
   final int? firstDayOfWeek;
@@ -70,14 +59,8 @@ class TDCalendar extends StatefulWidget {
   /// 日历的选择类型，single = 单选；multiple = 多选; range = 区间选择
   final CalendarType? type;
 
-  /// 是否使用弹出层包裹日历
-  final bool? usePopup;
-
   /// 当前选择的日期(fromMillisecondsSinceEpoch)，不传则默认今天，当 type = single 时数组长度为1
   final List<int>? value;
-
-  /// 是否显示日历；[usePopup] 为 true 时有效
-  final bool? visible;
 
   /// 年月显示格式，`year`表示年，`month`表示月，如`year month`表示年在前、月在后、中间隔一个空格
   final String? displayFormat;
@@ -97,14 +80,13 @@ class TDCalendar extends StatefulWidget {
   /// 选中值变化时触发
   final void Function(List<int> value)? onChange;
 
-  /// 关闭时触发
-  final void Function(CalendarTrigger trigger)? onClose;
-
-  /// 点击确认按钮时触发
-  final void Function(List<int> value)? onConfirm;
-
   /// 点击日期时触发
-  final void Function(int value, DateSelectType type)? onSelect;
+  final void Function(int value, DateSelectType type)? onCellClick;
+
+  List<DateTime>? get _value => value?.map((e) {
+        final date = DateTime.fromMillisecondsSinceEpoch(e);
+        return DateTime(date.year, date.month, date.day);
+      }).toList();
 
   @override
   _TDCalendarState createState() => _TDCalendarState();
@@ -113,6 +95,7 @@ class TDCalendar extends StatefulWidget {
 class _TDCalendarState extends State<TDCalendar> {
   late List<String> weekdayNames;
   late List<String> monthNames;
+  late TDCalendarInherited? inherited;
 
   @override
   void didChangeDependencies() {
@@ -143,11 +126,23 @@ class _TDCalendarState extends State<TDCalendar> {
   }
 
   @override
+  void didUpdateWidget(TDCalendar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != oldWidget.value) {
+      inherited?.selected.value = widget.value ?? [];
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final style = widget.style ?? TDCalendarStyle.generateStyle(context);
-    return SizedBox(
+    inherited = TDCalendarInherited.of(context);
+    inherited?.selected.value = widget.value ?? [];
+    final verticalGap = TDTheme.of(context).spacer8;
+    return Container(
       height: widget.height,
-      width: widget.height ?? double.infinity,
+      width: widget.width ?? double.infinity,
+      decoration: style.decoration,
       child: Column(
         children: [
           TDCalendarHeader(
@@ -161,10 +156,10 @@ class _TDCalendarState extends State<TDCalendar> {
             titleWidget: widget.titleWidget,
             titleMaxLine: style.titleMaxLine,
             titleOverflow: TextOverflow.ellipsis,
-            closeBtn: widget.usePopup ?? true,
+            closeBtn: inherited?.usePopup ?? false,
             closeColor: style.titleCloseColor,
             weekdayNames: weekdayNames,
-            onClose: () {},
+            onClose: inherited?.onClose,
           ),
           Expanded(
             child: TDCalendarBody(
@@ -172,28 +167,43 @@ class _TDCalendarState extends State<TDCalendar> {
               firstDayOfWeek: widget.firstDayOfWeek ?? 0,
               maxDate: widget.maxDate,
               minDate: widget.minDate,
-              value: widget.value,
+              value: widget._value,
               bodyPadding: TDTheme.of(context).spacer16,
               displayFormat: widget.displayFormat ?? 'year month',
               monthNames: monthNames,
               monthTitleStyle: style.monthTitleStyle,
-              horizontalGap: TDTheme.of(context).spacer4,
-              verticalGap: TDTheme.of(context).spacer8,
-              builder: (date, data, index) {
+              verticalGap: verticalGap,
+              builder: (date, dateList, data, rowIndex, colIndex) {
                 return TDCalendarCell(
                   height: widget.cellHeight ?? 60,
                   tdate: date,
                   format: widget.format,
                   type: widget.type ?? CalendarType.single,
                   data: data,
-                  padding: TDTheme.of(context).spacer4,
-                  onChange: widget.onChange,
-                  onSelect: widget.onSelect,
-                  isRowLast: index == 6,
+                  padding: verticalGap / 2,
+                  onChange: (value) {
+                    inherited?.selected.value = value;
+                    widget.onChange?.call(value);
+                  },
+                  onCellClick: widget.onCellClick,
+                  dateList: dateList,
+                  rowIndex: rowIndex,
+                  colIndex: colIndex,
                 );
               },
             ),
           ),
+          if (inherited?.usePopup == true)
+            inherited?.confirmBtn ??
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: TDTheme.of(context).spacer16),
+                  child: TDButton(
+                    theme: TDButtonTheme.primary,
+                    text: '确定',
+                    isBlock: true,
+                    onTap: inherited?.onConfirm,
+                  ),
+                ),
         ],
       ),
     );
