@@ -113,7 +113,7 @@ class TDCalendarPopup {
   void close() {
     if (_calendarPopup != null) {
       Navigator.of(context).pop();
-      _deleteRouter();
+      // _deleteRouter();
     }
   }
 
