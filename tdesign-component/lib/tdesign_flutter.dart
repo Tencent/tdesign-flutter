@@ -3,6 +3,7 @@ export 'src/components/backtop/td_backtop.dart';
 export 'src/components/badge/td_badge.dart';
 export 'src/components/button/td_button.dart';
 export 'src/components/button/td_button_style.dart';
+export 'src/components/calendar/td_calendar.dart';
 export 'src/components/cascader/td_cascader.dart';
 export 'src/components/cascader/td_custom_tab.dart';
 export 'src/components/cascader/td_multi_cascader.dart';
