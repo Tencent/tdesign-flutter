@@ -158,16 +158,14 @@ class TDDrawer {
   @mustCallSuper
   void close() {
     if (_drawerRoute != null) {
-      Navigator.of(context).removeRoute(_drawerRoute!);
+      Navigator.of(context).pop();
       _deleteRouter();
     }
   }
 
   void _deleteRouter() {
     _drawerRoute = null;
-    if (onClose != null) {
-      onClose!();
-    }
+    onClose?.call();
   }
 }
 

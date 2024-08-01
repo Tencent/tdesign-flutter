@@ -4,16 +4,20 @@ import '../../../tdesign_flutter.dart';
 /// 日历组件样式
 class TDCalendarStyle {
   TDCalendarStyle({
+    this.decoration,
     this.titleStyle,
     this.titleMaxLine,
     this.titleCloseColor,
     this.weekdayStyle,
     this.monthTitleStyle,
     this.cellStyle,
+    this.centreColor,
     this.cellDecoration,
     this.cellPrefixStyle,
     this.cellSuffixStyle,
   });
+
+  BoxDecoration? decoration;
 
   /// header区域 [TDCalendar.title]的样式
   TextStyle? titleStyle;
@@ -34,7 +38,10 @@ class TDCalendarStyle {
   TextStyle? cellStyle;
 
   /// 日期decoration
-  Decoration? cellDecoration;
+  BoxDecoration? cellDecoration;
+
+  /// 日期范围内背景样式
+  Color? centreColor;
 
   /// 日期前面的字符串的样式
   TextStyle? cellPrefixStyle;
@@ -44,6 +51,12 @@ class TDCalendarStyle {
 
   /// 生成默认样式
   TDCalendarStyle.generateStyle(BuildContext context) {
+    decoration = BoxDecoration(
+      color: TDTheme.of(context).whiteColor1,
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(TDTheme.of(context).radiusExtraLarge),
+      ),
+    );
     titleStyle = TextStyle(
       fontSize: TDTheme.of(context).fontTitleLarge?.size,
       fontWeight: TDTheme.of(context).fontTitleLarge?.fontWeight,
@@ -75,6 +88,7 @@ class TDCalendarStyle {
       height: TDTheme.of(context).fontBodyExtraSmall?.height,
       fontWeight: FontWeight.w400,
     );
+    centreColor = TDTheme.of(context).brandColor1;
     switch (type) {
       case DateSelectType.empty:
         cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontGyColor1);
@@ -102,7 +116,7 @@ class TDCalendarStyle {
         cellPrefixStyle = prefixStyle.copyWith(color: TDTheme.of(context).errorColor6);
         cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontGyColor3);
         cellDecoration = BoxDecoration(
-          color: TDTheme.of(context).brandColor1,
+          color: centreColor,
         );
         break;
       case DateSelectType.start:
@@ -111,7 +125,7 @@ class TDCalendarStyle {
         cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
         cellDecoration = BoxDecoration(
           color: TDTheme.of(context).brandColor7,
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(radius6), bottomLeft: Radius.circular(radius6)),
+          borderRadius: BorderRadius.horizontal(left: Radius.circular(radius6)),
         );
         break;
       case DateSelectType.end:
@@ -120,7 +134,7 @@ class TDCalendarStyle {
         cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
         cellDecoration = BoxDecoration(
           color: TDTheme.of(context).brandColor7,
-          borderRadius: BorderRadius.only(topRight: Radius.circular(radius6), bottomRight: Radius.circular(radius6)),
+          borderRadius: BorderRadius.horizontal(right: Radius.circular(radius6)),
         );
         break;
     }
