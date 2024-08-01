@@ -159,7 +159,7 @@ class TDDrawer {
   void close() {
     if (_drawerRoute != null) {
       Navigator.of(context).pop();
-      _deleteRouter();
+      // _deleteRouter();
     }
   }
 

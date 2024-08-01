@@ -56,23 +56,40 @@ Widget _buildSimple(BuildContext context) {
   return ValueListenableBuilder(
     valueListenable: selected,
     builder: (context, value, child) {
+      final date = DateTime.fromMillisecondsSinceEpoch(value[0]);
       return TDCellGroup(
         cells: [
           TDCell(
             title: '单个选择日历',
             arrow: true,
-            note: value[0].toString(),
+            note: '${date.year}-${date.month}-${date.day}',
             onClick: (cell) {
               TDCalendarPopup(
                 context,
                 visible: true,
                 onConfirm: (value) {
+                  print('onConfirm:$value');
                   selected.value = value;
+                },
+                onClose: () {
+                  print('onClose');
                 },
                 child: TDCalendar(
                   title: '请选择日期',
                   value: value,
                   height: size.height * 0.6 + 176,
+                  onCellClick: (value, type, tdate) {
+                    print('onCellClick:$value');
+                  },
+                  onCellLongPress: (value, type, tdate) {
+                    print('onCellLongPress:$value');
+                  },
+                  onHeanderClick: (index, week) {
+                    print('onHeanderClick:$week');
+                  },
+                  onChange: (value) {
+                    print('onChange:$value');
+                  },
                 ),
               );
             },

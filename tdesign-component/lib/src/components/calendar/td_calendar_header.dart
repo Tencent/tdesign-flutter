@@ -19,6 +19,7 @@ class TDCalendarHeader extends StatelessWidget {
     this.closeBtn = true,
     this.closeColor,
     this.onClose,
+    this.onClick,
     required this.weekdayNames,
   }) : super(key: key);
 
@@ -36,6 +37,7 @@ class TDCalendarHeader extends StatelessWidget {
   final Color? closeColor;
   final VoidCallback? onClose;
   final List<String> weekdayNames;
+  final void Function(int index, String week)? onClick;
 
   List<String> _getWeeks(BuildContext context) {
     final ans = <String>[];
@@ -89,12 +91,17 @@ class TDCalendarHeader extends StatelessWidget {
               return [
                 if (index != 0) SizedBox(width: weekdayGap),
                 Expanded(
-                  child: SizedBox(
-                    height: weekdayHeight,
-                    child: Center(
-                      child: TDText(
-                        list[index],
-                        style: weekdayStyle,
+                  child: GestureDetector(
+                    onTap: () {
+                      onClick?.call(index, list[index]);
+                    },
+                    child: SizedBox(
+                      height: weekdayHeight,
+                      child: Center(
+                        child: TDText(
+                          list[index],
+                          style: weekdayStyle,
+                        ),
                       ),
                     ),
                   ),

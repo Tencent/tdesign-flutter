@@ -36,6 +36,8 @@ class TDCalendar extends StatefulWidget {
     this.style,
     this.onChange,
     this.onCellClick,
+    this.onCellLongPress,
+    this.onHeanderClick,
   }) : super(key: key);
 
   /// 第一天从星期几开始，默认 0 = 周日
@@ -81,7 +83,13 @@ class TDCalendar extends StatefulWidget {
   final void Function(List<int> value)? onChange;
 
   /// 点击日期时触发
-  final void Function(int value, DateSelectType type)? onCellClick;
+  final void Function(int value, DateSelectType type, TDate tdate)? onCellClick;
+
+  /// 长安日期时触发
+  final void Function(int value, DateSelectType type, TDate tdate)? onCellLongPress;
+
+  /// 点击周时触发
+  final void Function(int index, String week)? onHeanderClick;
 
   List<DateTime>? get _value => value?.map((e) {
         final date = DateTime.fromMillisecondsSinceEpoch(e);
@@ -160,6 +168,7 @@ class _TDCalendarState extends State<TDCalendar> {
             closeColor: style.titleCloseColor,
             weekdayNames: weekdayNames,
             onClose: inherited?.onClose,
+            onClick: widget.onHeanderClick,
           ),
           Expanded(
             child: TDCalendarBody(
@@ -186,6 +195,7 @@ class _TDCalendarState extends State<TDCalendar> {
                     widget.onChange?.call(value);
                   },
                   onCellClick: widget.onCellClick,
+                  onCellLongPress: widget.onCellLongPress,
                   dateList: dateList,
                   rowIndex: rowIndex,
                   colIndex: colIndex,
