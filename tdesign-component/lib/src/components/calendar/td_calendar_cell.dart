@@ -11,6 +11,7 @@ class TDCalendarCell extends StatefulWidget {
     this.format,
     required this.type,
     this.onCellClick,
+    this.onCellLongPress,
     this.onChange,
     required this.height,
     required this.data,
@@ -23,7 +24,8 @@ class TDCalendarCell extends StatefulWidget {
   final TDate? tdate;
   final CalendarFormat? format;
   final CalendarType type;
-  final void Function(int value, DateSelectType type)? onCellClick;
+  final void Function(int value, DateSelectType type, TDate tdate)? onCellClick;
+  final void Function(int value, DateSelectType type, TDate tdate)? onCellLongPress;
   final void Function(List<int> value)? onChange;
   final double height;
   final Map<DateTime, List<TDate?>> data;
@@ -76,6 +78,11 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: _cellTap,
+      onLongPress: () {
+        final selectType = widget.tdate!._type;
+        final curDate = widget.tdate!._milliseconds;
+        widget.onCellLongPress?.call(curDate, selectType, widget.tdate!);
+      },
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -136,7 +143,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
     final selectType = widget.tdate!._type;
     final curDate = widget.tdate!._milliseconds;
     if (selectType == DateSelectType.disabled) {
-      widget.onCellClick?.call(curDate, selectType);
+      widget.onCellClick?.call(curDate, selectType, widget.tdate!);
       return;
     }
     switch (widget.type) {
@@ -185,7 +192,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
         }
         break;
     }
-    widget.onCellClick?.call(curDate, widget.tdate!._type);
+    widget.onCellClick?.call(curDate, widget.tdate!._type, widget.tdate!);
   }
 
   void _cellTypeChange() {

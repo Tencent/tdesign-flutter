@@ -46,7 +46,9 @@
 | width | double? | - | 宽度 |
 | style | TDCalendarStyle? | - | 自定义样式 |
 | onChange | void Function(List<int> value)? | - | 选中值变化时触发 |
-| onCellClick | void Function(int value, DateSelectType type)? | - | 点击日期时触发 |
+| onCellClick | void Function(int value, DateSelectType type, TDate tdate)? | - | 点击日期时触发 |
+| onCellLongPress | void Function(int value, DateSelectType type, TDate tdate)? | - | 长安日期时触发 |
+| onHeanderClick | void Function(int index, String week)? | - | 点击周时触发 |
 
 ```
 ```
