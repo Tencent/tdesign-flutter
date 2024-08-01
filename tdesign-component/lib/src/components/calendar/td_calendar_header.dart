@@ -86,19 +86,21 @@ class TDCalendarHeader extends StatelessWidget {
             ),
           Row(
             children: List.generate(list.length, (index) {
-              return Expanded(
-                child: Container(
-                  height: weekdayHeight,
-                  margin: list.length == index + 1 ? null : EdgeInsets.only(right: weekdayGap),
-                  child: Center(
-                    child: TDText(
-                      list[index],
-                      style: weekdayStyle,
+              return [
+                if (index != 0) SizedBox(width: weekdayGap),
+                Expanded(
+                  child: SizedBox(
+                    height: weekdayHeight,
+                    child: Center(
+                      child: TDText(
+                        list[index],
+                        style: weekdayStyle,
+                      ),
                     ),
                   ),
                 ),
-              );
-            }),
+              ];
+            }).expand((element) => element).toList(),
           ),
         ],
       ),
