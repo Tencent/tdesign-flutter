@@ -17,7 +17,7 @@ enum CalendarTrigger { closeBtn, confirmBtn, overlay }
 
 enum DateSelectType { selected, disabled, start, centre, end, empty }
 
-/// 单元格组件
+/// 日历组件
 class TDCalendar extends StatefulWidget {
   const TDCalendar({
     Key? key,
