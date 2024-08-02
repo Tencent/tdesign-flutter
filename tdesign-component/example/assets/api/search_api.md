@@ -6,11 +6,13 @@
 | --- | --- | --- | --- |
 | key |  | - |  |
 | placeHolder | String? | - | 预设文案 |
+| action | String? | - | 右侧操作按钮文字 |
 | style | TDSearchStyle? | TDSearchStyle.square | 样式 |
 | alignment | TDSearchAlignment? | TDSearchAlignment.left | 对齐方式，居中或这头部对齐 |
 | onTextChanged | TDSearchBarEvent? | - | 文字改变回调 |
 | onSubmitted | TDSearchBarEvent? | - | 提交回调 |
 | onEditComplete | TDSearchBarCallBack? | - | 编辑完成回调 |
+| onActionClick | TDSearchBarCallBack? | - | 右侧操作按钮点击回调 |
 | autoHeight | bool | false | 是否自动计算高度 |
 | padding | EdgeInsets | const EdgeInsets.fromLTRB(16, 8, 16, 8) | 内部填充 |
 | autoFocus | bool | false | 是否自动获取焦点 |
