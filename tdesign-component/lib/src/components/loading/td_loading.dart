@@ -28,7 +28,7 @@ class TDLoading extends StatelessWidget {
   const TDLoading({
     Key? key,
     required this.size,
-    this.icon,
+    this.icon = TDLoadingIcon.circle,
     this.iconColor,
     this.axis = Axis.vertical,
     this.text,
