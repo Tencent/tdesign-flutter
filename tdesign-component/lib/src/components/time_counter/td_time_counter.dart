@@ -18,20 +18,21 @@ String _getMark(String format, String? type) {
 }
 
 /// 倒计时组件
-class TDCountDown extends StatefulWidget {
-  const TDCountDown({
+class TDTimeCounter extends StatefulWidget {
+  const TDTimeCounter({
     Key? key,
     this.autoStart = true,
     this.content = 'default',
     this.format = 'HH:mm:ss',
     this.millisecond = false,
-    this.size = TDCountDownSize.medium,
+    this.size = TDTimeCounterSize.medium,
     this.splitWithUnit = false,
-    this.theme = TDCountDownTheme.defaultTheme,
+    this.theme = TDTimeCounterTheme.defaultTheme,
     required this.time,
     this.style,
     this.onChange,
     this.onFinish,
+    this.direction = TDTimeCounterDirection.down,
     this.controller,
   }) : super(key: key);
 
@@ -48,19 +49,19 @@ class TDCountDown extends StatefulWidget {
   final bool millisecond;
 
   /// 倒计时尺寸
-  final TDCountDownSize size;
+  final TDTimeCounterSize size;
 
   /// 使用时间单位分割
   final bool splitWithUnit;
 
   /// 倒计时风格
-  final TDCountDownTheme theme;
+  final TDTimeCounterTheme theme;
 
   /// 必需；倒计时时长，单位毫秒
   final int time;
 
   /// 自定义样式，有则优先用它，没有则根据size和theme选取
-  final TDCountDownStyle? style;
+  final TDTimeCounterStyle? style;
 
   /// 时间变化时触发回调
   final Function(int time)? onChange;
@@ -68,24 +69,32 @@ class TDCountDown extends StatefulWidget {
   /// 倒计时结束时触发回调
   final VoidCallback? onFinish;
 
+  /// 计时方向，默认倒计时
+  final TDTimeCounterDirection direction;
+
   /// 控制器，可控制开始/暂停/继续/重置
-  final TDCountDownController? controller;
+  final TDTimeCounterController? controller;
 
   @override
-  _TDCountDownState createState() => _TDCountDownState();
+  _TDTimeCounterState createState() => _TDTimeCounterState();
 }
 
-class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStateMixin {
-  late TDCountDownStyle _style;
+class _TDTimeCounterState extends State<TDTimeCounter>
+    with SingleTickerProviderStateMixin {
+  late TDTimeCounterStyle _style;
   late Map<String, String> timeUnitMap;
   Ticker? _ticker;
   int _time = 0;
   int _tempMilliseconds = 0;
+  int _maxTime = 0;
 
   @override
   void initState() {
     super.initState();
-    _time = widget.time;
+    _maxTime = widget.time;
+    if (widget.direction == TDTimeCounterDirection.down) {
+      _time = widget.time;
+    }
     if (widget.autoStart) {
       startTimer();
     }
@@ -96,7 +105,7 @@ class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStat
   void didChangeDependencies() {
     super.didChangeDependencies();
     _style = widget.style ??
-        TDCountDownStyle.generateStyle(
+        TDTimeCounterStyle.generateStyle(
           context,
           size: widget.size,
           theme: widget.theme,
@@ -112,7 +121,7 @@ class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStat
   }
 
   @override
-  void didUpdateWidget(TDCountDown oldWidget) {
+  void didUpdateWidget(TDTimeCounter oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
       oldWidget.controller?.removeListener(_onControllerChanged);
@@ -134,13 +143,19 @@ class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStat
     }
     _tempMilliseconds = 0;
     _ticker ??= createTicker((Duration elapsed) {
-      if (_time > 0) {
-        _time = max(_time - (elapsed.inMilliseconds - _tempMilliseconds), 0);
+      if ((widget.direction == TDTimeCounterDirection.down && _time > 0) || widget.direction == TDTimeCounterDirection.up && _time <= _maxTime) {
+        setState(() {
+          if (widget.direction == TDTimeCounterDirection.down) {
+            _time = max(_time - (elapsed.inMilliseconds - _tempMilliseconds), 0);
+          } else {
+            _time = min(_time + (elapsed.inMilliseconds - _tempMilliseconds), _maxTime);
+          }
+        });
         _tempMilliseconds = elapsed.inMilliseconds;
         widget.onChange?.call(_time);
       } else {
         _time = 0;
-        _ticker!.stop();
+        _ticker!.dispose();
         widget.onFinish?.call();
       }
       setState(() {});
@@ -161,7 +176,12 @@ class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStat
   /// 重置倒计时
   void resetTimer([int? time]) {
     _ticker?.stop();
-    _time = time ?? widget.time;
+    if (widget.direction == TDTimeCounterDirection.down) {
+      _time = time ?? widget.time;
+    } else {
+      _time = 0;
+      _maxTime = time ?? widget.time;
+    }
     setState(() {});
     if (widget.autoStart) {
       startTimer();
@@ -170,16 +190,16 @@ class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStat
 
   void _onControllerChanged() {
     switch (widget.controller?.value) {
-      case TDCountDownStatus.start:
+      case TDTimeCounterStatus.start:
         startTimer();
         break;
-      case TDCountDownStatus.pause:
+      case TDTimeCounterStatus.pause:
         pauseTimer();
         break;
-      case TDCountDownStatus.resume:
+      case TDTimeCounterStatus.resume:
         resumeTimer();
         break;
-      case TDCountDownStatus.reset:
+      case TDTimeCounterStatus.reset:
         resetTimer(widget.controller?.time);
         break;
       default:
@@ -190,7 +210,8 @@ class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     if (widget.content == 'default') {
-      return Row(mainAxisSize: MainAxisSize.min, children: _buildTimeWidget(context));
+      return Row(
+          mainAxisSize: MainAxisSize.min, children: _buildTimeWidget(context));
     }
     if (widget.content is Function) {
       return widget.content(_time);
@@ -199,7 +220,9 @@ class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStat
   }
 
   List<Widget> _buildTimeWidget(BuildContext context) {
-    var format = widget.millisecond ? '${widget.format.replaceAll(':SSS', '')}:SSS' : widget.format;
+    var format = widget.millisecond
+        ? '${widget.format.replaceAll(':SSS', '')}:SSS'
+        : widget.format;
     var matches = _timeReg.allMatches(format);
     var timeMap = _getTimeMap(_time);
     return matches
@@ -266,6 +289,12 @@ class _TDCountDownState extends State<TDCountDown> with SingleTickerProviderStat
     var minutes = _toDigits(duration.inMinutes.remainder(60), 2);
     var seconds = _toDigits(duration.inSeconds.remainder(60), 2);
     var milliseconds = _toDigits(duration.inMilliseconds.remainder(1000), 3);
-    return {'DD': days, 'HH': hours, 'mm': minutes, 'ss': seconds, 'SSS': milliseconds};
+    return {
+      'DD': days,
+      'HH': hours,
+      'mm': minutes,
+      'ss': seconds,
+      'SSS': milliseconds
+    };
   }
 }
