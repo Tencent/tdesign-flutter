@@ -38,6 +38,8 @@ class TDSearchBar extends StatefulWidget {
     this.needCancel = false,
     this.controller,
     this.backgroundColor = Colors.white,
+    this.action = '',
+    this.onActionClick,
   }) : super(key: key);
 
   /// 预设文案
@@ -78,6 +80,12 @@ class TDSearchBar extends StatefulWidget {
 
   /// 编辑完成回调
   final TDSearchBarCallBack? onEditComplete;
+
+  /// 自定义操作文字
+  final String action;
+
+  /// 自定义操作回调
+  final TDSearchBarEvent? onActionClick;
 
   @override
   State<StatefulWidget> createState() => _TDSearchBarState();
@@ -169,6 +177,21 @@ class _TDSearchBarState extends State<TDSearchBar>
         : TDTheme.of(context).fontBodyLarge;
   }
 
+  Widget actionBtn(BuildContext context, String? text, {String? action, TDSearchBarEvent? onActionClick} ){
+    return GestureDetector(
+      onTap: (){
+        onActionClick!(text??'');
+      },
+      child: Container(
+        padding: const EdgeInsets.only(left: 16),
+        child: Text(action!,
+            style: TextStyle(
+                fontSize: getSize(context)?.size,
+                color: TDTheme.of(context).brandNormalColor)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -255,37 +278,44 @@ class _TDSearchBarState extends State<TDSearchBar>
                 ),
               ),
             ),
-            Offstage(
-              offstage: cancelBtnHide || !widget.needCancel,
-              child: GestureDetector(
-                onTap: () {
-                  _cleanInputText();
-                  if (widget.onTextChanged != null) {
-                    widget.onTextChanged!('');
-                  }
-                  if (_animation == null) {
-                    focusNode.unfocus();
-                    setState(() {
-                      _status = _TDSearchBarStatus.unFocus;
-                    });
-                    return;
-                  }
-                  setState(() {
-                    _status = _TDSearchBarStatus.animatingToUnFocus;
-                  });
-                  focusNode.unfocus();
-                  _animationController.reverse(
-                      from: _animationController.upperBound);
-                },
-                child: Container(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: Text(context.resource.cancel,
-                      style: TextStyle(
-                          fontSize: getSize(context)?.size,
-                          color: TDTheme.of(context).brandNormalColor)),
-                ),
-              ),
-            ),
+            widget.action.isNotEmpty
+                ? actionBtn(
+                    context,
+                    controller.text,
+                    action: widget.action,
+                    onActionClick: widget.onActionClick ?? (String text) {},
+                  )
+                : Offstage(
+                    offstage: cancelBtnHide || !widget.needCancel,
+                    child: GestureDetector(
+                      onTap: () {
+                        _cleanInputText();
+                        if (widget.onTextChanged != null) {
+                          widget.onTextChanged!('');
+                        }
+                        if (_animation == null) {
+                          focusNode.unfocus();
+                          setState(() {
+                            _status = _TDSearchBarStatus.unFocus;
+                          });
+                          return;
+                        }
+                        setState(() {
+                          _status = _TDSearchBarStatus.animatingToUnFocus;
+                        });
+                        focusNode.unfocus();
+                        _animationController.reverse(
+                            from: _animationController.upperBound);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Text(context.resource.cancel,
+                            style: TextStyle(
+                                fontSize: getSize(context)?.size,
+                                color: TDTheme.of(context).brandNormalColor)),
+                      ),
+                    ),
+                  ),
           ],
         ),
         Offstage(
