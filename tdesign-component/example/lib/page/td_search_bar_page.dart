@@ -13,6 +13,7 @@ class TDSearchBarPage extends StatefulWidget {
 
 class _TDSearchBarPageState extends State<TDSearchBarPage> {
   String? inputText;
+  String? searchText;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +28,8 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
             children: [
               ExampleItem(desc: '基础搜索框', builder: _buildDefaultSearchBar),
               ExampleItem(desc: '获取焦点后显示取消按钮', builder: _buildFocusSearchBar),
+              ExampleItem(
+                  desc: '获取焦点后显示自定义操作按钮', builder: _buildSearchBarWithAction),
             ],
           ),
           ExampleModule(title: '组件样式', children: [
@@ -113,6 +116,37 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
           inputText = text;
         });
       },
+    );
+  }
+
+  @Demo(group: 'search')
+  Widget _buildSearchBarWithAction(BuildContext context) {
+    return Column(
+      children: [
+        TDSearchBar(
+          placeHolder: '搜索预设文案',
+          alignment: TDSearchAlignment.left,
+          action: '搜索',
+          onActionClick: (String text) {
+            setState(() {
+              searchText = text;
+            });
+          },
+          onTextChanged: (String text) {
+            setState(() {
+              inputText = text;
+            });
+          },
+        ),
+        const SizedBox(height: 10,),
+        Container(
+          padding: const EdgeInsets.only(left: 15),
+          alignment: Alignment.centerLeft,
+          child: TDText(
+            '搜索框输入的内容：${searchText ?? ''}',
+          ),
+        )
+      ],
     );
   }
 }
