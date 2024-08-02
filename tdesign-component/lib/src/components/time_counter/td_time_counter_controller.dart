@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-/// 倒计时组件控制器转态
+/// 计时组件控制器转态
 enum TDTimeCounterStatus {
   /// 开始
   start,
@@ -43,7 +43,7 @@ class TDTimeCounterController extends ValueNotifier<TDTimeCounterStatus> {
 
   /// 重置
   void reset([int? time]) {
-    if (value == TDTimeCounterStatus.reset && _time != time) {
+    if (value == TDTimeCounterStatus.reset) {
        _time = time;
       notifyListeners();
     } else {
