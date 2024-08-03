@@ -28,15 +28,16 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
             children: [
               ExampleItem(desc: '基础搜索框', builder: _buildDefaultSearchBar),
               ExampleItem(desc: '获取焦点后显示取消按钮', builder: _buildFocusSearchBar),
-              ExampleItem(
-                  desc: '获取焦点后显示自定义操作按钮', builder: _buildSearchBarWithAction),
             ],
           ),
           ExampleModule(title: '组件样式', children: [
             ExampleItem(desc: '搜索框形状', builder: _buildSearchBarWithShape),
             ExampleItem(desc: '默认状态其他对齐方式', builder: _buildCenterSearchBar),
-          ])
-        ]);
+          ]),
+        ],
+      test: [
+        ExampleItem(desc: '获取焦点后显示自定义操作按钮', builder: _buildSearchBarWithAction),
+      ],);
   }
 
   @Demo(group: 'search')
