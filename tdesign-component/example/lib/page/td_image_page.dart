@@ -55,14 +55,12 @@ class TDImageState extends State<TDImagePage>
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _imageClip,
-                            methodName: '_imageClip', // 裁剪
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _imageStretch,
-                            methodName: '_imageStretch', // 拉伸
                           ),
                         ),
                       ],
@@ -82,14 +80,12 @@ class TDImageState extends State<TDImagePage>
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _imageFitHeight,
-                            methodName: '_imageFitHeight', // 适应高
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8), // 适应宽
                           child: CodeWrapper(
                             builder: _imageFitWidth,
-                            methodName: '_imageFitWidth',
                           ),
                         ),
                       ],
@@ -109,21 +105,18 @@ class TDImageState extends State<TDImagePage>
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _imageSquare,
-                            methodName: '_imageSquare', // 方形
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _imageRoundedSquare,
-                            methodName: '_imageRoundedSquare', // 圆角方形
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _imageCircle,
-                            methodName: '_imageCircle', // 圆形
                           ),
                         ),
                       ],
@@ -148,14 +141,12 @@ class TDImageState extends State<TDImagePage>
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _loadingDefault,
-                            methodName: '_loadingDefault', // 加载默认
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _loadingCustom,
-                            methodName: '_loadingCustom', // 加载自定义
                           ),
                         ),
                       ],
@@ -175,14 +166,12 @@ class TDImageState extends State<TDImagePage>
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _failDefault,
-                            methodName: '_failDefault', // 失败默认
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
                           child: CodeWrapper(
                             builder: _failCustom,
-                            methodName: '_failCustom', // 失败自定义
                           ),
                         ),
                       ],
@@ -206,7 +195,6 @@ class TDImageState extends State<TDImagePage>
                       margin: const EdgeInsets.all(8),
                       child: CodeWrapper(
                         builder: _imageFile,
-                        methodName: '_imageFile',
                       ),
                     ),
                   ],
