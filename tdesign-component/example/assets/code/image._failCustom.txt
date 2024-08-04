@@ -1,0 +1,11 @@
+const TDImage(
+                imgUrl: 'error',
+                errorWidget: TDText(
+                  '加载失败',
+                  forceVerticalCenter: true,
+                  font: TDTheme.of(context).fontBodyExtraSmall,
+                  fontWeight: FontWeight.w500,
+                  textColor: TDTheme.of(context).fontGyColor3,
+                ),
+                type: TDImageType.roundedSquare,
+              )
