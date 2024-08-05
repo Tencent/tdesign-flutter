@@ -13,6 +13,7 @@ class TDTextareaPage extends StatefulWidget {
 
 class _TDTextareaPageState extends State<TDTextareaPage> {
   var controller = <TextEditingController>[];
+  final _tdTextareaFormKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -66,6 +67,12 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
             ExampleItem(desc: '标签外置输入框', builder: _extensionStyle),
             ExampleItem(desc: '自定义标题', builder: _setLabel),
             ExampleItem(desc: '必填和辅助说明', builder: _setStatus),
+          ],
+        ),
+        ExampleModule(
+          title: '表单校验',
+          children: [
+            ExampleItem(builder: _formValidatorBasic),
           ],
         ),
       ],
@@ -175,9 +182,12 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       indicator: true,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
+        borderRadius:
+            BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
       ),
-      margin: EdgeInsets.only(right: TDTheme.of(context).spacer16, left: TDTheme.of(context).spacer16),
+      margin: EdgeInsets.only(
+          right: TDTheme.of(context).spacer16,
+          left: TDTheme.of(context).spacer16),
       onChanged: (value) {
         setState(() {});
       },
@@ -275,6 +285,39 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       onChanged: (value) {
         setState(() {});
       },
+    );
+  }
+
+  @Demo(group: 'textarea')
+  Widget _formValidatorBasic(BuildContext context) {
+    return Column(
+      children: [
+        Form(
+            key: _tdTextareaFormKey,
+            child: TDTextarea(
+              controller: controller[12],
+              hintText: '请输入文字',
+              maxLines: 4,
+              minLines: 4,
+              onChanged: (value) {
+                setState(() {});
+              },
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return '请输入文字';
+                }
+                return null;
+              },
+            )),
+        TDButton(
+            text: '提交',
+            onTap: () {
+              _tdTextareaFormKey.currentState?.validate();
+            }),
+        const SizedBox(
+          height: 16,
+        )
+      ],
     );
   }
 }
