@@ -144,7 +144,7 @@ class _TDCellState extends State<TDCell> {
       },
       child: Container(
         color: _status == 'default' ? style.backgroundColor : style.clickBackgroundColor,
-        padding: EdgeInsets.all(TDTheme.of(context).spacer16),
+        padding: style.padding,
         child: Row(
           crossAxisAlignment: crossAxisAlignment,
           children: [

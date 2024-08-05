@@ -14,6 +14,7 @@ class TDCellStyle {
     this.borderedColor,
     this.groupBorderedColor,
     this.backgroundColor,
+    this.padding
   });
 
   /// 左侧图标颜色
@@ -52,6 +53,9 @@ class TDCellStyle {
   /// 单元组标题文字样式
   TextStyle? groupTitleStyle;
 
+  /// 单元格内边距
+  EdgeInsets? padding;
+
   /// 生成单元格默认样式
   TDCellStyle.cellStyle(BuildContext context) {
     backgroundColor = Colors.white;
@@ -82,5 +86,7 @@ class TDCellStyle {
       height: TDTheme.of(context).fontTitleLarge?.height ?? 26,
       fontWeight: TDTheme.of(context).fontTitleLarge?.fontWeight ?? FontWeight.w600,
     );
+
+    padding = EdgeInsets.all(TDTheme.of(context).spacer16);
   }
 }
