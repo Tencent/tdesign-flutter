@@ -3,8 +3,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDCountDownPage extends StatelessWidget {
-  const TDCountDownPage({super.key});
+class TDTimeCounterPage extends StatelessWidget {
+  const TDTimeCounterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +12,8 @@ class TDCountDownPage extends StatelessWidget {
       color: TDTheme.of(context).grayColor2,
       child: ExamplePage(
         title: tdTitle(context),
-        desc: '用于实时展示倒计时数值。',
-        exampleCodeGroup: 'countDown',
+        desc: '用于实时展示计时数值。',
+        exampleCodeGroup: 'timeCounter',
         children: [
           ExampleModule(title: '组件类型', children: [
             ExampleItem(
@@ -32,6 +32,15 @@ class TDCountDownPage extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16),
               builder: (BuildContext context) {
                 return const CodeWrapper(builder: _buildMillisecondSimple);
+              },
+            ),
+            ExampleItem(
+              ignoreCode: true,
+              desc: '正向计时',
+              center: false,
+              padding: const EdgeInsets.only(left: 16),
+              builder: (BuildContext context) {
+                return const CodeWrapper(builder: _buildUpSimple);
               },
             ),
             ExampleItem(
@@ -80,9 +89,9 @@ class TDCountDownPage extends StatelessWidget {
               builder: (BuildContext context) {
                 return Container(
                   alignment: Alignment.topLeft,
-                  child: Wrap(spacing: 8, direction: Axis.vertical, children: [
+                  child: const Wrap(spacing: 8, direction: Axis.vertical, children: [
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('小'),
@@ -91,7 +100,7 @@ class TDCountDownPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('中'),
@@ -100,7 +109,7 @@ class TDCountDownPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('大'),
@@ -120,9 +129,9 @@ class TDCountDownPage extends StatelessWidget {
               builder: (BuildContext context) {
                 return Container(
                   alignment: Alignment.topLeft,
-                  child: Wrap(spacing: 8, direction: Axis.vertical, children: [
+                  child: const Wrap(spacing: 8, direction: Axis.vertical, children: [
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('小'),
@@ -131,7 +140,7 @@ class TDCountDownPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('中'),
@@ -140,7 +149,7 @@ class TDCountDownPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('大'),
@@ -160,9 +169,9 @@ class TDCountDownPage extends StatelessWidget {
               builder: (BuildContext context) {
                 return Container(
                   alignment: Alignment.topLeft,
-                  child: Wrap(spacing: 8, direction: Axis.vertical, children: [
+                  child: const Wrap(spacing: 8, direction: Axis.vertical, children: [
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('小'),
@@ -171,7 +180,7 @@ class TDCountDownPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('中'),
@@ -180,7 +189,7 @@ class TDCountDownPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('大'),
@@ -200,9 +209,9 @@ class TDCountDownPage extends StatelessWidget {
               builder: (BuildContext context) {
                 return Container(
                   alignment: Alignment.topLeft,
-                  child: Wrap(spacing: 8, direction: Axis.vertical, children: [
+                  child: const Wrap(spacing: 8, direction: Axis.vertical, children: [
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('小'),
@@ -211,7 +220,7 @@ class TDCountDownPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('中'),
@@ -220,7 +229,7 @@ class TDCountDownPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('大'),
@@ -240,9 +249,9 @@ class TDCountDownPage extends StatelessWidget {
               builder: (BuildContext context) {
                 return Container(
                   alignment: Alignment.topLeft,
-                  child: Wrap(spacing: 8, direction: Axis.vertical, children: [
+                  child: const Wrap(spacing: 8, direction: Axis.vertical, children: [
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('小'),
@@ -251,7 +260,7 @@ class TDCountDownPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('中'),
@@ -260,7 +269,7 @@ class TDCountDownPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 80,
                           child: Text('大'),
@@ -290,182 +299,187 @@ class TDCountDownPage extends StatelessWidget {
   }
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildSimple(BuildContext context) {
-  return const TDCountDown(time: 60 * 60 * 1000);
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildSimple(BuildContext context) {
+  return const TDTimeCounter(time: 60 * 60 * 1000);
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildMillisecondSimple(BuildContext context) {
-  return const TDCountDown(time: 60 * 60 * 1000, millisecond: true);
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildMillisecondSimple(BuildContext context) {
+  return const TDTimeCounter(time: 60 * 60 * 1000, millisecond: true);
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildSquareSimple(BuildContext context) {
-  return const TDCountDown(time: 60 * 60 * 1000, theme: TDCountDownTheme.square);
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildUpSimple(BuildContext context) {
+  return const TDTimeCounter(time: 60 * 60 * 1000, millisecond: true, direction: TDTimeCounterDirection.up,);
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildRoundSimple(BuildContext context) {
-  return const TDCountDown(time: 60 * 60 * 1000, theme: TDCountDownTheme.round);
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildSquareSimple(BuildContext context) {
+  return const TDTimeCounter(time: 60 * 60 * 1000, theme: TDTimeCounterTheme.square);
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildUnitSimple(BuildContext context) {
-  return const TDCountDown(time: 60 * 60 * 1000, theme: TDCountDownTheme.square, splitWithUnit: true);
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildRoundSimple(BuildContext context) {
+  return const TDTimeCounter(time: 60 * 60 * 1000, theme: TDTimeCounterTheme.round);
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildCustomUnitSimple(BuildContext context) {
-  var style = TDCountDownStyle.generateStyle(context);
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildUnitSimple(BuildContext context) {
+  return const TDTimeCounter(time: 60 * 60 * 1000, theme: TDTimeCounterTheme.square, splitWithUnit: true);
+}
+
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildCustomUnitSimple(BuildContext context) {
+  var style = TDTimeCounterStyle.generateStyle(context);
   style.timeColor = TDTheme.of(context).errorColor6;
-  return TDCountDown(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
+  return TDTimeCounter(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildSmallSize(BuildContext context) {
-  return const TDCountDown(
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildSmallSize(BuildContext context) {
+  return const TDTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.small,
+    size: TDTimeCounterSize.small,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildMediumSize(BuildContext context) {
-  return const TDCountDown(
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildMediumSize(BuildContext context) {
+  return const TDTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.medium,
+    size: TDTimeCounterSize.medium,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildLargeSize(BuildContext context) {
-  return const TDCountDown(
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildLargeSize(BuildContext context) {
+  return const TDTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.large,
+    size: TDTimeCounterSize.large,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildSquareSmallSize(BuildContext context) {
-  return const TDCountDown(
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildSquareSmallSize(BuildContext context) {
+  return const TDTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.small,
-    theme: TDCountDownTheme.square,
+    size: TDTimeCounterSize.small,
+    theme: TDTimeCounterTheme.square,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildSquareMediumSize(BuildContext context) {
-  return const TDCountDown(
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildSquareMediumSize(BuildContext context) {
+  return const TDTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.medium,
-    theme: TDCountDownTheme.square,
+    size: TDTimeCounterSize.medium,
+    theme: TDTimeCounterTheme.square,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildSquareLargeSize(BuildContext context) {
-  return const TDCountDown(
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildSquareLargeSize(BuildContext context) {
+  return const TDTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.large,
-    theme: TDCountDownTheme.square,
+    size: TDTimeCounterSize.large,
+    theme: TDTimeCounterTheme.square,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildRoundSmallSize(BuildContext context) {
-  return const TDCountDown(
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildRoundSmallSize(BuildContext context) {
+  return const TDTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.small,
-    theme: TDCountDownTheme.round,
+    size: TDTimeCounterSize.small,
+    theme: TDTimeCounterTheme.round,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildRoundMediumSize(BuildContext context) {
-  return const TDCountDown(
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildRoundMediumSize(BuildContext context) {
+  return const TDTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.medium,
-    theme: TDCountDownTheme.round,
+    size: TDTimeCounterSize.medium,
+    theme: TDTimeCounterTheme.round,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildRoundLargeSize(BuildContext context) {
-  return const TDCountDown(
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildRoundLargeSize(BuildContext context) {
+  return const TDTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.large,
-    theme: TDCountDownTheme.round,
+    size: TDTimeCounterSize.large,
+    theme: TDTimeCounterTheme.round,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildUnitSmallSize(BuildContext context) {
-  return const TDCountDown(
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildUnitSmallSize(BuildContext context) {
+  return const TDTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.small,
-    theme: TDCountDownTheme.square,
+    size: TDTimeCounterSize.small,
+    theme: TDTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildUnitMediumSize(BuildContext context) {
-  return const TDCountDown(
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildUnitMediumSize(BuildContext context) {
+  return const TDTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.medium,
-    theme: TDCountDownTheme.square,
+    size: TDTimeCounterSize.medium,
+    theme: TDTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildUnitLargeSize(BuildContext context) {
-  return const TDCountDown(
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildUnitLargeSize(BuildContext context) {
+  return const TDTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDCountDownSize.large,
-    theme: TDCountDownTheme.square,
+    size: TDTimeCounterSize.large,
+    theme: TDTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildCustomUnitSmallSize(BuildContext context) {
-  var style = TDCountDownStyle.generateStyle(context, size: TDCountDownSize.small);
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
+  var style = TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.small);
   style.timeColor = TDTheme.of(context).errorColor6;
-  return TDCountDown(
+  return TDTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
     style: style,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildCustomUnitMediumSize(BuildContext context) {
-  var style = TDCountDownStyle.generateStyle(context, size: TDCountDownSize.medium);
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
+  var style = TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.medium);
   style.timeColor = TDTheme.of(context).errorColor6;
-  return TDCountDown(
+  return TDTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
     style: style,
   );
 }
 
-@Demo(group: 'countDown')
-TDCountDown _buildCustomUnitLargeSize(BuildContext context) {
-  var style = TDCountDownStyle.generateStyle(context, size: TDCountDownSize.large);
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
+  var style = TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.large);
   style.timeColor = TDTheme.of(context).errorColor6;
-  return TDCountDown(
+  return TDTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
     style: style,
   );
 }
 
-@Demo(group: 'countDown')
+@Demo(group: 'timeCounter')
 Widget _buildControl(BuildContext context) {
-  var controller = TDCountDownController();
+  var controller = TDTimeCounterController();
   return Wrap(
     direction: Axis.vertical,
     spacing: 8,
@@ -515,7 +529,7 @@ Widget _buildControl(BuildContext context) {
           ),
         ],
       ),
-      TDCountDown(
+      TDTimeCounter(
         time: 60 * 60 * 1000,
         controller: controller,
         autoStart: false,

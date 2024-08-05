@@ -157,7 +157,7 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
 ## 组件规划
 
-- 开发中组件: NoticeBar,Rate,Calendar,Indexs,ActionSheet,Progress,Footer,Result,Message,Popover,Table
+- 开发中组件: NoticeBar,Rate,Calendar,Indexes,ActionSheet,Progress,Footer,Result,Message,Popover,Table
 
 - 待开发组件: Form,Upload
 
