@@ -425,11 +425,10 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   void _getChildrenListData(int level, String value) {
     //查询层级数据
     var selectLevelData = _listData.where((element) => element.level == (level)).toList();
+    var childList = selectLevelData.where((element) => element.parentValue == value).toList();
     //判断下级是否存在
-    if (selectLevelData.isNotEmpty) {
+    if (selectLevelData.isNotEmpty && childList.isNotEmpty) {
       //获取下级数据
-      var childList =
-          selectLevelData.where((element) => element.parentValue == value).toList();
       _selectListData = childList;
       _currentTabIndex += 1;
     } else {
