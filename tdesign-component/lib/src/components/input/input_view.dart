@@ -22,7 +22,7 @@ class TDInputView extends StatelessWidget {
 
   /// 最大输入行数
   final int? maxLines;
-  
+
   /// 最小输入行数
   final int? minLines;
 
@@ -42,7 +42,17 @@ class TDInputView extends StatelessWidget {
   final VoidCallback? onEditingComplete;
 
   /// 点击键盘完成按钮时触发的回调, 参数值为输入的内容
+  @deprecated
   final ValueChanged<String>? onSubmitted;
+
+  /// 点击键盘完成按钮时触发的回调, 参数值为输入的内容
+  final ValueChanged<String>? onFieldSubmitted;
+
+  /// 点击输入框外部时触发的回调
+  final TapRegionCallback? onTapOutside;
+
+  /// 输入验证，用法同TextFormField
+  final String? Function(String?)? validator;
 
   /// 自定义输入框样式，默认圆角
   final InputDecoration? inputDecoration;
@@ -72,36 +82,39 @@ class TDInputView extends StatelessWidget {
 
   const TDInputView(
       {Key? key,
-      required this.textStyle,
-      this.readOnly = false,
-      this.autofocus = false,
-      this.obscureText = false,
-      this.onEditingComplete,
-      this.onSubmitted,
-      this.hintText = '',
-      this.inputType,
-      this.onChanged,
-      this.inputFormatters,
-      this.inputDecoration,
-      this.maxLines,
-      this.minLines,
-      this.maxLength,
-      this.focusNode,
-      this.hintTextStyle,
-      this.cursorColor,
-      this.textInputBackgroundColor,
-      this.contentPadding = EdgeInsets.zero,
-      this.isCollapsed = false,
-      this.textAlign,
-      this.controller,
-      this.inputAction,})
+    required this.textStyle,
+    this.readOnly = false,
+    this.autofocus = false,
+    this.obscureText = false,
+    this.onEditingComplete,
+    this.onSubmitted,
+    this.onFieldSubmitted,
+    this.onTapOutside,
+    this.validator,
+    this.hintText = '',
+    this.inputType,
+    this.onChanged,
+    this.inputFormatters,
+    this.inputDecoration,
+    this.maxLines,
+    this.minLines,
+    this.maxLength,
+    this.focusNode,
+    this.hintTextStyle,
+    this.cursorColor,
+    this.textInputBackgroundColor,
+    this.contentPadding = EdgeInsets.zero,
+    this.isCollapsed = false,
+    this.textAlign,
+    this.controller,
+    this.inputAction,})
       : super(
           key: key,
         );
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       inputFormatters: inputFormatters,
       readOnly: readOnly,
       keyboardType: inputType,
@@ -109,7 +122,9 @@ class TDInputView extends StatelessWidget {
       autofocus: autofocus,
       obscureText: obscureText,
       onEditingComplete: onEditingComplete,
-      onSubmitted: onSubmitted,
+      onFieldSubmitted: onFieldSubmitted ?? onSubmitted,
+      onTapOutside: onTapOutside,
+      validator: validator,
       controller: controller,
       onChanged: onChanged,
       focusNode: focusNode,
