@@ -173,7 +173,7 @@ class TDInput extends StatefulWidget {
   /// 点击输入框外部时触发的回调
   final TapRegionCallback? onTapOutside;
 
-  /// 校验触发方式
+    /// 校验触发方式
   final TDInputValidationTrigger? validationTrigger;
 
   /// 输入验证，用法同TextFormField
