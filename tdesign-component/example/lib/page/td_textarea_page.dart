@@ -297,8 +297,10 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
             child: TDTextarea(
               controller: controller[12],
               hintText: '请输入文字',
+              additionInfoColor: TDTheme.of(context).errorColor6,
               maxLines: 4,
               minLines: 4,
+              validationTrigger: TDTextareaValidationTrigger.changed,
               onChanged: (value) {
                 setState(() {});
               },

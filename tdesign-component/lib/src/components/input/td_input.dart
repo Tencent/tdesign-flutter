@@ -14,7 +14,7 @@ enum TDInputType {
 
 enum TDInputSize { small, large }
 
-enum TDInputValidationTrigger { changed, submitted, outSide }
+enum TDInputValidationTrigger { changed, submitted }
 
 // 提供三种默认样式，也可以自定义decoration和上下文字。
 enum TDCardStyle { topText, topTextWithBlueBorder, errorStyle }
@@ -173,7 +173,7 @@ class TDInput extends StatefulWidget {
   /// 点击输入框外部时触发的回调
   final TapRegionCallback? onTapOutside;
 
-    /// 校验触发方式
+  /// 校验触发方式
   final TDInputValidationTrigger? validationTrigger;
 
   /// 输入验证，用法同TextFormField
@@ -554,7 +554,9 @@ class _TDInputState extends State<TDInput> {
     if (widget.validationTrigger == TDInputValidationTrigger.changed) {
       validator(value);
     }
-    widget.onChanged ?? widget.onChanged!(value);
+    if (widget.onChanged != null) {
+      widget.onChanged!(value);
+    }
   }
 
   onFieldSubmitted(String value) {

@@ -14,6 +14,8 @@ import '../text/td_text.dart';
 
 enum TDTextareaLayout { vertical, horizontal }
 
+enum TDTextareaValidationTrigger { changed, submitted }
+
 /// 用于多行文本信息输入
 class TDTextarea extends StatefulWidget {
   const TDTextarea({
@@ -135,7 +137,7 @@ class TDTextarea extends StatefulWidget {
   final TapRegionCallback? onTapOutside;
 
   /// 校验触发方式
-  final TDInputValidationTrigger? validationTrigger;
+  final TDTextareaValidationTrigger? validationTrigger;
 
   /// 输入验证，用法同TextFormField
   final String? Function(String?)? validator;
@@ -319,14 +321,16 @@ class _TDTextareaState extends State<TDTextarea> {
           readOnly: widget.readOnly ?? false,
           autofocus: widget.autofocus ?? false,
           onEditingComplete: widget.onEditingComplete,
-          onSubmitted: widget.onSubmitted,
-          onFieldSubmitted: widget.onFieldSubmitted ?? widget.onSubmitted,
+          onFieldSubmitted: onFieldSubmitted,
           onTapOutside: widget.onTapOutside,
-          validator: widget.validator,
+          validator: (value) {
+            validator(value);
+            return null;
+          },
           hintText: widget.hintText,
           inputType: widget.inputType,
           textAlign: widget.textAlign,
-          onChanged: widget.onChanged,
+          onChanged: onChanged,
           inputFormatters: [
             ...(widget.inputFormatters ?? []),
             ...(widget.maxLength != null && !(widget.allowInputOverMax ?? false)
@@ -359,8 +363,7 @@ class _TDTextareaState extends State<TDTextarea> {
 
   Widget _getIndicatorView(BuildContext context) {
     var padding = _getInputPadding(context);
-    var showAdditionInfo =
-        additionInfo != '' && additionInfo != null;
+    var showAdditionInfo = additionInfo != '' && additionInfo != null;
     var showIndicator = widget.indicator == true && widget.maxLength != null;
     var widgetList = <Widget>[];
     if (showAdditionInfo) {
@@ -473,14 +476,16 @@ class _TDTextareaState extends State<TDTextarea> {
   }
 
   onChanged(String value) {
-    if (widget.validationTrigger == TDInputValidationTrigger.changed) {
+    if (widget.validationTrigger == TDTextareaValidationTrigger.changed) {
       validator(value);
     }
-    widget.onChanged ?? widget.onChanged!(value);
+    if (widget.onChanged != null) {
+      widget.onChanged!(value);
+    }
   }
 
   onFieldSubmitted(String value) {
-    if (widget.validationTrigger == TDInputValidationTrigger.submitted) {
+    if (widget.validationTrigger == TDTextareaValidationTrigger.submitted) {
       validator(value);
     }
     if (widget.onFieldSubmitted != null) {
