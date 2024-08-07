@@ -20,6 +20,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
   var countDownText = '重发';
   Timer? _timer;
   int _countdownTime = 0;
+  final _tdInputFormKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -99,6 +100,9 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           ExampleItem(desc: '标签外置样式', builder: _labelOutStyle),
           ExampleItem(desc: '自定义样式输入框', builder: _customStyle),
         ]),
+        ExampleModule(title: '表单校验', children: [
+          ExampleItem( builder: _formValidatorBasic),
+        ]),
       ],
       test: [
         ExampleItem(desc: '长文本样式', builder: _customLongTextStyle),
@@ -114,14 +118,9 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       children: [
         TDInput(
           leftLabel: '标签文字',
-          controller: controller[0],
           backgroundColor: Colors.white,
           hintText: '请输入文字',
           onChanged: (text) {
-            setState(() {});
-          },
-          onClearTap: () {
-            controller[0].clear();
             setState(() {});
           },
         ),
@@ -890,6 +889,46 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           },
         ),
       ),
+    );
+  }
+
+
+  @Demo(group: 'input')
+  Widget _formValidatorBasic(BuildContext context) {
+    return Column(
+      children: [
+        Form(
+          key: _tdInputFormKey,
+          child: TDInput(
+            leftLabel: '标签文字',
+            controller: controller[27],
+            backgroundColor: Colors.white,
+            hintText: '请输入文字',
+            additionInfoColor: TDTheme.of(context).errorColor6,
+            onChanged: (text) {
+              setState(() {});
+            },
+            needClear: true,
+            onClearTap: () {
+              controller[27].clear();
+              setState(() {});
+            },
+            validationTrigger: TDInputValidationTrigger.submitted,
+            validator: (value) {
+              if(value!.isEmpty) {
+                return '请输入文字';
+              }
+              return null;
+            },
+          ),
+        ),
+        TDButton(text: '提交',onTap: () {
+          _tdInputFormKey.currentState?.validate();
+        }),
+        const SizedBox(
+          height: 16,
+        )
+      ],
     );
   }
 }

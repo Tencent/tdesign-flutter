@@ -17,6 +17,10 @@
 | autofocus | bool? | false | 是否自动获取焦点 |
 | onEditingComplete | VoidCallback? | - | 点击键盘完成按钮时触发的回调 |
 | onSubmitted | ValueChanged<String>? | - | 点击键盘完成按钮时触发的回调, 参数值为输入的内容 |
+| onFieldSubmitted | ValueChanged<String>? | - | 点击键盘完成按钮时触发的回调, 参数值为输入的内容 |
+| onTapOutside | TapRegionCallback? | - | 点击输入框之外时触发的回调 |
+| validationTrigger | TDInputValidationTrigger? | - | 校验触发方式 |
+| validator | String? Function(String?)? | - | 校验触发 |
 | hintText | String? | - | 提示文案 |
 | inputType | TextInputType? | - | 键盘类型，数字、字母 |
 | onChanged | ValueChanged<String>? | - | 输入文本变化时回调 |
