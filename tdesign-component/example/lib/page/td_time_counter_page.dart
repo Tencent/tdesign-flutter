@@ -89,9 +89,9 @@ class TDTimeCounterPage extends StatelessWidget {
               builder: (BuildContext context) {
                 return Container(
                   alignment: Alignment.topLeft,
-                  child: const Wrap(spacing: 8, direction: Axis.vertical, children: [
+                  child: Wrap(spacing: 8, direction: Axis.vertical, children: [
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('小'),
@@ -100,7 +100,7 @@ class TDTimeCounterPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('中'),
@@ -109,7 +109,7 @@ class TDTimeCounterPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('大'),
@@ -129,9 +129,9 @@ class TDTimeCounterPage extends StatelessWidget {
               builder: (BuildContext context) {
                 return Container(
                   alignment: Alignment.topLeft,
-                  child: const Wrap(spacing: 8, direction: Axis.vertical, children: [
+                  child: Wrap(spacing: 8, direction: Axis.vertical, children: [
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('小'),
@@ -140,7 +140,7 @@ class TDTimeCounterPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('中'),
@@ -149,7 +149,7 @@ class TDTimeCounterPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('大'),
@@ -169,9 +169,9 @@ class TDTimeCounterPage extends StatelessWidget {
               builder: (BuildContext context) {
                 return Container(
                   alignment: Alignment.topLeft,
-                  child: const Wrap(spacing: 8, direction: Axis.vertical, children: [
+                  child: Wrap(spacing: 8, direction: Axis.vertical, children: [
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('小'),
@@ -180,7 +180,7 @@ class TDTimeCounterPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('中'),
@@ -189,7 +189,7 @@ class TDTimeCounterPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('大'),
@@ -209,9 +209,9 @@ class TDTimeCounterPage extends StatelessWidget {
               builder: (BuildContext context) {
                 return Container(
                   alignment: Alignment.topLeft,
-                  child: const Wrap(spacing: 8, direction: Axis.vertical, children: [
+                  child: Wrap(spacing: 8, direction: Axis.vertical, children: [
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('小'),
@@ -220,7 +220,7 @@ class TDTimeCounterPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('中'),
@@ -229,7 +229,7 @@ class TDTimeCounterPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('大'),
@@ -249,9 +249,9 @@ class TDTimeCounterPage extends StatelessWidget {
               builder: (BuildContext context) {
                 return Container(
                   alignment: Alignment.topLeft,
-                  child: const Wrap(spacing: 8, direction: Axis.vertical, children: [
+                  child: Wrap(spacing: 8, direction: Axis.vertical, children: [
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('小'),
@@ -260,7 +260,7 @@ class TDTimeCounterPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('中'),
@@ -269,7 +269,7 @@ class TDTimeCounterPage extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: [
+                      children: const [
                         SizedBox(
                           width: 80,
                           child: Text('大'),
@@ -293,6 +293,15 @@ class TDTimeCounterPage extends StatelessWidget {
               return const CodeWrapper(builder: _buildControl);
             },
           ),
+          ExampleItem(
+            ignoreCode: true,
+            desc: '自定义显示位数',
+            center: false,
+            padding: const EdgeInsets.only(left: 16),
+            builder: (BuildContext context) {
+              return const CodeWrapper(builder: _buildCustomNum);
+            },
+          ),
         ],
       ),
     );
@@ -311,7 +320,11 @@ TDTimeCounter _buildMillisecondSimple(BuildContext context) {
 
 @Demo(group: 'timeCounter')
 TDTimeCounter _buildUpSimple(BuildContext context) {
-  return const TDTimeCounter(time: 60 * 60 * 1000, millisecond: true, direction: TDTimeCounterDirection.up,);
+  return const TDTimeCounter(
+    time: 60 * 60 * 1000,
+    millisecond: true,
+    direction: TDTimeCounterDirection.up,
+  );
 }
 
 @Demo(group: 'timeCounter')
@@ -532,8 +545,16 @@ Widget _buildControl(BuildContext context) {
       TDTimeCounter(
         time: 60 * 60 * 1000,
         controller: controller,
-        autoStart: false,
+        // autoStart: false,
       ),
     ],
+  );
+}
+
+@Demo(group: 'timeCounter')
+TDTimeCounter _buildCustomNum(BuildContext context) {
+  return const TDTimeCounter(
+    time: 2000 * 60 * 1000,
+    format: 'mmmmmmm分sss秒',
   );
 }

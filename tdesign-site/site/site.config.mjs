@@ -309,11 +309,11 @@ export default {
           component: () => import('@/collapse/README.md'),
         },
         {
-          title: 'CountDown 倒计时',
-          name: 'countdown',
+          title: 'TimeCounter 计时器',
+          name: 'timeCounter',
           meta: { docType: 'data' },
-          path: '/flutter/components/count-down',
-          component: () => import('@/count-down/README.md'),
+          path: '/flutter/components/time-counter',
+          component: () => import('@/time-counter/README.md'),
         },
         {
           title: 'Empty 空状态',
