@@ -62,7 +62,13 @@ class TDNavBarPage extends StatelessWidget {
             ),
           ]
         )
-      ]
+      ],
+      test: [
+        ExampleItem(
+          desc: '底部阴影',
+          builder: _shadowNavbar,
+        ),
+      ],
     );
   }
 
@@ -254,6 +260,24 @@ class TDNavBarPage extends StatelessWidget {
           TDNavBarItem(icon: TDIcons.home, iconSize: 24, iconColor: Colors.white),
           TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24, iconColor: Colors.white)
         ]
+    );
+  }
+
+  @Demo(group: 'navbar')
+  Widget _shadowNavbar(BuildContext context) {
+    return TDNavBar(
+      height: 48,
+      titleFontWeight: FontWeight.w600,
+      title: titleText,
+      screenAdaptation: false,
+      useDefaultBack: true,
+      boxShadow: [
+        BoxShadow(
+          blurRadius: 4,
+          offset: const Offset(0, 4),
+          color: TDTheme.of(context).grayColor5,
+        )
+      ],
     );
   }
 }
