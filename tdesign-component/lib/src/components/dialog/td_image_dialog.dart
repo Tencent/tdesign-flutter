@@ -32,6 +32,8 @@ class TDImageDialog extends StatelessWidget {
     this.leftBtn,
     this.rightBtn,
     this.showCloseButton,
+    this.padding,
+    this.buttonWidget,
   }) : super(key: key);
 
   /// 背景颜色
@@ -73,6 +75,12 @@ class TDImageDialog extends StatelessWidget {
   /// 显示右上角关闭按钮
   final bool? showCloseButton;
 
+  /// 内容内边距
+  final EdgeInsets? padding;
+
+  /// 自定义按钮
+  final Widget? buttonWidget;
+
   Widget _buildImage(BuildContext context) {
     return SizedBox(
       width: 311,
@@ -94,7 +102,7 @@ class TDImageDialog extends StatelessWidget {
       ),
       TDDialogInfoWidget(
         title: title,
-        padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+        padding: padding ?? const EdgeInsets.fromLTRB(24, 24, 24, 0),
         titleColor: titleColor,
         titleAlignment: titleAlignment,
         contentWidget: contentWidget,
@@ -109,7 +117,7 @@ class TDImageDialog extends StatelessWidget {
   Widget _buildMiddleImage(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       TDDialogInfoWidget(
-        padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+        padding: padding ?? const EdgeInsets.fromLTRB(24, 24, 24, 0),
         title: title,
         titleColor: titleColor,
         titleAlignment: titleAlignment,
@@ -161,6 +169,9 @@ class TDImageDialog extends StatelessWidget {
   }
 
   Widget _horizontalButtons(BuildContext context) {
+    if (buttonWidget != null) {
+      return buttonWidget!;
+    }
     final left = leftBtn ??
         TDDialogButtonOptions(
             title: context.resource.cancel, theme: TDButtonTheme.light, action: null);
