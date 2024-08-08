@@ -289,7 +289,14 @@ class _TDDatePickerState extends State<TDDatePicker> {
   Widget buildTitle(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: widget.leftPadding ?? 16, right: widget.rightPadding ?? 16),
-
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: widget.titleDividerColor ?? Colors.transparent,
+          ),
+        )
+      ),
       /// 减去分割线的空间
       height: getTitleHeight() - 0.5,
       child: Row(
