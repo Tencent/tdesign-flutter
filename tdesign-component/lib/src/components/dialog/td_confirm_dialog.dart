@@ -30,6 +30,8 @@ class TDConfirmDialog extends StatelessWidget {
     this.buttonTextColor,
     this.buttonStyle = TDDialogButtonStyle.normal,
     this.showCloseButton,
+    this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
+    this.buttonWidget,
   }) : super(key: key);
 
   /// 标题
@@ -74,7 +76,16 @@ class TDConfirmDialog extends StatelessWidget {
   /// 右上角关闭按钮
   final bool? showCloseButton;
 
+  /// 内容内边距
+  final EdgeInsets? padding;
+
+  /// 自定义按钮
+  final Widget? buttonWidget;
+
   Widget _buildButton(BuildContext context) {
+    if(buttonWidget != null) {
+      return buttonWidget!;
+    }
     if (buttonStyle == TDDialogButtonStyle.text) {
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -133,6 +144,7 @@ class TDConfirmDialog extends StatelessWidget {
             content: content,
             contentColor: contentColor,
             contentMaxHeight: contentMaxHeight,
+            padding: padding,
           ),
           _buildButton(context),
         ]));
