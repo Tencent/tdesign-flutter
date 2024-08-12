@@ -125,6 +125,7 @@ class TDTablePage extends StatelessWidget {
               children: [
                 TDText(
                   '修改',
+                  forceVerticalCenter: true,
                   style: TextStyle(
                     color: TDTheme.of(context).brandNormalColor,
                     fontSize: 14,
@@ -132,6 +133,7 @@ class TDTablePage extends StatelessWidget {
                 ),
                 TDText(
                   '通过',
+                  forceVerticalCenter: true,
                   style: TextStyle(
                     color: TDTheme.of(context).brandNormalColor,
                     fontSize: 14,
@@ -160,8 +162,8 @@ class TDTablePage extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(TDIcons.upload, color: TDTheme.of(context).brandNormalColor, size: 14),
-                Icon(TDIcons.delete, color: TDTheme.of(context).brandNormalColor, size: 14),
+                Icon(TDIcons.upload, color: TDTheme.of(context).brandNormalColor, size: 16),
+                Icon(TDIcons.delete, color: TDTheme.of(context).brandNormalColor, size: 16),
               ],
             );
           },
