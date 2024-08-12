@@ -263,9 +263,9 @@ class TDTableState extends State<TDTable> {
     var topBorder = BorderSide.none,
         rightBorder = BorderSide.none,
         leftBorder = BorderSide.none;
-    var bottomBorder = const BorderSide(width: 0.5, color: Color(0xffE7E7E7));
+    var bottomBorder = halfBorder;
     if (widget.bordered ?? false) {
-      topBorder = rightBorder = leftBorder = halfBorder;
+      rightBorder = halfBorder;
     }
     if (fixedBorder && col.fixed == TDTableColFixed.left) {
       rightBorder = doubleBorder;
