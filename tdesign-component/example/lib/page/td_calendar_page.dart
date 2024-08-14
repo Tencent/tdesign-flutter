@@ -197,6 +197,7 @@ Widget _buildStyle(BuildContext context) {
                 shape: TDButtonShape.round,
                 text: 'ok',
                 isBlock: true,
+                size: TDButtonSize.large,
                 onTap: () {
                   print(calendar.selected);
                   calendar.close();

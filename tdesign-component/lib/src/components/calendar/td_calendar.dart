@@ -104,6 +104,7 @@ class _TDCalendarState extends State<TDCalendar> {
   late List<String> weekdayNames;
   late List<String> monthNames;
   late TDCalendarInherited? inherited;
+  late TDCalendarStyle _style;
 
   @override
   void didChangeDependencies() {
@@ -131,6 +132,7 @@ class _TDCalendarState extends State<TDCalendar> {
       context.resource.november,
       context.resource.december,
     ];
+    _style = widget.style ?? TDCalendarStyle.generateStyle(context);
   }
 
   @override
@@ -143,29 +145,28 @@ class _TDCalendarState extends State<TDCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    final style = widget.style ?? TDCalendarStyle.generateStyle(context);
     inherited = TDCalendarInherited.of(context);
     inherited?.selected.value = widget.value ?? [];
     final verticalGap = TDTheme.of(context).spacer8;
     return Container(
       height: widget.height,
       width: widget.width ?? double.infinity,
-      decoration: style.decoration,
+      decoration: _style.decoration,
       child: Column(
         children: [
           TDCalendarHeader(
             firstDayOfWeek: widget.firstDayOfWeek ?? 0,
             weekdayGap: TDTheme.of(context).spacer4,
             padding: TDTheme.of(context).spacer16,
-            weekdayStyle: style.weekdayStyle,
+            weekdayStyle: _style.weekdayStyle,
             weekdayHeight: 46,
             title: widget.title,
-            titleStyle: style.titleStyle,
+            titleStyle: _style.titleStyle,
             titleWidget: widget.titleWidget,
-            titleMaxLine: style.titleMaxLine,
+            titleMaxLine: _style.titleMaxLine,
             titleOverflow: TextOverflow.ellipsis,
             closeBtn: inherited?.usePopup ?? false,
-            closeColor: style.titleCloseColor,
+            closeColor: _style.titleCloseColor,
             weekdayNames: weekdayNames,
             onClose: inherited?.onClose,
             onClick: widget.onHeanderClick,
@@ -180,7 +181,7 @@ class _TDCalendarState extends State<TDCalendar> {
               bodyPadding: TDTheme.of(context).spacer16,
               displayFormat: widget.displayFormat ?? 'year month',
               monthNames: monthNames,
-              monthTitleStyle: style.monthTitleStyle,
+              monthTitleStyle: _style.monthTitleStyle,
               verticalGap: verticalGap,
               builder: (date, dateList, data, rowIndex, colIndex) {
                 return TDCalendarCell(
@@ -211,6 +212,7 @@ class _TDCalendarState extends State<TDCalendar> {
                     theme: TDButtonTheme.primary,
                     text: '确定',
                     isBlock: true,
+                    size: TDButtonSize.large,
                     onTap: inherited?.onConfirm,
                   ),
                 ),

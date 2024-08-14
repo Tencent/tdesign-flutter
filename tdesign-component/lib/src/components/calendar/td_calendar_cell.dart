@@ -40,11 +40,13 @@ class TDCalendarCell extends StatefulWidget {
 
 class _TDCalendarCellState extends State<TDCalendarCell> {
   late List<TDate?> list;
+  var isToday = false;
   var positionOffset = 0;
   @override
   void initState() {
     super.initState();
     list = widget.data.values.expand((element) => element).toList();
+    isToday = _isToday();
     widget.tdate?.typeNotifier.addListener(_cellTypeChange);
   }
 
@@ -108,7 +110,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
                     child: TDText(
                       forceVerticalCenter: true,
                       widget.tdate!.date.day.toString(),
-                      style: tdate.style ?? cellStyle.cellStyle,
+                      style: (isToday ? cellStyle.todayStyle : null) ?? tdate.style ?? cellStyle.cellStyle,
                     ),
                   ),
                 ),
@@ -227,6 +229,11 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
     }
     final date = widget.dateList.elementAt(index);
     return date;
+  }
+
+  bool _isToday() {
+    final today = DateTime.now();
+    return widget.tdate?._milliseconds == DateTime(today.year, today.month, today.day).millisecondsSinceEpoch;
   }
 }
 

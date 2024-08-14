@@ -37,6 +37,9 @@ class TDCalendarStyle {
   /// 日期样式
   TextStyle? cellStyle;
 
+  /// 当天日期样式
+  TextStyle? todayStyle;
+
   /// 日期decoration
   BoxDecoration? cellDecoration;
 
@@ -76,7 +79,7 @@ class TDCalendarStyle {
   }
 
   /// 日期样式
-  TDCalendarStyle.cellStyle(BuildContext context, DateSelectType type) {
+  TDCalendarStyle.cellStyle(BuildContext context, DateSelectType? type) {
     final radius6 = TDTheme.of(context).radiusDefault;
     final defStyle = TextStyle(
       fontSize: TDTheme.of(context).fontTitleMedium?.size,
@@ -92,12 +95,14 @@ class TDCalendarStyle {
     switch (type) {
       case DateSelectType.empty:
         cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontGyColor1);
+        todayStyle = defStyle.copyWith(color: TDTheme.of(context).brandColor7);
         cellPrefixStyle = prefixStyle.copyWith(color: TDTheme.of(context).errorColor6);
         cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontGyColor3);
         cellDecoration = null;
         break;
       case DateSelectType.disabled:
         cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontGyColor4);
+        todayStyle = defStyle.copyWith(color: TDTheme.of(context).brandColor3);
         cellPrefixStyle = prefixStyle.copyWith(color: TDTheme.of(context).errorColor3);
         cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontGyColor4);
         cellDecoration = null;
@@ -136,6 +141,8 @@ class TDCalendarStyle {
           color: TDTheme.of(context).brandColor7,
           borderRadius: BorderRadius.horizontal(right: Radius.circular(radius6)),
         );
+        break;
+      default:
         break;
     }
   }
