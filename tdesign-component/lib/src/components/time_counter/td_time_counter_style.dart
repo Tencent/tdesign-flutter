@@ -9,7 +9,7 @@ enum TDTimeCounterDirection {
   up
 }
 
-/// 倒计时组件尺寸
+/// 计时组件尺寸
 enum TDTimeCounterSize {
   /// 小
   small,
@@ -21,7 +21,7 @@ enum TDTimeCounterSize {
   large,
 }
 
-/// 倒计时组件风格
+/// 计时组件风格
 enum TDTimeCounterTheme {
   /// 默认
   defaultTheme,
@@ -33,7 +33,7 @@ enum TDTimeCounterTheme {
   square,
 }
 
-/// 倒计时组件样式
+/// 计时组件样式
 class TDTimeCounterStyle {
   TDTimeCounterStyle({
     this.timeWidth,
