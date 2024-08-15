@@ -35,13 +35,10 @@ class TDDropdownMenu extends StatefulWidget {
     this.direction = TDDropdownMenuDirection.auto,
     this.duration = 200.0,
     this.showOverlay = true,
-    this.isScrollable = false,
+    this.isScrollable=false,
     this.arrowIcon,
     this.onMenuOpened,
     this.onMenuClosed,
-    this.width,
-    this.height = 48,
-    this.tabBarAlign = MainAxisAlignment.center,
   }) : super(key: key);
 
   /// 下拉菜单构建器，优先级高于[items]
@@ -71,20 +68,10 @@ class TDDropdownMenu extends StatefulWidget {
   /// 关闭菜单事件
   final ValueChanged<int>? onMenuClosed;
 
-  /// 是否开启滚动列表
-  final bool isScrollable;
-
-  /// menu的宽度
-  final double? width;
-
-  /// menu的高度
-  final double? height;
-
-  /// [TDDropdownItem.label]和[arrowIcon]/[TDDropdownItem.arrowIcon]的对齐方式
-  final MainAxisAlignment? tabBarAlign;
-
   static _TDDropdownMenuState? _currentOpenedInstance;
 
+  /// 是否开启滚动列表
+  final bool isScrollable;
   @override
   _TDDropdownMenuState createState() => _TDDropdownMenuState();
 }
@@ -113,7 +100,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
     super.dispose();
   }
 
-  @override
+    @override
   void didUpdateWidget(TDDropdownMenu oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.builder != oldWidget.builder || widget.items != oldWidget.items) {
@@ -123,27 +110,50 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    Widget tabBar = Row(
+    Widget tabBar=Row(
       children: List.generate(
         _items?.length ?? 0,
-        (index) {
+            (index) {
           return Expanded(
-            child: _tabBarContent(index),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                if (_disabled(index)) {
+                  return;
+                }
+                _isOpened[index] ? _closeMenu() : _openMenu(index);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [_getText(index), _getIcon(index)],
+              ),
+            ),
           );
         },
       ),
     );
-    if (widget.isScrollable) {
-      tabBar = SingleChildScrollView(
+    if(widget.isScrollable){
+      tabBar=SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
-        child: Row(
+        child:Row(
           children: List.generate(
             _items?.length ?? 0,
-            (index) => SizedBox(
-              width: _items![index].tabBarWidth,
-              child: _tabBarContent(index),
-            ),
+                (index) {
+              return  GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    if (_disabled(index)) {
+                      return;
+                    }
+                    _isOpened[index] ? _closeMenu() : _openMenu(index);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [_getText(index), _getIcon(index)],
+                  ),
+              );
+            },
           ),
         ),
       );
@@ -154,8 +164,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
         return !isClose;
       },
       child: Container(
-        height: widget.height,
-        width: widget.width ?? double.infinity,
+        height: 48,
         decoration: BoxDecoration(
           color: TDTheme.of(context).whiteColor1,
           border: Border(
@@ -190,40 +199,17 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
     _iconAnimations = _iconControllers?.map((e) => Tween<double>(begin: 0, end: 0.5).animate(e)).toList() ?? [];
   }
 
-  Widget _tabBarContent(int index) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        if (_disabled(index)) {
-          return;
-        }
-        _isOpened[index] ? _closeMenu() : _openMenu(index);
-      },
-      child: Row(
-        mainAxisAlignment: _items![index].tabBarAlign ?? widget.tabBarAlign ?? MainAxisAlignment.center,
-        children: [_getText(index), _getIcon(index)],
-      ),
-    );
-  }
-
   Widget _getText(int index) {
     var textColor = _disabled(index)
         ? TDTheme.of(context).fontGyColor4
         : _isOpened[index]
             ? TDTheme.of(context).brandColor7
             : TDTheme.of(context).fontGyColor1;
-    return TDText(
-      _items![index].getLabel(),
-      font: TDTheme.of(context).fontBodyMedium,
-      textColor: textColor,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-    );
+    return TDText(_items![index].getLabel(), font: TDTheme.of(context).fontBodyMedium, textColor: textColor);
   }
 
   Widget _getIcon(int index) {
-    var arrowIcon = _items![index].arrowIcon ??
-        widget.arrowIcon ??
+    var arrowIcon = widget.arrowIcon ??
         (widget.direction == TDDropdownMenuDirection.up ? TDIcons.caret_up_small : TDIcons.caret_down_small);
     return RotationTransition(
       turns: _iconAnimations[index],
