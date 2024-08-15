@@ -34,7 +34,6 @@ class TDDropdownItem<T> extends StatefulWidget {
     Key? key,
     this.disabled = false,
     this.label,
-    this.arrowIcon,
     this.multiple = false,
     this.options = const [],
     this.builder,
@@ -44,8 +43,6 @@ class TDDropdownItem<T> extends StatefulWidget {
     this.onReset,
     this.minHeight,
     this.maxHeight,
-    this.tabBarWidth,
-    this.tabBarAlign,
   }) : super(key: key);
 
   /// 是否禁用
@@ -53,9 +50,6 @@ class TDDropdownItem<T> extends StatefulWidget {
 
   /// 标题
   final String? label;
-
-  /// 自定义箭头图标
-  final IconData? arrowIcon;
 
   /// 是否多选
   final bool? multiple;
@@ -83,12 +77,6 @@ class TDDropdownItem<T> extends StatefulWidget {
 
   /// 内容最大高度
   final double? maxHeight;
-
-  /// 该item在menu上的宽度，仅在[TDDropdownMenu.isScrollable]为true时有效
-  final double? tabBarWidth;
-
-  /// [label]和[arrowIcon]/[TDDropdownMenu.arrowIcon]的对齐方式
-  final MainAxisAlignment? tabBarAlign;
 
   static const double operateHeight = 73;
 
