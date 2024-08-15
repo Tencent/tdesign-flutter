@@ -68,7 +68,7 @@ class TDCountDown extends StatefulWidget {
   /// 倒计时结束时触发回调
   final VoidCallback? onFinish;
 
-  /// 控制器，可控制开始/暂停/继续/重置，一个控制器只能作用一个[TDCountDown]
+  /// 控制器，可控制开始/暂停/继续/重置
   final TDCountDownController? controller;
 
   @override
