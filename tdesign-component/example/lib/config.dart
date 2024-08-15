@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'base/example_base.dart';
 import 'page/sidebar/td_sidebar_page.dart';
 import 'page/sidebar/td_sidebar_page_anchor.dart';
 import 'page/sidebar/td_sidebar_page_custom.dart';
 import 'page/sidebar/td_sidebar_page_icon.dart';
+import 'page/sidebar/td_sidebar_page_loading.dart';
 import 'page/sidebar/td_sidebar_page_outline.dart';
 import 'page/sidebar/td_sidebar_page_pagination.dart';
 import 'page/td_avatar_page.dart';
@@ -18,7 +18,6 @@ import 'page/td_cascader_page.dart';
 import 'page/td_cell_page.dart';
 import 'page/td_checkbox_page.dart';
 import 'page/td_collapse.dart';
-import 'page/td_count_down_page.dart';
 import 'page/td_date_picker_page.dart';
 import 'page/td_dialog_page.dart';
 import 'page/td_divider_page.dart';
@@ -53,6 +52,7 @@ import 'page/td_tag_page.dart';
 import 'page/td_text_page.dart';
 import 'page/td_textarea_page.dart';
 import 'page/td_theme_page.dart';
+import 'page/td_time_counter_page.dart';
 import 'page/td_toast_page.dart';
 import 'page/td_tree_select_page.dart';
 import 'page/todo_page.dart';
@@ -159,10 +159,9 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Cell 单元格', name: 'cell', pageBuilder: _wrapInheritedTheme((context) => const TDCellPage())),
     ExamplePageModel(
-        text: 'CountDown 倒计时',
-        name: 'count-down',
-        pageName: 'count_down',
-        pageBuilder: _wrapInheritedTheme((context) => const TDCountDownPage())),
+        text: 'TimeCounter 计时器',
+        name: 'time-counter',
+        pageBuilder: _wrapInheritedTheme((context) => const TDTimeCounterPage())),
     ExamplePageModel(
         text: 'Collapse 折叠面板',
         name: 'collapse',
@@ -283,5 +282,10 @@ List<ExamplePageModel> sideBarExamplePage = [
       text: 'SideBar 自定义样式',
       name: 'SideBarCustom',
       isTodo: false,
-      pageBuilder: _wrapInheritedTheme((context) => const TDSideBarCustomPage()))
+      pageBuilder: _wrapInheritedTheme((context) => const TDSideBarCustomPage())),
+  ExamplePageModel(
+      text: 'SideBar 延迟加载',
+      name: 'SideBarLoading',
+      isTodo: false,
+      pageBuilder: _wrapInheritedTheme((context) => const TDSideBarLoadingPage()))
 ];
