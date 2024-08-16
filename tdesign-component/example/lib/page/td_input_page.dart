@@ -104,6 +104,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         ExampleItem(desc: '长文本样式', builder: _customLongTextStyle),
         ExampleItem(desc: '隐藏底部分割线', builder: _hideBottomDivider),
         ExampleItem(desc: '自定义高度-使用SizeBox', builder: _customHeight),
+        ExampleItem(desc: '获取焦点时点击外部区域事件响应-onTapOutside', builder: _onTapOutside)
       ],
     );
   }
@@ -887,6 +888,37 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           onClearTap: () {
             controller.clear();
             setState(() {});
+          },
+        ),
+      ),
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _onTapOutside(BuildContext context) {
+    var controller = TextEditingController();
+    return Container(
+      color: Colors.yellow,
+      alignment: Alignment.center,
+      height: 90,
+      child: SizedBox(
+        height: 60,
+        child: TDInput(
+          size: TDInputSize.small,
+          leftLabel: '标签文字',
+          controller: controller,
+          backgroundColor: Colors.white,
+          hintText: '请输入文字',
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller.clear();
+            setState(() {});
+          },
+          onTapOutside: (event) {
+            TDToast.showText('点击输入框外部区域', context: context);
+            print('on tap outside ${event}');
           },
         ),
       ),
