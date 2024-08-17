@@ -129,6 +129,42 @@ Widget _buildSimple(BuildContext context) {
               );
             },
           ),
+          TDCell(
+            title: '单个选择日历和时间',
+            arrow: true,
+            note: '${date.year}-${date.month}-${date.day} ${date.hour}:${date.minute}',
+            onClick: (cell) {
+              TDCalendarPopup(
+                context,
+                visible: true,
+                onConfirm: (value) {
+                  print('onConfirm:$value');
+                  selected.value = value;
+                },
+                onClose: () {
+                  print('onClose');
+                },
+                child: TDCalendar(
+                  title: '请选择日期和时间',
+                  value: value,
+                  height: size.height * 0.92,
+                  useTimePicker: true,
+                  onCellClick: (value, type, tdate) {
+                    print('onCellClick:$value');
+                  },
+                  onCellLongPress: (value, type, tdate) {
+                    print('onCellLongPress:$value');
+                  },
+                  onHeanderClick: (index, week) {
+                    print('onHeanderClick:$week');
+                  },
+                  onChange: (value) {
+                    print('onChange:$value');
+                  },
+                ),
+              );
+            },
+          ),
         ],
       );
     },

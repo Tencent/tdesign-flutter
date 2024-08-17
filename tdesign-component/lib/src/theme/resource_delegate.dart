@@ -160,6 +160,15 @@ abstract class TDResourceDelegate {
 
   /// [TDCalendarBody] 十二月
   String get december;
+
+  /// [TDCalendar] 时间
+  String get time;
+
+  /// [TDCalendar] 开始
+  String get start;
+
+  /// [TDCalendar] 结束
+  String get end;
 }
 
 /// 如果用户要重写,就应该全部重写,不开放只重新部分资源
@@ -274,4 +283,13 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
 
   @override
   String get december => '12 月';
+
+  @override
+  String get time => '时间';
+
+  @override
+  String get start => '开始';
+
+  @override
+  String get end => '结束';
 }

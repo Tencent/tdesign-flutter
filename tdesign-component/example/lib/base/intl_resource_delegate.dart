@@ -123,4 +123,13 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
   @override
   String get december => AppLocalizations.of(context)!.december;
+
+  @override
+  String get time => AppLocalizations.of(context)!.time;
+
+  @override
+  String get start => AppLocalizations.of(context)!.start;
+
+  @override
+  String get end => AppLocalizations.of(context)!.end;
 }
