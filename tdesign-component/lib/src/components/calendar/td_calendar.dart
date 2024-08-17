@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
+import '../../util/iterable_ext.dart';
 
 export 'td_calendar_body.dart';
 export 'td_calendar_cell.dart';
@@ -38,6 +39,8 @@ class TDCalendar extends StatefulWidget {
     this.onCellClick,
     this.onCellLongPress,
     this.onHeanderClick,
+    this.useTimePicker = false,
+    this.timePicker,
   }) : super(key: key);
 
   /// 第一天从星期几开始，默认 0 = 周日
@@ -91,6 +94,12 @@ class TDCalendar extends StatefulWidget {
   /// 点击周时触发
   final void Function(int index, String week)? onHeanderClick;
 
+  /// 是否显示时间选择器
+  final bool? useTimePicker;
+
+  /// 自定义时间选择器
+  final List<TDDatePicker>? timePicker;
+
   List<DateTime>? get _value => value?.map((e) {
         final date = DateTime.fromMillisecondsSinceEpoch(e);
         return DateTime(date.year, date.month, date.day);
@@ -105,6 +114,7 @@ class _TDCalendarState extends State<TDCalendar> {
   late List<String> monthNames;
   late TDCalendarInherited? inherited;
   late TDCalendarStyle _style;
+  final List<TDDatePicker> timePickerList = [];
 
   @override
   void didChangeDependencies() {
@@ -147,6 +157,7 @@ class _TDCalendarState extends State<TDCalendar> {
   Widget build(BuildContext context) {
     inherited = TDCalendarInherited.of(context);
     inherited?.selected.value = widget.value ?? [];
+    timePickerList.clear();
     final verticalGap = TDTheme.of(context).spacer8;
     return Container(
       height: widget.height,
@@ -192,8 +203,9 @@ class _TDCalendarState extends State<TDCalendar> {
                   data: data,
                   padding: verticalGap / 2,
                   onChange: (value) {
-                    inherited?.selected.value = value;
-                    widget.onChange?.call(value);
+                    final time = _getValue(value);
+                    inherited?.selected.value = time;
+                    widget.onChange?.call(time);
                   },
                   onCellClick: widget.onCellClick,
                   onCellLongPress: widget.onCellLongPress,
@@ -204,6 +216,7 @@ class _TDCalendarState extends State<TDCalendar> {
               },
             ),
           ),
+          if (widget.useTimePicker == true) _getTimePicker(),
           if (inherited?.usePopup == true)
             inherited?.confirmBtn ??
                 Padding(
@@ -219,5 +232,78 @@ class _TDCalendarState extends State<TDCalendar> {
         ],
       ),
     );
+  }
+
+  Widget _getTimePicker() {
+    final now = DateTime.now();
+    final noRange = widget.type != CalendarType.range;
+    return Container(
+      decoration: BoxDecoration(
+        color: TDTheme.of(context).whiteColor1,
+        boxShadow: const [
+          BoxShadow(
+            color: Color.fromRGBO(0, 0, 0, 0.04),
+            blurRadius: 12,
+            offset: Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: List.generate(
+          noRange ? 1 : 2,
+          (index) {
+            final timePicker = widget.timePicker?.getOrNull(index) ??
+                TDDatePicker(
+                  title: noRange
+                      ? context.resource.time
+                      : index == 0
+                          ? context.resource.start
+                          : context.resource.end,
+                  leftText: '',
+                  rightText: '',
+                  model: DatePickerModel(
+                    useYear: false,
+                    useMonth: false,
+                    useDay: false,
+                    useWeekDay: false,
+                    useHour: true,
+                    useMinute: true,
+                    useSecond: false,
+                    dateStart: [1999, 01, 01],
+                    dateEnd: [2999, 12, 31],
+                    dateInitial: [now.year, now.month, now.day, now.hour, now.minute, now.second],
+                  ),
+                  pickerHeight: 178,
+                  pickerItemCount: 3,
+                  onConfirm: (Map<String, int> selected) {},
+                );
+            timePickerList.add(timePicker);
+            return Expanded(
+              child: timePicker,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  List<int> _getValue(List<int> value) {
+    if (widget.useTimePicker != true) {
+      return value;
+    }
+    final milliseconds = timePickerList.map((e) {
+      final model = e.model;
+      // model.hourFixedExtentScrollController.addListener(() { });
+      final hour = model.useHour ? model.hourFixedExtentScrollController.selectedItem : 0;
+      final minute = model.useMinute ? model.minuteFixedExtentScrollController.selectedItem : 0;
+      final second = model.useSecond ? model.secondFixedExtentScrollController.selectedItem : 0;
+      return (hour * 60 * 60 + minute * 60 + second) * 1000;
+    });
+    return value.mapWidthIndex((e, index) {
+      if (widget.type != CalendarType.range) {
+        return e + (milliseconds.getOrNull(0) ?? 0);
+      }
+      return e + (milliseconds.getOrNull(index) ?? 0);
+    }).toList();
   }
 }
