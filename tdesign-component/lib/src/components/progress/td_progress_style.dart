@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../button/td_button_style.dart';
+import '../../../tdesign_flutter.dart';
 
 class TDProgressStyle {
   const TDProgressStyle({
     this.height,
-    this.width,
+    this.strokeWidth,
     this.circleRadius,
     this.borderRadius,
     this.color,
@@ -16,7 +16,7 @@ class TDProgressStyle {
   });
 
   final double? height;
-  final double? width;
+  final double? strokeWidth;
   final double? circleRadius;
   final double? borderRadius;
   final Color? color;
@@ -28,10 +28,9 @@ class TDProgressStyle {
 
   // 基础进度条样式
   static TDProgressStyle baseStyle(BuildContext context) {
-    final theme = Theme.of(context);
     return TDProgressStyle(
-      color: theme.colorScheme.primary,
-      backgroundColor: theme.colorScheme.surface,
+      color: TDTheme.of(context).brandColor1,
+      backgroundColor: TDTheme.of(context).grayColor1,
       animationConfig: const TDProgressAnimationConfig(
         enabled: true,
         type: TDProgressAnimationType.linear,
@@ -44,8 +43,8 @@ class TDProgressStyle {
   static TDProgressStyle lineStyle(BuildContext context) {
     return baseStyle(context).copyWith(
       height: 8,
-      width: double.infinity,
-      borderRadius: 4,
+      strokeWidth: 2,
+      borderRadius: TDTheme.of(context).radiusDefault,
       labelPosition: TDProgressLabelPosition.right,
       labelType: TDProgressLabelType.text,
     );
@@ -54,7 +53,8 @@ class TDProgressStyle {
   // 圆形进度条样式
   static TDProgressStyle circleStyle(BuildContext context) {
     return baseStyle(context).copyWith(
-      circleRadius: 50,
+      strokeWidth: 2,
+      circleRadius: TDTheme.of(context).radiusCircle,
       labelPosition: TDProgressLabelPosition.inner,
       labelType: TDProgressLabelType.text,
       animationConfig: const TDProgressAnimationConfig(
@@ -67,8 +67,8 @@ class TDProgressStyle {
   static TDProgressStyle microStyle(BuildContext context) {
     return baseStyle(context).copyWith(
       height: 4,
-      width: 60,
-      borderRadius: 2,
+      strokeWidth: 1,
+      borderRadius: TDTheme.of(context).radiusCircle,
       labelType: TDProgressLabelType.none,
       animationConfig: const TDProgressAnimationConfig(
         speed: 1.5,
@@ -91,8 +91,6 @@ class TDProgressStyle {
   // 带按钮的线性进度条样式
   static TDProgressStyle lineButtonStyle(BuildContext context) {
     return lineStyle(context).copyWith(
-      height: 12,
-      borderRadius: 6,
       labelType: TDProgressLabelType.custom,
       buttonConfig: const TDProgressButtonConfig(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -120,7 +118,7 @@ class TDProgressStyle {
   // 复制并修改当前样式
   TDProgressStyle copyWith({
     double? height,
-    double? width,
+    double? strokeWidth,
     double? circleRadius,
     double? borderRadius,
     Color? color,
@@ -132,7 +130,7 @@ class TDProgressStyle {
   }) {
     return TDProgressStyle(
       height: height ?? this.height,
-      width: width ?? this.width,
+      strokeWidth: strokeWidth ?? this.strokeWidth,
       circleRadius: circleRadius ?? this.circleRadius,
       borderRadius: borderRadius ?? this.borderRadius,
       color: color ?? this.color,
@@ -145,7 +143,7 @@ class TDProgressStyle {
   }
 }
 
-// 新增：进度条按钮配置类
+// 进度条按钮配置类
 class TDProgressButtonConfig {
   const TDProgressButtonConfig({
     this.size,

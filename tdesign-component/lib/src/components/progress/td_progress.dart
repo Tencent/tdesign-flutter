@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
+import './td_progress_style.dart';
 
 
 class TDProgress extends StatefulWidget {
