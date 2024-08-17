@@ -39,5 +39,8 @@
   "september": "September",
   "october": "October",
   "november": "November",
-  "december": "December"
+  "december": "December",
+  "time": "Time",
+  "start": "Start",
+  "end": "End"
 }

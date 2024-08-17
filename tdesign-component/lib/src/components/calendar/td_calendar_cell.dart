@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../util/iterable_ext.dart';
 import '../../util/list_ext.dart';
 import '../text/td_text.dart';
 import 'td_calendar.dart';
@@ -224,10 +225,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
 
   TDate? _nextDay([int num = 1]) {
     final index = widget.rowIndex * 7 + widget.colIndex + num;
-    if (index >= widget.dateList.length || index < 0) {
-      return null;
-    }
-    final date = widget.dateList.elementAt(index);
+    final date = widget.dateList.getOrNull(index);
     return date;
   }
 

@@ -39,5 +39,8 @@
   "september": "9 月",
   "october": "10 月",
   "november": "11 月",
-  "december": "12 月"
+  "december": "12 月",
+  "time": "时间",
+  "start": "开始",
+  "end": "结束"
 }
