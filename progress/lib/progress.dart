@@ -159,6 +159,8 @@ class _ProgressIndicatorState<T extends LabelWidget>
       duration: const Duration(seconds: 1),
     );
     _updateAnimation();
+    final int duration = (_animation.value * 1000).toInt();
+    _animationController.duration = Duration(milliseconds: duration);
     _updateEffectiveColor();
     _updateEffectiveLabel();
   }
@@ -301,28 +303,34 @@ class _ProgressIndicatorState<T extends LabelWidget>
 
   //构建外显label
   Widget _buildOutsideLabel() {
-    return Row(
-      children: [
-        if (widget.progressLabelPosition == ProgressLabelPosition.left)
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: _buildLabelWidget(Colors.black),
-          ),
-        Expanded(
-          child: LinearProgressIndicator(
-            borderRadius: widget.borderRadius,
-            value: widget.value != null ? _animation.value : null,
-            backgroundColor: widget.backgroundColor,
-            valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
-            minHeight: widget.strokeWidth,
-          ),
-        ),
-        if (widget.progressLabelPosition == ProgressLabelPosition.right)
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: _buildLabelWidget(Colors.black),
-          ),
-      ],
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child)  {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (widget.progressLabelPosition == ProgressLabelPosition.left)
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: _buildLabelWidget(Colors.black),
+              ),
+            Expanded(
+              child: LinearProgressIndicator(
+                borderRadius: widget.borderRadius,
+                value: widget.value != null ? _animation.value : null,
+                backgroundColor: widget.backgroundColor,
+                valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
+                minHeight: widget.strokeWidth,
+              ),
+            ),
+            if (widget.progressLabelPosition == ProgressLabelPosition.right)
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: _buildLabelWidget(Colors.black),
+              ),
+          ],
+        );
+      },
     );
   }
 
