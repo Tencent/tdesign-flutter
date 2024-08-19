@@ -30,18 +30,19 @@ class Progress {
   Progress._();
 
   /// 创建线性进度条
-  static Widget linear<T extends LabelWidget>({
-    Key? key,
-    double? value,
-    T? label,
-    ProgressStatus progressStatus = ProgressStatus.primary,
-    ProgressLabelPosition progressLabelPosition = ProgressLabelPosition.inside,
-    double strokeWidth = 20.0,
-    Color? color,
-    Color backgroundColor = const Color(0xFFEEEEEE),
-    BorderRadiusGeometry borderRadius =
-        const BorderRadius.all(Radius.circular(20)),
-  }) {
+  static Widget linear<T extends LabelWidget>(
+      {Key? key,
+      double? value,
+      T? label,
+      ProgressStatus progressStatus = ProgressStatus.primary,
+      ProgressLabelPosition progressLabelPosition =
+          ProgressLabelPosition.inside,
+      double strokeWidth = 20.0,
+      Color? color,
+      Color backgroundColor = const Color(0xFFEEEEEE),
+      BorderRadiusGeometry borderRadius =
+          const BorderRadius.all(Radius.circular(20)),
+      bool showLabel = true}) {
     return _ProgressIndicator<T>(
         key: key,
         value: value,
@@ -52,6 +53,7 @@ class Progress {
         color: color,
         backgroundColor: backgroundColor,
         borderRadius: borderRadius,
+        showLabel: showLabel,
         type: _ProgressType.linear);
   }
 
@@ -65,6 +67,7 @@ class Progress {
     Color? color,
     Color backgroundColor = const Color(0xFFEEEEEE),
     double circleRadius = 80.0,
+    bool showLabel = true,
   }) {
     return _ProgressIndicator<T>(
       key: key,
@@ -75,21 +78,22 @@ class Progress {
       color: color,
       backgroundColor: backgroundColor,
       circleRadius: circleRadius,
+      showLabel: showLabel,
       type: _ProgressType.circular,
     );
   }
 
   //构建微型进度条
-  static Widget micro<T extends LabelWidget>({
-    Key? key,
-    double? value,
-    T? label,
-    ProgressStatus progressStatus = ProgressStatus.primary,
-    double strokeWidth = 2.0,
-    Color? color,
-    Color backgroundColor = const Color(0xFFEEEEEE),
-    double circleRadius = 20.0,
-  }) {
+  static Widget micro<T extends LabelWidget>(
+      {Key? key,
+      double? value,
+      T? label,
+      ProgressStatus progressStatus = ProgressStatus.primary,
+      double strokeWidth = 2.0,
+      Color? color,
+      Color backgroundColor = const Color(0xFFEEEEEE),
+      double circleRadius = 20.0,
+      bool showLabel = false}) {
     return _ProgressIndicator(
       key: key,
       value: value,
@@ -99,11 +103,11 @@ class Progress {
       color: color,
       backgroundColor: backgroundColor,
       circleRadius: circleRadius,
+      showLabel: showLabel,
       type: _ProgressType.micro,
     );
   }
 }
-
 
 // 构建进度条基础小部件类
 class _ProgressIndicator<T extends LabelWidget> extends StatefulWidget {
@@ -118,6 +122,7 @@ class _ProgressIndicator<T extends LabelWidget> extends StatefulWidget {
   final _ProgressType type;
   final StrokeCap strokeCap;
   final ProgressStatus progressStatus;
+  final bool showLabel;
 
   const _ProgressIndicator(
       {Key? key,
@@ -131,7 +136,8 @@ class _ProgressIndicator<T extends LabelWidget> extends StatefulWidget {
       this.backgroundColor = const Color(0xFFEEEEEE),
       this.type = _ProgressType.linear,
       this.strokeCap = StrokeCap.round,
-      this.progressStatus = ProgressStatus.primary})
+      this.progressStatus = ProgressStatus.primary,
+      this.showLabel = true})
       : super(key: key);
 
   @override
@@ -191,8 +197,7 @@ class _ProgressIndicatorState<T extends LabelWidget>
 
   //根据status构建默认参数
   Widget _getDefaultLabelFromStatus(ProgressStatus status) {
-    final bool showAutoText =
-        widget.value != null && widget.type != _ProgressType.micro;
+    final bool showAutoText = widget.value != null;
     final bool showInsideLabel =
         widget.progressLabelPosition == ProgressLabelPosition.inside &&
             widget.type != _ProgressType.circular;
@@ -204,12 +209,21 @@ class _ProgressIndicatorState<T extends LabelWidget>
 
     final statusWidgets = {
       ProgressStatus.primary: getAutoText(),
-      ProgressStatus.warning:
-          showInsideLabel ? getAutoText() :showIconBorder?const Icon(TDIcons.error_circle_filled): const Icon(TDIcons.error),
-      ProgressStatus.danger:
-          showInsideLabel ? getAutoText() : showIconBorder?const Icon(TDIcons.close_circle_filled): const Icon(TDIcons.close),
-      ProgressStatus.success:
-          showInsideLabel ? getAutoText() : showIconBorder?const Icon(TDIcons.check_circle_filled): const Icon(TDIcons.check),
+      ProgressStatus.warning: showInsideLabel
+          ? getAutoText()
+          : showIconBorder
+              ? const Icon(TDIcons.error_circle_filled)
+              : const Icon(TDIcons.error),
+      ProgressStatus.danger: showInsideLabel
+          ? getAutoText()
+          : showIconBorder
+              ? const Icon(TDIcons.close_circle_filled)
+              : const Icon(TDIcons.close),
+      ProgressStatus.success: showInsideLabel
+          ? getAutoText()
+          : showIconBorder
+              ? const Icon(TDIcons.check_circle_filled)
+              : const Icon(TDIcons.check),
     };
 
     return statusWidgets[status] ?? getAutoText(); // 如果状态不匹配，默认返回自动文本
@@ -332,13 +346,15 @@ class _ProgressIndicatorState<T extends LabelWidget>
         color: _effectiveColor,
         borderRadius: widget.borderRadius,
       ),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: _buildLabelWidget(Colors.white),
-        ),
-      ),
+      child: widget.showLabel
+          ? Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: _buildLabelWidget(Colors.white),
+              ),
+            )
+          : null,
     );
   }
 
@@ -355,10 +371,11 @@ class _ProgressIndicatorState<T extends LabelWidget>
             borderRadius: widget.borderRadius,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: _buildLabelWidget(Colors.black),
-        ),
+        if (widget.showLabel)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: _buildLabelWidget(Colors.black),
+          ),
       ],
     );
   }
@@ -372,7 +389,7 @@ class _ProgressIndicatorState<T extends LabelWidget>
     switch (widget.type) {
       case _ProgressType.linear:
         iconSize = widget.strokeWidth;
-        fontSize = widget.strokeWidth  * 0.6;
+        fontSize = widget.strokeWidth * 0.6;
         fontWeight = FontWeight.normal;
         break;
       case _ProgressType.circular:
@@ -404,7 +421,7 @@ class _ProgressIndicatorState<T extends LabelWidget>
       ),
     );
   }
-  
+
   // 构建圆形进度条
   Widget _buildCircularProgress() {
     return AnimatedBuilder(
@@ -427,7 +444,7 @@ class _ProgressIndicatorState<T extends LabelWidget>
                 ),
               ),
             ),
-            _buildLabelWidget(Colors.black),
+            if (widget.showLabel) _buildLabelWidget(Colors.black),
           ],
         );
       },
@@ -456,7 +473,7 @@ class _ProgressIndicatorState<T extends LabelWidget>
                   ),
                 ),
               ),
-              _buildLabelWidget(Colors.black),
+              if (widget.showLabel) _buildLabelWidget(Colors.black),
             ],
           );
         });
