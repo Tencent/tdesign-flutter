@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import '../../util/iterable_ext.dart';
@@ -40,7 +39,7 @@ class TDCalendar extends StatefulWidget {
     this.onCellLongPress,
     this.onHeanderClick,
     this.useTimePicker = false,
-    this.timePicker,
+    this.timePickerModel,
   }) : super(key: key);
 
   /// 第一天从星期几开始，默认 0 = 周日
@@ -98,12 +97,14 @@ class TDCalendar extends StatefulWidget {
   final bool? useTimePicker;
 
   /// 自定义时间选择器
-  final List<TDDatePicker>? timePicker;
+  final List<DatePickerModel>? timePickerModel;
 
   List<DateTime>? get _value => value?.map((e) {
         final date = DateTime.fromMillisecondsSinceEpoch(e);
         return DateTime(date.year, date.month, date.day);
       }).toList();
+
+  List<DateTime>? get _valueTime => value?.map(DateTime.fromMillisecondsSinceEpoch).toList();
 
   @override
   _TDCalendarState createState() => _TDCalendarState();
@@ -114,7 +115,7 @@ class _TDCalendarState extends State<TDCalendar> {
   late List<String> monthNames;
   late TDCalendarInherited? inherited;
   late TDCalendarStyle _style;
-  final List<TDDatePicker> timePickerList = [];
+  final List<DatePickerModel> timePickerModelList = [];
 
   @override
   void didChangeDependencies() {
@@ -156,8 +157,8 @@ class _TDCalendarState extends State<TDCalendar> {
   @override
   Widget build(BuildContext context) {
     inherited = TDCalendarInherited.of(context);
-    inherited?.selected.value = widget.value ?? [];
-    timePickerList.clear();
+    _initValue();
+    timePickerModelList.clear();
     final verticalGap = TDTheme.of(context).spacer8;
     return Container(
       height: widget.height,
@@ -235,8 +236,9 @@ class _TDCalendarState extends State<TDCalendar> {
   }
 
   Widget _getTimePicker() {
-    final now = DateTime.now();
     final noRange = widget.type != CalendarType.range;
+    final now = DateTime.now();
+    final valueTime = widget._valueTime;
     return Container(
       decoration: BoxDecoration(
         color: TDTheme.of(context).whiteColor1,
@@ -252,35 +254,44 @@ class _TDCalendarState extends State<TDCalendar> {
         children: List.generate(
           noRange ? 1 : 2,
           (index) {
-            final timePicker = widget.timePicker?.getOrNull(index) ??
-                TDDatePicker(
-                  title: noRange
-                      ? context.resource.time
-                      : index == 0
-                          ? context.resource.start
-                          : context.resource.end,
-                  leftText: '',
-                  rightText: '',
-                  model: DatePickerModel(
-                    useYear: false,
-                    useMonth: false,
-                    useDay: false,
-                    useWeekDay: false,
-                    useHour: true,
-                    useMinute: true,
-                    useSecond: false,
-                    dateStart: [1999, 01, 01],
-                    dateEnd: [2999, 12, 31],
-                    dateInitial: [now.year, now.month, now.day, now.hour, now.minute, now.second],
-                  ),
-                  pickerHeight: 178,
-                  pickerItemCount: 3,
-                  onConfirm: (Map<String, int> selected) {},
+            final timePickerModel = widget.timePickerModel?.getOrNull(index) ??
+                DatePickerModel(
+                  useYear: false,
+                  useMonth: false,
+                  useDay: false,
+                  useWeekDay: false,
+                  useHour: true,
+                  useMinute: true,
+                  useSecond: false,
+                  dateStart: [1999, 01, 01],
+                  dateEnd: [2999, 12, 31],
+                  dateInitial: [
+                    ...[1999, 01, 01],
+                    valueTime?.getOrNull(index)?.hour ?? now.hour,
+                    valueTime?.getOrNull(index)?.minute ?? now.minute,
+                    valueTime?.getOrNull(index)?.second ?? now.second
+                  ],
                 );
-            timePickerList.add(timePicker);
-            return Expanded(
-              child: timePicker,
+            final timePicker = TDDatePicker(
+              title: noRange
+                  ? context.resource.time
+                  : index == 0
+                      ? context.resource.start
+                      : context.resource.end,
+              leftText: '',
+              rightText: '',
+              model: timePickerModel,
+              pickerHeight: 178,
+              pickerItemCount: 3,
+              onConfirm: (Map<String, int> selected) {},
+              onSelectedItemChanged: (index) {
+                final time = _getValue(inherited?.selected.value ?? []);
+                inherited?.selected.value = time;
+                widget.onChange?.call(time);
+              },
             );
+            timePickerModelList.add(timePickerModel);
+            return Expanded(child: timePicker);
           },
         ),
       ),
@@ -288,22 +299,30 @@ class _TDCalendarState extends State<TDCalendar> {
   }
 
   List<int> _getValue(List<int> value) {
+    final dateValue = value.map((e) {
+      final date = DateTime.fromMillisecondsSinceEpoch(e);
+      return DateTime(date.year, date.month, date.day).millisecondsSinceEpoch;
+    }).toList();
     if (widget.useTimePicker != true) {
-      return value;
+      return dateValue;
     }
-    final milliseconds = timePickerList.map((e) {
-      final model = e.model;
-      // model.hourFixedExtentScrollController.addListener(() { });
+    final milliseconds = timePickerModelList.map((model) {
       final hour = model.useHour ? model.hourFixedExtentScrollController.selectedItem : 0;
       final minute = model.useMinute ? model.minuteFixedExtentScrollController.selectedItem : 0;
       final second = model.useSecond ? model.secondFixedExtentScrollController.selectedItem : 0;
       return (hour * 60 * 60 + minute * 60 + second) * 1000;
-    });
-    return value.mapWidthIndex((e, index) {
+    }).toList();
+    return dateValue.mapWidthIndex((e, index) {
       if (widget.type != CalendarType.range) {
         return e + (milliseconds.getOrNull(0) ?? 0);
       }
       return e + (milliseconds.getOrNull(index) ?? 0);
     }).toList();
+  }
+  
+  void _initValue() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      inherited?.selected.value = _getValue(widget.value ?? []);
+    });
   }
 }
