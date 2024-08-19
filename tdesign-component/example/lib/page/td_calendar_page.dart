@@ -118,7 +118,7 @@ Widget _buildSimple(BuildContext context) {
                 context,
                 visible: true,
                 child: TDCalendar(
-                  title: '请选择日期',
+                  title: '请选择日期区间',
                   type: CalendarType.range,
                   value: [
                     DateTime.now().millisecondsSinceEpoch,
@@ -148,6 +148,44 @@ Widget _buildSimple(BuildContext context) {
                   title: '请选择日期和时间',
                   value: value,
                   height: size.height * 0.92,
+                  useTimePicker: true,
+                  onCellClick: (value, type, tdate) {
+                    print('onCellClick:$value');
+                  },
+                  onCellLongPress: (value, type, tdate) {
+                    print('onCellLongPress:$value');
+                  },
+                  onHeanderClick: (index, week) {
+                    print('onHeanderClick:$week');
+                  },
+                  onChange: (value) {
+                    print('onChange:$value');
+                  },
+                ),
+              );
+            },
+          ),
+          TDCell(
+            title: '区间选择日历和时间',
+            arrow: true,
+            onClick: (cell) {
+              TDCalendarPopup(
+                context,
+                visible: true,
+                onConfirm: (value) {
+                  print('onConfirm:$value');
+                },
+                onClose: () {
+                  print('onClose');
+                },
+                child: TDCalendar(
+                  title: '请选择日期和时间区间',
+                  height: size.height * 0.92,
+                  type: CalendarType.range,
+                  value: [
+                    DateTime.now().millisecondsSinceEpoch,
+                    DateTime.now().add(const Duration(days: 3)).millisecondsSinceEpoch,
+                  ],
                   useTimePicker: true,
                   onCellClick: (value, type, tdate) {
                     print('onCellClick:$value');
