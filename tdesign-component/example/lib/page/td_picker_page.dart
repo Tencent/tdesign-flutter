@@ -72,7 +72,11 @@ class _TDPickerPageState extends State<TDPickerPage> {
             ExampleItem(desc: '无标题选择器', builder: buildAreaWithoutTitle),
           ],
         )
-      ]
+      ],
+      test: [
+        ExampleItem(
+            desc: '自定义left/right text', builder: buildCustomLeftRightText),
+      ],
     );
   }
 
@@ -159,6 +163,41 @@ class _TDPickerPageState extends State<TDPickerPage> {
     );
   }
 
+  @Demo(group: 'picker')
+  Widget buildCustomLeftRightText(BuildContext context) {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            TDPicker.showMultiPicker(context,
+                leftText: '自定义取消',
+                rightText: '自定义确认',
+                title: '基础选择器', onConfirm: (selected) {
+              setState(() {
+                selected_5 = '${data_1[selected[0]]}';
+              });
+              Navigator.of(context).pop();
+            }, data: [data_1]);
+          },
+          child: buildSelectRow(context, selected_5, '基础选择器'),
+        ),
+        GestureDetector(
+          onTap: () {
+            TDPicker.showMultiLinkedPicker(context,
+                leftText: '自定义取消',
+                rightText: '自定义确认',
+                title: '联动选择器', onConfirm: (selected) {
+              setState(() {
+                selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
+              });
+              Navigator.of(context).pop();
+            }, data: data_3, columnNum: 3, initialData: ['浙江省', '杭州市', '西湖区']);
+          },
+          child: buildSelectRow(context, selected_3, '联动选择器'),
+        )
+      ],
+    );
+  }
 
   Widget buildSelectRow(BuildContext context, String output, String title) {
     return Container(
