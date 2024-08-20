@@ -15,6 +15,7 @@ class TDCascader {
       double cascaderHeight = 500,
       String? initialData,
       String? closeText,
+        bool  isLetterSort=false,
       List<String>? subTitles,
       Function? onClose}) {
     showModalBottomSheet(
@@ -32,6 +33,7 @@ class TDCascader {
               onChange: onChange,
               closeText: closeText,
               theme: theme,
+              isLetterSort:isLetterSort,
               subTitles: subTitles);
         });
   }
