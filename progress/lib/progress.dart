@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 // 用于区分线性和圆形进度条的枚举
-enum _ProgressType { linear, circular, micro }
+enum _ProgressType { linear, circular, micro, button }
 
 //label位置的枚举
 enum ProgressLabelPosition { inside, left, right }
@@ -93,19 +93,55 @@ class Progress {
       Color? color,
       Color backgroundColor = const Color(0xFFEEEEEE),
       double circleRadius = 20.0,
-      bool showLabel = false}) {
+      VoidCallback? onTap,
+      VoidCallback? onLongPress,
+      bool showLabel = true}) {
     return _ProgressIndicator(
       key: key,
       value: value,
-      label: label,
+      label: label ?? const TextLabel(""),
       progressStatus: progressStatus,
       strokeWidth: strokeWidth,
       color: color,
       backgroundColor: backgroundColor,
       circleRadius: circleRadius,
+      onTap: onTap,
+      onLongPress: onLongPress,
       showLabel: showLabel,
       type: _ProgressType.micro,
     );
+  }
+
+  // 构建按钮进度条
+  static Widget button<T extends LabelWidget>(
+      {Key? key,
+      double? value,
+      T? label,
+      ProgressStatus progressStatus = ProgressStatus.primary,
+      ProgressLabelPosition progressLabelPosition =
+          ProgressLabelPosition.inside,
+      double strokeWidth = 60.0,
+      Color? color,
+      Color backgroundColor = Colors.blue,
+      BorderRadiusGeometry borderRadius =
+          const BorderRadius.all(Radius.circular(10)),
+      VoidCallback? onTap,
+      VoidCallback? onLongPress,
+      bool showLabel = true}) {
+    return _ProgressIndicator<T>(
+        key: key,
+        value: value,
+        label: label,
+        progressStatus: progressStatus,
+        progressLabelPosition: progressLabelPosition,
+        strokeWidth: strokeWidth,
+        color: color,
+        backgroundColor: backgroundColor,
+        borderRadius: borderRadius,
+        showLabel: showLabel,
+        onTap: onTap,
+        onLongPress: onLongPress,
+        type: _ProgressType.button);
   }
 }
 
@@ -123,6 +159,8 @@ class _ProgressIndicator<T extends LabelWidget> extends StatefulWidget {
   final StrokeCap strokeCap;
   final ProgressStatus progressStatus;
   final bool showLabel;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
 
   const _ProgressIndicator(
       {Key? key,
@@ -137,7 +175,9 @@ class _ProgressIndicator<T extends LabelWidget> extends StatefulWidget {
       this.type = _ProgressType.linear,
       this.strokeCap = StrokeCap.round,
       this.progressStatus = ProgressStatus.primary,
-      this.showLabel = true})
+      this.showLabel = true,
+      this.onTap,
+      this.onLongPress})
       : super(key: key);
 
   @override
@@ -261,7 +301,9 @@ class _ProgressIndicatorState<T extends LabelWidget>
         else if (widget.type == _ProgressType.circular)
           _buildCircularProgress()
         else if (widget.type == _ProgressType.micro)
-          _buildMicroProgress(),
+          _buildMicroProgress()
+        else if (widget.type == _ProgressType.button)
+          _buildButtonProgress()
       ],
     );
   }
@@ -305,7 +347,7 @@ class _ProgressIndicatorState<T extends LabelWidget>
   Widget _buildOutsideLabel() {
     return AnimatedBuilder(
       animation: _animation,
-      builder: (context, child)  {
+      builder: (context, child) {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -406,8 +448,13 @@ class _ProgressIndicatorState<T extends LabelWidget>
         fontWeight = FontWeight.bold;
         break;
       case _ProgressType.micro:
-        iconSize = widget.circleRadius * 0.4;
+        iconSize = widget.circleRadius * 0.6;
         fontSize = widget.circleRadius * 0.2;
+        fontWeight = FontWeight.normal;
+        break;
+      case _ProgressType.button:
+        iconSize = widget.strokeWidth * 0.8;
+        fontSize = widget.strokeWidth * 0.4;
         fontWeight = FontWeight.normal;
         break;
       default:
@@ -464,26 +511,81 @@ class _ProgressIndicatorState<T extends LabelWidget>
     return AnimatedBuilder(
         animation: _animation,
         builder: (context, child) {
-          return Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                height: widget.circleRadius,
-                width: widget.circleRadius,
-                child: Padding(
-                  padding: EdgeInsets.all(widget.strokeWidth / 2),
-                  child: CircularProgressIndicator(
-                    value: widget.value != null ? _animation.value : null,
-                    backgroundColor: widget.backgroundColor,
-                    strokeCap: widget.strokeCap,
-                    valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
-                    strokeWidth: widget.strokeWidth,
-                  ),
-                ),
-              ),
-              if (widget.showLabel) _buildLabelWidget(Colors.black),
-            ],
+          return GestureDetector(
+            onTap: widget.onTap,
+            onLongPress: widget.onLongPress,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                _buildMicroOutline(),
+                if (widget.showLabel) _buildLabelWidget(Colors.black),
+              ],
+            )
           );
-        });
+        }
+    );
+  }
+
+  Widget _buildMicroOutline() {
+    return SizedBox(
+      height: widget.circleRadius,
+      width: widget.circleRadius,
+      child: Padding(
+        padding: EdgeInsets.all(widget.strokeWidth / 2),
+        child: CircularProgressIndicator(
+          value: widget.value != null ? _animation.value : null,
+          backgroundColor: widget.backgroundColor,
+          strokeCap: widget.strokeCap,
+          valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
+          strokeWidth: widget.strokeWidth,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButtonProgress() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = constraints.maxWidth;
+        return AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            final progressWidth = maxWidth * _animation.value;
+            return GestureDetector(
+              onTap: widget.onTap,
+              onLongPress: widget.onLongPress,
+              child: Stack(
+                children: [
+                  _buildBackgroundContainer(),
+                  _buildButtonActiveContainer(progressWidth),
+                  if (widget.showLabel) _buildButtonLabel(maxWidth),
+                ],
+              )
+            );
+          }
+        );
+      },
+    );
+  }
+
+  // 按钮进度条内容器
+  Widget _buildButtonActiveContainer(double progressWidth) {
+    return Container(
+      height: widget.strokeWidth,
+      width: progressWidth,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+            colors: [widget.backgroundColor, Colors.white.withOpacity(.2)]),
+        borderRadius: widget.borderRadius,
+      ),
+    );
+  }
+
+  Widget _buildButtonLabel(double maxWidth) {
+    return Container(
+      height: widget.strokeWidth,
+      alignment: Alignment.center,
+      child: _buildLabelWidget(Colors.white),
+    );
   }
 }

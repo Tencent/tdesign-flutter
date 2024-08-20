@@ -28,6 +28,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  TextLabel buttonLabel = const TextLabel("50%");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,8 +65,30 @@ class _HomeState extends State<Home> {
             ),
           ]),
           _buildSection("微型进度条", [
-            Progress.micro(value: 0.3, label: const IconLabel(TDIcons.arrow_down)),
+            Progress.micro(value: 0.3),
           ]),
+          _buildSection("微型按钮进度条", [
+            Row(
+              children: [
+                Progress.micro(value: 0.3, onTap: (){}, label: const IconLabel(Icons.play_arrow, color: Colors.blue)),
+                const SizedBox(width: 10),
+                Progress.micro(value: 0.3, onTap: (){}, label: const IconLabel(Icons.pause, color: Colors.blue)),
+                const SizedBox(width: 10),
+                Progress.micro(value: 0.3, onTap: (){}, label: const IconLabel(Icons.stop, color: Colors.blue))
+              ]
+            )
+          ]),
+          _buildSection("按钮进度条", [
+            Progress.button(
+              onTap: (){
+                setState(() {
+                  buttonLabel = buttonLabel.data == "50%" ? const TextLabel("继续") : const TextLabel("50%");
+                });
+              },
+              value: .5,
+              label: buttonLabel,
+            ),
+          ])
         ],
       ),
     );
