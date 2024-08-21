@@ -29,7 +29,6 @@ class TDIconLabel extends Icon implements TDLabelWidget {
 
 /// 进度条组件
 class TDProgress extends StatelessWidget {
-
   /// 进度条类型
   final TDProgressType type;
 
@@ -72,7 +71,7 @@ class TDProgress extends StatelessWidget {
   const TDProgress({
     Key? key,
     required this.type,
-    this.value,
+    double? value,
     this.label,
     this.progressStatus = TDProgressStatus.primary,
     this.progressLabelPosition = TDProgressLabelPosition.inside,
@@ -84,7 +83,9 @@ class TDProgress extends StatelessWidget {
     this.showLabel = true,
     this.onTap,
     this.onLongPress,
-  }) : super(key: key);
+  })  : value =
+            (value == null) ? null : (value < 0 ? 0 : (value > 1 ? 1 : value)),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -203,11 +204,11 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: Duration(
+          milliseconds:
+              widget.value != null ? (widget.value! * 1000).toInt() : 1000),
     );
     _updateAnimation();
-    final int duration = (_animation.value * 1000).toInt();
-    _animationController.duration = Duration(milliseconds: duration);
     _updateEffectiveColor();
     _updateEffectiveLabel();
   }
@@ -263,8 +264,12 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     final bool showIconBorder = widget.type == TDProgressType.linear;
 
     Widget getAutoText() => showAutoText && widget.type != TDProgressType.micro
-        ? Text('${(widget.value! * 100).round()}%')
-        : const Text("");
+        ? AnimatedBuilder(
+            animation: _animation,
+            builder: (context, child) {
+              return Text('${(_animation.value * 100).round()}%');
+            })
+        : const Text('');
 
     final statusWidgets = {
       TDProgressStatus.primary: getAutoText(),
@@ -358,7 +363,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
         return Stack(
           children: [
             _buildBackgroundContainer(),
-            if (widget.value! > 0.1)
+            if (_animation.value > 0.1)
               _buildProgressContainerWithLabel(progressWidth)
             else
               _buildProgressContainerWithLabelOutside(progressWidth),
@@ -536,7 +541,8 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
                 alignment: Alignment.center,
                 children: [
                   _buildMicroOutline(),
-                  if (widget.showLabel) _buildLabelWidget(TDTheme.of().fontGyColor1),
+                  if (widget.showLabel)
+                    _buildLabelWidget(TDTheme.of().fontGyColor1),
                 ],
               ));
         });
