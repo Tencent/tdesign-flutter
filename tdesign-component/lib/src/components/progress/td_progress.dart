@@ -90,7 +90,7 @@ class TDProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final defaultValues = _getDefaultValues(type);
-    return _ProgressIndicator(
+    return MyProgressIndicator(
       value: value,
       label: label,
       progressStatus: progressStatus,
@@ -156,7 +156,7 @@ class _DefaultValues {
 }
 
 /// 构建工具类
-class _ProgressIndicator extends StatefulWidget {
+class MyProgressIndicator extends StatefulWidget {
   final double? value;
   final TDLabelWidget? label;
   final TDProgressLabelPosition progressLabelPosition;
@@ -171,7 +171,7 @@ class _ProgressIndicator extends StatefulWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
 
-  const _ProgressIndicator({
+  const MyProgressIndicator({
     Key? key,
     this.value,
     this.label,
@@ -192,7 +192,7 @@ class _ProgressIndicator extends StatefulWidget {
   _ProgressIndicatorState createState() => _ProgressIndicatorState();
 }
 
-class _ProgressIndicatorState extends State<_ProgressIndicator>
+class _ProgressIndicatorState extends State<MyProgressIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -204,6 +204,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
+      value: widget.value ?? 0,
       duration: Duration(
           milliseconds:
               widget.value != null ? (widget.value! * 1000).toInt() : 1000),
@@ -214,10 +215,10 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
   }
 
   @override
-  void didUpdateWidget(_ProgressIndicator oldWidget) {
+  void didUpdateWidget(MyProgressIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
-      _updateAnimation();
+      _updateAnimation(oldWidgetValue: oldWidget.value);
     }
     if (oldWidget.color != widget.color ||
         oldWidget.progressStatus != widget.progressStatus) {
@@ -250,10 +251,10 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
         widget.label ?? _getDefaultLabelFromStatus(widget.progressStatus);
   }
 
-  void _updateAnimation() {
-    _animation = Tween<double>(begin: 0, end: widget.value ?? 0)
+  void _updateAnimation({double? oldWidgetValue}) {
+    _animation = Tween<double>(begin: _animationController.value, end: widget.value ?? 0)
         .animate(_animationController);
-    _animationController.forward(from: 0);
+    _animationController.forward(from: _animationController.value);
   }
 
   Widget _getDefaultLabelFromStatus(TDProgressStatus status) {
@@ -264,11 +265,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     final bool showIconBorder = widget.type == TDProgressType.linear;
 
     Widget getAutoText() => showAutoText && widget.type != TDProgressType.micro
-        ? AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child) {
-              return Text('${(_animation.value * 100).round()}%');
-            })
+        ? Text('${(widget.value! * 100).round()}%')
         : const Text('');
 
     final statusWidgets = {
@@ -363,7 +360,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
         return Stack(
           children: [
             _buildBackgroundContainer(),
-            if (_animation.value > 0.1)
+            if (widget.value! > 0.1)
               _buildProgressContainerWithLabel(progressWidth)
             else
               _buildProgressContainerWithLabelOutside(progressWidth),
