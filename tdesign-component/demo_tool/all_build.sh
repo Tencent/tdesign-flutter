@@ -33,6 +33,7 @@
 
 # 输入
 # calendar
+./bin/demo_tool generate --folder ../lib/src/components/calendar --name TDCalendar,TDCalendarPopup,TDCalendarStyle --folder-name calendar --output ../example/assets/api/ --only-api
 # cascader
 ./bin/demo_tool generate --folder ../lib/src/components/cascader --name TDMultiCascader --folder-name cascader --output ../example/assets/api/ --only-api
 
