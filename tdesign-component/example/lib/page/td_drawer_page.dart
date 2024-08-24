@@ -81,7 +81,15 @@ class TDDrawerPage extends StatelessWidget {
               ),
             ]),
           ],
-          test: const [],
+          test: [
+            ExampleItem(
+              ignoreCode: true,
+              desc: '自定义背景色',
+              builder: (BuildContext context) {
+                return const CodeWrapper(builder: _buildColorSimple);
+              },
+            )
+          ],
         ));
   }
 }
@@ -89,7 +97,7 @@ class TDDrawerPage extends StatelessWidget {
 @Demo(group: 'drawer')
 Widget _buildBaseSimple(BuildContext context) {
   /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TDButton(
     text: '基础抽屉',
     isBlock: true,
@@ -100,7 +108,7 @@ Widget _buildBaseSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        drawerTop: renderBox.size.height,
+        drawerTop: renderBox?.size.height,
         items: List.generate(30, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
         onItemClick: (index, item) {
           print('drawer item被点击，index：$index，title：${item.title}');
@@ -113,7 +121,7 @@ Widget _buildBaseSimple(BuildContext context) {
 @Demo(group: 'drawer')
 Widget _buildIconSimple(BuildContext context) {
   /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TDButton(
     text: '带图标抽屉',
     isBlock: true,
@@ -124,7 +132,7 @@ Widget _buildIconSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        drawerTop: renderBox.size.height,
+        drawerTop: renderBox?.size.height,
         items: List.generate(30, (index) => TDDrawerItem(title: '菜单${_nums[index]}', icon: const Icon(TDIcons.app))).toList(),
       );
     },
@@ -134,7 +142,7 @@ Widget _buildIconSimple(BuildContext context) {
 @Demo(group: 'drawer')
 Widget _buildTitleSimple(BuildContext context) {
   /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TDButton(
     text: '带图标抽屉',
     isBlock: true,
@@ -145,7 +153,7 @@ Widget _buildTitleSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        drawerTop: renderBox.size.height,
+        drawerTop: renderBox?.size.height,
         title: '标题',
         placement: TDDrawerPlacement.left,
         items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
@@ -157,7 +165,7 @@ Widget _buildTitleSimple(BuildContext context) {
 @Demo(group: 'drawer')
 Widget _buildBottomSimple(BuildContext context) {
   /// 获取navBar尺寸
-  var renderBox = navBarkey.currentContext!.findRenderObject() as RenderBox;
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return TDButton(
     text: '带底部插槽样式',
     isBlock: true,
@@ -168,7 +176,7 @@ Widget _buildBottomSimple(BuildContext context) {
       TDDrawer(
         context,
         visible: true,
-        drawerTop: renderBox.size.height,
+        drawerTop: renderBox?.size.height,
         title: '标题',
         placement: TDDrawerPlacement.left,
         items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
@@ -178,6 +186,29 @@ Widget _buildBottomSimple(BuildContext context) {
           width: double.infinity,
           size: TDButtonSize.large,
         ),
+      );
+    },
+  );
+}
+
+@Demo(group: 'drawer')
+Widget _buildColorSimple(BuildContext context) {
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
+  return TDButton(
+    text: '自定义背景色',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDDrawer(
+        context,
+        visible: true,
+        drawerTop: renderBox?.size.height,
+        title: '标题',
+        backgroundColor: TDTheme.of(context).grayColor1,
+        placement: TDDrawerPlacement.right,
+        items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
       );
     },
   );
