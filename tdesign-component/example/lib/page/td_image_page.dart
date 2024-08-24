@@ -244,7 +244,7 @@ class TDImageState extends State<TDImagePage>
           color: Colors.black,
           width: 121,
           height: 72,
-          child: const Stack(
+          child: Stack(
             alignment: Alignment.center,
             children: [
               TDImage(

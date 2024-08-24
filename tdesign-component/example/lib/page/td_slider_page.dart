@@ -244,30 +244,18 @@ class _TDSliderPageState extends State<TDSliderPage> {
         min: 0,
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
-      )..updateSliderThemeData((data) => data.copyWith(
-           activeTickMarkColor: const Color(0xFFE7E7E7),
-           inactiveTickMarkColor: const Color(0xFFE7E7E7),
-      )),
+      )
+        ..updateSliderThemeData((data) =>
+            data.copyWith(
+              activeTickMarkColor: const Color(0xFFE7E7E7),
+              inactiveTickMarkColor: const Color(0xFFE7E7E7),
+            )),
       value: 60,
       onChanged: (value) {},
     );
   }
 
   @Demo(group: 'slider')
-  Widget _buildCapsuleDoubleHandleWithScale(BuildContext context) {
-    return TDRangeSlider(
-      sliderThemeData: TDSliderThemeData.capsule(
-        showScaleValue: true,
-        divisions: 5,
-        min: 0,
-        max: 100,
-        scaleFormatter: (value) => value.toInt().toString(),
-      )..updateSliderThemeData((data) => data.copyWith(
-           activeTickMarkColor: const Color(0xFFE7E7E7),
-           inactiveTickMarkColor: const Color(0xFFE7E7E7),
-      )),
-      value: const RangeValues(20, 60),
-      onChanged: (value) {},
   Widget _buildCapsule(BuildContext context) {
     return Column(
       children: [
@@ -336,10 +324,12 @@ class _TDSliderPageState extends State<TDSliderPage> {
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
-          )..updateSliderThemeData((data) => data.copyWith(
-                activeTickMarkColor: const Color(0xFFE7E7E7),
-                inactiveTickMarkColor: const Color(0xFFE7E7E7),
-              )),
+          )
+            ..updateSliderThemeData((data) =>
+                data.copyWith(
+                  activeTickMarkColor: const Color(0xFFE7E7E7),
+                  inactiveTickMarkColor: const Color(0xFFE7E7E7),
+                )),
           value: 60,
           // divisions: 5,
           onChanged: (value) {},
@@ -378,8 +368,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
             max: 100,
           ),
           value: 40,
-          boxDecoration: BoxDecoration(
-             color: Colors.amber
+          boxDecoration: const BoxDecoration(
+              color: Colors.amber
           ),
           // divisions: 5,
           onChanged: (value) {},
@@ -400,6 +390,25 @@ class _TDSliderPageState extends State<TDSliderPage> {
           onChanged: (value) {},
         ),
       ],
+    );
+  }
+
+
+  @Demo(group: 'slider')
+  Widget _buildCapsuleDoubleHandleWithScale(BuildContext context) {
+    return TDRangeSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        showScaleValue: true,
+        divisions: 5,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      )..updateSliderThemeData((data) => data.copyWith(
+        activeTickMarkColor: const Color(0xFFE7E7E7),
+        inactiveTickMarkColor: const Color(0xFFE7E7E7),
+      )),
+      value: const RangeValues(20, 60),
+      onChanged: (value) {},
     );
   }
 }
