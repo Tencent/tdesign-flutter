@@ -1,0 +1,33 @@
+
+  Widget _buildSizeFab(BuildContext context) {
+    return _buildRowDemoWidthDescription([
+      {
+        'component': const TDFab(
+          theme: TDFabTheme.primary,
+          size: TDFabSize.large,
+        ),
+        'desc': 'Large'
+      },
+      {
+        'component': const TDFab(
+          theme: TDFabTheme.primary,
+          size: TDFabSize.medium,
+        ),
+        'desc': 'Medium'
+      },
+      {
+        'component': const TDFab(
+          theme: TDFabTheme.primary,
+          size: TDFabSize.small,
+        ),
+        'desc': 'Small'
+      },
+      {
+        'component': const TDFab(
+          theme: TDFabTheme.primary,
+          size: TDFabSize.extraSmall,
+        ),
+        'desc': 'extraSmall'
+      },
+    ]);
+  }

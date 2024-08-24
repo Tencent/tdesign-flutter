@@ -26,21 +26,27 @@ class TDSearchBar extends StatefulWidget {
   const TDSearchBar({
     Key? key,
     this.placeHolder,
+    this.action,
     this.style = TDSearchStyle.square,
     this.alignment = TDSearchAlignment.left,
     this.onTextChanged,
     this.onSubmitted,
     this.onEditComplete,
+    this.onActionClick,
     this.autoHeight = false,
     this.padding = const EdgeInsets.fromLTRB(16, 8, 16, 8),
     this.autoFocus = false,
     this.mediumStyle = false,
     this.needCancel = false,
+    this.controller,
     this.backgroundColor = Colors.white,
   }) : super(key: key);
 
   /// 预设文案
   final String? placeHolder;
+
+  /// 右侧操作按钮文字
+  final String? action;
 
   /// 样式
   final TDSearchStyle? style;
@@ -66,6 +72,9 @@ class TDSearchBar extends StatefulWidget {
   /// 是否需要取消按钮
   final bool needCancel;
 
+  /// 控制器
+  final TextEditingController? controller;
+
   /// 文字改变回调
   final TDSearchBarEvent? onTextChanged;
 
@@ -74,6 +83,9 @@ class TDSearchBar extends StatefulWidget {
 
   /// 编辑完成回调
   final TDSearchBarCallBack? onEditComplete;
+
+  /// 右侧操作按钮点击回调
+  final TDSearchBarCallBack? onActionClick;
 
   @override
   State<StatefulWidget> createState() => _TDSearchBarState();
@@ -104,10 +116,17 @@ class _TDSearchBarState extends State<TDSearchBar>
     _status = widget.autoFocus
         ? _TDSearchBarStatus.focused
         : _TDSearchBarStatus.unFocus;
-    controller.addListener(() {
-      var clearVisible = controller.text.isNotEmpty;
-      _updateClearBtnVisible(clearVisible);
-    });
+    if(widget.controller==null){
+      controller.addListener(() {
+        var clearVisible = controller.text.isNotEmpty;
+        _updateClearBtnVisible(clearVisible!);
+      });
+    }else{
+      widget.controller?.addListener(() {
+        var clearVisible = widget.controller?.text.isNotEmpty;
+        _updateClearBtnVisible(clearVisible!);
+      });
+    }
     focusNode.addListener(() {
       setState(() {
         _status = focusNode.hasFocus
@@ -130,23 +149,6 @@ class _TDSearchBarState extends State<TDSearchBar>
         });
       }
     });
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   var phBox = _phKey.currentContext?.findRenderObject() as RenderBox?;
-    //   if (phBox != null) {
-    //     setState(() {
-    //       if (widget.alignment != TDSearchAlignment.center) {
-    //         return;
-    //       }
-    //       var dx = (phBox.size.width / 2 - 24) / phBox.size.width;
-    //       if (dx < 0) {
-    //         return;
-    //       }
-
-    //       _animation ??= Tween(begin: Offset.zero, end: Offset(-dx, 0))
-    //           .animate(_animationController);
-    //     });
-    //   }
-    // });
   }
 
   void _updateClearBtnVisible(bool visible) {
@@ -159,6 +161,14 @@ class _TDSearchBarState extends State<TDSearchBar>
     setState(() {
       cancelBtnHide = !visible;
     });
+  }
+
+  void _cleanInputText(){
+    if(widget.controller==null){
+      controller.clear();
+    }else{
+      widget.controller?.clear();
+    }
   }
 
   Font? getSize(BuildContext context) {
@@ -202,7 +212,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                         margin: const EdgeInsets.only(bottom: 1),// 为了适配TextField与Text的差异，后续需要做通用适配
                         child: TextField(
                           key: _textFieldKey,
-                          controller: controller,
+                          controller: widget.controller??controller,
                           autofocus: widget.autoFocus,
                           cursorColor: TDTheme.of(context).brandNormalColor,
                           cursorWidth: 1,
@@ -237,7 +247,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                       offstage: clearBtnHide,
                       child: GestureDetector(
                           onTap: () {
-                            controller.clear();
+                            _cleanInputText();
                             if (widget.onTextChanged != null) {
                               widget.onTextChanged!('');
                             }
@@ -257,9 +267,13 @@ class _TDSearchBarState extends State<TDSearchBar>
               offstage: cancelBtnHide || !widget.needCancel,
               child: GestureDetector(
                 onTap: () {
-                  controller.clear();
-                  if (widget.onTextChanged != null) {
-                    widget.onTextChanged!('');
+                  if (widget.onActionClick != null) {
+                    widget.onActionClick!();
+                  } else {
+                    _cleanInputText();
+                    if (widget.onTextChanged != null) {
+                      widget.onTextChanged!('');
+                    }
                   }
                   if (_animation == null) {
                     focusNode.unfocus();
@@ -277,7 +291,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                 },
                 child: Container(
                   padding: const EdgeInsets.only(left: 16),
-                  child: Text(context.resource.cancel,
+                  child: Text(widget.action ?? context.resource.cancel,
                       style: TextStyle(
                           fontSize: getSize(context)?.size,
                           color: TDTheme.of(context).brandNormalColor)),
@@ -287,8 +301,8 @@ class _TDSearchBarState extends State<TDSearchBar>
           ],
         ),
         Offstage(
-          offstage: (_status == _TDSearchBarStatus.focused ||
-              controller.text.isNotEmpty),
+        offstage:widget.controller==null?(_status == _TDSearchBarStatus.focused ||
+        controller.text.isNotEmpty):(_status == _TDSearchBarStatus.focused ||widget.controller!.text.isNotEmpty),
           child: GestureDetector(
               onTap: () {
                 if (_status == _TDSearchBarStatus.animatingToFocus ||

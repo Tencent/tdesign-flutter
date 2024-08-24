@@ -14,7 +14,7 @@ class TDDropdownPopup {
   TDDropdownPopup({
     required this.parentContext,
     required this.child,
-    this.handleClose,
+    required this.handleClose,
     this.direction = TDDropdownPopupDirection.auto,
     this.showOverlay = true,
     this.closeOnClickOverlay = true,
@@ -23,30 +23,33 @@ class TDDropdownPopup {
 
   final BuildContext parentContext;
   final TDDropdownItem child;
-  final FutureCallback? handleClose;
+  final FutureCallback handleClose;
   final TDDropdownPopupDirection? direction;
   final bool? showOverlay;
   final bool? closeOnClickOverlay;
   final Duration? duration;
 
   /// _overlay1：下拉方向的
-  /// _overlay2：menu部分的
-  /// _overlay3：下拉反方向的
-  /// _overlay3Height：下拉反方向的高度，用于判断auto方向
-  /// _initContent：初始内容
   late double _overlay1Top,
       _overlay1Bottom,
+
+      /// _overlay2：menu部分的
       _overlay2Top,
       _overlay2Bottom,
+
+      /// _overlay3：下拉反方向的
       _overlay3Top,
       _overlay3Bottom,
+
+      /// _overlay3Height：下拉反方向的高度，用于判断auto方向
       _overlay3Height,
+
+      /// _initContent：初始内容
       _initContentTop,
       _initContentBottom;
-  late VoidCallback _closeContent;
-  final directionListenable = ValueNotifier<TDDropdownPopupDirection>(TDDropdownPopupDirection.auto);
-
-  OverlayEntry? overlayEntry;
+  final _closeListenable = ValueNotifier<FutureCallback?>(null);
+  final _directionListenable = ValueNotifier<TDDropdownPopupDirection>(TDDropdownPopupDirection.auto);
+  final _colorAlphaListenable = ValueNotifier(false);
 
   Duration get _duration => duration ?? const Duration(milliseconds: 200);
 
@@ -84,118 +87,131 @@ class TDDropdownPopup {
     }
   }
 
-  Future<void> add([TDDropdownItem? updateChild]) async {
-    directionListenable.value = direction ?? TDDropdownPopupDirection.auto;
-    overlayEntry?.remove();
-    overlayEntry = OverlayEntry(
+  Future<void> add([TDDropdownItem? updateChild]) {
+    var completer = Completer<void>();
+    _directionListenable.value = direction ?? TDDropdownPopupDirection.auto;
+    final overlayEntry = OverlayEntry(
       builder: (BuildContext context) {
-        return directionListenable.value == TDDropdownPopupDirection.auto
+        return _directionListenable.value == TDDropdownPopupDirection.auto
             ? ValueListenableBuilder(
-                valueListenable: directionListenable,
+                valueListenable: _directionListenable,
                 builder: (context, value, child) => value == TDDropdownPopupDirection.auto
                     ? child!
-                    : _getPopup(value, updateChild), // 每次重新渲染item，更新高度
-                child: _getPopup(TDDropdownPopupDirection.down, updateChild),
+                    : _getPopup(value, updateChild, completer), // 每次重新渲染item，更新高度
+                child: _getPopup(TDDropdownPopupDirection.down, updateChild, completer),
               )
-            : _getPopup(directionListenable.value, updateChild);
+            : _getPopup(_directionListenable.value, updateChild, completer);
       },
     );
-
-    Overlay.of(parentContext).insert(overlayEntry!);
-    await Future.delayed(_duration);
+    Navigator.push(parentContext, _PopupOverlayRoute(overlayEntry, handleClose));
+    return completer.future;
   }
 
-  Widget _getPopup(TDDropdownMenuDirection value, TDDropdownItem? updateChild) {
+  Widget _getPopup(TDDropdownMenuDirection value, TDDropdownItem? updateChild, Completer<void> completer) {
     _init(value);
+    final barrier = GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: _overlayClick,
+    );
     return Stack(children: [
-      _getOverlay1(),
-      _getOverlay2(),
-      _getOverlay3(),
+      if (_directionListenable.value != TDDropdownPopupDirection.auto) ...[
+        _getOverlay1(barrier),
+        _getOverlay2(),
+        _getOverlay3(barrier),
+      ],
       TDDropdownInherited(
-          popupState: this,
-          directionListenable: directionListenable,
-          child: TDDropdownPanel(
-            duration: _duration,
-            direction: value,
-            directionListenable: directionListenable,
-            initContentBottom: _initContentBottom,
-            initContentTop: _initContentTop,
-            reverseHeight: _overlay3Height,
-            closeCallback: _closeCallback,
-            child: updateChild ?? child,
-          )),
+        popupState: this,
+        directionListenable: _directionListenable,
+        child: TDDropdownPanel(
+          duration: _duration,
+          direction: value,
+          directionListenable: _directionListenable,
+          colorAlphaListenable: _colorAlphaListenable,
+          initContentBottom: _initContentBottom,
+          initContentTop: _initContentTop,
+          reverseHeight: _overlay3Height,
+          closeListenable: _closeListenable,
+          onOpened: () {
+            completer.complete();
+          },
+          child: updateChild ?? child,
+        ),
+      ),
     ]);
   }
 
-  Widget _getOverlay1() {
-    return showOverlay == true
-        ? Positioned(
-            top: _overlay1Top,
-            bottom: _overlay1Bottom,
-            left: 0,
-            right: 0,
-            child: Container(
-              color: Colors.black54,
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: _overlayClick,
-              ),
-            ),
-          )
-        : const SizedBox.shrink();
+  Widget _getOverlay1(Widget barrier) {
+    return Positioned(
+      top: _overlay1Top,
+      bottom: _overlay1Bottom,
+      left: 0,
+      right: 0,
+      child: showOverlay == true
+          ? ValueListenableBuilder(
+              builder: (BuildContext context, value, Widget? child) {
+                return AnimatedContainer(
+                  color: value ? Colors.black54 : Colors.black54.withAlpha(0),
+                  duration: value ? _duration : _duration ~/ 2,
+                  child: barrier,
+                );
+              },
+              valueListenable: _colorAlphaListenable,
+            )
+          : barrier,
+    );
   }
 
   Widget _getOverlay2() {
-    return showOverlay == true
-        ? Positioned(
-            top: _overlay2Top,
-            bottom: _overlay2Bottom,
-            left: 0,
-            right: 0,
-            child: GestureDetector(
-              onVerticalDragUpdate: (details) {},
-              onHorizontalDragUpdate: (details) {},
-              behavior: HitTestBehavior.translucent,
-              child: const SizedBox(),
-            ),
-          )
-        : const SizedBox.shrink();
+    return Positioned(
+      top: _overlay2Top,
+      bottom: _overlay2Bottom,
+      left: 0,
+      right: 0,
+      child: GestureDetector(
+        onVerticalDragUpdate: (details) {},
+        onHorizontalDragUpdate: (details) {},
+        behavior: HitTestBehavior.translucent,
+      ),
+    );
   }
 
-  Widget _getOverlay3() {
-    return showOverlay == true
-        ? Positioned(
-            top: _overlay3Top,
-            bottom: _overlay3Bottom,
-            left: 0,
-            right: 0,
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: _overlayClick,
-            ),
-          )
-        : const SizedBox.shrink();
+  Widget _getOverlay3(Widget barrier) {
+    return Positioned(
+      top: _overlay3Top,
+      bottom: _overlay3Bottom,
+      left: 0,
+      right: 0,
+      child: barrier,
+    );
   }
 
   void _overlayClick() {
     if (!(closeOnClickOverlay ?? true)) {
       return;
     }
-    if (handleClose != null) {
-      handleClose!();
-    } else {
-      remove();
-    }
+    Navigator.maybePop(parentContext);
   }
 
   Future<void> remove() async {
-    _closeContent();
-    await Future.delayed(Duration(milliseconds: _duration.inMilliseconds ~/ 2));
-    overlayEntry?.remove();
-    overlayEntry = null;
+    await _closeListenable.value?.call();
+    _closeListenable.value = null;
+  }
+}
+
+class _PopupOverlayRoute<T> extends OverlayRoute<T> {
+  final OverlayEntry overlayEntry;
+  final FutureCallback handleClose;
+
+  _PopupOverlayRoute(this.overlayEntry, this.handleClose);
+
+  @override
+  Iterable<OverlayEntry> createOverlayEntries() {
+    return [overlayEntry];
   }
 
-  _closeCallback(VoidCallback fn) {
-    _closeContent = fn;
+  @override
+  Future<RoutePopDisposition> willPop() async {
+    await handleClose();
+    return super.willPop();
   }
 }

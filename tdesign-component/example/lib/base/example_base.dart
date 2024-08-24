@@ -9,7 +9,7 @@ typedef PageBuilder = Widget Function(BuildContext context, ExamplePageModel mod
 /// 示例页面数据
 class ExamplePageModel{
 
-  ExamplePageModel({required this.text,required this.name, this.apiVisible = false, this.showAction = false, this.isTodo = false,required this.pageBuilder,});
+  ExamplePageModel({required this.text,required this.name, this.apiVisible = false, this.showAction = false, this.isTodo = false,this.pageName,required this.pageBuilder,});
 
   final String text;
   final String name;
@@ -17,6 +17,7 @@ class ExamplePageModel{
   String? spline;
   bool apiVisible;
   bool showAction;
+  String? pageName;
   bool isTodo;
   final PageBuilder pageBuilder;
 }
