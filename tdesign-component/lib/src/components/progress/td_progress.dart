@@ -67,7 +67,7 @@ class TDProgress extends StatelessWidget {
   final VoidCallback? onLongPress;
 
   /// 动画持续时间 (正整数，单位为毫秒)
-  final int animationDuration;
+  final int? animationDuration;
 
   TDProgress({
     Key? key,
@@ -86,43 +86,19 @@ class TDProgress extends StatelessWidget {
     this.onLongPress,
     int animationDuration = 300,
   })  : value = _validateProgress(value),
-        strokeWidth = _validatePositiveDouble(strokeWidth, 'strokeWidth'),
-        circleRadius = _validatePositiveDouble(circleRadius, 'circleRadius'),
-        animationDuration = _validatePositiveInt(animationDuration, 'animationDuration'),
+        strokeWidth = _validatePositiveDouble(strokeWidth),
+        circleRadius = _validatePositiveDouble(circleRadius),
+        animationDuration = _validatePositiveInt(animationDuration),
         super(key: key);
 
-  // 验证进度值
-  static double? _validateProgress(double? value) {
-    if (value == null) {
-      return null;
-    }
-    if (value < 0) {
-      return 0;
-    }
-    if (value > 1) {
-      return 1;
-    }
-    return value;
-  }
+  static double? _validateProgress(double? value) =>
+      value == null ? null : value.clamp(0.0, 1.0);
 
-  // 验证正数 double 值
-  static double? _validatePositiveDouble(double? value, String paramName) {
-    if (value == null) {
-      return null;
-    }
-    if (value <= 0) {
-      throw ArgumentError('$paramName must be a positive number');
-    }
-    return value;
-  }
+  static double? _validatePositiveDouble(double? value) =>
+      value == null ? null : value <= 0 ? 0 : value;
 
-  // 验证正整数
-  static int _validatePositiveInt(int value, String paramName) {
-    if (value <= 0) {
-      throw ArgumentError('$paramName must be a positive number');
-    }
-    return value;
-  }
+  static int _validatePositiveInt(int? value) =>
+      value == null || value <= 0 ? 0 : value;
 
 
   @override
@@ -153,7 +129,7 @@ class TDProgress extends StatelessWidget {
           strokeWidth: 20.0,
           backgroundColor: TDTheme.of().grayColor3,
           strokeCap: ProgressStrokeCap.round,
-          circleRadius: 0, 
+          circleRadius: 0,
         );
       case ProgressType.circular:
         return _DefaultValues(
@@ -174,7 +150,7 @@ class TDProgress extends StatelessWidget {
           strokeWidth: 60.0,
           backgroundColor: TDTheme.of().brandNormalColor,
           strokeCap: ProgressStrokeCap.butt,
-          circleRadius: 0, 
+          circleRadius: 0,
         );
     }
   }
