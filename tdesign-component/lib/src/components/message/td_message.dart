@@ -89,14 +89,19 @@ class TDMessage extends StatefulWidget {
 }
 
 class _TDMessageState extends State<TDMessage> {
-  bool? _isVisible = true;
-  bool? _isIcon = true;
+  bool _isVisible = true;
+  double _topOffset = 0;
 
   @override
   void initState() {
     super.initState();
-    _isVisible = widget.visible ?? true;
-    _isIcon = widget.icon ?? true;
+    _topOffset = (widget.offset?[1] ?? 110) - 30;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _topOffset = widget.offset?[1] ?? 110;
+      });
+    });
 
     if (widget.duration != null && widget.duration! > 0) {
       Future.delayed(Duration(milliseconds: widget.duration!), _closeMessage);
@@ -104,77 +109,77 @@ class _TDMessageState extends State<TDMessage> {
   }
 
   void _closeMessage() {
-    if (mounted) {
-      setState(() {
-        _isVisible = false;
-      });
-      if (widget.onDurationEnd != null) {
-        WidgetsBinding.instance.addPostFrameCallback(() {
-          widget.onDurationEnd!();
-        } as FrameCallback);
+    setState(() {
+      _topOffset = (widget.offset?[1] ?? 110) - 30;
+    });
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (mounted) {
+        setState(() {
+          _isVisible = false;
+        });
+        widget.onDurationEnd?.call();
       }
-    }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_isVisible!) {
-      return const SizedBox.shrink();
-    }
+    var _leftOffset = widget.offset?[0] ?? (MediaQuery.of(context).size.width - 343) / 2;
 
-    return Positioned(
-      left: widget.offset?[0] ?? (MediaQuery.of(context).size.width - 343) / 2,
-      top: widget.offset?[1] ?? 110,
-      child: Material(
-        color: Colors.transparent,
-        child: Container(
-          width: 343,
-          height: 48,
-          padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Row(
-            children: [
-              if (_isIcon != null && _isIcon!)
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child:
-                    SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: getIcon(context),
-                    ),
+    return AnimatedPositioned(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      top: _topOffset,
+      left: _leftOffset,
+      child: _isVisible
+          ? Material(
+              color: Colors.transparent,
+              child: Container(
+                width: 343,
+                height: 48,
+                padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(6),
                 ),
-              Expanded(
-                child: Text(
-                  widget.content ?? '',
-                  style: const TextStyle(color: Colors.black),
+                child: Row(
+                  children: [
+                    if (widget.icon ?? true)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: getIcon(context),
+                        ),
+                      ),
+                    Expanded(
+                      child: Text(
+                        widget.content ?? '',
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            )
+          : const SizedBox.shrink(),
     );
   }
 
   Widget getIcon(BuildContext context) {
-    if (widget.icon != null) {
-      switch (widget.theme) {
-        case MessageTheme.info:
-          return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).brandColor7);
-        case MessageTheme.success:
-          return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).successColor5);
-        case MessageTheme.warning:
-          return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).warningColor5);
-        case MessageTheme.error:
-          return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).errorColor6);
-        case null:
-          return const SizedBox.shrink();
-      }
+    switch (widget.theme) {
+      case MessageTheme.info:
+        return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).brandColor7);
+      case MessageTheme.success:
+        return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).successColor5);
+      case MessageTheme.warning:
+        return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).warningColor5);
+      case MessageTheme.error:
+        return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).errorColor6);
+      case null:
+        return const SizedBox.shrink();
     }
-    return const SizedBox.shrink();
   }
 }
