@@ -1,0 +1,8 @@
+ 
+  TDResult _buildResultWithDescriptionError(BuildContext context) {
+    return const TDResult(
+      title: '失败状态',
+      theme: TDResultTheme.error,
+      description: '描述文字',
+    );
+  }
