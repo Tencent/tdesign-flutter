@@ -20,34 +20,36 @@ class TDSwitchPageState extends State<TDSwitchPage> {
   @override
   Widget build(BuildContext context) {
     var current = ExamplePage(
-        title: tdTitle(),
-        exampleCodeGroup: 'switch',
-        desc: '用于控制某个功能的开启和关闭。',
-        children: [
-          ExampleModule(
-            title: '组件类型',
-            children: [
-              ExampleItem(desc: '基础开关', builder: _buildSwitchWithBase),
-              ExampleItem(desc: '带描述开关', builder: _buildSwitchWithText),
-              ExampleItem(builder: _buildSwitchWithIcon),
-              ExampleItem(desc: '自定义颜色开关', builder: _buildSwitchWithColor),
-            ],
-          ),
-          ExampleModule(title: '组件状态', children: [
-            ExampleItem(desc: '加载状态', builder: _buildSwitchWithLoadingOff),
-            ExampleItem(builder: _buildSwitchWithLoadingOn),
-            ExampleItem(desc: '禁用状态', builder: _buildSwitchWithDisableOff),
-            ExampleItem(builder: _buildSwitchWithDisableOn),
-          ]),
-          ExampleModule(title: '组件样式', children: [
-            ExampleItem(desc: '开关尺寸', builder: _buildSwitchWithSizeLarge),
-            ExampleItem(builder: _buildSwitchWithSizeMed),
-            ExampleItem(builder: _buildSwitchWithSizeSmall),
-          ]),
-        ],
-    test: [
-      ExampleItem(desc: '自定义开关文案-通常只支持一个字符,超出部分无法展示', builder: _customText),
-    ],);
+      title: tdTitle(),
+      exampleCodeGroup: 'switch',
+      desc: '用于控制某个功能的开启和关闭。',
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(desc: '基础开关', builder: _buildSwitchWithBase),
+            ExampleItem(desc: '带描述开关', builder: _buildSwitchWithText),
+            ExampleItem(builder: _buildSwitchWithIcon),
+            ExampleItem(desc: '自定义颜色开关', builder: _buildSwitchWithColor),
+          ],
+        ),
+        ExampleModule(title: '组件状态', children: [
+          ExampleItem(desc: '加载状态', builder: _buildSwitchWithLoadingOff),
+          ExampleItem(builder: _buildSwitchWithLoadingOn),
+          ExampleItem(desc: '禁用状态', builder: _buildSwitchWithDisableOff),
+          ExampleItem(builder: _buildSwitchWithDisableOn),
+        ]),
+        ExampleModule(title: '组件样式', children: [
+          ExampleItem(desc: '开关尺寸', builder: _buildSwitchWithSizeLarge),
+          ExampleItem(builder: _buildSwitchWithSizeMed),
+          ExampleItem(builder: _buildSwitchWithSizeSmall),
+        ]),
+      ],
+      test: [
+        ExampleItem(desc: '自定义开关文案-通常只支持一个字符,超出部分无法展示', builder: _customText),
+        ExampleItem(desc: '自定义带文字开关的字体大小', builder: _customTextFont),
+      ],
+    );
     return current;
   }
 
@@ -291,6 +293,23 @@ class TDSwitchPageState extends State<TDSwitchPage> {
         type: TDSwitchType.text,
         openText: '1111',
         closeText: '—',
+      ),
+      title: '基础开关',
+    );
+  }
+
+  @Demo(group: 'switch')
+  Widget _customTextFont(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(
+        type: TDSwitchType.text,
+        openText: '开',
+        closeText: '关',
+        thumbContentOffColor: Colors.red,
+        thumbContentOnColor: Colors.green,
+        thumbContentOnFont: TextStyle(fontSize: 18),
+        thumbContentOffFont: TextStyle(fontSize: 12),
       ),
       title: '基础开关',
     );

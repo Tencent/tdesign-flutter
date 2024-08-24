@@ -16,6 +16,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
+[td_textarea_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_textarea_page.dart)
+
 ### 1 组件类型
 
 基础多文本输入框
@@ -293,16 +295,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | textInputBackgroundColor | Color? | - | 文本框背景色 |
 | size | TDInputSize? | TDInputSize.large | 输入框规格 |
 | maxLength | int? | - | 最大字数限制 |
+| maxLengthEnforcement | MaxLengthEnforcement? | - | 如何执行输入长度限制 |
+| allowInputOverMax | bool? | false | 超出[maxLength]之后是否还允许输入 |
 | additionInfo | String? | '' | 错误提示信息 |
 | additionInfoColor | Color? | - | 错误提示颜色 |
 | textAlign | TextAlign? | - | 文字对齐方向 |
 | label | String? | - | 输入框标题 |
 | indicator | bool? | false | 否显示文本计数器，如 0/140（必须设置maxLength） |
 | layout | TDTextareaLayout? | TDTextareaLayout.horizontal | 标题输入框布局方式。可选项：vertical/horizontal |
-| autosize | bool? | - | 是否自动增高，值为 autosize 时，maxLines 不生效 |
+| autosize | bool? | - | 是否自动增高，值为 true 时，[maxLines]不生效 |
 | labelIcon | Widget? | - | 输入框标题图标 |
 | labelWidth | double? | - | 输入框标题宽度 |
 | margin | EdgeInsetsGeometry? | - | 外边距 |
+| padding | EdgeInsetsGeometry? | - | 内边距 |
 | textareaDecoration | Decoration? | - | 输入框样式(不包括标签) |
 | bordered | bool? | - | 是否显示外边框 |
 

@@ -1,0 +1,20 @@
+
+Widget _buildIconSimple(BuildContext context) {
+  /// 获取navBar尺寸
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
+  return TDButton(
+    text: '带图标抽屉',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDDrawer(
+        context,
+        visible: true,
+        drawerTop: renderBox?.size.height,
+        items: List.generate(30, (index) => TDDrawerItem(title: '菜单${_nums[index]}', icon: const Icon(TDIcons.app))).toList(),
+      );
+    },
+  );
+}
