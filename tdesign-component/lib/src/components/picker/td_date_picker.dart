@@ -446,18 +446,13 @@ class DatePickerModel {
   }
 
   void setInitialTime() {
-    var startTime = DateTime(dateStart[0], dateStart[1], dateStart[2], dateStart.length > 3 ? dateStart[3] : 0,
-        dateStart.length > 4 ? dateStart[4] : 0, dateStart.length > 5 ? dateStart[5] : 0);
-    var endTime = DateTime(dateEnd[0], dateEnd[1], dateEnd[2], dateEnd.length > 3 ? dateEnd[3] : 0,
-        dateEnd.length > 4 ? dateEnd[4] : 0, dateEnd.length > 5 ? dateEnd[5] : 0);
+    dateStart = List.generate(6, (index) => index < dateStart.length ? dateStart[index] : 0);
+    var startTime = DateTime(dateStart[0],dateStart[1],dateStart[2],dateStart[3],dateStart[4],dateStart[5]);
+    dateEnd = List.generate(6, (index) => index < dateEnd.length ? dateEnd[index] : 0);
+    var endTime = DateTime(dateEnd[0],dateEnd[1],dateEnd[2],dateEnd[3],dateEnd[4],dateEnd[5],);
     if (dateInitial != null) {
-      initialTime = DateTime(
-          dateInitial![0],
-          dateInitial![1],
-          dateInitial![2],
-          dateInitial!.length > 3 ? dateInitial![3] : 0,
-          dateInitial!.length > 4 ? dateInitial![4] : 0,
-          dateInitial!.length > 5 ? dateInitial![5] : 0);
+      var initList = List.generate(6, (index) => index < dateInitial!.length ? dateInitial![index] : 0);
+      initialTime = DateTime(initList[0], initList[1], initList[2], initList[3], initList[4], initList[5]);
       if (initialTime.isBefore(startTime)) {
         initialTime = startTime;
       } else if (initialTime.isAfter(endTime)) {
@@ -468,9 +463,9 @@ class DatePickerModel {
 
     var now = DateTime.now();
     if (now.isBefore(startTime)) {
-      initialTime = DateTime(dateStart[0], dateStart[1], dateStart[2], now.hour, now.minute, now.second);
+      initialTime = startTime.copyWith();
     } else if (now.isAfter(endTime)) {
-      initialTime = DateTime(dateEnd[0], dateEnd[1], dateEnd[2], now.hour, now.minute, now.second);
+      initialTime = startTime.copyWith();
     } else {
       initialTime = now;
     }
