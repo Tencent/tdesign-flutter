@@ -3,7 +3,7 @@
     <img alt="TDesign Logo" width="200" src="https://tdesign.gtimg.com/site/TDesign.png" />
   </a>
 </p>
-腾讯TDesign Flutter技术栈组件库，适合在移动端项目中使用。
+腾讯TDesign Flutter技术栈组件库，适合在移动端项目中使用。 
 
 # 特性
 
@@ -196,3 +196,5 @@ TDesign Flutter 依赖以下组件库,感谢作者的开源贡献:
 [flutter_easyrefresh](https://pub-web.flutter-io.cn/packages/easy_refresh)
 
 [flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)
+
+[flutter_slidable](https://pub-web.flutter-io.cn/packages/flutter_slidable)

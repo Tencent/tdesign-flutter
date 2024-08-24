@@ -1,0 +1,21 @@
+
+  Widget _buildSwiperRightCell(BuildContext context) {
+    // 屏幕宽度
+    var screenWidth = MediaQuery.of(context).size.width;
+    return TDSwipeCell(
+      groupTag: 'test',
+      left: TDSwipeCellPanel(
+        extentRatio: 60 / screenWidth,
+        children: [
+          TDSwipeCellAction(
+            backgroundColor: TDTheme.of(context).brandColor7,
+            label: '选择',
+          ),
+        ],
+      ),
+      cell: const TDCell(
+        title: '右滑操作',
+        note: '辅助信息',
+      ),
+    );
+  }
