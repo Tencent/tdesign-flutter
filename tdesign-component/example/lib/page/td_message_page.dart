@@ -15,10 +15,6 @@ class _TDMessagePageState extends State<TDMessagePage> {
 
   final _commonContent = '这是一条普通的通知信息';
 
-  final _demoImage = Image.asset(
-    'assets/img/image.png',
-  );
-
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
