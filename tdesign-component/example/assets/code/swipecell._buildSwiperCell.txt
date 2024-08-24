@@ -1,0 +1,50 @@
+
+  Widget _buildSwiperCell(BuildContext context) {
+    // 屏幕宽度
+    var screenWidth = MediaQuery.of(context).size.width;
+    var list = [
+      {'id': '1', 'title': '左滑操作', 'note': '辅助信息', 'description': ''},
+      {'id': '2', 'title': '左滑操作', 'note': '辅助信息', 'description': '一段很长很长的内容文字'},
+    ];
+    final cellLength = ValueNotifier<int>(list.length);
+    return ValueListenableBuilder(
+      valueListenable: cellLength,
+      builder: (BuildContext context, value, Widget? child) {
+        return TDCellGroup(
+          cells: list.map((e) => TDCell(title: e['title'], note: e['note'], description: e['description'])).toList(),
+          builder: (context, cell, index) {
+            return TDSwipeCell(
+              slidableKey: ValueKey(list[index]['id']),
+              groupTag: 'test',
+              onChange: (direction, open) {
+                print('打开方向：$direction');
+                print('打开转态$open');
+              },
+              right: TDSwipeCellPanel(
+                extentRatio: 60 / screenWidth,
+                // dragDismissible: true,
+                onDismissed: (context) {
+                  list.removeAt(index);
+                  cellLength.value = list.length;
+                },
+                children: [
+                  TDSwipeCellAction(
+                    backgroundColor: TDTheme.of(context).errorColor6,
+                    label: '删除',
+                    onPressed: (context) {
+                      print('点击action');
+                      print(TDSwipeCell.of(context));
+                      print(TDSwipeCellInherited.of(context)?.controller);
+                      list.removeAt(index);
+                      cellLength.value = list.length;
+                    },
+                  ),
+                ],
+              ),
+              cell: cell,
+            );
+          },
+        );
+      },
+    );
+  }

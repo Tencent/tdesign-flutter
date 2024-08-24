@@ -25,7 +25,9 @@
 | semanticsLabel |  | - |  |
 | textWidthBasis |  | - |  |
 | textHeightBehavior |  | - |  |
-| forceVerticalCenter |  | false |  |
+| forceVerticalCenter | bool | false | 是否强制居中 |
+| isInFontLoader | bool | false | 是否在FontLoader中使用 |
+| fontFamilyUrl | String? | - | 是否禁用懒加载FontFamily的能力 |
 | key |  | - |  |
 
 
@@ -66,6 +68,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| paddingConfig | TDTextPaddingConfig? | - | forceVerticalCenter=true时，内置padding配置 |
 | key |  | - |  |
 | child |  | - |  |
+| paddingConfig | TDTextPaddingConfig? | - | forceVerticalCenter=true时，内置padding配置 |
+| globalFontFamily | FontFamily? | - | 全局字体,kTextNeedGlobalFontFamily=true时生效 |

@@ -1,0 +1,31 @@
+
+  Widget _buildHalfCircleBackTop(BuildContext context) {
+    return Column(
+      children: [
+        getCustomButton(context, '半圆形返回顶部', () {
+          setState(() {
+            showBackTop = true;
+            if (controller.hasClients) {
+              controller.jumpTo(500);
+            }
+            style = TDBackTopStyle.halfCircle;
+          });
+        }),
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
+          child: Wrap(
+            spacing: 16,
+            runSpacing: 24,
+            children: [
+              getDemoBox(context),
+              getDemoBox(context),
+              getDemoBox(context),
+              getDemoBox(context),
+              getDemoBox(context),
+              getDemoBox(context),
+            ],
+          ),
+        )
+      ],
+    );
+  }

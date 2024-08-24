@@ -609,6 +609,8 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
     return Column(
       children: [
         TDInput(
+          leftInfoWidth: 80,
+          spacer: TDInputSpacer(iconLabelSpace: 4),
           leftLabel: '标签超长时最多十个字',
           controller: controller[18],
           backgroundColor: Colors.white,
@@ -646,6 +648,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
   @Demo(group: 'input')
   Widget _verticalStyle(BuildContext context) {
     return TDInput(
+      spacer: TDInputSpacer(iconLabelSpace: 0),
       type: TDInputType.twoLine,
       leftLabel: '标签文字',
       controller: controller[20],
