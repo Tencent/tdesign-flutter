@@ -1,0 +1,11 @@
+
+Widget _buildCard(BuildContext context) {
+  return const TDCellGroup(
+    theme: TDCellGroupTheme.cardTheme,
+    cells: [
+      TDCell(arrow: true, title: '单行标题'),
+      TDCell(arrow: true, title: '单行标题', required: true),
+      TDCell(arrow: true, title: '单行标题'),
+    ],
+  );
+}

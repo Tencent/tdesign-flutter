@@ -27,6 +27,8 @@ class TDInputDialog extends StatelessWidget {
     this.leftBtn,
     this.rightBtn,
     this.showCloseButton,
+    this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
+    this.buttonWidget,
   })  : assert((title != null || content != null)),
         super(key: key);
 
@@ -69,15 +71,23 @@ class TDInputDialog extends StatelessWidget {
   /// 显示右上角关闭按钮
   final bool? showCloseButton;
 
+  /// 内容内边距
+  final EdgeInsets? padding;
+
+  /// 自定义按钮
+  final Widget? buttonWidget;
+
   @override
   Widget build(BuildContext context) {
     return TDDialogScaffold(
       showCloseButton: showCloseButton,
-      backgroundColor: backgroundColor,
+      backgroundColor:backgroundColor,
       radius: radius,
       body: Material(
+        color:backgroundColor,
         borderRadius: BorderRadius.all(Radius.circular(radius)),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
+        child: Column(
+            mainAxisSize: MainAxisSize.min, children: [
           TDDialogInfoWidget(
             title: title,
             titleColor: titleColor,
@@ -85,11 +95,15 @@ class TDInputDialog extends StatelessWidget {
             contentWidget: contentWidget,
             content: content,
             contentColor: contentColor,
+            padding: padding,
           ),
           Container(
-            color: Colors.white,
             height: 48,
             margin: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(radius)),
+            ),
             child: TextField(
               controller: textEditingController,
               autofocus: true,
@@ -113,6 +127,9 @@ class TDInputDialog extends StatelessWidget {
   }
 
   Widget _horizontalButtons(BuildContext context) {
+    if(buttonWidget != null) {
+      return buttonWidget!;
+    }
     final left = leftBtn ??
         TDDialogButtonOptions(title: context.resource.cancel, titleColor: const Color(0xE6000000), fontWeight: FontWeight.normal, action: null, height: 56);
     final right = rightBtn ??
