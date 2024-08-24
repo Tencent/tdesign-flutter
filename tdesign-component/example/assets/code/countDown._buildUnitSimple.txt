@@ -1,7 +1,4 @@
 
 TDCountDown _buildUnitSimple(BuildContext context) {
-  return const TDCountDown(
-      time: 60 * 60 * 1000,
-      theme: TDCountDownTheme.square,
-      splitWithUnit: true);
+  return const TDCountDown(time: 60 * 60 * 1000, theme: TDCountDownTheme.square, splitWithUnit: true);
 }

@@ -2,17 +2,20 @@
   Widget _buildPopFromBottomWithTitle(BuildContext context) {
     return TDButton(
       text: '底部弹出层-仅标题',
+      isBlock: true,
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
+      size: TDButtonSize.large,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
+            modalBarrierColor: TDTheme.of(context).fontGyColor2,
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
               return TDPopupBottomDisplayPanel(
                 title: '标题文字',
                 hideClose: true,
-                closeClick: (){
-                  Navigator.pop(context);
+                closeClick: () {
+                  Navigator.maybePop(context);
                 },
                 child: Container(
                   height: 200,

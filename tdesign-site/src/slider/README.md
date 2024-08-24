@@ -16,6 +16,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
+[td_slider_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_slider_page.dart)
+
 ### 1 组件类型
 
 单游标滑块
@@ -313,6 +315,48 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 </td-code-block>
                                   
 
+自定义盒子样式
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildCustomDecoration(BuildContext context) {
+    return Column(
+      children: [
+        TDSlider(
+          sliderThemeData: TDSliderThemeData(
+            min: 0,
+            max: 100,
+          ),
+          value: 40,
+          boxDecoration: BoxDecoration(
+             color: Colors.amber
+          ),
+          // divisions: 5,
+          onChanged: (value) {},
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData.capsule(
+            min: 0,
+            max: 100,
+            scaleFormatter: (value) => value.toInt().toString(),
+          ),
+          boxDecoration: BoxDecoration(
+              color: Colors.deepOrangeAccent
+          ),
+          value: const RangeValues(20, 60),
+          onChanged: (value) {},
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
 
 ## API
 ### TDSlider
@@ -322,6 +366,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | key |  | - |  |
 | value | RangeValues | - | 默认值 |
+| boxDecoration | Decoration? | - | 自定义盒子样式 |
 | onChanged | ValueChanged<RangeValues>? | - | 滑动变化监听 |
 | sliderThemeData | TDSliderThemeData? | - | 样式 |
 | leftLabel | String? | - | 左侧标签 |
@@ -338,6 +383,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | key |  | - |  |
 | value | RangeValues | - | 默认值 |
+| boxDecoration | Decoration? | - | 自定义盒子样式 |
 | onChanged | ValueChanged<RangeValues>? | - | 滑动变化监听 |
 | sliderThemeData | TDSliderThemeData? | - | 样式 |
 | leftLabel | String? | - | 左侧标签 |

@@ -1,0 +1,8 @@
+  
+  TDResult _buildResultWithDescriptionDefault(BuildContext context) {
+    return const TDResult(
+      title: '默认状态',
+      theme: TDResultTheme.defaultTheme,
+      description: '描述文字',
+    );
+  }
