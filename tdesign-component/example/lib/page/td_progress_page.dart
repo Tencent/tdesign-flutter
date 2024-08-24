@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../annotation/demo.dart';
@@ -96,32 +95,32 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildRightLabelLinear(BuildContext context) {
-    return const TDProgress(
-        type: TDProgressType.linear,
+    return TDProgress(
+        type: ProgressType.linear,
         value: 0.8,
         strokeWidth: 6,
-        progressLabelPosition: TDProgressLabelPosition.right);
+        progressLabelPosition: ProgressLabelPosition.right);
   }
 
   @Demo(group: 'progress')
   Widget _buildInsideLabelLinear(BuildContext context) {
-    return const TDProgress(type: TDProgressType.linear, value: 0.8);
+    return TDProgress(type: ProgressType.linear, value: 0.8);
   }
 
   @Demo(group: 'progress')
   Widget _buildCircle(BuildContext context) {
-    return const TDProgress(type: TDProgressType.circular, value: 0.3);
+    return TDProgress(type: ProgressType.circular, value: 0.3);
   }
 
   @Demo(group: 'progress')
   Widget _buildMicro(BuildContext context) {
-    return const TDProgress(type: TDProgressType.micro, value: 0.75);
+    return TDProgress(type: ProgressType.micro, value: 0.75);
   }
 
   @Demo(group: 'progress')
   Widget _buildButton(BuildContext context) {
     return TDProgress(
-        type: TDProgressType.button,
+        type: ProgressType.button,
         onTap: _toggleProgress,
         onLongPress: _resetProgress,
         value: progressValue,
@@ -134,7 +133,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         TDProgress(
-          type: TDProgressType.micro,
+          type: ProgressType.micro,
           value: microProgressValue,
           onTap: _toggleMicroProgress,
           label: TDIconLabel(isPlaying ? Icons.pause : Icons.play_arrow,
@@ -142,7 +141,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
         ),
         const SizedBox(width: 10),
         TDProgress(
-          type: TDProgressType.micro,
+          type: ProgressType.micro,
           value: microProgressValue,
           onTap: _resetMicroProgress,
           label: TDIconLabel(Icons.stop,
@@ -154,73 +153,73 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildPrimary(BuildContext context) {
-    return const TDProgress(
-        type: TDProgressType.linear,
-        progressStatus: TDProgressStatus.primary,
+    return TDProgress(
+        type: ProgressType.linear,
+        progressStatus: ProgressStatus.primary,
         value: 0.8,
         strokeWidth: 6,
-        progressLabelPosition: TDProgressLabelPosition.right);
+        progressLabelPosition: ProgressLabelPosition.right);
   }
 
   @Demo(group: 'progress')
   Widget _buildWarning(BuildContext context) {
-    return const TDProgress(
-        type: TDProgressType.linear,
-        progressStatus: TDProgressStatus.warning,
+    return TDProgress(
+        type: ProgressType.linear,
+        progressStatus: ProgressStatus.warning,
         value: 0.8,
         strokeWidth: 6,
-        progressLabelPosition: TDProgressLabelPosition.right);
+        progressLabelPosition: ProgressLabelPosition.right);
   }
 
   @Demo(group: 'progress')
   Widget _buildDanger(BuildContext context) {
-    return const TDProgress(
-        type: TDProgressType.linear,
-        progressStatus: TDProgressStatus.danger,
+    return TDProgress(
+        type: ProgressType.linear,
+        progressStatus: ProgressStatus.danger,
         value: 0.8,
         strokeWidth: 6,
-        progressLabelPosition: TDProgressLabelPosition.right);
+        progressLabelPosition: ProgressLabelPosition.right);
   }
 
   @Demo(group: 'progress')
   Widget _buildSuccess(BuildContext context) {
-    return const TDProgress(
-        type: TDProgressType.linear,
-        progressStatus: TDProgressStatus.success,
+    return TDProgress(
+        type: ProgressType.linear,
+        progressStatus: ProgressStatus.success,
         value: 0.8,
         strokeWidth: 6,
-        progressLabelPosition: TDProgressLabelPosition.right);
+        progressLabelPosition: ProgressLabelPosition.right);
   }
 
   @Demo(group: 'progress')
   Widget _buildCirclePrimary(BuildContext context) {
-    return const TDProgress(
-        type: TDProgressType.circular,
-        progressStatus: TDProgressStatus.primary,
+    return TDProgress(
+        type: ProgressType.circular,
+        progressStatus: ProgressStatus.primary,
         value: 0.3);
   }
 
   @Demo(group: 'progress')
   Widget _buildCircleWarning(BuildContext context) {
-    return const TDProgress(
-        type: TDProgressType.circular,
-        progressStatus: TDProgressStatus.warning,
+    return TDProgress(
+        type: ProgressType.circular,
+        progressStatus: ProgressStatus.warning,
         value: 0.3);
   }
 
   @Demo(group: 'progress')
   Widget _buildCircleDanger(BuildContext context) {
-    return const TDProgress(
-        type: TDProgressType.circular,
-        progressStatus: TDProgressStatus.danger,
+    return TDProgress(
+        type: ProgressType.circular,
+        progressStatus: ProgressStatus.danger,
         value: 0.3);
   }
 
   @Demo(group: 'progress')
   Widget _buildCircleSuccess(BuildContext context) {
-    return const TDProgress(
-        type: TDProgressType.circular,
-        progressStatus: TDProgressStatus.success,
+    return TDProgress(
+        type: ProgressType.circular,
+        progressStatus: ProgressStatus.success,
         value: 1);
   }
 

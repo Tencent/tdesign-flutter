@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
-enum TDProgressType { linear, circular, micro, button }
+enum ProgressType { linear, circular, micro, button }
 
-enum TDProgressLabelPosition { inside, left, right }
+enum ProgressLabelPosition { inside, left, right }
 
-enum TDProgressStatus { primary, warning, danger, success }
+enum ProgressStatus { primary, warning, danger, success }
 
-enum ProgressStrokeCap {
-  round,
-  square,
-  butt,
-}
+enum ProgressStrokeCap { round, square, butt }
+
+enum ProgressAnimationCurve { easeIn, easeOut, easeInout }
 
 abstract class TDLabelWidget extends Widget {
   const TDLabelWidget({super.key});
@@ -30,21 +28,21 @@ class TDIconLabel extends Icon implements TDLabelWidget {
 /// 进度条组件
 class TDProgress extends StatelessWidget {
   /// 进度条类型
-  final TDProgressType type;
+  final ProgressType type;
 
-  /// 进度值
+  /// 进度值 (0.0 到 1.0 之间的正数)
   final double? value;
 
   /// 进度条标签
   final TDLabelWidget? label;
 
   /// 进度条状态
-  final TDProgressStatus progressStatus;
+  final ProgressStatus progressStatus;
 
   /// 标签显示位置
-  final TDProgressLabelPosition progressLabelPosition;
+  final ProgressLabelPosition progressLabelPosition;
 
-  /// 进度条粗细
+  /// 进度条粗细 (正数)
   final double? strokeWidth;
 
   /// 进度条颜色
@@ -56,7 +54,7 @@ class TDProgress extends StatelessWidget {
   /// 进度条末端形状
   final ProgressStrokeCap? strokeCap;
 
-  /// 进度条背景圆角
+  /// 环形进度条半径 (正数)
   final double? circleRadius;
 
   /// 是否显示标签
@@ -68,29 +66,69 @@ class TDProgress extends StatelessWidget {
   /// 长按事件
   final VoidCallback? onLongPress;
 
-  const TDProgress({
+  /// 动画持续时间 (正整数，单位为毫秒)
+  final int animationDuration;
+
+  TDProgress({
     Key? key,
     required this.type,
     double? value,
     this.label,
-    this.progressStatus = TDProgressStatus.primary,
-    this.progressLabelPosition = TDProgressLabelPosition.inside,
-    this.strokeWidth,
+    this.progressStatus = ProgressStatus.primary,
+    this.progressLabelPosition = ProgressLabelPosition.inside,
+    double? strokeWidth,
     this.color,
     this.backgroundColor,
     this.strokeCap,
-    this.circleRadius,
+    double? circleRadius,
     this.showLabel = true,
     this.onTap,
     this.onLongPress,
-  })  : value =
-            (value == null) ? null : (value < 0 ? 0 : (value > 1 ? 1 : value)),
+    int animationDuration = 300,
+  })  : value = _validateProgress(value),
+        strokeWidth = _validatePositiveDouble(strokeWidth, 'strokeWidth'),
+        circleRadius = _validatePositiveDouble(circleRadius, 'circleRadius'),
+        animationDuration = _validatePositiveInt(animationDuration, 'animationDuration'),
         super(key: key);
+
+  // 验证进度值
+  static double? _validateProgress(double? value) {
+    if (value == null) {
+      return null;
+    }
+    if (value < 0) {
+      return 0;
+    }
+    if (value > 1) {
+      return 1;
+    }
+    return value;
+  }
+
+  // 验证正数 double 值
+  static double? _validatePositiveDouble(double? value, String paramName) {
+    if (value == null) {
+      return null;
+    }
+    if (value <= 0) {
+      throw ArgumentError('$paramName must be a positive number');
+    }
+    return value;
+  }
+
+  // 验证正整数
+  static int _validatePositiveInt(int value, String paramName) {
+    if (value <= 0) {
+      throw ArgumentError('$paramName must be a positive number');
+    }
+    return value;
+  }
+
 
   @override
   Widget build(BuildContext context) {
     final defaultValues = _getDefaultValues(type);
-    return MyProgressIndicator(
+    return ProgressIndicator(
       value: value,
       label: label,
       progressStatus: progressStatus,
@@ -104,38 +142,39 @@ class TDProgress extends StatelessWidget {
       onTap: onTap,
       onLongPress: onLongPress,
       type: type,
+
     );
   }
 
-  _DefaultValues _getDefaultValues(TDProgressType type) {
+  _DefaultValues _getDefaultValues(ProgressType type) {
     switch (type) {
-      case TDProgressType.linear:
+      case ProgressType.linear:
         return _DefaultValues(
           strokeWidth: 20.0,
           backgroundColor: TDTheme.of().grayColor3,
           strokeCap: ProgressStrokeCap.round,
-          circleRadius: 0, // Not applicable for linear progress
+          circleRadius: 0, 
         );
-      case TDProgressType.circular:
+      case ProgressType.circular:
         return _DefaultValues(
           strokeWidth: 5.0,
           backgroundColor: TDTheme.of().grayColor2,
           strokeCap: ProgressStrokeCap.round,
           circleRadius: 80.0,
         );
-      case TDProgressType.micro:
+      case ProgressType.micro:
         return _DefaultValues(
           strokeWidth: 2.0,
           backgroundColor: TDTheme.of().grayColor2,
           strokeCap: ProgressStrokeCap.round,
           circleRadius: 20.0,
         );
-      case TDProgressType.button:
+      case ProgressType.button:
         return _DefaultValues(
           strokeWidth: 60.0,
           backgroundColor: TDTheme.of().brandNormalColor,
           strokeCap: ProgressStrokeCap.butt,
-          circleRadius: 0, // Not applicable for button progress
+          circleRadius: 0, 
         );
     }
   }
@@ -156,43 +195,45 @@ class _DefaultValues {
 }
 
 /// 构建工具类
-class MyProgressIndicator extends StatefulWidget {
+class ProgressIndicator extends StatefulWidget {
   final double? value;
   final TDLabelWidget? label;
-  final TDProgressLabelPosition progressLabelPosition;
+  final ProgressLabelPosition progressLabelPosition;
   final double strokeWidth;
   final double circleRadius;
   final ProgressStrokeCap strokeCap;
   final Color? color;
   final Color backgroundColor;
-  final TDProgressType type;
-  final TDProgressStatus progressStatus;
+  final ProgressType type;
+  final ProgressStatus progressStatus;
   final bool showLabel;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
+  final int animationDuration;
 
-  const MyProgressIndicator({
+  const ProgressIndicator({
     Key? key,
     this.value,
     this.label,
-    this.progressLabelPosition = TDProgressLabelPosition.inside,
+    this.progressLabelPosition = ProgressLabelPosition.inside,
     required this.strokeWidth,
     required this.strokeCap,
     required this.circleRadius,
     this.color,
     required this.backgroundColor,
     required this.type,
-    this.progressStatus = TDProgressStatus.primary,
+    this.progressStatus = ProgressStatus.primary,
     this.showLabel = true,
     this.onTap,
     this.onLongPress,
+    this.animationDuration = 300,
   }) : super(key: key);
 
   @override
   _ProgressIndicatorState createState() => _ProgressIndicatorState();
 }
 
-class _ProgressIndicatorState extends State<MyProgressIndicator>
+class _ProgressIndicatorState extends State<ProgressIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -204,10 +245,7 @@ class _ProgressIndicatorState extends State<MyProgressIndicator>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      value: widget.value ?? 0,
-      duration: Duration(
-          milliseconds:
-              widget.value != null ? (widget.value! * 1000).toInt() : 1000),
+      duration: Duration(milliseconds: widget.animationDuration),
     );
     _updateAnimation();
     _updateEffectiveColor();
@@ -215,7 +253,7 @@ class _ProgressIndicatorState extends State<MyProgressIndicator>
   }
 
   @override
-  void didUpdateWidget(MyProgressIndicator oldWidget) {
+  void didUpdateWidget(ProgressIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
       _updateAnimation(oldWidgetValue: oldWidget.value);
@@ -252,35 +290,35 @@ class _ProgressIndicatorState extends State<MyProgressIndicator>
   }
 
   void _updateAnimation({double? oldWidgetValue}) {
-    _animation = Tween<double>(begin: _animationController.value, end: widget.value ?? 0)
+    _animation = Tween<double>(begin: oldWidgetValue ?? _animationController.value, end: widget.value)
         .animate(_animationController);
-    _animationController.forward(from: _animationController.value);
+    _animationController.forward(from: 0);
   }
 
-  Widget _getDefaultLabelFromStatus(TDProgressStatus status) {
-    final bool showAutoText = widget.value != null;
-    final bool showInsideLabel =
-        widget.progressLabelPosition == TDProgressLabelPosition.inside &&
-            widget.type != TDProgressType.circular;
-    final bool showIconBorder = widget.type == TDProgressType.linear;
+  Widget _getDefaultLabelFromStatus(ProgressStatus status) {
+    final showAutoText = widget.value != null;
+    final showInsideLabel =
+        widget.progressLabelPosition == ProgressLabelPosition.inside &&
+            widget.type != ProgressType.circular;
+    final showIconBorder = widget.type == ProgressType.linear;
 
-    Widget getAutoText() => showAutoText && widget.type != TDProgressType.micro
+    Widget getAutoText() => showAutoText && widget.type != ProgressType.micro
         ? Text('${(widget.value! * 100).round()}%')
         : const Text('');
 
     final statusWidgets = {
-      TDProgressStatus.primary: getAutoText(),
-      TDProgressStatus.warning: showInsideLabel
+      ProgressStatus.primary: getAutoText(),
+      ProgressStatus.warning: showInsideLabel
           ? getAutoText()
           : showIconBorder
               ? const Icon(TDIcons.error_circle_filled)
               : const Icon(TDIcons.error),
-      TDProgressStatus.danger: showInsideLabel
+      ProgressStatus.danger: showInsideLabel
           ? getAutoText()
           : showIconBorder
               ? const Icon(TDIcons.close_circle_filled)
               : const Icon(TDIcons.close),
-      TDProgressStatus.success: showInsideLabel
+      ProgressStatus.success: showInsideLabel
           ? getAutoText()
           : showIconBorder
               ? const Icon(TDIcons.check_circle_filled)
@@ -290,15 +328,15 @@ class _ProgressIndicatorState extends State<MyProgressIndicator>
     return statusWidgets[status] ?? getAutoText();
   }
 
-  Color _getColorFromStatus(TDProgressStatus status) {
+  Color _getColorFromStatus(ProgressStatus status) {
     switch (status) {
-      case TDProgressStatus.primary:
+      case ProgressStatus.primary:
         return TDTheme.of().brandNormalColor;
-      case TDProgressStatus.warning:
+      case ProgressStatus.warning:
         return TDTheme.of().warningNormalColor;
-      case TDProgressStatus.danger:
+      case ProgressStatus.danger:
         return TDTheme.of().errorNormalColor;
-      case TDProgressStatus.success:
+      case ProgressStatus.success:
         return TDTheme.of().successNormalColor;
     }
   }
@@ -325,13 +363,13 @@ class _ProgressIndicatorState extends State<MyProgressIndicator>
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (widget.type == TDProgressType.linear)
+        if (widget.type == ProgressType.linear)
           _buildLinearProgress()
-        else if (widget.type == TDProgressType.circular)
+        else if (widget.type == ProgressType.circular)
           _buildCircularProgress()
-        else if (widget.type == TDProgressType.micro)
+        else if (widget.type == ProgressType.micro)
           _buildMicroProgress()
-        else if (widget.type == TDProgressType.button)
+        else if (widget.type == ProgressType.button)
           _buildButtonProgress()
       ],
     );
@@ -343,7 +381,7 @@ class _ProgressIndicatorState extends State<MyProgressIndicator>
         final maxWidth = constraints.maxWidth;
 
         if (widget.value != null &&
-            widget.progressLabelPosition == TDProgressLabelPosition.inside) {
+            widget.progressLabelPosition == ProgressLabelPosition.inside) {
           return _buildInsideLabel(maxWidth);
         } else {
           return _buildOutsideLabel();
@@ -377,7 +415,7 @@ class _ProgressIndicatorState extends State<MyProgressIndicator>
         return Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (widget.progressLabelPosition == TDProgressLabelPosition.left)
+            if (widget.progressLabelPosition == ProgressLabelPosition.left)
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: _buildLabelWidget(TDTheme.of().fontGyColor1),
@@ -391,7 +429,7 @@ class _ProgressIndicatorState extends State<MyProgressIndicator>
                 minHeight: widget.strokeWidth,
               ),
             ),
-            if (widget.progressLabelPosition == TDProgressLabelPosition.right)
+            if (widget.progressLabelPosition == ProgressLabelPosition.right)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: _buildLabelWidget(TDTheme.of().fontGyColor1),
@@ -459,8 +497,8 @@ class _ProgressIndicatorState extends State<MyProgressIndicator>
     late FontWeight fontWeight;
 
     switch (widget.type) {
-      case TDProgressType.linear:
-        if (widget.progressLabelPosition != TDProgressLabelPosition.inside) {
+      case ProgressType.linear:
+        if (widget.progressLabelPosition != ProgressLabelPosition.inside) {
           fontSize = widget.strokeWidth > 14 ? widget.strokeWidth : 14;
           iconSize = widget.strokeWidth > 20 ? widget.strokeWidth : 20;
         } else {
@@ -469,17 +507,17 @@ class _ProgressIndicatorState extends State<MyProgressIndicator>
         }
         fontWeight = FontWeight.normal;
         break;
-      case TDProgressType.circular:
+      case ProgressType.circular:
         iconSize = widget.circleRadius * 0.4;
         fontSize = widget.circleRadius * 0.2;
         fontWeight = FontWeight.bold;
         break;
-      case TDProgressType.micro:
+      case ProgressType.micro:
         iconSize = widget.circleRadius * 0.6;
         fontSize = widget.circleRadius * 0.2;
         fontWeight = FontWeight.normal;
         break;
-      case TDProgressType.button:
+      case ProgressType.button:
         iconSize = widget.strokeWidth * 0.8;
         fontSize = widget.strokeWidth * 0.3;
         fontWeight = FontWeight.normal;
