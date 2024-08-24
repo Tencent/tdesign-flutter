@@ -16,6 +16,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
+[td_radio_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_radio_page.dart)
+
 ### 1 组件类型
 
 纵向单选框
@@ -23,7 +25,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _verticleRadios(BuildContext context) {
+  Widget _verticalRadios(BuildContext context) {
     return TDRadioGroup(
       selectId: 'index:1',
       child: ListView.builder(
@@ -202,7 +204,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         padding: const EdgeInsets.all(0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (contet, index) {
+        itemBuilder: (context, index) {
           var title = '单选';
           return TDRadio(
             id: 'index:$index',

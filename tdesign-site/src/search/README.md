@@ -16,6 +16,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
+[td_search_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_search_page.dart)
+
 ### 1 组件类型
 
 基础搜索框
@@ -134,6 +136,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | autoFocus | bool | false | 是否自动获取焦点 |
 | mediumStyle | bool | false | 是否在导航栏中的样式 |
 | needCancel | bool | false | 是否需要取消按钮 |
+| controller | TextEditingController? | - | 控制器 |
 | backgroundColor | Color? | Colors.white | 背景颜色 |
 
 

@@ -1,8 +1,8 @@
 # flutter AOP 补丁
 # TODO: 指定自己的flutter目录，并且切换到3.10.0版本
-flutterDir=$1
+flutterDir=/Users/zflyluo/tools/flutter
 # TODO:指定当前example的目录，后面不带"/"
-projectDir=$2
+projectDir=/Users/zflyluo/WorkSpace/flutter/tdesign_group/tdesign-mobile-flutter/tdesign-component
 # 指定aop运行版本
 version=3.10.0
 

@@ -5,6 +5,36 @@ toc: false
 docClass: timeline
 ---
 
+## 🌈 0.1.6 `2024-07-24` 
+### 🚀 Features
+- `Cell`: 新增 Cell 单元格 组件 @hkaikai ([#150](https://github.com/Tencent/tdesign-flutter/pull/150))
+- `Drawer`: 新增Drawer 抽屉 组件 @hkaikai ([#178](https://github.com/Tencent/tdesign-flutter/pull/178))
+- `SwipeCell`: 新增SwipeCell 滑动操作 组件 @hkaikai ([#218](https://github.com/Tencent/tdesign-flutter/pull/218))
+- `Steps`: 新增 Steps 步骤条 组件 @aaronmhl ([#199](https://github.com/Tencent/tdesign-flutter/pull/199))
+- `ImageViewer`: 新增ImageViewer 图片预览 组件 @ccXxx1aoBai ([#187](https://github.com/Tencent/tdesign-flutter/pull/187))
+- `Cascader`:新增 Cascader 级联选择器 组件@shizhe2018 ([#195](https://github.com/Tencent/tdesign-flutter/pull/195))
+- `Fab`:新增 Fab 悬浮按钮 组件 @TingShine ([#239](https://github.com/Tencent/tdesign-flutter/pull/239))
+- `BackTop`:新增 BackTop 返回顶部 组件 @TingShine ([#239](https://github.com/Tencent/tdesign-flutter/pull/239))
+- `TreeSelect`:新增 TreeSelect 树形选择器 组件 @TingShine ([#239](https://github.com/Tencent/tdesign-flutter/pull/239))
+- `Collapse`:新增 Collapse 折叠面板 组件 @dorayx ([#239](https://github.com/Tencent/tdesign-flutter/pull/239))
+- `Input`: 新增inputAction API，支持设置键盘行为；新增spacer API,可自定义组件间距 @ccXxx1aoBai ([#184](https://github.com/Tencent/tdesign-flutter/pull/184))
+- `Text`: 增加全局字体配置和加载网络字体的能力 @Luozf12345 ([#232](https://github.com/Tencent/tdesign-flutter/pull/232))
+- `CountDown`: 添加 开始/重置/暂停/继续 的控制功能 @hkaikai ([#175](https://github.com/Tencent/tdesign-flutter/pull/175))
+- `Popup`: 支持位置，大小设置 @hkaikai ([#191](https://github.com/Tencent/tdesign-flutter/pull/191))
+### 🐞 Bug Fixes
+- `Toast`: 解决duration属性无效问题 @ccXxx1aoBai ([#167](https://github.com/Tencent/tdesign-flutter/pull/167))
+- `Tnput`: 解决label溢出问题 @ccXxx1aoBai ([#184](https://github.com/Tencent/tdesign-flutter/pull/184))
+- `Tabs`:tabs组件outlineType为capsule支持设置选中和未选中tab背景色，outlineType为card支持设置选中tab背景色 @ccXxx1aoBai 
+- `Button`: 修复setState方法下属性无法改变的问题 @shizhe2018 ([#201](https://github.com/Tencent/tdesign-flutter/pull/201))
+- `SearchBar`:搜索框增加控制器，允许外部清除搜索文本 @shizhe2018 ([#194](https://github.com/Tencent/tdesign-flutter/pull/194))
+- `Slider`: 新增自定义Decoration样式 @shizhe2018 ([#198](https://github.com/Tencent/tdesign-flutter/pull/198))
+- `Empty`: 新增文字大小样式 api @shizhe2018 ([#219](https://github.com/Tencent/tdesign-flutter/pull/219))
+- `Dialog`: 新增input类型背景 @shizhe2018 ([#238](https://github.com/Tencent/tdesign-flutter/pull/238))
+### 🚧 Others
+- 鸿蒙编译支持 @hkaikai ([#233](https://github.com/Tencent/tdesign-flutter/pull/233))
+- 修改主题适配工具 @Luozf12345
+- 演示代码新增完整页面的github链接 @Luozf12345
+
 ## 🌈 0.1.5 `2024-05-31`
 
 ### 🚀 Features
@@ -166,7 +196,7 @@ docClass: timeline
 
 ## 0.0.7
 
-* 修改 exmaple的main.dart
+* 修改 example的main.dart
 
 ## 0.0.6
 

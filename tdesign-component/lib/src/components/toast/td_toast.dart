@@ -15,8 +15,9 @@ class TDToast {
       {required BuildContext context,
       Duration duration = TDToast._defaultDisPlayDuration,
       int? maxLines,
-      BoxConstraints? constraints}) {
-    _showOverlay(_TDTextToast(text: text, maxLines: maxLines, constraints: constraints), context: context);
+      BoxConstraints? constraints,
+      bool? preventTap}) {
+    _showOverlay(_TDTextToast(text: text, maxLines: maxLines, constraints: constraints), context: context, duration: duration, preventTap: preventTap);
   }
 
   /// 带图标的Toast
@@ -24,73 +25,86 @@ class TDToast {
       {IconData? icon,
       IconTextDirection direction = IconTextDirection.horizontal,
       required BuildContext context,
-      Duration duration = TDToast._defaultDisPlayDuration}) {
+      Duration duration = TDToast._defaultDisPlayDuration,
+      bool? preventTap}) {
     _showOverlay(
         _TDIconTextToast(
           text: text,
           iconData: icon,
           iconTextDirection: direction,
         ),
-        context: context);
+        context: context,
+        duration: duration,
+        preventTap: preventTap);
   }
 
   /// 成功提示Toast
   static void showSuccess(String? text,
       {IconTextDirection direction = IconTextDirection.horizontal,
       required BuildContext context,
-      Duration duration = TDToast._defaultDisPlayDuration}) {
+      Duration duration = TDToast._defaultDisPlayDuration,
+      bool? preventTap}) {
     _showOverlay(
         _TDIconTextToast(
           text: text,
           iconData: TDIcons.check_circle,
           iconTextDirection: direction,
         ),
-        context: context);
+        context: context,
+        duration: duration,
+        preventTap: preventTap);
   }
 
   /// 警告Toast
   static void showWarning(String? text,
       {IconTextDirection direction = IconTextDirection.horizontal,
       required BuildContext context,
-      Duration duration = TDToast._defaultDisPlayDuration}) {
+      Duration duration = TDToast._defaultDisPlayDuration,
+      bool? preventTap}) {
     _showOverlay(
         _TDIconTextToast(
           text: text,
           iconData: TDIcons.error_circle,
           iconTextDirection: direction,
         ),
-        context: context);
+        context: context,
+        duration: duration,
+        preventTap: preventTap);
   }
 
   /// 失败提示Toast
   static void showFail(String? text,
       {IconTextDirection direction = IconTextDirection.horizontal,
       required BuildContext context,
-      Duration duration = TDToast._defaultDisPlayDuration}) {
+      Duration duration = TDToast._defaultDisPlayDuration,
+      bool? preventTap}) {
     _showOverlay(
         _TDIconTextToast(
           text: text,
           iconData: TDIcons.close_circle,
           iconTextDirection: direction,
         ),
-        context: context);
+        context: context,
+        duration: duration,
+        preventTap: preventTap);
   }
 
   /// 带文案的加载Toast
   static void showLoading(
-      {required BuildContext context, String? text, Duration duration = TDToast._defaultDisPlayDuration}) {
+      {required BuildContext context, String? text, Duration duration = TDToast._infiniteDuration, bool? preventTap}) {
     _showOverlay(
         _TDToastLoading(
           text: text,
         ),
         context: context,
-        duration: TDToast._infiniteDuration);
+        duration: duration,
+        preventTap: preventTap);
   }
 
   /// 不带文案的加载Toast
   static void showLoadingWithoutText(
-      {required BuildContext context, String? text, Duration duration = TDToast._defaultDisPlayDuration}) {
-    _showOverlay(const _TDToastLoadingWithoutText(), context: context, duration: TDToast._infiniteDuration);
+      {required BuildContext context, String? text, Duration duration = TDToast._infiniteDuration, bool? preventTap}) {
+    _showOverlay(const _TDToastLoadingWithoutText(), context: context, duration: duration, preventTap: preventTap);
   }
 
   /// 关闭加载Toast
@@ -99,18 +113,41 @@ class TDToast {
   }
 
   static void _showOverlay(Widget? widget,
-      {required BuildContext context, Duration duration = TDToast._defaultDisPlayDuration}) {
+      {required BuildContext context, Duration duration = TDToast._defaultDisPlayDuration,
+      bool? preventTap}) {
     _cancel();
     _showing = true;
     var overlayState = Overlay.of(context);
     _overlayEntry = OverlayEntry(
         builder: (BuildContext context) => Center(
-              child: AnimatedOpacity(
-                opacity: _showing ? 1.0 : 0.0,
-                duration: _showing ? const Duration(milliseconds: 100) : const Duration(milliseconds: 200),
-                child: widget,
+          child: AnimatedOpacity(
+            opacity: _showing ? 1.0 : 0.0,
+            duration: _showing ? const Duration(milliseconds: 100) : const Duration(milliseconds: 200),
+            child: widget,
+          ),
+        ));
+
+    if(preventTap ?? false) {
+      _overlayEntry = OverlayEntry(
+          builder: (BuildContext context) => Positioned(
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            child: Container(
+              color: Colors.transparent,
+              child: Align(
+                alignment: Alignment.center,
+                child: AnimatedOpacity(
+                  opacity: _showing ? 1.0 : 0.0,
+                  duration: _showing ? const Duration(milliseconds: 100) : const Duration(milliseconds: 200),
+                  child: widget,
+                ),
               ),
-            ));
+            ),
+          ),
+      );
+    }
     if (_overlayEntry != null) {
       overlayState?.insert(_overlayEntry!);
     }
