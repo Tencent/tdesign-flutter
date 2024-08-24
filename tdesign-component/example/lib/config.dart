@@ -37,6 +37,7 @@ import 'page/td_popup_page.dart';
 import 'page/td_radio_page.dart';
 import 'page/td_radius_page.dart';
 import 'page/td_refresh_page.dart';
+import 'page/td_result_page.dart';
 import 'page/td_search_bar_page.dart';
 import 'page/td_shadows_page.dart';
 import 'page/td_slider_page.dart';
@@ -190,8 +191,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Result 结果',
         name: 'result',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDResultPage())),
     ExamplePageModel(
         text: 'Skeleton 骨架屏',
         name: 'skeleton',
