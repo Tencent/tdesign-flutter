@@ -32,10 +32,17 @@ class _TDSliderPageState extends State<TDSliderPage> {
             ExampleItem(desc: '带刻度双游标滑块', builder: _buildDoubleHandleWithScale),
           ]),
           ExampleModule(title: '组件状态', children: [
-            ExampleItem(desc: '禁用状态', builder: _buildDisable),
+            ExampleItem(desc: '禁用状态', builder: _buildDisableSingleHandle),
+            ExampleItem(builder: _buildDisableDoubleHandleWithNumber),
+            ExampleItem(builder: _buildDisableDoubleHandleWithScale),
           ]),
           ExampleModule(title: '特殊样式', children: [
-            ExampleItem(desc: '胶囊型滑块', builder: _buildCapsule),
+            ExampleItem(desc: '胶囊型滑块', builder: _buildCapsuleSingleHandleWithNumber),
+            ExampleItem(builder: _buildCapsuleDoubleHandle),
+            ExampleItem(builder: _buildCapsuleSingleHandle),
+            ExampleItem(builder: _buildCapsuleDoubleHandleWithNumber),
+            ExampleItem(builder: _buildCapsuleSingleHandleWithScale),
+            ExampleItem(builder: _buildCapsuleDoubleHandleWithScale),
           ]),
         ]);
   }
@@ -48,7 +55,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
         max: 100,
       ),
       value: 10,
-      // divisions: 5,
       onChanged: (value) {},
     );
   }
@@ -61,7 +67,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
         max: 100,
       ),
       value: const RangeValues(10, 60),
-      // divisions: 5,
       onChanged: (value) {},
     );
   }
@@ -78,7 +83,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
       value: 10,
       leftLabel: '0',
       rightLabel: '100',
-      // divisions: 5,
       onChanged: (value) {},
     );
   }
@@ -95,7 +99,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
       leftLabel: '0',
       rightLabel: '100',
       value: const RangeValues(40, 60),
-      // divisions: 5,
       onChanged: (value) {},
     );
   }
@@ -111,7 +114,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
         scaleFormatter: (value) => value.toInt().toString(),
       ),
       value: 60,
-      // divisions: 5,
       onChanged: (value) {},
     );
   }
@@ -127,153 +129,143 @@ class _TDSliderPageState extends State<TDSliderPage> {
         scaleFormatter: (value) => value.toInt().toString(),
       ),
       value: const RangeValues(40, 70),
-      // divisions: 5,
       onChanged: (value) {},
     );
   }
 
   @Demo(group: 'slider')
-  Widget _buildDisable(BuildContext context) {
-    return Column(
-      children: [
-        TDSlider(
-          sliderThemeData: TDSliderThemeData(
-            min: 0,
-            max: 100,
-          ),
-          value: 40,
-          leftLabel: '0',
-          rightLabel: '100',
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData(
-            min: 0,
-            max: 100,
-            showThumbValue: true,
-            scaleFormatter: (value) => value.toInt().toString(),
-          ),
-          value: const RangeValues(20, 60),
-          leftLabel: '0',
-          rightLabel: '100',
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData(
-            showScaleValue: true,
-            divisions: 5,
-            min: 0,
-            max: 100,
-            scaleFormatter: (value) => value.toInt().toString(),
-          ),
-          value: const RangeValues(20, 60),
-        ),
-      ],
+  Widget _buildDisableSingleHandle(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData(
+        min: 0,
+        max: 100,
+      ),
+      leftLabel: '0',
+      rightLabel: '100',
+      value: 40,
     );
   }
 
   @Demo(group: 'slider')
-  Widget _buildCapsule(BuildContext context) {
-    return Column(
-      children: [
-        TDSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
-            showThumbValue: true,
-            min: 0,
-            max: 100,
-            scaleFormatter: (value) => value.toInt().toString(),
-          ),
-          value: 40,
-          // divisions: 5,
-          onChanged: (value) {},
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
-            min: 0,
-            max: 100,
-            scaleFormatter: (value) => value.toInt().toString(),
-          ),
-          value: const RangeValues(20, 60),
-          // divisions: 5,
-          onChanged: (value) {},
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        TDSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
-            min: 0,
-            max: 100,
-            scaleFormatter: (value) => value.toInt().toString(),
-          ),
-          leftLabel: '0',
-          rightLabel: '100',
-          value: 40,
-          // divisions: 5,
-          onChanged: (value) {},
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
-            min: 0,
-            max: 100,
-            showThumbValue: true,
-            scaleFormatter: (value) => value.toInt().toString(),
-          ),
-          value: const RangeValues(20, 60),
-          leftLabel: '0',
-          rightLabel: '100',
-          // divisions: 5,
-          onChanged: (value) {},
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        TDSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
-            showScaleValue: true,
-            divisions: 5,
-            min: 0,
-            max: 100,
-            scaleFormatter: (value) => value.toInt().toString(),
-          )..updateSliderThemeData((data) => data.copyWith(
-                activeTickMarkColor: const Color(0xFFE7E7E7),
-                inactiveTickMarkColor: const Color(0xFFE7E7E7),
-              )),
-          value: 60,
-          // divisions: 5,
-          onChanged: (value) {},
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
-            showScaleValue: true,
-            divisions: 5,
-            min: 0,
-            max: 100,
-            scaleFormatter: (value) => value.toInt().toString(),
-          )
-            ..updateSliderThemeData((data) =>
-                data.copyWith(
-                  activeTickMarkColor: const Color(0xFFE7E7E7),
-                  inactiveTickMarkColor: const Color(0xFFE7E7E7),
-                )),
-          value: const RangeValues(20, 60),
-          // divisions: 5,
-          onChanged: (value) {},
-        )
-      ],
+  Widget _buildDisableDoubleHandleWithNumber(BuildContext context) {
+    return TDRangeSlider(
+      sliderThemeData: TDSliderThemeData(
+        showThumbValue: true,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      leftLabel: '0',
+      rightLabel: '100',
+      value: const RangeValues(20, 60),
+    );
+  }
+
+  @Demo(group: 'slider')
+  Widget _buildDisableDoubleHandleWithScale(BuildContext context) {
+    return TDRangeSlider(
+      sliderThemeData: TDSliderThemeData(
+        showScaleValue: true,
+        divisions: 5,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      value: const RangeValues(20, 60),
+    );
+  }
+  
+  @Demo(group: 'slider')
+  Widget _buildCapsuleSingleHandleWithNumber(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        showThumbValue: true,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      value: 40,
+      onChanged: (value) {},
+    );
+  }
+
+  @Demo(group: 'slider')
+  Widget _buildCapsuleDoubleHandle(BuildContext context) {
+    return TDRangeSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      value: const RangeValues(20, 60),
+      onChanged: (value) {},
+    );
+  }
+
+  @Demo(group: 'slider')
+  Widget _buildCapsuleSingleHandle(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      leftLabel: '0',
+      rightLabel: '100',
+      value: 40,
+      onChanged: (value) {},
+    );
+  }
+
+  @Demo(group: 'slider')
+  Widget _buildCapsuleDoubleHandleWithNumber(BuildContext context) {
+    return TDRangeSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        showThumbValue: true,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      leftLabel: '0',
+      rightLabel: '100',
+      value: const RangeValues(20, 60),
+      onChanged: (value) {},
+    );
+  }
+
+  @Demo(group: 'slider')
+  Widget _buildCapsuleSingleHandleWithScale(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        showScaleValue: true,
+        divisions: 5,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      )..updateSliderThemeData((data) => data.copyWith(
+           activeTickMarkColor: const Color(0xFFE7E7E7),
+           inactiveTickMarkColor: const Color(0xFFE7E7E7),
+      )),
+      value: 60,
+      onChanged: (value) {},
+    );
+  }
+
+  @Demo(group: 'slider')
+  Widget _buildCapsuleDoubleHandleWithScale(BuildContext context) {
+    return TDRangeSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        showScaleValue: true,
+        divisions: 5,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      )..updateSliderThemeData((data) => data.copyWith(
+           activeTickMarkColor: const Color(0xFFE7E7E7),
+           inactiveTickMarkColor: const Color(0xFFE7E7E7),
+      )),
+      value: const RangeValues(20, 60),
+      onChanged: (value) {},
     );
   }
 }
