@@ -54,6 +54,10 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
 
   @Demo(group: 'image_viewer')
   Widget _actionImageViewer(BuildContext context) {
+    var delImages = [
+      'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
+      'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
+    ];
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -63,7 +67,7 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
       onTap: () {
         TDImageViewer.showImageViewer(
           context: context,
-          images: images,
+          images: delImages,
           showIndex: true,
           deleteBtn: true,
         );

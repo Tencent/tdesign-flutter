@@ -32,6 +32,9 @@ class TDDrawer {
     this.drawerTop,
     this.style,
     this.hover = true,
+    this.backgroundColor,
+    this.bordered = true,
+    this.isShowLastBordered = true,
   }) {
     if (visible == true) {
       show();
@@ -83,6 +86,15 @@ class TDDrawer {
   /// 是否开启点击反馈
   final bool? hover;
 
+  /// 组件背景颜色
+  final Color? backgroundColor;
+
+  /// 是否显示边框
+  final bool? bordered;
+
+  /// 是否显示最后一行分割线
+  final bool? isShowLastBordered;
+
   static TDSlidePopupRoute? _drawerRoute;
 
   void show() {
@@ -112,6 +124,7 @@ class TDDrawer {
                   title: item.title,
                   leftIconWidget: item.icon,
                   hover: hover,
+                  bordered: bordered,
                   onClick: (cell) {
                     if (onItemClick == null) {
                       return;
@@ -124,7 +137,7 @@ class TDDrawer {
             .values
             .toList();
         return Container(
-          color: Colors.white,
+          color: backgroundColor ?? Colors.white,
           width: width ?? 280,
           height: double.infinity,
           child: Column(
@@ -135,7 +148,7 @@ class TDDrawer {
                   titleWidget: titleWidget,
                   style: cellStyle,
                   scrollable: true,
-                  isShowLastBordered: true,
+                  isShowLastBordered: isShowLastBordered,
                   cells: cells ?? [],
                 ),
               ),
@@ -158,16 +171,14 @@ class TDDrawer {
   @mustCallSuper
   void close() {
     if (_drawerRoute != null) {
-      Navigator.of(context).removeRoute(_drawerRoute!);
-      _deleteRouter();
+      Navigator.of(context).pop();
+      // _deleteRouter();
     }
   }
 
   void _deleteRouter() {
     _drawerRoute = null;
-    if (onClose != null) {
-      onClose!();
-    }
+    onClose?.call();
   }
 }
 
