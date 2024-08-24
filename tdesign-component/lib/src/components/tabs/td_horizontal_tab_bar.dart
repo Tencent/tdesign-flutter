@@ -124,6 +124,9 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
     this.onTap,
     this.physics,
     this.outlineType,
+    this.backgroundColor,
+    this.selectedBgColor,
+    this.unSelectedBgColor,
   })  : assert(indicator != null || (indicatorWeight > 0.0)),
         super(key: key);
 
@@ -310,6 +313,15 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
 
   /// 选项卡样式
   final TDTabBarOutlineType? outlineType;
+
+  /// tabBar背景色
+  final Color? backgroundColor;
+
+  /// 被选中背景色
+  final Color? selectedBgColor;
+
+  /// 未选中背景色
+  final Color? unSelectedBgColor;
 
   /// A size whose height depends on if the tabs have both icons and text.
   ///
@@ -770,8 +782,8 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
     if (widget.outlineType == TDTabBarOutlineType.capsule) {
       return BoxDecoration(
           color: index == _currentIndex
-              ? TDTheme.of(context).brandColor1
-              : TDTheme.of(context).grayColor1,
+              ? (widget.selectedBgColor ?? TDTheme.of(context).brandColor1)
+              : (widget.unSelectedBgColor ?? TDTheme.of(context).grayColor1),
           borderRadius: BorderRadius.circular(32));
     }
     return null;
@@ -785,7 +797,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
     } else if (widget.outlineType == TDTabBarOutlineType.card) {
       if (index == _currentIndex) {
         return BoxDecoration(
-            color: TDTheme.of(context).whiteColor1,
+            color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
             borderRadius: BorderRadius.only(
                 topRight:
                     Radius.circular(index + 1 < widget.tabs.length ? 9 : 0),

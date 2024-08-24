@@ -28,12 +28,13 @@ int _num(List list, int? n) {
   return list.length + list.length % val;
 }
 
-/// 下拉菜单
+/// 下拉菜单内容
 class TDDropdownItem<T> extends StatefulWidget {
   const TDDropdownItem({
     Key? key,
     this.disabled = false,
     this.label,
+    this.arrowIcon,
     this.multiple = false,
     this.options = const [],
     this.builder,
@@ -43,6 +44,8 @@ class TDDropdownItem<T> extends StatefulWidget {
     this.onReset,
     this.minHeight,
     this.maxHeight,
+    this.tabBarWidth,
+    this.tabBarAlign,
   }) : super(key: key);
 
   /// 是否禁用
@@ -50,6 +53,9 @@ class TDDropdownItem<T> extends StatefulWidget {
 
   /// 标题
   final String? label;
+
+  /// 自定义箭头图标
+  final IconData? arrowIcon;
 
   /// 是否多选
   final bool? multiple;
@@ -78,11 +84,17 @@ class TDDropdownItem<T> extends StatefulWidget {
   /// 内容最大高度
   final double? maxHeight;
 
+  /// 该item在menu上的宽度，仅在[TDDropdownMenu.isScrollable]为true时有效
+  final double? tabBarWidth;
+
+  /// [label]和[arrowIcon]/[TDDropdownMenu.arrowIcon]的对齐方式
+  final MainAxisAlignment? tabBarAlign;
+
   static const double operateHeight = 73;
 
-  double? get minContenHeight =>
+  double? get minContentHeight =>
       multiple == true ? (minHeight != null ? minHeight! + TDDropdownItem.operateHeight : null) : minHeight;
-  double? get maxContenHeight =>
+  double? get maxContentHeight =>
       multiple == true ? (maxHeight != null ? maxHeight! + TDDropdownItem.operateHeight : null) : maxHeight;
 
   @override
@@ -117,64 +129,68 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
   Widget _getCheckboxList() {
     var paddingNum = TDTheme.of(context).spacer16;
     var groupCunck = _groupChunkOptions();
-    var maxContentHeight = widget.maxContenHeight != null
-        ? widget.maxContenHeight!
+    var maxContentHeight = widget.maxContentHeight != null
+        ? widget.maxContentHeight!
         : directionListenable.value == TDDropdownMenuDirection.auto
             ? double.infinity
             : max<double>(popupState.maxContentHeight - TDDropdownItem.operateHeight, 0);
-    var selectIds = _getSelected(widget.options).map((e) => e!.value).toList();
     return Column(
       children: [
-        ConstrainedBox(
-          constraints: BoxConstraints(minHeight: widget.minContenHeight ?? 0.0, maxHeight: maxContentHeight),
-          child: SingleChildScrollView(
-            child: Column(
-              children: List.generate(groupCunck.length, (index) {
-                var entry = groupCunck.entries.elementAt(index);
-                var chunks = entry.value;
-                return Column(
-                  children: [
-                    groupCunck.length == 1 && entry.key == '__default__'
-                        ? const SizedBox.shrink()
-                        : Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.only(left: paddingNum, top: paddingNum, right: paddingNum),
-                            color: TDTheme.of(context).whiteColor1,
-                            child: TDText(entry.key == '__default__' ? context.resource.other : entry.key),
+        Container(
+          color: TDTheme.of(context).whiteColor1,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: widget.minContentHeight ?? 0.0, maxHeight: maxContentHeight),
+            child: SingleChildScrollView(
+              child: Column(
+                children: List.generate(groupCunck.length, (index) {
+                  var entry = groupCunck.entries.elementAt(index);
+                  var chunks = entry.value;
+                  return Column(
+                    children: [
+                      groupCunck.length == 1 && entry.key == '__default__'
+                          ? const SizedBox.shrink()
+                          : Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.only(left: paddingNum, top: paddingNum, right: paddingNum),
+                              color: TDTheme.of(context).whiteColor1,
+                              child: TDText(entry.key == '__default__' ? context.resource.other : entry.key),
+                            ),
+                      Container(
+                        padding: EdgeInsets.all(paddingNum),
+                        color: TDTheme.of(context).whiteColor1,
+                        child: TDCheckboxGroupContainer(
+                          selectIds: _getSelected(widget.options).map((e) => e!.value).toList(),
+                          onCheckBoxGroupChange: (values) {
+                            _handleSelectChange(values, options: chunks.expand((chunk) => chunk).toList());
+                          },
+                          child: Column(
+                            children: List.generate(chunks.length, (ri) {
+                              var num = _num(chunks[ri], widget.optionsColumns);
+                              return Padding(
+                                padding: _getPadding(chunks.length, ri, 'bottom'),
+                                child: Row(
+                                  children: List.generate(num, (ci) {
+                                    return Expanded(
+                                      child: Padding(
+                                        padding: _getPadding(num, ci, 'right'),
+                                        child: _getCheckboxItem(chunks[ri], ci),
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              );
+                            }),
                           ),
-                    Container(
-                      padding: EdgeInsets.all(paddingNum),
-                      color: TDTheme.of(context).whiteColor1,
-                      child: TDCheckboxGroupContainer(
-                        selectIds: selectIds,
-                        onCheckBoxGroupChange: _handleSelectChange,
-                        child: Column(
-                          children: List.generate(chunks.length, (ri) {
-                            var num = _num(chunks[ri], widget.optionsColumns);
-                            return Padding(
-                              padding: _getPadding(chunks.length, ri, 'bottom'),
-                              child: Row(
-                                children: List.generate(num, (ci) {
-                                  return Expanded(
-                                    child: Padding(
-                                      padding: _getPadding(num, ci, 'right'),
-                                      child: _getCheckboxItem(chunks[ri], ci),
-                                    ),
-                                  );
-                                }),
-                              ),
-                            );
-                          }),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              }),
+                    ],
+                  );
+                }),
+              ),
             ),
           ),
         ),
-        _getCheckboxOperate(selectIds),
+        _getCheckboxOperate(),
       ],
     );
   }
@@ -196,11 +212,14 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
         ),
       ),
     );
-    return widget.minContenHeight != null || widget.maxContenHeight != null
-        ? ConstrainedBox(
-            constraints: BoxConstraints(
-                minHeight: widget.minContenHeight ?? 0.0, maxHeight: widget.maxContenHeight ?? double.infinity),
-            child: widget.maxContenHeight != null ? SingleChildScrollView(child: radios) : radios,
+    return widget.minContentHeight != null || widget.maxContentHeight != null
+        ? Container(
+            color: TDTheme.of(context).whiteColor1,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                  minHeight: widget.minContentHeight ?? 0.0, maxHeight: widget.maxContentHeight ?? double.infinity),
+              child: widget.maxContentHeight != null ? SingleChildScrollView(child: radios) : radios,
+            ),
           )
         : radios;
   }
@@ -242,7 +261,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
     );
   }
 
-  Widget _getCheckboxOperate(List<String> selectIds) {
+  Widget _getCheckboxOperate() {
     return Container(
       height: TDDropdownItem.operateHeight,
       padding: EdgeInsets.all(TDTheme.of(context).spacer16),
@@ -266,15 +285,12 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
           child: TDButton(
             text: context.resource.reset,
             theme: TDButtonTheme.light,
-            // disabled: selectIds.isEmpty,
             onTap: () {
               widget.options?.forEach((element) {
                 element.selected = false;
               });
               setState(() {});
-              if (widget.onReset != null) {
-                widget.onReset!();
-              }
+              widget.onReset?.call();
             },
           ),
         ),
@@ -283,12 +299,9 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
           child: TDButton(
             text: context.resource.confirm,
             theme: TDButtonTheme.primary,
-            // disabled: selectIds.isEmpty,
             onTap: () {
               _handleClose();
-              if (widget.onConfirm != null) {
-                widget.onConfirm!(selectIds);
-              }
+              widget.onConfirm?.call(_getSelected(widget.options).map((e) => e!.value).toList());
             },
           ),
         ),
@@ -320,17 +333,13 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
     return groupedChunkOptions;
   }
 
-  void _handleSelectChange(selected) async {
-    widget.options?.forEach((element) {
+  void _handleSelectChange(selected, {List<TDDropdownItemOption>? options}) {
+    (options ?? widget.options)?.forEach((element) {
       element.selected = selected is List<String> ? selected.contains(element.value) : element.value == selected;
     });
-    if (widget.onChange != null) {
-      widget.onChange!(selected);
-    }
+    widget.onChange?.call(_getSelected(widget.options).map((e) => e!.value).toList());
     if (widget.multiple != true) {
       _handleClose();
-    } else {
-      // setState(() {});
     }
   }
 
@@ -338,10 +347,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
     if (widget.multiple != true) {
       await Future.delayed(const Duration(milliseconds: 100));
     }
-    var handleClose = popupState.handleClose;
-    if (handleClose != null) {
-      unawaited(handleClose());
-    }
+    await Navigator.maybePop(context);
   }
 }
 

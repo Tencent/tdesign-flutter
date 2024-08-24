@@ -2,10 +2,13 @@
   Widget _buildPopFromBottom(BuildContext context) {
     return TDButton(
       text: '底部弹出',
+      isBlock: true,
       theme: TDButtonTheme.primary,
       type: TDButtonType.outline,
+      size: TDButtonSize.large,
       onTap: () {
         Navigator.of(context).push(TDSlidePopupRoute(
+            modalBarrierColor: TDTheme.of(context).fontGyColor2,
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
               return Container(

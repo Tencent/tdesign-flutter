@@ -41,6 +41,8 @@ class TDSideBar extends StatefulWidget {
     this.contentPadding,
     this.selectedTextStyle,
     this.style = TDSideBarStyle.normal,
+    this.loading,
+    this.loadingWidget,
   }) : super(key: key);
 
   /// 选项值
@@ -76,6 +78,12 @@ class TDSideBar extends StatefulWidget {
   /// 控制器
   final TDSideBarController? controller;
 
+  /// 加载效果
+  final bool? loading;
+
+  /// 自定义加载动画
+  final Widget? loadingWidget;
+
   @override
   State<TDSideBar> createState() => _TDSideBarState();
 }
@@ -87,6 +95,7 @@ class _TDSideBarState extends State<TDSideBar> {
   final _scrollerController = ScrollController();
   final GlobalKey globalKey = GlobalKey();
   final double itemHeight = 56.0;
+  bool _loading = false;
 
   // 查找某值对应项
   SideItemProps findSideItem(int value) {
@@ -130,10 +139,25 @@ class _TDSideBarState extends State<TDSideBar> {
   void initState() {
     super.initState();
 
+    _loading = widget.loading ?? false;
     // controller注册事件
     if (widget.controller != null) {
       widget.controller!.addListener(() {
         selectValue(widget.controller!.currentValue, needScroll: true);
+        _loading = widget.controller!.loading;
+        displayChildren = widget.controller!.children
+            .asMap()
+            .entries
+            .map((entry) => SideItemProps(
+            index: entry.key,
+            disabled: entry.value.disabled,
+            value: entry.value.value,
+            icon: entry.value.icon,
+            label: entry.value.label,
+            textStyle: entry.value.textStyle,
+            badge: entry.value.badge))
+            .toList();
+        setState(() {});
       });
     }
 
@@ -187,12 +211,24 @@ class _TDSideBarState extends State<TDSideBar> {
 
   @override
   Widget build(BuildContext context) {
+    if(_loading) {
+      if(widget.loadingWidget != null) {
+        return widget.loadingWidget!;
+      }
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: const Align(
+          child: TDLoading(icon: TDLoadingIcon.circle, size: TDLoadingSize.large),
+        ),
+      );
+    }
     return ConstrainedBox(
         key: globalKey,
         constraints: BoxConstraints(
             minWidth: 106,
             maxHeight: MediaQuery.of(context).size.height -
                 MediaQuery.of(context).padding.top),
+
         child: SizedBox(
             height: widget.height ?? MediaQuery.of(context).size.height,
             child: MediaQuery.removePadding(
@@ -200,6 +236,7 @@ class _TDSideBarState extends State<TDSideBar> {
                 removeTop: true,
                 removeBottom: true,
                 child: ListView.builder(
+                    physics: const ClampingScrollPhysics(),
                     itemCount: displayChildren.length,
                     controller: _scrollerController,
                     itemBuilder: (BuildContext context, int index) {
