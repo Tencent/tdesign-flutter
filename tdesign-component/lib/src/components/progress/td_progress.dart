@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
-enum ProgressType { linear, circular, micro, button }
+enum TDProgressType { linear, circular, micro, button }
 
-enum ProgressLabelPosition { inside, left, right }
+enum TDProgressLabelPosition { inside, left, right }
 
-enum ProgressStatus { primary, warning, danger, success }
+enum TDProgressStatus { primary, warning, danger, success }
 
-enum ProgressStrokeCap { round, square, butt }
+enum TDProgressStrokeCap { round, square, butt }
 
-enum ProgressAnimationCurve { easeIn, easeOut, easeInout }
+enum TDProgressAnimationCurve { easeIn, easeOut, easeInout }
 
 abstract class TDLabelWidget extends Widget {
   const TDLabelWidget({super.key});
@@ -28,7 +28,7 @@ class TDIconLabel extends Icon implements TDLabelWidget {
 /// 进度条组件
 class TDProgress extends StatelessWidget {
   /// 进度条类型
-  final ProgressType type;
+  final TDProgressType type;
 
   /// 进度值 (0.0 到 1.0 之间的正数)
   final double? value;
@@ -37,10 +37,10 @@ class TDProgress extends StatelessWidget {
   final TDLabelWidget? label;
 
   /// 进度条状态
-  final ProgressStatus progressStatus;
+  final TDProgressStatus progressStatus;
 
   /// 标签显示位置
-  final ProgressLabelPosition progressLabelPosition;
+  final TDProgressLabelPosition progressLabelPosition;
 
   /// 进度条粗细 (正数)
   final double? strokeWidth;
@@ -52,7 +52,7 @@ class TDProgress extends StatelessWidget {
   final Color? backgroundColor;
 
   /// 进度条末端形状
-  final ProgressStrokeCap? strokeCap;
+  final TDProgressStrokeCap? strokeCap;
 
   /// 环形进度条半径 (正数)
   final double? circleRadius;
@@ -74,8 +74,8 @@ class TDProgress extends StatelessWidget {
     required this.type,
     double? value,
     this.label,
-    this.progressStatus = ProgressStatus.primary,
-    this.progressLabelPosition = ProgressLabelPosition.inside,
+    this.progressStatus = TDProgressStatus.primary,
+    this.progressLabelPosition = TDProgressLabelPosition.inside,
     double? strokeWidth,
     this.color,
     this.backgroundColor,
@@ -103,7 +103,7 @@ class TDProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultValues = _getDefaultValues(type);
+    final defaultValues = _getDefaultValues(context, type);
     return ProgressIndicator(
       value: value,
       label: label,
@@ -118,38 +118,38 @@ class TDProgress extends StatelessWidget {
       onTap: onTap,
       onLongPress: onLongPress,
       type: type,
-
+      context: context,
     );
   }
 
-  _DefaultValues _getDefaultValues(ProgressType type) {
+  _DefaultValues _getDefaultValues(BuildContext context, TDProgressType type) {
     switch (type) {
-      case ProgressType.linear:
+      case TDProgressType.linear:
         return _DefaultValues(
           strokeWidth: 20.0,
-          backgroundColor: TDTheme.of().grayColor3,
-          strokeCap: ProgressStrokeCap.round,
+          backgroundColor: TDTheme.of(context).grayColor3,
+          strokeCap: TDProgressStrokeCap.round,
           circleRadius: 0,
         );
-      case ProgressType.circular:
+      case TDProgressType.circular:
         return _DefaultValues(
           strokeWidth: 5.0,
-          backgroundColor: TDTheme.of().grayColor2,
-          strokeCap: ProgressStrokeCap.round,
+          backgroundColor: TDTheme.of(context).grayColor2,
+          strokeCap: TDProgressStrokeCap.round,
           circleRadius: 80.0,
         );
-      case ProgressType.micro:
+      case TDProgressType.micro:
         return _DefaultValues(
           strokeWidth: 2.0,
-          backgroundColor: TDTheme.of().grayColor2,
-          strokeCap: ProgressStrokeCap.round,
+          backgroundColor: TDTheme.of(context).grayColor2,
+          strokeCap: TDProgressStrokeCap.round,
           circleRadius: 20.0,
         );
-      case ProgressType.button:
+      case TDProgressType.button:
         return _DefaultValues(
           strokeWidth: 60.0,
-          backgroundColor: TDTheme.of().brandNormalColor,
-          strokeCap: ProgressStrokeCap.butt,
+          backgroundColor: TDTheme.of(context).brandNormalColor,
+          strokeCap: TDProgressStrokeCap.butt,
           circleRadius: 0,
         );
     }
@@ -159,7 +159,7 @@ class TDProgress extends StatelessWidget {
 class _DefaultValues {
   final double strokeWidth;
   final Color backgroundColor;
-  final ProgressStrokeCap strokeCap;
+  final TDProgressStrokeCap strokeCap;
   final double circleRadius;
 
   _DefaultValues({
@@ -174,35 +174,37 @@ class _DefaultValues {
 class ProgressIndicator extends StatefulWidget {
   final double? value;
   final TDLabelWidget? label;
-  final ProgressLabelPosition progressLabelPosition;
+  final TDProgressLabelPosition progressLabelPosition;
   final double strokeWidth;
   final double circleRadius;
-  final ProgressStrokeCap strokeCap;
+  final TDProgressStrokeCap strokeCap;
   final Color? color;
   final Color backgroundColor;
-  final ProgressType type;
-  final ProgressStatus progressStatus;
+  final TDProgressType type;
+  final TDProgressStatus progressStatus;
   final bool showLabel;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final int animationDuration;
+  final BuildContext? context;
 
   const ProgressIndicator({
     Key? key,
     this.value,
     this.label,
-    this.progressLabelPosition = ProgressLabelPosition.inside,
+    this.progressLabelPosition = TDProgressLabelPosition.inside,
     required this.strokeWidth,
     required this.strokeCap,
     required this.circleRadius,
     this.color,
     required this.backgroundColor,
     required this.type,
-    this.progressStatus = ProgressStatus.primary,
+    this.progressStatus = TDProgressStatus.primary,
     this.showLabel = true,
     this.onTap,
     this.onLongPress,
     this.animationDuration = 300,
+    this.context,
   }) : super(key: key);
 
   @override
@@ -246,11 +248,11 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
 
   BorderRadius _getBorderRadius() {
     switch (widget.strokeCap) {
-      case ProgressStrokeCap.round:
+      case TDProgressStrokeCap.round:
         return BorderRadius.circular(widget.strokeWidth / 2);
-      case ProgressStrokeCap.square:
+      case TDProgressStrokeCap.square:
         return BorderRadius.zero;
-      case ProgressStrokeCap.butt:
+      case TDProgressStrokeCap.butt:
         return BorderRadius.circular(widget.strokeWidth / 6);
     }
   }
@@ -271,30 +273,30 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
     _animationController.forward(from: 0);
   }
 
-  Widget _getDefaultLabelFromStatus(ProgressStatus status) {
+  Widget _getDefaultLabelFromStatus(TDProgressStatus status) {
     final showAutoText = widget.value != null;
     final showInsideLabel =
-        widget.progressLabelPosition == ProgressLabelPosition.inside &&
-            widget.type != ProgressType.circular;
-    final showIconBorder = widget.type == ProgressType.linear;
+        widget.progressLabelPosition == TDProgressLabelPosition.inside &&
+            widget.type != TDProgressType.circular;
+    final showIconBorder = widget.type == TDProgressType.linear;
 
-    Widget getAutoText() => showAutoText && widget.type != ProgressType.micro
+    Widget getAutoText() => showAutoText && widget.type != TDProgressType.micro
         ? Text('${(widget.value! * 100).round()}%')
         : const Text('');
 
     final statusWidgets = {
-      ProgressStatus.primary: getAutoText(),
-      ProgressStatus.warning: showInsideLabel
+      TDProgressStatus.primary: getAutoText(),
+      TDProgressStatus.warning: showInsideLabel
           ? getAutoText()
           : showIconBorder
               ? const Icon(TDIcons.error_circle_filled)
               : const Icon(TDIcons.error),
-      ProgressStatus.danger: showInsideLabel
+      TDProgressStatus.danger: showInsideLabel
           ? getAutoText()
           : showIconBorder
               ? const Icon(TDIcons.close_circle_filled)
               : const Icon(TDIcons.close),
-      ProgressStatus.success: showInsideLabel
+      TDProgressStatus.success: showInsideLabel
           ? getAutoText()
           : showIconBorder
               ? const Icon(TDIcons.check_circle_filled)
@@ -304,26 +306,26 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
     return statusWidgets[status] ?? getAutoText();
   }
 
-  Color _getColorFromStatus(ProgressStatus status) {
+  Color _getColorFromStatus(TDProgressStatus status) {
     switch (status) {
-      case ProgressStatus.primary:
-        return TDTheme.of().brandNormalColor;
-      case ProgressStatus.warning:
-        return TDTheme.of().warningNormalColor;
-      case ProgressStatus.danger:
-        return TDTheme.of().errorNormalColor;
-      case ProgressStatus.success:
-        return TDTheme.of().successNormalColor;
+      case TDProgressStatus.primary:
+        return TDTheme.of(widget.context).brandNormalColor;
+      case TDProgressStatus.warning:
+        return TDTheme.of(widget.context).warningNormalColor;
+      case TDProgressStatus.danger:
+        return TDTheme.of(widget.context).errorNormalColor;
+      case TDProgressStatus.success:
+        return TDTheme.of(widget.context).successNormalColor;
     }
   }
 
-  StrokeCap _getFlutterStrokeCap(ProgressStrokeCap cap) {
+  StrokeCap _getFlutterStrokeCap(TDProgressStrokeCap cap) {
     switch (cap) {
-      case ProgressStrokeCap.round:
+      case TDProgressStrokeCap.round:
         return StrokeCap.round;
-      case ProgressStrokeCap.square:
+      case TDProgressStrokeCap.square:
         return StrokeCap.square;
-      case ProgressStrokeCap.butt:
+      case TDProgressStrokeCap.butt:
         return StrokeCap.butt;
     }
   }
@@ -339,13 +341,13 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (widget.type == ProgressType.linear)
+        if (widget.type == TDProgressType.linear)
           _buildLinearProgress()
-        else if (widget.type == ProgressType.circular)
+        else if (widget.type == TDProgressType.circular)
           _buildCircularProgress()
-        else if (widget.type == ProgressType.micro)
+        else if (widget.type == TDProgressType.micro)
           _buildMicroProgress()
-        else if (widget.type == ProgressType.button)
+        else if (widget.type == TDProgressType.button)
           _buildButtonProgress()
       ],
     );
@@ -357,7 +359,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
         final maxWidth = constraints.maxWidth;
 
         if (widget.value != null &&
-            widget.progressLabelPosition == ProgressLabelPosition.inside) {
+            widget.progressLabelPosition == TDProgressLabelPosition.inside) {
           return _buildInsideLabel(maxWidth);
         } else {
           return _buildOutsideLabel();
@@ -391,10 +393,10 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
         return Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (widget.progressLabelPosition == ProgressLabelPosition.left)
+            if (widget.progressLabelPosition == TDProgressLabelPosition.left)
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: _buildLabelWidget(TDTheme.of().fontGyColor1),
+                child: _buildLabelWidget(TDTheme.of(context).fontGyColor1),
               ),
             Expanded(
               child: LinearProgressIndicator(
@@ -405,10 +407,10 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
                 minHeight: widget.strokeWidth,
               ),
             ),
-            if (widget.progressLabelPosition == ProgressLabelPosition.right)
+            if (widget.progressLabelPosition == TDProgressLabelPosition.right)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: _buildLabelWidget(TDTheme.of().fontGyColor1),
+                child: _buildLabelWidget(TDTheme.of(context).fontGyColor1),
               ),
           ],
         );
@@ -439,7 +441,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
               alignment: Alignment.centerRight,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: _buildLabelWidget(TDTheme.of().fontWhColor1),
+                child: _buildLabelWidget(TDTheme.of(context).fontWhColor1),
               ),
             )
           : null,
@@ -461,7 +463,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
         if (widget.showLabel)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: _buildLabelWidget(TDTheme.of().fontGyColor1),
+            child: _buildLabelWidget(TDTheme.of(context).fontGyColor1),
           ),
       ],
     );
@@ -473,8 +475,8 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
     late FontWeight fontWeight;
 
     switch (widget.type) {
-      case ProgressType.linear:
-        if (widget.progressLabelPosition != ProgressLabelPosition.inside) {
+      case TDProgressType.linear:
+        if (widget.progressLabelPosition != TDProgressLabelPosition.inside) {
           fontSize = widget.strokeWidth > 14 ? widget.strokeWidth : 14;
           iconSize = widget.strokeWidth > 20 ? widget.strokeWidth : 20;
         } else {
@@ -483,17 +485,17 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
         }
         fontWeight = FontWeight.normal;
         break;
-      case ProgressType.circular:
+      case TDProgressType.circular:
         iconSize = widget.circleRadius * 0.4;
         fontSize = widget.circleRadius * 0.2;
         fontWeight = FontWeight.bold;
         break;
-      case ProgressType.micro:
+      case TDProgressType.micro:
         iconSize = widget.circleRadius * 0.6;
         fontSize = widget.circleRadius * 0.2;
         fontWeight = FontWeight.normal;
         break;
-      case ProgressType.button:
+      case TDProgressType.button:
         iconSize = widget.strokeWidth * 0.8;
         fontSize = widget.strokeWidth * 0.3;
         fontWeight = FontWeight.normal;
@@ -534,7 +536,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
                 ),
               ),
             ),
-            if (widget.showLabel) _buildLabelWidget(TDTheme.of().fontGyColor1),
+            if (widget.showLabel) _buildLabelWidget(TDTheme.of(widget.context).fontGyColor1),
           ],
         );
       },
@@ -553,7 +555,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
                 children: [
                   _buildMicroOutline(),
                   if (widget.showLabel)
-                    _buildLabelWidget(TDTheme.of().fontGyColor1),
+                    _buildLabelWidget(TDTheme.of(widget.context).fontGyColor1),
                 ],
               ));
         });
@@ -606,9 +608,9 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
     return Container(
       height: widget.strokeWidth,
       width: progressWidth,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0x0096bbf8), Color(0x8096bbf8)],
+          colors: [_effectiveColor, TDTheme.of(widget.context).brandDisabledColor],
         ),
       ),
     );
@@ -618,7 +620,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
     return Container(
       height: widget.strokeWidth,
       alignment: Alignment.center,
-      child: _buildLabelWidget(TDTheme.of().fontWhColor1),
+      child: _buildLabelWidget(TDTheme.of(widget.context).fontWhColor1),
     );
   }
 }
