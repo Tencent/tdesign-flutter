@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
-/// 倒计时组件尺寸
-enum TDCountDownSize {
+/// 计时组件计时方向
+enum TDTimeCounterDirection {
+  /// 倒计时
+  down,
+  /// 正向计时
+  up
+}
+
+/// 计时组件尺寸
+enum TDTimeCounterSize {
   /// 小
   small,
 
@@ -13,8 +21,8 @@ enum TDCountDownSize {
   large,
 }
 
-/// 倒计时组件风格
-enum TDCountDownTheme {
+/// 计时组件风格
+enum TDTimeCounterTheme {
   /// 默认
   defaultTheme,
 
@@ -25,9 +33,9 @@ enum TDCountDownTheme {
   square,
 }
 
-/// 倒计时组件样式
-class TDCountDownStyle {
-  TDCountDownStyle({
+/// 计时组件样式
+class TDTimeCounterStyle {
+  TDTimeCounterStyle({
     this.timeWidth,
     this.timeHeight,
     this.timePadding,
@@ -91,17 +99,17 @@ class TDCountDownStyle {
   double? space;
 
   /// 生成默认样式
-  TDCountDownStyle.generateStyle(
+  TDTimeCounterStyle.generateStyle(
     BuildContext context, {
-    TDCountDownSize? size,
-    TDCountDownTheme? theme,
+    TDTimeCounterSize? size,
+    TDTimeCounterTheme? theme,
     bool? splitWithUnit,
   }) {
     timeFontFamily = TDTheme.defaultData().numberFontFamily;
     late Font? font;
-    switch (size ?? TDCountDownSize.medium) {
-      case TDCountDownSize.small:
-        if (theme == TDCountDownTheme.defaultTheme) {
+    switch (size ?? TDTimeCounterSize.medium) {
+      case TDTimeCounterSize.small:
+        if (theme == TDTimeCounterTheme.defaultTheme) {
           timeWidth = timeHeight = null;
           font = TDTheme.of(context).fontBodyMedium;
           timeFontSize = splitFontSize = font?.size ?? 14;
@@ -114,8 +122,8 @@ class TDCountDownStyle {
         }
         space = TDTheme.of(context).spacer4 / 2;
         break;
-      case TDCountDownSize.medium:
-        if (theme == TDCountDownTheme.defaultTheme) {
+      case TDTimeCounterSize.medium:
+        if (theme == TDTimeCounterTheme.defaultTheme) {
           timeWidth = timeHeight = null;
           font = TDTheme.of(context).fontBodyLarge;
           timeFontSize = splitFontSize = font?.size ?? 16;
@@ -128,8 +136,8 @@ class TDCountDownStyle {
         }
         space = TDTheme.of(context).spacer8 / 2;
         break;
-      case TDCountDownSize.large:
-        if (theme == TDCountDownTheme.defaultTheme) {
+      case TDTimeCounterSize.large:
+        if (theme == TDTimeCounterTheme.defaultTheme) {
           timeWidth = timeHeight = null;
           font = TDTheme.of(context).fontBodyExtraLarge;
           timeFontSize = splitFontSize = font?.size ?? 18;
@@ -143,8 +151,8 @@ class TDCountDownStyle {
         space = TDTheme.of(context).spacer12 / 2;
     }
 
-    switch (theme ?? TDCountDownTheme.defaultTheme) {
-      case TDCountDownTheme.round:
+    switch (theme ?? TDTimeCounterTheme.defaultTheme) {
+      case TDTimeCounterTheme.round:
         timeBox = BoxDecoration(
           shape: BoxShape.circle,
           color: TDTheme.of(context).errorColor6,
@@ -152,7 +160,7 @@ class TDCountDownStyle {
         timeColor = TDTheme.of(context).fontWhColor1;
         splitColor = TDTheme.of(context).errorColor6;
         break;
-      case TDCountDownTheme.square:
+      case TDTimeCounterTheme.square:
         timeBox = BoxDecoration(
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(TDTheme.of(context).radiusSmall),
@@ -161,7 +169,7 @@ class TDCountDownStyle {
         timeColor = TDTheme.of(context).fontWhColor1;
         splitColor = TDTheme.of(context).errorColor6;
         break;
-      case TDCountDownTheme.defaultTheme:
+      case TDTimeCounterTheme.defaultTheme:
         timeBox = null;
         timeColor = splitColor = TDTheme.of(context).fontGyColor1;
         timeWidth = null;

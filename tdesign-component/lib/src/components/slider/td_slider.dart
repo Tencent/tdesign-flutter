@@ -57,6 +57,12 @@ class TDSliderState extends State<TDSlider> {
     value = widget.value;
   }
 
+  @override
+  void didUpdateWidget(covariant TDSlider oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    value = widget.value;
+  }
+
   bool get enabled => widget.onChanged != null;
 
   TextStyle get labelTextStyle =>
@@ -174,6 +180,12 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
   @override
   void initState() {
     super.initState();
+    rangeValues = widget.value;
+  }
+
+  @override
+  void didUpdateWidget(covariant TDRangeSlider oldWidget) {
+    super.didUpdateWidget(oldWidget);
     rangeValues = widget.value;
   }
 
