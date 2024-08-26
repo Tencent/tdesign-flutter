@@ -27,9 +27,9 @@ class _TDMessagePageState extends State<TDMessagePage> {
             children: [
                 ExampleItem(desc: '纯文字的通知', builder: _buildPlainTextMessage),
                 ExampleItem(desc: '带图标的通知', builder: _buildIconTextMessage),
-                // ExampleItem(desc: '带关闭的通知', builder: _buildInputNormal),
-                // ExampleItem(desc: '可滚动的通知', builder: _buildImageTop),
-                // ExampleItem(desc: '带按钮的通知', builder: _buildImageTopNoTitle),
+                ExampleItem(desc: '带关闭的通知', builder: _buildMessageWithCloseButton),
+                ExampleItem(desc: '可滚动的通知', builder: _buildRollingMessage),
+                ExampleItem(desc: '带按钮的通知', builder: _buildLinkMessage),
         ]),
         ExampleModule(
             title: '组件状态',
@@ -86,9 +86,69 @@ class _TDMessagePageState extends State<TDMessagePage> {
           builder: (context) => TDMessage(
             visible: true,
             icon: true,
-            content: '带图标的通知',
+            content: _commonContent,
             theme: MessageTheme.info,
             duration: 3000,
+          ),
+        );
+        overlay.insert(overlayEntry);
+      },
+    );
+  }
+  @Demo(group: 'message')
+  Widget _buildMessageWithCloseButton(BuildContext context) {
+    return TDButton(
+      isBlock: true,
+      text: '带关闭的通知',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      width: 450,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        final overlay = Overlay.of(context);
+        late OverlayEntry overlayEntry;
+        overlayEntry = OverlayEntry(
+          builder: (context) => TDMessage(
+            visible: true,
+            icon: true,
+            content: _commonContent,
+            theme: MessageTheme.info,
+            duration: 300000,
+            closeBtn: true,
+            link: '按钮',
+            onDurationEnd: () {
+              overlayEntry.remove();
+            },
+            onCloseBtnClick: () {
+              print('Close button clicked!');
+            },
+          ),
+        );
+        overlay.insert(overlayEntry);
+      },
+    );
+  }
+
+  @Demo(group: 'message')
+  Widget _buildRollingMessage(BuildContext context) {
+    return TDButton(
+      isBlock: true,
+      text: '可滚动的通知',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      width: 450,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        final overlay = Overlay.of(context);
+        late OverlayEntry overlayEntry;
+        overlayEntry = OverlayEntry(
+          builder: (context) => TDMessage(
+            visible: true,
+            icon: false,
+            marquee: MessageMarquee(speed: 1000, loop: 1, delay: 0),
+            content: _commonContent,
+            theme: MessageTheme.info,
+            duration: 300000,
             onDurationEnd: () {
               overlayEntry.remove();
             },
@@ -98,6 +158,42 @@ class _TDMessagePageState extends State<TDMessagePage> {
       },
     );
   }
+  @Demo(group: 'message')
+  Widget _buildLinkMessage(BuildContext context) {
+    return TDButton(
+      isBlock: true,
+      text: '带按钮的通知',
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      width: 450,
+      theme: TDButtonTheme.primary,
+      onTap: () {
+        final overlay = Overlay.of(context);
+        late OverlayEntry overlayEntry;
+        overlayEntry = OverlayEntry(
+          builder: (context) => TDMessage(
+            visible: true,
+            icon: true,
+            content: _commonContent,
+            theme: MessageTheme.info,
+            duration: 300000,
+            link: '按钮',
+            onDurationEnd: () {
+              overlayEntry.remove();
+            },
+            onLinkClick: () {
+              print('link clicked!');
+            },
+
+          ),
+        );
+        overlay.insert(overlayEntry);
+      },
+    );
+  }
+
+
+
 
   @Demo(group: 'message')
   Widget _buildInfoMessage(BuildContext context) {
