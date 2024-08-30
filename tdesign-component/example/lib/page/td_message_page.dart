@@ -14,6 +14,7 @@ class TDMessagePage extends StatefulWidget {
 class _TDMessagePageState extends State<TDMessagePage> {
 
   final _commonContent = '这是一条普通的通知信息';
+  final longContent = '这是一条普通的通知信息看，这是一条普通的通知信息，这是一条普通的通知信息';
 
   @override
   Widget build(BuildContext context) {
@@ -145,10 +146,10 @@ class _TDMessagePageState extends State<TDMessagePage> {
           builder: (context) => TDMessage(
             visible: true,
             icon: false,
-            marquee: MessageMarquee(speed: 1000, loop: 1, delay: 0),
-            content: _commonContent,
+            marquee: MessageMarquee(speed: 5000, loop: 1, delay: 300),
+            content: longContent,
             theme: MessageTheme.info,
-            duration: 300000,
+            duration: 100000,
             onDurationEnd: () {
               overlayEntry.remove();
             },

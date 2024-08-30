@@ -107,12 +107,16 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
   bool _isVisible = true;
   double _topOffset = 0;
   double initTopOffset = 80;
-
+  double totalWidth = 343;
+  late AnimationController animationController;
 
   @override
   void initState() {
     super.initState();
     _topOffset = (widget.offset?[1] ?? initTopOffset) - 30;
+    animationController = AnimationController(
+      vsync: this,
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
@@ -125,11 +129,18 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
     }
   }
 
+  @override
+  void dispose() {
+    animationController.stop();
+    animationController.dispose();
+    super.dispose();
+  }
+
   void _closeMessage() {
+    animationController.stop();
     setState(() {
       _topOffset = (widget.offset?[1] ?? initTopOffset) - 30;
     });
-
     Future.delayed(const Duration(milliseconds: 300), () {
       if (mounted) {
         setState(() {
@@ -144,6 +155,155 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     var _leftOffset = widget.offset?[0] ?? (MediaQuery.of(context).size.width - 343) / 2;
 
+    Widget getText(BuildContext context) {
+      if (widget.marquee == null) {
+        return SizedBox(
+          width: calculateTextWidth(),
+          child: Text(
+            widget.content ?? '',
+            style: const TextStyle(color: Colors.black),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        );
+      } else {
+        final textPainter = TextPainter(
+          text: TextSpan(text: widget.content ?? '',
+          style: const TextStyle(color: Colors.black)),
+          maxLines: 1,
+          textDirection: TextDirection.ltr,
+        )..layout(minWidth: 0, maxWidth: double.infinity);
+        final textWidth = textPainter.width;
+        print('textWidth is ${textWidth}');
+
+        final containerWidth = calculateTextWidth();
+
+        final animationDuration = Duration(milliseconds: (widget.marquee!.speed ?? 10000));
+        animationController.duration = animationDuration;
+
+        final tween = Tween<Offset>(
+          begin: Offset.zero,
+          end: Offset(-textWidth, 0),
+        );
+
+        void startAnimation() {
+          if (widget.marquee!.loop == 0) {
+            animationController.forward();
+          } else if(widget.marquee!.loop == 1){
+            animationController.repeat();
+          }
+        }
+
+        if (widget.marquee!.delay != null && widget.marquee!.delay! > 0) {
+          Future.delayed(Duration(milliseconds: widget.marquee!.delay!), startAnimation);
+        } else {
+          startAnimation();
+        }
+
+        return ClipRect(
+          child: SizedBox(
+            width: containerWidth,
+            child: AnimatedBuilder(
+              animation: animationController,
+              builder: (context, child) {
+                final offset = tween.evaluate(animationController);
+                return OverflowBox(
+                  minWidth: 0,
+                  maxWidth: double.infinity,
+                  alignment: Alignment.centerLeft,
+                  child: Transform.translate(
+                    offset: offset,
+                    child: SizedBox(
+                      child: Text(
+                        widget.content ?? '',
+                        style: const TextStyle(color: Colors.black),
+                        maxLines: 1,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      }
+    }
+
+    Widget getIcon(BuildContext context) {
+      if (widget.icon is Widget) {
+        return widget.icon;
+      } else {
+        switch (widget.theme) {
+          case MessageTheme.info:
+            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).brandColor7);
+          case MessageTheme.success:
+            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).successColor5);
+          case MessageTheme.warning:
+            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).warningColor5);
+          case MessageTheme.error:
+            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).errorColor6);
+          case null:
+            return const SizedBox.shrink();
+        }
+      }
+    }
+    void clickCloseButton() {
+      _closeMessage();
+      widget.onCloseBtnClick?.call();
+    }
+
+    Widget getCloseBtn(BuildContext context) {
+      if(widget.closeBtn is Widget) {
+        return GestureDetector(
+          onTap: clickCloseButton,
+          child: widget.closeBtn!,
+        );
+      } else if(widget.closeBtn == true){
+        return GestureDetector(
+          onTap: clickCloseButton,
+          child: Icon(TDIcons.close),
+        );
+      } else if(widget.closeBtn is String){
+        return GestureDetector(
+          onTap: clickCloseButton,
+          child: Text(widget.closeBtn),
+        );
+      } else {
+        return const SizedBox.shrink();
+      }
+    }
+    void clickLink() {
+      widget.onLinkClick?.call();
+    }
+
+    Widget getLink(BuildContext context) {
+      if (widget.link is LinkObj) {
+        return TDLink(
+          label: widget.link.name,
+          style: TDLinkStyle.primary,
+          type: TDLinkType.basic,
+          uri: widget.link.uri ?? Uri.parse('https://example.com'),
+          size: TDLinkSize.small,
+          color: widget.link.color ?? TDTheme.of(context).brandNormalColor,
+        );
+      } else if (widget.link is String) {
+        return GestureDetector(
+          onTap: clickLink,
+          child: Text(
+            widget.link ?? '',
+            style: TextStyle(
+              color: TDTheme.of(context).brandNormalColor,
+              fontSize: 14,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        );
+      } else {
+        return const SizedBox.shrink();
+      }
+    }
+
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -153,7 +313,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
           ? Material(
         color: Colors.transparent,
         child: Container(
-          width: 343,
+          width: totalWidth,
           height: 48,
           padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
           decoration: BoxDecoration(
@@ -205,164 +365,17 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
     );
   }
 
-  Widget getIcon(BuildContext context) {
-    if (widget.icon is Widget) { // 如果icon是Widget类型，则返回传入的图标
-      return widget.icon;
-    } else { // 如果icon是true，则返回theme设定图标
-      switch (widget.theme) {
-        case MessageTheme.info:
-          return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).brandColor7);
-        case MessageTheme.success:
-          return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).successColor5);
-        case MessageTheme.warning:
-          return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).warningColor5);
-        case MessageTheme.error:
-          return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).errorColor6);
-        case null:
-          return const SizedBox.shrink();
-      }
-    }
-  }
-  void clickCloseButton() {
-    _closeMessage();
-    widget.onCloseBtnClick?.call();
-  }
-
-  Widget getCloseBtn(BuildContext context) {
-    if(widget.closeBtn is Widget) {
-      return GestureDetector(
-        onTap: clickCloseButton,
-        child: widget.closeBtn!,
-      );
-    } else if(widget.closeBtn == true){
-      return GestureDetector(
-        onTap: clickCloseButton,
-        child: Icon(TDIcons.close),
-      );
-    } else if(widget.closeBtn is String){
-      return GestureDetector(
-        onTap: clickCloseButton,
-        child: Text(widget.closeBtn),
-      );
-    } else {
-      return const SizedBox.shrink();
-    }
-  }
-  void clickLink() {
-    widget.onLinkClick?.call();
-  }
-
-  Widget getLink(BuildContext context) {
-    if (widget.link is LinkObj) {
-      return TDLink(
-        label: widget.link.name,
-        style: TDLinkStyle.primary,
-        type: TDLinkType.basic,
-        uri: widget.link.uri ?? Uri.parse('https://example.com'),
-        size: TDLinkSize.small,
-        color: widget.link.color ?? TDTheme.of(context).brandNormalColor,
-      );
-    } else if (widget.link is String) {
-      return GestureDetector(
-        onTap: clickLink,
-        child: Text(
-          widget.link ?? '',
-          style: TextStyle(
-            color: TDTheme.of(context).brandNormalColor,
-            fontSize: 14,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      );
-    } else {
-      return const SizedBox.shrink();
-    }
-  }
-
   double calculateTextWidth() {
-    if (widget.link != null && widget.closeBtn != null) {
-      return 211;
-    } else if (widget.link != null || widget.closeBtn != null) {
-      return 245;
-    } else if(widget.link == null && widget.closeBtn == null){
-      return 302;
-    } else {
-      return 245;
+    double width = totalWidth - 32;
+    if (widget.icon != null && widget.icon != false) {
+      width -= 30;
     }
-  }
-
-
-  Widget getText(BuildContext context) {
-    if (widget.marquee == null) {
-      return SizedBox(
-        width: calculateTextWidth(),
-        child: Text(
-          widget.content ?? '',
-          style: const TextStyle(color: Colors.black),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      );
-    } else {
-      final textSpan = TextSpan(text: widget.content ?? '', style: const TextStyle(color: Colors.black));
-      final textPainter = TextPainter(
-        text: textSpan,
-        textDirection: TextDirection.ltr,
-        maxLines: 1,
-      );
-      textPainter.layout(minWidth: 0, maxWidth: double.infinity);
-
-      final textWidth = textPainter.width;
-
-      print('textWidth is ${textWidth}');
-
-      final containerWidth = calculateTextWidth();
-      final animationController = AnimationController(
-        duration: Duration(milliseconds: widget.marquee!.speed ?? 10000),
-        vsync: this,
-      );
-
-      final tween = Tween<double>(begin: textWidth, end: -textWidth);
-
-      animationController.addListener(() {
-        setState(() {});
-      });
-
-      animationController.addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          if (widget.marquee!.loop != null && widget.marquee!.loop! > 0) {
-            animationController.repeat();
-          }
-        } else if (status == AnimationStatus.dismissed) {
-          if (widget.marquee!.loop != null && widget.marquee!.loop! > 0) {
-            animationController.forward();
-          }
-        }
-      });
-
-      if (widget.marquee!.delay != null && widget.marquee!.delay! > 0) {
-        Future.delayed(Duration(milliseconds: widget.marquee!.delay!), animationController.forward);
-      } else {
-        animationController.forward();
-      }
-
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Transform.translate(
-          offset: Offset(tween.evaluate(animationController), 0),
-          child: SizedBox(
-            width: containerWidth,
-            child: Text(
-              widget.content ?? '',
-              style: const TextStyle(color: Colors.black),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ),
-      );
+    if (widget.link != null) {
+      width -= 36;
     }
+    if (widget.closeBtn != null) {
+      width -= 34;
+    }
+    return width;
   }
-
 }
