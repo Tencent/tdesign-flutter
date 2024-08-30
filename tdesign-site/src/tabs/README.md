@@ -16,6 +16,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
+[td_tabs_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_tabs_page.dart)
+
 ### 1 组件类型
 
 均分选项卡
@@ -405,7 +407,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | tabs | List<TDTab> | - | tab数组 |
 | controller | TabController? | - | tab控制器 |
 | decoration | Decoration? | - | tabBar修饰 |
-| backgroundColor | Color? | - | tabBar背景色 |
+| backgroundColor | Color? | - | tabBar背景色，当outlineType为card时控制选中tab颜色 |
 | indicatorColor | Color? | - | tabBar下标颜色 |
 | indicatorWidth | double? | - | tabBar下标宽度 |
 | indicatorHeight | double? | - | tabBar下标高度 |
@@ -425,6 +427,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | showIndicator | bool | false | 是否展示引导控件 |
 | dividerColor | Color? | - | 分割线颜色 |
 | dividerHeight | double | 0.5 | 分割线高度,小于等于0则不展示分割线 |
+| selectedBgColor | Color? | - | 被选中背景色，只有outlineType为capsule时有效 |
+| unSelectedBgColor | Color? | - | 未选中背景色，只有outlineType为capsule时有效 |
 
 ```
 ```
