@@ -18,7 +18,10 @@ class ApiPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: TDText('${model?.text} API', textColor: TDTheme.of(context).whiteColor1,),),
       body: SingleChildScrollView(
-        child: ApiWidget(apiName: model?.name, visible: true,),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: ApiWidget(apiName: model?.name, visible: true,),
+        ),
       ),
     );
   }

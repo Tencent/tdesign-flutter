@@ -1,0 +1,20 @@
+
+  Widget _buildCardCollapse(BuildContext context) {
+    return TDCollapse(
+      style: TDCollapseStyle.card,
+      expansionCallback: (int index, bool isExpanded) {
+        setState(() {
+          _cardStyleData[index].isExpanded = !isExpanded;
+        });
+      },
+      children: _cardStyleData.map((CollapseDataItem item) {
+        return TDCollapsePanel(
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return Text(item.headerValue);
+          },
+          isExpanded: item.isExpanded,
+          body: const Text(randomString),
+        );
+      }).toList(),
+    );
+  }

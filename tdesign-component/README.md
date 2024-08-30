@@ -51,7 +51,7 @@ flutter: ">=3.7.0"
 
 # Feedback
 
- <img src="../tdesign-site/site/public/assets/qrcode/feedback.png" width = "200" height = "200" alt="feedback" align=center />
+ <img src="feedback.png" width = "200" height = "200" alt="feedback" align=center />
 
 # Open source agreement:
 

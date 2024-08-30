@@ -1,0 +1,29 @@
+
+  Widget _buildThemeFab(BuildContext context) {
+    return _buildRowDemoWidthDescription([
+      {
+        'component': const TDFab(
+          theme: TDFabTheme.primary,
+        ),
+        'desc': 'Primary'
+      },
+      {
+        'component': const TDFab(
+          theme: TDFabTheme.defaultTheme,
+        ),
+        'desc': 'Default'
+      },
+      {
+        'component': const TDFab(
+          theme: TDFabTheme.light,
+        ),
+        'desc': 'Light'
+      },
+      {
+        'component': const TDFab(
+          theme: TDFabTheme.danger,
+        ),
+        'desc': 'Danger'
+      },
+    ]);
+  }

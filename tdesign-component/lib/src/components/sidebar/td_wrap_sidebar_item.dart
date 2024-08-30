@@ -58,7 +58,7 @@ class TDWrapSideBarItem extends StatelessWidget {
         constraints: const BoxConstraints(minHeight: 56),
         child: Container(
           decoration: BoxDecoration(
-              color: selected ? Colors.white : const Color.fromRGBO(246, 246, 246, 1),
+              color: selected ? Colors.white : const Color.fromRGBO(243, 243, 243, 1),
               borderRadius: bottomAdjacent || topAdjacent
                   ? bottomAdjacent
                       ? const BorderRadius.only(bottomRight: Radius.circular(9))
@@ -116,22 +116,24 @@ class TDWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderPreLine(BuildContext context) {
-    return Visibility(
-        visible: !disabled && selected,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: preLineWidth,
-              height: 14,
-              decoration: BoxDecoration(
-                  color: selectedTextStyle != null
-                      ? selectedTextStyle?.color
-                      : (selectedColor ?? TDTheme.of(context).brandNormalColor),
-                  borderRadius: BorderRadius.circular(4)),
-            )
-          ],
-        ));
+    return  Visibility(
+          visible: !disabled && selected,
+          replacement: const SizedBox(width:preLineWidth ,),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: preLineWidth,
+                height: 14,
+                decoration: BoxDecoration(
+                    color: selectedTextStyle != null
+                        ? selectedTextStyle?.color
+                        : (selectedColor ?? TDTheme.of(context).brandNormalColor),
+                    borderRadius: BorderRadius.circular(4)),
+              )
+            ],
+          ),
+    );
   }
 
   Widget renderIcon(BuildContext context) {
