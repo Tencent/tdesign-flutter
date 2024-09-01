@@ -1,17 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/binding.dart';
 
 import '../../../tdesign_flutter.dart';
 
-// 定义消息对齐方式枚举
-enum MessageAlign {
-  /// 左对齐
-  left,
-
-  /// 右对齐
-  center
-}
 //链接设置
 class LinkObj {
   LinkObj({
@@ -31,11 +22,7 @@ class MessageMarquee {
   final int? loop;
   final int? delay;
 
-  MessageMarquee({
-    this.speed,
-    this.loop,
-    this.delay
-  });
+  MessageMarquee({this.speed, this.loop, this.delay});
 }
 
 // 定义消息主题枚举
@@ -55,36 +42,44 @@ enum MessageTheme {
 
 // TDMessage 组件
 class TDMessage extends StatefulWidget {
-  /// 对齐方式
-  final MessageAlign? align;
-  /// 关闭按钮
-  final dynamic closeBtn;
   /// 通知内容
   final String? content;
+
   /// 消息内置计时器
   final int? duration;
-  /// 自定义消息前面的图标
-  final dynamic icon;
-  /// 链接名称
-  final dynamic link;
-  /// 跑马灯效果
-  final MessageMarquee? marquee;
-  /// 相对于 placement 的偏移量
-  final List<double>? offset;
-  /// 消息组件风格 info/success/warning/error
-  final MessageTheme? theme;
+
   /// 是否显示
   final bool? visible;
+
+  /// 自定义消息前面的图标
+  final dynamic icon;
+
+  /// 链接名称
+  final dynamic link;
+
+  /// 关闭按钮
+  final dynamic closeBtn;
+
+  /// 跑马灯效果
+  final MessageMarquee? marquee;
+
+  /// 相对于 placement 的偏移量
+  final List<double>? offset;
+
+  /// 消息组件风格 info/success/warning/error
+  final MessageTheme? theme;
+
   /// 点击关闭按钮触发
   final VoidCallback? onCloseBtnClick;
+
   /// 计时结束后触发
   final VoidCallback? onDurationEnd;
+
   /// 点击链接文本时触发
   final VoidCallback? onLinkClick;
 
   const TDMessage({
     Key? key,
-    this.align,
     this.closeBtn,
     this.content,
     this.duration = 3000,
@@ -101,6 +96,45 @@ class TDMessage extends StatefulWidget {
 
   @override
   _TDMessageState createState() => _TDMessageState();
+
+  static void showMessage({
+    required BuildContext context,
+    String? content,
+    bool? visible,
+    int? duration,
+    dynamic closeBtn,
+    dynamic icon,
+    dynamic link,
+    MessageMarquee? marquee,
+    List<double>? offset,
+    MessageTheme? theme,
+    VoidCallback? onCloseBtnClick,
+    VoidCallback? onDurationEnd,
+    VoidCallback? onLinkClick,
+  }) {
+    final overlay = Overlay.of(context);
+    late OverlayEntry overlayEntry;
+    overlayEntry = OverlayEntry(
+      builder: (context) => TDMessage(
+        content: content,
+        visible: visible,
+        duration: duration,
+        closeBtn: closeBtn,
+        icon: icon,
+        link: link,
+        marquee: marquee,
+        offset: offset,
+        theme: theme,
+        onDurationEnd: () {
+          onDurationEnd?.call();
+          overlayEntry.remove();
+        },
+        onCloseBtnClick: onCloseBtnClick,
+        onLinkClick: onLinkClick,
+      ),
+    );
+    overlay.insert(overlayEntry);
+  }
 }
 
 class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
@@ -108,7 +142,8 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
   double _topOffset = 0;
   double initTopOffset = 80;
   double totalWidth = 343;
-  late AnimationController animationController;
+  AnimationController? animationController;
+  bool _isAnimationRunning = false;
 
   @override
   void initState() {
@@ -119,41 +154,71 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        _topOffset = widget.offset?[1] ?? initTopOffset;
-      });
+      if (mounted) {
+        setState(() {
+          _topOffset = widget.offset?[1] ?? initTopOffset;
+        });
+      }
     });
 
     if (widget.duration != null && widget.duration! > 0) {
       Future.delayed(Duration(milliseconds: widget.duration!), _closeMessage);
     }
+
+    if (widget.marquee != null) {
+      animationController = AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: widget.marquee!.speed ?? 10000),
+      );
+    }
   }
 
   @override
   void dispose() {
-    animationController.stop();
-    animationController.dispose();
+    animationController?.stop();
+    animationController?.dispose();
+    animationController = null;
     super.dispose();
   }
 
   void _closeMessage() {
-    animationController.stop();
-    setState(() {
-      _topOffset = (widget.offset?[1] ?? initTopOffset) - 30;
-    });
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (mounted) {
-        setState(() {
-          _isVisible = false;
-        });
-        widget.onDurationEnd?.call();
+    if (mounted) {
+      animationController?.stop();
+      setState(() {
+        _topOffset = (widget.offset?[1] ?? initTopOffset) - 30;
+        _isAnimationRunning = false;
+      });
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) {
+          setState(() {
+            _isVisible = false;
+          });
+          widget.onDurationEnd?.call();
+        }
+      });
+    }
+  }
+
+  void startAnimation() {
+    if (mounted && animationController != null && !_isAnimationRunning) {
+      setState(() {
+        _isAnimationRunning = true;
+      });
+      if (widget.marquee!.loop == 0) {
+        animationController!.forward();
+      } else if (widget.marquee!.loop == 1) {
+        animationController!.repeat();
       }
-    });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var _leftOffset = widget.offset?[0] ?? (MediaQuery.of(context).size.width - 343) / 2;
+    if (widget.visible == false) {
+      return const SizedBox.shrink();
+    }
+    var _leftOffset =
+        widget.offset?[0] ?? (MediaQuery.of(context).size.width - 343) / 2;
 
     Widget getText(BuildContext context) {
       if (widget.marquee == null) {
@@ -168,34 +233,28 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
         );
       } else {
         final textPainter = TextPainter(
-          text: TextSpan(text: widget.content ?? '',
-          style: const TextStyle(color: Colors.black)),
+          text: TextSpan(
+              text: widget.content ?? '',
+              style: const TextStyle(color: Colors.black)),
           maxLines: 1,
           textDirection: TextDirection.ltr,
         )..layout(minWidth: 0, maxWidth: double.infinity);
         final textWidth = textPainter.width;
-        print('textWidth is ${textWidth}');
 
         final containerWidth = calculateTextWidth();
 
-        final animationDuration = Duration(milliseconds: (widget.marquee!.speed ?? 10000));
-        animationController.duration = animationDuration;
+        final animationDuration =
+            Duration(milliseconds: (widget.marquee!.speed ?? 10000));
+        animationController!.duration = animationDuration;
 
         final tween = Tween<Offset>(
           begin: Offset.zero,
           end: Offset(-textWidth, 0),
         );
 
-        void startAnimation() {
-          if (widget.marquee!.loop == 0) {
-            animationController.forward();
-          } else if(widget.marquee!.loop == 1){
-            animationController.repeat();
-          }
-        }
-
         if (widget.marquee!.delay != null && widget.marquee!.delay! > 0) {
-          Future.delayed(Duration(milliseconds: widget.marquee!.delay!), startAnimation);
+          Future.delayed(
+              Duration(milliseconds: widget.marquee!.delay!), startAnimation);
         } else {
           startAnimation();
         }
@@ -204,9 +263,10 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
           child: SizedBox(
             width: containerWidth,
             child: AnimatedBuilder(
-              animation: animationController,
+              animation: animationController ?? const AlwaysStoppedAnimation(0),
               builder: (context, child) {
-                final offset = tween.evaluate(animationController);
+                final offset = tween.evaluate(
+                    animationController ?? const AlwaysStoppedAnimation(0));
                 return OverflowBox(
                   minWidth: 0,
                   maxWidth: double.infinity,
@@ -235,35 +295,40 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       } else {
         switch (widget.theme) {
           case MessageTheme.info:
-            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).brandColor7);
+            return Icon(TDIcons.error_circle_filled,
+                color: TDTheme.of(context).brandColor7);
           case MessageTheme.success:
-            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).successColor5);
+            return Icon(TDIcons.error_circle_filled,
+                color: TDTheme.of(context).successColor5);
           case MessageTheme.warning:
-            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).warningColor5);
+            return Icon(TDIcons.error_circle_filled,
+                color: TDTheme.of(context).warningColor5);
           case MessageTheme.error:
-            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).errorColor6);
+            return Icon(TDIcons.error_circle_filled,
+                color: TDTheme.of(context).errorColor6);
           case null:
             return const SizedBox.shrink();
         }
       }
     }
+
     void clickCloseButton() {
       _closeMessage();
       widget.onCloseBtnClick?.call();
     }
 
     Widget getCloseBtn(BuildContext context) {
-      if(widget.closeBtn is Widget) {
+      if (widget.closeBtn is Widget) {
         return GestureDetector(
           onTap: clickCloseButton,
           child: widget.closeBtn!,
         );
-      } else if(widget.closeBtn == true){
+      } else if (widget.closeBtn == true) {
         return GestureDetector(
           onTap: clickCloseButton,
           child: Icon(TDIcons.close),
         );
-      } else if(widget.closeBtn is String){
+      } else if (widget.closeBtn is String) {
         return GestureDetector(
           onTap: clickCloseButton,
           child: Text(widget.closeBtn),
@@ -272,6 +337,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
         return const SizedBox.shrink();
       }
     }
+
     void clickLink() {
       widget.onLinkClick?.call();
     }
@@ -311,56 +377,55 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       left: _leftOffset,
       child: _isVisible
           ? Material(
-        color: Colors.transparent,
-        child: Container(
-          width: totalWidth,
-          height: 48,
-          padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Row(
-            children: [
-              if (widget.icon != false)
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: SizedBox(
-                    width: 20,
-                    height: 22,
-                    child: getIcon(context),
-                  ),
+              color: Colors.transparent,
+              child: Container(
+                width: totalWidth,
+                height: 48,
+                padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(6),
                 ),
-              Expanded(
                 child: Row(
                   children: [
-                    getText(context),
-
-                    if (widget.link != null)
+                    if (widget.icon != false)
                       Padding(
-                        padding: const EdgeInsets.only(left: 8),
+                        padding: const EdgeInsets.only(right: 10),
                         child: SizedBox(
-                          width: 28,
-                          height: 60,
-                          child: getLink(context),
-                        ),
-                      ),
-                    if (widget.closeBtn != null)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 12),
-                        child: SizedBox(
-                          width: 22,
+                          width: 20,
                           height: 22,
-                          child: getCloseBtn(context),
+                          child: getIcon(context),
                         ),
                       ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          getText(context),
+                          if (widget.link != null)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: SizedBox(
+                                width: 28,
+                                height: 60,
+                                child: getLink(context),
+                              ),
+                            ),
+                          if (widget.closeBtn != null)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12),
+                              child: SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: getCloseBtn(context),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      )
+            )
           : const SizedBox.shrink(),
     );
   }
