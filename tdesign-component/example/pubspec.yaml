@@ -106,3 +106,4 @@ flutter:
     - assets/version
     - assets/img/
     - assets/theme.json
+    - assets/publish_time
