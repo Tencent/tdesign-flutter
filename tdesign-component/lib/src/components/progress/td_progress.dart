@@ -134,7 +134,7 @@ class TDProgress extends StatelessWidget {
           strokeWidth: 5.0,
           backgroundColor: TDTheme.of(context).grayColor2,
           borderRadius: BorderRadius.circular(20),
-          circleRadius: 80.0,
+          circleRadius: 100.0,
         );
       case TDProgressType.micro:
         return _DefaultValues(
@@ -480,7 +480,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
         break;
       case TDProgressType.circular:
         iconSize = widget.circleRadius * 0.4;
-        fontSize = widget.circleRadius * 0.2;
+        fontSize = widget.circleRadius * 0.15;
         fontWeight = FontWeight.bold;
         break;
       case TDProgressType.micro:
