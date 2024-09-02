@@ -43,6 +43,7 @@ class TDBadge extends StatefulWidget {
   const TDBadge(this.type,
       {Key? key,
       this.count,
+      this.maxCount = '99',
       this.border = TDBadgeBorder.large,
       this.size = TDBadgeSize.small,
       this.color,
@@ -56,6 +57,9 @@ class TDBadge extends StatefulWidget {
 
   /// 红点数量
   final String? count;
+
+  /// 最大红点数量
+  final String? maxCount;
 
   /// 红点样式
   final TDBadgeType type;
@@ -99,7 +103,14 @@ class _TDBadgeState extends State<TDBadge> {
       return;
     }
     setState(() {
-      badgeNum = newCount;
+      // 如果 newCount 超过了 maxCount，则显示 `${maxCount}+`
+      final countValue = int.tryParse(newCount) ?? 0;
+      final maxCountValue = int.tryParse(widget.maxCount ?? '') ?? 0;
+      if (maxCountValue > 0 && countValue > maxCountValue) {
+        badgeNum = '${maxCountValue}+';
+      } else {
+        badgeNum = newCount;
+      }
     });
   }
 
@@ -245,28 +256,30 @@ class _TDBadgeState extends State<TDBadge> {
       case TDBadgeType.square:
         return Visibility(
             visible: isVisible(),
-            child: Container(
-              height: getBadgeSize(),
-              width: getBadgeSize(),
-              padding: const EdgeInsets.only(left: 5, right: 5),
-              decoration: BoxDecoration(
-                color: widget.color ?? TDTheme.of(context).errorColor6,
-                borderRadius: widget.border == TDBadgeBorder.large
-                    ? BorderRadius.circular(8)
-                    : BorderRadius.circular(2),
-              ),
-              child: Center(
-                child: TDText(
-                  widget.message ?? '$badgeNum',
-                  forceVerticalCenter: true,
-                  font: getBadgeFont(context),
-                  fontWeight: FontWeight.w500,
-                  textColor:
-                      widget.textColor ?? TDTheme.of(context).whiteColor1,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ));
+            child: IntrinsicWidth(
+                child: Container(
+                  height: getBadgeSize(),
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  decoration: BoxDecoration(
+                    color: widget.color ?? TDTheme.of(context).errorColor6,
+                    borderRadius: widget.border == TDBadgeBorder.large
+                        ? BorderRadius.circular(8)
+                        : BorderRadius.circular(2),
+                  ),
+                  child: Center(
+                    child: TDText(
+                      widget.message ?? '$badgeNum',
+                      forceVerticalCenter: true,
+                      font: getBadgeFont(context),
+                      fontWeight: FontWeight.w500,
+                      textColor:
+                        widget.textColor ?? TDTheme.of(context).whiteColor1,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+            )
+        );
     }
   }
 }
