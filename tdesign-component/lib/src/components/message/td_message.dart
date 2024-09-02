@@ -42,6 +42,22 @@ enum MessageTheme {
 
 // TDMessage 组件
 class TDMessage extends StatefulWidget {
+  const TDMessage({
+    Key? key,
+    this.closeBtn,
+    this.content,
+    this.duration = 3000,
+    this.icon = true,
+    this.link,
+    this.marquee,
+    this.offset,
+    this.theme = MessageTheme.info,
+    this.visible = true,
+    this.onCloseBtnClick,
+    this.onDurationEnd,
+    this.onLinkClick,
+  }) : super(key: key);
+
   /// 通知内容
   final String? content;
 
@@ -77,22 +93,6 @@ class TDMessage extends StatefulWidget {
 
   /// 点击链接文本时触发
   final VoidCallback? onLinkClick;
-
-  const TDMessage({
-    Key? key,
-    this.closeBtn,
-    this.content,
-    this.duration = 3000,
-    this.icon = true,
-    this.link,
-    this.marquee,
-    this.offset,
-    this.theme = MessageTheme.info,
-    this.visible = true,
-    this.onCloseBtnClick,
-    this.onDurationEnd,
-    this.onLinkClick,
-  }) : super(key: key);
 
   @override
   _TDMessageState createState() => _TDMessageState();
