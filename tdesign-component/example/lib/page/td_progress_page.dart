@@ -23,7 +23,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
   Timer? _timer;
   bool isProgressing = false;
   bool isPlaying = false;
-  double microProgressValue = 0.0;
+  double microProgressValue = 0.3;
   Timer? _microTimer;
 
   @override
@@ -129,25 +129,12 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildMicroButton(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        TDProgress(
-          type: TDProgressType.micro,
-          value: microProgressValue,
-          onTap: _toggleMicroProgress,
-          label: TDIconLabel(isPlaying ? Icons.pause : Icons.play_arrow,
-              color: TDTheme.of(context).brandNormalColor),
-        ),
-        const SizedBox(width: 10),
-        TDProgress(
-          type: TDProgressType.micro,
-          value: microProgressValue,
-          onTap: _resetMicroProgress,
-          label: TDIconLabel(Icons.stop,
-              color: TDTheme.of(context).brandNormalColor),
-        ),
-      ],
+    return TDProgress(
+      type: TDProgressType.micro,
+      value: microProgressValue,
+      onTap: _toggleMicroProgress,
+      label: TDIconLabel(isPlaying ? Icons.pause : Icons.play_arrow,
+          color: TDTheme.of(context).brandNormalColor),
     );
   }
 
@@ -280,13 +267,5 @@ class _TDProgressPageState extends State<TDProgressPage> {
     } else {
       _microTimer?.cancel();
     }
-  }
-
-  void _resetMicroProgress() {
-    _microTimer?.cancel();
-    setState(() {
-      isPlaying = false;
-      microProgressValue = 0.0;
-    });
   }
 }
