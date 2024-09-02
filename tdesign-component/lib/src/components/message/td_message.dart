@@ -218,19 +218,22 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       return const SizedBox.shrink();
     }
     var _leftOffset =
-        widget.offset?[0] ?? (MediaQuery.of(context).size.width - 343) / 2;
+        widget.offset?[0] ?? (MediaQuery.of(context).size.width - totalWidth) / 2;
 
     Widget getText(BuildContext context) {
       if (widget.marquee == null) {
-        return SizedBox(
-          width: calculateTextWidth(),
-          child: Text(
-            widget.content ?? '',
-            style: const TextStyle(color: Colors.black),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        );
+        return Align(
+            alignment: Alignment.center,
+            child: SizedBox(
+              width: calculateTextWidth(),
+              child: Text(
+                widget.content ?? '',
+                style: const TextStyle(color: Colors.black),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          );
       } else {
         final textPainter = TextPainter(
           text: TextSpan(
@@ -259,33 +262,39 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
           startAnimation();
         }
 
-        return ClipRect(
-          child: SizedBox(
-            width: containerWidth,
-            child: AnimatedBuilder(
-              animation: animationController ?? const AlwaysStoppedAnimation(0),
-              builder: (context, child) {
-                final offset = tween.evaluate(
-                    animationController ?? const AlwaysStoppedAnimation(0));
-                return OverflowBox(
-                  minWidth: 0,
-                  maxWidth: double.infinity,
-                  alignment: Alignment.centerLeft,
-                  child: Transform.translate(
-                    offset: offset,
-                    child: SizedBox(
-                      child: Text(
-                        widget.content ?? '',
-                        style: const TextStyle(color: Colors.black),
-                        maxLines: 1,
-                      ),
-                    ),
+        return Align(
+            alignment: Alignment.center,
+            child: SizedBox(
+              width: calculateTextWidth(),
+              child: ClipRect(
+                child: SizedBox(
+                  width: containerWidth,
+                  child: AnimatedBuilder(
+                    animation: animationController ?? const AlwaysStoppedAnimation(0),
+                    builder: (context, child) {
+                      final offset = tween.evaluate(
+                          animationController ?? const AlwaysStoppedAnimation(0));
+                      return OverflowBox(
+                        minWidth: 0,
+                        maxWidth: double.infinity,
+                        alignment: Alignment.centerLeft,
+                        child: Transform.translate(
+                          offset: offset,
+                          child: SizedBox(
+                            child: Text(
+                              widget.content ?? '',
+                              style: const TextStyle(color: Colors.black),
+                              maxLines: 1,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              )
             ),
-          ),
-        );
+          );
       }
     }
 
@@ -344,27 +353,36 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
 
     Widget getLink(BuildContext context) {
       if (widget.link is LinkObj) {
-        return TDLink(
-          label: widget.link.name,
-          style: TDLinkStyle.primary,
-          type: TDLinkType.basic,
-          uri: widget.link.uri ?? Uri.parse('https://example.com'),
-          size: TDLinkSize.small,
-          color: widget.link.color ?? TDTheme.of(context).brandNormalColor,
+        return Align(
+          alignment: Alignment.center,
+          child:TDLink(
+            label: widget.link.name,
+            style: TDLinkStyle.primary,
+            type: TDLinkType.basic,
+            uri: widget.link.uri ?? Uri.parse('https://example.com'),
+            size: TDLinkSize.small,
+            color: widget.link.color ?? TDTheme.of(context).brandNormalColor,
+          )
         );
+
       } else if (widget.link is String) {
-        return GestureDetector(
-          onTap: clickLink,
-          child: Text(
-            widget.link ?? '',
-            style: TextStyle(
-              color: TDTheme.of(context).brandNormalColor,
-              fontSize: 14,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        );
+        return
+          Align(
+              alignment: Alignment.center,
+              child: GestureDetector(
+                onTap: clickLink,
+                child: Text(
+                  widget.link ?? '',
+                  style: TextStyle(
+                    color: TDTheme.of(context).brandNormalColor,
+                    fontSize: 14,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              )
+          );
+
       } else {
         return const SizedBox.shrink();
       }
@@ -377,62 +395,65 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       left: _leftOffset,
       child: _isVisible
           ? Material(
-              color: Colors.transparent,
-              child: Container(
-                width: totalWidth,
-                height: 48,
-                padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(6),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x0F000000),
-                      offset: Offset(0, 2),
-                      blurRadius: 8,
+        color: Colors.transparent,
+        child: Container(
+          width: totalWidth,
+          height: 48,
+          padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: TDTheme.of(context).shadowsMiddle
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              if (widget.icon != false)
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      width: 20,
+                      height: 22,
+                      child: getIcon(context),
                     ),
-                  ],
+                  ),
                 ),
+              Expanded(
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (widget.icon != false)
+                    getText(context),
+                    if (widget.link != null)
                       Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: SizedBox(
-                          width: 20,
-                          height: 22,
-                          child: getIcon(context),
+                        padding: const EdgeInsets.only(left: 8),
+                        child:
+                          SizedBox(
+                            width: 28,
+                            height: 22,
+                            child: getLink(context),
+                          ),
+                      ),
+                    if (widget.closeBtn != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: getCloseBtn(context),
+                          ),
                         ),
                       ),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          getText(context),
-                          if (widget.link != null)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: SizedBox(
-                                width: 28,
-                                height: 60,
-                                child: getLink(context),
-                              ),
-                            ),
-                          if (widget.closeBtn != null)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 12),
-                              child: SizedBox(
-                                width: 22,
-                                height: 22,
-                                child: getCloseBtn(context),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),
-            )
+            ],
+          ),
+        ),
+      )
           : const SizedBox.shrink(),
     );
   }
