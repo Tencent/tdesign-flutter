@@ -23,6 +23,28 @@ class TDIconLabel extends Icon implements TDLabelWidget {
 }
 
 class TDProgress extends StatelessWidget {
+  TDProgress({
+    Key? key,
+    required this.type,
+    double? value,
+    this.label,
+    this.progressStatus = TDProgressStatus.primary,
+    this.progressLabelPosition = TDProgressLabelPosition.inside,
+    double? strokeWidth,
+    this.color,
+    this.backgroundColor,
+    this.borderRadius,
+    double? circleRadius,
+    this.showLabel = true,
+    this.onTap,
+    this.onLongPress,
+    int animationDuration = 300,
+  })  : value = _validateProgress(value),
+        strokeWidth = _validatePositiveDouble(strokeWidth),
+        circleRadius = _validatePositiveDouble(circleRadius),
+        animationDuration = _validatePositiveInt(animationDuration),
+        super(key: key);
+
   /// 进度条类型
   final TDProgressType type;
 
@@ -64,28 +86,6 @@ class TDProgress extends StatelessWidget {
 
   /// 动画持续时间 (正整数，单位为毫秒)
   final int? animationDuration;
-
-  TDProgress({
-    Key? key,
-    required this.type,
-    double? value,
-    this.label,
-    this.progressStatus = TDProgressStatus.primary,
-    this.progressLabelPosition = TDProgressLabelPosition.inside,
-    double? strokeWidth,
-    this.color,
-    this.backgroundColor,
-    this.borderRadius,
-    double? circleRadius,
-    this.showLabel = true,
-    this.onTap,
-    this.onLongPress,
-    int animationDuration = 300,
-  })  : value = _validateProgress(value),
-        strokeWidth = _validatePositiveDouble(strokeWidth),
-        circleRadius = _validatePositiveDouble(circleRadius),
-        animationDuration = _validatePositiveInt(animationDuration),
-        super(key: key);
 
   static double? _validateProgress(double? value) =>
       value == null ? 0 : value.clamp(0.0, 1.0);
