@@ -43,6 +43,7 @@ import 'page/td_refresh_page.dart';
 import 'page/td_result_page.dart';
 import 'page/td_search_bar_page.dart';
 import 'page/td_shadows_page.dart';
+import 'page/td_skeleton_page.dart';
 import 'page/td_slider_page.dart';
 import 'page/td_stepper_page.dart';
 import 'page/td_steps_page.dart';
@@ -194,8 +195,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Skeleton 骨架屏',
         name: 'skeleton',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDSkeletonPage())),
     ExamplePageModel(
         text: 'Sticky 吸顶',
         name: 'sticky',

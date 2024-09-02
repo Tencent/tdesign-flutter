@@ -1,0 +1,37 @@
+
+  Widget _buildCellSkeleton(BuildContext context) {
+    var rowColsAvatar = TDSkeleton(theme: TDSkeletonTheme.avatar);
+    var rowColsImage = TDSkeleton.fromRowCol(
+      rowCol: TDSkeletonRowCol(objects: const [
+        [TDSkeletonRowColObj.rect(width: 48, height: 48, flex: null)]
+      ]),
+    );
+    var rowColsContent = TDSkeleton.fromRowCol(
+      rowCol: TDSkeletonRowCol(
+        objects: const [
+          [TDSkeletonRowColObj(), TDSkeletonRowColObj.spacer(flex: 1)],
+          [TDSkeletonRowColObj()]
+        ],
+      ),
+    );
+
+    return Column(
+      children: [
+        Row(
+          children: [
+            rowColsAvatar,
+            const SizedBox(width: 12),
+            rowColsContent,
+          ],
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            rowColsImage,
+            const SizedBox(width: 12),
+            rowColsContent,
+          ],
+        ),
+      ],
+    );
+  }

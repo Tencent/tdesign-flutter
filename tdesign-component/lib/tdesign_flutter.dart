@@ -53,6 +53,8 @@ export 'src/components/search/td_search_bar.dart';
 export 'src/components/sidebar/td_sidebar.dart';
 export 'src/components/sidebar/td_sidebar_controller.dart';
 export 'src/components/sidebar/td_sidebar_item.dart';
+export 'src/components/skeleton/td_skeleton.dart';
+export 'src/components/skeleton/td_skeleton_rowcol.dart';
 export 'src/components/slider/td_slider.dart';
 export 'src/components/slider/td_slider_theme.dart';
 export 'src/components/stepper/td_stepper.dart';

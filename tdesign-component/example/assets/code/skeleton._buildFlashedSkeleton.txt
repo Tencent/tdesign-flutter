@@ -1,0 +1,7 @@
+
+  Widget _buildFlashedSkeleton(BuildContext context) {
+    return TDSkeleton(
+      animation: TDSkeletonAnimation.flashed,
+      theme: TDSkeletonTheme.paragraph,
+    );
+  }
