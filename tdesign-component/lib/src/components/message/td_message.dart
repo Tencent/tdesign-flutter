@@ -4,8 +4,8 @@ import 'package:flutter/src/scheduler/binding.dart';
 import '../../../tdesign_flutter.dart';
 
 //链接设置
-class LinkObj {
-  LinkObj({
+class MessageLink {
+  MessageLink({
     required this.name,
     required this.uri,
     this.color,
