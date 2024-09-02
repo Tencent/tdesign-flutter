@@ -102,7 +102,7 @@ class _TDMessagePageState extends State<TDMessagePage> {
             theme: MessageTheme.info,
             duration: 300000,
             closeBtn: true,
-            link: LinkObj(name: '按钮', uri: Uri.parse('www')),
+            link: LinkObj(name: '按钮', uri: Uri.parse('www.example.com')),
             onCloseBtnClick: () {
               print('Close button clicked!');
             },
