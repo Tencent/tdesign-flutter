@@ -85,7 +85,7 @@
 # imageViewer
 ./bin/demo_tool generate --folder ../lib/src/components/image_viewer  --name TDImageViewer,TDImageViewerWidget,  --folder-name image-viewer --output ../example/assets/api/ --only-api
 # progress
-./bin/demo_tool generate --file ../lib/src/components/image/td_progress.dart --name TDProgress --folder-name image --output ../example/assets/api/ --only-api
+./bin/demo_tool generate --file ../lib/src/components/image/td_progress.dart --name TDProgress --folder-name progress --output ../example/assets/api/ --only-api
 # result
 # skeleton
 # sticky
