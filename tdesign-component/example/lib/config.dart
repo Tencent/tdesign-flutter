@@ -12,6 +12,7 @@ import 'page/td_backtop_page.dart';
 import 'page/td_badge_page.dart';
 import 'page/td_bottom_tab_bar_page.dart';
 import 'page/td_button_page.dart';
+import 'page/td_calendar_page.dart';
 import 'page/td_cascader_page.dart';
 import 'page/td_cell_page.dart';
 import 'page/td_checkbox_page.dart';
