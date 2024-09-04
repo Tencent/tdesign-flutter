@@ -104,6 +104,12 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
                     Navigator.pop(context);
                   }
                 },
+                onDoubleTap: () {
+                  barrierClick?.call();
+                  if (isDismissible) {
+                    Navigator.pop(context);
+                  }
+                },
               ),
             ),
           ),
