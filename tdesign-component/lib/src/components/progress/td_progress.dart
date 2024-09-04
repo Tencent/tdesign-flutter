@@ -33,7 +33,7 @@ class TDProgress extends StatelessWidget {
     double? strokeWidth,
     this.color,
     this.backgroundColor,
-    this.borderRadius,
+    this.linearBorderRadius,
     double? circleRadius,
     this.showLabel = true,
     this.onTap,
@@ -69,8 +69,8 @@ class TDProgress extends StatelessWidget {
   /// 进度条背景颜色
   final Color? backgroundColor;
 
-  /// 进度条末端形状
-  final BorderRadiusGeometry? borderRadius;
+  /// 条形进度条末端形状
+  final BorderRadiusGeometry? linearBorderRadius;
 
   /// 环形进度条半径 (正数)
   final double? circleRadius;
@@ -110,7 +110,7 @@ class TDProgress extends StatelessWidget {
       strokeWidth: strokeWidth ?? defaultValues.strokeWidth,
       color: color,
       backgroundColor: backgroundColor ?? defaultValues.backgroundColor,
-      borderRadius: borderRadius ?? defaultValues.borderRadius,
+      linearBorderRadius: linearBorderRadius ?? defaultValues.linearBorderRadius,
       circleRadius: circleRadius ?? defaultValues.circleRadius,
       showLabel: showLabel,
       onTap: onTap,
@@ -126,28 +126,28 @@ class TDProgress extends StatelessWidget {
         return _DefaultValues(
           strokeWidth: 20.0,
           backgroundColor: TDTheme.of(context).grayColor3,
-          borderRadius: BorderRadius.circular(20),
+          linearBorderRadius: BorderRadius.circular(20),
           circleRadius: 0,
         );
       case TDProgressType.circular:
         return _DefaultValues(
           strokeWidth: 5.0,
           backgroundColor: TDTheme.of(context).grayColor2,
-          borderRadius: BorderRadius.circular(20),
+          linearBorderRadius: BorderRadius.circular(20),
           circleRadius: 100.0,
         );
       case TDProgressType.micro:
         return _DefaultValues(
           strokeWidth: 2.0,
           backgroundColor: TDTheme.of(context).grayColor2,
-          borderRadius: BorderRadius.circular(20),
+          linearBorderRadius: BorderRadius.circular(20),
           circleRadius: 25.0,
         );
       case TDProgressType.button:
         return _DefaultValues(
           strokeWidth: 50.0,
           backgroundColor: TDTheme.of(context).brandNormalColor,
-          borderRadius: BorderRadius.circular(8),
+          linearBorderRadius: BorderRadius.circular(8),
           circleRadius: 0,
         );
     }
@@ -157,13 +157,13 @@ class TDProgress extends StatelessWidget {
 class _DefaultValues {
   final double strokeWidth;
   final Color backgroundColor;
-  final BorderRadiusGeometry borderRadius;
+  final BorderRadiusGeometry linearBorderRadius;
   final double circleRadius;
 
   _DefaultValues({
     required this.strokeWidth,
     required this.backgroundColor,
-    required this.borderRadius,
+    required this.linearBorderRadius,
     required this.circleRadius,
   });
 }
@@ -174,7 +174,7 @@ class ProgressIndicator extends StatefulWidget {
   final TDProgressLabelPosition progressLabelPosition;
   final double strokeWidth;
   final double circleRadius;
-  final BorderRadiusGeometry borderRadius;
+  final BorderRadiusGeometry linearBorderRadius;
   final Color? color;
   final Color backgroundColor;
   final TDProgressType type;
@@ -191,7 +191,7 @@ class ProgressIndicator extends StatefulWidget {
     this.label,
     this.progressLabelPosition = TDProgressLabelPosition.inside,
     required this.strokeWidth,
-    required this.borderRadius,
+    required this.linearBorderRadius,
     required this.circleRadius,
     this.color,
     required this.backgroundColor,
@@ -384,7 +384,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
                   width: progressWidth,
                   decoration: BoxDecoration(
                     color: _effectiveColor,
-                    borderRadius: widget.borderRadius,
+                    borderRadius: widget.linearBorderRadius,
                   ),
                 )
               ],
@@ -404,7 +404,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
     return Container(
       height: widget.strokeWidth,
       decoration: BoxDecoration(
-        borderRadius: widget.borderRadius,
+        borderRadius: widget.linearBorderRadius,
         color: widget.backgroundColor,
       ),
     );
@@ -416,7 +416,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
       width: progressWidth,
       decoration: BoxDecoration(
         color: _effectiveColor,
-        borderRadius: widget.borderRadius,
+        borderRadius: widget.linearBorderRadius,
       ),
       child: widget.showLabel
           ? Align(
@@ -440,14 +440,14 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
           decoration: BoxDecoration(
             color: _effectiveColor,
             borderRadius: BorderRadius.only(
-              topLeft: widget.borderRadius.resolve(TextDirection.ltr).topLeft,
+              topLeft: widget.linearBorderRadius.resolve(TextDirection.ltr).topLeft,
               bottomLeft:
-                  widget.borderRadius.resolve(TextDirection.ltr).bottomLeft,
+                  widget.linearBorderRadius.resolve(TextDirection.ltr).bottomLeft,
               topRight: Radius.circular(
-                  widget.borderRadius.resolve(TextDirection.ltr).topRight.x /
+                  widget.linearBorderRadius.resolve(TextDirection.ltr).topRight.x /
                       2),
               bottomRight: Radius.circular(
-                  widget.borderRadius.resolve(TextDirection.ltr).bottomRight.x /
+                  widget.linearBorderRadius.resolve(TextDirection.ltr).bottomRight.x /
                       2),
             ),
           ),
@@ -523,7 +523,6 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
                 child: TDProgressCircular(
                   strokeWidth: widget.strokeWidth,
                   circleRadius: widget.circleRadius,
-                  borderRadius: widget.borderRadius,
                   value: _animation.value,
                   backgroundColor: widget.backgroundColor,
                   valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
@@ -565,7 +564,6 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
         child: TDProgressCircular(
           strokeWidth: widget.strokeWidth,
           circleRadius: widget.circleRadius,
-          borderRadius: widget.borderRadius,
           value: _animation.value,
           backgroundColor: widget.backgroundColor,
           valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
@@ -583,7 +581,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
             builder: (context, child) {
               final progressWidth = maxWidth * _animation.value;
               return ClipRRect(
-                borderRadius: widget.borderRadius,
+                borderRadius: widget.linearBorderRadius,
                 child: GestureDetector(
                     onTap: widget.onTap,
                     onLongPress: widget.onLongPress,

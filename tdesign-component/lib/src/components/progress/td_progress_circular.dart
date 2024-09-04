@@ -9,7 +9,6 @@ class TDProgressCircular extends StatelessWidget {
   final Color backgroundColor;
   final Animation<Color> valueColor;
   final double circleRadius;
-  final BorderRadiusGeometry borderRadius;
 
   const TDProgressCircular({
     Key? key,
@@ -18,7 +17,6 @@ class TDProgressCircular extends StatelessWidget {
     required this.backgroundColor,
     required this.valueColor,
     required this.circleRadius,
-    required this.borderRadius,
   })  : _value = value,
         super(key: key);
 
@@ -29,16 +27,13 @@ class TDProgressCircular extends StatelessWidget {
     return SizedBox(
       width: circleRadius * 2,
       height: circleRadius * 2,
-      child: ClipRRect(
-        borderRadius: borderRadius,
-        child: CustomPaint(
-          painter: _TDProgressCircularPainter(
-            value: value,
-            backgroundColor: backgroundColor,
-            valueColor: valueColor,
-            circleRadius: circleRadius,
-            strokeWidth: strokeWidth,
-          ),
+      child: CustomPaint(
+        painter: _TDProgressCircularPainter(
+          value: value,
+          backgroundColor: backgroundColor,
+          valueColor: valueColor,
+          circleRadius: circleRadius,
+          strokeWidth: strokeWidth,
         ),
       ),
     );
