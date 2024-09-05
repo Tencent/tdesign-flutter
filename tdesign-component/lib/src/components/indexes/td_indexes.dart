@@ -89,11 +89,12 @@ class _TDIndexesState extends State<TDIndexes> {
 
   List<Widget> _slivers(List<String> indexList) {
     final capsuleTheme = widget.capsuleTheme ?? false;
+    final stickyOffset = widget.stickyOffset ?? 0;
     return indexList
         .mapWidthIndex(
           (e, index) => SliverStickyHeader.builder(
             sticky: widget.sticky ?? true,
-            pinnedOffset: capsuleTheme ? TDTheme.of(context).spacer8 : widget.stickyOffset ?? 0,
+            pinnedOffset: capsuleTheme ? TDTheme.of(context).spacer8 + stickyOffset : stickyOffset,
             builder: (context, state) => TDIndexesAnchor(
               text: e,
               capsuleTheme: capsuleTheme,
@@ -104,7 +105,16 @@ class _TDIndexesState extends State<TDIndexes> {
             ),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) => widget.builderContent(context, e),
+                (context, index) {
+                  final content = widget.builderContent(context, e);
+                  if (capsuleTheme) {
+                    return Padding(
+                      padding: EdgeInsets.only(top: TDTheme.of(context).spacer8),
+                      child: content,
+                    );
+                  }
+                  return content;
+                },
                 childCount: 1,
               ),
             ),
