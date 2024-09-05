@@ -38,7 +38,7 @@ Widget _buildSimple(BuildContext context) {
   return SizedBox(
     height: 150, // screenHeight - navHeight,
     child: TDIndexes(
-      capsuleTheme: true,
+      // capsuleTheme: true,
       // sticky: true,
       indexList: const ['A', 'B'],
       builderContent: (context, index) {
