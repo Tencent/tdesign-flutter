@@ -4,32 +4,32 @@ import '../../../tdesign_flutter.dart';
 import '../../util/iterable_ext.dart';
 import 'sticky_header/widgets/sliver_sticky_header.dart';
 import 'td_indexes_anchor.dart';
+import 'td_indexes_list.dart';
 
 /// 索引
 class TDIndexes extends StatefulWidget {
   const TDIndexes({
     Key? key,
     this.indexList,
-    this.indexListMaxHeight,
-    this.indexKeySize = 20,
+    this.indexListMaxHeight = 0.8,
     this.sticky = true,
     this.stickyOffset = 0,
     this.capsuleTheme = false,
     this.reverse = false,
+    this.scrollDuration = const Duration(milliseconds: 200),
+    this.scrollController,
     this.onChange,
     this.onSelect,
     required this.builderContent,
     this.builderAnchor,
+    this.builderIndex,
   }) : super(key: key);
 
   /// 索引字符列表。不传默认 A-Z
   final List<String>? indexList;
 
-  /// 索引列表最大高度，默认屏幕高度的80%
+  /// 索引列表最大高度（父容器高度的百分比，默认0.8）
   final double? indexListMaxHeight;
-
-  /// 索引编码的尺寸
-  final double? indexKeySize;
 
   /// 锚点是否吸顶
   final bool? sticky;
@@ -43,6 +43,12 @@ class TDIndexes extends StatefulWidget {
   /// 反方向滚动置顶
   final bool? reverse;
 
+  /// 滚动动画时长
+  final Duration? scrollDuration;
+
+  /// 滚动控制器
+  final ScrollController? scrollController;
+
   /// 索引发生变更时触发事件
   final void Function(String index)? onChange;
 
@@ -55,39 +61,73 @@ class TDIndexes extends StatefulWidget {
   /// 锚点自定义构建
   final Widget? Function(BuildContext context, String index, bool isPinnedToTop)? builderAnchor;
 
+  /// 索引文本自定义构建
+  final Widget Function(BuildContext context, String index, bool isActive)? builderIndex;
+
   @override
   _TDIndexesState createState() => _TDIndexesState();
 }
 
 class _TDIndexesState extends State<TDIndexes> {
+  late ScrollController scrollController;
+  late List<String> indexList;
+  late List<GlobalKey> anchorKeys;
+  late ValueNotifier<String> activeIndex;
   @override
   void initState() {
     super.initState();
+    scrollController = widget.scrollController ?? ScrollController();
+    // scrollController.addListener(onScroll);
   }
 
   @override
   void dispose() {
+    // scrollController.removeListener(onScroll);
+    scrollController.dispose();
     super.dispose();
   }
 
   @override
+  void didUpdateWidget(TDIndexes oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.scrollController != oldWidget.scrollController) {
+      // scrollController.removeListener(onScroll);
+      scrollController.dispose();
+      scrollController = widget.scrollController ?? ScrollController();
+      // scrollController.addListener(onScroll);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // final screenHeight = MediaQuery.of(context).size.height;
-    final indexList = widget.indexList ?? _azList();
+    indexList = widget.indexList ?? _azList();
+    anchorKeys = indexList.map((e) => GlobalKey()).toList();
+    activeIndex = ValueNotifier(indexList.getOrNull(0) ?? '');
     return Container(
       color: TDTheme.of(context).whiteColor1,
       child: Stack(
         children: [
           CustomScrollView(
+            controller: scrollController,
             reverse: widget.reverse ?? false,
-            slivers: _slivers(indexList),
-          )
+            slivers: _slivers(),
+          ),
+          TDIndexesList(
+            indexList: indexList,
+            activeIndex: activeIndex,
+            onSelect: (index) {
+              widget.onSelect?.call(index);
+              _scrollToTarget(index);
+            },
+            indexListMaxHeight: widget.indexListMaxHeight ?? 0.8,
+            builderIndex: widget.builderIndex,
+          ),
         ],
       ),
     );
   }
 
-  List<Widget> _slivers(List<String> indexList) {
+  List<Widget> _slivers() {
     final capsuleTheme = widget.capsuleTheme ?? false;
     final stickyOffset = widget.stickyOffset ?? 0;
     return indexList
@@ -95,14 +135,22 @@ class _TDIndexesState extends State<TDIndexes> {
           (e, index) => SliverStickyHeader.builder(
             sticky: widget.sticky ?? true,
             pinnedOffset: capsuleTheme ? TDTheme.of(context).spacer8 + stickyOffset : stickyOffset,
-            builder: (context, state) => TDIndexesAnchor(
-              text: e,
-              capsuleTheme: capsuleTheme,
-              isPinned: state.isPinned,
-              builderAnchor: widget.builderAnchor,
-              index: index,
-              sticky: widget.sticky ?? true,
-            ),
+            builder: (context, state) {
+              if (state.isPinned && activeIndex.value != e) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  activeIndex.value = e;
+                });
+              }
+              return TDIndexesAnchor(
+                key: anchorKeys[index],
+                text: e,
+                capsuleTheme: capsuleTheme,
+                isPinned: state.isPinned,
+                builderAnchor: widget.builderAnchor,
+                index: index,
+                sticky: widget.sticky ?? true,
+              );
+            },
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -130,30 +178,18 @@ class _TDIndexesState extends State<TDIndexes> {
     }
     return azList;
   }
-}
 
-// Positioned(
-//   right: TDTheme.of(context).spacer8,
-//   top: 0,
-//   bottom: 0,
-//   child: Align(
-//     alignment: Alignment.center,
-//     child: ConstrainedBox(
-//       constraints: BoxConstraints(maxHeight: widget.indexListMaxHeight ?? screenHeight * 0.8),
-//       child: ListView.builder(
-//         itemCount: indexList.length,
-//         itemBuilder: (context, index) {
-//           return Container(
-//             width: widget.indexKeySize,
-//             height: widget.indexKeySize,
-//             // decoration: BoxDecoration(
-//             //   borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
-//             //   color: TDTheme.of(context).brandColor7,
-//             // ),
-//             child: TDText(indexList[index]),
-//           );
-//         },
-//       ),
-//     ),
-//   ),
-// ),
+  void _scrollToTarget(String index) {
+    final targetKey = anchorKeys[indexList.indexOf(index)];
+    final renderBox = targetKey.currentContext!.findRenderObject() as RenderBox;
+    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final position = renderBox.localToGlobal(Offset.zero, ancestor: overlay);
+    scrollController.animateTo(
+      position.dy + scrollController.offset,
+      duration: widget.scrollDuration ?? const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  // void onScroll() {}
+}
