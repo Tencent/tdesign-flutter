@@ -10,8 +10,7 @@ class TDIndexesAnchor extends StatelessWidget {
     required this.text,
     required this.capsuleTheme,
     this.builderAnchor,
-    this.isPinned = false,
-    this.index = 0,
+    required this.activeIndex,
   }) : super(key: key);
 
   /// 索引是否吸顶
@@ -23,39 +22,41 @@ class TDIndexesAnchor extends StatelessWidget {
   /// 是否为胶囊式样式
   final bool capsuleTheme;
 
-  /// 是否到顶部
-  final bool isPinned;
-
-  /// 索引
-  final int index;
+  /// 选中索引
+  final ValueNotifier<String> activeIndex;
 
   /// 索引锚点构建
   final Widget? Function(BuildContext context, String index, bool isPinnedToTop)? builderAnchor;
 
   @override
   Widget build(BuildContext context) {
-    final isTop = index == 0 && sticky ? true : isPinned;
-    final customAnchor = builderAnchor?.call(context, text, isTop);
-    return customAnchor ??
-        Container(
-          padding:
-              EdgeInsets.symmetric(vertical: TDTheme.of(context).spacer4, horizontal: TDTheme.of(context).spacer16),
-          margin: capsuleTheme ? EdgeInsets.symmetric(horizontal: TDTheme.of(context).spacer8) : null,
-          decoration: BoxDecoration(
-            color: isTop ? TDTheme.of(context).whiteColor1 : TDTheme.of(context).grayColor1,
-            borderRadius: capsuleTheme ? BorderRadius.circular(TDTheme.of(context).radiusCircle) : null,
-            border: isTop
-                ? capsuleTheme
-                    ? Border.all(color: TDTheme.of(context).grayColor1)
-                    : Border(bottom: BorderSide(color: TDTheme.of(context).grayColor1))
-                : null,
-          ),
-          child: TDText(
-            text,
-            forceVerticalCenter: true,
-            font: TDTheme.of(context).fontTitleSmall,
-            textColor: isTop ? TDTheme.of(context).brandColor7 : TDTheme.of(context).fontGyColor1,
-          ),
-        );
+    return ValueListenableBuilder(
+      valueListenable: activeIndex,
+      builder: (context, value, child) {
+        final isPinned = value == text;
+        final customAnchor = builderAnchor?.call(context, text, isPinned);
+        return customAnchor ??
+            Container(
+              padding:
+                  EdgeInsets.symmetric(vertical: TDTheme.of(context).spacer4, horizontal: TDTheme.of(context).spacer16),
+              margin: capsuleTheme ? EdgeInsets.symmetric(horizontal: TDTheme.of(context).spacer8) : null,
+              decoration: BoxDecoration(
+                color: isPinned ? TDTheme.of(context).whiteColor1 : TDTheme.of(context).grayColor1,
+                borderRadius: capsuleTheme ? BorderRadius.circular(TDTheme.of(context).radiusCircle) : null,
+                border: isPinned
+                    ? capsuleTheme
+                        ? Border.all(color: TDTheme.of(context).grayColor1)
+                        : Border(bottom: BorderSide(color: TDTheme.of(context).grayColor1))
+                    : null,
+              ),
+              child: TDText(
+                text,
+                forceVerticalCenter: true,
+                font: TDTheme.of(context).fontTitleSmall,
+                textColor: isPinned ? TDTheme.of(context).brandColor7 : TDTheme.of(context).fontGyColor1,
+              ),
+            );
+      },
+    );
   }
 }
