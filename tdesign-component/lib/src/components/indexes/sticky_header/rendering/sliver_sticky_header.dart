@@ -366,7 +366,7 @@ class RenderSliverStickyHeader extends RenderSliver with RenderSliverHelpers {
   double? childScrollOffset(RenderObject child) {
     assert(child.parent == this);
     if (child == this.child) {
-      return _headerExtent;
+      return headerLogicalExtent;
     } else {
       return super.childScrollOffset(child);
     }
