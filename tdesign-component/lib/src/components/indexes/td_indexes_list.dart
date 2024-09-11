@@ -4,7 +4,7 @@ import 'package:flutter/scheduler.dart';
 
 import '../../../tdesign_flutter.dart';
 import '../../util/iterable_ext.dart';
-import 'sticky_header/widgets/sliver_sticky_header.dart';
+import 'sticky_header/sticky_header_widget.dart';
 import 'td_indexes_anchor.dart';
 
 /// 索引
@@ -28,7 +28,7 @@ class TDIndexesList extends StatefulWidget {
   final ValueNotifier<String> activeIndex;
 
   /// 点击侧边栏时触发事件
-  final void Function(String index, bool isUp) onSelect;
+  final void Function(String newIndex, String oldIndex) onSelect;
 
   /// 索引文本自定义构建，包括索引激活左侧提示
   final Widget Function(BuildContext context, String index, bool isActive)? builderIndex;
@@ -65,78 +65,85 @@ class _TDIndexesListState extends State<TDIndexesList> {
       child: Align(
         child: FractionallySizedBox(
           heightFactor: widget.indexListMaxHeight,
-          child: GestureDetector(
-            onVerticalDragUpdate: (details) {
-              _changeSelect(details.globalPosition);
-            },
-            onTapUp: (details) {
-              _changeSelect(details.globalPosition);
-              _hideTip();
-            },
-            onVerticalDragEnd: (details) {
-              _hideTip();
-            },
-            child: ValueListenableBuilder(
-              valueListenable: widget.activeIndex,
-              builder: (context, value, child) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: widget.indexList.map(
-                    (e) {
-                      final isActive = value == e;
-                      if (widget.builderIndex != null) {
-                        return widget.builderIndex!(context, e, isActive);
-                      }
-                      return Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          if (_showTip && value == e)
-                            Positioned(
-                              top: -TDTheme.of(context).spacer48 / 2 + _indexSize / 2,
-                              left: -TDTheme.of(context).spacer8 - TDTheme.of(context).spacer48,
-                              child: Container(
-                                height: TDTheme.of(context).spacer48,
-                                width: TDTheme.of(context).spacer48,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
-                                  color: TDTheme.of(context).brandColor1,
+          child: Align(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onVerticalDragUpdate: (details) {
+                _changeSelect(details.globalPosition);
+              },
+              onTapUp: (details) {
+                _changeSelect(details.globalPosition);
+                _hideTip();
+              },
+              onVerticalDragEnd: (details) {
+                _hideTip();
+              },
+              child: ValueListenableBuilder(
+                valueListenable: widget.activeIndex,
+                builder: (context, value, child) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: widget.indexList.map(
+                      (e) {
+                        final isActive = value == e;
+                        if (widget.builderIndex != null) {
+                          return widget.builderIndex!(context, e, isActive);
+                        }
+                        return Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            if (_showTip && value == e)
+                              Positioned(
+                                top: -TDTheme.of(context).spacer48 / 2 + _indexSize / 2,
+                                left: -TDTheme.of(context).spacer48,
+                                child: Container(
+                                  height: TDTheme.of(context).spacer48,
+                                  width: TDTheme.of(context).spacer48,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
+                                    color: TDTheme.of(context).brandColor1,
+                                  ),
+                                  child: Center(
+                                    child: TDText(
+                                      e,
+                                      forceVerticalCenter: true,
+                                      font: TDTheme.of(context).fontTitleExtraLarge,
+                                      textColor: TDTheme.of(context).brandColor7,
+                                    ),
+                                  ),
                                 ),
+                              ),
+                            Container(
+                              key: _containerKeys[e],
+                              padding: EdgeInsets.only(left: TDTheme.of(context).spacer8),
+                              color: Colors.transparent,
+                              child: Container(
+                                width: _indexSize,
+                                height: _indexSize,
+                                decoration: isActive
+                                    ? BoxDecoration(
+                                        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
+                                        color: TDTheme.of(context).brandColor7,
+                                      )
+                                    : null,
                                 child: Center(
                                   child: TDText(
                                     e,
                                     forceVerticalCenter: true,
-                                    font: TDTheme.of(context).fontTitleExtraLarge,
-                                    textColor: TDTheme.of(context).brandColor7,
+                                    font: TDTheme.of(context).fontLinkSmall,
+                                    textColor:
+                                        isActive ? TDTheme.of(context).fontWhColor1 : TDTheme.of(context).fontGyColor1,
                                   ),
                                 ),
                               ),
                             ),
-                          Container(
-                            key: _containerKeys[e],
-                            width: _indexSize,
-                            height: _indexSize,
-                            decoration: isActive
-                                ? BoxDecoration(
-                                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
-                                    color: TDTheme.of(context).brandColor7,
-                                  )
-                                : null,
-                            child: Center(
-                              child: TDText(
-                                e,
-                                forceVerticalCenter: true,
-                                font: TDTheme.of(context).fontLinkSmall,
-                                textColor:
-                                    isActive ? TDTheme.of(context).fontWhColor1 : TDTheme.of(context).fontGyColor1,
-                              ),
-                            ),
-                          )
-                        ],
-                      );
-                    },
-                  ).toList(),
-                );
-              },
+                          ],
+                        );
+                      },
+                    ).toList(),
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -145,13 +152,12 @@ class _TDIndexesListState extends State<TDIndexesList> {
   }
 
   void _changeSelect(Offset globalPosition) {
-    final inIndex = _fingerInsideContainer(globalPosition);
-    if (inIndex != null && inIndex != widget.activeIndex.value) {
-      final oldIndex = widget.indexList.indexOf(widget.activeIndex.value);
-      final newIndex = widget.indexList.indexOf(inIndex);
-      widget.activeIndex.value = inIndex;
+    final newIndex = _fingerInsideContainer(globalPosition);
+    if (newIndex != null && newIndex != widget.activeIndex.value) {
+      final oldIndex = widget.activeIndex.value;
+      widget.activeIndex.value = newIndex;
       _showTip = true;
-      widget.onSelect.call(inIndex, oldIndex > newIndex);
+      widget.onSelect.call(newIndex, oldIndex);
     }
   }
 
@@ -170,10 +176,13 @@ class _TDIndexesListState extends State<TDIndexesList> {
   }
 
   void _hideTip() {
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        _showTip = false;
-      });
-    });
+    Future.delayed(
+      const Duration(seconds: 1),
+      () {
+        setState(() {
+          _showTip = false;
+        });
+      },
+    );
   }
 }

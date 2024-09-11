@@ -1,9 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 import '../../util/iterable_ext.dart';
 
-export 'sticky_header/widgets/sliver_sticky_header.dart';
+export 'sticky_header/sticky_header_widget.dart';
 export 'td_indexes_anchor.dart';
 export 'td_indexes_list.dart';
 
@@ -68,6 +70,7 @@ class TDIndexes extends StatefulWidget {
 class _TDIndexesState extends State<TDIndexes> {
   late List<String> _indexList;
   late ValueNotifier<String> _activeIndex;
+  late ScrollController _scrollController;
   final _anchorKeys = <String, BuildContext>{};
   final _contentKeys = <String, BuildContext>{};
   var _isAnimating = false;
@@ -77,6 +80,7 @@ class _TDIndexesState extends State<TDIndexes> {
     super.initState();
     _indexList = widget.indexList ?? _azList();
     _activeIndex = ValueNotifier(_indexList.getOrNull(0) ?? '');
+    _scrollController = widget.scrollController ?? ScrollController();
   }
 
   @override
@@ -86,6 +90,16 @@ class _TDIndexesState extends State<TDIndexes> {
       _indexList = widget.indexList ?? _azList();
       _activeIndex = ValueNotifier(_indexList.getOrNull(0) ?? '');
     }
+    if (widget.scrollController != oldWidget.scrollController) {
+      _scrollController.dispose();
+      _scrollController = widget.scrollController ?? ScrollController();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -95,17 +109,17 @@ class _TDIndexesState extends State<TDIndexes> {
       child: Stack(
         children: [
           CustomScrollView(
-            controller: widget.scrollController,
+            controller: _scrollController,
             reverse: widget.reverse ?? false,
             slivers: _slivers(),
           ),
           TDIndexesList(
             indexList: _indexList,
             activeIndex: _activeIndex,
-            onSelect: (index, isUp) {
-              widget.onSelect?.call(index);
-              widget.onChange?.call(index);
-              _scrollToTarget(index, isUp);
+            onSelect: (newIndex, oldIndex) {
+              widget.onSelect?.call(newIndex);
+              widget.onChange?.call(newIndex);
+              _scrollToTarget(newIndex, oldIndex);
             },
             indexListMaxHeight: widget.indexListMaxHeight ?? 0.8,
             builderIndex: widget.builderIndex,
@@ -121,9 +135,10 @@ class _TDIndexesState extends State<TDIndexes> {
     _anchorKeys.clear();
     _contentKeys.clear();
     return _indexList.map((e) {
+      final isPinnedOffset = capsuleTheme && _activeIndex.value == e;
       return SliverStickyHeader.builder(
         sticky: widget.sticky ?? true,
-        pinnedOffset: capsuleTheme ? TDTheme.of(context).spacer8 + stickyOffset : stickyOffset,
+        pinnedOffset: isPinnedOffset ? TDTheme.of(context).spacer8 + stickyOffset : stickyOffset,
         builder: (context, state) {
           _anchorKeys[e] = context;
           if (state.isPinned && _activeIndex.value != e && !_isAnimating) {
@@ -140,20 +155,15 @@ class _TDIndexesState extends State<TDIndexes> {
             sticky: widget.sticky ?? true,
           );
         },
-        sliver: SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
+        sliver: SliverToBoxAdapter(
+          child: Builder(
+            builder: (context) {
               _contentKeys[e] = context;
-              final content = widget.builderContent(context, e);
-              if (capsuleTheme) {
-                return Padding(
-                  padding: EdgeInsets.only(top: TDTheme.of(context).spacer8),
-                  child: content,
-                );
-              }
-              return content;
+              return Padding(
+                padding: isPinnedOffset ? EdgeInsets.only(top: TDTheme.of(context).spacer8) : EdgeInsets.zero,
+                child: widget.builderContent(context, e),
+              );
             },
-            childCount: 1,
           ),
         ),
       );
@@ -168,20 +178,39 @@ class _TDIndexesState extends State<TDIndexes> {
     return azList;
   }
 
-  void _scrollToTarget(String index, bool isUp) {
-    final targetContext = isUp ? _anchorKeys[index] : _contentKeys[index];
-    if (targetContext == null) {
-      return;
-    }
+  void _scrollToTarget(String newIndex, String oldIndex) {
     _isAnimating = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Scrollable.ensureVisible(
-        targetContext,
-      ).then((value) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+
+    /// isUp: 是否（手指）向上滑动
+    final isUp = _indexList.indexOf(newIndex) > _indexList.indexOf(oldIndex);
+    if (isUp) {
+      var index = oldIndex;
+      final contentRenderBox = _contentKeys[index]?.findRenderObject() as RenderBox?;
+      if (contentRenderBox != null) {
+        final contentHeight = contentRenderBox.size.height;
+        final maxScrollExtent = _scrollController.position.maxScrollExtent;
+        final targetOffset =
+            contentRenderBox.localToGlobal(Offset(0, contentHeight), ancestor: context.findRenderObject());
+        final scrollOffset = targetOffset.dy + _scrollController.offset;
+        _scrollController.jumpTo(min(maxScrollExtent, scrollOffset));
+      }
+      index = _indexList[_indexList.indexOf(index) + (isUp ? 1 : -1)];
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (index != newIndex) {
+          _scrollToTarget(newIndex, index);
+        } else {
           _isAnimating = false;
-        });
+        }
       });
-    });
+    } else {
+      final anchorContext = _anchorKeys[newIndex];
+      if (anchorContext != null) {
+        Scrollable.ensureVisible(anchorContext).then((value) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _isAnimating = false;
+          });
+        });
+      }
+    }
   }
 }

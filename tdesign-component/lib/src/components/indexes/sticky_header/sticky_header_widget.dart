@@ -1,8 +1,8 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
-import '../rendering/sliver_sticky_header.dart';
-import '../value_layout_builder.dart';
+import 'sticky_header_render.dart';
+import 'value_layout_builder.dart';
 
 /// Signature used by [SliverStickyHeader.builder] to build the header
 /// when the sticky header state has changed.
