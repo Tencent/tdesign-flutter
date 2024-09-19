@@ -14,7 +14,7 @@ import '../../../tdesign_flutter.dart';
 
 const double _kTabHeight = 46.0;
 const double _kTextAndIconTabHeight = 72.0;
-
+const double _kStartOffset = 52.0;
 class _TabStyle extends AnimatedWidget {
   const _TabStyle({
     Key? key,
@@ -127,6 +127,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
     this.backgroundColor,
     this.selectedBgColor,
     this.unSelectedBgColor,
+    this.tabAlignment
   })  : assert(indicator != null || (indicatorWeight > 0.0)),
         super(key: key);
 
@@ -323,6 +324,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// 未选中背景色
   final Color? unSelectedBgColor;
 
+  final TabAlignment? tabAlignment;
   /// A size whose height depends on if the tabs have both icons and text.
   ///
   /// [AppBar] uses this size to compute its own preferred size.
@@ -823,9 +825,32 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
     }
     return null;
   }
-
+  TabAlignment get _defaults {
+    return widget.isScrollable ? TabAlignment.start : TabAlignment.fill;
+  }
+  bool _debugTabAlignmentIsValid(TabAlignment tabAlignment) {
+    assert(() {
+      if (widget.isScrollable && tabAlignment == TabAlignment.fill) {
+        throw FlutterError(
+          '$tabAlignment is only valid for non-scrollable tab bars.',
+        );
+      }
+      if (!widget.isScrollable
+          && (tabAlignment == TabAlignment.start
+              || tabAlignment == TabAlignment.startOffset)) {
+        throw FlutterError(
+          '$tabAlignment is only valid for scrollable tab bars.',
+        );
+      }
+      return true;
+    }());
+    return true;
+  }
   @override
   Widget build(BuildContext context) {
+    final tabBarTheme = TabBarTheme.of(context);
+    final TabAlignment effectiveTabAlignment = widget.tabAlignment ?? tabBarTheme.tabAlignment ?? _defaults;
+    assert(_debugTabAlignmentIsValid(effectiveTabAlignment));
     assert(debugCheckHasMaterialLocalizations(context));
     assert(() {
       if (_controller!.length != widget.tabs.length) {
@@ -843,7 +868,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
       );
     }
 
-    final tabBarTheme = TabBarTheme.of(context);
+
 
     final wrappedTabs = List<Widget>.generate(widget.tabs.length, (int index) {
       const verticalAdjustment = (_kTextAndIconTabHeight - _kTabHeight) / 2.0;
@@ -961,7 +986,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
           ),
         ),
       );
-      if (!widget.isScrollable) {
+      if (!widget.isScrollable && effectiveTabAlignment == TabAlignment.fill) {
         wrappedTabs[index] = Expanded(child: wrappedTabs[index]);
       }
     }
@@ -977,18 +1002,21 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
         unselectedLabelStyle: widget.unselectedLabelStyle,
         child: _TabLabelBar(
           onPerformLayout: _saveTabOffsets,
+          mainAxisSize: effectiveTabAlignment == TabAlignment.fill ? MainAxisSize.max : MainAxisSize.min,
           children: wrappedTabs,
         ),
       ),
     );
 
     if (widget.isScrollable) {
+      final EdgeInsetsGeometry? effectivePadding = effectiveTabAlignment == TabAlignment.startOffset
+          ? const EdgeInsetsDirectional.only(start: _kStartOffset).add(widget.padding ?? EdgeInsets.zero): widget.padding;
       _scrollController ??= _TabBarScrollController(this);
       tdHorizontalTabBar = SingleChildScrollView(
         dragStartBehavior: widget.dragStartBehavior,
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
-        padding: widget.padding,
+        padding: effectivePadding,
         physics: widget.physics,
         child: tdHorizontalTabBar,
       );
@@ -1125,6 +1153,7 @@ class _TabLabelBar extends Flex {
     Key? key,
     List<Widget> children = const <Widget>[],
     required this.onPerformLayout,
+    required super.mainAxisSize,
   }) : super(
     key: key,
     children: children,
