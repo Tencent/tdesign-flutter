@@ -29,6 +29,7 @@ import 'page/td_font_page.dart';
 import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
 import 'page/td_image_viewer_page.dart';
+import 'page/td_indexes_page.dart';
 import 'page/td_input_page.dart';
 import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
@@ -92,8 +93,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Indexes 索引',
         name: 'indexes',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDIndexesPage())),
     ExamplePageModel(
         text: 'NavBar 导航栏', name: 'navbar', pageBuilder: _wrapInheritedTheme((context) => const TDNavBarPage())),
     ExamplePageModel(
