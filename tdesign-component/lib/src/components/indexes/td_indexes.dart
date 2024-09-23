@@ -194,7 +194,7 @@ class _TDIndexesState extends State<TDIndexes> {
         final scrollOffset = targetOffset.dy + _scrollController.offset;
         _scrollController.jumpTo(min(maxScrollExtent, scrollOffset));
       }
-      index = _indexList[_indexList.indexOf(index) + (isUp ? 1 : -1)];
+      index = _indexList[_indexList.indexOf(index) + 1];
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (index != newIndex) {
           _scrollToTarget(newIndex, index);
