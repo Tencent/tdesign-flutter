@@ -52,7 +52,7 @@ class TDIndexesAnchor extends StatelessWidget {
               child: TDText(
                 text,
                 forceVerticalCenter: true,
-                font: TDTheme.of(context).fontTitleSmall,
+                font: isPinned ? TDTheme.of(context).fontMarkMedium : TDTheme.of(context).fontTitleSmall,
                 textColor: isPinned ? TDTheme.of(context).brandColor7 : TDTheme.of(context).fontGyColor1,
               ),
             );
