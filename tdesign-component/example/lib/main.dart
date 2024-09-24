@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'gen_l10n/app_localizations.dart';
 import 'package:tdesign_flutter/src/util/log.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 

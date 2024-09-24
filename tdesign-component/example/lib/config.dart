@@ -29,6 +29,7 @@ import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
 import 'page/td_image_viewer_page.dart';
 import 'page/td_input_page.dart';
+import 'page/td_form_page.dart';
 import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
 import 'page/td_navbar_page.dart';
@@ -120,6 +121,8 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'date-time-picker',
         pageName: 'data_picker',
         pageBuilder: _wrapInheritedTheme((context) => const TDDatePickerPage())),
+    ExamplePageModel(
+        text: 'Form 表单', name: 'form', pageBuilder: _wrapInheritedTheme((context) => const TDFormPage())),
     ExamplePageModel(
         text: 'Input 输入框', name: 'input', pageBuilder: _wrapInheritedTheme((context) => const TDInputViewPage())),
     ExamplePageModel(
