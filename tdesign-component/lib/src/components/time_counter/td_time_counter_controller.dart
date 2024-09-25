@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-/// 倒计时组件控制器转态
-enum TDCountDownStatus {
+/// 计时组件控制器转态
+enum TDTimeCounterStatus {
   /// 开始
   start,
 
@@ -19,8 +19,8 @@ enum TDCountDownStatus {
 }
 
 /// 倒计时组件控制器，可控制开始(`start()`)/暂停(`pause()`)/继续(`resume()`)/重置(`reset([int? time])`)
-class TDCountDownController extends ValueNotifier<TDCountDownStatus> {
-  TDCountDownController() : super(TDCountDownStatus.idle);
+class TDTimeCounterController extends ValueNotifier<TDTimeCounterStatus> {
+  TDTimeCounterController() : super(TDTimeCounterStatus.idle);
 
   int? _time;
 
@@ -28,27 +28,27 @@ class TDCountDownController extends ValueNotifier<TDCountDownStatus> {
 
   /// 开始
   void start() {
-    value = TDCountDownStatus.start;
+    value = TDTimeCounterStatus.start;
   }
 
   /// 暂停
   void pause() {
-    value = TDCountDownStatus.pause;
+    value = TDTimeCounterStatus.pause;
   }
 
   /// 继续
   void resume() {
-    value = TDCountDownStatus.resume;
+    value = TDTimeCounterStatus.resume;
   }
 
   /// 重置
   void reset([int? time]) {
-    if (value == TDCountDownStatus.reset && _time != time) {
+    if (value == TDTimeCounterStatus.reset) {
        _time = time;
       notifyListeners();
     } else {
       _time = time;
-      value = TDCountDownStatus.reset;
+      value = TDTimeCounterStatus.reset;
     }
   }
 }

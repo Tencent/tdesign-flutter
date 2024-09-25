@@ -82,5 +82,15 @@ extension IterableExt<T> on Iterable<T> {
     return firstWhereOrNull((element) => test(element)) != null;
   }
 
+  ///
+  /// 获取指定索引的元素，如果索引越界，则返回null
+  ///
+  T? getOrNull(int index) {
+    if (index < 0 || index >= length) {
+      return null;
+    }
+    return elementAt(index);
+  }
+
 
 }

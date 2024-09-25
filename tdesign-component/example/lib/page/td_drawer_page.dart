@@ -81,7 +81,15 @@ class TDDrawerPage extends StatelessWidget {
               ),
             ]),
           ],
-          test: const [],
+          test: [
+            ExampleItem(
+              ignoreCode: true,
+              desc: '自定义背景色',
+              builder: (BuildContext context) {
+                return const CodeWrapper(builder: _buildColorSimple);
+              },
+            )
+          ],
         ));
   }
 }
@@ -178,6 +186,29 @@ Widget _buildBottomSimple(BuildContext context) {
           width: double.infinity,
           size: TDButtonSize.large,
         ),
+      );
+    },
+  );
+}
+
+@Demo(group: 'drawer')
+Widget _buildColorSimple(BuildContext context) {
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
+  return TDButton(
+    text: '自定义背景色',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDDrawer(
+        context,
+        visible: true,
+        drawerTop: renderBox?.size.height,
+        title: '标题',
+        backgroundColor: TDTheme.of(context).grayColor1,
+        placement: TDDrawerPlacement.right,
+        items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
       );
     },
   );
