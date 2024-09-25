@@ -220,7 +220,6 @@ class _TDNavBarState extends State<TDNavBar> {
           vertical: TDTheme.of(context).spacer4,
         );
 
-    print("screenAdaptation:${widget.screenAdaptation}, paddingTop:$paddingTop");
     return Container(
       color: bcc,
       height: widget.height + paddingTop,
