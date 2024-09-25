@@ -26,6 +26,7 @@ export 'src/components/image/image_widget.dart';
 export 'src/components/image/td_image.dart';
 export 'src/components/image_viewer/td_image_viewer.dart';
 export 'src/components/image_viewer/td_image_viewer_widget.dart';
+export 'src/components/indexes/td_indexes.dart';
 export 'src/components/input/input_view.dart';
 export 'src/components/input/td_input.dart';
 export 'src/components/input/td_input_spacer.dart';
