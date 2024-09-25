@@ -187,11 +187,16 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     if (focusNode != null && focusNode.context != null) {
       var renderObject = focusNode.context!.findRenderObject();
       if (renderObject is RenderPointerListener) {
-        _focusY = renderObject.localToGlobal(Offset.zero).dy;
+        _focusY = renderObject
+            .localToGlobal(Offset.zero)
+            .dy;
         _focusHeight = renderObject.size.height;
       }
     }
     (focusNode?.context as Element?)?.markNeedsBuild();
+  }
+
+  @override
   bool didPop(T? result) {
     close?.call();
     return super.didPop(result);
