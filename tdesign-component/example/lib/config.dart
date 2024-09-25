@@ -38,6 +38,7 @@ import 'page/td_picker_page.dart';
 import 'page/td_popup_page.dart';
 import 'page/td_radio_page.dart';
 import 'page/td_radius_page.dart';
+import 'page/td_rate_page.dart';
 import 'page/td_refresh_page.dart';
 import 'page/td_search_bar_page.dart';
 import 'page/td_shadows_page.dart';
@@ -127,7 +128,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Radio 单选框', name: 'radio', pageBuilder: _wrapInheritedTheme((context) => const TDRadioPage())),
     ExamplePageModel(
-        text: 'Rate 评分', name: 'rate', isTodo: true, pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        text: 'Rate 评分', name: 'rate', pageBuilder: _wrapInheritedTheme((context) => const TDRatePage())),
     ExamplePageModel(
         text: 'Search 搜索框', name: 'search', pageBuilder: _wrapInheritedTheme((context) => const TDSearchBarPage())),
     ExamplePageModel(
