@@ -179,6 +179,7 @@ class TDWrapSideBarItem extends StatelessWidget {
         ],
       ),
       softWrap: true,
+      style: selectedTextStyle,
     );
   }
 
