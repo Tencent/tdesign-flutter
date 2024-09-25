@@ -62,7 +62,8 @@ class TDInput extends StatelessWidget {
       this.cardStyleTopText,
       this.inputAction,
       TDInputSpacer? spacer,
-      this.cardStyleBottomText})
+      this.cardStyleBottomText,
+      this.onTapOutside})
       :
         // assert(() {
         //   if (type == TDInputType.cardStyle) {
@@ -239,6 +240,9 @@ class TDInput extends StatelessWidget {
   /// 左侧内容所占区域宽度
   double _leftLabelWidth = 0;
 
+  /// 点击输入框外部区域回调
+  final TapRegionCallback? onTapOutside;
+
   /// 获取输入框规格
   double getInputPadding() {
     switch (size) {
@@ -348,6 +352,7 @@ class TDInput extends StatelessWidget {
                       hintText: hintText,
                       inputType: inputType,
                       onChanged: onChanged,
+                      onTapOutside: onTapOutside,
                       inputFormatters: inputFormatters,
                       inputDecoration: inputDecoration,
                       maxLines: maxLines,
