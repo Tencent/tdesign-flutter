@@ -1,0 +1,7 @@
+
+  Widget _buildCustomResult(BuildContext context) {
+    return TDResult(
+        title: '自定义结果',
+        icon: Image.asset('assets/img/illustration.png'),
+        description: '描述文字');
+  }
