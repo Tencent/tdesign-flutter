@@ -38,6 +38,6 @@ class TDRatePageState extends State<TDRatePage> {
 
   @Demo(group: 'rate')
   Widget _buildFilledRate(BuildContext context) {
-    return Container();
+    return const Padding(padding: EdgeInsets.all(50), child: TDRate());
   }
 }
