@@ -189,8 +189,19 @@ class TDMultiPicker extends StatelessWidget {
 
   Widget buildTitle(BuildContext context, List<FixedExtentScrollController> controllers) {
     return Container(
-      padding:
-          EdgeInsets.only(left: leftPadding ?? 16, right: rightPadding ?? 16),
+      padding: EdgeInsets.only(
+        left: leftPadding ?? 16,
+        right: rightPadding ?? 16,
+        top: topPadding ?? 16,
+      ),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 0.5,
+            color: titleDividerColor ?? Colors.transparent,
+          )
+        ),
+      ),
       height: getTitleHeight(),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -534,7 +545,18 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
   Widget buildTitle(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-          left: widget.leftPadding ?? 16, right: widget.rightPadding ?? 16),
+        left: widget.leftPadding ?? 16,
+        right: widget.rightPadding ?? 16,
+        top: widget.topPadding ?? 16,
+      ),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 0.5,
+            color: widget.titleDividerColor ?? Colors.transparent,
+          )
+        )
+      ),
       height: getTitleHeight() - 0.5,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

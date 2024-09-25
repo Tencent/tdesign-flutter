@@ -24,6 +24,8 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     this.modalLeft = 0,
     this.open,
     this.opened,
+    this.close,
+    this.barrierClick,
   });
 
   /// 控件构建器
@@ -58,6 +60,12 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
 
   /// 打开后事件
   final VoidCallback? opened;
+
+  /// 关闭前事件
+  final VoidCallback? close;
+
+  /// 蒙层点击事件，仅在[modalBarrierFull]为false时触发
+  final VoidCallback? barrierClick;
 
   Color get _barrierColor => modalBarrierColor ?? Colors.black54;
 
@@ -101,6 +109,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
               color: _barrierColor.withAlpha((animValue * _barrierColor.alpha).toInt()),
               child: GestureDetector(
                 onTap: () {
+                  barrierClick?.call();
                   if (isDismissible) {
                     Navigator.pop(context);
                   }
@@ -150,6 +159,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
 
   @override
   void dispose() {
+    close?.call();
     stopFocusListener(navigator!.context);
     super.dispose();
   }
@@ -176,6 +186,9 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
       }
     }
     (focusNode?.context as Element?)?.markNeedsBuild();
+  bool didPop(T? result) {
+    close?.call();
+    return super.didPop(result);
   }
 
   Widget _getPositionWidget(BuildContext context, Widget child) {
