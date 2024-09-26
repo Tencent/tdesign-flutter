@@ -35,6 +35,8 @@ class TDAlertDialog extends StatelessWidget {
     this.rightBtnAction,
     this.showCloseButton,
     TDDialogButtonStyle buttonStyle = TDDialogButtonStyle.normal,
+    this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
+    this.buttonWidget,
   })  : assert((title != null || content != null)),
         _vertical = false,
         _buttons = null,
@@ -57,6 +59,8 @@ class TDAlertDialog extends StatelessWidget {
     this.contentColor,
     this.contentMaxHeight = 0,
     this.showCloseButton,
+    this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
+    this.buttonWidget,
   })  : _vertical = true,
         leftBtn = null,
         rightBtn = null,
@@ -121,6 +125,12 @@ class TDAlertDialog extends StatelessWidget {
   /// [leftBtn]和[rightBtn]中的style会覆盖此配置
   final TDDialogButtonStyle _buttonStyle;
 
+  /// 内容内边距
+  final EdgeInsets? padding;
+
+  /// 自定义按钮
+  final Widget? buttonWidget;
+
   @override
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
@@ -137,6 +147,7 @@ class TDAlertDialog extends StatelessWidget {
             content: content,
             contentColor: contentColor,
             contentMaxHeight: contentMaxHeight,
+            padding: padding,
           ),
           const TDDivider(height: 24, color: Colors.transparent),
           _vertical ? _verticalButtons(context) : _horizontalButtons(context),
@@ -144,6 +155,9 @@ class TDAlertDialog extends StatelessWidget {
   }
 
   Widget _horizontalButtons(BuildContext context) {
+    if(buttonWidget != null) {
+      return buttonWidget!;
+    }
     final left = leftBtn ??
         TDDialogButtonOptions(
             title: context.resource.cancel, theme: TDButtonTheme.light, action: leftBtnAction);

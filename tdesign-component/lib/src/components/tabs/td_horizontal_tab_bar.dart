@@ -43,15 +43,15 @@ class _TabStyle extends AnimatedWidget {
     // To enable TextStyle.lerp(style1, style2, value), both styles must have
     // the same value of inherit. Force that to be inherit=true here.
     final defaultStyle = (labelStyle ??
-            tabBarTheme.labelStyle ??
-            TextStyle(
-              height: TDTheme.of(context).fontBodyMedium?.height ?? 1.57,
-              fontSize: TDTheme.of(context).fontBodyMedium?.size ?? 14
-            ))
+        tabBarTheme.labelStyle ??
+        TextStyle(
+            height: TDTheme.of(context).fontBodyMedium?.height ?? 1.57,
+            fontSize: TDTheme.of(context).fontBodyMedium?.size ?? 14
+        ))
         .copyWith(inherit: true);
     final defaultUnselectedStyle = (unselectedLabelStyle ??
-            tabBarTheme.unselectedLabelStyle ??
-            labelStyle ??
+        tabBarTheme.unselectedLabelStyle ??
+        labelStyle ??
         TextStyle(
             height: TDTheme.of(context).fontBodyMedium?.height ?? 1.57,
             fontSize: TDTheme.of(context).fontBodyMedium?.size ?? 14
@@ -60,7 +60,7 @@ class _TabStyle extends AnimatedWidget {
     final textStyle = selected
         ? TextStyle.lerp(defaultStyle, defaultUnselectedStyle, animation.value)!
         : TextStyle.lerp(
-            defaultUnselectedStyle, defaultStyle, animation.value)!;
+        defaultUnselectedStyle, defaultStyle, animation.value)!;
 
     final selectedColor = labelColor ??
         tabBarTheme.labelColor ??
@@ -468,12 +468,12 @@ class _IndicatorPainter extends CustomPainter {
 
     final insets = indicatorPadding.resolve(_currentTextDirection);
     final rect =
-        Rect.fromLTWH(tabLeft, 0.0, tabRight - tabLeft, tabBarSize.height);
+    Rect.fromLTWH(tabLeft, 0.0, tabRight - tabLeft, tabBarSize.height);
 
     if (!(rect.size >= insets.collapsedSize)) {
       throw FlutterError(
         'indicatorPadding insets should be less than Tab Size\n'
-        'Rect Size : ${rect.size}, Insets: ${insets.toString()}',
+            'Rect Size : ${rect.size}, Insets: ${insets.toString()}',
       );
     }
     return insets.deflateRect(rect);
@@ -612,14 +612,14 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
     _indicatorPainter = !_controllerIsValid
         ? null
         : _IndicatorPainter(
-            controller: _controller!,
-            indicator: _indicator,
-            indicatorSize:
-                widget.indicatorSize ?? TabBarTheme.of(context).indicatorSize,
-            indicatorPadding: widget.indicatorPadding,
-            tabKeys: _tabKeys,
-            old: _indicatorPainter,
-          );
+      controller: _controller!,
+      indicator: _indicator,
+      indicatorSize:
+      widget.indicatorSize ?? TabBarTheme.of(context).indicatorSize,
+      indicatorPadding: widget.indicatorPadding,
+      tabKeys: _tabKeys,
+      old: _indicatorPainter,
+    );
   }
 
   @override
@@ -800,7 +800,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
             color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
             borderRadius: BorderRadius.only(
                 topRight:
-                    Radius.circular(index + 1 < widget.tabs.length ? 9 : 0),
+                Radius.circular(index + 1 < widget.tabs.length ? 9 : 0),
                 topLeft: Radius.circular(index > 0 ? 9 : 0)));
       } else {
         return BoxDecoration(
@@ -831,7 +831,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
       if (_controller!.length != widget.tabs.length) {
         throw FlutterError(
           "Controller's length property (${_controller!.length}) does not match the "
-          "number of tabs (${widget.tabs.length}) present in TDHorizontalTabBar's tabs property.",
+              "number of tabs (${widget.tabs.length}) present in TDHorizontalTabBar's tabs property.",
         );
       }
       return true;
@@ -907,20 +907,20 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
         // The user is dragging the TDHorizontalTabBarView's PageView left or right.
         final tabIndex = _currentIndex!;
         final Animation<double> centerAnimation =
-            _DragAnimation(_controller!, tabIndex);
+        _DragAnimation(_controller!, tabIndex);
         wrappedTabs[tabIndex] =
             _buildStyledTab(wrappedTabs[tabIndex], true, centerAnimation);
         if (_currentIndex! > 0) {
           final tabIndex = _currentIndex! - 1;
           final Animation<double> previousAnimation =
-              ReverseAnimation(_DragAnimation(_controller!, tabIndex));
+          ReverseAnimation(_DragAnimation(_controller!, tabIndex));
           wrappedTabs[tabIndex] =
               _buildStyledTab(wrappedTabs[tabIndex], false, previousAnimation);
         }
         if (_currentIndex! < widget.tabs.length - 1) {
           final tabIndex = _currentIndex! + 1;
           final Animation<double> nextAnimation =
-              ReverseAnimation(_DragAnimation(_controller!, tabIndex));
+          ReverseAnimation(_DragAnimation(_controller!, tabIndex));
           wrappedTabs[tabIndex] =
               _buildStyledTab(wrappedTabs[tabIndex], false, nextAnimation);
         }
@@ -1036,11 +1036,11 @@ class _TabBarScrollPosition extends ScrollPositionWithSingleContext {
     required ScrollPosition? oldPosition,
     required this.tabBar,
   }) : super(
-          physics: physics,
-          context: context,
-          initialPixels: null,
-          oldPosition: oldPosition,
-        );
+    physics: physics,
+    context: context,
+    initialPixels: null,
+    oldPosition: oldPosition,
+  );
 
   final _TDHorizontalTabBarState tabBar;
 
@@ -1078,14 +1078,14 @@ class _TabLabelBarRenderer extends RenderFlex {
     required VerticalDirection verticalDirection,
     required this.onPerformLayout,
   }) : super(
-          children: children,
-          direction: direction,
-          mainAxisSize: mainAxisSize,
-          mainAxisAlignment: mainAxisAlignment,
-          crossAxisAlignment: crossAxisAlignment,
-          textDirection: textDirection,
-          verticalDirection: verticalDirection,
-        );
+    children: children,
+    direction: direction,
+    mainAxisSize: mainAxisSize,
+    mainAxisAlignment: mainAxisAlignment,
+    crossAxisAlignment: crossAxisAlignment,
+    textDirection: textDirection,
+    verticalDirection: verticalDirection,
+  );
 
   _LayoutCallback onPerformLayout;
 
@@ -1126,14 +1126,14 @@ class _TabLabelBar extends Flex {
     List<Widget> children = const <Widget>[],
     required this.onPerformLayout,
   }) : super(
-          key: key,
-          children: children,
-          direction: Axis.horizontal,
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          verticalDirection: VerticalDirection.down,
-        );
+    key: key,
+    children: children,
+    direction: Axis.horizontal,
+    mainAxisSize: MainAxisSize.max,
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    verticalDirection: VerticalDirection.down,
+  );
 
   final _LayoutCallback onPerformLayout;
 
@@ -1187,7 +1187,7 @@ class _DragAnimation extends Animation<double>
     assert(!controller.indexIsChanging);
     final controllerMaxValue = (controller.length - 1).toDouble();
     final controllerValue =
-        controller.animation!.value.clamp(0.0, controllerMaxValue);
+    controller.animation!.value.clamp(0.0, controllerMaxValue);
     return (controllerValue - index.toDouble()).abs().clamp(0.0, 1.0);
   }
 }
@@ -1427,7 +1427,7 @@ class _TDHorizontalTabBarViewState extends State<TDHorizontalTabBarView> {
       if (_controller!.length != widget.children.length) {
         throw FlutterError(
           "Controller's length property (${_controller!.length}) does not match the "
-          "number of tabs (${widget.children.length}) present in TDHorizontalTabBar's tabs property.",
+              "number of tabs (${widget.children.length}) present in TDHorizontalTabBar's tabs property.",
         );
       }
       return true;
@@ -1524,11 +1524,11 @@ class TabPageSelector extends StatelessWidget {
   final Color? selectedColor;
 
   Widget _buildTabIndicator(
-    int tabIndex,
-    TabController tabController,
-    ColorTween selectedColorTween,
-    ColorTween previousColorTween,
-  ) {
+      int tabIndex,
+      TabController tabController,
+      ColorTween selectedColorTween,
+      ColorTween previousColorTween,
+      ) {
     final Color background;
     if (tabController.indexIsChanging) {
       // The selection's animation is animating from previousValue to value.
@@ -1567,9 +1567,9 @@ class TabPageSelector extends StatelessWidget {
     final fixSelectedColor =
         selectedColor ?? Theme.of(context).colorScheme.secondary;
     final selectedColorTween =
-        ColorTween(begin: fixColor, end: fixSelectedColor);
+    ColorTween(begin: fixColor, end: fixSelectedColor);
     final previousColorTween =
-        ColorTween(begin: fixSelectedColor, end: fixColor);
+    ColorTween(begin: fixSelectedColor, end: fixColor);
     final tabController = controller ?? DefaultTabController.of(context);
     final localizations = MaterialLocalizations.of(context);
     assert(() {
@@ -1589,7 +1589,7 @@ class TabPageSelector extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children:
-                List<Widget>.generate(tabController.length, (int tabIndex) {
+            List<Widget>.generate(tabController.length, (int tabIndex) {
               return _buildTabIndicator(tabIndex, tabController,
                   selectedColorTween, previousColorTween);
             }).toList(),
