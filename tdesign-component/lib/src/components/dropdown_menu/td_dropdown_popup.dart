@@ -14,7 +14,7 @@ class TDDropdownPopup {
   TDDropdownPopup({
     required this.parentContext,
     required this.child,
-    this.handleClose,
+    required this.handleClose,
     this.direction = TDDropdownPopupDirection.auto,
     this.showOverlay = true,
     this.closeOnClickOverlay = true,
@@ -23,31 +23,33 @@ class TDDropdownPopup {
 
   final BuildContext parentContext;
   final TDDropdownItem child;
-  final FutureCallback? handleClose;
+  final FutureCallback handleClose;
   final TDDropdownPopupDirection? direction;
   final bool? showOverlay;
   final bool? closeOnClickOverlay;
   final Duration? duration;
 
   /// _overlay1：下拉方向的
-  /// _overlay2：menu部分的
-  /// _overlay3：下拉反方向的
-  /// _overlay3Height：下拉反方向的高度，用于判断auto方向
-  /// _initContent：初始内容
   late double _overlay1Top,
       _overlay1Bottom,
+
+      /// _overlay2：menu部分的
       _overlay2Top,
       _overlay2Bottom,
+
+      /// _overlay3：下拉反方向的
       _overlay3Top,
       _overlay3Bottom,
+
+      /// _overlay3Height：下拉反方向的高度，用于判断auto方向
       _overlay3Height,
+
+      /// _initContent：初始内容
       _initContentTop,
       _initContentBottom;
-  late Future<void> Function() _closeContent;
+  final _closeListenable = ValueNotifier<FutureCallback?>(null);
   final _directionListenable = ValueNotifier<TDDropdownPopupDirection>(TDDropdownPopupDirection.auto);
-  final _colorAlphaListenable = ValueNotifier<bool>(false);
-
-  OverlayEntry? overlayEntry;
+  final _colorAlphaListenable = ValueNotifier(false);
 
   Duration get _duration => duration ?? const Duration(milliseconds: 200);
 
@@ -88,8 +90,7 @@ class TDDropdownPopup {
   Future<void> add([TDDropdownItem? updateChild]) {
     var completer = Completer<void>();
     _directionListenable.value = direction ?? TDDropdownPopupDirection.auto;
-    overlayEntry?.remove();
-    overlayEntry = OverlayEntry(
+    final overlayEntry = OverlayEntry(
       builder: (BuildContext context) {
         return _directionListenable.value == TDDropdownPopupDirection.auto
             ? ValueListenableBuilder(
@@ -102,8 +103,7 @@ class TDDropdownPopup {
             : _getPopup(_directionListenable.value, updateChild, completer);
       },
     );
-
-    Overlay.of(parentContext).insert(overlayEntry!);
+    Navigator.push(parentContext, _PopupOverlayRoute(overlayEntry, handleClose));
     return completer.future;
   }
 
@@ -120,22 +120,23 @@ class TDDropdownPopup {
         _getOverlay3(barrier),
       ],
       TDDropdownInherited(
-          popupState: this,
+        popupState: this,
+        directionListenable: _directionListenable,
+        child: TDDropdownPanel(
+          duration: _duration,
+          direction: value,
           directionListenable: _directionListenable,
-          child: TDDropdownPanel(
-            duration: _duration,
-            direction: value,
-            directionListenable: _directionListenable,
-            colorAlphaListenable: _colorAlphaListenable,
-            initContentBottom: _initContentBottom,
-            initContentTop: _initContentTop,
-            reverseHeight: _overlay3Height,
-            closeCallback: _closeCallback,
-            onOpened: () {
-              completer.complete();
-            },
-            child: updateChild ?? child,
-          )),
+          colorAlphaListenable: _colorAlphaListenable,
+          initContentBottom: _initContentBottom,
+          initContentTop: _initContentTop,
+          reverseHeight: _overlay3Height,
+          closeListenable: _closeListenable,
+          onOpened: () {
+            completer.complete();
+          },
+          child: updateChild ?? child,
+        ),
+      ),
     ]);
   }
 
@@ -150,7 +151,7 @@ class TDDropdownPopup {
               builder: (BuildContext context, value, Widget? child) {
                 return AnimatedContainer(
                   color: value ? Colors.black54 : Colors.black54.withAlpha(0),
-                  duration: _duration,
+                  duration: value ? _duration : _duration ~/ 2,
                   child: barrier,
                 );
               },
@@ -188,20 +189,29 @@ class TDDropdownPopup {
     if (!(closeOnClickOverlay ?? true)) {
       return;
     }
-    if (handleClose != null) {
-      handleClose!();
-    } else {
-      remove();
-    }
+    Navigator.maybePop(parentContext);
   }
 
   Future<void> remove() async {
-    await _closeContent();
-    overlayEntry?.remove();
-    overlayEntry = null;
+    await _closeListenable.value?.call();
+    _closeListenable.value = null;
+  }
+}
+
+class _PopupOverlayRoute<T> extends OverlayRoute<T> {
+  final OverlayEntry overlayEntry;
+  final FutureCallback handleClose;
+
+  _PopupOverlayRoute(this.overlayEntry, this.handleClose);
+
+  @override
+  Iterable<OverlayEntry> createOverlayEntries() {
+    return [overlayEntry];
   }
 
-  void _closeCallback(Future<void> Function() fn) {
-    _closeContent = fn;
+  @override
+  Future<RoutePopDisposition> willPop() async {
+    await handleClose();
+    return super.willPop();
   }
 }

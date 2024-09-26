@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -43,7 +44,12 @@ class TDSideBarPageState extends State<TDSideBarPage> {
             ExampleItem(
                 desc: '侧边导航样式', ignoreCode: true, builder: _buildStyleSideBar),
           ])
-        ]);
+        ],
+        test: [
+          ExampleItem(
+              desc: '延迟加载', ignoreCode: true, builder: _loadingSideBar),
+        ],
+    );
   }
 
   Widget _buildNavigatorSideBar(BuildContext context) {
@@ -94,6 +100,20 @@ class TDSideBarPageState extends State<TDSideBarPage> {
               builder: (_) =>
                   getCustomButton(context, '自定义样式', 'SideBarCustom'),
               methodName: '_buildCustomSideBar',
+            ),
+          ],
+        ));
+  }
+
+  Widget _loadingSideBar(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            CodeWrapper(
+              builder: (_) =>
+                  getCustomButton(context, '延迟加载', 'SideBarLoading'),
+              methodName: '_buildLoadingSideBar',
             ),
           ],
         ));
