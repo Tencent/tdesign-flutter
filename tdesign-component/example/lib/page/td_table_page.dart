@@ -129,6 +129,7 @@ class TDTablePage extends StatelessWidget {
                   style: TextStyle(
                     color: TDTheme.of(context).brandNormalColor,
                     fontSize: 14,
+                    height: 1,
                   ),
                 ),
                 TDText(
@@ -137,6 +138,7 @@ class TDTablePage extends StatelessWidget {
                   style: TextStyle(
                     color: TDTheme.of(context).brandNormalColor,
                     fontSize: 14,
+                    height: 1,
                   ),
                 ),
               ],
