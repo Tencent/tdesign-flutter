@@ -35,6 +35,7 @@ class TDPicker {
         context: context,
         backgroundColor: Colors.transparent,
         barrierColor: barrierColor ?? TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+        enableDrag:false,
         builder: (context) {
           return TDDatePicker(
               title: title,

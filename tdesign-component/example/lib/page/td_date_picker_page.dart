@@ -294,12 +294,15 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
               });
               Navigator.of(context).pop();
             },
+            useYear: true,
+            useMonth: true,
+            useDay: true,
             useHour: true,
             useMinute: true,
             useSecond: true,
-            dateStart: [2012, 1, 15,12],
-            dateEnd: [2012, 6, 15,12,48,59],
-            initialDate: [2012, 1, 15,13,20,22]);
+            dateStart: [2012,1, 15,12,28],
+            dateEnd: [2012, 6, 15,12,48],
+            initialDate: [2012, 1, 15,13,20]);
       },
       child: buildSelectRow(context, selected_5, '选择时间'),
     );

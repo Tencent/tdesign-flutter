@@ -297,6 +297,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                     if (useAll()) {
                       widget.model.refreshTimeDataInitialAndController(whichLine);
                     }
+
                     /// 使用动态高度，强制列表组件的state刷新，以展现更新的数据，详见下方链接
                     /// FIX:https://github.com/flutter/flutter/issues/22999
                     pickerHeight = pickerHeight - Random().nextDouble() / 100000000;
@@ -447,9 +448,16 @@ class DatePickerModel {
 
   void setInitialTime() {
     dateStart = List.generate(6, (index) => index < dateStart.length ? dateStart[index] : 0);
-    var startTime = DateTime(dateStart[0],dateStart[1],dateStart[2],dateStart[3],dateStart[4],dateStart[5]);
+    var startTime = DateTime(dateStart[0], dateStart[1], dateStart[2], dateStart[3], dateStart[4], dateStart[5]);
     dateEnd = List.generate(6, (index) => index < dateEnd.length ? dateEnd[index] : 0);
-    var endTime = DateTime(dateEnd[0],dateEnd[1],dateEnd[2],dateEnd[3],dateEnd[4],dateEnd[5],);
+    var endTime = DateTime(
+      dateEnd[0],
+      dateEnd[1],
+      dateEnd[2],
+      dateEnd[3],
+      dateEnd[4],
+      dateEnd[5],
+    );
     if (dateInitial != null) {
       var initList = List.generate(6, (index) => index < dateInitial!.length ? dateInitial![index] : 0);
       initialTime = DateTime(initList[0], initList[1], initList[2], initList[3], initList[4], initList[5]);
@@ -584,6 +592,7 @@ class DatePickerModel {
     /// 在刷新日数据时，年月数据已经是最新的
     var selectedYear = yearIndex + data[0][0];
     var selectedMonth = monthIndex + data[1][0];
+    int selectHour = dateStart[3];
     if (dateEnd[0] == dateStart[0] && dateEnd[1] == dateStart[1]) {
       data[2] = List.generate(dateEnd[2] - dateStart[2] + 1, (index) => index + dateStart[2]);
     } else if (selectedYear == dateStart[0] && selectedMonth == dateStart[1]) {
@@ -607,48 +616,46 @@ class DatePickerModel {
     var selectedYear = yearIndex + data[0][0];
     var selectedMonth = monthIndex + data[1][0];
     var selectDay = dayIndex + data[2][0];
+    if (wheel <= 2) {
+      refreshHourData(selectedYear:selectedYear,selectedMonth: selectedMonth,selectDay: selectDay);
+      refreshMinuteData(selectedYear:selectedYear,selectedMonth: selectedMonth,selectDay: selectDay);
+    } else {
+      refreshMinuteData(selectedYear:selectedYear,selectedMonth: selectedMonth,selectDay: selectDay);
+    }
+    refreshSecondData();
+  }
+
+  void refreshHourData({required int selectedYear,required int selectedMonth,required int selectDay}) {
+      int selectHour = selectDay == data[2][0] ? 0 : hourIndex;
     if (selectedYear == dateStart[0] && selectedMonth == dateStart[1] && selectDay == dateStart[2]) {
-      if (wheel <= 2) {
-        refreshHourData();
-        refreshMinuteData();
-        refreshSecondData();
-        return;
-      }
-      if (wheel == 4) {
-        refreshMinuteData();
-        refreshSecondData();
-        return;
-      }
-      refreshSecondData();
+      data[4] = List.generate(24 - (dateStart[3]), (index) => index + dateStart[3]);
+    } else if (selectedYear == dateEnd[0] && selectedMonth == dateEnd[1] && selectDay == dateEnd[2]) {
+      data[4] = dateEnd[3] >= dateStart[3] ?  List.generate(dateEnd[3] + 1, (index) => index) : List.generate(24-dateStart[3], (index) => index);
     } else {
       data[4] = List.generate(24, (index) => index);
+    }
+    hourFixedExtentScrollController.jumpToItem(selectHour > 0 ? hourIndex : 0);
+  }
+
+  void refreshMinuteData({required int selectedYear,required int selectedMonth,required int selectDay}) {
+    int selectHour = hourIndex + data[4][0];
+    if (selectedYear == dateStart[0] &&
+        selectedMonth == dateStart[1] &&
+        selectDay == dateStart[2] &&
+        selectHour == dateStart[3]) {
+      data[5] = List.generate(60 - (dateStart[4]), (index) => index + dateStart[4]);
+    } else if (selectedYear == dateEnd[0] &&
+        selectedMonth == dateEnd[1] &&
+        selectDay == dateEnd[2] &&
+        selectHour == dateEnd[3]) {
+      data[5] = dateEnd[4] >= dateStart[4] ? List.generate(dateEnd[4] + 1, (index) => index):List.generate(60 - (dateStart[4]), (index) => index);
+    } else {
       data[5] = List.generate(60, (index) => index);
-      data[6] = List.generate(60, (index) => index);
     }
   }
 
-  void refreshHourData() {
-    var selectDay = dayIndex + data[2][0];
-    int hour = selectDay == dateStart[2] ? dateStart[3] : 0;
-    data[4] = List.generate(24 - hour, (index) => index + hour);
-    hourFixedExtentScrollController.jumpToItem(hour > 0 ? 0 : hourIndex);
-  }
-
-  void refreshMinuteData() {
-    var selectDay = dayIndex + data[2][0];
-    var selectHour = hourIndex + data[4][0];
-    int minute = selectDay == dateStart[2] ?selectHour>dateStart[3]?0:dateStart[4] : 0;
-    data[5] = List.generate(60 - minute, (index) => index + minute);
-    minuteFixedExtentScrollController.jumpToItem(minute > 0 ? 0 : minute);
-  }
-
   void refreshSecondData() {
-    var selectDay = dayIndex + data[2][0];
-    var selectHour = hourIndex + data[4][0];
-    var selectMinute = minuteIndex + data[5][0];
-    int second = selectDay == dateStart[2] ?selectHour>dateStart[3]||selectMinute>dateStart[4]?0:dateStart[5]: 0;
-    data[6] = List.generate(60 - second, (index) => index + second);
-    secondFixedExtentScrollController.jumpToItem(second > 0 ? 0 : second);
+    data[6] = List.generate(60, (index) => index);
   }
 
   Map<String, int> getSelectedMap() {
