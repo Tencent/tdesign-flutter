@@ -27,6 +27,7 @@ class TDInputDialog extends StatelessWidget {
     this.leftBtn,
     this.rightBtn,
     this.showCloseButton,
+    this.customInputWidget,
   })  : assert((title != null || content != null)),
         super(key: key);
 
@@ -69,6 +70,8 @@ class TDInputDialog extends StatelessWidget {
   /// 显示右上角关闭按钮
   final bool? showCloseButton;
 
+  /// 自定义输入框
+  final Widget? customInputWidget;
   @override
   Widget build(BuildContext context) {
     return TDDialogScaffold(
@@ -88,26 +91,25 @@ class TDInputDialog extends StatelessWidget {
             content: content,
             contentColor: contentColor,
           ),
-          Container(
-            height: 48,
-            margin: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-            decoration: BoxDecoration(
+          SizedBox(
+            child: customInputWidget!=null?customInputWidget!:Container(
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(radius)),
-            ),
-            child: TextField(
-              controller: textEditingController,
-              autofocus: true,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: BorderSide.none),
-                hintText: hintText,
-                hintStyle: const TextStyle(color: Color(0x66000000)),
-                fillColor: const Color(0xFFF3F3F3),
-                filled: true,
-                // labelText: '左上角',
+              height: 48,
+              margin: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+              child: TextField(
+                controller: textEditingController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(6),
+                      borderSide: BorderSide.none),
+                  hintText: hintText,
+                  hintStyle: const TextStyle(color: Color(0x66000000)),
+                  fillColor: const Color(0xFFF3F3F3),
+                  filled: true,
+                  // labelText: '左上角',
+                ),
               ),
             ),
           ),
