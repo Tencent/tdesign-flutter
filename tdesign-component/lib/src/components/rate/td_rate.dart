@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import '../../util/iterable_ext.dart';
+import 'td_rate_tips.dart';
 
 enum PlacementEnum {
   none,
@@ -25,10 +28,13 @@ class TDRate extends StatefulWidget {
     this.showText = false,
     this.size = 24.0,
     this.texts = const ['极差', '失望', '一般', '满意', '惊喜'],
+    this.textWidth = 48.0,
     this.builderText,
     this.value = 0,
     this.onChange,
-    this.iconTextAlignment = MainAxisAlignment.start,
+    this.direction = Axis.horizontal,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
     this.iconTextGap,
   });
 
@@ -65,6 +71,9 @@ class TDRate extends StatefulWidget {
   /// 自定义值示例：['1分', '2分', '3分', '4分', '5分']。
   final List<String>? texts;
 
+  /// 评分等级对应的辅助文字宽度
+  final double? textWidth;
+
   /// 评分等级对应的辅助文字自定义构建，优先级高于[texts]
   final Widget Function(BuildContext context, double value)? builderText;
 
@@ -74,8 +83,14 @@ class TDRate extends StatefulWidget {
   /// 评分数改变时触发
   final void Function(double value)? onChange;
 
-  /// 评分图标与辅助文字的对齐方式
-  final MainAxisAlignment? iconTextAlignment;
+  /// 评分图标与辅助文字的布局方向
+  final Axis? direction;
+
+  /// 评分图标与辅助文字的主轴对齐方式
+  final MainAxisAlignment? mainAxisAlignment;
+
+  /// 评分图标与辅助文字的交叉轴对齐方式
+  final CrossAxisAlignment? crossAxisAlignment;
 
   /// 评分图标与辅助文字的间距，默认：[TDTheme.of(context).spacer16]
   final double? iconTextGap;
@@ -87,12 +102,25 @@ class TDRate extends StatefulWidget {
 class _TDRateState extends State<TDRate> {
   late double _activeValue;
   late Map<double, GlobalKey> _globalKeys;
+  Timer? _hideTipTimer;
+
+  /// 控制显示弹框
   var _showTip = false;
+
+  /// 组件高度
+  var _height = 0.0;
+
+  /// 当前弹框宽度
+  var _tipWidth = 0.0;
+
+  /// 当前选中的评分宽度
+  var _rateWidth = 0.0;
+
   @override
   void initState() {
     super.initState();
     _activeValue = widget.value ?? 0;
-    _globalKeys = List.generate((widget.count ?? 5) * 2, (index) => index / 2 + 1)
+    _globalKeys = List.generate((widget.count ?? 5) * 2, (index) => index / 2 + 0.5)
         .asMap()
         .map((index, e) => MapEntry(e, GlobalKey()));
   }
@@ -104,33 +132,40 @@ class _TDRateState extends State<TDRate> {
       _activeValue = widget.value ?? 0;
     }
     if (widget.count != oldWidget.count) {
-      _globalKeys = List.generate((widget.count ?? 5) * 2, (index) => index / 2 + 1)
+      _globalKeys = List.generate((widget.count ?? 5) * 2, (index) => index / 2 + 0.5)
           .asMap()
           .map((index, e) => MapEntry(e, GlobalKey()));
     }
   }
 
   @override
+  void dispose() {
+    _hideTipTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: widget.iconTextAlignment ?? MainAxisAlignment.start,
+    return Flex(
+      direction: widget.direction ?? Axis.horizontal,
+      mainAxisAlignment: widget.mainAxisAlignment ?? MainAxisAlignment.start,
+      crossAxisAlignment: widget.crossAxisAlignment ?? CrossAxisAlignment.center,
       children: [
-        GestureDetector(
+        Listener(
           behavior: HitTestBehavior.opaque,
-          onVerticalDragUpdate: (details) {
-            _changeSelect(details.globalPosition);
+          onPointerMove: (details) {
+            _changeSelect(details.position);
           },
-          onTapUp: (details) {
-            _changeSelect(details.globalPosition);
+          onPointerUp: (details) {
+            _changeSelect(details.position);
             _hideTip();
           },
-          onVerticalDragEnd: (details) {
+          onPointerCancel: (details) {
             _hideTip();
           },
           child: Row(
             children: List.generate(widget.count ?? 5, (index) {
               final isLast = index == (widget.count ?? 5) - 1;
-              final icon = widget.icon?.getOrNull(index) ?? TDIcons.star_filled;
               return Padding(
                 padding: EdgeInsets.only(right: isLast ? 0 : widget.gap ?? TDTheme.of(context).spacer8),
                 child: Stack(
@@ -144,9 +179,9 @@ class _TDRateState extends State<TDRate> {
                             alignment: Alignment.centerLeft,
                             widthFactor: 0.5,
                             child: Icon(
-                              icon,
+                              _getIcon(value: index + 0.5),
                               size: widget.size ?? 24,
-                              color: _getIconColor(index + 0.5),
+                              color: _getIconColor(value: index + 0.5),
                             ),
                           ),
                         ),
@@ -156,14 +191,37 @@ class _TDRateState extends State<TDRate> {
                             alignment: Alignment.centerRight,
                             widthFactor: 0.5,
                             child: Icon(
-                              icon,
+                              _getIcon(value: index + 1.0),
                               size: widget.size ?? 24,
-                              color: _getIconColor(index + 1.0),
+                              color: _getIconColor(value: index + 1.0),
                             ),
                           ),
                         ),
                       ],
                     ),
+                    if (widget.placement != PlacementEnum.none &&
+                        _showTip &&
+                        (index + 0.5 == _activeValue || index + 1 == _activeValue))
+                      Positioned(
+                        bottom: widget.placement == PlacementEnum.top ? _height + TDTheme.of(context).spacer8 : null,
+                        top: widget.placement == PlacementEnum.bottom ? _height + TDTheme.of(context).spacer8 : null,
+                        left: -(_tipWidth - _rateWidth) / 2,
+                        child: TDRateTips(
+                          allowHalf: widget.allowHalf,
+                          index: index,
+                          activeValue: _activeValue,
+                          icon: _getIcon(isActive: true),
+                          size: widget.size,
+                          getIconColor: _getIconColor,
+                          withCall: (width) {
+                            if (_tipWidth != width) {
+                              setState(() {
+                                _tipWidth = width;
+                              });
+                            }
+                          },
+                        ),
+                      ),
                   ],
                 ),
               );
@@ -188,6 +246,7 @@ class _TDRateState extends State<TDRate> {
 
   double? _fingerInsideContainer(Offset globalPosition) {
     final rateBox = context.findRenderObject() as RenderBox?;
+    _height = rateBox?.size.height ?? 0;
     if (rateBox == null) {
       return null;
     }
@@ -201,6 +260,7 @@ class _TDRateState extends State<TDRate> {
         final localPosition = renderBox.globalToLocal(globalPosition);
         final isIn = renderBox.hitTest(BoxHitTestResult(), position: localPosition);
         if (isIn) {
+          _rateWidth = renderBox.size.width * 2;
           return (widget.allowHalf ?? false) ? entry.key : entry.key.ceil().toDouble();
         }
       }
@@ -209,7 +269,8 @@ class _TDRateState extends State<TDRate> {
   }
 
   void _hideTip() {
-    Future.delayed(
+    _hideTipTimer?.cancel();
+    _hideTipTimer = Timer(
       const Duration(seconds: 1),
       () {
         setState(() {
@@ -221,20 +282,31 @@ class _TDRateState extends State<TDRate> {
 
   Widget _getDefText() {
     final notRated = _activeValue == 0;
-    final textIndex = (widget.allowHalf ?? false) ? _activeValue : _activeValue * 2;
+    final textIndex = (widget.allowHalf == true ? _activeValue * 2 : _activeValue) - 1;
     return Padding(
-      padding: EdgeInsets.only(left: widget.iconTextGap ?? TDTheme.of(context).spacer16),
-      child: TDText(
-        notRated ? context.resource.notRated : widget.texts?.getOrNull(textIndex.toInt()) ?? _activeValue,
-        font: notRated ? TDTheme.of(context).fontBodyLarge : TDTheme.of(context).fontTitleMedium,
-        textColor: notRated ? TDTheme.of(context).fontGyColor4 : TDTheme.of(context).fontGyColor1,
+      padding: widget.direction == Axis.horizontal
+          ? EdgeInsets.only(left: widget.iconTextGap ?? TDTheme.of(context).spacer16)
+          : EdgeInsets.only(top: widget.iconTextGap ?? TDTheme.of(context).spacer8),
+      child: SizedBox(
+        width: widget.textWidth ?? 50,
+        child: TDText(
+          notRated ? context.resource.notRated : widget.texts?.getOrNull(textIndex.toInt()) ?? '$_activeValue',
+          font: notRated ? TDTheme.of(context).fontBodyLarge : TDTheme.of(context).fontTitleMedium,
+          textColor: notRated ? TDTheme.of(context).fontGyColor4 : TDTheme.of(context).fontGyColor1,
+        ),
       ),
     );
   }
 
-  Color _getIconColor(double value) {
-    return _activeValue >= value
+  Color _getIconColor({double? value, bool? isActive}) {
+    return (value != null && _activeValue >= value) || (isActive != null && isActive)
         ? widget.color?.getOrNull(0) ?? TDTheme.of(context).warningColor5
         : widget.color?.getOrNull(1) ?? TDTheme.of(context).grayColor4;
+  }
+
+  IconData _getIcon({double? value, bool? isActive}) {
+    final selectIcon = widget.icon?.getOrNull(0) ?? TDIcons.star_filled;
+    final icon = [selectIcon, widget.icon?.getOrNull(1) ?? selectIcon];
+    return (value != null && _activeValue >= value) || (isActive != null && isActive) ? icon[0] : icon[1];
   }
 }
