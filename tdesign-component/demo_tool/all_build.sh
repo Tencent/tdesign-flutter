@@ -4,6 +4,7 @@
 # divider
 ./bin/demo_tool generate --file ../lib/src/components/divider/td_divider.dart --name TDDivider --folder-name divider --output ../example/assets/api/ --only-api
 # fab
+./bin/demo_tool generate --file ../lib/src/components/fab/td_fab.dart --name TDFab --folder-name fab --output ../example/assets/api/ --only-api
 # icon
 ./bin/demo_tool generate --file ../lib/src/components/icon/td_icons.dart --name TDIcons --folder-name icon --output ../example/assets/api/ --only-api
 # link
@@ -14,6 +15,7 @@
 
 # 导航
 # back_top
+./bin/demo_tool generate --file ../lib/src/components/backtop/td_backtop.dart --name TDBackTop --folder-name back-top --output ../example/assets/api/ --only-api
 # drawer
 ./bin/demo_tool generate --folder ../lib/src/components/drawer --name TDDrawer,TDDrawerItem,TDDrawerStyle --folder-name drawer --output ../example/assets/api/ --only-api --get-comments
 # indexes
@@ -22,6 +24,7 @@
 # sidebar
 ./bin/demo_tool generate --folder ../lib/src/components/sidebar --name TDSideBar,TDSideBarItem, --folder-name side-bar --output ../example/assets/api/ --only-api
 # steps
+./bin/demo_tool generate --folder ../lib/src/components/steps --name TDSteps,TDStepsItemData --folder-name steps --output ../example/assets/api/ --only-api
 # tabbar
 ./bin/demo_tool generate --file ../lib/src/components/tabbar/td_bottom_tab_bar.dart --name TDBottomTabBar,BadgeConfig,TDBottomTabBarTabConfig,TDBottomTabBarPopUpBtnConfig,TDBottomTabBarPopUpShapeConfig,PopUpMenuItem --folder-name tab-bar --output ../example/assets/api/ --only-api
 # tabs
@@ -31,6 +34,8 @@
 # 输入
 # calendar
 # cascader
+./bin/demo_tool generate --folder ../lib/src/components/cascader --name TDMultiCascader --folder-name cascader --output ../example/assets/api/ --only-api
+
 # checkbox
 ./bin/demo_tool generate --folder ../lib/src/components/checkbox --name TDCheckbox,TDCheckboxGroup --folder-name checkbox --output ../example/assets/api/ --only-api
 # date_picker
@@ -53,6 +58,8 @@
 # textarea
 ./bin/demo_tool generate --file ../lib/src/components/textarea/td_textarea.dart --name TDTextarea --folder-name textarea --output ../example/assets/api/ --only-api --get-comments
 # tree_select
+./bin/demo_tool generate --file ../lib/src/components/tree/td_tree_select.dart --name TDTreeSelect,TDSelectOption --folder-name tree-select --output ../example/assets/api/ --only-api
+
 # upload
 
 
@@ -66,6 +73,8 @@
 # countDown
 ./bin/demo_tool generate --folder ../lib/src/components/count_down --name TDCountDown,TDCountDownController,TDCountDownStyle --folder-name count-down --output ../example/assets/api/ --only-api --get-comments
 # collapse
+./bin/demo_tool generate --folder ../lib/src/components/collapse --name TDCollapse --folder-name collapse --output ../example/assets/api/ --only-api --get-comments
+
 # empty
 ./bin/demo_tool generate --file ../lib/src/components/empty/td_empty.dart --name TDEmpty --folder-name empty --output ../example/assets/api/ --only-api
 # footer
@@ -73,6 +82,7 @@
 # image
 ./bin/demo_tool generate --file ../lib/src/components/image/td_image.dart --name TDImage --folder-name image --output ../example/assets/api/ --only-api
 # imageViewer
+./bin/demo_tool generate --folder ../lib/src/components/image_viewer  --name TDImageViewer,TDImageViewerWidget,  --folder-name image-viewer --output ../example/assets/api/ --only-api
 # progress
 # result
 # skeleton
