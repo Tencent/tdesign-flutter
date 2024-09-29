@@ -367,6 +367,7 @@ class _TDTextareaState extends State<TDTextarea> {
       decoration: widget.textareaDecoration ??
           (widget.bordered == true
               ? BoxDecoration(
+            color: widget.decoration != null ? null : (widget.backgroundColor ?? Colors.white),
                   borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
                   border: Border.all(color: TDTheme.of(context).grayColor4),
                 )
@@ -386,7 +387,6 @@ class _TDTextareaState extends State<TDTextarea> {
     var isHorizontal = widget.layout == TDTextareaLayout.horizontal;
     return Container(
       width: widget.width,
-      color: widget.decoration != null ? null : (widget.backgroundColor ?? Colors.white),
       decoration: widget.decoration,
       padding: widget.padding ?? EdgeInsets.all(padding),
       margin: widget.margin,

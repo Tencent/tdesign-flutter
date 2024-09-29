@@ -1,0 +1,20 @@
+
+  Widget _buildVErrorSimpleSteps(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: vErrorSimpleStepsListData,
+              direction: TDStepsDirection.vertical,
+              activeIndex: 1,
+              simple: true,
+              status: TDStepsStatus.error,
+            ),
+          )
+        ],
+      ),
+    );
+  }

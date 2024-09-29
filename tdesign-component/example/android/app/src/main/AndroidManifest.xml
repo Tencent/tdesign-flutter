@@ -8,6 +8,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!-- 往 SD 卡写入数据权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!-- 拍照权限 -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- 录制音视频权限 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
    <application
         android:label="tdesign_flutter_example"
        android:requestLegacyExternalStorage="true"

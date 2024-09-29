@@ -1,0 +1,22 @@
+
+Widget _buildTitleSimple(BuildContext context) {
+  /// 获取navBar尺寸
+  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
+  return TDButton(
+    text: '带图标抽屉',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDDrawer(
+        context,
+        visible: true,
+        drawerTop: renderBox?.size.height,
+        title: '标题',
+        placement: TDDrawerPlacement.left,
+        items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
+      );
+    },
+  );
+}

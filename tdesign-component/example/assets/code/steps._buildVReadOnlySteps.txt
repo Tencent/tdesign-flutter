@@ -1,0 +1,19 @@
+
+  Widget _buildVReadOnlySteps(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TDSteps(
+              steps: vReadOnlyStepsListData,
+              direction: TDStepsDirection.vertical,
+              activeIndex: 0,
+              readOnly: true,
+            ),
+          )
+        ],
+      ),
+    );
+  }

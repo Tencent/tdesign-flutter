@@ -16,6 +16,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
+[td_empty_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_empty_page.dart)
+
 ### 1 组件类型
 
 图标空状态
@@ -83,7 +85,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | image | Widget? | - | 展示图片 |
 | emptyText | String? | - | 描述文字 |
 | operationText | String? | - | 操作按钮文案 |
+| operationTheme | TDButtonTheme? | - | 操作按钮文案主题色 |
 | onTapEvent | TDTapEvent? | - | 点击事件 |
+| emptyTextColor | Color? | - | 描述文字颜色 |
+| emptyTextFont | Font? | - | 描述文字大小 |
 | key |  | - |  |
 
 
