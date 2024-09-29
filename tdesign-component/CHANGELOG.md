@@ -1,4 +1,39 @@
 
+## 🌈 0.1.6 `2024-07-24`
+
+### 🚀 Features
+- `Cell`: Added Cell component @hkaikai ([#150](https://github.com/Tencent/tdesign-flutter/pull/150))
+- `Drawer`: Added Drawer component @hkaikai ([#178](https://github.com/Tencent/tdesign-flutter/pull/178))
+- `SwipeCell`: Added SwipeCell component @hkaikai ([#218](https://github.com/Tencent/tdesign-flutter/pull/218))
+- `Steps`: Added Steps component @aaronmhl ([#199](https://github.com/Tencent/tdesign-flutter/pull/199))
+- `ImageViewer`: Added ImageViewer component @ccXxx1aoBai ([#187](https://github.com/Tencent/tdesign-flutter/pull/187))
+- `Cascader`: Added Cascader component @shizhe2018 ([#195](https://github.com/Tencent/tdesign-flutter/pull/195))
+- `Fab`: Added Fab component @TingShine ([#239](https://github.com/Tencent/tdesign-flutter/pull/239))
+- `BackTop`: Added BackTop component @TingShine ([#239](https://github.com/Tencent/tdesign-flutter/pull/239))
+- `TreeSelect`: Added TreeSelect component @TingShine ([#239](https://github.com/Tencent/tdesign-flutter/pull/239))
+- `Collapse`: Added Collapse component @dorayx ([#239](https://github.com/Tencent/tdesign-flutter/pull/239))
+- `Input`: Added inputAction API to support setting keyboard actions; added spacer API to customize component spacing @ccXxx1aoBai ([#184](https://github.com/Tencent/tdesign-flutter/pull/184))
+- `Text`: Added global font configuration and the ability to load web fonts @Luozf12345 ([#232](https://github.com/Tencent/tdesign-flutter/pull/232))
+- `CountDown`: Added start/reset/pause/resume control functions @hkaikai ([#175](https://github.com/Tencent/tdesign-flutter/pull/175))
+- `Popup`: Supported position and size settings @hkaikai ([#191](https://github.com/Tencent/tdesign-flutter/pull/191))
+
+### 🐞 Bug Fixes
+- `Toast`: Fixed the issue where the duration attribute was ineffective @ccXxx1aoBai ([#167](https://github.com/Tencent/tdesign-flutter/pull/167))
+- `Input`: Fixed the label overflow issue @ccXxx1aoBai ([#184](https://github.com/Tencent/tdesign-flutter/pull/184))
+- `Tabs`: For the tabs component, outlineType 'capsule' now supports setting selected and unselected tab background colors, and outlineType 'card' supports setting the selected tab background color @ccXxx1aoBai
+- `Button`: Fixed the issue where properties could not be changed under the setState method @shizhe2018 ([#201](https://github.com/Tencent/tdesign-flutter/pull/201))
+- `SearchBar`: Added a controller to the search bar, allowing external clearing of search text @shizhe2018 ([#194](https://github.com/Tencent/tdesign-flutter/pull/194))
+- `Slider`: Added custom Decoration styles @shizhe2018 ([#198](https://github.com/Tencent/tdesign-flutter/pull/198))
+- `Empty`: Added text size style API @shizhe2018 ([#219](https://github.com/Tencent/tdesign-flutter/pull/219))
+- `Dialog`: Added input type background @shizhe2018 ([#238](https://github.com/Tencent/tdesign-flutter/pull/238))
+
+### 🚧 Others
+- HarmonyOS compilation support @hkaikai ([#233](https://github.com/Tencent/tdesign-flutter/pull/233))
+- Modified theme adaptation tool @Luozf12345
+- Added GitHub links for complete pages in demo code @Luozf12345
+
+
+
 ## 🌈 0.1.5 `2024-05-31`
 
 ### 🚀 Features

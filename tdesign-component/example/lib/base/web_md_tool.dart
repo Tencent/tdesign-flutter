@@ -23,10 +23,11 @@ class WebMdTool {
     required CodeWrapper? singleChild,
   }) async {
     if (needGenerateWebMd && model != null && !kIsWeb) {
+      var pageName = 'td_${model.pageName ?? model.name}_page';
       var exampleCodeSb = StringBuffer();
       var count = 1;
       if (singleChild != null) {
-        await writeSingleCode(exampleCodeSb, exampleCodeGroup);
+        await writeSingleCode(exampleCodeSb, exampleCodeGroup,pageName);
       } else {
         for (var module in exampleModuleList) {
           exampleCodeSb.writeln('### $count ${module.title}');
@@ -47,7 +48,7 @@ class WebMdTool {
         print(e);
       }
       var mdContent = _getTemplate(model.text, description,
-          model.spline ?? 'other', exampleCodeSb.toString(), api.toString());
+          model.spline ?? 'other', exampleCodeSb.toString(), api.toString(), pageName);
       print('生成演示代码成功：\n${mdContent.substring(0,50)}...');
 
       var path = "";
@@ -70,7 +71,7 @@ class WebMdTool {
   }
 
   static Future<void> writeSingleCode(
-      StringBuffer exampleCodeSb, String? exampleCodeGroup) async {
+      StringBuffer exampleCodeSb, String? exampleCodeGroup, String? pageName) async {
     var hasCodeSuccess = false;
 
     var list = manualExampleCode[exampleCodeGroup];
@@ -211,6 +212,7 @@ class WebMdTool {
     String spline,
     String exampleCode,
     String api,
+      String pageName,
   ) =>
       '''
 ---
@@ -230,6 +232,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';${_getExtraImport(title)}
 ```
 
 ## 代码演示
+
+${_getPageCode(pageName)}
 
 ${exampleCode}
 
@@ -251,5 +255,21 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';''';
 
     }
     return '';
+  }
+
+  static _getPageCode(String pageName) {
+    if(pageName == 'td_side-bar_page'){
+      return '''
+[td_sidebar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/td_sidebar_page.dart)
+
+[td_sidebar_page_anchor.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/td_sidebar_page_anchor.dart)
+
+[td_sidebar_page_custom.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/td_sidebar_page_custom.dart)
+
+[td_sidebar_page_icon.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/td_sidebar_page_icon.dart)
+
+[td_sidebar_page_pagination.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/sidebar/td_sidebar_page_pagination.dart)''';
+    }
+    return '[$pageName.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/$pageName.dart)';
   }
 }

@@ -1,7 +1,6 @@
 
 TDCountDown _buildCustomUnitLargeSize(BuildContext context) {
-  var style =
-      TDCountDownStyle.generateStyle(context, size: TDCountDownSize.large);
+  var style = TDCountDownStyle.generateStyle(context, size: TDCountDownSize.large);
   style.timeColor = TDTheme.of(context).errorColor6;
   return TDCountDown(
     time: 60 * 60 * 1000,
