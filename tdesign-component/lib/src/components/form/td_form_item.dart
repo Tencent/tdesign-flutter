@@ -4,6 +4,8 @@ import '../input/td_input.dart';
 
 class TDFormItem extends StatefulWidget {
   TDFormItem({
+    this.controller,
+    this.select = '',
     this.label,
     this.name,
     this.arrow = false,
@@ -45,11 +47,17 @@ class TDFormItem extends StatefulWidget {
   /// 表格标识
   final String? name;
 
+  /// 表格的 controller
+  var controller;
+
+  /// 日期选择需要展示的内容
+  String select;
+
   /// 是否显示必填符号 (*)
   /// 优先级高于 Form.requiredMark
   final bool? requiredMark;
 
-  /// 表单字段校验规则 ???
+  /// 表单字段校验规则
   final List? rules;
 
   /// 校验不通过时，是否显示错误提示信息
@@ -60,20 +68,48 @@ class TDFormItem extends StatefulWidget {
   _TDFormItemState createState() => _TDFormItemState();
 }
 
+Widget buildSelectRow(BuildContext context, String output, String title) {
+  return Container(
+    color: TDTheme.of(context).whiteColor1,
+    height: 56,
+    child: Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
+              child: TDText(title, font: TDTheme.of(context).fontBodyLarge,),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Row(
+                children: [
+                  TDText(
+                    output,
+                    font: TDTheme.of(context).fontBodyLarge,
+                    textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 2),
+                    child: Icon(
+                      TDIcons.chevron_right,
+                      color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const TDDivider(margin: EdgeInsets.only(left: 16, ),)
+      ],
+    ),
+  );
+}
+
 class _TDFormItemState extends State<TDFormItem> {
   /// 实现密码右侧的可见按钮
   bool browseOn = false;
-
-  /// 实现输入框的 controller
-  var controller = [];
-
-  @override
-  void initState() {
-    for (var i = 0; i < 10; i++) {
-      controller.add(TextEditingController());
-    }
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +119,7 @@ class _TDFormItemState extends State<TDFormItem> {
           TDInput(
             leftLabel: widget.label,
             required: true,
-            controller: controller[0],
+            controller: widget.controller,
             backgroundColor: Colors.white,
             hintText: widget.help,
           ),
@@ -97,7 +133,7 @@ class _TDFormItemState extends State<TDFormItem> {
         children: [
           TDInput(
             type: TDInputType.normal,
-            controller: controller[1],
+            controller: widget.controller,
             obscureText: !browseOn,
             leftLabel: widget.label,
             hintText: widget.help,
@@ -148,7 +184,48 @@ class _TDFormItemState extends State<TDFormItem> {
           ),
         ],
       );
+    } else if(widget.name == 'date'){
+        return GestureDetector(
+          onTap: (){
+            TDPicker.showDatePicker(context, title: '选择时间',
+                onConfirm: (selected) {
+                  setState(() {
+                    widget.select = '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
+                  });
+                  Navigator.of(context).pop();
+                },
+                dateStart: [1999, 01, 01],
+                dateEnd: [2023, 12, 31],
+                initialDate: [2012, 1, 1]);
+          },
+          child: buildSelectRow(context, widget.select, '选择时间'),
+        );
+    }else if(widget.name == 'age'){
+      final theme = TDTheme.of(context);
+
+      return Container(
+        decoration: BoxDecoration(
+          color: theme.whiteColor1,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, // 左右分布
+            children: [
+              TDText(
+                widget.label, // 左侧的文本
+                style: TextStyle(fontSize: 16), // 可根据需要设置样式
+              ),
+              TDStepper(
+                theme: TDStepperTheme.filled, // 右侧的步进器
+              ),
+            ],
+          ),
+        ),
+      );
     }
+
+
     return Column();
   }
 }
