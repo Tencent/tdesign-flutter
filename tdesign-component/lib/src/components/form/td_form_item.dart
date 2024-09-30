@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../../tdesign_flutter.dart';
+import '../input/td_input.dart';
 
-class TDFormItem extends StatelessWidget {
-  const TDFormItem({
-    Key? key,
+class TDFormItem extends StatefulWidget {
+  TDFormItem({
     this.label,
     this.name,
     this.arrow = false,
@@ -13,7 +14,11 @@ class TDFormItem extends StatelessWidget {
     this.requiredMark,
     this.rules,
     this.showErrowMessage,
+    Key? key,
   }) : super(key: key);
+
+  /// 表格内标签 内容填充
+  final String? label;
 
   /// 表单内容对齐方式：
   /// 左对齐、右对齐
@@ -23,11 +28,9 @@ class TDFormItem extends StatelessWidget {
   /// 是否显示右箭头
   final bool? arrow;
 
-  /// 表单说明内容 ？？？？
-  final help;
-
-  /// 表格内标签 内容填充
-  final String? label;
+  /// 表单说明内容
+  /// 表单的默认输入字符
+  final String? help;
 
   /// 表单字段标签对齐方式：
   /// 左对齐、右对齐、顶部对齐
@@ -54,40 +57,98 @@ class TDFormItem extends StatelessWidget {
   final bool? showErrowMessage;
 
   @override
+  _TDFormItemState createState() => _TDFormItemState();
+}
+
+class _TDFormItemState extends State<TDFormItem> {
+  /// 实现密码右侧的可见按钮
+  bool browseOn = false;
+
+  /// 实现输入框的 controller
+  var controller = [];
+
+  @override
+  void initState() {
+    for (var i = 0; i < 10; i++) {
+      controller.add(TextEditingController());
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: contentAlign == 'right'
-          ? MainAxisAlignment.end
-          : MainAxisAlignment.start,
-      children: [
-        // 标签
-        Container(
-          width: labelWidth != null ? double.parse(labelWidth!) : null,
-          alignment: labelAlign == 'right'
-              ? Alignment.centerRight
-              : labelAlign == 'top'
-                  ? Alignment.topLeft
-                  : Alignment.centerLeft,
-          child: Text(
-            label ?? '',
-            style: TextStyle(
-              fontWeight:
-                  requiredMark == true ? FontWeight.bold : FontWeight.normal,
-            ),
+    if (widget.name == 'name') {
+      return Column(
+        children: [
+          TDInput(
+            leftLabel: widget.label,
+            required: true,
+            controller: controller[0],
+            backgroundColor: Colors.white,
+            hintText: widget.help,
           ),
-        ),
-        const SizedBox(width: 8), // 标签与输入框的间距
-        // 输入框
-        Expanded(
-          child: TextFormField(
-            decoration: InputDecoration(
-              hintText: help,
-              suffixIcon: arrow == true ? Icon(Icons.arrow_forward) : null,
-            ),
-            // 可添加更多属性，如 validator 等
+          const SizedBox(
+            height: 16,
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    } else if (widget.name == 'password') {
+      return Column(
+        children: [
+          TDInput(
+            type: TDInputType.normal,
+            controller: controller[1],
+            obscureText: !browseOn,
+            leftLabel: widget.label,
+            hintText: widget.help,
+            backgroundColor: Colors.white,
+            rightBtn: browseOn
+                ? Icon(
+              TDIcons.browse,
+              color: TDTheme.of(context).fontGyColor3,
+            )
+                : Icon(
+              TDIcons.browse_off,
+              color: TDTheme.of(context).fontGyColor3,
+            ),
+            onBtnTap: () {
+              setState(() {
+                browseOn = !browseOn;
+              });
+            },
+            needClear: false,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+        ],
+      );
+    } else if(widget.name == 'gender'){
+      return TDRadioGroup(
+        selectId: 'index:1',
+        direction: Axis.horizontal,
+        directionalTdRadios: const [
+          TDRadio(
+            id: '0',
+            title: '男',
+            radioStyle: TDRadioStyle.circle,
+            showDivider: false,
+          ),
+          TDRadio(
+            id: '1',
+            title: '女',
+            radioStyle: TDRadioStyle.circle,
+            showDivider: false,
+          ),
+          TDRadio(
+            id: '2',
+            title: '保密',
+            radioStyle: TDRadioStyle.circle,
+            showDivider: false,
+          ),
+        ],
+      );
+    }
+    return Column();
   }
 }
