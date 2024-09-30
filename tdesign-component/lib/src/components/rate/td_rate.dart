@@ -116,6 +116,9 @@ class _TDRateState extends State<TDRate> {
   /// 当前选中的评分宽度
   var _rateWidth = 0.0;
 
+  /// 是否点击，否则是滑动
+  var _isClick = true;
+
   @override
   void initState() {
     super.initState();
@@ -152,15 +155,16 @@ class _TDRateState extends State<TDRate> {
       crossAxisAlignment: widget.crossAxisAlignment ?? CrossAxisAlignment.center,
       children: [
         Listener(
-          behavior: HitTestBehavior.opaque,
+          // behavior: HitTestBehavior.opaque,
+          onPointerDown: (event) {
+            _isClick = true;
+          },
           onPointerMove: (details) {
+            _isClick = false;
             _changeSelect(details.position);
           },
           onPointerUp: (details) {
             _changeSelect(details.position);
-            _hideTip();
-          },
-          onPointerCancel: (details) {
             _hideTip();
           },
           child: Row(
@@ -213,12 +217,20 @@ class _TDRateState extends State<TDRate> {
                           icon: _getIcon(isActive: true),
                           size: widget.size,
                           getIconColor: _getIconColor,
+                          isClick: _isClick,
                           withCall: (width) {
                             if (_tipWidth != width) {
                               setState(() {
                                 _tipWidth = width;
                               });
                             }
+                          },
+                          tipClick: (value) {
+                            setState(() {
+                              _showTip = false;
+                              _isClick = true;
+                              _activeValue = value;
+                            });
                           },
                         ),
                       ),
@@ -271,10 +283,11 @@ class _TDRateState extends State<TDRate> {
   void _hideTip() {
     _hideTipTimer?.cancel();
     _hideTipTimer = Timer(
-      const Duration(seconds: 1),
+      Duration(seconds: _isClick && widget.allowHalf == true ? 3 : 1),
       () {
         setState(() {
           _showTip = false;
+          _isClick = true;
         });
       },
     );
