@@ -13,6 +13,8 @@ class TDRateTips extends StatelessWidget {
     this.size,
     required this.getIconColor,
     required this.withCall,
+    required this.isClick,
+    required this.tipClick,
   }) : super(key: key);
 
   final bool? allowHalf;
@@ -22,6 +24,8 @@ class TDRateTips extends StatelessWidget {
   final double? size;
   final Color Function({double? value, bool? isActive}) getIconColor;
   final void Function(double width) withCall;
+  final bool isClick;
+  final void Function(double value) tipClick;
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +63,18 @@ class TDRateTips extends StatelessWidget {
       padding: EdgeInsets.all(TDTheme.of(context).spacer4),
       child: Row(
         children: [
+          // GestureDetector(
+          //   onTap: () {
+          //     if (allowHalf == true && isClick) {
+          //       tipClick(index + 0.5);
+          //     }
+          //   },
+          //   child:
           Container(
             decoration: BoxDecoration(
-              color: (allowHalf ?? false) == false || index + 0.5 != activeValue
-                  ? TDTheme.of(context).whiteColor1
-                  : TDTheme.of(context).grayColor3,
+              color: allowHalf == true && index + 0.5 == activeValue && isClick
+                  ? TDTheme.of(context).grayColor3
+                  : TDTheme.of(context).whiteColor1,
               borderRadius: BorderRadius.circular(TDTheme.of(context).radiusSmall),
             ),
             padding: EdgeInsets.only(left: TDTheme.of(context).spacer4, right: TDTheme.of(context).spacer4),
@@ -89,7 +100,9 @@ class TDRateTips extends StatelessWidget {
                         child: Icon(
                           icon,
                           size: size ?? 24,
-                          color: allowHalf == true ? getIconColor(isActive: false) : getIconColor(isActive: true),
+                          color: allowHalf == true
+                              ? (isClick ? getIconColor(isActive: false) : getIconColor(value: index + 1))
+                              : getIconColor(isActive: true),
                         ),
                       ),
                     ),
@@ -97,7 +110,7 @@ class TDRateTips extends StatelessWidget {
                 ),
                 Center(
                   child: TDText(
-                    allowHalf == true ? '${index + 0.5}' : '${index + 1}',
+                    allowHalf == true ? (isClick ? '${index + 0.5}' : '${activeValue}') : '${index + 1}',
                     font: TDTheme.of(context).fontBodySmall,
                     textColor: TDTheme.of(context).fontGyColor1,
                   ),
@@ -105,8 +118,16 @@ class TDRateTips extends StatelessWidget {
               ],
             ),
           ),
-          if (allowHalf == true) SizedBox(width: TDTheme.of(context).spacer4),
-          if (allowHalf == true)
+          // ),
+          if (allowHalf == true && isClick) SizedBox(width: TDTheme.of(context).spacer4),
+          if (allowHalf == true && isClick)
+            // GestureDetector(
+            //   onTap: () {
+            //     if (allowHalf == true && isClick) {
+            //       tipClick(index + 1.0);
+            //     }
+            //   },
+            //   child:
             Container(
               decoration: BoxDecoration(
                 color: index + 1 != activeValue ? TDTheme.of(context).whiteColor1 : TDTheme.of(context).grayColor3,
@@ -130,61 +151,9 @@ class TDRateTips extends StatelessWidget {
                 ],
               ),
             ),
+          // ),
         ],
       ),
     );
   }
 }
-
-// import 'package:flutter/material.dart';
-
-// class MyWidget extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         appBar: AppBar(
-//           title: Text('Positioned Offset Example'),
-//         ),
-//         body: Center(
-//           child: Stack(
-//             fit: StackFit.expand,
-//             children: [
-//               Container(
-//                 color: Colors.blue.withOpacity(0.5),
-//               ),
-//               LayoutBuilder(
-//                 builder: (BuildContext context, BoxConstraints constraints) {
-//                   return _CustomPositionedWidget(constraints.maxWidth);
-//                 },
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class _CustomPositionedWidget extends StatelessWidget {
-//   final double maxWidth;
-
-//   _CustomPositionedWidget(this.maxWidth);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Positioned(
-//       top: 100,
-//       left: maxWidth * 0.5,
-//       child: Container(
-//         width: maxWidth,
-//         height: 100,
-//         color: Colors.red,
-//       ),
-//     );
-//   }
-// }
-
-// void main() {
-//   runApp(MyWidget());
-// }
