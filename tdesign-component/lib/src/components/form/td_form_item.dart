@@ -4,8 +4,10 @@ import '../input/td_input.dart';
 
 class TDFormItem extends StatefulWidget {
   TDFormItem({
+    /// 需要从 page 外部传入的参数
     this.controller,
     this.select = '',
+    List<Map>? localData,
     this.label,
     this.name,
     this.arrow = false,
@@ -17,7 +19,8 @@ class TDFormItem extends StatefulWidget {
     this.rules,
     this.showErrowMessage,
     Key? key,
-  }) : super(key: key);
+  })  : localData = localData ?? const [],
+        super(key: key);
 
   /// 表格内标签 内容填充
   final String? label;
@@ -52,6 +55,9 @@ class TDFormItem extends StatefulWidget {
 
   /// 日期选择需要展示的内容
   String select;
+
+  /// 组相联选择器需要的数据
+  final List<Map> localData;
 
   /// 是否显示必填符号 (*)
   /// 优先级高于 Form.requiredMark
@@ -110,6 +116,10 @@ Widget buildSelectRow(BuildContext context, String output, String title) {
 class _TDFormItemState extends State<TDFormItem> {
   /// 实现密码右侧的可见按钮
   bool browseOn = false;
+
+  /// 垂直联级选择器
+  String? _initData;
+  String _selected_1 = '';
 
   @override
   Widget build(BuildContext context) {
@@ -223,9 +233,80 @@ class _TDFormItemState extends State<TDFormItem> {
           ),
         ),
       );
+    }else if(widget.name == 'local'){
+      return GestureDetector(
+        onTap: () {
+          TDCascader.showMultiCascader(context, title: '选择地址', data: widget.localData, initialData: _initData, theme: 'step',
+              onChange: (List<MultiCascaderListModel> selectData) {
+                setState(() {
+                  List result = [];
+                  int len = selectData.length;
+                  _initData = selectData[len - 1].value!;
+                  selectData.forEach((element) {
+                    result.add(element.label);
+                  });
+                  _selected_1 = result.join('/');
+                });
+              }, onClose: () {
+                Navigator.of(context).pop();
+              });
+        },
+        child: _buildSelectRow(context, _selected_1, '选择地区'),
+      );
     }
-
-
     return Column();
+  }
+
+
+  Widget _buildSelectRow(BuildContext context, String output, String title) {
+    return Container(
+      color: TDTheme.of(context).whiteColor1,
+      height: 56,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
+                child: TDText(
+                  title,
+                  font: TDTheme.of(context).fontBodyLarge,
+                ),
+              ),
+              Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16, left: 16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: TDText(
+                              output,
+                              font: TDTheme.of(context).fontBodyLarge,
+                              textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2),
+                          child: Icon(
+                            TDIcons.chevron_right,
+                            color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+            ],
+          ),
+          const TDDivider(
+            margin: EdgeInsets.only(
+              left: 16,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
