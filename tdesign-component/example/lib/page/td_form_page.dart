@@ -12,9 +12,16 @@ class TDFormPage extends StatefulWidget {
 }
 
 class _TDFormPageState extends State<TDFormPage> {
-
   var controller = [];
   String selected_1 = '';
+
+  Color verticalTextColor = Colors.black;
+  Color horizontalTextColor = Colors.red;
+  Color verticalButtonColor = Colors.blueGrey;
+  Color horizontalButtonColor = Colors.blue;
+
+  Map<String, String> _radios = {"0": "男", "1": "女", "2": "保密"};
+
   List<Map> _data = [
     {
       "label": '北京市',
@@ -97,81 +104,138 @@ class _TDFormPageState extends State<TDFormPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
-      exampleCodeGroup: 'form',
-      backgroundColor: const Color(0xfff6f6f6),
-      children: [
-        ExampleModule(title: '禁用态开关', children: [
-          ExampleItem(desc: '基础开关', builder: _buildSwitchWithBase),
-        ]),
-        ExampleModule(title: 'Form', children: [
-          ExampleItem(desc: '', builder: _buildUserNameItem),
-          ExampleItem(desc: '', builder: _buildPassWordItem),
-          ExampleItem(desc: '', builder: _buildhorizontalRadiosItem),
-          ExampleItem(desc: '', builder: _buildDateItem),
-          ExampleItem(desc: '', builder: _buildCascaderItem),
-          ExampleItem(desc: '', builder: _buildStepperItem),
-        ]),
-      ],
-    );
+        title: tdTitle(),
+        exampleCodeGroup: 'form',
+        desc: '基础表单',
+        backgroundColor: const Color(0xfff6f6f6),
+        children: [
+          ExampleModule(title: '基础类型', children: [
+            ExampleItem(desc: '基础表单', builder: _buildArrangementSwitch),
+            ExampleItem(desc: '', builder: _buildSwitchWithBase),
+            ExampleItem(builder: (BuildContext context) {
+              return CodeWrapper(builder: _buildForm);
+            })
+          ]),
+        ]);
   }
 
   @Demo(group: 'form')
-  Widget _buildUserNameItem(BuildContext buildContext) {
-    return TDFormItem(
-      label: '用户名',
-      name: 'name',
-      help: '请输入用户名',
-      controller: controller[0],
-    );
+  Widget _buildForm(BuildContext context) {
+    return TDForm(items: [
+      TDFormItem(
+        label: '用户名',
+        name: 'name',
+        help: '请输入用户名',
+        controller: controller[0],
+      ),
+      TDFormItem(
+        label: '密码',
+        name: 'password',
+        help: '请输入密码',
+        controller: controller[1],
+      ),
+      TDFormItem(
+        label: '性别',
+        name: 'radios',
+
+        /// 扩展一下数量和选项内容
+        radios: _radios,
+      ),
+      TDFormItem(
+        label: '生日',
+        name: 'date',
+
+        /// 引入需要的日期数据
+        select: selected_1,
+      ),
+      TDFormItem(
+        label: '籍贯',
+        name: 'local',
+
+        /// 引入需要的地点数据
+        localData: _data,
+      ),
+      TDFormItem(
+        label: '年限',
+        name: 'age',
+
+        /// 为 TDStepper 预留其他设置
+      ),
+      TDFormItem(
+        label: '个人简介',
+        name: 'textarea',
+        help: '请输入个人简介',
+        controller: controller[2],
+
+        /// 为 TDTextarea 长文本其他参数做预留 API
+        maxLength: 500,
+        indicator: true,
+      )
+    ]);
   }
 
+  /// 横 竖 排版模式切换
   @Demo(group: 'form')
-  Widget _buildPassWordItem(BuildContext buildContext) {
-    return TDFormItem(
-      label: '密码',
-      name: 'password',
-      help: '请输入密码',
-      controller: controller[1],
-    );
-  }
+  Widget _buildArrangementSwitch(BuildContext buildContext) {
+    final theme = TDTheme.of(context);
+    return Container(
+        decoration: BoxDecoration(
+          color: theme.whiteColor1,
+        ),
+        child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TDButton(
+                    text: '水平排布',
+                    shape: TDButtonShape.round,
+                    style:
+                        TDButtonStyle(backgroundColor: horizontalButtonColor),
+                    textStyle: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: horizontalTextColor,
+                    ),
+                    onTap: () {
+                      setState(() {
+                        print("____1");
+                        final currentVerticalColor = verticalButtonColor;
+                        verticalButtonColor = horizontalButtonColor;
+                        horizontalButtonColor = currentVerticalColor;
 
-  @Demo(group: 'form')
-  Widget _buildhorizontalRadiosItem(BuildContext buildContext) {
-    return TDFormItem(
-      label: '性别',
-      name: 'gender',
-      /// 扩展一下数量和选项内容
-    );
-  }
+                        final currentTextColor = verticalTextColor;
+                        verticalTextColor = horizontalTextColor;
+                        horizontalTextColor = currentTextColor;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: TDButton(
+                    text: '竖直排布',
+                    shape: TDButtonShape.round,
+                    style: TDButtonStyle(backgroundColor: verticalButtonColor),
+                    textStyle: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: verticalTextColor,
+                    ),
+                    onTap: () {
+                      setState(() {
+                        print("____2");
+                        final currentVerticalColor = verticalButtonColor;
+                        verticalButtonColor = horizontalButtonColor;
+                        horizontalButtonColor = currentVerticalColor;
 
-  @Demo(group: 'form')
-  Widget _buildDateItem(BuildContext buildContext){
-    return TDFormItem(
-      label: '生日',
-      name: 'date',
-      /// 引入需要的日期数据
-      select: selected_1,
-    );
-  }
-
-  @Demo(group: 'form')
-  Widget _buildCascaderItem(BuildContext buildContext){
-    return TDFormItem(
-      label: '籍贯',
-      name: 'local',
-      /// 引入需要的地点数据
-      localData: _data,
-    );
-  }
-
-  @Demo(group: 'form')
-  Widget _buildStepperItem(BuildContext buildContext){
-    return TDFormItem(
-      label: '年限',
-      name: 'age',
-      /// 为 TDStepper 预留其他设置
-    );
+                        final currentTextColor = verticalTextColor;
+                        verticalTextColor = horizontalTextColor;
+                        horizontalTextColor = currentTextColor;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            )));
   }
 
   @Demo(group: 'switch')
@@ -192,9 +256,9 @@ class _TDFormPageState extends State<TDFormPage> {
       children: [
         Expanded(
             child: TDText(
-              title ?? '',
-              textColor: theme.fontGyColor1,
-            )),
+          title ?? '',
+          textColor: theme.fontGyColor1,
+        )),
         TDText(
           desc ?? '',
           textColor: theme.grayColor6,
@@ -218,5 +282,3 @@ class _TDFormPageState extends State<TDFormPage> {
     return Column(mainAxisSize: MainAxisSize.min, children: [current]);
   }
 }
-
-

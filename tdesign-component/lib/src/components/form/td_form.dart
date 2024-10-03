@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../../tdesign_flutter.dart';
 
 class TDForm extends StatefulWidget {
   const TDForm({
-    Key?key,
+    Key? key,
+    required this.items,
     this.colon = false,
     this.contentAlign = 'left',
     this.data,
@@ -17,7 +19,10 @@ class TDForm extends StatefulWidget {
     this.scrollToFirstError,
     this.showErrorMessage = true,
     this.submitWithWarningMessage = false,
-  }): super(key: key);
+  }) : super(key: key);
+
+  /// 表单内容 items
+  final List<TDFormItem> items;
 
   /// 是否在表单标签字段右侧显示冒号
   final bool? colon;
@@ -75,6 +80,17 @@ class TDForm extends StatefulWidget {
 class _TDFormState extends State<TDForm> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Container(
+      child: ListView.separated(
+        shrinkWrap: true,
+        itemCount: widget.items.length,
+        itemBuilder: (context, index) {
+          return widget.items[index];
+        },
+        separatorBuilder: (context, index) {
+          return SizedBox(height: 1);
+        },
+      ),
+    );
   }
 }
