@@ -15,14 +15,22 @@ class _TDFormPageState extends State<TDFormPage> {
   var controller = [];
   String selected_1 = '';
 
-  Color verticalTextColor = Colors.black;
-  Color horizontalTextColor = Colors.red;
-  Color verticalButtonColor = Colors.blueGrey;
-  Color horizontalButtonColor = Colors.blue;
+  /// 设置按钮是否可点击状态
+  /// true 表示处于 active 状态
+  bool horizontalButton = false;
+  bool verticalButton = true;
+
+  Color activeButtonColor = Color(0xFFF0F1FD);
+  Color defaultButtonColor = Color(0xFFE5E5E5);
+
+  Color verticalTextColor = Color(0xFF1A1A1A);
+  Color horizontalTextColor = Color(0xFF0A58D9);
+  Color verticalButtonColor = Color(0xFFE5E5E5);
+  Color horizontalButtonColor = Color(0xFFF0F1FD);
 
   Map<String, String> _radios = {"0": "男", "1": "女", "2": "保密"};
 
-  List<Map> _data = [
+  static const List<Map> _data = [
     {
       "label": '北京市',
       "value": '110000',
@@ -171,7 +179,7 @@ class _TDFormPageState extends State<TDFormPage> {
         maxLength: 500,
         indicator: true,
       )
-    ]);
+    ], disabled: false);
   }
 
   /// 横 竖 排版模式切换
@@ -198,14 +206,21 @@ class _TDFormPageState extends State<TDFormPage> {
                     ),
                     onTap: () {
                       setState(() {
-                        print("____1");
-                        final currentVerticalColor = verticalButtonColor;
-                        verticalButtonColor = horizontalButtonColor;
-                        horizontalButtonColor = currentVerticalColor;
+                        if (horizontalButton) {
+                          /// 置换按钮状态
+                          horizontalButton = false;
+                          verticalButton = true;
 
-                        final currentTextColor = verticalTextColor;
-                        verticalTextColor = horizontalTextColor;
-                        horizontalTextColor = currentTextColor;
+                          /// 置换按钮颜色
+                          final currentVerticalColor = verticalButtonColor;
+                          verticalButtonColor = horizontalButtonColor;
+                          horizontalButtonColor = currentVerticalColor;
+
+                          /// 置换文字颜色
+                          final currentTextColor = verticalTextColor;
+                          verticalTextColor = horizontalTextColor;
+                          horizontalTextColor = currentTextColor;
+                        }
                       });
                     },
                   ),
@@ -222,14 +237,21 @@ class _TDFormPageState extends State<TDFormPage> {
                     ),
                     onTap: () {
                       setState(() {
-                        print("____2");
-                        final currentVerticalColor = verticalButtonColor;
-                        verticalButtonColor = horizontalButtonColor;
-                        horizontalButtonColor = currentVerticalColor;
+                        if (verticalButton) {
+                          /// 置换按钮状态
+                          horizontalButton = true;
+                          verticalButton = false;
 
-                        final currentTextColor = verticalTextColor;
-                        verticalTextColor = horizontalTextColor;
-                        horizontalTextColor = currentTextColor;
+                          /// 置换按钮颜色
+                          final currentVerticalColor = verticalButtonColor;
+                          verticalButtonColor = horizontalButtonColor;
+                          horizontalButtonColor = currentVerticalColor;
+
+                          /// 置换文字颜色
+                          final currentTextColor = verticalTextColor;
+                          verticalTextColor = horizontalTextColor;
+                          horizontalTextColor = currentTextColor;
+                        }
                       });
                     },
                   ),
@@ -267,7 +289,7 @@ class _TDFormPageState extends State<TDFormPage> {
       ],
     );
     current = Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 1),
       child: SizedBox(
         child: Container(
           child: Padding(

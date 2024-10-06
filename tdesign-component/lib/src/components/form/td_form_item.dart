@@ -152,9 +152,6 @@ class _TDFormItemState extends State<TDFormItem> {
             backgroundColor: Colors.white,
             hintText: widget.help,
           ),
-          const SizedBox(
-            height: 16,
-          ),
         ],
       );
     } else if (widget.name == 'password') {
@@ -183,15 +180,11 @@ class _TDFormItemState extends State<TDFormItem> {
             },
             needClear: false,
           ),
-          const SizedBox(
-            height: 16,
-          ),
         ],
       );
     } else if (widget.name == 'radios') {
       final theme = TDTheme.of(context);
       return Container(
-        height: 80.0,
         decoration: BoxDecoration(
           color: theme.whiteColor1,
         ),
@@ -205,8 +198,7 @@ class _TDFormItemState extends State<TDFormItem> {
                 widget.label ?? '',
                 style: const TextStyle(fontSize: 16),
               ),
-              const SizedBox(width: 16), // 间隔
-              // 右侧的单选按钮组，使用 Expanded 包裹
+              const SizedBox(width: 16),
               Expanded(
                 child: TDRadioGroup(
                   selectId: 'index:1',
