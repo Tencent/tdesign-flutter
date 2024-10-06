@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/src/components/form/td_form_inherited.dart';
 import '../../../tdesign_flutter.dart';
 
 class TDForm extends StatefulWidget {
@@ -35,7 +36,7 @@ class TDForm extends StatefulWidget {
   final Object? data;
 
   /// 是否禁用整个表单
-  final bool? disabled;
+  final bool disabled;
 
   /// 表单信息错误信息配置
   final Object? errorMessage;
@@ -80,16 +81,18 @@ class TDForm extends StatefulWidget {
 class _TDFormState extends State<TDForm> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView.separated(
-        shrinkWrap: true,
-        itemCount: widget.items.length,
-        itemBuilder: (context, index) {
-          return widget.items[index];
-        },
-        separatorBuilder: (context, index) {
-          return SizedBox(height: 1);
-        },
+    return TDFormInherited(
+      disabled: widget.disabled,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: widget.items
+            .map((item) => Column(
+                  children: [
+                    item,
+                    SizedBox(height: 1),
+                  ],
+                ))
+            .toList(),
       ),
     );
   }
