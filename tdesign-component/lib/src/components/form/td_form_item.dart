@@ -284,7 +284,7 @@ class _TDFormItemState extends State<TDFormItem> {
     } else if (widget.name == 'textarea') {
       return TDTextarea(
         /// 背景颜色未完成
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.red,
         controller: widget.controller,
         label: widget.label,
         hintText: widget.help,
