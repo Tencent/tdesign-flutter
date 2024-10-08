@@ -134,12 +134,15 @@ class _TDFormPageState extends State<TDFormPage> {
         label: '用户名',
         name: 'name',
         help: '请输入用户名',
+        additionInfo: '输入用户名',
+        inputPadding: 15.0,
         controller: controller[0],
       ),
       TDFormItem(
         label: '密码',
         name: 'password',
         help: '请输入密码',
+        inputPadding: 35.0,
         controller: controller[1],
       ),
       TDFormItem(
