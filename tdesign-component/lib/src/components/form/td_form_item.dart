@@ -20,6 +20,8 @@ class TDFormItem extends StatefulWidget {
     this.showErrowMessage,
     this.maxLength,
     this.indicator,
+    this.additionInfo,
+    this.inputPadding = 10.0,
     Key? key,
   })  : localData = localData ?? const [],
         radios = radios ?? const {},
@@ -36,9 +38,15 @@ class TDFormItem extends StatefulWidget {
   /// 是否显示右箭头
   final bool? arrow;
 
+  /// TDInput 框的辅助说明文字
+  final String? additionInfo;
+
   /// 表单说明内容
   /// 表单的默认输入字符
   final String? help;
+
+  /// input 框默认文本的左侧 padding
+  final double inputPadding;
 
   /// 表单字段标签对齐方式：
   /// 左对齐、右对齐、顶部对齐
@@ -147,10 +155,16 @@ class _TDFormItemState extends State<TDFormItem> {
       return Column(
         children: [
           TDInput(
+            inputDecoration: InputDecoration(
+              hintText: widget.help,
+              contentPadding:
+                  EdgeInsets.only(left: widget.inputPadding), // 左侧内边距20像素
+              border: InputBorder.none,
+            ),
             leftLabel: widget.label,
             controller: widget.controller,
             backgroundColor: Colors.white,
-            hintText: widget.help,
+            additionInfo: widget.additionInfo,
           ),
         ],
       );
@@ -158,11 +172,16 @@ class _TDFormItemState extends State<TDFormItem> {
       return Column(
         children: [
           TDInput(
+            inputDecoration: InputDecoration(
+              hintText: widget.help,
+              contentPadding:
+                  EdgeInsets.only(left: widget.inputPadding), // 左侧内边距20像素
+              border: InputBorder.none,
+            ),
             type: TDInputType.normal,
             controller: widget.controller,
             obscureText: !browseOn,
             leftLabel: widget.label,
-            hintText: widget.help,
             backgroundColor: Colors.white,
             rightBtn: browseOn
                 ? Icon(
