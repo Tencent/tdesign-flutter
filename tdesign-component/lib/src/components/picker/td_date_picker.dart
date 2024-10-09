@@ -10,29 +10,31 @@ typedef DatePickerCallback = void Function(Map<String, int> selected);
 
 /// 时间选择器
 class TDDatePicker extends StatefulWidget {
+
   const TDDatePicker(
       {required this.title,
-      required this.onConfirm,
-      this.rightText,
-      this.leftText,
-      this.onCancel,
-      this.backgroundColor,
-      this.titleDividerColor,
-      this.topRadius,
-      this.titleHeight,
-      this.padding,
-      this.leftPadding,
-      this.rightPadding,
-      this.leftTextStyle,
-      this.rightTextStyle,
-      this.centerTextStyle,
-      this.customSelectWidget,
-      this.itemDistanceCalculator,
-      required this.model,
-      this.showTitle = true,
-      this.pickerHeight = 200,
-      required this.pickerItemCount,
-      Key? key})
+        required this.onConfirm,
+        this.rightText,
+        this.leftText,
+        this.onCancel,
+        this.backgroundColor,
+        this.titleDividerColor,
+        this.topRadius,
+        this.titleHeight,
+        this.padding,
+        this.leftPadding,
+        this.rightPadding,
+        this.leftTextStyle,
+        this.rightTextStyle,
+        this.centerTextStyle,
+        this.customSelectWidget,
+        this.itemDistanceCalculator,
+        required this.model,
+        this.showTitle = true,
+        this.pickerHeight = 200,
+        required this.pickerItemCount,
+        this.onSelectedItemChanged,
+        Key? key})
       : super(key: key);
 
   /// 选择器标题
@@ -98,6 +100,9 @@ class TDDatePicker extends StatefulWidget {
   /// 数据模型
   final DatePickerModel model;
 
+  /// 选择器选中项改变回调
+  final void Function(int index)? onSelectedItemChanged;
+
   @override
   State<StatefulWidget> createState() => _TDDatePickerState();
 }
@@ -110,6 +115,12 @@ class _TDDatePickerState extends State<TDDatePicker> {
   void initState() {
     super.initState();
     pickerHeight = widget.pickerHeight;
+  }
+
+  @override
+  void dispose() {
+    widget.model.removeListener();
+    super.dispose();
   }
 
   bool useAll() {
@@ -303,6 +314,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                     pickerHeight = pickerHeight - Random().nextDouble() / 100000000;
                   });
                 }
+                widget.onSelectedItemChanged?.call(index);
               },
               childDelegate: ListWheelChildBuilderDelegate(
                   childCount: widget.model.data[whichLine].length,
@@ -328,7 +340,14 @@ class _TDDatePickerState extends State<TDDatePicker> {
   Widget buildTitle(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: widget.leftPadding ?? 16, right: widget.rightPadding ?? 16),
-
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: widget.titleDividerColor ?? Colors.transparent,
+          ),
+        )
+      ),
       /// 减去分割线的空间
       height: getTitleHeight() - 0.5,
       child: Row(
@@ -549,20 +568,28 @@ class DatePickerModel {
     secondFixedExtentScrollController = controllers[6];
   }
 
+  void _yearListener() {
+    yearIndex = yearFixedExtentScrollController.selectedItem;
+  }
+
+  void _monthListener() {
+    monthIndex = monthFixedExtentScrollController.selectedItem;
+  }
+
+  void _dayListener() {
+    dayIndex = dayFixedExtentScrollController.selectedItem;
+  }
+
+  void _weekDayListener() {
+    weekDayIndex = weekDayFixedExtentScrollController.selectedItem;
+  }
+
   void addListener() {
     /// 给年月日加上监控
-    yearFixedExtentScrollController.addListener(() {
-      yearIndex = yearFixedExtentScrollController.selectedItem;
-    });
-    monthFixedExtentScrollController.addListener(() {
-      monthIndex = monthFixedExtentScrollController.selectedItem;
-    });
-    dayFixedExtentScrollController.addListener(() {
-      dayIndex = dayFixedExtentScrollController.selectedItem;
-    });
-    weekDayFixedExtentScrollController.addListener(() {
-      weekDayIndex = weekDayFixedExtentScrollController.selectedItem;
-    });
+    yearFixedExtentScrollController.addListener(_yearListener);
+    monthFixedExtentScrollController.addListener(_monthListener);
+    dayFixedExtentScrollController.addListener(_dayListener);
+    weekDayFixedExtentScrollController.addListener(_weekDayListener);
     hourFixedExtentScrollController.addListener(() {
       hourIndex = hourFixedExtentScrollController.selectedItem;
     });
@@ -572,6 +599,14 @@ class DatePickerModel {
     secondFixedExtentScrollController.addListener(() {
       secondIndex = secondFixedExtentScrollController.selectedItem;
     });
+  }
+
+  void removeListener() {
+    /// 移除年月日的监控
+    yearFixedExtentScrollController.removeListener(_yearListener);
+    monthFixedExtentScrollController.removeListener(_monthListener);
+    dayFixedExtentScrollController.removeListener(_dayListener);
+    weekDayFixedExtentScrollController.removeListener(_weekDayListener);
   }
 
   void refreshMonthDataAndController() {
