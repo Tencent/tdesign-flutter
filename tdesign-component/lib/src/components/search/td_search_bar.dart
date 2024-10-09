@@ -35,6 +35,7 @@ class TDSearchBar extends StatefulWidget {
     this.padding = const EdgeInsets.fromLTRB(16, 8, 16, 8),
     this.autoFocus = false,
     this.mediumStyle = false,
+    this.cursorHeight,
     this.needCancel = false,
     this.controller,
     this.backgroundColor = Colors.white,
@@ -65,6 +66,10 @@ class TDSearchBar extends StatefulWidget {
 
   /// 是否在导航栏中的样式
   final bool mediumStyle;
+
+  /// 光标的高
+  final double? cursorHeight;
+
 
   /// 是否需要取消按钮
   final bool needCancel;
@@ -231,7 +236,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                           autofocus: widget.autoFocus,
                           cursorColor: TDTheme.of(context).brandNormalColor,
                           cursorWidth: 1,
-                          cursorHeight: widget.mediumStyle ? 16 : 18,
+                          cursorHeight:widget.cursorHeight ??(widget.mediumStyle ? 16 : 18),
                           textAlign: widget.alignment == TDSearchAlignment.center
                               ? TextAlign.center
                               : TextAlign.left,
