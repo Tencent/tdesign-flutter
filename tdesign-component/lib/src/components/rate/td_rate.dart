@@ -6,6 +6,8 @@ import 'package:flutter/rendering.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import '../../util/iterable_ext.dart';
+import '../../util/throttle.dart';
+import 'td_rate_overlay.dart';
 import 'td_rate_tips.dart';
 
 enum PlacementEnum {
@@ -100,21 +102,23 @@ class TDRate extends StatefulWidget {
 }
 
 class _TDRateState extends State<TDRate> {
+  final _throttle = Throttle(delay: const Duration(milliseconds: 100));
   late double _activeValue;
   late Map<double, GlobalKey> _globalKeys;
+  late TDRateOverlay _overlay;
   Timer? _hideTipTimer;
 
   /// 控制显示弹框
   var _showTip = false;
 
-  /// 组件高度
-  var _height = 0.0;
+  /// 弹框的尺寸
+  var _tipSize = Size.zero;
 
-  /// 当前弹框宽度
-  var _tipWidth = 0.0;
+  /// 当前选中的评分的位置
+  var _rateOffset = Offset.zero;
 
-  /// 当前选中的评分宽度
-  var _rateWidth = 0.0;
+  /// 当前选中的评分的大小
+  var _rateSize = Size.zero;
 
   /// 是否点击，否则是滑动
   var _isClick = true;
@@ -126,6 +130,7 @@ class _TDRateState extends State<TDRate> {
     _globalKeys = List.generate((widget.count ?? 5) * 2, (index) => index / 2 + 0.5)
         .asMap()
         .map((index, e) => MapEntry(e, GlobalKey()));
+    _overlay = TDRateOverlay(context: context, builder: (context) => _buildOverlay())..show();
   }
 
   @override
@@ -143,6 +148,7 @@ class _TDRateState extends State<TDRate> {
 
   @override
   void dispose() {
+    _overlay.hide();
     _hideTipTimer?.cancel();
     super.dispose();
   }
@@ -154,17 +160,19 @@ class _TDRateState extends State<TDRate> {
       mainAxisAlignment: widget.mainAxisAlignment ?? MainAxisAlignment.start,
       crossAxisAlignment: widget.crossAxisAlignment ?? CrossAxisAlignment.center,
       children: [
-        Listener(
-          // behavior: HitTestBehavior.opaque,
-          onPointerDown: (event) {
+        GestureDetector(
+          onTapDown: (event) {
             _isClick = true;
           },
-          onPointerMove: (details) {
-            _isClick = false;
-            _changeSelect(details.position);
+          onTapUp: (details) {
+            _changeSelect(details.globalPosition, true);
+            _hideTip();
           },
-          onPointerUp: (details) {
-            _changeSelect(details.position);
+          onHorizontalDragUpdate: (details) {
+            _isClick = false;
+            _changeSelect(details.globalPosition);
+          },
+          onHorizontalDragEnd: (details) {
             _hideTip();
           },
           child: Row(
@@ -172,68 +180,32 @@ class _TDRateState extends State<TDRate> {
               final isLast = index == (widget.count ?? 5) - 1;
               return Padding(
                 padding: EdgeInsets.only(right: isLast ? 0 : widget.gap ?? TDTheme.of(context).spacer8),
-                child: Stack(
-                  clipBehavior: Clip.none,
+                child: Row(
                   children: [
-                    Row(
-                      children: [
-                        ClipRect(
-                          key: _globalKeys[index + 0.5],
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            widthFactor: 0.5,
-                            child: Icon(
-                              _getIcon(value: index + 0.5),
-                              size: widget.size ?? 24,
-                              color: _getIconColor(value: index + 0.5),
-                            ),
-                          ),
-                        ),
-                        ClipRect(
-                          key: _globalKeys[index + 1.0],
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            widthFactor: 0.5,
-                            child: Icon(
-                              _getIcon(value: index + 1.0),
-                              size: widget.size ?? 24,
-                              color: _getIconColor(value: index + 1.0),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (widget.placement != PlacementEnum.none &&
-                        _showTip &&
-                        (index + 0.5 == _activeValue || index + 1 == _activeValue))
-                      Positioned(
-                        bottom: widget.placement == PlacementEnum.top ? _height + TDTheme.of(context).spacer8 : null,
-                        top: widget.placement == PlacementEnum.bottom ? _height + TDTheme.of(context).spacer8 : null,
-                        left: -(_tipWidth - _rateWidth) / 2,
-                        child: TDRateTips(
-                          allowHalf: widget.allowHalf,
-                          index: index,
-                          activeValue: _activeValue,
-                          icon: _getIcon(isActive: true),
-                          size: widget.size,
-                          getIconColor: _getIconColor,
-                          isClick: _isClick,
-                          withCall: (width) {
-                            if (_tipWidth != width) {
-                              setState(() {
-                                _tipWidth = width;
-                              });
-                            }
-                          },
-                          tipClick: (value) {
-                            setState(() {
-                              _showTip = false;
-                              _isClick = true;
-                              _activeValue = value;
-                            });
-                          },
+                    ClipRect(
+                      key: _globalKeys[index + 0.5],
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        widthFactor: 0.5,
+                        child: Icon(
+                          _getIcon(value: index + 0.5),
+                          size: widget.size ?? 24,
+                          color: _getIconColor(value: index + 0.5),
                         ),
                       ),
+                    ),
+                    ClipRect(
+                      key: _globalKeys[index + 1.0],
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        widthFactor: 0.5,
+                        child: Icon(
+                          _getIcon(value: index + 1.0),
+                          size: widget.size ?? 24,
+                          color: _getIconColor(value: index + 1.0),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               );
@@ -245,20 +217,27 @@ class _TDRateState extends State<TDRate> {
     );
   }
 
-  void _changeSelect(Offset globalPosition) {
-    final newIndex = _fingerInsideContainer(globalPosition);
-    if (newIndex != null && newIndex != _activeValue) {
-      setState(() {
+  void _changeSelect(Offset globalPosition, [bool? isTap]) {
+    _throttle.call(() {
+      final newIndex = _fingerInsideContainer(globalPosition);
+      if (newIndex == null) {
+        return;
+      }
+      final diff = newIndex != _activeValue;
+      if (diff || isTap == true) {
         _activeValue = newIndex;
         _showTip = newIndex == 0 ? false : true;
-      });
-      widget.onChange?.call(newIndex);
-    }
+        _overlay.update();
+        if (diff) {
+          setState(() {});
+          widget.onChange?.call(newIndex);
+        }
+      }
+    });
   }
 
   double? _fingerInsideContainer(Offset globalPosition) {
     final rateBox = context.findRenderObject() as RenderBox?;
-    _height = rateBox?.size.height ?? 0;
     if (rateBox == null) {
       return null;
     }
@@ -272,8 +251,10 @@ class _TDRateState extends State<TDRate> {
         final localPosition = renderBox.globalToLocal(globalPosition);
         final isIn = renderBox.hitTest(BoxHitTestResult(), position: localPosition);
         if (isIn) {
-          _rateWidth = renderBox.size.width * 2;
-          return (widget.allowHalf ?? false) ? entry.key : entry.key.ceil().toDouble();
+          final parentRenderBox = renderBox.parent as RenderBox;
+          _rateOffset = parentRenderBox.localToGlobal(Offset.zero);
+          _rateSize = parentRenderBox.size;
+          return widget.allowHalf == true ? entry.key : entry.key.ceil().toDouble();
         }
       }
     }
@@ -285,10 +266,9 @@ class _TDRateState extends State<TDRate> {
     _hideTipTimer = Timer(
       Duration(seconds: _isClick && widget.allowHalf == true ? 3 : 1),
       () {
-        setState(() {
-          _showTip = false;
-          _isClick = true;
-        });
+        _showTip = false;
+        _isClick = true;
+        _overlay.update();
       },
     );
   }
@@ -321,5 +301,39 @@ class _TDRateState extends State<TDRate> {
     final selectIcon = widget.icon?.getOrNull(0) ?? TDIcons.star_filled;
     final icon = [selectIcon, widget.icon?.getOrNull(1) ?? selectIcon];
     return (value != null && _activeValue >= value) || (isActive != null && isActive) ? icon[0] : icon[1];
+  }
+
+  Widget _buildOverlay() {
+    return widget.placement != PlacementEnum.none && _showTip
+        ? Positioned(
+            top: widget.placement == PlacementEnum.top
+                ? _rateOffset.dy - TDTheme.of(context).spacer8 - _tipSize.height
+                : _rateOffset.dy + TDTheme.of(context).spacer8 + _rateSize.height,
+            left: _rateOffset.dx - (_tipSize.width - _rateSize.width) / 2,
+            child: TDRateTips(
+              allowHalf: widget.allowHalf,
+              activeValue: _activeValue,
+              icon: _getIcon(isActive: true),
+              size: widget.size,
+              getIconColor: _getIconColor,
+              isClick: _isClick,
+              sizeCall: (size) {
+                if (_tipSize.width != size.width || _tipSize.height != size.height) {
+                  _tipSize = size;
+                  _overlay.update();
+                }
+              },
+              tipClick: (value) {
+                _showTip = false;
+                _isClick = true;
+                _overlay.update();
+                if (value != _activeValue) {
+                  _activeValue = value;
+                  setState(() {});
+                }
+              },
+            ),
+          )
+        : const SizedBox.shrink();
   }
 }
