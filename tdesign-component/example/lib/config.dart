@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'base/example_base.dart';
 import 'page/sidebar/td_sidebar_page.dart';
 import 'page/sidebar/td_sidebar_page_anchor.dart';
 import 'page/sidebar/td_sidebar_page_custom.dart';
 import 'page/sidebar/td_sidebar_page_icon.dart';
+import 'page/sidebar/td_sidebar_page_loading.dart';
 import 'page/sidebar/td_sidebar_page_outline.dart';
 import 'page/sidebar/td_sidebar_page_pagination.dart';
 import 'page/td_avatar_page.dart';
@@ -13,10 +13,11 @@ import 'page/td_backtop_page.dart';
 import 'page/td_badge_page.dart';
 import 'page/td_bottom_tab_bar_page.dart';
 import 'page/td_button_page.dart';
+import 'page/td_calendar_page.dart';
+import 'page/td_cascader_page.dart';
 import 'page/td_cell_page.dart';
 import 'page/td_checkbox_page.dart';
 import 'page/td_collapse.dart';
-import 'page/td_count_down_page.dart';
 import 'page/td_date_picker_page.dart';
 import 'page/td_dialog_page.dart';
 import 'page/td_divider_page.dart';
@@ -28,10 +29,12 @@ import 'page/td_font_page.dart';
 import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
 import 'page/td_image_viewer_page.dart';
+import 'page/td_indexes_page.dart';
 import 'page/td_input_page.dart';
 import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
 import 'page/td_navbar_page.dart';
+import 'page/td_notice_bar_page.dart';
 import 'page/td_picker_page.dart';
 import 'page/td_popup_page.dart';
 import 'page/td_radio_page.dart';
@@ -42,18 +45,19 @@ import 'page/td_search_bar_page.dart';
 import 'page/td_shadows_page.dart';
 import 'page/td_slider_page.dart';
 import 'page/td_stepper_page.dart';
-import 'page/td_swipe_cell_page.dart';
 import 'page/td_steps_page.dart';
+import 'page/td_swipe_cell_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
+import 'page/td_table_page.dart';
 import 'page/td_tabs_page.dart';
 import 'page/td_tag_page.dart';
 import 'page/td_text_page.dart';
 import 'page/td_textarea_page.dart';
 import 'page/td_theme_page.dart';
+import 'page/td_time_counter_page.dart';
 import 'page/td_toast_page.dart';
 import 'page/td_tree_select_page.dart';
-import 'page/td_cascader_page.dart';
 import 'page/todo_page.dart';
 
 PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
@@ -91,8 +95,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Indexes 索引',
         name: 'indexes',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDIndexesPage())),
     ExamplePageModel(
         text: 'NavBar 导航栏', name: 'navbar', pageBuilder: _wrapInheritedTheme((context) => const TDNavBarPage())),
     ExamplePageModel(
@@ -107,8 +110,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Calendar 日历',
         name: 'calendar',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDCalendarPage())),
     ExamplePageModel(
         text: 'Cascader 级联选择器',
         name: 'cascader',
@@ -159,10 +161,9 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Cell 单元格', name: 'cell', pageBuilder: _wrapInheritedTheme((context) => const TDCellPage())),
     ExamplePageModel(
-        text: 'CountDown 倒计时',
-        name: 'count-down',
-        pageName: 'count_down',
-        pageBuilder: _wrapInheritedTheme((context) => const TDCountDownPage())),
+        text: 'TimeCounter 计时器',
+        name: 'time-counter',
+        pageBuilder: _wrapInheritedTheme((context) => const TDTimeCounterPage())),
     ExamplePageModel(
         text: 'Collapse 折叠面板',
         name: 'collapse',
@@ -204,6 +205,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
         text: 'Swiper 轮播图', name: 'swiper', pageBuilder: _wrapInheritedTheme((context) => const TDSwiperPage())),
+    ExamplePageModel(text: 'Table 表格', name: 'table', pageBuilder: _wrapInheritedTheme((context) => const TDTablePage())),
     ExamplePageModel(text: 'Tag 标签', name: 'tag', pageBuilder: _wrapInheritedTheme((context) => const TDTagPage())),
   ],
   '反馈': [
@@ -227,10 +229,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         isTodo: true,
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
-        text: 'NoticeBar 公告栏',
-        name: 'notice_bar',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        text: 'NoticeBar 公告栏', name: 'notice-bar', pageBuilder: _wrapInheritedTheme((context) => const TDNoticeBarPage())),
     ExamplePageModel(
         text: 'Overlay 遮罩层',
         name: 'overlay',
@@ -285,5 +284,10 @@ List<ExamplePageModel> sideBarExamplePage = [
       text: 'SideBar 自定义样式',
       name: 'SideBarCustom',
       isTodo: false,
-      pageBuilder: _wrapInheritedTheme((context) => const TDSideBarCustomPage()))
+      pageBuilder: _wrapInheritedTheme((context) => const TDSideBarCustomPage())),
+  ExamplePageModel(
+      text: 'SideBar 延迟加载',
+      name: 'SideBarLoading',
+      isTodo: false,
+      pageBuilder: _wrapInheritedTheme((context) => const TDSideBarLoadingPage()))
 ];
