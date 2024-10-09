@@ -41,6 +41,10 @@ class TDRatePageState extends State<TDRatePage> {
             ExampleItem(desc: '只可选全星时', builder: _buildFullRate),
             ExampleItem(desc: '可选半星时', builder: _buildHalfRate),
           ]),
+          ExampleModule(title: '组件样式', children: [
+            ExampleItem(desc: '评分大小', builder: _buildSizeRate),
+            ExampleItem(desc: '设置评分颜色', builder: _buildColorRate),
+          ]),
         ]);
   }
 
@@ -67,7 +71,7 @@ class TDRatePageState extends State<TDRatePage> {
       TDCell(title: '带描述评分', noteWidget: TDRate(value: 3, showText: true))
     ]);
   }
-    
+
   @Demo(group: 'rate')
   Widget _buildDRate(BuildContext context) {
     return Column(children: const [
@@ -87,5 +91,23 @@ class TDRatePageState extends State<TDRatePage> {
   @Demo(group: 'rate')
   Widget _buildHalfRate(BuildContext context) {
     return const TDCell(title: '点击活滑动', noteWidget: TDRate(value: 3, allowHalf: true));
+  }
+
+  @Demo(group: 'rate')
+  Widget _buildSizeRate(BuildContext context) {
+    return Column(children: const [
+      TDCell(title: '默认尺寸24', noteWidget: TDRate(value: 3)),
+      SizedBox(height: 16),
+      TDCell(title: '小尺寸20', noteWidget: TDRate(value: 3, size: 20)),
+    ]);
+  }
+
+  @Demo(group: 'rate')
+  Widget _buildColorRate(BuildContext context) {
+    return Column(children: const [
+      TDCell(title: '填充评分', noteWidget: TDRate(value: 2.5, allowHalf: true, color: [Color(0xFFFFC51C), Color(0xFFE8E8E8)],)),
+      SizedBox(height: 16),
+      TDCell(title: '线描评分', noteWidget: TDRate(value: 2.5, allowHalf: true, color: [Color(0xFF00A870)])),
+    ]);
   }
 }
