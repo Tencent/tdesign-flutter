@@ -224,7 +224,6 @@ class _TDNavBarState extends State<TDNavBar> {
           vertical: TDTheme.of(context).spacer4,
         );
 
-    print("screenAdaptation:${widget.screenAdaptation}, paddingTop:$paddingTop");
     return Container(
       height: widget.height + paddingTop,
       padding: padding.add(EdgeInsets.only(top: paddingTop)),
