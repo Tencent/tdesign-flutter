@@ -5,10 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 import '../../../tdesign_flutter.dart';
-import '../../theme/td_colors.dart';
-import '../../theme/td_theme.dart';
-import '../icon/td_icons.dart';
-import '../image/td_image.dart';
 import '../navbar/td_nav_bar.dart';
 
 typedef OnIndexChange = Function(int index);
@@ -77,7 +73,13 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
   @override
   void initState() {
     super.initState();
-    _index = widget.defaultIndex ?? 1;
+    if(widget.images.isEmpty) {
+      throw FlutterError('images must not be empty');
+    }
+    if((widget.defaultIndex ?? 0) > widget.images.length - 1) {
+      throw FlutterError('defaultIndex must be less than images.length');
+    }
+    _index = (widget.defaultIndex ?? 0) + 1;
   }
 
   Widget _getImage(dynamic image) {
@@ -139,8 +141,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
   @override
   Widget build(BuildContext context) {
     var media =  MediaQuery.of(context);
-    var safeAreaHeight = media.padding.top ?? 0;
-    var width = media.size.width ?? 0;
+    var safeAreaHeight = media.padding.top;
     return Stack(
       children: [
         Positioned(
@@ -158,6 +159,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
           left: 0,
           right: 0,
           child: Swiper(
+            index: _index - 1,
             itemBuilder: (BuildContext context, int index) {
               var image = widget.images[index];
               return GestureDetector(
@@ -209,9 +211,16 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
                 if (widget.deleteBtn ?? false)
                   GestureDetector(
                     onTap: () {
+                      if(widget.images.length == 1) {
+                        throw FlutterError('images must not be empty');
+                      }
                       widget.images.removeAt(_index - 1);
                       widget.onDelete?.call(_index - 1);
-                      setState(() {});
+                      setState(() {
+                        if(_index > 1) {
+                          _index--;
+                        }
+                      });
                     },
                     child: Icon(
                       TDIcons.delete,

@@ -305,6 +305,128 @@ class TDPopupPageState extends State<TDPopupPage> {
             );
           },
         ),
+        ExampleItem(
+            desc: '弹出层包含输入框且会被键盘遮挡',
+            builder: (_) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.all(8),
+                    child: TDButton(
+                      text: '底部弹出层-被键盘弹出遮挡',
+                      isBlock: true,
+                      theme: TDButtonTheme.primary,
+                      type: TDButtonType.outline,
+                      size: TDButtonSize.large,
+                      onTap: () {
+                        Navigator.of(context).push(TDSlidePopupRoute(
+                            modalBarrierColor: TDTheme.of(context).fontGyColor2,
+                            slideTransitionFrom: SlideTransitionFrom.bottom,
+                            builder: (context) {
+                              return TDPopupBottomDisplayPanel(
+                                title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                                closeColor: TDTheme.of(context).errorNormalColor,
+                                closeClick: () {
+                                  Navigator.maybePop(context);
+                                },
+                                child: Material(
+                                  child: SizedBox(
+                                    height: 100,
+                                    child: TDInput(
+                                      type: TDInputType.normal,
+                                      leftLabel: '标签文字',
+                                      hintText: '请输入文字',
+                                      maxLength: 10,
+                                      additionInfo: '最大输入10个字符',
+                                      backgroundColor: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                radius: 6,
+                              );
+                            }));
+                      },
+                    ),
+                  ),
+                  Container(
+                      margin: const EdgeInsets.all(8),
+                      child: TDButton(
+                        text: '居中弹出层-被键盘弹出遮挡',
+                        isBlock: true,
+                        theme: TDButtonTheme.primary,
+                        type: TDButtonType.outline,
+                        size: TDButtonSize.large,
+                        onTap: () {
+                          Navigator.of(context).push(TDSlidePopupRoute(
+                              modalBarrierColor: TDTheme.of(context).fontGyColor2,
+                              slideTransitionFrom: SlideTransitionFrom.center,
+                              builder: (context) {
+                                return TDPopupCenterPanel(
+                                  closeColor: TDTheme.of(context).errorNormalColor,
+                                  closeClick: () {
+                                    Navigator.maybePop(context);
+                                  },
+                                  child: Material(
+                                    child: SizedBox(
+                                      height: 336,
+                                      child: Column(
+                                        children: [
+                                          TDInput(
+                                            type: TDInputType.normal,
+                                            leftLabel: '标签文字1',
+                                            hintText: '请输入文字1',
+                                            maxLength: 10,
+                                            backgroundColor: Colors.white,
+                                          ),
+                                          TDInput(
+                                            type: TDInputType.normal,
+                                            leftLabel: '标签文字2',
+                                            hintText: '请输入文字2',
+                                            maxLength: 10,
+                                            backgroundColor: Colors.white,
+                                          ),
+                                          TDInput(
+                                            type: TDInputType.normal,
+                                            leftLabel: '标签文字3',
+                                            hintText: '请输入文字3',
+                                            maxLength: 10,
+                                            backgroundColor: Colors.white,
+                                          ),
+                                          TDInput(
+                                            type: TDInputType.normal,
+                                            leftLabel: '标签文字4',
+                                            hintText: '请输入文字4',
+                                            maxLength: 10,
+                                            backgroundColor: Colors.white,
+                                          ),
+                                          TDInput(
+                                            type: TDInputType.normal,
+                                            leftLabel: '会被键盘遮挡的输入框1',
+                                            hintText: '会被键盘遮挡小部分',
+                                            maxLength: 10,
+                                            backgroundColor: Colors.white,
+                                          ),
+                                          TDInput(
+                                            type: TDInputType.normal,
+                                            leftLabel: '会被键盘遮挡的输入框2',
+                                            hintText: '会被键盘遮挡全遮挡',
+                                            maxLength: 10,
+                                            backgroundColor: Colors.white,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  radius: 6,
+                                );
+                              }));
+                        },
+                      )),
+                ],
+              );
+            })
       ],
     );
   }
