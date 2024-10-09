@@ -300,8 +300,8 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             useHour: true,
             useMinute: true,
             useSecond: true,
-            dateStart: [2012,1, 15,12,28],
-            dateEnd: [2012, 6, 15,12,48],
+            dateStart: [2012,1, 15,12,28,11],
+            dateEnd: [2012, 6, 15,12,48,32],
             initialDate: [2012, 1, 15,13,20]);
       },
       child: buildSelectRow(context, selected_5, '选择时间'),

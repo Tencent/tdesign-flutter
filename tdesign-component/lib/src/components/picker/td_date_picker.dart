@@ -271,7 +271,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
               controller: widget.model.controllers[whichLine],
               physics: whichLine == 3 ? const NeverScrollableScrollPhysics() : const FixedExtentScrollPhysics(),
               onSelectedItemChanged: (index) {
-                if (whichLine == 0 || whichLine == 1 || whichLine == 2 || whichLine == 4 || whichLine == 5) {
+                if (whichLine == 0 || whichLine == 1 || whichLine == 2 || whichLine == 4 || whichLine == 5 || whichLine == 6) {
                   // 年月的改变会引起日的改变, 年的改变会引起月的改变
                   setState(() {
                     switch (whichLine) {
@@ -622,7 +622,7 @@ class DatePickerModel {
     } else {
       refreshMinuteData(selectedYear:selectedYear,selectedMonth: selectedMonth,selectDay: selectDay);
     }
-    refreshSecondData();
+    refreshSecondData(selectedYear:selectedYear,selectedMonth: selectedMonth,selectDay: selectDay);
   }
 
   void refreshHourData({required int selectedYear,required int selectedMonth,required int selectDay}) {
@@ -654,8 +654,24 @@ class DatePickerModel {
     }
   }
 
-  void refreshSecondData() {
-    data[6] = List.generate(60, (index) => index);
+  void refreshSecondData({required int selectedYear,required int selectedMonth,required int selectDay}) {
+    var selectHour = hourIndex + data[4][0];
+    var selectMinute = minuteIndex + data[5][0];
+    if (selectedYear == dateStart[0] &&
+        selectedMonth == dateStart[1] &&
+        selectDay == dateStart[2] &&
+        selectHour == dateStart[3] &&
+        selectMinute == dateStart[4]) {
+      data[6] = List.generate(60 - (dateStart[5]), (index) => index + dateStart[5]);
+    } else if (selectedYear == dateEnd[0] &&
+        selectedMonth == dateEnd[1] &&
+        selectDay == dateEnd[2] &&
+        selectHour == dateEnd[3] &&
+        selectMinute == dateEnd[4]) {
+      data[6] = dateEnd[5] >= dateStart[5] ? List.generate(dateEnd[5] + 1, (index) => index):List.generate(60 - (dateStart[5]), (index) => index);
+    } else {
+      data[6] = List.generate(60, (index) => index);
+    }
   }
 
   Map<String, int> getSelectedMap() {
