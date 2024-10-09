@@ -6,23 +6,23 @@ typedef TDTDResourceBuilder = TDResourceDelegate? Function(BuildContext context)
 
 /// 资源管理器
 class TDResourceManager {
-
   /// 代理构建器
   TDTDResourceBuilder? _builder;
+
   /// 每次都调用build方法
   bool _needAlwaysBuild = false;
 
   TDResourceDelegate? _delegate;
 
   /// 获取资源
-  TDResourceDelegate delegate(BuildContext context){
-    if(_builder == null){
+  TDResourceDelegate delegate(BuildContext context) {
+    if (_builder == null) {
       return _defaultDelegate;
     }
-    if(_needAlwaysBuild){
+    if (_needAlwaysBuild) {
       // 每次都调用,适用于全局有多个TDResourceDelegate的情况
       var delegate = _builder?.call(context);
-      if(delegate != null){
+      if (delegate != null) {
         return delegate;
       }
     }
@@ -42,7 +42,7 @@ class TDResourceManager {
   static final _defaultDelegate = _DefaultResourceDelegate();
 
   /// 设置资源代理
-  void setResourceBuilder(TDTDResourceBuilder delegate,needAlwaysBuild) {
+  void setResourceBuilder(TDTDResourceBuilder delegate, needAlwaysBuild) {
     _builder = delegate;
     _needAlwaysBuild = needAlwaysBuild;
   }
@@ -86,20 +86,89 @@ abstract class TDResourceDelegate {
   /// [TDRefreshHeader] 松开刷新
   String get releaseRefresh;
 
-  /// [TDCountDown] 天
+  /// [TDTimeCounter] 天
   String get days;
 
-  /// [TDCountDown] 时
+  /// [TDTimeCounter] 时
   String get hours;
 
-  /// [TDCountDown] 分
+  /// [TDTimeCounter] 分
   String get minutes;
 
-  /// [TDCountDown] 秒
+  /// [TDTimeCounter] 秒
   String get seconds;
 
-  /// [TDCountDown] 毫秒
+  /// [TDTimeCounter] 毫秒
   String get milliseconds;
+
+  /// [TDCalendarHeader] 星期日
+  String get sunday;
+
+  /// [TDCalendarHeader] 星期一
+  String get monday;
+
+  /// [TDCalendarHeader] 星期二
+  String get tuesday;
+
+  /// [TDCalendarHeader] 星期三
+  String get wednesday;
+
+  /// [TDCalendarHeader] 星期四
+  String get thursday;
+
+  /// [TDCalendarHeader] 星期五
+  String get friday;
+
+  /// [TDCalendarHeader] 星期六
+  String get saturday;
+
+  /// [TDCalendarBody] 年
+  String get year;
+
+  /// [TDCalendarBody] 一月
+  String get january;
+
+  /// [TDCalendarBody] 二月
+  String get february;
+
+  /// [TDCalendarBody] 三月
+  String get march;
+
+  /// [TDCalendarBody] 四月
+  String get april;
+
+  /// [TDCalendarBody] 五月
+  String get may;
+
+  /// [TDCalendarBody] 六月
+  String get june;
+
+  /// [TDCalendarBody] 七月
+  String get july;
+
+  /// [TDCalendarBody] 八月
+  String get august;
+
+  /// [TDCalendarBody] 九月
+  String get september;
+
+  /// [TDCalendarBody] 十月
+  String get october;
+
+  /// [TDCalendarBody] 十一月
+  String get november;
+
+  /// [TDCalendarBody] 十二月
+  String get december;
+
+  /// [TDCalendar] 时间
+  String get time;
+
+  /// [TDCalendar] 开始
+  String get start;
+
+  /// [TDCalendar] 结束
+  String get end;
 }
 
 /// 如果用户要重写,就应该全部重写,不开放只重新部分资源
@@ -139,7 +208,7 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
 
   @override
   String get releaseRefresh => '松开刷新';
-  
+
   @override
   String get days => '天';
 
@@ -154,4 +223,73 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
 
   @override
   String get milliseconds => '毫秒';
+
+  @override
+  String get sunday => '日';
+
+  @override
+  String get monday => '一';
+
+  @override
+  String get tuesday => '二';
+
+  @override
+  String get wednesday => '三';
+
+  @override
+  String get thursday => '四';
+
+  @override
+  String get friday => '五';
+
+  @override
+  String get saturday => '六';
+
+  @override
+  String get year => ' 年';
+
+  @override
+  String get january => '1 月';
+
+  @override
+  String get february => '2 月';
+
+  @override
+  String get march => '3 月';
+
+  @override
+  String get april => '4 月';
+
+  @override
+  String get may => '5 月';
+
+  @override
+  String get june => '6 月';
+
+  @override
+  String get july => '7 月';
+
+  @override
+  String get august => '8 月';
+
+  @override
+  String get september => '9 月';
+
+  @override
+  String get october => '10 月';
+
+  @override
+  String get november => '11 月';
+
+  @override
+  String get december => '12 月';
+
+  @override
+  String get time => '时间';
+
+  @override
+  String get start => '开始';
+
+  @override
+  String get end => '结束';
 }

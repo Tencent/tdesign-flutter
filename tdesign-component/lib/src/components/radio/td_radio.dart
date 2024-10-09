@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/auto_size.dart';
 
 enum TDRadioStyle {
   circle, // 圆形
@@ -14,54 +15,53 @@ class TDRadio extends TDCheckbox {
   /// 单选框按钮样式
   final TDRadioStyle radioStyle;
 
-  const TDRadio({
-    String? id,
-    Key? key,
-    String? title,
-    Font? titleFont,
-    String? subTitle,
-    Font? subTitleFont,
-    bool enable = true,
-    int subTitleMaxLine = 1,
-    int titleMaxLine = 1,
-    Color? selectColor,
-    Color? disableColor,
-    ContentBuilder? customContentBuilder,
-    double? spacing,
-    bool? cardMode,
-    bool? showDivider,
-    TDCheckBoxSize size = TDCheckBoxSize.small,
-    this.radioStyle = TDRadioStyle.circle,
-    TDContentDirection contentDirection = TDContentDirection.right,
-    IconBuilder? customIconBuilder,
-    Color? titleColor,
-    Color? subTitleColor,
-    Color? backgroundColor,
-   double? checkBoxLeftSpace
-  }) : super(
-          id: id,
-          key: key,
-          title: title,
-          subTitle: subTitle,
-          titleFont: titleFont,
-          subTitleFont: subTitleFont,
-          subTitleMaxLine: subTitleMaxLine,
-          enable: enable,
-          size: size,
-          cardMode: cardMode ?? false,
-          showDivider: showDivider ?? true,
-          titleMaxLine: titleMaxLine,
-          customContentBuilder: customContentBuilder,
-          contentDirection: contentDirection,
-          spacing: spacing,
-          customIconBuilder: customIconBuilder,
-          selectColor: selectColor,
-          disableColor: disableColor,
-          titleColor: titleColor,
-          subTitleColor: subTitleColor,
-          backgroundColor: backgroundColor,
-          checkBoxLeftSpace:checkBoxLeftSpace
-        );
+  const TDRadio(
+      {String? id,
+      Key? key,
+      String? title,
+      Font? titleFont,
+      String? subTitle,
+      Font? subTitleFont,
+      bool enable = true,
+      int subTitleMaxLine = 1,
+      int titleMaxLine = 1,
+      Color? selectColor,
+      Color? disableColor,
+      ContentBuilder? customContentBuilder,
+      double? spacing,
+      bool? cardMode,
+      bool? showDivider,
+      TDCheckBoxSize size = TDCheckBoxSize.small,
+      this.radioStyle = TDRadioStyle.circle,
+      TDContentDirection contentDirection = TDContentDirection.right,
+      IconBuilder? customIconBuilder,
+      Color? titleColor,
+      Color? subTitleColor,
+      Color? backgroundColor,
+      double? checkBoxLeftSpace})
+      : super(
+            id: id,
+            key: key,
+            title: title,
+            subTitle: subTitle,
+            titleFont: titleFont,
+            subTitleFont: subTitleFont,
+            subTitleMaxLine: subTitleMaxLine,
+            enable: enable,
+            size: size,
+            cardMode: cardMode ?? false,
+            showDivider: showDivider ?? true,
+            titleMaxLine: titleMaxLine,
+            customContentBuilder: customContentBuilder,
+            contentDirection: contentDirection,
+            spacing: spacing,
+            customIconBuilder: customIconBuilder,
+            selectColor: selectColor,
+            disableColor: disableColor,
+            titleColor: titleColor,
+            subTitleColor: subTitleColor,
+            backgroundColor: backgroundColor,
+            checkBoxLeftSpace: checkBoxLeftSpace);
 
   @override
   Widget buildDefaultIcon(BuildContext context, TDCheckboxGroupState? groupState, bool isSelected) {
@@ -111,7 +111,7 @@ class TDRadio extends TDCheckbox {
           color: !enable
               ? (isSelected ? (disableColor ?? theme.brandDisabledColor) : theme.grayColor4)
               : isSelected
-                  ? selectColor ??  theme.brandNormalColor
+                  ? selectColor ?? theme.brandNormalColor
                   : theme.grayColor4);
     } else {
       return SizedBox(
@@ -139,7 +139,7 @@ class TDRadioState extends TDCheckboxState {
         canNotCancel = true;
       }
     }
-    return  super.build(context);
+    return super.build(context);
   }
 }
 
@@ -182,6 +182,9 @@ class TDRadioGroup extends TDCheckboxGroup {
   /// 自定义下划线
   final Widget? divider;
 
+  ///每行几列
+  final int rowCount;
+
   TDRadioGroup({
     Key? key,
     Widget? child, // 使用child 则请勿设置direction
@@ -196,6 +199,7 @@ class TDRadioGroup extends TDCheckboxGroup {
     IconBuilder? customIconBuilder,
     ContentBuilder? customContentBuilder,
     double? spacing, // icon和文字距离
+    this.rowCount=1,
     TDContentDirection? contentDirection,
     OnRadioGroupChange? onRadioGroupChange, // 切换监听
     this.showDivider = false,
@@ -290,16 +294,27 @@ class TDRadioGroup extends TDCheckboxGroup {
                       )
                     : Container(
                         margin: cardMode ? const EdgeInsets.symmetric(horizontal: 16) : null,
-                        height: cardMode ? 56 : null,
+                        height: cardMode ? (directionalTdRadios!.length/rowCount).ceil()*(56+10) : null,
+                        // height: 56,
                         alignment: cardMode ? Alignment.topLeft : null,
-                        child: cardMode
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: directionalTdRadios!
-                                    .expand(horizontalChild)
-                                    .toList()
-                                    .sublist(0, directionalTdRadios.length * 2 - 1),
-                              )
+                        child: cardMode&&rowCount!=null
+                            ?
+                               GridView.builder(
+                                    itemCount: directionalTdRadios!.length,
+                                    gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisSpacing: 10.0,
+                                      mainAxisSpacing: 10.0,
+                                      crossAxisCount: rowCount,//一行的 Widget 数量
+                                      mainAxisExtent:56,
+                                    ),
+                                    itemBuilder: (BuildContext context,int index){
+                                      return Container(
+                                                width: 160.scale,
+                                                height: 56,
+                                                child: directionalTdRadios![index],
+                                              );
+                                    }
+                                )
                             : Column(
                                 children: [
                                   Row(

@@ -43,10 +43,10 @@ class TDTabBar extends StatefulWidget {
     this.selectedBgColor,
     this.unSelectedBgColor,
   })  : assert(
-          backgroundColor == null || decoration == null,
-          'Cannot provide both a backgroundColor and a decoration\n'
-          'To provide both, use "decoration: BoxDecoration(color: color)".',
-        ),
+  backgroundColor == null || decoration == null,
+  'Cannot provide both a backgroundColor and a decoration\n'
+      'To provide both, use "decoration: BoxDecoration(color: color)".',
+  ),
         super(key: key);
 
   /// tab数组
@@ -141,13 +141,13 @@ class _TDTabBarState extends State<TDTabBar> {
           (widget.outlineType == TDTabBarOutlineType.card
               ? BoxDecoration(color: widget.backgroundColor)
               : BoxDecoration(
-                  color: widget.backgroundColor,
-                  border: widget.dividerHeight <= 0
-                      ? null
-                      : Border(
-                          bottom: BorderSide(
-                              color: widget.dividerColor ?? TDTheme.of(context).grayColor3,
-                              width: widget.dividerHeight)))),
+              color: widget.backgroundColor,
+              border: widget.dividerHeight <= 0
+                  ? null
+                  : Border(
+                  bottom: BorderSide(
+                      color: widget.dividerColor ?? TDTheme.of(context).grayColor3,
+                      width: widget.dividerHeight)))),
       child: TDHorizontalTabBar(
         physics: widget.physics,
         isScrollable: widget.isScrollable,
@@ -189,10 +189,10 @@ class _TDTabBarState extends State<TDTabBar> {
   Decoration _getIndicator(BuildContext context) {
     return widget.showIndicator
         ? TDTabBarIndicator(
-            context: context,
-            indicatorHeight: widget.indicatorHeight,
-            indicatorWidth: widget.indicatorWidth,
-            indicatorColor: widget.indicatorColor)
+        context: context,
+        indicatorHeight: widget.indicatorHeight,
+        indicatorWidth: widget.indicatorWidth,
+        indicatorColor: widget.indicatorColor)
         : TDNoneIndicator();
   }
 }
