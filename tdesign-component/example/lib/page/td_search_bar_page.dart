@@ -160,7 +160,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
       action: '搜索',
       needCancel: true,
       controller: inputController,
-      onActionClick: () {
+      onActionClick: (value) {
         showGeneralDialog(
           context: context,
           pageBuilder: (BuildContext buildContext, Animation<double> animation,
