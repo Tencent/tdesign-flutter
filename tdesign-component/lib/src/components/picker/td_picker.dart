@@ -22,6 +22,10 @@ class TDPicker {
       List<int>? initialDate,
       String? rightText,
       String? leftText,
+      TextStyle? leftTextStyle,
+      TextStyle? centerTextStyle,
+      TextStyle? rightTextStyle,
+      Color? titleDividerColor,
       Duration duration = const Duration(milliseconds: 100),
       double pickerHeight = 200,
       int pickerItemCount = 5}) {
@@ -35,6 +39,7 @@ class TDPicker {
         context: context,
         backgroundColor: Colors.transparent,
         barrierColor: barrierColor ?? TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+        enableDrag:false,
         builder: (context) {
           return TDDatePicker(
               title: title,
@@ -42,6 +47,10 @@ class TDPicker {
               onCancel: onCancel,
               rightText: rightText,
               leftText: leftText,
+              leftTextStyle: leftTextStyle,
+              centerTextStyle: centerTextStyle,
+              rightTextStyle: rightTextStyle,
+              titleDividerColor: titleDividerColor,
               model: DatePickerModel(
                 useYear: useYear,
                 useMonth: useMonth,
@@ -69,6 +78,13 @@ class TDPicker {
       Duration duration = const Duration(milliseconds: 100),
       Color? barrierColor,
       double pickerHeight = 200,
+      String? rightText,
+      String? leftText,
+      TextStyle? leftTextStyle,
+      TextStyle? centerTextStyle,
+      TextStyle? rightTextStyle,
+      Color? titleDividerColor,
+      double? topPadding,
       int pickerItemCount = 5}) {
     showModalBottomSheet(
         context: context,
@@ -80,9 +96,16 @@ class TDPicker {
             onConfirm: onConfirm,
             onCancel: onCancel,
             data: data,
+            rightText: rightText,
+            leftText: leftText,
+            leftTextStyle: leftTextStyle,
+            centerTextStyle: centerTextStyle,
+            rightTextStyle: rightTextStyle,
             initialIndexes: initialIndexes,
             pickerHeight: pickerHeight,
             pickerItemCount: pickerItemCount,
+            titleDividerColor: titleDividerColor,
+            topPadding: topPadding,
           );
         });
   }
@@ -97,7 +120,14 @@ class TDPicker {
       required List initialData,
       Duration duration = const Duration(milliseconds: 100),
       Color? barrierColor,
+      String? rightText,
+      String? leftText,
+      TextStyle? leftTextStyle,
+      TextStyle? centerTextStyle,
+      TextStyle? rightTextStyle,
       double pickerHeight = 200,
+      Color? titleDividerColor,
+      double? topPadding,
       int pickerItemCount = 5}) {
     showModalBottomSheet(
         context: context,
@@ -109,10 +139,17 @@ class TDPicker {
             onConfirm: onConfirm,
             onCancel: onCancel,
             data: data,
+            rightText: rightText,
+            leftText: leftText,
+            leftTextStyle: leftTextStyle,
+            centerTextStyle: centerTextStyle,
+            rightTextStyle: rightTextStyle,
             pickerHeight: pickerHeight,
             pickerItemCount: pickerItemCount,
             columnNum: columnNum,
             selectedData: initialData,
+            titleDividerColor: titleDividerColor,
+            topPadding: topPadding,
           );
         });
   }

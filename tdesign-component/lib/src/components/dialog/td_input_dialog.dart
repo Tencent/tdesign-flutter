@@ -27,6 +27,8 @@ class TDInputDialog extends StatelessWidget {
     this.leftBtn,
     this.rightBtn,
     this.showCloseButton,
+    this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
+    this.buttonWidget,
     this.customInputWidget,
   })  : assert((title != null || content != null)),
         super(key: key);
@@ -70,6 +72,12 @@ class TDInputDialog extends StatelessWidget {
   /// 显示右上角关闭按钮
   final bool? showCloseButton;
 
+  /// 内容内边距
+  final EdgeInsets? padding;
+
+  /// 自定义按钮
+  final Widget? buttonWidget;
+
   /// 自定义输入框
   final Widget? customInputWidget;
   @override
@@ -90,6 +98,7 @@ class TDInputDialog extends StatelessWidget {
             contentWidget: contentWidget,
             content: content,
             contentColor: contentColor,
+            padding: padding,
           ),
           SizedBox(
             child: customInputWidget!=null?customInputWidget!:Container(
@@ -120,6 +129,9 @@ class TDInputDialog extends StatelessWidget {
   }
 
   Widget _horizontalButtons(BuildContext context) {
+    if(buttonWidget != null) {
+      return buttonWidget!;
+    }
     final left = leftBtn ??
         TDDialogButtonOptions(title: context.resource.cancel, titleColor: const Color(0xE6000000), fontWeight: FontWeight.normal, action: null, height: 56);
     final right = rightBtn ??

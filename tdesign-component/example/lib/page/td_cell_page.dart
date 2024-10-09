@@ -44,23 +44,15 @@ class TDCellPage extends StatelessWidget {
               ),
             ]),
           ],
-          test: const [
-            // ExampleItem(
-            //   ignoreCode: true,
-            //   desc: '显示外边框',
-            //   center: false,
-            //   builder: (BuildContext context) {
-            //     return const CodeWrapper(builder: _buildBorder);
-            //   },
-            // ),
-            // ExampleItem(
-            //   ignoreCode: true,
-            //   desc: '显示标题',
-            //   center: false,
-            //   builder: (BuildContext context) {
-            //     return const CodeWrapper(builder: _buildTitle);
-            //   },
-            // ),
+          test: [
+            ExampleItem(
+              ignoreCode: true,
+              desc: '自定义内边距-padding',
+              center: false,
+              builder: (BuildContext context) {
+                return const CodeWrapper(builder: _buildPadding);
+              },
+            ),
           ],
         ));
   }
@@ -120,6 +112,18 @@ Widget _buildCard(BuildContext context) {
       TDCell(arrow: true, title: '单行标题'),
       TDCell(arrow: true, title: '单行标题', required: true),
       TDCell(arrow: true, title: '单行标题'),
+    ],
+  );
+}
+
+@Demo(group: 'cell')
+Widget _buildPadding(BuildContext context) {
+  var style = TDCellStyle.cellStyle(context);
+  style.padding = const EdgeInsets.all(30);
+  return TDCellGroup(
+    theme: TDCellGroupTheme.cardTheme,
+    cells: [
+      TDCell(arrow: true, title: 'padding-all-30', style: style,),
     ],
   );
 }

@@ -31,6 +31,12 @@ class TDMultiPicker extends StatelessWidget {
   /// 自定义选择框样式
   final Widget? customSelectWidget;
 
+  /// 右侧按钮文案
+  final String? rightText;
+
+  /// 左侧按钮文案
+  final String? leftText;
+
   /// 自定义左侧文案样式
   final TextStyle? leftTextStyle;
 
@@ -80,6 +86,8 @@ class TDMultiPicker extends StatelessWidget {
       required this.pickerHeight,
       required this.pickerItemCount,
       this.initialIndexes,
+      this.rightText,
+      this.leftText,
       this.leftTextStyle,
       this.rightTextStyle,
       this.centerTextStyle,
@@ -189,8 +197,19 @@ class TDMultiPicker extends StatelessWidget {
 
   Widget buildTitle(BuildContext context, List<FixedExtentScrollController> controllers) {
     return Container(
-      padding:
-          EdgeInsets.only(left: leftPadding ?? 16, right: rightPadding ?? 16),
+      padding: EdgeInsets.only(
+        left: leftPadding ?? 16,
+        right: rightPadding ?? 16,
+        top: topPadding ?? 16,
+      ),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 0.5,
+            color: titleDividerColor ?? Colors.transparent,
+          )
+        ),
+      ),
       height: getTitleHeight(),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -209,7 +228,7 @@ class TDMultiPicker extends StatelessWidget {
               },
               behavior: HitTestBehavior.opaque,
               child: TDText(
-                context.resource.cancel,
+                leftText ?? context.resource.cancel,
                 style: leftTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontBodyLarge!.size,
                   color: TDTheme.of(context).fontGyColor2
@@ -244,7 +263,7 @@ class TDMultiPicker extends StatelessWidget {
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
-              context.resource.confirm,
+              rightText ?? context.resource.confirm,
               style: rightTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontBodyLarge!.size,
                   color: TDTheme.of(context).brandNormalColor
@@ -318,6 +337,12 @@ class TDMultiLinkedPicker extends StatefulWidget {
   /// 自定义选择框样式
   final Widget? customSelectWidget;
 
+  /// 右侧按钮文案
+  final String? rightText;
+
+  /// 左侧按钮文案
+  final String? leftText;
+
   /// 自定义左侧文案样式
   final TextStyle? leftTextStyle;
 
@@ -364,6 +389,8 @@ class TDMultiLinkedPicker extends StatefulWidget {
     this.pickerHeight = 200,
     this.pickerItemCount = 5,
     this.customSelectWidget,
+    this.rightText,
+    this.leftText,
     this.leftTextStyle,
     this.rightTextStyle,
     this.centerTextStyle,
@@ -534,7 +561,18 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
   Widget buildTitle(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-          left: widget.leftPadding ?? 16, right: widget.rightPadding ?? 16),
+        left: widget.leftPadding ?? 16,
+        right: widget.rightPadding ?? 16,
+        top: widget.topPadding ?? 16,
+      ),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 0.5,
+            color: widget.titleDividerColor ?? Colors.transparent,
+          )
+        )
+      ),
       height: getTitleHeight() - 0.5,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -550,7 +588,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               },
               behavior: HitTestBehavior.opaque,
               child: TDText(
-                context.resource.cancel,
+                widget.leftText ?? context.resource.cancel,
                 style: widget.leftTextStyle ?? TextStyle(
                   fontSize: TDTheme.of(context).fontBodyLarge!.size,
                   color: TDTheme.of(context).fontGyColor2,
@@ -582,7 +620,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
-              context.resource.confirm,
+              widget.rightText ?? context.resource.confirm,
               style: widget.rightTextStyle ?? TextStyle(
                 fontSize: TDTheme.of(context).fontBodyLarge!.size,
                 color: TDTheme.of(context).brandNormalColor,
