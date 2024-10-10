@@ -37,6 +37,7 @@ class TDRate extends StatefulWidget {
     this.direction = Axis.horizontal,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.mainAxisSize = MainAxisSize.min,
     this.iconTextGap,
   });
 
@@ -77,6 +78,7 @@ class TDRate extends StatefulWidget {
   final double? textWidth;
 
   /// 评分等级对应的辅助文字自定义构建，优先级高于[texts]
+  /// 配置后，会忽略[texts],[textWidth],[iconTextGap]
   final Widget Function(BuildContext context, double value)? builderText;
 
   /// 选择评分的值
@@ -94,6 +96,9 @@ class TDRate extends StatefulWidget {
   /// 评分图标与辅助文字的交叉轴对齐方式
   final CrossAxisAlignment? crossAxisAlignment;
 
+  /// 评分图标与辅助文字主轴方向上如何占用空间
+  final MainAxisSize? mainAxisSize;
+
   /// 评分图标与辅助文字的间距，默认：[TDTheme.of(context).spacer16]
   final double? iconTextGap;
 
@@ -101,11 +106,13 @@ class TDRate extends StatefulWidget {
   _TDRateState createState() => _TDRateState();
 }
 
-class _TDRateState extends State<TDRate> {
+class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
   final _throttle = Throttle(delay: const Duration(milliseconds: 100));
   late double _activeValue;
   late Map<double, GlobalKey> _globalKeys;
   late TDRateOverlay _overlay;
+  late List<AnimationController> _controller;
+  late List<Animation<double>> _animation;
   Timer? _hideTipTimer;
 
   /// 控制显示弹框
@@ -131,6 +138,12 @@ class _TDRateState extends State<TDRate> {
         .asMap()
         .map((index, e) => MapEntry(e, GlobalKey()));
     _overlay = TDRateOverlay(context: context, builder: (context) => _buildOverlay())..show();
+    _tipSize = Size(widget.allowHalf == true ? 76 : 40, 52);
+    _controller = List.generate(widget.count ?? 5, ((index) => AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    )));
+    _animation = List.generate(widget.count ?? 5, ((index) => Tween<double>(begin: 1.0, end: 1.33).animate(_controller[index])));
   }
 
   @override
@@ -144,12 +157,16 @@ class _TDRateState extends State<TDRate> {
           .asMap()
           .map((index, e) => MapEntry(e, GlobalKey()));
     }
+    if (widget.allowHalf != oldWidget.allowHalf) {
+      _tipSize = Size(widget.allowHalf == true ? 76 : 40, 52);
+    }
   }
 
   @override
   void dispose() {
     _overlay.hide();
     _hideTipTimer?.cancel();
+    _controller.forEach((controller) => controller.dispose());
     super.dispose();
   }
 
@@ -159,6 +176,7 @@ class _TDRateState extends State<TDRate> {
       direction: widget.direction ?? Axis.horizontal,
       mainAxisAlignment: widget.mainAxisAlignment ?? MainAxisAlignment.start,
       crossAxisAlignment: widget.crossAxisAlignment ?? CrossAxisAlignment.center,
+      mainAxisSize: widget.mainAxisSize ?? MainAxisSize.min,
       children: [
         GestureDetector(
           onTapDown: (event) {
@@ -176,37 +194,47 @@ class _TDRateState extends State<TDRate> {
             _hideTip();
           },
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: List.generate(widget.count ?? 5, (index) {
               final isLast = index == (widget.count ?? 5) - 1;
               return Padding(
                 padding: EdgeInsets.only(right: isLast ? 0 : widget.gap ?? TDTheme.of(context).spacer8),
-                child: Row(
-                  children: [
-                    ClipRect(
-                      key: _globalKeys[index + 0.5],
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        widthFactor: 0.5,
-                        child: Icon(
-                          _getIcon(value: index + 0.5),
-                          size: widget.size ?? 24,
-                          color: _getIconColor(value: index + 0.5),
+                child: AnimatedBuilder(
+                  animation: _animation[index],
+                  builder: (context, child) {
+                    return Transform.scale(
+                      scale: _animation[index].value,
+                      child: child,
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      ClipRect(
+                        key: _globalKeys[index + 0.5],
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          widthFactor: 0.5,
+                          child: Icon(
+                            _getIcon(value: index + 0.5),
+                            size: widget.size ?? 24,
+                            color: _getIconColor(value: index + 0.5),
+                          ),
                         ),
                       ),
-                    ),
-                    ClipRect(
-                      key: _globalKeys[index + 1.0],
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        widthFactor: 0.5,
-                        child: Icon(
-                          _getIcon(value: index + 1.0),
-                          size: widget.size ?? 24,
-                          color: _getIconColor(value: index + 1.0),
+                      ClipRect(
+                        key: _globalKeys[index + 1.0],
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          widthFactor: 0.5,
+                          child: Icon(
+                            _getIcon(value: index + 1.0),
+                            size: widget.size ?? 24,
+                            color: _getIconColor(value: index + 1.0),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             }),
@@ -227,12 +255,26 @@ class _TDRateState extends State<TDRate> {
       if (diff || isTap == true) {
         _activeValue = newIndex;
         _showTip = newIndex == 0 ? false : true;
+        _forward();
         _overlay.update();
         if (diff) {
           setState(() {});
           widget.onChange?.call(newIndex);
         }
       }
+    });
+  }
+
+  void _forward() {
+    _controller.forEach((element) {
+      element.reverse();
+    });
+    _controller.getOrNull((_activeValue - 0.5).floor())?.forward();
+  }
+
+  void _reverse() {
+     _controller.forEach((element) {
+      element.reverse();
     });
   }
 
@@ -264,10 +306,11 @@ class _TDRateState extends State<TDRate> {
   void _hideTip() {
     _hideTipTimer?.cancel();
     _hideTipTimer = Timer(
-      Duration(seconds: _isClick && widget.allowHalf == true ? 3 : 1),
+      Duration(milliseconds: _isClick && widget.allowHalf == true ? 3000 : 1000),
       () {
         _showTip = false;
         _isClick = true;
+        _reverse();
         _overlay.update();
       },
     );
@@ -326,6 +369,7 @@ class _TDRateState extends State<TDRate> {
               tipClick: (value) {
                 _showTip = false;
                 _isClick = true;
+                _reverse();
                 _overlay.update();
                 if (value != _activeValue) {
                   _activeValue = value;

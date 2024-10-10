@@ -45,6 +45,9 @@ class TDRatePageState extends State<TDRatePage> {
             ExampleItem(desc: '评分大小', builder: _buildSizeRate),
             ExampleItem(desc: '设置评分颜色', builder: _buildColorRate),
           ]),
+          ExampleModule(title: '特殊样式', children: [
+            ExampleItem(desc: '竖向带描述评分', builder: _buildOtherRate),
+          ]),
         ]);
   }
 
@@ -60,7 +63,12 @@ class TDRatePageState extends State<TDRatePage> {
 
   @Demo(group: 'rate')
   Widget _buildNumRate(BuildContext context) {
-    return const TDCell(title: '自定义评分数量', noteWidget: TDRate(value: 2, count: 3,));
+    return const TDCell(
+        title: '自定义评分数量',
+        noteWidget: TDRate(
+          value: 2,
+          count: 3,
+        ));
   }
 
   @Demo(group: 'rate')
@@ -105,9 +113,49 @@ class TDRatePageState extends State<TDRatePage> {
   @Demo(group: 'rate')
   Widget _buildColorRate(BuildContext context) {
     return Column(children: const [
-      TDCell(title: '填充评分', noteWidget: TDRate(value: 2.5, allowHalf: true, color: [Color(0xFFFFC51C), Color(0xFFE8E8E8)],)),
+      TDCell(
+          title: '填充评分',
+          noteWidget: TDRate(
+            value: 2.5,
+            allowHalf: true,
+            color: [Color(0xFFFFC51C), Color(0xFFE8E8E8)],
+          )),
       SizedBox(height: 16),
       TDCell(title: '线描评分', noteWidget: TDRate(value: 2.5, allowHalf: true, color: [Color(0xFF00A870)])),
     ]);
+  }
+
+  @Demo(group: 'rate')
+  Widget _buildOtherRate(BuildContext context) {
+    var texts = ['非常糟糕', '有些糟糕', '可以尝试', '可以前往', '推荐前往'];
+    return Container(
+      width: double.infinity,
+      child: Center(
+        child: TDRate(
+        value: 2,
+        size: 30,
+        showText: true,
+        // texts: ['非常糟糕', '有些糟糕', '可以尝试', '可以前往', '推荐前往'],
+        direction: Axis.vertical,
+        // mainAxisAlignment: MainAxisAlignment.center,
+        // textWidth: 64,
+        builderText: (context, value) {
+          return value == 0
+              ? const SizedBox.shrink()
+              : Padding(
+                  padding: EdgeInsets.only(top: TDTheme.of(context).spacer8),
+                  child: TDText(
+                    texts[(value - 1).toInt()],
+                    font: TDTheme.of(context).fontTitleMedium,
+                    textColor: TDTheme.of(context).warningColor5,
+                  ),
+                );
+        },
+      ),
+      ),
+      
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      color: Colors.white,
+    );
   }
 }
