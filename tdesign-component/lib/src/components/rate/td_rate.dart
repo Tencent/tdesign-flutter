@@ -107,12 +107,26 @@ class TDRate extends StatefulWidget {
 }
 
 class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
+  /// 节流
   final _throttle = Throttle(delay: const Duration(milliseconds: 100));
+
+  /// 当前选中的评分值
   late double _activeValue;
+
+  /// 根据评分值，获取所在评分的索引
+  int _index([double? value]) => ((value ?? _activeValue) - 0.5).floor();
+
+  /// 每半个评分的GlobalKey
   late Map<double, GlobalKey> _globalKeys;
+
+  /// 弹框
   late TDRateOverlay _overlay;
+
+  /// 动画
   late List<AnimationController> _controller;
   late List<Animation<double>> _animation;
+
+  /// 隐藏弹框的定时器
   Timer? _hideTipTimer;
 
   /// 控制显示弹框
@@ -121,11 +135,11 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
   /// 弹框的尺寸
   var _tipSize = Size.zero;
 
-  /// 当前选中的评分的位置
-  var _rateOffset = Offset.zero;
+  /// 每个评分(Row)的Size:<索引, Size>
+  final _rateSize = <int, Size>{};
 
-  /// 当前选中的评分的大小
-  var _rateSize = Size.zero;
+  /// 每个评分(Row)的Offset:<索引, Offset>
+  final _rateOffset = <int, Offset>{};
 
   /// 是否点击，否则是滑动
   var _isClick = true;
@@ -139,11 +153,14 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
         .map((index, e) => MapEntry(e, GlobalKey()));
     _overlay = TDRateOverlay(context: context, builder: (context) => _buildOverlay())..show();
     _tipSize = Size(widget.allowHalf == true ? 76 : 40, 52);
-    _controller = List.generate(widget.count ?? 5, ((index) => AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    )));
-    _animation = List.generate(widget.count ?? 5, ((index) => Tween<double>(begin: 1.0, end: 1.33).animate(_controller[index])));
+    _controller = List.generate(
+        widget.count ?? 5,
+        ((index) => AnimationController(
+              duration: const Duration(milliseconds: 300),
+              vsync: this,
+            )));
+    _animation =
+        List.generate(widget.count ?? 5, ((index) => Tween<double>(begin: 1.0, end: 1.33).animate(_controller[index])));
   }
 
   @override
@@ -269,11 +286,11 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
     _controller.forEach((element) {
       element.reverse();
     });
-    _controller.getOrNull((_activeValue - 0.5).floor())?.forward();
+    _controller.getOrNull(_index())?.forward();
   }
 
   void _reverse() {
-     _controller.forEach((element) {
+    _controller.forEach((element) {
       element.reverse();
     });
   }
@@ -293,10 +310,14 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
         final localPosition = renderBox.globalToLocal(globalPosition);
         final isIn = renderBox.hitTest(BoxHitTestResult(), position: localPosition);
         if (isIn) {
-          final parentRenderBox = renderBox.parent as RenderBox;
-          _rateOffset = parentRenderBox.localToGlobal(Offset.zero);
-          _rateSize = parentRenderBox.size;
-          return widget.allowHalf == true ? entry.key : entry.key.ceil().toDouble();
+          var value = widget.allowHalf == true ? entry.key : entry.key.ceil().toDouble();
+          var index = _index(value);
+          if (!_rateSize.containsKey(index) || !_rateOffset.containsKey(index)) {
+            final parentRenderBox = renderBox.parent as RenderBox;
+            _rateSize[index] = parentRenderBox.size;
+            _rateOffset[index] = parentRenderBox.localToGlobal(Offset.zero);
+          }
+          return value;
         }
       }
     }
@@ -347,37 +368,44 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
   }
 
   Widget _buildOverlay() {
-    return widget.placement != PlacementEnum.none && _showTip
-        ? Positioned(
-            top: widget.placement == PlacementEnum.top
-                ? _rateOffset.dy - TDTheme.of(context).spacer8 - _tipSize.height
-                : _rateOffset.dy + TDTheme.of(context).spacer8 + _rateSize.height,
-            left: _rateOffset.dx - (_tipSize.width - _rateSize.width) / 2,
-            child: TDRateTips(
-              allowHalf: widget.allowHalf,
-              activeValue: _activeValue,
-              icon: _getIcon(isActive: true),
-              size: widget.size,
-              getIconColor: _getIconColor,
-              isClick: _isClick,
-              sizeCall: (size) {
-                if (_tipSize.width != size.width || _tipSize.height != size.height) {
-                  _tipSize = size;
-                  _overlay.update();
-                }
-              },
-              tipClick: (value) {
-                _showTip = false;
-                _isClick = true;
-                _reverse();
-                _overlay.update();
-                if (value != _activeValue) {
-                  _activeValue = value;
-                  setState(() {});
-                }
-              },
-            ),
-          )
-        : const SizedBox.shrink();
+    if (widget.placement == PlacementEnum.none || !_showTip || _activeValue == 0) {
+      return const SizedBox.shrink();
+    }
+    var index = _index();
+    var rateSize = _rateSize[index];
+    var rateOffset = _rateOffset[index];
+    if (rateSize == null || rateOffset == null) {
+      return const SizedBox.shrink();
+    }
+    return Positioned(
+      top: widget.placement == PlacementEnum.top
+          ? rateOffset.dy - TDTheme.of(context).spacer8 - _tipSize.height
+          : rateOffset.dy + TDTheme.of(context).spacer8 + rateSize.height,
+      left: rateOffset.dx - (_tipSize.width - rateSize.width) / 2,
+      child: TDRateTips(
+        allowHalf: widget.allowHalf,
+        activeValue: _activeValue,
+        icon: _getIcon(isActive: true),
+        size: widget.size,
+        getIconColor: _getIconColor,
+        isClick: _isClick,
+        sizeCall: (size) {
+          if (_tipSize.width != size.width || _tipSize.height != size.height) {
+            _tipSize = size;
+            _overlay.update();
+          }
+        },
+        tipClick: (value) {
+          _showTip = false;
+          _isClick = true;
+          _reverse();
+          _overlay.update();
+          if (value != _activeValue) {
+            _activeValue = value;
+            setState(() {});
+          }
+        },
+      ),
+    );
   }
 }
