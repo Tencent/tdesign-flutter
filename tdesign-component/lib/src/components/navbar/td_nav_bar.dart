@@ -28,6 +28,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.border,
     this.belowTitleWidget,
     this.boxShadow,
+    this.flexibleSpace,
   }) : super(key: key);
 
   /// 左边操作项
@@ -80,6 +81,9 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
 
   /// 底部阴影
   final List<BoxShadow>? boxShadow;
+
+  /// 固定背景
+  final Widget? flexibleSpace;
 
   @override
   State<StatefulWidget> createState() => _TDNavBarState();
@@ -223,16 +227,26 @@ class _TDNavBarState extends State<TDNavBar> {
           horizontal: TDTheme.of(context).spacer16,
           vertical: TDTheme.of(context).spacer4,
         );
-
-    return Container(
-      height: widget.height + paddingTop,
-      padding: padding.add(EdgeInsets.only(top: paddingTop)),
-      decoration: BoxDecoration(
-        color: bcc,
-        boxShadow: widget.boxShadow,
-      ),
-      child: _getNavbarChild()
+    Widget appBar = Container(
+        height: widget.height + paddingTop,
+        padding: padding.add(EdgeInsets.only(top: paddingTop)),
+        decoration: BoxDecoration(
+          color: bcc,
+          boxShadow: widget.boxShadow,
+        ),
+        child: _getNavbarChild()
     );
+    if (widget.flexibleSpace != null) {
+      appBar = Stack(
+        fit: StackFit.passthrough,
+        children: <Widget>[
+          widget.flexibleSpace!,
+          appBar,
+        ],
+      );
+    }
+
+    return appBar;
   }
 }
 
