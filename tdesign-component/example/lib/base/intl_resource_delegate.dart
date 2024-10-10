@@ -132,4 +132,7 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
   @override
   String get end => AppLocalizations.of(context)!.end;
+
+  @override
+  String get notRated => AppLocalizations.of(context)!.notRated;
 }
