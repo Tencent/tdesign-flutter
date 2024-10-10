@@ -20,6 +20,7 @@ enum TDSearchAlignment {
 }
 
 typedef TDSearchBarEvent = void Function(String value);
+typedef TDSearchBarClearEvent = bool Function(String value);
 typedef TDSearchBarCallBack = void Function();
 
 class TDSearchBar extends StatefulWidget {
@@ -41,6 +42,8 @@ class TDSearchBar extends StatefulWidget {
     this.backgroundColor = Colors.white,
     this.action = '',
     this.onActionClick,
+    this.onClearClick,
+    this.focusNode,
   }) : super(key: key);
 
   /// 预设文案
@@ -92,6 +95,12 @@ class TDSearchBar extends StatefulWidget {
   /// 自定义操作回调
   final TDSearchBarEvent? onActionClick;
 
+  /// 自定义操作回调
+  final TDSearchBarClearEvent? onClearClick;
+
+  /// 自定义焦点
+  final  FocusNode? focusNode;
+
   @override
   State<StatefulWidget> createState() => _TDSearchBarState();
 }
@@ -105,7 +114,7 @@ enum _TDSearchBarStatus {
 
 class _TDSearchBarState extends State<TDSearchBar>
     with TickerProviderStateMixin {
-  final FocusNode focusNode = FocusNode();
+  late FocusNode focusNode = FocusNode();
   final TextEditingController controller = TextEditingController();
   final GlobalKey _textFieldKey = GlobalKey();
   final GlobalKey _phKey = GlobalKey();
@@ -118,9 +127,6 @@ class _TDSearchBarState extends State<TDSearchBar>
   @override
   void initState() {
     super.initState();
-    _status = widget.autoFocus
-        ? _TDSearchBarStatus.focused
-        : _TDSearchBarStatus.unFocus;
     if(widget.controller==null){
       controller.addListener(() {
         var clearVisible = controller.text.isNotEmpty;
@@ -132,6 +138,16 @@ class _TDSearchBarState extends State<TDSearchBar>
         _updateClearBtnVisible(clearVisible!);
       });
     }
+    _animationController = AnimationController(
+        duration: const Duration(milliseconds: 200), vsync: this);
+    _updateFocusNode();
+  }
+
+  void _updateFocusNode() {
+    focusNode = widget.focusNode ?? focusNode;
+    _status = widget.autoFocus
+        ? _TDSearchBarStatus.focused
+        : _TDSearchBarStatus.unFocus;
     focusNode.addListener(() {
       setState(() {
         _status = focusNode.hasFocus
@@ -140,8 +156,6 @@ class _TDSearchBarState extends State<TDSearchBar>
       });
       _updateCancelBtnVisible(focusNode.hasFocus);
     });
-    _animationController = AnimationController(
-        duration: const Duration(milliseconds: 200), vsync: this);
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         setState(() {
@@ -154,6 +168,12 @@ class _TDSearchBarState extends State<TDSearchBar>
         });
       }
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant TDSearchBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _updateFocusNode();
   }
 
   void _updateClearBtnVisible(bool visible) {
@@ -169,10 +189,13 @@ class _TDSearchBarState extends State<TDSearchBar>
   }
 
   void _cleanInputText(){
-    if(widget.controller==null){
-      controller.clear();
-    }else{
-      widget.controller?.clear();
+    if(!(widget.onClearClick?.call(controller.text) ?? false)){
+      // 如果外部没处理,则走默认清除逻辑
+      if(widget.controller==null){
+        controller.clear();
+      }else{
+        widget.controller?.clear();
+      }
     }
   }
 
@@ -243,6 +266,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                           focusNode: focusNode,
                           onChanged: widget.onTextChanged,
                           onSubmitted: widget.onSubmitted,
+                          onEditingComplete: widget.onEditComplete,
                           style: TextStyle(
                               fontSize: getSize(context)?.size,
                               color: TDTheme.of(context).fontGyColor1),
