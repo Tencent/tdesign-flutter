@@ -5,7 +5,7 @@ import '../../../tdesign_flutter.dart';
 class TDSideBarController extends ChangeNotifier {
   int currentValue = 0;
   List<SideItemProps> children = [];
-  bool _loading = true;
+  bool _loading = false;
 
   void selectTo(int value) {
     currentValue = value;
