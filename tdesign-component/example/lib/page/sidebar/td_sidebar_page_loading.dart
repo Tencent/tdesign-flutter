@@ -40,6 +40,9 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
 
       if (currentValue != index) {
         setState(() {
+          if(_sideBarController.loading) {
+            _sideBarController.loading = false;
+          }
           _sideBarController.selectTo(index);
         });
       }
@@ -82,10 +85,12 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
         ));
   }
 
-  final list = <SideItemProps>[];
-  final pages = <Widget>[];
+  List<SideItemProps> list = <SideItemProps>[];
+  List<Widget> pages = <Widget>[];
 
   void _initData() {
+    list = [];
+    pages = [];
     for (var i = 0; i < 20; i++) {
       list.add(SideItemProps(
         index: i,

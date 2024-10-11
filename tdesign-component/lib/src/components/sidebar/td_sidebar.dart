@@ -212,6 +212,7 @@ class _TDSideBarState extends State<TDSideBar> {
   @override
   Widget build(BuildContext context) {
     if(_loading) {
+      widget.controller?.loading = true;
       if(widget.loadingWidget != null) {
         return widget.loadingWidget!;
       }
