@@ -1,0 +1,10 @@
+
+TDTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
+  var style = TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.medium);
+  style.timeColor = TDTheme.of(context).errorColor6;
+  return TDTimeCounter(
+    time: 60 * 60 * 1000,
+    splitWithUnit: true,
+    style: style,
+  );
+}

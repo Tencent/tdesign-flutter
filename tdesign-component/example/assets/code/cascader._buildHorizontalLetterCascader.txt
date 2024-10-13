@@ -2,8 +2,12 @@
   Widget _buildHorizontalLetterCascader(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TDCascader.showMultiCascader(context, title: '选择地址', data: _data_2, initialData: _initData_2, theme: 'tab',
-            onChange: (List<MultiCascaderListModel> selectData) {
+        TDCascader.showMultiCascader(context,
+            title: '选择地址',
+            data: _data_2,
+            initialData: _initData_2,
+            isLetterSort: true,
+            theme: 'tab', onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
             List result = [];
             int len = selectData.length;
