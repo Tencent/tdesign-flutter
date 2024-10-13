@@ -33,6 +33,7 @@ import 'page/td_image_viewer_page.dart';
 import 'page/td_input_page.dart';
 import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
+import 'page/td_message_page.dart';
 import 'page/td_navbar_page.dart';
 import 'page/td_notice_bar_page.dart';
 import 'page/td_picker_page.dart';
@@ -224,8 +225,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Message 消息通知',
         name: 'message',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDMessagePage())),
     ExamplePageModel(
         text: 'NoticeBar 公告栏', name: 'notice-bar', pageBuilder: _wrapInheritedTheme((context) => const TDNoticeBarPage())),
     ExamplePageModel(
