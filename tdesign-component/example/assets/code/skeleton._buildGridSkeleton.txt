@@ -1,0 +1,15 @@
+
+  Widget _buildGridSkeleton(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        for (var i = 0; i < 5; i++)
+          TDSkeleton.fromRowCol(
+            rowCol: TDSkeletonRowCol(objects: const [
+              [TDSkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
+              [TDSkeletonRowColObj.text(width: 48, flex: null)],
+            ]),
+          ),
+      ],
+    );
+  }

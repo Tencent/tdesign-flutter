@@ -1,0 +1,4 @@
+
+  Widget _buildTextSkeleton(BuildContext context) {
+    return TDSkeleton(theme: TDSkeletonTheme.text);
+  }
