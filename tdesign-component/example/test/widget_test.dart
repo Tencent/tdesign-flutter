@@ -44,7 +44,7 @@ void main() async {
 
 }
 
-var changeList = ['Drawer 抽屉','Tabs 选项卡','Input 输入框','Stepper 步进器','Badge 徽标','Empty 空状态','Dialog 对话框','Swipecell 滑动操作'];
+var changeList = ['Drawer 抽屉','TabBar 标签栏','Checkbox 多选框','Search 搜索框','TreeSelect 树形选择器','TimeCounter 计时器','Result 结果','DropdownMenu 下拉菜单','Swipecell 滑动操作'];
 Finder? lastFinder;
 
 Future<void> _testComponent(WidgetTester tester, String name) async {

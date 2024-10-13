@@ -243,7 +243,7 @@ Widget _buildOther(BuildContext context) {
 | indexList | List<String> | - | 索引字符列表。不传默认 A-Z |
 | indexListMaxHeight | double | 0.8 | 索引列表最大高度（父容器高度的百分比，默认0.8） |
 | activeIndex | ValueNotifier<String> | - | 选中索引 |
-| onSelect | void Function(String index, bool isUp) | - | 点击侧边栏时触发事件 |
+| onSelect | void Function(String newIndex, String oldIndex) | - | 点击侧边栏时触发事件 |
 | builderIndex | Widget Function(BuildContext context, String index, bool isActive)? | - | 索引文本自定义构建，包括索引激活左侧提示 |
 
 ```
