@@ -37,6 +37,7 @@ export 'src/components/link/td_link.dart';
 export 'src/components/loading/td_circle_indicator.dart';
 export 'src/components/loading/td_loading.dart';
 export 'src/components/loading/td_loading_controller.dart';
+export 'src/components/message/td_message.dart';
 export 'src/components/navbar/td_nav_bar.dart';
 export 'src/components/notice_bar/td_notice_bar.dart';
 export 'src/components/notice_bar/td_notice_bar_style.dart';
