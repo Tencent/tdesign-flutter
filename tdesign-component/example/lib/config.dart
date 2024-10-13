@@ -38,6 +38,7 @@ import 'page/td_navbar_page.dart';
 import 'page/td_notice_bar_page.dart';
 import 'page/td_picker_page.dart';
 import 'page/td_popup_page.dart';
+import 'page/td_progress_page.dart';
 import 'page/td_radio_page.dart';
 import 'page/td_radius_page.dart';
 import 'page/td_refresh_page.dart';
@@ -186,8 +187,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Progress 进度条',
         name: 'progress',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDProgressPage())),
     ExamplePageModel(
         text: 'Result 结果',
         name: 'result',
