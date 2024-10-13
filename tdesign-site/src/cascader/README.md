@@ -122,8 +122,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildHorizontalLetterCascader(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TDCascader.showMultiCascader(context, title: '选择地址', data: _data_2, initialData: _initData_2, theme: 'tab',
-            onChange: (List<MultiCascaderListModel> selectData) {
+        TDCascader.showMultiCascader(context,
+            title: '选择地址',
+            data: _data_2,
+            initialData: _initData_2,
+            isLetterSort: true,
+            theme: 'tab', onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
             List result = [];
             int len = selectData.length;
@@ -152,7 +156,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildHorizontalCompanyCascader(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TDCascader.showMultiCascader(context, title: '选择部门人员', data: _data_3, initialData: _initData_3, theme: 'tab',
+        TDCascader.showMultiCascader(context, title: '选择部门人员', data: _data_3,isLetterSort: true, initialData: _initData_3, theme: 'tab',
             onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
             List result = [];
@@ -182,7 +186,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildVerticalCompanyCascader(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TDCascader.showMultiCascader(context, title: '选择部门人员', data: _data_3, initialData: _initData_3, theme: 'step',
+        TDCascader.showMultiCascader(context, title: '选择部门人员', data: _data_3,isLetterSort: true, initialData: _initData_3, theme: 'step',
             onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
             List result = [];
@@ -223,6 +227,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | backgroundColor | Color? | - | 背景颜色 |
 | topRadius | double? | - | 顶部圆角 |
 | closeText | String? | - | 关闭按钮文本 |
+| isLetterSort | bool | false | 是否开启字母排序 |
 | onClose | Function? | - | 选择器关闭按钮回调 |
 | onChange | MultiCascaderCallback | - | 值发生变更时触发 |
 
