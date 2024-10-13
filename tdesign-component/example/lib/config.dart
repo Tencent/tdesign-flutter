@@ -8,6 +8,7 @@ import 'page/sidebar/td_sidebar_page_icon.dart';
 import 'page/sidebar/td_sidebar_page_loading.dart';
 import 'page/sidebar/td_sidebar_page_outline.dart';
 import 'page/sidebar/td_sidebar_page_pagination.dart';
+import 'page/td_action_sheet_page.dart';
 import 'page/td_avatar_page.dart';
 import 'page/td_backtop_page.dart';
 import 'page/td_badge_page.dart';
@@ -208,11 +209,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(text: 'Steps 步骤条', name: 'steps', pageBuilder: _wrapInheritedTheme((context) => const TDStepsPage())),
   ],
   '反馈': [
-    ExamplePageModel(
+    ExamplePageModel( 
         text: 'ActionSheet 动作面板',
         name: 'action_sheet',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        isTodo: false,
+        pageBuilder: _wrapInheritedTheme((context) => const TDActionSheetPage())),
     ExamplePageModel(
         text: 'Dialog 对话框', name: 'dialog', pageBuilder: _wrapInheritedTheme((context) => const TDDialogPage())),
     ExamplePageModel(
