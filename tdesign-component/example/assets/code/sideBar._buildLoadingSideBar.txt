@@ -1,0 +1,41 @@
+
+  Widget _buildLoadingSideBar(BuildContext context) {
+    // 延迟加载
+    Future.delayed(const Duration(seconds: 3), _initData);
+    var size = MediaQuery.of(context).size;
+    var demoHeight = size.height;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: list.isEmpty ? size.width : 110,
+          child: TDSideBar(
+            height: demoHeight,
+            style: TDSideBarStyle.normal,
+            value: currentValue,
+            controller: _sideBarController,
+            loading: true,
+            children: list
+                .map((ele) => TDSideBarItem(
+                    label: ele.label ?? '',
+                    badge: ele.badge,
+                    value: ele.value,
+                    icon: ele.icon))
+                .toList(),
+            onChanged: onChanged,
+            onSelected: onSelected,
+          ),
+        ),
+        Expanded(
+            child: SizedBox(
+          height: demoHeight,
+          child: SingleChildScrollView(
+            controller: _demoScroller,
+            child: Column(
+              children: pages,
+            ),
+          ),
+        ))
+      ],
+    );
+  }

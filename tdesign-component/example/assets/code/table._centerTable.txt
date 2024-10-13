@@ -1,0 +1,12 @@
+
+  Widget _centerTable(BuildContext context) {
+    return TDTable(
+      columns: [
+        TDTableCol(title: '标题', colKey: 'title1', align: TDTableColAlign.center),
+        TDTableCol(title: '标题', colKey: 'title2', align: TDTableColAlign.center),
+        TDTableCol(title: '标题', colKey: 'title3', align: TDTableColAlign.center),
+        TDTableCol(title: '标题', colKey: 'title4', align: TDTableColAlign.center)
+      ],
+      data: _getData(10),
+    );
+  }
