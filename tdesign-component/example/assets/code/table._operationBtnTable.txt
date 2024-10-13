@@ -1,0 +1,40 @@
+
+  Widget _operationBtnTable(BuildContext context) {
+    return TDTable(
+      columns: [
+        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
+        TDTableCol(title: '标题', colKey: 'title2'),
+        TDTableCol(title: '标题', colKey: 'title3'),
+        TDTableCol(
+          title: '标题',
+          colKey: 'title4',
+          cellBuilder: (BuildContext context) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TDText(
+                  '修改',
+                  forceVerticalCenter: true,
+                  style: TextStyle(
+                    color: TDTheme.of(context).brandNormalColor,
+                    fontSize: 14,
+                    height: 1,
+                  ),
+                ),
+                TDText(
+                  '通过',
+                  forceVerticalCenter: true,
+                  style: TextStyle(
+                    color: TDTheme.of(context).brandNormalColor,
+                    fontSize: 14,
+                    height: 1,
+                  ),
+                ),
+              ],
+            );
+          },
+        )
+      ],
+      data: _getData(9),
+    );
+  }

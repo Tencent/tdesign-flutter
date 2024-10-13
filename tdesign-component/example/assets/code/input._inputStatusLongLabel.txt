@@ -3,6 +3,8 @@
     return Column(
       children: [
         TDInput(
+          leftInfoWidth: 80,
+          spacer: TDInputSpacer(iconLabelSpace: 4),
           leftLabel: '标签超长时最多十个字',
           controller: controller[18],
           backgroundColor: Colors.white,

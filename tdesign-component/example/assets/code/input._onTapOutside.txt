@@ -1,0 +1,30 @@
+
+  Widget _onTapOutside(BuildContext context) {
+    var controller = TextEditingController();
+    return Container(
+      color: Colors.yellow,
+      alignment: Alignment.center,
+      height: 90,
+      child: SizedBox(
+        height: 60,
+        child: TDInput(
+          size: TDInputSize.small,
+          leftLabel: '标签文字',
+          controller: controller,
+          backgroundColor: Colors.white,
+          hintText: '请输入文字',
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller.clear();
+            setState(() {});
+          },
+          onTapOutside: (event) {
+            TDToast.showText('点击输入框外部区域', context: context);
+            print('on tap outside ${event}');
+          },
+        ),
+      ),
+    );
+  }

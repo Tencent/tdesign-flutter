@@ -1,0 +1,9 @@
+
+TDTimeCounter _buildUnitSmallSize(BuildContext context) {
+  return const TDTimeCounter(
+    time: 60 * 60 * 1000,
+    size: TDTimeCounterSize.small,
+    theme: TDTimeCounterTheme.square,
+    splitWithUnit: true,
+  );
+}
