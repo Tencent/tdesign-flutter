@@ -31,3 +31,5 @@
 | contentPadding | EdgeInsetsGeometry? | - | 自定义文本框内边距 |
 | selectedTextStyle | TextStyle? | - | 选中样式 |
 | style | TDSideBarStyle | TDSideBarStyle.normal | 样式 |
+| loading | bool? | - | 加载效果 |
+| loadingWidget | Widget? | - | 自定义加载动画 |

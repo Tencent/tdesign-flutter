@@ -16,5 +16,6 @@
 | backgroundColor | Color? | - | 背景颜色 |
 | topRadius | double? | - | 顶部圆角 |
 | closeText | String? | - | 关闭按钮文本 |
+| isLetterSort | bool | false | 是否开启字母排序 |
 | onClose | Function? | - | 选择器关闭按钮回调 |
 | onChange | MultiCascaderCallback | - | 值发生变更时触发 |
