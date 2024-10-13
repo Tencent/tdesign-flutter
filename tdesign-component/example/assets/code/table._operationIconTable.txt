@@ -1,0 +1,24 @@
+
+  Widget _operationIconTable(BuildContext context) {
+    return TDTable(
+      columns: [
+        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
+        TDTableCol(title: '标题', colKey: 'title2'),
+        TDTableCol(title: '标题', colKey: 'title3'),
+        TDTableCol(
+          title: '标题',
+          colKey: 'title4',
+          cellBuilder: (BuildContext context) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(TDIcons.upload, color: TDTheme.of(context).brandNormalColor, size: 16),
+                Icon(TDIcons.delete, color: TDTheme.of(context).brandNormalColor, size: 16),
+              ],
+            );
+          },
+        )
+      ],
+      data: _getData(9),
+    );
+  }

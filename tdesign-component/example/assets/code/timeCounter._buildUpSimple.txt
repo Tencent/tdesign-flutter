@@ -1,0 +1,8 @@
+
+TDTimeCounter _buildUpSimple(BuildContext context) {
+  return const TDTimeCounter(
+    time: 60 * 60 * 1000,
+    millisecond: true,
+    direction: TDTimeCounterDirection.up,
+  );
+}

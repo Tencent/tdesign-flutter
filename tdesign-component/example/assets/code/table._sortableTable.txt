@@ -1,0 +1,12 @@
+
+  Widget _sortableTable(BuildContext context) {
+    return TDTable(
+      columns: [
+        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true, sortable: true),
+        TDTableCol(title: '标题', colKey: 'title2', sortable: true),
+        TDTableCol(title: '标题', colKey: 'title3', sortable: true),
+        TDTableCol(title: '标题', colKey: 'title4', sortable: true)
+      ],
+      data: _getData(9),
+    );
+  }
