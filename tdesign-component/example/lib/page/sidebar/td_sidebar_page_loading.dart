@@ -40,9 +40,6 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
 
       if (currentValue != index) {
         setState(() {
-          if(_sideBarController.loading) {
-            _sideBarController.loading = false;
-          }
           _sideBarController.selectTo(index);
         });
       }
@@ -111,9 +108,11 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
       count: '8',
     );
     if(_sideBarController.loading) {
-      _sideBarController.loading = false;
       _sideBarController.init(list);
       _sideBarController.selectTo(currentValue);
+      // 初始化时避免右侧内容与左侧item不匹配
+      _demoScroller.animateTo(currentValue.toDouble() * itemHeight,
+          duration: const Duration(milliseconds: 1), curve: Curves.easeIn);
     }
   }
 

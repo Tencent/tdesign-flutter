@@ -13,13 +13,20 @@ class TDSideBarController extends ChangeNotifier {
   }
 
   void init(List<SideItemProps> data) {
+    closeLoading(false, needNotify: false);
     children = data;
     notifyListeners();
   }
 
-  set loading(bool load) {
+  void closeLoading(bool load, { bool needNotify = true }) {
     _loading = load;
-    notifyListeners();
+    if(needNotify) {
+      notifyListeners();
+    }
+  }
+
+  set loading (bool load) {
+    _loading = load;
   }
 
   bool get loading => _loading;
