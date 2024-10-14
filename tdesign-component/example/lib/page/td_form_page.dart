@@ -34,12 +34,12 @@ class _TDFormPageState extends State<TDFormPage> {
   Color verticalButtonColor = Color(0xFFE5E5E5);
   Color horizontalButtonColor = Color(0xFFF0F1FD);
 
-  Map<String, String> _radios = {"0": "男", "1": "女", "2": "保密"};
+  final Map<String, String> _radios = {'0': '男', '1': '女', '3': '保密'};
 
   static const List<Map> _data = [
     {
-      "label": '北京市',
-      "value": '110000',
+      'label': '北京市',
+      'value': '110000',
       "children": [
         {
           "value": '110100',
@@ -109,7 +109,7 @@ class _TDFormPageState extends State<TDFormPage> {
 
   @override
   void initState() {
-    for (var i = 0; i < 28; i++) {
+    for (var i = 0; i < 3; i++) {
       controller.add(TextEditingController());
     }
     super.initState();
@@ -142,7 +142,7 @@ class _TDFormPageState extends State<TDFormPage> {
   Widget _buildForm(BuildContext context) {
     return TDForm(
         disabled: _formDisableState,
-        isHoeizontal: _isFormHorizontal,
+        isHorizontal: _isFormHorizontal,
         items: [
           TDFormItem(
             label: '用户名',
@@ -244,7 +244,7 @@ class _TDFormPageState extends State<TDFormPage> {
                     },
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Expanded(
                   child: TDButton(
                     text: '竖直排布',
@@ -337,41 +337,82 @@ class _TDFormPageState extends State<TDFormPage> {
   @Demo(group: 'button')
   Widget _buildCombinationButtons(BuildContext context) {
     final theme = TDTheme.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.whiteColor1,
-      ),
-      child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 16,
-              ),
-              Expanded(
-                  child: TDButton(
-                text: '提交',
-                size: TDButtonSize.large,
-                type: TDButtonType.fill,
-                theme: TDButtonTheme.primary,
-                shape: TDButtonShape.rectangle,
-              )),
-              SizedBox(
-                width: 16,
-              ),
-              Expanded(
-                  child: TDButton(
-                text: '重置',
-                size: TDButtonSize.large,
-                type: TDButtonType.fill,
-                shape: TDButtonShape.rectangle,
-                theme: TDButtonTheme.defaultTheme,
-              )),
-              SizedBox(
-                width: 16,
-              ),
-            ],
-          )),
-    );
+    if (!_formDisableState) {
+      return Container(
+        decoration: BoxDecoration(
+          color: theme.whiteColor1,
+        ),
+        child: const Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                    child: TDButton(
+                  text: '提交',
+                  size: TDButtonSize.large,
+                  type: TDButtonType.fill,
+                  theme: TDButtonTheme.primary,
+                  shape: TDButtonShape.rectangle,
+                )),
+                SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                    child: TDButton(
+                  text: '重置',
+                  size: TDButtonSize.large,
+                  type: TDButtonType.fill,
+                  shape: TDButtonShape.rectangle,
+                  theme: TDButtonTheme.defaultTheme,
+                )),
+                SizedBox(
+                  width: 16,
+                ),
+              ],
+            )),
+      );
+    } else {
+      return Container(
+        decoration: BoxDecoration(
+          color: theme.whiteColor1,
+        ),
+        child: const Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                    child: TDButton(
+                  text: '提交',
+                  size: TDButtonSize.large,
+                  type: TDButtonType.fill,
+                  theme: TDButtonTheme.primary,
+                  shape: TDButtonShape.rectangle,
+                  disabled: true,
+                )),
+                SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                    child: TDButton(
+                  text: '重置',
+                  size: TDButtonSize.large,
+                  type: TDButtonType.fill,
+                  shape: TDButtonShape.rectangle,
+                  theme: TDButtonTheme.defaultTheme,
+                  disabled: true,
+                )),
+                SizedBox(
+                  width: 16,
+                ),
+              ],
+            )),
+      );
+    }
   }
 }
