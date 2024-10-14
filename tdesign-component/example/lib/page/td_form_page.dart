@@ -15,6 +15,12 @@ class _TDFormPageState extends State<TDFormPage> {
   var controller = [];
   String selected_1 = '';
 
+  /// form 禁用的状态
+  bool _formDisableState = false;
+
+  /// form 排列方式是否为水平
+  bool _isFormHorizontal = true;
+
   /// 设置按钮是否可点击状态
   /// true 表示处于 active 状态
   bool horizontalButton = false;
@@ -112,80 +118,88 @@ class _TDFormPageState extends State<TDFormPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
-        exampleCodeGroup: 'form',
-        desc: '基础表单',
-        backgroundColor: const Color(0xfff6f6f6),
-        children: [
-          ExampleModule(title: '基础类型', children: [
-            ExampleItem(desc: '基础表单', builder: _buildArrangementSwitch),
-            ExampleItem(desc: '', builder: _buildSwitchWithBase),
-            ExampleItem(builder: (BuildContext context) {
-              return CodeWrapper(builder: _buildForm);
-            })
-          ]),
-        ]);
+      title: tdTitle(),
+      exampleCodeGroup: 'form',
+      desc: '基础表单',
+      backgroundColor: const Color(0xfff6f6f6),
+      children: [
+        ExampleModule(title: '基础类型', children: [
+          ExampleItem(desc: '基础表单', builder: _buildArrangementSwitch),
+          ExampleItem(desc: '', builder: _buildSwitchWithBase),
+          ExampleItem(builder: (BuildContext context) {
+            return CodeWrapper(builder: _buildForm);
+          }),
+          ExampleItem(
+              ignoreCode: true,
+              desc: '',
+              builder: (_) => CodeWrapper(builder: _buildCombinationButtons)),
+        ]),
+      ],
+    );
   }
 
   @Demo(group: 'form')
   Widget _buildForm(BuildContext context) {
-    return TDForm(items: [
-      TDFormItem(
-        label: '用户名',
-        name: 'name',
-        help: '请输入用户名',
-        additionInfo: '输入用户名',
-        inputPadding: 15.0,
-        controller: controller[0],
-      ),
-      TDFormItem(
-        label: '密码',
-        name: 'password',
-        help: '请输入密码',
-        inputPadding: 35.0,
-        controller: controller[1],
-      ),
-      TDFormItem(
-        label: '性别',
-        name: 'radios',
+    return TDForm(
+        disabled: _formDisableState,
+        isHoeizontal: _isFormHorizontal,
+        items: [
+          TDFormItem(
+            label: '用户名',
+            name: 'name',
+            help: '请输入用户名',
+            additionInfo: '输入用户名',
+            labelWidth: 15.0,
+            controller: controller[0],
+          ),
+          TDFormItem(
+            label: '密码',
+            name: 'password',
+            help: '请输入密码',
+            labelWidth: 35.0,
+            controller: controller[1],
+          ),
+          TDFormItem(
+            label: '性别',
+            name: 'radios',
 
-        /// 扩展一下数量和选项内容
-        radios: _radios,
-      ),
-      TDFormItem(
-        label: '生日',
-        name: 'date',
+            /// 扩展一下数量和选项内容
+            radios: _radios,
+          ),
+          TDFormItem(
+            label: '生日',
+            name: 'date',
 
-        /// 引入需要的日期数据
-        select: selected_1,
-      ),
-      TDFormItem(
-        label: '籍贯',
-        name: 'local',
+            /// 引入需要的日期数据
+            select: selected_1,
+          ),
+          TDFormItem(
+            label: '籍贯',
+            name: 'local',
 
-        /// 引入需要的地点数据
-        localData: _data,
-      ),
-      TDFormItem(
-        label: '年限',
-        name: 'age',
+            /// 引入需要的地点数据
+            localData: _data,
+          ),
+          TDFormItem(
+            label: '年限',
+            name: 'stepper',
 
-        /// 为 TDStepper 预留其他设置
-      ),
-      TDFormItem(
-        label: '个人简介',
-        name: 'textarea',
-        help: '请输入个人简介',
-        controller: controller[2],
+            /// 为 TDStepper 预留其他设置
+          ),
+          TDFormItem(
+            label: '个人简介',
+            name: 'textarea',
+            help: '请输入个人简介',
+            controller: controller[2],
 
-        /// 为 TDTextarea 长文本其他参数做预留 API
-        maxLength: 500,
-        indicator: true,
-      )
-    ], disabled: false);
+            /// 为 TDTextarea 长文本其他参数做预留 API
+            maxLength: 500,
+            indicator: true,
+          )
+        ]);
   }
 
-  /// 横 竖 排版模式切换
+  /// 横 竖 排版模式切换按钮
   @Demo(group: 'form')
   Widget _buildArrangementSwitch(BuildContext buildContext) {
     final theme = TDTheme.of(context);
@@ -223,6 +237,8 @@ class _TDFormPageState extends State<TDFormPage> {
                           final currentTextColor = verticalTextColor;
                           verticalTextColor = horizontalTextColor;
                           horizontalTextColor = currentTextColor;
+                          _isFormHorizontal = true;
+                          print(_isFormHorizontal);
                         }
                       });
                     },
@@ -254,6 +270,9 @@ class _TDFormPageState extends State<TDFormPage> {
                           final currentTextColor = verticalTextColor;
                           verticalTextColor = horizontalTextColor;
                           horizontalTextColor = currentTextColor;
+
+                          _isFormHorizontal = false;
+                          print(_isFormHorizontal);
                         }
                       });
                     },
@@ -267,12 +286,19 @@ class _TDFormPageState extends State<TDFormPage> {
   Widget _buildSwitchWithBase(BuildContext context) {
     return _buildItem(
       context,
-      const TDSwitch(),
+      TDSwitch(
+        isOn: _formDisableState,
+        onChanged: (value) {
+          setState(() {
+            _formDisableState = value;
+          });
+          return false;
+        },
+      ),
       title: '禁用态',
     );
   }
 
-  /// 每一项的封装
   @Demo(group: 'switch')
   Widget _buildItem(BuildContext context, Widget switchItem,
       {String? title, String? desc}) {
@@ -305,5 +331,47 @@ class _TDFormPageState extends State<TDFormPage> {
       ),
     );
     return Column(mainAxisSize: MainAxisSize.min, children: [current]);
+  }
+
+  /// 提交按钮
+  @Demo(group: 'button')
+  Widget _buildCombinationButtons(BuildContext context) {
+    final theme = TDTheme.of(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.whiteColor1,
+      ),
+      child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 16,
+              ),
+              Expanded(
+                  child: TDButton(
+                text: '提交',
+                size: TDButtonSize.large,
+                type: TDButtonType.fill,
+                theme: TDButtonTheme.primary,
+                shape: TDButtonShape.rectangle,
+              )),
+              SizedBox(
+                width: 16,
+              ),
+              Expanded(
+                  child: TDButton(
+                text: '重置',
+                size: TDButtonSize.large,
+                type: TDButtonType.fill,
+                shape: TDButtonShape.rectangle,
+                theme: TDButtonTheme.defaultTheme,
+              )),
+              SizedBox(
+                width: 16,
+              ),
+            ],
+          )),
+    );
   }
 }
