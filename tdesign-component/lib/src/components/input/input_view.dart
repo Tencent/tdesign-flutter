@@ -70,6 +70,9 @@ class TDInputView extends StatelessWidget {
   /// 键盘动作类型
   final TextInputAction? inputAction;
 
+  /// 点击输入框外部区域回调
+  final TapRegionCallback? onTapOutside;
+
   const TDInputView(
       {Key? key,
       required this.textStyle,
@@ -94,7 +97,8 @@ class TDInputView extends StatelessWidget {
       this.isCollapsed = false,
       this.textAlign,
       this.controller,
-      this.inputAction,})
+      this.inputAction,
+      this.onTapOutside})
       : super(
           key: key,
         );
@@ -117,6 +121,7 @@ class TDInputView extends StatelessWidget {
       maxLines: maxLines,
       minLines: minLines,
       maxLength: maxLength,
+      onTapOutside: onTapOutside,
       style: textStyle,
       textAlign: textAlign ?? TextAlign.start,
       buildCounter: _buildCounter,
