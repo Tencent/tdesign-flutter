@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/components/form/td_form_inherited.dart';
+import 'td_form_inherited.dart';
 import '../../../tdesign_flutter.dart';
 
 class TDFormItem extends StatefulWidget {
   TDFormItem({
-    // External parameters
-    this.controller,
-    this.select = '',
-    List<Map>? localData,
-    Map<String, String>? radios,
     this.label,
     this.name,
     this.arrow = false,
@@ -22,58 +17,65 @@ class TDFormItem extends StatefulWidget {
     this.maxLength,
     this.indicator,
     this.additionInfo,
+    this.controller,
+    this.select = '',
+    List<Map>? localData,
+    Map<String, String>? radios,
     Key? key,
   })  : localData = localData ?? const [],
         radios = radios ?? const {},
         super(key: key);
 
-  // Form label content
+  /// 表单项标签内容
   final String? label;
 
-  // Form content alignment: 'left' or 'right'
+  /// 表单内容对齐方式：'left' 或 'right'
   final String? contentAlign;
 
-  // Whether to show the right arrow
+  /// 是否显示右侧箭头
   final bool? arrow;
 
-  // Auxiliary information for TDInput
+  /// TDInput的辅助信息
   final String? additionInfo;
 
-  // Help text for the form field
+  /// TDInput 默认显示文字
   final String? help;
 
-  // Label alignment: 'left', 'right', or 'top'
+  /// 标签对齐方式：'left', 'right', 或 'top'
   final String? labelAlign;
 
-  // Label width, overrides the Form's labelWidth if provided
+  /// 标签宽度，如果提供则覆盖Form的labelWidth
   final double? labelWidth;
 
-  // Form field identifier
+  /// 表单项标识符
   final String? name;
 
-  // Controller for the form field
+  /// Input 控制器
   var controller;
 
-  // Selected value for date picker or similar
+  /// 选择器 适用于日期选择器等
   String select;
 
-  // Data for cascader or other selection widgets
+  /// 传入数据 适用于级联选择器等
   final List<Map> localData;
 
-  // Data for radio buttons
+  /// 单选按钮数据
+  /// < 序号 , 名称 >
   final Map<String, String> radios;
 
-  // Whether to display the required mark (*)
+  /// 是否显示必填标记（*）
   final bool? requiredMark;
 
-  // Validation rules for the form field
+  /// 表单项验证规则
   final List? rules;
 
-  // Whether to show error messages
+  /// 是否显示错误信息
   final bool? showErrowMessage;
 
-  // Properties for TDTextarea
+  /// TDTextarea的属性，最大长度
   final int? maxLength;
+
+  /// TDTextarea的属性，指示器
   final bool? indicator;
 
   @override
@@ -283,13 +285,13 @@ class _TDFormItemState extends State<TDFormItem> {
             color: theme.whiteColor1,
           ),
           child: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TDText(
                   widget.label,
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
                 TDStepper(
                   theme: TDStepperTheme.filled,
@@ -369,7 +371,7 @@ class _TDFormItemState extends State<TDFormItem> {
             color: theme.whiteColor1,
           ),
           child: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -377,6 +379,7 @@ class _TDFormItemState extends State<TDFormItem> {
                   widget.label ?? '',
                   style: const TextStyle(fontSize: 16),
                 ),
+                const SizedBox(width: 20),
                 TDRadioGroup(
                   selectId: 'index:1',
                   direction: Axis.horizontal,
@@ -442,15 +445,15 @@ class _TDFormItemState extends State<TDFormItem> {
             color: theme.whiteColor1,
           ),
           child: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start, // 使内容左对齐
               children: [
                 TDText(
                   widget.label,
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 TDStepper(
                   theme: TDStepperTheme.filled,
                   disabled: FormState,
@@ -476,7 +479,8 @@ class _TDFormItemState extends State<TDFormItem> {
       }
     }
 
-    return Column();
+    /// TODO: 构建错误的提示页面
+    return const Column();
   }
 
   Widget buildSelectRow(BuildContext context, String output, String title) {
@@ -490,7 +494,7 @@ class _TDFormItemState extends State<TDFormItem> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 16, top: 16, bottom: 16),
+                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
                 child: TDText(
                   title,
                   font: TDTheme.of(context).fontBodyLarge,
@@ -539,7 +543,7 @@ class _TDFormItemState extends State<TDFormItem> {
           Row(
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 16, top: 16, bottom: 16),
+                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
                 child: TDText(
                   title,
                   font: TDTheme.of(context).fontBodyLarge,

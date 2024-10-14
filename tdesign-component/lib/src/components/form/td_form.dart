@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/components/form/td_form_inherited.dart';
+import 'td_form_inherited.dart';
 import '../../../tdesign_flutter.dart';
 
 class TDForm extends StatefulWidget {
@@ -9,7 +9,7 @@ class TDForm extends StatefulWidget {
     this.colon = false,
     this.contentAlign = 'left',
     this.data,
-    this.isHoeizontal = true,
+    this.isHorizontal = true,
     this.disabled = false,
     this.errorMessage,
     this.labelAlign = 'right',
@@ -37,7 +37,7 @@ class TDForm extends StatefulWidget {
   final Object? data;
 
   /// 表单排列方式是否为 水平方向
-  final bool isHoeizontal;
+  final bool isHorizontal;
 
   /// 是否禁用整个表单
   final bool disabled;
@@ -88,7 +88,7 @@ class _TDFormState extends State<TDForm> {
     return TDFormInherited(
       disabled: widget.disabled,
       labelWidth: widget.labelWidth,
-      isHorizontal: widget.isHoeizontal,
+      isHorizontal: widget.isHorizontal,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: widget.items
