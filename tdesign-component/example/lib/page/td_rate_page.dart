@@ -74,7 +74,7 @@ class TDRatePageState extends State<TDRatePage> {
   @Demo(group: 'rate')
   Widget _buildMsgRate(BuildContext context) {
     return Column(children: const [
-      TDCell(title: '带描述评分', noteWidget: TDRate(value: 3, showText: true, texts: ['很差', '差', '一般', '好评', '优秀'])),
+      TDCell(title: '带描述评分', noteWidget: TDRate(value: 3, showText: true, texts: ['1分', '2分', '3分', '4分', '5分'])),
       SizedBox(height: 16),
       TDCell(title: '带描述评分', noteWidget: TDRate(value: 3, showText: true))
     ]);
