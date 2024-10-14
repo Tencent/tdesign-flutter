@@ -9,10 +9,11 @@ class TDForm extends StatefulWidget {
     this.colon = false,
     this.contentAlign = 'left',
     this.data,
+    this.isHoeizontal = true,
     this.disabled = false,
     this.errorMessage,
     this.labelAlign = 'right',
-    this.labelWidth = '81px',
+    this.labelWidth = 20.0,
     this.preventSubmitDefault = true,
     this.requiredMark = true, // 此处必填项有小问题
     this.resetType = 'empty',
@@ -35,6 +36,9 @@ class TDForm extends StatefulWidget {
   /// 表单数据
   final Object? data;
 
+  /// 表单排列方式是否为 水平方向
+  final bool isHoeizontal;
+
   /// 是否禁用整个表单
   final bool disabled;
 
@@ -46,8 +50,8 @@ class TDForm extends StatefulWidget {
   /// 可选项: left/right/top
   final String? labelAlign;
 
-  /// 可以整体设置 label 标签宽度，默认为 81px
-  final String? labelWidth;
+  /// 可以整体设置 label 标签宽度
+  final double? labelWidth;
 
   /// 是否阻止表单提交默认事件（表单提交默认事件会刷新页面）
   /// 设置为 true 可以避免刷新
@@ -83,6 +87,8 @@ class _TDFormState extends State<TDForm> {
   Widget build(BuildContext context) {
     return TDFormInherited(
       disabled: widget.disabled,
+      labelWidth: widget.labelWidth,
+      isHorizontal: widget.isHoeizontal,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: widget.items
