@@ -20,3 +20,4 @@
 | onActionClick   | TDSearchBarEvent?      | -                                       | 右侧操作按钮点击回调    |
 | controller      | TextEditingController? | -                                       | 控制器           |
 | backgroundColor | Color?                 | Colors.white                            | 背景颜色          |
+

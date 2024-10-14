@@ -52,7 +52,10 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
               ExampleItem(desc: '不带标题', builder: buildWithoutTitle),
             ],
           )
-        ]);
+        ],
+    test: [
+      ExampleItem(desc: '指定开始时间', builder: _customStartTime),
+    ],);
   }
 
   @Demo(group: 'datetimePicker')
@@ -271,6 +274,37 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
           const TDDivider(margin: EdgeInsets.only(left: 16, ),)
         ],
       ),
+    );
+  }
+
+  @Demo(group: 'datetimePicker')
+  Widget _customStartTime(BuildContext context) {
+
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showDatePicker(context, title: '选择时间',
+            onConfirm: (selected) {
+              setState(() {
+                selected_5 = '${selected['year'].toString().padLeft(4, '0')}-'
+                    '${selected['month'].toString().padLeft(2, '0')}-'
+                    '${selected['day'].toString().padLeft(2, '0')} '
+                    '${selected['hour'].toString().padLeft(2, '0')}:'
+                    '${selected['minute'].toString().padLeft(2, '0')}:'
+                    '${selected['second'].toString().padLeft(2, '0')}';
+              });
+              Navigator.of(context).pop();
+            },
+            useYear: true,
+            useMonth: true,
+            useDay: true,
+            useHour: true,
+            useMinute: true,
+            useSecond: true,
+            dateStart: [2012,1, 15,12,28,11],
+            dateEnd: [2012, 6, 15,12,48,32],
+            initialDate: [2012, 1, 15,13,20]);
+      },
+      child: buildSelectRow(context, selected_5, '选择时间'),
     );
   }
 }

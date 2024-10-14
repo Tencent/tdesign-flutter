@@ -31,6 +31,7 @@ import 'page/td_footer_page.dart';
 import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
 import 'page/td_image_viewer_page.dart';
+import 'page/td_indexes_page.dart';
 import 'page/td_input_page.dart';
 import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
@@ -54,6 +55,7 @@ import 'page/td_swipe_cell_page.dart';
 import 'page/td_steps_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
+import 'page/td_table_page.dart';
 import 'page/td_tabs_page.dart';
 import 'page/td_tag_page.dart';
 import 'page/td_text_page.dart';
@@ -99,8 +101,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Indexes 索引',
         name: 'indexes',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDIndexesPage())),
     ExamplePageModel(
         text: 'NavBar 导航栏', name: 'navbar', pageBuilder: _wrapInheritedTheme((context) => const TDNavBarPage())),
     ExamplePageModel(
@@ -205,6 +206,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
     ExamplePageModel(
         text: 'Swiper 轮播图', name: 'swiper', pageBuilder: _wrapInheritedTheme((context) => const TDSwiperPage())),
+    ExamplePageModel(text: 'Table 表格', name: 'table', pageBuilder: _wrapInheritedTheme((context) => const TDTablePage())),
     ExamplePageModel(text: 'Tag 标签', name: 'tag', pageBuilder: _wrapInheritedTheme((context) => const TDTagPage())),
     ExamplePageModel(text: 'Steps 步骤条', name: 'steps', pageBuilder: _wrapInheritedTheme((context) => const TDStepsPage())),
   ],
