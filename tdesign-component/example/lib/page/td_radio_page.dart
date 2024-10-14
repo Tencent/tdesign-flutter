@@ -261,6 +261,7 @@ class TDRadioPageState extends State<TDRadioPage> {
       selectId: 'index:1',
       cardMode: true,
       direction: Axis.horizontal,
+      rowCount: 2,
       directionalTdRadios: const [
         TDRadio(
           id: 'index:0',

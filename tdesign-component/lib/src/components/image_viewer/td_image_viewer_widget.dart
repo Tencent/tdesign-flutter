@@ -216,7 +216,11 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
                       }
                       widget.images.removeAt(_index - 1);
                       widget.onDelete?.call(_index - 1);
-                      setState(() {});
+                      setState(() {
+                        if(_index > 1) {
+                          _index--;
+                        }
+                      });
                     },
                     child: Icon(
                       TDIcons.delete,
