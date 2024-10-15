@@ -1,0 +1,10 @@
+
+  Widget _buildDRate(BuildContext context) {
+    return Column(children: const [
+      TDCell(title: '顶部显示', noteWidget: TDRate(placement: PlacementEnum.top)),
+      SizedBox(height: 16),
+      TDCell(title: '不显示', noteWidget: TDRate(placement: PlacementEnum.none)),
+      SizedBox(height: 16),
+      TDCell(title: '底部显示', noteWidget: TDRate(placement: PlacementEnum.bottom)),
+    ]);
+  }
