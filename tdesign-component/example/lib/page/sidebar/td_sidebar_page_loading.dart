@@ -82,10 +82,12 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
         ));
   }
 
-  final list = <SideItemProps>[];
-  final pages = <Widget>[];
+  List<SideItemProps> list = <SideItemProps>[];
+  List<Widget> pages = <Widget>[];
 
   void _initData() {
+    list = [];
+    pages = [];
     for (var i = 0; i < 20; i++) {
       list.add(SideItemProps(
         index: i,
@@ -106,9 +108,11 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
       count: '8',
     );
     if(_sideBarController.loading) {
-      _sideBarController.loading = false;
       _sideBarController.init(list);
       _sideBarController.selectTo(currentValue);
+      // 初始化时避免右侧内容与左侧item不匹配
+      _demoScroller.animateTo(currentValue.toDouble() * itemHeight,
+          duration: const Duration(milliseconds: 1), curve: Curves.easeIn);
     }
   }
 
