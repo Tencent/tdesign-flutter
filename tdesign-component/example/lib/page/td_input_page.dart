@@ -72,7 +72,8 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
             ExampleItem(desc: '带操作输入框', builder: _basicTypeWithHandleIconOne),
             ExampleItem(builder: _basicTypeWithHandleIconTwo),
             ExampleItem(builder: _basicTypeWithHandleIconThree),
-            ExampleItem(desc: '带图标输入框', builder: _basicTypeWithLeftIconLeftLabel),
+            ExampleItem(
+                desc: '带图标输入框', builder: _basicTypeWithLeftIconLeftLabel),
             ExampleItem(builder: _basicTypeWithLeftIcon),
             ExampleItem(desc: '特定类型输入框', builder: _specialTypePassword),
             ExampleItem(builder: _specialTypeVerifyCode),
@@ -104,7 +105,8 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         ExampleItem(desc: '长文本样式', builder: _customLongTextStyle),
         ExampleItem(desc: '隐藏底部分割线', builder: _hideBottomDivider),
         ExampleItem(desc: '自定义高度-使用SizeBox', builder: _customHeight),
-        ExampleItem(desc: '获取焦点时点击外部区域事件响应-onTapOutside', builder: _onTapOutside)
+        ExampleItem(
+            desc: '获取焦点时点击外部区域事件响应-onTapOutside', builder: _onTapOutside)
       ],
     );
   }
@@ -138,7 +140,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
     return Column(
       children: [
         TDInput(
-          leftLabel: '标签文字',
+          leftLabel: '标签文字123',
           required: true,
           controller: controller[1],
           backgroundColor: Colors.white,
@@ -513,7 +515,8 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                         '${countDownText}(${_countdownTime}秒)',
                         textColor: TDTheme.of(context).fontGyColor4,
                       )
-                    : TDText(confirmText, textColor: TDTheme.of(context).brandNormalColor),
+                    : TDText(confirmText,
+                        textColor: TDTheme.of(context).brandNormalColor),
               ],
             ),
           ),

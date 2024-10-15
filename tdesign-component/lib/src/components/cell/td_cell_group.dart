@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import 'td_cell_inherited.dart';
 
-typedef CellBuilder = Widget Function(BuildContext context, TDCell cell, int index);
+typedef CellBuilder = Widget Function(
+    BuildContext context, TDCell cell, int index);
 
 enum TDCellGroupTheme { defaultTheme, cardTheme }
 
@@ -76,25 +77,32 @@ class _TDCellGroupState extends State<TDCellGroup> {
                 top: TDTheme.of(context).spacer24,
                 bottom: TDTheme.of(context).spacer8,
               ),
-              child: widget.titleWidget ?? TDText(widget.title!, style: style.groupTitleStyle),
+              child: widget.titleWidget ??
+                  TDText(widget.title!, style: style.groupTitleStyle),
             ),
           Flexible(
             child: Container(
               padding: widget.theme == TDCellGroupTheme.cardTheme
                   ? EdgeInsets.only(left: spacer16, right: spacer16)
                   : EdgeInsets.zero,
-              decoration: BoxDecoration(border: _getBordered(style), borderRadius: radius),
+              decoration: BoxDecoration(
+                  border: _getBordered(style), borderRadius: radius),
               child: ClipRRect(
                 borderRadius: radius,
                 child: ListView.separated(
                   padding: EdgeInsets.zero,
                   shrinkWrap: widget.scrollable == false, // 设置为true以避免无限制地增长
-                  physics: widget.scrollable == false ? const NeverScrollableScrollPhysics() : null, // 禁用ListView的滚动
+                  physics: widget.scrollable == false
+                      ? const NeverScrollableScrollPhysics()
+                      : null, // 禁用ListView的滚动
                   itemCount: itemCount,
                   itemBuilder: (context, index) {
                     final item = widget.cells[index];
-                    final cell = widget.builder == null ? item : widget.builder!(context, item, index);
-                    if (itemCount - 1 == index && (widget.isShowLastBordered ?? false)) {
+                    final cell = widget.builder == null
+                        ? item
+                        : widget.builder!(context, item, index);
+                    if (itemCount - 1 == index &&
+                        (widget.isShowLastBordered ?? false)) {
                       return Column(children: [cell, _borderWidget(style)]);
                     }
                     return cell;
@@ -135,9 +143,14 @@ class _TDCellGroupState extends State<TDCellGroup> {
   Widget _borderWidget(TDCellStyle style) {
     return Row(
       children: [
-        Container(height: 0.5, width: TDTheme.of(context).spacer16, color: style.backgroundColor),
+        Container(
+            height: 0.5,
+            width: TDTheme.of(context).spacer16,
+            color: style.backgroundColor),
         Expanded(
-          child: Container(height: 0.5, color: style.borderedColor ?? TDTheme.of(context).grayColor3),
+          child: Container(
+              height: 0.5,
+              color: style.borderedColor ?? TDTheme.of(context).grayColor3),
         ),
       ],
     );
