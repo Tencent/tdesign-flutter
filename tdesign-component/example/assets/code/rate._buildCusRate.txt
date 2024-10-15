@@ -1,0 +1,4 @@
+
+  Widget _buildCusRate(BuildContext context) {
+    return const TDCell(title: '自定义评分', noteWidget: TDRate(value: 3, icon: [TDIcons.thumb_up]));
+  }

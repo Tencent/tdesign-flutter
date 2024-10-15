@@ -359,6 +359,7 @@ TDDropdownMenu _buildGroup(BuildContext context) {
 | maxHeight | double? | - | 内容最大高度 |
 | tabBarWidth | double? | - | 该item在menu上的宽度，仅在[TDDropdownMenu.isScrollable]为true时有效 |
 | tabBarAlign | MainAxisAlignment? | - | [label]和[arrowIcon]/[TDDropdownMenu.arrowIcon]的对齐方式 |
+| tabBarFlex | int? | 1 | 该item在menu上的宽度占比，仅在[TDDropdownMenu.isScrollable]为false时有效 |
 
 ```
 ```

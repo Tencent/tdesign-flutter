@@ -1,0 +1,4 @@
+
+  Widget _buildMicro(BuildContext context) {
+    return TDProgress(type: TDProgressType.micro, value: 0.75);
+  }

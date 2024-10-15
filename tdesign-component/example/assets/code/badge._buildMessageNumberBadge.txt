@@ -1,0 +1,27 @@
+
+  Widget _buildMessageNumberBadge(BuildContext context) {
+    return Container(
+        alignment: Alignment.bottomLeft,
+        margin: const EdgeInsets.only(left: 16),
+        child: SizedBox(
+          width: 54,
+          height: 36,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              TDText(
+                '消息',
+                font: TDTheme.of(context).fontBodyLarge,
+              ),
+              const Positioned(
+                child: TDBadge(
+                  TDBadgeType.message,
+                  count: '8',
+                ),
+                left: 28,
+                bottom: 18,
+              )
+            ],
+          ),
+        ));
+  }
