@@ -1,0 +1,25 @@
+
+Widget _buildBadgeGridActionSheet(BuildContext context) {
+  return TDButton(
+    text: '带徽标宫格型',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDActionSheet(
+        context,
+        visible: true,
+        theme: TDActionSheetTheme.grid,
+        count: 8,
+        items: _gridItems
+            .map((e) => TDActionSheetItem(
+                  label: e.label,
+                  icon: e.icon,
+                  badge: TDBadge(TDBadgeType.redPoint),
+                ))
+            .toList(),
+      );
+    },
+  );
+}

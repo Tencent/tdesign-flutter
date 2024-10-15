@@ -1,0 +1,17 @@
+
+  Widget _shadowNavbar(BuildContext context) {
+    return TDNavBar(
+      height: 48,
+      titleFontWeight: FontWeight.w600,
+      title: titleText,
+      screenAdaptation: false,
+      useDefaultBack: true,
+      boxShadow: [
+        BoxShadow(
+          blurRadius: 4,
+          offset: const Offset(0, 4),
+          color: TDTheme.of(context).grayColor5,
+        )
+      ],
+    );
+  }
