@@ -130,6 +130,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
         _items?.length ?? 0,
         (index) {
           return Expanded(
+            flex: _items![index].tabBarFlex ?? 1,
             child: _tabBarContent(index),
           );
         },
@@ -196,8 +197,9 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
         _isOpened[index] ? await Navigator.maybePop(context) : _openMenu(index);
       },
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: _items![index].tabBarAlign ?? widget.tabBarAlign ?? MainAxisAlignment.center,
-        children: [_getText(index), _getIcon(index)],
+        children: [Flexible(child: _getText(index)), _getIcon(index)],
       ),
     );
   }

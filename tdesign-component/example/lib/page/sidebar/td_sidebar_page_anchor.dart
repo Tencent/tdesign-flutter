@@ -107,6 +107,7 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
     );
 
     var demoHeight = MediaQuery.of(context).size.height;
+    _sideBarController.init(list);
 
     return Row(
       children: [
