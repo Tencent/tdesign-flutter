@@ -1,0 +1,9 @@
+
+Widget _buildBlock(BuildContext context) {
+  final size = MediaQuery.of(context).size;
+  return TDCalendar(
+    title: '请选择日期',
+    value: [DateTime.now().millisecondsSinceEpoch],
+    height: size.height * 0.6 + 176,
+  );
+}

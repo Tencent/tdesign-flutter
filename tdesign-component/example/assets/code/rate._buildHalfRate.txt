@@ -1,0 +1,4 @@
+
+  Widget _buildHalfRate(BuildContext context) {
+    return const TDCell(title: '点击活滑动', noteWidget: TDRate(value: 3, allowHalf: true));
+  }

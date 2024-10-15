@@ -1,0 +1,6 @@
+
+TDTimeCounter _buildCustomUnitSimple(BuildContext context) {
+  var style = TDTimeCounterStyle.generateStyle(context);
+  style.timeColor = TDTheme.of(context).errorColor6;
+  return TDTimeCounter(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
+}

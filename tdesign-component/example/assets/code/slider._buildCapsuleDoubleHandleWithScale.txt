@@ -1,0 +1,17 @@
+
+  Widget _buildCapsuleDoubleHandleWithScale(BuildContext context) {
+    return TDRangeSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        showScaleValue: true,
+        divisions: 5,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      )..updateSliderThemeData((data) => data.copyWith(
+        activeTickMarkColor: const Color(0xFFE7E7E7),
+        inactiveTickMarkColor: const Color(0xFFE7E7E7),
+      )),
+      value: const RangeValues(20, 60),
+      onChanged: (value) {},
+    );
+  }

@@ -60,6 +60,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     );
 
     var demoHeight = MediaQuery.of(context).size.height;
+    _sideBarController.init(list);
 
     return Row(
       children: [
@@ -197,6 +198,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     );
 
     var demoHeight = MediaQuery.of(context).size.height;
+    _sideBarController.init(list);
 
     return Row(
       children: [
@@ -688,6 +690,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | contentPadding | EdgeInsetsGeometry? | - | 自定义文本框内边距 |
 | selectedTextStyle | TextStyle? | - | 选中样式 |
 | style | TDSideBarStyle | TDSideBarStyle.normal | 样式 |
+| loading | bool? | - | 加载效果 |
+| loadingWidget | Widget? | - | 自定义加载动画 |
 
 
   
