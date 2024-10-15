@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -40,6 +42,7 @@ class TDIndexesList extends StatefulWidget {
 class _TDIndexesListState extends State<TDIndexesList> {
   late Map<String, GlobalKey> _containerKeys;
   final _indexSize = 20.0;
+  Timer? _hideTipTimer;
   var _showTip = false;
 
   @override
@@ -54,6 +57,12 @@ class _TDIndexesListState extends State<TDIndexesList> {
     if (widget.indexList != oldWidget.indexList) {
       _containerKeys = widget.indexList.asMap().map((index, e) => MapEntry(e, GlobalKey()));
     }
+  }
+
+  @override
+  void dispose() {
+    _hideTipTimer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -176,7 +185,8 @@ class _TDIndexesListState extends State<TDIndexesList> {
   }
 
   void _hideTip() {
-    Future.delayed(
+    _hideTipTimer?.cancel();
+    _hideTipTimer = Timer(
       const Duration(seconds: 1),
       () {
         setState(() {
