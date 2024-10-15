@@ -1,0 +1,30 @@
+
+  Widget _buildLessThanMaxCountBadge(BuildContext context) {
+    return Container(
+        alignment: Alignment.bottomLeft,
+        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+        child: SizedBox(
+          width: 60,
+          height: 50,
+          child: Stack(
+            children: [
+              Positioned(
+                left: 0,
+                bottom: 0,
+                child: Icon(TDIcons.notification),
+              ),
+              Positioned(
+                child: TDBadge(
+                  TDBadgeType.square,
+                  count: '8888',
+                  maxCount: '9000',
+                  size: TDBadgeSize.large,
+                  border: TDBadgeBorder.large,
+                ),
+                left: 18,
+                bottom: 18,
+              ),
+            ],
+          ),
+        ));
+  }

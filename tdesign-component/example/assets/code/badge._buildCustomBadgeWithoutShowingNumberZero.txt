@@ -1,0 +1,33 @@
+
+  Widget _buildCustomBadgeWithoutShowingNumberZero(BuildContext context) {
+    return Container(
+        alignment: Alignment.bottomLeft,
+        margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+        child: SizedBox(
+          width: 64,
+          height: 56,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              Container(
+                child: const Icon(TDIcons.notification),
+                decoration: BoxDecoration(
+                    color: TDTheme.of(context).grayColor2,
+                    borderRadius: BorderRadius.circular(
+                        TDTheme.of(context).radiusDefault)),
+                height: 48,
+                width: 48,
+              ),
+              const Positioned(
+                child: TDBadge(
+                  TDBadgeType.message,
+                  count: '0',
+                  showZero: false,
+                ),
+                right: 0,
+                top: 0,
+              )
+            ],
+          ),
+        ));
+  }

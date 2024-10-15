@@ -60,6 +60,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     );
 
     var demoHeight = MediaQuery.of(context).size.height;
+    _sideBarController.init(list);
 
     return Row(
       children: [
@@ -197,6 +198,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     );
 
     var demoHeight = MediaQuery.of(context).size.height;
+    _sideBarController.init(list);
 
     return Row(
       children: [
