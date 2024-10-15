@@ -1,0 +1,35 @@
+
+  Widget _buildCombineSkeleton(BuildContext context) {
+    var rowCols = Flexible(
+        child: LayoutBuilder(
+            builder: (context, constraints) => Row(children: [
+                  TDSkeleton.fromRowCol(
+                    rowCol: TDSkeletonRowCol(
+                      objects: [
+                        [
+                          TDSkeletonRowColObj(
+                              width: constraints.maxWidth,
+                              height: constraints.maxWidth,
+                              flex: null,
+                              style: TDSkeletonRowColObjStyle(
+                                  borderRadius: (context) =>
+                                      TDTheme.of(context).radiusExtraLarge))
+                        ],
+                        const [TDSkeletonRowColObj.text()],
+                        const [
+                          TDSkeletonRowColObj.text(),
+                          TDSkeletonRowColObj.spacer(flex: 1),
+                        ],
+                      ],
+                    ),
+                  )
+                ])));
+
+    return Row(
+      children: [
+        rowCols,
+        SizedBox(width: TDTheme.of(context).spacer4),
+        rowCols,
+      ],
+    );
+  }

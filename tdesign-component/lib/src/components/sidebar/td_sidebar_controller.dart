@@ -5,7 +5,7 @@ import '../../../tdesign_flutter.dart';
 class TDSideBarController extends ChangeNotifier {
   int currentValue = 0;
   List<SideItemProps> children = [];
-  bool _loading = true;
+  bool _loading = false;
 
   void selectTo(int value) {
     currentValue = value;
@@ -13,13 +13,20 @@ class TDSideBarController extends ChangeNotifier {
   }
 
   void init(List<SideItemProps> data) {
+    closeLoading(false, needNotify: false);
     children = data;
     notifyListeners();
   }
 
-  set loading(bool load) {
+  void closeLoading(bool load, { bool needNotify = true }) {
     _loading = load;
-    notifyListeners();
+    if(needNotify) {
+      notifyListeners();
+    }
+  }
+
+  set loading (bool load) {
+    _loading = load;
   }
 
   bool get loading => _loading;
