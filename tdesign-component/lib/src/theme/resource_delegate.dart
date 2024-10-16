@@ -172,6 +172,9 @@ abstract class TDResourceDelegate {
 
   /// [TDRate] 未评分
   String get notRated;
+
+  /// [TDRate] 选择选项
+  String get cascadeLabel;
 }
 
 /// 如果用户要重写,就应该全部重写,不开放只重新部分资源
@@ -298,4 +301,7 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
 
   @override
   String get notRated => '未评分';
+
+  @override
+  String get cascadeLabel => '选择选项';
 }
