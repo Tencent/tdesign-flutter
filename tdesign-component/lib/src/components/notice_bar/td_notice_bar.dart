@@ -90,7 +90,6 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
       throw Exception('interval must not be less than 0');
     }
     _scrollController = ScrollController();
-    _init();
     WidgetsBinding.instance.addPostFrameCallback((time) {
       if (widget.marquee == true) {
         _startTimer();
@@ -365,6 +364,8 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
 
   @override
   Widget build(BuildContext context) {
+    // 初始化样式及左右widget
+    _init();
     _size = MediaQuery.of(context).size;
     return Container(
       padding: _style!.getPadding,
