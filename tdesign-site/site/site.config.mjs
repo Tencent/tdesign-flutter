@@ -218,13 +218,13 @@ export default {
           path: '/flutter/components/radio',
           component: () => import('@/radio/README.md'),
         },
-        // {
-        //   title: 'Rate 评分',
-        //   name: 'rate',
-        //   meta: { docType: 'form' },
-        //   path: '/flutter/components/rate',
-        //   component: () => import('@/rate/README.md'),
-        // },
+        {
+          title: 'Rate 评分',
+          name: 'rate',
+          meta: { docType: 'form' },
+          path: '/flutter/components/rate',
+          component: () => import('@/rate/README.md'),
+        },
         {
           title: 'Search 搜索框',
           name: 'search',

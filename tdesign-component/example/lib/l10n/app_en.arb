@@ -43,5 +43,6 @@
   "time": "Time",
   "start": "Start",
   "end": "End",
-  "notRated": "Not rated"
+  "notRated": "Not rated",
+  "cascadeLabel": "Select Item"
 }
