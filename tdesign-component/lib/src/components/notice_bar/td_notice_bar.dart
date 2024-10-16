@@ -241,6 +241,14 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
         (_size!.width - _style!.getPadding.horizontal);
   }
 
+  /// 获取文字高度
+  double _getTextHeight() {
+    if(identical(0, 0.0)) {
+      return widget.height;
+    }
+    return _getFontSize().height;
+  }
+
   /// 内容区域
   Widget _contextWidget() {
     var valid = false;
@@ -251,11 +259,14 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
         height: widget.height,
         child: Align(
           alignment: Alignment.centerLeft,
-          child: TDText(
-            widget.context,
-            style: _style?.getTextStyle,
-            maxLines: 1,
-            forceVerticalCenter: true,
+          child: SizedBox(
+            height: _getTextHeight(),
+            child: TDText(
+              widget.context,
+              style: _style?.getTextStyle,
+              maxLines: 1,
+              forceVerticalCenter: true,
+            ),
           ),
         ),
       );
@@ -266,11 +277,14 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
         height: widget.height,
         child: Align(
           alignment: Alignment.centerLeft,
-          child: TDText(
-            widget.context[0],
-            style: _style?.getTextStyle,
-            maxLines: 1,
-            forceVerticalCenter: true,
+          child: SizedBox(
+            height: _getTextHeight(),
+            child: TDText(
+              widget.context[0],
+              style: _style?.getTextStyle,
+              maxLines: 1,
+              forceVerticalCenter: true,
+            ),
           ),
         ),
       );
