@@ -175,13 +175,13 @@ spline: explain
       <p class="name">Radio 单选框</p>
     </a>
   </div>
-  <!-- <div class="image-wrapper">
+  <div class="image-wrapper">
     <a class="item" href="/flutter/components/rate">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-rate.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-rate-dark.png" />
       <p class="name">Rate 评分</p>
     </a>
-  </div> -->
+  </div>
   <div class="image-wrapper">
     <a class="item" href="/flutter/components/search">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-search.png" />
