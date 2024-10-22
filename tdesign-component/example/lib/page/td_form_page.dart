@@ -146,49 +146,49 @@ class _TDFormPageState extends State<TDFormPage> {
         items: [
           TDFormItem(
             label: '用户名',
-            name: 'name',
+            type: TDFormItemType.input,
             help: '请输入用户名',
-            additionInfo: '输入用户名',
+            // additionInfo: '输入用户名',
             labelWidth: 15.0,
             controller: controller[0],
           ),
           TDFormItem(
             label: '密码',
-            name: 'password',
+            type: TDFormItemType.password,
             help: '请输入密码',
             labelWidth: 35.0,
             controller: controller[1],
           ),
           TDFormItem(
             label: '性别',
-            name: 'radios',
+            type: TDFormItemType.radios,
 
             /// 扩展一下数量和选项内容
             radios: _radios,
           ),
           TDFormItem(
             label: '生日',
-            name: 'date',
+            type: TDFormItemType.dateTimePicker,
 
             /// 引入需要的日期数据
             select: selected_1,
           ),
           TDFormItem(
             label: '籍贯',
-            name: 'local',
+            type: TDFormItemType.cascader,
 
             /// 引入需要的地点数据
             localData: _data,
           ),
           TDFormItem(
             label: '年限',
-            name: 'stepper',
+            type: TDFormItemType.stepper,
 
             /// 为 TDStepper 预留其他设置
           ),
           TDFormItem(
             label: '个人简介',
-            name: 'textarea',
+            type: TDFormItemType.textarea,
             help: '请输入个人简介',
             controller: controller[2],
 
