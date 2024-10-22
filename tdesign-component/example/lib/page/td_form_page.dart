@@ -187,6 +187,10 @@ class _TDFormPageState extends State<TDFormPage> {
             /// 为 TDStepper 预留其他设置
           ),
           TDFormItem(
+            label: '自我评价',
+            type: TDFormItemType.rate,
+          ),
+          TDFormItem(
             label: '个人简介',
             type: TDFormItemType.textarea,
             help: '请输入个人简介',
