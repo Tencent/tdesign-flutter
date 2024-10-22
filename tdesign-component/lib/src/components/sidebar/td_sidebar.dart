@@ -139,24 +139,13 @@ class _TDSideBarState extends State<TDSideBar> {
   void initState() {
     super.initState();
 
-    _loading = widget.loading ?? false;
+    _loading = widget.loading ?? widget.controller?.loading ?? false;
     // controller注册事件
     if (widget.controller != null) {
       widget.controller!.addListener(() {
         selectValue(widget.controller!.currentValue, needScroll: true);
         _loading = widget.controller!.loading;
-        displayChildren = widget.controller!.children
-            .asMap()
-            .entries
-            .map((entry) => SideItemProps(
-            index: entry.key,
-            disabled: entry.value.disabled,
-            value: entry.value.value,
-            icon: entry.value.icon,
-            label: entry.value.label,
-            textStyle: entry.value.textStyle,
-            badge: entry.value.badge))
-            .toList();
+        getDisplayChildren();
         setState(() {});
       });
     }
@@ -190,6 +179,38 @@ class _TDSideBarState extends State<TDSideBar> {
     }
   }
 
+  void getDisplayChildren() {
+    if (widget.controller != null && widget.controller!.children.isNotEmpty) {
+      displayChildren = widget.controller!.children
+          .asMap()
+          .entries
+          .map((entry) => SideItemProps(
+            index: entry.key,
+            disabled: entry.value.disabled,
+            value: entry.value.value,
+            icon: entry.value.icon,
+            label: entry.value.label,
+            textStyle: entry.value.textStyle,
+            badge: entry.value.badge))
+          .toList();
+    } else if(widget.children.isNotEmpty) {
+      displayChildren = widget.children
+          .asMap()
+          .entries
+          .map((entry) => SideItemProps(
+            index: entry.key,
+            disabled: entry.value.disabled,
+            value: entry.value.value,
+            icon: entry.value.icon,
+            label: entry.value.label,
+            textStyle: entry.value.textStyle,
+            badge: entry.value.badge))
+          .toList();
+    } else {
+      displayChildren = [];
+    }
+  }
+
   // 选中某项
   void onSelect(SideItemProps item, {isController = false}) {
     if (currentIndex != item.index) {
@@ -212,6 +233,7 @@ class _TDSideBarState extends State<TDSideBar> {
   @override
   Widget build(BuildContext context) {
     if(_loading) {
+      widget.controller?.loading = true;
       if(widget.loadingWidget != null) {
         return widget.loadingWidget!;
       }
