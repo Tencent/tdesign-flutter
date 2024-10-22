@@ -164,19 +164,19 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
       action: '搜索',
       needCancel: true,
       controller: inputController,
-      // onActionClick: () {
-      //   showGeneralDialog(
-      //     context: context,
-      //     pageBuilder: (BuildContext buildContext, Animation<double> animation,
-      //         Animation<double> secondaryAnimation) {
-      //       return TDConfirmDialog(
-      //         content: inputController.text.isNotEmpty
-      //             ? '搜索关键词：${inputController.text}'
-      //             : '搜索关键词为空',
-      //       );
-      //     },
-      //   );
-      // },
+      onActionClick: (value) {
+        showGeneralDialog(
+          context: context,
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDConfirmDialog(
+              content: inputController.text.isNotEmpty
+                  ? '搜索关键词：${inputController.text}'
+                  : '搜索关键词为空',
+            );
+          },
+        );
+      },
     );
   }
 }

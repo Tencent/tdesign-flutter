@@ -151,46 +151,55 @@ class TDAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (type) {
       case TDAvatarType.icon:
-        return Container(
-          width: _getAvatarWidth(),
-          height: _getAvatarWidth(),
-          decoration: BoxDecoration(
-            color: backgroundColor ?? TDTheme.of(context).brandColor2,
-            borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
-          ),
-          child: Center(
-              child: Icon(icon ?? TDIcons.user, size: _getIconWidth(), color: TDTheme.of(context).brandNormalColor)),
-        );
-      case TDAvatarType.normal:
-        return Container(
-          width: _getAvatarWidth(),
-          height: _getAvatarWidth(),
-          decoration: BoxDecoration(
+        return GestureDetector(
+          child: Container(
+            width: _getAvatarWidth(),
+            height: _getAvatarWidth(),
+            decoration: BoxDecoration(
               color: backgroundColor ?? TDTheme.of(context).brandColor2,
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
-              image: avatarUrl != null
-                  ? DecorationImage(image: NetworkImage(avatarUrl!))
-                  : defaultUrl != ''
-                      ? DecorationImage(image: AssetImage(defaultUrl))
-                      : null),
+            ),
+            child: Center(
+                child: Icon(icon ?? TDIcons.user, size: _getIconWidth(), color: TDTheme.of(context).brandNormalColor)),
+          ),
+          onTap: onTap,
+        );
+      case TDAvatarType.normal:
+        return GestureDetector(
+          child: Container(
+            width: _getAvatarWidth(),
+            height: _getAvatarWidth(),
+            decoration: BoxDecoration(
+                color: backgroundColor ?? TDTheme.of(context).brandColor2,
+                borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
+                image: avatarUrl != null
+                    ? DecorationImage(image: NetworkImage(avatarUrl!))
+                    : defaultUrl != ''
+                    ? DecorationImage(image: AssetImage(defaultUrl))
+                    : null),
+          ),
+          onTap: onTap,
         );
       case TDAvatarType.customText:
-        return Container(
-          width: _getAvatarWidth(),
-          height: _getAvatarWidth(),
-          decoration: BoxDecoration(
-            color: backgroundColor ?? TDTheme.of(context).brandNormalColor,
-            borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
-          ),
-          child: Center(
-            child: TDText(
-              text,
-              forceVerticalCenter: true,
-              textAlign: TextAlign.center,
-              font: _getTextFont(context),
-              textColor: TDTheme.of(context).whiteColor1,
+        return GestureDetector(
+          child: Container(
+            width: _getAvatarWidth(),
+            height: _getAvatarWidth(),
+            decoration: BoxDecoration(
+              color: backgroundColor ?? TDTheme.of(context).brandNormalColor,
+              borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
+            ),
+            child: Center(
+              child: TDText(
+                text,
+                forceVerticalCenter: true,
+                textAlign: TextAlign.center,
+                font: _getTextFont(context),
+                textColor: TDTheme.of(context).whiteColor1,
+              ),
             ),
           ),
+          onTap: onTap,
         );
       case TDAvatarType.display:
         return buildDisplayAvatar(context);
