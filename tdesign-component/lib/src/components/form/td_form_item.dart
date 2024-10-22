@@ -4,8 +4,8 @@ import '../../../tdesign_flutter.dart';
 
 class TDFormItem extends StatefulWidget {
   TDFormItem({
+    required this.type,
     this.label,
-    this.name,
     this.arrow = false,
     this.contentAlign = 'left',
     this.help,
@@ -29,6 +29,9 @@ class TDFormItem extends StatefulWidget {
   /// 表单项标签内容
   final String? label;
 
+  /// 表格单元需要使用的组件类型
+  final TDFormItemType type;
+
   /// 表单内容对齐方式：'left' 或 'right'
   final String? contentAlign;
 
@@ -46,9 +49,6 @@ class TDFormItem extends StatefulWidget {
 
   /// 标签宽度，如果提供则覆盖Form的labelWidth
   final double? labelWidth;
-
-  /// 表单项标识符
-  final String? name;
 
   /// Input 控制器
   var controller;
@@ -80,6 +80,17 @@ class TDFormItem extends StatefulWidget {
 
   @override
   _TDFormItemState createState() => _TDFormItemState();
+}
+
+/// 表格单元选用组件类型的枚举
+enum TDFormItemType {
+  input,
+  password,
+  radios,
+  dateTimePicker,
+  cascader,
+  stepper,
+  textarea
 }
 
 class _TDFormItemState extends State<TDFormItem> {
@@ -125,362 +136,328 @@ class _TDFormItemState extends State<TDFormItem> {
   @override
   Widget build(BuildContext context) {
     if (FormIsHorizontal) {
-      if (widget.name == 'name') {
-        return TDInput(
-          inputDecoration: InputDecoration(
-            hintText: widget.help,
-            contentPadding: EdgeInsets.only(left: LabelWidth),
-            border: InputBorder.none,
-          ),
-          leftLabel: widget.label,
-          controller: widget.controller,
-          backgroundColor: Colors.white,
-          additionInfo: widget.additionInfo,
-          readOnly: FormState,
-        );
-      } else if (widget.name == 'password') {
-        return TDInput(
-          inputDecoration: InputDecoration(
-            hintText: widget.help,
-            contentPadding: EdgeInsets.only(left: LabelWidth),
-            border: InputBorder.none,
-          ),
-          type: TDInputType.normal,
-          controller: widget.controller,
-          obscureText: !browseOn,
-          leftLabel: widget.label,
-          backgroundColor: Colors.white,
-          rightBtn: browseOn
-              ? Icon(
-                  TDIcons.browse,
-                  color: TDTheme.of(context).fontGyColor3,
-                )
-              : Icon(
-                  TDIcons.browse_off,
-                  color: TDTheme.of(context).fontGyColor3,
-                ),
-          onBtnTap: () {
-            setState(() {
-              browseOn = !browseOn;
-            });
-          },
-          needClear: false,
-          readOnly: FormState,
-        );
-      } else if (widget.name == 'radios') {
-        final theme = TDTheme.of(context);
-        return Container(
-          decoration: BoxDecoration(
-            color: theme.whiteColor1,
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TDText(
-                  widget.label ?? '',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: TDRadioGroup(
-                    selectId: 'index:1',
-                    direction: Axis.horizontal,
-                    directionalTdRadios: widget.radios.entries.map((entry) {
-                      return TDRadio(
-                        id: entry.key,
-                        title: entry.value,
-                        radioStyle: TDRadioStyle.circle,
-                        showDivider: false,
-                        enable: !FormState,
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
+      switch (widget.type) {
+        case TDFormItemType.input:
+          return TDInput(
+            inputDecoration: InputDecoration(
+              hintText: widget.help,
+              contentPadding: EdgeInsets.only(left: LabelWidth),
+              border: InputBorder.none,
             ),
-          ),
-        );
-      } else if (widget.name == 'date') {
-        return GestureDetector(
-          onTap: () {
-            TDPicker.showDatePicker(context, title: '选择时间',
-                onConfirm: (selected) {
+            leftLabel: widget.label,
+            controller: widget.controller,
+            backgroundColor: Colors.white,
+            // additionInfo: widget.additionInfo,
+            readOnly: FormState,
+          );
+        case TDFormItemType.password:
+          return TDInput(
+            inputDecoration: InputDecoration(
+              hintText: widget.help,
+              contentPadding: EdgeInsets.only(left: LabelWidth),
+              border: InputBorder.none,
+            ),
+            type: TDInputType.normal,
+            controller: widget.controller,
+            obscureText: !browseOn,
+            leftLabel: widget.label,
+            backgroundColor: Colors.white,
+            rightBtn: browseOn
+                ? Icon(
+                    TDIcons.browse,
+                    color: TDTheme.of(context).fontGyColor3,
+                  )
+                : Icon(
+                    TDIcons.browse_off,
+                    color: TDTheme.of(context).fontGyColor3,
+                  ),
+            onBtnTap: () {
               setState(() {
-                widget.select =
-                    '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
+                browseOn = !browseOn;
               });
-              Navigator.of(context).pop();
             },
-                dateStart: [1999, 01, 01],
-                dateEnd: [2023, 12, 31],
-                initialDate: [2012, 1, 1]);
-          },
-          child: buildSelectRow(context, widget.select, '选择时间'),
-        );
-      } else if (widget.name == 'radios') {
-        final theme = TDTheme.of(context);
-        return Container(
-          decoration: BoxDecoration(
-            color: theme.whiteColor1,
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TDText(
-                  widget.label ?? '',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: TDRadioGroup(
-                    selectId: 'index:1',
-                    direction: Axis.horizontal,
-                    directionalTdRadios: widget.radios.entries.map((entry) {
-                      return TDRadio(
-                        id: entry.key,
-                        title: entry.value,
-                        radioStyle: TDRadioStyle.circle,
-                        showDivider: false,
-                        enable: !FormState,
-                      );
-                    }).toList(),
+            needClear: false,
+            readOnly: FormState,
+          );
+        case TDFormItemType.radios:
+          final theme = TDTheme.of(context);
+          return Container(
+            decoration: BoxDecoration(
+              color: theme.whiteColor1,
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TDText(
+                    widget.label ?? '',
+                    style: const TextStyle(fontSize: 16),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: TDRadioGroup(
+                      selectId: 'index:1',
+                      direction: Axis.horizontal,
+                      directionalTdRadios: widget.radios.entries.map((entry) {
+                        return TDRadio(
+                          id: entry.key,
+                          title: entry.value,
+                          radioStyle: TDRadioStyle.circle,
+                          showDivider: false,
+                          enable: !FormState,
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      } else if (widget.name == 'local') {
-        return GestureDetector(
-          onTap: () {
-            TDCascader.showMultiCascader(context,
-                title: '选择地址',
-                data: widget.localData,
-                initialData: _initData,
-                theme: 'step',
-                onChange: (List<MultiCascaderListModel> selectData) {
-              setState(() {
-                List result = [];
-                int len = selectData.length;
-                _initData = selectData[len - 1].value!;
-                selectData.forEach((element) {
-                  result.add(element.label);
+          );
+        case TDFormItemType.dateTimePicker:
+          return GestureDetector(
+            onTap: () {
+              TDPicker.showDatePicker(context, title: '选择时间',
+                  onConfirm: (selected) {
+                setState(() {
+                  widget.select =
+                      '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
                 });
-                _selected_1 = result.join('/');
+                Navigator.of(context).pop();
+              },
+                  dateStart: [1999, 01, 01],
+                  dateEnd: [2023, 12, 31],
+                  initialDate: [2012, 1, 1]);
+            },
+            child: buildSelectRow(context, widget.select, '选择时间'),
+          );
+        case TDFormItemType.cascader:
+          return GestureDetector(
+            onTap: () {
+              TDCascader.showMultiCascader(context,
+                  title: '选择地址',
+                  data: widget.localData,
+                  initialData: _initData,
+                  theme: 'step',
+                  onChange: (List<MultiCascaderListModel> selectData) {
+                setState(() {
+                  List result = [];
+                  int len = selectData.length;
+                  _initData = selectData[len - 1].value!;
+                  selectData.forEach((element) {
+                    result.add(element.label);
+                  });
+                  _selected_1 = result.join('/');
+                });
+              }, onClose: () {
+                Navigator.of(context).pop();
               });
-            }, onClose: () {
-              Navigator.of(context).pop();
-            });
-          },
-          child: _buildSelectRow(context, _selected_1, '选择地区'),
-        );
-      } else if (widget.name == 'stepper') {
-        final theme = TDTheme.of(context);
-        return Container(
-          decoration: BoxDecoration(
-            color: theme.whiteColor1,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TDText(
-                  widget.label,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                TDStepper(
-                  theme: TDStepperTheme.filled,
-                  disabled: FormState,
-                ),
-              ],
+            },
+            child: _buildSelectRow(context, _selected_1, '选择地区'),
+          );
+        case TDFormItemType.stepper:
+          final theme = TDTheme.of(context);
+          return Container(
+            decoration: BoxDecoration(
+              color: theme.whiteColor1,
             ),
-          ),
-        );
-      } else if (widget.name == 'textarea') {
-        return TDTextarea(
-          backgroundColor: Colors.red,
-          controller: widget.controller,
-          label: widget.label,
-          hintText: widget.help,
-          maxLength: widget.maxLength,
-          indicator: widget.indicator,
-          readOnly: FormState,
-          onChanged: (value) {
-            setState(() {});
-          },
-        );
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TDText(
+                    widget.label,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  TDStepper(
+                    theme: TDStepperTheme.filled,
+                    disabled: FormState,
+                  ),
+                ],
+              ),
+            ),
+          );
+        case TDFormItemType.textarea:
+          return TDTextarea(
+            backgroundColor: Colors.red,
+            controller: widget.controller,
+            label: widget.label,
+            hintText: widget.help,
+            maxLength: widget.maxLength,
+            indicator: widget.indicator,
+            readOnly: FormState,
+            onChanged: (value) {
+              setState(() {});
+            },
+          );
       }
     } else {
-      if (widget.name == 'name') {
-        return TDInput(
-          type: TDInputType.twoLine,
-          inputDecoration: InputDecoration(
-            hintText: widget.help,
-            border: InputBorder.none,
-          ),
-          leftLabel: widget.label,
-          controller: widget.controller,
-          backgroundColor: Colors.white,
+      switch (widget.type) {
+        case TDFormItemType.input:
+          return TDInput(
+            type: TDInputType.twoLine,
+            inputDecoration: InputDecoration(
+              hintText: widget.help,
+              border: InputBorder.none,
+            ),
+            leftLabel: widget.label,
+            controller: widget.controller,
+            backgroundColor: Colors.white,
 
-          /// 竖直态的 TDInput 没用 additionInfo?
-          additionInfo: widget.additionInfo,
-          readOnly: FormState,
-        );
-      } else if (widget.name == 'password') {
-        return Column(
-          children: [
-            TDInput(
-              inputDecoration: InputDecoration(
-                hintText: widget.help,
-                // contentPadding: EdgeInsets.only(left: LabelWidth),
-                border: InputBorder.none,
+            /// 竖直态的 TDInput 没用 additionInfo?
+            additionInfo: widget.additionInfo,
+            readOnly: FormState,
+          );
+        case TDFormItemType.password:
+          return Column(
+            children: [
+              TDInput(
+                inputDecoration: InputDecoration(
+                  hintText: widget.help,
+                  // contentPadding: EdgeInsets.only(left: LabelWidth),
+                  border: InputBorder.none,
+                ),
+                type: TDInputType.twoLine,
+                controller: widget.controller,
+                obscureText: !browseOn,
+                leftLabel: widget.label,
+                backgroundColor: Colors.white,
+                rightBtn: browseOn
+                    ? Icon(
+                        TDIcons.browse,
+                        color: TDTheme.of(context).fontGyColor3,
+                      )
+                    : Icon(
+                        TDIcons.browse_off,
+                        color: TDTheme.of(context).fontGyColor3,
+                      ),
+                onBtnTap: () {
+                  setState(() {
+                    browseOn = !browseOn;
+                  });
+                },
+                needClear: false,
+                readOnly: FormState,
               ),
-              type: TDInputType.twoLine,
-              controller: widget.controller,
-              obscureText: !browseOn,
-              leftLabel: widget.label,
-              backgroundColor: Colors.white,
-              rightBtn: browseOn
-                  ? Icon(
-                      TDIcons.browse,
-                      color: TDTheme.of(context).fontGyColor3,
-                    )
-                  : Icon(
-                      TDIcons.browse_off,
-                      color: TDTheme.of(context).fontGyColor3,
-                    ),
-              onBtnTap: () {
+            ],
+          );
+        case TDFormItemType.radios:
+          final theme = TDTheme.of(context);
+          return Container(
+            decoration: BoxDecoration(
+              color: theme.whiteColor1,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TDText(
+                    widget.label ?? '',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(width: 20),
+                  TDRadioGroup(
+                    selectId: 'index:1',
+                    direction: Axis.horizontal,
+                    directionalTdRadios: widget.radios.entries.map((entry) {
+                      return TDRadio(
+                        id: entry.key,
+                        title: entry.value,
+                        radioStyle: TDRadioStyle.circle,
+                        showDivider: false,
+                        enable: !FormState,
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
+          );
+        case TDFormItemType.dateTimePicker:
+          return GestureDetector(
+            onTap: () {
+              TDPicker.showDatePicker(context, title: '选择时间',
+                  onConfirm: (selected) {
                 setState(() {
-                  browseOn = !browseOn;
+                  widget.select =
+                      '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
                 });
+                Navigator.of(context).pop();
               },
-              needClear: false,
-              readOnly: FormState,
-            ),
-          ],
-        );
-      } else if (widget.name == 'radios') {
-        final theme = TDTheme.of(context);
-        return Container(
-          decoration: BoxDecoration(
-            color: theme.whiteColor1,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TDText(
-                  widget.label ?? '',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(width: 20),
-                TDRadioGroup(
-                  selectId: 'index:1',
-                  direction: Axis.horizontal,
-                  directionalTdRadios: widget.radios.entries.map((entry) {
-                    return TDRadio(
-                      id: entry.key,
-                      title: entry.value,
-                      radioStyle: TDRadioStyle.circle,
-                      showDivider: false,
-                      enable: !FormState,
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ),
-        );
-      } else if (widget.name == 'date') {
-        return GestureDetector(
-          onTap: () {
-            TDPicker.showDatePicker(context, title: '选择时间',
-                onConfirm: (selected) {
-              setState(() {
-                widget.select =
-                    '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
-              });
-              Navigator.of(context).pop();
+                  dateStart: [1999, 01, 01],
+                  dateEnd: [2023, 12, 31],
+                  initialDate: [2012, 1, 1]);
             },
-                dateStart: [1999, 01, 01],
-                dateEnd: [2023, 12, 31],
-                initialDate: [2012, 1, 1]);
-          },
-          child: buildSelectRow(context, widget.select, '选择时间'),
-        );
-      } else if (widget.name == 'local') {
-        return GestureDetector(
-          onTap: () {
-            TDCascader.showMultiCascader(context,
-                title: '选择地址',
-                data: widget.localData,
-                initialData: _initData,
-                theme: 'step',
-                onChange: (List<MultiCascaderListModel> selectData) {
-              setState(() {
-                List result = [];
-                int len = selectData.length;
-                _initData = selectData[len - 1].value!;
-                selectData.forEach((element) {
-                  result.add(element.label);
+            child: buildSelectRow(context, widget.select, '选择时间'),
+          );
+        case TDFormItemType.cascader:
+          return GestureDetector(
+            onTap: () {
+              TDCascader.showMultiCascader(context,
+                  title: '选择地址',
+                  data: widget.localData,
+                  initialData: _initData,
+                  theme: 'step',
+                  onChange: (List<MultiCascaderListModel> selectData) {
+                setState(() {
+                  List result = [];
+                  int len = selectData.length;
+                  _initData = selectData[len - 1].value!;
+                  selectData.forEach((element) {
+                    result.add(element.label);
+                  });
+                  _selected_1 = result.join('/');
                 });
-                _selected_1 = result.join('/');
+              }, onClose: () {
+                Navigator.of(context).pop();
               });
-            }, onClose: () {
-              Navigator.of(context).pop();
-            });
-          },
-          child: _buildSelectRow(context, _selected_1, '选择地区'),
-        );
-      } else if (widget.name == 'stepper') {
-        final theme = TDTheme.of(context);
-        return Container(
-          decoration: BoxDecoration(
-            color: theme.whiteColor1,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // 使内容左对齐
-              children: [
-                TDText(
-                  widget.label,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                TDStepper(
-                  theme: TDStepperTheme.filled,
-                  disabled: FormState,
-                ),
-              ],
+            },
+            child: _buildSelectRow(context, _selected_1, '选择地区'),
+          );
+        case TDFormItemType.stepper:
+          final theme = TDTheme.of(context);
+          return Container(
+            decoration: BoxDecoration(
+              color: theme.whiteColor1,
             ),
-          ),
-        );
-      } else if (widget.name == 'textarea') {
-        return TDTextarea(
-          backgroundColor: Colors.red,
-          controller: widget.controller,
-          label: widget.label,
-          hintText: widget.help,
-          maxLength: widget.maxLength,
-          indicator: widget.indicator,
-          readOnly: FormState,
-          layout: TDTextareaLayout.vertical,
-          onChanged: (value) {
-            setState(() {});
-          },
-        );
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start, // 使内容左对齐
+                children: [
+                  TDText(
+                    widget.label,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  TDStepper(
+                    theme: TDStepperTheme.filled,
+                    disabled: FormState,
+                  ),
+                ],
+              ),
+            ),
+          );
+        case TDFormItemType.textarea:
+          return TDTextarea(
+            backgroundColor: Colors.red,
+            controller: widget.controller,
+            label: widget.label,
+            hintText: widget.help,
+            maxLength: widget.maxLength,
+            indicator: widget.indicator,
+            readOnly: FormState,
+            layout: TDTextareaLayout.vertical,
+            onChanged: (value) {
+              setState(() {});
+            },
+          );
       }
     }
 
     /// TODO: 构建错误的提示页面
-    return const Column();
   }
 
   Widget buildSelectRow(BuildContext context, String output, String title) {
