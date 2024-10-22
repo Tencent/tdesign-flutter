@@ -49,6 +49,8 @@
 | onCellClick | void Function(int value, DateSelectType type, TDate tdate)? | - | 点击日期时触发 |
 | onCellLongPress | void Function(int value, DateSelectType type, TDate tdate)? | - | 长安日期时触发 |
 | onHeanderClick | void Function(int index, String week)? | - | 点击周时触发 |
+| useTimePicker | bool? | false | 是否显示时间选择器 |
+| timePickerModel | List<DatePickerModel>? | - | 自定义时间选择器 |
 
 ```
 ```

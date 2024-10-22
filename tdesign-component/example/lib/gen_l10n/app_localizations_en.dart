@@ -135,4 +135,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get end => 'End';
+
+  @override
+  String get notRated => 'Not rated';
+
+  @override
+  String get cascadeLabel => 'Select Item';
 }
