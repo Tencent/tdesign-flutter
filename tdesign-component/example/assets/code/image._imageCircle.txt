@@ -1,0 +1,6 @@
+const TDImage(
+                assetUrl: 'assets/img/image.png',
+                width: 72,
+                height: 72,
+                type: TDImageType.circle,
+              )
