@@ -1,0 +1,14 @@
+
+  Widget _buildColorRate(BuildContext context) {
+    return Column(children: const [
+      TDCell(
+          title: '填充评分',
+          noteWidget: TDRate(
+            value: 2.5,
+            allowHalf: true,
+            color: [Color(0xFFFFC51C), Color(0xFFE8E8E8)],
+          )),
+      SizedBox(height: 16),
+      TDCell(title: '线描评分', noteWidget: TDRate(value: 2.5, allowHalf: true, color: [Color(0xFF00A870)])),
+    ]);
+  }

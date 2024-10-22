@@ -356,6 +356,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'End'**
   String get end;
+
+  /// No description provided for @notRated.
+  ///
+  /// In en, this message translates to:
+  /// **'Not rated'**
+  String get notRated;
+
+  /// No description provided for @cascadeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Item'**
+  String get cascadeLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

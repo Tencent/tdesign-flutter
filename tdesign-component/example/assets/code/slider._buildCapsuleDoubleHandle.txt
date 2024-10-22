@@ -1,0 +1,12 @@
+
+  Widget _buildCapsuleDoubleHandle(BuildContext context) {
+    return TDRangeSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      value: const RangeValues(20, 60),
+      onChanged: (value) {},
+    );
+  }

@@ -46,6 +46,7 @@ class TDDropdownItem<T> extends StatefulWidget {
     this.maxHeight,
     this.tabBarWidth,
     this.tabBarAlign,
+    this.tabBarFlex = 1,
   }) : super(key: key);
 
   /// 是否禁用
@@ -89,6 +90,9 @@ class TDDropdownItem<T> extends StatefulWidget {
 
   /// [label]和[arrowIcon]/[TDDropdownMenu.arrowIcon]的对齐方式
   final MainAxisAlignment? tabBarAlign;
+
+  /// 该item在menu上的宽度占比，仅在[TDDropdownMenu.isScrollable]为false时有效
+  final int? tabBarFlex;
 
   static const double operateHeight = 73;
 

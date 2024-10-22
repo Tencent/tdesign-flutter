@@ -1,0 +1,20 @@
+
+  Widget _buildErrorMessage(BuildContext context) {
+    return TDButton(
+        isBlock: true,
+        text: '错误通知',
+        size: TDButtonSize.large,
+        type: TDButtonType.outline,
+        width: 450,
+        theme: TDButtonTheme.primary,
+        onTap: () {
+          TDMessage.showMessage(
+            context: context,
+            visible: true,
+            icon: true,
+            content: _commonContent,
+            theme: MessageTheme.error,
+            duration: 3000,
+          );
+        });
+  }

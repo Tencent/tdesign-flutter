@@ -1,0 +1,9 @@
+
+  Widget _buildButton(BuildContext context) {
+    return TDProgress(
+        type: TDProgressType.button,
+        onTap: _toggleProgress,
+        onLongPress: _resetProgress,
+        value: progressValue,
+        label: buttonLabel);
+  }

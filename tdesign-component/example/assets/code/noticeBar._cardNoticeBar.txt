@@ -1,0 +1,54 @@
+
+Widget _cardNoticeBar(BuildContext context) {
+  var size = MediaQuery.of(context).size;
+  return Container(
+    margin: const EdgeInsets.symmetric(horizontal: 16),
+    decoration: BoxDecoration(
+      color: TDNoticeBarStyle.generateTheme(context).backgroundColor,
+      borderRadius: const BorderRadius.all(Radius.circular(9)),
+      boxShadow: const [
+        BoxShadow(
+          color: Color(0x0d000000),
+          blurRadius: 8,
+          spreadRadius: 2,
+          offset: Offset(0, 2),
+        ),
+        BoxShadow(
+          color: Color(0x0f000000),
+          blurRadius: 10,
+          spreadRadius: 1,
+          offset: Offset(0, 8),
+        ),
+        BoxShadow(
+          color: Color(0x1a000000),
+          blurRadius: 5,
+          spreadRadius: -3,
+          offset: Offset(0, 5),
+        ),
+      ],
+    ),
+    child: Column(
+      children: [
+        Container(
+          width: size.width - 32,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+          clipBehavior: Clip.hardEdge,
+          child: const TDNoticeBar(
+            context: '这是一条普通的通知信息',
+            prefixIcon: TDIcons.error_circle_filled,
+            suffixIcon: TDIcons.chevron_right,
+          ),
+        ),
+        Container(
+          height: 150,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+        )
+      ],
+    ),
+  );
+}
