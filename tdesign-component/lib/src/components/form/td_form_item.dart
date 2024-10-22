@@ -90,7 +90,8 @@ enum TDFormItemType {
   dateTimePicker,
   cascader,
   stepper,
-  textarea
+  rate,
+  textarea,
 }
 
 class _TDFormItemState extends State<TDFormItem> {
@@ -278,6 +279,14 @@ class _TDFormItemState extends State<TDFormItem> {
               ),
             ),
           );
+        case TDFormItemType.rate:
+          return TDCell(
+              title: widget.label,
+              noteWidget: TDRate(
+                value: 3,
+                allowHalf: true,
+                disabled: FormState,
+              ));
         case TDFormItemType.textarea:
           return TDTextarea(
             backgroundColor: Colors.red,
@@ -296,8 +305,10 @@ class _TDFormItemState extends State<TDFormItem> {
       switch (widget.type) {
         case TDFormItemType.input:
           return TDInput(
+            spacer: TDInputSpacer(iconLabelSpace: 0),
             type: TDInputType.twoLine,
             inputDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: LabelWidth),
               hintText: widget.help,
               border: InputBorder.none,
             ),
@@ -306,7 +317,7 @@ class _TDFormItemState extends State<TDFormItem> {
             backgroundColor: Colors.white,
 
             /// 竖直态的 TDInput 没用 additionInfo?
-            additionInfo: widget.additionInfo,
+            // additionInfo: widget.additionInfo,
             readOnly: FormState,
           );
         case TDFormItemType.password:
@@ -315,7 +326,7 @@ class _TDFormItemState extends State<TDFormItem> {
               TDInput(
                 inputDecoration: InputDecoration(
                   hintText: widget.help,
-                  // contentPadding: EdgeInsets.only(left: LabelWidth),
+                  contentPadding: EdgeInsets.only(left: LabelWidth),
                   border: InputBorder.none,
                 ),
                 type: TDInputType.twoLine,
@@ -417,15 +428,14 @@ class _TDFormItemState extends State<TDFormItem> {
             child: _buildSelectRow(context, _selected_1, '选择地区'),
           );
         case TDFormItemType.stepper:
-          final theme = TDTheme.of(context);
           return Container(
             decoration: BoxDecoration(
-              color: theme.whiteColor1,
+              color: TDTheme.of(context).whiteColor1,
             ),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start, // 使内容左对齐
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TDText(
                     widget.label,
@@ -440,6 +450,30 @@ class _TDFormItemState extends State<TDFormItem> {
               ),
             ),
           );
+        case TDFormItemType.rate:
+          return Container(
+              width: double.infinity, // 设置宽度为无限，横向占满父容器
+              decoration: BoxDecoration(
+                color: TDTheme.of(context).whiteColor1,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TDText(
+                      widget.label,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 8),
+                    TDRate(
+                      value: 3,
+                      allowHalf: true,
+                      disabled: FormState,
+                    ),
+                  ],
+                ),
+              ));
         case TDFormItemType.textarea:
           return TDTextarea(
             backgroundColor: Colors.red,
