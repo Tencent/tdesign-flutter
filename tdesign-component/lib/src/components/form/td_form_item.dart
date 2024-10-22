@@ -26,7 +26,7 @@ class TDFormItem extends StatefulWidget {
         radios = radios ?? const {},
         super(key: key);
 
-  /// 表单项标签内容
+  /// 表单项标签左侧展示的内容
   final String? label;
 
   /// 表格单元需要使用的组件类型
