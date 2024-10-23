@@ -354,7 +354,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                     return GestureDetector(
                       onTap: () {
                         int level = 0;
-                        if (_tabListData.length > 2 && _currentTabIndex == 0) {
+                        if (item.level ==0 && _currentTabIndex == 0) {
                           _tabListData.clear();
                           _tabListData.add(MultiCascaderListModel(
                             labelFun: ()=>context.resource.cascadeLabel,
@@ -440,7 +440,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
 
   void _getChildrenListData(int level, String value) {
     //查询层级数据
-    var selectLevelData = _listData.where((element) => element.level == (level)).toList();
+    var selectLevelData = _listData.where((element) => element.level == (level)&&element.parentValue==value).toList();
     //判断下级是否存在
     if (selectLevelData.isNotEmpty) {
       //获取下级数据
