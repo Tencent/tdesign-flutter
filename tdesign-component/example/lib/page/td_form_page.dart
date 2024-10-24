@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -20,6 +22,9 @@ class _TDFormPageState extends State<TDFormPage> {
 
   /// form 排列方式是否为水平
   bool _isFormHorizontal = true;
+
+  /// 控制是否进行表单校验
+  bool _validateForm = false;
 
   /// 设置按钮是否可点击状态
   /// true 表示处于 active 状态
@@ -109,51 +114,43 @@ class _TDFormPageState extends State<TDFormPage> {
     },
   ];
 
-  /// 表单校验规则
-  final Map<String, List<Map<String, dynamic>>> _rules = {
-    'name': [
-      {
-        'validator': (String? val) => val != null && val.length == 8,
-        'message': '只能输入8个字符英文',
-      },
-    ],
-    'password': [
-      {
-        'validator': (String? val) => val != null && val.length > 6,
-        'message': '长度大于6个字符',
-      },
-    ],
-    'gender': [
-      {
-        'validator': (String? val) => val != null && val.isNotEmpty,
-        'message': '不能为空',
-      },
-    ],
-    'birth': [
-      {
-        'validator': (String? val) => val != null && val.isNotEmpty,
-        'message': '不能为空',
-      },
-    ],
-    'place': [
-      {
-        'validator': (String? val) => val != null && val.isNotEmpty,
-        'message': '不能为空',
-      },
-    ],
-    'description': [
-      {
-        'validator': (int? val) => val != null && val > 3,
-        'message': '分数过低会影响整体评价',
-      },
-    ],
-    'resume': [
-      {
-        'validator': (String? val) => val != null && val.isNotEmpty,
-        'message': '不能为空',
-      },
-    ],
-  };
+  /// 按钮点击事件：改变 _validate 值，从而触发校验
+  void _onSubmit() {
+    setState(() {
+      _validateForm = true;
+    });
+  }
+
+  /// 定义整个校验规则
+  final List<TDFormValidation> _validationRules = [
+    TDFormValidation(
+      validate: (value) => value == null || value.isEmpty ? 'empty' : null,
+      errorMessage: '输入不能为空',
+      type: TDFormItemType.input,
+    ),
+    TDFormValidation(
+      validate: (value) =>
+          RegExp(r'^[a-zA-Z]{8}$').hasMatch(value ?? '') ? null : 'invalid',
+      errorMessage: '只能输入8个字符英文',
+      type: TDFormItemType.input,
+    ),
+    TDFormValidation(
+      validate: (value) => value == null || value.isEmpty ? 'empty' : null,
+      errorMessage: '输入不能为空',
+      type: TDFormItemType.password,
+    ),
+    TDFormValidation(
+      validate: (value) =>
+          RegExp(r'^\d+$').hasMatch(value ?? '') ? null : 'invalid',
+      errorMessage: '只能输入数字',
+      type: TDFormItemType.password,
+    ),
+    TDFormValidation(
+      validate: (value) => value == null || value.isEmpty ? 'empty' : null,
+      errorMessage: '输入不能为空',
+      type: TDFormItemType.textarea,
+    ),
+  ];
 
   @override
   void initState() {
@@ -191,6 +188,8 @@ class _TDFormPageState extends State<TDFormPage> {
     return TDForm(
         disabled: _formDisableState,
         isHorizontal: _isFormHorizontal,
+        isValidate: _validateForm,
+        rules: _validationRules,
         items: [
           TDFormItem(
             label: '用户名',
@@ -397,13 +396,10 @@ class _TDFormPageState extends State<TDFormPage> {
         decoration: BoxDecoration(
           color: theme.whiteColor1,
         ),
-        child: const Padding(
-            padding: EdgeInsets.all(16),
+        child: Padding(
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                SizedBox(
-                  width: 16,
-                ),
                 Expanded(
                     child: TDButton(
                   text: '提交',
@@ -411,6 +407,7 @@ class _TDFormPageState extends State<TDFormPage> {
                   type: TDButtonType.fill,
                   theme: TDButtonTheme.primary,
                   shape: TDButtonShape.rectangle,
+                  onTap: _onSubmit,
                 )),
               ],
             )),
