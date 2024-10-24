@@ -668,6 +668,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return Column(
       children: [
         TDInput(
+          leftInfoWidth: 80,
+          spacer: TDInputSpacer(iconLabelSpace: 4),
           leftLabel: '标签超长时最多十个字',
           controller: controller[18],
           backgroundColor: Colors.white,
@@ -815,6 +817,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _verticalStyle(BuildContext context) {
     return TDInput(
+      spacer: TDInputSpacer(iconLabelSpace: 0),
       type: TDInputType.twoLine,
       leftLabel: '标签文字',
       controller: controller[20],
@@ -947,7 +950,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | decoration | Decoration? | - | 输入框样式 |
 | leftIcon | Widget? | - | 带图标的输入框 |
 | leftLabel | String? | - | 输入框左侧文案 |
-| leftLabelStyle | TextStyle? | - | 左侧标签样式 |
+| leftLabelStyle | TextStyle? | - | 左侧标签样式 设置该值是若出现像素溢出，请设置letterSpacing: 0 |
 | leftLabelSpace | double? | - | 输入框左侧文案间距 |
 | required | bool? | - | 是否必填标志（红色*） |
 | readOnly | bool | false | 是否只读 |
@@ -989,6 +992,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | inputAction | TextInputAction? | - | 键盘动作类型 |
 | spacer | TDInputSpacer | - | 组件各模块间间距 |
 | cardStyleBottomText | String? | - | 卡片模式下方文字 |
+| onTapOutside | TapRegionCallback? | - | 点击输入框外部区域回调 |
 
 
   

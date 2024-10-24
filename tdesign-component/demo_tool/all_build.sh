@@ -49,6 +49,7 @@
 # radio
 ./bin/demo_tool generate --file ../lib/src/components/radio/td_radio.dart --name TDRadioStyle,TDRadio,TDRadioGroup --folder-name radio --output ../example/assets/api/ --only-api --get-comments
 # rate
+./bin/demo_tool generate --file ../lib/src/components/rate/td_rate.dart --name TDRate --folder-name rate --output ../example/assets/api/ --only-api
 # search
 ./bin/demo_tool generate --file ../lib/src/components/search/td_search_bar.dart --name TDSearchBar --folder-name search --output ../example/assets/api/ --only-api
 # slider

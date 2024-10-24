@@ -1,0 +1,11 @@
+
+  Widget _horizontalScrollTable(BuildContext context) {
+    return TDTable(
+      columns: [
+        TDTableCol(title: '标题', colKey: 'title1', width: 160),
+        TDTableCol(title: '标题', colKey: 'title2', width: 160),
+        TDTableCol(title: '标题', colKey: 'title3', width: 160),
+      ],
+      data: _getData2(),
+    );
+  }

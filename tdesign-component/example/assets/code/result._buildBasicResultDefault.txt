@@ -1,4 +1,4 @@
-  
+
   TDResult _buildBasicResultDefault(BuildContext context) {
     return const TDResult(
       title: '默认状态',

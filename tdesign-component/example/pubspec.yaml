@@ -43,6 +43,8 @@ dependencies:
   tdesign_flutter:
     path: ../
   path_provider: ^2.1.1
+  extended_nested_scroll_view: any
+  flutter_screenutil: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

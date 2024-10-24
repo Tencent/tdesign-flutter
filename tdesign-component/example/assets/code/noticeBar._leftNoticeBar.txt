@@ -1,0 +1,15 @@
+
+Widget _leftNoticeBar(BuildContext context) {
+  return const TDNoticeBar(
+    context: '这是一条普通的通知信息',
+    suffixIcon: TDIcons.chevron_right,
+    left: TDButton(
+      text: '文本',
+      type: TDButtonType.text,
+      theme: TDButtonTheme.primary,
+      size: TDButtonSize.extraSmall,
+      height: 22,
+      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+    ),
+  );
+}

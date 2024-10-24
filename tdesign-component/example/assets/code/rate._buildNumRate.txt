@@ -1,0 +1,9 @@
+
+  Widget _buildNumRate(BuildContext context) {
+    return const TDCell(
+        title: '自定义评分数量',
+        noteWidget: TDRate(
+          value: 2,
+          count: 3,
+        ));
+  }

@@ -67,7 +67,7 @@ export default defineComponent({
       const { path } = this.$route;
       const name = path.slice(path.lastIndexOf('/') + 1);
       // new URL(): https://cn.vitejs.dev/guide/assets.html#new-url-url-import-meta-url
-      return new URL(`../public/assets/qrcode/tdesign_apk_qrcode.png`, import.meta.url).href;
+      return new URL(`../public/assets/qrcode/td_apk_qr_0_1_7.png`, import.meta.url).href;
     },
   },
 

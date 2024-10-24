@@ -1,0 +1,22 @@
+
+Widget _buildBadgeListCenterActionSheet(BuildContext context) {
+  return TDButton(
+    text: '居中带徽标列表型',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDActionSheet(
+        context,
+        visible: true,
+        items: _nums
+            .map((e) => TDActionSheetItem(
+                  label: '选项$e',
+                  badge: TDBadge(TDBadgeType.redPoint),
+                ))
+            .toList(),
+      );
+    },
+  );
+}

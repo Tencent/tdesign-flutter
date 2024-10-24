@@ -1,0 +1,8 @@
+
+TDTimeCounter _buildSquareMediumSize(BuildContext context) {
+  return const TDTimeCounter(
+    time: 60 * 60 * 1000,
+    size: TDTimeCounterSize.medium,
+    theme: TDTimeCounterTheme.square,
+  );
+}

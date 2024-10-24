@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 
 typedef MultiCascaderCallback = void Function(List<MultiCascaderListModel> selected);
 
@@ -91,7 +92,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     super.initState();
     List.generate(widget.data.length, (index) {
       MultiCascaderListModel item = MultiCascaderListModel(
-        label: widget.data[index]['label'],
+        labelFun: ()=>widget.data[index]['label'],
         value: widget.data[index]['value'],
         segmentValue: widget.data[index]['segmentValue'],
         level: 0,
@@ -107,7 +108,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     }
     _selectListData = _listData.where((element) => element.level == 0).toList();
     _tabListData.add(MultiCascaderListModel(
-      label: '选择选项',
+      labelFun: ()=>context.resource.cascadeLabel,
     ));
     if (widget.initialData != null) {
       _tabListData.clear();
@@ -183,7 +184,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   void _buildRecursiveList(int depth, String parentValue, List<Map> data) {
     List.generate(data.length, (index) {
       MultiCascaderListModel item = MultiCascaderListModel(
-        label: data[index]['label'],
+        labelFun: ()=>data[index]['label'],
         value: data[index]['value'],
         parentValue: parentValue,
         segmentValue: data[index]['segmentValue'],
@@ -308,7 +309,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
       width: maxWidth,
       child: TDCustomTab(
         tabs: List.generate(_tabListData.length, (index) {
-          return _tabListData[index].label!;
+          return _tabListData[index].label ?? '';
         }),
         initialIndex: _currentTabIndex,
         onTap: (int index) {
@@ -353,10 +354,10 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                     return GestureDetector(
                       onTap: () {
                         int level = 0;
-                        if (_tabListData.length > 2 && _currentTabIndex == 0) {
+                        if (item.level ==0 && _currentTabIndex == 0) {
                           _tabListData.clear();
                           _tabListData.add(MultiCascaderListModel(
-                            label: '选择选项',
+                            labelFun: ()=>context.resource.cascadeLabel,
                           ));
                         }
                         if (item.level != null) {
@@ -439,7 +440,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
 
   void _getChildrenListData(int level, String value) {
     //查询层级数据
-    var selectLevelData = _listData.where((element) => element.level == (level)).toList();
+    var selectLevelData = _listData.where((element) => element.level == (level)&&element.parentValue==value).toList();
     //判断下级是否存在
     if (selectLevelData.isNotEmpty) {
       //获取下级数据
@@ -447,7 +448,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
       _selectListData = childList;
       _currentTabIndex += 1;
     } else {
-      var result = _tabListData.where((element) => element.label != '选择选项').toList();
+      var result = _tabListData.where((element) => element.label != context.resource.cascadeLabel).toList();
       widget.onChange(result);
       Navigator.of(context).pop();
     }
@@ -500,7 +501,7 @@ class LeftLineWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 16),
       width: 16,
       child: CustomPaint(
-        painter: LeftLinePainter(isShowTopLine: isShowTopLine, topLineColor: topLineColor, isCircleFill: isCircleFill),
+        painter: LeftLinePainter(isShowTopLine: isShowTopLine, topLineColor: topLineColor ?? TDTheme.of(context).brandNormalColor, isCircleFill: isCircleFill),
       ),
     );
   }
@@ -509,18 +510,18 @@ class LeftLineWidget extends StatelessWidget {
 class LeftLinePainter extends CustomPainter {
   static const double _topHeight = 16;
 
-  static const Color _lightColor = Color.fromRGBO(0, 82, 217, 1);
+  // static const Color _lightColor = Color.fromRGBO(0, 82, 217, 1);
 
   /// 是否实心圆
   final bool isCircleFill;
 
   /// 线条颜色
-  final Color? topLineColor;
+  final Color topLineColor;
 
   /// 是否显示圆圈上方线条
   final bool isShowTopLine;
 
-  const LeftLinePainter({this.topLineColor, required this.isShowTopLine, required this.isCircleFill});
+  const LeftLinePainter({required this.topLineColor, required this.isShowTopLine, required this.isCircleFill});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -533,10 +534,10 @@ class LeftLinePainter extends CustomPainter {
     linePain.strokeCap = StrokeCap.square;
     canvas.drawLine(Offset(centerX, 0), Offset(centerX, topHeight), linePain);
     Paint circlePaint = Paint();
-    circlePaint.color = _lightColor;
+    circlePaint.color = topLineColor;
     circlePaint.strokeWidth = 1;
     circlePaint.style = isCircleFill ? PaintingStyle.fill : PaintingStyle.stroke;
-    linePain.color = isShowTopLine ? (topLineColor ?? _lightColor) : Colors.transparent;
+    linePain.color = isShowTopLine ? (topLineColor) : Colors.transparent;
     canvas.drawLine(Offset(centerX, -size.height), Offset(centerX, -size.height - _topHeight), linePain);
     canvas.drawCircle(Offset(centerX, topHeight), centerX * 0.5, circlePaint);
   }
@@ -548,7 +549,8 @@ class LeftLinePainter extends CustomPainter {
 }
 
 class MultiCascaderListModel {
-  String? label;
+  String? Function()? labelFun;
+  String? get label => labelFun?.call();
 
   String? value;
 
@@ -559,5 +561,5 @@ class MultiCascaderListModel {
   String? segmentValue;
 
   int? level;
-  MultiCascaderListModel({this.label, this.value, this.parentValue, this.level, this.segmentValue});
+  MultiCascaderListModel({this.labelFun, this.value, this.parentValue, this.level, this.segmentValue});
 }

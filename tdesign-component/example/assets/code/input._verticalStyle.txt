@@ -1,6 +1,7 @@
 
   Widget _verticalStyle(BuildContext context) {
     return TDInput(
+      spacer: TDInputSpacer(iconLabelSpace: 0),
       type: TDInputType.twoLine,
       leftLabel: '标签文字',
       controller: controller[20],

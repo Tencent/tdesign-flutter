@@ -788,6 +788,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onTap | TDButtonEvent? | - | 点击事件 |
 | icon | IconData? | - | 图标icon |
 | iconWidget | Widget? | - | 自定义图标icon控件 |
+| iconTextSpacing | double? | - | 自定义图标与文本之间距离 |
 | onLongPress | TDButtonEvent? | - | 长按事件 |
 | margin | EdgeInsetsGeometry? | - | 自定义margin |
 | padding | EdgeInsetsGeometry? | - | 自定义padding |

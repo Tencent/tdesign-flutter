@@ -1,0 +1,38 @@
+
+Widget _buildSimple(BuildContext context) {
+  final renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
+  final indexList = _list.map((item) => item['index'] as String).toList();
+  return TDButton(
+    text: '基础用法',
+    isBlock: true,
+    size: TDButtonSize.large,
+    theme: TDButtonTheme.primary,
+    type: TDButtonType.outline,
+    onTap: () {
+      Navigator.of(context).push(
+        TDSlidePopupRoute(
+          slideTransitionFrom: SlideTransitionFrom.right,
+          modalTop: renderBox?.size.height,
+          builder: (context) {
+            return Container(
+              color: Colors.white,
+              child: TDIndexes(
+                indexList: indexList,
+                builderContent: (context, index) {
+                  final list = _list.firstWhere((element) => element['index'] == index)['children'] as List<String>;
+                  return TDCellGroup(
+                    cells: list
+                        .map((e) => TDCell(
+                              title: e,
+                            ))
+                        .toList(),
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      );
+    },
+  );
+}

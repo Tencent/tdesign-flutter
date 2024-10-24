@@ -1,0 +1,4 @@
+
+  Widget _buildFilledRate(BuildContext context) {
+    return const TDCell(title: '实心评分', noteWidget: TDRate(value: 3));
+  }

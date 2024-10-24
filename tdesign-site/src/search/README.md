@@ -135,9 +135,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | padding | EdgeInsets | const EdgeInsets.fromLTRB(16, 8, 16, 8) | 内部填充 |
 | autoFocus | bool | false | 是否自动获取焦点 |
 | mediumStyle | bool | false | 是否在导航栏中的样式 |
+| cursorHeight | double? | - | 光标的高 |
 | needCancel | bool | false | 是否需要取消按钮 |
 | controller | TextEditingController? | - | 控制器 |
 | backgroundColor | Color? | Colors.white | 背景颜色 |
+| action | String | '' | 自定义操作文字 |
+| onActionClick | TDSearchBarEvent? | - | 自定义操作回调 |
+| onClearClick | TDSearchBarClearEvent? | - | 自定义操作回调 |
+| focusNode | FocusNode? | - | 自定义焦点 |
 
 
   

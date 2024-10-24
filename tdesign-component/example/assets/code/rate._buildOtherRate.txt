@@ -1,0 +1,33 @@
+
+  Widget _buildOtherRate(BuildContext context) {
+    var texts = ['非常糟糕', '有些糟糕', '可以尝试', '可以前往', '推荐前往'];
+    return Container(
+      width: double.infinity,
+      child: Center(
+        child: TDRate(
+        value: 2,
+        size: 30,
+        showText: true,
+        // texts: ['非常糟糕', '有些糟糕', '可以尝试', '可以前往', '推荐前往'],
+        direction: Axis.vertical,
+        // mainAxisAlignment: MainAxisAlignment.center,
+        // textWidth: 64,
+        builderText: (context, value) {
+          return value == 0
+              ? const SizedBox.shrink()
+              : Padding(
+                  padding: EdgeInsets.only(top: TDTheme.of(context).spacer8),
+                  child: TDText(
+                    texts[(value - 1).toInt()],
+                    font: TDTheme.of(context).fontTitleMedium,
+                    textColor: TDTheme.of(context).warningColor5,
+                  ),
+                );
+        },
+      ),
+      ),
+      
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      color: Colors.white,
+    );
+  }

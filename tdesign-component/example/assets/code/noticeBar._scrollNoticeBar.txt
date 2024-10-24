@@ -1,0 +1,8 @@
+
+Widget _scrollNoticeBar(BuildContext context) {
+  return const TDNoticeBar(
+    context: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',
+    marquee: true,
+    speed: 50,
+  );
+}

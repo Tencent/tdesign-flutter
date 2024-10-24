@@ -121,13 +121,13 @@ export default {
           path: '/flutter/components/drawer',
           component: () => import('@/drawer/README.md'),
         },
-        // {
-        //   title: 'Indexes 索引',
-        //   name: 'indexes',
-        //   meta: { docType: 'navigation' },
-        //   path: '/flutter/components/indexes',
-        //   component: () => import('@/indexes/README.md'),
-        // },
+        {
+          title: 'Indexes 索引',
+          name: 'indexes',
+          meta: { docType: 'navigation' },
+          path: '/flutter/components/indexes',
+          component: () => import('@/indexes/README.md'),
+        },
         {
           title: 'Navbar 导航栏',
           name: 'navbar',
@@ -169,13 +169,13 @@ export default {
       title: '输入',
       type: 'component',
       children: [
-        // {
-        //   title: 'Calendar 日历',
-        //   name: 'calendar',
-        //   meta: { docType: 'form' },
-        //   path: '/flutter/components/calendar',
-        //   component: () => import('@/calendar/README.md'),
-        // },
+        {
+          title: 'Calendar 日历',
+          name: 'calendar',
+          meta: { docType: 'form' },
+          path: '/flutter/components/calendar',
+          component: () => import('@/calendar/README.md'),
+        },
         {
           title: 'Cascader 级联选择器',
           name: 'cascader',
@@ -218,13 +218,13 @@ export default {
           path: '/flutter/components/radio',
           component: () => import('@/radio/README.md'),
         },
-        // {
-        //   title: 'Rate 评分',
-        //   name: 'rate',
-        //   meta: { docType: 'form' },
-        //   path: '/flutter/components/rate',
-        //   component: () => import('@/rate/README.md'),
-        // },
+        {
+          title: 'Rate 评分',
+          name: 'rate',
+          meta: { docType: 'form' },
+          path: '/flutter/components/rate',
+          component: () => import('@/rate/README.md'),
+        },
         {
           title: 'Search 搜索框',
           name: 'search',
@@ -386,6 +386,13 @@ export default {
           component: () => import('@/swiper/README.md'),
         },
         {
+          title: 'Table 表格',
+          name: 'table',
+          meta: { docType: 'data' },
+          path: '/flutter/components/table',
+          component: () => import('@/table/README.md'),
+        },
+        {
           title: 'Tag 标签',
           name: 'tag',
           meta: { docType: 'data' },
@@ -433,13 +440,13 @@ export default {
         //   path: '/flutter/components/message',
         //   component: () => import('@/message/README.md'),
         // },
-        // {
-        //   title: 'NoticeBar 公告栏',
-        //   name: 'noticebar',
-        //   meta: { docType: 'message' },
-        //   path: '/flutter/components/notice-bar',
-        //   component: () => import('@/notice-bar/README.md'),
-        // },
+        {
+          title: 'NoticeBar 公告栏',
+          name: 'noticebar',
+          meta: { docType: 'message' },
+          path: '/flutter/components/notice-bar',
+          component: () => import('@/notice-bar/README.md'),
+        },
         // {
         //   title: 'Overlay 遮罩层',
         //   name: 'overlay',

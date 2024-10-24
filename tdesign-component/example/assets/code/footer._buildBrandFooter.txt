@@ -1,0 +1,9 @@
+
+  Widget _buildBrandFooter(BuildContext context) {
+    return TDFooter(
+      TDFooterType.brand,
+      logo: 'assets/img/td_brand.png',
+      width: 204,
+      height: 48,
+    );
+  }

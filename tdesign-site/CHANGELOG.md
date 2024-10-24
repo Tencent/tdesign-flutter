@@ -5,6 +5,59 @@ toc: false
 docClass: timeline
 ---
 
+
+## 🌈 0.1.7 `2024-10-16` 
+### 🚀 Features
+- `TDNoticeBar`: 新增noticeBar组件 @ccXxx1aoBai ([#162](https://github.com/Tencent/tdesign-flutter/pull/162))
+- `Result`: 新增Result结果组件 @shinyina ([#220](https://github.com/Tencent/tdesign-flutter/pull/220))
+- `TimeCounter`: 计时组件支持超过转换单位的时间展示，原TDCountDown组件改名为TimeCounter @hkaikai ([#272](https://github.com/Tencent/tdesign-flutter/pull/272))
+- `Calendar`: 新增Calendar 日历组件 @hkaikai ([#271](https://github.com/Tencent/tdesign-flutter/pull/271))
+- `Indexes`: 新增索引组件 @hkaikai ([#321](https://github.com/Tencent/tdesign-flutter/pull/321))
+- `Table`: 新增table组件 @ccXxx1aoBai ([#244](https://github.com/Tencent/tdesign-flutter/pull/244))
+- `Rate`: 新增Rate组件 @ hkaikai ([#338](https://github.com/Tencent/tdesign-flutter/pull/338))
+- `Dialog`: 支持自定义内容内边距和按钮 @ccXxx1aoBai ([#289](https://github.com/Tencent/tdesign-flutter/pull/289))
+- `Drawer`: 支持控制分割线显隐，支持自定义抽屉背景色，支持控制显示最后一条分割线 @ccXxx1aoBai ([#278](https://github.com/Tencent/tdesign-flutter/pull/278))
+- `DropdownMenu`: 新增 图标/宽度/高度/图标和文字的对齐方式 控制参数 @hkaikai ([#297](https://github.com/Tencent/tdesign-flutter/pull/297))
+- `Search`: 增加action和onActionClick属性 @Ezer015 ([#263](https://github.com/Tencent/tdesign-flutter/pull/263))
+- `Avatar`: 增加onTap事件 @ccXxx1aoBai ([#344](https://github.com/Tencent/tdesign-flutter/pull/344))
+- `TDDropdownMenu`: TDDropdownItem新增tabBarFlex参数，控制宽度占比 @hkaikai ([#338](https://github.com/Tencent/tdesign-flutter/pull/338))
+- `SearchBar`:Feature/td searchbarfix 新增光标高属性 @shizhe2018 ([#337](https://github.com/Tencent/tdesign-flutter/pull/337))
+- `TimeCounter`: 添加正向计时功能 @epoll-j ([#246](https://github.com/Tencent/tdesign-flutter/pull/246))
+- `NavBar `:[NavBar]支持设置底部阴影 @ccXxx1aoBai ([#284](https://github.com/Tencent/tdesign-flutter/pull/284))
+- `Cell`: 添加自定义padding参数 @epoll-j ([#276](https://github.com/Tencent/tdesign-flutter/pull/276))
+- `Input`: 增加onTapOutside回调 @epoll-j ([#280](https://github.com/Tencent/tdesign-flutter/pull/280))
+- `Picker`: 增加自定义leftText、rightText @epoll-j ([#301](https://github.com/Tencent/tdesign-flutter/pull/301))
+- `Slider`:Feature/tdslider 新增文本换行功能 @shizhe2018 ([#329](https://github.com/Tencent/tdesign-flutter/pull/329))
+- `Radio`:Feature/tdRadioGroup 新增自带换行，设置行列数 @shizhe2018 ([#331](https://github.com/Tencent/tdesign-flutter/pull/331))
+- `Dialog`:新增自定义输入框 @shizhe2018 ([#333](https://github.com/Tencent/tdesign-flutter/pull/333))
+- `TDNavBar`:添加flexibleSpace参数 @Luozf12345 ([#341](https://github.com/Tencent/tdesign-flutter/pull/341))
+- `TDSearch`:添加搜索框焦点获取及清除事件 @Luozf12345 ([#342](https://github.com/Tencent/tdesign-flutter/pull/342))
+
+
+### 🐞 Bug Fixes
+- `ImageViewer`: 解决defaultIndex无效问题 @ccXxx1aoBai ([#292](https://github.com/Tencent/tdesign-flutter/pull/292))
+- `TimeCounter`: 修复无法重复重置问题 @hkaikai ([#272](https://github.com/Tencent/tdesign-flutter/pull/272))
+- `DropdownMenu`: 调整弹出层逻辑，修复无法监听后退问题； @hkaikai ([#297](https://github.com/Tencent/tdesign-flutter/pull/297))
+- `DatePicker`: 销毁时移除年月日上监控，避免内存泄露；新增onSelectedItemChanged事件 @hkaikai ([#300](https://github.com/Tencent/tdesign-flutter/pull/300))
+- `SideBar`: 解决自定义选中样式文字不居中问题 @ccXxx1aoBai ([#313](https://github.com/Tencent/tdesign-flutter/pull/313))
+- `Popup`: 解决快速点击蒙层多次返回问题 @ccXxx1aoBai ([#318](https://github.com/Tencent/tdesign-flutter/pull/318))
+- `ImageViewer`: 解决删除首位图片显示异常问题 @ccXxx1aoBai ([#322](https://github.com/Tencent/tdesign-flutter/pull/322))
+- `SideBar`: 解决延迟加载组件导致瞄点功能异常问题 @ccXxx1aoBai ([#343](https://github.com/Tencent/tdesign-flutter/pull/343))
+- `TDDropdownMenu`: 优化menu显示文字超出显示省略号 @hkaikai ([#338](https://github.com/Tencent/tdesign-flutter/pull/338))
+- `NoticeBar`: 解决无法跟随主题色问题 @ccXxx1aoBai ([#350](https://github.com/Tencent/tdesign-flutter/pull/350))
+- `Button`: 修复设置shape为square或circle时出现overflow @epoll-j ([#257](https://github.com/Tencent/tdesign-flutter/pull/257))
+- `Slider`: bugfix:修复tb_slider setState不更新问题 @arvinwli ([#298](https://github.com/Tencent/tdesign-flutter/pull/298))
+- `Cascader`: 修改列表排序问题 @shizhe2018 ([#303](https://github.com/Tencent/tdesign-flutter/pull/303))
+- `Popup`:解决键盘出现会遮挡Popup里的输入框 @epoll-j ([#264](https://github.com/Tencent/tdesign-flutter/pull/264))
+- `Cascader`:修改联动时间限制范围逻辑 @shizhe2018 ([#242](https://github.com/Tencent/tdesign-flutter/pull/242))
+- `Loading`:修复Loading显示后立即dismiss无法生效的问题 @Luozf12345 ([#340](https://github.com/Tencent/tdesign-flutter/pull/340))
+
+
+### 🚧 Others
+- fix: remove useless output. @Ives7 ([#311](https://github.com/Tencent/tdesign-flutter/pull/311))
+
+
+
 ## 🌈 0.1.6 `2024-07-24` 
 ### 🚀 Features
 - `Cell`: 新增 Cell 单元格 组件 @hkaikai ([#150](https://github.com/Tencent/tdesign-flutter/pull/150))

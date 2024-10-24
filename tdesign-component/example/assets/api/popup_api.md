@@ -18,6 +18,8 @@
 | modalLeft | double? | 0 | 弹出框左侧距离 |
 | open | VoidCallback? | - | 打开前事件 |
 | opened | VoidCallback? | - | 打开后事件 |
+| close | VoidCallback? | - | 关闭前事件 |
+| barrierClick | VoidCallback? | - | 蒙层点击事件，仅在[modalBarrierFull]为false时触发 |
 
 ```
 ```

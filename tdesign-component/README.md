@@ -51,7 +51,7 @@ flutter: ">=3.7.0"
 
 # Feedback
 
- <img src="feedback.png" width = "200" height = "200" alt="feedback" align=center />
+ <img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/components/src/images/groups/flutter-group.png" width = "200" height = "200" alt="feedback" align=center />
 
 # Open source agreement:
 

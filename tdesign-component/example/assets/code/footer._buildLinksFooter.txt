@@ -1,0 +1,17 @@
+
+  Widget _buildLinksFooter(BuildContext context) {
+    final links = <LinkObj>[
+      LinkObj(name: '底部链接', uri: Uri.parse('https://example.com')),
+      LinkObj(name: '底部链接', uri: Uri.parse('https://example.com')),
+    ];
+    return Column(
+      children: [
+        SizedBox(height: 12),
+        TDFooter(
+          TDFooterType.link,
+          links: links,
+          text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
+        )
+      ],
+    );
+  }

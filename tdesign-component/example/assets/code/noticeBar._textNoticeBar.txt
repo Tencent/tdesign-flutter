@@ -1,0 +1,4 @@
+
+Widget _textNoticeBar(BuildContext context) {
+  return const TDNoticeBar(context: '这是一条普通的通知信息');
+}

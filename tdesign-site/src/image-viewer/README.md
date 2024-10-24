@@ -47,6 +47,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _actionImageViewer(BuildContext context) {
+    var delImages = [
+      'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
+      'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
+    ];
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -56,7 +60,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TDImageViewer.showImageViewer(
           context: context,
-          images: images,
+          images: delImages,
           showIndex: true,
           deleteBtn: true,
         );

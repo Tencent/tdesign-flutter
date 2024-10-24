@@ -1,0 +1,9 @@
+
+  Widget _buildSuccess(BuildContext context) {
+    return TDProgress(
+        type: TDProgressType.linear,
+        progressStatus: TDProgressStatus.success,
+        value: 0.8,
+        strokeWidth: 6,
+        progressLabelPosition: TDProgressLabelPosition.right);
+  }

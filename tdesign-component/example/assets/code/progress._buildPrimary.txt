@@ -1,0 +1,9 @@
+
+  Widget _buildPrimary(BuildContext context) {
+    return TDProgress(
+        type: TDProgressType.linear,
+        progressStatus: TDProgressStatus.primary,
+        value: 0.8,
+        strokeWidth: 6,
+        progressLabelPosition: TDProgressLabelPosition.right);
+  }

@@ -1,0 +1,11 @@
+
+Widget _entranceNoticeBar2(BuildContext context) {
+  return const Padding(
+    padding: EdgeInsets.only(top: 16),
+    child: TDNoticeBar(
+      context: '这是一条普通的通知信息',
+      prefixIcon: TDIcons.error_circle_filled,
+      suffixIcon: TDIcons.chevron_right,
+    ),
+  );
+}

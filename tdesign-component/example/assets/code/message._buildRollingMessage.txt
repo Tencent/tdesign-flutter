@@ -1,0 +1,23 @@
+
+  Widget _buildRollingMessage(BuildContext context) {
+    return TDButton(
+        isBlock: true,
+        text: '可滚动的通知',
+        size: TDButtonSize.large,
+        type: TDButtonType.outline,
+        width: 450,
+        theme: TDButtonTheme.primary,
+        onTap: () {
+          TDMessage.showMessage(
+              context: context,
+              visible: true,
+              icon: false,
+              marquee: MessageMarquee(speed: 5000, loop: 1, delay: 300),
+              content: longContent,
+              theme: MessageTheme.info,
+              duration: 8000,
+              onCloseBtnClick: () {
+                print('Close button clicked!');
+              });
+        });
+  }

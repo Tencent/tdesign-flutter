@@ -1,0 +1,20 @@
+
+Widget _buildDescGridActionSheet(BuildContext context) {
+  return TDButton(
+    text: '带描述宫格型',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDActionSheet(
+        context,
+        visible: true,
+        theme: TDActionSheetTheme.grid,
+        count: 8,
+        description: '动作面板描述文字',
+        items: _gridItems,
+      );
+    },
+  );
+}

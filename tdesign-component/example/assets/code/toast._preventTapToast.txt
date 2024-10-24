@@ -1,0 +1,14 @@
+
+  Widget _preventTapToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showText('轻提示文字内容',
+            context: context, preventTap: true);
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '禁止滚动+点击',
+    );
+  }

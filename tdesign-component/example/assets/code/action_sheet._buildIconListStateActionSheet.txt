@@ -1,0 +1,44 @@
+
+Widget _buildIconListStateActionSheet(BuildContext context) {
+  return TDButton(
+    text: '列表型带图标状态',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDActionSheet(
+        context,
+        visible: true,
+        items: [
+          TDActionSheetItem(
+            label: '默认选项',
+            icon: Icon(TDIcons.app),
+          ),
+          TDActionSheetItem(
+            label: '自定义选项',
+            icon: Icon(TDIcons.app),
+            textStyle: TextStyle(
+              color: TDTheme.of(context).brandNormalColor,
+            ),
+          ),
+          TDActionSheetItem(
+            label: '失效选项',
+            icon: Icon(TDIcons.app),
+            disabled: true,
+          ),
+          TDActionSheetItem(
+            label: '警告选项',
+            icon: Icon(TDIcons.app),
+            textStyle: TextStyle(
+              color: Colors.red,
+            ),
+          ),
+        ],
+        onSelected: (item, index) {
+          print('选中了：${item.label}');
+        },
+      );
+    },
+  );
+}

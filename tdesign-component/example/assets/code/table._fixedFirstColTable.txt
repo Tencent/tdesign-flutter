@@ -1,0 +1,12 @@
+
+  Widget _fixedFirstColTable(BuildContext context) {
+    return TDTable(
+      columns: [
+        TDTableCol(title: '标题', colKey: 'title1'),
+        TDTableCol(title: '标题', colKey: 'title2'),
+        TDTableCol(title: '标题', colKey: 'title3'),
+        TDTableCol(title: '标题', colKey: 'title4', fixed: TDTableColFixed.left),
+      ],
+      data: _getData(10),
+    );
+  }

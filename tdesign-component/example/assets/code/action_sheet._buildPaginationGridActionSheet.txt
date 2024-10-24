@@ -1,0 +1,38 @@
+
+Widget _buildPaginationGridActionSheet(BuildContext context) {
+  return TDButton(
+    text: '带分页宫格型',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDActionSheet(
+        context,
+        visible: true,
+        theme: TDActionSheetTheme.grid,
+        count: 8,
+        showPagination: true,
+        items: [
+          ..._gridItems,
+          TDActionSheetItem(
+            label: '安卓',
+            icon: IconWithBackground(icon: TDIcons.logo_android),
+          ),
+          TDActionSheetItem(
+            label: 'Apple',
+            icon: IconWithBackground(icon: TDIcons.logo_apple),
+          ),
+          TDActionSheetItem(
+            label: 'Chrome',
+            icon: IconWithBackground(icon: TDIcons.logo_chrome),
+          ),
+          TDActionSheetItem(
+            label: 'Github',
+            icon: IconWithBackground(icon: TDIcons.logo_github),
+          ),
+        ],
+      );
+    },
+  );
+}

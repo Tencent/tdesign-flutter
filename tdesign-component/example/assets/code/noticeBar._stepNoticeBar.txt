@@ -1,0 +1,9 @@
+
+Widget _stepNoticeBar(BuildContext context) {
+  return const TDNoticeBar(
+    context: ['君不见黄河之水天上来', '奔流到海不复回', '君不见'],
+    direction: Axis.vertical,
+    prefixIcon: TDIcons.sound,
+    marquee: true,
+  );
+}

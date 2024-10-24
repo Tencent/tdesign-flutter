@@ -33,6 +33,7 @@ import 'page/td_image_page.dart';
 import 'page/td_image_viewer_page.dart';
 import 'page/td_indexes_page.dart';
 import 'page/td_input_page.dart';
+import 'page/td_form_page.dart';
 import 'page/td_link_page.dart';
 import 'page/td_loading_page.dart';
 import 'page/td_message_page.dart';
@@ -43,6 +44,7 @@ import 'page/td_popup_page.dart';
 import 'page/td_progress_page.dart';
 import 'page/td_radio_page.dart';
 import 'page/td_radius_page.dart';
+import 'page/td_rate_page.dart';
 import 'page/td_refresh_page.dart';
 import 'page/td_result_page.dart';
 import 'page/td_search_bar_page.dart';
@@ -129,13 +131,15 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         pageName: 'data_picker',
         pageBuilder: _wrapInheritedTheme((context) => const TDDatePickerPage())),
     ExamplePageModel(
+        text: 'Form 表单', name: 'form', pageBuilder: _wrapInheritedTheme((context) => const TDFormPage())),
+    ExamplePageModel(
         text: 'Input 输入框', name: 'input', pageBuilder: _wrapInheritedTheme((context) => const TDInputViewPage())),
     ExamplePageModel(
         text: 'Picker 选择器', name: 'picker', pageBuilder: _wrapInheritedTheme((context) => const TDPickerPage())),
     ExamplePageModel(
         text: 'Radio 单选框', name: 'radio', pageBuilder: _wrapInheritedTheme((context) => const TDRadioPage())),
     ExamplePageModel(
-        text: 'Rate 评分', name: 'rate', isTodo: true, pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        text: 'Rate 评分', name: 'rate', pageBuilder: _wrapInheritedTheme((context) => const TDRatePage())),
     ExamplePageModel(
         text: 'Search 搜索框', name: 'search', pageBuilder: _wrapInheritedTheme((context) => const TDSearchBarPage())),
     ExamplePageModel(

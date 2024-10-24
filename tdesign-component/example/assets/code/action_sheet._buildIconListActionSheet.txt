@@ -1,0 +1,22 @@
+
+Widget _buildIconListActionSheet(BuildContext context) {
+  return TDButton(
+    text: '带图标列表型',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDActionSheet(
+        context,
+        visible: true,
+        items: _nums
+            .map((e) => TDActionSheetItem(
+                  label: '选项$e',
+                  icon: const Icon(TDIcons.app),
+                ))
+            .toList(),
+      );
+    },
+  );
+}
