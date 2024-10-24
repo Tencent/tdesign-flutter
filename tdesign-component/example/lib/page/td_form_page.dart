@@ -34,8 +34,10 @@ class _TDFormPageState extends State<TDFormPage> {
   Color verticalButtonColor = Color(0xFFE5E5E5);
   Color horizontalButtonColor = Color(0xFFF0F1FD);
 
+  /// radios 传入参数
   final Map<String, String> _radios = {'0': '男', '1': '女', '3': '保密'};
 
+  /// 级联选择器 传入参数
   static const List<Map> _data = [
     {
       'label': '北京市',
@@ -107,6 +109,52 @@ class _TDFormPageState extends State<TDFormPage> {
     },
   ];
 
+  /// 表单校验规则
+  final Map<String, List<Map<String, dynamic>>> _rules = {
+    'name': [
+      {
+        'validator': (String? val) => val != null && val.length == 8,
+        'message': '只能输入8个字符英文',
+      },
+    ],
+    'password': [
+      {
+        'validator': (String? val) => val != null && val.length > 6,
+        'message': '长度大于6个字符',
+      },
+    ],
+    'gender': [
+      {
+        'validator': (String? val) => val != null && val.isNotEmpty,
+        'message': '不能为空',
+      },
+    ],
+    'birth': [
+      {
+        'validator': (String? val) => val != null && val.isNotEmpty,
+        'message': '不能为空',
+      },
+    ],
+    'place': [
+      {
+        'validator': (String? val) => val != null && val.isNotEmpty,
+        'message': '不能为空',
+      },
+    ],
+    'description': [
+      {
+        'validator': (int? val) => val != null && val > 3,
+        'message': '分数过低会影响整体评价',
+      },
+    ],
+    'resume': [
+      {
+        'validator': (String? val) => val != null && val.isNotEmpty,
+        'message': '不能为空',
+      },
+    ],
+  };
+
   @override
   void initState() {
     for (var i = 0; i < 3; i++) {
@@ -148,20 +196,23 @@ class _TDFormPageState extends State<TDFormPage> {
             label: '用户名',
             type: TDFormItemType.input,
             help: '请输入用户名',
-            // additionInfo: '输入用户名',
-            labelWidth: 15.0,
+            // additionInfo: '只能输入8个字符英文',
+            labelWidth: 43.0,
             controller: controller[0],
+            // requiredMark: true,
           ),
           TDFormItem(
             label: '密码',
             type: TDFormItemType.password,
             help: '请输入密码',
-            labelWidth: 35.0,
+            // additionInfo: '只能输入数字',
+            labelWidth: 60.0,
             controller: controller[1],
           ),
           TDFormItem(
             label: '性别',
             type: TDFormItemType.radios,
+            labelWidth: 50.0,
 
             /// 扩展一下数量和选项内容
             radios: _radios,
@@ -361,20 +412,6 @@ class _TDFormPageState extends State<TDFormPage> {
                   theme: TDButtonTheme.primary,
                   shape: TDButtonShape.rectangle,
                 )),
-                SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                    child: TDButton(
-                  text: '重置',
-                  size: TDButtonSize.large,
-                  type: TDButtonType.fill,
-                  shape: TDButtonShape.rectangle,
-                  theme: TDButtonTheme.defaultTheme,
-                )),
-                SizedBox(
-                  width: 16,
-                ),
               ],
             )),
       );
@@ -399,21 +436,6 @@ class _TDFormPageState extends State<TDFormPage> {
                   shape: TDButtonShape.rectangle,
                   disabled: true,
                 )),
-                SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                    child: TDButton(
-                  text: '重置',
-                  size: TDButtonSize.large,
-                  type: TDButtonType.fill,
-                  shape: TDButtonShape.rectangle,
-                  theme: TDButtonTheme.defaultTheme,
-                  disabled: true,
-                )),
-                SizedBox(
-                  width: 16,
-                ),
               ],
             )),
       );
