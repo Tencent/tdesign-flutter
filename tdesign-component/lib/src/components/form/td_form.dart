@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/src/components/form/td_form_validation.dart';
 import 'td_form_inherited.dart';
 import '../../../tdesign_flutter.dart';
 
@@ -17,7 +18,8 @@ class TDForm extends StatefulWidget {
     this.preventSubmitDefault = true,
     this.requiredMark = true, // 此处必填项有小问题
     this.resetType = 'empty',
-    this.rules,
+    required this.rules,
+    this.isValidate = false,
     this.scrollToFirstError,
     this.showErrorMessage = true,
     this.submitWithWarningMessage = false,
@@ -64,8 +66,11 @@ class TDForm extends StatefulWidget {
   /// 可选项：empty/initial
   final String? resetType;
 
-  /// 表单字段校验规则
-  final Object? rules;
+  /// 整个表单字段校验规则
+  final List<TDFormValidation> rules;
+
+  /// 是否对整个 form 进行校验
+  final bool isValidate;
 
   /// 表单校验不通过时，是否自动滚动到第一个校验不通过的字段，平滑滚动或是瞬间直达。
   /// 值为空则表示不滚动。可选项：''/smooth/auto
@@ -89,6 +94,8 @@ class _TDFormState extends State<TDForm> {
       disabled: widget.disabled,
       labelWidth: widget.labelWidth,
       isHorizontal: widget.isHorizontal,
+      isValidate: widget.isValidate,
+      rules: widget.rules,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: widget.items

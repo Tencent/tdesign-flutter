@@ -140,7 +140,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
     return Column(
       children: [
         TDInput(
-          leftLabel: '标签文字123',
+          leftLabel: '标签文字',
           required: true,
           controller: controller[1],
           backgroundColor: Colors.white,

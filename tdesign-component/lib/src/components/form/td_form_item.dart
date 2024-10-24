@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 import 'td_form_inherited.dart';
 import '../../../tdesign_flutter.dart';
 
+/// 表格单元选用组件类型的枚举
+enum TDFormItemType {
+  input,
+  password,
+  radios,
+  dateTimePicker,
+  cascader,
+  stepper,
+  rate,
+  textarea,
+}
+
 class TDFormItem extends StatefulWidget {
   TDFormItem({
     required this.type,
@@ -12,8 +24,9 @@ class TDFormItem extends StatefulWidget {
     this.labelAlign,
     this.labelWidth,
     this.requiredMark,
-    this.rules,
-    this.showErrowMessage,
+    this.formRules,
+    this.itemRule,
+    this.showErrorMessage = true,
     this.maxLength,
     this.indicator,
     this.additionInfo,
@@ -51,6 +64,9 @@ class TDFormItem extends StatefulWidget {
   /// 标签宽度，如果提供则覆盖Form的labelWidth
   final double? labelWidth;
 
+  /// TODO:
+  /// 竖直状态的两侧 padding
+
   /// Input 控制器
   var controller;
 
@@ -67,11 +83,14 @@ class TDFormItem extends StatefulWidget {
   /// 是否显示必填标记（*）
   final bool? requiredMark;
 
+  /// 整个表单的校验规则
+  final List<TDFormValidation>? formRules;
+
   /// 表单项验证规则
-  final List? rules;
+  final List? itemRule;
 
   /// 是否显示错误信息
-  final bool? showErrowMessage;
+  final bool showErrorMessage;
 
   /// TDTextarea的属性，最大长度
   final int? maxLength;
@@ -83,37 +102,27 @@ class TDFormItem extends StatefulWidget {
   _TDFormItemState createState() => _TDFormItemState();
 }
 
-/// 表格单元选用组件类型的枚举
-enum TDFormItemType {
-  input,
-  password,
-  radios,
-  dateTimePicker,
-  cascader,
-  stepper,
-  rate,
-  textarea,
-}
-
 class _TDFormItemState extends State<TDFormItem> {
+  /// 从 TDForm 继承获取整个表单的参数
+  /// 获取真正的 LabelWidth
   double get LabelWidth {
     final inherited = TDFormInherited.of(context);
-    final double defaultLabelWidth = 8.0; // Default label width
+    final double defaultLabelWidth = 8.0;
 
-    // 优先使用 widget.labelWidth，如果不为空直接返回
+    /// 如果 item 传入定制的 labelWidth 则使用
     if (widget.labelWidth != null) {
       return widget.labelWidth as double;
     }
 
-    // 如果 widget.labelWidth 为空，使用 inherited.labelWidth
+    /// 使用 form 整体传入的 labelWidth
     if (inherited?.labelWidth != null) {
       return inherited!.labelWidth as double;
     }
 
-    // 如果两者都为空，返回默认值
     return defaultLabelWidth;
   }
 
+  /// 获取 form 是否被禁用的状态
   bool get FormState {
     final inherited = TDFormInherited.of(context);
     if (inherited?.disabled != null) {
@@ -122,6 +131,7 @@ class _TDFormItemState extends State<TDFormItem> {
     return false;
   }
 
+  /// 获取 form 是否为水平排列的状态
   bool get FormIsHorizontal {
     final inherited = TDFormInherited.of(context);
     if (inherited?.isHorizontal != null) {
@@ -130,13 +140,54 @@ class _TDFormItemState extends State<TDFormItem> {
     return false;
   }
 
-  bool browseOn = false;
+  /// 获取 form 整体是否校验的信号状态
+  bool get FormValidate {
+    final inherited = TDFormInherited.of(context);
+    return inherited!.isValidate;
+  }
 
+  /// 获取整个表单的校验规则
+  List<TDFormValidation> get FormRules {
+    final inherited = TDFormInherited.of(context);
+    return inherited!.rules;
+  }
+
+  bool browseOn = false;
   String? _initData;
   String _selected_1 = '';
 
+  /// 表单 item 的校验错误提示信息
+  String? errorMessage;
+
+  // 调用校验方法
+  void startValidation() {
+    setState(() {
+      errorMessage = validate();
+    });
+  }
+
+  /// 遍历校验规则并执行
+  String? validate() {
+    String? value = widget.controller?.text;
+
+    for (var rule in FormRules!) {
+      /// 只对类型匹配的项进行校验
+      if (rule.type == widget.type) {
+        final result = rule.check(value);
+        if (result != null) {
+          /// 返回第一个不通过的错误信息
+          return result;
+        }
+      }
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (FormValidate) {
+      startValidation();
+    }
     if (FormIsHorizontal) {
       switch (widget.type) {
         case TDFormItemType.input:
@@ -145,13 +196,23 @@ class _TDFormItemState extends State<TDFormItem> {
               hintText: widget.help,
               contentPadding: EdgeInsets.only(left: LabelWidth),
               border: InputBorder.none,
+              errorText: widget.showErrorMessage == true ? errorMessage : null,
             ),
+
+            /// TODO:
+            /// 校验失败的提示 icon
+            // rightBtn: widget.showErrowMessage == true
+            //     ? Icon(
+            //         TDIcons.error_circle_filled,
+            //         color: TDTheme.of(context).fontGyColor3,
+            //       )
+            //     : null,
             leftLabel: widget.label,
             controller: widget.controller,
             backgroundColor: Colors.white,
-            // additionInfo: widget.additionInfo,
-            // additionInfoColor: TDTheme.of(context).errorColor6,
+            additionInfoColor: TDTheme.of(context).errorColor6,
             readOnly: FormState,
+            // required: widget.requiredMark,
           );
         case TDFormItemType.password:
           return TDInput(
@@ -159,6 +220,7 @@ class _TDFormItemState extends State<TDFormItem> {
               hintText: widget.help,
               contentPadding: EdgeInsets.only(left: LabelWidth),
               border: InputBorder.none,
+              errorText: widget.showErrorMessage == true ? errorMessage : null,
             ),
             type: TDInputType.normal,
             controller: widget.controller,
@@ -191,7 +253,7 @@ class _TDFormItemState extends State<TDFormItem> {
               color: theme.whiteColor1,
             ),
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -300,6 +362,11 @@ class _TDFormItemState extends State<TDFormItem> {
             maxLength: widget.maxLength,
             indicator: widget.indicator,
             readOnly: FormState,
+
+            /// TODO:
+            /// TDTextarea 目前没用实现提示词 ? 存在调用问题
+            additionInfo: widget.showErrorMessage == true ? errorMessage : null,
+            additionInfoColor: TDTheme.of(context).errorColor6,
             onChanged: (value) {
               setState(() {});
             },
@@ -312,7 +379,7 @@ class _TDFormItemState extends State<TDFormItem> {
             spacer: TDInputSpacer(iconLabelSpace: 0),
             type: TDInputType.twoLine,
             inputDecoration: InputDecoration(
-              contentPadding: EdgeInsets.only(left: 16),
+              contentPadding: const EdgeInsets.only(left: 16),
               hintText: widget.help,
               border: InputBorder.none,
             ),
@@ -331,7 +398,7 @@ class _TDFormItemState extends State<TDFormItem> {
               TDInput(
                 inputDecoration: InputDecoration(
                   hintText: widget.help,
-                  contentPadding: EdgeInsets.only(left: 16),
+                  contentPadding: const EdgeInsets.only(left: 16),
                   border: InputBorder.none,
                 ),
                 leftLabelSpace: 16,
@@ -459,7 +526,7 @@ class _TDFormItemState extends State<TDFormItem> {
           );
         case TDFormItemType.rate:
           return Container(
-              width: double.infinity, // 设置宽度为无限，横向占满父容器
+              width: double.infinity,
               decoration: BoxDecoration(
                 color: TDTheme.of(context).whiteColor1,
               ),
@@ -491,6 +558,11 @@ class _TDFormItemState extends State<TDFormItem> {
             indicator: widget.indicator,
             readOnly: FormState,
             layout: TDTextareaLayout.vertical,
+
+            /// TODO:
+            /// TDTextarea 目前没用实现提示词 ? 存在调用问题
+            additionInfo: widget.showErrorMessage == true ? errorMessage : null,
+            additionInfoColor: TDTheme.of(context).errorColor6,
             onChanged: (value) {
               setState(() {});
             },
