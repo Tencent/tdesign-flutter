@@ -35,6 +35,7 @@ class TDFormItem extends StatefulWidget {
   /// 表单内容对齐方式：'left' 或 'right'
   final String? contentAlign;
 
+  /// TODO：
   /// 是否显示右侧箭头
   final bool? arrow;
 
@@ -149,6 +150,7 @@ class _TDFormItemState extends State<TDFormItem> {
             controller: widget.controller,
             backgroundColor: Colors.white,
             // additionInfo: widget.additionInfo,
+            // additionInfoColor: TDTheme.of(context).errorColor6,
             readOnly: FormState,
           );
         case TDFormItemType.password:
@@ -179,6 +181,8 @@ class _TDFormItemState extends State<TDFormItem> {
             },
             needClear: false,
             readOnly: FormState,
+            // additionInfo: widget.additionInfo,
+            // additionInfoColor: TDTheme.of(context).errorColor6,
           );
         case TDFormItemType.radios:
           final theme = TDTheme.of(context);
@@ -195,7 +199,7 @@ class _TDFormItemState extends State<TDFormItem> {
                     widget.label ?? '',
                     style: const TextStyle(fontSize: 16),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: LabelWidth),
                   Expanded(
                     child: TDRadioGroup(
                       selectId: 'index:1',
@@ -308,10 +312,11 @@ class _TDFormItemState extends State<TDFormItem> {
             spacer: TDInputSpacer(iconLabelSpace: 0),
             type: TDInputType.twoLine,
             inputDecoration: InputDecoration(
-              contentPadding: EdgeInsets.only(left: LabelWidth),
+              contentPadding: EdgeInsets.only(left: 16),
               hintText: widget.help,
               border: InputBorder.none,
             ),
+            leftLabelSpace: 16,
             leftLabel: widget.label,
             controller: widget.controller,
             backgroundColor: Colors.white,
@@ -326,9 +331,10 @@ class _TDFormItemState extends State<TDFormItem> {
               TDInput(
                 inputDecoration: InputDecoration(
                   hintText: widget.help,
-                  contentPadding: EdgeInsets.only(left: LabelWidth),
+                  contentPadding: EdgeInsets.only(left: 16),
                   border: InputBorder.none,
                 ),
+                leftLabelSpace: 16,
                 type: TDInputType.twoLine,
                 controller: widget.controller,
                 obscureText: !browseOn,
@@ -359,33 +365,34 @@ class _TDFormItemState extends State<TDFormItem> {
             decoration: BoxDecoration(
               color: theme.whiteColor1,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TDText(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16), // 仅作用于 TDText
+                  child: TDText(
                     widget.label ?? '',
                     style: const TextStyle(fontSize: 16),
                   ),
-                  const SizedBox(width: 20),
-                  TDRadioGroup(
-                    selectId: 'index:1',
-                    direction: Axis.horizontal,
-                    directionalTdRadios: widget.radios.entries.map((entry) {
-                      return TDRadio(
-                        id: entry.key,
-                        title: entry.value,
-                        radioStyle: TDRadioStyle.circle,
-                        showDivider: false,
-                        enable: !FormState,
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 20),
+                TDRadioGroup(
+                  selectId: 'index:1',
+                  direction: Axis.horizontal,
+                  directionalTdRadios: widget.radios.entries.map((entry) {
+                    return TDRadio(
+                      id: entry.key,
+                      title: entry.value,
+                      radioStyle: TDRadioStyle.circle,
+                      showDivider: false,
+                      enable: !FormState,
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
           );
+
         case TDFormItemType.dateTimePicker:
           return GestureDetector(
             onTap: () {
