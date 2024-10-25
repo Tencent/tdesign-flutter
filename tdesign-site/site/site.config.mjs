@@ -357,13 +357,13 @@ export default {
         //   path: '/flutter/components/progress',
         //   component: () => import('@/progress/README.md'),
         // },
-        // {
-        //   title: 'Result 结果',
-        //   name: 'result',
-        //   meta: { docType: 'data' },
-        //   path: '/flutter/components/result',
-        //   component: () => import('@/result/README.md'),
-        // },
+        {
+          title: 'Result 结果',
+          name: 'result',
+          meta: { docType: 'data' },
+          path: '/flutter/components/result',
+          component: () => import('@/result/README.md'),
+        },
         // {
         //   title: 'Skeleton 骨架屏',
         //   name: 'skeleton',
