@@ -1,0 +1,13 @@
+
+  Widget _borderTable(BuildContext context) {
+    return TDTable(
+      bordered: true,
+      columns: [
+        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
+        TDTableCol(title: '标题', colKey: 'title2'),
+        TDTableCol(title: '标题', colKey: 'title3'),
+        TDTableCol(title: '标题', colKey: 'title4')
+      ],
+      data: _getData(9),
+    );
+  }

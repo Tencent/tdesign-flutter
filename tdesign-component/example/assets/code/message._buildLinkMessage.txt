@@ -1,0 +1,23 @@
+
+  Widget _buildLinkMessage(BuildContext context) {
+    return TDButton(
+        isBlock: true,
+        text: '带按钮的通知',
+        size: TDButtonSize.large,
+        type: TDButtonType.outline,
+        width: 450,
+        theme: TDButtonTheme.primary,
+        onTap: () {
+          TDMessage.showMessage(
+              context: context,
+              visible: true,
+              icon: true,
+              content: _commonContent,
+              theme: MessageTheme.info,
+              duration: 3000,
+              link: '按钮',
+              onLinkClick: () {
+                print('link clicked!');
+              });
+        });
+  }

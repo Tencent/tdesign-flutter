@@ -1,0 +1,12 @@
+
+Widget _scrollIconNoticeBar(BuildContext context) {
+  return const Padding(
+    padding: EdgeInsets.only(top: 16),
+    child: TDNoticeBar(
+      context: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',
+      speed: 50,
+      prefixIcon: TDIcons.sound,
+      marquee: true,
+    ),
+  );
+}
