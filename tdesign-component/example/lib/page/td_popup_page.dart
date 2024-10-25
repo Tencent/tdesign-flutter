@@ -306,7 +306,7 @@ class TDPopupPageState extends State<TDPopupPage> {
           },
         ),
         ExampleItem(
-            desc: '弹出层包含输入框且会被键盘遮挡',
+            desc: '弹出层包含输入框且不会被键盘遮挡',
             builder: (_) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -315,7 +315,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                   Container(
                     margin: const EdgeInsets.all(8),
                     child: TDButton(
-                      text: '底部弹出层-被键盘弹出遮挡',
+                      text: '底部弹出层-键盘弹出不遮挡',
                       isBlock: true,
                       theme: TDButtonTheme.primary,
                       type: TDButtonType.outline,
@@ -353,7 +353,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                   Container(
                       margin: const EdgeInsets.all(8),
                       child: TDButton(
-                        text: '居中弹出层-被键盘弹出遮挡',
+                        text: '居中弹出层-键盘弹出不遮挡',
                         isBlock: true,
                         theme: TDButtonTheme.primary,
                         type: TDButtonType.outline,
