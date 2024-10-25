@@ -1,0 +1,15 @@
+
+Widget _entranceNoticeBar1(BuildContext context) {
+  return const TDNoticeBar(
+    context: '这是一条普通的通知信息',
+    prefixIcon: TDIcons.error_circle_filled,
+    right: TDButton(
+      text: '文字按钮',
+      type: TDButtonType.text,
+      theme: TDButtonTheme.primary,
+      size: TDButtonSize.extraSmall,
+      height: 22,
+      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+    ),
+  );
+}

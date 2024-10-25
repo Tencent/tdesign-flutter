@@ -1,0 +1,14 @@
+
+  Widget _buildCapsuleSingleHandle(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      leftLabel: '0',
+      rightLabel: '100',
+      value: 40,
+      onChanged: (value) {},
+    );
+  }

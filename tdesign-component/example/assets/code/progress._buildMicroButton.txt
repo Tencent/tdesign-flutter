@@ -1,0 +1,10 @@
+
+  Widget _buildMicroButton(BuildContext context) {
+    return TDProgress(
+      type: TDProgressType.micro,
+      value: microProgressValue,
+      onTap: _toggleMicroProgress,
+      label: TDIconLabel(isPlaying ? Icons.pause : Icons.play_arrow,
+          color: TDTheme.of(context).brandNormalColor),
+    );
+  }

@@ -295,6 +295,9 @@ Widget _buildBottomSimple(BuildContext context) {
 | drawerTop | double? | - | 距离顶部的距离 |
 | style | TDCellStyle? | - | 列表自定义样式 |
 | hover | bool? | true | 是否开启点击反馈 |
+| backgroundColor | Color? | - | 组件背景颜色 |
+| bordered | bool? | true | 是否显示边框 |
+| isShowLastBordered | bool? | true | 是否显示最后一行分割线 |
 
 ```
 ```

@@ -22,35 +22,33 @@ void main() async {
       WebMdTool.needGenerateWebMd = true;
 
       await tester.pumpWidget(const MyApp());
-      exampleMap.forEach((key, value) {
-        value.forEach((model) {
+      for(var i =0 ;i < exampleMap.length; i++){
+        var value = exampleMap.values.elementAt(i);
+        for(var j =0 ;j < value.length; j++){
+          var model = value.elementAt(j);
           if (!model.isTodo) {
-            examplePageList.add(model);
+            if(model.text == '颜色'){
+            // 测试结束
+              throw Exception('<===============执行完成!!!!=================>');
           }
-        });
-      });
-      for(var element in examplePageList){
-        // Build our app and trigger a frame.
-        if(element.text == '颜色'){
-          // 测试结束
-          break;
+          await _testComponent(tester, model.text);
+          }
         }
-        await _testComponent(tester, element.text);
+        count++;
       }
-      // throw Exception('<===============执行完成!!!!=================>');
 
     });
 
 
 }
 
-var changeList = ['Drawer 抽屉','Tabs 选项卡','Input 输入框','Stepper 步进器','Badge 徽标','Empty 空状态','Dialog 对话框','Swipecell 滑动操作'];
 Finder? lastFinder;
 
+int count = 0;
 Future<void> _testComponent(WidgetTester tester, String name) async {
   print('\n\n当前组件==============>：$name');
-
-  if(changeList.contains(name) && lastFinder != null){
+  count++;
+  if(count % 5 == 0 && lastFinder != null){
     await tester.fling(lastFinder!, const Offset(0, -300), 2);
     try {
       await tester.pumpAndSettle();
