@@ -5,7 +5,7 @@ import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
 ///
-/// TDRadio演示
+/// TDRate演示
 ///
 class TDRatePage extends StatefulWidget {
   const TDRatePage({Key? key}) : super(key: key);
@@ -98,7 +98,7 @@ class TDRatePageState extends State<TDRatePage> {
 
   @Demo(group: 'rate')
   Widget _buildHalfRate(BuildContext context) {
-    return const TDCell(title: '点击活滑动', noteWidget: TDRate(value: 3, allowHalf: true));
+    return const TDCell(title: '点击活滑动', noteWidget: TDRate(value: 3, allowHalf: true, onChange: print,));
   }
 
   @Demo(group: 'rate')
