@@ -30,6 +30,7 @@ class TDFormItem extends StatefulWidget {
     this.showErrorMessage = true,
     this.maxLength,
     this.indicator,
+    this.radioGroupSpacing,
     this.allowHalf = false,
     this.rateValue = 3,
     this.rateCount = 5,
@@ -106,6 +107,9 @@ class TDFormItem extends StatefulWidget {
 
   /// TDTextarea 的属性，指示器
   final bool? indicator;
+
+  /// TDRadioGroup 属性，文字与单选框的间距
+  final double? radioGroupSpacing;
 
   /// TDRate 属性，是否开启可选半个等级
   final bool allowHalf;
@@ -299,6 +303,7 @@ class _TDFormItemState extends State<TDFormItem> {
                   SizedBox(width: LabelWidth),
                   Expanded(
                     child: TDRadioGroup(
+                      // spacing: widget.radioGroupSpacing,
                       selectId: 'index:1',
                       direction: Axis.horizontal,
                       directionalTdRadios: widget.radios.entries.map((entry) {
