@@ -246,6 +246,7 @@ class _TDFormPageState extends State<TDFormPage> {
 
             /// 扩展一下数量和选项内容
             radios: _radios,
+            // radioGroupSpacing: ,
           ),
           TDFormItem(
             label: '生日',
