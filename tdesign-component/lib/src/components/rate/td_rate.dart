@@ -415,6 +415,7 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
           if (value != _activeValue) {
             _activeValue = value;
             setState(() {});
+            widget.onChange?.call(value);
           }
         },
       ),
