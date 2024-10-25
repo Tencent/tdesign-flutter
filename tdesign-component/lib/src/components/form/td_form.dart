@@ -7,6 +7,7 @@ class TDForm extends StatefulWidget {
   const TDForm({
     Key? key,
     required this.items,
+    required this.rules,
     this.colon = false,
     this.contentAlign = 'left',
     this.data,
@@ -18,10 +19,9 @@ class TDForm extends StatefulWidget {
     this.preventSubmitDefault = true,
     this.requiredMark = true, // 此处必填项有小问题
     this.resetType = 'empty',
-    required this.rules,
     this.isValidate = false,
     this.scrollToFirstError,
-    this.showErrorMessage = true,
+    this.formShowErrorMessage = true,
     this.submitWithWarningMessage = false,
   }) : super(key: key);
 
@@ -35,7 +35,7 @@ class TDForm extends StatefulWidget {
   /// 可选项: left/right
   final String? contentAlign;
 
-  /// 表单数据
+  /// TODO: 整个表单数据 是否需要将所有 items 的数据整合输出？
   final Object? data;
 
   /// 表单排列方式是否为 水平方向
@@ -78,7 +78,7 @@ class TDForm extends StatefulWidget {
 
   /// 校验不通过时，是否显示错误提示信息，统一控制全部表单项
   /// 如果希望控制单个表单项，请给 FormItem 设置该属性
-  final bool? showErrorMessage;
+  final bool? formShowErrorMessage;
 
   /// 【讨论中】当校验结果只有告警信息时，是否触发 submit 提交事件
   final bool? submitWithWarningMessage;
@@ -96,6 +96,7 @@ class _TDFormState extends State<TDForm> {
       isHorizontal: widget.isHorizontal,
       isValidate: widget.isValidate,
       rules: widget.rules,
+      formShowErrorMessage: widget.formShowErrorMessage,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: widget.items
