@@ -1,0 +1,19 @@
+
+Widget _buildBaseGridActionSheet(BuildContext context) {
+  return TDButton(
+    text: '常规宫格型',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDActionSheet(
+        context,
+        visible: true,
+        theme: TDActionSheetTheme.grid,
+        count: 8,
+        items: _gridItems,
+      );
+    },
+  );
+}

@@ -1,0 +1,39 @@
+
+Widget _buildOther(BuildContext context) {
+  final renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
+  final indexList = _list.map((item) => item['index'] as String).toList();
+  return TDButton(
+    text: '胶囊索引',
+    isBlock: true,
+    size: TDButtonSize.large,
+    theme: TDButtonTheme.primary,
+    type: TDButtonType.outline,
+    onTap: () {
+      Navigator.of(context).push(
+        TDSlidePopupRoute(
+          slideTransitionFrom: SlideTransitionFrom.right,
+          modalTop: renderBox?.size.height,
+          builder: (context) {
+            return Container(
+              color: Colors.white,
+              child: TDIndexes(
+                indexList: indexList,
+                capsuleTheme: true,
+                builderContent: (context, index) {
+                  final list = _list.firstWhere((element) => element['index'] == index)['children'] as List<String>;
+                  return TDCellGroup(
+                    cells: list
+                        .map((e) => TDCell(
+                              title: e,
+                            ))
+                        .toList(),
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      );
+    },
+  );
+}

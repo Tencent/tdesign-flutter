@@ -42,5 +42,7 @@
   "december": "December",
   "time": "Time",
   "start": "Start",
-  "end": "End"
+  "end": "End",
+  "notRated": "Not rated",
+  "cascadeLabel": "Select Item"
 }
