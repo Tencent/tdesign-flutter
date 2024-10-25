@@ -1,5 +1,7 @@
 import '../../../tdesign_flutter.dart';
 
+/// 实现普通表单项的校验
+/// 校验规则 和 错误提醒
 class TDFormValidation {
   final String? Function(String?) validate; // 校验方法
   final String errorMessage;
