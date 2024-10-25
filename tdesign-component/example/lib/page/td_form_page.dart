@@ -1,8 +1,6 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-
 import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
@@ -14,8 +12,8 @@ class TDFormPage extends StatefulWidget {
 }
 
 class _TDFormPageState extends State<TDFormPage> {
-  var controller = [];
-  String selected_1 = '';
+  var _controller = [];
+  String _selected_1 = '';
 
   /// form 禁用的状态
   bool _formDisableState = false;
@@ -114,11 +112,24 @@ class _TDFormPageState extends State<TDFormPage> {
     },
   ];
 
-  /// 按钮点击事件：改变 _validate 值，从而触发校验
-  void _onSubmit() {
-    setState(() {
-      _validateForm = true;
-    });
+  /// TDDateTimePicker 监控数据
+  void _dateONChange(newValue) {
+    print('Date value changed to $newValue');
+  }
+
+  /// TDCasader 监控数据
+  void _localONChange(newValue) {
+    print('Local value changed to $newValue');
+  }
+
+  /// TDStepper 监控数据
+  void _stepperONChange(newValue) {
+    print('Stepper value changed to $newValue');
+  }
+
+  /// TDRate 监控数据
+  void _rateONChange(newValue) {
+    print('Rate value changed to $newValue');
   }
 
   /// 定义整个校验规则
@@ -155,9 +166,23 @@ class _TDFormPageState extends State<TDFormPage> {
   @override
   void initState() {
     for (var i = 0; i < 3; i++) {
-      controller.add(TextEditingController());
+      _controller.add(TextEditingController());
     }
     super.initState();
+  }
+
+  /// 提交按钮钮点击事件：
+  /// 改变 _validate 值，从而触发校验
+  /// 获取表单的数据
+  void _onSubmit() {
+    setState(() {
+      _validateForm = true;
+      print('input1@ ${_controller[0]}');
+      print('input2@ ${_controller[1]}');
+      print('input3@ ${_controller[2]}');
+
+      /// 其他通过回调获取数据
+    });
   }
 
   @override
@@ -190,6 +215,9 @@ class _TDFormPageState extends State<TDFormPage> {
         isHorizontal: _isFormHorizontal,
         isValidate: _validateForm,
         rules: _validationRules,
+
+        /// 确定整个表单是否展示提示信息
+        formShowErrorMessage: true,
         items: [
           TDFormItem(
             label: '用户名',
@@ -197,7 +225,10 @@ class _TDFormPageState extends State<TDFormPage> {
             help: '请输入用户名',
             // additionInfo: '只能输入8个字符英文',
             labelWidth: 43.0,
-            controller: controller[0],
+            controller: _controller[0],
+
+            /// 控制单个 item 是否展示错误提醒
+            showErrorMessage: false,
             // requiredMark: true,
           ),
           TDFormItem(
@@ -206,7 +237,7 @@ class _TDFormPageState extends State<TDFormPage> {
             help: '请输入密码',
             // additionInfo: '只能输入数字',
             labelWidth: 60.0,
-            controller: controller[1],
+            controller: _controller[1],
           ),
           TDFormItem(
             label: '性别',
@@ -221,7 +252,11 @@ class _TDFormPageState extends State<TDFormPage> {
             type: TDFormItemType.dateTimePicker,
 
             /// 引入需要的日期数据
-            select: selected_1,
+            select: _selected_1,
+            onChange: _dateONChange,
+
+            ///对于复杂表单项可以自定义传入校验方法
+            //itemRule: ,
           ),
           TDFormItem(
             label: '籍贯',
@@ -229,22 +264,37 @@ class _TDFormPageState extends State<TDFormPage> {
 
             /// 引入需要的地点数据
             localData: _data,
+            onChange: _localONChange,
+
+            ///对于复杂表单项可以自定义传入校验方法
+            //itemRule: ,
           ),
           TDFormItem(
             label: '年限',
             type: TDFormItemType.stepper,
 
             /// 为 TDStepper 预留其他设置
+            onChange: _stepperONChange,
+
+            ///对于复杂表单项可以自定义传入校验方法
+            //itemRule: ,
           ),
           TDFormItem(
             label: '自我评价',
             type: TDFormItemType.rate,
+            allowHalf: true,
+            rateCount: 5,
+            rateValue: 3,
+            onChange: _rateONChange,
+
+            ///对于复杂表单项可以自定义传入校验方法
+            //itemRule: ,
           ),
           TDFormItem(
             label: '个人简介',
             type: TDFormItemType.textarea,
             help: '请输入个人简介',
-            controller: controller[2],
+            controller: _controller[2],
 
             /// 为 TDTextarea 长文本其他参数做预留 API
             maxLength: 500,

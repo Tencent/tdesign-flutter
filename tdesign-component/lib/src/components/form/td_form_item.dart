@@ -26,9 +26,14 @@ class TDFormItem extends StatefulWidget {
     this.requiredMark,
     this.formRules,
     this.itemRule,
+    this.onChange,
     this.showErrorMessage = true,
     this.maxLength,
     this.indicator,
+    this.allowHalf = false,
+    this.rateValue = 3,
+    this.rateCount = 5,
+    this.rateGap,
     this.additionInfo,
     this.controller,
     this.select = '',
@@ -48,7 +53,7 @@ class TDFormItem extends StatefulWidget {
   /// 表单内容对齐方式：'left' 或 'right'
   final String? contentAlign;
 
-  /// TODO：
+  /// TODO：右箭头 API 未实现
   /// 是否显示右侧箭头
   final bool? arrow;
 
@@ -64,8 +69,9 @@ class TDFormItem extends StatefulWidget {
   /// 标签宽度，如果提供则覆盖Form的labelWidth
   final double? labelWidth;
 
-  /// TODO:
-  /// 竖直状态的两侧 padding
+  /// TODO: 竖直状态的左侧对齐 padding
+  /// 目前部分组件需要完善
+  /// 左侧 起始的 padding 位置不同
 
   /// Input 控制器
   var controller;
@@ -89,14 +95,30 @@ class TDFormItem extends StatefulWidget {
   /// 表单项验证规则
   final List? itemRule;
 
+  /// 表单 item 的回调函数
+  final ValueChanged? onChange;
+
   /// 是否显示错误信息
   final bool showErrorMessage;
 
-  /// TDTextarea的属性，最大长度
+  /// TDTextarea 的属性，最大长度
   final int? maxLength;
 
-  /// TDTextarea的属性，指示器
+  /// TDTextarea 的属性，指示器
   final bool? indicator;
+
+  /// TDRate 属性，是否开启可选半个等级
+  final bool allowHalf;
+
+  /// TDRate 属性，评分的满分数
+  final int rateCount;
+
+  /// TDRate 属性，初始时的 value
+  final double rateValue;
+
+  /// TDRate 属性
+  /// 评分图标的间距，默认：TDTheme.of(context).spacer8
+  final double? rateGap;
 
   @override
   _TDFormItemState createState() => _TDFormItemState();
@@ -146,6 +168,16 @@ class _TDFormItemState extends State<TDFormItem> {
     return inherited!.isValidate;
   }
 
+  /// 获取整个表格是否需要展示错误提示
+  bool? get ShowErrorMessage {
+    final inherited = TDFormInherited.of(context);
+    if (widget.showErrorMessage != null) {
+      return widget.showErrorMessage;
+    } else {
+      return inherited!.formShowErrorMessage;
+    }
+  }
+
   /// 获取整个表单的校验规则
   List<TDFormValidation> get FormRules {
     final inherited = TDFormInherited.of(context);
@@ -159,7 +191,9 @@ class _TDFormItemState extends State<TDFormItem> {
   /// 表单 item 的校验错误提示信息
   String? errorMessage;
 
-  // 调用校验方法
+  double rate = 0;
+
+  /// 调用校验方法
   void startValidation() {
     setState(() {
       errorMessage = validate();
@@ -196,11 +230,10 @@ class _TDFormItemState extends State<TDFormItem> {
               hintText: widget.help,
               contentPadding: EdgeInsets.only(left: LabelWidth),
               border: InputBorder.none,
-              errorText: widget.showErrorMessage == true ? errorMessage : null,
+              errorText: ShowErrorMessage == true ? errorMessage : null,
             ),
 
-            /// TODO:
-            /// 校验失败的提示 icon
+            /// TODO: Input 校验失败时的提示 icon
             // rightBtn: widget.showErrowMessage == true
             //     ? Icon(
             //         TDIcons.error_circle_filled,
@@ -212,6 +245,8 @@ class _TDFormItemState extends State<TDFormItem> {
             backgroundColor: Colors.white,
             additionInfoColor: TDTheme.of(context).errorColor6,
             readOnly: FormState,
+
+            /// TODO: requiredMark 会使得间距变大 要调整
             // required: widget.requiredMark,
           );
         case TDFormItemType.password:
@@ -220,7 +255,7 @@ class _TDFormItemState extends State<TDFormItem> {
               hintText: widget.help,
               contentPadding: EdgeInsets.only(left: LabelWidth),
               border: InputBorder.none,
-              errorText: widget.showErrorMessage == true ? errorMessage : null,
+              errorText: ShowErrorMessage == true ? errorMessage : null,
             ),
             type: TDInputType.normal,
             controller: widget.controller,
@@ -275,6 +310,13 @@ class _TDFormItemState extends State<TDFormItem> {
                           enable: !FormState,
                         );
                       }).toList(),
+
+                      /// TODO: TDRadioGroup 回调函数存在覆盖问题
+                      // onRadioGroupChange: (ids) {
+                      //   setState(() {
+                      //     print(ids);
+                      //   });
+                      // },
                     ),
                   ),
                 ],
@@ -289,6 +331,9 @@ class _TDFormItemState extends State<TDFormItem> {
                 setState(() {
                   widget.select =
                       '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
+                  if (widget.onChange != null) {
+                    widget.onChange!(widget.select);
+                  }
                 });
                 Navigator.of(context).pop();
               },
@@ -315,6 +360,9 @@ class _TDFormItemState extends State<TDFormItem> {
                     result.add(element.label);
                   });
                   _selected_1 = result.join('/');
+                  if (widget.onChange != null) {
+                    widget.onChange!(_selected_1);
+                  }
                 });
               }, onClose: () {
                 Navigator.of(context).pop();
@@ -340,6 +388,13 @@ class _TDFormItemState extends State<TDFormItem> {
                   TDStepper(
                     theme: TDStepperTheme.filled,
                     disabled: FormState,
+                    onChange: (value) {
+                      setState(() {
+                        if (widget.onChange != null) {
+                          widget.onChange!(value);
+                        }
+                      });
+                    },
                   ),
                 ],
               ),
@@ -349,9 +404,20 @@ class _TDFormItemState extends State<TDFormItem> {
           return TDCell(
               title: widget.label,
               noteWidget: TDRate(
-                value: 3,
-                allowHalf: true,
+                count: widget.rateCount,
+                value: widget.rateValue,
+                allowHalf: widget.allowHalf,
                 disabled: FormState,
+                onChange: (value) {
+                  setState(() {
+                    if (widget.onChange != null) {
+                      widget.onChange!(value);
+                    }
+                  });
+
+                  /// TODO: Rated 组件的校验
+                  // if (rate < 3) {}
+                },
               ));
         case TDFormItemType.textarea:
           return TDTextarea(
@@ -362,14 +428,8 @@ class _TDFormItemState extends State<TDFormItem> {
             maxLength: widget.maxLength,
             indicator: widget.indicator,
             readOnly: FormState,
-
-            /// TODO:
-            /// TDTextarea 目前没用实现提示词 ? 存在调用问题
-            additionInfo: widget.showErrorMessage == true ? errorMessage : null,
+            additionInfo: ShowErrorMessage == true ? errorMessage : null,
             additionInfoColor: TDTheme.of(context).errorColor6,
-            onChanged: (value) {
-              setState(() {});
-            },
           );
       }
     } else {
@@ -455,6 +515,10 @@ class _TDFormItemState extends State<TDFormItem> {
                       enable: !FormState,
                     );
                   }).toList(),
+                  // onRadioGroupChange: (value) {
+                  //   setState(() {
+                  //   });
+                  // },
                 ),
               ],
             ),
@@ -468,6 +532,9 @@ class _TDFormItemState extends State<TDFormItem> {
                 setState(() {
                   widget.select =
                       '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
+                  if (widget.onChange != null) {
+                    widget.onChange!(widget.select);
+                  }
                 });
                 Navigator.of(context).pop();
               },
@@ -494,6 +561,9 @@ class _TDFormItemState extends State<TDFormItem> {
                     result.add(element.label);
                   });
                   _selected_1 = result.join('/');
+                  if (widget.onChange != null) {
+                    widget.onChange!(_selected_1);
+                  }
                 });
               }, onClose: () {
                 Navigator.of(context).pop();
@@ -519,6 +589,13 @@ class _TDFormItemState extends State<TDFormItem> {
                   TDStepper(
                     theme: TDStepperTheme.filled,
                     disabled: FormState,
+                    onChange: (value) {
+                      setState(() {
+                        if (widget.onChange != null) {
+                          widget.onChange!(value);
+                        }
+                      });
+                    },
                   ),
                 ],
               ),
@@ -541,10 +618,17 @@ class _TDFormItemState extends State<TDFormItem> {
                     ),
                     const SizedBox(height: 8),
                     TDRate(
-                      value: 3,
-                      allowHalf: true,
-                      disabled: FormState,
-                    ),
+                        count: widget.rateCount,
+                        value: widget.rateValue,
+                        allowHalf: widget.allowHalf,
+                        disabled: FormState,
+                        onChange: (value) {
+                          setState(() {
+                            if (widget.onChange != null) {
+                              widget.onChange!(value);
+                            }
+                          });
+                        }),
                   ],
                 ),
               ));
@@ -558,10 +642,7 @@ class _TDFormItemState extends State<TDFormItem> {
             indicator: widget.indicator,
             readOnly: FormState,
             layout: TDTextareaLayout.vertical,
-
-            /// TODO:
-            /// TDTextarea 目前没用实现提示词 ? 存在调用问题
-            additionInfo: widget.showErrorMessage == true ? errorMessage : null,
+            additionInfo: ShowErrorMessage == true ? errorMessage : null,
             additionInfoColor: TDTheme.of(context).errorColor6,
             onChanged: (value) {
               setState(() {});
@@ -646,6 +727,7 @@ class _TDFormItemState extends State<TDFormItem> {
                     children: [
                       Expanded(
                           child: TDText(
+                        textAlign: TextAlign.right,
                         output,
                         font: TDTheme.of(context).fontBodyLarge,
                         textColor:
