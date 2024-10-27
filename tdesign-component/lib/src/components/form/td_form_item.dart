@@ -18,10 +18,9 @@ class TDFormItem extends StatefulWidget {
   TDFormItem({
     required this.type,
     this.label,
-    this.arrow = false,
-    this.contentAlign = 'left',
     this.help,
     this.labelAlign,
+    this.contentAlign,
     this.labelWidth,
     this.requiredMark,
     this.formRules,
@@ -51,27 +50,25 @@ class TDFormItem extends StatefulWidget {
   /// 表格单元需要使用的组件类型
   final TDFormItemType type;
 
-  /// 表单内容对齐方式：'left' 或 'right'
-  final String? contentAlign;
-
-  /// TODO：右箭头 API 未实现
-  /// 是否显示右侧箭头
-  final bool? arrow;
-
   /// TDInput的辅助信息
   final String? additionInfo;
 
   /// TDInput 默认显示文字
   final String? help;
 
-  /// 标签对齐方式：'left', 'right', 或 'top'
-  final String? labelAlign;
+  /// TODO: item 标签对齐方式
+  /// 可选: left、right、top
+  final TextAlign? labelAlign;
+
+  /// 表单显示内容对齐方式：
+  /// left、right、top
+  /// TODO: TDStepper TDRate 等组件没用实现通用性
+  final TextAlign? contentAlign;
 
   /// 标签宽度，如果提供则覆盖Form的labelWidth
   final double? labelWidth;
 
-  /// TODO: 竖直状态的左侧对齐 padding
-  /// 目前部分组件需要完善
+  /// TODO: 竖直状态的左侧对齐 padding 需要目前部分组件的更新支持
   /// 左侧 起始的 padding 位置不同
 
   /// Input 控制器
@@ -133,7 +130,7 @@ class _TDFormItemState extends State<TDFormItem> {
   /// 获取真正的 LabelWidth
   double get LabelWidth {
     final inherited = TDFormInherited.of(context);
-    final double defaultLabelWidth = 8.0;
+    final defaultLabelWidth = 8.0;
 
     /// 如果 item 传入定制的 labelWidth 则使用
     if (widget.labelWidth != null) {
@@ -155,6 +152,18 @@ class _TDFormItemState extends State<TDFormItem> {
       return inherited!.disabled;
     }
     return false;
+  }
+
+  /// 获取 form 以及 formItem 的内容排列方式
+  TextAlign get FormContentAlign {
+    final inherited = TDFormInherited.of(context);
+    if (widget.contentAlign != null) {
+      /// 断言 widget.contentAlign 不会为空
+      return widget.contentAlign!;
+    }
+
+    /// 如果 没用为 item 定制内容排列方式 则全部使用总表单的内容排列方式
+    return inherited!.formContentAlign;
   }
 
   /// 获取 form 是否为水平排列的状态
@@ -197,6 +206,14 @@ class _TDFormItemState extends State<TDFormItem> {
 
   double rate = 0;
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (FormValidate) {
+      startValidation();
+    }
+  }
+
   /// 调用校验方法
   void startValidation() {
     setState(() {
@@ -223,16 +240,14 @@ class _TDFormItemState extends State<TDFormItem> {
 
   @override
   Widget build(BuildContext context) {
-    if (FormValidate) {
-      startValidation();
-    }
     if (FormIsHorizontal) {
       switch (widget.type) {
         case TDFormItemType.input:
           return TDInput(
             inputDecoration: InputDecoration(
               hintText: widget.help,
-              contentPadding: EdgeInsets.only(left: LabelWidth),
+              contentPadding: EdgeInsets.only(
+                  left: FormContentAlign == TextAlign.center ? 0 : LabelWidth),
               border: InputBorder.none,
               errorText: ShowErrorMessage == true ? errorMessage : null,
             ),
@@ -244,13 +259,14 @@ class _TDFormItemState extends State<TDFormItem> {
             //         color: TDTheme.of(context).fontGyColor3,
             //       )
             //     : null,
+            contentAlignment: FormContentAlign,
             leftLabel: widget.label,
             controller: widget.controller,
             backgroundColor: Colors.white,
             additionInfoColor: TDTheme.of(context).errorColor6,
             readOnly: FormState,
 
-            /// TODO: requiredMark 会使得间距变大 要调整
+            /// TODO: requiredMark 会使得间距变大 要适应优化
             // required: widget.requiredMark,
           );
         case TDFormItemType.password:
@@ -261,6 +277,7 @@ class _TDFormItemState extends State<TDFormItem> {
               border: InputBorder.none,
               errorText: ShowErrorMessage == true ? errorMessage : null,
             ),
+            contentAlignment: FormContentAlign,
             type: TDInputType.normal,
             controller: widget.controller,
             obscureText: !browseOn,
@@ -346,7 +363,7 @@ class _TDFormItemState extends State<TDFormItem> {
                   dateEnd: [2023, 12, 31],
                   initialDate: [2012, 1, 1]);
             },
-            child: buildSelectRow(context, widget.select, '选择时间'),
+            child: _buildSelectRow(context, widget.select, '选择时间'),
           );
         case TDFormItemType.cascader:
           return GestureDetector(
@@ -358,8 +375,8 @@ class _TDFormItemState extends State<TDFormItem> {
                   theme: 'step',
                   onChange: (List<MultiCascaderListModel> selectData) {
                 setState(() {
-                  List result = [];
-                  int len = selectData.length;
+                  var result = [];
+                  var len = selectData.length;
                   _initData = selectData[len - 1].value!;
                   selectData.forEach((element) {
                     result.add(element.label);
@@ -547,7 +564,7 @@ class _TDFormItemState extends State<TDFormItem> {
                   dateEnd: [2023, 12, 31],
                   initialDate: [2012, 1, 1]);
             },
-            child: buildSelectRow(context, widget.select, '选择时间'),
+            child: _buildSelectRow(context, widget.select, '选择时间'),
           );
         case TDFormItemType.cascader:
           return GestureDetector(
@@ -559,8 +576,8 @@ class _TDFormItemState extends State<TDFormItem> {
                   theme: 'step',
                   onChange: (List<MultiCascaderListModel> selectData) {
                 setState(() {
-                  List result = [];
-                  int len = selectData.length;
+                  var result = [];
+                  var len = selectData.length;
                   _initData = selectData[len - 1].value!;
                   selectData.forEach((element) {
                     result.add(element.label);
@@ -655,58 +672,6 @@ class _TDFormItemState extends State<TDFormItem> {
           );
       }
     }
-
-    /// TODO: 构建错误的提示页面
-  }
-
-  Widget buildSelectRow(BuildContext context, String output, String title) {
-    return Container(
-      color: TDTheme.of(context).whiteColor1,
-      height: 56,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-                child: TDText(
-                  title,
-                  font: TDTheme.of(context).fontBodyLarge,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: Row(
-                  children: [
-                    TDText(
-                      output,
-                      font: TDTheme.of(context).fontBodyLarge,
-                      textColor:
-                          TDTheme.of(context).fontGyColor3.withOpacity(0.4),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 2),
-                      child: Icon(
-                        TDIcons.chevron_right,
-                        color:
-                            TDTheme.of(context).fontGyColor3.withOpacity(0.4),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const TDDivider(
-            margin: EdgeInsets.only(
-              left: 16,
-            ),
-          )
-        ],
-      ),
-    );
   }
 
   Widget _buildSelectRow(BuildContext context, String output, String title) {
@@ -732,6 +697,7 @@ class _TDFormItemState extends State<TDFormItem> {
                     children: [
                       Expanded(
                           child: TDText(
+                        /// TODO: 选择器 结果展示部分 也可以单独设 API
                         textAlign: TextAlign.right,
                         output,
                         font: TDTheme.of(context).fontBodyLarge,

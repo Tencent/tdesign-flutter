@@ -112,24 +112,40 @@ class _TDFormPageState extends State<TDFormPage> {
     },
   ];
 
+  List<dynamic> _formData = []; // 存储所有 FormItem 数据的列表
+
+  void _updateFormData(String label, dynamic value) {
+    final existingIndex =
+        _formData.indexWhere((element) => element['label'] == label);
+    if (existingIndex != -1) {
+      _formData[existingIndex]['value'] = value; // 更新现有项
+    } else {
+      _formData.add({'label': label, 'value': value}); // 添加新项
+    }
+  }
+
   /// TDDateTimePicker 监控数据
   void _dateONChange(newValue) {
     print('Date value changed to $newValue');
+    _updateFormData('Date', newValue); // 添加到 formData
   }
 
   /// TDCasader 监控数据
   void _localONChange(newValue) {
     print('Local value changed to $newValue');
+    _updateFormData('Casader', newValue);
   }
 
   /// TDStepper 监控数据
   void _stepperONChange(newValue) {
     print('Stepper value changed to $newValue');
+    _updateFormData('Stepper', newValue); // 添加到 formData
   }
 
   /// TDRate 监控数据
   void _rateONChange(newValue) {
     print('Rate value changed to $newValue');
+    _updateFormData('Rate', newValue); // 添加到 formData
   }
 
   /// 定义整个校验规则
@@ -165,6 +181,7 @@ class _TDFormPageState extends State<TDFormPage> {
 
   @override
   void initState() {
+    /// 三个文本型的表格单元
     for (var i = 0; i < 3; i++) {
       _controller.add(TextEditingController());
     }
@@ -177,11 +194,12 @@ class _TDFormPageState extends State<TDFormPage> {
   void _onSubmit() {
     setState(() {
       _validateForm = true;
-      print('input1@ ${_controller[0]}');
-      print('input2@ ${_controller[1]}');
-      print('input3@ ${_controller[2]}');
+      for (var i = 0; i < 3; i++) {
+        _updateFormData('input${i}', _controller[i].text);
+      }
 
       /// 其他通过回调获取数据
+      print('Form Data: $_formData'); // 输出所有回调获取的数据
     });
   }
 
@@ -215,6 +233,7 @@ class _TDFormPageState extends State<TDFormPage> {
         isHorizontal: _isFormHorizontal,
         isValidate: _validateForm,
         rules: _validationRules,
+        formContentAlign: TextAlign.left,
 
         /// 确定整个表单是否展示提示信息
         formShowErrorMessage: true,
@@ -223,19 +242,17 @@ class _TDFormPageState extends State<TDFormPage> {
             label: '用户名',
             type: TDFormItemType.input,
             help: '请输入用户名',
-            // additionInfo: '只能输入8个字符英文',
             labelWidth: 43.0,
             controller: _controller[0],
 
             /// 控制单个 item 是否展示错误提醒
-            showErrorMessage: false,
+            showErrorMessage: true,
             // requiredMark: true,
           ),
           TDFormItem(
             label: '密码',
             type: TDFormItemType.password,
             help: '请输入密码',
-            // additionInfo: '只能输入数字',
             labelWidth: 60.0,
             controller: _controller[1],
           ),
@@ -254,7 +271,7 @@ class _TDFormPageState extends State<TDFormPage> {
 
             /// 引入需要的日期数据
             select: _selected_1,
-            onChange: _dateONChange,
+            // onChange: _dateONChange,
 
             ///对于复杂表单项可以自定义传入校验方法
             //itemRule: ,
@@ -472,9 +489,6 @@ class _TDFormPageState extends State<TDFormPage> {
             padding: EdgeInsets.all(16),
             child: Row(
               children: [
-                SizedBox(
-                  width: 16,
-                ),
                 Expanded(
                     child: TDButton(
                   text: '提交',
