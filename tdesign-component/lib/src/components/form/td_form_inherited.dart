@@ -9,17 +9,19 @@ class TDFormInherited extends InheritedWidget {
   final bool isValidate;
   final List<TDFormValidation> rules;
   final bool? formShowErrorMessage;
+  final TextAlign formContentAlign;
 
-  const TDFormInherited(
-      {super.key,
-      required Widget child,
-      required this.disabled,
-      required this.isHorizontal,
-      required this.isValidate,
-      this.labelWidth,
-      this.formShowErrorMessage,
-      required this.rules})
-      : super(child: child);
+  const TDFormInherited({
+    super.key,
+    required Widget child,
+    required this.disabled,
+    required this.isHorizontal,
+    required this.isValidate,
+    required this.rules,
+    required this.formContentAlign,
+    this.labelWidth,
+    this.formShowErrorMessage,
+  }) : super(child: child);
 
   static TDFormInherited? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<TDFormInherited>();
@@ -32,6 +34,7 @@ class TDFormInherited extends InheritedWidget {
         isHorizontal != oldWidget.isHorizontal ||
         isValidate != oldWidget.isValidate ||
         rules != oldWidget.rules ||
-        formShowErrorMessage != oldWidget.formShowErrorMessage;
+        formShowErrorMessage != oldWidget.formShowErrorMessage ||
+        formContentAlign != oldWidget.formContentAlign;
   }
 }
