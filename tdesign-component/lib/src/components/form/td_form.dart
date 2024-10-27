@@ -9,12 +9,12 @@ class TDForm extends StatefulWidget {
     required this.items,
     required this.rules,
     this.colon = false,
-    this.contentAlign = 'left',
+    this.formContentAlign = TextAlign.left,
     this.data,
     this.isHorizontal = true,
     this.disabled = false,
     this.errorMessage,
-    this.labelAlign = 'right',
+    this.formLabelAlign = TextAlign.left,
     this.labelWidth = 20.0,
     this.preventSubmitDefault = true,
     this.requiredMark = true, // 此处必填项有小问题
@@ -31,12 +31,15 @@ class TDForm extends StatefulWidget {
   /// 是否在表单标签字段右侧显示冒号
   final bool? colon;
 
-  /// 表单内容对齐方式: 左对齐、右对齐
-  /// 可选项: left/right
-  final String? contentAlign;
+  /// 表单内容对齐方式: 左对齐、右对齐、居中对齐
+  /// 可选项: left/right/center
+  /// 默认为左对齐
+  /// 优先级低于 TDFormItem 的对齐 API
+  /// TODO: TDStepper TDRate 等组件没用实现通用性
+  final TextAlign formContentAlign;
 
   /// TODO: 整个表单数据 是否需要将所有 items 的数据整合输出？
-  final Object? data;
+  final List<String>? data;
 
   /// 表单排列方式是否为 水平方向
   final bool isHorizontal;
@@ -50,7 +53,8 @@ class TDForm extends StatefulWidget {
   /// 表单字段标签的对齐方式：
   /// 左对齐、右对齐、顶部对齐
   /// 可选项: left/right/top
-  final String? labelAlign;
+  /// TODO: 表单总体标签对齐方式
+  final TextAlign? formLabelAlign;
 
   /// 可以整体设置 label 标签宽度
   final double? labelWidth;
@@ -96,6 +100,7 @@ class _TDFormState extends State<TDForm> {
       isHorizontal: widget.isHorizontal,
       isValidate: widget.isValidate,
       rules: widget.rules,
+      formContentAlign: widget.formContentAlign,
       formShowErrorMessage: widget.formShowErrorMessage,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
