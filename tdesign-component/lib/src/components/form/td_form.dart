@@ -18,7 +18,6 @@ class TDForm extends StatefulWidget {
     this.labelWidth = 20.0,
     this.preventSubmitDefault = true,
     this.requiredMark = true, // 此处必填项有小问题
-    this.resetType = 'empty',
     this.isValidate = false,
     this.scrollToFirstError,
     this.formShowErrorMessage = true,
@@ -66,14 +65,11 @@ class TDForm extends StatefulWidget {
   /// 是否显示必填符号（*），默认显示
   final bool? requiredMark;
 
-  /// 重置表单的方式，值为 empty 表示重置表单为空，值为 initial 表示重置表单数据为初始值
-  /// 可选项：empty/initial
-  final String? resetType;
-
   /// 整个表单字段校验规则
   final List<TDFormValidation> rules;
 
   /// 是否对整个 form 进行校验
+  /// TODO: 无法重复点击提交按钮的校验进行重复校验
   final bool isValidate;
 
   /// 表单校验不通过时，是否自动滚动到第一个校验不通过的字段，平滑滚动或是瞬间直达。
@@ -92,6 +88,15 @@ class TDForm extends StatefulWidget {
 }
 
 class _TDFormState extends State<TDForm> {
+  late final List<Widget> _formItems;
+
+  @override
+  void initState() {
+    super.initState();
+    _formItems =
+        widget.items.expand((item) => [item, SizedBox(height: 1)]).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return TDFormInherited(
@@ -102,16 +107,12 @@ class _TDFormState extends State<TDForm> {
       rules: widget.rules,
       formContentAlign: widget.formContentAlign,
       formShowErrorMessage: widget.formShowErrorMessage,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: widget.items
-            .map((item) => Column(
-                  children: [
-                    item,
-                    SizedBox(height: 1),
-                  ],
-                ))
-            .toList(),
+      child: ListView.builder(
+        itemCount: _formItems.length,
+        itemBuilder: (context, index) => _formItems[index],
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        cacheExtent: 500,
       ),
     );
   }
