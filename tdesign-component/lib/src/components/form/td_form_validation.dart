@@ -15,11 +15,13 @@ class TDFormValidation {
     required this.type,
   });
 
-  // 执行校验逻辑
+  /// 执行校验逻辑
   String? check(String? value) {
     if (validate(value) != null) {
       return errorMessage;
     }
-    return null; // 校验通过时返回 null
+
+    /// 校验通过时返回 null
+    return null;
   }
 }
