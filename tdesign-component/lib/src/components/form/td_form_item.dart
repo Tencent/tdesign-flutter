@@ -518,7 +518,7 @@ class _TDFormItemState extends State<TDFormItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16), // 仅作用于 TDText
+                  padding: const EdgeInsets.all(16),
                   child: TDText(
                     widget.label ?? '',
                     style: const TextStyle(fontSize: 16),
@@ -697,8 +697,7 @@ class _TDFormItemState extends State<TDFormItem> {
                     children: [
                       Expanded(
                           child: TDText(
-                        /// TODO: 选择器 结果展示部分 也可以单独设 API
-                        textAlign: TextAlign.right,
+                        textAlign: FormContentAlign,
                         output,
                         font: TDTheme.of(context).fontBodyLarge,
                         textColor:

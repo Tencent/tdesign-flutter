@@ -112,40 +112,76 @@ class _TDFormPageState extends State<TDFormPage> {
     },
   ];
 
-  List<dynamic> _formData = []; // 存储所有 FormItem 数据的列表
+  /// 整个表单存放的数据
+  List<dynamic> _formData = [];
 
-  void _updateFormData(String label, dynamic value) {
-    final existingIndex =
-        _formData.indexWhere((element) => element['label'] == label);
+  void _updateFormData(
+
+      /// type: 表格单元类型  num: 重复的类型的表格单元的序号  value：表格单元存放的数据
+      {required TDFormItemType type,
+      int num = 0,
+      required value}) {
+    final existingIndex = _formData.indexWhere(
+      (element) => element['itemType'] == type && element['num'] == num,
+    );
     if (existingIndex != -1) {
-      _formData[existingIndex]['value'] = value; // 更新现有项
+      _formData[existingIndex]['value'] = value;
     } else {
-      _formData.add({'label': label, 'value': value}); // 添加新项
+      _formData.add({'itemType': type, 'num': num, 'value': value});
     }
   }
 
   /// TDDateTimePicker 监控数据
   void _dateONChange(newValue) {
     print('Date value changed to $newValue');
-    _updateFormData('Date', newValue); // 添加到 formData
+    _updateFormData(
+        type: TDFormItemType.dateTimePicker, value: newValue); // 添加到 formData
   }
 
   /// TDCasader 监控数据
   void _localONChange(newValue) {
     print('Local value changed to $newValue');
-    _updateFormData('Casader', newValue);
+    _updateFormData(type: TDFormItemType.cascader, value: newValue);
   }
 
   /// TDStepper 监控数据
   void _stepperONChange(newValue) {
     print('Stepper value changed to $newValue');
-    _updateFormData('Stepper', newValue); // 添加到 formData
+    _updateFormData(
+        type: TDFormItemType.stepper, value: newValue); // 添加到 formData
   }
 
   /// TDRate 监控数据
   void _rateONChange(newValue) {
     print('Rate value changed to $newValue');
-    _updateFormData('Rate', newValue); // 添加到 formData
+    _updateFormData(type: TDFormItemType.rate, value: newValue); // 添加到 formData
+  }
+
+  @override
+  void initState() {
+    /// 三个文本型的表格单元
+    for (var i = 0; i < 3; i++) {
+      _controller.add(TextEditingController());
+    }
+    super.initState();
+  }
+
+  /// 提交按钮钮点击事件：
+  /// 改变 _validate 值，从而触发校验
+  /// 获取表单的数据
+  void _onSubmit() {
+    setState(() {
+      _validateForm = true;
+      for (var i = 0; i < 3; i++) {
+        _updateFormData(
+            type: TDFormItemType.input,
+            num: (i + 1),
+            value: _controller[i].text);
+      }
+
+      /// 其他通过回调获取数据
+      print('Form Data: $_formData');
+    });
   }
 
   /// 定义整个校验规则
@@ -178,30 +214,6 @@ class _TDFormPageState extends State<TDFormPage> {
       type: TDFormItemType.textarea,
     ),
   ];
-
-  @override
-  void initState() {
-    /// 三个文本型的表格单元
-    for (var i = 0; i < 3; i++) {
-      _controller.add(TextEditingController());
-    }
-    super.initState();
-  }
-
-  /// 提交按钮钮点击事件：
-  /// 改变 _validate 值，从而触发校验
-  /// 获取表单的数据
-  void _onSubmit() {
-    setState(() {
-      _validateForm = true;
-      for (var i = 0; i < 3; i++) {
-        _updateFormData('input${i}', _controller[i].text);
-      }
-
-      /// 其他通过回调获取数据
-      print('Form Data: $_formData'); // 输出所有回调获取的数据
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -268,10 +280,11 @@ class _TDFormPageState extends State<TDFormPage> {
           TDFormItem(
             label: '生日',
             type: TDFormItemType.dateTimePicker,
+            contentAlign: TextAlign.right,
 
             /// 引入需要的日期数据
             select: _selected_1,
-            // onChange: _dateONChange,
+            onChange: _dateONChange,
 
             ///对于复杂表单项可以自定义传入校验方法
             //itemRule: ,
@@ -279,6 +292,7 @@ class _TDFormPageState extends State<TDFormPage> {
           TDFormItem(
             label: '籍贯',
             type: TDFormItemType.cascader,
+            contentAlign: TextAlign.right,
 
             /// 引入需要的地点数据
             localData: _data,
