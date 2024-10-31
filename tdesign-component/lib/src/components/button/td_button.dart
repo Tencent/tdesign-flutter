@@ -125,14 +125,17 @@ class _TDButtonState extends State<TDButton> {
   double? _iconSize;
 
   _updateParams() async {
-    _buttonStatus = widget.disabled ? TDButtonStatus.disable : TDButtonStatus.defaultState;
+    _buttonStatus =
+        widget.disabled ? TDButtonStatus.disable : TDButtonStatus.defaultState;
     _innerDefaultStyle = widget.style;
     _innerActiveStyle = widget.activeStyle;
     _innerDisableStyle = widget.disableStyle;
     _width = _getWidth();
     _height = _getHeight();
     _margin = _getMargin();
-    _alignment = widget.shape == TDButtonShape.filled || widget.isBlock ? Alignment.center : null;
+    _alignment = widget.shape == TDButtonShape.filled || widget.isBlock
+        ? Alignment.center
+        : null;
     if (widget.text != null) {
       _textStyle = widget.disabled ? widget.disableTextStyle : widget.textStyle;
     }
@@ -281,13 +284,17 @@ class _TDButtonState extends State<TDButton> {
   Font _getTextFont() {
     switch (widget.size) {
       case TDButtonSize.large:
-        return TDTheme.of(context).fontMarkLarge ?? Font(size: 16, lineHeight: 24);
+        return TDTheme.of(context).fontMarkLarge ??
+            Font(size: 16, lineHeight: 24);
       case TDButtonSize.medium:
-        return TDTheme.of(context).fontMarkLarge ?? Font(size: 16, lineHeight: 24);
+        return TDTheme.of(context).fontMarkLarge ??
+            Font(size: 16, lineHeight: 24);
       case TDButtonSize.small:
-        return TDTheme.of(context).fontMarkMedium ?? Font(size: 14, lineHeight: 22);
+        return TDTheme.of(context).fontMarkMedium ??
+            Font(size: 14, lineHeight: 22);
       case TDButtonSize.extraSmall:
-        return TDTheme.of(context).fontMarkMedium ?? Font(size: 14, lineHeight: 22);
+        return TDTheme.of(context).fontMarkMedium ??
+            Font(size: 14, lineHeight: 22);
     }
   }
 
@@ -295,7 +302,9 @@ class _TDButtonState extends State<TDButton> {
     if (widget.width != null) {
       return widget.width;
     }
-    if (!widget.isBlock && (widget.shape == TDButtonShape.square || widget.shape == TDButtonShape.circle)) {
+    if (!widget.isBlock &&
+        (widget.shape == TDButtonShape.square ||
+            widget.shape == TDButtonShape.circle)) {
       switch (widget.size) {
         case TDButtonSize.large:
           return 48;
@@ -350,7 +359,8 @@ class _TDButtonState extends State<TDButton> {
     if (widget.padding != null) {
       return widget.padding;
     }
-    var equalSide = widget.shape == TDButtonShape.square || widget.shape == TDButtonShape.circle;
+    var equalSide = widget.shape == TDButtonShape.square ||
+        widget.shape == TDButtonShape.circle;
 
     double horizontalPadding;
     double verticalPadding;
@@ -383,7 +393,10 @@ class _TDButtonState extends State<TDButton> {
       }
     }
     return EdgeInsets.only(
-        left: horizontalPadding, right: horizontalPadding, bottom: verticalPadding, top: verticalPadding);
+        left: horizontalPadding,
+        right: horizontalPadding,
+        bottom: verticalPadding,
+        top: verticalPadding);
   }
 
   @override
@@ -395,13 +408,17 @@ class _TDButtonState extends State<TDButton> {
   TDButtonStyle _generateInnerStyle() {
     switch (widget.type) {
       case TDButtonType.fill:
-        return TDButtonStyle.generateFillStyleByTheme(context, widget.theme, _buttonStatus);
+        return TDButtonStyle.generateFillStyleByTheme(
+            context, widget.theme, _buttonStatus);
       case TDButtonType.outline:
-        return TDButtonStyle.generateOutlineStyleByTheme(context, widget.theme, _buttonStatus);
+        return TDButtonStyle.generateOutlineStyleByTheme(
+            context, widget.theme, _buttonStatus);
       case TDButtonType.text:
-        return TDButtonStyle.generateTextStyleByTheme(context, widget.theme, _buttonStatus);
+        return TDButtonStyle.generateTextStyleByTheme(
+            context, widget.theme, _buttonStatus);
       case TDButtonType.ghost:
-        return TDButtonStyle.generateGhostStyleByTheme(context, widget.theme, _buttonStatus);
+        return TDButtonStyle.generateGhostStyleByTheme(
+            context, widget.theme, _buttonStatus);
     }
   }
 

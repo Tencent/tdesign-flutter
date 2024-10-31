@@ -121,6 +121,7 @@
     ]
   },
   "dependencies": {
-    "dayjs": "^1.10.7"
+    "dayjs": "^1.10.7",
+    "tdesign-flutter": "file:"
   }
 }
