@@ -20,7 +20,7 @@ enum TDSearchAlignment {
 }
 
 typedef TDSearchBarEvent = void Function(String value);
-typedef TDSearchBarClearEvent = bool Function(String value);
+typedef TDSearchBarClearEvent = bool? Function(String value);
 typedef TDSearchBarCallBack = void Function();
 
 class TDSearchBar extends StatefulWidget {
@@ -465,7 +465,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                         maxWidth: box.maxWidth - 51,
                       ),
                       child: TDText(
-                        widget.placeHolder,
+                        widget.placeHolder ?? '',
                         font: getSize(context),
                         textColor: TDTheme.of(context).fontGyColor3,
                         maxLines: 1,
