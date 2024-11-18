@@ -284,7 +284,7 @@ class _TDCalendarState extends State<TDCalendar> {
               pickerHeight: 178,
               pickerItemCount: 3,
               onConfirm: (Map<String, int> selected) {},
-              onSelectedItemChanged: (index) {
+              onSelectedItemChanged: (wheelIndex,index) {
                 final time = _getValue(inherited?.selected.value ?? []);
                 inherited?.selected.value = time;
                 widget.onChange?.call(time);
