@@ -100,7 +100,7 @@ class TDDatePicker extends StatefulWidget {
   final DatePickerModel model;
 
   /// 选择器选中项改变回调
-  final void Function(int index)? onSelectedItemChanged;
+  final void Function(int wheelIndex,int index)? onSelectedItemChanged;
 
   @override
   State<StatefulWidget> createState() => _TDDatePickerState();
@@ -318,7 +318,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                     pickerHeight = pickerHeight - Random().nextDouble() / 100000000;
                   });
                 }
-                widget.onSelectedItemChanged?.call(index);
+                widget.onSelectedItemChanged?.call(whichLine,index);
               },
               childDelegate: ListWheelChildBuilderDelegate(
                   childCount: widget.model.data[whichLine].length,
