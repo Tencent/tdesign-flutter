@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 import '../../util/iterable_ext.dart';
@@ -34,62 +37,73 @@ class TDCalendarBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemKey = GlobalKey();
     final scrollController = ScrollController();
     var scrollToIndex = 0;
+    var heightList = <double>[];
     final min = _getDefDate(minDate);
     final max = _getDefDate(maxDate, 6);
     final months = _monthsBetween(min, max);
     final data = <DateTime, List<TDate?>>{};
     for (var i = 0; i < months.length; i++) {
-      data[months[i]] = _getDaysInMonth(months[i], min, max);
-      final hasSelected = data[months[i]]?.isContains((item) =>
-          item?.typeNotifier.value == DateSelectType.selected || item?.typeNotifier.value == DateSelectType.start);
-      if (scrollToIndex == 0 && hasSelected == true) {
-        scrollToIndex = i;
+      final month = months[i];
+      data[month] = _getDaysInMonth(month, min, max);
+      heightList.add(22 + (data[month]!.length ~/ 7) * 68);
+      if (scrollToIndex == 0) {
+        final hasSelected = data[month]!.isContains((item) =>
+            item?.typeNotifier.value == DateSelectType.selected || item?.typeNotifier.value == DateSelectType.start);
+        if (hasSelected) {
+          scrollToIndex = i; // 第一个选中的月索引
+        }
       }
     }
-    _scrollToItem(itemKey, scrollController, scrollToIndex);
+    _scrollToItem(scrollController, scrollToIndex, heightList);
     return ListView.separated(
       padding: EdgeInsets.all(bodyPadding),
       controller: scrollController,
       itemCount: data.keys.length,
       itemBuilder: (context, index) {
-        final key = index == 0 ? itemKey : null;
         final monthDate = data.keys.elementAt(index);
         final monthYear = monthDate.year.toString() + context.resource.year;
         final monthMonth = monthNames[monthDate.month - 1];
         final monthDateText = displayFormat.replaceFirst('year', monthYear).replaceFirst('month', monthMonth);
         final monthData = data[monthDate]!;
-        return Column(
-          key: key,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TDText(monthDateText, style: monthTitleStyle),
-            ...List.generate(
-              (monthData.length / 7).ceil(),
-              (rowIndex) => [
-                SizedBox(height: verticalGap),
-                Row(
-                  children: List.generate(
-                    7,
-                    (colIndex) => [
-                      if (colIndex != 0) SizedBox(width: verticalGap / 2),
-                      Expanded(
-                        child: builder(
-                          monthData[rowIndex * 7 + colIndex],
-                          monthData,
-                          data,
-                          rowIndex,
-                          colIndex,
-                        ),
-                      ),
+        return SizedBox(
+          height: heightList[index].toDouble(),
+          child: FutureBuilder(
+            // 兼容 flutter 3.7; https://api.flutter.dev/flutter/widgets/ListView/itemExtentBuilder.html
+            future: _createFuture(), // Future.delayed(const Duration(milliseconds: 100)),
+            builder: (context, snapshot) => snapshot.connectionState == ConnectionState.waiting
+                ? const SizedBox.shrink()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TDText(monthDateText, style: monthTitleStyle),
+                      ...List.generate(
+                        (monthData.length / 7).ceil(),
+                        (rowIndex) => [
+                          SizedBox(height: verticalGap),
+                          Row(
+                            children: List.generate(
+                              7,
+                              (colIndex) => [
+                                if (colIndex != 0) SizedBox(width: verticalGap / 2),
+                                Expanded(
+                                  child: builder(
+                                    monthData[rowIndex * 7 + colIndex],
+                                    monthData,
+                                    data,
+                                    rowIndex,
+                                    colIndex,
+                                  ),
+                                ),
+                              ],
+                            ).expand((element) => element).toList(),
+                          ),
+                        ],
+                      ).expand((element) => element).toList(),
                     ],
-                  ).expand((element) => element).toList(),
-                ),
-              ],
-            ).expand((element) => element).toList(),
-          ],
+                  ),
+          ),
         );
       },
       separatorBuilder: (BuildContext context, int index) {
@@ -98,10 +112,14 @@ class TDCalendarBody extends StatelessWidget {
     );
   }
 
-  void _scrollToItem(GlobalKey itemKey, ScrollController scrollController, int index) {
+  void _scrollToItem(ScrollController scrollController, int index, List<double> heightList) {
+    if (index == 0) {
+      return;
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final height = (itemKey.currentContext?.findRenderObject() as RenderBox?)?.size.height ?? 0;
-      scrollController.jumpTo(height * index + index * bodyPadding);
+      final countHeight = heightList.sublist(0, index).reduce((a, b) => a + b);
+      final height = countHeight + index * bodyPadding;
+      scrollController.jumpTo(height);
     });
   }
 
@@ -170,5 +188,13 @@ class TDCalendarBody extends StatelessWidget {
     sufOffset = sufOffset == 7 ? 0 : sufOffset;
     List.generate(sufOffset, (index) => daysInMonth.add(null));
     return daysInMonth;
+  }
+
+  Future<void> _createFuture() async {
+    final completer = Completer<void>();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      completer.complete();
+    });
+    await completer.future;
   }
 }

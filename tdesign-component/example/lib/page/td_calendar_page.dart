@@ -43,7 +43,7 @@ class TDCalendarPage extends StatelessWidget {
             ),
           ]),
         ],
-        test: [],
+        test: const [],
       ),
     );
   }
@@ -52,7 +52,7 @@ class TDCalendarPage extends StatelessWidget {
 @Demo(group: 'calendar')
 Widget _buildSimple(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch]);
+  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
   return ValueListenableBuilder(
     valueListenable: selected,
     builder: (context, value, child) {
@@ -295,9 +295,9 @@ Widget _buildStyle(BuildContext context) {
             visible: true,
             child: TDCalendar(
               title: '请选择日期',
-              minDate: DateTime(2022, 1, 1).millisecondsSinceEpoch,
-              maxDate: DateTime(2022, 1, 31).millisecondsSinceEpoch,
-              value: [DateTime(2022, 1, 15).millisecondsSinceEpoch],
+              minDate: DateTime(2000, 1, 1).millisecondsSinceEpoch,
+              maxDate: DateTime(2100, 1, 1).millisecondsSinceEpoch,
+              value: [DateTime(2024, 10, 1).millisecondsSinceEpoch],
               height: size.height * 0.6 + 176,
             ),
           );
