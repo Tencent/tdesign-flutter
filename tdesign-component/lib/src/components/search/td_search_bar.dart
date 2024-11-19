@@ -44,6 +44,7 @@ class TDSearchBar extends StatefulWidget {
     this.onActionClick,
     this.onClearClick,
     this.focusNode,
+    this.inputAction,
   }) : super(key: key);
 
   /// 预设文案
@@ -100,6 +101,9 @@ class TDSearchBar extends StatefulWidget {
 
   /// 自定义焦点
   final  FocusNode? focusNode;
+
+  /// 键盘动作类型
+  final TextInputAction? inputAction;
 
   @override
   State<StatefulWidget> createState() => _TDSearchBarState();
@@ -283,6 +287,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                             fillColor: TDTheme.of(context).grayColor1,
                           ),
                           maxLines: 1,
+                          textInputAction: widget.inputAction,
                         ),
                       ),
                     ),
