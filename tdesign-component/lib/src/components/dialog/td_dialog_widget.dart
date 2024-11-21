@@ -232,6 +232,7 @@ class HorizontalNormalButtons extends StatelessWidget {
             child: TDDialogButton(
               buttonText: leftBtn.title,
               buttonTextColor: leftBtn.titleColor ?? TDTheme.of(context).brandNormalColor,
+              buttonTextSize: leftBtn.titleSize,
               buttonStyle: leftBtn.style,
               buttonType: leftBtn.type,
               buttonTheme: leftBtn.theme,
@@ -254,6 +255,7 @@ class HorizontalNormalButtons extends StatelessWidget {
             child: TDDialogButton(
               buttonText: rightBtn.title,
               buttonTextColor: rightBtn.titleColor ?? TDTheme.of(context).whiteColor1,
+              buttonTextSize: rightBtn.titleSize,
               buttonStyle: rightBtn.style,
               buttonType: rightBtn.type,
               buttonTheme: rightBtn.theme,
@@ -301,6 +303,7 @@ class HorizontalTextButtons extends StatelessWidget {
               child: TDDialogButton(
                 buttonText: leftBtn.title,
                 buttonTextColor: leftBtn.titleColor ?? TDTheme.of(context).fontGyColor1,
+                buttonTextSize: leftBtn.titleSize,
                 buttonStyle: leftBtn.style,
                 buttonType: leftBtn.type ?? TDButtonType.text,
                 buttonTheme: leftBtn.theme,
@@ -323,6 +326,7 @@ class HorizontalTextButtons extends StatelessWidget {
               child: TDDialogButton(
                 buttonText: rightBtn.title,
                 buttonTextColor: rightBtn.titleColor ?? TDTheme.of(context).brandNormalColor,
+                buttonTextSize: rightBtn.titleSize,
                 buttonStyle: leftBtn.style,
                 buttonType: leftBtn.type ?? TDButtonType.text,
                 buttonTheme: leftBtn.theme ?? TDButtonTheme.primary,
@@ -350,6 +354,7 @@ class TDDialogButton extends StatelessWidget {
     Key? key,
     this.buttonText,
     this.buttonTextColor,
+    this.buttonTextSize,
     this.buttonTextFontWeight = FontWeight.w600,
     this.buttonStyle,
     this.buttonType,
@@ -365,6 +370,9 @@ class TDDialogButton extends StatelessWidget {
 
   /// 按钮文字颜色
   final Color? buttonTextColor;
+
+  /// 按钮文字大小
+  final double? buttonTextSize;
 
   /// 按钮文字粗细
   final FontWeight? buttonTextFontWeight;
@@ -398,7 +406,7 @@ class TDDialogButton extends StatelessWidget {
       type: buttonType ?? TDButtonType.fill,
       theme: buttonTheme,
       text: buttonText,
-      textStyle: TextStyle(fontWeight: buttonTextFontWeight, color: buttonTextColor),
+      textStyle: TextStyle(fontWeight: buttonTextFontWeight, color: buttonTextColor,fontSize: buttonTextSize),
       width: width,
       height: height,
       isBlock: isBlock,
