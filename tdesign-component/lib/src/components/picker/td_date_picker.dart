@@ -10,30 +10,29 @@ typedef DatePickerCallback = void Function(Map<String, int> selected);
 
 /// 时间选择器
 class TDDatePicker extends StatefulWidget {
-
   const TDDatePicker(
       {required this.title,
-        required this.onConfirm,
-        this.rightText,
-        this.leftText,
-        this.onCancel,
-        this.backgroundColor,
-        this.titleDividerColor,
-        this.topRadius,
-        this.titleHeight,
-        this.padding,
-        this.leftPadding,
-        this.rightPadding,
-        this.leftTextStyle,
-        this.rightTextStyle,
-        this.centerTextStyle,
-        this.customSelectWidget,
-        this.itemDistanceCalculator,
-        required this.model,
-        this.showTitle = true,
-        this.pickerHeight = 200,
-        required this.pickerItemCount,
-        Key? key})
+      required this.onConfirm,
+      this.rightText,
+      this.leftText,
+      this.onCancel,
+      this.backgroundColor,
+      this.titleDividerColor,
+      this.topRadius,
+      this.titleHeight,
+      this.padding,
+      this.leftPadding,
+      this.rightPadding,
+      this.leftTextStyle,
+      this.rightTextStyle,
+      this.centerTextStyle,
+      this.customSelectWidget,
+      this.itemDistanceCalculator,
+      required this.model,
+      this.showTitle = true,
+      this.pickerHeight = 200,
+      required this.pickerItemCount,
+      Key? key})
       : super(key: key);
 
   /// 选择器标题
@@ -114,12 +113,12 @@ class _TDDatePickerState extends State<TDDatePicker> {
   }
 
   bool useAll() {
-    if(widget.model.useYear
-        && widget.model.useMonth
-        && widget.model.useDay
-        && widget.model.useHour
-        && widget.model.useMinute
-        && widget.model.useSecond) {
+    if (widget.model.useYear &&
+        widget.model.useMonth &&
+        widget.model.useDay &&
+        widget.model.useHour &&
+        widget.model.useMinute &&
+        widget.model.useSecond) {
       return true;
     }
     return false;
@@ -168,11 +167,11 @@ class _TDDatePickerState extends State<TDDatePicker> {
                       children: [
                         widget.model.useYear
                             ? useAll()
-                            ? SizedBox(
-                          child: buildList(context, 0),
-                          width: 64,
-                        )
-                            : Expanded(child: buildList(context, 0))
+                                ? SizedBox(
+                                    child: buildList(context, 0),
+                                    width: 64,
+                                  )
+                                : Expanded(child: buildList(context, 0))
                             : Container(),
                         widget.model.useMonth ? Expanded(child: buildList(context, 1)) : Container(),
                         widget.model.useDay ? Expanded(child: buildList(context, 2)) : Container(),
@@ -192,9 +191,9 @@ class _TDDatePickerState extends State<TDDatePicker> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
-                            TDTheme.of(context).whiteColor1,
-                            TDTheme.of(context).whiteColor1.withOpacity(0)
-                          ])),
+                        TDTheme.of(context).whiteColor1,
+                        TDTheme.of(context).whiteColor1.withOpacity(0)
+                      ])),
                     ),
                   ),
                 ),
@@ -207,9 +206,9 @@ class _TDDatePickerState extends State<TDDatePicker> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [
-                            TDTheme.of(context).whiteColor1,
-                            TDTheme.of(context).whiteColor1.withOpacity(0)
-                          ])),
+                        TDTheme.of(context).whiteColor1,
+                        TDTheme.of(context).whiteColor1.withOpacity(0)
+                      ])),
                     ),
                   ),
                 )
@@ -276,9 +275,9 @@ class _TDDatePickerState extends State<TDDatePicker> {
                           index: index,
                           itemHeight: pickerHeight / widget.pickerItemCount,
                           content: whichLine == 3
-                              ? widget.model.mapping[whichLine] +
-                              widget.model.weekMap[widget.model.data[whichLine][index] - 1]
-                              : widget.model.data[whichLine][index].toString() + widget.model.mapping[whichLine],
+                              ? timeUnitMap(widget.model.mapping[whichLine]) +
+                                  widget.model.weekMap[widget.model.data[whichLine][index] - 1]
+                              : widget.model.data[whichLine][index].toString() + timeUnitMap(widget.model.mapping[whichLine]),
                           fixedExtentScrollController: widget.model.controllers[whichLine],
                           itemDistanceCalculator: widget.itemDistanceCalculator,
                         ));
@@ -324,7 +323,8 @@ class _TDDatePickerState extends State<TDDatePicker> {
               behavior: HitTestBehavior.opaque,
               child: TDText(widget.leftText ?? context.resource.cancel,
                   style: widget.leftTextStyle ??
-                      TextStyle(fontSize: TDTheme.of(context).fontBodyLarge!.size, color: TDTheme.of(context).fontGyColor2))),
+                      TextStyle(
+                          fontSize: TDTheme.of(context).fontBodyLarge!.size, color: TDTheme.of(context).fontGyColor2))),
 
           /// 中间title
           Expanded(
@@ -369,7 +369,8 @@ class _TDDatePickerState extends State<TDDatePicker> {
             child: TDText(
               widget.rightText ?? context.resource.confirm,
               style: widget.rightTextStyle ??
-                  TextStyle(fontSize: TDTheme.of(context).fontBodyLarge!.size, color: TDTheme.of(context).brandNormalColor),
+                  TextStyle(
+                      fontSize: TDTheme.of(context).fontBodyLarge!.size, color: TDTheme.of(context).brandNormalColor),
             ),
           ),
         ],
@@ -377,6 +378,18 @@ class _TDDatePickerState extends State<TDDatePicker> {
     );
   }
 
+  timeUnitMap(String name){
+    Map<String,String>   times={
+      '年':context.resource.yearLabel,
+      '月':context.resource.monthLabel,
+      '日': context.resource.dateLabel,
+      '周':context.resource.weeksLabel,
+      '时':context.resource.hours,
+      '分':context.resource.minutes,
+      '秒':context.resource.seconds
+    };
+     return times[name];
+  }
   double getTitleHeight() => widget.titleHeight ?? _pickerTitleHeight;
 }
 
@@ -392,9 +405,8 @@ class DatePickerModel {
   List<int> dateStart;
   List<int> dateEnd;
   List<int>? dateInitial;
-
-  final mapping = ['年', '月', '日', '周', '时', '分', '秒'];
-  final weekMap = ['一', '二', '三', '四', '五', '六', '日'];
+  final mapping =  ['年', '月', '日', '周', '时', '分', '秒'];
+  final weekMap= ['一', '二', '三', '四', '五', '六', '日'];
 
   late DateTime initialTime;
 
@@ -424,15 +436,16 @@ class DatePickerModel {
 
   DatePickerModel(
       {required this.useYear,
-        required this.useMonth,
-        required this.useDay,
-        required this.useHour,
-        required this.useMinute,
-        required this.useWeekDay,
-        required this.useSecond,
-        required this.dateStart,
-        required this.dateEnd,
-        this.dateInitial}) {
+      required this.useMonth,
+      required this.useDay,
+      required this.useHour,
+      required this.useMinute,
+      required this.useWeekDay,
+      required this.useSecond,
+      required this.dateStart,
+      required this.dateEnd,
+      this.dateInitial,
+}) {
     assert(!useWeekDay || (!useSecond && !useMinute && !useHour), 'WeekDay can only used with Year, Month and Day!');
     setInitialTime();
     setInitialMonthData();
@@ -582,7 +595,7 @@ class DatePickerModel {
     var map = <String, int>{
       'year': yearIndex + data[0][0],
       'month': monthIndex + data[1][0],
-      'day' : dayIndex + data[2][0],
+      'day': dayIndex + data[2][0],
     };
     return map;
   }

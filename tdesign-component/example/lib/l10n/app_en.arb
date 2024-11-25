@@ -19,5 +19,9 @@
   "hours": "hours",
   "minutes": "minutes",
   "seconds": "seconds",
-  "milliseconds": "milliseconds"
+  "milliseconds": "milliseconds",
+  "yearLabel": "year",
+  "monthLabel": "month",
+  "dateLabel": "date",
+  "weeks":"weeks"
 }
