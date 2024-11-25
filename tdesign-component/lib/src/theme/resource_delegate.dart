@@ -86,6 +86,7 @@ abstract class TDResourceDelegate {
   /// [TDRefreshHeader] 松开刷新
   String get releaseRefresh;
 
+
   /// [TDCountDown] 天
   String get days;
 
@@ -100,6 +101,18 @@ abstract class TDResourceDelegate {
 
   /// [TDCountDown] 毫秒
   String get milliseconds;
+
+  /// [TDDatePicker]  年
+  String get yearLabel;
+
+  /// [TDDatePicker]  月
+  String get monthLabel;
+
+  /// [TDDatePicker] 日
+  String get dateLabel;
+
+  /// [TDDatePicker] 周
+  String get weeksLabel;
 }
 
 /// 如果用户要重写,就应该全部重写,不开放只重新部分资源
@@ -154,4 +167,19 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
 
   @override
   String get milliseconds => '毫秒';
+
+  @override
+  String get selectDate => '选择时间';
+
+  @override
+  String get yearLabel => '年';
+
+  @override
+  String get monthLabel => '月';
+
+  @override
+  String get dateLabel=>'日';
+
+  @override
+  String get weeksLabel=>'周';
 }
