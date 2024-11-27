@@ -28,6 +28,7 @@ class TDPicker {
       Color? titleDividerColor,
       Duration duration = const Duration(milliseconds: 100),
       double pickerHeight = 200,
+      bool isTimeUnit=true,
       Function(int wheelIndex, int index)? onSelectedItemChanged,
       int pickerItemCount = 5}) {
     if (dateEnd == null || initialDate == null) {
@@ -52,6 +53,7 @@ class TDPicker {
               centerTextStyle: centerTextStyle,
               rightTextStyle: rightTextStyle,
               titleDividerColor: titleDividerColor,
+              isTimeUnit: isTimeUnit,
               model: DatePickerModel(
                 useYear: useYear,
                 useMonth: useMonth,
