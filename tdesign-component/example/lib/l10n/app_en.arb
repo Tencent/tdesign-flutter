@@ -44,5 +44,9 @@
   "start": "Start",
   "end": "End",
   "notRated": "Not rated",
-  "cascadeLabel": "Select Item"
+  "cascadeLabel": "Select Item",
+  "yearLabel": "year",
+  "monthLabel": "month",
+  "dateLabel": "date",
+  "weeks":"weeks"
 }

@@ -138,4 +138,16 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
   @override
   String get cascadeLabel =>  AppLocalizations.of(context)!.cascadeLabel;
+
+  @override
+  String get yearLabel => AppLocalizations.of(context)!.yearLabel;
+
+  @override
+  String get monthLabel => AppLocalizations.of(context)!.monthLabel;
+
+  @override
+  String get dateLabel => AppLocalizations.of(context)!.dateLabel;
+
+  @override
+  String get weeksLabel => AppLocalizations.of(context)!.weeks;
 }
