@@ -104,7 +104,8 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         ExampleItem(desc: '长文本样式', builder: _customLongTextStyle),
         ExampleItem(desc: '隐藏底部分割线', builder: _hideBottomDivider),
         ExampleItem(desc: '自定义高度-使用SizeBox', builder: _customHeight),
-        ExampleItem(desc: '获取焦点时点击外部区域事件响应-onTapOutside', builder: _onTapOutside)
+        ExampleItem(desc: '获取焦点时点击外部区域事件响应-onTapOutside', builder: _onTapOutside),
+        ExampleItem(desc: '设置contentPadding内容与分割线对齐', builder: _contentPadding)
       ],
     );
   }
@@ -924,6 +925,42 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
             print('on tap outside ${event}');
           },
         ),
+      ),
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _contentPadding(BuildContext context) {
+    var controller = TextEditingController();
+    return Container(
+      color: Colors.yellow,
+      alignment: Alignment.center,
+      child: Column(
+        children: [
+          TDInput(
+            size: TDInputSize.small,
+            controller: controller,
+            backgroundColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            hintText: '请输入文字',
+          ),
+          TDInput(
+            type: TDInputType.twoLine,
+            size: TDInputSize.small,
+            controller: controller,
+            backgroundColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+            hintText: '请输入文字',
+          ),
+          TDInput(
+            type: TDInputType.normalMaxTwoLine,
+            size: TDInputSize.small,
+            controller: controller,
+            backgroundColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
+            hintText: '请输入文字',
+          ),
+        ],
       ),
     );
   }
