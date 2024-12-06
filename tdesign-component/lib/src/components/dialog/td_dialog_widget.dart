@@ -231,7 +231,7 @@ class HorizontalNormalButtons extends StatelessWidget {
           Expanded(
             child: TDDialogButton(
               buttonText: leftBtn.title,
-              buttonTextColor: leftBtn.titleColor ?? TDTheme.of(context).brandNormalColor,
+              buttonTextColor: leftBtn.titleColor,
               buttonTextSize: leftBtn.titleSize,
               buttonStyle: leftBtn.style,
               buttonType: leftBtn.type,
@@ -254,7 +254,7 @@ class HorizontalNormalButtons extends StatelessWidget {
           Expanded(
             child: TDDialogButton(
               buttonText: rightBtn.title,
-              buttonTextColor: rightBtn.titleColor ?? TDTheme.of(context).whiteColor1,
+              buttonTextColor: rightBtn.titleColor,
               buttonTextSize: rightBtn.titleSize,
               buttonStyle: rightBtn.style,
               buttonType: rightBtn.type,
@@ -302,7 +302,7 @@ class HorizontalTextButtons extends StatelessWidget {
             Expanded(
               child: TDDialogButton(
                 buttonText: leftBtn.title,
-                buttonTextColor: leftBtn.titleColor ?? TDTheme.of(context).fontGyColor1,
+                buttonTextColor: leftBtn.titleColor,
                 buttonTextSize: leftBtn.titleSize,
                 buttonStyle: leftBtn.style,
                 buttonType: leftBtn.type ?? TDButtonType.text,
@@ -325,7 +325,7 @@ class HorizontalTextButtons extends StatelessWidget {
             Expanded(
               child: TDDialogButton(
                 buttonText: rightBtn.title,
-                buttonTextColor: rightBtn.titleColor ?? TDTheme.of(context).brandNormalColor,
+                buttonTextColor: rightBtn.titleColor,
                 buttonTextSize: rightBtn.titleSize,
                 buttonStyle: leftBtn.style,
                 buttonType: leftBtn.type ?? TDButtonType.text,
@@ -406,7 +406,7 @@ class TDDialogButton extends StatelessWidget {
       type: buttonType ?? TDButtonType.fill,
       theme: buttonTheme,
       text: buttonText,
-      textStyle: TextStyle(fontWeight: buttonTextFontWeight, color: buttonTextColor,fontSize: buttonTextSize),
+      textStyle: TextStyle(fontWeight: buttonTextFontWeight,color:buttonTextColor,fontSize: buttonTextSize),
       width: width,
       height: height,
       isBlock: isBlock,
