@@ -28,6 +28,7 @@ class TDDialogButtonOptions {
     required this.title,
     required this.action,
     this.titleColor,
+    this.titleSize,
     this.style,
     this.type,
     this.theme,
@@ -40,6 +41,9 @@ class TDDialogButtonOptions {
 
   /// 标题颜色
   Color? titleColor;
+
+  /// 字体大小
+  final double? titleSize;
 
   /// 字体粗细
   final FontWeight? fontWeight;
