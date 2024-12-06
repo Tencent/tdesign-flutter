@@ -26,6 +26,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     this.opened,
     this.close,
     this.barrierClick,
+    this.focusMove = false,
   });
 
   /// 控件构建器
@@ -66,6 +67,9 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
 
   /// 蒙层点击事件，仅在[modalBarrierFull]为false时触发
   final VoidCallback? barrierClick;
+
+  /// 是否有输入框获取焦点时整体平移避免输入框被遮挡
+  final bool focusMove;
 
   Color get _barrierColor => modalBarrierColor ?? Colors.black54;
 
@@ -219,7 +223,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     }
 
     var screenSize = mediaQuery.size;
-    var _modalTop = (modalTop ?? 0).clamp(0, screenSize.height).toDouble() - bottom;
+    var _modalTop = (modalTop ?? 0).clamp(0, screenSize.height).toDouble() - (focusMove ? bottom : 0);
     var _modalLeft = (modalLeft ?? 0).clamp(0, screenSize.width).toDouble();
     var _modalHeight = (modalHeight ?? screenSize.height).clamp(0, screenSize.height - _modalTop).toDouble();
     var _modalWidth = (modalWidth ?? screenSize.width).clamp(0, screenSize.width - _modalLeft).toDouble();
