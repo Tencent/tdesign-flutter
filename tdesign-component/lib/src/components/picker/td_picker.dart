@@ -28,6 +28,7 @@ class TDPicker {
       Color? titleDividerColor,
       Duration duration = const Duration(milliseconds: 100),
       double pickerHeight = 200,
+      Function(int wheelIndex, int index)? onSelectedItemChanged,
       int pickerItemCount = 5}) {
     if (dateEnd == null || initialDate == null) {
       var now = DateTime.now();
@@ -64,7 +65,8 @@ class TDPicker {
                 dateInitial: initialDate,
               ),
               pickerHeight: pickerHeight,
-              pickerItemCount: pickerItemCount);
+              pickerItemCount: pickerItemCount,
+              onSelectedItemChanged:onSelectedItemChanged);
         });
   }
 

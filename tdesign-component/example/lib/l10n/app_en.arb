@@ -20,6 +20,10 @@
   "minutes": "minutes",
   "seconds": "seconds",
   "milliseconds": "milliseconds",
+  "yearLabel": "year",
+  "monthLabel": "month",
+  "dateLabel": "date",
+  "weeks":"weeks"
   "sunday": "SUN",
   "monday": "MON",
   "tuesday": "TUE",
@@ -43,5 +47,6 @@
   "time": "Time",
   "start": "Start",
   "end": "End",
-  "notRated": "Not rated"
+  "notRated": "Not rated",
+  "cascadeLabel": "Select Item"
 }

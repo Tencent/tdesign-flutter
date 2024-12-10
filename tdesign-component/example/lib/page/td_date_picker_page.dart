@@ -55,6 +55,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
         ],
     test: [
       ExampleItem(desc: '指定开始时间', builder: _customStartTime),
+      ExampleItem(desc: '限制时分秒时间', builder: _customLimitTime),
     ],);
   }
 
@@ -139,8 +140,8 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             useMinute: true,
             useSecond: true,
             dateStart: [1999, 01, 01],
-            dateEnd: [2023, 12, 31],
-            initialDate: [2012, 1, 1]);
+            dateEnd: [2023, 12, 31,4,12,20],
+            initialDate: [2023, 12, 31]);
       },
       child: buildSelectRow(context, selected_4, '选择时间'),
     );
@@ -305,6 +306,32 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             initialDate: [2012, 1, 15,13,20]);
       },
       child: buildSelectRow(context, selected_5, '选择时间'),
+    );
+  }
+  @Demo(group: 'datetimePicker')
+  Widget _customLimitTime(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showDatePicker(context, title: '选择时间',
+            onConfirm: (selected) {
+              setState(() {
+                selected_4 = '${selected['hour'].toString().padLeft(2, '0')}:'
+                    '${selected['minute'].toString().padLeft(2, '0')}:'
+                    '${selected['second'].toString().padLeft(2, '0')}';
+              });
+              Navigator.of(context).pop();
+            },
+            useYear: false,
+            useMonth: false,
+            useDay: false,
+            useHour: true,
+            useMinute: true,
+            useSecond: true,
+            dateStart: [2023, 12, 31],
+            dateEnd: [2023, 12, 31,4,12,20],
+            initialDate: [2023, 12, 31,3,02,03]);
+      },
+      child: buildSelectRow(context, selected_4, '选择时间'),
     );
   }
 }

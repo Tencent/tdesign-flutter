@@ -175,13 +175,13 @@ spline: explain
       <p class="name">Radio 单选框</p>
     </a>
   </div>
-  <!-- <div class="image-wrapper">
+  <div class="image-wrapper">
     <a class="item" href="/flutter/components/rate">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-rate.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-rate-dark.png" />
       <p class="name">Rate 评分</p>
     </a>
-  </div> -->
+  </div>
   <div class="image-wrapper">
     <a class="item" href="/flutter/components/search">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-search.png" />
@@ -323,7 +323,7 @@ spline: explain
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-progress-dark.png" />
       <p class="name">Progress 进度条</p>
     </a>
-  </div>
+  </div>-->
 
   <div class="image-wrapper">
     <a class="item" href="/flutter/components/result">
@@ -333,7 +333,7 @@ spline: explain
     </a>
   </div>
 
-  <div class="image-wrapper">
+  <!--  <div class="image-wrapper">
     <a class="item" href="/flutter/components/skeleton">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-skeleton.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-skeleton-dark.png" />
@@ -354,6 +354,13 @@ spline: explain
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-swiper.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-swiper-dark.png" />
       <p class="name">Swiper 轮播图</p>
+    </a>
+  </div>
+  <div class="image-wrapper">
+    <a class="item" href="/flutter/components/tag">
+      <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-table-dark.png" />
+      <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-table-dark.png" />
+      <p class="name">Table 表格</p>
     </a>
   </div>
 

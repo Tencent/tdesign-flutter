@@ -178,6 +178,7 @@ class TDAlertDialog extends StatelessWidget {
       Widget btn = TDDialogButton(
         buttonText: value.title,
         buttonTextColor: value.titleColor,
+        buttonTextSize: value.titleSize,
         height: value.height,
         buttonTextFontWeight: value.fontWeight ?? FontWeight.w600,
         buttonStyle: value.style,
