@@ -1,0 +1,4 @@
+
+  Widget _buildInsideLabelLinear(BuildContext context) {
+    return TDProgress(type: TDProgressType.linear, value: 0.8);
+  }

@@ -18,6 +18,8 @@
 | leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
 | rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
 | showCloseButton | bool? | - | 显示右上角关闭按钮 |
+| padding | EdgeInsets? | - | 内容内边距 |
+| buttonWidget | Widget? | - | 自定义按钮 |
 
 ```
 ```
@@ -57,6 +59,8 @@
 | buttonTextColor | Color? | - | 按钮文字颜色 |
 | buttonStyle | TDDialogButtonStyle | TDDialogButtonStyle.normal | 按钮样式 |
 | showCloseButton | bool? | - | 右上角关闭按钮 |
+| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
+| buttonWidget | Widget? | - | 自定义按钮 |
 
 ```
 ```
@@ -79,6 +83,9 @@
 | leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
 | rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
 | showCloseButton | bool? | - | 显示右上角关闭按钮 |
+| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
+| buttonWidget | Widget? | - | 自定义按钮 |
+| customInputWidget | Widget? | - | 自定义输入框 |
 
 ```
 ```
@@ -103,6 +110,8 @@
 | rightBtnAction |  Function()? | - | 右侧按钮默认点击 |
 | showCloseButton | bool? | - | 显示右上角关闭按钮 |
 | buttonStyle |  | TDDialogButtonStyle.normal |  |
+| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
+| buttonWidget | Widget? | - | 自定义按钮 |
 
 
 #### 工厂构造方法

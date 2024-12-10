@@ -1,0 +1,27 @@
+
+  Widget _buildRedPointButtonBadge(BuildContext context) {
+    return Container(
+        alignment: Alignment.bottomLeft,
+        margin: const EdgeInsets.only(left: 16, right: 16),
+        child: SizedBox(
+          width: 83,
+          height: 48,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              TDButton(
+                width: 80,
+                height: 48,
+                text: '按钮',
+                size: TDButtonSize.large,
+                type: TDButtonType.fill,
+              ),
+              Positioned(
+                child: TDBadge(TDBadgeType.redPoint),
+                right: 0,
+                top: 0,
+              )
+            ],
+          ),
+        ));
+  }

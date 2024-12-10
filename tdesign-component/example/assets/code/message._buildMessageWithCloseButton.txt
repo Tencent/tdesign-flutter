@@ -1,0 +1,25 @@
+
+  Widget _buildMessageWithCloseButton(BuildContext context) {
+    return TDButton(
+        isBlock: true,
+        text: '带关闭的通知',
+        size: TDButtonSize.large,
+        type: TDButtonType.outline,
+        width: 450,
+        theme: TDButtonTheme.primary,
+        onTap: () {
+          TDMessage.showMessage(
+            context: context,
+            visible: true,
+            icon: true,
+            content: _commonContent,
+            theme: MessageTheme.info,
+            duration: 300000,
+            closeBtn: true,
+            link: MessageLink(name: '按钮', uri: Uri.parse('www.example.com')),
+            onCloseBtnClick: () {
+              print('Close button clicked!');
+            },
+          );
+        });
+  }
