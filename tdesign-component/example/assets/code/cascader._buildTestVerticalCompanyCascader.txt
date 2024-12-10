@@ -1,0 +1,25 @@
+
+  Widget _buildTestVerticalCompanyCascader(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        TDCascader.showMultiCascader(context,
+            title: '选择部门人员',
+            data: _data_4,
+            initialData: _initData,
+            theme: 'step', onChange: (List<MultiCascaderListModel> selectData) {
+              setState(() {
+                List result = [];
+                int len = selectData.length;
+                _initData = selectData[len - 1].value!;
+                selectData.forEach((element) {
+                  result.add(element.label);
+                });
+                _selected_4 = result.join('/');
+              });
+            }, onClose: () {
+              Navigator.of(context).pop();
+            });
+      },
+      child: _buildSelectRow(context, _selected_4, '选择部门人员'),
+    );
+  }

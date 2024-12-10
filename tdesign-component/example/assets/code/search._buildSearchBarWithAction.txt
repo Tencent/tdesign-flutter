@@ -1,0 +1,30 @@
+
+  Widget _buildSearchBarWithAction(BuildContext context) {
+    return Column(
+      children: [
+        TDSearchBar(
+          placeHolder: '搜索预设文案',
+          alignment: TDSearchAlignment.left,
+          action: '搜索',
+          onActionClick: (String text) {
+            setState(() {
+              searchText = text;
+            });
+          },
+          onTextChanged: (String text) {
+            setState(() {
+              inputText = text;
+            });
+          },
+        ),
+        const SizedBox(height: 10,),
+        Container(
+          padding: const EdgeInsets.only(left: 15),
+          alignment: Alignment.centerLeft,
+          child: TDText(
+            '搜索框输入的内容：${searchText ?? ''}',
+          ),
+        )
+      ],
+    );
+  }

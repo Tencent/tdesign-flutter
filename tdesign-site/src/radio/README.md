@@ -281,6 +281,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       selectId: 'index:1',
       cardMode: true,
       direction: Axis.horizontal,
+      rowCount: 2,
       directionalTdRadios: const [
         TDRadio(
           id: 'index:0',
@@ -368,6 +369,7 @@ RadioGroup分组对象，继承自TDCheckboxGroup，字段含义与父类一致
 | customIconBuilder |  | - |  |
 | customContentBuilder |  | - |  |
 | spacing |  | - |  |
+| rowCount | int | 1 | 每行几列 |
 | contentDirection |  | - |  |
 | onRadioGroupChange |  | - |  |
 | showDivider | bool | false | 是否显示下划线 |

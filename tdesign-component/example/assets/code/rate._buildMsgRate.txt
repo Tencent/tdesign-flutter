@@ -1,0 +1,8 @@
+
+  Widget _buildMsgRate(BuildContext context) {
+    return Column(children: const [
+      TDCell(title: '带描述评分', noteWidget: TDRate(value: 3, showText: true, texts: ['1分', '2分', '3分', '4分', '5分'])),
+      SizedBox(height: 16),
+      TDCell(title: '带描述评分', noteWidget: TDRate(value: 3, showText: true))
+    ]);
+  }

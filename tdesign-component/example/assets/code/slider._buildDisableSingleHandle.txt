@@ -1,0 +1,12 @@
+
+  Widget _buildDisableSingleHandle(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData(
+        min: 0,
+        max: 100,
+      ),
+      leftLabel: '0',
+      rightLabel: '100',
+      value: 40,
+    );
+  }

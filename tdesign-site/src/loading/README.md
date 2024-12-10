@@ -240,7 +240,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | key |  | - |  |
 | size | TDLoadingSize | - | 尺寸 |
-| icon | TDLoadingIcon? | - | 图标，支持圆形、点状、菊花状 |
+| icon | TDLoadingIcon? | TDLoadingIcon.circle | 图标，支持圆形、点状、菊花状 |
 | iconColor | Color? | - | 图标颜色 |
 | axis | Axis | Axis.vertical | 文案和图标相对方向 |
 | text | String? | - | 文案 |

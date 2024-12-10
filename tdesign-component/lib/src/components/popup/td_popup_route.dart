@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 const Duration _bottomSheetEnterDuration = Duration(milliseconds: 250);
 const Duration _bottomSheetExitDuration = Duration(milliseconds: 200);
@@ -21,6 +24,9 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     this.modalLeft = 0,
     this.open,
     this.opened,
+    this.close,
+    this.barrierClick,
+    this.focusMove = false,
   });
 
   /// 控件构建器
@@ -56,6 +62,15 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
   /// 打开后事件
   final VoidCallback? opened;
 
+  /// 关闭前事件
+  final VoidCallback? close;
+
+  /// 蒙层点击事件，仅在[modalBarrierFull]为false时触发
+  final VoidCallback? barrierClick;
+
+  /// 是否有输入框获取焦点时整体平移避免输入框被遮挡
+  final bool focusMove;
+
   Color get _barrierColor => modalBarrierColor ?? Colors.black54;
 
   @override
@@ -73,6 +88,15 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
   @override
   Color get barrierColor => modalBarrierFull ? _barrierColor : Colors.transparent;
 
+  /// 键盘焦点对象的Y坐标
+  var _focusY = 0.0;
+
+  /// 键盘焦点对象的高度
+  var _focusHeight = 0.0;
+
+  /// 键盘出现后bottom的偏移量
+  var _lastBottom = 0.0;
+
   // 实现转场动画
   @override
   Widget buildTransitions(
@@ -87,14 +111,24 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
         if (!modalBarrierFull)
           _getPositionWidget(
             context,
-            Container(
-              color: _barrierColor.withAlpha((animValue * _barrierColor.alpha).toInt()),
-              child: GestureDetector(
-                onTap: () {
-                  if (isDismissible) {
-                    Navigator.pop(context);
-                  }
-                },
+            IgnorePointer(
+              ignoring: true,
+              child: Container(
+                color: _barrierColor.withAlpha((animValue * _barrierColor.alpha).toInt()),
+                child: GestureDetector(
+                  onTap: () {
+                    barrierClick?.call();
+                    if (isDismissible) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  onDoubleTap: () {
+                    barrierClick?.call();
+                    if (isDismissible) {
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
               ),
             ),
           ),
@@ -128,6 +162,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
 
   @override
   TickerFuture didPush() {
+    startFocusListener(navigator!.context);
     open?.call();
     animation?.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -137,9 +172,60 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     return super.didPush();
   }
 
+  @override
+  void dispose() {
+    close?.call();
+    stopFocusListener(navigator!.context);
+    super.dispose();
+  }
+
+  /// 监听焦点变化
+  void startFocusListener(BuildContext context) {
+    FocusManager.instance.addListener(_handleFocusChange);
+  }
+
+  /// 停止监听焦点变化
+  void stopFocusListener(BuildContext context) {
+    FocusManager.instance.removeListener(_handleFocusChange);
+  }
+
+  void _handleFocusChange() {
+    // 获取当前的焦点节点
+    var focusNode = FocusManager.instance.primaryFocus;
+    if (focusNode != null && focusNode.context != null) {
+      var renderObject = focusNode.context!.findRenderObject();
+      if (renderObject is RenderPointerListener) {
+        _focusY = renderObject.localToGlobal(Offset.zero).dy;
+        _focusHeight = renderObject.size.height;
+      }
+    }
+    (focusNode?.context as Element?)?.markNeedsBuild();
+  }
+
+  @override
+  bool didPop(T? result) {
+    close?.call();
+    return super.didPop(result);
+  }
+
   Widget _getPositionWidget(BuildContext context, Widget child) {
-    var screenSize = MediaQuery.of(context).size;
-    var _modalTop = (modalTop ?? 0).clamp(0, screenSize.height).toDouble();
+    var bottom = 0.0;
+    var mediaQuery = MediaQuery.of(context);
+    if (slideTransitionFrom == SlideTransitionFrom.bottom) {
+      bottom = mediaQuery.viewInsets.bottom;
+    } else {
+      if ((_focusY + mediaQuery.viewInsets.bottom + _focusHeight) > mediaQuery.size.height) {
+        bottom = -(mediaQuery.size.height - (_focusY + mediaQuery.viewInsets.bottom + _focusHeight + 10));
+        _lastBottom = bottom;
+      } else {
+        if (_lastBottom > 0.0) {
+          bottom = max((_lastBottom -= 5), 0).toDouble();
+        }
+      }
+    }
+
+    var screenSize = mediaQuery.size;
+    var _modalTop = (modalTop ?? 0).clamp(0, screenSize.height).toDouble() - (focusMove ? bottom : 0);
     var _modalLeft = (modalLeft ?? 0).clamp(0, screenSize.width).toDouble();
     var _modalHeight = (modalHeight ?? screenSize.height).clamp(0, screenSize.height - _modalTop).toDouble();
     var _modalWidth = (modalWidth ?? screenSize.width).clamp(0, screenSize.width - _modalLeft).toDouble();

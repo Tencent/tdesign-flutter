@@ -1,3 +1,52 @@
+## 🌈 0.1.7 `2024-10-16`
+### 🚀 Features
+- `TDNoticeBar`: Added noticeBar component @ccXxx1aoBai ([#162](https://github.com/Tencent/tdesign-flutter/pull/162))
+- `Result`: Added Result component @shinyina ([#220](https://github.com/Tencent/tdesign-flutter/pull/220))
+- `TimeCounter`: Timer component supports time display beyond conversion units, original TDCountDown component renamed to TimeCounter @hkaikai ([#272](https://github.com/Tencent/tdesign-flutter/pull/272))
+- `Calendar`: Added Calendar component @hkaikai ([#271](https://github.com/Tencent/tdesign-flutter/pull/271))
+- `Indexes`: Added Indexes component @hkaikai ([#321](https://github.com/Tencent/tdesign-flutter/pull/321))
+- `Table`: Added table component @ccXxx1aoBai ([#244](https://github.com/Tencent/tdesign-flutter/pull/244))
+- `Rate`: Added Rate component @hkaikai ([#338](https://github.com/Tencent/tdesign-flutter/pull/338))
+- `Dialog`: Supports custom content padding and buttons @ccXxx1aoBai ([#289](https://github.com/Tencent/tdesign-flutter/pull/289))
+- `Drawer`: Supports controlling the visibility of the divider, custom drawer background color, and controlling the display of the last divider @ccXxx1aoBai ([#278](https://github.com/Tencent/tdesign-flutter/pull/278))
+- `DropdownMenu`: Added control parameters for icon/width/height/icon and text alignment @hkaikai ([#297](https://github.com/Tencent/tdesign-flutter/pull/297))
+- `Search`: Added action and onActionClick properties @Ezer015 ([#263](https://github.com/Tencent/tdesign-flutter/pull/263))
+- `Avatar`: Added onTap event @ccXxx1aoBai ([#344](https://github.com/Tencent/tdesign-flutter/pull/344))
+- `TDDropdownMenu`: Added tabBarFlex parameter to TDDropdownItem to control width ratio @hkaikai ([#338](https://github.com/Tencent/tdesign-flutter/pull/338))
+- `SearchBar`: Feature/td searchbarfix added cursor height property @shizhe2018 ([#337](https://github.com/Tencent/tdesign-flutter/pull/337))
+- `TimeCounter`: Added forward timing function @epoll-j ([#246](https://github.com/Tencent/tdesign-flutter/pull/246))
+- `NavBar`: [NavBar] supports setting bottom shadow @ccXxx1aoBai ([#284](https://github.com/Tencent/tdesign-flutter/pull/284))
+- `Cell`: Added custom padding parameter @epoll-j ([#276](https://github.com/Tencent/tdesign-flutter/pull/276))
+- `Input`: Added onTapOutside callback @epoll-j ([#280](https://github.com/Tencent/tdesign-flutter/pull/280))
+- `Picker`: Added custom leftText, rightText @epoll-j ([#301](https://github.com/Tencent/tdesign-flutter/pull/301))
+- `Slider`: Feature/tdslider added text wrapping function @shizhe2018 ([#329](https://github.com/Tencent/tdesign-flutter/pull/329))
+- `Radio`: Feature/tdRadioGroup added built-in line wrapping, set number of rows and columns @shizhe2018 ([#331](https://github.com/Tencent/tdesign-flutter/pull/331))
+- `Dialog`: Added custom input box @shizhe2018 ([#333](https://github.com/Tencent/tdesign-flutter/pull/333))
+- `TDNavBar`: Added flexibleSpace parameter @Luozf12345 ([#341](https://github.com/Tencent/tdesign-flutter/pull/341))
+- `TDSearch`: Added search box focus acquisition and clear events @Luozf12345 ([#342](https://github.com/Tencent/tdesign-flutter/pull/342))
+
+### 🐞 Bug Fixes
+- `ImageViewer`: Fixed defaultIndex invalid issue @ccXxx1aoBai ([#292](https://github.com/Tencent/tdesign-flutter/pull/292))
+- `TimeCounter`: Fixed issue where it could not be reset repeatedly @hkaikai ([#272](https://github.com/Tencent/tdesign-flutter/pull/272))
+- `DropdownMenu`: Adjusted popup layer logic, fixed issue where back button could not be listened to @hkaikai ([#297](https://github.com/Tencent/tdesign-flutter/pull/297))
+- `DatePicker`: Removed monitoring on year, month, and day when destroyed to avoid memory leaks; added onSelectedItemChanged event @hkaikai ([#300](https://github.com/Tencent/tdesign-flutter/pull/300))
+- `SideBar`: Fixed issue where custom selected style text was not centered @ccXxx1aoBai ([#313](https://github.com/Tencent/tdesign-flutter/pull/313))
+- `Popup`: Fixed issue where multiple returns occurred when quickly clicking the mask @ccXxx1aoBai ([#318](https://github.com/Tencent/tdesign-flutter/pull/318))
+- `ImageViewer`: Fixed issue where deleting the first image caused display anomalies @ccXxx1aoBai ([#322](https://github.com/Tencent/tdesign-flutter/pull/322))
+- `SideBar`: Fixed issue where delayed loading components caused anchor point function anomalies @ccXxx1aoBai ([#343](https://github.com/Tencent/tdesign-flutter/pull/343))
+- `TDDropdownMenu`: Optimized menu display text to show ellipsis when exceeding display limit @hkaikai ([#338](https://github.com/Tencent/tdesign-flutter/pull/338))
+- `NoticeBar`: Fixed issue where it could not follow the theme color @ccXxx1aoBai ([#350](https://github.com/Tencent/tdesign-flutter/pull/350))
+- `Button`: Fixed overflow issue when setting shape to square or circle @epoll-j ([#257](https://github.com/Tencent/tdesign-flutter/pull/257))
+- `Slider`: Bugfix: Fixed issue where tb_slider setState did not update @arvinwli ([#298](https://github.com/Tencent/tdesign-flutter/pull/298))
+- `Cascader`: Fixed list sorting issue @shizhe2018 ([#303](https://github.com/Tencent/tdesign-flutter/pull/303))
+- `Popup`: Fixed issue where the keyboard would cover the input box in the Popup @epoll-j ([#264](https://github.com/Tencent/tdesign-flutter/pull/264))
+- `Cascader`: Fixed linkage time limit range logic @shizhe2018 ([#242](https://github.com/Tencent/tdesign-flutter/pull/242))
+- `Loading`: Fixed issue where dismissing Loading immediately after showing did not take effect @Luozf12345 ([#340](https://github.com/Tencent/tdesign-flutter/pull/340))
+
+### 🚧 Others
+- fix: remove useless output. @Ives7 ([#311](https://github.com/Tencent/tdesign-flutter/pull/311))
+
+
 
 ## 🌈 0.1.6 `2024-07-24`
 

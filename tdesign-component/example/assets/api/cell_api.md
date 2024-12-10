@@ -15,6 +15,7 @@
 | borderedColor | Color? | - | 单元格边框颜色 |
 | groupBorderedColor | Color? | - | 单元格组边框颜色 |
 | backgroundColor | Color? | - | 默认状态背景颜色 |
+| padding | EdgeInsets? | - | 单元格内边距 |
 
 
 #### 工厂构造方法

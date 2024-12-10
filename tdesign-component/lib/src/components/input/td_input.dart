@@ -60,7 +60,8 @@ class TDInput extends StatelessWidget {
       this.cardStyleTopText,
       this.inputAction,
       TDInputSpacer? spacer,
-      this.cardStyleBottomText})
+      this.cardStyleBottomText,
+      this.onTapOutside})
       :
         // assert(() {
         //   if (type == TDInputType.cardStyle) {
@@ -225,7 +226,7 @@ class TDInput extends StatelessWidget {
   /// 内容对齐方向
   final TextAlign contentAlignment;
 
-  /// 左侧标签样式
+  /// 左侧标签样式 设置该值是若出现像素溢出，请设置letterSpacing: 0
   final TextStyle? leftLabelStyle;
 
   /// 键盘动作类型
@@ -236,6 +237,9 @@ class TDInput extends StatelessWidget {
 
   /// 左侧内容所占区域宽度
   double _leftLabelWidth = 0;
+
+  /// 点击输入框外部区域回调
+  final TapRegionCallback? onTapOutside;
 
   /// 获取输入框规格
   double getInputPadding() {
@@ -265,6 +269,25 @@ class TDInput extends StatelessWidget {
     }
   }
 
+  double _getBottomDividerMarginLeft() {
+    switch (type) {
+      case TDInputType.normal:
+      case TDInputType.twoLine:
+      case TDInputType.normalMaxTwoLine:
+      case TDInputType.cardStyle:
+        if (contentPadding != null && contentPadding is EdgeInsets) {
+          return (contentPadding as EdgeInsets).left;
+        }
+        return spacer.labelInputSpace ?? 16;
+      case TDInputType.special:
+      case TDInputType.longText:
+        if (contentPadding != null && contentPadding is EdgeInsets) {
+          return (contentPadding as EdgeInsets).left;
+        }
+        return 16;
+    }
+  }
+
   Widget buildNormalInput(BuildContext context) {
     var cardStyleDecoration = _getCardStylePreDecoration(context);
     var hasLeftWidget = leftLabel != null || leftIcon != null || (required ?? false);
@@ -284,46 +307,52 @@ class TDInput extends StatelessWidget {
                   width: leftLabelSpace ?? 16,
                 ),
               ),
-              Row(
-                children: [
-                  Visibility(
-                    visible: leftIcon != null,
-                    child: leftIcon ?? const SizedBox.shrink(),
-                  ),
-                  Visibility(
-                    visible: leftLabel != null,
-                    child: Container(
-                      constraints: BoxConstraints(maxWidth: _leftLabelWidth),
-                      padding: EdgeInsets.only(
-                          left: leftIcon != null ? spacer.iconLabelSpace! : 0,
-                          top: getInputPadding(),
-                          bottom: getInputPadding()),
-                      child: TDText(
-                        leftLabel,
-                        maxLines: 2,
-                        style: leftLabelStyle,
-                        font: TDTheme.of(context).fontBodyLarge,
-                        fontWeight: FontWeight.w400,
+              SizedBox(
+                width: _leftLabelWidth,
+                child: Row(
+                  children: [
+                    Visibility(
+                      visible: leftIcon != null,
+                      child: SizedBox(
+                        width: 24,
+                        child: leftIcon ?? const SizedBox.shrink(),
                       ),
                     ),
-                  ),
-                  Visibility(
-                    visible: labelWidget != null,
-                    child: labelWidget ?? const SizedBox.shrink(),
-                  ),
-                  Visibility(
-                      visible: required ?? false,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 4.0),
+                    Visibility(
+                      visible: leftLabel != null,
+                      child: Container(
+                        constraints: BoxConstraints(maxWidth: _leftLabelWidth),
+                        padding: EdgeInsets.only(
+                            left: leftIcon != null ? (spacer.iconLabelSpace ?? 4) : 0,
+                            top: getInputPadding(),
+                            bottom: getInputPadding()),
                         child: TDText(
-                          '*',
-                          maxLines: 1,
-                          style: TextStyle(color: TDTheme.of(context).errorColor6),
+                          leftLabel,
+                          maxLines: 2,
+                          style: leftLabelStyle ?? const TextStyle(letterSpacing: 0),
                           font: TDTheme.of(context).fontBodyLarge,
                           fontWeight: FontWeight.w400,
                         ),
-                      )),
-                ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: labelWidget != null,
+                      child: labelWidget ?? const SizedBox.shrink(),
+                    ),
+                    Visibility(
+                        visible: required ?? false,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 4.0),
+                          child: TDText(
+                            '*',
+                            maxLines: 1,
+                            style: TextStyle(color: TDTheme.of(context).errorColor6),
+                            font: TDTheme.of(context).fontBodyLarge,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        )),
+                  ],
+                ),
               ),
               Expanded(
                 flex: 1,
@@ -340,6 +369,7 @@ class TDInput extends StatelessWidget {
                       hintText: hintText,
                       inputType: inputType,
                       onChanged: onChanged,
+                      onTapOutside: onTapOutside,
                       inputFormatters: inputFormatters,
                       inputDecoration: inputDecoration,
                       maxLines: maxLines,
@@ -353,15 +383,15 @@ class TDInput extends StatelessWidget {
                       controller: controller,
                       contentPadding: contentPadding ??
                           EdgeInsets.only(
-                              left: spacer.labelInputSpace!,
-                              right: spacer.inputRightSpace! / 2,
+                              left: spacer.labelInputSpace ?? 16,
+                              right: spacer.inputRightSpace != null ? spacer.inputRightSpace! / 2 : 16,
                               bottom: additionInfo != '' ? 4 : getInputPadding(),
                               top: getInputPadding()),
                       inputAction: inputAction,
                     ),
                     Visibility(
                       child: Padding(
-                        padding: EdgeInsets.only(left: spacer.additionInfoSpace!, bottom: getInputPadding()),
+                        padding: EdgeInsets.only(left: spacer.additionInfoSpace ?? 16, bottom: getInputPadding()),
                         child: TDText(
                           additionInfo,
                           font: TDTheme.of(context).fontBodySmall,
@@ -385,8 +415,8 @@ class TDInput extends StatelessWidget {
                 child: GestureDetector(
                     child: Container(
                       margin: EdgeInsets.only(
-                          left: spacer.inputRightSpace! / 2,
-                          right: spacer.rightSpace!,
+                          left: spacer.inputRightSpace != null ? spacer.inputRightSpace! / 2 : 8,
+                          right: spacer.rightSpace ?? 16,
                           top: additionInfo != '' ? getInputPadding() : 0),
                       child: Icon(
                         size: clearIconSize,
@@ -404,8 +434,8 @@ class TDInput extends StatelessWidget {
                     onTap: onBtnTap,
                     child: Container(
                       margin: EdgeInsets.only(
-                          left: spacer.inputRightSpace! / 2,
-                          right: spacer.rightSpace!,
+                          left: spacer.inputRightSpace != null ? spacer.inputRightSpace! / 2 : 8,
+                          right: spacer.rightSpace ?? 16,
                           top: additionInfo != '' ? getInputPadding() : 0),
                       child: rightBtn,
                     ),
@@ -418,9 +448,9 @@ class TDInput extends StatelessWidget {
         if (showBottomDivider)
           Visibility(
             visible: type != TDInputType.cardStyle,
-            child: const TDDivider(
+            child: TDDivider(
               margin: EdgeInsets.only(
-                left: 16,
+                left: _getBottomDividerMarginLeft(),
               ),
             ),
           ),
@@ -483,7 +513,7 @@ class TDInput extends StatelessWidget {
                               TDText(
                                 leftLabel,
                                 maxLines: 2,
-                                style: leftLabelStyle,
+                                style: leftLabelStyle ?? const TextStyle(letterSpacing: 0),
                                 font: TDTheme.of(context).fontBodyLarge,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -543,7 +573,10 @@ class TDInput extends StatelessWidget {
                         textInputBackgroundColor: textInputBackgroundColor,
                         controller: controller,
                         contentPadding: contentPadding ??
-                            EdgeInsets.only(left: spacer.labelInputSpace!, right: spacer.inputRightSpace! / 2),
+                            EdgeInsets.only(
+                                left: spacer.labelInputSpace ?? 16,
+                                right: spacer.inputRightSpace != null ? spacer.inputRightSpace! / 2 : 8,
+                            ),
                         inputAction: inputAction,
                       ),
                     ),
@@ -551,7 +584,10 @@ class TDInput extends StatelessWidget {
                       visible: controller != null && controller!.text.isNotEmpty && needClear,
                       child: GestureDetector(
                         child: Container(
-                          margin: EdgeInsets.only(left: spacer.inputRightSpace! / 2, right: spacer.rightSpace!),
+                          margin: EdgeInsets.only(
+                              left: spacer.inputRightSpace != null ? spacer.inputRightSpace! / 2 : 8,
+                              right: spacer.rightSpace ?? 16,
+                          ),
                           child: Icon(
                             size: clearIconSize,
                             TDIcons.close_circle_filled,
@@ -565,7 +601,10 @@ class TDInput extends StatelessWidget {
                         child: GestureDetector(
                           onTap: onBtnTap,
                           child: Container(
-                            margin: EdgeInsets.only(left: spacer.inputRightSpace! / 2, right: spacer.rightSpace!),
+                            margin: EdgeInsets.only(
+                                left: spacer.inputRightSpace != null ? spacer.inputRightSpace! / 2 : 8,
+                                right: spacer.rightSpace ?? 16,
+                            ),
                             child: rightBtn,
                           ),
                         ),
@@ -577,9 +616,9 @@ class TDInput extends StatelessWidget {
             ],
           ),
           if (showBottomDivider)
-            const TDDivider(
+            TDDivider(
               margin: EdgeInsets.only(
-                left: 16,
+                left: _getBottomDividerMarginLeft(),
               ),
             ),
         ],
@@ -609,9 +648,9 @@ class TDInput extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                     )),
                 if (showBottomDivider)
-                  const TDDivider(
+                  TDDivider(
                     margin: EdgeInsets.only(
-                      left: 16,
+                      left: _getBottomDividerMarginLeft(),
                     ),
                   ),
               ],
@@ -736,10 +775,10 @@ class TDInput extends StatelessWidget {
           ),
         ),
         if (showBottomDivider)
-          const Visibility(
+          Visibility(
             child: TDDivider(
               margin: EdgeInsets.only(
-                left: 16,
+                left: _getBottomDividerMarginLeft(),
               ),
             ),
           ),

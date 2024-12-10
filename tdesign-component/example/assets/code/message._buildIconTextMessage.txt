@@ -1,0 +1,20 @@
+
+  Widget _buildIconTextMessage(BuildContext context) {
+    return TDButton(
+        isBlock: true,
+        text: '带图标的通知',
+        size: TDButtonSize.large,
+        type: TDButtonType.outline,
+        width: 450,
+        theme: TDButtonTheme.primary,
+        onTap: () {
+          TDMessage.showMessage(
+            context: context,
+            content: _commonContent,
+            visible: true,
+            icon: true,
+            theme: MessageTheme.info,
+            duration: 3000,
+          );
+        });
+  }

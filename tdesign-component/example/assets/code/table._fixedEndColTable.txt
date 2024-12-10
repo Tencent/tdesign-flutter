@@ -1,0 +1,37 @@
+
+  Widget _fixedEndColTable(BuildContext context) {
+    return TDTable(
+      columns: [
+        TDTableCol(title: '标题', colKey: 'title1'),
+        TDTableCol(title: '标题', colKey: 'title2'),
+        TDTableCol(title: '标题', colKey: 'title3'),
+        TDTableCol(
+          title: '标题',
+          colKey: 'title4',
+          fixed: TDTableColFixed.right,
+          cellBuilder: (BuildContext context) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TDText(
+                  '修改',
+                  style: TextStyle(
+                    color: TDTheme.of(context).brandNormalColor,
+                    fontSize: 14,
+                  ),
+                ),
+                TDText(
+                  '通过',
+                  style: TextStyle(
+                    color: TDTheme.of(context).brandNormalColor,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ],
+      data: _getData(10),
+    );
+  }
