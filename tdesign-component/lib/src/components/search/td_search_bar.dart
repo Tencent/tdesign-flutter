@@ -45,6 +45,7 @@ class TDSearchBar extends StatefulWidget {
     this.onActionClick,
     this.onClearClick,
     this.focusNode,
+    this.inputAction,
     this.enabled,
     this.readOnly,
   }) : super(key: key);
@@ -105,6 +106,9 @@ class TDSearchBar extends StatefulWidget {
 
   /// 自定义焦点
   final  FocusNode? focusNode;
+
+  /// 键盘动作类型
+  final TextInputAction? inputAction;
 
   /// 是否禁用
   final bool? enabled;
@@ -294,6 +298,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                             fillColor: TDTheme.of(context).grayColor1,
                           ),
                           maxLines: 1,
+                          textInputAction: widget.inputAction,
                           readOnly:widget.readOnly??false,
                             enabled:widget.enabled,
                         ),
