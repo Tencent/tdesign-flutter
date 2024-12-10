@@ -32,6 +32,7 @@ class TDSearchBar extends StatefulWidget {
     this.onTextChanged,
     this.onSubmitted,
     this.onEditComplete,
+    this.onInputClick,
     this.autoHeight = false,
     this.padding = const EdgeInsets.fromLTRB(16, 8, 16, 8),
     this.autoFocus = false,
@@ -45,6 +46,8 @@ class TDSearchBar extends StatefulWidget {
     this.onClearClick,
     this.focusNode,
     this.inputAction,
+    this.enabled,
+    this.readOnly,
   }) : super(key: key);
 
   /// 预设文案
@@ -93,6 +96,8 @@ class TDSearchBar extends StatefulWidget {
   /// 自定义操作文字
   final String action;
 
+  /// 输入框点击事件
+  final GestureTapCallback? onInputClick;
   /// 自定义操作回调
   final TDSearchBarEvent? onActionClick;
 
@@ -105,6 +110,11 @@ class TDSearchBar extends StatefulWidget {
   /// 键盘动作类型
   final TextInputAction? inputAction;
 
+  /// 是否禁用
+  final bool? enabled;
+
+  /// 是否只读
+  final bool? readOnly;
   @override
   State<StatefulWidget> createState() => _TDSearchBarState();
 }
@@ -268,6 +278,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                               ? TextAlign.center
                               : TextAlign.left,
                           focusNode: focusNode,
+                          onTap: widget.onInputClick,
                           onChanged: widget.onTextChanged,
                           onSubmitted: widget.onSubmitted,
                           onEditingComplete: widget.onEditComplete,
@@ -288,6 +299,8 @@ class _TDSearchBarState extends State<TDSearchBar>
                           ),
                           maxLines: 1,
                           textInputAction: widget.inputAction,
+                          readOnly:widget.readOnly??false,
+                            enabled:widget.enabled,
                         ),
                       ),
                     ),
