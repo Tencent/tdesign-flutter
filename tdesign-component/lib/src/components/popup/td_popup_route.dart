@@ -90,8 +90,10 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
 
   /// 键盘焦点对象的Y坐标
   var _focusY = 0.0;
+
   /// 键盘焦点对象的高度
   var _focusHeight = 0.0;
+
   /// 键盘出现后bottom的偏移量
   var _lastBottom = 0.0;
 
@@ -109,21 +111,24 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
         if (!modalBarrierFull)
           _getPositionWidget(
             context,
-            Container(
-              color: _barrierColor.withAlpha((animValue * _barrierColor.alpha).toInt()),
-              child: GestureDetector(
-                onTap: () {
-                  barrierClick?.call();
-                  if (isDismissible) {
-                    Navigator.pop(context);
-                  }
-                },
-                onDoubleTap: () {
-                  barrierClick?.call();
-                  if (isDismissible) {
-                    Navigator.pop(context);
-                  }
-                },
+            IgnorePointer(
+              ignoring: true,
+              child: Container(
+                color: _barrierColor.withAlpha((animValue * _barrierColor.alpha).toInt()),
+                child: GestureDetector(
+                  onTap: () {
+                    barrierClick?.call();
+                    if (isDismissible) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  onDoubleTap: () {
+                    barrierClick?.call();
+                    if (isDismissible) {
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
               ),
             ),
           ),
@@ -174,7 +179,6 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     super.dispose();
   }
 
-
   /// 监听焦点变化
   void startFocusListener(BuildContext context) {
     FocusManager.instance.addListener(_handleFocusChange);
@@ -191,9 +195,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     if (focusNode != null && focusNode.context != null) {
       var renderObject = focusNode.context!.findRenderObject();
       if (renderObject is RenderPointerListener) {
-        _focusY = renderObject
-            .localToGlobal(Offset.zero)
-            .dy;
+        _focusY = renderObject.localToGlobal(Offset.zero).dy;
         _focusHeight = renderObject.size.height;
       }
     }
