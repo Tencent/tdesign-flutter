@@ -98,7 +98,6 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       maxLines: 4,
       minLines: 4,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }
@@ -110,7 +109,6 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       hintText: '请输入文字',
       minLines: 1,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }
@@ -126,7 +124,6 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       maxLength: 500,
       indicator: true,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }
@@ -141,7 +138,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       minLines: 4,
       readOnly: true,
       onChanged: (value) {
-        setState(() {});
+
       },
     );
   }
@@ -158,7 +155,6 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       indicator: true,
       layout: TDTextareaLayout.vertical,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }
@@ -179,7 +175,6 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       ),
       margin: EdgeInsets.only(right: TDTheme.of(context).spacer16, left: TDTheme.of(context).spacer16),
       onChanged: (value) {
-        setState(() {});
       },
     );
   }
@@ -197,7 +192,6 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       layout: TDTextareaLayout.vertical,
       bordered: true,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }
@@ -214,7 +208,6 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       indicator: true,
       width: 200,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }
@@ -236,7 +229,6 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       maxLength: 500,
       indicator: true,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }
@@ -255,7 +247,6 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       required: true,
       additionInfo: '辅助说明',
       onChanged: (value) {
-        setState(() {});
       },
     );
   }
@@ -273,7 +264,6 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       layout: TDTextareaLayout.vertical,
       size: TDInputSize.small,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }
