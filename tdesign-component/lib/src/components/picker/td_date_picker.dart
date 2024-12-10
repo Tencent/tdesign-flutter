@@ -100,7 +100,7 @@ class TDDatePicker extends StatefulWidget {
   final DatePickerModel model;
 
   /// 选择器选中项改变回调
-  final void Function(int index)? onSelectedItemChanged;
+  final void Function(int wheelIndex,int index)? onSelectedItemChanged;
 
   @override
   State<StatefulWidget> createState() => _TDDatePickerState();
@@ -318,7 +318,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                     pickerHeight = pickerHeight - Random().nextDouble() / 100000000;
                   });
                 }
-                widget.onSelectedItemChanged?.call(index);
+                widget.onSelectedItemChanged?.call(whichLine,index);
               },
               childDelegate: ListWheelChildBuilderDelegate(
                   childCount: widget.model.data[whichLine].length,
@@ -331,6 +331,9 @@ class _TDDatePickerState extends State<TDDatePicker> {
                           index: index,
                           itemHeight: pickerHeight / widget.pickerItemCount,
                           content: whichLine == 3
+                              ? timeUnitMap(widget.model.mapping[whichLine]) +
+                                  widget.model.weekMap[widget.model.data[whichLine][index] - 1]
+                              : widget.model.data[whichLine][index].toString() + timeUnitMap(widget.model.mapping[whichLine]),
                               ? widget.model.mapping[whichLine] +
                                   widget.model.weekMap[widget.model.data[whichLine][index] - 1]
                               : widget.model.data[whichLine][index].toString() + widget.model.mapping[whichLine],
@@ -401,6 +404,18 @@ class _TDDatePickerState extends State<TDDatePicker> {
     );
   }
 
+  timeUnitMap(String name){
+    Map<String,String>   times={
+      '年':context.resource.yearLabel,
+      '月':context.resource.monthLabel,
+      '日': context.resource.dateLabel,
+      '周':context.resource.weeksLabel,
+      '时':context.resource.hours,
+      '分':context.resource.minutes,
+      '秒':context.resource.seconds
+    };
+     return times[name];
+  }
   double getTitleHeight() => widget.titleHeight ?? _pickerTitleHeight;
 }
 
@@ -416,9 +431,8 @@ class DatePickerModel {
   List<int> dateStart;
   List<int> dateEnd;
   List<int>? dateInitial;
-
-  final mapping = ['年', '月', '日', '周', '时', '分', '秒'];
-  final weekMap = ['一', '二', '三', '四', '五', '六', '日'];
+  final mapping =  ['年', '月', '日', '周', '时', '分', '秒'];
+  final weekMap= ['一', '二', '三', '四', '五', '六', '日'];
 
   late DateTime initialTime;
 
@@ -458,6 +472,8 @@ class DatePickerModel {
       required this.useSecond,
       required this.dateStart,
       required this.dateEnd,
+      this.dateInitial,
+}) {
       this.dateInitial}) {
     assert(!useWeekDay || (!useSecond && !useMinute && !useHour), 'WeekDay can only used with Year, Month and Day!');
     setInitialTime();
@@ -529,6 +545,12 @@ class DatePickerModel {
 
   void setInitialTimeData() {
     if (dateStart.length > 3) {
+      if(!useYear&&!useMonth&&!useDay&&dateEnd[0] == dateStart[0] && dateEnd[1] == dateStart[1]&& dateEnd[2] == dateStart[2]){
+          data[4] = List.generate(dateEnd[3]+1, (index) => index + dateStart[3]);
+          data[5] = List.generate(dateEnd[4]+1, (index) => index + dateStart[4]);
+          data[6] = List.generate(dateEnd[5]+1, (index) => index + dateStart[5]);
+          return;
+      }
       if (initialTime.hour >= dateStart[3]) {
         data[4] = List.generate(24 - dateStart[3], (index) => index + dateStart[3]);
       }
@@ -640,7 +662,6 @@ class DatePickerModel {
     /// 在刷新日数据时，年月数据已经是最新的
     var selectedYear = yearIndex + data[0][0];
     var selectedMonth = monthIndex + data[1][0];
-    int selectHour = dateStart[3];
     if (dateEnd[0] == dateStart[0] && dateEnd[1] == dateStart[1]) {
       data[2] = List.generate(dateEnd[2] - dateStart[2] + 1, (index) => index + dateStart[2]);
     } else if (selectedYear == dateStart[0] && selectedMonth == dateStart[1]) {

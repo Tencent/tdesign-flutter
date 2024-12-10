@@ -197,17 +197,29 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
       children: [
         GestureDetector(
           onTapDown: (event) {
+            if (widget.disabled == true) {
+              return;
+            }
             _isClick = true;
           },
           onTapUp: (details) {
+            if (widget.disabled == true) {
+              return;
+            }
             _changeSelect(details.globalPosition, true);
             _hideTip();
           },
           onHorizontalDragUpdate: (details) {
+            if (widget.disabled == true) {
+              return;
+            }
             _isClick = false;
             _changeSelect(details.globalPosition);
           },
           onHorizontalDragEnd: (details) {
+            if (widget.disabled == true) {
+              return;
+            }
             _hideTip();
           },
           child: Row(
@@ -403,6 +415,7 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
           if (value != _activeValue) {
             _activeValue = value;
             setState(() {});
+            widget.onChange?.call(value);
           }
         },
       ),

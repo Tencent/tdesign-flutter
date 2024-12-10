@@ -90,7 +90,6 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
       throw Exception('interval must not be less than 0');
     }
     _scrollController = ScrollController();
-    _init();
     WidgetsBinding.instance.addPostFrameCallback((time) {
       if (widget.marquee == true) {
         _startTimer();
@@ -242,6 +241,14 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
         (_size!.width - _style!.getPadding.horizontal);
   }
 
+  /// 获取文字高度
+  double _getTextHeight() {
+    if(identical(0, 0.0)) {
+      return widget.height;
+    }
+    return _getFontSize().height;
+  }
+
   /// 内容区域
   Widget _contextWidget() {
     var valid = false;
@@ -252,11 +259,14 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
         height: widget.height,
         child: Align(
           alignment: Alignment.centerLeft,
-          child: TDText(
-            widget.context,
-            style: _style?.getTextStyle,
-            maxLines: 1,
-            forceVerticalCenter: true,
+          child: SizedBox(
+            height: _getTextHeight(),
+            child: TDText(
+              widget.context,
+              style: _style?.getTextStyle,
+              maxLines: 1,
+              forceVerticalCenter: true,
+            ),
           ),
         ),
       );
@@ -267,11 +277,14 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
         height: widget.height,
         child: Align(
           alignment: Alignment.centerLeft,
-          child: TDText(
-            widget.context[0],
-            style: _style?.getTextStyle,
-            maxLines: 1,
-            forceVerticalCenter: true,
+          child: SizedBox(
+            height: _getTextHeight(),
+            child: TDText(
+              widget.context[0],
+              style: _style?.getTextStyle,
+              maxLines: 1,
+              forceVerticalCenter: true,
+            ),
           ),
         ),
       );
@@ -365,6 +378,8 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
 
   @override
   Widget build(BuildContext context) {
+    // 初始化样式及左右widget
+    _init();
     _size = MediaQuery.of(context).size;
     return Container(
       padding: _style!.getPadding,

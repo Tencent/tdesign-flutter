@@ -10,7 +10,7 @@ TDesign Flutter组件示例应用
 <br/>
 Android请扫码下载预览 ↓
 <br/>
-<img width="260" src="/flutter/assets/qrcode/td_apk_qrcode.png" />
+<img width="260" src="/flutter/assets/qrcode/td_apk_qr_0_1_7.png" />
 <br/>
 iOS请运行项目预览 ↓
 <br/>
@@ -157,11 +157,11 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
 ## 组件规划
 
-- 开发中组件: NoticeBar,Rate,Calendar,Indexes,ActionSheet,Progress,Footer,Result,Message,Popover,Table
+- 开发中组件: ActionSheet,Progress,Footer,Message,Form
 
-- 待开发组件: Form,Upload
+- 待开发组件: Upload,Popover
 
-- 其他事项: API优化,单元测试,多端适配
+- 其他事项: API优化,单元测试,多端适配,深色模式
 
 ## 基础库版本
 
