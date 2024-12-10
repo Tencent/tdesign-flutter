@@ -425,8 +425,12 @@ class TDTableState extends State<TDTable> {
         _getVerticalCell(fixedRightCol, fixedRightTitle, cellWidth);
 
     // 固定列宽度
-    var fixedCellsWidth =
-        (fixedLeftCol.length + fixedRightCol.length) * cellWidth;
+    var fixedCellsWidth = 0.0;
+    for(var tableCol in widget.columns) {
+      if(tableCol.fixed == TDTableColFixed.left || tableCol.fixed == TDTableColFixed.right) {
+        fixedCellsWidth += (tableCol.width ?? cellWidth);
+      }
+    }
 
     // 计算非固定列宽度
     var fixedNonCellsWidth = 0.0;
