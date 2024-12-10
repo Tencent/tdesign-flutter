@@ -2,7 +2,7 @@
   Widget _buildVerticalCompanyCascader(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TDCascader.showMultiCascader(context, title: '选择部门人员', data: _data_3, initialData: _initData_3, theme: 'step',
+        TDCascader.showMultiCascader(context, title: '选择部门人员', data: _data_3,isLetterSort: true, initialData: _initData_3, theme: 'step',
             onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
             List result = [];

@@ -310,6 +310,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | useBorderStyle | bool | false | 是否使用边框模式 |
 | border | TDNavBarItemBorder? | - | 边框 |
 | belowTitleWidget | Widget? | - | belowTitleWidget navbar 下方的widget |
+| boxShadow | List<BoxShadow>? | - | 底部阴影 |
+| flexibleSpace | Widget? | - | 固定背景 |
 
 ```
 ```

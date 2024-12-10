@@ -11,7 +11,7 @@
 | decoration | Decoration? | - | 输入框样式 |
 | leftIcon | Widget? | - | 带图标的输入框 |
 | leftLabel | String? | - | 输入框左侧文案 |
-| leftLabelStyle | TextStyle? | - | 左侧标签样式 |
+| leftLabelStyle | TextStyle? | - | 左侧标签样式 设置该值是若出现像素溢出，请设置letterSpacing: 0 |
 | leftLabelSpace | double? | - | 输入框左侧文案间距 |
 | required | bool? | - | 是否必填标志（红色*） |
 | readOnly | bool | false | 是否只读 |
@@ -53,3 +53,4 @@
 | inputAction | TextInputAction? | - | 键盘动作类型 |
 | spacer | TDInputSpacer | - | 组件各模块间间距 |
 | cardStyleBottomText | String? | - | 卡片模式下方文字 |
+| onTapOutside | TapRegionCallback? | - | 点击输入框外部区域回调 |

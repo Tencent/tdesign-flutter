@@ -36,6 +36,7 @@ class TDButton extends StatefulWidget {
       this.onTap,
       this.icon,
       this.iconWidget,
+      this.iconTextSpacing,
       this.onLongPress,
       this.margin,
       this.padding})
@@ -94,6 +95,9 @@ class TDButton extends StatefulWidget {
 
   /// 自定义图标icon控件
   final Widget? iconWidget;
+
+ /// 自定义图标与文本之间距离
+  final double? iconTextSpacing;
 
   /// 自定义padding
   final EdgeInsetsGeometry? padding;
@@ -187,7 +191,7 @@ class _TDButtonState extends State<TDButton> {
       },
       onTapUp: (TapUpDetails details) {
         Future.delayed(const Duration(milliseconds: 100), () {
-          if (mounted&&!widget.disabled) {
+          if (mounted && !widget.disabled) {
             setState(() {
               _buttonStatus = TDButtonStatus.defaultState;
             });
@@ -239,8 +243,8 @@ class _TDButtonState extends State<TDButton> {
     if (children.length == 2) {
       children.insert(
         1,
-        const SizedBox(
-          width: 8,
+        SizedBox(
+          width:widget.iconTextSpacing??8,
         ),
       );
     }
@@ -327,11 +331,11 @@ class _TDButtonState extends State<TDButton> {
       case TDButtonSize.large:
         return 24;
       case TDButtonSize.medium:
-        return 22;
+        return 20;
       case TDButtonSize.small:
-        return 20;
+        return 18;
       case TDButtonSize.extraSmall:
-        return 20;
+        return 14;
     }
   }
 

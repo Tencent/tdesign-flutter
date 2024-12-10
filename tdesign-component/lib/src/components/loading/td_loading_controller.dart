@@ -55,7 +55,7 @@ class TDLoadingController {
   // 消失
   static void dismiss() {
     if (_isShowing) {
-     if (_overlayEntry != null && _overlayEntry!.mounted) {
+     if (_overlayEntry != null) {
        _overlayEntry?.remove();
        _overlayEntry = null;
      }

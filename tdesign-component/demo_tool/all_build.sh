@@ -19,6 +19,7 @@
 # drawer
 ./bin/demo_tool generate --folder ../lib/src/components/drawer --name TDDrawer,TDDrawerItem,TDDrawerStyle --folder-name drawer --output ../example/assets/api/ --only-api --get-comments
 # indexes
+./bin/demo_tool generate --folder ../lib/src/components/indexes --name TDIndexes,TDIndexesAnchor,TDIndexesList --folder-name indexes --output ../example/assets/api/ --only-api --get-comments
 # navbar
 ./bin/demo_tool generate --file ../lib/src/components/navbar/td_nav_bar.dart --name TDNavBar,TDNavBarItem, --folder-name navbar --output ../example/assets/api/ --only-api
 # sidebar
@@ -33,6 +34,7 @@
 
 # 输入
 # calendar
+./bin/demo_tool generate --folder ../lib/src/components/calendar --name TDCalendar,TDCalendarPopup,TDCalendarStyle --folder-name calendar --output ../example/assets/api/ --only-api
 # cascader
 ./bin/demo_tool generate --folder ../lib/src/components/cascader --name TDMultiCascader --folder-name cascader --output ../example/assets/api/ --only-api
 
@@ -47,6 +49,7 @@
 # radio
 ./bin/demo_tool generate --file ../lib/src/components/radio/td_radio.dart --name TDRadioStyle,TDRadio,TDRadioGroup --folder-name radio --output ../example/assets/api/ --only-api --get-comments
 # rate
+./bin/demo_tool generate --file ../lib/src/components/rate/td_rate.dart --name TDRate --folder-name rate --output ../example/assets/api/ --only-api
 # search
 ./bin/demo_tool generate --file ../lib/src/components/search/td_search_bar.dart --name TDSearchBar --folder-name search --output ../example/assets/api/ --only-api
 # slider
@@ -70,8 +73,8 @@
 ./bin/demo_tool generate --file ../lib/src/components/badge/td_badge.dart --name TDBadge --folder-name badge --output ../example/assets/api/ --only-api
 # cell
 ./bin/demo_tool generate --folder ../lib/src/components/cell --name TDCell,TDCellGroup,TDCellStyle --folder-name cell --output ../example/assets/api/ --only-api --get-comments
-# countDown
-./bin/demo_tool generate --folder ../lib/src/components/count_down --name TDCountDown,TDCountDownController,TDCountDownStyle --folder-name count-down --output ../example/assets/api/ --only-api --get-comments
+# timeCounter
+./bin/demo_tool generate --folder ../lib/src/components/time_counter --name TDTimeCounter,TDTimeCounterController,TDTimeCounterStyle --folder-name time-counter --output ../example/assets/api/ --only-api --get-comments
 # collapse
 ./bin/demo_tool generate --folder ../lib/src/components/collapse --name TDCollapse --folder-name collapse --output ../example/assets/api/ --only-api --get-comments
 
@@ -89,6 +92,8 @@
 # sticky
 # swiper
 ./bin/demo_tool generate --folder ../lib/src/components/swiper --name TDSwiperPagination,TDPageTransformer --folder-name swiper --output ../example/assets/api/ --only-api --get-comments
+# table
+./bin/demo_tool generate --folder ../lib/src/components/table --name TDTable --folder-name table --output ../example/assets/api/ --only-api
 # tag
 ./bin/demo_tool generate --folder ../lib/src/components/tag --name TDTag,TDSelectTag,TDTagStyle --folder-name tag --output ../example/assets/api/ --only-api
 
@@ -104,6 +109,7 @@
 ./bin/demo_tool generate --file ../lib/src/components/loading/td_loading.dart --name TDLoading --folder-name loading --output ../example/assets/api/ --only-api
 # message
 # noticeBar
+./bin/demo_tool generate --file ../lib/src/components/notice_bar --name TDNoticeBar,TDNoticeBarStyle --folder-name notice-bar --output ../example/assets/api/ --only-api --get-comments
 # overlay
 # popup
 ./bin/demo_tool generate --folder ../lib/src/components/popup --name TDSlidePopupRoute,TDPopupBottomDisplayPanel,TDPopupBottomConfirmPanel,TDPopupCenterPanel --folder-name popup --output ../example/assets/api/ --only-api --get-comments

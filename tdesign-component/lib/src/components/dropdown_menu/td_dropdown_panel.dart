@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'td_dropdown_menu.dart';
 import 'td_dropdown_popup.dart';
 
-typedef FutureParamCallback = void Function(Future<void> Function());
-
 class TDDropdownPanel extends StatefulWidget {
   const TDDropdownPanel({
     Key? key,
@@ -18,7 +16,7 @@ class TDDropdownPanel extends StatefulWidget {
     required this.directionListenable,
     required this.colorAlphaListenable,
     required this.direction,
-    required this.closeCallback,
+    required this.closeListenable,
     required this.onOpened,
     required this.child,
   }) : super(key: key);
@@ -30,7 +28,7 @@ class TDDropdownPanel extends StatefulWidget {
   final ValueNotifier<TDDropdownPopupDirection> directionListenable;
   final ValueNotifier<bool> colorAlphaListenable;
   final TDDropdownPopupDirection direction;
-  final FutureParamCallback closeCallback;
+  final ValueNotifier<FutureCallback?> closeListenable;
   final VoidCallback onOpened;
   final Widget child;
 
@@ -46,7 +44,15 @@ class _TDDropdownPanelState extends State<TDDropdownPanel> with SingleTickerProv
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: widget.duration);
-    widget.closeCallback(close);
+    widget.closeListenable.value = close;
+  }
+
+  @override
+  void didUpdateWidget(TDDropdownPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.directionListenable != oldWidget.directionListenable) {
+      widget.closeListenable.value = close;
+    }
   }
 
   @override
@@ -112,6 +118,7 @@ class _TDDropdownPanelState extends State<TDDropdownPanel> with SingleTickerProv
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_controller.status == AnimationStatus.dismissed) {
           widget.colorAlphaListenable.value = true;
+          _controller.duration = widget.duration;
           _controller.forward().whenCompleteOrCancel(() {
             widget.onOpened();
           });
@@ -129,6 +136,7 @@ class _TDDropdownPanelState extends State<TDDropdownPanel> with SingleTickerProv
 
   Future<void> close() {
     widget.colorAlphaListenable.value = false;
+    _controller.duration = widget.duration ~/ 2;
     return _controller.reverse();
   }
 }
