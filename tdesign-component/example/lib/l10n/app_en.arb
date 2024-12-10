@@ -20,6 +20,10 @@
   "minutes": "minutes",
   "seconds": "seconds",
   "milliseconds": "milliseconds",
+  "yearLabel": "year",
+  "monthLabel": "month",
+  "dateLabel": "date",
+  "weeks":"weeks"
   "sunday": "SUN",
   "monday": "MON",
   "tuesday": "TUE",

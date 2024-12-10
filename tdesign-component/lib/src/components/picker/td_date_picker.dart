@@ -331,6 +331,9 @@ class _TDDatePickerState extends State<TDDatePicker> {
                           index: index,
                           itemHeight: pickerHeight / widget.pickerItemCount,
                           content: whichLine == 3
+                              ? timeUnitMap(widget.model.mapping[whichLine]) +
+                                  widget.model.weekMap[widget.model.data[whichLine][index] - 1]
+                              : widget.model.data[whichLine][index].toString() + timeUnitMap(widget.model.mapping[whichLine]),
                               ? widget.model.mapping[whichLine] +
                                   widget.model.weekMap[widget.model.data[whichLine][index] - 1]
                               : widget.model.data[whichLine][index].toString() + widget.model.mapping[whichLine],
@@ -401,6 +404,18 @@ class _TDDatePickerState extends State<TDDatePicker> {
     );
   }
 
+  timeUnitMap(String name){
+    Map<String,String>   times={
+      '年':context.resource.yearLabel,
+      '月':context.resource.monthLabel,
+      '日': context.resource.dateLabel,
+      '周':context.resource.weeksLabel,
+      '时':context.resource.hours,
+      '分':context.resource.minutes,
+      '秒':context.resource.seconds
+    };
+     return times[name];
+  }
   double getTitleHeight() => widget.titleHeight ?? _pickerTitleHeight;
 }
 
@@ -416,9 +431,8 @@ class DatePickerModel {
   List<int> dateStart;
   List<int> dateEnd;
   List<int>? dateInitial;
-
-  final mapping = ['年', '月', '日', '周', '时', '分', '秒'];
-  final weekMap = ['一', '二', '三', '四', '五', '六', '日'];
+  final mapping =  ['年', '月', '日', '周', '时', '分', '秒'];
+  final weekMap= ['一', '二', '三', '四', '五', '六', '日'];
 
   late DateTime initialTime;
 
@@ -458,6 +472,8 @@ class DatePickerModel {
       required this.useSecond,
       required this.dateStart,
       required this.dateEnd,
+      this.dateInitial,
+}) {
       this.dateInitial}) {
     assert(!useWeekDay || (!useSecond && !useMinute && !useHour), 'WeekDay can only used with Year, Month and Day!');
     setInitialTime();
