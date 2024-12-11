@@ -332,11 +332,8 @@ class _TDDatePickerState extends State<TDDatePicker> {
                           itemHeight: pickerHeight / widget.pickerItemCount,
                           content: whichLine == 3
                               ? timeUnitMap(widget.model.mapping[whichLine]) +
-                                  widget.model.weekMap[widget.model.data[whichLine][index] - 1]
+                              widget.model.weekMap[widget.model.data[whichLine][index] - 1]
                               : widget.model.data[whichLine][index].toString() + timeUnitMap(widget.model.mapping[whichLine]),
-                              ? widget.model.mapping[whichLine] +
-                                  widget.model.weekMap[widget.model.data[whichLine][index] - 1]
-                              : widget.model.data[whichLine][index].toString() + widget.model.mapping[whichLine],
                           fixedExtentScrollController: widget.model.controllers[whichLine],
                           itemDistanceCalculator: widget.itemDistanceCalculator,
                         ));
@@ -474,7 +471,6 @@ class DatePickerModel {
       required this.dateEnd,
       this.dateInitial,
 }) {
-      this.dateInitial}) {
     assert(!useWeekDay || (!useSecond && !useMinute && !useHour), 'WeekDay can only used with Year, Month and Day!');
     setInitialTime();
     setInitialMonthData();
