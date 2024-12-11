@@ -20,6 +20,10 @@
   "minutes": "分",
   "seconds": "秒",
   "milliseconds": "毫秒",
+  "yearLabel":"年",
+  "monthLabel": "月",
+  "dateLabel": "日",
+  "weeks":"周"
   "sunday": "日",
   "monday": "一",
   "tuesday": "二",
