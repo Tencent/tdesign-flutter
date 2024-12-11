@@ -315,6 +315,44 @@ class TDPopupPageState extends State<TDPopupPage> {
                   Container(
                     margin: const EdgeInsets.all(8),
                     child: TDButton(
+                      text: '底部弹出层-键盘弹默认遮挡',
+                      isBlock: true,
+                      theme: TDButtonTheme.primary,
+                      type: TDButtonType.outline,
+                      size: TDButtonSize.large,
+                      onTap: () {
+                        Navigator.of(context).push(TDSlidePopupRoute(
+                            modalBarrierColor: TDTheme.of(context).fontGyColor2,
+                            slideTransitionFrom: SlideTransitionFrom.bottom,
+                            builder: (context) {
+                              return TDPopupBottomDisplayPanel(
+                                title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                                closeColor: TDTheme.of(context).errorNormalColor,
+                                closeClick: () {
+                                  Navigator.maybePop(context);
+                                },
+                                child: Material(
+                                  child: SizedBox(
+                                    height: 100,
+                                    child: TDInput(
+                                      type: TDInputType.normal,
+                                      leftLabel: '标签文字',
+                                      hintText: '请输入文字',
+                                      maxLength: 10,
+                                      additionInfo: '最大输入10个字符',
+                                      backgroundColor: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                radius: 6,
+                              );
+                            }));
+                      },
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(8),
+                    child: TDButton(
                       text: '底部弹出层-键盘弹出不遮挡',
                       isBlock: true,
                       theme: TDButtonTheme.primary,
@@ -324,6 +362,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                         Navigator.of(context).push(TDSlidePopupRoute(
                             modalBarrierColor: TDTheme.of(context).fontGyColor2,
                             slideTransitionFrom: SlideTransitionFrom.bottom,
+                            focusMove: true,
                             builder: (context) {
                               return TDPopupBottomDisplayPanel(
                                 title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
@@ -362,6 +401,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                           Navigator.of(context).push(TDSlidePopupRoute(
                               modalBarrierColor: TDTheme.of(context).fontGyColor2,
                               slideTransitionFrom: SlideTransitionFrom.center,
+                              focusMove: true,
                               builder: (context) {
                                 return TDPopupCenterPanel(
                                   closeColor: TDTheme.of(context).errorNormalColor,
@@ -423,7 +463,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                                 );
                               }));
                         },
-                      )),
+                      ))
                 ],
               );
             })

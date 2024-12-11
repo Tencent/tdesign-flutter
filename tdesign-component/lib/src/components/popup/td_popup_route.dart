@@ -26,6 +26,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     this.opened,
     this.close,
     this.barrierClick,
+    this.focusMove = false,
   });
 
   /// 控件构建器
@@ -67,6 +68,9 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
   /// 蒙层点击事件，仅在[modalBarrierFull]为false时触发
   final VoidCallback? barrierClick;
 
+  /// 是否有输入框获取焦点时整体平移避免输入框被遮挡
+  final bool focusMove;
+
   Color get _barrierColor => modalBarrierColor ?? Colors.black54;
 
   @override
@@ -86,8 +90,10 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
 
   /// 键盘焦点对象的Y坐标
   var _focusY = 0.0;
+
   /// 键盘焦点对象的高度
   var _focusHeight = 0.0;
+
   /// 键盘出现后bottom的偏移量
   var _lastBottom = 0.0;
 
@@ -105,21 +111,24 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
         if (!modalBarrierFull)
           _getPositionWidget(
             context,
-            Container(
-              color: _barrierColor.withAlpha((animValue * _barrierColor.alpha).toInt()),
-              child: GestureDetector(
-                onTap: () {
-                  barrierClick?.call();
-                  if (isDismissible) {
-                    Navigator.pop(context);
-                  }
-                },
-                onDoubleTap: () {
-                  barrierClick?.call();
-                  if (isDismissible) {
-                    Navigator.pop(context);
-                  }
-                },
+            IgnorePointer(
+              ignoring: true,
+              child: Container(
+                color: _barrierColor.withAlpha((animValue * _barrierColor.alpha).toInt()),
+                child: GestureDetector(
+                  onTap: () {
+                    barrierClick?.call();
+                    if (isDismissible) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  onDoubleTap: () {
+                    barrierClick?.call();
+                    if (isDismissible) {
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
               ),
             ),
           ),
@@ -170,7 +179,6 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     super.dispose();
   }
 
-
   /// 监听焦点变化
   void startFocusListener(BuildContext context) {
     FocusManager.instance.addListener(_handleFocusChange);
@@ -187,9 +195,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     if (focusNode != null && focusNode.context != null) {
       var renderObject = focusNode.context!.findRenderObject();
       if (renderObject is RenderPointerListener) {
-        _focusY = renderObject
-            .localToGlobal(Offset.zero)
-            .dy;
+        _focusY = renderObject.localToGlobal(Offset.zero).dy;
         _focusHeight = renderObject.size.height;
       }
     }
@@ -219,7 +225,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     }
 
     var screenSize = mediaQuery.size;
-    var _modalTop = (modalTop ?? 0).clamp(0, screenSize.height).toDouble() - bottom;
+    var _modalTop = (modalTop ?? 0).clamp(0, screenSize.height).toDouble() - (focusMove ? bottom : 0);
     var _modalLeft = (modalLeft ?? 0).clamp(0, screenSize.width).toDouble();
     var _modalHeight = (modalHeight ?? screenSize.height).clamp(0, screenSize.height - _modalTop).toDouble();
     var _modalWidth = (modalWidth ?? screenSize.width).clamp(0, screenSize.width - _modalLeft).toDouble();
