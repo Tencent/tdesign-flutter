@@ -187,6 +187,19 @@ abstract class TDResourceDelegate {
 
   /// [TDRate] 选择选项
   String get cascadeLabel;
+
+  /// [TDDatePicker]  年
+  String get yearLabel;
+
+  /// [TDDatePicker]  月
+  String get monthLabel;
+
+  /// [TDDatePicker] 日
+  String get dateLabel;
+
+  /// [TDDatePicker] 周
+  String get weeksLabel;
+
 }
 
 /// 如果用户要重写,就应该全部重写,不开放只重新部分资源
@@ -330,4 +343,16 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
 
   @override
   String get cascadeLabel => '选择选项';
+
+  @override
+  String get yearLabel => '年';
+
+  @override
+  String get monthLabel => '月';
+
+  @override
+  String get dateLabel=>'日';
+
+  @override
+  String get weeksLabel=>'周';
 }
