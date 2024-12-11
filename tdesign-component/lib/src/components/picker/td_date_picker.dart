@@ -32,6 +32,7 @@ class TDDatePicker extends StatefulWidget {
       this.showTitle = true,
       this.pickerHeight = 200,
       required this.pickerItemCount,
+      this.isTimeUnit,
       this.onSelectedItemChanged,
       Key? key})
       : super(key: key);
@@ -98,7 +99,8 @@ class TDDatePicker extends StatefulWidget {
 
   /// 数据模型
   final DatePickerModel model;
-
+ /// 是否时间显示
+  final bool? isTimeUnit;
   /// 选择器选中项改变回调
   final void Function(int wheelIndex,int index)? onSelectedItemChanged;
 
@@ -327,13 +329,10 @@ class _TDDatePickerState extends State<TDDatePicker> {
                         alignment: Alignment.center,
                         height: pickerHeight / widget.pickerItemCount,
                         width: maxWidth,
-                        child: TDItemWidget(
+                        child:  TDItemWidget(
                           index: index,
                           itemHeight: pickerHeight / widget.pickerItemCount,
                           content: whichLine == 3
-                              ? timeUnitMap(widget.model.mapping[whichLine]) +
-                                  widget.model.weekMap[widget.model.data[whichLine][index] - 1]
-                              : widget.model.data[whichLine][index].toString() + timeUnitMap(widget.model.mapping[whichLine]),
                               ? widget.model.mapping[whichLine] +
                                   widget.model.weekMap[widget.model.data[whichLine][index] - 1]
                               : widget.model.data[whichLine][index].toString() + widget.model.mapping[whichLine],
@@ -403,7 +402,21 @@ class _TDDatePickerState extends State<TDDatePicker> {
       ),
     );
   }
-
+  timeUnitMap(String name){
+    if(widget.isTimeUnit!=null&&widget.isTimeUnit==true){
+      Map<String,String>   times={
+        '年':context.resource.yearLabel,
+        '月':context.resource.monthLabel,
+        '日': context.resource.dateLabel,
+        '周':context.resource.weeksLabel,
+        '时':context.resource.hours,
+        '分':context.resource.minutes,
+        '秒':context.resource.seconds
+      };
+      return times[name];
+    }else{
+      return '';
+    }
   timeUnitMap(String name){
     Map<String,String>   times={
       '年':context.resource.yearLabel,
