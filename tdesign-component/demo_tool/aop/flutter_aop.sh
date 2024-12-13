@@ -2,9 +2,9 @@
 # TODO: 指定自己的flutter目录，并且切换到3.10.0版本
 flutterDir=/Users/zflyluo/tools/flutter
 # TODO:指定当前example的目录，后面不带"/"
-projectDir=/Users/zflyluo/WorkSpace/flutter/tdesign_group/tdesign-mobile-flutter/tdesign-component
+projectDir=/Users/zflyluo/WorkSpace/flutter/tdesign_group/tdesign-flutter/tdesign-component/
 # 指定aop运行版本
-version=3.10.0
+version=3.16.9
 
 # 切换到3.10.0版本
 cd $flutterDir
@@ -22,7 +22,7 @@ echo "=====apply aop patch end====="
 
 bin/flutter --version
 
-echo "=====打印日志带'TDFlutterAop'，则表示AOP 应用成功====="
+echo "=====打印日志带'AOPTools'，则表示AOP 应用成功====="
 
 #cd $exampleDir
 #flutter clean
