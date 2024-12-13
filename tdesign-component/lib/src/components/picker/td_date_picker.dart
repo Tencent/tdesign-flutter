@@ -417,17 +417,6 @@ class _TDDatePickerState extends State<TDDatePicker> {
     }else{
       return '';
     }
-  timeUnitMap(String name){
-    Map<String,String>   times={
-      '年':context.resource.yearLabel,
-      '月':context.resource.monthLabel,
-      '日': context.resource.dateLabel,
-      '周':context.resource.weeksLabel,
-      '时':context.resource.hours,
-      '分':context.resource.minutes,
-      '秒':context.resource.seconds
-    };
-     return times[name];
   }
   double getTitleHeight() => widget.titleHeight ?? _pickerTitleHeight;
 }
