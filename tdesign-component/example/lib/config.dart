@@ -59,6 +59,7 @@ import 'page/td_theme_page.dart';
 import 'page/td_time_counter_page.dart';
 import 'page/td_toast_page.dart';
 import 'page/td_tree_select_page.dart';
+import 'page/td_upload_page.dart';
 import 'page/todo_page.dart';
 
 PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
@@ -151,8 +152,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Upload 上传',
         name: 'upload',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDUploadPage())),
   ],
   '数据展示': [
     ExamplePageModel(
