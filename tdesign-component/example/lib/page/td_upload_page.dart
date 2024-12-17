@@ -58,7 +58,7 @@ class TDUploadState extends State<TDUploadPage> {
             'https://tdesign.gtimg.com/miniprogram/images/example4.png'),
   ];
 
-  void onVaueChanged(List<TDUploadFile> fileList, List<TDUploadFile> value,
+  void onValueChanged(List<TDUploadFile> fileList, List<TDUploadFile> value,
       TDUploadType event) {
     switch (event) {
       case TDUploadType.add:
@@ -136,7 +136,7 @@ class TDUploadState extends State<TDUploadPage> {
           onCancel: onCancel,
           onError: print,
           onValidate: print,
-          onChange: ((files, type) => onVaueChanged(files1, files, type)),
+          onChange: ((files, type) => onValueChanged(files1, files, type)),
         ));
   }
 
@@ -151,7 +151,7 @@ class TDUploadState extends State<TDUploadPage> {
           onCancel: onCancel,
           onError: print,
           onValidate: print,
-          onChange: ((files, type) => onVaueChanged(files2, files, type)),
+          onChange: ((files, type) => onValueChanged(files2, files, type)),
         ));
   }
 
@@ -166,7 +166,7 @@ class TDUploadState extends State<TDUploadPage> {
           onCancel: onCancel,
           onError: print,
           onValidate: print,
-          onChange: ((files, type) => onVaueChanged(files3, files, type)),
+          onChange: ((files, type) => onValueChanged(files3, files, type)),
         ));
   }
 
@@ -181,7 +181,7 @@ class TDUploadState extends State<TDUploadPage> {
           onCancel: onCancel,
           onError: print,
           onValidate: print,
-          onChange: ((files, type) => onVaueChanged(files4, files, type)),
+          onChange: ((files, type) => onValueChanged(files4, files, type)),
         ));
   }
 
@@ -196,7 +196,7 @@ class TDUploadState extends State<TDUploadPage> {
           onCancel: onCancel,
           onError: print,
           onValidate: print,
-          onChange: ((files, type) => onVaueChanged(files5, files, type)),
+          onChange: ((files, type) => onValueChanged(files5, files, type)),
         ));
   }
 }
