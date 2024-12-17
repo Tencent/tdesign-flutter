@@ -35,6 +35,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool useConch = false;
+  String searchText = '';
 
   @override
   void initState() {
@@ -108,7 +109,8 @@ class _MyHomePageState extends State<MyHomePage> {
       return const web.WebMainBody();
     }
     return SafeArea(
-        child: Center(
+        child: Align(
+          alignment: Alignment.topCenter,
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -160,6 +162,15 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     ));
 
+    children.add(TDSearchBar(
+      placeHolder: '请输入组件名称',
+      onTextChanged: (value){
+        setState(() {
+          searchText = value;
+        });
+      },
+    ));
+
     exampleMap.forEach((key, value) {
       children.add(Container(
         alignment: Alignment.topLeft,
@@ -174,6 +185,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ));
       value.forEach((model) {
+        if(searchText.isNotEmpty && !model.text.toLowerCase().contains(searchText.toLowerCase())){
+          // 如果有搜索文案,不再搜索中的组件不展示
+          return;
+        }
         model.spline = WebMdTool.getSpline(key);
         if (model.isTodo) {
           if (_kShowTodoComponent) {
