@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
-typedef CalendarBuilder = TDCalendar Function(BuildContext context);
+typedef CalendarBuilder = Widget Function(BuildContext context);
 
 enum CalendarTrigger { closeBtn, confirmBtn, overlay }
 
