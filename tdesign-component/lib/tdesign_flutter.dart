@@ -1,4 +1,3 @@
-export 'src/components/action_sheet/td_action_sheet.dart';
 export 'src/components/avatar/td_avatar.dart';
 export 'src/components/backtop/td_backtop.dart';
 export 'src/components/badge/td_badge.dart';
@@ -21,8 +20,8 @@ export 'src/components/drawer/td_drawer.dart';
 export 'src/components/dropdown_menu/td_dropdown_item.dart';
 export 'src/components/dropdown_menu/td_dropdown_menu.dart';
 export 'src/components/empty/td_empty.dart';
-export 'src/components/footer/td_footer.dart';
 export 'src/components/fab/td_fab.dart';
+export 'src/components/footer/td_footer.dart';
 export 'src/components/icon/td_icons.dart';
 export 'src/components/image/image_widget.dart';
 export 'src/components/image/td_image.dart';
