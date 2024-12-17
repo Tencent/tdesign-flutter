@@ -50,7 +50,7 @@ class TDTabBar extends StatefulWidget {
         super(key: key);
 
   /// tab数组
-  final List<TDTab> tabs;
+  final List<TDTab> tabs; //
 
   /// tab控制器
   final TabController? controller;
@@ -152,12 +152,12 @@ class _TDTabBarState extends State<TDTabBar> {
         physics: widget.physics,
         isScrollable: widget.isScrollable,
         indicator: widget.indicator ?? _getIndicator(context),
-        indicatorColor: widget.indicatorColor ?? TDTheme.of(context).brandNormalColor,
-        unselectedLabelColor: widget.unselectedLabelColor ?? TDTheme.of(context).fontGyColor2,
-        labelColor: widget.labelColor ?? TDTheme.of(context).brandNormalColor,
+        indicatorColor: widget.indicatorColor,
+        unselectedLabelColor: widget.unselectedLabelColor,
+        labelColor: widget.labelColor,
         labelStyle: widget.labelStyle ?? _getLabelStyle(context),
         labelPadding: widget.labelPadding ?? const EdgeInsets.all(8),
-        unselectedLabelStyle: widget.unselectedLabelStyle ?? _getUnSelectLabelStyle(context),
+        unselectedLabelStyle:widget.unselectedLabelStyle ?? _getUnSelectLabelStyle(context),
         tabs: widget.tabs,
         indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
         outlineType: widget.outlineType,
