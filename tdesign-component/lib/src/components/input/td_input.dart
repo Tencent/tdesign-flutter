@@ -390,11 +390,13 @@ class TDInput extends StatelessWidget {
                       inputAction: inputAction,
                     ),
                     Visibility(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: spacer.additionInfoSpace ?? 16, bottom: getInputPadding()),
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.only(left: spacer.additionInfoSpace ?? 16,right:TextAlign.end==contentAlignment?8:0, bottom: getInputPadding()),
                         child: TDText(
                           additionInfo,
                           font: TDTheme.of(context).fontBodySmall,
+                          textAlign: contentAlignment!=TextAlign.center?contentAlignment:TextAlign.start,
                           textColor: additionInfoColor ?? TDTheme.of(context).fontGyColor3,
                         ),
                       ),
