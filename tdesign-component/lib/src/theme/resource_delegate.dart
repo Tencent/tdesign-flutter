@@ -101,6 +101,18 @@ abstract class TDResourceDelegate {
   /// [TDTimeCounter] 毫秒
   String get milliseconds;
 
+  /// [TDDatePicker]  年
+  String get yearLabel;
+
+  /// [TDDatePicker]  月
+  String get monthLabel;
+
+  /// [TDDatePicker] 日
+  String get dateLabel;
+
+  /// [TDDatePicker] 周
+  String get weeksLabel;
+  
   /// [TDCalendarHeader] 星期日
   String get sunday;
 
@@ -175,6 +187,7 @@ abstract class TDResourceDelegate {
 
   /// [TDRate] 选择选项
   String get cascadeLabel;
+
 }
 
 /// 如果用户要重写,就应该全部重写,不开放只重新部分资源
@@ -231,6 +244,20 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
   String get milliseconds => '毫秒';
 
   @override
+  String get selectDate => '选择时间';
+
+  @override
+  String get yearLabel => '年';
+
+  @override
+  String get monthLabel => '月';
+
+  @override
+  String get dateLabel=>'日';
+
+  @override
+  String get weeksLabel=>'周';
+  
   String get sunday => '日';
 
   @override

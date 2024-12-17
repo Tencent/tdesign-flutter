@@ -20,6 +20,10 @@
   "minutes": "分",
   "seconds": "秒",
   "milliseconds": "毫秒",
+  "yearLabel":"年",
+  "monthLabel": "月",
+  "dateLabel": "日",
+  "weeks":"周",
   "sunday": "日",
   "monday": "一",
   "tuesday": "二",
@@ -44,5 +48,9 @@
   "start": "开始",
   "end": "结束",
   "notRated": "未评分",
-  "cascadeLabel": "选择选项"
+  "cascadeLabel": "选择选项",
+  "yearLabel":"年",
+  "monthLabel": "月",
+  "dateLabel": "日",
+  "weeks":"周"
 }

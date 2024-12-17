@@ -42,7 +42,7 @@ dependencies:
   http: ^0.13.5
   tdesign_flutter:
     path: ../
-  path_provider: ^2.1.1
+#  path_provider: 2.1.5
   extended_nested_scroll_view: any
   flutter_screenutil: any
 dev_dependencies:
