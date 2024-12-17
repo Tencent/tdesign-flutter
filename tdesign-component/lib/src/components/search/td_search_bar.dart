@@ -483,7 +483,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                         maxWidth: box.maxWidth - 51,
                       ),
                       child: TDText(
-                        widget.placeHolder,
+                        widget.placeHolder ?? '',
                         font: getSize(context),
                         textColor: TDTheme.of(context).fontGyColor3,
                         maxLines: 1,
