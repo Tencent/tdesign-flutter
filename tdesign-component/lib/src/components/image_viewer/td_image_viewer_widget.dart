@@ -18,6 +18,7 @@ class TDImageViewerWidget extends StatefulWidget {
     this.closeBtn,
     this.deleteBtn,
     required this.images,
+    this.labels,
     this.showIndex,
     this.defaultIndex,
     this.onIndexChange,
@@ -36,6 +37,9 @@ class TDImageViewerWidget extends StatefulWidget {
 
   /// 图片数组
   final List<dynamic> images;
+
+  /// 图片描述
+  final List<String>? labels;
 
   /// 是否显示页码
   final bool? showIndex;
@@ -78,6 +82,9 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
     }
     if((widget.defaultIndex ?? 0) > widget.images.length - 1) {
       throw FlutterError('defaultIndex must be less than images.length');
+    }
+    if(widget.labels != null && widget.images.length != widget.labels!.length) {
+      throw FlutterError('labels.length must be equals images.length');
     }
     _index = (widget.defaultIndex ?? 0) + 1;
   }
@@ -138,6 +145,37 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
     throw FlutterError('image ${image} type is not supported');
   }
 
+  Widget _getPageTitle() {
+    if(widget.labels != null) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Visibility(
+            visible: (widget.labels![_index - 1] ?? '') != '',
+            child: Text(widget.labels![_index - 1],
+              textAlign: TextAlign.center,
+              style: TextStyle(color: TDTheme.of(context).whiteColor1),
+            ),
+          ),
+          Visibility(
+            visible: widget.showIndex ?? false,
+            child: Text('$_index / ${widget.images.length}',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: TDTheme.of(context).grayColor5, fontSize: 10),
+            ),
+          )
+        ],
+      );
+    }
+    return Text(
+      (widget.showIndex ?? false)
+          ? '$_index / ${widget.images.length}'
+          : '',
+      textAlign: TextAlign.center,
+      style: TextStyle(color: TDTheme.of(context).whiteColor1),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var media =  MediaQuery.of(context);
@@ -169,7 +207,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
             },
             itemCount: widget.images.length,
             onIndexChanged: (index) {
-              if ((widget.showIndex ?? false)) {
+              if ((widget.showIndex ?? false) || widget.labels != null) {
                 setState(() {
                   _index = index + 1;
                 });
@@ -200,13 +238,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Text(
-                    (widget.showIndex ?? false)
-                        ? '$_index / ${widget.images.length}'
-                        : '',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: TDTheme.of(context).whiteColor1),
-                  ),
+                  child: _getPageTitle(),
                 ),
                 if (widget.deleteBtn ?? false)
                   GestureDetector(
