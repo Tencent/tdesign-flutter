@@ -20,6 +20,7 @@
 | opened | VoidCallback? | - | 打开后事件 |
 | close | VoidCallback? | - | 关闭前事件 |
 | barrierClick | VoidCallback? | - | 蒙层点击事件，仅在[modalBarrierFull]为false时触发 |
+| focusMove | bool | false | 是否有输入框获取焦点时整体平移避免输入框被遮挡 |
 
 ```
 ```
