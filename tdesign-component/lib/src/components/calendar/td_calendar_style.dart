@@ -52,6 +52,12 @@ class TDCalendarStyle {
   /// 日期后面的字符串的样式
   TextStyle? cellSuffixStyle;
 
+  /// 日期垂直间距，水平间距为[verticalGap] / 2
+  double? verticalGap;
+
+  /// 月与月之间的垂直间距
+  double? bodyPadding;
+
   /// 生成默认样式
   TDCalendarStyle.generateStyle(BuildContext context) {
     decoration = BoxDecoration(
@@ -76,6 +82,8 @@ class TDCalendarStyle {
       fontWeight: TDTheme.of(context).fontMarkMedium?.fontWeight,
       color: TDTheme.of(context).fontGyColor1,
     );
+    verticalGap = TDTheme.of(context).spacer8;
+    bodyPadding = TDTheme.of(context).spacer16;
   }
 
   /// 日期样式
