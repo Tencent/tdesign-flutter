@@ -42,6 +42,7 @@ class TDTabBar extends StatefulWidget {
     this.dividerHeight = 0.5,
     this.selectedBgColor,
     this.unSelectedBgColor,
+    this.tabAlignment,
   })  : assert(
   backgroundColor == null || decoration == null,
   'Cannot provide both a backgroundColor and a decoration\n'
@@ -124,6 +125,7 @@ class TDTabBar extends StatefulWidget {
   /// 未选中背景色，只有outlineType为capsule时有效
   final Color? unSelectedBgColor;
 
+  final TabAlignment? tabAlignment;
   @override
   State<StatefulWidget> createState() => _TDTabBarState();
 }
@@ -165,6 +167,7 @@ class _TDTabBarState extends State<TDTabBar> {
         backgroundColor: widget.backgroundColor,
         selectedBgColor: widget.selectedBgColor,
         unSelectedBgColor: widget.unSelectedBgColor,
+        tabAlignment:widget.tabAlignment,
         onTap: (index) {
           widget.onTap?.call(index);
         },
