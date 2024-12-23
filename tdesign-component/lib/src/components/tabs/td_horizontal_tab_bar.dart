@@ -1120,7 +1120,6 @@ class _TabLabelBar extends Flex {
           key: key,
           children: children,
           direction: Axis.horizontal,
-          mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           verticalDirection: VerticalDirection.down,
