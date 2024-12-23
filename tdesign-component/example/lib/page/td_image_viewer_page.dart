@@ -29,6 +29,7 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
         ExampleItem(desc: '长按图片', builder: _longPressImageViewer),
         ExampleItem(desc: '图片超宽情况', builder: _ultraWidthImageViewer),
         ExampleItem(desc: '图片超高情况', builder: _ultraHeightImageViewer),
+        ExampleItem(desc: '带图片标题', builder: _descImageViewer),
       ],
     );
   }
@@ -145,6 +146,29 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
               builder: _getSheetItem,
             ));
           },
+        );
+      },
+    );
+  }
+
+  @Demo(group: 'image_viewer')
+  Widget _descImageViewer(BuildContext context) {
+    var delImages = [
+      'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
+      'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
+    ];
+    var labels = ['图片标题1', '图片标题2'];
+    return TDButton(
+      type: TDButtonType.ghost,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      size: TDButtonSize.large,
+      text: '带图片标题',
+      onTap: () {
+        TDImageViewer.showImageViewer(
+          context: context,
+          images: delImages,
+          labels: labels,
         );
       },
     );
