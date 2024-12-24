@@ -14,7 +14,6 @@
       ),
       margin: EdgeInsets.only(right: TDTheme.of(context).spacer16, left: TDTheme.of(context).spacer16),
       onChanged: (value) {
-        setState(() {});
       },
     );
   }
