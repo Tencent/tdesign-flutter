@@ -1,0 +1,14 @@
+
+  Widget _uploadMultiple(BuildContext context) {
+    return wrapDemoContainer('多选上传',
+        child: TDUpload(
+          files: files2,
+          multiple: true,
+          max: 9,
+          onClick: onClick,
+          onCancel: onCancel,
+          onError: print,
+          onValidate: print,
+          onChange: ((files, type) => onValueChanged(files2, files, type)),
+        ));
+  }
