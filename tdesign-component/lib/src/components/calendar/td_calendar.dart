@@ -299,7 +299,7 @@ class _TDCalendarState extends State<TDCalendar> {
   }
 
   List<int> _getValue(List<int> value) {
-    final dateValue = value.map((e) {
+    var dateValue = value.map((e) {
       final date = DateTime.fromMillisecondsSinceEpoch(e);
       return DateTime(date.year, date.month, date.day).millisecondsSinceEpoch;
     }).toList();
