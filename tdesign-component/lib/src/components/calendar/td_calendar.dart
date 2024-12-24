@@ -312,6 +312,9 @@ class _TDCalendarState extends State<TDCalendar> {
       final second = model.useSecond ? model.secondFixedExtentScrollController.selectedItem : 0;
       return (hour * 60 * 60 + minute * 60 + second) * 1000;
     }).toList();
+    if (widget.type == CalendarType.range && dateValue.length == 1) {
+      dateValue.add(dateValue.first);
+    }
     return dateValue.mapWidthIndex((e, index) {
       if (widget.type != CalendarType.range) {
         return e + (milliseconds.getOrNull(0) ?? 0);
@@ -319,7 +322,7 @@ class _TDCalendarState extends State<TDCalendar> {
       return e + (milliseconds.getOrNull(index) ?? 0);
     }).toList();
   }
-  
+
   void _initValue() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       inherited?.selected.value = _getValue(widget.value ?? []);
