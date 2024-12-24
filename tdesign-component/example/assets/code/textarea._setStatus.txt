@@ -12,7 +12,6 @@
       required: true,
       additionInfo: '辅助说明',
       onChanged: (value) {
-        setState(() {});
       },
     );
   }
