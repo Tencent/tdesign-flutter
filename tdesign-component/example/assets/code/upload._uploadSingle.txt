@@ -1,0 +1,12 @@
+
+  Widget _uploadSingle(BuildContext context) {
+    return wrapDemoContainer('单选上传',
+        child: TDUpload(
+          files: files1,
+          onClick: onClick,
+          onCancel: onCancel,
+          onError: print,
+          onValidate: print,
+          onChange: ((files, type) => onValueChanged(files1, files, type)),
+        ));
+  }
