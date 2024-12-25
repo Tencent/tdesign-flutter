@@ -277,7 +277,8 @@ class _TDUploadState extends State<TDUpload> {
             width: 80,
             height: 80,
             imgUrl: file.remotePath,
-            assetUrl: file.assetPath,
+            // assetUrl: file.assetPath,
+            imageFile: file.file,
           ),
           Visibility(visible: file.status != TDUploadFileStatus.success, child: _buildShadowBox(file)),
           Visibility(
