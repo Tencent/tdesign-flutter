@@ -31,6 +31,7 @@
 | title | String | - | 标题内容 |
 | action |  Function()? | - | 点击操作 |
 | titleColor | Color? | - | 标题颜色 |
+| titleSize | double? | - | 字体大小 |
 | style | TDButtonStyle? | - | 按钮样式 |
 | type | TDButtonType? | - | 按钮类型 |
 | theme | TDButtonTheme? | - | 按钮类型 |
@@ -206,6 +207,7 @@
 | key |  | - |  |
 | buttonText | String? | - | 按钮文字 |
 | buttonTextColor | Color? | - | 按钮文字颜色 |
+| buttonTextSize | double? | - | 按钮文字大小 |
 | buttonTextFontWeight | FontWeight? | FontWeight.w600 | 按钮文字粗细 |
 | buttonStyle | TDButtonStyle? | - | 按钮样式 |
 | buttonType | TDButtonType? | - | 按钮类型 |

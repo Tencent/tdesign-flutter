@@ -37,9 +37,11 @@ class TDCalendar extends StatefulWidget {
     this.onChange,
     this.onCellClick,
     this.onCellLongPress,
-    this.onHeanderClick,
+    this.onHeaderClick,
     this.useTimePicker = false,
     this.timePickerModel,
+    this.monthTitleHeight = 22,
+    this.monthTitleBuilder,
   }) : super(key: key);
 
   /// 第一天从星期几开始，默认 0 = 周日
@@ -91,13 +93,19 @@ class TDCalendar extends StatefulWidget {
   final void Function(int value, DateSelectType type, TDate tdate)? onCellLongPress;
 
   /// 点击周时触发
-  final void Function(int index, String week)? onHeanderClick;
+  final void Function(int index, String week)? onHeaderClick;
 
   /// 是否显示时间选择器
   final bool? useTimePicker;
 
   /// 自定义时间选择器
   final List<DatePickerModel>? timePickerModel;
+
+  /// 月标题高度
+  final double? monthTitleHeight;
+
+  /// 月标题构建器
+  final Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder;
 
   List<DateTime>? get _value => value?.map((e) {
         final date = DateTime.fromMillisecondsSinceEpoch(e);
@@ -159,7 +167,7 @@ class _TDCalendarState extends State<TDCalendar> {
     inherited = TDCalendarInherited.of(context);
     _initValue();
     timePickerModelList.clear();
-    final verticalGap = TDTheme.of(context).spacer8;
+    final verticalGap = _style.verticalGap ?? TDTheme.of(context).spacer8;
     return Container(
       height: widget.height,
       width: widget.width ?? double.infinity,
@@ -181,7 +189,7 @@ class _TDCalendarState extends State<TDCalendar> {
             closeColor: _style.titleCloseColor,
             weekdayNames: weekdayNames,
             onClose: inherited?.onClose,
-            onClick: widget.onHeanderClick,
+            onClick: widget.onHeaderClick,
           ),
           Expanded(
             child: TDCalendarBody(
@@ -190,11 +198,14 @@ class _TDCalendarState extends State<TDCalendar> {
               maxDate: widget.maxDate,
               minDate: widget.minDate,
               value: widget._value,
-              bodyPadding: TDTheme.of(context).spacer16,
+              bodyPadding: _style.bodyPadding ?? TDTheme.of(context).spacer16,
               displayFormat: widget.displayFormat ?? 'year month',
               monthNames: monthNames,
               monthTitleStyle: _style.monthTitleStyle,
               verticalGap: verticalGap,
+              cellHeight: widget.cellHeight ?? 60,
+              monthTitleHeight: widget.monthTitleHeight ?? 22,
+              monthTitleBuilder: widget.monthTitleBuilder,
               builder: (date, dateList, data, rowIndex, colIndex) {
                 return TDCalendarCell(
                   height: widget.cellHeight ?? 60,
@@ -284,7 +295,7 @@ class _TDCalendarState extends State<TDCalendar> {
               pickerHeight: 178,
               pickerItemCount: 3,
               onConfirm: (Map<String, int> selected) {},
-              onSelectedItemChanged: (index) {
+              onSelectedItemChanged: (wheelIndex,index) {
                 final time = _getValue(inherited?.selected.value ?? []);
                 inherited?.selected.value = time;
                 widget.onChange?.call(time);

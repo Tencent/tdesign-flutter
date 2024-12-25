@@ -274,8 +274,11 @@ class _TDStepperState extends State<TDStepper> {
                       textAlign: TextAlign.center,
                       textAlignVertical: TextAlignVertical.center,
                       keyboardType: TextInputType.number,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        isDense: true,
+                        contentPadding: EdgeInsets.zero,
+                      ),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         TextInputFormatter.withFunction((oldValue, newValue) {
