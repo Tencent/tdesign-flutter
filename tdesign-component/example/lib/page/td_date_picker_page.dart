@@ -21,6 +21,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
   String selected_6 = '';
   String selected_7 = '';
   String selected_8 = '';
+  String selected_9 = '';
 
   var weekDayList = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
@@ -56,6 +57,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     test: [
       ExampleItem(desc: '指定开始时间', builder: _customStartTime),
       ExampleItem(desc: '限制时分秒时间', builder: _customLimitTime),
+      ExampleItem(desc: '自定义时间选项', builder: _customItems),
     ],);
   }
 
@@ -332,6 +334,39 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             initialDate: [2023, 12, 31,3,02,03]);
       },
       child: buildSelectRow(context, selected_4, '选择时间'),
+    );
+  }
+
+  @Demo(group: 'datetimePicker')
+  Widget _customItems(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showDatePicker(context, title: '选择时间',
+            onConfirm: (selected) {
+              setState(() {
+                selected_9 = '${selected['year'].toString().padLeft(4, '0')}-'
+                    '${selected['month'].toString().padLeft(2, '0')}-'
+                    '${selected['day'].toString().padLeft(2, '0')} '
+                    '${selected['hour'].toString().padLeft(2, '0')}:'
+                    '${selected['minute'].toString().padLeft(2, '0')}:'
+                    '${selected['second'].toString().padLeft(2, '0')}';
+              });
+              Navigator.of(context).pop();
+            },
+            useHour: true,
+            useMinute: true,
+            useSecond: true,
+            dateStart: [1999, 01, 01],
+            dateEnd: [2023, 12, 31],
+            initialDate: [2012, 1, 1],
+            filterItems: (key, nums) {
+              if (key == DateTypeKey.minute) {
+                return [0, 30];
+              }
+              return nums;
+            });
+      },
+      child: buildSelectRow(context, selected_9, '选择时间'),
     );
   }
 }
