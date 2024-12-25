@@ -30,7 +30,8 @@ class TDPicker {
       double pickerHeight = 200,
       bool isTimeUnit=true,
       Function(int wheelIndex, int index)? onSelectedItemChanged,
-      int pickerItemCount = 5}) {
+      int pickerItemCount = 5,
+      List<int> Function(DateTypeKey key, List<int> nums)? filterItems}) {
     if (dateEnd == null || initialDate == null) {
       var now = DateTime.now();
       // 如果未指定结束时间，则取当前时间
@@ -65,6 +66,7 @@ class TDPicker {
                 dateStart: dateStart,
                 dateEnd: dateEnd!,
                 dateInitial: initialDate,
+                filterItems: filterItems,
               ),
               pickerHeight: pickerHeight,
               pickerItemCount: pickerItemCount,
