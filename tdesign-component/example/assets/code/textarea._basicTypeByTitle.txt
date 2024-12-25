@@ -7,7 +7,6 @@
       maxLines: 4,
       minLines: 4,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }

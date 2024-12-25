@@ -37,7 +37,7 @@ class TDAlertDialog extends StatelessWidget {
     TDDialogButtonStyle buttonStyle = TDDialogButtonStyle.normal,
     this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
     this.buttonWidget,
-  })  : assert((title != null || content != null)),
+  })  : assert((title != null || content != null || contentWidget != null)),
         _vertical = false,
         _buttons = null,
         _buttonStyle = buttonStyle,
@@ -178,6 +178,7 @@ class TDAlertDialog extends StatelessWidget {
       Widget btn = TDDialogButton(
         buttonText: value.title,
         buttonTextColor: value.titleColor,
+        buttonTextSize: value.titleSize,
         height: value.height,
         buttonTextFontWeight: value.fontWeight ?? FontWeight.w600,
         buttonStyle: value.style,

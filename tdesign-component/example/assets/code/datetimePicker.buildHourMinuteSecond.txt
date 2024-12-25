@@ -18,8 +18,8 @@
             useMinute: true,
             useSecond: true,
             dateStart: [1999, 01, 01],
-            dateEnd: [2023, 12, 31],
-            initialDate: [2012, 1, 1]);
+            dateEnd: [2023, 12, 31,4,12,20],
+            initialDate: [2023, 12, 31]);
       },
       child: buildSelectRow(context, selected_4, '选择时间'),
     );

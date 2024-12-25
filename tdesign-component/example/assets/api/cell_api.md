@@ -7,6 +7,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | leftIconColor | Color? | - | 左侧图标颜色 |
+| rightIconColor | Color? | - | 右侧图标颜色 |
 | titleStyle | TextStyle? | - | 标题文字样式 |
 | requiredStyle | TextStyle? | - | 必填星号文字样式 |
 | descriptionStyle | TextStyle? | - | 内容描述文字样式 |
@@ -16,6 +17,9 @@
 | groupBorderedColor | Color? | - | 单元格组边框颜色 |
 | backgroundColor | Color? | - | 默认状态背景颜色 |
 | padding | EdgeInsets? | - | 单元格内边距 |
+| cardBorderRadius | BorderRadius? | - | 卡片模式边框圆角 |
+| cardPadding | EdgeInsets? | - | 卡片模式内边距 |
+| titlePadding | EdgeInsets? | - | 单元格组标题内边距 |
 
 
 #### 工厂构造方法
