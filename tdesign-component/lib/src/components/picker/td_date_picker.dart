@@ -7,6 +7,7 @@ import '../../util/context_extension.dart';
 import 'no_wave_behavior.dart';
 
 typedef DatePickerCallback = void Function(Map<String, int> selected);
+enum DateTypeKey { year, month, weekDay, day, hour, minute, second }
 
 /// 时间选择器
 class TDDatePicker extends StatefulWidget {
@@ -99,8 +100,10 @@ class TDDatePicker extends StatefulWidget {
 
   /// 数据模型
   final DatePickerModel model;
- /// 是否时间显示
+
+  /// 是否时间显示
   final bool? isTimeUnit;
+
   /// 选择器选中项改变回调
   final void Function(int wheelIndex,int index)? onSelectedItemChanged;
 
@@ -404,7 +407,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
   }
   timeUnitMap(String name){
     if(widget.isTimeUnit!=null&&widget.isTimeUnit==true){
-      Map<String,String>   times={
+      var times={
         '年':context.resource.yearLabel,
         '月':context.resource.monthLabel,
         '日': context.resource.dateLabel,
@@ -433,6 +436,7 @@ class DatePickerModel {
   List<int> dateStart;
   List<int> dateEnd;
   List<int>? dateInitial;
+  List<int> Function(DateTypeKey key, List<int> nums)? filterItems;
   final mapping =  ['年', '月', '日', '周', '时', '分', '秒'];
   final weekMap= ['一', '二', '三', '四', '五', '六', '日'];
 
@@ -447,13 +451,13 @@ class DatePickerModel {
   late int minuteIndex;
   late int secondIndex;
   late List<List<int>> data = [
-    List.generate(dateEnd[0] - dateStart[0] + 1, (index) => index + dateStart[0]),
     [],
     [],
     [],
-    List.generate(24, (index) => index),
-    List.generate(60, (index) => index),
-    List.generate(60, (index) => index),
+    [],
+    [],
+    [],
+    [],
   ];
   late var controllers;
   late FixedExtentScrollController yearFixedExtentScrollController;
@@ -475,9 +479,11 @@ class DatePickerModel {
       required this.dateStart,
       required this.dateEnd,
       this.dateInitial,
+      this.filterItems,
 }) {
     assert(!useWeekDay || (!useSecond && !useMinute && !useHour), 'WeekDay can only used with Year, Month and Day!');
     setInitialTime();
+    setInitialYearData();
     setInitialMonthData();
     setInitialDayData();
     setInitialWeekDayData();
@@ -519,53 +525,72 @@ class DatePickerModel {
     }
   }
 
+  void setInitialYearData() {
+    var years = List.generate(dateEnd[0] - dateStart[0] + 1, (index) => index + dateStart[0]);
+    data[0] = useYear && filterItems != null ? filterItems!(DateTypeKey.year, years) : years;
+  }
+
   void setInitialMonthData() {
+    late List<int> month;
     if (dateEnd[0] == dateStart[0]) {
-      data[1] = List.generate(dateEnd[1] - dateStart[1] + 1, (index) => index + dateStart[1]);
+      month = List.generate(dateEnd[1] - dateStart[1] + 1, (index) => index + dateStart[1]);
     } else if (initialTime.year == dateStart[0]) {
-      data[1] = List.generate(12 - dateStart[1] + 1, (index) => index + dateStart[1]);
+      month = List.generate(12 - dateStart[1] + 1, (index) => index + dateStart[1]);
     } else if (initialTime.year == dateEnd[0]) {
-      data[1] = List.generate(dateEnd[1], (index) => index + 1);
+      month = List.generate(dateEnd[1], (index) => index + 1);
     } else {
-      data[1] = List.generate(12, (index) => index + 1);
+      month = List.generate(12, (index) => index + 1);
     }
+    data[1] = useMonth && filterItems != null ? filterItems!(DateTypeKey.month, month) : month;
   }
 
   void setInitialDayData() {
+    late List<int> day;
     if (dateEnd[0] == dateStart[0] && dateEnd[1] == dateStart[1]) {
-      data[2] = List.generate(dateEnd[2] - dateStart[2] + 1, (index) => index + dateStart[2]);
+      day = List.generate(dateEnd[2] - dateStart[2] + 1, (index) => index + dateStart[2]);
     } else if (initialTime.year == dateStart[0] && initialTime.month == dateStart[1]) {
-      data[2] = List.generate(
+      day = List.generate(
           DateTime(initialTime.year, initialTime.month + 1, 0).day - dateStart[2] + 1, (index) => index + dateStart[2]);
     } else if (initialTime.year == dateEnd[0] && initialTime.month == dateEnd[1]) {
-      data[2] = List.generate(dateEnd[2], (index) => index + 1);
+      day = List.generate(dateEnd[2], (index) => index + 1);
     } else {
-      data[2] = List.generate(DateTime(initialTime.year, initialTime.month + 1, 0).day, (index) => index + 1);
+      day = List.generate(DateTime(initialTime.year, initialTime.month + 1, 0).day, (index) => index + 1);
     }
-  }
-
-  void setInitialTimeData() {
-    if (dateStart.length > 3) {
-      if(!useYear&&!useMonth&&!useDay&&dateEnd[0] == dateStart[0] && dateEnd[1] == dateStart[1]&& dateEnd[2] == dateStart[2]){
-          data[4] = List.generate(dateEnd[3]+1, (index) => index + dateStart[3]);
-          data[5] = List.generate(dateEnd[4]+1, (index) => index + dateStart[4]);
-          data[6] = List.generate(dateEnd[5]+1, (index) => index + dateStart[5]);
-          return;
-      }
-      if (initialTime.hour >= dateStart[3]) {
-        data[4] = List.generate(24 - dateStart[3], (index) => index + dateStart[3]);
-      }
-      if (initialTime.minute >= dateStart[4]) {
-        data[5] = List.generate(60 - dateStart[4], (index) => index + dateStart[4]);
-      }
-      if (initialTime.second >= dateStart[5]) {
-        data[6] = List.generate(60 - dateStart[5], (index) => index + dateStart[5]);
-      }
-    }
+    data[2] = useDay && filterItems != null ? filterItems!(DateTypeKey.day, day) : day;
   }
 
   void setInitialWeekDayData() {
-    data[3] = [1, 2, 3, 4, 5, 6, 7];
+    var weekDay = [1, 2, 3, 4, 5, 6, 7];
+    data[3] = useWeekDay && filterItems != null ? filterItems!(DateTypeKey.weekDay, weekDay) : weekDay;
+  }
+
+  void setInitialTimeData() {
+    var hour = List.generate(24, (index) => index);
+    var minute = List.generate(60, (index) => index);
+    var second = List.generate(60, (index) => index);
+    if (dateStart.length > 3) {
+      if(!useYear&&!useMonth&&!useDay&&dateEnd[0] == dateStart[0] && dateEnd[1] == dateStart[1]&& dateEnd[2] == dateStart[2]){
+          hour = List.generate(dateEnd[3]+1, (index) => index + dateStart[3]);
+          minute = List.generate(dateEnd[4]+1, (index) => index + dateStart[4]);
+          second = List.generate(dateEnd[5]+1, (index) => index + dateStart[5]);
+          data[4] = useHour && filterItems != null ? filterItems!(DateTypeKey.hour, hour) : hour;
+          data[5] = useMinute && filterItems != null ? filterItems!(DateTypeKey.minute, minute) : minute;
+          data[6] = useSecond && filterItems != null ? filterItems!(DateTypeKey.second, second) : second;
+          return;
+      }
+      if (initialTime.hour >= dateStart[3]) {
+        hour = List.generate(24 - dateStart[3], (index) => index + dateStart[3]);
+      }
+      if (initialTime.minute >= dateStart[4]) {
+        minute = List.generate(60 - dateStart[4], (index) => index + dateStart[4]);
+      }
+      if (initialTime.second >= dateStart[5]) {
+        second = List.generate(60 - dateStart[5], (index) => index + dateStart[5]);
+      }
+    }
+    data[4] = useHour && filterItems != null ? filterItems!(DateTypeKey.hour, hour) : hour;
+    data[5] = useMinute && filterItems != null ? filterItems!(DateTypeKey.minute, minute) : minute;
+    data[6] = useSecond && filterItems != null ? filterItems!(DateTypeKey.second, second) : second;
   }
 
   void setControllers() {
@@ -647,15 +672,17 @@ class DatePickerModel {
 
   void refreshMonthDataAndController() {
     var selectedYear = yearIndex + data[0][0];
+    late List<int> month;
     if (dateEnd[0] == dateStart[0]) {
-      data[1] = List.generate(dateEnd[1] - dateStart[1] + 1, (index) => index + dateStart[1]);
+      month = List.generate(dateEnd[1] - dateStart[1] + 1, (index) => index + dateStart[1]);
     } else if (selectedYear == dateStart[0]) {
-      data[1] = List.generate(12 - dateStart[1] + 1, (index) => index + dateStart[1]);
+      month = List.generate(12 - dateStart[1] + 1, (index) => index + dateStart[1]);
     } else if (selectedYear == dateEnd[0]) {
-      data[1] = List.generate(dateEnd[1], (index) => index + 1);
+      month = List.generate(dateEnd[1], (index) => index + 1);
     } else {
-      data[1] = List.generate(12, (index) => index + 1);
+      month = List.generate(12, (index) => index + 1);
     }
+    data[1] = useMonth && filterItems != null ? filterItems!(DateTypeKey.month, month) : month;
     monthFixedExtentScrollController.jumpToItem(monthIndex > data[1].length - 1 ? data[1].length - 1 : monthIndex);
   }
 
@@ -663,16 +690,18 @@ class DatePickerModel {
     /// 在刷新日数据时，年月数据已经是最新的
     var selectedYear = yearIndex + data[0][0];
     var selectedMonth = monthIndex + data[1][0];
+    late List<int> day;
     if (dateEnd[0] == dateStart[0] && dateEnd[1] == dateStart[1]) {
-      data[2] = List.generate(dateEnd[2] - dateStart[2] + 1, (index) => index + dateStart[2]);
+      day = List.generate(dateEnd[2] - dateStart[2] + 1, (index) => index + dateStart[2]);
     } else if (selectedYear == dateStart[0] && selectedMonth == dateStart[1]) {
-      data[2] = List.generate(
+      day = List.generate(
           DateTime(selectedYear, selectedMonth + 1, 0).day - dateStart[2] + 1, (index) => index + dateStart[2]);
     } else if (selectedYear == dateEnd[0] && selectedMonth == dateEnd[1]) {
-      data[2] = List.generate(dateEnd[2], (index) => index + 1);
+      day = List.generate(dateEnd[2], (index) => index + 1);
     } else {
-      data[2] = List.generate(DateTime(selectedYear, selectedMonth + 1, 0).day, (index) => index + 1);
+      day = List.generate(DateTime(selectedYear, selectedMonth + 1, 0).day, (index) => index + 1);
     }
+    data[2] = useDay && filterItems != null ? filterItems!(DateTypeKey.day, day) : day;
     dayFixedExtentScrollController.jumpToItem(dayIndex > data[2].length - 1 ? data[2].length - 1 : dayIndex);
   }
 
@@ -696,58 +725,64 @@ class DatePickerModel {
   }
 
   void refreshHourData({required int selectedYear, required int selectedMonth, required int selectDay}) {
-    int selectHour = selectDay == data[2][0] ? 0 : hourIndex;
+    var selectHour = selectDay == data[2][0] ? 0 : hourIndex;
+    late List<int> hour;
     if (selectedYear == dateStart[0] && selectedMonth == dateStart[1] && selectDay == dateStart[2]) {
-      data[4] = List.generate(24 - (dateStart[3]), (index) => index + dateStart[3]);
+      hour = List.generate(24 - (dateStart[3]), (index) => index + dateStart[3]);
     } else if (selectedYear == dateEnd[0] && selectedMonth == dateEnd[1] && selectDay == dateEnd[2]) {
-      data[4] = dateEnd[3] >= dateStart[3]
+      hour = dateEnd[3] >= dateStart[3]
           ? List.generate(dateEnd[3] + 1, (index) => index)
           : List.generate(24 - dateStart[3], (index) => index);
     } else {
-      data[4] = List.generate(24, (index) => index);
+      hour = List.generate(24, (index) => index);
     }
+    data[4] = useHour && filterItems != null ? filterItems!(DateTypeKey.hour, hour) : hour;
     hourFixedExtentScrollController.jumpToItem(selectHour > 0 ? hourIndex : 0);
   }
 
   void refreshMinuteData({required int selectedYear, required int selectedMonth, required int selectDay}) {
-    int selectHour = hourIndex + data[4][0];
+    var selectHour = hourIndex + data[4][0];
+    late List<int> minute;
     if (selectedYear == dateStart[0] &&
         selectedMonth == dateStart[1] &&
         selectDay == dateStart[2] &&
         selectHour == dateStart[3]) {
-      data[5] = List.generate(60 - (dateStart[4]), (index) => index + dateStart[4]);
+      minute = List.generate(60 - (dateStart[4]), (index) => index + dateStart[4]);
     } else if (selectedYear == dateEnd[0] &&
         selectedMonth == dateEnd[1] &&
         selectDay == dateEnd[2] &&
         selectHour == dateEnd[3]) {
-      data[5] = dateEnd[4] >= dateStart[4]
+      minute = dateEnd[4] >= dateStart[4]
           ? List.generate(dateEnd[4] + 1, (index) => index)
           : List.generate(60 - (dateStart[4]), (index) => index);
     } else {
-      data[5] = List.generate(60, (index) => index);
+      minute = List.generate(60, (index) => index);
     }
+    data[5] = useMinute && filterItems != null ? filterItems!(DateTypeKey.minute, minute) : minute;
   }
 
   void refreshSecondData({required int selectedYear, required int selectedMonth, required int selectDay}) {
     var selectHour = hourIndex + data[4][0];
     var selectMinute = minuteIndex + data[5][0];
+    late List<int> second;
     if (selectedYear == dateStart[0] &&
         selectedMonth == dateStart[1] &&
         selectDay == dateStart[2] &&
         selectHour == dateStart[3] &&
         selectMinute == dateStart[4]) {
-      data[6] = List.generate(60 - (dateStart[5]), (index) => index + dateStart[5]);
+      second = List.generate(60 - (dateStart[5]), (index) => index + dateStart[5]);
     } else if (selectedYear == dateEnd[0] &&
         selectedMonth == dateEnd[1] &&
         selectDay == dateEnd[2] &&
         selectHour == dateEnd[3] &&
         selectMinute == dateEnd[4]) {
-      data[6] = dateEnd[5] >= dateStart[5]
+      second = dateEnd[5] >= dateStart[5]
           ? List.generate(dateEnd[5] + 1, (index) => index)
           : List.generate(60 - (dateStart[5]), (index) => index);
     } else {
-      data[6] = List.generate(60, (index) => index);
+      second = List.generate(60, (index) => index);
     }
+    data[6] = useSecond && filterItems != null ? filterItems!(DateTypeKey.second, second) : second;
   }
 
   Map<String, int> getSelectedMap() {
