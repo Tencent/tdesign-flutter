@@ -33,3 +33,5 @@
 | style | TDSideBarStyle | TDSideBarStyle.normal | 样式 |
 | loading | bool? | - | 加载效果 |
 | loadingWidget | Widget? | - | 自定义加载动画 |
+| selectedBgColor | Color? | - | 选择的背景颜色 |
+| unSelectedBgColor | Color? | - | 未选择的背景颜色 |

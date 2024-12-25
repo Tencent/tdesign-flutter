@@ -48,9 +48,14 @@
 | onChange | void Function(List<int> value)? | - | 选中值变化时触发 |
 | onCellClick | void Function(int value, DateSelectType type, TDate tdate)? | - | 点击日期时触发 |
 | onCellLongPress | void Function(int value, DateSelectType type, TDate tdate)? | - | 长安日期时触发 |
-| onHeanderClick | void Function(int index, String week)? | - | 点击周时触发 |
+| onHeaderClick | void Function(int index, String week)? | - | 点击周时触发 |
 | useTimePicker | bool? | false | 是否显示时间选择器 |
 | timePickerModel | List<DatePickerModel>? | - | 自定义时间选择器 |
+| monthTitleHeight | double? | 22 | 月标题高度 |
+| monthTitleBuilder | Widget Function(BuildContext context, DateTime monthDate)? | - | 月标题构建器 |
+| pickerHeight | double? | 178 | 时间选择器List的视窗高度 |
+| pickerItemCount | int? | 3 | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
+| isTimeUnit | bool? | true | 是否显示时间单位 |
 
 ```
 ```
