@@ -4,6 +4,7 @@
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showThumbValue: true,
             min: 0,
             max: 100,
@@ -18,6 +19,7 @@
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
@@ -31,6 +33,7 @@
         ),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
@@ -46,6 +49,7 @@
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             showThumbValue: true,
@@ -62,6 +66,7 @@
         ),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showScaleValue: true,
             divisions: 5,
             min: 0,
@@ -80,6 +85,7 @@
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showScaleValue: true,
             divisions: 5,
             min: 0,
