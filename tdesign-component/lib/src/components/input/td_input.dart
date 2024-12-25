@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -271,6 +269,25 @@ class TDInput extends StatelessWidget {
     }
   }
 
+  double _getBottomDividerMarginLeft() {
+    switch (type) {
+      case TDInputType.normal:
+      case TDInputType.twoLine:
+      case TDInputType.normalMaxTwoLine:
+      case TDInputType.cardStyle:
+        if (contentPadding != null && contentPadding is EdgeInsets) {
+          return (contentPadding as EdgeInsets).left;
+        }
+        return spacer.labelInputSpace ?? 16;
+      case TDInputType.special:
+      case TDInputType.longText:
+        if (contentPadding != null && contentPadding is EdgeInsets) {
+          return (contentPadding as EdgeInsets).left;
+        }
+        return 16;
+    }
+  }
+
   Widget buildNormalInput(BuildContext context) {
     var cardStyleDecoration = _getCardStylePreDecoration(context);
     var hasLeftWidget = leftLabel != null || leftIcon != null || (required ?? false);
@@ -373,11 +390,13 @@ class TDInput extends StatelessWidget {
                       inputAction: inputAction,
                     ),
                     Visibility(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: spacer.additionInfoSpace ?? 16, bottom: getInputPadding()),
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.only(left: spacer.additionInfoSpace ?? 16,right:TextAlign.end==contentAlignment?8:0, bottom: getInputPadding()),
                         child: TDText(
                           additionInfo,
                           font: TDTheme.of(context).fontBodySmall,
+                          textAlign: contentAlignment!=TextAlign.center?contentAlignment:TextAlign.start,
                           textColor: additionInfoColor ?? TDTheme.of(context).fontGyColor3,
                         ),
                       ),
@@ -431,9 +450,9 @@ class TDInput extends StatelessWidget {
         if (showBottomDivider)
           Visibility(
             visible: type != TDInputType.cardStyle,
-            child: const TDDivider(
+            child: TDDivider(
               margin: EdgeInsets.only(
-                left: 16,
+                left: _getBottomDividerMarginLeft(),
               ),
             ),
           ),
@@ -599,9 +618,9 @@ class TDInput extends StatelessWidget {
             ],
           ),
           if (showBottomDivider)
-            const TDDivider(
+            TDDivider(
               margin: EdgeInsets.only(
-                left: 16,
+                left: _getBottomDividerMarginLeft(),
               ),
             ),
         ],
@@ -631,9 +650,9 @@ class TDInput extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                     )),
                 if (showBottomDivider)
-                  const TDDivider(
+                  TDDivider(
                     margin: EdgeInsets.only(
-                      left: 16,
+                      left: _getBottomDividerMarginLeft(),
                     ),
                   ),
               ],
@@ -758,10 +777,10 @@ class TDInput extends StatelessWidget {
           ),
         ),
         if (showBottomDivider)
-          const Visibility(
+          Visibility(
             child: TDDivider(
               margin: EdgeInsets.only(
-                left: 16,
+                left: _getBottomDividerMarginLeft(),
               ),
             ),
           ),

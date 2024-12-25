@@ -130,7 +130,7 @@ class TDConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
-    assert((title != null || content != null));
+    assert((title != null || content != null || contentWidget != null));
     return TDDialogScaffold(
         showCloseButton: showCloseButton,
         backgroundColor: backgroundColor,

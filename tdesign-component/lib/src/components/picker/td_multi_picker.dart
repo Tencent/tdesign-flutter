@@ -293,16 +293,19 @@ class TDMultiPicker extends StatelessWidget {
                   childCount: data[position].length,
                   builder: (context, index) {
                     return Container(
+                        key: UniqueKey(),
                         alignment: Alignment.center,
                         height: pickerHeight / pickerItemCount,
                         width: maxWidth,
                         child: TDItemWidget(
                           index: index,
+                          key: UniqueKey(),
                           itemHeight: pickerHeight / pickerItemCount,
                           content: data[position][index],
                           itemDistanceCalculator: itemDistanceCalculator,
                           fixedExtentScrollController: controllers[position],
-                        ));
+                        )
+                    );
                   })),
         ));
   }

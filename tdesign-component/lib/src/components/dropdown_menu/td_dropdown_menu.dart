@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import './td_dropdown_item.dart';
 import '../../theme/td_colors.dart';
 import '../../theme/td_fonts.dart';
 import '../../theme/td_theme.dart';
 import '../icon/td_icons.dart';
 import '../text/td_text.dart';
+import './td_dropdown_item.dart';
 import 'td_dropdown_popup.dart';
 
 /// 菜单展开方向
@@ -46,6 +46,7 @@ class TDDropdownMenu extends StatefulWidget {
     this.width,
     this.height = 48,
     this.tabBarAlign = MainAxisAlignment.center,
+    this.decoration,
   }) : super(key: key);
 
   /// 下拉菜单构建器，优先级高于[items]
@@ -79,7 +80,7 @@ class TDDropdownMenu extends StatefulWidget {
   final ValueChanged<int>? onMenuClosed;
 
   /// 是否开启滚动列表
-  final bool isScrollable;
+  final bool? isScrollable;
 
   /// menu的宽度
   final double? width;
@@ -89,6 +90,9 @@ class TDDropdownMenu extends StatefulWidget {
 
   /// [TDDropdownItem.label]和[arrowIcon]/[TDDropdownItem.arrowIcon]的对齐方式
   final MainAxisAlignment? tabBarAlign;
+
+  /// 下拉菜单的装饰器
+  final Decoration? decoration;
 
   @override
   _TDDropdownMenuState createState() => _TDDropdownMenuState();
@@ -125,44 +129,44 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    Widget tabBar = Row(
-      children: List.generate(
-        _items?.length ?? 0,
-        (index) {
-          return Expanded(
-            flex: _items![index].tabBarFlex ?? 1,
-            child: _tabBarContent(index),
-          );
-        },
-      ),
-    );
-    if (widget.isScrollable) {
-      tabBar = SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        child: Row(
-          children: List.generate(
-            _items?.length ?? 0,
-            (index) => SizedBox(
-              width: _items![index].tabBarWidth,
-              child: _tabBarContent(index),
+    var tabBar = widget.isScrollable == true
+        ? SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: Row(
+              children: List.generate(
+                _items?.length ?? 0,
+                (index) => SizedBox(
+                  width: _items![index].tabBarWidth,
+                  child: _tabBarContent(index),
+                ),
+              ),
             ),
-          ),
-        ),
-      );
-    }
+          )
+        : Row(
+            children: List.generate(
+              _items?.length ?? 0,
+              (index) {
+                return Expanded(
+                  flex: _items![index].tabBarFlex ?? 1,
+                  child: _tabBarContent(index),
+                );
+              },
+            ),
+          );
     return Container(
       height: widget.height,
       width: widget.width ?? double.infinity,
-      decoration: BoxDecoration(
-        color: TDTheme.of(context).whiteColor1,
-        border: Border(
-          bottom: BorderSide(
-            color: TDTheme.of(context).grayColor3,
-            width: 1,
+      decoration: widget.decoration ??
+          BoxDecoration(
+            color: TDTheme.of(context).whiteColor1,
+            border: Border(
+              bottom: BorderSide(
+                color: TDTheme.of(context).grayColor3,
+                width: 1,
+              ),
+            ),
           ),
-        ),
-      ),
       child: tabBar,
     );
   }

@@ -42,7 +42,7 @@ dependencies:
   http: ^0.13.5
   tdesign_flutter:
     path: ../
-  path_provider: ^2.1.1
+#  path_provider: 2.1.5
   extended_nested_scroll_view: any
   flutter_screenutil: any
 dev_dependencies:
@@ -108,3 +108,14 @@ flutter:
     - assets/version
     - assets/img/
     - assets/theme.json
+
+# 生成演示代码
+AOPMarket:
+  enable: true
+  compileTarget: frontend_server, dart2js
+  versions:
+    negativeInfinity~3.0.0:
+      unsupportTips: 请在Flutter 3.+ 运行心悦工程
+    3.0.0~infinity:
+      path: ./tdesign_flutter_generator
+  saveDartDependencies: true
