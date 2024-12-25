@@ -104,7 +104,9 @@ class TDCalendar extends StatefulWidget {
         return DateTime(date.year, date.month, date.day);
       }).toList();
 
-  List<DateTime>? get _valueTime => value?.map(DateTime.fromMillisecondsSinceEpoch).toList();
+  List<DateTime>? get _valueTime => value?.map((item) {
+        return DateTime.fromMillisecondsSinceEpoch(item);
+      }).toList();
 
   @override
   _TDCalendarState createState() => _TDCalendarState();
