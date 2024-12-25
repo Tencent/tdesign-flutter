@@ -44,6 +44,7 @@ class TDCalendar extends StatefulWidget {
     this.monthTitleBuilder,
     this.pickerHeight = 178,
     this.pickerItemCount = 3,
+    this.isTimeUnit = true,
   }) : super(key: key);
 
   /// 第一天从星期几开始，默认 0 = 周日
@@ -114,6 +115,9 @@ class TDCalendar extends StatefulWidget {
 
   /// 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
   final int? pickerItemCount;
+
+  /// 是否显示时间单位
+  final bool? isTimeUnit;
 
   List<DateTime>? get _value => value?.map((e) {
         final date = DateTime.fromMillisecondsSinceEpoch(e);
@@ -302,6 +306,7 @@ class _TDCalendarState extends State<TDCalendar> {
               model: timePickerModel,
               pickerHeight: widget.pickerHeight ?? 178,
               pickerItemCount: widget.pickerItemCount ?? 3,
+              isTimeUnit: widget.isTimeUnit ?? true,
               onConfirm: (selected) {},
               onSelectedItemChanged: (wheelIndex, index) {
                 final time = _getValue(inherited?.selected.value ?? []);
