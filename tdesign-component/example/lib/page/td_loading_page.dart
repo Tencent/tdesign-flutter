@@ -305,6 +305,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
           ),
           TDSlider(value: _currentSliderValue,
             sliderThemeData: TDSliderThemeData(
+              context: context,
               max: 2000,
               min: -20,
               divisions: 100,
