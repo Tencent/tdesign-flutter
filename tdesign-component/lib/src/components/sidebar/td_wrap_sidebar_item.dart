@@ -21,6 +21,8 @@ class TDWrapSideBarItem extends StatelessWidget {
     this.topAdjacent = false,
     this.bottomAdjacent = false,
     this.onTap,
+    this.selectedBgColor,
+    this.unSelectedBgColor,
     required this.style,
   }) : super(key: key);
 
@@ -34,6 +36,8 @@ class TDWrapSideBarItem extends StatelessWidget {
   final int value;
   final bool selected;
   final Color? selectedColor;
+  final Color? selectedBgColor;
+  final Color? unSelectedBgColor;
   final bool topAdjacent;
   final bool bottomAdjacent;
   final VoidCallback? onTap;
@@ -51,18 +55,20 @@ class TDWrapSideBarItem extends StatelessWidget {
   Widget renderNormalItem(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: selectedBgColor ?? Colors.white,
       ),
-      child:Container(
-          decoration: BoxDecoration(
-              color: selected ? Colors.white : const Color.fromRGBO(243, 243, 243, 1),
-              borderRadius: bottomAdjacent || topAdjacent
-                  ? bottomAdjacent
-                      ? const BorderRadius.only(bottomRight: Radius.circular(9))
-                      : const BorderRadius.only(topRight: Radius.circular(9))
-                  : null),
-          child: Row(
-            children: [
+      child: Container(
+        decoration: BoxDecoration(
+            color: selected
+                ? (selectedBgColor ?? Colors.white)
+                : (unSelectedBgColor ?? const Color.fromRGBO(243, 243, 243, 1)),
+            borderRadius: bottomAdjacent || topAdjacent
+                ? bottomAdjacent
+                    ? const BorderRadius.only(bottomRight: Radius.circular(9))
+                    : const BorderRadius.only(topRight: Radius.circular(9))
+                : null),
+        child: Row(
+          children: [
               renderPreLine(context),
               Expanded(
                   child: Padding(
