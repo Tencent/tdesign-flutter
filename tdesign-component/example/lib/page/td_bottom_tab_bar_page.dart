@@ -195,6 +195,12 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
             builder: (context) {
               return CodeWrapper(builder: _setCurrentIndexToTabBar);
             }),
+        ExampleItem(
+            ignoreCode: true,
+            desc: 'icon默认大小底部文字不溢出',
+            builder: (context) {
+              return CodeWrapper(builder: _iconTextTypeTabBarOverflow);
+            })
       ],
     );
   }
@@ -438,6 +444,44 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
         unselectedIcon: _unSelectedIcon,
         onTap: () {
           onTapTab(context, '标签2');
+        },
+      ),
+    ]);
+  }
+
+  @Demo(group: 'bottomTabBar')
+  Widget _iconTextTypeTabBarOverflow(BuildContext context) {
+    final selectedIcon = Icon(
+      TDIcons.app,
+      color: TDTheme.of(context).brandNormalColor,
+    );
+    final unSelectedIcon = Icon(
+      TDIcons.app,
+      color: TDTheme.of(context).brandNormalColor,
+    );
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
+      TDBottomTabBarTabConfig(
+        tabText: '标签',
+        selectedIcon: selectedIcon,
+        unselectedIcon: unSelectedIcon,
+        onTap: () {
+          onTapTab(context, '标签1');
+        },
+      ),
+      TDBottomTabBarTabConfig(
+        tabText: '标签',
+        selectedIcon: selectedIcon,
+        unselectedIcon: unSelectedIcon,
+        onTap: () {
+          onTapTab(context, '标签2');
+        },
+      ),
+      TDBottomTabBarTabConfig(
+        tabText: '标签',
+        selectedIcon: selectedIcon,
+        unselectedIcon: unSelectedIcon,
+        onTap: () {
+          onTapTab(context, '标签3');
         },
       ),
     ]);
