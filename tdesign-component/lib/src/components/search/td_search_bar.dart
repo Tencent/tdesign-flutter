@@ -20,7 +20,7 @@ enum TDSearchAlignment {
 }
 
 typedef TDSearchBarEvent = void Function(String value);
-typedef TDSearchBarClearEvent = bool Function(String value);
+typedef TDSearchBarClearEvent = bool? Function(String value);
 typedef TDSearchBarCallBack = void Function();
 
 class TDSearchBar extends StatefulWidget {
