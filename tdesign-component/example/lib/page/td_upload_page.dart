@@ -87,7 +87,7 @@ class TDUploadState extends State<TDUploadPage> {
     return ExamplePage(
         title: tdTitle(),
         exampleCodeGroup: 'upload',
-        desc: '上传组件',
+        desc: '用于相册读取或拉起拍照的图片上传功能。${PlatformUtil.isWeb ? "Web端不支持读取本地图片,请前往移动端体验。" : ""}',
         children: [
           ExampleModule(
             title: '组件类型',
