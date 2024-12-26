@@ -64,3 +64,7 @@ TDesign Flutter depends on the following component libraries. We appreciate the 
 [flutter_easyrefresh](https://pub-web.flutter-io.cn/packages/easy_refresh)
 
 [flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)
+
+[flutter_slidable](https://pub-web.flutter-io.cn/packages/flutter_slidable)
+
+[image_picker](https://pub-web.flutter-io.cn/packages/image_picker)
