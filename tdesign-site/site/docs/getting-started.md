@@ -186,3 +186,5 @@ TDesign Flutter 依赖以下组件库,感谢作者的开源贡献:
 [flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)
 
 [flutter_slidable](https://pub-web.flutter-io.cn/packages/flutter_slidable)
+
+[image_picker](https://pub-web.flutter-io.cn/packages/image_picker)
