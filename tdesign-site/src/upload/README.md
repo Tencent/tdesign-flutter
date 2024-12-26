@@ -1,6 +1,6 @@
 ---
 title: Upload 上传
-description: 上传组件
+description: 用于相册读取或拉起拍照的图片上传功能。
 spline: base
 isComponent: true
 ---
