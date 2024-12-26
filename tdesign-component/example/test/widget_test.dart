@@ -17,38 +17,42 @@ import 'package:tdesign_flutter_example/main.dart';
 
 void main() async {
 
-    testWidgets('Counter increments smoke testeee', (WidgetTester tester) async {
+  testWidgets('Counter increments smoke testeee', (WidgetTester tester) async {
 
-      WebMdTool.needGenerateWebMd = true;
+    WebMdTool.needGenerateWebMd = true;
 
-      await tester.pumpWidget(const MyApp());
-      for(var i =0 ;i < exampleMap.length; i++){
-        var value = exampleMap.values.elementAt(i);
-        for(var j =0 ;j < value.length; j++){
-          var model = value.elementAt(j);
-          if (!model.isTodo) {
-            if(model.text == '颜色'){
-            // 测试结束
-              throw Exception('<===============执行完成!!!!=================>');
-          }
-          await _testComponent(tester, model.text);
-          }
+    await tester.pumpWidget(const MyApp());
+    exampleMap.forEach((key, value) {
+      value.forEach((model) {
+        if (!model.isTodo) {
+          examplePageList.add(model);
         }
-        count++;
-      }
-
+      });
     });
+    for(var element in examplePageList){
+      // Build our app and trigger a frame.
+      if(element.text == '颜色'){
+        // 测试结束
+        break;
+      }
+      await _testComponent(tester, element.text);
+    }
+    // throw Exception('<===============执行完成!!!!=================>');
+
+  });
 
 
 }
 
+var changeList = ['BackTop 返回顶部','Steps 步骤条','Calendar 日历','Radio 单选框','Switch 开关','Upload 上传','Empty 空状态','Result 结果','DropdownMenu 下拉菜单','Swipecell 滑动操作'];
 Finder? lastFinder;
 
 int count = 0;
 Future<void> _testComponent(WidgetTester tester, String name) async {
-  print('\n\n当前组件==============>：$name');
-  count++;
-  if(count % 5 == 0 && lastFinder != null){
+  print('\n\n当前组件==============>：$name, 滑动count:$count');
+
+  if(changeList.contains(name) && lastFinder != null){
+    count++;
     await tester.fling(lastFinder!, const Offset(0, -300), 2);
     try {
       await tester.pumpAndSettle();
@@ -59,16 +63,16 @@ Future<void> _testComponent(WidgetTester tester, String name) async {
 
   var button = find.text(name);
 
-    expect(button, findsOneWidget);
-    lastFinder = button;
+  expect(button, findsOneWidget);
+  lastFinder = button;
 
-    await tester.tap(button);
-    await tester.pump();
-    await tester.pump();
-    await tester.pump();
-    await tester.pump();
-    await tester.pump();
-    var page = find.text('WebGenTag');
+  await tester.tap(button);
+  await tester.pump();
+  await tester.pump();
+  await tester.pump();
+  await tester.pump();
+  await tester.pump();
+  var page = find.text('WebGenTag');
   try {
     expect(page, findsOneWidget);
 
@@ -76,10 +80,10 @@ Future<void> _testComponent(WidgetTester tester, String name) async {
 
     await tester.fling(page, const Offset(0, -20000), 2);
     try {
-        await tester.pumpAndSettle();
-      } catch (e) {
-        print('pumpAndSettle 2 error:$e');
-      }
+      await tester.pumpAndSettle();
+    } catch (e) {
+      print('pumpAndSettle 2 error:$e');
+    }
   } catch (e) {
     print("没有找到'WebGenTag',不用滑动,直接点击");
   }
