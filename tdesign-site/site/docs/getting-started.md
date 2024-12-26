@@ -159,7 +159,7 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
 - 开发中组件: ActionSheet,Progress,Footer,Message,Form
 
-- 待开发组件: Upload,Popover
+- 待开发组件: Popover
 
 - 其他事项: API优化,单元测试,多端适配,深色模式
 
@@ -169,9 +169,9 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
 ## SDK依赖版本
 
-dart: ">=2.19.0 <4.0.0"
+dart: ">=3.2.6 <4.0.0"
 
-flutter: ">=3.7.0"
+flutter: ">=3.16.0"
 
 ## 交流反馈
 <br/>
