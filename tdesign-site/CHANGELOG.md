@@ -39,7 +39,7 @@ docClass: timeline
 - `Dialog`: 修改Dialog可以只传contentWidget,不用传title和content @Luozf12345 ([#418](https://github.com/Tencent/tdesign-flutter/pull/418))
 - `TDBottomTabBar`: 修复iconText模式，底部溢出2.5像素 @epoll-j ([#422](https://github.com/Tencent/tdesign-flutter/pull/422))
 ### 🚧 Others
-- 适配FlutterSdk3.25 @shizhe2018 ([#378](https://github.com/Tencent/tdesign-flutter/pull/378))
+- 适配FlutterSdk3.25,最低支持版本调整为3.16.0 @shizhe2018 ([#378](https://github.com/Tencent/tdesign-flutter/pull/378))
 - 修改Example英文版文案 @shizhe2018 ([#382](https://github.com/Tencent/tdesign-flutter/pull/382))
 - 升级flutter_slidable版本 @Luozf12345 ([#407](https://github.com/Tencent/tdesign-flutter/pull/407))
 - demo增加组件搜索功能 @Luozf12345 ([#410](https://github.com/Tencent/tdesign-flutter/pull/410))
