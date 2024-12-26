@@ -37,6 +37,12 @@ spline: explain
 - 代码规范(兼容指定的最低版本SDK)
 - API验收
 
+### Flutter基础知识
+- Flutter基础介绍：https://book.flutterchina.club/chapter1/flutter_intro.html
+- Dart语言介绍：https://book.flutterchina.club/chapter1/dart.html
+- 搭建Flutter开发环境：https://book.flutterchina.club/chapter1/install_flutter.html
+- 计数器应用示例：https://book.flutterchina.club/chapter2/first_flutter_app.html
+
 ## SDK依赖版本
 
 dart: ">=3.2.6 <4.0.0"
