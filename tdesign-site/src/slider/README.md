@@ -28,6 +28,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildSingleHandle(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         min: 0,
         max: 100,
       ),
@@ -48,6 +49,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildDoubleHandle(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         min: 0,
         max: 100,
       ),
@@ -68,6 +70,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildSingleHandleWithNumber(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showThumbValue: true,
         scaleFormatter: (value) => value.toInt().toString(),
         min: 0,
@@ -92,6 +95,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildDoubleHandleWithNumber(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showThumbValue: true,
         min: 0,
         max: 100,
@@ -116,6 +120,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildSingleHandleWithScale(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -139,6 +144,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildDoubleHandleWithScale(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -165,6 +171,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
+            context: context,
             min: 0,
             max: 100,
           ),
@@ -177,6 +184,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData(
+            context: context,
             min: 0,
             max: 100,
             showThumbValue: true,
@@ -191,6 +199,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData(
+            context: context,
             showScaleValue: true,
             divisions: 5,
             min: 0,
@@ -217,6 +226,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showThumbValue: true,
             min: 0,
             max: 100,
@@ -231,6 +241,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
@@ -244,6 +255,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         ),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
@@ -259,6 +271,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             showThumbValue: true,
@@ -275,6 +288,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         ),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showScaleValue: true,
             divisions: 5,
             min: 0,
@@ -293,6 +307,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showScaleValue: true,
             divisions: 5,
             min: 0,
@@ -325,11 +340,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
+            context: context,
             min: 0,
             max: 100,
           ),
           value: 40,
-          boxDecoration: BoxDecoration(
+          boxDecoration: const BoxDecoration(
              color: Colors.amber
           ),
           // divisions: 5,
@@ -340,11 +356,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           ),
-          boxDecoration: BoxDecoration(
+          boxDecoration: const BoxDecoration(
               color: Colors.deepOrangeAccent
           ),
           value: const RangeValues(20, 60),
