@@ -301,7 +301,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
         height: widget.barHeight ?? _kDefaultTabBarHeight,
         width: itemWidth,
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 7),
+        padding: EdgeInsets.only(top: 7, bottom: widget.basicType == TDBottomTabBarBasicType.iconText ? 5 : 7),
         child: TDBottomTabBarItemWithBadge(
           basiceType: widget.basicType,
           componentType: widget.componentType ?? TDBottomTabBarComponentType.label,
@@ -442,7 +442,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
                         borderRadius: const BorderRadius.all(Radius.circular(24))),
                   )),
             Container(
-                padding: EdgeInsets.only(top: isInOrOutCapsule ? 3.0 : 2.0, bottom: isInOrOutCapsule ? 1.0 : 0.0),
+                padding: EdgeInsets.only(top: isInOrOutCapsule ? 3.0 : 2.0, bottom: isInOrOutCapsule ? (basiceType == TDBottomTabBarBasicType.iconText ? 0.0 : 1.0) : 0.0),
                 child: _constructItem(context, badgeConfig, isInOrOutCapsule)),
 
             /// )
