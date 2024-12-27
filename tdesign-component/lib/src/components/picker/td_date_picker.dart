@@ -35,6 +35,7 @@ class TDDatePicker extends StatefulWidget {
       required this.pickerItemCount,
       this.isTimeUnit,
       this.onSelectedItemChanged,
+      this.itemBuilder,
       Key? key})
       : super(key: key);
 
@@ -106,6 +107,9 @@ class TDDatePicker extends StatefulWidget {
 
   /// 选择器选中项改变回调
   final void Function(int wheelIndex,int index)? onSelectedItemChanged;
+
+  /// 自定义item构建
+  final ItemBuilderType? itemBuilder;
 
   @override
   State<StatefulWidget> createState() => _TDDatePickerState();
@@ -332,7 +336,8 @@ class _TDDatePickerState extends State<TDDatePicker> {
                         alignment: Alignment.center,
                         height: pickerHeight / widget.pickerItemCount,
                         width: maxWidth,
-                        child:  TDItemWidget(
+                        child: TDItemWidget(
+                          colIndex: whichLine,
                           index: index,
                           itemHeight: pickerHeight / widget.pickerItemCount,
                           content: whichLine == 3
@@ -341,6 +346,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                               : widget.model.data[whichLine][index].toString() + timeUnitMap(widget.model.mapping[whichLine]),
                           fixedExtentScrollController: widget.model.controllers[whichLine],
                           itemDistanceCalculator: widget.itemDistanceCalculator,
+                          itemBuilder: widget.itemBuilder,
                         ));
                   })),
         ));
