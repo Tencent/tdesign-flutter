@@ -76,6 +76,9 @@ class TDMultiPicker extends StatelessWidget {
   /// 若为null表示全部从零开始
   final List<int>? initialIndexes;
 
+  /// 自定义item构建
+  final ItemBuilderType? itemBuilder;
+
   static const _pickerTitleHeight = 56.0;
 
   const TDMultiPicker(
@@ -101,6 +104,7 @@ class TDMultiPicker extends StatelessWidget {
       this.padding,
       this.itemDistanceCalculator,
       this.customSelectWidget,
+      this.itemBuilder,
       Key? key})
       : super(key: key);
 
@@ -298,12 +302,14 @@ class TDMultiPicker extends StatelessWidget {
                         height: pickerHeight / pickerItemCount,
                         width: maxWidth,
                         child: TDItemWidget(
+                          colIndex: position,
                           index: index,
                           key: UniqueKey(),
                           itemHeight: pickerHeight / pickerItemCount,
                           content: data[position][index],
                           itemDistanceCalculator: itemDistanceCalculator,
                           fixedExtentScrollController: controllers[position],
+                          itemBuilder: itemBuilder,
                         )
                     );
                   })),
@@ -382,6 +388,9 @@ class TDMultiLinkedPicker extends StatefulWidget {
   /// 不同距离自选项计算策略
   final ItemDistanceCalculator? itemDistanceCalculator;
 
+  /// 自定义item构建
+  final ItemBuilderType? itemBuilder;
+
   const TDMultiLinkedPicker({
     this.title,
     required this.onConfirm,
@@ -406,6 +415,7 @@ class TDMultiLinkedPicker extends StatefulWidget {
     this.topRadius,
     this.padding,
     this.itemDistanceCalculator,
+    this.itemBuilder,
     Key? key,
   }) : super(key: key);
 
@@ -549,6 +559,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                         height: pickerHeight / widget.pickerItemCount,
                         width: maxWidth,
                         child: TDItemWidget(
+                          colIndex: position,
                           index: index,
                           itemHeight: pickerHeight / widget.pickerItemCount,
                           content:
@@ -556,6 +567,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                           fixedExtentScrollController:
                               model.controllers[position],
                           itemDistanceCalculator: widget.itemDistanceCalculator,
+                          itemBuilder: widget.itemBuilder,
                         ));
                   })),
         ));
