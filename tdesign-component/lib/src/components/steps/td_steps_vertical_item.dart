@@ -11,6 +11,7 @@ class TDStepsVerticalItem extends StatelessWidget {
   final bool simple;
   final bool readOnly;
   final bool verticalSelect;
+
   const TDStepsVerticalItem({
     super.key,
     required this.data,
@@ -25,6 +26,10 @@ class TDStepsVerticalItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// 默认标题
+    Widget defaultTitle = Text('Step ${index + 1}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold));
+    /// 默认内容
+    Widget defaultContent = Text('This is the content of step ${index + 1}.');
     /// 步骤条数字背景色
     var stepsNumberBgColor = TDTheme.of(context).brandNormalColor;
     /// 步骤条数字颜色
@@ -195,33 +200,18 @@ class TDStepsVerticalItem extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TDText(
-                          data.title,
-                          style: TextStyle(
-                            fontWeight: (activeIndex == index && !readOnly) ? FontWeight.w600 : FontWeight.w400,
-                            color: stepsTitleColor,
-                            fontSize: 14,
-                            height: 1.2,
-                          ),
-                        ),
-                        verticalSelect ? Icon(TDIcons.chevron_right, color: TDTheme.of(context).fontGyColor1, size: 16,): Container(),
+                        data.title ?? defaultTitle, // 使用默认title
+                        verticalSelect ? Icon(TDIcons.chevron_right, color: TDTheme.of(context).fontGyColor1, size: 16,) : Container(),
                       ],
                     ),
                   ),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TDText(
-                        data.content,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          color: TDTheme.of(context).fontGyColor3,
-                          fontSize: 12,
-                        ),
-                      ),
-                      customContent,
-                    ]
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        data.content ?? defaultContent, // 使用默认content
+                        customContent,
+                      ]
                   ),
                 ],
               ),
@@ -231,6 +221,4 @@ class TDStepsVerticalItem extends StatelessWidget {
       ),
     );
   }
-
 }
-
