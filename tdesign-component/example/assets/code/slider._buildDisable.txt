@@ -4,6 +4,7 @@
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
+            context: context,
             min: 0,
             max: 100,
           ),
@@ -16,6 +17,7 @@
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData(
+            context: context,
             min: 0,
             max: 100,
             showThumbValue: true,
@@ -30,6 +32,7 @@
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData(
+            context: context,
             showScaleValue: true,
             divisions: 5,
             min: 0,

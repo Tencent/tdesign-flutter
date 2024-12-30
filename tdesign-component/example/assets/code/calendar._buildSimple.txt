@@ -98,6 +98,8 @@ Widget _buildSimple(BuildContext context) {
                   value: value,
                   height: size.height * 0.92,
                   useTimePicker: true,
+                  // pickerHeight: 100,
+                  // pickerItemCount: 2,
                   onCellClick: (value, type, tdate) {
                     print('onCellClick:$value');
                   },

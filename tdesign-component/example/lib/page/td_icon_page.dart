@@ -14,20 +14,15 @@ class TDIconPage extends StatefulWidget {
 class _TDIconPageState extends State<TDIconPage> {
   bool showBorder = false;
 
-  var iconList = [];
+  dynamic iconList = [];
 
-  var isLoading = true;
+  var isLoading = false;
 
   @override
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(milliseconds: 500), () {
-      setState(() {
-        iconList.addAll(TDIcons.all.values);
-        isLoading = false;
-      });
-    });
+    iconList = TDIcons.all.values;
   }
 
   @override
@@ -63,20 +58,25 @@ class _TDIconPageState extends State<TDIconPage> {
             action: '搜索',
             onActionClick: (text) {
               setState(() {
-                iconList.clear();
+                iconList = [];
+                isLoading = true;
               });
               Future.delayed(const Duration(milliseconds: 30), () {
+                var list = [];
                 TDIcons.all.forEach((key, value) {
                   if (value.name.contains(text)) {
-                    iconList.add(value);
+                    list.add(value);
                   }
                 });
-                setState(() {});
+                setState(() {
+                  iconList = list;
+                  isLoading = false;
+                });
               });
             },
             onClearClick: (_) {
               setState(() {
-                iconList.addAll(TDIcons.all.values);
+                iconList = TDIcons.all.values;
               });
             },
           ),
@@ -97,26 +97,53 @@ class _TDIconPageState extends State<TDIconPage> {
               return Container(
                 height: 300,
                 alignment: Alignment.center,
-                child: isLoading ? const TDLoading(size: TDLoadingSize.medium) : const TDText("暂无内容"),
+                child: isLoading ? const TDText('加载中...') : const TDText('暂无内容'),
               );
             }
-            return Wrap(
-              children: [
-                for (var iconData in iconList)
-                  SizedBox(
-                    height: 100,
-                    width: 175,
-                    child: Column(
+            return SizedBox(
+              height: MediaQuery.of(context).size.height - 150,
+              child: ListView.builder(
+                  itemCount: (iconList.length + 1) ~/ 2,
+                  itemBuilder: (context,index){
+                    var index1 = index ~/ 2;
+                    var index2 = index1 + 1;
+                    var iconData1 =  iconList.elementAt(index1);
+                    var iconData2;
+                    if(iconList.length > index2){
+                      iconData2 =  iconList.elementAt(index2);
+                    }
+                    return Row(
                       children: [
-                        Container(
-                          color: showBorder ? TDTheme.of(context).brandDisabledColor : Colors.transparent,
-                          child: Icon(iconData),
+                        SizedBox(
+                          height: 100,
+                          width: 175,
+                          child: Column(
+                            children: [
+                              Container(
+                                color: showBorder ? TDTheme.of(context).brandDisabledColor : Colors.transparent,
+                                child: Icon(iconData1),
+                              ),
+                              TDText(iconData1.name)
+                            ],
+                          ),
                         ),
-                        TDText(iconData.name)
+                        if (iconData2 != null)
+                          SizedBox(
+                            height: 100,
+                            width: 175,
+                            child: Column(
+                              children: [
+                                Container(
+                                  color: showBorder ? TDTheme.of(context).brandDisabledColor : Colors.transparent,
+                                  child: Icon(iconData2),
+                                ),
+                                TDText(iconData2.name)
+                              ],
+                            ),
+                          )
                       ],
-                    ),
-                  )
-              ],
+                    );
+                  }),
             );
           })
         ],
