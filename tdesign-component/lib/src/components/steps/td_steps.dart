@@ -7,18 +7,18 @@ import '../../../tdesign_flutter.dart';
 class TDStepsItemData {
 
   TDStepsItemData({
-    required this.title,
-    required this.content,
+    this.title,
+    this.content,
     this.successIcon,
     this.errorIcon,
     this.customContent,
   });
 
   /// 标题
-  final String title;
+  final Widget? title;
 
   /// 内容
-  final String content;
+  final Widget? content;
 
   /// 成功图标
   final IconData? successIcon;
@@ -80,23 +80,23 @@ class _TDStepsState extends State<TDSteps> {
   Widget build(BuildContext context) {
     /// 当前激活的step索引
     final currentActiveIndex = widget.activeIndex < 0 ? 0 :
-      (widget.activeIndex >= widget.steps.length ? widget.steps.length - 1 : widget.activeIndex);
+    (widget.activeIndex >= widget.steps.length ? widget.steps.length - 1 : widget.activeIndex);
     return widget.direction == TDStepsDirection.horizontal ?
-      TDStepsHorizontal(
+    TDStepsHorizontal(
         steps: widget.steps,
         activeIndex: currentActiveIndex,
         status: widget.status,
         simple: widget.simple,
         readOnly: widget.readOnly
-      ):
-      TDStepsVertical(
-        steps: widget.steps,
-        activeIndex: currentActiveIndex,
-        status: widget.status,
-        simple: widget.simple,
-        readOnly: widget.readOnly,
-        verticalSelect: widget.verticalSelect,
-      );
+    ):
+    TDStepsVertical(
+      steps: widget.steps,
+      activeIndex: currentActiveIndex,
+      status: widget.status,
+      simple: widget.simple,
+      readOnly: widget.readOnly,
+      verticalSelect: widget.verticalSelect,
+    );
   }
 
 }
