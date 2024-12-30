@@ -6,7 +6,7 @@ docClass: timeline
 ---
 
 
-## 🌈 0.1.8 `2024-12-26` 
+## 🌈 0.1.8 `2024-12-30` 
 ### 🚀 Features
 - `TDUpload`: 新增Upload组件 @TingShine ([#405](https://github.com/Tencent/tdesign-flutter/pull/405))
 - `SearchBar`: 增加键盘动作类型 @ccXxx1aoBai ([#366](https://github.com/Tencent/tdesign-flutter/pull/366))
