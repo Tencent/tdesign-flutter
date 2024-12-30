@@ -10,6 +10,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
   final TDStepsStatus status;
   final bool simple;
   final bool readOnly;
+
   const TDStepsHorizontalItem({
     super.key,
     required this.data,
@@ -23,6 +24,10 @@ class TDStepsHorizontalItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// 默认标题
+    Widget defaultTitle = Text('Step ${index + 1}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold));
+    /// 默认内容
+    Widget defaultContent = Text('This is the content of step ${index + 1}.');
     /// 步骤条数字背景色
     var stepsNumberBgColor = TDTheme.of(context).brandNormalColor;
     /// 步骤条数字颜色
@@ -175,30 +180,14 @@ class TDStepsHorizontalItem extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(top: 8),
           alignment: Alignment.center,
-          child: TDText(
-            data.title,
-            style: TextStyle(
-              fontWeight: (activeIndex == index && !readOnly)  ? FontWeight.w600 : FontWeight.w400,
-              color: stepsTitleColor,
-              fontSize: 14,
-            ),
-          ),
+          child: data.title ?? defaultTitle, // 使用默认title
         ),
         Container(
           margin: const EdgeInsets.only(top: 4),
           alignment: Alignment.center,
-          child: TDText(
-            data.content,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              color: TDTheme.of(context).fontGyColor3,
-              fontSize: 12,
-            ),
-          ),
+          child: data.content ?? defaultContent, // 使用默认content
         ),
       ],
     );
   }
-
 }
-
