@@ -1,4 +1,4 @@
-## 🌈 0.1.8 `2024-12-26`
+## 🌈 0.1.8 `2024-12-30`
 ### 🚀 Features
 - `TDUpload`: Added Upload component @TingShine ([#405](https://github.com/Tencent/tdesign-flutter/pull/405))
 - `SearchBar`: Added keyboard action type @ccXxx1aoBai ([#366](https://github.com/Tencent/tdesign-flutter/pull/366))
