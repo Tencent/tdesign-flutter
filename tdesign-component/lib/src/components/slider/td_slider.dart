@@ -91,7 +91,7 @@ class TDSliderState extends State<TDSlider> {
         bottom: 8,
       ),
       decoration: widget.boxDecoration ??
-          BoxDecoration(
+          const BoxDecoration(
             color: Colors.white,
           ),
       child: Row(
@@ -217,7 +217,7 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
         bottom: 8,
       ),
       decoration: widget.boxDecoration ??
-          BoxDecoration(
+          const BoxDecoration(
             color: Colors.white,
           ),
       child: Row(

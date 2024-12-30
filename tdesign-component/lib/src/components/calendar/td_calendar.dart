@@ -124,7 +124,9 @@ class TDCalendar extends StatefulWidget {
         return DateTime(date.year, date.month, date.day);
       }).toList();
 
-  List<DateTime>? get _valueTime => value?.map(DateTime.fromMillisecondsSinceEpoch).toList();
+  List<DateTime>? get _valueTime => value?.map((item) {
+        return DateTime.fromMillisecondsSinceEpoch(item);
+      }).toList();
 
   @override
   _TDCalendarState createState() => _TDCalendarState();
@@ -323,7 +325,7 @@ class _TDCalendarState extends State<TDCalendar> {
   }
 
   List<int> _getValue(List<int> value) {
-    final dateValue = value.map((e) {
+    var dateValue = value.map((e) {
       final date = DateTime.fromMillisecondsSinceEpoch(e);
       return DateTime(date.year, date.month, date.day).millisecondsSinceEpoch;
     }).toList();
@@ -336,6 +338,9 @@ class _TDCalendarState extends State<TDCalendar> {
       final second = model.useSecond ? model.secondFixedExtentScrollController.selectedItem : 0;
       return (hour * 60 * 60 + minute * 60 + second) * 1000;
     }).toList();
+    if (widget.type == CalendarType.range && dateValue.length == 1) {
+      dateValue.add(dateValue.first);
+    }
     return dateValue.mapWidthIndex((e, index) {
       if (widget.type != CalendarType.range) {
         return e + (milliseconds.getOrNull(0) ?? 0);

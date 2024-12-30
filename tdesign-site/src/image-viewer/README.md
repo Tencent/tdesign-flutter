@@ -82,6 +82,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeBtn | bool? | - | 是否展示关闭按钮 |
 | deleteBtn | bool? | - | 是否显示删除操作 |
 | images | List<dynamic> | - | 图片数组 |
+| labels | List<String>? | - | 图片描述 |
 | showIndex | bool? | - | 是否显示页码 |
 | defaultIndex | int? | - | 默认预览图片所在的下标 |
 | onIndexChange | OnIndexChange? | - | 预览图片切换回调 |
@@ -99,7 +100,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| showImageViewer |  |   required BuildContext context,  required List<dynamic> images,  bool? closeBtn,  bool? deleteBtn,  bool? showIndex,  int? defaultIndex,  double? width,  double? height,  OnIndexChange? onIndexChange,  OnClose? onClose,  OnDelete? onDelete,  OnLongPress? onLongPress, | 显示图片预览 |
+| showImageViewer |  |   required BuildContext context,  required List<dynamic> images,  List<String>? labels,  bool? closeBtn,  bool? deleteBtn,  bool? showIndex,  int? defaultIndex,  double? width,  double? height,  OnIndexChange? onIndexChange,  OnClose? onClose,  OnDelete? onDelete,  OnLongPress? onLongPress, | 显示图片预览 |
 
 
   
