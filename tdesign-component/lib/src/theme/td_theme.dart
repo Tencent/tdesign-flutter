@@ -1,6 +1,6 @@
-import 'dart:collection';
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../../tdesign_flutter.dart';
@@ -354,11 +354,10 @@ abstract class TDExtraThemeData {
 typedef DefaultMapFactory = TDMap? Function();
 
 /// 自定义Map
-class TDMap<K,V> extends SplayTreeMap<K, V>{
-
-  TDMap({this.factory, this.refs});
-DefaultMapFactory? factory;
-TDMap? refs;
+class TDMap<K,V> extends DelegatingMap<K, V>{
+  TDMap({this.factory, this.refs}) : super({});
+  DefaultMapFactory? factory;
+  TDMap? refs;
 
   @override
   V? operator [](Object? key) {

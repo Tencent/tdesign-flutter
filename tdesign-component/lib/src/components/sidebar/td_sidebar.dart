@@ -43,6 +43,8 @@ class TDSideBar extends StatefulWidget {
     this.style = TDSideBarStyle.normal,
     this.loading,
     this.loadingWidget,
+    this.selectedBgColor,
+    this.unSelectedBgColor,
   }) : super(key: key);
 
   /// 选项值
@@ -83,6 +85,12 @@ class TDSideBar extends StatefulWidget {
 
   /// 自定义加载动画
   final Widget? loadingWidget;
+
+  /// 选择的背景颜色
+  final Color? selectedBgColor;
+
+  /// 未选择的背景颜色
+  final Color? unSelectedBgColor;
 
   @override
   State<TDSideBar> createState() => _TDSideBarState();
@@ -280,6 +288,8 @@ class _TDSideBarState extends State<TDSideBar> {
                             currentIndex! + 1 == ele.index,
                         bottomAdjacent: currentIndex != null &&
                             currentIndex! - 1 == ele.index,
+                        selectedBgColor: widget.selectedBgColor,
+                          unSelectedBgColor: widget.unSelectedBgColor,
                         onTap: () {
                           if (!(ele.disabled ?? false)) {
                             onSelect(ele, isController: false);
