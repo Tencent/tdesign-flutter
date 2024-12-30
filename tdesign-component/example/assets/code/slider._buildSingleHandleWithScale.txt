@@ -2,6 +2,7 @@
   Widget _buildSingleHandleWithScale(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
