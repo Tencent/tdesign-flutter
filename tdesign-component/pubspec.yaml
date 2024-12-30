@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  collection:
 
   # 轮播图组件
   flutter_swiper_null_safety: ^1.0.2
