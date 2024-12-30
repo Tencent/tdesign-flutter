@@ -8,7 +8,7 @@ docClass: timeline
 
 ## 🌈 0.1.8 `2024-12-26` 
 ### 🚀 Features
-- `TDUpload`: 新增Upload组件 @Luozf12345 ([#405](https://github.com/Tencent/tdesign-flutter/pull/405))
+- `TDUpload`: 新增Upload组件 @TingShine ([#405](https://github.com/Tencent/tdesign-flutter/pull/405))
 - `SearchBar`: 增加键盘动作类型 @ccXxx1aoBai ([#366](https://github.com/Tencent/tdesign-flutter/pull/366))
 - `Cell`: CellGroup 新增样式控制参数：cardBorderRadius(卡片模式边框圆角)、cardPadding(卡片模式内边距)、titlePadding(标题内边距) @hkaikai ([#409](https://github.com/Tencent/tdesign-flutter/pull/409))
 - `DropdownMenu`: 新增装饰器配置：decoration，可自定义菜单颜色和边框 @hkaikai ([#408](https://github.com/Tencent/tdesign-flutter/pull/408))
