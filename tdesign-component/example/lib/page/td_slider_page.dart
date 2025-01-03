@@ -145,6 +145,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildDisableSingleHandle(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         min: 0,
         max: 100,
       ),
@@ -158,6 +159,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildDisableDoubleHandleWithNumber(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showThumbValue: true,
         min: 0,
         max: 100,
@@ -173,6 +175,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildDisableDoubleHandleWithScale(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -187,6 +190,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCapsuleSingleHandleWithNumber(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
         showThumbValue: true,
         min: 0,
         max: 100,
@@ -201,6 +205,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCapsuleDoubleHandle(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
         min: 0,
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
@@ -214,6 +219,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCapsuleSingleHandle(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
         min: 0,
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
@@ -229,6 +235,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCapsuleDoubleHandleWithNumber(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
         showThumbValue: true,
         min: 0,
         max: 100,
@@ -245,6 +252,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCapsuleSingleHandleWithScale(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -412,6 +420,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCapsuleDoubleHandleWithScale(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
