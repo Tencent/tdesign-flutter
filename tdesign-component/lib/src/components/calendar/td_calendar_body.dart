@@ -19,6 +19,9 @@ class TDCalendarBody extends StatelessWidget {
     required this.displayFormat,
     required this.monthNames,
     this.monthTitleStyle,
+    this.monthTitleBuilder,
+    required this.cellHeight,
+    required this.monthTitleHeight,
     required this.verticalGap,
   }) : super(key: key);
 
@@ -33,93 +36,102 @@ class TDCalendarBody extends StatelessWidget {
   final String displayFormat;
   final List<String> monthNames;
   final TextStyle? monthTitleStyle;
+  final Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder;
+  final double monthTitleHeight;
   final double verticalGap;
+  final double cellHeight;
 
   @override
   Widget build(BuildContext context) {
     final scrollController = ScrollController();
-    var scrollToIndex = 0;
-    var heightList = <double>[];
     final min = _getDefDate(minDate);
     final max = _getDefDate(maxDate, 6);
     final months = _monthsBetween(min, max);
     final data = <DateTime, List<TDate?>>{};
-    for (var i = 0; i < months.length; i++) {
-      final month = months[i];
-      data[month] = _getDaysInMonth(month, min, max);
-      heightList.add(22 + (data[month]!.length ~/ 7) * 68);
-      if (scrollToIndex == 0) {
-        final hasSelected = data[month]!.isContains((item) =>
-            item?.typeNotifier.value == DateSelectType.selected || item?.typeNotifier.value == DateSelectType.start);
-        if (hasSelected) {
-          scrollToIndex = i; // 第一个选中的月索引
-        }
-      }
-    }
-    _scrollToItem(scrollController, scrollToIndex, heightList);
-    return ListView.separated(
+    final monthHeight = <int, double>{};
+    _scrollToItem(scrollController, months, monthHeight);
+    return ListView.builder(
       padding: EdgeInsets.all(bodyPadding),
       controller: scrollController,
-      itemCount: data.keys.length,
+      itemCount: months.length,
+      itemExtentBuilder: (index, dimensions) => _getMonthHeight(months, index, monthHeight),
       itemBuilder: (context, index) {
-        final monthDate = data.keys.elementAt(index);
+        final monthDate = months[index];
         final monthYear = monthDate.year.toString() + context.resource.year;
         final monthMonth = monthNames[monthDate.month - 1];
         final monthDateText = displayFormat.replaceFirst('year', monthYear).replaceFirst('month', monthMonth);
-        final monthData = data[monthDate]!;
-        return SizedBox(
-          height: heightList[index].toDouble(),
-          child: FutureBuilder(
-            // 兼容 flutter 3.7; https://api.flutter.dev/flutter/widgets/ListView/itemExtentBuilder.html
-            future: _createFuture(), // Future.delayed(const Duration(milliseconds: 100)),
-            builder: (context, snapshot) => snapshot.connectionState == ConnectionState.waiting
-                ? const SizedBox.shrink()
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TDText(monthDateText, style: monthTitleStyle),
-                      ...List.generate(
-                        (monthData.length / 7).ceil(),
-                        (rowIndex) => [
-                          SizedBox(height: verticalGap),
-                          Row(
-                            children: List.generate(
-                              7,
-                              (colIndex) => [
-                                if (colIndex != 0) SizedBox(width: verticalGap / 2),
-                                Expanded(
-                                  child: builder(
-                                    monthData[rowIndex * 7 + colIndex],
-                                    monthData,
-                                    data,
-                                    rowIndex,
-                                    colIndex,
-                                  ),
-                                ),
-                              ],
-                            ).expand((element) => element).toList(),
-                          ),
-                        ],
-                      ).expand((element) => element).toList(),
+        late List<TDate?> monthData;
+        if (data.containsKey(monthDate)) {
+          monthData = data[monthDate]!;
+        } else {
+          monthData = data[monthDate] = _getDaysInMonth(monthDate, min, max);
+        }
+
+        final keyList = [...data.keys];
+        final currentIndex = keyList.indexOf(monthDate);
+        keyList.forEachWidthIndex((key, index) {
+          if (index < currentIndex - 10 || index > currentIndex + 10) {
+            // 保留最近 10 个月的数据，防止内存泄露
+            data.remove(key);
+          }
+        });
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: monthTitleHeight,
+              child: monthTitleBuilder?.call(context, monthDate) ?? TDText(monthDateText, style: monthTitleStyle),
+            ),
+            ...List.generate(
+              (monthData.length / 7).ceil(),
+              (rowIndex) => [
+                SizedBox(height: verticalGap),
+                Row(
+                  children: List.generate(
+                    7,
+                    (colIndex) => [
+                      if (colIndex != 0) SizedBox(width: verticalGap / 2),
+                      Expanded(
+                        child: builder(
+                          monthData[rowIndex * 7 + colIndex],
+                          monthData,
+                          data,
+                          rowIndex,
+                          colIndex,
+                        ),
+                      ),
                     ],
-                  ),
-          ),
+                  ).expand((element) => element).toList(),
+                ),
+              ],
+            ).expand((element) => element).toList(),
+            SizedBox(height: index == months.length - 1 ? 0 : bodyPadding),
+          ],
         );
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return SizedBox(height: bodyPadding);
       },
     );
   }
 
-  void _scrollToItem(ScrollController scrollController, int index, List<double> heightList) {
-    if (index == 0) {
+  void _scrollToItem(ScrollController scrollController, List<DateTime> months, Map<int, double> monthHeight) {
+    if (value == null || value!.isEmpty) {
+      return;
+    }
+    final scrollDate = value!.reduce((a, b) => a.isBefore(b) ? a : b);
+    if (months.first.isAfter(scrollDate) || months.last.isBefore(scrollDate)) {
       return;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final countHeight = heightList.sublist(0, index).reduce((a, b) => a + b);
-      final height = countHeight + index * bodyPadding;
-      scrollController.jumpTo(height);
+      var height = 0.0;
+      for (var i = 0; i < months.length; i++) {
+        final item = months[i];
+        if (item.year == scrollDate.year && item.month == scrollDate.month) {
+          break;
+        }
+        height += _getMonthHeight(months, i, monthHeight);
+      }
+      if (height > 0) {
+        scrollController.jumpTo(height);
+      }
     });
   }
 
@@ -142,17 +154,11 @@ class TDCalendarBody extends StatelessWidget {
     return months;
   }
 
-  List<TDate?> _getDaysInMonth(DateTime date, DateTime min, DateTime max) {
-    final year = date.year;
-    final month = date.month;
-    var dayOneWeek = DateTime(year, month).weekday;
-    dayOneWeek = dayOneWeek == 7 ? 0 : dayOneWeek;
-    var preOffset = dayOneWeek - firstDayOfWeek;
-    preOffset = preOffset < 0 ? preOffset + 7 : preOffset;
-    final daysInMonth = List<TDate?>.generate(preOffset, (index) => null);
-    final daysInMonthCount = DateTime(year, month + 1, 0).day; // 获取下个月的第一天的前一天，即当前月的最后一天
+  List<TDate?> _getDaysInMonth(DateTime curDate, DateTime min, DateTime max) {
+    final daysInMonth = List<TDate?>.generate(_getPreOffset(curDate), (index) => null);
+    final daysInMonthCount = DateTime(curDate.year, curDate.month + 1, 0).day; // 获取下个月的第一天的前一天，即当前月的最后一天
     for (var day = 1; day <= daysInMonthCount; day++) {
-      final date = DateTime(year, month, day);
+      final date = DateTime(curDate.year, curDate.month, day);
       var selectType = DateSelectType.empty;
       if (date.compareTo(min) == -1 || date.compareTo(max) == 1) {
         selectType = DateSelectType.disabled;
@@ -190,11 +196,29 @@ class TDCalendarBody extends StatelessWidget {
     return daysInMonth;
   }
 
-  Future<void> _createFuture() async {
-    final completer = Completer<void>();
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      completer.complete();
-    });
-    await completer.future;
+  int _getPreOffset(DateTime date) {
+    final year = date.year;
+    final month = date.month;
+    var dayOneWeek = DateTime(year, month).weekday;
+    dayOneWeek = dayOneWeek == 7 ? 0 : dayOneWeek;
+    var preOffset = dayOneWeek - firstDayOfWeek;
+    preOffset = preOffset < 0 ? preOffset + 7 : preOffset;
+    return preOffset;
+  }
+
+  /// 获取月份高度，带缓存
+  double _getMonthHeight(List<DateTime> months, int index, Map<int, double> monthHeight) {
+    if (monthHeight.containsKey(index)) {
+      return monthHeight[index]!;
+    }
+    final item = months[index];
+    final isLast = index == months.length - 1;
+    final preOffset = _getPreOffset(item);
+    final daysInMonthCount = DateTime(item.year, item.month + 1, 0).day;
+    final daysInMonth = preOffset + daysInMonthCount;
+    final height =
+        monthTitleHeight + (daysInMonth / 7).ceil() * (verticalGap + cellHeight) + (isLast ? 0 : bodyPadding);
+    monthHeight[index] = height;
+    return height;
   }
 }

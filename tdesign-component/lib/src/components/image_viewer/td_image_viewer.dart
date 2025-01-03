@@ -12,6 +12,7 @@ class TDImageViewer {
   static void showImageViewer({
     required BuildContext context,
     required List<dynamic> images,
+    List<String>? labels,
     bool? closeBtn = true,
     bool? deleteBtn = false,
     bool? showIndex = false,
@@ -32,6 +33,7 @@ class TDImageViewer {
       builder: (context) {
         return TDImageViewerWidget(
           images: images,
+          labels: labels,
           closeBtn: closeBtn,
           deleteBtn: deleteBtn,
           showIndex: showIndex,

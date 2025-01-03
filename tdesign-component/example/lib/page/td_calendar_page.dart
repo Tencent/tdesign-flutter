@@ -84,8 +84,8 @@ Widget _buildSimple(BuildContext context) {
                   onCellLongPress: (value, type, tdate) {
                     print('onCellLongPress:$value');
                   },
-                  onHeanderClick: (index, week) {
-                    print('onHeanderClick:$week');
+                  onHeaderClick: (index, week) {
+                    print('onHeaderClick:$week');
                   },
                   onChange: (value) {
                     print('onChange:$value');
@@ -149,14 +149,16 @@ Widget _buildSimple(BuildContext context) {
                   value: value,
                   height: size.height * 0.92,
                   useTimePicker: true,
+                  // pickerHeight: 100,
+                  // pickerItemCount: 2,
                   onCellClick: (value, type, tdate) {
                     print('onCellClick:$value');
                   },
                   onCellLongPress: (value, type, tdate) {
                     print('onCellLongPress:$value');
                   },
-                  onHeanderClick: (index, week) {
-                    print('onHeanderClick:$week');
+                  onHeaderClick: (index, week) {
+                    print('onHeaderClick:$week');
                   },
                   onChange: (value) {
                     print('onChange:$value');
@@ -193,8 +195,8 @@ Widget _buildSimple(BuildContext context) {
                   onCellLongPress: (value, type, tdate) {
                     print('onCellLongPress:$value');
                   },
-                  onHeanderClick: (index, week) {
-                    print('onHeanderClick:$week');
+                  onHeaderClick: (index, week) {
+                    print('onHeaderClick:$week');
                   },
                   onChange: (value) {
                     print('onChange:$value');
@@ -296,7 +298,7 @@ Widget _buildStyle(BuildContext context) {
             child: TDCalendar(
               title: '请选择日期',
               minDate: DateTime(2000, 1, 1).millisecondsSinceEpoch,
-              maxDate: DateTime(2100, 1, 1).millisecondsSinceEpoch,
+              maxDate: DateTime(3000, 1, 1).millisecondsSinceEpoch,
               value: [DateTime(2024, 10, 1).millisecondsSinceEpoch],
               height: size.height * 0.6 + 176,
             ),

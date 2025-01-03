@@ -6,6 +6,7 @@ import '../../../tdesign_flutter.dart';
 class TDCellStyle {
   TDCellStyle({
     this.leftIconColor,
+    this.rightIconColor,
     this.titleStyle,
     this.requiredStyle,
     this.descriptionStyle,
@@ -14,7 +15,10 @@ class TDCellStyle {
     this.borderedColor,
     this.groupBorderedColor,
     this.backgroundColor,
-    this.padding
+    this.padding,
+    this.cardBorderRadius,
+    this.cardPadding,
+    this.titlePadding,
   });
 
   /// 左侧图标颜色
@@ -56,6 +60,15 @@ class TDCellStyle {
   /// 单元格内边距
   EdgeInsets? padding;
 
+  /// 卡片模式边框圆角
+  BorderRadius? cardBorderRadius;
+
+  /// 卡片模式内边距
+  EdgeInsets? cardPadding;
+
+  /// 单元格组标题内边距
+  EdgeInsets? titlePadding;
+
   /// 生成单元格默认样式
   TDCellStyle.cellStyle(BuildContext context) {
     backgroundColor = Colors.white;
@@ -88,5 +101,13 @@ class TDCellStyle {
     );
 
     padding = EdgeInsets.all(TDTheme.of(context).spacer16);
+    cardBorderRadius = BorderRadius.all(Radius.circular(TDTheme.of(context).radiusLarge));
+    cardPadding = EdgeInsets.only(left: TDTheme.of(context).spacer16, right: TDTheme.of(context).spacer16);
+    titlePadding = EdgeInsets.only(
+      left: TDTheme.of(context).spacer16,
+      right: TDTheme.of(context).spacer16,
+      top: TDTheme.of(context).spacer24,
+      bottom: TDTheme.of(context).spacer8,
+    );
   }
 }

@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../tdesign_flutter.dart';
 
-
 enum TDUploadMediaType {
   image, // 图片
   video, // 视频
@@ -56,8 +55,7 @@ class TDUploadFile {
 
 typedef TDUploadErrorEvent = void Function(Object e);
 typedef TDUploadClickEvent = void Function(int value);
-typedef TDUploadValueChangedEvent = void Function(
-    List<TDUploadFile> files, TDUploadType type);
+typedef TDUploadValueChangedEvent = void Function(List<TDUploadFile> files, TDUploadType type);
 typedef TDUploadValidatorEvent = void Function(TDUploadValidatorError e);
 
 class TDUpload extends StatefulWidget {
@@ -111,9 +109,8 @@ class TDUpload extends StatefulWidget {
 
 class _TDUploadState extends State<TDUpload> {
   List<TDUploadFile> fileList = [];
-  bool get canUpload => widget.multiple
-      ? (widget.max == 0 ? true : fileList.length < widget.max)
-      : fileList.isEmpty;
+
+  bool get canUpload => widget.multiple ? (widget.max == 0 ? true : fileList.length < widget.max) : fileList.isEmpty;
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -132,8 +129,7 @@ class _TDUploadState extends State<TDUpload> {
 
     try {
       if (widget.multiple) {
-        if (widget.mediaType.length == 1 &&
-            widget.mediaType.contains(TDUploadMediaType.image)) {
+        if (widget.mediaType.length == 1 && widget.mediaType.contains(TDUploadMediaType.image)) {
           medias = await _picker.pickMultiImage();
         } else {
           medias = await _picker.pickMultiImage();
@@ -186,15 +182,11 @@ class _TDUploadState extends State<TDUpload> {
       return;
     }
 
-    var originMaxKeys =
-        fileList.isEmpty ? 0 : fileList.map((file) => file.key).reduce(max);
+    var originMaxKeys = fileList.isEmpty ? 0 : fileList.map((file) => file.key).reduce(max);
 
     var newFiles = <TDUploadFile>[];
     for (var i = 0; i < files.length; i++) {
-      newFiles.add(TDUploadFile(
-          key: originMaxKeys + i + 1,
-          file: File(files[i].path),
-          assetPath: files[i].path));
+      newFiles.add(TDUploadFile(key: originMaxKeys + i + 1, file: File(files[i].path), assetPath: files[i].path));
     }
 
     if (widget.onChange != null) {
@@ -254,8 +246,7 @@ class _TDUploadState extends State<TDUpload> {
     );
   }
 
-  Widget _buildUploadBox(BuildContext context,
-      {void Function()? onTap, bool shouldDisplay = true}) {
+  Widget _buildUploadBox(BuildContext context, {void Function()? onTap, bool shouldDisplay = true}) {
     return Visibility(
         visible: shouldDisplay,
         child: GestureDetector(
@@ -263,9 +254,7 @@ class _TDUploadState extends State<TDUpload> {
             child: Container(
               width: 80,
               height: 80,
-              decoration: BoxDecoration(
-                  color: TDTheme.of(context).grayColor1,
-                  borderRadius: BorderRadius.circular(6)),
+              decoration: BoxDecoration(color: TDTheme.of(context).grayColor1, borderRadius: BorderRadius.circular(6)),
               child: const Center(
                   child: Icon(
                 TDIcons.add,
@@ -288,11 +277,10 @@ class _TDUploadState extends State<TDUpload> {
             width: 80,
             height: 80,
             imgUrl: file.remotePath,
-            assetUrl: file.assetPath,
+            // assetUrl: file.assetPath,
+            imageFile: file.file,
           ),
-          Visibility(
-              visible: file.status != TDUploadFileStatus.success,
-              child: _buildShadowBox(file)),
+          Visibility(visible: file.status != TDUploadFileStatus.success, child: _buildShadowBox(file)),
           Visibility(
               visible: file.canDelete,
               child: Positioned(
@@ -307,9 +295,8 @@ class _TDUploadState extends State<TDUpload> {
                       height: 20,
                       decoration: const BoxDecoration(
                           color: Color.fromRGBO(0, 0, 0, 0.6),
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(6),
-                              topRight: Radius.circular(6))),
+                          borderRadius:
+                              BorderRadius.only(bottomLeft: Radius.circular(6), topRight: Radius.circular(6))),
                       child: const Center(
                           child: Icon(
                         TDIcons.close,
@@ -327,8 +314,7 @@ class _TDUploadState extends State<TDUpload> {
     var displayText = '';
     switch (file.status) {
       case TDUploadFileStatus.loading:
-        displayText =
-            file.progress != null ? '${file.progress!}%' : file.loadingText;
+        displayText = file.progress != null ? '${file.progress!}%' : file.loadingText;
         break;
       case TDUploadFileStatus.retry:
         displayText = file.retryText;
@@ -342,9 +328,7 @@ class _TDUploadState extends State<TDUpload> {
     return Container(
       width: 80,
       height: 80,
-      decoration: BoxDecoration(
-          color: const Color.fromRGBO(0, 0, 0, 0.4),
-          borderRadius: BorderRadius.circular(6)),
+      decoration: BoxDecoration(color: const Color.fromRGBO(0, 0, 0, 0.4), borderRadius: BorderRadius.circular(6)),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Center(
@@ -360,12 +344,9 @@ class _TDUploadState extends State<TDUpload> {
                 ),
               ),
               Visibility(
-                  visible: file.status == TDUploadFileStatus.retry ||
-                      file.status == TDUploadFileStatus.error,
+                  visible: file.status == TDUploadFileStatus.retry || file.status == TDUploadFileStatus.error,
                   child: Icon(
-                    file.status == TDUploadFileStatus.retry
-                        ? TDIcons.refresh
-                        : TDIcons.close_circle,
+                    file.status == TDUploadFileStatus.retry ? TDIcons.refresh : TDIcons.close_circle,
                     size: 24,
                     color: Colors.white,
                   )),

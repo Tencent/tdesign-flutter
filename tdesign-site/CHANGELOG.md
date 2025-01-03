@@ -6,6 +6,46 @@ docClass: timeline
 ---
 
 
+## 🌈 0.1.8 `2024-12-30` 
+### 🚀 Features
+- `TDUpload`: 新增Upload组件 @TingShine ([#405](https://github.com/Tencent/tdesign-flutter/pull/405))
+- `SearchBar`: 增加键盘动作类型 @ccXxx1aoBai ([#366](https://github.com/Tencent/tdesign-flutter/pull/366))
+- `Cell`: CellGroup 新增样式控制参数：cardBorderRadius(卡片模式边框圆角)、cardPadding(卡片模式内边距)、titlePadding(标题内边距) @hkaikai ([#409](https://github.com/Tencent/tdesign-flutter/pull/409))
+- `DropdownMenu`: 新增装饰器配置：decoration，可自定义菜单颜色和边框 @hkaikai ([#408](https://github.com/Tencent/tdesign-flutter/pull/408))
+- `ImageViewer`: 支持显示图片标题 @ccXxx1aoBai ([#411](https://github.com/Tencent/tdesign-flutter/pull/411))
+- `Calendar`: 新增monthTitleBuilder参数 @hkaikai ([#419](https://github.com/Tencent/tdesign-flutter/pull/419))
+- `Calendar`: 新增pickerHeight、pickerItemCount参数，用于控制时间选择组件高度 @hkaikai ([#421](https://github.com/Tencent/tdesign-flutter/pull/421))
+- `Toast`: 支持自定义蒙层背景色 @ccXxx1aoBai ([#423](https://github.com/Tencent/tdesign-flutter/pull/423))
+- `Rate`: 支持disabeld 参数 @hkaikai ([#357](https://github.com/Tencent/tdesign-flutter/pull/357))
+- `Calendar`: 修改CalendarBuilder返回值为Widget @Luozf12345 ([#396](https://github.com/Tencent/tdesign-flutter/pull/396))
+- `SearchBar`: 新增只读属性与点击事件 @shizhe2018 ([#393](https://github.com/Tencent/tdesign-flutter/pull/393))
+- `Dialog`: TDDialogButtonOptions新增属性字体大小 @shizhe2018 ([#381](https://github.com/Tencent/tdesign-flutter/pull/381))
+- `DateTimePicker`: 新增时间单位显示属性 @shizhe2018 ([#383](https://github.com/Tencent/tdesign-flutter/pull/383))
+- `Input`: 新增additionInfo 左右显示位置 @shizhe2018 ([#401](https://github.com/Tencent/tdesign-flutter/pull/401))
+### 🐞 Bug Fixes
+- `NoticeBar`: 解决web端文字显示异常问题 @ccXxx1aoBai ([#351](https://github.com/Tencent/tdesign-flutter/pull/351))
+- `Rate`: 修复半选时，点击提示框没有触发onChange事件的问题 @hkaikai ([#361](https://github.com/Tencent/tdesign-flutter/pull/361))
+- `Calendar`: 修复因月份日期行数不一致导致回显滚动位置不准确问题 @hkaikai ([#363](https://github.com/Tencent/tdesign-flutter/pull/363))
+- `Calendar`: 优化min、max过大导致渲染卡顿问题 @hkaikai ([#363](https://github.com/Tencent/tdesign-flutter/pull/363))
+- `Input`: 修复设置contentPadding时分割线与内容没对齐问题 @epoll-j ([#365](https://github.com/Tencent/tdesign-flutter/pull/365))
+- `Table`: 解决固定列设置宽度溢出问题 @ccXxx1aoBai ([#370](https://github.com/Tencent/tdesign-flutter/pull/370))
+- `Popup`: 修复点击蒙层关闭延迟问题 @hkaikai ([#380](https://github.com/Tencent/tdesign-flutter/pull/380))
+- `Cascader`: 新增第一层点击选择功能 @shizhe2018 ([#355](https://github.com/Tencent/tdesign-flutter/pull/355))
+- `DateTimePicker`: 新增限制时分秒 @shizhe2018 ([#362](https://github.com/Tencent/tdesign-flutter/pull/362))
+- `Textarea`: 优化字数限制变化更新 @shizhe2018 ([#385](https://github.com/Tencent/tdesign-flutter/pull/385))
+- `TabBar`: 修复labelStyle和unselectedLabelStyle 不生效的问题 @shizhe2018 ([#399](https://github.com/Tencent/tdesign-flutter/pull/399))
+- `Picker`: 修改多层弹框，滑动无法选择颜色问题 @shizhe2018 ([#413](https://github.com/Tencent/tdesign-flutter/pull/413))
+- `SearchBar`: 修复SearchBar聚集时默认位置抖动,以及光标未居中的问题 @Luozf12345 ([#417](https://github.com/Tencent/tdesign-flutter/pull/417))
+- `Dialog`: 修改Dialog可以只传contentWidget,不用传title和content @Luozf12345 ([#418](https://github.com/Tencent/tdesign-flutter/pull/418))
+- `TDBottomTabBar`: 修复iconText模式，底部溢出2.5像素 @epoll-j ([#422](https://github.com/Tencent/tdesign-flutter/pull/422))
+### 🚧 Others
+- 适配FlutterSdk3.25,最低支持版本调整为3.16.0 @shizhe2018 ([#378](https://github.com/Tencent/tdesign-flutter/pull/378))
+- 修改Example英文版文案 @shizhe2018 ([#382](https://github.com/Tencent/tdesign-flutter/pull/382))
+- 升级flutter_slidable版本 @Luozf12345 ([#407](https://github.com/Tencent/tdesign-flutter/pull/407))
+- demo增加组件搜索功能 @Luozf12345 ([#410](https://github.com/Tencent/tdesign-flutter/pull/410))
+- 更新Icons @Luozf12345 ([#420](https://github.com/Tencent/tdesign-flutter/pull/420))
+
+
 ## 🌈 0.1.7 `2024-10-16` 
 ### 🚀 Features
 - `TDNoticeBar`: 新增noticeBar组件 @ccXxx1aoBai ([#162](https://github.com/Tencent/tdesign-flutter/pull/162))

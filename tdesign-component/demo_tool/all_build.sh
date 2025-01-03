@@ -64,6 +64,7 @@
 ./bin/demo_tool generate --file ../lib/src/components/tree/td_tree_select.dart --name TDTreeSelect,TDSelectOption --folder-name tree-select --output ../example/assets/api/ --only-api
 
 # upload
+./bin/demo_tool generate --file ../lib/src/components/upload/td_upload.dart --name TDUpload --folder-name upload --output ../example/assets/api/ --only-api
 
 
 # 数据展示

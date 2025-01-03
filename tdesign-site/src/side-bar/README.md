@@ -496,6 +496,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             selectedTextStyle:TextStyle(color: Colors.red),
             onSelected: setCurrentValue,
             contentPadding:EdgeInsets.only(left: 16, top: 16,bottom: 16),
+            selectedBgColor: Colors.blue,
+            unSelectedBgColor: Colors.yellow,
           ),
         ),
         Expanded(
@@ -637,6 +639,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             selectedTextStyle:TextStyle(color: Colors.red),
             onSelected: setCurrentValue,
             contentPadding:EdgeInsets.only(left: 16, top: 16,bottom: 16),
+            selectedBgColor: Colors.blue,
+            unSelectedBgColor: Colors.yellow,
           ),
         ),
         Expanded(
@@ -692,6 +696,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | style | TDSideBarStyle | TDSideBarStyle.normal | 样式 |
 | loading | bool? | - | 加载效果 |
 | loadingWidget | Widget? | - | 自定义加载动画 |
+| selectedBgColor | Color? | - | 选择的背景颜色 |
+| unSelectedBgColor | Color? | - | 未选择的背景颜色 |
 
 
   

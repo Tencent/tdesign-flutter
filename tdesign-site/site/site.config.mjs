@@ -267,13 +267,13 @@ export default {
           path: '/flutter/components/tree-select',
           component: () => import('@/tree-select/README.md'),
         },
-        // {
-        //   title: 'Upload 上传',
-        //   name: 'upload',
-        //   meta: { docType: 'form' },
-        //   path: '/flutter/components/upload',
-        //   component: () => import('@/upload/README.md'),
-        // },
+        {
+          title: 'Upload 上传',
+          name: 'upload',
+          meta: { docType: 'form' },
+          path: '/flutter/components/upload',
+          component: () => import('@/upload/README.md'),
+        },
       ],
     },
     {

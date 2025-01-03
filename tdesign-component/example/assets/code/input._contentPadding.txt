@@ -1,0 +1,35 @@
+
+  Widget _contentPadding(BuildContext context) {
+    var controller = TextEditingController();
+    return Container(
+      color: Colors.yellow,
+      alignment: Alignment.center,
+      child: Column(
+        children: [
+          TDInput(
+            size: TDInputSize.small,
+            controller: controller,
+            backgroundColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            hintText: '请输入文字',
+          ),
+          TDInput(
+            type: TDInputType.twoLine,
+            size: TDInputSize.small,
+            controller: controller,
+            backgroundColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+            hintText: '请输入文字',
+          ),
+          TDInput(
+            type: TDInputType.normalMaxTwoLine,
+            size: TDInputSize.small,
+            controller: controller,
+            backgroundColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
+            hintText: '请输入文字',
+          ),
+        ],
+      ),
+    );
+  }
