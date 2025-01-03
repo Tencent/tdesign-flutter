@@ -1,3 +1,44 @@
+## 🌈 0.1.8 `2024-12-30`
+### 🚀 Features
+- `TDUpload`: Added Upload component @TingShine ([#405](https://github.com/Tencent/tdesign-flutter/pull/405))
+- `SearchBar`: Added keyboard action type @ccXxx1aoBai ([#366](https://github.com/Tencent/tdesign-flutter/pull/366))
+- `Cell`: CellGroup added style control parameters: cardBorderRadius (card mode border radius), cardPadding (card mode padding), titlePadding (title padding) @hkaikai ([#409](https://github.com/Tencent/tdesign-flutter/pull/409))
+- `DropdownMenu`: Added decorator configuration: decoration, which can customize menu color and border @hkaikai ([#408](https://github.com/Tencent/tdesign-flutter/pull/408))
+- `ImageViewer`: Supports displaying image titles @ccXxx1aoBai ([#411](https://github.com/Tencent/tdesign-flutter/pull/411))
+- `Calendar`: Added monthTitleBuilder parameter @hkaikai ([#419](https://github.com/Tencent/tdesign-flutter/pull/419))
+- `Calendar`: Added pickerHeight, pickerItemCount parameters to control the height of the time selection component @hkaikai ([#421](https://github.com/Tencent/tdesign-flutter/pull/421))
+- `Toast`: Supports customizing the overlay background color @ccXxx1aoBai ([#423](https://github.com/Tencent/tdesign-flutter/pull/423))
+- `Rate`: Supports disabled parameter @hkaikai ([#357](https://github.com/Tencent/tdesign-flutter/pull/357))
+- `Calendar`: Modified CalendarBuilder return value to Widget @Luozf12345 ([#396](https://github.com/Tencent/tdesign-flutter/pull/396))
+- `SearchBar`: Added read-only attribute and click event @shizhe2018 ([#393](https://github.com/Tencent/tdesign-flutter/pull/393))
+- `Dialog`: TDDialogButtonOptions added font size attribute @shizhe2018 ([#381](https://github.com/Tencent/tdesign-flutter/pull/381))
+- `DateTimePicker`: Added time unit display attribute @shizhe2018 ([#383](https://github.com/Tencent/tdesign-flutter/pull/383))
+- `Input`: Added additionInfo left and right display position @shizhe2018 ([#401](https://github.com/Tencent/tdesign-flutter/pull/401))
+
+### 🐞 Bug Fixes
+- `NoticeBar`: Fixed the issue of abnormal text display on the web @ccXxx1aoBai ([#351](https://github.com/Tencent/tdesign-flutter/pull/351))
+- `Rate`: Fixed the issue where the onChange event was not triggered when clicking the tooltip in half selection @hkaikai ([#361](https://github.com/Tencent/tdesign-flutter/pull/361))
+- `Calendar`: Fixed the issue of inaccurate scroll position due to inconsistent number of rows in the month date @hkaikai ([#363](https://github.com/Tencent/tdesign-flutter/pull/363))
+- `Calendar`: Optimized the issue of rendering lag caused by too large min and max @hkaikai ([#363](https://github.com/Tencent/tdesign-flutter/pull/363))
+- `Input`: Fixed the issue where the dividing line and content were not aligned when setting contentPadding @epoll-j ([#365](https://github.com/Tencent/tdesign-flutter/pull/365))
+- `Table`: Fixed the issue of overflow when setting the width of fixed columns @ccXxx1aoBai ([#370](https://github.com/Tencent/tdesign-flutter/pull/370))
+- `Popup`: Fixed the issue of delay in closing when clicking on the overlay @hkaikai ([#380](https://github.com/Tencent/tdesign-flutter/pull/380))
+- `Cascader`: Added the function of clicking to select the first layer @shizhe2018 ([#355](https://github.com/Tencent/tdesign-flutter/pull/355))
+- `DateTimePicker`: Added restrictions on hours, minutes, and seconds @shizhe2018 ([#362](https://github.com/Tencent/tdesign-flutter/pull/362))
+- `Textarea`: Optimized the update of word limit changes @shizhe2018 ([#385](https://github.com/Tencent/tdesign-flutter/pull/385))
+- `TabBar`: Fixed the issue where labelStyle and unselectedLabelStyle did not take effect @shizhe2018 ([#399](https://github.com/Tencent/tdesign-flutter/pull/399))
+- `Picker`: Fixed the issue of unable to select color when sliding in multi-layer pop-up @shizhe2018 ([#413](https://github.com/Tencent/tdesign-flutter/pull/413))
+- `SearchBar`: Fixed the issue of SearchBar jittering at the default position when focusing, and the cursor not being centered @Luozf12345 ([#417](https://github.com/Tencent/tdesign-flutter/pull/417))
+- `Dialog`: Modified Dialog to only pass contentWidget, no need to pass title and content @Luozf12345 ([#418](https://github.com/Tencent/tdesign-flutter/pull/418))
+- `TDBottomTabBar`: Fixed the issue of bottom overflow by 2.5 pixels in iconText mode @epoll-j ([#422](https://github.com/Tencent/tdesign-flutter/pull/422))
+
+### 🚧 Others
+- Adapted to FlutterSdk3.25, the minimum supported version has been adjusted to 3.16.0 @shizhe2018 ([#378](https://github.com/Tencent/tdesign-flutter/pull/378))
+- Modified Example English version copy @shizhe2018 ([#382](https://github.com/Tencent/tdesign-flutter/pull/382))
+- Upgraded flutter_slidable version @Luozf12345 ([#407](https://github.com/Tencent/tdesign-flutter/pull/407))
+- Added component search function to demo @Luozf12345 ([#410](https://github.com/Tencent/tdesign-flutter/pull/410))
+- Updated Icons @Luozf12345 ([#420](https://github.com/Tencent/tdesign-flutter/pull/420))
+
 ## 🌈 0.1.7 `2024-10-16`
 ### 🚀 Features
 - `TDNoticeBar`: Added noticeBar component @ccXxx1aoBai ([#162](https://github.com/Tencent/tdesign-flutter/pull/162))

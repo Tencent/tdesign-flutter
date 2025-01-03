@@ -36,6 +36,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool useConch = false;
   String searchText = '';
+  FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
@@ -95,6 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             onTap: () {
+              focusNode.unfocus();
               Navigator.pushNamed(context, TDExampleRoute.aboutPath);
             },
           )
@@ -164,6 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     children.add(TDSearchBar(
       placeHolder: '请输入组件名称',
+      focusNode: focusNode,
       onTextChanged: (value){
         setState(() {
           searchText = value;
@@ -215,6 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 shape: TDButtonShape.filled,
                 theme: TDButtonTheme.primary,
                 onTap: () {
+                  focusNode.unfocus();
                   Navigator.pushNamed(context, '${model.name}?showAction=1');
                 },
                 text: model.text),

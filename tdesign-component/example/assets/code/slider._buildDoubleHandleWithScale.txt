@@ -2,6 +2,7 @@
   Widget _buildDoubleHandleWithScale(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,

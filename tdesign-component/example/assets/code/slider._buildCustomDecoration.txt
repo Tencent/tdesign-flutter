@@ -4,11 +4,12 @@
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
+            context: context,
             min: 0,
             max: 100,
           ),
           value: 40,
-          boxDecoration: BoxDecoration(
+          boxDecoration: const BoxDecoration(
              color: Colors.amber
           ),
           // divisions: 5,
@@ -19,11 +20,12 @@
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           ),
-          boxDecoration: BoxDecoration(
+          boxDecoration: const BoxDecoration(
               color: Colors.deepOrangeAccent
           ),
           value: const RangeValues(20, 60),

@@ -53,6 +53,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildSingleHandle(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         min: 0,
         max: 100,
       ),
@@ -65,6 +66,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildDoubleHandle(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         min: 0,
         max: 100,
       ),
@@ -77,6 +79,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildSingleHandleWithNumber(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showThumbValue: true,
         scaleFormatter: (value) => value.toInt().toString(),
         min: 0,
@@ -93,6 +96,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildDoubleHandleWithNumber(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showThumbValue: true,
         min: 0,
         max: 100,
@@ -109,6 +113,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildSingleHandleWithScale(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -124,6 +129,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildDoubleHandleWithScale(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -261,6 +267,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showThumbValue: true,
             min: 0,
             max: 100,
@@ -275,6 +282,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
@@ -288,6 +296,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
@@ -303,6 +312,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             showThumbValue: true,
@@ -319,6 +329,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showScaleValue: true,
             divisions: 5,
             min: 0,
@@ -339,6 +350,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showScaleValue: true,
             divisions: 5,
             min: 0,
@@ -364,6 +376,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
+            context: context,
             min: 0,
             max: 100,
           ),
@@ -379,11 +392,12 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           ),
-          boxDecoration: BoxDecoration(
+          boxDecoration: const BoxDecoration(
               color: Colors.deepOrangeAccent
           ),
           value: const RangeValues(20, 60),

@@ -13,7 +13,7 @@
 | direction | TDDropdownMenuDirection? | TDDropdownMenuDirection.auto | 菜单展开方向（down、up、auto） |
 | duration | double? | 200.0 | 动画时长，毫秒 |
 | showOverlay | bool? | true | 是否显示遮罩层 |
-| isScrollable | bool | false | 是否开启滚动列表 |
+| isScrollable | bool? | false | 是否开启滚动列表 |
 | arrowIcon | IconData? | - | 自定义箭头图标 |
 | labelBuilder | LabelBuilder? | - | 自定义标签内容 |
 | onMenuOpened | ValueChanged<int>? | - | 展开菜单事件 |
@@ -21,6 +21,7 @@
 | width | double? | - | menu的宽度 |
 | height | double? | 48 | menu的高度 |
 | tabBarAlign | MainAxisAlignment? | MainAxisAlignment.center | [TDDropdownItem.label]和[arrowIcon]/[TDDropdownItem.arrowIcon]的对齐方式 |
+| decoration | Decoration? | - | 下拉菜单的装饰器 |
 
 ```
 ```
