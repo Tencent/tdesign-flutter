@@ -86,6 +86,12 @@ abstract class TDResourceDelegate {
   /// [TDRefreshHeader] 松开刷新
   String get releaseRefresh;
 
+  /// [TDRefreshHeader] 下拉刷新
+  String get pullToRefresh;
+
+  /// [TDRefreshHeader] 刷新完成
+  String get completeRefresh;
+
   /// [TDTimeCounter] 天
   String get days;
 
@@ -229,6 +235,12 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
   String get releaseRefresh => '松开刷新';
 
   @override
+  String get pullToRefresh => '下拉刷新';
+
+  @override
+  String get completeRefresh => '刷新完成';
+
+  @override
   String get days => '天';
 
   @override
@@ -242,9 +254,6 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
 
   @override
   String get milliseconds => '毫秒';
-
-  @override
-  String get selectDate => '选择时间';
 
   @override
   String get yearLabel => '年';

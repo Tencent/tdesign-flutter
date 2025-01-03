@@ -303,11 +303,7 @@ class _TDCupertinoSwitchState extends State<TDCupertinoSwitch>
       case TargetPlatform.iOS:
         HapticFeedback.lightImpact();
         break;
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
+      default:
         break;
     }
   }

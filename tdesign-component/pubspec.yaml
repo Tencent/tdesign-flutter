@@ -16,7 +16,7 @@ dependencies:
   flutter_swiper_null_safety: ^1.0.2
 
   # 下拉刷新组件
-  flutter_easyrefresh: ^2.2.1
+  easy_refresh: ^3.4.0
 
   # 滑动单元格组件
   flutter_slidable: 3.1.2

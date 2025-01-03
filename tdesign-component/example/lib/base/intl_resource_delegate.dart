@@ -47,6 +47,12 @@ class IntlResourceDelegate extends TDResourceDelegate {
   String get releaseRefresh => AppLocalizations.of(context)!.releaseRefresh;
 
   @override
+  String get pullToRefresh => AppLocalizations.of(context)!.pullToRefresh;
+
+  @override
+  String get completeRefresh => AppLocalizations.of(context)!.completeRefresh;
+
+  @override
   String get reset => AppLocalizations.of(context)!.reset;
 
   @override
