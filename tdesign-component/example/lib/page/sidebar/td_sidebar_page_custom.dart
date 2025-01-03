@@ -89,6 +89,8 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
             selectedTextStyle:TextStyle(color: Colors.red),
             onSelected: setCurrentValue,
             contentPadding:EdgeInsets.only(left: 16, top: 16,bottom: 16),
+            selectedBgColor: Colors.blue,
+            unSelectedBgColor: Colors.yellow,
           ),
         ),
         Expanded(

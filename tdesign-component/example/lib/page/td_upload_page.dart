@@ -17,15 +17,15 @@ class TDUploadState extends State<TDUploadPage> {
     TDUploadFile(
         key: 1,
         remotePath:
-            'https://tdesign.gtimg.com/miniprogram/images/example4.png'),
+            'https://tdesign.gtimg.com/demo/images/example1.png'),
     TDUploadFile(
         key: 2,
         remotePath:
-            'https://tdesign.gtimg.com/miniprogram/images/example6.png'),
+            'https://tdesign.gtimg.com/demo/images/example2.png'),
     TDUploadFile(
         key: 3,
         remotePath:
-            'https://tdesign.gtimg.com/miniprogram/images/example5.png'),
+            'https://tdesign.gtimg.com/demo/images/example3.png'),
   ];
   final List<TDUploadFile> files3 = [
     TDUploadFile(
@@ -33,13 +33,13 @@ class TDUploadState extends State<TDUploadPage> {
         status: TDUploadFileStatus.loading,
         loadingText: '上传中...',
         remotePath:
-            'https://tdesign.gtimg.com/miniprogram/images/example5.png'),
+            'https://tdesign.gtimg.com/demo/images/example1.png'),
     TDUploadFile(
         key: 2,
         status: TDUploadFileStatus.loading,
         progress: 68,
         remotePath:
-            'https://tdesign.gtimg.com/miniprogram/images/example4.png'),
+            'https://tdesign.gtimg.com/demo/images/example1.png'),
   ];
   final List<TDUploadFile> files4 = [
     TDUploadFile(
@@ -47,7 +47,7 @@ class TDUploadState extends State<TDUploadPage> {
         status: TDUploadFileStatus.retry,
         retryText: '重新上传',
         remotePath:
-            'https://tdesign.gtimg.com/miniprogram/images/example4.png'),
+            'https://tdesign.gtimg.com/demo/images/example1.png'),
   ];
   final List<TDUploadFile> files5 = [
     TDUploadFile(
@@ -55,10 +55,10 @@ class TDUploadState extends State<TDUploadPage> {
         status: TDUploadFileStatus.error,
         errorText: '上传失败',
         remotePath:
-            'https://tdesign.gtimg.com/miniprogram/images/example4.png'),
+            'https://tdesign.gtimg.com/demo/images/example4.png'),
   ];
 
-  void onVaueChanged(List<TDUploadFile> fileList, List<TDUploadFile> value,
+  void onValueChanged(List<TDUploadFile> fileList, List<TDUploadFile> value,
       TDUploadType event) {
     switch (event) {
       case TDUploadType.add:
@@ -87,7 +87,7 @@ class TDUploadState extends State<TDUploadPage> {
     return ExamplePage(
         title: tdTitle(),
         exampleCodeGroup: 'upload',
-        desc: '上传组件',
+        desc: '用于相册读取或拉起拍照的图片上传功能。${PlatformUtil.isWeb ? "Web端不支持读取本地图片,请前往移动端体验。" : ""}',
         children: [
           ExampleModule(
             title: '组件类型',
@@ -136,7 +136,7 @@ class TDUploadState extends State<TDUploadPage> {
           onCancel: onCancel,
           onError: print,
           onValidate: print,
-          onChange: ((files, type) => onVaueChanged(files1, files, type)),
+          onChange: ((files, type) => onValueChanged(files1, files, type)),
         ));
   }
 
@@ -151,7 +151,7 @@ class TDUploadState extends State<TDUploadPage> {
           onCancel: onCancel,
           onError: print,
           onValidate: print,
-          onChange: ((files, type) => onVaueChanged(files2, files, type)),
+          onChange: ((files, type) => onValueChanged(files2, files, type)),
         ));
   }
 
@@ -166,7 +166,7 @@ class TDUploadState extends State<TDUploadPage> {
           onCancel: onCancel,
           onError: print,
           onValidate: print,
-          onChange: ((files, type) => onVaueChanged(files3, files, type)),
+          onChange: ((files, type) => onValueChanged(files3, files, type)),
         ));
   }
 
@@ -181,7 +181,7 @@ class TDUploadState extends State<TDUploadPage> {
           onCancel: onCancel,
           onError: print,
           onValidate: print,
-          onChange: ((files, type) => onVaueChanged(files4, files, type)),
+          onChange: ((files, type) => onValueChanged(files4, files, type)),
         ));
   }
 
@@ -196,7 +196,7 @@ class TDUploadState extends State<TDUploadPage> {
           onCancel: onCancel,
           onError: print,
           onValidate: print,
-          onChange: ((files, type) => onVaueChanged(files5, files, type)),
+          onChange: ((files, type) => onValueChanged(files5, files, type)),
         ));
   }
 }

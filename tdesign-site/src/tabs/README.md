@@ -429,6 +429,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | dividerHeight | double | 0.5 | 分割线高度,小于等于0则不展示分割线 |
 | selectedBgColor | Color? | - | 被选中背景色，只有outlineType为capsule时有效 |
 | unSelectedBgColor | Color? | - | 未选中背景色，只有outlineType为capsule时有效 |
+| tabAlignment |  | - |  |
 
 ```
 ```

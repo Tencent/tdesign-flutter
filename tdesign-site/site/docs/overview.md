@@ -123,7 +123,7 @@ spline: explain
   </div>
 </section>
 
-<h3>输入<em class="tag">14</em></h3>
+<h3>输入<em class="tag">15</em></h3>
 <section class="image-group">
   <div class="image-wrapper">
     <a class="item" href="/flutter/components/calendar">
@@ -226,13 +226,13 @@ spline: explain
     </a>
   </div>
 
-  <!-- <div class="image-wrapper">
+  <div class="image-wrapper">
     <a class="item" href="/flutter/components/upload">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-upload.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-upload-dark.png" />
       <p class="name">Upload 上传</p>
     </a>
-  </div> -->
+  </div>
 </section>
 
 <h3>数据展示<em class="tag">12</em></h3>

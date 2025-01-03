@@ -11,6 +11,7 @@
 | onTextChanged | TDSearchBarEvent? | - | 文字改变回调 |
 | onSubmitted | TDSearchBarEvent? | - | 提交回调 |
 | onEditComplete | TDSearchBarCallBack? | - | 编辑完成回调 |
+| onInputClick | GestureTapCallback? | - | 输入框点击事件 |
 | autoHeight | bool | false | 是否自动计算高度 |
 | padding | EdgeInsets | const EdgeInsets.fromLTRB(16, 8, 16, 8) | 内部填充 |
 | autoFocus | bool | false | 是否自动获取焦点 |
@@ -23,3 +24,6 @@
 | onActionClick | TDSearchBarEvent? | - | 自定义操作回调 |
 | onClearClick | TDSearchBarClearEvent? | - | 自定义操作回调 |
 | focusNode | FocusNode? | - | 自定义焦点 |
+| inputAction | TextInputAction? | - | 键盘动作类型 |
+| enabled | bool? | - | 是否禁用 |
+| readOnly | bool? | - | 是否只读 |
