@@ -15,6 +15,8 @@ class TDCellStyle {
     this.borderedColor,
     this.groupBorderedColor,
     this.backgroundColor,
+    this.clickBackgroundColor,
+    this.groupTitleStyle,
     this.padding,
     this.cardBorderRadius,
     this.cardPadding,
