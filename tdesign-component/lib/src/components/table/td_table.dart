@@ -516,14 +516,22 @@ class TDTableState extends State<TDTable> {
           padding: const EdgeInsets.only(top: 16, bottom: 38),
           child: TDEmpty(
             image: Visibility(
-              visible: false,
-              child: TDImage(assetUrl: widget.empty?.assetUrl ?? ''),
+              visible: widget.empty?.assetUrl != null,
+              child: _getEmptyImage(),
             ),
             emptyText: widget.empty?.text ?? defaultText,
           ),
         ),
       ),
     );
+  }
+
+  TDImage _getEmptyImage() {
+    var url = widget.empty?.assetUrl ?? '';
+    if (url.startsWith('http')) {
+      return TDImage(imgUrl: url);
+    }
+    return TDImage(assetUrl: url);
   }
 
   /// 竖向生成单元格
