@@ -38,7 +38,14 @@ class TestPage extends StatelessWidget {
         customContent: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('今天是星期六，下面是拍摄的照片'),
+            TDText(
+              '今天是星期六，下面是拍摄的照片',
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                color: TDTheme.of(context).fontGyColor3,
+                fontSize: 12,
+              ),
+            ),
             Image.asset('assets/img/image.png', width: 100, height: 100),
           ],
         ),
@@ -49,7 +56,7 @@ class TestPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('TDSteps Test Page'),
+        title: TDText('TDSteps Test Page'),
       ),
       body: Form(
         key: _formKey,

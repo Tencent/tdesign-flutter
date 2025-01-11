@@ -196,7 +196,15 @@ class TDStepsVerticalItem extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(data.title!), // 使用标题字符串
+                          TDText(
+                            data.title!,
+                            style: TextStyle(
+                              fontWeight: (activeIndex == index && !readOnly) ? FontWeight.w600 : FontWeight.w400,
+                              color: stepsTitleColor,
+                              fontSize: 14,
+                              height: 1.2,
+                            ),
+                          ),
                           verticalSelect ? Icon(TDIcons.chevron_right, color: TDTheme.of(context).fontGyColor1, size: 16,) : Container(),
                         ],
                       ),
@@ -208,7 +216,14 @@ class TDStepsVerticalItem extends StatelessWidget {
                       if (data.customContent != null)
                         data.customContent!
                       else if (data.content != null && data.content!.isNotEmpty)
-                        Text(data.content!),
+                        TDText(
+                          data.content!,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: TDTheme.of(context).fontGyColor3,
+                            fontSize: 12,
+                          ),
+                        ),
                     ],
                   ),
                 ],
