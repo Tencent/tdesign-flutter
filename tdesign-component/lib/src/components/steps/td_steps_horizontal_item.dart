@@ -176,12 +176,26 @@ class TDStepsHorizontalItem extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(top: 8),
             alignment: Alignment.center,
-            child: Text(data.title!), // 使用标题字符串
+            child: TDText(
+              data.title!,
+              style: TextStyle(
+                fontWeight: (activeIndex == index && !readOnly) ? FontWeight.w600 : FontWeight.w400,
+                color: stepsTitleColor,
+                fontSize: 14,
+              ),
+            ),
           ),
         Container(
           margin: const EdgeInsets.only(top: 4),
           alignment: Alignment.center,
-          child: data.customContent ?? Text(data.content ?? ''), // 使用customContent覆盖content
+          child: data.customContent ?? TDText(
+            data.content ?? '',
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              color: TDTheme.of(context).fontGyColor3,
+              fontSize: 12,
+            ),
+          ),
         ),
       ],
     );
