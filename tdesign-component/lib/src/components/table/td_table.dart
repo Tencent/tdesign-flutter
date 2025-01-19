@@ -43,7 +43,7 @@ class TDTableCol {
   bool? ellipsisTitle;
 
   /// 自定义列
-  WidgetBuilder? cellBuilder;
+  IndexedWidgetBuilder? cellBuilder;
 
   /// 列内容横向对齐方式
   TDTableColAlign? align;
@@ -375,7 +375,7 @@ class TDTableState extends State<TDTable> {
     }
     // 自定义单元格内容
     if (col.cellBuilder != null) {
-      return Builder(builder: col.cellBuilder!);
+      return Builder(builder: (_) => col.cellBuilder!(_, index));
     }
     return titleWidget;
   }
