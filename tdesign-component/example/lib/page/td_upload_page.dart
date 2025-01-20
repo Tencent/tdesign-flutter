@@ -14,52 +14,39 @@ class TDUploadPage extends StatefulWidget {
 class TDUploadState extends State<TDUploadPage> {
   final List<TDUploadFile> files1 = [];
   final List<TDUploadFile> files2 = [
-    TDUploadFile(
-        key: 1,
-        remotePath:
-            'https://tdesign.gtimg.com/demo/images/example1.png'),
-    TDUploadFile(
-        key: 2,
-        remotePath:
-            'https://tdesign.gtimg.com/demo/images/example2.png'),
-    TDUploadFile(
-        key: 3,
-        remotePath:
-            'https://tdesign.gtimg.com/demo/images/example3.png'),
+    TDUploadFile(key: 1, remotePath: 'https://tdesign.gtimg.com/demo/images/example1.png'),
+    TDUploadFile(key: 2, remotePath: 'https://tdesign.gtimg.com/demo/images/example2.png'),
+    TDUploadFile(key: 3, remotePath: 'https://tdesign.gtimg.com/demo/images/example3.png'),
   ];
   final List<TDUploadFile> files3 = [
     TDUploadFile(
         key: 1,
         status: TDUploadFileStatus.loading,
         loadingText: '上传中...',
-        remotePath:
-            'https://tdesign.gtimg.com/demo/images/example1.png'),
+        remotePath: 'https://tdesign.gtimg.com/demo/images/example1.png'),
     TDUploadFile(
         key: 2,
         status: TDUploadFileStatus.loading,
         progress: 68,
-        remotePath:
-            'https://tdesign.gtimg.com/demo/images/example1.png'),
+        remotePath: 'https://tdesign.gtimg.com/demo/images/example1.png'),
   ];
   final List<TDUploadFile> files4 = [
     TDUploadFile(
         key: 1,
         status: TDUploadFileStatus.retry,
         retryText: '重新上传',
-        remotePath:
-            'https://tdesign.gtimg.com/demo/images/example1.png'),
+        remotePath: 'https://tdesign.gtimg.com/demo/images/example1.png'),
   ];
   final List<TDUploadFile> files5 = [
     TDUploadFile(
         key: 1,
         status: TDUploadFileStatus.error,
         errorText: '上传失败',
-        remotePath:
-            'https://tdesign.gtimg.com/demo/images/example4.png'),
+        remotePath: 'https://tdesign.gtimg.com/demo/images/example4.png'),
   ];
+  final List<TDUploadFile> files6 = [];
 
-  void onValueChanged(List<TDUploadFile> fileList, List<TDUploadFile> value,
-      TDUploadType event) {
+  void onValueChanged(List<TDUploadFile> fileList, List<TDUploadFile> value, TDUploadType event) {
     switch (event) {
       case TDUploadType.add:
         setState(() {
@@ -69,6 +56,15 @@ class TDUploadState extends State<TDUploadPage> {
       case TDUploadType.remove:
         setState(() {
           fileList.removeWhere((element) => element.key == value[0].key);
+        });
+        break;
+      case TDUploadType.replace:
+        setState(() {
+          final firstReplaceFile = value.first;
+          final index = fileList.indexWhere((file) => file.key == firstReplaceFile.key);
+          if (index != -1) {
+            fileList[index] = firstReplaceFile;
+          }
         });
         break;
     }
@@ -93,6 +89,7 @@ class TDUploadState extends State<TDUploadPage> {
             title: '组件类型',
             children: [
               ExampleItem(desc: '单选上传', builder: _uploadSingle),
+              ExampleItem(desc: '单选上传(替换)', builder: _uploadSingleWithReplace),
               ExampleItem(desc: '多选上传', builder: _uploadMultiple),
             ],
           ),
@@ -137,6 +134,23 @@ class TDUploadState extends State<TDUploadPage> {
           onError: print,
           onValidate: print,
           onChange: ((files, type) => onValueChanged(files1, files, type)),
+        ));
+  }
+
+  @Demo(group: 'upload')
+  Widget _uploadSingleWithReplace(BuildContext context) {
+    return wrapDemoContainer('单选上传(替换)',
+        child: TDUpload(
+          files: files6,
+          width: 60,
+          height: 60,
+          type: TDUploadBoxType.circle,
+          enabledReplaceType: true,
+          onClick: onClick,
+          onCancel: onCancel,
+          onError: print,
+          onValidate: print,
+          onChange: ((files, type) => onValueChanged(files6, files, type)),
         ));
   }
 
