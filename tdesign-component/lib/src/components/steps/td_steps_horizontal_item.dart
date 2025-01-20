@@ -10,6 +10,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
   final TDStepsStatus status;
   final bool simple;
   final bool readOnly;
+
   const TDStepsHorizontalItem({
     super.key,
     required this.data,
@@ -48,7 +49,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
       stepsTitleColor = TDTheme.of(context).fontGyColor1;
       /// 已完成的用icon图标显示
       completeIconWidget = Icon(TDIcons.check, color: TDTheme.of(context).brandColor7, size: 16,);
-    }else if (activeIndex < index) {
+    } else if (activeIndex < index) {
       /// 激活索引小于当前索引
       stepsNumberBgColor = TDTheme.of(context).grayColor1;
       stepsNumberTextColor = TDTheme.of(context).fontGyColor3;
@@ -100,10 +101,9 @@ class TDStepsHorizontalItem extends StatelessWidget {
     BoxDecoration? iconWidgetDecoration = shouldSetIconWidgetDecoration ? BoxDecoration(
       color: stepsNumberBgColor,
       shape: BoxShape.circle,
-    ): null;
+    ) : null;
 
-
-    // icon组件容器大小
+    /// icon组件容器大小
     double iconContainerSize = 22;
 
     /// 简略步骤条
@@ -172,23 +172,24 @@ class TDStepsHorizontalItem extends StatelessWidget {
             ),
           ],
         ),
-        Container(
-          margin: const EdgeInsets.only(top: 8),
-          alignment: Alignment.center,
-          child: TDText(
-            data.title,
-            style: TextStyle(
-              fontWeight: (activeIndex == index && !readOnly)  ? FontWeight.w600 : FontWeight.w400,
-              color: stepsTitleColor,
-              fontSize: 14,
+        if (data.title != null && data.title!.isNotEmpty)
+          Container(
+            margin: const EdgeInsets.only(top: 8),
+            alignment: Alignment.center,
+            child: TDText(
+              data.title!,
+              style: TextStyle(
+                fontWeight: (activeIndex == index && !readOnly) ? FontWeight.w600 : FontWeight.w400,
+                color: stepsTitleColor,
+                fontSize: 14,
+              ),
             ),
           ),
-        ),
         Container(
           margin: const EdgeInsets.only(top: 4),
           alignment: Alignment.center,
-          child: TDText(
-            data.content,
+          child: data.customContent ?? TDText(
+            data.content ?? '',
             style: TextStyle(
               fontWeight: FontWeight.w400,
               color: TDTheme.of(context).fontGyColor3,
@@ -199,6 +200,5 @@ class TDStepsHorizontalItem extends StatelessWidget {
       ],
     );
   }
-
 }
 
