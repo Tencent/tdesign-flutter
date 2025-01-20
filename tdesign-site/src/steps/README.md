@@ -95,7 +95,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
-### 1 水平图标步骤条
+### 2 水平图标步骤条
 
 水平图标步骤条1
             
@@ -174,7 +174,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
-### 1 水平简略步骤条
+### 3 水平简略步骤条
 
 水平简略步骤条1
             
@@ -256,7 +256,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
-### 1 水平错误状态步骤条
+### 4 水平错误状态步骤条
 
 水平错误状态基本步骤条
             
@@ -339,7 +339,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
-### 1 垂直步骤条
+### 5 垂直步骤条
 
 垂直默认步骤条
             
@@ -527,7 +527,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
-### 1 Extension步骤条
+### 6 Extension步骤条
 
 Read-only Steps 纯展示水平步骤条
             
@@ -586,6 +586,22 @@ Vertical Customize Steps 垂直自定义步骤条
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
+
+  List<TDStepsItemData> vCustomizeStepsListData = [
+      TDStepsItemData(title: 'Step 1', content: 'Vertical Step 1'),
+      TDStepsItemData(
+        title: 'Step 2',
+        customContent: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Vertical Step 2'),
+            Image.asset('assets/img/image.png'),
+          ],
+        ),
+      ),
+      TDStepsItemData(title: 'Step 3', content: 'Vertical Step 3'),
+  ];
+
   Widget _buildVCustomizeSteps(BuildContext context){
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -607,20 +623,19 @@ Vertical Customize Steps 垂直自定义步骤条
   }</pre>
 
 </td-code-block>
-                                  
 
 
 ## API
 ### TDStepsItemData
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| title | String | - | 标题 |
-| content | String | - | 内容 |
+| 参数 | 类型        | 默认值 | 说明 |
+| --- |-----------| --- | --- |
+| title | String?   | - | 标题 |
+| content | String?   | - | 内容 |
 | successIcon | IconData? | - | 成功图标 |
 | errorIcon | IconData? | - | 失败图标 |
-| customContent | Widget? | - | 自定义内容 |
+| customContent | Widget?   | - | 自定义内容 |
 
 ```
 ```
