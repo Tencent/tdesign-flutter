@@ -4,22 +4,103 @@
   </a>
 </p>
 
-TDesign Flutter 技术栈组件库，适合在移动端项目中使用。
+<p align="center">
+  <a href="https://github.com/Tencent/tdesign-flutter/blob/mainLICENSE">
+    <img src="https://img.shields.io/github/license/tencent/tdesign-flutter" alt="License">
+  </a>
+  <a href="https://pub.dev/packages/tdesign_flutter/license">
+    <img src="https://img.shields.io/pub/v/tdesign_flutter" alt="Version">
+  </a>
+  <a href="https://pub.dev/packages/tdesign_flutter/score">
+    <img src="https://img.shields.io/pub/dm/tdesign_flutter" alt="Downloads">
+  </a>
+</p>
 
-# 简介
+English | [简体中文](README_zh_CN.md)
 
-Flutter 组件库项目在 tdesign-component 文件夹下，相关使用详见[tdesign-component/README_zh.md](./tdesign-component/README_zh.md)
+Tencent TDesign UI component library of Flutter, suitable for use in mobile projects.
 
-# 其他技术栈实现
 
-- 桌面端 Vue 3 实现：[web-vue-next](https://github.com/Tencent/tdesign-vue-next)
-- 桌面端 React 实现： [web-react](https://github.com/Tencent/tdesign-react)
-- 移动端小程序实现： [小程序](https://github.com/Tencent/tdesign-miniprogram)
+# 🎉 Features
 
-# 交流反馈
+- Provides Flutter UI component library in TDesign design style
+- Support customizing themes according to App design style
+- Provides commonly used Icon library and supports customized replacement
+- Define color groups according to the TDesign specification, which can be viewed in TDColors to facilitate the adaptation of components to the TDesign specification.
+- The color value declaration class can add default colors and view the default display effect of color values in real time.
 
-<img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/components/src/images/groups/flutter-group.png" width="200" />
 
-# 开源协议
+# 🔨 Usage
+- SDK dependency version
+```yaml
+dart: ">=2.19.0 <4.0.0"
+flutter: ">=3.7.0"
+```
 
-TDesign 遵循 [MIT 协议](https://github.com/Tencent/tdesing-flutter/blob/main/tdesign-component/LICENSE)
+- Add the dependency in `pubspec.yaml`
+
+```yaml
+dependencies:
+  tdesign_flutter: ^0.0.6
+```
+
+- Import at the top of your file:
+
+```dart
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+```
+
+- You can configure theme styles such as colors, font sizes, font styles, corner radius, and shadows through a json file. 
+Retrieve theme data using `TDTheme.of(context)` or `TDTheme.defaultData()`. It is recommended 
+that components use `TDTheme.of(context)` unless the component does not need to follow local themes, 
+in which case `TDTheme.defaultData()` can be used.
+
+Examples of using colors, fonts, and corner radius:
+
+```dart
+TDTheme.of(context).brandNormalColor
+TDTheme.defaultData().fontBodyLarge
+```
+
+- TDesign's icons do not follow the theme, they are all in ttf format, usage examples:
+
+```dart
+Icon(TDIcons.activity)
+```
+
+- For more use examples, please refer to [example/lib/page](tdesign-component/example/lib/page)
+
+
+# TDesign component libraries
+
+TDesign also provides component libraries for other platforms and frameworks.
+
+- component library for Vue 2.x : [tdesign-vue](https://github.com/Tencent/tdesign-vue)
+- component library for Vue 3.x : [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next)
+- component library for React : [tdesign-react](https://github.com/Tencent/tdesign-react)
+- component library for Vue 3.x Mobile : [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)
+- component library for React Mobile : [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react)
+- component library for Wechat miniprogram : [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)
+
+# Acknowledgements
+
+TDesign Flutter depends on the following component libraries. We appreciate the authors for their open-source contributions:
+
+- [easy_refresh](https://pub-web.flutter-io.cn/packages/easy_refresh)
+- [flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)
+- [flutter_slidable](https://pub-web.flutter-io.cn/packages/flutter_slidable)
+- [image_picker](https://pub-web.flutter-io.cn/packages/image_picker)
+
+# Contributing
+
+Contributing is welcome. Read [guidelines for contributing](CONTRIBUTING.md) before submitting your [Pull Request](https://github.com/Tencent/tdesign-flutter/pulls).
+
+# Feedback
+
+Create your [Github issues](https://github.com/Tencent/tdesign-vue-next/issues) or scan the QR code below to join our user groups
+
+<img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/components/src/images/groups/vue3-group.png" width="200" />
+
+# License
+
+The MIT License. Please see [the license file](LICENSE) for more information.
