@@ -117,7 +117,9 @@ class TDCalendarBody extends StatelessWidget {
       return;
     }
     final scrollDate = value!.reduce((a, b) => a.isBefore(b) ? a : b);
-    if (months.first.isAfter(scrollDate) || months.last.isBefore(scrollDate)) {
+    var lastMonthDay = DateTime(months.last.year, months.last.month + 1); 
+    lastMonthDay = lastMonthDay.add(const Duration(days: -1));
+    if (months.first.isAfter(scrollDate) || lastMonthDay.isBefore(scrollDate)) {
       return;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
