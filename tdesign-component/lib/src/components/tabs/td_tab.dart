@@ -66,13 +66,7 @@ class TDTab extends Tab {
       this.outlineType = TDTabOutlineType.filled,
       this.enable = true,
       this.iconMargin = const EdgeInsets.only(bottom: 4.0, right: 4.0)})
-      : super(
-            key: key,
-            text: text,
-            child: child,
-            icon: icon,
-            height: height,
-            iconMargin: iconMargin);
+      : super(key: key, text: text, child: child, icon: icon, height: height, iconMargin: iconMargin);
 
   final double _kTabHeight = 48.0;
   final double _kTextAndIconTabHeight = 72.0;
@@ -83,7 +77,7 @@ class TDTab extends Tab {
     Widget label;
     if (icon == null) {
       calculatedHeight = _kTabHeight;
-      label = _buildLabelText();
+      label = _buildLabelText(context);
     } else if (text == null && child == null) {
       calculatedHeight = _kTabHeight;
       label = icon!;
@@ -98,7 +92,7 @@ class TDTab extends Tab {
             width: iconMargin.horizontal,
             height: iconMargin.vertical,
           ),
-          _buildLabelText(),
+          _buildLabelText(context),
         ],
       );
     }
@@ -121,9 +115,7 @@ class TDTab extends Tab {
       ignoring: !enable,
       child: Container(
         alignment: Alignment.center,
-        margin: isCapsuleOutlineType
-            ? const EdgeInsets.symmetric(horizontal: 16)
-            : null,
+        margin: isCapsuleOutlineType ? const EdgeInsets.symmetric(horizontal: 16) : null,
         height: height ?? calculatedHeight,
         child: Center(
           widthFactor: 1.0,
@@ -133,17 +125,26 @@ class TDTab extends Tab {
     );
   }
 
-  Widget _buildLabelText() {
-    return child ??
-        Text(
-          text!,
-          softWrap: false,
-          overflow: TextOverflow.fade,
-          style: TextStyle(fontSize: _getFontSize()),
-        );
+  Widget _buildLabelText(BuildContext context) {
+    if (child != null) {
+      return DefaultTextStyle(
+        child: child!,
+        style: DefaultTextStyle.of(context).style.copyWith(fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14),
+      );
+    }
+    return Text(
+      text!,
+      softWrap: false,
+      overflow: TextOverflow.fade,
+      style: TextStyle(fontSize: _getFontSize(context)),
+    );
   }
 
-  double _getFontSize() {
+  double _getFontSize(BuildContext context) {
+    final defaultTextStyle = DefaultTextStyle.of(context);
+    if (defaultTextStyle.style.fontSize != null) {
+      return defaultTextStyle.style.fontSize!;
+    }
     if (size == TDTabSize.large) {
       return 16.0;
     } else {

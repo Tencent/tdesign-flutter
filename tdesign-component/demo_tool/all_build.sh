@@ -17,7 +17,7 @@
 # back_top
 ./bin/demo_tool generate --file ../lib/src/components/backtop/td_backtop.dart --name TDBackTop --folder-name back-top --output ../example/assets/api/ --only-api
 # drawer
-./bin/demo_tool generate --folder ../lib/src/components/drawer --name TDDrawer,TDDrawerItem,TDDrawerStyle --folder-name drawer --output ../example/assets/api/ --only-api --get-comments
+./bin/demo_tool generate --folder ../lib/src/components/drawer --name TDDrawer,TDDrawerWidget,TDDrawerItem,TDDrawerStyle --folder-name drawer --output ../example/assets/api/ --only-api --get-comments
 # indexes
 ./bin/demo_tool generate --folder ../lib/src/components/indexes --name TDIndexes,TDIndexesAnchor,TDIndexesList --folder-name indexes --output ../example/assets/api/ --only-api --get-comments
 # navbar
