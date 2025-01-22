@@ -26,6 +26,12 @@ enum TDUploadFileStatus {
 enum TDUploadType {
   add, // 添加
   remove, // 删除
+  replace, // 替换
+}
+
+enum TDUploadBoxType {
+  roundedSquare, // 圆角方形
+  circle, // 圆形
 }
 
 class TDUploadFile {
@@ -70,7 +76,11 @@ class TDUpload extends StatefulWidget {
       this.onClick,
       required this.files,
       this.onChange,
-      this.multiple = false})
+      this.multiple = false,
+      this.width = 80.0,
+      this.height = 80.0,
+      this.type = TDUploadBoxType.roundedSquare,
+      this.enabledReplaceType = false})
       : super(key: key);
 
   /// 控制展示的文件列表
@@ -100,8 +110,20 @@ class TDUpload extends StatefulWidget {
   /// 监听点击图片位
   final TDUploadClickEvent? onClick;
 
-  /// 监听添加或删除照片
+  /// 监听添加, 删除和替换media事件
   final TDUploadValueChangedEvent? onChange;
+
+  /// 图片宽度
+  final double? width;
+
+  /// 图片高度
+  final double? height;
+
+  /// Box类型
+  final TDUploadBoxType type;
+
+  /// 是否启用replace功能
+  final bool? enabledReplaceType;
 
   @override
   State<TDUpload> createState() => _TDUploadState();
@@ -113,6 +135,12 @@ class _TDUploadState extends State<TDUpload> {
   bool get canUpload => widget.multiple ? (widget.max == 0 ? true : fileList.length < widget.max) : fileList.isEmpty;
   final ImagePicker _picker = ImagePicker();
 
+  // 类型映射
+  final Map<TDUploadBoxType, TDImageType> _imageTypeMap = {
+    TDUploadBoxType.roundedSquare: TDImageType.roundedSquare,
+    TDUploadBoxType.circle: TDImageType.circle,
+  };
+
   @override
   initState() {
     super.initState();
@@ -120,15 +148,15 @@ class _TDUploadState extends State<TDUpload> {
   }
 
   // 获取相册照片或视频
-  Future<List<XFile>> getMediaFromPicker() async {
-    if (!canUpload || widget.mediaType.isEmpty) {
+  Future<List<XFile>> getMediaFromPicker(bool isMultiple) async {
+    if (widget.mediaType.isEmpty) {
       return [];
     }
 
     List<XFile> medias;
 
     try {
-      if (widget.multiple) {
+      if (isMultiple) {
         if (widget.mediaType.length == 1 && widget.mediaType.contains(TDUploadMediaType.image)) {
           medias = await _picker.pickMultiImage();
         } else {
@@ -194,11 +222,39 @@ class _TDUploadState extends State<TDUpload> {
     }
   }
 
+  // 替换资源
+  void replaceMedia(List<XFile> files, TDUploadFile oldFile) async {
+    if (files.isEmpty || files.length != 1) {
+      return;
+    }
+
+    var result = await validateResources(files);
+
+    if (result != null) {
+      if (widget.onValidate != null) {
+        widget.onValidate!(result);
+      }
+      return;
+    }
+
+    var newFile = TDUploadFile(key: oldFile.key, file: File(files[0].path), assetPath: files[0].path);
+
+    if (widget.onChange != null) {
+      widget.onChange!([newFile], TDUploadType.replace);
+    }
+  }
+
   // 校验资源
-  Future<TDUploadValidatorError?> validateResources(List<XFile> files) async {
+  Future<TDUploadValidatorError?> validateResources(List<XFile> files, [bool? multiple]) async {
     TDUploadValidatorError? error;
 
-    if (widget.multiple && widget.max > 0) {
+    // 多选逻辑，优选从参数获取
+    var isMultiple = widget.multiple;
+    if (multiple != null) {
+      isMultiple = multiple;
+    }
+
+    if (isMultiple && widget.max > 0) {
       var remain = widget.max - fileList.length;
 
       if (files.length > remain) {
@@ -238,7 +294,11 @@ class _TDUploadState extends State<TDUpload> {
         children: [
           ...fileList.map((file) => _buildImageBox(context, file)).toList(),
           _buildUploadBox(context, shouldDisplay: canUpload, onTap: () async {
-            final files = await getMediaFromPicker();
+            if (!canUpload) {
+              return;
+            }
+
+            final files = await getMediaFromPicker(widget.multiple);
             extractImageList(files);
           }),
         ],
@@ -252,9 +312,14 @@ class _TDUploadState extends State<TDUpload> {
         child: GestureDetector(
             onTap: onTap,
             child: Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(color: TDTheme.of(context).grayColor1, borderRadius: BorderRadius.circular(6)),
+              width: widget.width,
+              height: widget.height,
+              decoration: widget.type == TDUploadBoxType.circle
+                  ? BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: TDTheme.of(context).grayColor1,
+                    )
+                  : BoxDecoration(color: TDTheme.of(context).grayColor1, borderRadius: BorderRadius.circular(6)),
               child: const Center(
                   child: Icon(
                 TDIcons.add,
@@ -266,19 +331,26 @@ class _TDUploadState extends State<TDUpload> {
 
   Widget _buildImageBox(BuildContext context, TDUploadFile file) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         if (widget.onClick != null) {
           widget.onClick!(file.key);
+        }
+        // 替换资源
+        if (widget.enabledReplaceType ?? false) {
+          final files = await getMediaFromPicker(false);
+          replaceMedia(files, file);
         }
       },
       child: Stack(
         children: [
           TDImage(
-            width: 80,
-            height: 80,
+            key: Key(file.assetPath ?? ''),
+            width: widget.width,
+            height: widget.height,
             imgUrl: file.remotePath,
             // assetUrl: file.assetPath,
             imageFile: file.file,
+            type: _imageTypeMap[widget.type] ?? TDImageType.roundedSquare,
           ),
           Visibility(visible: file.status != TDUploadFileStatus.success, child: _buildShadowBox(file)),
           Visibility(
@@ -293,10 +365,15 @@ class _TDUploadState extends State<TDUpload> {
                     child: Container(
                       width: 20,
                       height: 20,
-                      decoration: const BoxDecoration(
-                          color: Color.fromRGBO(0, 0, 0, 0.6),
-                          borderRadius:
-                              BorderRadius.only(bottomLeft: Radius.circular(6), topRight: Radius.circular(6))),
+                      decoration: widget.type == TDUploadBoxType.circle
+                          ? const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color.fromRGBO(0, 0, 0, 0.6),
+                            )
+                          : const BoxDecoration(
+                              color: Color.fromRGBO(0, 0, 0, 0.6),
+                              borderRadius:
+                                  BorderRadius.only(bottomLeft: Radius.circular(6), topRight: Radius.circular(6))),
                       child: const Center(
                           child: Icon(
                         TDIcons.close,
@@ -326,14 +403,19 @@ class _TDUploadState extends State<TDUpload> {
     }
 
     return Container(
-      width: 80,
-      height: 80,
-      decoration: BoxDecoration(color: const Color.fromRGBO(0, 0, 0, 0.4), borderRadius: BorderRadius.circular(6)),
+      width: widget.width,
+      height: widget.height,
+      decoration: widget.type == TDUploadBoxType.circle
+          ? const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color.fromRGBO(0, 0, 0, 0.4),
+            )
+          : BoxDecoration(color: const Color.fromRGBO(0, 0, 0, 0.4), borderRadius: BorderRadius.circular(6)),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Visibility(
                 visible: file.status == TDUploadFileStatus.loading,
@@ -350,10 +432,13 @@ class _TDUploadState extends State<TDUpload> {
                     size: 24,
                     color: Colors.white,
                   )),
-              TDText(
-                displayText,
-                textColor: Colors.white,
-                style: const TextStyle(fontSize: 12, height: 1.67),
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: TDText(
+                  displayText,
+                  textColor: Colors.white,
+                  style: const TextStyle(fontSize: 12, height: 1.67),
+                ),
               ),
             ],
           ),
