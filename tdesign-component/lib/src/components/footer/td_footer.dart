@@ -11,15 +11,16 @@ enum TDFooterType {
 
   /// 品牌样式
   brand,
-
 }
 
 class TDFooter extends StatefulWidget {
-  const TDFooter( this.type,
-    {Key? key,
+  const TDFooter(
+    this.type, {
+    Key? key,
     this.logo,
     this.text = '',
     this.links = const [],
+    this.isWithUnderline = false,
     this.width,
     this.height,
   }) : super(key: key);
@@ -42,6 +43,8 @@ class TDFooter extends StatefulWidget {
   /// 链接
   final List<LinkObj> links;
 
+  /// 是否显示下滑线
+  final bool isWithUnderline;
   @override
   State<TDFooter> createState() => _TDFooterState();
 }
@@ -60,55 +63,43 @@ class _TDFooterState extends State<TDFooter> {
             ],
           ),
         );
-    case TDFooterType.link:
-      return Container(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (widget.links.isNotEmpty)
-              _renderLinks()
-            else
-              _renderText(),
-          ],
-        ),
-      );
-    case TDFooterType.brand:
-      return Container(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (widget.logo != null)
-              _renderLogo()
-            else
-              _renderText(),
-          ],
-        ),
-      );
+      case TDFooterType.link:
+        return Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (widget.links.isNotEmpty) _renderLinks() else _renderText(),
+            ],
+          ),
+        );
+      case TDFooterType.brand:
+        return Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (widget.logo != null) _renderLogo() else _renderText(),
+            ],
+          ),
+        );
     }
   }
 
   Widget _renderLogo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 4, bottom: 4),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TDImage(
-                  assetUrl: widget.logo,
-                  type: TDImageType.clip,
-                  width: widget.width,
-                  height: widget.height,
-                ),
-              ]
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Padding(
+        padding: const EdgeInsets.only(top: 4, bottom: 4),
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          TDImage(
+            assetUrl: widget.logo,
+            type: TDImageType.fitWidth,
+            width: widget.width,
+            height: widget.height,
           ),
-        )
-      ]
-    );
+        ]),
+      )
+    ]);
   }
 
   Widget _renderLinks() {
@@ -119,26 +110,23 @@ class _TDFooterState extends State<TDFooter> {
           padding: const EdgeInsets.only(top: 4, bottom: 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: widget.links.map((link) {
-              return Padding(
+            children: List.generate(widget.links.length, (index) {
+              LinkObj link = widget.links[index];
+              return Container(
+                decoration:index<(widget.links.length-1)? BoxDecoration(border: Border(right: BorderSide(color: Color.fromRGBO(231, 231, 231, 1)))):null,
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: TDLink(
-                    type: TDLinkType.withUnderline,
+                    type: widget.isWithUnderline ? TDLinkType.withUnderline : TDLinkType.basic,
                     style: TDLinkStyle.primary,
                     label: link.name,
-                    uri: link.uri)
+                    uri: link.uri),
               );
             }).toList(),
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _renderText()
-            ]
-          ),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [_renderText()]),
         ),
       ],
     );
