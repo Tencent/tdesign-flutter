@@ -217,28 +217,22 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
     if (widget.visible == false) {
       return const SizedBox.shrink();
     }
-    var _leftOffset = widget.offset?[0] ??
-        (MediaQuery.of(context).size.width - totalWidth) / 2;
+    var _leftOffset = widget.offset?[0] ?? (MediaQuery.of(context).size.width - totalWidth) / 2;
 
     Widget getText(BuildContext context) {
       if (widget.marquee == null) {
         return Align(
-          alignment: Alignment.center,
-          child: SizedBox(
-            width: calculateTextWidth(),
-            child: Text(
-              widget.content ?? '',
-              style: const TextStyle(color: Colors.black),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+          alignment: Alignment.centerLeft,
+          child: Text(
+            widget.content ?? '',
+            style: const TextStyle(color: Colors.black),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         );
       } else {
         final textPainter = TextPainter(
-          text: TextSpan(
-              text: widget.content ?? '',
-              style: const TextStyle(color: Colors.black)),
+          text: TextSpan(text: widget.content ?? '', style: const TextStyle(color: Colors.black)),
           maxLines: 1,
           textDirection: TextDirection.ltr,
         )..layout(minWidth: 0, maxWidth: double.infinity);
@@ -246,8 +240,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
 
         final containerWidth = calculateTextWidth();
 
-        final animationDuration =
-            Duration(milliseconds: (widget.marquee!.speed ?? 10000));
+        final animationDuration = Duration(milliseconds: (widget.marquee!.speed ?? 10000));
         animationController!.duration = animationDuration;
 
         final tween = Tween<Offset>(
@@ -256,45 +249,39 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
         );
 
         if (widget.marquee!.delay != null && widget.marquee!.delay! > 0) {
-          Future.delayed(
-              Duration(milliseconds: widget.marquee!.delay!), startAnimation);
+          Future.delayed(Duration(milliseconds: widget.marquee!.delay!), startAnimation);
         } else {
           startAnimation();
         }
 
         return Align(
-          alignment: Alignment.center,
-          child: SizedBox(
-              width: calculateTextWidth(),
-              child: ClipRect(
-                child: SizedBox(
-                  width: containerWidth,
-                  child: AnimatedBuilder(
-                    animation:
-                        animationController ?? const AlwaysStoppedAnimation(0),
-                    builder: (context, child) {
-                      final offset = tween.evaluate(animationController ??
-                          const AlwaysStoppedAnimation(0));
-                      return OverflowBox(
-                        minWidth: 0,
-                        maxWidth: double.infinity,
-                        alignment: Alignment.centerLeft,
-                        child: Transform.translate(
-                          offset: offset,
-                          child: SizedBox(
-                            child: Text(
-                              widget.content ?? '',
-                              style: const TextStyle(color: Colors.black),
-                              maxLines: 1,
-                            ),
+            alignment: Alignment.center,
+            child: ClipRect(
+              child: SizedBox(
+                width: containerWidth,
+                child: AnimatedBuilder(
+                  animation: animationController ?? const AlwaysStoppedAnimation(0),
+                  builder: (context, child) {
+                    final offset = tween.evaluate(animationController ?? const AlwaysStoppedAnimation(0));
+                    return OverflowBox(
+                      minWidth: 0,
+                      maxWidth: double.infinity,
+                      alignment: Alignment.centerLeft,
+                      child: Transform.translate(
+                        offset: offset,
+                        child: SizedBox(
+                          child: Text(
+                            widget.content ?? '',
+                            style: const TextStyle(color: Colors.black),
+                            maxLines: 1,
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              )),
-        );
+              ),
+            ));
       }
     }
 
@@ -304,17 +291,13 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       } else {
         switch (widget.theme) {
           case MessageTheme.info:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).brandColor7);
+            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).brandColor7);
           case MessageTheme.success:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).successColor5);
+            return Icon(TDIcons.check_circle_filled, color: TDTheme.of(context).successColor5);
           case MessageTheme.warning:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).warningColor5);
+            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).warningColor5);
           case MessageTheme.error:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).errorColor6);
+            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).errorColor6);
           case null:
             return const SizedBox.shrink();
         }
@@ -335,7 +318,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       } else if (widget.closeBtn == true) {
         return GestureDetector(
           onTap: clickCloseButton,
-          child: Icon(TDIcons.close),
+          child: Icon(TDIcons.close,color:Color.fromRGBO(0, 0, 0, 0.4),),
         );
       } else if (widget.closeBtn is String) {
         return GestureDetector(
@@ -361,7 +344,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
               type: TDLinkType.basic,
               uri: widget.link.uri ?? Uri.parse('https://example.com'),
               size: TDLinkSize.small,
-              color: widget.link.color ?? TDTheme.of(context).brandNormalColor,
+              color:TDTheme.of(context).brandColor7,
             ));
       } else if (widget.link is String) {
         return Align(
@@ -371,7 +354,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
               child: Text(
                 widget.link ?? '',
                 style: TextStyle(
-                  color: TDTheme.of(context).brandNormalColor,
+                  color: TDTheme.of(context).brandColor7,
                   fontSize: 14,
                 ),
                 maxLines: 1,
@@ -418,15 +401,17 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          getText(context),
+                          Expanded(
+                            child: getText(context),
+                            flex: 3,
+                          ),
                           if (widget.link != null)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: SizedBox(
-                                width: 28,
+                            Container(
+                                margin: const EdgeInsets.only(left: 8),
+                                width: 40,
                                 height: 22,
-                                child: getLink(context),
-                              ),
+                                child:getLink(context)
+                                    //
                             ),
                           if (widget.closeBtn != null)
                             Padding(
