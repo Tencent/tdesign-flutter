@@ -74,6 +74,7 @@ class TDUpload extends StatefulWidget {
       this.onError,
       this.onValidate,
       this.onClick,
+      this.onMaxLimitReached,
       required this.files,
       this.onChange,
       this.multiple = false,
@@ -110,6 +111,9 @@ class TDUpload extends StatefulWidget {
   /// 监听点击图片位
   final TDUploadClickEvent? onClick;
 
+  /// 监听文件超过最大数量
+  final VoidCallback? onMaxLimitReached;
+
   /// 监听添加, 删除和替换media事件
   final TDUploadValueChangedEvent? onChange;
 
@@ -145,6 +149,21 @@ class _TDUploadState extends State<TDUpload> {
   initState() {
     super.initState();
     fileList = widget.files;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _validateInitialFiles();
+    });
+  }
+
+  void _validateInitialFiles() {
+    if (widget.max > 0 && fileList.length > widget.max) {
+      if (widget.onMaxLimitReached != null) {
+        widget.onMaxLimitReached!();
+      } else if (widget.onValidate != null) {
+        widget.onValidate!(TDUploadValidatorError.overQuantity);
+      } else {
+        throw Exception("Initial file count exceeds the maximum limit");
+      }
+    }
   }
 
   // 获取相册照片或视频
@@ -153,38 +172,33 @@ class _TDUploadState extends State<TDUpload> {
       return [];
     }
 
-    List<XFile> medias;
-
+    var medias = <XFile>[];
     try {
       if (isMultiple) {
-        if (widget.mediaType.length == 1 && widget.mediaType.contains(TDUploadMediaType.image)) {
-          medias = await _picker.pickMultiImage();
-        } else {
-          medias = await _picker.pickMultiImage();
-        }
-
-        return medias;
-      }
-
-      XFile? media;
-      if (widget.mediaType.length == 1) {
+        medias = await _picker.pickMultiImage();
+      } else {
+        XFile? media;
         if (widget.mediaType.contains(TDUploadMediaType.image)) {
           media = await _picker.pickImage(source: ImageSource.gallery);
         } else {
           media = await _picker.pickVideo(source: ImageSource.gallery);
         }
-      } else {
-        media = await _picker.pickImage(source: ImageSource.gallery);
+        if (media != null) {
+          medias = [media];
+        }
       }
 
-      return media == null ? [] : [media];
-    } on PlatformException catch (e) {
-      if (e.code == 'null-error' && widget.onCancel != null) {
-        widget.onCancel!();
-      } else {
-        if (widget.onError != null) {
-          widget.onError!(e);
+      if (widget.max > 0 && fileList.length + medias.length > widget.max) {
+        if (widget.onMaxLimitReached != null) {
+          widget.onMaxLimitReached!();
+        } else if (widget.onValidate != null) {
+          widget.onValidate!(TDUploadValidatorError.overQuantity);
         }
+        return [];
+      }
+    } on PlatformException catch (e) {
+      if (widget.onError != null) {
+        widget.onError!(e);
       }
     } catch (e) {
       if (widget.onError != null) {
@@ -192,7 +206,7 @@ class _TDUploadState extends State<TDUpload> {
       }
     }
 
-    return [];
+    return medias;
   }
 
   // 处理获取到的资源

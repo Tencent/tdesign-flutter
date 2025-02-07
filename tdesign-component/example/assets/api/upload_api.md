@@ -11,7 +11,12 @@
 | onCancel | VoidCallback? | - | 监听取消上传 |
 | onError | TDUploadErrorEvent? | - | 监听获取资源错误 |
 | onValidate | TDUploadValidatorEvent? | - | 监听文件校验出错 |
+| onMaxLimitReached | VoidCallback? | - | 监听文件数量超过最大限制回调函数 |
 | onClick | TDUploadClickEvent? | - | 监听点击图片位 |
 | files | List<TDUploadFile> | - | 控制展示的文件列表 |
 | onChange | TDUploadValueChangedEvent? | - | 监听添加或删除照片 |
 | multiple | bool | false | 是否多选上传，默认false |
+| width | double? | - | 图片宽度 |
+| height | double? | - | 图片高度 |
+| type | TDUploadBoxType? | - | Box类型 |
+| enabledReplaceType | bool? | false | 是否启用replace功能 |
