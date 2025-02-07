@@ -7,18 +7,20 @@ import '../../../tdesign_flutter.dart';
 class TDStepsItemData {
 
   TDStepsItemData({
-    required this.title,
-    required this.content,
+    this.title,
+    this.content,
     this.successIcon,
     this.errorIcon,
     this.customContent,
-  });
+  }) {
+    _validate();
+  }
 
   /// 标题
-  final String title;
+  final String? title;
 
   /// 内容
-  final String content;
+  final String? content;
 
   /// 成功图标
   final IconData? successIcon;
@@ -28,6 +30,13 @@ class TDStepsItemData {
 
   /// 自定义内容
   final Widget? customContent;
+
+  /// 校验参数
+  void _validate() {
+    if (title == null && content == null && customContent == null) {
+      throw ArgumentError('title, content, customContent needs at least one non-empty value');
+    }
+  }
 }
 
 /// Steps步骤条方向
@@ -98,5 +107,4 @@ class _TDStepsState extends State<TDSteps> {
         verticalSelect: widget.verticalSelect,
       );
   }
-
 }
