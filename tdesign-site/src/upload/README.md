@@ -147,6 +147,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | files | List<TDUploadFile> | - | 控制展示的文件列表 |
 | onChange | TDUploadValueChangedEvent? | - | 监听添加或删除照片 |
 | multiple | bool | false | 是否多选上传，默认false |
-
+| width | double? | - | 图片宽度 |
+| height | double? | - | 图片高度 |
+| type | TDUploadBoxType? | - | Box类型 |
+| enabledReplaceType | bool? | false | 是否启用replace功能 |
 
   
