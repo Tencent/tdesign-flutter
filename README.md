@@ -5,10 +5,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Tencent/tdesign-flutter/blob/mainLICENSE">
+  <a href="https://github.com/Tencent/tdesign-flutter/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/tencent/tdesign-flutter" alt="License">
   </a>
-  <a href="https://pub.dev/packages/tdesign_flutter/license">
+  <a href="https://pub.dev/packages/tdesign_flutter">
     <img src="https://img.shields.io/pub/v/tdesign_flutter" alt="Version">
   </a>
   <a href="https://pub.dev/packages/tdesign_flutter/score">
@@ -97,7 +97,7 @@ Contributing is welcome. Read [guidelines for contributing](CONTRIBUTING.md) bef
 
 # Feedback
 
-Create your [Github issues](https://github.com/Tencent/tdesign-vue-next/issues) or scan the QR code below to join our user groups
+Create your [Github issues](https://github.com/Tencent/tdesign-flutter/issues) or scan the QR code below to join our user groups
 
 <img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/components/src/images/groups/vue3-group.png" width="200" />
 
