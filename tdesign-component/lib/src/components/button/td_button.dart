@@ -12,6 +12,8 @@ enum TDButtonTheme { defaultTheme, primary, danger, light }
 
 enum TDButtonStatus { defaultState, active, disable }
 
+enum TDButtonIconPosition { left, right }
+
 typedef TDButtonEvent = void Function();
 
 /// TD常规按钮
@@ -39,7 +41,8 @@ class TDButton extends StatefulWidget {
       this.iconTextSpacing,
       this.onLongPress,
       this.margin,
-      this.padding})
+      this.padding,
+      this.iconPosition = TDButtonIconPosition.left})
       : super(key: key);
 
   /// 自控件
@@ -98,6 +101,9 @@ class TDButton extends StatefulWidget {
 
  /// 自定义图标与文本之间距离
   final double? iconTextSpacing;
+
+  /// 图标位置
+  final TDButtonIconPosition? iconPosition;
 
   /// 自定义padding
   final EdgeInsetsGeometry? padding;
@@ -226,7 +232,7 @@ class _TDButtonState extends State<TDButton> {
     }
     var children = <Widget>[];
     // 系统Icon会导致不居中，因此自绘icon指定height
-    if (icon != null) {
+    if (icon != null && widget.iconPosition == TDButtonIconPosition.left) {
       children.add(icon);
     }
     if (widget.text != null) {
@@ -238,6 +244,9 @@ class _TDButtonState extends State<TDButton> {
         forceVerticalCenter: true,
       );
       children.add(text);
+    }
+    if (icon != null && widget.iconPosition == TDButtonIconPosition.right) {
+      children.add(icon);
     }
 
     if (children.length == 2) {
