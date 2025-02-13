@@ -131,7 +131,7 @@ class _TDSkeletonState extends State<TDSkeleton>
       LinearGradient(
         colors: [
           Colors.transparent,
-          TDTheme.of(context).fontGyColor3,
+          TDTheme.of(context).grayColor4,
           Colors.transparent,
         ],
         // 15 deg

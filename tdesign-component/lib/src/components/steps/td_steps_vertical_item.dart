@@ -11,6 +11,7 @@ class TDStepsVerticalItem extends StatelessWidget {
   final bool simple;
   final bool readOnly;
   final bool verticalSelect;
+
   const TDStepsVerticalItem({
     super.key,
     required this.data,
@@ -50,7 +51,7 @@ class TDStepsVerticalItem extends StatelessWidget {
       stepsTitleColor = TDTheme.of(context).fontGyColor1;
       /// 已完成的用icon图标显示
       completeIconWidget = Icon(TDIcons.check, color: TDTheme.of(context).brandColor7, size: 16,);
-    }else if (activeIndex < index) {
+    } else if (activeIndex < index) {
       /// 激活索引小于当前索引
       stepsNumberBgColor = TDTheme.of(context).grayColor1;
       stepsNumberTextColor = TDTheme.of(context).fontGyColor3;
@@ -102,8 +103,7 @@ class TDStepsVerticalItem extends StatelessWidget {
     var iconWidgetDecoration = shouldSetIconWidgetDecoration ? BoxDecoration(
       color: stepsNumberBgColor,
       shape: BoxShape.circle,
-    ): null;
-
+    ) : null;
 
     /// icon组件容器大小
     double iconContainerSize = 22;
@@ -189,39 +189,42 @@ class TDStepsVerticalItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 22,
-                    margin: const EdgeInsets.only(bottom: 4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TDText(
-                          data.title,
-                          style: TextStyle(
-                            fontWeight: (activeIndex == index && !readOnly) ? FontWeight.w600 : FontWeight.w400,
-                            color: stepsTitleColor,
-                            fontSize: 14,
-                            height: 1.2,
+                  if (data.title != null && data.title!.isNotEmpty)
+                    Container(
+                      height: 22,
+                      margin: const EdgeInsets.only(bottom: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TDText(
+                            data.title!,
+                            style: TextStyle(
+                              fontWeight: (activeIndex == index && !readOnly) ? FontWeight.w600 : FontWeight.w400,
+                              color: stepsTitleColor,
+                              fontSize: 14,
+                              height: 1.2,
+                            ),
                           ),
-                        ),
-                        verticalSelect ? Icon(TDIcons.chevron_right, color: TDTheme.of(context).fontGyColor1, size: 16,): Container(),
-                      ],
+                          verticalSelect ? Icon(TDIcons.chevron_right, color: TDTheme.of(context).fontGyColor1, size: 16,) : Container(),
+                        ],
+                      ),
                     ),
-                  ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TDText(
-                        data.content,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          color: TDTheme.of(context).fontGyColor3,
-                          fontSize: 12,
+                      if (data.customContent != null)
+                        data.customContent!
+                      else if (data.content != null && data.content!.isNotEmpty)
+                        TDText(
+                          data.content!,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: TDTheme.of(context).fontGyColor3,
+                            fontSize: 12,
+                          ),
                         ),
-                      ),
-                      customContent,
-                    ]
+                    ],
                   ),
                 ],
               ),
@@ -231,6 +234,5 @@ class TDStepsVerticalItem extends StatelessWidget {
       ),
     );
   }
-
 }
 
