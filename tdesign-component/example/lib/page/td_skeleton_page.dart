@@ -180,14 +180,16 @@ class _TDSkeletonPageState extends State<TDSkeletonPage> {
                       objects: [
                         [
                           TDSkeletonRowColObj(
-                              width: constraints.maxWidth,
+                              width: constraints.maxWidth*0.96,
                               height: constraints.maxWidth,
                               flex: null,
                               style: TDSkeletonRowColObjStyle(
                                   borderRadius: (context) =>
                                       TDTheme.of(context).radiusExtraLarge))
                         ],
-                        const [TDSkeletonRowColObj.text()],
+                        [TDSkeletonRowColObj.text(
+                          width: constraints.maxWidth*0.96,
+                        )],
                         const [
                           TDSkeletonRowColObj.text(),
                           TDSkeletonRowColObj.spacer(flex: 1),
