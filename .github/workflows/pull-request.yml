@@ -1,0 +1,19 @@
+name: MAIN_PULL_REQUEST
+
+on:
+  pull_request:
+    branches: [develop, main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: dev
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter build apk
