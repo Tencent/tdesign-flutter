@@ -28,19 +28,6 @@
 
 ```
 ```
- ### TDDrawerItem
-#### 简介
-抽屉里的列表项
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| title | String? | - | 每列标题 |
-| icon | Widget? | - | 每列图标 |
-| content | Widget? | - | 完全自定义 |
-
-```
-```
  ### TDDrawerWidget
 #### 简介
 抽屉内容组件
@@ -62,3 +49,16 @@
 | backgroundColor | Color? | - | 组件背景颜色 |
 | bordered | bool? | true | 是否显示边框 |
 | isShowLastBordered | bool? | true | 是否显示最后一行分割线 |
+
+```
+```
+ ### TDDrawerItem
+#### 简介
+抽屉里的列表项
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| title | String? | - | 每列标题 |
+| icon | Widget? | - | 每列图标 |
+| content | Widget? | - | 完全自定义 |
