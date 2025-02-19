@@ -16,16 +16,12 @@
 ```
 /// 属性简介（必须）
 ```
-#### 组件demo注释示例：
-```
-/// demo名称（可以为空，为空的时候默认显示组件名称）
-/// demo示例介绍（可以为空）
-```
+
 
 ## 组件库工具使用方法
 ### 初始化工具调用命令
 ```
-dart tools/smart_cli/bin/main.dart generate
+./bin/demo_tool generate
     --file                相对ui_component目录的组件文件路径
     --folder              相对ui_component目录的组件文件夹路径
     --name                组件名，多个组件名之间用英文,分割
@@ -88,4 +84,4 @@ dart tools/smart_cli/bin/main.dart generate
 其中，`group`参数需与`exampleCodeGroup`参数一致，为直接的字符串赋值，不能是变量引用或者字符串拼接。
 
 ## Flutter AOP
-请设置`flutter_aop.sh`的`flutterDir`和`exampleDir`,运行后会将flutter SDK 切换至3.10.0版本，并支持AOP能力。
+提交pr后,将会触发流水线自动打包apk,流水线配置了AOP能力
