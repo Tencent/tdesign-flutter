@@ -10,7 +10,7 @@ TDesign Flutter组件示例应用
 <br/>
 Android请扫码下载预览 ↓
 <br/>
-<img width="260" src="/flutter/assets/qrcode/td_apk_qr_0_1_8.png" />
+<img width="260" src="/flutter/assets/qrcode/td_apk_qrcode.png" />
 <br/>
 iOS请运行项目预览 ↓
 <br/>
