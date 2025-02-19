@@ -5,10 +5,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Tencent/tdesign-flutter/blob/mainLICENSE">
+  <a href="https://github.com/Tencent/tdesign-flutter/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/tencent/tdesign-flutter" alt="License">
   </a>
-  <a href="https://pub.dev/packages/tdesign_flutter/license">
+  <a href="https://pub.dev/packages/tdesign_flutter">
     <img src="https://img.shields.io/pub/v/tdesign_flutter" alt="Version">
   </a>
   <a href="https://pub.dev/packages/tdesign_flutter/score">
@@ -75,7 +75,7 @@ Icon(TDIcons.activity)
 - 桌面端 Vue 3.X 版本实现：[tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next)
 - 桌面端 React 实现：[tdesign-react](https://github.com/Tencent/tdesign-react)
 - 手机端 Vue 3.X 版本实现：[tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)
-- 手机端 React 实现：[[tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react)
+- 手机端 React 实现：[tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react)
 - 移动端小程序实现：[tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)
 
 # 致谢
@@ -93,7 +93,7 @@ Contributing is welcome. Read [guidelines for contributing](CONTRIBUTING.md) bef
 
 # 反馈
 
-有任何问题，建议通过 [Github issues](https://github.com/Tencent/tdesign-vue-next/issues) 反馈或扫码加入用户微信群。
+有任何问题，建议通过 [Github issues](https://github.com/Tencent/tdesign-flutter/issues) 反馈或扫码加入用户微信群。
 
 <img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/components/src/images/groups/vue3-group.png" width="200" />
 
