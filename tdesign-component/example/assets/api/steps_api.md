@@ -4,8 +4,8 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| title | String | - | 标题 |
-| content | String | - | 内容 |
+| title | String? | - | 标题 |
+| content | String? | - | 内容 |
 | successIcon | IconData? | - | 成功图标 |
 | errorIcon | IconData? | - | 失败图标 |
 | customContent | Widget? | - | 自定义内容 |
