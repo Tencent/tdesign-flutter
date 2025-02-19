@@ -6,11 +6,13 @@ body:
     attributes:
       value: |
         # 欢迎你的参与
-        tdesign-flutter 的 Issue 列表接受 bug 报告或是新功能请求。也可加入官方社区：<img width="80px" src="https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/feedback.png" />
-
+        tdesign-flutter 的 Issue 列表接受 bug 报告或是新功能请求。也可加入官方社区：
+        
+        <img width="200px" src="https://tdesign.tencent.com/flutter/assets/qrcode/feedback.png" />
+        
         在发布一个 Issue 前，请确保：
-        - 在 [更新日志](https://tdesign.tencent.com/flutter/changelog) 和 [Issue列表](https://github.com/Tencent/tdesign-flutter/issues) 中搜索过你的问题。（你的问题可能已有人提出，也可能已在最新版本中被修正）
-        - 如果你发现一个已经关闭的旧 Issue 在最新版本中仍然存在，不要在旧 Issue 下面留言，请建一个新的 issue。
+          - 在 [常见问题](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-site/FAQ.md)、[更新日志](https://tdesign.tencent.com/flutter/changelog) 和 [Issue列表](https://github.com/Tencent/tdesign-flutter/issues) 中搜索过你的问题。（你的问题可能已有人提出，也可能已在最新版本中被修正）
+          - 如果你发现一个已经关闭的旧 Issue 在最新版本中仍然存在，不要在旧 Issue 下面留言，请建一个新的 issue。
 
   - type: textarea
     id: functionContent
