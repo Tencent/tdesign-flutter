@@ -6,9 +6,17 @@ spline: explain
 
 ## 1.项目地址
 https://github.com/Tencent/tdesign-flutter
-组件项目：tdesign-component
-官网项目：tdesign-site
 
+目录结构:
+```text
+tdesign-component/
+├── demo_tool       // API和演示代码工具
+├── examples        // 组件使用示例
+├── lib             // 组件库
+└── tests           // 组件测试
+
+tdesign-site/       // tdesign flutter站点
+```
 ## 2.如何运行
 2.1 Flutter基础知识
 - Flutter基础介绍：[https://book.flutterchina.club/chapter1/flutter_intro.html](https://book.flutterchina.club/chapter1/flutter_intro.html)
@@ -18,6 +26,7 @@ https://github.com/Tencent/tdesign-flutter
 
 ### 2.2 开发环境要求
 flutter sdk 版本：3.16.9
+
 （注: TD需要支持3.16.9~最新稳定版本，因此最好再3.16.9版本开发完成后，使用最新稳定版本确认能否正常运行）
 
 ### 2.3 克隆项目
@@ -98,7 +107,9 @@ npm run site:dev
 - 标题格式：`组件类名`: 修改描述（示例：`TDUpload`: 新增Upload组件；`TDBottomTabBar`: 修复iconText模式，底部溢出2.5像素）
 - 勾选规则：
   > 1.只要有新增参数，就勾选”新特性提交“
+  > 
   > 2.只修改内部bug，未新增参数，才勾选”日常 bug 修复“
+  > 
   > 3.其他选项视具体改动判断
 - ”相关issue“处带上修复的issue链接
 - 其他内容视情况可选填
@@ -125,6 +136,7 @@ npm run site:dev
 #### 5.3.2 新增组件：
 - tdesign-site/site/site.config.mjs
   > 菜单栏是否放开了注释？如果没有被注释组件，则参考其他组件添加。
+  > 
   > name与tdesign-component/example/lib/config.dart的ExamplePageModel的name参数是否一致
 <br/>
 <img width="260" src="/flutter/assets/contributing_component_name.png" />
