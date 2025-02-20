@@ -119,13 +119,12 @@ class TDTablePage extends StatelessWidget {
         TDTableCol(
           title: '标题',
           colKey: 'title4',
-          cellBuilder: (BuildContext context) {
+          cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TDText(
                   '修改',
-                  forceVerticalCenter: true,
                   style: TextStyle(
                     color: TDTheme.of(context).brandNormalColor,
                     fontSize: 14,
@@ -134,7 +133,6 @@ class TDTablePage extends StatelessWidget {
                 ),
                 TDText(
                   '通过',
-                  forceVerticalCenter: true,
                   style: TextStyle(
                     color: TDTheme.of(context).brandNormalColor,
                     fontSize: 14,
@@ -160,7 +158,7 @@ class TDTablePage extends StatelessWidget {
         TDTableCol(
           title: '标题',
           colKey: 'title4',
-          cellBuilder: (BuildContext context) {
+          cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -199,7 +197,7 @@ class TDTablePage extends StatelessWidget {
           title: '标题',
           colKey: 'title4',
           fixed: TDTableColFixed.right,
-          cellBuilder: (BuildContext context) {
+          cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -292,7 +290,7 @@ class TDTablePage extends StatelessWidget {
           title: '标题',
           colKey: 'title4',
           fixed: TDTableColFixed.right,
-          cellBuilder: (BuildContext context) {
+          cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
