@@ -1,5 +1,17 @@
 ## API
-### TDTabBar
+### TDTabBarView
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key |  | - |  |
+| children | List<Widget> | - | 子widget列表 |
+| controller | TabController? | - | 控制器 |
+| isSlideSwitch | bool | false | 是否可以滑动切换 |
+
+```
+```
+ ### TDTabBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -31,18 +43,6 @@
 | selectedBgColor | Color? | - | 被选中背景色，只有outlineType为capsule时有效 |
 | unSelectedBgColor | Color? | - | 未选中背景色，只有outlineType为capsule时有效 |
 | tabAlignment |  | - |  |
-
-```
-```
- ### TDTabBarView
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| children | List<Widget> | - | 子widget列表 |
-| controller | TabController? | - | 控制器 |
-| isSlideSwitch | bool | false | 是否可以滑动切换 |
 
 ```
 ```
