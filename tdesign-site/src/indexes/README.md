@@ -232,22 +232,6 @@ Widget _buildOther(BuildContext context) {
 
 ```
 ```
- ### TDIndexesList
-#### 简介
-索引
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| indexList | List<String> | - | 索引字符列表。不传默认 A-Z |
-| indexListMaxHeight | double | 0.8 | 索引列表最大高度（父容器高度的百分比，默认0.8） |
-| activeIndex | ValueNotifier<String> | - | 选中索引 |
-| onSelect | void Function(String newIndex, String oldIndex) | - | 点击侧边栏时触发事件 |
-| builderIndex | Widget Function(BuildContext context, String index, bool isActive)? | - | 索引文本自定义构建，包括索引激活左侧提示 |
-
-```
-```
  ### TDIndexesAnchor
 #### 简介
 索引锚点
@@ -261,6 +245,22 @@ Widget _buildOther(BuildContext context) {
 | capsuleTheme | bool | - | 是否为胶囊式样式 |
 | builderAnchor | Widget? Function(BuildContext context, String index, bool isPinnedToTop)? | - | 索引锚点构建 |
 | activeIndex | ValueNotifier<String> | - | 选中索引 |
+
+```
+```
+ ### TDIndexesList
+#### 简介
+索引
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key |  | - |  |
+| indexList | List<String> | - | 索引字符列表。不传默认 A-Z |
+| indexListMaxHeight | double | 0.8 | 索引列表最大高度（父容器高度的百分比，默认0.8） |
+| activeIndex | ValueNotifier<String> | - | 选中索引 |
+| onSelect | void Function(String newIndex, String oldIndex) | - | 点击侧边栏时触发事件 |
+| builderIndex | Widget Function(BuildContext context, String index, bool isActive)? | - | 索引文本自定义构建，包括索引激活左侧提示 |
 
 
   
