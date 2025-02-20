@@ -18,7 +18,7 @@ tdesign-component/
 tdesign-site/       // tdesign flutter站点
 ```
 ## 2.如何运行
-2.1 Flutter基础知识
+### 2.1 Flutter基础知识
 - Flutter基础介绍：[https://book.flutterchina.club/chapter1/flutter_intro.html](https://book.flutterchina.club/chapter1/flutter_intro.html)
 - Dart语言介绍：[https://book.flutterchina.club/chapter1/dart.html](https://book.flutterchina.club/chapter1/dart.html)
 - 搭建Flutter开发环境：[https://book.flutterchina.club/chapter1/install_flutter.html](https://book.flutterchina.club/chapter1/install_flutter.html)
