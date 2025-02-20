@@ -126,7 +126,7 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
         }, colorMap: {
           'brandNormalColor': Colors.red
         }),
-        // 不能直接在此处使用contxt，这里虽然被包裹在TGTheme中，但是context未更新，因此阿不到最新数据
+        // 不能直接在此处使用context，这里虽然被包裹在TGTheme中，但是context未更新，因此阿不到最新数据
         child: const TestWidget());
 
     // /// 测试控件
