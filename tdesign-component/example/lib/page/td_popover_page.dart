@@ -497,7 +497,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
         child: LayoutBuilder(
             builder: (_, constraints) {
               return TDButton(
-                  text: '底部右',
+                  text: '底部左',
                   type: TDButtonType.outline,
                   theme: TDButtonTheme.primary,
                   onTap: () {
