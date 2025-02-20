@@ -741,30 +741,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDButtonStyle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| frameColor | Color? | - | 边框颜色 |
-| textColor | Color? | - | 文字颜色 |
-| frameWidth | double? | - | 边框宽度 |
-| radius | BorderRadiusGeometry? | - | 自定义圆角 |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TDButtonStyle.generateFillStyleByTheme  | 生成不同主题的填充按钮样式 |
-| TDButtonStyle.generateOutlineStyleByTheme  | 生成不同主题的描边按钮样式 |
-| TDButtonStyle.generateTextStyleByTheme  | 生成不同主题的文本按钮样式 |
-| TDButtonStyle.generateGhostStyleByTheme  | 生成不同主题的幽灵按钮样式 |
-
-```
-```
- ### TDButton
+### TDButton
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -792,6 +769,29 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onLongPress | TDButtonEvent? | - | 长按事件 |
 | margin | EdgeInsetsGeometry? | - | 自定义margin |
 | padding | EdgeInsetsGeometry? | - | 自定义padding |
+
+```
+```
+ ### TDButtonStyle
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景颜色 |
+| frameColor | Color? | - | 边框颜色 |
+| textColor | Color? | - | 文字颜色 |
+| frameWidth | double? | - | 边框宽度 |
+| radius | BorderRadiusGeometry? | - | 自定义圆角 |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TDButtonStyle.generateFillStyleByTheme  | 生成不同主题的填充按钮样式 |
+| TDButtonStyle.generateOutlineStyleByTheme  | 生成不同主题的描边按钮样式 |
+| TDButtonStyle.generateTextStyleByTheme  | 生成不同主题的文本按钮样式 |
+| TDButtonStyle.generateGhostStyleByTheme  | 生成不同主题的幽灵按钮样式 |
 
 
   
