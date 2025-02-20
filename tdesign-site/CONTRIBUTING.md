@@ -129,7 +129,7 @@ npm run site:dev
 - 检测组件与https://tdesign.tencent.com/mobile-vue/overview 是否有含义相同但命名不同的组件，如果有，尽量保持命名一致。
 - tdesign-component/demo_tool/all_build.sh中的名字与tdesign-component/example/lib/config.dart的名字需保持一致
 <br/>
-<img width="640" src="https://tdesign.tencent.com/flutter/assets/contributing_api_name.png" />
+<img width="720" src="https://tdesign.tencent.com/flutter/assets/contributing_api_name.png" />
 <br/>
 
 
@@ -140,18 +140,18 @@ npm run site:dev
   > name与tdesign-component/example/lib/config.dart的ExamplePageModel的name参数是否一致
 
 <br/>
-<img width="640" src="https://tdesign.tencent.com/flutter/assets/contributing_component_name.png" />
+<img width="720" src="https://tdesign.tencent.com/flutter/assets/contributing_component_name.png" />
 <br/>
 - tdesign-site/site/docs/overview.md：检查组件预览是否已添加、分组组件数量是否正确
 <br/>
-<img width="640" src="https://tdesign.tencent.com/flutter/assets/contributing_overview.png" />
+<img width="720" src="https://tdesign.tencent.com/flutter/assets/contributing_overview.png" />
 <br/>
 
 
 ### 5.4 demo自测
 提交pr后，会触发流水线自动打包。打包完成会添加评论如下：
 <br/>
-<img width="640" src="https://tdesign.tencent.com/flutter/assets/contributing_apk.png" />
+<img width="720" src="https://tdesign.tencent.com/flutter/assets/contributing_apk.png" />
 <br/>
 点击”体验apk“后面链接，即可跳转打包完成的apk下载地址，可以安装自测。
 注：该demo是基于Flutter 3.16.9打包的。请留意最新Flutter版本的包是否打包成功；如果评论打包失败，请检测失败原因。
