@@ -89,3 +89,4 @@ export 'src/theme/td_shadows.dart';
 export 'src/theme/td_spacers.dart';
 export 'src/theme/td_theme.dart';
 export 'src/util/platform_util.dart';
+export 'src/util/theme.dart';
