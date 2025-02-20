@@ -5,6 +5,7 @@ import '../../../tdesign_flutter.dart';
 /// 单元格组件样式
 class TDCellStyle {
   TDCellStyle({
+    this.context,
     this.leftIconColor,
     this.rightIconColor,
     this.titleStyle,
@@ -15,11 +16,20 @@ class TDCellStyle {
     this.borderedColor,
     this.groupBorderedColor,
     this.backgroundColor,
+    this.clickBackgroundColor,
+    this.groupTitleStyle,
     this.padding,
     this.cardBorderRadius,
     this.cardPadding,
     this.titlePadding,
-  });
+  }) {
+    if (context != null) {
+      defaultStyle(context!);
+    }
+  }
+
+  /// 传递context，会生成默认样式
+  BuildContext? context;
 
   /// 左侧图标颜色
   Color? leftIconColor;
@@ -71,6 +81,10 @@ class TDCellStyle {
 
   /// 生成单元格默认样式
   TDCellStyle.cellStyle(BuildContext context) {
+    defaultStyle(context);
+  }
+
+  defaultStyle(BuildContext context) {
     backgroundColor = Colors.white;
     clickBackgroundColor = TDTheme.of(context).grayColor1;
     leftIconColor = TDTheme.of(context).brandColor7;

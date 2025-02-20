@@ -141,7 +141,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDMultiPicker
+### TDPicker
+
+#### 静态方法
+
+| 名称 | 返回类型 | 参数 | 说明 |
+| --- | --- | --- | --- |
+| showDatePicker |  |   required null context,  required String title,  required DatePickerCallback? onConfirm,  DatePickerCallback? onCancel,  bool useYear,  bool useMonth,  bool useDay,  bool useHour,  bool useMinute,  bool useSecond,  bool useWeekDay,  Color? barrierColor,  List<int> dateStart,  List<int>? dateEnd,  List<int>? initialDate,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  Color? titleDividerColor,  Duration duration,  double pickerHeight,  bool isTimeUnit,   Function(int wheelIndex, int index)? onSelectedItemChanged,  int pickerItemCount, | 显示时间选择器 |
+| showMultiPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List<List<String>> data,  List<int>? initialIndexes,  Duration duration,  Color? barrierColor,  double pickerHeight,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  Color? titleDividerColor,  double? topPadding,  int pickerItemCount, | 显示多级选择器 |
+| showMultiLinkedPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required Map data,  required int columnNum,  required List initialData,  Duration duration,  Color? barrierColor,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double pickerHeight,  Color? titleDividerColor,  double? topPadding,  int pickerItemCount, | 显示多级联动选择器 |
+
+```
+```
+ ### TDMultiPicker
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -168,6 +180,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | padding | EdgeInsets? | - | 适配padding |
 | itemDistanceCalculator | ItemDistanceCalculator? | - | 不同距离自选项计算策略 |
 | customSelectWidget | Widget? | - | 自定义选择框样式 |
+| itemBuilder | ItemBuilderType? | - | 自定义item构建 |
 | key |  | - |  |
 
 ```
@@ -200,6 +213,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | topRadius | double? | - | 顶部圆角 |
 | padding | EdgeInsets? | - | 适配padding |
 | itemDistanceCalculator | ItemDistanceCalculator? | - | 不同距离自选项计算策略 |
+| itemBuilder | ItemBuilderType? | - | 自定义item构建 |
 | key |  | - |  |
 
 ```
@@ -212,18 +226,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | data | Map | - | 总的数据 |
 | columnNum | int | - | 总列数 |
 | initialData |  | - |  |
-
-```
-```
- ### TDPicker
-
-#### 静态方法
-
-| 名称 | 返回类型 | 参数 | 说明 |
-| --- | --- | --- | --- |
-| showDatePicker |  |   required null context,  required String title,  required DatePickerCallback? onConfirm,  DatePickerCallback? onCancel,  bool useYear,  bool useMonth,  bool useDay,  bool useHour,  bool useMinute,  bool useSecond,  bool useWeekDay,  Color? barrierColor,  List<int> dateStart,  List<int>? dateEnd,  List<int>? initialDate,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  Color? titleDividerColor,  Duration duration,  double pickerHeight,  bool isTimeUnit,   Function(int wheelIndex, int index)? onSelectedItemChanged,  int pickerItemCount, | 显示时间选择器 |
-| showMultiPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List<List<String>> data,  List<int>? initialIndexes,  Duration duration,  Color? barrierColor,  double pickerHeight,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  Color? titleDividerColor,  double? topPadding,  int pickerItemCount, | 显示多级选择器 |
-| showMultiLinkedPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required Map data,  required int columnNum,  required List initialData,  Duration duration,  Color? barrierColor,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double pickerHeight,  Color? titleDividerColor,  double? topPadding,  int pickerItemCount, | 显示多级联动选择器 |
 
 
   
