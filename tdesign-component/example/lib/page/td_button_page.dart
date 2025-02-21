@@ -396,6 +396,12 @@ class _TDButtonPageState extends State<TDButtonPage> {
                     },
                   );
                 }),
+            ExampleItem(
+                ignoreCode: true,
+                desc: '图标在文字右侧',
+                builder: (context) {
+                  return CodeWrapper(builder: _buildRightIconButton);
+                }),
           ],
         ));
   }
@@ -794,6 +800,46 @@ class _TDButtonPageState extends State<TDButtonPage> {
         height: 24,
         width: 24,
         color: Colors.red,
+      ),
+    );
+  }
+
+  @Demo(group: 'button')
+  Widget _buildRightIconButton(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(16),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          TDButton(
+            text: '填充按钮',
+            icon: TDIcons.app,
+            size: TDButtonSize.large,
+            type: TDButtonType.fill,
+            shape: TDButtonShape.rectangle,
+            theme: TDButtonTheme.primary,
+            iconPosition: TDButtonIconPosition.right,
+          ),
+          TDButton(
+            icon: TDIcons.app,
+            size: TDButtonSize.large,
+            type: TDButtonType.fill,
+            shape: TDButtonShape.rectangle,
+            theme: TDButtonTheme.primary,
+            iconPosition: TDButtonIconPosition.right,
+          ),
+          TDButton(
+            text: '间距20',
+            icon: TDIcons.app,
+            size: TDButtonSize.large,
+            type: TDButtonType.fill,
+            shape: TDButtonShape.rectangle,
+            theme: TDButtonTheme.primary,
+            iconPosition: TDButtonIconPosition.right,
+            iconTextSpacing: 20,
+          )
+        ],
       ),
     );
   }
