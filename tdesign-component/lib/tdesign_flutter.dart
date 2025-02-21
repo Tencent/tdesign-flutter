@@ -1,3 +1,4 @@
+export 'src/components/action_sheet/td_action_sheet.dart';
 export 'src/components/avatar/td_avatar.dart';
 export 'src/components/backtop/td_backtop.dart';
 export 'src/components/badge/td_badge.dart';

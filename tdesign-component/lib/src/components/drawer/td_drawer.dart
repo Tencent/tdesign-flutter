@@ -17,11 +17,11 @@ enum TDDrawerPlacement { left, right }
 class TDDrawer {
   TDDrawer(
     this.context, {
-    this.closeOnOverlayClick,
+    this.closeOnOverlayClick = true,
     this.footer,
     this.items,
-    this.placement,
-    this.showOverlay,
+    this.placement = TDDrawerPlacement.right,
+    this.showOverlay = true,
     this.title,
     this.titleWidget,
     this.visible,
@@ -105,9 +105,7 @@ class TDDrawer {
       return; // 如果抽屉已经显示了，就不要再显示
     }
     _drawerRoute = TDSlidePopupRoute(
-      slideTransitionFrom: (placement ?? TDDrawerPlacement.right) == TDDrawerPlacement.right
-          ? SlideTransitionFrom.right
-          : SlideTransitionFrom.left,
+      slideTransitionFrom: placement == TDDrawerPlacement.right ? SlideTransitionFrom.right : SlideTransitionFrom.left,
       isDismissible: (showOverlay ?? true) ? (closeOnOverlayClick ?? true) : false,
       modalBarrierColor: (showOverlay ?? true) ? null : Colors.transparent,
       modalTop: drawerTop,
@@ -150,4 +148,3 @@ class TDDrawer {
     onClose?.call();
   }
 }
-

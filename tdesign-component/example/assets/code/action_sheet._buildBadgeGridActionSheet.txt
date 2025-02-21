@@ -7,19 +7,16 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
     theme: TDButtonTheme.primary,
     size: TDButtonSize.large,
     onTap: () {
-      TDActionSheet(
-        context,
-        visible: true,
-        theme: TDActionSheetTheme.grid,
-        count: 8,
-        items: _gridItems
-            .map((e) => TDActionSheetItem(
-                  label: e.label,
-                  icon: e.icon,
-                  badge: TDBadge(TDBadgeType.redPoint),
-                ))
-            .toList(),
-      );
+      TDActionSheet.showGridActionSheet(context, items: [
+        TDActionSheetItem(label: '微信', icon: Image.asset('assets/img/td_action_sheet_1.png'), badge: const TDBadge(TDBadgeType.message, count: 'NEW')),
+        TDActionSheetItem(label: '朋友圈', icon: Image.asset('assets/img/td_action_sheet_2.png')),
+        TDActionSheetItem(label: 'QQ', icon: Image.asset('assets/img/td_action_sheet_3.png')),
+        TDActionSheetItem(label: '企业微信', icon: Image.asset('assets/img/td_action_sheet_4.png')),
+        TDActionSheetItem(label: '收藏', icon: const IconWithBackground(icon: TDIcons.star), badge: const TDBadge(TDBadgeType.redPoint)),
+        TDActionSheetItem(label: '刷新', icon: const IconWithBackground(icon: TDIcons.refresh)),
+        TDActionSheetItem(label: '下载', icon: const IconWithBackground(icon: TDIcons.download), badge: const TDBadge(TDBadgeType.message, count: '8')),
+        TDActionSheetItem(label: '复制', icon: const IconWithBackground(icon: TDIcons.queue)),
+      ]);
     },
   );
 }
