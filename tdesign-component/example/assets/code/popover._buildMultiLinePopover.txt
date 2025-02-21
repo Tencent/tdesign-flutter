@@ -6,18 +6,20 @@
       child: LayoutBuilder(
         builder: (_, constraints) {
           return TDButton(
+            size: TDButtonSize.large,
             text: '多行内容',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 width: 200,
                 content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
               );
-            }
+            },
           );
-        }
-      )
+        },
+      ),
     );
   }
