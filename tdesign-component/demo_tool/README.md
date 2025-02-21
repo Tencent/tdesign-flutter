@@ -1,4 +1,4 @@
-# demo_tool
+# api_tool
 # 基于smart_cli实现的组件库生成工具
 
 ## 组件注释规范
@@ -21,7 +21,7 @@
 ## 组件库工具使用方法
 ### 初始化工具调用命令
 ```
-./bin/demo_tool generate
+./bin/api_tool_xxx generate
     --file                相对ui_component目录的组件文件路径
     --folder              相对ui_component目录的组件文件夹路径
     --name                组件名，多个组件名之间用英文,分割
@@ -39,16 +39,16 @@
 1、初始化一个组件文件中的一个组件示例，没有--folder-name的时候，默认文件夹名称是第一个name的下划线表示，示例：
 
 ```
-./demo_tool/bin/demo_tool generate --file lib/src/components/tags/td_tag.dart --name TDTag --folder-name tag --only-api
+./demo_tool/bin/api_tool_xxx generate --file lib/src/components/tags/td_tag.dart --name TDTag --folder-name tag --only-api
 ```
 
 2、 把一个文件中的多个组件合并生成一份示例数据（api说明生成在一个文件中），没有--folder-name的时候，默认文件夹名称是第一个name的下划线表示
 ```
-./demo_tool/bin/demo_tool generate --file lib/checkbox/custom_check_box.dart --name SquareCheckbox,TECheckBox --folder-name checkbox2
+./demo_tool/bin/api_tool_xxx generate --file lib/checkbox/custom_check_box.dart --name SquareCheckbox,TECheckBox --folder-name checkbox2
 ```
 3、 把一个文件夹中的多个组件合并生成一份示例数据（api说明生成在一个文件中），没有--folder-name的时候，默认文件夹名称是第一个name的下划线表示
 ```
-./demo_tool/bin/demo_tool generate --folder lib/setting --name SettingItemWidget,SettingTowRowCellWidget,SettingLeftTextCellWidget,SettingCheckBoxCellWidget,SettingTowTextCellWidget,SettingTowLineTextCellWidget,SettingGroupWidget,SettingGroupTextWidget --folder-name setting
+./demo_tool/bin/api_tool_xxx generate --folder lib/setting --name SettingItemWidget,SettingTowRowCellWidget,SettingLeftTextCellWidget,SettingCheckBoxCellWidget,SettingTowTextCellWidget,SettingTowLineTextCellWidget,SettingGroupWidget,SettingGroupTextWidget --folder-name setting
 ```
 
 如果想只更新API文档，那么在上述初始化的命令之后增加参数 `--only-api` 即可

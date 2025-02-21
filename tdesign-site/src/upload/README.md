@@ -41,13 +41,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                                   
 
 单选上传(替换)
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _uploadSingleWithReplace(BuildContext context) {
+    return wrapDemoContainer('单选上传(替换)',
+        child: TDUpload(
+          files: files6,
+          width: 60,
+          height: 60,
+          type: TDUploadBoxType.circle,
+          enabledReplaceType: true,
+          onClick: onClick,
+          onCancel: onCancel,
+          onError: print,
+          onValidate: print,
+          onChange: ((files, type) => onValueChanged(files6, files, type)),
+        ));
+  }</pre>
 
 </td-code-block>
-                
+                                  
 
 多选上传
             
