@@ -275,19 +275,19 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
     var margin = EdgeInsets.only(top: widget.arrowSize);
     switch (widget.placement) {
       case TDPopoverPlacement.topLeft:
-       margin = EdgeInsets.only(top: widget.arrowSize, left: widget.arrowSize + 8);
+       margin = EdgeInsets.only(top: widget.arrowSize, left: widget.arrowSize + 12);
        break;
       case TDPopoverPlacement.topRight:
-       margin = EdgeInsets.only(top: widget.arrowSize, right: widget.arrowSize + 8);
+       margin = EdgeInsets.only(top: widget.arrowSize, right: widget.arrowSize + 12);
        break;
       case TDPopoverPlacement.bottomLeft:
-       margin = EdgeInsets.only(bottom: widget.arrowSize, left: widget.arrowSize + 8);
+       margin = EdgeInsets.only(bottom: widget.arrowSize, left: widget.arrowSize + 12);
        break;
       case TDPopoverPlacement.bottom:
        margin = EdgeInsets.only(bottom: widget.arrowSize);
        break;
       case TDPopoverPlacement.bottomRight:
-       margin = EdgeInsets.only(bottom: widget.arrowSize, right: widget.arrowSize + 8);
+       margin = EdgeInsets.only(bottom: widget.arrowSize, right: widget.arrowSize + 12);
        break;
       case TDPopoverPlacement.rightTop:
         margin = EdgeInsets.only(top: widget.arrowSize + 6, right: widget.arrowSize);
