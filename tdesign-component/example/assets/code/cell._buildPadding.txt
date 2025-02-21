@@ -1,11 +1,18 @@
 
 Widget _buildPadding(BuildContext context) {
-  var style = TDCellStyle.cellStyle(context);
+  var style = TDCellStyle(context: context);
   style.padding = const EdgeInsets.all(30);
   return TDCellGroup(
     theme: TDCellGroupTheme.cardTheme,
     cells: [
-      TDCell(arrow: true, title: 'padding-all-30', style: style,),
+      TDCell(
+        arrow: true,
+        title: 'padding-all-30',
+        style: style,
+        onClick: (cell) {
+          print('padding-all-30');
+        },
+      ),
     ],
   );
 }
