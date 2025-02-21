@@ -77,6 +77,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
           ),
           ExampleItem(
             desc: '顶部弹出气泡',
+            ignoreCode: true,
             builder: (context) {
               return Container(
                 alignment: Alignment.topLeft,
@@ -103,6 +104,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
           ),
           ExampleItem(
             desc: '底部弹出气泡',
+            ignoreCode: true,
             builder: (context) {
               return Container(
                 alignment: Alignment.topLeft,
@@ -129,6 +131,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
           ),
           ExampleItem(
             desc: '右侧弹出气泡',
+            ignoreCode: true,
             builder: (context) {
               return Container(
                 alignment: Alignment.topLeft,
@@ -157,6 +160,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
           ),
           ExampleItem(
             desc: '左侧弹出气泡',
+            ignoreCode: true,
             builder: (context) {
               return Container(
                 alignment: Alignment.topLeft,
