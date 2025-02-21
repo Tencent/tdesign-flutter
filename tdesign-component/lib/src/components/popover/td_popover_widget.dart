@@ -260,11 +260,11 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
       case TDPopoverPlacement.rightTop:
       case TDPopoverPlacement.right:
       case TDPopoverPlacement.rightBottom:
-        return dx + widgetWidth + widget.offset;
+        return dx + widgetWidth + widget.offset + 8;
       case TDPopoverPlacement.leftTop:
       case TDPopoverPlacement.left:
       case TDPopoverPlacement.leftBottom:
-        return dx - popoverWidth - widget.arrowSize - widget.offset;
+        return dx - popoverWidth - widget.arrowSize - widget.offset - 8;
       default :
         return dx - (popoverWidth - widgetWidth) / 2;
     }
@@ -275,19 +275,19 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
     var margin = EdgeInsets.only(top: widget.arrowSize);
     switch (widget.placement) {
       case TDPopoverPlacement.topLeft:
-       margin = EdgeInsets.only(top: widget.arrowSize, left: widget.arrowSize + 6);
+       margin = EdgeInsets.only(top: widget.arrowSize, left: widget.arrowSize + 8);
        break;
       case TDPopoverPlacement.topRight:
-       margin = EdgeInsets.only(top: widget.arrowSize, right: widget.arrowSize + 6);
+       margin = EdgeInsets.only(top: widget.arrowSize, right: widget.arrowSize + 8);
        break;
       case TDPopoverPlacement.bottomLeft:
-       margin = EdgeInsets.only(bottom: widget.arrowSize, left: widget.arrowSize + 6);
+       margin = EdgeInsets.only(bottom: widget.arrowSize, left: widget.arrowSize + 8);
        break;
       case TDPopoverPlacement.bottom:
        margin = EdgeInsets.only(bottom: widget.arrowSize);
        break;
       case TDPopoverPlacement.bottomRight:
-       margin = EdgeInsets.only(bottom: widget.arrowSize, right: widget.arrowSize + 6);
+       margin = EdgeInsets.only(bottom: widget.arrowSize, right: widget.arrowSize + 8);
        break;
       case TDPopoverPlacement.rightTop:
         margin = EdgeInsets.only(top: widget.arrowSize + 6, right: widget.arrowSize);
@@ -352,8 +352,10 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             color: _backgroundColor,
-            boxShadow: [
-              BoxShadow(color: TDTheme.of(context).grayColor7, offset: const Offset(0, 2), blurRadius: 10)
+            boxShadow: const [
+              BoxShadow(color: Color(0x0d000000), offset: Offset(0, 6), blurRadius: 30, spreadRadius: 5),
+              BoxShadow(color: Color(0x0a000000), offset: Offset(0, 16), blurRadius: 24, spreadRadius: 2),
+              BoxShadow(color: Color(0x14000000), offset: Offset(0, 8), blurRadius: 10, spreadRadius: -5),
             ]
         ),
         child: widget.contentWidget != null ? widget.contentWidget! : TDText(
@@ -388,7 +390,9 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
         children = [
           Visibility(
             visible: widget.showArrow ?? false,
-            child: _getArrowWidget(),
+            child: Container(
+              child: _getArrowWidget(),
+            ),
           ),
           Container(
             padding: widget.padding ?? const EdgeInsets.all(12),
