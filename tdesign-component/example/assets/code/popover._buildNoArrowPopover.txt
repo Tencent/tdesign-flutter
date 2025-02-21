@@ -3,11 +3,14 @@
     return LayoutBuilder(
       builder: (_, constrains) {
         return TDButton(
+          size: TDButtonSize.large,
           text: '不带箭头',
           type: TDButtonType.outline,
           theme: TDButtonTheme.primary,
+          textStyle: const TextStyle(height: 1),
           onTap: () {
-            TDPopover.showPopover(context: _, content: '弹出气泡内容', showArrow: false);
+            TDPopover.showPopover(
+                context: _, content: '弹出气泡内容', showArrow: false);
           },
         );
       },
