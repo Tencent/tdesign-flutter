@@ -14,39 +14,28 @@ enum TDActionSheetTheme { list, grid, group }
 
 enum TDActionSheetAlign { center, left, right }
 
-const constCancelText = '取消';
-const constCount = 8;
-const constRows = 2;
-const constItemHeight = 96.0;
-const constItemMinWidth = 80.0;
-const constShowCancel = true;
-const constShowPagination = false;
-const constScrollable = false;
-const constShowOverlay = true;
-const constCloseOnOverlayClick = true;
-
 /// 动作面板
 class TDActionSheet {
   TDActionSheet(
     this.context, {
     this.align = TDActionSheetAlign.center,
-    this.cancelText = constCancelText,
-    this.count = constCount,
-    this.rows = constRows,
-    this.itemHeight = constItemHeight,
-    this.itemMinWidth = constItemMinWidth,
+    this.cancelText = '取消',
+    this.count = 8,
+    this.rows = 2,
+    this.itemHeight = 96.0,
+    this.itemMinWidth = 80.0,
     this.description,
     required this.items,
-    this.showCancel = constShowCancel,
-    this.showPagination = constShowPagination,
-    this.scrollable = constScrollable,
+    this.showCancel = true,
+    this.showPagination = false,
+    this.scrollable = false,
     this.theme = TDActionSheetTheme.list,
     this.visible = false,
     this.onCancel,
     this.onClose,
     this.onSelected,
-    this.showOverlay = constShowOverlay,
-    this.closeOnOverlayClick = constCloseOnOverlayClick,
+    this.showOverlay = true,
+    this.closeOnOverlayClick = true,
   }) {
     if (visible) {
       show();
@@ -125,12 +114,12 @@ class TDActionSheet {
     BuildContext context, {
     required List<TDActionSheetItem> items,
     TDActionSheetAlign align = TDActionSheetAlign.center,
-    String cancelText = constCancelText,
-    bool showCancel = constShowCancel,
+    String cancelText = '取消',
+    bool showCancel = true,
     VoidCallback? onCancel,
     TDActionSheetItemCallback? onSelected,
-    bool showOverlay = constShowOverlay,
-    bool closeOnOverlayClick = constCloseOnOverlayClick,
+    bool showOverlay = true,
+    bool closeOnOverlayClick = true,
     VoidCallback? onClose,
   }) {
     _createRoute(
@@ -153,17 +142,17 @@ class TDActionSheet {
     BuildContext context, {
     required List<TDActionSheetItem> items,
     TDActionSheetAlign align = TDActionSheetAlign.center,
-    String cancelText = constCancelText,
-    bool showCancel = constShowCancel,
+    String cancelText = '取消',
+    bool showCancel = true,
     TDActionSheetItemCallback? onSelected,
-    bool showOverlay = constShowOverlay,
-    bool closeOnOverlayClick = constCloseOnOverlayClick,
-    int count = constCount,
-    int rows = constRows,
-    double itemHeight = constItemHeight,
-    double itemMinWidth = constItemMinWidth,
-    bool scrollable = constScrollable,
-    bool showPagination = constShowPagination,
+    bool showOverlay = true,
+    bool closeOnOverlayClick = true,
+    int count = 8,
+    int rows = 2,
+    double itemHeight = 96.0,
+    double itemMinWidth = 80.0,
+    bool scrollable = false,
+    bool showPagination = false,
     VoidCallback? onCancel,
     String? description,
     VoidCallback? onClose,
@@ -195,13 +184,13 @@ class TDActionSheet {
     BuildContext context, {
     required List<TDActionSheetItem> items,
     TDActionSheetAlign align = TDActionSheetAlign.left,
-    String cancelText = constCancelText,
-    bool showCancel = constShowCancel,
+    String cancelText = '取消',
+    bool showCancel = true,
     TDActionSheetItemCallback? onSelected,
-    bool showOverlay = constShowOverlay,
-    bool closeOnOverlayClick = constCloseOnOverlayClick,
-    double itemHeight = constItemHeight,
-    double itemMinWidth = constItemMinWidth,
+    bool showOverlay = true,
+    bool closeOnOverlayClick = true,
+    double itemHeight = 96.0,
+    double itemMinWidth = 80.0,
     VoidCallback? onCancel,
     VoidCallback? onClose,
   }) {
@@ -263,17 +252,17 @@ class TDActionSheet {
     required TDActionSheetTheme theme,
     required List<TDActionSheetItem> items,
     TDActionSheetAlign align = TDActionSheetAlign.center,
-    String cancelText = constCancelText,
-    bool showCancel = constShowCancel,
+    String cancelText = '取消',
+    bool showCancel = true,
     TDActionSheetItemCallback? onSelected,
-    bool showOverlay = constShowOverlay,
-    bool closeOnOverlayClick = constCloseOnOverlayClick,
-    int count = constCount,
-    int rows = constRows,
-    double itemHeight = constItemHeight,
-    double itemMinWidth = constItemMinWidth,
-    bool scrollable = constScrollable,
-    bool showPagination = constShowPagination,
+    bool showOverlay = true,
+    bool closeOnOverlayClick = true,
+    int count = 8,
+    int rows = 2,
+    double itemHeight = 96.0,
+    double itemMinWidth = 80.0,
+    bool scrollable = false,
+    bool showPagination = false,
     VoidCallback? onCancel,
     String? description,
     VoidCallback? onClose,

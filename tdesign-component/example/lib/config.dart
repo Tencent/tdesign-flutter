@@ -213,7 +213,8 @@ Map<String, List<ExamplePageModel>> exampleMap = {
   '反馈': [
     ExamplePageModel(
         text: 'ActionSheet 动作面板',
-        name: 'action_sheet',
+        name: 'action-sheet',
+        pageName: 'action_sheet',
         pageBuilder: _wrapInheritedTheme((context) => const TDActionSheetPage())),
     ExamplePageModel(
         text: 'Dialog 对话框', name: 'dialog', pageBuilder: _wrapInheritedTheme((context) => const TDDialogPage())),
