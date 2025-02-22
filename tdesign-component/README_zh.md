@@ -87,7 +87,8 @@
     MaterialApp(
       title: 'TDesign Flutter Example',
       theme: ThemeData(
-      extensions: [_themeData],
+        extensions: [_themeData]
+      ),
       home: MyHomePage(title: 'TDesign Flutter 组件库'),
     );
 ```
