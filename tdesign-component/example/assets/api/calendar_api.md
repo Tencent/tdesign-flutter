@@ -26,6 +26,23 @@
 
 ```
 ```
+ ### TDCalendarPopup
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | context | 上下文 |
+| top | double? | - | 距离顶部的距离 |
+| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
+| confirmBtn | Widget? | - | 自定义确认按钮 |
+| visible | bool? | - | 默认是否显示日历 |
+| onClose | VoidCallback? | - | 关闭时触发 |
+| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
+| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
+| child | TDCalendar? | - | 日历控件 |
+
+```
+```
  ### TDCalendar
 #### 默认构造方法
 
@@ -56,20 +73,3 @@
 | pickerHeight | double? | 178 | 时间选择器List的视窗高度 |
 | pickerItemCount | int? | 3 | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
 | isTimeUnit | bool? | true | 是否显示时间单位 |
-
-```
-```
- ### TDCalendarPopup
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | context | 上下文 |
-| top | double? | - | 距离顶部的距离 |
-| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
-| confirmBtn | Widget? | - | 自定义确认按钮 |
-| visible | bool? | - | 默认是否显示日历 |
-| onClose | VoidCallback? | - | 关闭时触发 |
-| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
-| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
-| child | TDCalendar? | - | 日历控件 |
