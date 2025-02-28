@@ -207,8 +207,8 @@ class _TDImageState extends State<TDImage> {
             ? (widget.assetUrl == null
                 ? ImageWidget.network(
                     widget.imgUrl,
-                    height: widget.height ?? 72,
-                    width: widget.width ?? 72,
+                    height: widget.height,
+                    width: widget.width,
                     errorWidget: widget.errorWidget,
                     loadingWidget: widget.loadingWidget,
                     fit: widget.fit ?? BoxFit.fitHeight,
@@ -232,8 +232,8 @@ class _TDImageState extends State<TDImage> {
                   )
                 : ImageWidget.asset(
                     widget.assetUrl!,
-                    width: widget.width ?? 72,
-                    height: widget.height ?? 72,
+                    width: widget.width,
+                    height: widget.height,
                     errorWidget: widget.errorWidget,
                     loadingWidget: widget.loadingWidget,
                     fit: widget.fit ?? BoxFit.fitHeight,
@@ -256,8 +256,8 @@ class _TDImageState extends State<TDImage> {
                   ))
             : ImageWidget.file(
                 widget.imageFile,
-                width: widget.width ?? 72,
-                height: widget.height ?? 72,
+                width: widget.width,
+                height: widget.height,
                 fit: widget.fit ?? BoxFit.fitHeight,
                 color: widget.color,
                 frameBuilder: widget.frameBuilder,
@@ -591,8 +591,8 @@ class _TDImageState extends State<TDImage> {
             ? (widget.assetUrl == null
                 ? ImageWidget.network(
                     widget.imgUrl,
-                    height: widget.height ?? 72,
-                    width: widget.width ?? 72,
+                    height: widget.height,
+                    width: widget.width,
                     errorWidget: widget.errorWidget,
                     loadingWidget: widget.loadingWidget,
                     fit: widget.fit ?? BoxFit.fitWidth,
@@ -616,8 +616,8 @@ class _TDImageState extends State<TDImage> {
                   )
                 : ImageWidget.asset(
                     widget.assetUrl!,
-                    width: widget.width ?? 72,
-                    height: widget.height ?? 72,
+                    width: widget.width,
+                    height: widget.height,
                     errorWidget: widget.errorWidget,
                     loadingWidget: widget.loadingWidget,
                     fit: widget.fit ?? BoxFit.fitWidth,
@@ -640,8 +640,8 @@ class _TDImageState extends State<TDImage> {
                   ))
             : ImageWidget.file(
                 widget.imageFile!,
-                width: widget.width ?? 72,
-                height: widget.height ?? 72,
+                width: widget.width,
+                height: widget.height,
                 errorWidget: widget.errorWidget,
                 loadingWidget: widget.loadingWidget,
                 fit: widget.fit ?? BoxFit.fitWidth,
