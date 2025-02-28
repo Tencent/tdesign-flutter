@@ -155,7 +155,8 @@ class _TDProgressPageState extends State<TDProgressPage> {
         progressStatus: TDProgressStatus.warning,
         value: 0.8,
         strokeWidth: 6,
-        progressLabelPosition: TDProgressLabelPosition.right);
+        progressLabelPosition: TDProgressLabelPosition.right,
+    );
   }
 
   @Demo(group: 'progress')
