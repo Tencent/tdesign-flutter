@@ -18,6 +18,13 @@ export default {
           path: '/flutter/develop',
           component: () => import('@/../CONTRIBUTING.md'),
         },
+        {
+          title: '常见问题',
+          name: 'faq',
+          meta: { docType: 'explain' },
+          path: '/flutter/faq',
+          component: () => import('@/../FAQ.md'),
+        },
         // {
         //   title: '谁在用',
         //   name: 'used',
