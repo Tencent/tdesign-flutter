@@ -1,24 +1,24 @@
 
   Widget _buildSquareBadge(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16),
+      padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
           SizedBox(
-            width: 34,
+            width: 48,
             height: 34,
             child: Stack(
               alignment: Alignment.bottomLeft,
-              children: const [
+              children: [
                 Icon(TDIcons.notification),
                 Positioned(
                   child: TDBadge(
                     TDBadgeType.square,
                     border: TDBadgeBorder.small,
-                    count: '8',
+                    count: '16',
                   ),
-                  right: 0,
-                  top: 0,
+                  left: 20,
+                  bottom: 18,
                 )
               ],
             ),
