@@ -113,6 +113,8 @@
 # noticeBar
 ./bin/api_tool_linux generate --folder ../lib/src/components/notice_bar --name TDNoticeBar,TDNoticeBarStyle --folder-name notice-bar --output ../example/assets/api/ --only-api --get-comments
 # overlay
+# popover
+./bin/api_tool_linux generate --folder ../lib/src/components/popover --name TDPopover,TDPopoverWidget --folder-name popover --output ../example/assets/api/ --only-api --get-comments
 # popup
 ./bin/api_tool_linux generate --folder ../lib/src/components/popup --name TDSlidePopupRoute,TDPopupBottomDisplayPanel,TDPopupBottomConfirmPanel,TDPopupCenterPanel --folder-name popup --output ../example/assets/api/ --only-api --get-comments
 # refresh

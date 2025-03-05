@@ -9,7 +9,7 @@
           title: '标题',
           colKey: 'title4',
           fixed: TDTableColFixed.right,
-          cellBuilder: (BuildContext context) {
+          cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
