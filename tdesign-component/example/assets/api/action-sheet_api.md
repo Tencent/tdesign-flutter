@@ -25,15 +25,16 @@
 | onSelected | TDActionSheetItemCallback? | - | 选择项目时的回调函数 |
 | showOverlay | bool | true | 是否显示遮罩层 |
 | closeOnOverlayClick | bool | true | 点击蒙层时是否关闭 |
+| useSafeArea | bool | true | 使用安全区域 |
 
 
 #### 静态方法
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| showListActionSheet |  |   required BuildContext context,  required List<TDActionSheetItem> items,  TDActionSheetAlign align,  String cancelText,  bool showCancel,  VoidCallback? onCancel,  TDActionSheetItemCallback? onSelected,  bool showOverlay,  bool closeOnOverlayClick,  VoidCallback? onClose, | 显示列表类型面板 |
-| showGridActionSheet |  |   required BuildContext context,  required List<TDActionSheetItem> items,  TDActionSheetAlign align,  String cancelText,  bool showCancel,  TDActionSheetItemCallback? onSelected,  bool showOverlay,  bool closeOnOverlayClick,  int count,  int rows,  double itemHeight,  double itemMinWidth,  bool scrollable,  bool showPagination,  VoidCallback? onCancel,  String? description,  VoidCallback? onClose, | 显示宫格类型面板 |
-| showGroupActionSheet |  |   required BuildContext context,  required List<TDActionSheetItem> items,  TDActionSheetAlign align,  String cancelText,  bool showCancel,  TDActionSheetItemCallback? onSelected,  bool showOverlay,  bool closeOnOverlayClick,  double itemHeight,  double itemMinWidth,  VoidCallback? onCancel,  VoidCallback? onClose, | 显示分组类型面板 |
+| showListActionSheet |  |   required BuildContext context,  required List<TDActionSheetItem> items,  TDActionSheetAlign align,  String cancelText,  bool showCancel,  VoidCallback? onCancel,  TDActionSheetItemCallback? onSelected,  bool showOverlay,  bool closeOnOverlayClick,  VoidCallback? onClose,  bool useSafeArea, | 显示列表类型面板 |
+| showGridActionSheet |  |   required BuildContext context,  required List<TDActionSheetItem> items,  TDActionSheetAlign align,  String cancelText,  bool showCancel,  TDActionSheetItemCallback? onSelected,  bool showOverlay,  bool closeOnOverlayClick,  int count,  int rows,  double itemHeight,  double itemMinWidth,  bool scrollable,  bool showPagination,  VoidCallback? onCancel,  String? description,  VoidCallback? onClose,  bool useSafeArea, | 显示宫格类型面板 |
+| showGroupActionSheet |  |   required BuildContext context,  required List<TDActionSheetItem> items,  TDActionSheetAlign align,  String cancelText,  bool showCancel,  TDActionSheetItemCallback? onSelected,  bool showOverlay,  bool closeOnOverlayClick,  double itemHeight,  double itemMinWidth,  VoidCallback? onCancel,  VoidCallback? onClose,  bool useSafeArea, | 显示分组类型面板 |
 
 ```
 ```
