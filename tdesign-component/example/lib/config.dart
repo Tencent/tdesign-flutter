@@ -37,6 +37,7 @@ import 'page/td_loading_page.dart';
 import 'page/td_navbar_page.dart';
 import 'page/td_notice_bar_page.dart';
 import 'page/td_picker_page.dart';
+import 'page/td_popover_page.dart';
 import 'page/td_popup_page.dart';
 import 'page/td_radio_page.dart';
 import 'page/td_radius_page.dart';
@@ -237,6 +238,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'overlay',
         isTodo: true,
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+    ExamplePageModel(text: 'Popover 弹出气泡', name: 'popover', pageBuilder: _wrapInheritedTheme((context) => const TDPopoverPage())),
     ExamplePageModel(
         text: 'Popup 弹出层', name: 'popup', pageBuilder: _wrapInheritedTheme((context) => const TDPopupPage())),
     ExamplePageModel(
