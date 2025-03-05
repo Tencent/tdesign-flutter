@@ -36,6 +36,7 @@ class TDActionSheet {
     this.onSelected,
     this.showOverlay = true,
     this.closeOnOverlayClick = true,
+    this.useSafeArea = true,
   }) {
     if (visible) {
       show();
@@ -107,6 +108,9 @@ class TDActionSheet {
   /// 选择项目时的回调函数
   final TDActionSheetItemCallback? onSelected;
 
+  /// 使用安全区域
+  final bool useSafeArea;
+
   static TDSlidePopupRoute? _actionSheetRoute;
 
   /// 显示列表类型面板
@@ -121,6 +125,7 @@ class TDActionSheet {
     bool showOverlay = true,
     bool closeOnOverlayClick = true,
     VoidCallback? onClose,
+    bool useSafeArea = true,
   }) {
     _createRoute(
       context,
@@ -134,6 +139,7 @@ class TDActionSheet {
       showOverlay: showOverlay,
       closeOnOverlayClick: closeOnOverlayClick,
       onClose: onClose,
+      useSafeArea: useSafeArea,
     );
   }
 
@@ -156,6 +162,7 @@ class TDActionSheet {
     VoidCallback? onCancel,
     String? description,
     VoidCallback? onClose,
+    bool useSafeArea = true,
   }) {
     _createRoute(
       context,
@@ -176,6 +183,7 @@ class TDActionSheet {
       showPagination: showPagination,
       description: description,
       onClose: onClose,
+      useSafeArea: useSafeArea,
     );
   }
 
@@ -193,6 +201,7 @@ class TDActionSheet {
     double itemMinWidth = 80.0,
     VoidCallback? onCancel,
     VoidCallback? onClose,
+    bool useSafeArea = true,
   }) {
     _createRoute(
       context,
@@ -208,6 +217,7 @@ class TDActionSheet {
       itemHeight: itemHeight,
       itemMinWidth: itemMinWidth,
       onClose: onClose,
+      useSafeArea: useSafeArea,
     );
   }
 
@@ -232,6 +242,7 @@ class TDActionSheet {
       showPagination: showPagination,
       description: description,
       onClose: onClose,
+      useSafeArea: useSafeArea,
     );
   }
 
@@ -266,6 +277,7 @@ class TDActionSheet {
     VoidCallback? onCancel,
     String? description,
     VoidCallback? onClose,
+    bool useSafeArea = true,
   }) {
     if (_actionSheetRoute != null) {
       return;
@@ -285,6 +297,7 @@ class TDActionSheet {
               showCancel: showCancel,
               onCancel: onCancel,
               onSelected: onSelected,
+              useSafeArea: useSafeArea,
             );
           case TDActionSheetTheme.grid:
             return TDActionSheetGrid(
@@ -301,6 +314,7 @@ class TDActionSheet {
               onCancel: onCancel,
               itemHeight: itemHeight,
               itemMinWidth: itemMinWidth,
+              useSafeArea: useSafeArea,
             );
           case TDActionSheetTheme.group:
             return TDActionSheetGroup(
@@ -312,6 +326,7 @@ class TDActionSheet {
               onSelected: onSelected,
               itemHeight: itemHeight,
               itemMinWidth: itemMinWidth,
+              useSafeArea: useSafeArea,
             );
           default:
             return const SizedBox.shrink();
