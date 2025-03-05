@@ -20,6 +20,7 @@ class TDActionSheetGroup extends StatelessWidget {
   final TDActionSheetItemCallback? onSelected;
   final double itemHeight;
   final double itemMinWidth;
+  final bool useSafeArea;
 
   const TDActionSheetGroup({
     super.key,
@@ -31,6 +32,7 @@ class TDActionSheetGroup extends StatelessWidget {
     this.onSelected,
     this.itemHeight = 96.0,
     this.itemMinWidth = 80.0,
+    this.useSafeArea = true,
   });
 
   @override
@@ -45,6 +47,7 @@ class TDActionSheetGroup extends StatelessWidget {
         color: TDTheme.of(context).whiteColor1,
       ),
       clipBehavior: Clip.antiAlias,
+      padding: useSafeArea ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom) : EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
