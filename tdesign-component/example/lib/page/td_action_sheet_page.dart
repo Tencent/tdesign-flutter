@@ -18,6 +18,7 @@ class IconWithBackground extends StatelessWidget {
       height: 40.0,
       decoration: BoxDecoration(
         color: TDTheme.of(context).grayColor1,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
       ),
       child: Center(
         child: Icon(
@@ -362,32 +363,32 @@ Widget _buildMultiScrollGridActionSheet(BuildContext context) {
       TDActionSheet.showGroupActionSheet(context, items: [
         TDActionSheetItem(
           label: 'Allen',
-          icon: Image.asset('assets/img/td_avatar_1.png'),
+          icon: Image.asset('assets/img/td_action_sheet_5.png'),
           group: '分享给好友',
         ),
         TDActionSheetItem(
           label: 'Nick',
-          icon: Image.asset('assets/img/td_avatar_2.png'),
+          icon: Image.asset('assets/img/td_action_sheet_6.png'),
           group: '分享给好友',
         ),
         TDActionSheetItem(
           label: 'Jacky',
-          icon: Image.asset('assets/img/td_avatar_1.png'),
+          icon: Image.asset('assets/img/td_action_sheet_7.png'),
           group: '分享给好友',
         ),
         TDActionSheetItem(
           label: 'Eric',
-          icon: Image.asset('assets/img/td_avatar_2.png'),
+          icon: Image.asset('assets/img/td_action_sheet_8.png'),
           group: '分享给好友',
         ),
         TDActionSheetItem(
           label: 'Johnsc',
-          icon: Image.asset('assets/img/td_avatar_1.png'),
+          icon: Image.asset('assets/img/td_action_sheet_5.png'),
           group: '分享给好友',
         ),
         TDActionSheetItem(
           label: 'Kevin',
-          icon: Image.asset('assets/img/td_avatar_2.png'),
+          icon: Image.asset('assets/img/td_action_sheet_6.png'),
           group: '分享给好友',
         ),
         ..._gridItems,

@@ -25,6 +25,7 @@ class TDActionSheetGrid extends StatefulWidget {
   final TDActionSheetItemCallback? onSelected;
   final double itemHeight;
   final double itemMinWidth;
+  final bool useSafeArea;
 
   const TDActionSheetGrid({
     super.key,
@@ -41,6 +42,7 @@ class TDActionSheetGrid extends StatefulWidget {
     this.onSelected,
     this.itemHeight = 96.0,
     this.itemMinWidth = 80.0,
+    this.useSafeArea = true,
   });
 
   @override
@@ -59,6 +61,7 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
         color: TDTheme.of(context).whiteColor1,
       ),
       clipBehavior: Clip.antiAlias,
+      padding: widget.useSafeArea ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom) : EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

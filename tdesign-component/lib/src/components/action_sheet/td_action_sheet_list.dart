@@ -17,6 +17,7 @@ class TDActionSheetList extends StatelessWidget {
   final bool showCancel;
   final VoidCallback? onCancel;
   final TDActionSheetItemCallback? onSelected;
+  final bool useSafeArea;
 
   const TDActionSheetList({
     super.key,
@@ -27,6 +28,7 @@ class TDActionSheetList extends StatelessWidget {
     this.showCancel = true,
     this.onCancel,
     this.onSelected,
+    this.useSafeArea = true,
   });
 
   @override
@@ -38,6 +40,7 @@ class TDActionSheetList extends StatelessWidget {
         color: TDTheme.of(context).grayColor1,
       ),
       clipBehavior: Clip.antiAlias,
+      padding: useSafeArea ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom) : EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
