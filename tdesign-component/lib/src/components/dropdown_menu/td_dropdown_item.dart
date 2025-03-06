@@ -127,10 +127,11 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
     if (widget.builder != null) {
       return widget.builder!(context, this, popupState);
     }
-    return widget.multiple == true ? _getCheckboxList() : _getRadioList();
+    return widget.multiple == true || (widget.optionsColumns ?? 1) > 1 ? _getCheckboxList() : _getRadioList();
   }
 
   Widget _getCheckboxList() {
+    var isMultiple = widget.multiple == true;
     var paddingNum = TDTheme.of(context).spacer16;
     var groupCunck = _groupChunkOptions();
     var maxContentHeight = widget.maxContentHeight != null
@@ -149,6 +150,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
                 children: List.generate(groupCunck.length, (index) {
                   var entry = groupCunck.entries.elementAt(index);
                   var chunks = entry.value;
+                  var selectIds = _getSelected(widget.options).map((e) => e!.value).toList();
                   return Column(
                     children: [
                       groupCunck.length == 1 && entry.key == '__default__'
@@ -163,10 +165,12 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
                         padding: EdgeInsets.all(paddingNum),
                         color: TDTheme.of(context).whiteColor1,
                         child: TDCheckboxGroupContainer(
-                          selectIds: _getSelected(widget.options).map((e) => e!.value).toList(),
-                          onCheckBoxGroupChange: (values) {
-                            _handleSelectChange(values, options: chunks.expand((chunk) => chunk).toList());
-                          },
+                          selectIds: isMultiple
+                              ? selectIds
+                              : selectIds.isEmpty
+                                  ? []
+                                  : [selectIds[0]],
+                          onCheckBoxGroupChange: _handleSelectChange,
                           child: Column(
                             children: List.generate(chunks.length, (ri) {
                               var num = _num(chunks[ri], widget.optionsColumns);
@@ -194,7 +198,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
             ),
           ),
         ),
-        _getCheckboxOperate(),
+        if (isMultiple) _getCheckboxOperate(),
       ],
     );
   }
@@ -337,10 +341,17 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
     return groupedChunkOptions;
   }
 
-  void _handleSelectChange(selected, {List<TDDropdownItemOption>? options}) {
-    (options ?? widget.options)?.forEach((element) {
+  void _handleSelectChange(selected) {
+    var isRadio = widget.multiple != true && selected is List<String>;
+    if (isRadio) {
+      selected.removeAt(0);
+    }
+    widget.options?.forEach((element) {
       element.selected = selected is List<String> ? selected.contains(element.value) : element.value == selected;
     });
+    if (isRadio) {
+      setState(() {});
+    }
     widget.onChange?.call(_getSelected(widget.options).map((e) => e!.value).toList());
     if (widget.multiple != true) {
       _handleClose();
@@ -348,7 +359,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
   }
 
   void _handleClose() async {
-    if (widget.multiple != true) {
+    if (widget.multiple != true || (widget.optionsColumns ?? 1) > 1) {
       await Future.delayed(const Duration(milliseconds: 100));
     }
     await Navigator.maybePop(context);
