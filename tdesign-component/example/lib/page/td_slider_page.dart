@@ -37,6 +37,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           ExampleModule(title: '特殊样式', children: [
             ExampleItem(desc: '胶囊型滑块', builder: _buildCapsule),
             ExampleItem(desc: '自定义盒子样式', builder: _buildCustomDecoration),
+            ExampleItem(desc: '自定义滑轨颜色', builder: _buildCustomActiveColor),
           ]),
         ]);
   }
@@ -322,6 +323,41 @@ class _TDSliderPageState extends State<TDSliderPage> {
           ),
           boxDecoration: const BoxDecoration(
               color: Colors.deepOrangeAccent
+          ),
+          value: const RangeValues(20, 60),
+          onChanged: (value) {},
+        ),
+      ],
+    );
+  }
+
+  @Demo(group: 'slider')
+  Widget _buildCustomActiveColor(BuildContext context) {
+    return Column(
+      children: [
+        TDSlider(
+          sliderThemeData: TDSliderThemeData(
+            activeTrackColor: Colors.red,
+            inactiveTrackColor: Colors.green,
+            context: context,
+            min: 0,
+            max: 100,
+          ),
+          value: 40,
+          // divisions: 5,
+          onChanged: (value) {},
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData.capsule(
+            activeTrackColor: Colors.green,
+            inactiveTrackColor: Colors.red,
+            context: context,
+            min: 0,
+            max: 100,
+            scaleFormatter: (value) => value.toInt().toString(),
           ),
           value: const RangeValues(20, 60),
           onChanged: (value) {},
