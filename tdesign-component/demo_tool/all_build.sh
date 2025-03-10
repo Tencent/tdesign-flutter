@@ -17,7 +17,7 @@
 # back_top
 ./bin/api_tool_linux generate --file ../lib/src/components/backtop/td_backtop.dart --name TDBackTop --folder-name back-top --output ../example/assets/api/ --only-api
 # drawer
-./bin/api_tool_linux generate --folder ../lib/src/components/drawer --name TDDrawer,TDDrawerItem,TDDrawerStyle --folder-name drawer --output ../example/assets/api/ --only-api --get-comments
+./bin/api_tool_linux generate --folder ../lib/src/components/drawer --name TDDrawer,TDDrawerWidget,TDDrawerItem,TDDrawerStyle --folder-name drawer --output ../example/assets/api/ --only-api --get-comments
 # indexes
 ./bin/api_tool_linux generate --folder ../lib/src/components/indexes --name TDIndexes,TDIndexesAnchor,TDIndexesList --folder-name indexes --output ../example/assets/api/ --only-api --get-comments
 # navbar
@@ -110,8 +110,10 @@
 ./bin/api_tool_linux generate --file ../lib/src/components/loading/td_loading.dart --name TDLoading --folder-name loading --output ../example/assets/api/ --only-api
 # message
 # noticeBar
-./bin/api_tool_linux generate --file ../lib/src/components/notice_bar --name TDNoticeBar,TDNoticeBarStyle --folder-name notice-bar --output ../example/assets/api/ --only-api --get-comments
+./bin/api_tool_linux generate --folder ../lib/src/components/notice_bar --name TDNoticeBar,TDNoticeBarStyle --folder-name notice-bar --output ../example/assets/api/ --only-api --get-comments
 # overlay
+# popover
+./bin/api_tool_linux generate --folder ../lib/src/components/popover --name TDPopover,TDPopoverWidget --folder-name popover --output ../example/assets/api/ --only-api --get-comments
 # popup
 ./bin/api_tool_linux generate --folder ../lib/src/components/popup --name TDSlidePopupRoute,TDPopupBottomDisplayPanel,TDPopupBottomConfirmPanel,TDPopupCenterPanel --folder-name popup --output ../example/assets/api/ --only-api --get-comments
 # refresh

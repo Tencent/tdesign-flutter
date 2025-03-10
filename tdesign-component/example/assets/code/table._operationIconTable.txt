@@ -8,7 +8,7 @@
         TDTableCol(
           title: '标题',
           colKey: 'title4',
-          cellBuilder: (BuildContext context) {
+          cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
