@@ -58,6 +58,12 @@ class TDSliderThemeData {
   /// 是否为胶囊类型
   final bool _capsule;
 
+  /// 激活颜色
+  final Color? activeTrackColor;
+
+  /// 非激活颜色
+  final Color? inactiveTrackColor;
+
 
   /// 普通构建方法
   TDSliderThemeData({
@@ -72,6 +78,8 @@ class TDSliderThemeData {
     this.min = 0.0,
     this.max = 1.0,
     this.scaleFormatter,
+    this.activeTrackColor,
+    this.inactiveTrackColor,
     SliderThemeData? sliderThemeData,
   })  : scaleTextStyle = scaleTextStyle ?? TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor1),
         disabledScaleTextStyle =
@@ -95,6 +103,8 @@ class TDSliderThemeData {
     this.min = 0.0,
     this.max = 1.0,
     this.scaleFormatter,
+    this.activeTrackColor,
+    this.inactiveTrackColor,
     SliderThemeData? sliderThemeData,
   })  : scaleTextStyle = scaleTextStyle ?? TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor1),
         disabledScaleTextStyle =
@@ -122,8 +132,8 @@ class TDSliderThemeData {
   SliderThemeData normal(){
     return SliderThemeData(
       trackHeight: 4,
-      activeTrackColor : TDTheme.of(context).brandNormalColor,
-      inactiveTrackColor : TDTheme.of(context).grayColor4,
+      activeTrackColor : activeTrackColor ?? TDTheme.of(context).brandNormalColor,
+      inactiveTrackColor : inactiveTrackColor ?? TDTheme.of(context).grayColor4,
       disabledActiveTrackColor : TDTheme.of(context).brandDisabledColor,
       disabledInactiveTrackColor : TDTheme.of(context).grayColor2,
       activeTickMarkColor : TDTheme.of(context).brandNormalColor,
@@ -159,8 +169,8 @@ class TDSliderThemeData {
       thumbColor : Colors.white,
       disabledThumbColor : Colors.white,
       trackHeight: 24,
-      activeTrackColor : TDTheme.of(context).brandNormalColor,
-      inactiveTrackColor : TDTheme.of(context).grayColor4,
+      activeTrackColor : activeTrackColor ?? TDTheme.of(context).brandNormalColor,
+      inactiveTrackColor : inactiveTrackColor ?? TDTheme.of(context).grayColor4,
       disabledActiveTrackColor : TDTheme.of(context).brandDisabledColor,
       disabledInactiveTrackColor : TDTheme.of(context).grayColor2,
       overlayShape : const TDNoOverlayShape(),
@@ -181,6 +191,8 @@ class TDSliderThemeData {
     double? min,
     double? max,
     ScaleFormatter? scaleFormatter,
+    Color? activeTrackColor,
+    Color? inactiveTrackColor,
   }) {
     return TDSliderThemeData(
         showScaleValue: showScaleValue ?? this.showScaleValue,
@@ -192,7 +204,10 @@ class TDSliderThemeData {
         divisions: divisions ?? this.divisions,
         min: min ?? this.min,
         max: max ?? this.max,
-        scaleFormatter: scaleFormatter ?? this.scaleFormatter);
+        scaleFormatter: scaleFormatter ?? this.scaleFormatter,
+        activeTrackColor: activeTrackColor ?? this.activeTrackColor,
+        inactiveTrackColor: inactiveTrackColor ?? this.inactiveTrackColor,
+    );
   }
 }
 

@@ -1,15 +1,16 @@
 
-  Widget _buildCustomDecoration(BuildContext context) {
+  Widget _buildCustomActiveColor(BuildContext context) {
     return Column(
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
+            activeTrackColor: Colors.red,
+            inactiveTrackColor: Colors.green,
             context: context,
             min: 0,
             max: 100,
           ),
           value: 40,
-          boxDecoration: const BoxDecoration(color: Colors.amber),
           // divisions: 5,
           onChanged: (value) {},
         ),
@@ -18,12 +19,13 @@
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            activeTrackColor: Colors.green,
+            inactiveTrackColor: Colors.red,
             context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           ),
-          boxDecoration: const BoxDecoration(color: Colors.deepOrangeAccent),
           value: const RangeValues(20, 60),
           onChanged: (value) {},
         ),

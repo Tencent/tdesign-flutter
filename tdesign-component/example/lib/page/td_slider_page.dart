@@ -18,27 +18,29 @@ class _TDSliderPageState extends State<TDSliderPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
-        desc: '用于选择横轴上的数值、区间、档位。',
-        exampleCodeGroup: 'slider',
-        padding: const EdgeInsets.only(top: 8, bottom: 8),
-        children: [
-          ExampleModule(title: '组件类型', children: [
-            ExampleItem(desc: '单游标滑块', builder: _buildSingleHandle),
-            ExampleItem(desc: '双游标滑块', builder: _buildDoubleHandle),
-            ExampleItem(desc: '带数值单游标滑块 ', builder: _buildSingleHandleWithNumber),
-            ExampleItem(desc: '带数值双游标滑块', builder: _buildDoubleHandleWithNumber),
-            ExampleItem(desc: '带刻度单游标滑块', builder: _buildSingleHandleWithScale),
-            ExampleItem(desc: '带刻度双游标滑块', builder: _buildDoubleHandleWithScale),
-          ]),
-          ExampleModule(title: '组件状态', children: [
-            ExampleItem(desc: '禁用状态', builder: _buildDisable),
-          ]),
-          ExampleModule(title: '特殊样式', children: [
-            ExampleItem(desc: '胶囊型滑块', builder: _buildCapsule),
-            ExampleItem(desc: '自定义盒子样式', builder: _buildCustomDecoration),
-          ]),
-        ]);
+      title: tdTitle(),
+      desc: '用于选择横轴上的数值、区间、档位。',
+      exampleCodeGroup: 'slider',
+      padding: const EdgeInsets.only(top: 8, bottom: 8),
+      children: [
+        ExampleModule(title: '组件类型', children: [
+          ExampleItem(desc: '单游标滑块', builder: _buildSingleHandle),
+          ExampleItem(desc: '双游标滑块', builder: _buildDoubleHandle),
+          ExampleItem(desc: '带数值单游标滑块 ', builder: _buildSingleHandleWithNumber),
+          ExampleItem(desc: '带数值双游标滑块', builder: _buildDoubleHandleWithNumber),
+          ExampleItem(desc: '带刻度单游标滑块', builder: _buildSingleHandleWithScale),
+          ExampleItem(desc: '带刻度双游标滑块', builder: _buildDoubleHandleWithScale),
+        ]),
+        ExampleModule(title: '组件状态', children: [
+          ExampleItem(desc: '禁用状态', builder: _buildDisable),
+        ]),
+        ExampleModule(title: '特殊样式', children: [
+          ExampleItem(desc: '胶囊型滑块', builder: _buildCapsule),
+          ExampleItem(desc: '自定义盒子样式', builder: _buildCustomDecoration),
+        ]),
+      ],
+      test: [ExampleItem(desc: '自定义滑轨颜色', builder: _buildCustomActiveColor)],
+    );
   }
 
   @Demo(group: 'slider')
@@ -279,12 +281,10 @@ class _TDSliderPageState extends State<TDSliderPage> {
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
-          )
-            ..updateSliderThemeData((data) =>
-                data.copyWith(
-                  activeTickMarkColor: const Color(0xFFE7E7E7),
-                  inactiveTickMarkColor: const Color(0xFFE7E7E7),
-                )),
+          )..updateSliderThemeData((data) => data.copyWith(
+                activeTickMarkColor: const Color(0xFFE7E7E7),
+                inactiveTickMarkColor: const Color(0xFFE7E7E7),
+              )),
           value: const RangeValues(20, 60),
           // divisions: 5,
           onChanged: (value) {},
@@ -304,9 +304,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
             max: 100,
           ),
           value: 40,
-          boxDecoration: const BoxDecoration(
-             color: Colors.amber
-          ),
+          boxDecoration: const BoxDecoration(color: Colors.amber),
           // divisions: 5,
           onChanged: (value) {},
         ),
@@ -320,8 +318,41 @@ class _TDSliderPageState extends State<TDSliderPage> {
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           ),
-          boxDecoration: const BoxDecoration(
-              color: Colors.deepOrangeAccent
+          boxDecoration: const BoxDecoration(color: Colors.deepOrangeAccent),
+          value: const RangeValues(20, 60),
+          onChanged: (value) {},
+        ),
+      ],
+    );
+  }
+
+  @Demo(group: 'slider')
+  Widget _buildCustomActiveColor(BuildContext context) {
+    return Column(
+      children: [
+        TDSlider(
+          sliderThemeData: TDSliderThemeData(
+            activeTrackColor: Colors.red,
+            inactiveTrackColor: Colors.green,
+            context: context,
+            min: 0,
+            max: 100,
+          ),
+          value: 40,
+          // divisions: 5,
+          onChanged: (value) {},
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData.capsule(
+            activeTrackColor: Colors.green,
+            inactiveTrackColor: Colors.red,
+            context: context,
+            min: 0,
+            max: 100,
+            scaleFormatter: (value) => value.toInt().toString(),
           ),
           value: const RangeValues(20, 60),
           onChanged: (value) {},
