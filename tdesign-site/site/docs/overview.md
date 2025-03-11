@@ -357,7 +357,7 @@ spline: explain
     </a>
   </div>
   <div class="image-wrapper">
-    <a class="item" href="/flutter/components/tag">
+    <a class="item" href="/flutter/components/table">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-table-dark.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-table-dark.png" />
       <p class="name">Table 表格</p>
