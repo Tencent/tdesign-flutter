@@ -102,6 +102,7 @@
 
 # 反馈
 # action_sheet
+./bin/api_tool_linux generate --folder ../lib/src/components/action_sheet --name TDActionSheetItem,TDActionSheet --folder-name action-sheet --output ../example/assets/api/ --only-api --get-comments
 # dialog
 ./bin/api_tool_linux generate --folder ../lib/src/components/dialog --name TDAlertDialog,TDConfirmDialog,TDDialogButtonOptions,TDDialogButtonStyle,TDDialogScaffold,TDDialogTitle,TDDialogContent,TDDialogInfoWidget,HorizontalNormalButtons,HorizontalTextButtons,TDDialogButton,TDDialogImagePosition,TDImageDialog,TDInputDialog --folder-name dialog --output ../example/assets/api/ --only-api
 # dropdown_menu
