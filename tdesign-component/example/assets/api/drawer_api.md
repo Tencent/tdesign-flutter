@@ -44,11 +44,11 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | context | BuildContext | context | 上下文 |
-| closeOnOverlayClick | bool? | - | 点击蒙层时是否关闭抽屉 |
+| closeOnOverlayClick | bool? | true | 点击蒙层时是否关闭抽屉 |
 | footer | Widget? | - | 抽屉的底部 |
 | items | List<TDDrawerItem>? | - | 抽屉里的列表项 |
-| placement | TDDrawerPlacement? | - | 抽屉方向 |
-| showOverlay | bool? | - | 是否显示遮罩层 |
+| placement | TDDrawerPlacement? | TDDrawerPlacement.right | 抽屉方向 |
+| showOverlay | bool? | true | 是否显示遮罩层 |
 | title | String? | - | 抽屉的标题 |
 | titleWidget | Widget? | - | 抽屉的标题组件 |
 | visible | bool? | - | 组件是否可见 |
