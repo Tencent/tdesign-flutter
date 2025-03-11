@@ -27,6 +27,7 @@
 | onLongPress | TDButtonEvent? | - | 长按事件 |
 | margin | EdgeInsetsGeometry? | - | 自定义margin |
 | padding | EdgeInsetsGeometry? | - | 自定义padding |
+| iconPosition | TDButtonIconPosition? | TDButtonIconPosition.left | 图标位置 |
 
 ```
 ```

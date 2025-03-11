@@ -10,7 +10,7 @@
           ),
           value: 40,
           boxDecoration: const BoxDecoration(
-             color: Colors.amber
+              color: Colors.amber
           ),
           // divisions: 5,
           onChanged: (value) {},
