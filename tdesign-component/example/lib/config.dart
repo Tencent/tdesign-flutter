@@ -8,6 +8,7 @@ import 'page/sidebar/td_sidebar_page_icon.dart';
 import 'page/sidebar/td_sidebar_page_loading.dart';
 import 'page/sidebar/td_sidebar_page_outline.dart';
 import 'page/sidebar/td_sidebar_page_pagination.dart';
+import 'page/td_action_sheet_page.dart';
 import 'page/td_avatar_page.dart';
 import 'page/td_backtop_page.dart';
 import 'page/td_badge_page.dart';
@@ -38,6 +39,7 @@ import 'page/td_message_page.dart';
 import 'page/td_navbar_page.dart';
 import 'page/td_notice_bar_page.dart';
 import 'page/td_picker_page.dart';
+import 'page/td_popover_page.dart';
 import 'page/td_popup_page.dart';
 import 'page/td_progress_page.dart';
 import 'page/td_radio_page.dart';
@@ -213,9 +215,9 @@ Map<String, List<ExamplePageModel>> exampleMap = {
   '反馈': [
     ExamplePageModel( 
         text: 'ActionSheet 动作面板',
-        name: 'action_sheet',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        name: 'action-sheet',
+        pageName: 'action_sheet',
+        pageBuilder: _wrapInheritedTheme((context) => const TDActionSheetPage())),
     ExamplePageModel(
         text: 'Dialog 对话框', name: 'dialog', pageBuilder: _wrapInheritedTheme((context) => const TDDialogPage())),
     ExamplePageModel(
@@ -236,6 +238,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'overlay',
         isTodo: true,
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+    ExamplePageModel(text: 'Popover 弹出气泡', name: 'popover', pageBuilder: _wrapInheritedTheme((context) => const TDPopoverPage())),
     ExamplePageModel(
         text: 'Popup 弹出层', name: 'popup', pageBuilder: _wrapInheritedTheme((context) => const TDPopupPage())),
     ExamplePageModel(
