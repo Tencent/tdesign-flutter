@@ -11,7 +11,6 @@
       value: 10,
       leftLabel: '0',
       rightLabel: '100',
-      // divisions: 5,
       onChanged: (value) {},
     );
   }
