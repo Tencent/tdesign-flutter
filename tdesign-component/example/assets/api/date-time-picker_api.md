@@ -41,3 +41,5 @@
 | onSelectedItemChanged | void Function(int wheelIndex, int index)? | - | 选择器选中项改变回调 |
 | itemBuilder | ItemBuilderType? | - | 自定义item构建 |
 | key |  | - |  |
+
+```

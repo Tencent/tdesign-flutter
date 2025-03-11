@@ -1,7 +1,7 @@
 
 Widget _buildBadgeListLeftActionSheet(BuildContext context) {
   return TDButton(
-    text: '左对齐带徽标列表型',
+    text: '左对齐带徽标列表',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -10,11 +10,12 @@ Widget _buildBadgeListLeftActionSheet(BuildContext context) {
       TDActionSheet(
         context,
         visible: true,
+        description: '动作面板描述文字',
         align: TDActionSheetAlign.left,
         items: _nums
             .map((e) => TDActionSheetItem(
                   label: '选项$e',
-                  badge: TDBadge(TDBadgeType.redPoint),
+                  badge: const TDBadge(TDBadgeType.redPoint),
                 ))
             .toList(),
       );

@@ -1,7 +1,7 @@
 
 Widget _buildDescListActionSheet(BuildContext context) {
   return TDButton(
-    text: '带描述列表型',
+    text: '带描述列表',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
