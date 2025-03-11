@@ -2,6 +2,7 @@
   Widget _buildCapsuleDoubleHandleWithScale(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
