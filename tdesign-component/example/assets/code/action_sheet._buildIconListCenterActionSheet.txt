@@ -1,7 +1,7 @@
 
 Widget _buildIconListCenterActionSheet(BuildContext context) {
   return TDButton(
-    text: '居中带图标列表型',
+    text: '居中带图标列表',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -10,6 +10,7 @@ Widget _buildIconListCenterActionSheet(BuildContext context) {
       TDActionSheet(
         context,
         visible: true,
+        description: '动作面板描述文字',
         items: _nums
             .map((e) => TDActionSheetItem(
                   label: '选项$e',
