@@ -1,7 +1,7 @@
 
-Widget _buildPaginationGridActionSheet(BuildContext context) {
+Widget _buildScrollGridActionSheet(BuildContext context) {
   return TDButton(
-    text: '带翻页宫格',
+    text: '多行滚动宫格',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -12,7 +12,7 @@ Widget _buildPaginationGridActionSheet(BuildContext context) {
         visible: true,
         theme: TDActionSheetTheme.grid,
         count: 8,
-        showPagination: true,
+        scrollable: true,
         items: [
           ..._gridItems,
           TDActionSheetItem(
@@ -26,6 +26,10 @@ Widget _buildPaginationGridActionSheet(BuildContext context) {
           TDActionSheetItem(
             label: 'Chrome',
             icon: const IconWithBackground(icon: TDIcons.logo_chrome),
+          ),
+          TDActionSheetItem(
+            label: 'Github',
+            icon: const IconWithBackground(icon: TDIcons.logo_github),
           ),
           TDActionSheetItem(
             label: 'Github',
