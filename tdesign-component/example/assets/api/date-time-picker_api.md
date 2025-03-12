@@ -1,4 +1,5 @@
 ## API
+
 ### TDDatePicker
 #### 默认构造方法
 
@@ -27,12 +28,11 @@
 | pickerItemCount | int | - | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
 | isTimeUnit | bool? | - | 是否时间显示 |
 | onSelectedItemChanged | void Function(int wheelIndex, int index)? | - | 选择器选中项改变回调 |
+| itemBuilder | ItemBuilderType? | - | 自定义item构建 |
 | key |  | - |  |
 
-```
-```
- ### TDPicker
 
+### TDPicker
 #### 静态方法
 
 | 名称 | 返回类型 | 参数 | 说明 |

@@ -1,7 +1,7 @@
 
 Widget _buildPaginationGridActionSheet(BuildContext context) {
   return TDButton(
-    text: '带分页宫格型',
+    text: '带翻页宫格',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -17,19 +17,19 @@ Widget _buildPaginationGridActionSheet(BuildContext context) {
           ..._gridItems,
           TDActionSheetItem(
             label: '安卓',
-            icon: IconWithBackground(icon: TDIcons.logo_android),
+            icon: const IconWithBackground(icon: TDIcons.logo_android),
           ),
           TDActionSheetItem(
             label: 'Apple',
-            icon: IconWithBackground(icon: TDIcons.logo_apple),
+            icon: const IconWithBackground(icon: TDIcons.logo_apple),
           ),
           TDActionSheetItem(
             label: 'Chrome',
-            icon: IconWithBackground(icon: TDIcons.logo_chrome),
+            icon: const IconWithBackground(icon: TDIcons.logo_chrome),
           ),
           TDActionSheetItem(
             label: 'Github',
-            icon: IconWithBackground(icon: TDIcons.logo_github),
+            icon: const IconWithBackground(icon: TDIcons.logo_github),
           ),
         ],
       );

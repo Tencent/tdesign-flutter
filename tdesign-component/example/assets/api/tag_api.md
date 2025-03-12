@@ -22,6 +22,7 @@
 | isLight | bool | false | 是否为浅色 |
 | needCloseIcon | bool | false | 关闭图标 |
 | onCloseTap | GestureTapCallback? | - | 关闭图标点击事件 |
+| fixedWidth | double? | - | 标签的固定宽度 |
 | key |  | - |  |
 
 ```
@@ -75,4 +76,5 @@
 | needCloseIcon | bool | false | 关闭图标 |
 | onCloseTap | GestureTapCallback? | - | 关闭图标点击事件 |
 | overflow | TextOverflow? | - | 文字溢出处理 |
+| fixedWidth | double? | - | 标签的固定宽度 |
 | key |  | - |  |
