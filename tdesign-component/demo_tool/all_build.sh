@@ -88,6 +88,7 @@
 # imageViewer
 ./bin/api_tool_linux generate --folder ../lib/src/components/image_viewer  --name TDImageViewer,TDImageViewerWidget,  --folder-name image-viewer --output ../example/assets/api/ --only-api
 # progress
+./bin/demo_tool generate --file ../lib/src/components/image/td_progress.dart --name TDProgress --folder-name progress --output ../example/assets/api/ --only-api
 # result
 # skeleton
 # sticky
@@ -102,6 +103,7 @@
 
 # 反馈
 # action_sheet
+./bin/api_tool_linux generate --folder ../lib/src/components/action_sheet --name TDActionSheetItem,TDActionSheet --folder-name action-sheet --output ../example/assets/api/ --only-api --get-comments
 # dialog
 ./bin/api_tool_linux generate --folder ../lib/src/components/dialog --name TDAlertDialog,TDConfirmDialog,TDDialogButtonOptions,TDDialogButtonStyle,TDDialogScaffold,TDDialogTitle,TDDialogContent,TDDialogInfoWidget,HorizontalNormalButtons,HorizontalTextButtons,TDDialogButton,TDDialogImagePosition,TDImageDialog,TDInputDialog --folder-name dialog --output ../example/assets/api/ --only-api
 # dropdown_menu
@@ -128,7 +130,6 @@
 # theme
 ./bin/api_tool_linux generate --file ../lib/src/theme/td_theme.dart --name TDTheme,TDThemeData --folder-name theme --output ../example/assets/api/ --only-api
 # radius
-
 
 
 

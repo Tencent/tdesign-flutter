@@ -1,0 +1,20 @@
+
+  Widget _failDefault(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '失败默认提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          imgUrl: 'error',
+          type: TDImageType.roundedSquare,
+        ),
+      ],
+    );
+  }
