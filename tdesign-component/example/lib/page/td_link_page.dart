@@ -171,7 +171,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
         ? 'S'
         : (size == TDLinkSize.medium ? 'M' : 'L');
     return TDLink(
-      label: '$s号链接',
+      label: '${s}号链接',
       style: style,
       state: TDLinkState.normal,
       type: TDLinkType.withSuffixIcon,
