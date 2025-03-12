@@ -1,0 +1,25 @@
+
+  Widget _buildRightBottomPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.large,
+            text: '右侧下',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TDPopoverPlacement.rightBottom,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
