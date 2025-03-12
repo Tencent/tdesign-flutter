@@ -14,10 +14,10 @@ class ImageWidget extends StatefulWidget {
   final File? imageFile;
 
   /// 图片宽度
-  final double width;
+  final double? width;
 
   /// 图片高度
-  final double height;
+  final double? height;
 
   /// 加载错误时展示Widget
   final Widget? errorWidget;
@@ -73,8 +73,8 @@ class ImageWidget extends StatefulWidget {
       this.errorBuilder,
       this.semanticLabel,
       this.excludeFromSemantics = false,
-      required this.width,
-      required this.height,
+      this.width,
+      this.height,
       this.color,
       this.opacity,
       this.colorBlendMode,
@@ -97,8 +97,8 @@ class ImageWidget extends StatefulWidget {
 
   ImageWidget.network(this.src,
       {Key? key,
-      required this.width,
-      required this.height,
+      this.width,
+      this.height,
       double scale = 1.0,
       this.errorWidget,
       this.fit = BoxFit.none,
@@ -137,8 +137,8 @@ class ImageWidget extends StatefulWidget {
       this.semanticLabel,
       this.excludeFromSemantics = false,
       double? scale,
-      required this.width,
-      required this.height,
+      this.width,
+      this.height,
       this.color,
       this.opacity,
       this.colorBlendMode,
@@ -177,8 +177,8 @@ class ImageWidget extends StatefulWidget {
     this.errorBuilder,
     this.semanticLabel,
     this.excludeFromSemantics = false,
-    required this.width,
-    required this.height,
+    this.width,
+    this.height,
     this.color,
     this.opacity,
     this.colorBlendMode,
