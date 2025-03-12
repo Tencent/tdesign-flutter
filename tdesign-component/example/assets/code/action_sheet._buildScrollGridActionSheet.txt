@@ -1,0 +1,42 @@
+
+Widget _buildScrollGridActionSheet(BuildContext context) {
+  return TDButton(
+    text: '多行滚动宫格',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDActionSheet(
+        context,
+        visible: true,
+        theme: TDActionSheetTheme.grid,
+        count: 8,
+        scrollable: true,
+        items: [
+          ..._gridItems,
+          TDActionSheetItem(
+            label: '安卓',
+            icon: const IconWithBackground(icon: TDIcons.logo_android),
+          ),
+          TDActionSheetItem(
+            label: 'Apple',
+            icon: const IconWithBackground(icon: TDIcons.logo_apple),
+          ),
+          TDActionSheetItem(
+            label: 'Chrome',
+            icon: const IconWithBackground(icon: TDIcons.logo_chrome),
+          ),
+          TDActionSheetItem(
+            label: 'Github',
+            icon: const IconWithBackground(icon: TDIcons.logo_github),
+          ),
+          TDActionSheetItem(
+            label: 'Github',
+            icon: const IconWithBackground(icon: TDIcons.logo_github),
+          ),
+        ],
+      );
+    },
+  );
+}

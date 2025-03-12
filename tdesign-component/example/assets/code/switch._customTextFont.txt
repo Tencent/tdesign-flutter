@@ -1,0 +1,16 @@
+
+  Widget _customTextFont(BuildContext context) {
+    return _buildItem(
+      context,
+      const TDSwitch(
+        type: TDSwitchType.text,
+        openText: '开',
+        closeText: '关',
+        thumbContentOffColor: Colors.red,
+        thumbContentOnColor: Colors.green,
+        thumbContentOnFont: TextStyle(fontSize: 18),
+        thumbContentOffFont: TextStyle(fontSize: 12),
+      ),
+      title: '基础开关',
+    );
+  }
