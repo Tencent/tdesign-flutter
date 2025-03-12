@@ -771,7 +771,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   BoxDecoration? _getContentDecorateOuter(int index) {
     if (widget.outlineType == TDTabBarOutlineType.capsule) {
       return BoxDecoration(
-        color: TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
       );
     } else if (widget.outlineType == TDTabBarOutlineType.card) {
       if (index == _currentIndex) {
