@@ -1,74 +1,20 @@
 
   Widget _imageSquare(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 24),
-      child: Row(
-        children: [
-          const SizedBox(
-            width: 16,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: TDText(
-                  '方形',
-                  font: TDTheme.of(context).fontBodyMedium,
-                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-                ),
-              ),
-              const TDImage(
-                assetUrl: 'assets/img/image.png',
-                type: TDImageType.square,
-              ),
-            ],
-          ),
-          const SizedBox(
-            width: 24,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: TDText(
-                  '圆角方形',
-                  font: TDTheme.of(context).fontBodyMedium,
-                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-                ),
-              ),
-              const TDImage(
-                assetUrl: 'assets/img/image.png',
-                type: TDImageType.roundedSquare,
-                width: 72,
-                height: 72,
-              ),
-            ],
-          ),
-          const SizedBox(
-            width: 24,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: TDText(
-                  '圆形',
-                  font: TDTheme.of(context).fontBodyMedium,
-                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-                ),
-              ),
-              const TDImage(
-                assetUrl: 'assets/img/image.png',
-                width: 72,
-                height: 72,
-                type: TDImageType.circle,
-              ),
-            ],
-          )
-        ],
-      ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.square,
+        ),
+      ],
     );
   }

@@ -152,7 +152,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
       ],
     );
   }
-  
+
   @Demo(group: 'search')
   Widget _buildFocusSearchBarWithAction(BuildContext context) {
     return TDSearchBar(
@@ -166,8 +166,8 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
           pageBuilder: (BuildContext buildContext, Animation<double> animation,
               Animation<double> secondaryAnimation) {
             return TDConfirmDialog(
-              content: inputController.text.isNotEmpty 
-                  ? '搜索关键词：${inputController.text}' 
+              content: inputController.text.isNotEmpty
+                  ? '搜索关键词：${inputController.text}'
                   : '搜索关键词为空',
             );
           },
