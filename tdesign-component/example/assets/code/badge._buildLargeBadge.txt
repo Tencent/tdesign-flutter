@@ -1,15 +1,15 @@
 
   Widget _buildLargeBadge(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16),
+      padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
           SizedBox(
             width: 68,
-            height: 65.5,
+            height: 70,
             child: Stack(
               alignment: Alignment.bottomLeft,
-              children: const [
+              children: [
                 TDAvatar(
                   size: TDAvatarSize.large,
                   type: TDAvatarType.icon,
@@ -20,8 +20,8 @@
                     size: TDBadgeSize.large,
                     count: '8',
                   ),
-                  right: 0,
-                  top: 0,
+                  left: 48,
+                  bottom: 48,
                 )
               ],
             ),

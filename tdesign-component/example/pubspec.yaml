@@ -110,14 +110,15 @@ flutter:
     - assets/version
     - assets/img/
     - assets/theme.json
+    - assets/publish_time
 
 # 生成演示代码
 AOPMarket:
-  enable: true
+  enable: false
   compileTarget: frontend_server, dart2js
   versions:
     negativeInfinity~3.0.0:
-      unsupportTips: 请在Flutter 3.+ 运行心悦工程
+      unsupportedTips: 请在Flutter 3.+ 运行心悦工程
     3.0.0~infinity:
       path: ./tdesign_flutter_generator
   saveDartDependencies: true

@@ -1,0 +1,11 @@
+
+  Widget _imageFile(BuildContext context) {
+    return Container(
+      width: 72,
+      height: 72,
+      child: TDImage(
+        imageFile: File('/sdcard/td/test.jpg'),
+        type: TDImageType.fitWidth,
+      ),
+    );
+  }
