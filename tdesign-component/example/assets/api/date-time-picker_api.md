@@ -9,9 +9,8 @@
 | showMultiPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List<List<String>> data,  List<int>? initialIndexes,  Duration duration,  Color? barrierColor,  double pickerHeight,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  Color? titleDividerColor,  double? topPadding,  int pickerItemCount,  ItemBuilderType? itemBuilder, | 显示多级选择器 |
 | showMultiLinkedPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required Map data,  required int columnNum,  required List initialData,  Duration duration,  Color? barrierColor,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double pickerHeight,  Color? titleDividerColor,  double? topPadding,  int pickerItemCount, | 显示多级联动选择器 |
 
-```
-```
- ### TDDatePicker
+
+### TDDatePicker
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

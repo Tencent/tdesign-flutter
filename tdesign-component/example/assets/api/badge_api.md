@@ -7,6 +7,7 @@
 | type | TDBadgeType | type | 红点样式 |
 | key |  | - |  |
 | count | String? | - | 红点数量 |
+| maxCount | String? | '99' | 最大红点数量 |
 | border | TDBadgeBorder | TDBadgeBorder.large | 红点圆角大小 |
 | size | TDBadgeSize | TDBadgeSize.small | 红点尺寸 |
 | color | Color? | - | 红点颜色 |

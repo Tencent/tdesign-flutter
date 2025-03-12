@@ -28,7 +28,7 @@
 
 ```
 ```
- ### TDDrawerWidget
+### TDDrawerWidget
 #### 简介
 抽屉内容组件
  可用于Scaffold中的drawer属性
@@ -40,6 +40,12 @@
 | footer | Widget? | - | 抽屉的底部 |
 | items | List<TDDrawerItem>? | - | 抽屉里的列表项 |
 | contentWidget | Widget? | - | 自定义内容，优先级高于[items]/[footer]/[title] |
+| context | BuildContext | context | 上下文 |
+| closeOnOverlayClick | bool? | true | 点击蒙层时是否关闭抽屉 |
+| footer | Widget? | - | 抽屉的底部 |
+| items | List<TDDrawerItem>? | - | 抽屉里的列表项 |
+| placement | TDDrawerPlacement? | TDDrawerPlacement.right | 抽屉方向 |
+| showOverlay | bool? | true | 是否显示遮罩层 |
 | title | String? | - | 抽屉的标题 |
 | titleWidget | Widget? | - | 抽屉的标题组件 |
 | onItemClick | TDDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |
