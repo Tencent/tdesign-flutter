@@ -178,14 +178,14 @@ class _TDTabBarState extends State<TDTabBar> {
   TextStyle _getUnSelectLabelStyle(BuildContext context) {
     return TextStyle(
         fontWeight: FontWeight.w400,
-        fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14,
+        // fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14,
         color: TDTheme.of(context).fontGyColor2);
   }
 
   TextStyle _getLabelStyle(BuildContext context) {
     return TextStyle(
         fontWeight: FontWeight.w600,
-        fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14,
+        // fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14,
         color: TDTheme.of(context).fontGyColor2);
   }
 

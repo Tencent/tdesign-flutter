@@ -13,10 +13,13 @@ class _AboutPageState extends State<AboutPage> {
 
   String? version;
 
+  String? publishTime;
+
   @override
   void initState() {
     super.initState();
     _getVersion();
+    _getPublishTime();
   }
 
   Future<void> _getVersion() async {
@@ -24,7 +27,12 @@ class _AboutPageState extends State<AboutPage> {
     setState(() {});
   }
   
-  
+  Future<void> _getPublishTime() async {
+    var timeStamp = await rootBundle.loadString('assets/publish_time');
+    var exactTime = DateTime.fromMillisecondsSinceEpoch(int.parse(timeStamp));
+    publishTime = '${exactTime.year}-${exactTime.month}-${exactTime.day}';
+    setState(() {});
+  }
 
 
   @override
@@ -35,7 +43,8 @@ class _AboutPageState extends State<AboutPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            demoRow(context, '版本号：',desc: version)
+            demoRow(context, '版本号：',desc: version),
+            demoRow(context, '发版日期：', desc: publishTime)
           ],
         ),
       ),

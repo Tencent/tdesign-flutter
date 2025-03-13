@@ -10,7 +10,6 @@
         scaleFormatter: (value) => value.toInt().toString(),
       ),
       value: 60,
-      // divisions: 5,
       onChanged: (value) {},
     );
   }
