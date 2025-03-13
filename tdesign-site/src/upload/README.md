@@ -168,6 +168,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onError | TDUploadErrorEvent? | - | 监听获取资源错误 |
 | onValidate | TDUploadValidatorEvent? | - | 监听文件校验出错 |
 | onClick | TDUploadClickEvent? | - | 监听点击图片位 |
+| onMaxLimitReached | VoidCallback? | - | 监听文件超过最大数量 |
 | files | List<TDUploadFile> | - | 控制展示的文件列表 |
 | onChange | TDUploadValueChangedEvent? | - | 监听添加, 删除和替换media事件 |
 | multiple | bool | false | 是否多选上传，默认false |

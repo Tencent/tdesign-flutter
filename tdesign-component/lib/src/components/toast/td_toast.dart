@@ -33,12 +33,14 @@ class TDToast {
       required BuildContext context,
       Duration duration = TDToast._defaultDisPlayDuration,
       bool? preventTap,
-      Color? backgroundColor}) {
+      Color? backgroundColor,
+      int? maxLines}) {
     _showOverlay(
         _TDIconTextToast(
           text: text,
           iconData: icon,
           iconTextDirection: direction,
+          maxLines: maxLines,
         ),
         context: context,
         duration: duration,
@@ -52,12 +54,14 @@ class TDToast {
       required BuildContext context,
       Duration duration = TDToast._defaultDisPlayDuration,
       bool? preventTap,
-      Color? backgroundColor}) {
+      Color? backgroundColor,
+      int? maxLines}) {
     _showOverlay(
         _TDIconTextToast(
           text: text,
           iconData: TDIcons.check_circle,
           iconTextDirection: direction,
+          maxLines: maxLines,
         ),
         context: context,
         duration: duration,
@@ -71,12 +75,14 @@ class TDToast {
       required BuildContext context,
       Duration duration = TDToast._defaultDisPlayDuration,
       bool? preventTap,
-      Color? backgroundColor}) {
+      Color? backgroundColor,
+      int? maxLines}) {
     _showOverlay(
         _TDIconTextToast(
           text: text,
           iconData: TDIcons.error_circle,
           iconTextDirection: direction,
+          maxLines: maxLines,
         ),
         context: context,
         duration: duration,
@@ -90,12 +96,14 @@ class TDToast {
       required BuildContext context,
       Duration duration = TDToast._defaultDisPlayDuration,
       bool? preventTap,
-      Color? backgroundColor}) {
+      Color? backgroundColor,
+      int? maxLines}) {
     _showOverlay(
         _TDIconTextToast(
           text: text,
           iconData: TDIcons.close_circle,
           iconTextDirection: direction,
+          maxLines: maxLines,
         ),
         context: context,
         duration: duration,
@@ -221,8 +229,9 @@ class _TDIconTextToast extends StatelessWidget {
   final String? text;
   final IconData? iconData;
   final IconTextDirection iconTextDirection;
+  final int? maxLines;
 
-  const _TDIconTextToast({this.text, this.iconData, this.iconTextDirection = IconTextDirection.horizontal});
+  const _TDIconTextToast({this.text, this.iconData, this.iconTextDirection = IconTextDirection.horizontal, this.maxLines});
 
   Widget buildHorizontalWidgets(BuildContext context) {
     return ConstrainedBox(
@@ -260,9 +269,8 @@ class _TDIconTextToast extends StatelessWidget {
 
   Widget buildVerticalWidgets(BuildContext context) {
     return ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 136, maxHeight: 130),
+        constraints: const BoxConstraints(maxWidth: 136),
         child: Container(
-            height: 110,
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: TDTheme.of(context).fontGyColor1,
@@ -284,7 +292,7 @@ class _TDIconTextToast extends StatelessWidget {
                   text ?? '',
                   font: TDTheme.of(context).fontBodyMedium,
                   fontWeight: FontWeight.w400,
-                  maxLines: 1,
+                  maxLines: maxLines ?? 1,
                   overflow: TextOverflow.ellipsis,
                   textColor: TDTheme.of(context).whiteColor1,
                 )
