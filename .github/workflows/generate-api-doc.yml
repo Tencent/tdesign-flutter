@@ -1,0 +1,25 @@
+name: Generate API Documentation
+
+on:
+  workflow_dispatch: # 允许手动触发
+  push:
+    branches: [develop]
+    paths:
+      - 'tdesign-component/lib/src/components/**'
+      - 'tdesign-component/demo_tool/**'
+
+jobs:
+  generate-api-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup execution permissions
+        working-directory: tdesign-component/demo_tool
+        run: |
+          chmod +x bin/api_tool_linux
+          chmod +x all_build.sh
+
+      - name: Generate API documentation
+        working-directory: tdesign-component/demo_tool
+        run: sh all_build.sh
