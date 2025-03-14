@@ -24,6 +24,7 @@ class TDTag extends StatelessWidget {
       this.needCloseIcon = false,
       this.onCloseTap,
       this.overflow,
+      this.fixedWidth,
       Key? key})
       : super(key: key);
 
@@ -84,13 +85,16 @@ class TDTag extends StatelessWidget {
   /// 关闭图标点击事件
   final GestureTapCallback? onCloseTap;
 
+  /// 标签的固定宽度
+  final double? fixedWidth;
+
   @override
   Widget build(BuildContext context) {
     var innerStyle = _getInnerStyle(context);
 
     Widget child = TDText(
       text,
-      overflow: overflow,
+      overflow: overflow ?? TextOverflow.ellipsis,
       forceVerticalCenter: forceVerticalCenter,
       textColor: textColor ?? innerStyle.getTextColor,
       font: font ?? innerStyle.font ?? _getFont(context),
@@ -129,6 +133,7 @@ class TDTag extends StatelessWidget {
     }
 
     return Container(
+      width: fixedWidth,
       padding: padding ?? _getPadding(innerStyle.border),
       decoration: BoxDecoration(
           color: backgroundColor ?? innerStyle.getBackgroundColor,
@@ -136,7 +141,10 @@ class TDTag extends StatelessWidget {
               width: innerStyle.border,
               color: innerStyle.getBorderColor),
           borderRadius: innerStyle.getBorderRadius),
-      child: child,
+      child: Align(
+        widthFactor: 1,
+        child: child,
+      ),
     );
   }
 

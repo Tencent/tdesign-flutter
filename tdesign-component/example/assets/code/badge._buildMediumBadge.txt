@@ -1,15 +1,15 @@
 
   Widget _buildMediumBadge(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.only(left: 16),
       child: Row(
         children: [
           SizedBox(
-            width: 51,
-            height: 49.5,
+            width: 120,
+            height: 54,
             child: Stack(
               alignment: Alignment.bottomLeft,
-              children: const [
+              children: [
                 TDAvatar(
                   size: TDAvatarSize.medium,
                   type: TDAvatarType.icon,
@@ -19,8 +19,8 @@
                     TDBadgeType.message,
                     count: '8',
                   ),
-                  right: 0,
-                  top: 0,
+                  left: 36,
+                  bottom: 36,
                 )
               ],
             ),

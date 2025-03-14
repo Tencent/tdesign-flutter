@@ -412,13 +412,13 @@ export default {
       title: '反馈',
       type: 'component', // 组件文档
       children: [
-        // {
-        //   title: 'ActionSheet 动作面板',
-        //   name: 'actionsheet',
-        //   meta: { docType: 'message' },
-        //   path: '/flutter/components/action-sheet',
-        //   component: () => import('@/action-sheet/README.md'),
-        // },
+        {
+          title: 'ActionSheet 动作面板',
+          name: 'action-sheet',
+          meta: { docType: 'message' },
+          path: '/flutter/components/action-sheet',
+          component: () => import('@/action-sheet/README.md'),
+        },
         {
           title: 'Dialog 对话框',
           name: 'dialog',
