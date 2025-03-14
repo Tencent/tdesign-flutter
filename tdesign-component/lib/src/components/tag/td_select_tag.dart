@@ -23,6 +23,7 @@ class TDSelectTag extends StatefulWidget {
       this.isLight = false,
       this.needCloseIcon = false,
       this.onCloseTap,
+      this.fixedWidth,
       Key? key})
       : super(key: key);
 
@@ -80,6 +81,9 @@ class TDSelectTag extends StatefulWidget {
   /// 关闭图标点击事件
   final GestureTapCallback? onCloseTap;
 
+  /// 标签的固定宽度
+  final double? fixedWidth;
+
   @override
   _TDClickTagState createState() => _TDClickTagState();
 }
@@ -105,6 +109,7 @@ class _TDClickTagState extends State<TDSelectTag> {
       forceVerticalCenter: widget.forceVerticalCenter,
       needCloseIcon: widget.needCloseIcon,
       onCloseTap: widget.onCloseTap,
+      fixedWidth: widget.fixedWidth,
     );
     if (!widget.disableSelect) {
       result = GestureDetector(

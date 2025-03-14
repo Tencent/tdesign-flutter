@@ -1,85 +1,20 @@
 
-  Widget _imageClip(BuildContext context)  {
-
-    return Row(
+  Widget _imageClip(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          width: 16,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '裁剪',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: TDText(
-                '裁剪',
-                font: TDTheme.of(context).fontBodyMedium,
-                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-              ),
-            ),
-             const TDImage(
-               assetUrl: 'assets/img/image.png',
-               type: TDImageType.clip,
-            ),
-          ],
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.clip,
         ),
-        const SizedBox(
-          width: 24,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: TDText(
-                '适应高',
-                font: TDTheme.of(context).fontBodyMedium,
-                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-              ),
-            ),
-            Container(
-              width: 89,
-              height: 72,
-              color: Colors.black,
-              child: const TDImage(
-                assetUrl: 'assets/img/image.png',
-                type: TDImageType.fitHeight,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          width: 24,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: TDText(
-                '拉伸',
-                font: TDTheme.of(context).fontBodyMedium,
-                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-              ),
-            ),
-            Container(
-              color: Colors.black,
-              width: 121,
-              height: 72,
-              child: Stack(
-                alignment: Alignment.center,
-                children: const [
-                  TDImage(
-                    assetUrl: 'assets/img/image.png',
-                    width: 121,
-                    height: 50,
-                    type: TDImageType.stretch,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        )
       ],
     );
   }

@@ -307,7 +307,8 @@ class HorizontalTextButtons extends StatelessWidget {
                 buttonStyle: leftBtn.style,
                 buttonType: leftBtn.type ?? TDButtonType.text,
                 buttonTheme: leftBtn.theme,
-                height: leftBtn.height,
+                // fix： The button height does not fill the container.
+                height: 56,
                 buttonTextFontWeight: leftBtn.fontWeight,
                 onPressed: () {
                   if(leftBtn.action != null){
@@ -330,7 +331,7 @@ class HorizontalTextButtons extends StatelessWidget {
                 buttonStyle: leftBtn.style,
                 buttonType: leftBtn.type ?? TDButtonType.text,
                 buttonTheme: leftBtn.theme ?? TDButtonTheme.primary,
-                height: rightBtn.height,
+                height: 56,
                 buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
                 onPressed: () {
                   if(rightBtn.action != null){
