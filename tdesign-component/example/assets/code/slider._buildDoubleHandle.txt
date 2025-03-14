@@ -7,7 +7,6 @@
         max: 100,
       ),
       value: const RangeValues(10, 60),
-      // divisions: 5,
       onChanged: (value) {},
     );
   }
