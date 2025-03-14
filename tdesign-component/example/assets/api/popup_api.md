@@ -15,6 +15,9 @@
 | closeClick | PopupClick? | - | 关闭按钮点击回调 |
 | backgroundColor | Color? | - | 背景颜色 |
 | radius | double? | - | 圆角 |
+| draggable | bool | false | 是否可拖动 |
+| maxHeightRatio | double | 0.9 | 最大高度比例 |
+| minHeightRatio | double | 0.3 | 最小高度比例 |
 | key |  | - |  |
 
 ```
@@ -37,6 +40,9 @@
 | rightClick | PopupClick? | - | 右边文本点击回调 |
 | backgroundColor | Color? | - | 背景颜色 |
 | radius | double? | - | 圆角 |
+| draggable | bool | false | 是否可拖动 |
+| maxHeightRatio | double | 0.9 | 最大高度比例 |
+| minHeightRatio | double | 0.3 | 最小高度比例 |
 | key |  | - |  |
 
 ```

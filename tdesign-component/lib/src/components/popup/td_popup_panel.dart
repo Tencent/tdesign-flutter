@@ -6,7 +6,7 @@ import '../../util/context_extension.dart';
 typedef PopupClick = Function();
 
 /// 右上角带关闭的底部浮层面板
-class TDPopupBottomDisplayPanel extends StatelessWidget {
+class TDPopupBottomDisplayPanel extends StatefulWidget {
   const TDPopupBottomDisplayPanel({
     required this.child,
     this.title,
@@ -17,6 +17,9 @@ class TDPopupBottomDisplayPanel extends StatelessWidget {
     this.closeClick,
     this.backgroundColor,
     this.radius,
+    this.draggable = false,
+    this.maxHeightRatio = 0.9,
+    this.minHeightRatio = 0.3,
     Key? key,
   }) : super(key: key);
 
@@ -47,65 +50,240 @@ class TDPopupBottomDisplayPanel extends StatelessWidget {
   /// 圆角
   final double? radius;
 
+  /// 是否可拖动
+  final bool draggable;
+
+  /// 最大高度比例
+  final double maxHeightRatio;
+
+  /// 最小高度比例
+  final double minHeightRatio;
+
+  @override
+  State<TDPopupBottomDisplayPanel> createState() => _TDPopupBottomDisplayPanelState();
+}
+
+class _TDPopupBottomDisplayPanelState extends State<TDPopupBottomDisplayPanel>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late double _maxHeight;
+  late double _minHeight;
+  double _currentHeight = 0;
+  bool _isFullscreen = false;
+  late BoxConstraints _constraints;
+
+  final double _dragHandleHeight = 24.0;
+  final double _headerHeight = 58.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+    _controller.addListener(_updateHeight);
+  }
+
+  void _updateHeight() {
+    setState(() {
+      _currentHeight = _minHeight + (_maxHeight - _minHeight) * _controller.value;
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _toggleFullscreen(bool fullscreen) {
+    if (_isFullscreen == fullscreen) {
+      return;
+    }
+
+    setState(() {
+      _isFullscreen = fullscreen;
+      if (fullscreen) {
+        _maxHeight = MediaQuery.of(context).size.height;
+      } else {
+        _maxHeight = _constraints.maxHeight * widget.maxHeightRatio;
+      }
+    });
+
+    _controller.animateTo(
+      fullscreen ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _handleDragUpdate(DragUpdateDetails details) {
+    if (!widget.draggable) {
+      return;
+    }
+
+    final newHeight = _currentHeight - details.primaryDelta! * 1.2;
+    _currentHeight = newHeight.clamp(_minHeight, _maxHeight);
+
+    final progress = (_currentHeight - _minHeight) / (_maxHeight - _minHeight);
+    _controller.value = progress.clamp(0.0, 1.0);
+
+    if (progress > 0.85 && !_isFullscreen) {
+      _toggleFullscreen(true);
+    } else if (progress < 0.75 && _isFullscreen) {
+      _toggleFullscreen(false);
+    }
+  }
+
+  void _handleDragEnd(DragEndDetails details) {
+    if (!widget.draggable) return;
+
+    final velocity = details.velocity.pixelsPerSecond.dy;
+    if (velocity < -800 || _controller.value > 0.5) {
+      _animateTo(_maxHeight);
+    } else if (velocity > 800 || _controller.value < 0.5) {
+      _animateTo(_minHeight);
+    }
+  }
+
+  void _animateTo(double height) {
+    final value = (height - _minHeight) / (_maxHeight - _minHeight);
+    _controller.animateTo(
+      value,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: backgroundColor ?? TDTheme.of(context).whiteColor1,
-          borderRadius:
-              BorderRadius.only(topLeft: Radius.circular(radius ?? 12), topRight: Radius.circular(radius ?? 12))),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [_buildTop(context), child],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _constraints = constraints;
+        _maxHeight = constraints.maxHeight * widget.maxHeightRatio;
+        _minHeight = constraints.maxHeight * widget.minHeightRatio;
+        if (_currentHeight == 0) {
+          _currentHeight = _minHeight;
+        }
+
+        return AnimatedBuilder(
+          animation: _controller,
+          builder: (context, _) {
+            return Container(
+              height: _currentHeight,
+              decoration: BoxDecoration(
+                color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+                borderRadius: _isFullscreen
+                    ? null
+                    : BorderRadius.vertical(top: Radius.circular(widget.radius ?? 12)),
+              ),
+              child: Column(
+                children: [
+                  // 拖动条
+                  _buildDragHandle(context),
+                  // 标题
+                  if (widget.title != null) _buildHeader(),
+                  // 内容
+                  Expanded(child: _buildContent()),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildDragHandle(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onVerticalDragUpdate: _handleDragUpdate,
+      onVerticalDragEnd: _handleDragEnd,
+      onDoubleTap: () => _toggleFullscreen(!_isFullscreen),
+      child: SizedBox(
+        height: _dragHandleHeight + 12,
+        child: Center(
+          child: Container(
+            width: 48,
+            height: 4,
+            decoration: BoxDecoration(
+              color: TDTheme.of(context).grayColor3,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildTop(BuildContext context) {
+  Widget _buildHeader() {
     Widget result = Container(
-      alignment: titleLeft ? Alignment.centerLeft : Alignment.center,
+      alignment: widget.titleLeft ? Alignment.centerLeft : Alignment.center,
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: TDText(
-        title ?? '',
-        textColor: titleColor ?? TDTheme.of(context).fontGyColor1,
+        widget.title ?? '',
+        textColor: widget.titleColor ?? TDTheme.of(context).fontGyColor1,
         font: TDTheme.of(context).fontTitleLarge,
         fontWeight: FontWeight.w700,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
     );
-    if (!hideClose) {
-      result = Stack(
-        alignment: Alignment.centerLeft,
-        children: [
-          Padding(padding: EdgeInsets.only(right: 40, left: titleLeft ? 0 : 40), child: result),
-          Positioned(
-            right: 0,
-            child: GestureDetector(
-              child: Container(
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(right: 16),
-                child: Icon(
-                  TDIcons.close,
-                  color: closeColor,
-                  size: 24,
-                ),
-              ),
-              onTap: closeClick,
-            ),
-          ),
-        ],
-      );
-    }
     return SizedBox(
-      height: 58,
-      child: result,
+      height: _headerHeight,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(padding: EdgeInsets.only(right: 40, left: widget.titleLeft ? 0 : 40), child: result),
+            Positioned(
+              right: 0,
+              child: GestureDetector(
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 16),
+                  child: Icon(
+                    TDIcons.close,
+                    color: widget.closeColor,
+                    size: 24,
+                  ),
+                ),
+                onTap: widget.closeClick,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent() {
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification is ScrollUpdateNotification) {
+          final metrics = notification.metrics;
+          // 顶部越界拖动
+          if (metrics.pixels <= 0 && notification.dragDetails != null) {
+            _handleDragUpdate(notification.dragDetails!);
+          }
+          // 底部越界拖动
+          else if (metrics.pixels >= metrics.maxScrollExtent &&
+              notification.dragDetails != null) {
+            _handleDragUpdate(notification.dragDetails!);
+          }
+        }
+        return false;
+      },
+      child: widget.child,
     );
   }
 }
 
+
 /// 带确认的底部浮层面板
-class TDPopupBottomConfirmPanel extends StatelessWidget {
+class TDPopupBottomConfirmPanel extends StatefulWidget {
   const TDPopupBottomConfirmPanel({
     required this.child,
     this.title,
@@ -118,6 +296,9 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
     this.rightClick,
     this.backgroundColor,
     this.radius,
+    this.draggable = false,
+    this.maxHeightRatio = 0.9,
+    this.minHeightRatio = 0.3,
     Key? key,
   }) : super(key: key);
 
@@ -154,23 +335,191 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
   /// 圆角
   final double? radius;
 
+  /// 是否可拖动
+  final bool draggable;
+
+  /// 最大高度比例
+  final double maxHeightRatio;
+
+  /// 最小高度比例
+  final double minHeightRatio;
+
+  @override
+  State<TDPopupBottomConfirmPanel> createState() => _TDPopupBottomConfirmPanelState();
+}
+
+class _TDPopupBottomConfirmPanelState extends State<TDPopupBottomConfirmPanel>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late double _maxHeight;
+  late double _minHeight;
+  double _currentHeight = 0;
+  bool _isFullscreen = false;
+  late BoxConstraints _constraints;
+
+  final double _dragHandleHeight = 24.0;
+  final double _headerHeight = 58.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+    _controller.addListener(_updateHeight);
+  }
+
+  void _updateHeight() {
+    setState(() {
+      _currentHeight = _minHeight + (_maxHeight - _minHeight) * _controller.value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: backgroundColor ?? TDTheme.of(context).whiteColor1,
-          borderRadius:
-              BorderRadius.only(topLeft: Radius.circular(radius ?? 12), topRight: Radius.circular(radius ?? 12))),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [_buildTop(context), child],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _constraints = constraints;
+        _maxHeight = constraints.maxHeight * widget.maxHeightRatio;
+        _minHeight = constraints.maxHeight * widget.minHeightRatio;
+        if (_currentHeight == 0) {
+          _currentHeight = _minHeight;
+        }
+
+        return AnimatedBuilder(
+          animation: _controller,
+          builder: (context, _) {
+            return Container(
+              height: _currentHeight,
+              decoration: BoxDecoration(
+                color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+                borderRadius: _isFullscreen
+                    ? null
+                    : BorderRadius.vertical(top: Radius.circular(widget.radius ?? 12)),
+              ),
+              child: Column(
+                children: [
+                  // 拖动条
+                  _buildDragHandle(context),
+                  // 标题
+                  _buildTop(context),
+                  // 内容
+                  Expanded(child: _buildContent()),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _toggleFullscreen(bool fullscreen) {
+    if (_isFullscreen == fullscreen) {
+      return;
+    }
+
+    setState(() {
+      _isFullscreen = fullscreen;
+      if (fullscreen) {
+        _maxHeight = MediaQuery.of(context).size.height;
+      } else {
+        _maxHeight = _constraints.maxHeight * widget.maxHeightRatio;
+      }
+    });
+
+    _controller.animateTo(
+      fullscreen ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _handleDragUpdate(DragUpdateDetails details) {
+    if (!widget.draggable) {
+      return;
+    }
+
+    final newHeight = _currentHeight - details.primaryDelta! * 1.2;
+    _currentHeight = newHeight.clamp(_minHeight, _maxHeight);
+
+    final progress = (_currentHeight - _minHeight) / (_maxHeight - _minHeight);
+    _controller.value = progress.clamp(0.0, 1.0);
+
+    if (progress > 0.85 && !_isFullscreen) {
+      _toggleFullscreen(true);
+    } else if (progress < 0.75 && _isFullscreen) {
+      _toggleFullscreen(false);
+    }
+  }
+
+  void _handleDragEnd(DragEndDetails details) {
+    if (!widget.draggable) return;
+
+    final velocity = details.velocity.pixelsPerSecond.dy;
+    if (velocity < -800 || _controller.value > 0.5) {
+      _animateTo(_maxHeight);
+    } else if (velocity > 800 || _controller.value < 0.5) {
+      _animateTo(_minHeight);
+    }
+  }
+
+  void _animateTo(double height) {
+    final value = (height - _minHeight) / (_maxHeight - _minHeight);
+    _controller.animateTo(
+      value,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  Widget _buildDragHandle(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onVerticalDragUpdate: _handleDragUpdate,
+      onVerticalDragEnd: _handleDragEnd,
+      onDoubleTap: () => _toggleFullscreen(!_isFullscreen),
+      child: SizedBox(
+        height: _dragHandleHeight + 12,
+        child: Center(
+          child: Container(
+            width: 48,
+            height: 4,
+            decoration: BoxDecoration(
+              color: TDTheme.of(context).grayColor3,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+        ),
       ),
+    );
+  }
+
+  Widget _buildContent() {
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification is ScrollUpdateNotification) {
+          final metrics = notification.metrics;
+          // 顶部越界拖动处理
+          if (metrics.pixels <= 0 && notification.dragDetails != null) {
+            _handleDragUpdate(notification.dragDetails!);
+          }
+          // 底部越界拖动处理
+          else if (metrics.pixels >= metrics.maxScrollExtent &&
+              notification.dragDetails != null) {
+            _handleDragUpdate(notification.dragDetails!);
+          }
+        }
+        return false;
+      },
+      child: widget.child,
     );
   }
 
   Widget _buildTop(BuildContext context) {
     return SizedBox(
-      height: 58,
+      height: _headerHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -178,38 +527,38 @@ class TDPopupBottomConfirmPanel extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 16),
               child: TDText(
-                leftText ?? context.resource.cancel,
-                textColor: leftTextColor ?? TDTheme.of(context).fontGyColor2,
+                widget.leftText ?? context.resource.cancel,
+                textColor: widget.leftTextColor ?? TDTheme.of(context).fontGyColor2,
                 font: TDTheme.of(context).fontBodyLarge,
                 fontWeight: FontWeight.w400,
               ),
             ),
-            onTap: leftClick,
+            onTap: widget.leftClick,
           ),
           Expanded(
               child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(left: 16, right: 16),
-            child: TDText(
-              title ?? '',
-              textColor: titleColor ?? TDTheme.of(context).fontGyColor1,
-              font: TDTheme.of(context).fontTitleLarge,
-              fontWeight: FontWeight.w700,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          )),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: TDText(
+                  widget.title ?? '',
+                  textColor: widget.titleColor ?? TDTheme.of(context).fontGyColor1,
+                  font: TDTheme.of(context).fontTitleLarge,
+                  fontWeight: FontWeight.w700,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              )),
           GestureDetector(
             child: Padding(
               padding: const EdgeInsets.only(right: 16),
               child: TDText(
-                rightText ?? context.resource.confirm,
-                textColor: rightTextColor ?? TDTheme.of(context).brandNormalColor,
+                widget.rightText ?? context.resource.confirm,
+                textColor: widget.rightTextColor ?? TDTheme.of(context).brandNormalColor,
                 font: TDTheme.of(context).fontTitleMedium,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            onTap: rightClick,
+            onTap: widget.rightClick,
           ),
         ],
       ),
