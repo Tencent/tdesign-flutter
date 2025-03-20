@@ -28,17 +28,23 @@
             }
             return nums;
           },
-          itemBuilder: (context, content, colIndex, index, itemDistanceCalculator, distance) {
-            return colIndex == 5 ? TDText(
-              content,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontWeight: itemDistanceCalculator.calculateFontWeight(context, distance),
-                fontSize: index % 2 == 0 ? 20 : 10,
-                color: index % 2 == 1 ? TDTheme.of(context).fontGyColor1 : TDTheme.of(context).successColor6,
-              ),
-            ) : null;
+          itemBuilder: (context, content, colIndex, index,
+              itemDistanceCalculator, distance) {
+            return colIndex == 5
+                ? TDText(
+                    content,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: itemDistanceCalculator.calculateFontWeight(
+                          context, distance),
+                      fontSize: index % 2 == 0 ? 20 : 10,
+                      color: index % 2 == 1
+                          ? TDTheme.of(context).fontGyColor1
+                          : TDTheme.of(context).successColor6,
+                    ),
+                  )
+                : null;
           },
         );
       },
