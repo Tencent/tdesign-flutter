@@ -23,6 +23,7 @@ class TDCalendarBody extends StatelessWidget {
     required this.cellHeight,
     required this.monthTitleHeight,
     required this.verticalGap,
+    required this.animateTo,
   }) : super(key: key);
 
   final int? maxDate;
@@ -40,6 +41,7 @@ class TDCalendarBody extends StatelessWidget {
   final double monthTitleHeight;
   final double verticalGap;
   final double cellHeight;
+  final bool animateTo;
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +119,7 @@ class TDCalendarBody extends StatelessWidget {
       return;
     }
     final scrollDate = value!.reduce((a, b) => a.isBefore(b) ? a : b);
-    var lastMonthDay = DateTime(months.last.year, months.last.month + 1); 
+    var lastMonthDay = DateTime(months.last.year, months.last.month + 1);
     lastMonthDay = lastMonthDay.add(const Duration(days: -1));
     if (months.first.isAfter(scrollDate) || lastMonthDay.isBefore(scrollDate)) {
       return;
@@ -131,7 +133,16 @@ class TDCalendarBody extends StatelessWidget {
         }
         height += _getMonthHeight(months, i, monthHeight);
       }
-      if (height > 0) {
+      if (height <= 0) {
+        return;
+      }
+      if (animateTo) {
+        scrollController.animateTo(
+          height,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+        );
+      } else {
         scrollController.jumpTo(height);
       }
     });
