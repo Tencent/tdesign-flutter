@@ -1,0 +1,22 @@
+
+  Widget _imageRoundedSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '圆角方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.roundedSquare,
+          width: 72,
+          height: 72,
+        ),
+      ],
+    );
+  }

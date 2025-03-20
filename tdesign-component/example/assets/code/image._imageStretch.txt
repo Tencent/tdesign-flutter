@@ -1,0 +1,32 @@
+
+  Widget _imageStretch(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '拉伸',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          color: Colors.black,
+          width: 121,
+          height: 72,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              TDImage(
+                assetUrl: 'assets/img/image.png',
+                width: 121,
+                height: 50,
+                type: TDImageType.stretch,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
