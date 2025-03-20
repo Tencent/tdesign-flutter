@@ -36,6 +36,9 @@ class TDProgress extends StatelessWidget {
     this.linearBorderRadius,
     double? circleRadius,
     this.showLabel = true,
+    this.customProgressLabel,
+    this.labelWidgetWidth,
+    this.labelWidgetAlignment,
     this.onTap,
     this.onLongPress,
     int animationDuration = 300,
@@ -78,6 +81,15 @@ class TDProgress extends StatelessWidget {
   /// 是否显示标签
   final bool showLabel;
 
+  /// 自定义标签
+  final Widget? customProgressLabel;
+
+  /// 自定义标签宽度
+  final double? labelWidgetWidth;
+
+  /// 自定义标签对齐方式
+  final Alignment? labelWidgetAlignment;
+
   /// 点击事件
   final VoidCallback? onTap;
 
@@ -113,6 +125,9 @@ class TDProgress extends StatelessWidget {
       linearBorderRadius: linearBorderRadius ?? defaultValues.linearBorderRadius,
       circleRadius: circleRadius ?? defaultValues.circleRadius,
       showLabel: showLabel,
+      customProgressLabel:customProgressLabel,
+      labelWidgetWidth: labelWidgetWidth,
+      labelWidgetAlignment: labelWidgetAlignment,
       onTap: onTap,
       onLongPress: onLongPress,
       type: type,
@@ -180,6 +195,9 @@ class ProgressIndicator extends StatefulWidget {
   final TDProgressType type;
   final TDProgressStatus progressStatus;
   final bool showLabel;
+  final Widget? customProgressLabel;
+  final double? labelWidgetWidth;
+  final Alignment? labelWidgetAlignment;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final int animationDuration;
@@ -198,6 +216,9 @@ class ProgressIndicator extends StatefulWidget {
     required this.type,
     this.progressStatus = TDProgressStatus.primary,
     this.showLabel = true,
+    this.customProgressLabel,
+    this.labelWidgetWidth,
+    this.labelWidgetAlignment,
     this.onTap,
     this.onLongPress,
     this.animationDuration = 300,
@@ -371,9 +392,15 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (widget.progressLabelPosition == TDProgressLabelPosition.left)
-              Padding(
+              Container(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: _buildLabelWidget(TDTheme.of(context).fontGyColor1),
+                alignment:widget.labelWidgetAlignment??Alignment.centerRight,
+                constraints: BoxConstraints(
+                  minWidth:widget.labelWidgetWidth??(maxWidth*0.1>70?maxWidth*0.04
+                      :maxWidth*0.1),
+                ),
+                child:widget.customProgressLabel??
+                    _buildLabelWidget(TDTheme.of(context).fontGyColor1),
               ),
             Expanded(
                 child: Stack(
@@ -390,10 +417,16 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
               ],
             )),
             if (widget.progressLabelPosition == TDProgressLabelPosition.right)
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: _buildLabelWidget(TDTheme.of(context).fontGyColor1),
+            Container(
+              padding: const EdgeInsets.only(left: 8.0),
+              alignment:widget.labelWidgetAlignment??Alignment.centerLeft,
+              constraints: BoxConstraints(
+                minWidth:widget.labelWidgetWidth??(maxWidth*0.1>70?maxWidth*0.04
+                    :maxWidth*0.1),
               ),
+              child:widget.customProgressLabel??
+                  _buildLabelWidget(TDTheme.of(context).fontGyColor1),
+            )
           ],
         );
       },
