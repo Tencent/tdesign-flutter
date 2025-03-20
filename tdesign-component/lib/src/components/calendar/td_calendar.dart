@@ -45,6 +45,7 @@ class TDCalendar extends StatefulWidget {
     this.pickerHeight = 178,
     this.pickerItemCount = 3,
     this.isTimeUnit = true,
+    this.animateTo = false,
   }) : super(key: key);
 
   /// 第一天从星期几开始，默认 0 = 周日
@@ -119,6 +120,9 @@ class TDCalendar extends StatefulWidget {
   /// 是否显示时间单位
   final bool? isTimeUnit;
 
+  /// 动画滚动到指定位置
+  final bool? animateTo;
+
   List<DateTime>? get _value => value?.map((e) {
         final date = DateTime.fromMillisecondsSinceEpoch(e);
         return DateTime(date.year, date.month, date.day);
@@ -169,14 +173,6 @@ class _TDCalendarState extends State<TDCalendar> {
   }
 
   @override
-  void didUpdateWidget(TDCalendar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.value != oldWidget.value) {
-      inherited?.selected.value = widget.value ?? [];
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     inherited = TDCalendarInherited.of(context);
     _initValue();
@@ -220,6 +216,7 @@ class _TDCalendarState extends State<TDCalendar> {
               cellHeight: widget.cellHeight ?? 60,
               monthTitleHeight: widget.monthTitleHeight ?? 22,
               monthTitleBuilder: widget.monthTitleBuilder,
+              animateTo: widget.animateTo ?? false,
               builder: (date, dateList, data, rowIndex, colIndex) {
                 return TDCalendarCell(
                   height: widget.cellHeight ?? 60,
@@ -249,7 +246,7 @@ class _TDCalendarState extends State<TDCalendar> {
                   padding: EdgeInsets.symmetric(vertical: TDTheme.of(context).spacer16),
                   child: TDButton(
                     theme: TDButtonTheme.primary,
-                    text: '确定',
+                    text: context.resource.confirm,
                     isBlock: true,
                     size: TDButtonSize.large,
                     onTap: inherited?.onConfirm,
@@ -350,8 +347,11 @@ class _TDCalendarState extends State<TDCalendar> {
   }
 
   void _initValue() {
+    if (inherited == null) {
+      return;
+    }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      inherited?.selected.value = _getValue(widget.value ?? []);
+      inherited!.selected.value = _getValue(widget.value ?? []);
     });
   }
 }

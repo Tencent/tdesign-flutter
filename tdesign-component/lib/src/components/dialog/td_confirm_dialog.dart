@@ -83,7 +83,7 @@ class TDConfirmDialog extends StatelessWidget {
   final Widget? buttonWidget;
 
   Widget _buildButton(BuildContext context) {
-    if(buttonWidget != null) {
+    if (buttonWidget != null) {
       return buttonWidget!;
     }
     if (buttonStyle == TDDialogButtonStyle.text) {
@@ -131,22 +131,41 @@ class TDConfirmDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
     assert((title != null || content != null || contentWidget != null));
+
     return TDDialogScaffold(
         showCloseButton: showCloseButton,
         backgroundColor: backgroundColor,
         radius: radius,
-        body: Column(mainAxisSize: MainAxisSize.min, children: [
-          TDDialogInfoWidget(
-            title: title,
-            titleColor: titleColor,
-            titleAlignment: titleAlignment,
-            contentWidget: contentWidget,
-            content: content,
-            contentColor: contentColor,
-            contentMaxHeight: contentMaxHeight,
-            padding: padding,
-          ),
-          _buildButton(context),
-        ]));
+        body: LayoutBuilder(
+            builder: (context, constraints) {
+              return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 内容区域添加弹性约束 https://api.flutter.dev/flutter/widgets/Flexible-class.html
+                    Flexible(
+                      // 滚动支持
+                        child: SingleChildScrollView(
+                          physics: const ClampingScrollPhysics(),
+                          child: TDDialogInfoWidget(
+                            title: title,
+                            titleColor: titleColor,
+                            titleAlignment: titleAlignment,
+                            contentWidget: contentWidget,
+                            content: content,
+                            contentColor: contentColor,
+                            // 当contentMaxHeight未设置时，使用屏幕的60%作为最大高度，并允许滚动
+                            contentMaxHeight: contentMaxHeight > 0
+                                ? contentMaxHeight
+                                : constraints.maxHeight * 0.6,
+                            padding: padding,
+                          ),
+                        ),
+                    ),
+                    _buildButton(context),
+                  ]
+              );
+            }
+        )
+    );
   }
 }
