@@ -26,6 +26,7 @@ class TDPicker {
       TextStyle? centerTextStyle,
       TextStyle? rightTextStyle,
       Color? titleDividerColor,
+      Widget? customSelectWidget,
       Duration duration = const Duration(milliseconds: 100),
       double pickerHeight = 200,
       bool isTimeUnit=true,
@@ -56,6 +57,7 @@ class TDPicker {
               rightTextStyle: rightTextStyle,
               titleDividerColor: titleDividerColor,
               isTimeUnit: isTimeUnit,
+              customSelectWidget: customSelectWidget,
               model: DatePickerModel(
                 useYear: useYear,
                 useMonth: useMonth,
@@ -94,6 +96,7 @@ class TDPicker {
       Color? titleDividerColor,
       double? topPadding,
       int pickerItemCount = 5,
+      Widget? customSelectWidget,
       ItemBuilderType? itemBuilder}) {
     showModalBottomSheet(
         context: context,
@@ -115,7 +118,8 @@ class TDPicker {
             pickerItemCount: pickerItemCount,
             titleDividerColor: titleDividerColor,
             topPadding: topPadding,
-            itemBuilder: itemBuilder
+            itemBuilder: itemBuilder,
+            customSelectWidget: customSelectWidget,
           );
         });
   }
@@ -137,6 +141,7 @@ class TDPicker {
       TextStyle? rightTextStyle,
       double pickerHeight = 200,
       Color? titleDividerColor,
+      Widget? customSelectWidget,
       double? topPadding,
       int pickerItemCount = 5}) {
     showModalBottomSheet(
@@ -160,6 +165,7 @@ class TDPicker {
             selectedData: initialData,
             titleDividerColor: titleDividerColor,
             topPadding: topPadding,
+            customSelectWidget: customSelectWidget,
           );
         });
   }
