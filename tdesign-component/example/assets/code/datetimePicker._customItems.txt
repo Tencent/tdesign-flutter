@@ -1,0 +1,53 @@
+
+  Widget _customItems(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        TDPicker.showDatePicker(
+          context,
+          title: '选择时间',
+          onConfirm: (selected) {
+            setState(() {
+              selected_9 = '${selected['year'].toString().padLeft(4, '0')}-'
+                  '${selected['month'].toString().padLeft(2, '0')}-'
+                  '${selected['day'].toString().padLeft(2, '0')} '
+                  '${selected['hour'].toString().padLeft(2, '0')}:'
+                  '${selected['minute'].toString().padLeft(2, '0')}:'
+                  '${selected['second'].toString().padLeft(2, '0')}';
+            });
+            Navigator.of(context).pop();
+          },
+          useHour: true,
+          useMinute: true,
+          useSecond: true,
+          dateStart: [1999, 01, 01],
+          dateEnd: [2023, 12, 31],
+          initialDate: [2012, 1, 1],
+          filterItems: (key, nums) {
+            if (key == DateTypeKey.minute) {
+              return [0, 15, 30];
+            }
+            return nums;
+          },
+          itemBuilder: (context, content, colIndex, index,
+              itemDistanceCalculator, distance) {
+            return colIndex == 5
+                ? TDText(
+                    content,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: itemDistanceCalculator.calculateFontWeight(
+                          context, distance),
+                      fontSize: index % 2 == 0 ? 20 : 10,
+                      color: index % 2 == 1
+                          ? TDTheme.of(context).fontGyColor1
+                          : TDTheme.of(context).successColor6,
+                    ),
+                  )
+                : null;
+          },
+        );
+      },
+      child: buildSelectRow(context, selected_9, '选择时间'),
+    );
+  }

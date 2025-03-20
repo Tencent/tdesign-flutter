@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../dialog/td_dialog_widget.dart';
 
 enum TDInputType { normal, twoLine, longText, special, normalMaxTwoLine, cardStyle }
 
@@ -251,8 +252,22 @@ class TDInput extends StatelessWidget {
     }
   }
 
+  /// 获取文本的实际宽度
+  double _getTextWidth(String text, TextStyle? style) {
+    final textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout();
+    return textPainter.width;
+  }
+
   Widget buildInputView(BuildContext context) {
-    _leftLabelWidth = leftInfoWidth! + (spacer.iconLabelSpace ?? 4);
+    final double leftLabelWidth = leftLabel != null ? _getTextWidth(leftLabel!, leftLabelStyle) : 0;
+    _leftLabelWidth = leftLabelWidth +
+        (leftIcon != null ? (spacer.iconLabelSpace ?? 4) : 0) +
+        (required == true ? 14 : 0);
+    
     switch (type) {
       case TDInputType.normal:
         return buildNormalInput(context);
@@ -309,49 +324,71 @@ class TDInput extends StatelessWidget {
               ),
               SizedBox(
                 width: _leftLabelWidth,
-                child: Row(
-                  children: [
-                    Visibility(
-                      visible: leftIcon != null,
-                      child: SizedBox(
-                        width: 24,
-                        child: leftIcon ?? const SizedBox.shrink(),
-                      ),
-                    ),
-                    Visibility(
-                      visible: leftLabel != null,
-                      child: Container(
-                        constraints: BoxConstraints(maxWidth: _leftLabelWidth),
-                        padding: EdgeInsets.only(
-                            left: leftIcon != null ? (spacer.iconLabelSpace ?? 4) : 0,
-                            top: getInputPadding(),
-                            bottom: getInputPadding()),
-                        child: TDText(
-                          leftLabel,
-                          maxLines: 2,
-                          style: leftLabelStyle ?? const TextStyle(letterSpacing: 0),
-                          font: TDTheme.of(context).fontBodyLarge,
-                          fontWeight: FontWeight.w400,
+                child: GestureDetector(
+                  // 如果文本长度超过20字符，点击则弹出对话框显示文本全称
+                  onTap: () {
+                    if (leftLabel != null && leftLabel!.length > 20) {
+                      showGeneralDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        barrierLabel: '',
+                        barrierColor: Colors.transparent,  // 设置为透明
+                        transitionDuration: const Duration(milliseconds: 200),
+                        pageBuilder: (context, animation1, animation2) {
+                          return Center(
+                            child: TDDialogInfoWidget(
+                              content: leftLabel!,
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      Visibility(
+                        visible: leftIcon != null,
+                        child: SizedBox(
+                          width: 24,
+                          child: leftIcon ?? const SizedBox.shrink(),
                         ),
                       ),
-                    ),
-                    Visibility(
-                      visible: labelWidget != null,
-                      child: labelWidget ?? const SizedBox.shrink(),
-                    ),
-                    Visibility(
-                        visible: required ?? false,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 4.0),
+                      Visibility(
+                        visible: leftLabel != null,
+                        child: Container(
+                          constraints: BoxConstraints(maxWidth: _leftLabelWidth),
+                          padding: EdgeInsets.only(
+                              left: leftIcon != null ? (spacer.iconLabelSpace ?? 4) : 0,
+                              top: getInputPadding(),
+                              bottom: getInputPadding()),
                           child: TDText(
-                            '*',
+                            leftLabel,
                             maxLines: 1,
-                            style: TextStyle(color: TDTheme.of(context).errorColor6),
+                            overflow: TextOverflow.ellipsis,
+                            style: leftLabelStyle ?? const TextStyle(letterSpacing: 0),
                             font: TDTheme.of(context).fontBodyLarge,
                             fontWeight: FontWeight.w400,
                           ),
-                        )),
-                  ],
+                        ),
+                      ),
+                      Visibility(
+                        visible: labelWidget != null,
+                        child: labelWidget ?? const SizedBox.shrink(),
+                      ),
+                      Visibility(
+                          visible: required ?? false,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: TDText(
+                              '*',
+                              maxLines: 1,
+                              style: TextStyle(color: TDTheme.of(context).errorColor6),
+                              font: TDTheme.of(context).fontBodyLarge,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          )),
+                    ],
+                  ),
                 ),
               ),
               Expanded(

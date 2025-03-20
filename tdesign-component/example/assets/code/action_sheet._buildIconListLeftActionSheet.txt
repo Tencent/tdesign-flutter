@@ -1,7 +1,7 @@
 
 Widget _buildIconListLeftActionSheet(BuildContext context) {
   return TDButton(
-    text: '左对齐带图标列表型',
+    text: '左对齐带图标列表',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -10,6 +10,7 @@ Widget _buildIconListLeftActionSheet(BuildContext context) {
       TDActionSheet(
         context,
         visible: true,
+        description: '动作面板描述文字',
         align: TDActionSheetAlign.left,
         items: _nums
             .map((e) => TDActionSheetItem(

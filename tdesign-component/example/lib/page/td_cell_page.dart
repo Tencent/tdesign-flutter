@@ -60,15 +60,26 @@ class TDCellPage extends StatelessWidget {
 
 @Demo(group: 'cell')
 Widget _buildSimple(BuildContext context) {
-  return const TDCellGroup(
+  // 可统一修改样式
+  var style = TDCellStyle(context: context);
+  return TDCellGroup(
+    style: style,
     cells: [
-      TDCell(arrow: true, title: '单行标题'),
-      TDCell(arrow: true, title: '单行标题', required: true),
-      TDCell(arrow: true, title: '单行标题', noteWidget: TDBadge(TDBadgeType.message, count: '8')),
-      TDCell(arrow: false, title: '单行标题', rightIconWidget: TDSwitch(isOn: true)),
-      TDCell(arrow: true, title: '单行标题', note: '辅助信息'),
-      TDCell(arrow: true, title: '单行标题', leftIcon: TDIcons.lock_on),
-      TDCell(arrow: false, title: '单行标题'),
+      // 可单独修改样式
+      TDCell(arrow: true, title: '单行标题', style: TDCellStyle.cellStyle(context)),
+      TDCell(
+        arrow: true,
+        title: '单行标题',
+        required: true,
+        onClick: (cell) {
+          print('单行标题');
+        },
+      ),
+      const TDCell(arrow: true, title: '单行标题', noteWidget: TDBadge(TDBadgeType.message, count: '8')),
+      const TDCell(arrow: false, title: '单行标题', rightIconWidget: TDSwitch(isOn: true)),
+      const TDCell(arrow: true, title: '单行标题', note: '辅助信息'),
+      const TDCell(arrow: true, title: '单行标题', leftIcon: TDIcons.lock_on),
+      const TDCell(arrow: false, title: '单行标题'),
     ],
   );
 }
@@ -118,12 +129,19 @@ Widget _buildCard(BuildContext context) {
 
 @Demo(group: 'cell')
 Widget _buildPadding(BuildContext context) {
-  var style = TDCellStyle.cellStyle(context);
+  var style = TDCellStyle(context: context);
   style.padding = const EdgeInsets.all(30);
   return TDCellGroup(
     theme: TDCellGroupTheme.cardTheme,
     cells: [
-      TDCell(arrow: true, title: 'padding-all-30', style: style,),
+      TDCell(
+        arrow: true,
+        title: 'padding-all-30',
+        style: style,
+        onClick: (cell) {
+          print('padding-all-30');
+        },
+      ),
     ],
   );
 }
