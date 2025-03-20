@@ -16,7 +16,7 @@ docClass: timeline
 - `Calendar`: 新增monthTitleBuilder参数 @hkaikai ([#419](https://github.com/Tencent/tdesign-flutter/pull/419))
 - `Calendar`: 新增pickerHeight、pickerItemCount参数，用于控制时间选择组件高度 @hkaikai ([#421](https://github.com/Tencent/tdesign-flutter/pull/421))
 - `Toast`: 支持自定义蒙层背景色 @ccXxx1aoBai ([#423](https://github.com/Tencent/tdesign-flutter/pull/423))
-- `Rate`: 支持disabeld 参数 @hkaikai ([#357](https://github.com/Tencent/tdesign-flutter/pull/357))
+- `Rate`: 支持disabled 参数 @hkaikai ([#357](https://github.com/Tencent/tdesign-flutter/pull/357))
 - `Calendar`: 修改CalendarBuilder返回值为Widget @Luozf12345 ([#396](https://github.com/Tencent/tdesign-flutter/pull/396))
 - `SearchBar`: 新增只读属性与点击事件 @shizhe2018 ([#393](https://github.com/Tencent/tdesign-flutter/pull/393))
 - `Dialog`: TDDialogButtonOptions新增属性字体大小 @shizhe2018 ([#381](https://github.com/Tencent/tdesign-flutter/pull/381))
