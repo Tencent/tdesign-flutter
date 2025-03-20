@@ -128,6 +128,7 @@ class _TDTabsPageState extends State<TDTabsPage>
       ExampleItem(desc: '自定义下标属性', builder: _customIndicatorStyle),
       ExampleItem(desc: '自定义下划线样式', builder: _customDividerStyle),
       ExampleItem(desc: '不展示下划线-高度为0', builder: _hideBottomDivider),
+      ExampleItem(desc: 'capsule类型可修改背景色', builder: _capsuleBackgroundColor),
     ],);
   }
 
@@ -429,6 +430,16 @@ class _TDTabsPageState extends State<TDTabsPage>
       showIndicator: true,
       dividerColor: Colors.red,
       dividerHeight: 0,
+    );
+  }
+
+  @Demo(group: 'tabs')
+  Widget _capsuleBackgroundColor(BuildContext context) {
+    return TDTabBar(
+      tabs: subList(2),
+      controller: _tabController1,
+      backgroundColor: Colors.red,
+      outlineType: TDTabBarOutlineType.capsule,
     );
   }
 }
