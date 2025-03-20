@@ -13,24 +13,24 @@ Widget _buildIconListStateActionSheet(BuildContext context) {
         items: [
           TDActionSheetItem(
             label: '默认选项',
-            icon: Icon(TDIcons.app),
+            icon: const Icon(TDIcons.app),
           ),
           TDActionSheetItem(
             label: '自定义选项',
-            icon: Icon(TDIcons.app),
+            icon: const Icon(TDIcons.app),
             textStyle: TextStyle(
               color: TDTheme.of(context).brandNormalColor,
             ),
           ),
           TDActionSheetItem(
             label: '失效选项',
-            icon: Icon(TDIcons.app),
+            icon: const Icon(TDIcons.app),
             disabled: true,
           ),
           TDActionSheetItem(
             label: '警告选项',
-            icon: Icon(TDIcons.app),
-            textStyle: TextStyle(
+            icon: const Icon(TDIcons.app),
+            textStyle: const TextStyle(
               color: Colors.red,
             ),
           ),
