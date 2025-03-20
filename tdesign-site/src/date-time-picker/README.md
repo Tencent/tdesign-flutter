@@ -27,14 +27,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget buildYearMonthDay(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        TDPicker.showDatePicker(context, title: '选择时间',
-            onConfirm: (selected) {
-              setState(() {
-                selected_1 = '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
-              });
-              Navigator.of(context).pop();
-            },
+      onTap: () {
+        TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+          setState(() {
+            selected_1 =
+                '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
+          });
+          Navigator.of(context).pop();
+        },
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
             initialDate: [2012, 1, 1]);
@@ -53,15 +53,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget buildYearMonth(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        TDPicker.showDatePicker(context, title: '选择时间',
-            onConfirm: (selected) {
-              setState(() {
-                selected_2 = '${selected['year'].toString().padLeft(4, '0')}-'
-                    '${selected['month'].toString().padLeft(2, '0')}';
-              });
-              Navigator.of(context).pop();
-            },
+      onTap: () {
+        TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+          setState(() {
+            selected_2 = '${selected['year'].toString().padLeft(4, '0')}-'
+                '${selected['month'].toString().padLeft(2, '0')}';
+          });
+          Navigator.of(context).pop();
+        },
             useDay: false,
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
@@ -81,15 +80,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget buildMonthDay(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        TDPicker.showDatePicker(context, title: '选择时间',
-            onConfirm: (selected) {
-              setState(() {
-                selected_3 = '${selected['month'].toString().padLeft(2, '0')}-'
-                    '${selected['day'].toString().padLeft(2, '0')}';
-              });
-              Navigator.of(context).pop();
-            },
+      onTap: () {
+        TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+          setState(() {
+            selected_3 = '${selected['month'].toString().padLeft(2, '0')}-'
+                '${selected['day'].toString().padLeft(2, '0')}';
+          });
+          Navigator.of(context).pop();
+        },
             useYear: false,
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
@@ -109,16 +107,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget buildHourMinuteSecond(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        TDPicker.showDatePicker(context, title: '选择时间',
-            onConfirm: (selected) {
-              setState(() {
-                selected_4 = '${selected['hour'].toString().padLeft(2, '0')}:'
-                    '${selected['minute'].toString().padLeft(2, '0')}:'
-                    '${selected['second'].toString().padLeft(2, '0')}';
-              });
-              Navigator.of(context).pop();
-            },
+      onTap: () {
+        TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+          setState(() {
+            selected_4 = '${selected['hour'].toString().padLeft(2, '0')}:'
+                '${selected['minute'].toString().padLeft(2, '0')}:'
+                '${selected['second'].toString().padLeft(2, '0')}';
+          });
+          Navigator.of(context).pop();
+        },
             useYear: false,
             useMonth: false,
             useDay: false,
@@ -126,7 +123,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             useMinute: true,
             useSecond: true,
             dateStart: [1999, 01, 01],
-            dateEnd: [2023, 12, 31,4,12,20],
+            dateEnd: [2023, 12, 31, 4, 12, 20],
             initialDate: [2023, 12, 31]);
       },
       child: buildSelectRow(context, selected_4, '选择时间'),
@@ -143,19 +140,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget buildAll(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        TDPicker.showDatePicker(context, title: '选择时间',
-            onConfirm: (selected) {
-              setState(() {
-                selected_5 = '${selected['year'].toString().padLeft(4, '0')}-'
-                    '${selected['month'].toString().padLeft(2, '0')}-'
-                    '${selected['day'].toString().padLeft(2, '0')} '
-                    '${selected['hour'].toString().padLeft(2, '0')}:'
-                    '${selected['minute'].toString().padLeft(2, '0')}:'
-                    '${selected['second'].toString().padLeft(2, '0')}';
-              });
-              Navigator.of(context).pop();
-            },
+      onTap: () {
+        TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+          setState(() {
+            selected_5 = '${selected['year'].toString().padLeft(4, '0')}-'
+                '${selected['month'].toString().padLeft(2, '0')}-'
+                '${selected['day'].toString().padLeft(2, '0')} '
+                '${selected['hour'].toString().padLeft(2, '0')}:'
+                '${selected['minute'].toString().padLeft(2, '0')}:'
+                '${selected['second'].toString().padLeft(2, '0')}';
+          });
+          Navigator.of(context).pop();
+        },
             useHour: true,
             useMinute: true,
             useSecond: true,
@@ -177,17 +173,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget buildWeekDay(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        TDPicker.showDatePicker(context, title: '选择时间',
-            onConfirm: (selected) {
-              setState(() {
-                selected_6 = '${selected['year'].toString().padLeft(4, '0')}-'
-                    '${selected['month'].toString().padLeft(2, '0')}-'
-                    '${selected['day'].toString().padLeft(2, '0')} '
-                    '${weekDayList[selected['weekDay']! - 1]}';
-              });
-              Navigator.of(context).pop();
-            },
+      onTap: () {
+        TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+          setState(() {
+            selected_6 = '${selected['year'].toString().padLeft(4, '0')}-'
+                '${selected['month'].toString().padLeft(2, '0')}-'
+                '${selected['day'].toString().padLeft(2, '0')} '
+                '${weekDayList[selected['weekDay']! - 1]}';
+          });
+          Navigator.of(context).pop();
+        },
             useWeekDay: true,
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
@@ -208,16 +203,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget buildWithTitle(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        TDPicker.showDatePicker(context, title: '选择时间',
-            onConfirm: (selected) {
-              setState(() {
-                selected_7 = '${selected['year'].toString().padLeft(4, '0')}-'
-                    '${selected['month'].toString().padLeft(2, '0')}-'
-                    '${selected['day'].toString().padLeft(2, '0')}';
-              });
-              Navigator.of(context).pop();
-            },
+      onTap: () {
+        TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+          setState(() {
+            selected_7 = '${selected['year'].toString().padLeft(4, '0')}-'
+                '${selected['month'].toString().padLeft(2, '0')}-'
+                '${selected['day'].toString().padLeft(2, '0')}';
+          });
+          Navigator.of(context).pop();
+        },
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
             initialDate: [2012, 1, 1]);
@@ -236,16 +230,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget buildWithoutTitle(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        TDPicker.showDatePicker(context, title: '',
-            onConfirm: (selected) {
-              setState(() {
-                selected_8 = '${selected['year'].toString().padLeft(4, '0')}-'
-                    '${selected['month'].toString().padLeft(2, '0')}-'
-                    '${selected['day'].toString().padLeft(2, '0')}';
-              });
-              Navigator.of(context).pop();
-            },
+      onTap: () {
+        TDPicker.showDatePicker(context, title: '', onConfirm: (selected) {
+          setState(() {
+            selected_8 = '${selected['year'].toString().padLeft(4, '0')}-'
+                '${selected['month'].toString().padLeft(2, '0')}-'
+                '${selected['day'].toString().padLeft(2, '0')}';
+          });
+          Navigator.of(context).pop();
+        },
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],
             initialDate: [2012, 1, 1]);
@@ -259,19 +252,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDPicker
-
-#### 静态方法
-
-| 名称 | 返回类型 | 参数 | 说明 |
-| --- | --- | --- | --- |
-| showDatePicker |  |   required null context,  required String title,  required DatePickerCallback? onConfirm,  DatePickerCallback? onCancel,  bool useYear,  bool useMonth,  bool useDay,  bool useHour,  bool useMinute,  bool useSecond,  bool useWeekDay,  Color? barrierColor,  List<int> dateStart,  List<int>? dateEnd,  List<int>? initialDate,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  Color? titleDividerColor,  Duration duration,  double pickerHeight,  bool isTimeUnit,   Function(int wheelIndex, int index)? onSelectedItemChanged,  int pickerItemCount,  List<int> Function(DateTypeKey key, List<int> nums)? filterItems,  ItemBuilderType? itemBuilder, | 显示时间选择器 |
-| showMultiPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List<List<String>> data,  List<int>? initialIndexes,  Duration duration,  Color? barrierColor,  double pickerHeight,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  Color? titleDividerColor,  double? topPadding,  int pickerItemCount,  ItemBuilderType? itemBuilder, | 显示多级选择器 |
-| showMultiLinkedPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required Map data,  required int columnNum,  required List initialData,  Duration duration,  Color? barrierColor,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double pickerHeight,  Color? titleDividerColor,  double? topPadding,  int pickerItemCount, | 显示多级联动选择器 |
-
-```
-```
- ### TDDatePicker
+### TDDatePicker
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -301,6 +282,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onSelectedItemChanged | void Function(int wheelIndex, int index)? | - | 选择器选中项改变回调 |
 | itemBuilder | ItemBuilderType? | - | 自定义item构建 |
 | key |  | - |  |
+
+```
+```
+ ### TDPicker
+
+#### 静态方法
+
+| 名称 | 返回类型 | 参数 | 说明 |
+| --- | --- | --- | --- |
+| showDatePicker |  |   required null context,  required String title,  required DatePickerCallback? onConfirm,  DatePickerCallback? onCancel,  bool useYear,  bool useMonth,  bool useDay,  bool useHour,  bool useMinute,  bool useSecond,  bool useWeekDay,  Color? barrierColor,  List<int> dateStart,  List<int>? dateEnd,  List<int>? initialDate,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  Color? titleDividerColor,  Widget? customSelectWidget,  Duration duration,  double pickerHeight,  bool isTimeUnit,   Function(int wheelIndex, int index)? onSelectedItemChanged,  int pickerItemCount,  List<int> Function(DateTypeKey key, List<int> nums)? filterItems,  ItemBuilderType? itemBuilder, | 显示时间选择器 |
+| showMultiPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List<List<String>> data,  List<int>? initialIndexes,  Duration duration,  Color? barrierColor,  double pickerHeight,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  Color? titleDividerColor,  double? topPadding,  int pickerItemCount,  Widget? customSelectWidget,  ItemBuilderType? itemBuilder, | 显示多级选择器 |
+| showMultiLinkedPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required Map data,  required int columnNum,  required List initialData,  Duration duration,  Color? barrierColor,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double pickerHeight,  Color? titleDividerColor,  Widget? customSelectWidget,  double? topPadding,  int pickerItemCount, | 显示多级联动选择器 |
 
 
   

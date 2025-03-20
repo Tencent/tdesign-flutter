@@ -409,10 +409,43 @@ Widget _buildStyle(BuildContext context) {
   <pre slot="Dart" lang="javascript">
 Widget _buildBlock(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  return TDCalendar(
-    title: '请选择日期',
-    value: [DateTime.now().millisecondsSinceEpoch],
-    height: size.height * 0.6 + 176,
+  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          SizedBox(width: TDTheme.of(context).spacer16),
+          TDButton(
+              text: '加一个月',
+              size: TDButtonSize.small,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                selected.value = [selected.value[0] + 30 * 24 * 60 * 60 * 1000];
+              }),
+          SizedBox(width: TDTheme.of(context).spacer16),
+          TDButton(
+              text: '减一个月',
+              size: TDButtonSize.small,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                selected.value = [selected.value[0] - 30 * 24 * 60 * 60 * 1000];
+              }),
+        ],
+      ),
+      SizedBox(height: TDTheme.of(context).spacer16),
+      ValueListenableBuilder(
+        valueListenable: selected,
+        builder: (context, value, child) {
+          return TDCalendar(
+            title: '请选择日期',
+            value: value,
+            height: size.height * 0.6 + 176,
+            animateTo: true,
+          );
+        },
+      ),
+    ],
   );
 }</pre>
 
@@ -425,10 +458,43 @@ Widget _buildBlock(BuildContext context) {
   <pre slot="Dart" lang="javascript">
 Widget _buildBlock(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  return TDCalendar(
-    title: '请选择日期',
-    value: [DateTime.now().millisecondsSinceEpoch],
-    height: size.height * 0.6 + 176,
+  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          SizedBox(width: TDTheme.of(context).spacer16),
+          TDButton(
+              text: '加一个月',
+              size: TDButtonSize.small,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                selected.value = [selected.value[0] + 30 * 24 * 60 * 60 * 1000];
+              }),
+          SizedBox(width: TDTheme.of(context).spacer16),
+          TDButton(
+              text: '减一个月',
+              size: TDButtonSize.small,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                selected.value = [selected.value[0] - 30 * 24 * 60 * 60 * 1000];
+              }),
+        ],
+      ),
+      SizedBox(height: TDTheme.of(context).spacer16),
+      ValueListenableBuilder(
+        valueListenable: selected,
+        builder: (context, value, child) {
+          return TDCalendar(
+            title: '请选择日期',
+            value: value,
+            height: size.height * 0.6 + 176,
+            animateTo: true,
+          );
+        },
+      ),
+    ],
   );
 }</pre>
 
@@ -437,7 +503,34 @@ Widget _buildBlock(BuildContext context) {
 
 
 ## API
-### TDCalendar
+### TDCalendarStyle
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| decoration |  | - |  |
+| titleStyle | TextStyle? | - | header区域 [TDCalendar.title]的样式 |
+| titleMaxLine | int? | - | header区域 [TDCalendar.title]的行数 |
+| titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
+| weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
+| monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
+| cellStyle | TextStyle? | - | 日期样式 |
+| centreColor | Color? | - | 日期范围内背景样式 |
+| cellDecoration | BoxDecoration? | - | 日期decoration |
+| cellPrefixStyle | TextStyle? | - | 日期前面的字符串的样式 |
+| cellSuffixStyle | TextStyle? | - | 日期后面的字符串的样式 |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TDCalendarStyle.generateStyle  | 生成默认样式 |
+| TDCalendarStyle.cellStyle  | 日期样式 |
+
+```
+```
+ ### TDCalendar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -467,6 +560,7 @@ Widget _buildBlock(BuildContext context) {
 | pickerHeight | double? | 178 | 时间选择器List的视窗高度 |
 | pickerItemCount | int? | 3 | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
 | isTimeUnit | bool? | true | 是否显示时间单位 |
+| animateTo | bool? | false | 动画滚动到指定位置 |
 
 ```
 ```
@@ -484,33 +578,6 @@ Widget _buildBlock(BuildContext context) {
 | onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
 | builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
 | child | TDCalendar? | - | 日历控件 |
-
-```
-```
- ### TDCalendarStyle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| decoration |  | - |  |
-| titleStyle | TextStyle? | - | header区域 [TDCalendar.title]的样式 |
-| titleMaxLine | int? | - | header区域 [TDCalendar.title]的行数 |
-| titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
-| weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
-| monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
-| cellStyle | TextStyle? | - | 日期样式 |
-| centreColor | Color? | - | 日期范围内背景样式 |
-| cellDecoration | BoxDecoration? | - | 日期decoration |
-| cellPrefixStyle | TextStyle? | - | 日期前面的字符串的样式 |
-| cellSuffixStyle | TextStyle? | - | 日期后面的字符串的样式 |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TDCalendarStyle.generateStyle  | 生成默认样式 |
-| TDCalendarStyle.cellStyle  | 日期样式 |
 
 
   
