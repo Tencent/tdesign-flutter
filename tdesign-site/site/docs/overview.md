@@ -357,7 +357,7 @@ spline: explain
     </a>
   </div>
   <div class="image-wrapper">
-    <a class="item" href="/flutter/components/tag">
+    <a class="item" href="/flutter/components/table">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-table-dark.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-table-dark.png" />
       <p class="name">Table 表格</p>
@@ -375,13 +375,13 @@ spline: explain
 
 <h3>反馈<em class="tag">8</em></h3>
 <section class="image-group">
-  <!-- <div class="image-wrapper">
+  <div class="image-wrapper">
     <a class="item" href="/flutter/components/action-sheet">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-actionsheet.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-actionsheet-dark.png" />
       <p class="name">ActionSheet 动作面板</p>
     </a>
-  </div> -->
+  </div>
 
   <div class="image-wrapper">
     <a class="item" href="/flutter/components/dialog">
