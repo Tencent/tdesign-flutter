@@ -98,7 +98,7 @@ class TDDrawer {
   /// 是否显示最后一行分割线
   final bool? isShowLastBordered;
 
-  static TDSlidePopupRoute? _drawerRoute;
+  TDSlidePopupRoute? _drawerRoute;
 
   void show() {
     if (_drawerRoute != null) {
@@ -140,6 +140,7 @@ class TDDrawer {
   void close() {
     if (_drawerRoute != null) {
       Navigator.of(context).pop();
+      _deleteRouter();
     }
   }
 
