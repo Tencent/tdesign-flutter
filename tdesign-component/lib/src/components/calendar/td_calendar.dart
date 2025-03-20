@@ -246,7 +246,7 @@ class _TDCalendarState extends State<TDCalendar> {
                   padding: EdgeInsets.symmetric(vertical: TDTheme.of(context).spacer16),
                   child: TDButton(
                     theme: TDButtonTheme.primary,
-                    text: '确定',
+                    text: context.resource.confirm,
                     isBlock: true,
                     size: TDButtonSize.large,
                     onTap: inherited?.onConfirm,
