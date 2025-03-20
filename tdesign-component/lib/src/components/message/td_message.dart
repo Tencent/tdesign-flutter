@@ -383,7 +383,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(6),
                     boxShadow: TDTheme.of(context).shadowsMiddle),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     if (widget.icon != false)
                       Padding(
