@@ -114,7 +114,7 @@ class _TDFooterState extends State<TDFooter> {
               LinkObj link = widget.links[index];
               return Container(
                 decoration:index<(widget.links.length-1)? BoxDecoration(border: Border(right: BorderSide(color: Color.fromRGBO(231, 231, 231, 1)))):null,
-                padding: const EdgeInsets.symmetric(horizontal: 4),
+                padding: const EdgeInsets.symmetric(horizontal:6),
                 child: TDLink(
                     type: widget.isWithUnderline ? TDLinkType.withUnderline : TDLinkType.basic,
                     style: TDLinkStyle.primary,
