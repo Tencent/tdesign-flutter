@@ -9,16 +9,16 @@ docClass: timeline
 ## 🌈 0.1.9 `2025-03-24`
 ### 🚀 Features
 - `TDProgress`: 新增`Progress 进度条`组件 @CORCTON ([#307](https://github.com/Tencent/tdesign-flutter/pull/307))
-- `TDMessage`: 新增`Message 消息通知`组件 @chendingya ([#316](https://github.com/Tencent/tdesign-flutter/pull/316))
+- `TDMessage`: 新增`Message 全局提示`组件 @chendingya ([#316](https://github.com/Tencent/tdesign-flutter/pull/316))
 - `TDSkeleton`: 新增`Skeleton 骨架屏`组件 @Ezer015 ([#317](https://github.com/Tencent/tdesign-flutter/pull/317))
 - `TDFooter`: 新增`Footer 页脚`组件 @chendingya ([#224](https://github.com/Tencent/tdesign-flutter/pull/224))
+- `TDPopover`: 新增`Popover 弹出气泡`组件 @ccXxx1aoBai ([#435](https://github.com/Tencent/tdesign-flutter/pull/435))
 - `TDSwitch`: 添加自定义“开/关”字体大小 @shinyina ([#217](https://github.com/Tencent/tdesign-flutter/pull/217))
 - `TDDatePicker`: filterItems 参数添加，可自定义显示那些选项；itemBuilder 参数添加，用于自定义item @hkaikai ([#426](https://github.com/Tencent/tdesign-flutter/pull/426))
 - `TDDrawer`: 新建TDDrawerWidget组件，可用于Scaffold中的drawer属性 @hkaikai ([#445](https://github.com/Tencent/tdesign-flutter/pull/445))
 - `TDTable`: 自定义列返回当前行号 @ccXxx1aoBai ([#457](https://github.com/Tencent/tdesign-flutter/pull/457))
 - `TDUpload`: upload组件支持宽高设置和快速替换配置 @HubuHito ([#462](https://github.com/Tencent/tdesign-flutter/pull/462))
 - `TDButton`: 添加按钮图标位置属性 @epoll-j ([#463](https://github.com/Tencent/tdesign-flutter/pull/463))
-- `TDPopover`: 新增Popover组件 @ccXxx1aoBai ([#435](https://github.com/Tencent/tdesign-flutter/pull/435))
 - `TDDropdownMenu`: 支持单选(multiple == false)模式下，分栏(optionsColumns > 1)展示选项 @hkaikai ([#502](https://github.com/Tencent/tdesign-flutter/pull/502))
 - `TDActionSheet`: 新增动作面板组件 @hkaikai ([#485](https://github.com/Tencent/tdesign-flutter/pull/485))
 - `TDPicker`: 增加customSelectWidget参数 @epoll-j ([#495](https://github.com/Tencent/tdesign-flutter/pull/495))

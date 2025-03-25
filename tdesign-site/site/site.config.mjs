@@ -329,13 +329,13 @@ export default {
           path: '/flutter/components/empty',
           component: () => import('@/empty/README.md'),
         },
-        // {
-        //   title: 'Footer 页脚',
-        //   name: 'footer',
-        //   meta: { docType: 'data' },
-        //   path: '/flutter/components/footer',
-        //   component: () => import('@/footer/README.md'),
-        // },
+        {
+          title: 'Footer 页脚',
+          name: 'footer',
+          meta: { docType: 'data' },
+          path: '/flutter/components/footer',
+          component: () => import('@/footer/README.md'),
+        },
         {
           title: 'Image 图片',
           name: 'image',
@@ -357,13 +357,13 @@ export default {
           path: '/flutter/components/image-viewer',
           component: () => import('@/image-viewer/README.md'),
         },
-        // {
-        //   title: 'Progress 进度条',
-        //   name: 'progress',
-        //   meta: { docType: 'message' },
-        //   path: '/flutter/components/progress',
-        //   component: () => import('@/progress/README.md'),
-        // },
+        {
+          title: 'Progress 进度条',
+          name: 'progress',
+          meta: { docType: 'message' },
+          path: '/flutter/components/progress',
+          component: () => import('@/progress/README.md'),
+        },
         {
           title: 'Result 结果',
           name: 'result',
@@ -371,13 +371,13 @@ export default {
           path: '/flutter/components/result',
           component: () => import('@/result/README.md'),
         },
-        // {
-        //   title: 'Skeleton 骨架屏',
-        //   name: 'skeleton',
-        //   meta: { docType: 'data' },
-        //   path: '/flutter/components/skeleton',
-        //   component: () => import('@/skeleton/README.md'),
-        // },
+        {
+          title: 'Skeleton 骨架屏',
+          name: 'skeleton',
+          meta: { docType: 'data' },
+          path: '/flutter/components/skeleton',
+          component: () => import('@/skeleton/README.md'),
+        },
         // {
         //   title: 'Sticky 吸顶',
         //   name: 'sticky',
@@ -440,13 +440,13 @@ export default {
           path: '/flutter/components/loading',
           component: () => import('@/loading/README.md'),
         },
-        // {
-        //   title: 'Message 消息通知',
-        //   name: 'message',
-        //   meta: { docType: 'message' },
-        //   path: '/flutter/components/message',
-        //   component: () => import('@/message/README.md'),
-        // },
+        {
+          title: 'Message 消息通知',
+          name: 'message',
+          meta: { docType: 'message' },
+          path: '/flutter/components/message',
+          component: () => import('@/message/README.md'),
+        },
         {
           title: 'NoticeBar 公告栏',
           name: 'noticebar',
