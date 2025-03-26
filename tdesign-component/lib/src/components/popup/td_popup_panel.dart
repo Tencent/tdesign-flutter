@@ -235,7 +235,7 @@ class _TDPopupBottomDisplayPanelState extends State<TDPopupBottomDisplayPanel>
         fontWeight: FontWeight.w700,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-      ),
+      ),b
     );
     if (!widget.hideClose) {
       result = Stack(
