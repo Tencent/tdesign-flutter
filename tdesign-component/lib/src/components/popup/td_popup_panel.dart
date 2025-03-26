@@ -137,7 +137,9 @@ class _TDPopupBottomDisplayPanelState extends State<TDPopupBottomDisplayPanel>
   }
 
   void _handleDragEnd(DragEndDetails details) {
-    if (!widget.draggable) return;
+    if (!widget.draggable) {
+      return;
+    }
 
     final velocity = details.velocity.pixelsPerSecond.dy;
     if (velocity < -800 || _controller.value > 0.5) {
@@ -183,7 +185,7 @@ class _TDPopupBottomDisplayPanelState extends State<TDPopupBottomDisplayPanel>
                   // 拖动条
                   _buildDragHandle(context),
                   // 标题
-                  if (widget.title != null) _buildHeader(),
+                  _buildHeader(),
                   // 内容
                   Expanded(child: _buildContent()),
                 ],
@@ -196,13 +198,18 @@ class _TDPopupBottomDisplayPanelState extends State<TDPopupBottomDisplayPanel>
   }
 
   Widget _buildDragHandle(BuildContext context) {
+    if (!widget.draggable) {
+      // 未开启拖动事件,则不展示拖动条
+      return Container();
+    }
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onVerticalDragUpdate: _handleDragUpdate,
       onVerticalDragEnd: _handleDragEnd,
       onDoubleTap: () => _toggleFullscreen(!_isFullscreen),
-      child: SizedBox(
-        height: _dragHandleHeight + 12,
+      child: Container(
+        // color: Colors.red,
+        height: _dragHandleHeight,
         child: Center(
           child: Container(
             width: 48,
@@ -230,32 +237,30 @@ class _TDPopupBottomDisplayPanelState extends State<TDPopupBottomDisplayPanel>
         overflow: TextOverflow.ellipsis,
       ),
     );
-    return SizedBox(
-      height: _headerHeight,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(padding: EdgeInsets.only(right: 40, left: widget.titleLeft ? 0 : 40), child: result),
-            Positioned(
-              right: 0,
-              child: GestureDetector(
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Icon(
-                    TDIcons.close,
-                    color: widget.closeColor,
-                    size: 24,
-                  ),
-                ),
-                onTap: widget.closeClick,
+    if (!widget.hideClose) {
+      result =Row(
+        children: [
+          // const SizedBox(width: 40,),
+          Expanded(child: result),
+          GestureDetector(
+            child: Container(
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 16),
+              width: 40,
+              child: Icon(
+                TDIcons.close,
+                color: widget.closeColor,
+                size: 24,
               ),
             ),
-          ],
-        ),
-      ),
+            onTap: widget.closeClick,
+          )
+        ],
+      );
+    }
+    return SizedBox(
+      height: widget.draggable ?  _headerHeight - _dragHandleHeight: _headerHeight,
+      child: result,
     );
   }
 
@@ -455,7 +460,9 @@ class _TDPopupBottomConfirmPanelState extends State<TDPopupBottomConfirmPanel>
   }
 
   void _handleDragEnd(DragEndDetails details) {
-    if (!widget.draggable) return;
+    if (!widget.draggable) {
+      return;
+    }
 
     final velocity = details.velocity.pixelsPerSecond.dy;
     if (velocity < -800 || _controller.value > 0.5) {
@@ -475,6 +482,10 @@ class _TDPopupBottomConfirmPanelState extends State<TDPopupBottomConfirmPanel>
   }
 
   Widget _buildDragHandle(BuildContext context) {
+    if (!widget.draggable) {
+      // 未开启拖动事件,则不展示拖动条
+      return Container();
+    }
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onVerticalDragUpdate: _handleDragUpdate,
@@ -519,7 +530,7 @@ class _TDPopupBottomConfirmPanelState extends State<TDPopupBottomConfirmPanel>
 
   Widget _buildTop(BuildContext context) {
     return SizedBox(
-      height: _headerHeight,
+      height: widget.draggable ?  _headerHeight - _dragHandleHeight: _headerHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

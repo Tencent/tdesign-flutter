@@ -30,6 +30,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
         ),
         ExampleModule(title: '组件样式', children: [
           ExampleItem(
+            ignoreCode: true,
             builder: (context) {
               return Container(
                 alignment: Alignment.topLeft,
