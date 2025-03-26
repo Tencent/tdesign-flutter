@@ -267,6 +267,7 @@ List<ExamplePageModel> sideBarExamplePage = [
       text: 'SideBar 切页',
       name: 'SideBarPagination',
       isTodo: false,
+      showAction: false,
       pageBuilder: _wrapInheritedTheme((context) => const TDSideBarPaginationPage())),
   ExamplePageModel(
       text: 'SideBar 锚点',
