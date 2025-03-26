@@ -390,6 +390,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | rightLabel | String? | - | 右侧标签 |
 | onChangeStart | ValueChanged<RangeValues>? | - | 滑动开始监听 |
 | onChangeEnd | ValueChanged<RangeValues>? | - | 滑动结束监听 |
+| onTap | Offset offset, double value | - | 点击滑块触发 |
 
 ```
 ```
@@ -407,6 +408,4 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | rightLabel | String? | - | 右侧标签 |
 | onChangeStart | ValueChanged<RangeValues>? | - | 滑动开始监听 |
 | onChangeEnd | ValueChanged<RangeValues>? | - | 滑动结束监听 |
-
-
-  
+| onTap | Position position, Offset offset, double value | - | 点击滑块触发 |
