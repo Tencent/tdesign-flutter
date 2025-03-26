@@ -238,23 +238,25 @@ class _TDPopupBottomDisplayPanelState extends State<TDPopupBottomDisplayPanel>
       ),
     );
     if (!widget.hideClose) {
-      result =Row(
+      result = Stack(
+        alignment: Alignment.centerLeft,
         children: [
-          // const SizedBox(width: 40,),
-          Expanded(child: result),
-          GestureDetector(
-            child: Container(
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.only(right: 16),
-              width: 40,
-              child: Icon(
-                TDIcons.close,
-                color: widget.closeColor,
-                size: 24,
+          Padding(padding: EdgeInsets.only(right: 40, left: widget.titleLeft ? 0 : 40), child: result),
+          Positioned(
+            right: 0,
+            child: GestureDetector(
+              child: Container(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 16),
+                child: Icon(
+                  TDIcons.close,
+                  color: widget.closeColor,
+                  size: 24,
+                ),
               ),
+              onTap: widget.closeClick,
             ),
-            onTap: widget.closeClick,
-          )
+          ),
         ],
       );
     }
