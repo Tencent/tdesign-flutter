@@ -11,18 +11,25 @@ class MessageLink {
     this.color,
   });
 
+  /// 名称
   final String name;
+  /// 资源链接
   final Uri? uri;
+  /// 颜色
   final Color? color;
 }
 
 // 跑马灯配置
 class MessageMarquee {
-  final int? speed;
-  final int? loop;
-  final int? delay;
 
   MessageMarquee({this.speed, this.loop, this.delay});
+
+  /// 速度
+  final int? speed;
+  /// 循环次数
+  final int? loop;
+  /// 延迟时间(毫秒)
+  final int? delay;
 }
 
 // 定义消息主题枚举

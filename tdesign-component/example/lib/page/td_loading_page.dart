@@ -154,7 +154,9 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   Widget _buildRow(List<Widget> list) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(children: list.fold([], (previousValue, element) => [...previousValue, element, rowSpace])));
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(children: list.fold([], (previousValue, element) => [...previousValue, element, rowSpace])),));
   }
 
   /// 纯图标

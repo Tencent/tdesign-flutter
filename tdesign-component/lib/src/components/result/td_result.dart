@@ -4,18 +4,7 @@ import '../../../tdesign_flutter.dart';
 enum TDResultTheme { defaultTheme, success, warning, error }
 
 class TDResult extends StatelessWidget {
-// 描述文本，用于提供额外信息
-  final String? description;
-// 图标组件，用于在结果中显示一个图标
-  final Widget? icon;
-// 自定义字体样式，用于设置标题文本的样式
-  final TextStyle? titleStyle;
-// 主题样式，定义了结果组件的视觉风格
-  final TDResultTheme theme;
-// 标题文本，显示结果的主要信息
-  final String title;
-
-  // 构造函数，用于初始化Result组件
+  /// 构造函数，用于初始化Result组件
   const TDResult({
     Key? key,
     this.description,
@@ -24,6 +13,18 @@ class TDResult extends StatelessWidget {
     this.theme = TDResultTheme.defaultTheme, // 默认主题样式为defaultTheme
     this.title = '', // 默认标题为空字符串
   }) : super(key: key);
+
+/// 描述文本，用于提供额外信息
+  final String? description;
+/// 图标组件，用于在结果中显示一个图标
+  final Widget? icon;
+/// 自定义字体样式，用于设置标题文本的样式
+  final TextStyle? titleStyle;
+/// 主题样式，定义了结果组件的视觉风格
+  final TDResultTheme theme;
+/// 标题文本，显示结果的主要信息
+  final String title;
+
 
   @override
   Widget build(BuildContext context) {
