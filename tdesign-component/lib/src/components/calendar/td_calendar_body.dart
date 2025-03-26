@@ -131,7 +131,7 @@ class TDCalendarBody extends StatelessWidget {
         if (item.year == scrollDate.year && item.month == scrollDate.month) {
           break;
         }
-        height += _getMonthHeight(months, i, monthHeight);
+        height += (_getMonthHeight(months, i, monthHeight) ?? 0);
       }
       if (height <= 0) {
         return;
@@ -220,7 +220,10 @@ class TDCalendarBody extends StatelessWidget {
   }
 
   /// 获取月份高度，带缓存
-  double _getMonthHeight(List<DateTime> months, int index, Map<int, double> monthHeight) {
+  double? _getMonthHeight(List<DateTime> months, int index, Map<int, double> monthHeight) {
+    if (months.getOrNull(index) == null) {
+      return null;
+    }
     if (monthHeight.containsKey(index)) {
       return monthHeight[index]!;
     }
