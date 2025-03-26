@@ -29,6 +29,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       backgroundColor: Colors.white,
       exampleCodeGroup: 'popup',
       desc: '由其他控件触发，屏幕滑出或弹出一块自定义内容区域',
+      navBarKey: navBarkey,
       children: [
         ExampleModule(
           title: '组件类型',
