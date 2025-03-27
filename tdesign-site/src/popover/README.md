@@ -106,10 +106,385 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### 1 组件样式
 
 
-      
+
+          
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _buildDarkPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.large,
+            text: '深色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+              );
+            },
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildLightPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.large,
+            text: '浅色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.light,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildInfoPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.large,
+            text: '品牌色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.info,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildSuccessPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.large,
+            text: '成功色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.success,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildWarningPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.large,
+            text: '警告色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.warning,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildErrorPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.large,
+            text: '错误色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.error,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildDarkPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.large,
+            text: '深色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+              );
+            },
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildLightPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.large,
+            text: '浅色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.light,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildInfoPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.large,
+            text: '品牌色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.info,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildSuccessPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.large,
+            text: '成功色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.success,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildWarningPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.large,
+            text: '警告色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.warning,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildErrorPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.large,
+            text: '错误色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            textStyle: const TextStyle(height: 1),
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.error,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }</pre>
 
 </td-code-block>
                 
