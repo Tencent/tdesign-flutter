@@ -341,8 +341,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                           index: index,
                           itemHeight: pickerHeight / widget.pickerItemCount,
                           content: whichLine == 3
-                              ? timeUnitMap(widget.model.mapping[whichLine]) +
-                              widget.model.weekMap[widget.model.data[whichLine][index] - 1]
+                              ? weekUnitMap(widget.model.data[whichLine][index] - 1)
                               : widget.model.data[whichLine][index].toString() + timeUnitMap(widget.model.mapping[whichLine]),
                           fixedExtentScrollController: widget.model.controllers[whichLine],
                           itemDistanceCalculator: widget.itemDistanceCalculator,
@@ -427,6 +426,23 @@ class _TDDatePickerState extends State<TDDatePicker> {
       return '';
     }
   }
+
+  weekUnitMap(int index){
+    if(index < 0 || index > 6){
+      return '';
+    }
+    return [
+      context.resource.monday,
+      context.resource.tuesday,
+      context.resource.wednesday,
+      context.resource.thursday,
+      context.resource.friday,
+      context.resource.saturday,
+      context.resource.sunday,
+    ][index];
+  }
+
+
   double getTitleHeight() => widget.titleHeight ?? _pickerTitleHeight;
 }
 

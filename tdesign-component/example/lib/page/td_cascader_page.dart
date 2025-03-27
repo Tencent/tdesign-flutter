@@ -267,11 +267,9 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
       ],
     },
   ];
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+
+  String? _initData_5;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -452,12 +450,12 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
             title: '选择地址',
             subTitles: ['请选择省份', '请选择城市', '请选择区/县'],
             data: _data,
-            initialData: _initData,
+            initialData: _initData_4,
             theme: 'tab', onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
             List result = [];
             int len = selectData.length;
-            _initData = selectData[len - 1].value!;
+            _initData_4 = selectData[len - 1].value!;
             selectData.forEach((element) {
               result.add(element.label);
             });
@@ -477,12 +475,12 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
         TDCascader.showMultiCascader(context,
             title: '选择部门人员',
             data: _data_4,
-            initialData: _initData,
+            initialData: _initData_5,
             theme: 'step', onChange: (List<MultiCascaderListModel> selectData) {
               setState(() {
                 List result = [];
                 int len = selectData.length;
-                _initData = selectData[len - 1].value!;
+                _initData_5 = selectData[len - 1].value!;
                 selectData.forEach((element) {
                   result.add(element.label);
                 });
