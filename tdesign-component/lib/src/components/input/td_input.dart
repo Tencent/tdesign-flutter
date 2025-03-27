@@ -259,13 +259,13 @@ class TDInput extends StatelessWidget {
       maxLines: 1,
       textDirection: TextDirection.ltr,
     )..layout();
-    return textPainter.width;
+    return textPainter.width + (spacer.labelInputSpace ?? 16);
   }
 
   Widget buildInputView(BuildContext context) {
-    final double leftLabelWidth = leftLabel != null ? _getTextWidth(leftLabel!, leftLabelStyle) : 0;
+     var leftLabelWidth = leftLabel != null ? _getTextWidth(leftLabel!, leftLabelStyle) : 0;
     _leftLabelWidth = leftLabelWidth +
-        (leftIcon != null ? (spacer.iconLabelSpace ?? 4) : 0) +
+        (leftIcon != null ? ((spacer.iconLabelSpace ?? 4) + 24)  : 0) +
         (required == true ? 14 : 0);
     
     switch (type) {
