@@ -462,6 +462,13 @@ export default {
         //   component: () => import('@/overlay/README.md'),
         // },
         {
+          title: 'Popover 弹出气泡',
+          name: 'popover',
+          meta: { docType: 'message' },
+          path: '/flutter/components/popover',
+          component: () => import('@/popover/README.md'),
+        },
+        {
           title: 'Popup 弹出层',
           name: 'popup',
           meta: { docType: 'message' },
