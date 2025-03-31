@@ -1,3 +1,51 @@
+## 🌈 0.1.9 `2025-03-31`
+
+### 🚀 Features
+- `TDProgress`: Added `Progress` component @CORCTON ([#307](https://github.com/Tencent/tdesign-flutter/pull/307))
+- `TDMessage`: Added `Message` (Global Prompt) component @chendingya ([#316](https://github.com/Tencent/tdesign-flutter/pull/316))
+- `TDSkeleton`: Added `Skeleton` component @Ezer015 ([#317](https://github.com/Tencent/tdesign-flutter/pull/317))
+- `TDFooter`: Added `Footer` component @chendingya ([#224](https://github.com/Tencent/tdesign-flutter/pull/224))
+- `TDPopover`: Added `Popover` (Popup Bubble) component @ccXxx1aoBai ([#435](https://github.com/Tencent/tdesign-flutter/pull/435))
+- `TDSwitch`: Added custom "ON/OFF" font size support @shinyina ([#217](https://github.com/Tencent/tdesign-flutter/pull/217))
+- `TDDatePicker`: Added `filterItems` parameter for custom display options and `itemBuilder` for custom item rendering @hkaikai ([#426](https://github.com/Tencent/tdesign-flutter/pull/426))
+- `TDDrawer`: Created `TDDrawerWidget` component compatible with Scaffold's drawer property @hkaikai ([#445](https://github.com/Tencent/tdesign-flutter/pull/445))
+- `TDTable`: Custom columns now return current row number @ccXxx1aoBai ([#457](https://github.com/Tencent/tdesign-flutter/pull/457))
+- `TDUpload`: Added width/height settings and quick replacement configuration support @HubuHito ([#462](https://github.com/Tencent/tdesign-flutter/pull/462))
+- `TDButton`: Added icon position property @epoll-j ([#463](https://github.com/Tencent/tdesign-flutter/pull/463))
+- `TDDropdownMenu`: Supported single-select mode (`multiple == false`) with multi-column display (`optionsColumns > 1`) @hkaikai ([#502](https://github.com/Tencent/tdesign-flutter/pull/502))
+- `TDActionSheet`: Added Action Sheet component @hkaikai ([#485](https://github.com/Tencent/tdesign-flutter/pull/485))
+- `TDPicker`: Added `customSelectWidget` parameter @epoll-j ([#495](https://github.com/Tencent/tdesign-flutter/pull/495))
+- `TDSlider`: Added track color modification parameter @epoll-j ([#506](https://github.com/Tencent/tdesign-flutter/pull/506))
+- `TDCalendar`: Added animated scrolling to selected value position @hkaikai ([#509](https://github.com/Tencent/tdesign-flutter/pull/509))
+- `TDStep`: Added `CustomContent` parameter for Step content customization @Jzow ([#452](https://github.com/Tencent/tdesign-flutter/pull/452))
+- `TDTag`: Added `fixedWidth` parameter and fixed `TextOverflow.ellipsis` title overflow issue @Jzow ([#496](https://github.com/Tencent/tdesign-flutter/pull/496))
+- `TDPopup`: Added edge drag control for bottom panel @Jzow ([#514](https://github.com/Tencent/tdesign-flutter/pull/514))
+- `TDBadge`: Added capped numeric value setting for Badge @chendingya ([#302](https://github.com/Tencent/tdesign-flutter/pull/302))
+- `TDToast`: Added multi-line text support for icon-type toasts @ccXxx1aoBai ([#481](https://github.com/Tencent/tdesign-flutter/pull/481))
+
+### 🐞 Bug Fixes
+- `TDRefreshHeader`: Upgraded Easy Refresh to latest version, improved compatibility between v2/v3 syntax @hkaikai ([#438](https://github.com/Tencent/tdesign-flutter/pull/438))
+- `TDCell`: Fixed unresponsive click in blank area without default style; Improved default style construction and demo usage @hkaikai ([#448](https://github.com/Tencent/tdesign-flutter/pull/448))
+- `TDTable`: Fixed empty data image display issue @ccXxx1aoBai ([#451](https://github.com/Tencent/tdesign-flutter/pull/451))
+- `TDTabBar`: Added `labelStyle` and `unselectedLabelStyle` support for custom font sizes @hkaikai ([#453](https://github.com/Tencent/tdesign-flutter/pull/453))
+- `TDCalendar`: Fixed positioning issue when scrolling to last month @hkaikai ([#449](https://github.com/Tencent/tdesign-flutter/pull/449))
+- `TDBottomTabBar`: Fixed background color setting for capsule type @epoll-j ([#497](https://github.com/Tencent/tdesign-flutter/pull/497))
+- `TDCalendar`: Added localization for confirm button @hkaikai ([#505](https://github.com/Tencent/tdesign-flutter/pull/505))
+- `TDUpload`: Added `onMaxLimitReached` callback to handle file limit overflow @Jzow ([#474](https://github.com/Tencent/tdesign-flutter/pull/474))
+- `TDInput`: Added `_getTextWidth` function and click event to fix incomplete text display @Jzow ([#475](https://github.com/Tencent/tdesign-flutter/pull/475))
+- `TDImage`: Removed mandatory custom width/height constraints (default 72px) for layout auto-calculation @Jzow ([#499](https://github.com/Tencent/tdesign-flutter/pull/499))
+- `TDConfirmDialog`: Added layout constraints and dynamic max-height calculation with scroll support @Jzow ([#510](https://github.com/Tencent/tdesign-flutter/pull/510))
+- `TDDrawer`: Added `_deleteRouter()` call in close function to force clear routes @Jzow ([#512](https://github.com/Tencent/tdesign-flutter/pull/512))
+- `TDText`: Fixed text alignment issue in HarmonyOS 3.22 @duleigiser ([#437](https://github.com/Tencent/tdesign-flutter/pull/437))
+- `TDAlertDialog`: Fixed button style not filling width @lvjs ([#460](https://github.com/Tencent/tdesign-flutter/pull/460))
+
+### 🚧 Others
+- `TDSlider`: Demo code splitting @iamitis ([#245](https://github.com/Tencent/tdesign-flutter/pull/245))
+- Added release date to "About Us" page @iamitis ([#304](https://github.com/Tencent/tdesign-flutter/pull/304))
+- `Doc`: Updated README English version, added License file and Issue Doc templates @Jzow ([#458](https://github.com/Tencent/tdesign-flutter/pull/458))
+
+
+
 ## 🌈 0.1.8 `2024-12-30`
 ### 🚀 Features
 - `TDUpload`: Added Upload component @TingShine ([#405](https://github.com/Tencent/tdesign-flutter/pull/405))
