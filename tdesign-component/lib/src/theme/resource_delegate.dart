@@ -194,6 +194,12 @@ abstract class TDResourceDelegate {
   /// [TDRate] 选择选项
   String get cascadeLabel;
 
+  /// [TDBackTop] 返回
+  String get back;
+
+  /// [TDBackTop] 顶部
+  String get top;
+
 }
 
 /// 如果用户要重写,就应该全部重写,不开放只重新部分资源
@@ -340,4 +346,10 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
 
   @override
   String get cascadeLabel => '选择选项';
+
+  @override
+  String get back => '返回';
+
+  @override
+  String get top => '顶部';
 }

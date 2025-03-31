@@ -409,10 +409,43 @@ Widget _buildStyle(BuildContext context) {
   <pre slot="Dart" lang="javascript">
 Widget _buildBlock(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  return TDCalendar(
-    title: '请选择日期',
-    value: [DateTime.now().millisecondsSinceEpoch],
-    height: size.height * 0.6 + 176,
+  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          SizedBox(width: TDTheme.of(context).spacer16),
+          TDButton(
+              text: '加一个月',
+              size: TDButtonSize.small,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                selected.value = [selected.value[0] + 30 * 24 * 60 * 60 * 1000];
+              }),
+          SizedBox(width: TDTheme.of(context).spacer16),
+          TDButton(
+              text: '减一个月',
+              size: TDButtonSize.small,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                selected.value = [selected.value[0] - 30 * 24 * 60 * 60 * 1000];
+              }),
+        ],
+      ),
+      SizedBox(height: TDTheme.of(context).spacer16),
+      ValueListenableBuilder(
+        valueListenable: selected,
+        builder: (context, value, child) {
+          return TDCalendar(
+            title: '请选择日期',
+            value: value,
+            height: size.height * 0.6 + 176,
+            animateTo: true,
+          );
+        },
+      ),
+    ],
   );
 }</pre>
 
@@ -425,10 +458,43 @@ Widget _buildBlock(BuildContext context) {
   <pre slot="Dart" lang="javascript">
 Widget _buildBlock(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  return TDCalendar(
-    title: '请选择日期',
-    value: [DateTime.now().millisecondsSinceEpoch],
-    height: size.height * 0.6 + 176,
+  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          SizedBox(width: TDTheme.of(context).spacer16),
+          TDButton(
+              text: '加一个月',
+              size: TDButtonSize.small,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                selected.value = [selected.value[0] + 30 * 24 * 60 * 60 * 1000];
+              }),
+          SizedBox(width: TDTheme.of(context).spacer16),
+          TDButton(
+              text: '减一个月',
+              size: TDButtonSize.small,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                selected.value = [selected.value[0] - 30 * 24 * 60 * 60 * 1000];
+              }),
+        ],
+      ),
+      SizedBox(height: TDTheme.of(context).spacer16),
+      ValueListenableBuilder(
+        valueListenable: selected,
+        builder: (context, value, child) {
+          return TDCalendar(
+            title: '请选择日期',
+            value: value,
+            height: size.height * 0.6 + 176,
+            animateTo: true,
+          );
+        },
+      ),
+    ],
   );
 }</pre>
 
@@ -467,6 +533,7 @@ Widget _buildBlock(BuildContext context) {
 | pickerHeight | double? | 178 | 时间选择器List的视窗高度 |
 | pickerItemCount | int? | 3 | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
 | isTimeUnit | bool? | true | 是否显示时间单位 |
+| animateTo | bool? | false | 动画滚动到指定位置 |
 
 ```
 ```

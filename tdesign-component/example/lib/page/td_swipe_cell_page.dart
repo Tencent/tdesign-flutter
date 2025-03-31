@@ -253,7 +253,7 @@ class TDSwipeCellPage extends StatelessWidget {
               ],
             ),
             cell: const TDCell(
-              title: '右滑操作',
+              title: '左滑操作',
               note: '辅助信息',
             ),
           );
@@ -276,7 +276,7 @@ class TDSwipeCellPage extends StatelessWidget {
               ],
             ),
             cell: const TDCell(
-              title: '右滑操作',
+              title: '左滑操作',
               note: '辅助信息',
             ),
           );
@@ -303,7 +303,7 @@ class TDSwipeCellPage extends StatelessWidget {
               ],
             ),
             cell: const TDCell(
-              title: '右滑操作',
+              title: '左滑操作',
               note: '辅助信息',
               description: '一段很长很长的内容文字',
             ),
@@ -345,7 +345,7 @@ class TDSwipeCellPage extends StatelessWidget {
         ],
       ),
       cell: const TDCell(
-        title: '右滑操作',
+        title: '左滑操作',
         note: '辅助信息',
       ),
     );

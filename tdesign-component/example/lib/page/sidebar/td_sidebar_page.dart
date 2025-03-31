@@ -129,7 +129,7 @@ class TDSideBarPageState extends State<TDSideBarPage> {
       shape: TDButtonShape.rectangle,
       theme: TDButtonTheme.primary,
       onTap: () {
-        Navigator.pushNamed(context, PlatformUtil.isWeb ? routeName : '$routeName?showAction=1');
+        Navigator.pushNamed(context, PlatformUtil.isWeb ? routeName : '$routeName');
       },
     );
   }
