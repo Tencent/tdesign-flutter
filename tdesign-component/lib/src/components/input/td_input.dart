@@ -246,6 +246,9 @@ class TDInput extends StatelessWidget {
   /// 组件各模块间间距
   final TDInputSpacer spacer;
 
+  /// 左侧内容所占区域宽度
+  double _leftLabelWidth = 0;
+
   /// 点击输入框外部区域回调
   final TapRegionCallback? onTapOutside;
 
@@ -260,6 +263,7 @@ class TDInput extends StatelessWidget {
   }
 
   Widget buildInputView(BuildContext context) {
+    _leftLabelWidth = leftInfoWidth! + (spacer.iconLabelSpace ?? 4);
     switch (type) {
       case TDInputType.normal:
         return buildNormalInput(context);
@@ -320,6 +324,7 @@ class TDInput extends StatelessWidget {
                 ),
               ),
               SizedBox(
+                width: _leftLabelWidth,
                 child: GestureDetector(
                   // 如果文本长度超过20字符，点击则弹出对话框显示文本全称
                   onTap: () {
@@ -353,6 +358,8 @@ class TDInput extends StatelessWidget {
                       Visibility(
                         visible: leftLabel != null,
                         child: Container(
+                          constraints:
+                              BoxConstraints(maxWidth: _leftLabelWidth),
                           padding: EdgeInsets.only(
                               left: leftIcon != null
                                   ? (spacer.iconLabelSpace ?? 4)
@@ -570,6 +577,9 @@ class TDInput extends StatelessWidget {
                       Visibility(
                         visible: leftLabel != null,
                         child: Container(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                                  _leftLabelWidth + (leftLabelSpace ?? 12)),
                           padding: EdgeInsets.only(
                               left: leftLabelSpace ?? 12.0, top: 10.0),
                           child: Column(
@@ -800,6 +810,7 @@ class TDInput extends StatelessWidget {
                       bottom: getInputPadding()),
                   child: leftInfoWidth != null
                       ? SizedBox(
+                          width: _leftLabelWidth,
                           child: TDText(
                             leftLabel,
                             maxLines: 1,
