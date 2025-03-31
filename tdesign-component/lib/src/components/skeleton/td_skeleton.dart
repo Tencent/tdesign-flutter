@@ -89,6 +89,7 @@ class TDSkeleton extends StatefulWidget {
     }
   }
 
+  /// 从行列框架创建骨架屏
   const TDSkeleton.fromRowCol({
     super.key,
     this.animation,

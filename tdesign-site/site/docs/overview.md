@@ -235,7 +235,7 @@ spline: explain
   </div>
 </section>
 
-<h3>数据展示<em class="tag">12</em></h3>
+<h3>数据展示<em class="tag">15</em></h3>
 <section class="image-group">
   <div class="image-wrapper">
     <a class="item" href="/flutter/components/avatar">
@@ -285,7 +285,7 @@ spline: explain
     </a>
   </div>
 
-  <!-- <div class="image-wrapper">
+  <div class="image-wrapper">
     <a class="item" href="/flutter/components/footer">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-footer.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-footer-dark.png" />
@@ -293,7 +293,7 @@ spline: explain
     </a>
   </div>
 
-  <div class="image-wrapper">
+  <!-- <div class="image-wrapper">
     <a class="item" href="/flutter/components/grid">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-grid.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-grid-dark.png" />
@@ -317,13 +317,13 @@ spline: explain
     </a>
   </div>
 
-  <!-- <div class="image-wrapper">
+  <div class="image-wrapper">
     <a class="item" href="/flutter/components/progress">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-progress.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-progress-dark.png" />
       <p class="name">Progress 进度条</p>
     </a>
-  </div>-->
+  </div>
 
   <div class="image-wrapper">
     <a class="item" href="/flutter/components/result">
@@ -333,7 +333,7 @@ spline: explain
     </a>
   </div>
 
-  <!--  <div class="image-wrapper">
+   <div class="image-wrapper">
     <a class="item" href="/flutter/components/skeleton">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-skeleton.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-skeleton-dark.png" />
@@ -341,7 +341,7 @@ spline: explain
     </a>
   </div>
 
-  <div class="image-wrapper">
+  <!-- <div class="image-wrapper">
     <a class="item" href="/flutter/components/sticky">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-sticky.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-sticky-dark.png" />
@@ -373,7 +373,7 @@ spline: explain
   </div>
 </section>
 
-<h3>反馈<em class="tag">8</em></h3>
+<h3>反馈<em class="tag">11</em></h3>
 <section class="image-group">
   <div class="image-wrapper">
     <a class="item" href="/flutter/components/action-sheet">
@@ -407,13 +407,13 @@ spline: explain
     </a>
   </div>
 
-  <!-- <div class="image-wrapper">
+  <div class="image-wrapper">
     <a class="item" href="/flutter/components/message">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-message.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-message-dark.png" />
       <p class="name">Message 全局提示</p>
     </a>
-  </div> -->
+  </div>
 
   <div class="image-wrapper">
     <a class="item" href="/flutter/components/notice-bar">
@@ -430,6 +430,14 @@ spline: explain
       <p class="name">Overlay 遮罩层</p>
     </a>
   </div>  -->
+
+  <div class="image-wrapper">
+    <a class="item" href="/flutter/components/popover">
+      <img class="__light__" src="  https://tdesign.gtimg.com/site/mobile/doc-popover.png" />
+      <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-popover-dark.png" />
+      <p class="name">Popover 弹出气泡</p>
+    </a>
+  </div>
 
   <div class="image-wrapper">
     <a class="item" href="/flutter/components/popup">

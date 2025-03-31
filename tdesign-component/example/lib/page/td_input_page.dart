@@ -840,14 +840,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         ),
         onBtnTap: () {
           TDToast.showText('点击右侧按钮', context: context);
-        },
-        onChanged: (text) {
-          setState(() {});
-        },
-        onClearTap: () {
-          controller.clear();
-          setState(() {});
-        },
+        }
       ),
     );
   }
@@ -860,13 +853,6 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       controller: controller,
       backgroundColor: Colors.white,
       hintText: '请输入文字',
-      onChanged: (text) {
-        setState(() {});
-      },
-      onClearTap: () {
-        controller.clear();
-        setState(() {});
-      },
       showBottomDivider: false,
     );
   }
@@ -886,13 +872,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           controller: controller,
           backgroundColor: Colors.white,
           hintText: '请输入文字',
-          onChanged: (text) {
-            setState(() {});
-          },
-          onClearTap: () {
-            controller.clear();
-            setState(() {});
-          },
+          needClear: true,
         ),
       ),
     );
@@ -913,13 +893,6 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           controller: controller,
           backgroundColor: Colors.white,
           hintText: '请输入文字',
-          onChanged: (text) {
-            setState(() {});
-          },
-          onClearTap: () {
-            controller.clear();
-            setState(() {});
-          },
           onTapOutside: (event) {
             TDToast.showText('点击输入框外部区域', context: context);
             print('on tap outside ${event}');

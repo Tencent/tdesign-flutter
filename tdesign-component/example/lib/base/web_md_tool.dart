@@ -54,7 +54,6 @@ class WebMdTool {
       var path = "";
       if(Platform.environment['FLUTTER_TEST'] == 'true'){
 
-        // file:///Users/zflyluo/WorkSpace/flutter/tdesign_group/tdesign-mobile-flutter/tdesign-component/example/main.dart
         var baseDir = Platform.script.toFilePath().split('/tdesign-component')[0];
         path = '$baseDir/tdesign-site/src/${model.name}/README.md';
         // path = '$baseDir/test/src/${model.name}/README.md';
