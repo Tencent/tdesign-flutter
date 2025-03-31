@@ -35,7 +35,7 @@ docClass: timeline
 - `TDRefreshHeader`: 升级easy refresh到最新版本，兼容v2和v3写法；交互同步其他移动端平台 @hkaikai ([#438](https://github.com/Tencent/tdesign-flutter/pull/438))
 - `TDCell`: 修复无默认样式情况下点击空白区域无反应问题；TDCellStyle默认构造方法提供context参数，可以构建默认样式；完善demo自定义样式用法 @hkaikai ([#448](https://github.com/Tencent/tdesign-flutter/pull/448))
 - `TDTable`: 解决空数据图片无法显示问题 @ccXxx1aoBai ([#451](https://github.com/Tencent/tdesign-flutter/pull/451))
-- `TDTabBar`: labelStyle、unselectedLabelStyle支持自定义Lable的文字大小 @hkaikai ([#453](https://github.com/Tencent/tdesign-flutter/pull/453))
+- `TDTabBar`: labelStyle、unselectedLabelStyle支持自定义Label的文字大小 @hkaikai ([#453](https://github.com/Tencent/tdesign-flutter/pull/453))
 - `TDCalendar`: 修复定位到最后一个月时，无法定位问题 @hkaikai ([#449](https://github.com/Tencent/tdesign-flutter/pull/449))
 - `TDBottomTabBar`: 修复capsule类型无法设置背景色 @epoll-j ([#497](https://github.com/Tencent/tdesign-flutter/pull/497))
 - `TDCalendar`: 确定按钮添加国际化 @hkaikai ([#505](https://github.com/Tencent/tdesign-flutter/pull/505))
