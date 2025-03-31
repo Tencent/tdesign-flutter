@@ -353,7 +353,7 @@ class TDInput extends StatelessWidget {
                           child: leftIcon ?? const SizedBox.shrink(),
                         ),
                       ),
-                      Visibility(
+                      Expanded(child: Visibility(
                         visible: leftLabel != null,
                         child: Container(
                           constraints: BoxConstraints(maxWidth: _leftLabelWidth),
@@ -370,7 +370,7 @@ class TDInput extends StatelessWidget {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                      ),
+                      )),
                       Visibility(
                         visible: labelWidget != null,
                         child: labelWidget ?? const SizedBox.shrink(),

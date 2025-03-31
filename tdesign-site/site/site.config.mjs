@@ -441,14 +441,14 @@ export default {
           component: () => import('@/loading/README.md'),
         },
         {
-          title: 'Message 消息通知',
+          title: 'Message 全局提示',
           name: 'message',
           meta: { docType: 'message' },
           path: '/flutter/components/message',
           component: () => import('@/message/README.md'),
         },
         {
-          title: 'NoticeBar 公告栏',
+          title: 'NoticeBar 消息提醒',
           name: 'noticebar',
           meta: { docType: 'message' },
           path: '/flutter/components/notice-bar',
