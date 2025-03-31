@@ -29,6 +29,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       backgroundColor: Colors.white,
       exampleCodeGroup: 'popup',
       desc: '由其他控件触发，屏幕滑出或弹出一块自定义内容区域',
+      navBarKey: navBarkey,
       children: [
         ExampleModule(
           title: '组件类型',
@@ -273,39 +274,6 @@ class TDPopupPageState extends State<TDPopupPage> {
           },
         ),
         ExampleItem(
-          desc: '自定义大小位置',
-          builder: (_) {
-            return TDButton(
-              text: '自定义大小位置',
-              isBlock: true,
-              theme: TDButtonTheme.primary,
-              type: TDButtonType.outline,
-              size: TDButtonSize.large,
-              onTap: () {
-                Navigator.of(context).push(
-                  TDSlidePopupRoute(
-                    modalBarrierColor: TDTheme.of(context).fontGyColor2,
-                    slideTransitionFrom: SlideTransitionFrom.left,
-                    modalTop: 500,
-                    // modalLeft: 150,
-                    // modalWidth: 200,
-                    // modalHeight: 200,
-                    // modalBarrierFull: true,
-                    builder: (context) {
-                      return Container(
-                        color: Colors.white,
-                        height: double.infinity,
-                        width: 200,
-                        child: const TDText('自定义大小位置'),
-                      );
-                    },
-                  ),
-                );
-              },
-            );
-          },
-        ),
-        ExampleItem(
             desc: '弹出层包含输入框且不会被键盘遮挡',
             builder: (_) {
               return Column(
@@ -410,7 +378,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                                   },
                                   child: Material(
                                     child: SizedBox(
-                                      height: 336,
+                                      height: 340,
                                       child: Column(
                                         children: [
                                           TDInput(
@@ -466,7 +434,76 @@ class TDPopupPageState extends State<TDPopupPage> {
                       ))
                 ],
               );
-            })
+            }),
+        ExampleItem(
+          desc: '可拖动全屏',
+          builder: (_) {
+            return Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+            Container(
+            margin: const EdgeInsets.all(8),
+            child: TDButton(
+              text: '可拖动全屏',
+              isBlock: true,
+              theme: TDButtonTheme.primary,
+              type: TDButtonType.outline,
+              size: TDButtonSize.large,
+              onTap: () {
+
+                Navigator.of(context).push(TDSlidePopupRoute(
+                    modalBarrierColor: TDTheme.of(context).fontGyColor2,
+                    slideTransitionFrom: SlideTransitionFrom.bottom,
+                    builder: (context) {
+                      return TDPopupBottomDisplayPanel(
+                        title: '标题文字',
+                        draggable: true,
+                        closeColor: TDTheme.of(context).errorNormalColor,
+                        closeClick: () {
+                          Navigator.maybePop(context);
+                        },
+                        child: Container(
+                          height: 200,
+                        ),
+                      );
+                    }));
+              },
+            )),
+                  Container(
+                      margin: const EdgeInsets.all(8),
+                      child: TDButton(
+                        text: '可拖动全屏',
+                        isBlock: true,
+                        theme: TDButtonTheme.primary,
+                        type: TDButtonType.outline,
+                        size: TDButtonSize.large,
+                        onTap: () {
+
+                          Navigator.of(context).push(TDSlidePopupRoute(
+                              modalBarrierColor: TDTheme.of(context).fontGyColor2,
+                              slideTransitionFrom: SlideTransitionFrom.bottom,
+                              builder: (context) {
+                                return TDPopupBottomConfirmPanel(
+                                  title: '标题文字',
+                                  draggable: true,
+                                  leftClick: () {
+                                    Navigator.maybePop(context);
+                                  },
+                                  rightClick: () {
+                                    TDToast.showText('确定', context: context);
+                                    Navigator.maybePop(context);
+                                  },
+                                  child: Container(
+                                    height: 200,
+                                  ),
+                                );
+                              }));
+                        },
+                      )),
+                ]);
+          },
+        ),
       ],
     );
   }
@@ -746,9 +783,9 @@ class TDPopupPageState extends State<TDPopupPage> {
               return TDPopupBottomDisplayPanel(
                 title: '标题文字',
                 hideClose: true,
-                closeClick: () {
-                  Navigator.maybePop(context);
-                },
+                // closeClick: () {
+                //   Navigator.maybePop(context);
+                // },
                 child: Container(
                   height: 200,
                 ),
