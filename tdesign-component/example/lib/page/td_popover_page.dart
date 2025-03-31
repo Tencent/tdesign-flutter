@@ -210,7 +210,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '带箭头',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(context: _, content: '弹出气泡内容');
             },
@@ -229,7 +229,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
           text: '不带箭头',
           type: TDButtonType.outline,
           theme: TDButtonTheme.primary,
-          textStyle: const TextStyle(height: 1),
+             
           onTap: () {
             TDPopover.showPopover(
                 context: _, content: '弹出气泡内容', showArrow: false);
@@ -271,7 +271,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
           text: '自定义内容',
           type: TDButtonType.outline,
           theme: TDButtonTheme.primary,
-          textStyle: const TextStyle(height: 1),
+             
           onTap: () {
             TDPopover.showPopover(
               context: _,
@@ -298,7 +298,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '深色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -323,7 +323,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '浅色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -349,7 +349,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '品牌色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -375,7 +375,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '成功色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -401,7 +401,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '警告色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -427,7 +427,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '错误色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -453,7 +453,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '顶部左',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -479,7 +479,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '顶部中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -505,7 +505,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '顶部右',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -531,7 +531,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '底部左',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -557,7 +557,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '底部中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -583,7 +583,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '底部右',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -609,7 +609,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '右侧上',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -635,7 +635,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '右侧中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -661,7 +661,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '右侧下',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -687,7 +687,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '左侧上',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -713,7 +713,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '左侧中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -739,7 +739,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '左侧下',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -765,7 +765,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '多行内容',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-            textStyle: const TextStyle(height: 1),
+               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
