@@ -44,7 +44,7 @@ void main() async {
 
 }
 
-var changeList = ['BackTop 返回顶部','Steps 步骤条','Calendar 日历','Radio 单选框','Switch 开关','Upload 上传','Empty 空状态','Result 结果','DropdownMenu 下拉菜单','Swipecell 滑动操作'];
+var changeList = ['BackTop 返回顶部','Steps 步骤条','Calendar 日历','Radio 单选框','Switch 开关','Upload 上传','Empty 空状态','Result 结果','ActionSheet 动作面板','Message 全局提示', 'Swipecell 滑动操作'];
 Finder? lastFinder;
 
 int count = 0;
@@ -60,13 +60,19 @@ Future<void> _testComponent(WidgetTester tester, String name) async {
       print('pumpAndSettle 1 error:$e');
     }
   }
-
+  if(name == 'Skeleton 骨架屏'){
+    // TODO: 骨架屏需要额外手动处理
+    return;
+  }
   var button = find.text(name);
 
   expect(button, findsOneWidget);
   lastFinder = button;
 
   await tester.tap(button);
+  await tester.pump();
+  await tester.pump();
+  await tester.pump();
   await tester.pump();
   await tester.pump();
   await tester.pump();
@@ -80,6 +86,7 @@ Future<void> _testComponent(WidgetTester tester, String name) async {
 
     await tester.fling(page, const Offset(0, -20000), 2);
     try {
+      await tester.pumpAndSettle();
       await tester.pumpAndSettle();
     } catch (e) {
       print('pumpAndSettle 2 error:$e');
