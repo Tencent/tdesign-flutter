@@ -8,5 +8,7 @@
       ),
       value: const RangeValues(10, 60),
       onChanged: (value) {},
+      onTap: (position, offset, value) =>
+          print('onTap  position: $position, offset: $offset, value: $value'),
     );
   }

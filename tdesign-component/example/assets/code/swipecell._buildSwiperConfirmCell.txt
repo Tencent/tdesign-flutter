@@ -27,7 +27,7 @@
         ],
       ),
       cell: const TDCell(
-        title: '右滑操作',
+        title: '左滑操作',
         note: '辅助信息',
       ),
     );
