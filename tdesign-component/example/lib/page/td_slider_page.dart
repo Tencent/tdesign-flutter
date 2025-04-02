@@ -46,7 +46,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
             ExampleItem(desc: '胶囊型滑块', builder: _buildCapsule),
             ExampleItem(desc: '自定义盒子样式', builder: _buildCustomDecoration),
             ExampleItem(desc: '自定义滑轨颜色', builder: _buildCustomActiveColor),
-
           ]),
         ]);
   }
@@ -54,14 +53,15 @@ class _TDSliderPageState extends State<TDSliderPage> {
   @Demo(group: 'slider')
   Widget _buildSingleHandle(BuildContext context) {
     return TDSlider(
-      sliderThemeData: TDSliderThemeData(
-        context: context,
-        min: 0,
-        max: 100,
-      ),
-      value: 10,
-      onChanged: (value) {},
-    );
+        sliderThemeData: TDSliderThemeData(
+          context: context,
+          min: 0,
+          max: 100,
+        ),
+        value: 10,
+        onChanged: (value) {},
+        onTap: (offset, value) =>
+            print('onTap  offset: $offset, value: $value'));
   }
 
   @Demo(group: 'slider')
@@ -74,6 +74,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
       ),
       value: const RangeValues(10, 60),
       onChanged: (value) {},
+      onTap: (position, offset, value) =>
+          print('onTap  position: $position, offset: $offset, value: $value'),
     );
   }
 
@@ -416,7 +418,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
       ],
     );
   }
-
 
   @Demo(group: 'slider')
   Widget _buildCapsuleDoubleHandleWithScale(BuildContext context) {

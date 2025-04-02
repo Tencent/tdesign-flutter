@@ -5,12 +5,12 @@
         TDCascader.showMultiCascader(context,
             title: '选择部门人员',
             data: _data_4,
-            initialData: _initData,
+            initialData: _initData_5,
             theme: 'step', onChange: (List<MultiCascaderListModel> selectData) {
               setState(() {
                 List result = [];
                 int len = selectData.length;
-                _initData = selectData[len - 1].value!;
+                _initData_5 = selectData[len - 1].value!;
                 selectData.forEach((element) {
                   result.add(element.label);
                 });
