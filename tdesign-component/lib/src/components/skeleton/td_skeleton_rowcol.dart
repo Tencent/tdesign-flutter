@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
+
+/// 骨架屏样式
 class TDSkeletonRowColStyle {
   const TDSkeletonRowColStyle({
     this.rowSpacing = _defaultRowSpacing,
@@ -15,6 +17,8 @@ class TDSkeletonRowColStyle {
       TDTheme.of(context).spacer16;
 }
 
+
+/// 骨架屏行列框架
 class TDSkeletonRowCol {
   TDSkeletonRowCol({
     required this.objects,
@@ -43,6 +47,7 @@ class TDSkeletonRowCol {
   }
 }
 
+/// 骨架屏元素样式
 class TDSkeletonRowColObjStyle {
   const TDSkeletonRowColObjStyle({
     this.background = _defaultBackground,
@@ -93,6 +98,8 @@ class TDSkeletonRowColObjStyle {
       TDTheme.of(context).radiusSmall;
 }
 
+
+/// 骨架屏元素
 class TDSkeletonRowColObj {
   const TDSkeletonRowColObj({
     this.width,

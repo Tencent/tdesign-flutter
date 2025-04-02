@@ -26,10 +26,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
           ExampleModule(title: '组件类型', children: [
             ExampleItem(desc: '单游标滑块', builder: _buildSingleHandle),
             ExampleItem(desc: '双游标滑块', builder: _buildDoubleHandle),
-            ExampleItem(
-                desc: '带数值单游标滑块 ', builder: _buildSingleHandleWithNumber),
-            ExampleItem(
-                desc: '带数值双游标滑块', builder: _buildDoubleHandleWithNumber),
+            ExampleItem(desc: '带数值单游标滑块 ', builder: _buildSingleHandleWithNumber),
+            ExampleItem(desc: '带数值双游标滑块', builder: _buildDoubleHandleWithNumber),
             ExampleItem(desc: '带刻度单游标滑块', builder: _buildSingleHandleWithScale),
             ExampleItem(desc: '带刻度双游标滑块', builder: _buildDoubleHandleWithScale),
           ]),
@@ -39,8 +37,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
             ExampleItem(builder: _buildDisableDoubleHandleWithScale),
           ]),
           ExampleModule(title: '特殊样式', children: [
-            ExampleItem(
-                desc: '胶囊型滑块', builder: _buildCapsuleSingleHandleWithNumber),
+
+            ExampleItem(desc: '胶囊型滑块', builder: _buildCapsuleSingleHandleWithNumber),
             ExampleItem(builder: _buildCapsuleDoubleHandle),
             ExampleItem(builder: _buildCapsuleSingleHandle),
             ExampleItem(builder: _buildCapsuleDoubleHandleWithNumber),
@@ -265,10 +263,12 @@ class _TDSliderPageState extends State<TDSliderPage> {
         min: 0,
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
-      )..updateSliderThemeData((data) => data.copyWith(
-            activeTickMarkColor: const Color(0xFFE7E7E7),
-            inactiveTickMarkColor: const Color(0xFFE7E7E7),
-          )),
+      )
+        ..updateSliderThemeData((data) =>
+            data.copyWith(
+              activeTickMarkColor: const Color(0xFFE7E7E7),
+              inactiveTickMarkColor: const Color(0xFFE7E7E7),
+            )),
       value: 60,
       onChanged: (value) {},
     );
@@ -348,10 +348,12 @@ class _TDSliderPageState extends State<TDSliderPage> {
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
-          )..updateSliderThemeData((data) => data.copyWith(
-                activeTickMarkColor: const Color(0xFFE7E7E7),
-                inactiveTickMarkColor: const Color(0xFFE7E7E7),
-              )),
+          )
+            ..updateSliderThemeData((data) =>
+                data.copyWith(
+                  activeTickMarkColor: const Color(0xFFE7E7E7),
+                  inactiveTickMarkColor: const Color(0xFFE7E7E7),
+                )),
           value: 60,
           // divisions: 5,
           onChanged: (value) {},
@@ -367,10 +369,12 @@ class _TDSliderPageState extends State<TDSliderPage> {
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
-          )..updateSliderThemeData((data) => data.copyWith(
-                activeTickMarkColor: const Color(0xFFE7E7E7),
-                inactiveTickMarkColor: const Color(0xFFE7E7E7),
-              )),
+          )
+            ..updateSliderThemeData((data) =>
+                data.copyWith(
+                  activeTickMarkColor: const Color(0xFFE7E7E7),
+                  inactiveTickMarkColor: const Color(0xFFE7E7E7),
+                )),
           value: const RangeValues(20, 60),
           // divisions: 5,
           onChanged: (value) {},
@@ -390,7 +394,9 @@ class _TDSliderPageState extends State<TDSliderPage> {
             max: 100,
           ),
           value: 40,
-          boxDecoration: const BoxDecoration(color: Colors.amber),
+          boxDecoration: const BoxDecoration(
+              color: Colors.amber
+          ),
           // divisions: 5,
           onChanged: (value) {},
         ),
@@ -404,7 +410,9 @@ class _TDSliderPageState extends State<TDSliderPage> {
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           ),
-          boxDecoration: const BoxDecoration(color: Colors.deepOrangeAccent),
+          boxDecoration: const BoxDecoration(
+              color: Colors.deepOrangeAccent
+          ),
           value: const RangeValues(20, 60),
           onChanged: (value) {},
         ),
@@ -423,13 +431,14 @@ class _TDSliderPageState extends State<TDSliderPage> {
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
       )..updateSliderThemeData((data) => data.copyWith(
-            activeTickMarkColor: const Color(0xFFE7E7E7),
-            inactiveTickMarkColor: const Color(0xFFE7E7E7),
-          )),
+        activeTickMarkColor: const Color(0xFFE7E7E7),
+        inactiveTickMarkColor: const Color(0xFFE7E7E7),
+      )),
       value: const RangeValues(20, 60),
       onChanged: (value) {},
     );
   }
+
 
   @Demo(group: 'slider')
   Widget _buildCustomActiveColor(BuildContext context) {

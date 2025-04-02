@@ -210,7 +210,6 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         text: 'Swiper 轮播图', name: 'swiper', pageBuilder: _wrapInheritedTheme((context) => const TDSwiperPage())),
     ExamplePageModel(text: 'Table 表格', name: 'table', pageBuilder: _wrapInheritedTheme((context) => const TDTablePage())),
     ExamplePageModel(text: 'Tag 标签', name: 'tag', pageBuilder: _wrapInheritedTheme((context) => const TDTagPage())),
-    ExamplePageModel(text: 'Steps 步骤条', name: 'steps', pageBuilder: _wrapInheritedTheme((context) => const TDStepsPage())),
   ],
   '反馈': [
     ExamplePageModel( 
@@ -228,11 +227,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Loading 加载', name: 'loading', pageBuilder: _wrapInheritedTheme((context) => const TDLoadingPage())),
     ExamplePageModel(
-        text: 'Message 消息通知',
+        text: 'Message 全局提示',
         name: 'message',
         pageBuilder: _wrapInheritedTheme((context) => const TDMessagePage())),
     ExamplePageModel(
-        text: 'NoticeBar 公告栏', name: 'notice-bar', pageBuilder: _wrapInheritedTheme((context) => const TDNoticeBarPage())),
+        text: 'NoticeBar 消息提醒', name: 'notice-bar', pageBuilder: _wrapInheritedTheme((context) => const TDNoticeBarPage())),
     ExamplePageModel(
         text: 'Overlay 遮罩层',
         name: 'overlay',
@@ -268,6 +267,7 @@ List<ExamplePageModel> sideBarExamplePage = [
       text: 'SideBar 切页',
       name: 'SideBarPagination',
       isTodo: false,
+      showAction: false,
       pageBuilder: _wrapInheritedTheme((context) => const TDSideBarPaginationPage())),
   ExamplePageModel(
       text: 'SideBar 锚点',
