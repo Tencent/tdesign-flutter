@@ -331,9 +331,9 @@ class HorizontalTextButtons extends StatelessWidget {
                 buttonText: rightBtn.title,
                 buttonTextColor: rightBtn.titleColor,
                 buttonTextSize: rightBtn.titleSize,
-                buttonStyle: leftBtn.style,
-                buttonType: leftBtn.type ?? TDButtonType.text,
-                buttonTheme: leftBtn.theme ?? TDButtonTheme.primary,
+                buttonStyle: rightBtn.style,
+                buttonType: rightBtn.type ?? TDButtonType.text,
+                buttonTheme: rightBtn.theme ?? TDButtonTheme.primary,
                 height: 56,
                 buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
                 onPressed: () {

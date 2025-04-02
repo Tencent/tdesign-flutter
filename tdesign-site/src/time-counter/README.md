@@ -592,7 +592,12 @@ TDTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
 
 
 ## API
-### TDTimeCounter
+### TDTimeCounterController
+#### 简介
+倒计时组件控制器，可控制开始(`start()`)/暂停(`pause()`)/继续(`resume()`)/重置(`reset([int? time])`)
+```
+```
+ ### TDTimeCounter
 #### 简介
 计时组件
 #### 默认构造方法
@@ -614,11 +619,6 @@ TDTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
 | direction | TDTimeCounterDirection | TDTimeCounterDirection.down | 计时方向，默认倒计时 |
 | controller | TDTimeCounterController? | - | 控制器，可控制开始/暂停/继续/重置 |
 
-```
-```
- ### TDTimeCounterController
-#### 简介
-倒计时组件控制器，可控制开始(`start()`)/暂停(`pause()`)/继续(`resume()`)/重置(`reset([int? time])`)
 ```
 ```
  ### TDTimeCounterStyle

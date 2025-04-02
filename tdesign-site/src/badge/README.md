@@ -21,267 +21,322 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### 1 组件类型
 
 红点徽标
-            
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildRedPointBadge(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 40,
-            height: 24,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                TDText(
-                  '消息',
-                  font: TDTheme.of(context).fontBodyLarge,
-                ),
-                const Positioned(
-                  child: TDBadge(TDBadgeType.redPoint),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
+  Widget _buildRedPointMessageBadge(BuildContext context) {
+    return Container(
+        alignment: Alignment.bottomLeft,
+        margin: const EdgeInsets.only(left: 16, right: 16),
+        child: SizedBox(
+          width: 40,
+          height: 24,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              TDText(
+                '消息',
+                font: TDTheme.of(context).fontBodyLarge,
+              ),
+              const Positioned(
+                child: TDBadge(TDBadgeType.redPoint),
+                right: 0,
+                top: 0,
+              )
+            ],
           ),
-          const SizedBox(
-            width: 40,
-          ),
-          SizedBox(
-            width: 27,
-            height: 27,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: const [
-                Icon(TDIcons.notification),
-                Positioned(
-                  child: TDBadge(TDBadgeType.redPoint),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 40,
-          ),
-          SizedBox(
-            width: 83,
-            height: 51,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: const [
-                TDButton(
-                  width: 80,
-                  height: 48,
-                  text: '按钮',
-                  size: TDButtonSize.large,
-                  type: TDButtonType.fill,
-                ),
-                Positioned(
-                  child: TDBadge(TDBadgeType.redPoint),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+        ));
   }</pre>
 
 </td-code-block>
-                                  
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildRedPointIconBadge(BuildContext context) {
+    return Container(
+        alignment: Alignment.bottomLeft,
+        margin: const EdgeInsets.only(left: 16, right: 16),
+        child: SizedBox(
+          width: 27,
+          height: 27,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              Icon(TDIcons.notification),
+              Positioned(
+                child: TDBadge(TDBadgeType.redPoint),
+                right: 0,
+                top: 0,
+              )
+            ],
+          ),
+        ));
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildRedPointButtonBadge(BuildContext context) {
+    return Container(
+        alignment: Alignment.bottomLeft,
+        margin: const EdgeInsets.only(left: 16, right: 16),
+        child: SizedBox(
+          width: 83,
+          height: 48,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              TDButton(
+                width: 80,
+                height: 48,
+                text: '按钮',
+                size: TDButtonSize.large,
+                type: TDButtonType.fill,
+              ),
+              Positioned(
+                child: TDBadge(TDBadgeType.redPoint),
+                right: 0,
+                top: 0,
+              )
+            ],
+          ),
+        ));
+  }</pre>
+
+</td-code-block>
+                
 
 数字徽标
-            
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildNumberBadge(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 48,
-            height: 32,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                TDText(
-                  '消息',
-                  font: TDTheme.of(context).fontBodyLarge,
+  Widget _buildMessageNumberBadge(BuildContext context) {
+    return Container(
+        alignment: Alignment.bottomLeft,
+        margin: const EdgeInsets.only(left: 16),
+        child: SizedBox(
+          width: 54,
+          height: 36,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              TDText(
+                '消息',
+                font: TDTheme.of(context).fontBodyLarge,
+              ),
+              const Positioned(
+                child: TDBadge(
+                  TDBadgeType.message,
+                  count: '8',
                 ),
-                const Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '8',
-                  ),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
+                left: 28,
+                bottom: 18,
+              )
+            ],
           ),
-          const SizedBox(
-            width: 40,
-          ),
-          SizedBox(
-            width: 34,
-            height: 34,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: const [
-                Icon(TDIcons.notification),
-                Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '8',
-                  ),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 40,
-          ),
-          SizedBox(
-            width: 86,
-            height: 54,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: const [
-                TDButton(
-                  width: 80,
-                  height: 48,
-                  text: '按钮',
-                  size: TDButtonSize.large,
-                ),
-                Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '8',
-                  ),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+        ));
   }</pre>
 
 </td-code-block>
-                                  
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildIconNumberBadge(BuildContext context) {
+    return Container(
+        alignment: Alignment.bottomLeft,
+        margin: const EdgeInsets.only(left: 16),
+        child: SizedBox(
+          width: 42,
+          height: 36,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              Icon(TDIcons.notification),
+              Positioned(
+                child: TDBadge(
+                  TDBadgeType.message,
+                  count: '8',
+                ),
+                left: 18,
+                bottom: 18,
+              )
+            ],
+          ),
+        ));
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildButtonNumberBadge(BuildContext context) {
+    return Container(
+        alignment: Alignment.bottomLeft,
+        margin: const EdgeInsets.only(left: 16),
+        child: SizedBox(
+          width: 86,
+          height: 54,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              TDButton(
+                width: 80,
+                height: 48,
+                text: '按钮',
+                size: TDButtonSize.large,
+              ),
+              Positioned(
+                child: TDBadge(
+                  TDBadgeType.message,
+                  count: '8',
+                ),
+                right: 0,
+                top: 0,
+              )
+            ],
+          ),
+        ));
+  }</pre>
+
+</td-code-block>
+                
 
 自定义徽标
-            
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildCustomBadge(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 64,
-            height: 56,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                Container(
-                  child: const Icon(TDIcons.notification),
-                  decoration: BoxDecoration(
-                      color: TDTheme.of(context).grayColor2,
-                      borderRadius: BorderRadius.circular(
-                          TDTheme.of(context).radiusDefault)),
-                  height: 48,
-                  width: 48,
+  Widget _buildCustomBadgeShowingNumberEight(BuildContext context) {
+    return Container(
+        alignment: Alignment.bottomLeft,
+        margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+        child: SizedBox(
+          width: 64,
+          height: 56,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              Container(
+                child: const Icon(TDIcons.notification),
+                decoration: BoxDecoration(
+                    color: TDTheme.of(context).grayColor2,
+                    borderRadius: BorderRadius.circular(
+                        TDTheme.of(context).radiusDefault)),
+                height: 48,
+                width: 48,
+              ),
+              const Positioned(
+                child: TDBadge(
+                  TDBadgeType.message,
+                  count: '8',
                 ),
-                const Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '8',
-                  ),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
+                right: 0,
+                top: 0,
+              )
+            ],
           ),
-          const SizedBox(width: 40),
-          SizedBox(
-            width: 64,
-            height: 56,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                Container(
-                  child: const Icon(TDIcons.notification),
-                  decoration: BoxDecoration(
-                      color: TDTheme.of(context).grayColor2,
-                      borderRadius: BorderRadius.circular(
-                          TDTheme.of(context).radiusDefault)),
-                  height: 48,
-                  width: 48,
-                ),
-                const Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '0',
-                  ),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
-          ),
-          const SizedBox(width: 40),
-          SizedBox(
-            width: 64,
-            height: 56,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                Container(
-                  child: const Icon(TDIcons.notification),
-                  decoration: BoxDecoration(
-                      color: TDTheme.of(context).grayColor2,
-                      borderRadius: BorderRadius.circular(
-                          TDTheme.of(context).radiusDefault)),
-                  height: 48,
-                  width: 48,
-                ),
-                const Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '0',
-                    showZero: false,
-                  ),
-                  right: 0,
-                  top: 0,
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+        ));
   }</pre>
 
 </td-code-block>
-                                  
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildCustomBadgeShowingNumberZero(BuildContext context) {
+    return Container(
+        alignment: Alignment.bottomLeft,
+        margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+        child: SizedBox(
+          width: 64,
+          height: 56,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              Container(
+                child: const Icon(TDIcons.notification),
+                decoration: BoxDecoration(
+                    color: TDTheme.of(context).grayColor2,
+                    borderRadius: BorderRadius.circular(
+                        TDTheme.of(context).radiusDefault)),
+                height: 48,
+                width: 48,
+              ),
+              const Positioned(
+                child: TDBadge(
+                  TDBadgeType.message,
+                  count: '0',
+                ),
+                right: 0,
+                top: 0,
+              )
+            ],
+          ),
+        ));
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildCustomBadgeWithoutShowingNumberZero(BuildContext context) {
+    return Container(
+        alignment: Alignment.bottomLeft,
+        margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+        child: SizedBox(
+          width: 64,
+          height: 56,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              Container(
+                child: const Icon(TDIcons.notification),
+                decoration: BoxDecoration(
+                    color: TDTheme.of(context).grayColor2,
+                    borderRadius: BorderRadius.circular(
+                        TDTheme.of(context).radiusDefault)),
+                height: 48,
+                width: 48,
+              ),
+              const Positioned(
+                child: TDBadge(
+                  TDBadgeType.message,
+                  count: '0',
+                  showZero: false,
+                ),
+                right: 0,
+                top: 0,
+              )
+            ],
+          ),
+        ));
+  }</pre>
+
+</td-code-block>
+                
 ### 1 组件样式
 
 圆形徽标
@@ -291,23 +346,23 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildCircleBadge(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16),
+      padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
           SizedBox(
-            width: 34,
+            width: 48,
             height: 34,
             child: Stack(
               alignment: Alignment.bottomLeft,
-              children: const [
+              children: [
                 Icon(TDIcons.notification),
                 Positioned(
                   child: TDBadge(
                     TDBadgeType.message,
-                    count: '8',
+                    count: '16',
                   ),
-                  right: 0,
-                  top: 0,
+                  left: 18,
+                  bottom: 18,
                 )
               ],
             ),
@@ -327,24 +382,24 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildSquareBadge(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16),
+      padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
           SizedBox(
-            width: 34,
+            width: 48,
             height: 34,
             child: Stack(
               alignment: Alignment.bottomLeft,
-              children: const [
+              children: [
                 Icon(TDIcons.notification),
                 Positioned(
                   child: TDBadge(
                     TDBadgeType.square,
                     border: TDBadgeBorder.small,
-                    count: '8',
+                    count: '16',
                   ),
-                  right: 0,
-                  top: 0,
+                  left: 20,
+                  bottom: 18,
                 )
               ],
             ),
@@ -441,15 +496,15 @@ Large
   <pre slot="Dart" lang="javascript">
   Widget _buildLargeBadge(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16),
+      padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
           SizedBox(
             width: 68,
-            height: 65.5,
+            height: 70,
             child: Stack(
               alignment: Alignment.bottomLeft,
-              children: const [
+              children: [
                 TDAvatar(
                   size: TDAvatarSize.large,
                   type: TDAvatarType.icon,
@@ -460,8 +515,8 @@ Large
                     size: TDBadgeSize.large,
                     count: '8',
                   ),
-                  right: 0,
-                  top: 0,
+                  left: 48,
+                  bottom: 48,
                 )
               ],
             ),
@@ -480,16 +535,16 @@ Medium
 
   <pre slot="Dart" lang="javascript">
   Widget _buildMediumBadge(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.only(left: 16),
       child: Row(
         children: [
           SizedBox(
-            width: 51,
-            height: 49.5,
+            width: 120,
+            height: 54,
             child: Stack(
               alignment: Alignment.bottomLeft,
-              children: const [
+              children: [
                 TDAvatar(
                   size: TDAvatarSize.medium,
                   type: TDAvatarType.icon,
@@ -499,8 +554,8 @@ Medium
                     TDBadgeType.message,
                     count: '8',
                   ),
-                  right: 0,
-                  top: 0,
+                  left: 36,
+                  bottom: 36,
                 )
               ],
             ),
@@ -523,6 +578,7 @@ Medium
 | type | TDBadgeType | type | 红点样式 |
 | key |  | - |  |
 | count | String? | - | 红点数量 |
+| maxCount | String? | '99' | 最大红点数量 |
 | border | TDBadgeBorder | TDBadgeBorder.large | 红点圆角大小 |
 | size | TDBadgeSize | TDBadgeSize.small | 红点尺寸 |
 | color | Color? | - | 红点颜色 |

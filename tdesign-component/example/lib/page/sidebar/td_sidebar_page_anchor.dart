@@ -58,9 +58,11 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
   }
 
   void onChanged(int value) {
-    setState(() {
-      currentValue = value;
-    });
+    if(mounted){
+      setState(() {
+        currentValue = value;
+      });
+    }
   }
 
   @override

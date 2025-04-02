@@ -54,5 +54,7 @@
   "yearLabel":"年",
   "monthLabel": "月",
   "dateLabel": "日",
-  "weeks":"周"
+  "weeks":"周",
+  "back":"返回",
+  "top":"顶部"
 }

@@ -155,4 +155,10 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
   @override
   String get cascadeLabel =>  AppLocalizations.of(context)!.cascadeLabel;
+
+  @override
+  String get back => AppLocalizations.of(context)!.back;
+
+  @override
+  String get top => AppLocalizations.of(context)!.top;
 }

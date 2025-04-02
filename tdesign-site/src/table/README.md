@@ -74,13 +74,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDTableCol(
           title: '标题',
           colKey: 'title4',
-          cellBuilder: (BuildContext context) {
+          cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TDText(
                   '修改',
-                  forceVerticalCenter: true,
                   style: TextStyle(
                     color: TDTheme.of(context).brandNormalColor,
                     fontSize: 14,
@@ -89,7 +88,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 ),
                 TDText(
                   '通过',
-                  forceVerticalCenter: true,
                   style: TextStyle(
                     color: TDTheme.of(context).brandNormalColor,
                     fontSize: 14,
@@ -122,7 +120,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDTableCol(
           title: '标题',
           colKey: 'title4',
-          cellBuilder: (BuildContext context) {
+          cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -175,7 +173,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           title: '标题',
           colKey: 'title4',
           fixed: TDTableColFixed.right,
-          cellBuilder: (BuildContext context) {
+          cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
