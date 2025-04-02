@@ -37,7 +37,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
             ExampleItem(builder: _buildDisableDoubleHandleWithScale),
           ]),
           ExampleModule(title: '特殊样式', children: [
-
             ExampleItem(desc: '胶囊型滑块', builder: _buildCapsuleSingleHandleWithNumber),
             ExampleItem(builder: _buildCapsuleDoubleHandle),
             ExampleItem(builder: _buildCapsuleSingleHandle),
