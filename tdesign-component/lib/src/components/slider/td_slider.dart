@@ -290,12 +290,12 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
                 final tapOffset = sliderBox.globalToLocal(event.position);
                 final sliderWidth = sliderBox.size.width;
 
-                // 动态获取 Thumb 尺寸（两个参数）
+                // 动态获取 Thumb 尺寸
                 final sliderTheme = Theme.of(context).sliderTheme;
                 final thumbShape = sliderTheme.rangeThumbShape;
                 final thumbSize = thumbShape?.getPreferredSize(
-                      enabled, // 参数1: 是否启用
-                      tdSliderThemeData.divisions != null, // 参数2: 是否离散
+                      enabled,
+                      tdSliderThemeData.divisions != null,
                     ) ??
                     const Size(24, 24);
 
@@ -322,7 +322,6 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
                   position = Position.end;
                   tappedValue = rangeValues.end;
                 } else {
-                  // 计算轨道点击对应的值
                   tappedValue =
                       (tapOffset.dx / sliderWidth) * (max - min) + min;
                 }
