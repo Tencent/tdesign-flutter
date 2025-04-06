@@ -9,9 +9,7 @@
             max: 100,
           ),
           value: 40,
-          boxDecoration: const BoxDecoration(
-              color: Colors.amber
-          ),
+          boxDecoration: const BoxDecoration(color: Colors.amber),
           // divisions: 5,
           onChanged: (value) {},
         ),
@@ -25,9 +23,7 @@
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           ),
-          boxDecoration: const BoxDecoration(
-              color: Colors.deepOrangeAccent
-          ),
+          boxDecoration: const BoxDecoration(color: Colors.deepOrangeAccent),
           value: const RangeValues(20, 60),
           onChanged: (value) {},
         ),
