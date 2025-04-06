@@ -26,8 +26,10 @@ class _TDSliderPageState extends State<TDSliderPage> {
           ExampleModule(title: '组件类型', children: [
             ExampleItem(desc: '单游标滑块', builder: _buildSingleHandle),
             ExampleItem(desc: '双游标滑块', builder: _buildDoubleHandle),
-            ExampleItem(desc: '带数值单游标滑块 ', builder: _buildSingleHandleWithNumber),
-            ExampleItem(desc: '带数值双游标滑块', builder: _buildDoubleHandleWithNumber),
+            ExampleItem(
+                desc: '带数值单游标滑块 ', builder: _buildSingleHandleWithNumber),
+            ExampleItem(
+                desc: '带数值双游标滑块', builder: _buildDoubleHandleWithNumber),
             ExampleItem(desc: '带刻度单游标滑块', builder: _buildSingleHandleWithScale),
             ExampleItem(desc: '带刻度双游标滑块', builder: _buildDoubleHandleWithScale),
           ]),
@@ -36,8 +38,13 @@ class _TDSliderPageState extends State<TDSliderPage> {
             ExampleItem(builder: _buildDisableDoubleHandleWithNumber),
             ExampleItem(builder: _buildDisableDoubleHandleWithScale),
           ]),
+          ExampleModule(title: '组件事件', children: [
+            ExampleItem(desc: 'onTap', builder: _buildOnTapSingleHandle),
+            ExampleItem(builder: _buildOnTapDoubleHandle),
+          ]),
           ExampleModule(title: '特殊样式', children: [
-            ExampleItem(desc: '胶囊型滑块', builder: _buildCapsuleSingleHandleWithNumber),
+            ExampleItem(
+                desc: '胶囊型滑块', builder: _buildCapsuleSingleHandleWithNumber),
             ExampleItem(builder: _buildCapsuleDoubleHandle),
             ExampleItem(builder: _buildCapsuleSingleHandle),
             ExampleItem(builder: _buildCapsuleDoubleHandleWithNumber),
@@ -46,7 +53,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
             ExampleItem(desc: '胶囊型滑块', builder: _buildCapsule),
             ExampleItem(desc: '自定义盒子样式', builder: _buildCustomDecoration),
             ExampleItem(desc: '自定义滑轨颜色', builder: _buildCustomActiveColor),
-
           ]),
         ]);
   }
@@ -54,14 +60,15 @@ class _TDSliderPageState extends State<TDSliderPage> {
   @Demo(group: 'slider')
   Widget _buildSingleHandle(BuildContext context) {
     return TDSlider(
-      sliderThemeData: TDSliderThemeData(
-        context: context,
-        min: 0,
-        max: 100,
-      ),
-      value: 10,
-      onChanged: (value) {},
-    );
+        sliderThemeData: TDSliderThemeData(
+          context: context,
+          min: 0,
+          max: 100,
+        ),
+        value: 10,
+        onChanged: (value) {},
+        onTap: (offset, value) =>
+            print('onTap  offset: $offset, value: $value'));
   }
 
   @Demo(group: 'slider')
@@ -74,6 +81,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
       ),
       value: const RangeValues(10, 60),
       onChanged: (value) {},
+      onTap: (position, offset, value) =>
+          print('onTap  position: $position, offset: $offset, value: $value'),
     );
   }
 
@@ -188,6 +197,59 @@ class _TDSliderPageState extends State<TDSliderPage> {
     );
   }
 
+@Demo(group: 'slider')
+Widget _buildOnTapSingleHandle(BuildContext context) {
+  double currentValue = 40;
+  Offset? tapOffset;
+
+  return StatefulBuilder(
+    builder: (context, setState) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TDSlider(
+            sliderThemeData: TDSliderThemeData(
+              context: context,
+              min: 0,
+              max: 100,
+            ),
+            leftLabel: '0',
+            rightLabel: '100',
+            value: currentValue,
+            onChanged: (value) {},
+            onTap: (offset, value) {
+              setState(() {
+                currentValue = value;
+                tapOffset = offset;
+              });
+              print('onTap  offset: $offset, value: $value');
+            },
+          ),
+          Text('Value: ${currentValue.toStringAsFixed(1)}'),
+          if (tapOffset != null)
+            Text('Tap at (${tapOffset!.dx.toStringAsFixed(0)},'
+                 '${tapOffset!.dy.toStringAsFixed(0)})')
+        ],
+      );
+    },
+  );
+}
+
+  @Demo(group: 'slider')
+  Widget _buildOnTapDoubleHandle(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData(
+        context: context,
+        min: 0,
+        max: 100,
+      ),
+      leftLabel: '0',
+      rightLabel: '100',
+      value: 40,
+      onTap: (offset, value) => print('onTap  offset: $offset, value: $value'),
+    );
+  }
+
   @Demo(group: 'slider')
   Widget _buildCapsuleSingleHandleWithNumber(BuildContext context) {
     return TDSlider(
@@ -260,12 +322,10 @@ class _TDSliderPageState extends State<TDSliderPage> {
         min: 0,
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
-      )
-        ..updateSliderThemeData((data) =>
-            data.copyWith(
-              activeTickMarkColor: const Color(0xFFE7E7E7),
-              inactiveTickMarkColor: const Color(0xFFE7E7E7),
-            )),
+      )..updateSliderThemeData((data) => data.copyWith(
+            activeTickMarkColor: const Color(0xFFE7E7E7),
+            inactiveTickMarkColor: const Color(0xFFE7E7E7),
+          )),
       value: 60,
       onChanged: (value) {},
     );
@@ -345,12 +405,10 @@ class _TDSliderPageState extends State<TDSliderPage> {
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
-          )
-            ..updateSliderThemeData((data) =>
-                data.copyWith(
-                  activeTickMarkColor: const Color(0xFFE7E7E7),
-                  inactiveTickMarkColor: const Color(0xFFE7E7E7),
-                )),
+          )..updateSliderThemeData((data) => data.copyWith(
+                activeTickMarkColor: const Color(0xFFE7E7E7),
+                inactiveTickMarkColor: const Color(0xFFE7E7E7),
+              )),
           value: 60,
           // divisions: 5,
           onChanged: (value) {},
@@ -366,12 +424,10 @@ class _TDSliderPageState extends State<TDSliderPage> {
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
-          )
-            ..updateSliderThemeData((data) =>
-                data.copyWith(
-                  activeTickMarkColor: const Color(0xFFE7E7E7),
-                  inactiveTickMarkColor: const Color(0xFFE7E7E7),
-                )),
+          )..updateSliderThemeData((data) => data.copyWith(
+                activeTickMarkColor: const Color(0xFFE7E7E7),
+                inactiveTickMarkColor: const Color(0xFFE7E7E7),
+              )),
           value: const RangeValues(20, 60),
           // divisions: 5,
           onChanged: (value) {},
@@ -391,9 +447,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
             max: 100,
           ),
           value: 40,
-          boxDecoration: const BoxDecoration(
-              color: Colors.amber
-          ),
+          boxDecoration: const BoxDecoration(color: Colors.amber),
           // divisions: 5,
           onChanged: (value) {},
         ),
@@ -407,16 +461,13 @@ class _TDSliderPageState extends State<TDSliderPage> {
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           ),
-          boxDecoration: const BoxDecoration(
-              color: Colors.deepOrangeAccent
-          ),
+          boxDecoration: const BoxDecoration(color: Colors.deepOrangeAccent),
           value: const RangeValues(20, 60),
           onChanged: (value) {},
         ),
       ],
     );
   }
-
 
   @Demo(group: 'slider')
   Widget _buildCapsuleDoubleHandleWithScale(BuildContext context) {
@@ -429,14 +480,13 @@ class _TDSliderPageState extends State<TDSliderPage> {
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
       )..updateSliderThemeData((data) => data.copyWith(
-        activeTickMarkColor: const Color(0xFFE7E7E7),
-        inactiveTickMarkColor: const Color(0xFFE7E7E7),
-      )),
+            activeTickMarkColor: const Color(0xFFE7E7E7),
+            inactiveTickMarkColor: const Color(0xFFE7E7E7),
+          )),
       value: const RangeValues(20, 60),
       onChanged: (value) {},
     );
   }
-
 
   @Demo(group: 'slider')
   Widget _buildCustomActiveColor(BuildContext context) {

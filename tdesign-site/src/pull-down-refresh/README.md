@@ -12,7 +12,7 @@ isComponent: true
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart'; 
-import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 ```
 
 ## 代码演示

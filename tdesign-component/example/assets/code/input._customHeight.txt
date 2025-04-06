@@ -13,13 +13,7 @@
           controller: controller,
           backgroundColor: Colors.white,
           hintText: '请输入文字',
-          onChanged: (text) {
-            setState(() {});
-          },
-          onClearTap: () {
-            controller.clear();
-            setState(() {});
-          },
+          needClear: true,
         ),
       ),
     );

@@ -1,0 +1,14 @@
+
+  Widget _buildOnTapDoubleHandle(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData(
+        context: context,
+        min: 0,
+        max: 100,
+      ),
+      leftLabel: '0',
+      rightLabel: '100',
+      value: 40,
+      onTap: (offset, value) => print('onTap  offset: $offset, value: $value'),
+    );
+  }
