@@ -247,6 +247,7 @@ Widget _buildCard(BuildContext context) {
 | cardBorderRadius | BorderRadius? | - | 卡片模式边框圆角 |
 | cardPadding | EdgeInsets? | - | 卡片模式内边距 |
 | titlePadding | EdgeInsets? | - | 单元格组标题内边距 |
+| titleBackgroundColor | Color? | - | 单元格组标题背景颜色 |
 
 
 #### 工厂构造方法
