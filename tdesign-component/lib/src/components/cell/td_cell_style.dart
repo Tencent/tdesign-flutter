@@ -22,6 +22,7 @@ class TDCellStyle {
     this.cardBorderRadius,
     this.cardPadding,
     this.titlePadding,
+    this.titleBackgroundColor,
   }) {
     if (context != null) {
       defaultStyle(context!);
@@ -79,6 +80,9 @@ class TDCellStyle {
   /// 单元格组标题内边距
   EdgeInsets? titlePadding;
 
+  /// 单元格组标题背景颜色
+  Color? titleBackgroundColor;
+
   /// 生成单元格默认样式
   TDCellStyle.cellStyle(BuildContext context) {
     defaultStyle(context);
@@ -123,5 +127,6 @@ class TDCellStyle {
       top: TDTheme.of(context).spacer24,
       bottom: TDTheme.of(context).spacer8,
     );
+    titleBackgroundColor = Colors.transparent;
   }
 }
