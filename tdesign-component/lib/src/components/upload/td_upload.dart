@@ -279,9 +279,9 @@ class _TDUploadState extends State<TDUpload> {
 
     for (var file in files) {
       if (widget.sizeLimit != null) {
-        var fileSize = (await file.length()) * 1024;
-
-        if (fileSize > widget.sizeLimit!) {
+        final fileSize = await file.length();
+        final sizeLimitInBytes = widget.sizeLimit! * 1024;
+        if (fileSize > sizeLimitInBytes) {
           error = TDUploadValidatorError.overSize;
           break;
         }
