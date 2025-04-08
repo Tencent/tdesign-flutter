@@ -19,14 +19,7 @@
         ),
         onBtnTap: () {
           TDToast.showText('点击右侧按钮', context: context);
-        },
-        onChanged: (text) {
-          setState(() {});
-        },
-        onClearTap: () {
-          controller.clear();
-          setState(() {});
-        },
+        }
       ),
     );
   }
