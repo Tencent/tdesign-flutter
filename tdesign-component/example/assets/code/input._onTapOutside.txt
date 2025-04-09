@@ -13,13 +13,6 @@
           controller: controller,
           backgroundColor: Colors.white,
           hintText: '请输入文字',
-          onChanged: (text) {
-            setState(() {});
-          },
-          onClearTap: () {
-            controller.clear();
-            setState(() {});
-          },
           onTapOutside: (event) {
             TDToast.showText('点击输入框外部区域', context: context);
             print('on tap outside ${event}');
