@@ -235,6 +235,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | trackOffColor | Color? | - | 关闭时轨道颜色 |
 | thumbContentOnColor | Color? | - | 开启时ThumbView的颜色 |
 | thumbContentOffColor | Color? | - | 关闭时ThumbView的颜色 |
+| thumbContentOnFont | TextStyle? | - | 开启时ThumbView的字体样式 |
+| thumbContentOffFont | TextStyle? | - | 关闭时ThumbView的字体样式 |
 | onChanged | OnSwitchChanged? | - | 改变事件 |
 | openText | String? | - | 打开文案 |
 | closeText | String? | - | 关闭文案 |

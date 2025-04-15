@@ -479,6 +479,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | opened | VoidCallback? | - | 打开后事件 |
 | close | VoidCallback? | - | 关闭前事件 |
 | barrierClick | VoidCallback? | - | 蒙层点击事件，仅在[modalBarrierFull]为false时触发 |
+| focusMove | bool | false | 是否有输入框获取焦点时整体平移避免输入框被遮挡 |
 
 ```
 ```
@@ -489,16 +490,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| child | Widget | - | 子控件 |
-| title | String? | - | 标题 |
-| titleColor | Color? | - | 标题颜色 |
+| key |  | - |  |
+| child |  | - |  |
+| title |  | - |  |
+| titleColor |  | - |  |
 | titleLeft | bool | false | 标题是否靠左 |
 | hideClose | bool | false | 是否隐藏关闭按钮 |
 | closeColor | Color? | - | 关闭按钮颜色 |
 | closeClick | PopupClick? | - | 关闭按钮点击回调 |
-| backgroundColor | Color? | - | 背景颜色 |
-| radius | double? | - | 圆角 |
-| key |  | - |  |
+| backgroundColor |  | - |  |
+| radius |  | - |  |
+| draggable |  | - |  |
+| maxHeightRatio |  | - |  |
+| minHeightRatio |  | - |  |
 
 ```
 ```
@@ -509,18 +513,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| child | Widget | - | 子控件 |
-| title | String? | - | 标题 |
-| titleColor | Color? | - | 标题颜色 |
+| key |  | - |  |
+| child |  | - |  |
+| title |  | - |  |
+| titleColor |  | - |  |
 | leftText | String? | - | 左边文本 |
 | leftTextColor | Color? | - | 左边文本颜色 |
 | leftClick | PopupClick? | - | 左边文本点击回调 |
 | rightText | String? | - | 右边文本 |
 | rightTextColor | Color? | - | 右边文本颜色 |
 | rightClick | PopupClick? | - | 右边文本点击回调 |
-| backgroundColor | Color? | - | 背景颜色 |
-| radius | double? | - | 圆角 |
-| key |  | - |  |
+| backgroundColor |  | - |  |
+| radius |  | - |  |
+| draggable |  | - |  |
+| maxHeightRatio |  | - |  |
+| minHeightRatio |  | - |  |
 
 ```
 ```
@@ -531,13 +538,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| key |  | - |  |
 | child | Widget | - | 子控件 |
 | closeUnderBottom | bool | false | 关闭按钮是否在视图框下方 |
 | closeColor | Color? | - | 关闭按钮颜色 |
 | closeClick | PopupClick? | - | 关闭按钮点击回调 |
 | backgroundColor | Color? | - | 背景颜色 |
 | radius | double? | - | 圆角 |
-| key |  | - |  |
 
 
   

@@ -18,6 +18,13 @@ export default {
           path: '/flutter/develop',
           component: () => import('@/../CONTRIBUTING.md'),
         },
+        {
+          title: '常见问题',
+          name: 'faq',
+          meta: { docType: 'explain' },
+          path: '/flutter/faq',
+          component: () => import('@/../FAQ.md'),
+        },
         // {
         //   title: '谁在用',
         //   name: 'used',
@@ -267,13 +274,13 @@ export default {
           path: '/flutter/components/tree-select',
           component: () => import('@/tree-select/README.md'),
         },
-        // {
-        //   title: 'Upload 上传',
-        //   name: 'upload',
-        //   meta: { docType: 'form' },
-        //   path: '/flutter/components/upload',
-        //   component: () => import('@/upload/README.md'),
-        // },
+        {
+          title: 'Upload 上传',
+          name: 'upload',
+          meta: { docType: 'form' },
+          path: '/flutter/components/upload',
+          component: () => import('@/upload/README.md'),
+        },
       ],
     },
     {
@@ -322,13 +329,13 @@ export default {
           path: '/flutter/components/empty',
           component: () => import('@/empty/README.md'),
         },
-        // {
-        //   title: 'Footer 页脚',
-        //   name: 'footer',
-        //   meta: { docType: 'data' },
-        //   path: '/flutter/components/footer',
-        //   component: () => import('@/footer/README.md'),
-        // },
+        {
+          title: 'Footer 页脚',
+          name: 'footer',
+          meta: { docType: 'data' },
+          path: '/flutter/components/footer',
+          component: () => import('@/footer/README.md'),
+        },
         {
           title: 'Image 图片',
           name: 'image',
@@ -350,13 +357,13 @@ export default {
           path: '/flutter/components/image-viewer',
           component: () => import('@/image-viewer/README.md'),
         },
-        // {
-        //   title: 'Progress 进度条',
-        //   name: 'progress',
-        //   meta: { docType: 'message' },
-        //   path: '/flutter/components/progress',
-        //   component: () => import('@/progress/README.md'),
-        // },
+        {
+          title: 'Progress 进度条',
+          name: 'progress',
+          meta: { docType: 'message' },
+          path: '/flutter/components/progress',
+          component: () => import('@/progress/README.md'),
+        },
         {
           title: 'Result 结果',
           name: 'result',
@@ -364,13 +371,13 @@ export default {
           path: '/flutter/components/result',
           component: () => import('@/result/README.md'),
         },
-        // {
-        //   title: 'Skeleton 骨架屏',
-        //   name: 'skeleton',
-        //   meta: { docType: 'data' },
-        //   path: '/flutter/components/skeleton',
-        //   component: () => import('@/skeleton/README.md'),
-        // },
+        {
+          title: 'Skeleton 骨架屏',
+          name: 'skeleton',
+          meta: { docType: 'data' },
+          path: '/flutter/components/skeleton',
+          component: () => import('@/skeleton/README.md'),
+        },
         // {
         //   title: 'Sticky 吸顶',
         //   name: 'sticky',
@@ -405,13 +412,13 @@ export default {
       title: '反馈',
       type: 'component', // 组件文档
       children: [
-        // {
-        //   title: 'ActionSheet 动作面板',
-        //   name: 'actionsheet',
-        //   meta: { docType: 'message' },
-        //   path: '/flutter/components/action-sheet',
-        //   component: () => import('@/action-sheet/README.md'),
-        // },
+        {
+          title: 'ActionSheet 动作面板',
+          name: 'action-sheet',
+          meta: { docType: 'message' },
+          path: '/flutter/components/action-sheet',
+          component: () => import('@/action-sheet/README.md'),
+        },
         {
           title: 'Dialog 对话框',
           name: 'dialog',
@@ -433,15 +440,15 @@ export default {
           path: '/flutter/components/loading',
           component: () => import('@/loading/README.md'),
         },
-        // {
-        //   title: 'Message 消息通知',
-        //   name: 'message',
-        //   meta: { docType: 'message' },
-        //   path: '/flutter/components/message',
-        //   component: () => import('@/message/README.md'),
-        // },
         {
-          title: 'NoticeBar 公告栏',
+          title: 'Message 全局提示',
+          name: 'message',
+          meta: { docType: 'message' },
+          path: '/flutter/components/message',
+          component: () => import('@/message/README.md'),
+        },
+        {
+          title: 'NoticeBar 消息提醒',
           name: 'noticebar',
           meta: { docType: 'message' },
           path: '/flutter/components/notice-bar',
@@ -454,6 +461,13 @@ export default {
         //   path: '/flutter/components/overlay',
         //   component: () => import('@/overlay/README.md'),
         // },
+        {
+          title: 'Popover 弹出气泡',
+          name: 'popover',
+          meta: { docType: 'message' },
+          path: '/flutter/components/popover',
+          component: () => import('@/popover/README.md'),
+        },
         {
           title: 'Popup 弹出层',
           name: 'popup',

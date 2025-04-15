@@ -21,394 +21,1945 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### 1 组件类型
 
 
-            
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _imageClip(BuildContext context)  {
-
-    return Row(
+  Widget _imageClip(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          width: 16,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '裁剪',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: TDText(
-                '裁剪',
-                font: TDTheme.of(context).fontBodyMedium,
-                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-              ),
-            ),
-             const TDImage(
-               assetUrl: 'assets/img/image.png',
-               type: TDImageType.clip,
-            ),
-          ],
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.clip,
         ),
-        const SizedBox(
-          width: 24,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: TDText(
-                '适应高',
-                font: TDTheme.of(context).fontBodyMedium,
-                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-              ),
-            ),
-            Container(
-              width: 89,
-              height: 72,
-              color: Colors.black,
-              child: const TDImage(
-                assetUrl: 'assets/img/image.png',
-                type: TDImageType.fitHeight,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          width: 24,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: TDText(
-                '拉伸',
-                font: TDTheme.of(context).fontBodyMedium,
-                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-              ),
-            ),
-            Container(
-              color: Colors.black,
-              width: 121,
-              height: 72,
-              child: Stack(
-                alignment: Alignment.center,
-                children: const [
-                  TDImage(
-                    assetUrl: 'assets/img/image.png',
-                    width: 121,
-                    height: 50,
-                    type: TDImageType.stretch,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        )
       ],
     );
   }</pre>
 
 </td-code-block>
-                                  
+                
 
+          
+<td-code-block panel="Dart">
 
-            
+  <pre slot="Dart" lang="javascript">
+  Widget _imageStretch(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '拉伸',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          color: Colors.black,
+          width: 121,
+          height: 72,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              TDImage(
+                assetUrl: 'assets/img/image.png',
+                width: 121,
+                height: 50,
+                type: TDImageType.stretch,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageFitHeight(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '适应高',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          width: 89,
+          height: 72,
+          color: Colors.black,
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.fitHeight,
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
   Widget _imageFitWidth(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 24),
-      child: Row(
-        children: [
-          const SizedBox(
-            width: 16,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: TDText(
-                  '适应宽',
-                  font: TDTheme.of(context).fontBodyMedium,
-                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-                ),
-              ),
-              Container(
-                width: 72,
-                height: 89,
-                color: Colors.black,
-                child: const TDImage(
-                  assetUrl: 'assets/img/image.png',
-                  type: TDImageType.fitWidth,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _imageSquare(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 24),
-      child: Row(
-        children: [
-          const SizedBox(
-            width: 16,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: TDText(
-                  '方形',
-                  font: TDTheme.of(context).fontBodyMedium,
-                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-                ),
-              ),
-              const TDImage(
-                assetUrl: 'assets/img/image.png',
-                type: TDImageType.square,
-              ),
-            ],
-          ),
-          const SizedBox(
-            width: 24,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: TDText(
-                  '圆角方形',
-                  font: TDTheme.of(context).fontBodyMedium,
-                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-                ),
-              ),
-              const TDImage(
-                assetUrl: 'assets/img/image.png',
-                type: TDImageType.roundedSquare,
-                width: 72,
-                height: 72,
-              ),
-            ],
-          ),
-          const SizedBox(
-            width: 24,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: TDText(
-                  '圆形',
-                  font: TDTheme.of(context).fontBodyMedium,
-                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-                ),
-              ),
-              const TDImage(
-                assetUrl: 'assets/img/image.png',
-                width: 72,
-                height: 72,
-                type: TDImageType.circle,
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 组件状态
-
-
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _loading(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          width: 16,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '适应宽',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: TDText(
-                '加载默认提示',
-                font: TDTheme.of(context).fontBodyMedium,
-                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-              ),
-            ),
-            Container(
-                height: 72,
-                width: 72,
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault)),
-                child: Container(
-                    alignment: Alignment.center,
-                    color: TDTheme.of(context).grayColor2,
-                    child: Icon(
-                      TDIcons.ellipsis,
-                      size: 22,
-                      color: TDTheme.of(context).fontGyColor3,
-                    )
-                )
-            ),
-            // 实际组件写法如下：上面仅为加载展示
-            // const TDImage(
-            //   imgUrl:
-            //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-            //   type: TDImageType.roundedSquare,
-            // ),
-          ],
-        ),
-        const SizedBox(
-          width: 24,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: TDText(
-                '加载自定义提示',
-                font: TDTheme.of(context).fontBodyMedium,
-                textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-              ),
-            ),
-            Container(
-                height: 72,
-                width: 72,
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault)),
-                child: Container(
-                    alignment: Alignment.center,
-                    color: TDTheme.of(context).grayColor2,
-                    child: RotationTransition(
-                        turns: animation,
-                        alignment: Alignment.center,
-                        child: TDCircleIndicator(
-                          color: TDTheme.of(context).brandNormalColor,
-                          size: 18,
-                          lineWidth: 3,
-                        ))
-                )
-            ),
-            // 实际组件写法如下：上面仅为加载展示
-            // TDImage(
-            //   imgUrl:
-            //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-            //   loadingWidget: RotationTransition(
-            //       turns: animation,
-            //       alignment: Alignment.center,
-            //       child: TDCircleIndicator(
-            //         color: TDTheme.of(context).brandNormalColor,
-            //         size: 18,
-            //         lineWidth: 3,
-            //       )),
-            //   type: TDImageType.roundedSquare,
-            // ),
-          ],
-        ),
-        const SizedBox(
-          width: 24,
+        Container(
+          width: 72,
+          height: 89,
+          color: Colors.black,
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.fitWidth,
+          ),
         ),
       ],
     );
   }</pre>
 
 </td-code-block>
-                                  
+                
 
-
-            
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _fail(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 24),
-      child: Row(
-        children: [
-          const SizedBox(
-            width: 16,
+  Widget _imageSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: TDText(
-                  '失败默认提示',
-                  font: TDTheme.of(context).fontBodyMedium,
-                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-                ),
-              ),
-              const TDImage(
-                imgUrl: 'error',
-                type: TDImageType.roundedSquare,
-              ),
-            ],
-          ),
-          const SizedBox(
-            width: 24,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: TDText(
-                  '失败自定义提示',
-                  font: TDTheme.of(context).fontBodyMedium,
-                  textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
-                ),
-              ),
-              TDImage(
-                imgUrl: 'error',
-                errorWidget: TDText(
-                  '加载失败',
-                  forceVerticalCenter: true,
-                  font: TDTheme.of(context).fontBodyExtraSmall,
-                  fontWeight: FontWeight.w500,
-                  textColor: TDTheme.of(context).fontGyColor3,
-                ),
-                type: TDImageType.roundedSquare,
-              ),
-            ],
-          ),
-          const SizedBox(
-            width: 24,
-          ),
-        ],
-      ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.square,
+        ),
+      ],
     );
   }</pre>
 
 </td-code-block>
-                                  
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageRoundedSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '圆角方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.roundedSquare,
+          width: 72,
+          height: 72,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageCircle(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '圆形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          width: 72,
+          height: 72,
+          type: TDImageType.circle,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageClip(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '裁剪',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.clip,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageStretch(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '拉伸',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          color: Colors.black,
+          width: 121,
+          height: 72,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              TDImage(
+                assetUrl: 'assets/img/image.png',
+                width: 121,
+                height: 50,
+                type: TDImageType.stretch,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageFitHeight(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '适应高',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          width: 89,
+          height: 72,
+          color: Colors.black,
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.fitHeight,
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageFitWidth(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '适应宽',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          width: 72,
+          height: 89,
+          color: Colors.black,
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.fitWidth,
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.square,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageRoundedSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '圆角方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.roundedSquare,
+          width: 72,
+          height: 72,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageCircle(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '圆形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          width: 72,
+          height: 72,
+          type: TDImageType.circle,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageClip(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '裁剪',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.clip,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageStretch(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '拉伸',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          color: Colors.black,
+          width: 121,
+          height: 72,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              TDImage(
+                assetUrl: 'assets/img/image.png',
+                width: 121,
+                height: 50,
+                type: TDImageType.stretch,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageFitHeight(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '适应高',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          width: 89,
+          height: 72,
+          color: Colors.black,
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.fitHeight,
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageFitWidth(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '适应宽',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          width: 72,
+          height: 89,
+          color: Colors.black,
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.fitWidth,
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.square,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageRoundedSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '圆角方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.roundedSquare,
+          width: 72,
+          height: 72,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageCircle(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '圆形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          width: 72,
+          height: 72,
+          type: TDImageType.circle,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageClip(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '裁剪',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.clip,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageStretch(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '拉伸',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          color: Colors.black,
+          width: 121,
+          height: 72,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              TDImage(
+                assetUrl: 'assets/img/image.png',
+                width: 121,
+                height: 50,
+                type: TDImageType.stretch,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageFitHeight(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '适应高',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          width: 89,
+          height: 72,
+          color: Colors.black,
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.fitHeight,
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageFitWidth(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '适应宽',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          width: 72,
+          height: 89,
+          color: Colors.black,
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.fitWidth,
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.square,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageRoundedSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '圆角方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.roundedSquare,
+          width: 72,
+          height: 72,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageCircle(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '圆形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          width: 72,
+          height: 72,
+          type: TDImageType.circle,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageClip(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '裁剪',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.clip,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageStretch(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '拉伸',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          color: Colors.black,
+          width: 121,
+          height: 72,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              TDImage(
+                assetUrl: 'assets/img/image.png',
+                width: 121,
+                height: 50,
+                type: TDImageType.stretch,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageFitHeight(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '适应高',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          width: 89,
+          height: 72,
+          color: Colors.black,
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.fitHeight,
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageFitWidth(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '适应宽',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          width: 72,
+          height: 89,
+          color: Colors.black,
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.fitWidth,
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.square,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageRoundedSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '圆角方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.roundedSquare,
+          width: 72,
+          height: 72,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageCircle(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '圆形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          width: 72,
+          height: 72,
+          type: TDImageType.circle,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageClip(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '裁剪',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.clip,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageStretch(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '拉伸',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          color: Colors.black,
+          width: 121,
+          height: 72,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              TDImage(
+                assetUrl: 'assets/img/image.png',
+                width: 121,
+                height: 50,
+                type: TDImageType.stretch,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageFitHeight(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '适应高',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          width: 89,
+          height: 72,
+          color: Colors.black,
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.fitHeight,
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageFitWidth(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '适应宽',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+          width: 72,
+          height: 89,
+          color: Colors.black,
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.fitWidth,
+          ),
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.square,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageRoundedSquare(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '圆角方形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          type: TDImageType.roundedSquare,
+          width: 72,
+          height: 72,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _imageCircle(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '圆形',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          assetUrl: 'assets/img/image.png',
+          width: 72,
+          height: 72,
+          type: TDImageType.circle,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+### 1 组件状态
+
+
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _loadingDefault(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '加载默认提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+            height: 72,
+            width: 72,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+            child: Container(
+                alignment: Alignment.center,
+                color: TDTheme.of(context).grayColor2,
+                child: Icon(
+                  TDIcons.ellipsis,
+                  size: 22,
+                  color: TDTheme.of(context).fontGyColor3,
+                ))),
+        // 实际组件写法如下：上面仅为加载展示
+        // const TDImage(
+        //   imgUrl:
+        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        //   type: TDImageType.roundedSquare,
+        // ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _loadingCustom(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '加载自定义提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+            height: 72,
+            width: 72,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+            child: Container(
+                alignment: Alignment.center,
+                color: TDTheme.of(context).grayColor2,
+                child: RotationTransition(
+                    turns: animation,
+                    alignment: Alignment.center,
+                    child: TDCircleIndicator(
+                      color: TDTheme.of(context).brandNormalColor,
+                      size: 18,
+                      lineWidth: 3,
+                    )))),
+        // 实际组件写法如下：上面仅为加载展示
+        // TDImage(
+        //   imgUrl:
+        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        //   loadingWidget: RotationTransition(
+        //       turns: animation,
+        //       alignment: Alignment.center,
+        //       child: TDCircleIndicator(
+        //         color: TDTheme.of(context).brandNormalColor,
+        //         size: 18,
+        //         lineWidth: 3,
+        //       )),
+        //   type: TDImageType.roundedSquare,
+        // ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _failDefault(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '失败默认提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          imgUrl: 'error',
+          type: TDImageType.roundedSquare,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _failCustom(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '失败自定义提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        TDImage(
+          imgUrl: 'error',
+          errorWidget: TDText(
+            '加载失败',
+            forceVerticalCenter: true,
+            font: TDTheme.of(context).fontBodyExtraSmall,
+            fontWeight: FontWeight.w500,
+            textColor: TDTheme.of(context).fontGyColor3,
+          ),
+          type: TDImageType.roundedSquare,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _loadingDefault(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '加载默认提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+            height: 72,
+            width: 72,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+            child: Container(
+                alignment: Alignment.center,
+                color: TDTheme.of(context).grayColor2,
+                child: Icon(
+                  TDIcons.ellipsis,
+                  size: 22,
+                  color: TDTheme.of(context).fontGyColor3,
+                ))),
+        // 实际组件写法如下：上面仅为加载展示
+        // const TDImage(
+        //   imgUrl:
+        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        //   type: TDImageType.roundedSquare,
+        // ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _loadingCustom(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '加载自定义提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+            height: 72,
+            width: 72,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+            child: Container(
+                alignment: Alignment.center,
+                color: TDTheme.of(context).grayColor2,
+                child: RotationTransition(
+                    turns: animation,
+                    alignment: Alignment.center,
+                    child: TDCircleIndicator(
+                      color: TDTheme.of(context).brandNormalColor,
+                      size: 18,
+                      lineWidth: 3,
+                    )))),
+        // 实际组件写法如下：上面仅为加载展示
+        // TDImage(
+        //   imgUrl:
+        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        //   loadingWidget: RotationTransition(
+        //       turns: animation,
+        //       alignment: Alignment.center,
+        //       child: TDCircleIndicator(
+        //         color: TDTheme.of(context).brandNormalColor,
+        //         size: 18,
+        //         lineWidth: 3,
+        //       )),
+        //   type: TDImageType.roundedSquare,
+        // ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _failDefault(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '失败默认提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          imgUrl: 'error',
+          type: TDImageType.roundedSquare,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _failCustom(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '失败自定义提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        TDImage(
+          imgUrl: 'error',
+          errorWidget: TDText(
+            '加载失败',
+            forceVerticalCenter: true,
+            font: TDTheme.of(context).fontBodyExtraSmall,
+            fontWeight: FontWeight.w500,
+            textColor: TDTheme.of(context).fontGyColor3,
+          ),
+          type: TDImageType.roundedSquare,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _loadingDefault(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '加载默认提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+            height: 72,
+            width: 72,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+            child: Container(
+                alignment: Alignment.center,
+                color: TDTheme.of(context).grayColor2,
+                child: Icon(
+                  TDIcons.ellipsis,
+                  size: 22,
+                  color: TDTheme.of(context).fontGyColor3,
+                ))),
+        // 实际组件写法如下：上面仅为加载展示
+        // const TDImage(
+        //   imgUrl:
+        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        //   type: TDImageType.roundedSquare,
+        // ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _loadingCustom(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '加载自定义提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+            height: 72,
+            width: 72,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+            child: Container(
+                alignment: Alignment.center,
+                color: TDTheme.of(context).grayColor2,
+                child: RotationTransition(
+                    turns: animation,
+                    alignment: Alignment.center,
+                    child: TDCircleIndicator(
+                      color: TDTheme.of(context).brandNormalColor,
+                      size: 18,
+                      lineWidth: 3,
+                    )))),
+        // 实际组件写法如下：上面仅为加载展示
+        // TDImage(
+        //   imgUrl:
+        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        //   loadingWidget: RotationTransition(
+        //       turns: animation,
+        //       alignment: Alignment.center,
+        //       child: TDCircleIndicator(
+        //         color: TDTheme.of(context).brandNormalColor,
+        //         size: 18,
+        //         lineWidth: 3,
+        //       )),
+        //   type: TDImageType.roundedSquare,
+        // ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _failDefault(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '失败默认提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          imgUrl: 'error',
+          type: TDImageType.roundedSquare,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _failCustom(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '失败自定义提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        TDImage(
+          imgUrl: 'error',
+          errorWidget: TDText(
+            '加载失败',
+            forceVerticalCenter: true,
+            font: TDTheme.of(context).fontBodyExtraSmall,
+            fontWeight: FontWeight.w500,
+            textColor: TDTheme.of(context).fontGyColor3,
+          ),
+          type: TDImageType.roundedSquare,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _loadingDefault(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '加载默认提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+            height: 72,
+            width: 72,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+            child: Container(
+                alignment: Alignment.center,
+                color: TDTheme.of(context).grayColor2,
+                child: Icon(
+                  TDIcons.ellipsis,
+                  size: 22,
+                  color: TDTheme.of(context).fontGyColor3,
+                ))),
+        // 实际组件写法如下：上面仅为加载展示
+        // const TDImage(
+        //   imgUrl:
+        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        //   type: TDImageType.roundedSquare,
+        // ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _loadingCustom(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '加载自定义提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        Container(
+            height: 72,
+            width: 72,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+            child: Container(
+                alignment: Alignment.center,
+                color: TDTheme.of(context).grayColor2,
+                child: RotationTransition(
+                    turns: animation,
+                    alignment: Alignment.center,
+                    child: TDCircleIndicator(
+                      color: TDTheme.of(context).brandNormalColor,
+                      size: 18,
+                      lineWidth: 3,
+                    )))),
+        // 实际组件写法如下：上面仅为加载展示
+        // TDImage(
+        //   imgUrl:
+        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        //   loadingWidget: RotationTransition(
+        //       turns: animation,
+        //       alignment: Alignment.center,
+        //       child: TDCircleIndicator(
+        //         color: TDTheme.of(context).brandNormalColor,
+        //         size: 18,
+        //         lineWidth: 3,
+        //       )),
+        //   type: TDImageType.roundedSquare,
+        // ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _failDefault(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '失败默认提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        const TDImage(
+          imgUrl: 'error',
+          type: TDImageType.roundedSquare,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
+
+          
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _failCustom(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TDText(
+            '失败自定义提示',
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          ),
+        ),
+        TDImage(
+          imgUrl: 'error',
+          errorWidget: TDText(
+            '加载失败',
+            forceVerticalCenter: true,
+            font: TDTheme.of(context).fontBodyExtraSmall,
+            fontWeight: FontWeight.w500,
+            textColor: TDTheme.of(context).fontGyColor3,
+          ),
+          type: TDImageType.roundedSquare,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                
 
 
 ## API

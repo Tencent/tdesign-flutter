@@ -8,8 +8,7 @@ import '../cell/td_cell_group.dart';
 import '../cell/td_cell_style.dart';
 import '../icon/td_icons.dart';
 import '../popup/td_popup_route.dart';
-
-typedef TDDrawerItemClickCallback = void Function(int index, TDDrawerItem item);
+import 'td_drawer_widget.dart';
 
 /// 抽屉方向
 enum TDDrawerPlacement { left, right }
@@ -18,11 +17,11 @@ enum TDDrawerPlacement { left, right }
 class TDDrawer {
   TDDrawer(
     this.context, {
-    this.closeOnOverlayClick,
+    this.closeOnOverlayClick = true,
     this.footer,
     this.items,
-    this.placement,
-    this.showOverlay,
+    this.placement = TDDrawerPlacement.right,
+    this.showOverlay = true,
     this.title,
     this.titleWidget,
     this.visible,
@@ -35,6 +34,7 @@ class TDDrawer {
     this.backgroundColor,
     this.bordered = true,
     this.isShowLastBordered = true,
+    this.contentWidget,
   }) {
     if (visible == true) {
       show();
@@ -52,6 +52,9 @@ class TDDrawer {
 
   /// 抽屉里的列表项
   final List<TDDrawerItem>? items;
+
+  /// 自定义内容，优先级高于[items]/[footer]/[title]
+  final Widget? contentWidget;
 
   /// 抽屉方向
   final TDDrawerPlacement? placement;
@@ -95,70 +98,31 @@ class TDDrawer {
   /// 是否显示最后一行分割线
   final bool? isShowLastBordered;
 
-  static TDSlidePopupRoute? _drawerRoute;
+  TDSlidePopupRoute? _drawerRoute;
 
   void show() {
     if (_drawerRoute != null) {
       return; // 如果抽屉已经显示了，就不要再显示
     }
     _drawerRoute = TDSlidePopupRoute(
-      slideTransitionFrom: (placement ?? TDDrawerPlacement.right) == TDDrawerPlacement.right
-          ? SlideTransitionFrom.right
-          : SlideTransitionFrom.left,
+      slideTransitionFrom: placement == TDDrawerPlacement.right ? SlideTransitionFrom.right : SlideTransitionFrom.left,
       isDismissible: (showOverlay ?? true) ? (closeOnOverlayClick ?? true) : false,
       modalBarrierColor: (showOverlay ?? true) ? null : Colors.transparent,
       modalTop: drawerTop,
       builder: (context) {
-        var cellStyle = style;
-        if (cellStyle == null) {
-          cellStyle = TDCellStyle.cellStyle(context);
-          cellStyle.leftIconColor = TDTheme.of(context).fontGyColor1;
-        }
-        var cells = items
-            ?.asMap()
-            .map(
-              (index, item) => MapEntry(
-                index,
-                TDCell(
-                  titleWidget: item.content,
-                  title: item.title,
-                  leftIconWidget: item.icon,
-                  hover: hover,
-                  bordered: bordered,
-                  onClick: (cell) {
-                    if (onItemClick == null) {
-                      return;
-                    }
-                    onItemClick!(index, items![index]);
-                  },
-                ),
-              ),
-            )
-            .values
-            .toList();
-        return Container(
-          color: backgroundColor ?? Colors.white,
-          width: width ?? 280,
-          height: double.infinity,
-          child: Column(
-            children: [
-              Expanded(
-                child: TDCellGroup(
-                  title: title,
-                  titleWidget: titleWidget,
-                  style: cellStyle,
-                  scrollable: true,
-                  isShowLastBordered: isShowLastBordered,
-                  cells: cells ?? [],
-                ),
-              ),
-              if (footer != null)
-                Container(
-                  padding: EdgeInsets.all(TDTheme.of(context).spacer16),
-                  child: footer,
-                ),
-            ],
-          ),
+        return TDDrawerWidget(
+          footer: footer,
+          items: items,
+          contentWidget: contentWidget,
+          title: title,
+          titleWidget: titleWidget,
+          onItemClick: onItemClick,
+          width: width,
+          style: style,
+          hover: hover,
+          backgroundColor: backgroundColor,
+          bordered: bordered,
+          isShowLastBordered: isShowLastBordered,
         );
       },
     );
@@ -168,11 +132,15 @@ class TDDrawer {
     });
   }
 
+  void open() {
+    show();
+  }
+
   @mustCallSuper
   void close() {
     if (_drawerRoute != null) {
       Navigator.of(context).pop();
-      // _deleteRouter();
+      _deleteRouter();
     }
   }
 
@@ -180,18 +148,4 @@ class TDDrawer {
     _drawerRoute = null;
     onClose?.call();
   }
-}
-
-/// 抽屉里的列表项
-class TDDrawerItem {
-  TDDrawerItem({this.title, this.icon, this.content});
-
-  /// 每列标题
-  final String? title;
-
-  /// 每列图标
-  final Widget? icon;
-
-  /// 完全自定义
-  final Widget? content;
 }

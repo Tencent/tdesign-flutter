@@ -15,7 +15,6 @@
       maxLength: 500,
       indicator: true,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }

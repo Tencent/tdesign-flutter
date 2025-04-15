@@ -20,7 +20,7 @@ enum TDSearchAlignment {
 }
 
 typedef TDSearchBarEvent = void Function(String value);
-typedef TDSearchBarClearEvent = bool Function(String value);
+typedef TDSearchBarClearEvent = bool? Function(String value);
 typedef TDSearchBarCallBack = void Function();
 
 class TDSearchBar extends StatefulWidget {
@@ -32,6 +32,7 @@ class TDSearchBar extends StatefulWidget {
     this.onTextChanged,
     this.onSubmitted,
     this.onEditComplete,
+    this.onInputClick,
     this.autoHeight = false,
     this.padding = const EdgeInsets.fromLTRB(16, 8, 16, 8),
     this.autoFocus = false,
@@ -44,6 +45,9 @@ class TDSearchBar extends StatefulWidget {
     this.onActionClick,
     this.onClearClick,
     this.focusNode,
+    this.inputAction,
+    this.enabled,
+    this.readOnly,
   }) : super(key: key);
 
   /// 预设文案
@@ -92,6 +96,8 @@ class TDSearchBar extends StatefulWidget {
   /// 自定义操作文字
   final String action;
 
+  /// 输入框点击事件
+  final GestureTapCallback? onInputClick;
   /// 自定义操作回调
   final TDSearchBarEvent? onActionClick;
 
@@ -101,15 +107,16 @@ class TDSearchBar extends StatefulWidget {
   /// 自定义焦点
   final  FocusNode? focusNode;
 
+  /// 键盘动作类型
+  final TextInputAction? inputAction;
+
+  /// 是否禁用
+  final bool? enabled;
+
+  /// 是否只读
+  final bool? readOnly;
   @override
   State<StatefulWidget> createState() => _TDSearchBarState();
-}
-
-enum _TDSearchBarStatus {
-  unFocus,
-  animatingToFocus,
-  focused,
-  animatingToUnFocus
 }
 
 class _TDSearchBarState extends State<TDSearchBar>
@@ -117,20 +124,16 @@ class _TDSearchBarState extends State<TDSearchBar>
   late FocusNode focusNode = FocusNode();
   final TextEditingController controller = TextEditingController();
   final GlobalKey _textFieldKey = GlobalKey();
-  final GlobalKey _phKey = GlobalKey();
 
-  late AnimationController _animationController;
-  Animation<Offset>? _animation;
   bool clearBtnHide = true;
   bool cancelBtnHide = true;
-  late _TDSearchBarStatus _status;
   @override
   void initState() {
     super.initState();
     if(widget.controller==null){
       controller.addListener(() {
         var clearVisible = controller.text.isNotEmpty;
-        _updateClearBtnVisible(clearVisible!);
+        _updateClearBtnVisible(clearVisible);
       });
     }else{
       widget.controller?.addListener(() {
@@ -138,35 +141,15 @@ class _TDSearchBarState extends State<TDSearchBar>
         _updateClearBtnVisible(clearVisible!);
       });
     }
-    _animationController = AnimationController(
-        duration: const Duration(milliseconds: 200), vsync: this);
     _updateFocusNode();
   }
 
   void _updateFocusNode() {
     focusNode = widget.focusNode ?? focusNode;
-    _status = widget.autoFocus
-        ? _TDSearchBarStatus.focused
-        : _TDSearchBarStatus.unFocus;
     focusNode.addListener(() {
       setState(() {
-        _status = focusNode.hasFocus
-            ? _TDSearchBarStatus.focused
-            : _TDSearchBarStatus.unFocus;
+        cancelBtnHide = !focusNode.hasFocus;
       });
-      _updateCancelBtnVisible(focusNode.hasFocus);
-    });
-    _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        setState(() {
-          if (_status == _TDSearchBarStatus.animatingToFocus) {
-            _status = _TDSearchBarStatus.focused;
-            focusNode.requestFocus();
-          } else if (_status == _TDSearchBarStatus.animatingToUnFocus) {
-            _status = _TDSearchBarStatus.unFocus;
-          }
-        });
-      }
     });
   }
 
@@ -179,12 +162,6 @@ class _TDSearchBarState extends State<TDSearchBar>
   void _updateClearBtnVisible(bool visible) {
     setState(() {
       clearBtnHide = !visible;
-    });
-  }
-
-  void _updateCancelBtnVisible(bool visible) {
-    setState(() {
-      cancelBtnHide = !visible;
     });
   }
 
@@ -254,35 +231,43 @@ class _TDSearchBarState extends State<TDSearchBar>
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 1),// 为了适配TextField与Text的差异，后续需要做通用适配
                         child: TextField(
+
                           key: _textFieldKey,
                           controller: widget.controller??controller,
                           autofocus: widget.autoFocus,
                           cursorColor: TDTheme.of(context).brandNormalColor,
                           cursorWidth: 1,
-                          cursorHeight:widget.cursorHeight ??(widget.mediumStyle ? 16 : 18),
+                          cursorHeight:widget.cursorHeight,
                           textAlign: widget.alignment == TDSearchAlignment.center
                               ? TextAlign.center
                               : TextAlign.left,
                           focusNode: focusNode,
+                          onTap: widget.onInputClick,
                           onChanged: widget.onTextChanged,
                           onSubmitted: widget.onSubmitted,
                           onEditingComplete: widget.onEditComplete,
                           style: TextStyle(
+                              textBaseline: TextBaseline.ideographic,
                               fontSize: getSize(context)?.size,
                               color: TDTheme.of(context).fontGyColor1),
                           decoration: InputDecoration(
-                            hintText: (_status != _TDSearchBarStatus.focused)
-                                ? ''
-                                : widget.placeHolder,
+                            hintText: widget.placeHolder,
                             hintStyle: TextStyle(
                                 fontSize: getSize(context)?.size,
-                                color: TDTheme.of(context).fontGyColor3),
+                                color: TDTheme.of(context).fontGyColor3,
+                              textBaseline: TextBaseline.ideographic,
+                              overflow: TextOverflow.ellipsis,),
+                            hintMaxLines: 1,
                             border: InputBorder.none,
                             isCollapsed: true,
                             filled: true,
                             fillColor: TDTheme.of(context).grayColor1,
                           ),
                           maxLines: 1,
+                          textInputAction: widget.inputAction,
+                          readOnly:widget.readOnly??false,
+                            enabled:widget.enabled,
+                          cursorOpacityAnimates: false,
                         ),
                       ),
                     ),
@@ -322,19 +307,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                   if (widget.onTextChanged != null) {
                     widget.onTextChanged!('');
                   }
-                  if (_animation == null) {
-                    focusNode.unfocus();
-                    setState(() {
-                      _status = _TDSearchBarStatus.unFocus;
-                    });
-                    return;
-                  }
-                  setState(() {
-                    _status = _TDSearchBarStatus.animatingToUnFocus;
-                  });
                   focusNode.unfocus();
-                  _animationController.reverse(
-                      from: _animationController.upperBound);
                 },
                 child: Container(
                   padding: const EdgeInsets.only(left: 16),
@@ -347,139 +320,8 @@ class _TDSearchBarState extends State<TDSearchBar>
             ),
           ],
         ),
-        Offstage(
-          offstage:widget.controller==null?(_status == _TDSearchBarStatus.focused ||
-              controller.text.isNotEmpty):(_status == _TDSearchBarStatus.focused ||widget.controller!.text.isNotEmpty),
-          child: GestureDetector(
-              onTap: () {
-                if (_status == _TDSearchBarStatus.animatingToFocus ||
-                    _status == _TDSearchBarStatus.animatingToUnFocus) {
-                  return;
-                }
-                if (_animation == null) {
-                  focusNode.requestFocus();
-                  setState(() {
-                    _status = _TDSearchBarStatus.focused;
-                  });
-                  return;
-                }
-                setState(() {
-                  _status = _TDSearchBarStatus.animatingToFocus;
-                  _animationController.forward();
-                });
-              },
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: TDTheme.of(context).grayColor1,
-                      borderRadius: BorderRadius.circular(
-                          widget.style == TDSearchStyle.square ? 4 : 28),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 12, right: 12),
-                    alignment: Alignment.centerLeft,
-                    child: _getPlaceHolderWidgets(),
-                  )
-                ],
-              )),
-        ),
       ]),
     );
   }
 
-  Widget _getPlaceHolderWidgets() {
-    return LayoutBuilder(builder: (BuildContext context, BoxConstraints box) {
-      if (_animation != null) {
-        return Row(
-          children: [
-            Icon(
-              TDIcons.search,
-              size: widget.mediumStyle ? 20 : 24,
-              color: TDTheme.of(context).fontGyColor3,
-            ),
-            Expanded(
-                child: SlideTransition(
-                  position: _animation!,
-                  child: Row(
-                    key: _phKey,
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: (widget.mediumStyle ? 20 : 24) / 2,
-                      ),
-                      Expanded(
-                          child: Row(
-                            mainAxisAlignment:
-                            widget.alignment == TDSearchAlignment.left
-                                ? MainAxisAlignment.start
-                                : MainAxisAlignment.center,
-                            children: [
-                              ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  maxWidth: box.maxWidth - 51,
-                                ),
-                                child: TDText(
-                                  widget.placeHolder,
-                                  font: getSize(context),
-                                  textColor: TDTheme.of(context).fontGyColor3,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  forceVerticalCenter: true,
-                                ),
-                              )
-                            ],
-                          )),
-                      const SizedBox(
-                        width: 6,
-                      ),
-                    ],
-                  ),
-                ))
-          ],
-        );
-      } else {
-        return Row(
-          key: _phKey,
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              TDIcons.search,
-              size: widget.mediumStyle ? 20 : 24,
-              color: TDTheme.of(context).fontGyColor3,
-            ),
-            const SizedBox(
-              width: 3,
-            ),
-            Expanded(
-                child: Row(
-                  mainAxisAlignment: widget.alignment == TDSearchAlignment.left
-                      ? MainAxisAlignment.start
-                      : MainAxisAlignment.center,
-                  children: [
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: box.maxWidth - 51,
-                      ),
-                      child: TDText(
-                        widget.placeHolder,
-                        font: getSize(context),
-                        textColor: TDTheme.of(context).fontGyColor3,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    )
-                  ],
-                )),
-            const SizedBox(
-              width: 6,
-            ),
-          ],
-        );
-      }
-    });
-  }
 }

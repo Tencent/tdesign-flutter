@@ -30,7 +30,7 @@ class TDInputDialog extends StatelessWidget {
     this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
     this.buttonWidget,
     this.customInputWidget,
-  })  : assert((title != null || content != null)),
+  })  : assert((title != null || content != null || contentWidget != null)),
         super(key: key);
 
   /// 背景颜色

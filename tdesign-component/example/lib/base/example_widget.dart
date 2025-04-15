@@ -7,7 +7,7 @@ import 'package:markdown/markdown.dart' as md;
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../page/td_theme_page.dart';
-import '../web/syntax_highlighter.dart';
+import 'syntax_highlighter.dart';
 import 'api_widget.dart';
 import 'example_base.dart';
 import 'example_route.dart';
@@ -20,6 +20,7 @@ var navBarkey = GlobalKey();
 class ExamplePage extends StatefulWidget {
   const ExamplePage({
     Key? key,
+    this.navBarKey,
     required this.title,
     this.desc = '',
     this.children = const [],
@@ -67,6 +68,9 @@ class ExamplePage extends StatefulWidget {
 
   /// 悬浮按钮
   final Widget? floatingActionButton;
+
+  /// 悬浮按钮
+  final GlobalKey? navBarKey;
 
   @override
   State<ExamplePage> createState() => _ExamplePageState();
@@ -244,7 +248,7 @@ class _ExamplePageState extends State<ExamplePage> {
       }
     }
     return TDNavBar(
-      key: navBarkey,
+      key: widget.navBarKey,
       title: widget.title,
       rightBarItems: rightBarItems,
     );

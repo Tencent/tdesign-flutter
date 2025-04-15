@@ -2,11 +2,11 @@
   Widget _buildDoubleHandle(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         min: 0,
         max: 100,
       ),
       value: const RangeValues(10, 60),
-      // divisions: 5,
       onChanged: (value) {},
     );
   }

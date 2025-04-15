@@ -18,7 +18,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.19.0 <4.0.0"
+  sdk: ">=3.2.6 <4.0.0"
+  flutter: ">=3.16.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -29,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  web: ^0.3.0
 
   #轮播图组件
   flutter_swiper_null_safety: ^1.0.2
@@ -42,7 +44,7 @@ dependencies:
   http: ^0.13.5
   tdesign_flutter:
     path: ../
-  path_provider: ^2.1.1
+#  path_provider: 2.1.5
   extended_nested_scroll_view: any
   flutter_screenutil: any
 dev_dependencies:
@@ -57,6 +59,9 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
 
+
+dependency_overrides:
+  flutter_plugin_android_lifecycle: 2.0.1
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -109,3 +114,14 @@ flutter:
     - assets/img/
     - assets/theme.json
     - assets/publish_time
+
+# 生成演示代码
+AOPMarket:
+  enable: false
+  compileTarget: frontend_server, dart2js
+  versions:
+    negativeInfinity~3.0.0:
+      unsupportedTips: 请在Flutter 3.+ 运行心悦工程
+    3.0.0~infinity:
+      path: ./tdesign_flutter_generator
+  saveDartDependencies: true

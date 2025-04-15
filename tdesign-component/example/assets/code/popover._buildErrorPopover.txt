@@ -1,0 +1,25 @@
+
+  Widget _buildErrorPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '错误色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+               
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.error,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }

@@ -40,6 +40,7 @@ import 'page/td_message_page.dart';
 import 'page/td_navbar_page.dart';
 import 'page/td_notice_bar_page.dart';
 import 'page/td_picker_page.dart';
+import 'page/td_popover_page.dart';
 import 'page/td_popup_page.dart';
 import 'page/td_progress_page.dart';
 import 'page/td_radio_page.dart';
@@ -66,6 +67,7 @@ import 'page/td_theme_page.dart';
 import 'page/td_time_counter_page.dart';
 import 'page/td_toast_page.dart';
 import 'page/td_tree_select_page.dart';
+import 'page/td_upload_page.dart';
 import 'page/todo_page.dart';
 
 PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
@@ -160,8 +162,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Upload 上传',
         name: 'upload',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+        pageBuilder: _wrapInheritedTheme((context) => const TDUploadPage())),
   ],
   '数据展示': [
     ExamplePageModel(
@@ -212,13 +213,12 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         text: 'Swiper 轮播图', name: 'swiper', pageBuilder: _wrapInheritedTheme((context) => const TDSwiperPage())),
     ExamplePageModel(text: 'Table 表格', name: 'table', pageBuilder: _wrapInheritedTheme((context) => const TDTablePage())),
     ExamplePageModel(text: 'Tag 标签', name: 'tag', pageBuilder: _wrapInheritedTheme((context) => const TDTagPage())),
-    ExamplePageModel(text: 'Steps 步骤条', name: 'steps', pageBuilder: _wrapInheritedTheme((context) => const TDStepsPage())),
   ],
   '反馈': [
     ExamplePageModel( 
         text: 'ActionSheet 动作面板',
-        name: 'action_sheet',
-        isTodo: false,
+        name: 'action-sheet',
+        pageName: 'action_sheet',
         pageBuilder: _wrapInheritedTheme((context) => const TDActionSheetPage())),
     ExamplePageModel(
         text: 'Dialog 对话框', name: 'dialog', pageBuilder: _wrapInheritedTheme((context) => const TDDialogPage())),
@@ -230,16 +230,17 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
         text: 'Loading 加载', name: 'loading', pageBuilder: _wrapInheritedTheme((context) => const TDLoadingPage())),
     ExamplePageModel(
-        text: 'Message 消息通知',
+        text: 'Message 全局提示',
         name: 'message',
         pageBuilder: _wrapInheritedTheme((context) => const TDMessagePage())),
     ExamplePageModel(
-        text: 'NoticeBar 公告栏', name: 'notice-bar', pageBuilder: _wrapInheritedTheme((context) => const TDNoticeBarPage())),
+        text: 'NoticeBar 消息提醒', name: 'notice-bar', pageBuilder: _wrapInheritedTheme((context) => const TDNoticeBarPage())),
     ExamplePageModel(
         text: 'Overlay 遮罩层',
         name: 'overlay',
         isTodo: true,
         pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+    ExamplePageModel(text: 'Popover 弹出气泡', name: 'popover', pageBuilder: _wrapInheritedTheme((context) => const TDPopoverPage())),
     ExamplePageModel(
         text: 'Popup 弹出层', name: 'popup', pageBuilder: _wrapInheritedTheme((context) => const TDPopupPage())),
     ExamplePageModel(
@@ -269,6 +270,7 @@ List<ExamplePageModel> sideBarExamplePage = [
       text: 'SideBar 切页',
       name: 'SideBarPagination',
       isTodo: false,
+      showAction: false,
       pageBuilder: _wrapInheritedTheme((context) => const TDSideBarPaginationPage())),
   ExamplePageModel(
       text: 'SideBar 锚点',

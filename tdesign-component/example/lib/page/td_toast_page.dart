@@ -236,7 +236,9 @@ class _TDToastPageState extends State<TDToastPage> {
     return TDButton(
       onTap: () {
         TDToast.showText('轻提示文字内容',
-            context: context, preventTap: true);
+            context: context,
+            preventTap: true,
+            backgroundColor: Colors.black.withOpacity(0.7));
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,

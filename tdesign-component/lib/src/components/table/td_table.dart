@@ -43,7 +43,7 @@ class TDTableCol {
   bool? ellipsisTitle;
 
   /// 自定义列
-  WidgetBuilder? cellBuilder;
+  IndexedWidgetBuilder? cellBuilder;
 
   /// 列内容横向对齐方式
   TDTableColAlign? align;
@@ -375,7 +375,7 @@ class TDTableState extends State<TDTable> {
     }
     // 自定义单元格内容
     if (col.cellBuilder != null) {
-      return Builder(builder: col.cellBuilder!);
+      return Builder(builder: (_) => col.cellBuilder!(_, index));
     }
     return titleWidget;
   }
@@ -425,8 +425,12 @@ class TDTableState extends State<TDTable> {
         _getVerticalCell(fixedRightCol, fixedRightTitle, cellWidth);
 
     // 固定列宽度
-    var fixedCellsWidth =
-        (fixedLeftCol.length + fixedRightCol.length) * cellWidth;
+    var fixedCellsWidth = 0.0;
+    for(var tableCol in widget.columns) {
+      if(tableCol.fixed == TDTableColFixed.left || tableCol.fixed == TDTableColFixed.right) {
+        fixedCellsWidth += (tableCol.width ?? cellWidth);
+      }
+    }
 
     // 计算非固定列宽度
     var fixedNonCellsWidth = 0.0;
@@ -512,14 +516,22 @@ class TDTableState extends State<TDTable> {
           padding: const EdgeInsets.only(top: 16, bottom: 38),
           child: TDEmpty(
             image: Visibility(
-              visible: false,
-              child: TDImage(assetUrl: widget.empty?.assetUrl ?? ''),
+              visible: widget.empty?.assetUrl != null,
+              child: _getEmptyImage(),
             ),
             emptyText: widget.empty?.text ?? defaultText,
           ),
         ),
       ),
     );
+  }
+
+  TDImage _getEmptyImage() {
+    var url = widget.empty?.assetUrl ?? '';
+    if (url.startsWith('http')) {
+      return TDImage(imgUrl: url);
+    }
+    return TDImage(assetUrl: url);
   }
 
   /// 竖向生成单元格
