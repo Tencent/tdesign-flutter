@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../theme/td_colors.dart';
 import '../../theme/td_fonts.dart';
+import '../../theme/td_radius.dart';
+import '../../theme/td_spacers.dart';
 import '../../theme/td_theme.dart';
 import '../badge/td_badge.dart';
 import '../text/td_text.dart';
 import 'td_action_sheet.dart';
+import 'td_action_sheet_item_widget.dart';
 
 class TDActionSheetList extends StatelessWidget {
   final List<TDActionSheetItem> items;
@@ -14,8 +17,10 @@ class TDActionSheetList extends StatelessWidget {
   final bool showCancel;
   final VoidCallback? onCancel;
   final TDActionSheetItemCallback? onSelected;
+  final bool useSafeArea;
 
-  TDActionSheetList({
+  const TDActionSheetList({
+    super.key,
     required this.items,
     this.align = TDActionSheetAlign.center,
     this.cancelText = '取消',
@@ -23,12 +28,19 @@ class TDActionSheetList extends StatelessWidget {
     this.showCancel = true,
     this.onCancel,
     this.onSelected,
+    this.useSafeArea = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
+    final borderRadius = Radius.circular(TDTheme.of(context).radiusExtraLarge);
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
+        color: TDTheme.of(context).grayColor1,
+      ),
+      clipBehavior: Clip.antiAlias,
+      padding: useSafeArea ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom) : EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -42,23 +54,30 @@ class TDActionSheetList extends StatelessWidget {
 
   /// 构建描述文本
   Widget _buildDescription(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          color: TDTheme.of(context).fontWhColor1,
-          height: 46,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TDText(
-                description!,
-                font: TDTheme.of(context).fontBodyMedium,
-                textColor: TDTheme.of(context).fontGyColor3,
-              ),
-            ],
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: TDTheme.of(context).spacer16,
+        vertical: TDTheme.of(context).spacer12,
+      ),
+      decoration: BoxDecoration(
+        color: TDTheme.of(context).fontWhColor1,
+        border: Border(
+          bottom: BorderSide(
+            color: TDTheme.of(context).grayColor1,
+            width: 0.5,
           ),
         ),
-      ],
+      ),
+      child: Row(
+        mainAxisAlignment: getMainAxisAlignment(align),
+        children: [
+          TDText(
+            description!,
+            font: TDTheme.of(context).fontBodyMedium,
+            textColor: TDTheme.of(context).fontGyColor3,
+          ),
+        ],
+      ),
     );
   }
 
@@ -76,41 +95,38 @@ class TDActionSheetList extends StatelessWidget {
             onTap: item.disabled
                 ? null // 如果项被禁用，则不设置点击事件
                 : () {
-                    if (onSelected != null) {
-                      onSelected!(item, index); // 触发选中回调
-                    }
+                    onSelected?.call(item, index); // 触发选中回调
                     Navigator.maybePop(context); // 关闭当前页面
                   },
             child: Container(
               height: 56,
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: TDTheme.of(context).spacer16),
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
                     color: TDTheme.of(context).grayColor1,
-                    width: 1.0,
+                    width: 0.5,
                   ),
                 ),
               ),
               child: Row(
-                mainAxisAlignment: _getMainAxisAlignment(),
+                mainAxisAlignment: getMainAxisAlignment(align),
                 children: [
                   if (item.icon != null) ...[
                     IconTheme(
                       data: IconThemeData(
                         color: item.disabled
                             ? TDTheme.of(context).fontGyColor4 // 禁用状态下的图标颜色
-                            : (item.textStyle?.color ??
-                                TDTheme.of(context).fontGyColor1), // 正常状态下的图标颜色
+                            : (item.textStyle?.color ?? TDTheme.of(context).fontGyColor1), // 正常状态下的图标颜色
                         size: item.textStyle?.fontSize,
                       ),
                       child: SizedBox(
-                        width: 24,
-                        height: 24,
+                        width: item.iconSize ?? 24,
+                        height: item.iconSize ?? 24,
                         child: item.icon!,
                       ),
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: TDTheme.of(context).spacer8),
                   ],
                   TDText(
                     item.label,
@@ -121,7 +137,7 @@ class TDActionSheetList extends StatelessWidget {
                     style: item.textStyle,
                   ),
                   if (item.badge != null) ...[
-                    SizedBox(width: 8),
+                    SizedBox(width: TDTheme.of(context).spacer8),
                     item.badge!,
                   ],
                 ],
@@ -137,46 +153,25 @@ class TDActionSheetList extends StatelessWidget {
   Widget _buildCancelButton(BuildContext context) {
     return Column(
       children: [
-        Container(
-          color: TDTheme.of(context).grayColor1,
-          height: 8,
-        ),
+        SizedBox(height: TDTheme.of(context).spacer8),
         GestureDetector(
           onTap: () {
-            if (onCancel != null) {
-              onCancel!();
-            }
+            onCancel?.call();
             Navigator.maybePop(context);
           },
           child: Container(
             color: TDTheme.of(context).fontWhColor1,
             height: 48,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TDText(
-                  cancelText,
-                  font: TDTheme.of(context).fontBodyLarge,
-                  textColor: TDTheme.of(context).fontGyColor1,
-                ),
-              ],
+            child: Center(
+              child: TDText(
+                cancelText,
+                font: TDTheme.of(context).fontBodyLarge,
+                textColor: TDTheme.of(context).fontGyColor1,
+              ),
             ),
           ),
         ),
       ],
     );
-  }
-
-  /// 获取主轴对齐方式
-  MainAxisAlignment _getMainAxisAlignment() {
-    switch (align) {
-      case TDActionSheetAlign.left:
-        return MainAxisAlignment.start;
-      case TDActionSheetAlign.right:
-        return MainAxisAlignment.end;
-      case TDActionSheetAlign.center:
-      default:
-        return MainAxisAlignment.center;
-    }
   }
 }

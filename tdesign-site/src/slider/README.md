@@ -28,11 +28,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildSingleHandle(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         min: 0,
         max: 100,
       ),
       value: 10,
-      // divisions: 5,
       onChanged: (value) {},
     );
   }</pre>
@@ -48,11 +48,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildDoubleHandle(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         min: 0,
         max: 100,
       ),
       value: const RangeValues(10, 60),
-      // divisions: 5,
       onChanged: (value) {},
     );
   }</pre>
@@ -68,6 +68,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildSingleHandleWithNumber(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showThumbValue: true,
         scaleFormatter: (value) => value.toInt().toString(),
         min: 0,
@@ -76,7 +77,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       value: 10,
       leftLabel: '0',
       rightLabel: '100',
-      // divisions: 5,
       onChanged: (value) {},
     );
   }</pre>
@@ -92,6 +92,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildDoubleHandleWithNumber(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showThumbValue: true,
         min: 0,
         max: 100,
@@ -100,7 +101,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       leftLabel: '0',
       rightLabel: '100',
       value: const RangeValues(40, 60),
-      // divisions: 5,
       onChanged: (value) {},
     );
   }</pre>
@@ -116,6 +116,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildSingleHandleWithScale(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -123,7 +124,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         scaleFormatter: (value) => value.toInt().toString(),
       ),
       value: 60,
-      // divisions: 5,
       onChanged: (value) {},
     );
   }</pre>
@@ -139,6 +139,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _buildDoubleHandleWithScale(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -146,7 +147,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         scaleFormatter: (value) => value.toInt().toString(),
       ),
       value: const RangeValues(40, 70),
-      // divisions: 5,
       onChanged: (value) {},
     );
   }</pre>
@@ -160,46 +160,61 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildDisable(BuildContext context) {
-    return Column(
-      children: [
-        TDSlider(
-          sliderThemeData: TDSliderThemeData(
-            min: 0,
-            max: 100,
-          ),
-          value: 40,
-          leftLabel: '0',
-          rightLabel: '100',
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData(
-            min: 0,
-            max: 100,
-            showThumbValue: true,
-            scaleFormatter: (value) => value.toInt().toString(),
-          ),
-          value: const RangeValues(20, 60),
-          leftLabel: '0',
-          rightLabel: '100',
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData(
-            showScaleValue: true,
-            divisions: 5,
-            min: 0,
-            max: 100,
-            scaleFormatter: (value) => value.toInt().toString(),
-          ),
-          value: const RangeValues(20, 60),
-        ),
-      ],
+  Widget _buildDisableSingleHandle(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData(
+        context: context,
+        min: 0,
+        max: 100,
+      ),
+      leftLabel: '0',
+      rightLabel: '100',
+      value: 40,
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildDisableDoubleHandleWithNumber(BuildContext context) {
+    return TDRangeSlider(
+      sliderThemeData: TDSliderThemeData(
+        context: context,
+        showThumbValue: true,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      leftLabel: '0',
+      rightLabel: '100',
+      value: const RangeValues(20, 60),
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildDisableDoubleHandleWithScale(BuildContext context) {
+    return TDRangeSlider(
+      sliderThemeData: TDSliderThemeData(
+        context: context,
+        showScaleValue: true,
+        divisions: 5,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      value: const RangeValues(20, 60),
     );
   }</pre>
 
@@ -212,11 +227,156 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
+  Widget _buildCapsuleSingleHandleWithNumber(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
+        showThumbValue: true,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      value: 40,
+      onChanged: (value) {},
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildCapsuleDoubleHandle(BuildContext context) {
+    return TDRangeSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      value: const RangeValues(20, 60),
+      onChanged: (value) {},
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildCapsuleSingleHandle(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      leftLabel: '0',
+      rightLabel: '100',
+      value: 40,
+      onChanged: (value) {},
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildCapsuleDoubleHandleWithNumber(BuildContext context) {
+    return TDRangeSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
+        showThumbValue: true,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
+      leftLabel: '0',
+      rightLabel: '100',
+      value: const RangeValues(20, 60),
+      onChanged: (value) {},
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildCapsuleSingleHandleWithScale(BuildContext context) {
+    return TDSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
+        showScaleValue: true,
+        divisions: 5,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      )
+        ..updateSliderThemeData((data) =>
+            data.copyWith(
+              activeTickMarkColor: const Color(0xFFE7E7E7),
+              inactiveTickMarkColor: const Color(0xFFE7E7E7),
+            )),
+      value: 60,
+      onChanged: (value) {},
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildCapsuleDoubleHandleWithScale(BuildContext context) {
+    return TDRangeSlider(
+      sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
+        showScaleValue: true,
+        divisions: 5,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      )..updateSliderThemeData((data) => data.copyWith(
+        activeTickMarkColor: const Color(0xFFE7E7E7),
+        inactiveTickMarkColor: const Color(0xFFE7E7E7),
+      )),
+      value: const RangeValues(20, 60),
+      onChanged: (value) {},
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+胶囊型滑块
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
   Widget _buildCapsule(BuildContext context) {
     return Column(
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showThumbValue: true,
             min: 0,
             max: 100,
@@ -231,6 +391,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
@@ -244,6 +405,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         ),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
@@ -259,6 +421,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             showThumbValue: true,
@@ -275,24 +438,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         ),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
-            showScaleValue: true,
-            divisions: 5,
-            min: 0,
-            max: 100,
-            scaleFormatter: (value) => value.toInt().toString(),
-          )..updateSliderThemeData((data) => data.copyWith(
-                activeTickMarkColor: const Color(0xFFE7E7E7),
-                inactiveTickMarkColor: const Color(0xFFE7E7E7),
-              )),
-          value: 60,
-          // divisions: 5,
-          onChanged: (value) {},
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showScaleValue: true,
             divisions: 5,
             min: 0,
@@ -304,6 +450,25 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   activeTickMarkColor: const Color(0xFFE7E7E7),
                   inactiveTickMarkColor: const Color(0xFFE7E7E7),
                 )),
+          value: 60,
+          // divisions: 5,
+          onChanged: (value) {},
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
+            showScaleValue: true,
+            divisions: 5,
+            min: 0,
+            max: 100,
+            scaleFormatter: (value) => value.toInt().toString(),
+          )..updateSliderThemeData((data) => data.copyWith(
+                activeTickMarkColor: const Color(0xFFE7E7E7),
+                inactiveTickMarkColor: const Color(0xFFE7E7E7),
+              )),
           value: const RangeValues(20, 60),
           // divisions: 5,
           onChanged: (value) {},
@@ -316,22 +481,31 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                                   
 
 自定义盒子样式
+      
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+
+</td-code-block>
+                
+
+自定义滑轨颜色
             
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildCustomDecoration(BuildContext context) {
+  Widget _buildCustomActiveColor(BuildContext context) {
     return Column(
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
+            activeTrackColor: Colors.red,
+            inactiveTrackColor: Colors.green,
+            context: context,
             min: 0,
             max: 100,
           ),
           value: 40,
-          boxDecoration: BoxDecoration(
-             color: Colors.amber
-          ),
           // divisions: 5,
           onChanged: (value) {},
         ),
@@ -340,12 +514,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            activeTrackColor: Colors.green,
+            inactiveTrackColor: Colors.red,
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
-          ),
-          boxDecoration: BoxDecoration(
-              color: Colors.deepOrangeAccent
           ),
           value: const RangeValues(20, 60),
           onChanged: (value) {},

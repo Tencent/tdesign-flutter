@@ -89,6 +89,7 @@ class TDSkeleton extends StatefulWidget {
     }
   }
 
+  /// 从行列框架创建骨架屏
   const TDSkeleton.fromRowCol({
     super.key,
     this.animation,
@@ -131,7 +132,7 @@ class _TDSkeletonState extends State<TDSkeleton>
       LinearGradient(
         colors: [
           Colors.transparent,
-          TDTheme.of(context).fontGyColor3,
+          TDTheme.of(context).grayColor4,
           Colors.transparent,
         ],
         // 15 deg

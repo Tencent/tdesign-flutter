@@ -3,6 +3,9 @@
  */
 import 'package:flutter/cupertino.dart';
 
+import '../../../tdesign_flutter.dart';
+import '../../theme/td_theme.dart';
+
 class TDCollapseSaltedKey<S, V> extends LocalKey {
   const TDCollapseSaltedKey(this.salt, this.value);
 
@@ -17,10 +20,11 @@ class TDCollapseSaltedKey<S, V> extends LocalKey {
   }
 
   @override
-  int get hashCode => hashValues(runtimeType, salt, value);
+  int get hashCode => Object.hash(runtimeType, salt, value);
 
   @override
   String toString() {
+
     final saltString = S == String ? '<\'$salt\'>' : '<$salt>';
     final valueString = V == String ? '<\'$value\'>' : '<$value>';
     return '[$saltString $valueString]';

@@ -33,17 +33,19 @@ class TDDialogScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        width: 311,
-        decoration: BoxDecoration(
-          color: backgroundColor, // 底色
-          borderRadius: BorderRadius.all(Radius.circular(radius)),
-        ),
-        child: Stack(
-          children: [
-            body,
-            showCloseButton ?? false
-                ? Positioned(
+        child: Material(
+          type: MaterialType.transparency,
+          child: Container(
+            width: 311,
+            decoration: BoxDecoration(
+              color: backgroundColor, // 底色
+              borderRadius: BorderRadius.all(Radius.circular(radius)),
+            ),
+            child: Stack(
+              children: [
+                body,
+                showCloseButton ?? false
+                    ? Positioned(
                     top: 0,
                     right: 0,
                     child: GestureDetector(
@@ -62,10 +64,11 @@ class TDDialogScaffold extends StatelessWidget {
                         ),
                       ),
                     ))
-                : Container(height: 0)
-          ],
+                    : Container(height: 0)
+              ],
+            ),
+          ),
         ),
-      ),
     );
   }
 }
@@ -231,7 +234,8 @@ class HorizontalNormalButtons extends StatelessWidget {
           Expanded(
             child: TDDialogButton(
               buttonText: leftBtn.title,
-              buttonTextColor: leftBtn.titleColor ?? TDTheme.of(context).brandNormalColor,
+              buttonTextColor: leftBtn.titleColor,
+              buttonTextSize: leftBtn.titleSize,
               buttonStyle: leftBtn.style,
               buttonType: leftBtn.type,
               buttonTheme: leftBtn.theme,
@@ -253,7 +257,8 @@ class HorizontalNormalButtons extends StatelessWidget {
           Expanded(
             child: TDDialogButton(
               buttonText: rightBtn.title,
-              buttonTextColor: rightBtn.titleColor ?? TDTheme.of(context).whiteColor1,
+              buttonTextColor: rightBtn.titleColor,
+              buttonTextSize: rightBtn.titleSize,
               buttonStyle: rightBtn.style,
               buttonType: rightBtn.type,
               buttonTheme: rightBtn.theme,
@@ -300,11 +305,13 @@ class HorizontalTextButtons extends StatelessWidget {
             Expanded(
               child: TDDialogButton(
                 buttonText: leftBtn.title,
-                buttonTextColor: leftBtn.titleColor ?? TDTheme.of(context).fontGyColor1,
+                buttonTextColor: leftBtn.titleColor,
+                buttonTextSize: leftBtn.titleSize,
                 buttonStyle: leftBtn.style,
                 buttonType: leftBtn.type ?? TDButtonType.text,
                 buttonTheme: leftBtn.theme,
-                height: leftBtn.height,
+                // fix： The button height does not fill the container.
+                height: 56,
                 buttonTextFontWeight: leftBtn.fontWeight,
                 onPressed: () {
                   if(leftBtn.action != null){
@@ -322,11 +329,12 @@ class HorizontalTextButtons extends StatelessWidget {
             Expanded(
               child: TDDialogButton(
                 buttonText: rightBtn.title,
-                buttonTextColor: rightBtn.titleColor ?? TDTheme.of(context).brandNormalColor,
-                buttonStyle: leftBtn.style,
-                buttonType: leftBtn.type ?? TDButtonType.text,
-                buttonTheme: leftBtn.theme ?? TDButtonTheme.primary,
-                height: rightBtn.height,
+                buttonTextColor: rightBtn.titleColor,
+                buttonTextSize: rightBtn.titleSize,
+                buttonStyle: rightBtn.style,
+                buttonType: rightBtn.type ?? TDButtonType.text,
+                buttonTheme: rightBtn.theme ?? TDButtonTheme.primary,
+                height: 56,
                 buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
                 onPressed: () {
                   if(rightBtn.action != null){
@@ -350,6 +358,7 @@ class TDDialogButton extends StatelessWidget {
     Key? key,
     this.buttonText,
     this.buttonTextColor,
+    this.buttonTextSize,
     this.buttonTextFontWeight = FontWeight.w600,
     this.buttonStyle,
     this.buttonType,
@@ -365,6 +374,9 @@ class TDDialogButton extends StatelessWidget {
 
   /// 按钮文字颜色
   final Color? buttonTextColor;
+
+  /// 按钮文字大小
+  final double? buttonTextSize;
 
   /// 按钮文字粗细
   final FontWeight? buttonTextFontWeight;
@@ -398,7 +410,7 @@ class TDDialogButton extends StatelessWidget {
       type: buttonType ?? TDButtonType.fill,
       theme: buttonTheme,
       text: buttonText,
-      textStyle: TextStyle(fontWeight: buttonTextFontWeight, color: buttonTextColor),
+      textStyle: TextStyle(fontWeight: buttonTextFontWeight,color:buttonTextColor,fontSize: buttonTextSize),
       width: width,
       height: height,
       isBlock: isBlock,

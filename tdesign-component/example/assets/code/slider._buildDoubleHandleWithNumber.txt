@@ -2,6 +2,7 @@
   Widget _buildDoubleHandleWithNumber(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showThumbValue: true,
         min: 0,
         max: 100,
@@ -10,7 +11,6 @@
       leftLabel: '0',
       rightLabel: '100',
       value: const RangeValues(40, 60),
-      // divisions: 5,
       onChanged: (value) {},
     );
   }
