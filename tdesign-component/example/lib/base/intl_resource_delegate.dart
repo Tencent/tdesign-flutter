@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import '../gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// 国际化资源代理
