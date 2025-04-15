@@ -1,0 +1,22 @@
+
+  Widget _buildNCustomPopover(BuildContext context) {
+    return LayoutBuilder(
+      builder: (_, constrains) {
+        return TDButton(
+          text: '自定义内容',
+          type: TDButtonType.outline,
+          theme: TDButtonTheme.primary,
+             
+          onTap: () {
+            TDPopover.showPopover(
+              context: _,
+              padding: const EdgeInsets.all(0),
+              width: 108,
+              height: 148,
+              contentWidget: _buildPopoverList(context),
+            );
+          },
+        );
+      },
+    );
+  }

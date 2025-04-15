@@ -28,7 +28,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
 Widget _buildSimple(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch]);
+  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
   return ValueListenableBuilder(
     valueListenable: selected,
     builder: (context, value, child) {
@@ -60,8 +60,8 @@ Widget _buildSimple(BuildContext context) {
                   onCellLongPress: (value, type, tdate) {
                     print('onCellLongPress:$value');
                   },
-                  onHeanderClick: (index, week) {
-                    print('onHeanderClick:$week');
+                  onHeaderClick: (index, week) {
+                    print('onHeaderClick:$week');
                   },
                   onChange: (value) {
                     print('onChange:$value');
@@ -125,14 +125,16 @@ Widget _buildSimple(BuildContext context) {
                   value: value,
                   height: size.height * 0.92,
                   useTimePicker: true,
+                  // pickerHeight: 100,
+                  // pickerItemCount: 2,
                   onCellClick: (value, type, tdate) {
                     print('onCellClick:$value');
                   },
                   onCellLongPress: (value, type, tdate) {
                     print('onCellLongPress:$value');
                   },
-                  onHeanderClick: (index, week) {
-                    print('onHeanderClick:$week');
+                  onHeaderClick: (index, week) {
+                    print('onHeaderClick:$week');
                   },
                   onChange: (value) {
                     print('onChange:$value');
@@ -169,8 +171,8 @@ Widget _buildSimple(BuildContext context) {
                   onCellLongPress: (value, type, tdate) {
                     print('onCellLongPress:$value');
                   },
-                  onHeanderClick: (index, week) {
-                    print('onHeanderClick:$week');
+                  onHeaderClick: (index, week) {
+                    print('onHeaderClick:$week');
                   },
                   onChange: (value) {
                     print('onChange:$value');
@@ -280,9 +282,9 @@ Widget _buildStyle(BuildContext context) {
             visible: true,
             child: TDCalendar(
               title: '请选择日期',
-              minDate: DateTime(2022, 1, 1).millisecondsSinceEpoch,
-              maxDate: DateTime(2022, 1, 31).millisecondsSinceEpoch,
-              value: [DateTime(2022, 1, 15).millisecondsSinceEpoch],
+              minDate: DateTime(2000, 1, 1).millisecondsSinceEpoch,
+              maxDate: DateTime(3000, 1, 1).millisecondsSinceEpoch,
+              value: [DateTime(2024, 10, 1).millisecondsSinceEpoch],
               height: size.height * 0.6 + 176,
             ),
           );
@@ -384,9 +386,9 @@ Widget _buildStyle(BuildContext context) {
             visible: true,
             child: TDCalendar(
               title: '请选择日期',
-              minDate: DateTime(2022, 1, 1).millisecondsSinceEpoch,
-              maxDate: DateTime(2022, 1, 31).millisecondsSinceEpoch,
-              value: [DateTime(2022, 1, 15).millisecondsSinceEpoch],
+              minDate: DateTime(2000, 1, 1).millisecondsSinceEpoch,
+              maxDate: DateTime(3000, 1, 1).millisecondsSinceEpoch,
+              value: [DateTime(2024, 10, 1).millisecondsSinceEpoch],
               height: size.height * 0.6 + 176,
             ),
           );
@@ -407,10 +409,43 @@ Widget _buildStyle(BuildContext context) {
   <pre slot="Dart" lang="javascript">
 Widget _buildBlock(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  return TDCalendar(
-    title: '请选择日期',
-    value: [DateTime.now().millisecondsSinceEpoch],
-    height: size.height * 0.6 + 176,
+  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          SizedBox(width: TDTheme.of(context).spacer16),
+          TDButton(
+              text: '加一个月',
+              size: TDButtonSize.small,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                selected.value = [selected.value[0] + 30 * 24 * 60 * 60 * 1000];
+              }),
+          SizedBox(width: TDTheme.of(context).spacer16),
+          TDButton(
+              text: '减一个月',
+              size: TDButtonSize.small,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                selected.value = [selected.value[0] - 30 * 24 * 60 * 60 * 1000];
+              }),
+        ],
+      ),
+      SizedBox(height: TDTheme.of(context).spacer16),
+      ValueListenableBuilder(
+        valueListenable: selected,
+        builder: (context, value, child) {
+          return TDCalendar(
+            title: '请选择日期',
+            value: value,
+            height: size.height * 0.6 + 176,
+            animateTo: true,
+          );
+        },
+      ),
+    ],
   );
 }</pre>
 
@@ -423,10 +458,43 @@ Widget _buildBlock(BuildContext context) {
   <pre slot="Dart" lang="javascript">
 Widget _buildBlock(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  return TDCalendar(
-    title: '请选择日期',
-    value: [DateTime.now().millisecondsSinceEpoch],
-    height: size.height * 0.6 + 176,
+  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          SizedBox(width: TDTheme.of(context).spacer16),
+          TDButton(
+              text: '加一个月',
+              size: TDButtonSize.small,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                selected.value = [selected.value[0] + 30 * 24 * 60 * 60 * 1000];
+              }),
+          SizedBox(width: TDTheme.of(context).spacer16),
+          TDButton(
+              text: '减一个月',
+              size: TDButtonSize.small,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                selected.value = [selected.value[0] - 30 * 24 * 60 * 60 * 1000];
+              }),
+        ],
+      ),
+      SizedBox(height: TDTheme.of(context).spacer16),
+      ValueListenableBuilder(
+        valueListenable: selected,
+        builder: (context, value, child) {
+          return TDCalendar(
+            title: '请选择日期',
+            value: value,
+            height: size.height * 0.6 + 176,
+            animateTo: true,
+          );
+        },
+      ),
+    ],
   );
 }</pre>
 
@@ -484,9 +552,15 @@ Widget _buildBlock(BuildContext context) {
 | onChange | void Function(List<int> value)? | - | 选中值变化时触发 |
 | onCellClick | void Function(int value, DateSelectType type, TDate tdate)? | - | 点击日期时触发 |
 | onCellLongPress | void Function(int value, DateSelectType type, TDate tdate)? | - | 长安日期时触发 |
-| onHeanderClick | void Function(int index, String week)? | - | 点击周时触发 |
+| onHeaderClick | void Function(int index, String week)? | - | 点击周时触发 |
 | useTimePicker | bool? | false | 是否显示时间选择器 |
 | timePickerModel | List<DatePickerModel>? | - | 自定义时间选择器 |
+| monthTitleHeight | double? | 22 | 月标题高度 |
+| monthTitleBuilder | Widget Function(BuildContext context, DateTime monthDate)? | - | 月标题构建器 |
+| pickerHeight | double? | 178 | 时间选择器List的视窗高度 |
+| pickerItemCount | int? | 3 | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
+| isTimeUnit | bool? | true | 是否显示时间单位 |
+| animateTo | bool? | false | 动画滚动到指定位置 |
 
 ```
 ```

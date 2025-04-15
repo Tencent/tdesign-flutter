@@ -1,0 +1,25 @@
+
+  Widget _buildMultiLinePopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '多行内容',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+               
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                width: 200,
+                content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
+              );
+            },
+          );
+        },
+      ),
+    );
+  }

@@ -86,6 +86,12 @@ abstract class TDResourceDelegate {
   /// [TDRefreshHeader] 松开刷新
   String get releaseRefresh;
 
+  /// [TDRefreshHeader] 下拉刷新
+  String get pullToRefresh;
+
+  /// [TDRefreshHeader] 刷新完成
+  String get completeRefresh;
+
   /// [TDTimeCounter] 天
   String get days;
 
@@ -101,6 +107,18 @@ abstract class TDResourceDelegate {
   /// [TDTimeCounter] 毫秒
   String get milliseconds;
 
+  /// [TDDatePicker]  年
+  String get yearLabel;
+
+  /// [TDDatePicker]  月
+  String get monthLabel;
+
+  /// [TDDatePicker] 日
+  String get dateLabel;
+
+  /// [TDDatePicker] 周
+  String get weeksLabel;
+  
   /// [TDCalendarHeader] 星期日
   String get sunday;
 
@@ -175,6 +193,13 @@ abstract class TDResourceDelegate {
 
   /// [TDRate] 选择选项
   String get cascadeLabel;
+
+  /// [TDBackTop] 返回
+  String get back;
+
+  /// [TDBackTop] 顶部
+  String get top;
+
 }
 
 /// 如果用户要重写,就应该全部重写,不开放只重新部分资源
@@ -216,6 +241,12 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
   String get releaseRefresh => '松开刷新';
 
   @override
+  String get pullToRefresh => '下拉刷新';
+
+  @override
+  String get completeRefresh => '刷新完成';
+
+  @override
   String get days => '天';
 
   @override
@@ -231,6 +262,17 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
   String get milliseconds => '毫秒';
 
   @override
+  String get yearLabel => '年';
+
+  @override
+  String get monthLabel => '月';
+
+  @override
+  String get dateLabel=>'日';
+
+  @override
+  String get weeksLabel=>'周';
+  
   String get sunday => '日';
 
   @override
@@ -304,4 +346,10 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
 
   @override
   String get cascadeLabel => '选择选项';
+
+  @override
+  String get back => '返回';
+
+  @override
+  String get top => '顶部';
 }

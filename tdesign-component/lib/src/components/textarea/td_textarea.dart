@@ -287,7 +287,13 @@ class _TDTextareaState extends State<TDTextarea> {
           hintText: widget.hintText,
           inputType: widget.inputType,
           textAlign: widget.textAlign,
-          onChanged: widget.onChanged,
+          onChanged:(val){
+            setState(() {
+            });
+            if(widget.onChanged!=null){
+              widget.onChanged!(val);
+            }
+          },
           inputFormatters: [
             ...(widget.inputFormatters ?? []),
             ...(widget.maxLength != null && !(widget.allowInputOverMax ?? false)

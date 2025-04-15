@@ -1,7 +1,7 @@
 
 Widget _buildSimple(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch]);
+  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
   return ValueListenableBuilder(
     valueListenable: selected,
     builder: (context, value, child) {
@@ -33,8 +33,8 @@ Widget _buildSimple(BuildContext context) {
                   onCellLongPress: (value, type, tdate) {
                     print('onCellLongPress:$value');
                   },
-                  onHeanderClick: (index, week) {
-                    print('onHeanderClick:$week');
+                  onHeaderClick: (index, week) {
+                    print('onHeaderClick:$week');
                   },
                   onChange: (value) {
                     print('onChange:$value');
@@ -98,14 +98,16 @@ Widget _buildSimple(BuildContext context) {
                   value: value,
                   height: size.height * 0.92,
                   useTimePicker: true,
+                  // pickerHeight: 100,
+                  // pickerItemCount: 2,
                   onCellClick: (value, type, tdate) {
                     print('onCellClick:$value');
                   },
                   onCellLongPress: (value, type, tdate) {
                     print('onCellLongPress:$value');
                   },
-                  onHeanderClick: (index, week) {
-                    print('onHeanderClick:$week');
+                  onHeaderClick: (index, week) {
+                    print('onHeaderClick:$week');
                   },
                   onChange: (value) {
                     print('onChange:$value');
@@ -142,8 +144,8 @@ Widget _buildSimple(BuildContext context) {
                   onCellLongPress: (value, type, tdate) {
                     print('onCellLongPress:$value');
                   },
-                  onHeanderClick: (index, week) {
-                    print('onHeanderClick:$week');
+                  onHeaderClick: (index, week) {
+                    print('onHeaderClick:$week');
                   },
                   onChange: (value) {
                     print('onChange:$value');

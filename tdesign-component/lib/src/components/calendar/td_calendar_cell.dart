@@ -38,13 +38,11 @@ class TDCalendarCell extends StatefulWidget {
 }
 
 class _TDCalendarCellState extends State<TDCalendarCell> {
-  late List<TDate?> list;
   var isToday = false;
   var positionOffset = 0;
   @override
   void initState() {
     super.initState();
-    list = widget.data.values.expand((element) => element).toList();
     isToday = _isToday();
     widget.tdate?.typeNotifier.addListener(_cellTypeChange);
   }
@@ -52,10 +50,8 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
   @override
   void didUpdateWidget(TDCalendarCell oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.data != oldWidget.data) {
-      list = widget.data.values.expand((element) => element).toList();
-    }
     if (widget.tdate != oldWidget.tdate) {
+      isToday = _isToday();
       oldWidget.tdate?.typeNotifier.removeListener(_cellTypeChange);
       widget.tdate?.typeNotifier.addListener(_cellTypeChange);
     }
@@ -141,6 +137,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
   }
 
   void _cellTap() {
+    final list = widget.data.values.expand((element) => element).toList();
     final selectType = widget.tdate!._type;
     final curDate = widget.tdate!._milliseconds;
     if (selectType == DateSelectType.disabled) {

@@ -122,6 +122,7 @@ class _TDCellState extends State<TDCell> {
     var style = widget.style ?? TDCellInherited.of(context)?.style ?? TDCellStyle.cellStyle(context);
     var crossAxisAlignment = _getAlign();
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         if (widget.onClick != null && !(widget.disabled ?? false)) {
           widget.onClick!(widget);

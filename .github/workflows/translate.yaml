@@ -1,0 +1,28 @@
+name: Run OpenAI API Demo
+
+on:
+  workflow_dispatch:  # 允许手动触发
+  schedule:
+    - cron: '0 0 * * *'  # 可选：定时触发（每天 UTC 0 点）
+
+jobs:
+  run-openai-demo:
+    runs-on: ubuntu-latest  # 使用 GitHub 提供的 Ubuntu 环境
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  # 拉取仓库代码
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'  # 指定 Python 版本
+
+      - name: Install dependencies
+        run: |
+          pip install openai  # 安装 OpenAI 库
+
+      - name: Run Python script
+        env:
+          HUNYUAN_API_KEY: ${{ secrets.HUNYUAN_API_KEY }}
+        run: python tdesign-component/example/shell/script.py  # 更清晰且避免语法问题

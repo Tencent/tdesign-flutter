@@ -16,8 +16,14 @@ class TDToast {
       Duration duration = TDToast._defaultDisPlayDuration,
       int? maxLines,
       BoxConstraints? constraints,
-      bool? preventTap}) {
-    _showOverlay(_TDTextToast(text: text, maxLines: maxLines, constraints: constraints), context: context, duration: duration, preventTap: preventTap);
+      bool? preventTap,
+      Color? backgroundColor}) {
+    _showOverlay(
+        _TDTextToast(text: text, maxLines: maxLines, constraints: constraints),
+        context: context,
+        duration: duration,
+        preventTap: preventTap,
+        backgroundColor: backgroundColor);
   }
 
   /// 带图标的Toast
@@ -26,16 +32,20 @@ class TDToast {
       IconTextDirection direction = IconTextDirection.horizontal,
       required BuildContext context,
       Duration duration = TDToast._defaultDisPlayDuration,
-      bool? preventTap}) {
+      bool? preventTap,
+      Color? backgroundColor,
+      int? maxLines}) {
     _showOverlay(
         _TDIconTextToast(
           text: text,
           iconData: icon,
           iconTextDirection: direction,
+          maxLines: maxLines,
         ),
         context: context,
         duration: duration,
-        preventTap: preventTap);
+        preventTap: preventTap,
+        backgroundColor: backgroundColor);
   }
 
   /// 成功提示Toast
@@ -43,16 +53,20 @@ class TDToast {
       {IconTextDirection direction = IconTextDirection.horizontal,
       required BuildContext context,
       Duration duration = TDToast._defaultDisPlayDuration,
-      bool? preventTap}) {
+      bool? preventTap,
+      Color? backgroundColor,
+      int? maxLines}) {
     _showOverlay(
         _TDIconTextToast(
           text: text,
           iconData: TDIcons.check_circle,
           iconTextDirection: direction,
+          maxLines: maxLines,
         ),
         context: context,
         duration: duration,
-        preventTap: preventTap);
+        preventTap: preventTap,
+        backgroundColor: backgroundColor);
   }
 
   /// 警告Toast
@@ -60,16 +74,20 @@ class TDToast {
       {IconTextDirection direction = IconTextDirection.horizontal,
       required BuildContext context,
       Duration duration = TDToast._defaultDisPlayDuration,
-      bool? preventTap}) {
+      bool? preventTap,
+      Color? backgroundColor,
+      int? maxLines}) {
     _showOverlay(
         _TDIconTextToast(
           text: text,
           iconData: TDIcons.error_circle,
           iconTextDirection: direction,
+          maxLines: maxLines,
         ),
         context: context,
         duration: duration,
-        preventTap: preventTap);
+        preventTap: preventTap,
+        backgroundColor: backgroundColor);
   }
 
   /// 失败提示Toast
@@ -77,34 +95,52 @@ class TDToast {
       {IconTextDirection direction = IconTextDirection.horizontal,
       required BuildContext context,
       Duration duration = TDToast._defaultDisPlayDuration,
-      bool? preventTap}) {
+      bool? preventTap,
+      Color? backgroundColor,
+      int? maxLines}) {
     _showOverlay(
         _TDIconTextToast(
           text: text,
           iconData: TDIcons.close_circle,
           iconTextDirection: direction,
+          maxLines: maxLines,
         ),
         context: context,
         duration: duration,
-        preventTap: preventTap);
+        preventTap: preventTap,
+        backgroundColor: backgroundColor);
   }
 
   /// 带文案的加载Toast
   static void showLoading(
-      {required BuildContext context, String? text, Duration duration = TDToast._infiniteDuration, bool? preventTap}) {
+      {required BuildContext context,
+        String? text,
+        Duration duration = TDToast._infiniteDuration,
+        bool? preventTap,
+        Color? backgroundColor}) {
     _showOverlay(
         _TDToastLoading(
           text: text,
         ),
         context: context,
         duration: duration,
-        preventTap: preventTap);
+        preventTap: preventTap,
+        backgroundColor: backgroundColor);
   }
 
   /// 不带文案的加载Toast
   static void showLoadingWithoutText(
-      {required BuildContext context, String? text, Duration duration = TDToast._infiniteDuration, bool? preventTap}) {
-    _showOverlay(const _TDToastLoadingWithoutText(), context: context, duration: duration, preventTap: preventTap);
+      {required BuildContext context,
+        String? text,
+        Duration duration = TDToast._infiniteDuration,
+        bool? preventTap,
+        Color? backgroundColor}) {
+    _showOverlay(
+        const _TDToastLoadingWithoutText(),
+        context: context,
+        duration: duration,
+        preventTap: preventTap,
+        backgroundColor: backgroundColor);
   }
 
   /// 关闭加载Toast
@@ -113,8 +149,10 @@ class TDToast {
   }
 
   static void _showOverlay(Widget? widget,
-      {required BuildContext context, Duration duration = TDToast._defaultDisPlayDuration,
-      bool? preventTap}) {
+      {required BuildContext context,
+        Duration duration = TDToast._defaultDisPlayDuration,
+        bool? preventTap,
+        Color? backgroundColor}) {
     _cancel();
     _showing = true;
     var overlayState = Overlay.of(context);
@@ -135,7 +173,7 @@ class TDToast {
             bottom: 0,
             left: 0,
             child: Container(
-              color: Colors.transparent,
+              color: backgroundColor,
               child: Align(
                 alignment: Alignment.center,
                 child: AnimatedOpacity(
@@ -191,8 +229,9 @@ class _TDIconTextToast extends StatelessWidget {
   final String? text;
   final IconData? iconData;
   final IconTextDirection iconTextDirection;
+  final int? maxLines;
 
-  const _TDIconTextToast({this.text, this.iconData, this.iconTextDirection = IconTextDirection.horizontal});
+  const _TDIconTextToast({this.text, this.iconData, this.iconTextDirection = IconTextDirection.horizontal, this.maxLines});
 
   Widget buildHorizontalWidgets(BuildContext context) {
     return ConstrainedBox(
@@ -230,9 +269,8 @@ class _TDIconTextToast extends StatelessWidget {
 
   Widget buildVerticalWidgets(BuildContext context) {
     return ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 136, maxHeight: 130),
+        constraints: const BoxConstraints(maxWidth: 136),
         child: Container(
-            height: 110,
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: TDTheme.of(context).fontGyColor1,
@@ -254,7 +292,7 @@ class _TDIconTextToast extends StatelessWidget {
                   text ?? '',
                   font: TDTheme.of(context).fontBodyMedium,
                   fontWeight: FontWeight.w400,
-                  maxLines: 1,
+                  maxLines: maxLines ?? 1,
                   overflow: TextOverflow.ellipsis,
                   textColor: TDTheme.of(context).whiteColor1,
                 )

@@ -18,6 +18,7 @@ class IconWithBackground extends StatelessWidget {
       height: 40.0,
       decoration: BoxDecoration(
         color: TDTheme.of(context).grayColor1,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
       ),
       child: Center(
         child: Icon(
@@ -31,20 +32,14 @@ class IconWithBackground extends StatelessWidget {
 
 const _nums = ['一', '二', '三', '四'];
 List<TDActionSheetItem> _gridItems = [
-  TDActionSheetItem(
-      label: '微信', icon: Image.asset('assets/img/td_action_sheet_1.png')),
-  TDActionSheetItem(
-      label: '朋友圈', icon: Image.asset('assets/img/td_action_sheet_2.png')),
-  TDActionSheetItem(
-      label: 'QQ', icon: Image.asset('assets/img/td_action_sheet_3.png')),
-  TDActionSheetItem(
-      label: '企业微信', icon: Image.asset('assets/img/td_action_sheet_4.png')),
-  TDActionSheetItem(label: '收藏', icon: IconWithBackground(icon: TDIcons.star)),
-  TDActionSheetItem(
-      label: '刷新', icon: IconWithBackground(icon: TDIcons.refresh)),
-  TDActionSheetItem(
-      label: '下载', icon: IconWithBackground(icon: TDIcons.download)),
-  TDActionSheetItem(label: '复制', icon: IconWithBackground(icon: TDIcons.queue)),
+  TDActionSheetItem(label: '微信', icon: Image.asset('assets/img/td_action_sheet_1.png'), group: '分享至'),
+  TDActionSheetItem(label: '朋友圈', icon: Image.asset('assets/img/td_action_sheet_2.png'), group: '分享至'),
+  TDActionSheetItem(label: 'QQ', icon: Image.asset('assets/img/td_action_sheet_3.png'), group: '分享至'),
+  TDActionSheetItem(label: '企业微信', icon: Image.asset('assets/img/td_action_sheet_4.png'), group: '分享至'),
+  TDActionSheetItem(label: '收藏', icon: const IconWithBackground(icon: TDIcons.star), group: '分享至'),
+  TDActionSheetItem(label: '刷新', icon: const IconWithBackground(icon: TDIcons.refresh), group: '分享至'),
+  TDActionSheetItem(label: '下载', icon: const IconWithBackground(icon: TDIcons.download), group: '分享至'),
+  TDActionSheetItem(label: '复制', icon: const IconWithBackground(icon: TDIcons.queue), group: '分享至'),
 ];
 
 class TDActionSheetPage extends StatelessWidget {
@@ -88,6 +83,10 @@ class TDActionSheetPage extends StatelessWidget {
                       CodeWrapper(builder: _buildDescGridActionSheet),
                       SizedBox(height: 16),
                       CodeWrapper(builder: _buildPaginationGridActionSheet),
+                      SizedBox(height: 16),
+                      CodeWrapper(builder: _buildScrollGridActionSheet),
+                      SizedBox(height: 16),
+                      CodeWrapper(builder: _buildMultiScrollGridActionSheet),
                       SizedBox(height: 16),
                       CodeWrapper(builder: _buildBadgeGridActionSheet),
                     ],
@@ -137,7 +136,7 @@ class TDActionSheetPage extends StatelessWidget {
 @Demo(group: 'action_sheet')
 Widget _buildBaseListActionSheet(BuildContext context) {
   return TDButton(
-    text: '常规列表型',
+    text: '常规列表',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -155,7 +154,7 @@ Widget _buildBaseListActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildDescListActionSheet(BuildContext context) {
   return TDButton(
-    text: '带描述列表型',
+    text: '带描述列表',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -174,7 +173,7 @@ Widget _buildDescListActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildIconListActionSheet(BuildContext context) {
   return TDButton(
-    text: '带图标列表型',
+    text: '带图标列表',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -197,7 +196,7 @@ Widget _buildIconListActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildBadgeListActionSheet(BuildContext context) {
   return TDButton(
-    text: '带徽标列表型',
+    text: '带徽标列表',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -206,12 +205,24 @@ Widget _buildBadgeListActionSheet(BuildContext context) {
       TDActionSheet(
         context,
         visible: true,
-        items: _nums
-            .map((e) => TDActionSheetItem(
-                  label: '选项$e',
-                  badge: TDBadge(TDBadgeType.redPoint),
-                ))
-            .toList(),
+        items: [
+          TDActionSheetItem(
+            label: '选项一',
+            badge: const TDBadge(TDBadgeType.redPoint),
+          ),
+          TDActionSheetItem(
+            label: '选项二',
+            badge: const TDBadge(TDBadgeType.message, count: '8'),
+          ),
+          TDActionSheetItem(
+            label: '选项三',
+            badge: const TDBadge(TDBadgeType.message, count: '99'),
+          ),
+          TDActionSheetItem(
+            label: '选项四',
+            badge: const TDBadge(TDBadgeType.message, count: '99+'),
+          ),
+        ],
       );
     },
   );
@@ -220,7 +231,7 @@ Widget _buildBadgeListActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildBaseGridActionSheet(BuildContext context) {
   return TDButton(
-    text: '常规宫格型',
+    text: '常规宫格',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -240,7 +251,7 @@ Widget _buildBaseGridActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildDescGridActionSheet(BuildContext context) {
   return TDButton(
-    text: '带描述宫格型',
+    text: '带描述宫格',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -261,7 +272,7 @@ Widget _buildDescGridActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildPaginationGridActionSheet(BuildContext context) {
   return TDButton(
-    text: '带分页宫格型',
+    text: '带翻页宫格',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -277,22 +288,111 @@ Widget _buildPaginationGridActionSheet(BuildContext context) {
           ..._gridItems,
           TDActionSheetItem(
             label: '安卓',
-            icon: IconWithBackground(icon: TDIcons.logo_android),
+            icon: const IconWithBackground(icon: TDIcons.logo_android),
           ),
           TDActionSheetItem(
             label: 'Apple',
-            icon: IconWithBackground(icon: TDIcons.logo_apple),
+            icon: const IconWithBackground(icon: TDIcons.logo_apple),
           ),
           TDActionSheetItem(
             label: 'Chrome',
-            icon: IconWithBackground(icon: TDIcons.logo_chrome),
+            icon: const IconWithBackground(icon: TDIcons.logo_chrome),
           ),
           TDActionSheetItem(
             label: 'Github',
-            icon: IconWithBackground(icon: TDIcons.logo_github),
+            icon: const IconWithBackground(icon: TDIcons.logo_github),
           ),
         ],
       );
+    },
+  );
+}
+
+@Demo(group: 'action_sheet')
+Widget _buildScrollGridActionSheet(BuildContext context) {
+  return TDButton(
+    text: '多行滚动宫格',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDActionSheet(
+        context,
+        visible: true,
+        theme: TDActionSheetTheme.grid,
+        count: 8,
+        scrollable: true,
+        items: [
+          ..._gridItems,
+          TDActionSheetItem(
+            label: '安卓',
+            icon: const IconWithBackground(icon: TDIcons.logo_android),
+          ),
+          TDActionSheetItem(
+            label: 'Apple',
+            icon: const IconWithBackground(icon: TDIcons.logo_apple),
+          ),
+          TDActionSheetItem(
+            label: 'Chrome',
+            icon: const IconWithBackground(icon: TDIcons.logo_chrome),
+          ),
+          TDActionSheetItem(
+            label: 'Github',
+            icon: const IconWithBackground(icon: TDIcons.logo_github),
+          ),
+          TDActionSheetItem(
+            label: 'Github',
+            icon: const IconWithBackground(icon: TDIcons.logo_github),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+@Demo(group: 'action_sheet')
+Widget _buildMultiScrollGridActionSheet(BuildContext context) {
+  return TDButton(
+    text: '带描述多行滚动宫格',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDActionSheet.showGroupActionSheet(context, items: [
+        TDActionSheetItem(
+          label: 'Allen',
+          icon: Image.asset('assets/img/td_action_sheet_5.png'),
+          group: '分享给好友',
+        ),
+        TDActionSheetItem(
+          label: 'Nick',
+          icon: Image.asset('assets/img/td_action_sheet_6.png'),
+          group: '分享给好友',
+        ),
+        TDActionSheetItem(
+          label: 'Jacky',
+          icon: Image.asset('assets/img/td_action_sheet_7.png'),
+          group: '分享给好友',
+        ),
+        TDActionSheetItem(
+          label: 'Eric',
+          icon: Image.asset('assets/img/td_action_sheet_8.png'),
+          group: '分享给好友',
+        ),
+        TDActionSheetItem(
+          label: 'Johnsc',
+          icon: Image.asset('assets/img/td_action_sheet_5.png'),
+          group: '分享给好友',
+        ),
+        TDActionSheetItem(
+          label: 'Kevin',
+          icon: Image.asset('assets/img/td_action_sheet_6.png'),
+          group: '分享给好友',
+        ),
+        ..._gridItems,
+      ]);
     },
   );
 }
@@ -306,19 +406,16 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
     theme: TDButtonTheme.primary,
     size: TDButtonSize.large,
     onTap: () {
-      TDActionSheet(
-        context,
-        visible: true,
-        theme: TDActionSheetTheme.grid,
-        count: 8,
-        items: _gridItems
-            .map((e) => TDActionSheetItem(
-                  label: e.label,
-                  icon: e.icon,
-                  badge: TDBadge(TDBadgeType.redPoint),
-                ))
-            .toList(),
-      );
+      TDActionSheet.showGridActionSheet(context, items: [
+        TDActionSheetItem(label: '微信', icon: Image.asset('assets/img/td_action_sheet_1.png'), badge: const TDBadge(TDBadgeType.message, count: 'NEW')),
+        TDActionSheetItem(label: '朋友圈', icon: Image.asset('assets/img/td_action_sheet_2.png')),
+        TDActionSheetItem(label: 'QQ', icon: Image.asset('assets/img/td_action_sheet_3.png')),
+        TDActionSheetItem(label: '企业微信', icon: Image.asset('assets/img/td_action_sheet_4.png')),
+        TDActionSheetItem(label: '收藏', icon: const IconWithBackground(icon: TDIcons.star), badge: const TDBadge(TDBadgeType.redPoint)),
+        TDActionSheetItem(label: '刷新', icon: const IconWithBackground(icon: TDIcons.refresh)),
+        TDActionSheetItem(label: '下载', icon: const IconWithBackground(icon: TDIcons.download), badge: const TDBadge(TDBadgeType.message, count: '8')),
+        TDActionSheetItem(label: '复制', icon: const IconWithBackground(icon: TDIcons.queue)),
+      ]);
     },
   );
 }
@@ -351,7 +448,7 @@ Widget _buildBaseListStateActionSheet(BuildContext context) {
           ),
           TDActionSheetItem(
             label: '警告选项',
-            textStyle: TextStyle(
+            textStyle: const TextStyle(
               color: Colors.red,
             ),
           ),
@@ -379,24 +476,24 @@ Widget _buildIconListStateActionSheet(BuildContext context) {
         items: [
           TDActionSheetItem(
             label: '默认选项',
-            icon: Icon(TDIcons.app),
+            icon: const Icon(TDIcons.app),
           ),
           TDActionSheetItem(
             label: '自定义选项',
-            icon: Icon(TDIcons.app),
+            icon: const Icon(TDIcons.app),
             textStyle: TextStyle(
               color: TDTheme.of(context).brandNormalColor,
             ),
           ),
           TDActionSheetItem(
             label: '失效选项',
-            icon: Icon(TDIcons.app),
+            icon: const Icon(TDIcons.app),
             disabled: true,
           ),
           TDActionSheetItem(
             label: '警告选项',
-            icon: Icon(TDIcons.app),
-            textStyle: TextStyle(
+            icon: const Icon(TDIcons.app),
+            textStyle: const TextStyle(
               color: Colors.red,
             ),
           ),
@@ -412,7 +509,7 @@ Widget _buildIconListStateActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildBadgeListCenterActionSheet(BuildContext context) {
   return TDButton(
-    text: '居中带徽标列表型',
+    text: '居中带徽标列表',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -421,12 +518,21 @@ Widget _buildBadgeListCenterActionSheet(BuildContext context) {
       TDActionSheet(
         context,
         visible: true,
-        items: _nums
-            .map((e) => TDActionSheetItem(
-                  label: '选项$e',
-                  badge: TDBadge(TDBadgeType.redPoint),
-                ))
-            .toList(),
+        description: '动作面板描述文字',
+        items: [
+          TDActionSheetItem(
+            label: '选项一',
+            badge: const TDBadge(TDBadgeType.redPoint),
+          ),
+          TDActionSheetItem(
+            label: '选项二',
+            badge: const TDBadge(TDBadgeType.message, count: '8',),
+          ),
+          TDActionSheetItem(
+            label: '选项三',
+            badge: const TDBadge(TDBadgeType.message, count: '99',),
+          ),
+        ],
       );
     },
   );
@@ -435,7 +541,7 @@ Widget _buildBadgeListCenterActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildIconListCenterActionSheet(BuildContext context) {
   return TDButton(
-    text: '居中带图标列表型',
+    text: '居中带图标列表',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -444,6 +550,7 @@ Widget _buildIconListCenterActionSheet(BuildContext context) {
       TDActionSheet(
         context,
         visible: true,
+        description: '动作面板描述文字',
         items: _nums
             .map((e) => TDActionSheetItem(
                   label: '选项$e',
@@ -458,7 +565,7 @@ Widget _buildIconListCenterActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildBadgeListLeftActionSheet(BuildContext context) {
   return TDButton(
-    text: '左对齐带徽标列表型',
+    text: '左对齐带徽标列表',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -467,11 +574,12 @@ Widget _buildBadgeListLeftActionSheet(BuildContext context) {
       TDActionSheet(
         context,
         visible: true,
+        description: '动作面板描述文字',
         align: TDActionSheetAlign.left,
         items: _nums
             .map((e) => TDActionSheetItem(
                   label: '选项$e',
-                  badge: TDBadge(TDBadgeType.redPoint),
+                  badge: const TDBadge(TDBadgeType.redPoint),
                 ))
             .toList(),
       );
@@ -482,7 +590,7 @@ Widget _buildBadgeListLeftActionSheet(BuildContext context) {
 @Demo(group: 'action_sheet')
 Widget _buildIconListLeftActionSheet(BuildContext context) {
   return TDButton(
-    text: '左对齐带图标列表型',
+    text: '左对齐带图标列表',
     isBlock: true,
     type: TDButtonType.outline,
     theme: TDButtonTheme.primary,
@@ -491,6 +599,7 @@ Widget _buildIconListLeftActionSheet(BuildContext context) {
       TDActionSheet(
         context,
         visible: true,
+        description: '动作面板描述文字',
         align: TDActionSheetAlign.left,
         items: _nums
             .map((e) => TDActionSheetItem(

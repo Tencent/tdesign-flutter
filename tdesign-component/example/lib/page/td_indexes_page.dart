@@ -102,6 +102,7 @@ class TDIndexesPage extends StatelessWidget {
           title: tdTitle(context),
           desc: '用于页面中信息快速检索，可以根据目录中的页码快速找到所需的内容。',
           exampleCodeGroup: 'indexes',
+          navBarKey: navBarkey,
           children: [
             ExampleModule(title: '组件类型', children: [
               ExampleItem(

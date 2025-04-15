@@ -45,6 +45,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
             ExampleItem(builder: _buildCapsuleDoubleHandleWithScale),
             ExampleItem(desc: '胶囊型滑块', builder: _buildCapsule),
             ExampleItem(desc: '自定义盒子样式', builder: _buildCustomDecoration),
+            ExampleItem(desc: '自定义滑轨颜色', builder: _buildCustomActiveColor),
+
           ]),
         ]);
   }
@@ -53,6 +55,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildSingleHandle(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         min: 0,
         max: 100,
       ),
@@ -65,6 +68,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildDoubleHandle(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         min: 0,
         max: 100,
       ),
@@ -77,6 +81,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildSingleHandleWithNumber(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showThumbValue: true,
         scaleFormatter: (value) => value.toInt().toString(),
         min: 0,
@@ -93,6 +98,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildDoubleHandleWithNumber(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showThumbValue: true,
         min: 0,
         max: 100,
@@ -109,6 +115,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildSingleHandleWithScale(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -124,6 +131,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildDoubleHandleWithScale(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -139,6 +147,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildDisableSingleHandle(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         min: 0,
         max: 100,
       ),
@@ -152,6 +161,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildDisableDoubleHandleWithNumber(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showThumbValue: true,
         min: 0,
         max: 100,
@@ -167,6 +177,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildDisableDoubleHandleWithScale(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -181,6 +192,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCapsuleSingleHandleWithNumber(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
         showThumbValue: true,
         min: 0,
         max: 100,
@@ -195,6 +207,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCapsuleDoubleHandle(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
         min: 0,
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
@@ -208,6 +221,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCapsuleSingleHandle(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
         min: 0,
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
@@ -223,6 +237,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCapsuleDoubleHandleWithNumber(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
         showThumbValue: true,
         min: 0,
         max: 100,
@@ -239,6 +254,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCapsuleSingleHandleWithScale(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -261,6 +277,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showThumbValue: true,
             min: 0,
             max: 100,
@@ -275,6 +292,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
@@ -288,6 +306,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
@@ -303,6 +322,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             showThumbValue: true,
@@ -319,6 +339,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showScaleValue: true,
             divisions: 5,
             min: 0,
@@ -339,6 +360,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             showScaleValue: true,
             divisions: 5,
             min: 0,
@@ -364,6 +386,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
+            context: context,
             min: 0,
             max: 100,
           ),
@@ -379,11 +402,12 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           ),
-          boxDecoration: BoxDecoration(
+          boxDecoration: const BoxDecoration(
               color: Colors.deepOrangeAccent
           ),
           value: const RangeValues(20, 60),
@@ -398,6 +422,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCapsuleDoubleHandleWithScale(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData.capsule(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -409,6 +434,42 @@ class _TDSliderPageState extends State<TDSliderPage> {
       )),
       value: const RangeValues(20, 60),
       onChanged: (value) {},
+    );
+  }
+
+
+  @Demo(group: 'slider')
+  Widget _buildCustomActiveColor(BuildContext context) {
+    return Column(
+      children: [
+        TDSlider(
+          sliderThemeData: TDSliderThemeData(
+            activeTrackColor: Colors.red,
+            inactiveTrackColor: Colors.green,
+            context: context,
+            min: 0,
+            max: 100,
+          ),
+          value: 40,
+          // divisions: 5,
+          onChanged: (value) {},
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData.capsule(
+            activeTrackColor: Colors.green,
+            inactiveTrackColor: Colors.red,
+            context: context,
+            min: 0,
+            max: 100,
+            scaleFormatter: (value) => value.toInt().toString(),
+          ),
+          value: const RangeValues(20, 60),
+          onChanged: (value) {},
+        ),
+      ],
     );
   }
 }

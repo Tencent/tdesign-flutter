@@ -2,6 +2,7 @@
   Widget _buildSingleHandleWithScale(BuildContext context) {
     return TDSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -9,7 +10,6 @@
         scaleFormatter: (value) => value.toInt().toString(),
       ),
       value: 60,
-      // divisions: 5,
       onChanged: (value) {},
     );
   }

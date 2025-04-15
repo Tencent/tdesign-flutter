@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
+import '../../util/context_extension.dart';
 
 
 enum TDBackTopTheme {
@@ -72,10 +73,10 @@ class _TDBackTopState extends State<TDBackTop> {
       width: 48,
       height: 48,
       padding: EdgeInsets.symmetric(
-          vertical: widget.showText ? 6 : 13, horizontal: 13),
+          vertical: widget.showText ? 6 : 13),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(999),
-          border:Border.all(color: widget.theme== TDBackTopTheme.dark?Color.fromRGBO(94, 94, 94, 1):Color.fromRGBO(220, 220, 220, 1),width: 0.5),
+          border:Border.all(color: widget.theme== TDBackTopTheme.dark? TDTheme.of(context).grayColor14 :TDTheme.of(context).grayColor4,width: 0.5),
           color: widget.theme == TDBackTopTheme.light
               ? Colors.white
               : TDTheme.of(context).grayColor14),
@@ -91,7 +92,9 @@ class _TDBackTopState extends State<TDBackTop> {
           Visibility(
             visible: widget.showText,
             child: TDText(
-              'TOP',
+              context.resource.top,
+              maxLines: 1,
+              overflow: TextOverflow.visible,
               style: TextStyle(
                   fontSize: 10, color: color, fontWeight: FontWeight.w600),
             ),
@@ -142,7 +145,7 @@ class _TDBackTopState extends State<TDBackTop> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TDText(
-                          'BACK',
+                          context.resource.back,
                           style: TextStyle(
                               height: 1.2,
                               fontSize: 10,
@@ -150,7 +153,7 @@ class _TDBackTopState extends State<TDBackTop> {
                               fontWeight: FontWeight.w600),
                         ),
                         TDText(
-                          'TOP',
+                          context.resource.top,
                           style: TextStyle(
                               height: 1.2,
                               fontSize: 10,

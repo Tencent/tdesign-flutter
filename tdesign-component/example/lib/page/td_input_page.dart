@@ -72,8 +72,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
             ExampleItem(desc: '带操作输入框', builder: _basicTypeWithHandleIconOne),
             ExampleItem(builder: _basicTypeWithHandleIconTwo),
             ExampleItem(builder: _basicTypeWithHandleIconThree),
-            ExampleItem(
-                desc: '带图标输入框', builder: _basicTypeWithLeftIconLeftLabel),
+            ExampleItem(desc: '带图标输入框', builder: _basicTypeWithLeftIconLeftLabel),
             ExampleItem(builder: _basicTypeWithLeftIcon),
             ExampleItem(desc: '特定类型输入框', builder: _specialTypePassword),
             ExampleItem(builder: _specialTypeVerifyCode),
@@ -105,8 +104,8 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         ExampleItem(desc: '长文本样式', builder: _customLongTextStyle),
         ExampleItem(desc: '隐藏底部分割线', builder: _hideBottomDivider),
         ExampleItem(desc: '自定义高度-使用SizeBox', builder: _customHeight),
-        ExampleItem(
-            desc: '获取焦点时点击外部区域事件响应-onTapOutside', builder: _onTapOutside)
+        ExampleItem(desc: '获取焦点时点击外部区域事件响应-onTapOutside', builder: _onTapOutside),
+        ExampleItem(desc: '设置contentPadding内容与分割线对齐', builder: _contentPadding)
       ],
     );
   }
@@ -515,8 +514,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                         '${countDownText}(${_countdownTime}秒)',
                         textColor: TDTheme.of(context).fontGyColor4,
                       )
-                    : TDText(confirmText,
-                        textColor: TDTheme.of(context).brandNormalColor),
+                    : TDText(confirmText, textColor: TDTheme.of(context).brandNormalColor),
               ],
             ),
           ),
@@ -842,14 +840,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         ),
         onBtnTap: () {
           TDToast.showText('点击右侧按钮', context: context);
-        },
-        onChanged: (text) {
-          setState(() {});
-        },
-        onClearTap: () {
-          controller.clear();
-          setState(() {});
-        },
+        }
       ),
     );
   }
@@ -862,13 +853,6 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       controller: controller,
       backgroundColor: Colors.white,
       hintText: '请输入文字',
-      onChanged: (text) {
-        setState(() {});
-      },
-      onClearTap: () {
-        controller.clear();
-        setState(() {});
-      },
       showBottomDivider: false,
     );
   }
@@ -888,13 +872,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           controller: controller,
           backgroundColor: Colors.white,
           hintText: '请输入文字',
-          onChanged: (text) {
-            setState(() {});
-          },
-          onClearTap: () {
-            controller.clear();
-            setState(() {});
-          },
+          needClear: true,
         ),
       ),
     );
@@ -915,18 +893,47 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           controller: controller,
           backgroundColor: Colors.white,
           hintText: '请输入文字',
-          onChanged: (text) {
-            setState(() {});
-          },
-          onClearTap: () {
-            controller.clear();
-            setState(() {});
-          },
           onTapOutside: (event) {
             TDToast.showText('点击输入框外部区域', context: context);
             print('on tap outside ${event}');
           },
         ),
+      ),
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _contentPadding(BuildContext context) {
+    var controller = TextEditingController();
+    return Container(
+      color: Colors.yellow,
+      alignment: Alignment.center,
+      child: Column(
+        children: [
+          TDInput(
+            size: TDInputSize.small,
+            controller: controller,
+            backgroundColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            hintText: '请输入文字',
+          ),
+          TDInput(
+            type: TDInputType.twoLine,
+            size: TDInputSize.small,
+            controller: controller,
+            backgroundColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+            hintText: '请输入文字',
+          ),
+          TDInput(
+            type: TDInputType.normalMaxTwoLine,
+            size: TDInputSize.small,
+            controller: controller,
+            backgroundColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
+            hintText: '请输入文字',
+          ),
+        ],
       ),
     );
   }

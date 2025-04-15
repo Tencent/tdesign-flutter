@@ -1,15 +1,14 @@
 
   Widget buildYearMonth(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        TDPicker.showDatePicker(context, title: '选择时间',
-            onConfirm: (selected) {
-              setState(() {
-                selected_2 = '${selected['year'].toString().padLeft(4, '0')}-'
-                    '${selected['month'].toString().padLeft(2, '0')}';
-              });
-              Navigator.of(context).pop();
-            },
+      onTap: () {
+        TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+          setState(() {
+            selected_2 = '${selected['year'].toString().padLeft(4, '0')}-'
+                '${selected['month'].toString().padLeft(2, '0')}';
+          });
+          Navigator.of(context).pop();
+        },
             useDay: false,
             dateStart: [1999, 01, 01],
             dateEnd: [2023, 12, 31],

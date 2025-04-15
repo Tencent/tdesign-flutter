@@ -58,9 +58,8 @@ class _TDCellGroupState extends State<TDCellGroup> {
   @override
   Widget build(BuildContext context) {
     var style = widget.style ?? TDCellStyle.cellStyle(context);
-    var spacer16 = TDTheme.of(context).spacer16;
     var itemCount = widget.cells.length;
-    var radius = _getBorderRadius();
+    var radius = _getBorderRadius(style);
     return TDCellInherited(
       style: style,
       child: Column(
@@ -70,20 +69,14 @@ class _TDCellGroupState extends State<TDCellGroup> {
           if (widget.title != null || widget.titleWidget != null)
             Container(
               width: double.infinity,
-              color: style.backgroundColor,
-              padding: EdgeInsets.only(
-                left: spacer16,
-                right: spacer16,
-                top: TDTheme.of(context).spacer24,
-                bottom: TDTheme.of(context).spacer8,
-              ),
-              child: widget.titleWidget ??
-                  TDText(widget.title!, style: style.groupTitleStyle),
+              color: style.titleBackgroundColor,
+              padding: style.titlePadding,
+              child: widget.titleWidget ?? TDText(widget.title!, style: style.groupTitleStyle),
             ),
           Flexible(
             child: Container(
               padding: widget.theme == TDCellGroupTheme.cardTheme
-                  ? EdgeInsets.only(left: spacer16, right: spacer16)
+                  ? style.cardPadding
                   : EdgeInsets.zero,
               decoration: BoxDecoration(
                   border: _getBordered(style), borderRadius: radius),
@@ -133,9 +126,9 @@ class _TDCellGroupState extends State<TDCellGroup> {
     );
   }
 
-  BorderRadiusGeometry _getBorderRadius() {
+  BorderRadiusGeometry _getBorderRadius(TDCellStyle style) {
     if (widget.theme == TDCellGroupTheme.cardTheme) {
-      return BorderRadius.all(Radius.circular(TDTheme.of(context).radiusLarge));
+      return style.cardBorderRadius ?? BorderRadius.zero;
     }
     return BorderRadius.zero;
   }

@@ -7,7 +7,6 @@ import 'base/example_base.dart';
 import 'base/example_route.dart';
 import 'base/web_md_tool.dart';
 import 'config.dart';
-import 'web/web.dart' if (dart.library.io) 'web/web_replace.dart' as web;
 
 var _kShowTodoComponent = false;
 
@@ -35,6 +34,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool useConch = false;
+  String searchText = '';
+  FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
@@ -94,6 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             onTap: () {
+              focusNode.unfocus();
               Navigator.pushNamed(context, TDExampleRoute.aboutPath);
             },
           )
@@ -104,11 +106,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    if (ScreenUtil.isWebLargeScreen(context)) {
-      return const web.WebMainBody();
-    }
     return SafeArea(
-        child: Center(
+        child: Align(
+          alignment: Alignment.topCenter,
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -124,56 +124,65 @@ class _MyHomePageState extends State<MyHomePage> {
     // 添加切换主题的按钮
     children.add(Padding(
       padding: const EdgeInsets.only(top: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          TDTheme(
-              data: TDThemeData.defaultData(),
-              child: TDButton(
-                text: AppLocalizations.of(context)?.defaultTheme,
-                theme: TDButtonTheme.primary,
-                onTap: () {
-                  widget.onThemeChange?.call(TDTheme.defaultData());
-                },
-              )),
-          TDTheme(
-              data: TDThemeData.fromJson('green', greenThemeConfig) ?? TDThemeData.defaultData(),
-              child: TDButton(
-                  text: AppLocalizations.of(context)?.greenTheme,
-                  theme: TDButtonTheme.primary,
-                  onTap: () async {
-                    var jsonString = await rootBundle.loadString('assets/theme.json');
-                    var newData = TDThemeData.fromJson('green', jsonString);
-                    widget.onThemeChange?.call(newData ?? TDTheme.defaultData());
-                  })),
-          TDTheme(
-              data: TDThemeData.fromJson('red', greenThemeConfig) ?? TDThemeData.defaultData(),
-              child: TDButton(
-                  text: AppLocalizations.of(context)?.redTheme,
-                  theme: TDButtonTheme.danger,
-                  onTap: () async {
-                    var jsonString = await rootBundle.loadString('assets/theme.json');
-                    var newData = TDThemeData.fromJson('red', jsonString);
-                    widget.onThemeChange?.call(newData ?? TDTheme.defaultData());
-                  })),
-        ],
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(padding: const EdgeInsets.only(left: 8, right: 4),child: TDTheme(
+                  data: TDThemeData.defaultData(),
+                  child: TDButton(
+                    text: AppLocalizations.of(context)?.defaultTheme,
+                    theme: TDButtonTheme.primary,
+                    onTap: () {
+                      widget.onThemeChange?.call(TDTheme.defaultData());
+                    },
+                  )),),
+        Padding(padding: const EdgeInsets.only(left: 4, right: 4),child: TDTheme(
+                  data: TDThemeData.fromJson('green', greenThemeConfig) ?? TDThemeData.defaultData(),
+                  child: TDButton(
+                      text: AppLocalizations.of(context)?.greenTheme,
+                      theme: TDButtonTheme.primary,
+                      onTap: () async {
+                        var jsonString = await rootBundle.loadString('assets/theme.json');
+                        var newData = TDThemeData.fromJson('green', jsonString);
+                        widget.onThemeChange?.call(newData ?? TDTheme.defaultData());
+                      }))),
+        Padding(padding: const EdgeInsets.only(left: 4, right: 8),child: TDTheme(
+                  data: TDThemeData.fromJson('red', greenThemeConfig) ?? TDThemeData.defaultData(),
+                  child: TDButton(
+                      text: AppLocalizations.of(context)?.redTheme,
+                      theme: TDButtonTheme.danger,
+                      onTap: () async {
+                        var jsonString = await rootBundle.loadString('assets/theme.json');
+                        var newData = TDThemeData.fromJson('red', jsonString);
+                        widget.onThemeChange?.call(newData ?? TDTheme.defaultData());
+                      }))),
+            ],
+          ),
+        ),
       ),
     ));
 
+    children.add(TDSearchBar(
+      placeHolder: '请输入组件名称',
+      focusNode: focusNode,
+      onTextChanged: (value){
+        setState(() {
+          searchText = value;
+        });
+      },
+    ));
+
     exampleMap.forEach((key, value) {
-      children.add(Container(
-        alignment: Alignment.topLeft,
-        margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
-        padding: const EdgeInsets.only(left: 12),
-        decoration: BoxDecoration(
-            color: TDTheme.of(context).brandHoverColor,
-            borderRadius: BorderRadius.only(topRight: Radius.circular(TDTheme.of(context).radiusLarge))),
-        child: TDText(
-          key,
-          textColor: TDTheme.of(context).whiteColor1,
-        ),
-      ));
+      var subList = <Widget>[];
       value.forEach((model) {
+        if(searchText.isNotEmpty && !model.text.toLowerCase().contains(searchText.toLowerCase())){
+          // 如果有搜索文案,不再搜索中的组件不展示
+          return;
+        }
         model.spline = WebMdTool.getSpline(key);
         if (model.isTodo) {
           if (_kShowTodoComponent) {
@@ -192,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ));
           }
         } else {
-          children.add(Padding(
+          subList.add(Padding(
             padding: const EdgeInsets.only(left: 40, right: 40, top: 8, bottom: 8),
             child: TDButton(
                 size: TDButtonSize.medium,
@@ -200,12 +209,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 shape: TDButtonShape.filled,
                 theme: TDButtonTheme.primary,
                 onTap: () {
+                  focusNode.unfocus();
                   Navigator.pushNamed(context, '${model.name}?showAction=1');
                 },
                 text: model.text),
           ));
         }
       });
+      children.add(Container(
+        alignment: Alignment.topLeft,
+        margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
+        padding: const EdgeInsets.only(left: 12),
+        decoration: BoxDecoration(
+            color: TDTheme.of(context).brandHoverColor,
+            borderRadius: BorderRadius.only(topRight: Radius.circular(TDTheme.of(context).radiusLarge))),
+        child: TDText(
+          '$key(${subList.length})',
+          textColor: TDTheme.of(context).whiteColor1,
+        ),
+      ));
+      children.addAll(subList);
     });
     return children;
   }

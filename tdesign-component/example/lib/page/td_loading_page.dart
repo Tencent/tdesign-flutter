@@ -154,7 +154,9 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   Widget _buildRow(List<Widget> list) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(children: list.fold([], (previousValue, element) => [...previousValue, element, rowSpace])));
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(children: list.fold([], (previousValue, element) => [...previousValue, element, rowSpace])),));
   }
 
   /// 纯图标
@@ -303,18 +305,20 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
             text: '加载中…',
             duration: _currentSliderValue.round(),
           ),
-          Slider(
-            value: _currentSliderValue,
-            max: 2000,
-            min: -20,
-            divisions: 100,
-            label: _currentSliderValue.round().toString(),
+          TDSlider(value: _currentSliderValue,
+            sliderThemeData: TDSliderThemeData(
+              context: context,
+              max: 2000,
+              min: -20,
+              divisions: 100,
+              showThumbValue: true,
+              scaleFormatter: (value) => value.toInt().toString(),
+            ),
             onChanged: (double value) {
               setState(() {
                 _currentSliderValue = value;
               });
-            },
-          ),
+            },)
         ],
       ),
     );

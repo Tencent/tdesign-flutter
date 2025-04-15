@@ -2,6 +2,7 @@
   Widget _buildDoubleHandleWithScale(BuildContext context) {
     return TDRangeSlider(
       sliderThemeData: TDSliderThemeData(
+        context: context,
         showScaleValue: true,
         divisions: 5,
         min: 0,
@@ -9,7 +10,6 @@
         scaleFormatter: (value) => value.toInt().toString(),
       ),
       value: const RangeValues(40, 70),
-      // divisions: 5,
       onChanged: (value) {},
     );
   }

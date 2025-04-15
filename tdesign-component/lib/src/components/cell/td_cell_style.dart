@@ -5,7 +5,9 @@ import '../../../tdesign_flutter.dart';
 /// 单元格组件样式
 class TDCellStyle {
   TDCellStyle({
+    this.context,
     this.leftIconColor,
+    this.rightIconColor,
     this.titleStyle,
     this.requiredStyle,
     this.descriptionStyle,
@@ -14,8 +16,21 @@ class TDCellStyle {
     this.borderedColor,
     this.groupBorderedColor,
     this.backgroundColor,
-    this.padding
-  });
+    this.clickBackgroundColor,
+    this.groupTitleStyle,
+    this.padding,
+    this.cardBorderRadius,
+    this.cardPadding,
+    this.titlePadding,
+    this.titleBackgroundColor,
+  }) {
+    if (context != null) {
+      defaultStyle(context!);
+    }
+  }
+
+  /// 传递context，会生成默认样式
+  BuildContext? context;
 
   /// 左侧图标颜色
   Color? leftIconColor;
@@ -56,8 +71,24 @@ class TDCellStyle {
   /// 单元格内边距
   EdgeInsets? padding;
 
+  /// 卡片模式边框圆角
+  BorderRadius? cardBorderRadius;
+
+  /// 卡片模式内边距
+  EdgeInsets? cardPadding;
+
+  /// 单元格组标题内边距
+  EdgeInsets? titlePadding;
+
+  /// 单元格组标题背景颜色
+  Color? titleBackgroundColor;
+
   /// 生成单元格默认样式
   TDCellStyle.cellStyle(BuildContext context) {
+    defaultStyle(context);
+  }
+
+  defaultStyle(BuildContext context) {
     backgroundColor = Colors.white;
     clickBackgroundColor = TDTheme.of(context).grayColor1;
     leftIconColor = TDTheme.of(context).brandColor7;
@@ -88,5 +119,14 @@ class TDCellStyle {
     );
 
     padding = EdgeInsets.all(TDTheme.of(context).spacer16);
+    cardBorderRadius = BorderRadius.all(Radius.circular(TDTheme.of(context).radiusLarge));
+    cardPadding = EdgeInsets.only(left: TDTheme.of(context).spacer16, right: TDTheme.of(context).spacer16);
+    titlePadding = EdgeInsets.only(
+      left: TDTheme.of(context).spacer16,
+      right: TDTheme.of(context).spacer16,
+      top: TDTheme.of(context).spacer24,
+      bottom: TDTheme.of(context).spacer8,
+    );
+    titleBackgroundColor = Colors.transparent;
   }
 }

@@ -53,7 +53,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       maxLines: 4,
       minLines: 4,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }</pre>
@@ -72,7 +71,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       hintText: '请输入文字',
       minLines: 1,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }</pre>
@@ -95,7 +93,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       maxLength: 500,
       indicator: true,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }</pre>
@@ -118,7 +115,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       minLines: 4,
       readOnly: true,
       onChanged: (value) {
-        setState(() {});
+
       },
     );
   }</pre>
@@ -143,7 +140,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       indicator: true,
       layout: TDTextareaLayout.vertical,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }</pre>
@@ -171,7 +167,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       ),
       margin: EdgeInsets.only(right: TDTheme.of(context).spacer16, left: TDTheme.of(context).spacer16),
       onChanged: (value) {
-        setState(() {});
       },
     );
   }</pre>
@@ -197,7 +192,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       layout: TDTextareaLayout.vertical,
       bordered: true,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }</pre>
@@ -226,7 +220,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       maxLength: 500,
       indicator: true,
       onChanged: (value) {
-        setState(() {});
       },
     );
   }</pre>
@@ -252,7 +245,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       required: true,
       additionInfo: '辅助说明',
       onChanged: (value) {
-        setState(() {});
       },
     );
   }</pre>

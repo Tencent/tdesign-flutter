@@ -114,7 +114,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildHalfRate(BuildContext context) {
-    return const TDCell(title: '点击活滑动', noteWidget: TDRate(value: 3, allowHalf: true));
+    return const TDCell(title: '点击活滑动', noteWidget: TDRate(value: 3, allowHalf: true, onChange: print,));
   }</pre>
 
 </td-code-block>
