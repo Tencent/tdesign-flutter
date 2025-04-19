@@ -20,7 +20,6 @@ class TDFooter extends StatefulWidget {
     this.logo,
     this.text = '',
     this.links = const [],
-    this.isWithUnderline = false,
     this.width,
     this.height,
   }) : super(key: key);
@@ -41,10 +40,7 @@ class TDFooter extends StatefulWidget {
   final double? height;
 
   /// 链接
-  final List<LinkObj> links;
-
-  /// 是否显示下滑线
-  final bool isWithUnderline;
+  final List<TDLink> links;
 
   @override
   State<TDFooter> createState() => _TDFooterState();
@@ -110,7 +106,7 @@ class _TDFooterState extends State<TDFooter> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(widget.links.length, (index) {
-              LinkObj link = widget.links[index];
+              var link = widget.links[index];
               return Container(
                 decoration: index < (widget.links.length - 1)
                     ? BoxDecoration(
@@ -119,13 +115,7 @@ class _TDFooterState extends State<TDFooter> {
                                 color: TDTheme.of(context).grayColor3)))
                     : null,
                 padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: TDLink(
-                    type: widget.isWithUnderline
-                        ? TDLinkType.withUnderline
-                        : TDLinkType.basic,
-                    style: TDLinkStyle.primary,
-                    label: link.name,
-                    uri: link.uri),
+                child: link,
               );
             }).toList(),
           ),
@@ -150,14 +140,4 @@ class _TDFooterState extends State<TDFooter> {
       ),
     );
   }
-}
-
-class LinkObj {
-  LinkObj({
-    required this.name,
-    this.uri,
-  });
-
-  final String name;
-  final Uri? uri;
 }
