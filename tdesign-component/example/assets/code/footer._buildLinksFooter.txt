@@ -20,7 +20,7 @@
     ];
     return Column(
       children: [
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         TDFooter(
           TDFooterType.link,
           links: links,
