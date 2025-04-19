@@ -103,8 +103,8 @@ class _TDFooterState extends State<TDFooter> {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Wrap(
+            alignment: WrapAlignment.center,
             children: List.generate(widget.links.length, (index) {
               var link = widget.links[index];
               return Container(
@@ -124,7 +124,7 @@ class _TDFooterState extends State<TDFooter> {
           padding: const EdgeInsets.only(bottom: 4),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [_renderText()]),
+              children: [Flexible(child: _renderText())]),
         ),
       ],
     );
