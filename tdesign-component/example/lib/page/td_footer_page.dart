@@ -37,19 +37,26 @@ class _TDFooterPageState extends State<TDFooterPage> {
   Widget _buildFooter(BuildContext context) {
     return SizedBox(
       height: 30,
-      child:  TDFooter(
+      child: TDFooter(
         TDFooterType.text,
         text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
       ),
     );
-
   }
 
   @Demo(group: 'footer')
   Widget _buildSingleLinkFooter(BuildContext context) {
     // 示例链接列表
-    final singleLink = <LinkObj>[
-      LinkObj(name: '底部链接', uri: Uri.parse('https://example.com')),
+    final singleLink = <TDLink>[
+      TDLink(
+        label: '底部链接',
+        style: TDLinkStyle.primary,
+        // type: TDLinkType.withSuffixIcon,
+        uri: Uri.parse('https://example.com'),
+        linkClick: (link) {
+          print('点击了链接 $link');
+        },
+      ),
     ];
 
     return TDFooter(
@@ -61,9 +68,23 @@ class _TDFooterPageState extends State<TDFooterPage> {
 
   @Demo(group: 'footer')
   Widget _buildLinksFooter(BuildContext context) {
-    final links = <LinkObj>[
-      LinkObj(name: '底部链接', uri: Uri.parse('https://example.com')),
-      LinkObj(name: '底部链接', uri: Uri.parse('https://example.com')),
+    final links = <TDLink>[
+      TDLink(
+        label: '底部链接1',
+        style: TDLinkStyle.primary,
+        uri: Uri.parse('https://example.com'),
+        linkClick: (link) {
+          print('点击了链接1 $link');
+        },
+      ),
+      TDLink(
+        label: '底部链接2',
+        style: TDLinkStyle.primary,
+        uri: Uri.parse('https://example.com'),
+        linkClick: (link) {
+          print('点击了链接2 $link');
+        },
+      ),
     ];
     return Column(
       children: [
@@ -86,5 +107,4 @@ class _TDFooterPageState extends State<TDFooterPage> {
       height: 48,
     );
   }
-
 }
