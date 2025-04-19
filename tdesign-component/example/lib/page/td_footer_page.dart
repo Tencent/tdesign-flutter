@@ -35,12 +35,9 @@ class _TDFooterPageState extends State<TDFooterPage> {
 
   @Demo(group: 'footer')
   Widget _buildFooter(BuildContext context) {
-    return SizedBox(
-      height: 30,
-      child: TDFooter(
-        TDFooterType.text,
-        text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
-      ),
+    return const TDFooter(
+      TDFooterType.text,
+      text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
   }
 
@@ -88,7 +85,7 @@ class _TDFooterPageState extends State<TDFooterPage> {
     ];
     return Column(
       children: [
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         TDFooter(
           TDFooterType.link,
           links: links,
