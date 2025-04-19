@@ -91,14 +91,12 @@ class _TDFooterState extends State<TDFooter> {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Padding(
         padding: const EdgeInsets.only(top: 4, bottom: 4),
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          TDImage(
-            assetUrl: widget.logo,
-            type: TDImageType.fitWidth,
-            width: widget.width,
-            height: widget.height,
-          ),
-        ]),
+        child: TDImage(
+          assetUrl: widget.logo,
+          type: TDImageType.fitWidth,
+          width: widget.width,
+          height: widget.height,
+        ),
       )
     ]);
   }
