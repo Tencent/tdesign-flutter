@@ -45,6 +45,7 @@ class TDFooter extends StatefulWidget {
 
   /// 是否显示下滑线
   final bool isWithUnderline;
+
   @override
   State<TDFooter> createState() => _TDFooterState();
 }
@@ -113,10 +114,17 @@ class _TDFooterState extends State<TDFooter> {
             children: List.generate(widget.links.length, (index) {
               LinkObj link = widget.links[index];
               return Container(
-                decoration:index<(widget.links.length-1)? BoxDecoration(border: Border(right: BorderSide(color: Color.fromRGBO(231, 231, 231, 1)))):null,
-                padding: const EdgeInsets.symmetric(horizontal:6),
+                decoration: index < (widget.links.length - 1)
+                    ? BoxDecoration(
+                        border: Border(
+                            right: BorderSide(
+                                color: TDTheme.of(context).grayColor3)))
+                    : null,
+                padding: const EdgeInsets.symmetric(horizontal: 6),
                 child: TDLink(
-                    type: widget.isWithUnderline ? TDLinkType.withUnderline : TDLinkType.basic,
+                    type: widget.isWithUnderline
+                        ? TDLinkType.withUnderline
+                        : TDLinkType.basic,
                     style: TDLinkStyle.primary,
                     label: link.name,
                     uri: link.uri),
@@ -126,7 +134,9 @@ class _TDFooterState extends State<TDFooter> {
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 4),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [_renderText()]),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [_renderText()]),
         ),
       ],
     );
