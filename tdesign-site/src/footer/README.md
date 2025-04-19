@@ -27,15 +27,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildFooter(BuildContext context) {
-    return SizedBox(
-      height: 30,
-      child:  TDFooter(
-        TDFooterType.text,
-        text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
-      ),
+    return const TDFooter(
+      TDFooterType.text,
+      text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
-
-  }</pre>
+  }
+  </pre>
 
 </td-code-block>
 
