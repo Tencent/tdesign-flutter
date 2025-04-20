@@ -17,7 +17,7 @@ class _TDFooterPageState extends State<TDFooterPage> {
     return ExamplePage(
       title: tdTitle(),
       backgroundColor: TDTheme.of(context).whiteColor1,
-      desc: '可以折叠/展开的内容区域。',
+      desc: '用于展示App的版权声明、联系信息、重要页面链接和其他相关内容等信息。',
       exampleCodeGroup: 'footer',
       children: [
         ExampleModule(
