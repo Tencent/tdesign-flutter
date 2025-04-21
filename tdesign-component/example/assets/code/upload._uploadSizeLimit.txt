@@ -1,0 +1,13 @@
+
+  Widget _uploadSizeLimit(BuildContext context) {
+    return wrapDemoContainer('限制10KB',
+        child: TDUpload(
+          files: files1,
+          onClick: onClick,
+          onCancel: onCancel,
+          onError: print,
+          onValidate: print,
+          sizeLimit: 10,
+          onChange: ((files, type) => onValueChanged(files1, files, type)),
+        ));
+  }
