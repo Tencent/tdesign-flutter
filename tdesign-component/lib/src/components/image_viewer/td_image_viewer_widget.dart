@@ -20,6 +20,14 @@ class TDImageViewerWidget extends StatefulWidget {
     required this.images,
     this.labels,
     this.showIndex,
+    this.loop,
+    this.autoplay,
+    this.duration,
+    this.bgColor,
+    this.navBarBgColor,
+    this.iconColor,
+    this.labelStyle,
+    this.indexStyle,
     this.defaultIndex,
     this.onIndexChange,
     this.width,
@@ -43,6 +51,30 @@ class TDImageViewerWidget extends StatefulWidget {
 
   /// 是否显示页码
   final bool? showIndex;
+
+  /// 图片是否循环
+  final bool? loop;
+
+  /// 图片轮播是否自动播放
+  final bool? autoplay;
+
+  /// 自动播放间隔
+  final int? duration;
+
+  /// 背景色
+  final Color? bgColor;
+
+  /// 导航栏背景色
+  final Color? navBarBgColor;
+
+  /// 图标颜色
+  final Color? iconColor;
+
+  /// label文字样式
+  final TextStyle? labelStyle;
+
+  /// 页码样式
+  final TextStyle? indexStyle;
 
   /// 默认预览图片所在的下标
   final int? defaultIndex;
@@ -151,17 +183,17 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Visibility(
-            visible: (widget.labels![_index - 1] ?? '') != '',
+            visible: (widget.labels![_index - 1]) != '',
             child: Text(widget.labels![_index - 1],
               textAlign: TextAlign.center,
-              style: TextStyle(color: TDTheme.of(context).whiteColor1),
+              style: widget.labelStyle ?? TextStyle(color: TDTheme.of(context).whiteColor1),
             ),
           ),
           Visibility(
             visible: widget.showIndex ?? false,
             child: Text('$_index / ${widget.images.length}',
               textAlign: TextAlign.center,
-              style: TextStyle(color: TDTheme.of(context).grayColor5, fontSize: 10),
+              style: widget.indexStyle ?? TextStyle(color: TDTheme.of(context).brandClickColor, fontSize: 10),
             ),
           )
         ],
@@ -172,7 +204,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
           ? '$_index / ${widget.images.length}'
           : '',
       textAlign: TextAlign.center,
-      style: TextStyle(color: TDTheme.of(context).whiteColor1),
+      style: widget.indexStyle ?? TextStyle(color: TDTheme.of(context).whiteColor1),
     );
   }
 
@@ -188,7 +220,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
           left: 0,
           right: 0,
           child: Container(
-            color: TDTheme.of(context).fontGyColor1,
+            color: widget.bgColor ?? TDTheme.of(context).fontGyColor1,
           ),
         ),
         Positioned(
@@ -198,6 +230,9 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
           right: 0,
           child: Swiper(
             index: _index - 1,
+            loop: widget.loop ?? true,
+            autoplay: widget.autoplay ?? false,
+            duration: widget.duration ?? kDefaultAutoplayTransactionDuration,
             itemBuilder: (BuildContext context, int index) {
               var image = widget.images[index];
               return GestureDetector(
@@ -218,7 +253,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
         ),
         SafeArea(
           child: Container(
-            color: const Color(0x66000000),
+            color: widget.navBarBgColor ?? const Color(0x66000000),
             height: 44,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
@@ -233,7 +268,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
                   },
                   child: Icon(
                     TDIcons.close,
-                    color: TDTheme.of(context).whiteColor1,
+                    color: widget.iconColor ?? TDTheme.of(context).whiteColor1,
                   ),
                 ),
                 Expanded(
@@ -256,7 +291,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
                     },
                     child: Icon(
                       TDIcons.delete,
-                      color: TDTheme.of(context).whiteColor1,
+                      color: widget.iconColor ?? TDTheme.of(context).whiteColor1,
                     ),
                   )
               ],
