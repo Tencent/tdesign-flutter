@@ -276,9 +276,7 @@ class _TDCalendarState extends State<TDCalendar> {
       final initDateStartEpoch =
           DateTime(initDateStartList![0], initDateStartList![1], initDateStartList![2]).millisecondsSinceEpoch;
       final preDateTime = DateTime.fromMillisecondsSinceEpoch(_getValue(inherited?.selected.value ?? [])[0]);
-      if (datePickerModel != null) {
-        datePickerModel?.removeListener();
-      }
+      widget.timePickerModel![0].removeListener();
       datePickerModel = DatePickerModel(
           useYear: false,
           useMonth: false,
@@ -298,9 +296,9 @@ class _TDCalendarState extends State<TDCalendar> {
                 ]
               : [currDateTime.year, currDateTime.month, currDateTime.day, 0, 0, 0],
           dateEnd: [currDateTime.year, currDateTime.month, currDateTime.day, 23, 59, 59],
-          dateInitial:initDateStartList![3] == preDateTime.hour &&
-                  initDateStartList![4] == preDateTime.minute &&
-                  initDateStartList![5] == preDateTime.second
+          dateInitial: initDateStartList![3] == preDateTime.hour &&
+                      initDateStartList![4] == preDateTime.minute &&
+                      initDateStartList![5] == preDateTime.second
               ? [
                   initDateStartList![0],
                   initDateStartList![1],
