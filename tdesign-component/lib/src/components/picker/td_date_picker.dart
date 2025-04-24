@@ -124,7 +124,6 @@ class _TDDatePickerState extends State<TDDatePicker> {
     super.initState();
     pickerHeight = widget.pickerHeight;
   }
-
   @override
   void dispose() {
     widget.model.removeListener();
@@ -179,7 +178,6 @@ class _TDDatePickerState extends State<TDDatePicker> {
     ///选择列表索引对应的项的值
     return items[itemIndex];
   }
-
   @override
   Widget build(BuildContext context) {
     var maxWidth = MediaQuery.of(context).size.width;
@@ -684,6 +682,7 @@ class DatePickerModel {
 
   void removeListener() {
     /// 移除年月日的监控
+
     yearFixedExtentScrollController.removeListener(_yearListener);
     monthFixedExtentScrollController.removeListener(_monthListener);
     dayFixedExtentScrollController.removeListener(_dayListener);
