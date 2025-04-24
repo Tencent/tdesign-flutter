@@ -32,7 +32,10 @@ class TDImageViewer {
     OnIndexChange? onIndexChange,
     OnClose? onClose,
     OnDelete? onDelete,
+    OnImageTap? onTap,
     OnLongPress? onLongPress,
+    LeftItemBuilder? leftItemBuilder,
+    RightItemBuilder? rightItemBuilder,
   }) {
     modalBarrierColor ??= TDTheme.of(context).fontGyColor1;
     showDialog(
@@ -61,7 +64,10 @@ class TDImageViewer {
           height: height,
           onClose: onClose,
           onDelete: onDelete,
+          onTap: onTap,
           onLongPress: onLongPress,
+          leftItemBuilder: leftItemBuilder,
+          rightItemBuilder: rightItemBuilder,
         );
       },
     );
