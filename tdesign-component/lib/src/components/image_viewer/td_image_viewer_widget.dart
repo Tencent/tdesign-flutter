@@ -10,7 +10,10 @@ import '../navbar/td_nav_bar.dart';
 typedef OnIndexChange = Function(int index);
 typedef OnClose = Function(int index);
 typedef OnDelete = Function(int index);
+typedef OnImageTap = Function(int index);
 typedef OnLongPress = Function(int index);
+typedef LeftItemBuilder = Widget Function(BuildContext context, int index);
+typedef RightItemBuilder = Widget Function(BuildContext context, int index);
 
 class TDImageViewerWidget extends StatefulWidget {
   const TDImageViewerWidget({
@@ -34,7 +37,10 @@ class TDImageViewerWidget extends StatefulWidget {
     this.height,
     this.onClose,
     this.onDelete,
+    this.onTap,
     this.onLongPress,
+    this.leftItemBuilder,
+    this.rightItemBuilder,
   }) : super(key: key);
 
   /// 是否展示关闭按钮
@@ -88,6 +94,9 @@ class TDImageViewerWidget extends StatefulWidget {
   /// 删除点击
   final OnDelete? onDelete;
 
+  /// 点击图片
+  final OnImageTap? onTap;
+
   /// 长按图片
   final OnLongPress? onLongPress;
 
@@ -96,6 +105,12 @@ class TDImageViewerWidget extends StatefulWidget {
 
   /// 图片高度
   final double? height;
+
+  /// 左侧自定义操作
+  final LeftItemBuilder? leftItemBuilder;
+
+  /// 右侧自定义操作
+  final RightItemBuilder? rightItemBuilder;
 
   @override
   State<StatefulWidget> createState() {
@@ -208,6 +223,52 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
     );
   }
 
+  Widget _getLeft() {
+    if(widget.leftItemBuilder != null) {
+      return widget.leftItemBuilder!(context, _index - 1);
+    }
+    return GestureDetector(
+      onTap: () {
+        if (widget.onClose != null) {
+          widget.onClose!.call(_index - 1);
+        } else {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Icon(
+        TDIcons.close,
+        color: widget.iconColor ?? TDTheme.of(context).whiteColor1,
+      ),
+    );
+  }
+
+  Widget _getRight() {
+    if(widget.rightItemBuilder != null) {
+      return widget.rightItemBuilder!(context, _index - 1);
+    }
+    return Visibility(
+      visible: widget.deleteBtn ?? false,
+      child: GestureDetector(
+        onTap: () {
+          if(widget.images.length == 1) {
+            throw FlutterError('images must not be empty');
+          }
+          widget.images.removeAt(_index - 1);
+          widget.onDelete?.call(_index - 1);
+          setState(() {
+            if(_index > 1) {
+              _index--;
+            }
+          });
+        },
+        child: Icon(
+          TDIcons.delete,
+          color: widget.iconColor ?? TDTheme.of(context).whiteColor1,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var media =  MediaQuery.of(context);
@@ -236,6 +297,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
             itemBuilder: (BuildContext context, int index) {
               var image = widget.images[index];
               return GestureDetector(
+                onTap: () => widget.onTap?.call(index),
                 onLongPress: () => widget.onLongPress?.call(index),
                 child: _getImage(image),
               );
@@ -258,42 +320,12 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    if (widget.onClose != null) {
-                      widget.onClose!.call(_index - 1);
-                    } else {
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: Icon(
-                    TDIcons.close,
-                    color: widget.iconColor ?? TDTheme.of(context).whiteColor1,
-                  ),
-                ),
+                _getLeft(),
                 Expanded(
                   flex: 1,
                   child: _getPageTitle(),
                 ),
-                if (widget.deleteBtn ?? false)
-                  GestureDetector(
-                    onTap: () {
-                      if(widget.images.length == 1) {
-                        throw FlutterError('images must not be empty');
-                      }
-                      widget.images.removeAt(_index - 1);
-                      widget.onDelete?.call(_index - 1);
-                      setState(() {
-                        if(_index > 1) {
-                          _index--;
-                        }
-                      });
-                    },
-                    child: Icon(
-                      TDIcons.delete,
-                      color: widget.iconColor ?? TDTheme.of(context).whiteColor1,
-                    ),
-                  )
+                _getRight(),
               ],
             ),
           ),
