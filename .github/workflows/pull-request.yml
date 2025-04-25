@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [develop, main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable' 
+          flutter-version: '3.7.0'
+
+      - name: flutter pub get
+        working-directory: ./tdesign-component/example
+        run: flutter pub get
+
+      - name: flutter build 
+        working-directory: ./tdesign-component/example
+        run: flutter build apk
