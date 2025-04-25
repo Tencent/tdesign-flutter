@@ -259,7 +259,7 @@ Widget _buildSimple(BuildContext context) {
                         dateStartTime.minute,
                         dateStartTime.second
                       ],
-                      dateEnd: [2099, 12, 30, 24, 59, 59],
+                      dateEnd: [2099, 12, 30, 23, 59, 59],
                       dateInitial:[dateEndTime.year, dateEndTime.month, dateEndTime.day, dateEndTime.hour, dateEndTime.minute, dateEndTime.second],
                     )
                   ],
