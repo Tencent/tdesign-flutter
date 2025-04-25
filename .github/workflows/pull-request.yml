@@ -17,7 +17,7 @@ jobs:
           flutter-version: '3.7.0'
 
       - name: flutter pub get
-        working-directory: ./tdesign-component/example
+        working-directory: ./tdesign-component
         run: flutter pub get
 
       - name: flutter build 
