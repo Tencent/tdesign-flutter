@@ -280,40 +280,40 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
                   return;
                 }
 
-                final sliderRangeBox = _sliderRangeKey.currentContext
-                    ?.findRenderObject() as RenderBox?;
-                if (sliderRangeBox == null) {
-                  return;
-                }
-
-                // 坐标系转换
                 final tapOffset = sliderBox.globalToLocal(event.position);
                 final sliderWidth = sliderBox.size.width;
 
-                // 动态获取 Thumb 尺寸
-                final sliderTheme = Theme.of(context).sliderTheme;
+                final sliderTheme = SliderTheme.of(context);
                 final thumbShape = sliderTheme.rangeThumbShape;
                 final thumbSize = thumbShape?.getPreferredSize(
                       enabled,
-                      tdSliderThemeData.divisions != null,
+                      widget.sliderThemeData?.divisions != null,
                     ) ??
-                    const Size(24, 24);
+                    const Size(20, 20);
 
-                // 计算两个 Thumb 的位置
+                final thumbRadius = thumbSize.width / 2;
+
+                // 计算当前值对应的坐标比例
+                final min = widget.sliderThemeData?.min ?? 0;
+                final max = widget.sliderThemeData?.max ?? 100;
                 final startRatio = (rangeValues.start - min) / (max - min);
                 final endRatio = (rangeValues.end - min) / (max - min);
-                final startCenter =
-                    Offset(startRatio * sliderWidth, sliderBox.size.height / 2);
-                final endCenter =
-                    Offset(endRatio * sliderWidth, sliderBox.size.height / 2);
+
+                // 计算Thumb中心坐标
+                final startCenterX = startRatio * sliderWidth;
+                final endCenterX = endRatio * sliderWidth;
+                final verticalCenter = sliderBox.size.height / 2;
 
                 // 检测点击区域
-                final radius = thumbSize.width / 2;
-                final isStartTap = (tapOffset - startCenter).distance <= radius;
-                final isEndTap = (tapOffset - endCenter).distance <= radius;
+                final isStartTap =
+                    (tapOffset.dx - startCenterX).abs() <= thumbRadius &&
+                        (tapOffset.dy - verticalCenter).abs() <= thumbRadius;
+                final isEndTap =
+                    (tapOffset.dx - endCenterX).abs() <= thumbRadius &&
+                        (tapOffset.dy - verticalCenter).abs() <= thumbRadius;
 
-                var position = Position.start;
-                double tappedValue = 0;
+                Position position;
+                double tappedValue;
 
                 if (isStartTap) {
                   position = Position.start;
@@ -324,8 +324,12 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
                 } else {
                   tappedValue =
                       (tapOffset.dx / sliderWidth) * (max - min) + min;
+                  final startDistance = (tappedValue - rangeValues.start).abs();
+                  final endDistance = (tappedValue - rangeValues.end).abs();
+                  position = startDistance < endDistance
+                      ? Position.start
+                      : Position.end;
                 }
-
                 widget.onTap?.call(position, tapOffset, tappedValue);
               },
               child: SliderTheme(
