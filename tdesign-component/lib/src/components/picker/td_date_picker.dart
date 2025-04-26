@@ -124,7 +124,6 @@ class _TDDatePickerState extends State<TDDatePicker> {
     super.initState();
     pickerHeight = widget.pickerHeight;
   }
-
   @override
   void dispose() {
     widget.model.removeListener();
@@ -179,7 +178,6 @@ class _TDDatePickerState extends State<TDDatePicker> {
     ///选择列表索引对应的项的值
     return items[itemIndex];
   }
-
   @override
   Widget build(BuildContext context) {
     var maxWidth = MediaQuery.of(context).size.width;
@@ -318,10 +316,11 @@ class _TDDatePickerState extends State<TDDatePicker> {
                         }
                         break;
                     }
-                    if (useAll()) {
+                    if (useAll()||(!widget.model.useYear &&
+                        !widget.model.useMonth &&
+                        !widget.model.useDay)) {
                       widget.model.refreshTimeDataInitialAndController(whichLine);
                     }
-
                     /// 使用动态高度，强制列表组件的state刷新，以展现更新的数据，详见下方链接
                     /// FIX:https://github.com/flutter/flutter/issues/22999
                     pickerHeight = pickerHeight - Random().nextDouble() / 100000000;
@@ -592,9 +591,9 @@ class DatePickerModel {
     var second = List.generate(60, (index) => index);
     if (dateStart.length > 3) {
       if(!useYear&&!useMonth&&!useDay&&dateEnd[0] == dateStart[0] && dateEnd[1] == dateStart[1]&& dateEnd[2] == dateStart[2]){
-          hour = List.generate(dateEnd[3]+1, (index) => index + dateStart[3]);
-          minute = List.generate(dateEnd[4]+1, (index) => index + dateStart[4]);
-          second = List.generate(dateEnd[5]+1, (index) => index + dateStart[5]);
+          hour = List.generate((dateEnd[3]+1)-dateStart[3], (index) => index + dateStart[3]);
+          minute = List.generate((dateEnd[4]+1)-dateStart[4], (index) => index + dateStart[4]);
+          second = List.generate((dateEnd[5]+1)-dateStart[5], (index) => index + dateStart[5]);
           data[4] = useHour && filterItems != null ? filterItems!(DateTypeKey.hour, hour) : hour;
           data[5] = useMinute && filterItems != null ? filterItems!(DateTypeKey.minute, minute) : minute;
           data[6] = useSecond && filterItems != null ? filterItems!(DateTypeKey.second, second) : second;
@@ -683,6 +682,7 @@ class DatePickerModel {
 
   void removeListener() {
     /// 移除年月日的监控
+
     yearFixedExtentScrollController.removeListener(_yearListener);
     monthFixedExtentScrollController.removeListener(_monthListener);
     dayFixedExtentScrollController.removeListener(_dayListener);
