@@ -1,14 +1,55 @@
 
   Widget _buildOnTapDoubleHandle(BuildContext context) {
-    return TDSlider(
-      sliderThemeData: TDSliderThemeData(
-        context: context,
-        min: 0,
-        max: 100,
+    // 使用 ValueNotifier 保存显示数据，初始值与原来一致
+    final DisplayRangeDataNotifier = ValueNotifier<DisplayRangeData>(
+      DisplayRangeData(
+        currentPosition: Position.start,
+        currentTapValue: 40.0,
+        tapOffset: null,
       ),
-      leftLabel: '0',
-      rightLabel: '100',
-      value: 40,
-      onTap: (offset, value) => print('onTap  offset: $offset, value: $value'),
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ValueListenableBuilder<DisplayRangeData>(
+          valueListenable: DisplayRangeDataNotifier,
+          builder: (context, data, child) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Position: ${data.currentPosition}'),
+                const SizedBox(width: 10),
+                Text('Value: ${data.currentTapValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
+                if (data.tapOffset != null)
+                  Text(
+                      'Tap at (${data.tapOffset!.dx.toStringAsFixed(0)}, ${data.tapOffset!.dy.toStringAsFixed(0)})'),
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: 10),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData(
+            context: context,
+            min: 0,
+            max: 100,
+          ),
+          leftLabel: '0',
+          rightLabel: '100',
+          value: const RangeValues(10, 60), // 参数保持不变
+          onChanged: (value) {},
+          onTap: (position, offset, value) {
+            // 更新仅限于文字显示
+            DisplayRangeDataNotifier.value = DisplayRangeData(
+              currentPosition: position,
+              currentTapValue: value,
+              tapOffset: offset,
+            );
+            print('onTap offset: $offset, value: $value');
+          },
+        ),
+      ],
     );
   }
