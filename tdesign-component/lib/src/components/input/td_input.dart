@@ -52,7 +52,6 @@ class TDInput extends StatelessWidget {
       this.contentPadding,
       this.type = TDInputType.normal,
       this.size = TDInputSize.large,
-      double? leftInfoWidth,
       this.maxLength = 500,
       this.additionInfo = '',
       this.additionInfoColor,
@@ -69,38 +68,10 @@ class TDInput extends StatelessWidget {
       this.inputAction,
       TDInputSpacer? spacer,
       this.cardStyleBottomText,
-      this.onTapOutside})
-      :
-        // assert(() {
-        //   if (type == TDInputType.cardStyle) {
-        //     // card style must be shorter than the screen width, so please set a
-        //     // width to show.
-        //     assert(width != null);
-        //   }
-        //   return true;
-        // }()),
-        // 生成默认间距
-        // leftIcon与label 4
-        // label与inputView 17.5
-        // inputView与rightBtn 17.5
-        // 最右侧间距16
-        spacer = spacer ?? TDInputSpacer.generateDefault(),
-        // 输入框左侧内容宽度（不包括最左侧的16dp padding）
-        // leftLabel：左侧'标签文字'，一个字宽度16，最多一行展示5个字(5个字时，多一点荣誉)
-        // leftIcon: 左侧icon，限制大小为24，再加上4dp的间距，即28
-        // required: 是否必填的'*'标记，占位14（包括间距）
-        leftInfoWidth = leftInfoWidth ??
-            ((leftLabel == null && leftIcon == null && !(required ?? false))
-                ? 0
-                : ((leftLabel?.length == null ? 0 : leftLabel!.length) *
-                            (leftLabelStyle != null
-                                ? (leftLabelStyle.fontSize ?? 16)
-                                : 16) +
-                        1 +
-                        (leftIcon != null ? 1 : 0) *
-                            ((leftIcon is Icon) ? (leftIcon.size ?? 24) : 24)) +
-                    (required == true ? 1 : 0) * 14),
-        super(key: key);
+      this.onTapOutside,
+      this.leftInfoWidth,
+      })
+      :spacer = spacer ?? TDInputSpacer.generateDefault();
 
   /// 输入框宽度(TDCardStyle时必须设置该参数)
   final double? width;
@@ -262,8 +233,42 @@ class TDInput extends StatelessWidget {
     }
   }
 
+  /// 计算输入框左侧信息总宽度
+  /// 图标间距：若存在左侧图标 取间距配置值（默认4）
+  /// 图标宽度：24px图标尺寸 + 图标间距
+  /// 标签宽度：通过文本测量函数获取精确文本渲染宽度
+  /// 必填标识：当 required=true 时增加14px宽度（含4px间距）
+  /// 安全边距：最终增加4px防止截断
+  double _calculateLeftInfoWidth(BuildContext context) {
+    final iconSpace = leftIcon != null ? (spacer.iconLabelSpace ?? 4) : 0;
+    final iconWidth = leftIcon != null ? 24 + iconSpace : 0;
+    final labelWidth = _measureTextWidth(leftLabel, leftLabelStyle, context);
+    final requiredWidth = (required ?? false) ? 14 : 0;
+    return iconWidth + labelWidth + requiredWidth + 4;
+  }
+
+  /// 计算文本渲染宽度
+  /// text: 待测量文本（null/空字符串返回0）
+  /// style: 文本样式（继承主题字体尺寸）
+  /// 排版控制：letterSpacing=0消除字间距，height=1.0避免行高影响
+  /// 默认最大行数排版为1行
+  double _measureTextWidth(String? text, TextStyle? style, BuildContext context) {
+    if (text == null || text.isEmpty) return 0;
+    final effectiveStyle = (style ?? TextStyle()).copyWith(
+      fontSize: TDTheme.of(context).fontBodyLarge?.size,
+      letterSpacing: 0,
+      height: 1.0,
+    );
+    final textPainter = TextPainter(
+      text: TextSpan(text: text, style: effectiveStyle),
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+    )..layout();
+    return textPainter.width + 2;
+  }
+
   Widget buildInputView(BuildContext context) {
-    _leftLabelWidth = leftInfoWidth! + (spacer.iconLabelSpace ?? 4);
+    _leftLabelWidth = _calculateLeftInfoWidth(context);
     switch (type) {
       case TDInputType.normal:
         return buildNormalInput(context);
@@ -326,26 +331,6 @@ class TDInput extends StatelessWidget {
               SizedBox(
                 width: _leftLabelWidth,
                 child: GestureDetector(
-                  // 如果文本长度超过20字符，点击则弹出对话框显示文本全称
-                  onTap: () {
-                    if (leftLabel != null && leftLabel!.length > 20) {
-                      showGeneralDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        barrierLabel: '',
-                        barrierColor: Colors.transparent,
-                        // 设置为透明
-                        transitionDuration: const Duration(milliseconds: 200),
-                        pageBuilder: (context, animation1, animation2) {
-                          return Center(
-                            child: TDDialogInfoWidget(
-                              content: leftLabel!,
-                            ),
-                          );
-                        },
-                      );
-                    }
-                  },
                   child: Row(
                     children: [
                       Visibility(
@@ -369,7 +354,7 @@ class TDInput extends StatelessWidget {
                           child: TDText(
                             leftLabel,
                             maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                            overflow: TextOverflow.visible,
                             style: leftLabelStyle ??
                                 const TextStyle(letterSpacing: 0),
                             font: TDTheme.of(context).fontBodyLarge,
