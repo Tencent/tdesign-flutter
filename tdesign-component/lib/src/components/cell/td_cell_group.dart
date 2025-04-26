@@ -68,7 +68,7 @@ class _TDCellGroupState extends State<TDCellGroup> {
           if (widget.title != null || widget.titleWidget != null)
             Container(
               width: double.infinity,
-              color: style.backgroundColor,
+              color: style.titleBackgroundColor,
               padding: style.titlePadding,
               child: widget.titleWidget ?? TDText(widget.title!, style: style.groupTitleStyle),
             ),
