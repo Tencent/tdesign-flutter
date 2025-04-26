@@ -14,7 +14,19 @@ class TDSliderPage extends StatefulWidget {
   State<StatefulWidget> createState() => _TDSliderPageState();
 }
 
+class DisplayRangeData {
+  final Position currentPosition;
+  final double currentTapValue;
+  final Offset? tapOffset;
+  DisplayRangeData({
+    required this.currentPosition,
+    required this.currentTapValue,
+    this.tapOffset,
+  });
+}
+
 class _TDSliderPageState extends State<TDSliderPage> {
+  
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -66,9 +78,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           max: 100,
         ),
         value: 10,
-        onChanged: (value) {},
-        onTap: (offset, value) =>
-            print('onTap  offset: $offset, value: $value'));
+        onChanged: (value) {});
   }
 
   @Demo(group: 'slider')
@@ -81,8 +91,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
       ),
       value: const RangeValues(10, 60),
       onChanged: (value) {},
-      onTap: (position, offset, value) =>
-          print('onTap  position: $position, offset: $offset, value: $value'),
     );
   }
 
@@ -197,56 +205,102 @@ class _TDSliderPageState extends State<TDSliderPage> {
     );
   }
 
-@Demo(group: 'slider')
-Widget _buildOnTapSingleHandle(BuildContext context) {
-  double currentValue = 40;
-  Offset? tapOffset;
+  @Demo(group: 'slider')
+  Widget _buildOnTapSingleHandle(BuildContext context) {
+    var currentValue = 40.0;
+    Offset? tapOffset;
 
-  return StatefulBuilder(
-    builder: (context, setState) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TDSlider(
-            sliderThemeData: TDSliderThemeData(
-              context: context,
-              min: 0,
-              max: 100,
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Value: ${currentValue.toStringAsFixed(1)}'),
+                if (tapOffset != null)
+                  Text(
+                      'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})'),
+              ],
             ),
-            leftLabel: '0',
-            rightLabel: '100',
-            value: currentValue,
-            onChanged: (value) {},
-            onTap: (offset, value) {
-              setState(() {
-                currentValue = value;
-                tapOffset = offset;
-              });
-              print('onTap  offset: $offset, value: $value');
-            },
-          ),
-          Text('Value: ${currentValue.toStringAsFixed(1)}'),
-          if (tapOffset != null)
-            Text('Tap at (${tapOffset!.dx.toStringAsFixed(0)},'
-                 '${tapOffset!.dy.toStringAsFixed(0)})')
-        ],
-      );
-    },
-  );
-}
+            TDSlider(
+              sliderThemeData: TDSliderThemeData(
+                context: context,
+                min: 0,
+                max: 100,
+              ),
+              leftLabel: '0',
+              rightLabel: '100',
+              value: currentValue,
+              onChanged: (value) {},
+              onTap: (offset, value) {
+                setState(() {
+                  currentValue = value;
+                  tapOffset = offset;
+                });
+                print('onTap  offset: $offset, value: $value');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @Demo(group: 'slider')
   Widget _buildOnTapDoubleHandle(BuildContext context) {
-    return TDSlider(
-      sliderThemeData: TDSliderThemeData(
-        context: context,
-        min: 0,
-        max: 100,
+    // 使用 ValueNotifier 保存显示数据，初始值与原来一致
+    final DisplayRangeDataNotifier = ValueNotifier<DisplayRangeData>(
+      DisplayRangeData(
+        currentPosition: Position.start,
+        currentTapValue: 40.0,
+        tapOffset: null,
       ),
-      leftLabel: '0',
-      rightLabel: '100',
-      value: 40,
-      onTap: (offset, value) => print('onTap  offset: $offset, value: $value'),
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ValueListenableBuilder<DisplayRangeData>(
+          valueListenable: DisplayRangeDataNotifier,
+          builder: (context, data, child) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Position: ${data.currentPosition}'),
+                const SizedBox(width: 10),
+                Text('Value: ${data.currentTapValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
+                if (data.tapOffset != null)
+                  Text(
+                      'Tap at (${data.tapOffset!.dx.toStringAsFixed(0)}, ${data.tapOffset!.dy.toStringAsFixed(0)})'),
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: 10),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData(
+            context: context,
+            min: 0,
+            max: 100,
+          ),
+          leftLabel: '0',
+          rightLabel: '100',
+          value: const RangeValues(10, 60), // 参数保持不变
+          onChanged: (value) {},
+          onTap: (position, offset, value) {
+            // 更新仅限于文字显示
+            DisplayRangeDataNotifier.value = DisplayRangeData(
+              currentPosition: position,
+              currentTapValue: value,
+              tapOffset: offset,
+            );
+            print('onTap offset: $offset, value: $value');
+          },
+        ),
+      ],
     );
   }
 
