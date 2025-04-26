@@ -1,11 +1,7 @@
 
   Widget _buildFooter(BuildContext context) {
-    return SizedBox(
-      height: 30,
-      child:  TDFooter(
-        TDFooterType.text,
-        text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
-      ),
+    return const TDFooter(
+      TDFooterType.text,
+      text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
-
   }

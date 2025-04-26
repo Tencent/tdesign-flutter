@@ -13,21 +13,24 @@ class MessageLink {
 
   /// 名称
   final String name;
+
   /// 资源链接
   final Uri? uri;
+
   /// 颜色
   final Color? color;
 }
 
 // 跑马灯配置
 class MessageMarquee {
-
   MessageMarquee({this.speed, this.loop, this.delay});
 
   /// 速度
   final int? speed;
+
   /// 循环次数
   final int? loop;
+
   /// 延迟时间(毫秒)
   final int? delay;
 }
@@ -224,7 +227,8 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
     if (widget.visible == false) {
       return const SizedBox.shrink();
     }
-    var _leftOffset = widget.offset?[0] ?? (MediaQuery.of(context).size.width - totalWidth) / 2;
+    var _leftOffset = widget.offset?[0] ??
+        (MediaQuery.of(context).size.width - totalWidth) / 2;
 
     Widget getText(BuildContext context) {
       if (widget.marquee == null) {
@@ -239,7 +243,9 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
         );
       } else {
         final textPainter = TextPainter(
-          text: TextSpan(text: widget.content ?? '', style: const TextStyle(color: Colors.black)),
+          text: TextSpan(
+              text: widget.content ?? '',
+              style: const TextStyle(color: Colors.black)),
           maxLines: 1,
           textDirection: TextDirection.ltr,
         )..layout(minWidth: 0, maxWidth: double.infinity);
@@ -247,7 +253,8 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
 
         final containerWidth = calculateTextWidth();
 
-        final animationDuration = Duration(milliseconds: (widget.marquee!.speed ?? 10000));
+        final animationDuration =
+            Duration(milliseconds: (widget.marquee!.speed ?? 10000));
         animationController!.duration = animationDuration;
 
         final tween = Tween<Offset>(
@@ -256,7 +263,8 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
         );
 
         if (widget.marquee!.delay != null && widget.marquee!.delay! > 0) {
-          Future.delayed(Duration(milliseconds: widget.marquee!.delay!), startAnimation);
+          Future.delayed(
+              Duration(milliseconds: widget.marquee!.delay!), startAnimation);
         } else {
           startAnimation();
         }
@@ -267,9 +275,11 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
               child: SizedBox(
                 width: containerWidth,
                 child: AnimatedBuilder(
-                  animation: animationController ?? const AlwaysStoppedAnimation(0),
+                  animation:
+                      animationController ?? const AlwaysStoppedAnimation(0),
                   builder: (context, child) {
-                    final offset = tween.evaluate(animationController ?? const AlwaysStoppedAnimation(0));
+                    final offset = tween.evaluate(
+                        animationController ?? const AlwaysStoppedAnimation(0));
                     return OverflowBox(
                       minWidth: 0,
                       maxWidth: double.infinity,
@@ -298,13 +308,17 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       } else {
         switch (widget.theme) {
           case MessageTheme.info:
-            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).brandColor7);
+            return Icon(TDIcons.error_circle_filled,
+                color: TDTheme.of(context).brandColor7);
           case MessageTheme.success:
-            return Icon(TDIcons.check_circle_filled, color: TDTheme.of(context).successColor5);
+            return Icon(TDIcons.check_circle_filled,
+                color: TDTheme.of(context).successColor5);
           case MessageTheme.warning:
-            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).warningColor5);
+            return Icon(TDIcons.error_circle_filled,
+                color: TDTheme.of(context).warningColor5);
           case MessageTheme.error:
-            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).errorColor6);
+            return Icon(TDIcons.error_circle_filled,
+                color: TDTheme.of(context).errorColor6);
           case null:
             return const SizedBox.shrink();
         }
@@ -325,7 +339,10 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       } else if (widget.closeBtn == true) {
         return GestureDetector(
           onTap: clickCloseButton,
-          child: Icon(TDIcons.close,color:Color.fromRGBO(0, 0, 0, 0.4),),
+          child: const Icon(
+            TDIcons.close,
+            color: Color.fromRGBO(0, 0, 0, 0.4),
+          ),
         );
       } else if (widget.closeBtn is String) {
         return GestureDetector(
@@ -342,7 +359,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
     }
 
     Widget getLink(BuildContext context) {
-      if (widget.link is LinkObj) {
+      if (widget.link is MessageLink) {
         return Align(
             alignment: Alignment.center,
             child: TDLink(
@@ -350,8 +367,9 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
               style: TDLinkStyle.primary,
               type: TDLinkType.basic,
               uri: widget.link.uri ?? Uri.parse('https://example.com'),
-              size: TDLinkSize.small,
-              color:TDTheme.of(context).brandColor7,
+              size: TDLinkSize.medium,
+              color: widget.link.color ?? TDTheme.of(context).brandColor7,
+              linkClick: (link) => clickLink(),
             ));
       } else if (widget.link is String) {
         return Align(
@@ -417,9 +435,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                                 margin: const EdgeInsets.only(left: 8),
                                 width: 40,
                                 height: 22,
-                                child:getLink(context)
-                                    //
-                            ),
+                                child: getLink(context)),
                           if (widget.closeBtn != null)
                             Padding(
                               padding: const EdgeInsets.only(left: 12),
