@@ -104,6 +104,7 @@ class TDUploadState extends State<TDUploadPage> {
       ],
       test: [
         ExampleItem(ignoreCode: true, desc: '单选快速替换, 大小和图形测试', builder: _uploadSingleWithReplace),
+        ExampleItem(ignoreCode: true, desc: '上传文件大小限制，10KB', builder: _uploadSizeLimit),
       ],
     );
   }
@@ -215,6 +216,20 @@ class TDUploadState extends State<TDUploadPage> {
           onError: print,
           onValidate: print,
           onChange: ((files, type) => onValueChanged(files5, files, type)),
+        ));
+  }
+
+  @Demo(group: 'upload')
+  Widget _uploadSizeLimit(BuildContext context) {
+    return wrapDemoContainer('限制10KB',
+        child: TDUpload(
+          files: files1,
+          onClick: onClick,
+          onCancel: onCancel,
+          onError: print,
+          onValidate: print,
+          sizeLimit: 10,
+          onChange: ((files, type) => onValueChanged(files1, files, type)),
         ));
   }
 }

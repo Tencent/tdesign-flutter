@@ -115,10 +115,10 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
     return Column(
       children: [
         TDInput(
-          leftLabel: '标签文字',
+          leftLabel: 'Label Text',
           controller: controller[0],
           backgroundColor: Colors.white,
-          hintText: '请输入文字',
+          hintText: 'Please enter text',
           onChanged: (text) {
             setState(() {});
           },

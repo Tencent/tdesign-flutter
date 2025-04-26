@@ -17,7 +17,7 @@ class _TDFooterPageState extends State<TDFooterPage> {
     return ExamplePage(
       title: tdTitle(),
       backgroundColor: TDTheme.of(context).whiteColor1,
-      desc: '可以折叠/展开的内容区域。',
+      desc: '用于展示App的版权声明、联系信息、重要页面链接和其他相关内容等信息。',
       exampleCodeGroup: 'footer',
       children: [
         ExampleModule(
@@ -35,21 +35,25 @@ class _TDFooterPageState extends State<TDFooterPage> {
 
   @Demo(group: 'footer')
   Widget _buildFooter(BuildContext context) {
-    return SizedBox(
-      height: 30,
-      child:  TDFooter(
-        TDFooterType.text,
-        text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
-      ),
+    return const TDFooter(
+      TDFooterType.text,
+      text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
-
   }
 
   @Demo(group: 'footer')
   Widget _buildSingleLinkFooter(BuildContext context) {
     // 示例链接列表
-    final singleLink = <LinkObj>[
-      LinkObj(name: '底部链接', uri: Uri.parse('https://example.com')),
+    final singleLink = <TDLink>[
+      TDLink(
+        label: '底部链接',
+        style: TDLinkStyle.primary,
+        // type: TDLinkType.withSuffixIcon,
+        uri: Uri.parse('https://example.com'),
+        linkClick: (link) {
+          print('点击了链接 $link');
+        },
+      ),
     ];
 
     return TDFooter(
@@ -61,13 +65,27 @@ class _TDFooterPageState extends State<TDFooterPage> {
 
   @Demo(group: 'footer')
   Widget _buildLinksFooter(BuildContext context) {
-    final links = <LinkObj>[
-      LinkObj(name: '底部链接', uri: Uri.parse('https://example.com')),
-      LinkObj(name: '底部链接', uri: Uri.parse('https://example.com')),
+    final links = <TDLink>[
+      TDLink(
+        label: '底部链接1',
+        style: TDLinkStyle.primary,
+        uri: Uri.parse('https://example.com'),
+        linkClick: (link) {
+          print('点击了链接1 $link');
+        },
+      ),
+      TDLink(
+        label: '底部链接2',
+        style: TDLinkStyle.primary,
+        uri: Uri.parse('https://example.com'),
+        linkClick: (link) {
+          print('点击了链接2 $link');
+        },
+      ),
     ];
     return Column(
       children: [
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         TDFooter(
           TDFooterType.link,
           links: links,
@@ -86,5 +104,4 @@ class _TDFooterPageState extends State<TDFooterPage> {
       height: 48,
     );
   }
-
 }
