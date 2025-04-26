@@ -7,7 +7,5 @@
           max: 100,
         ),
         value: 10,
-        onChanged: (value) {},
-        onTap: (offset, value) =>
-            print('onTap  offset: $offset, value: $value'));
+        onChanged: (value) {});
   }
