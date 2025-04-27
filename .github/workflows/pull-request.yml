@@ -13,17 +13,31 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          channel: 'stable' 
-          flutter-version: '3.16.9'
+          channel: "stable"
+          flutter-version: "3.16.9"
           cache: true
       - run: dart --version
-      
+
       - run: flutter --version
 
       - name: flutter pub get
         working-directory: ./tdesign-component
         run: flutter pub get
 
-      - name: flutter build 
+      - name: flutter build
         working-directory: ./tdesign-component/example
         run: flutter build apk
+
+      - name: upload apk
+        uses: actions/upload-artifact@v4
+        id: upload-apk
+        with:
+          path: tdesign-component/example/build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 5
+
+      - name: comment
+        uses: actions-cool/maintain-one-comment@v3
+        with:
+          number: ${{ github.event.number }}
+          body: "体验APK: ${{ steps.upload-apk.outputs.artifact-url }}"
+          body-include: "<!-- EXAMPLE-APK -->"
