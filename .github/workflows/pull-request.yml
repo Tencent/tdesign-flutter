@@ -32,6 +32,7 @@ jobs:
         uses: actions/upload-artifact@v4
         id: upload-apk
         with:
+          name: tdesign-flutter-example.apk
           path: tdesign-component/example/build/app/outputs/flutter-apk/app-release.apk
           retention-days: 5
 
