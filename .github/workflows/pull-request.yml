@@ -40,5 +40,5 @@ jobs:
         uses: actions-cool/maintain-one-comment@v3
         with:
           number: ${{ github.event.number }}
-          body: "体验APK: ${{ steps.upload-apk.outputs.artifact-url }}"
+          body: "体验APK: [下载](${{ steps.upload-apk.outputs.artifact-url }})"
           body-include: "<!-- EXAMPLE-APK -->"
