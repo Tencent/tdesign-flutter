@@ -1019,16 +1019,45 @@ mixin TDCapsuleTrackShape {
   }
 }
 
+abstract interface class TDCapsuleRectThemeData {
+  final TDSliderThemeData themeData;
+  TDCapsuleRectThemeData({required this.themeData});
+}
+
+mixin TDCapsuleRectAdjustment implements TDCapsuleRectThemeData {
+  // 是否有分区
+  hasDivisions() {
+    return themeData.divisions != null && themeData.divisions! > 0;
+  }
+  
+  // 胶囊类型适配样式边距 trackHeight / 2，默认是 12
+  extraPadding({trackHeight = 24}) {
+    if (hasDivisions()) {
+      return 0;
+    }
+    return trackHeight / 2;
+  }
+
+  // 胶囊类型数值计算修正边距 trackHeight / 2，默认是 12
+  trackPadding({trackHeight = 24}) {
+    if (hasDivisions()) {
+      return trackHeight / 2;
+    }
+    return 0;
+  }
+}
+
 ///
 ///Slider轨道绘制
 ///
-class TDCapsuleRectSliderTrackShape extends SliderTrackShape with BaseSliderTrackShape, TDCapsuleTrackShape {
+class TDCapsuleRectSliderTrackShape extends SliderTrackShape with BaseSliderTrackShape, TDCapsuleTrackShape, TDCapsuleRectAdjustment {
 
   /// Create a slider track that draws two rectangles with rounded outer edges.
   const TDCapsuleRectSliderTrackShape({this.trackColorWhenShowScale = const Color(0xFFE7E7E7), required this.themeData});
 
   final Color trackColorWhenShowScale;
 
+  @override
   final TDSliderThemeData themeData;
 
   @override
@@ -1045,7 +1074,8 @@ class TDCapsuleRectSliderTrackShape extends SliderTrackShape with BaseSliderTrac
       isEnabled: isEnabled,
       isDiscrete: isDiscrete,
     );
-    var realRect = Rect.fromLTRB(rect.left + 12, rect.top, rect.right - 12, rect.bottom);
+    final padding = extraPadding();
+    var realRect = Rect.fromLTRB(rect.left + padding, rect.top, rect.right - padding, rect.bottom);
     themeData.sliderMeasureData.trackerRect = realRect;
     return realRect;
   }
@@ -1109,14 +1139,15 @@ class TDCapsuleRectSliderTrackShape extends SliderTrackShape with BaseSliderTrac
     final trackRadius = Radius.circular(trackRect.height / 2);
     final activeTrackRadius = Radius.circular((trackRect.height - additionalActiveTrackHeight) / 2);
 
+    final padding = extraPadding();
     context.canvas.drawRRect(
-      RRect.fromLTRBAndCorners(trackRect.left - 12, trackRect.top, trackRect.right + 12, trackRect.bottom,
+      RRect.fromLTRBAndCorners(trackRect.left - padding, trackRect.top, trackRect.right + padding, trackRect.bottom,
           topLeft: trackRadius, bottomLeft: trackRadius, topRight: trackRadius, bottomRight: trackRadius),
       inactiveTrackPaint,
     );
     context.canvas.drawRRect(
       RRect.fromLTRBAndCorners(
-        trackRect.left - 12 + additionalActiveTrackHeight,
+        trackRect.left - padding + additionalActiveTrackHeight,
         trackRect.top + additionalActiveTrackHeight,
         thumbCenter.dx,
         trackRect.bottom - additionalActiveTrackHeight,
@@ -1131,7 +1162,7 @@ class TDCapsuleRectSliderTrackShape extends SliderTrackShape with BaseSliderTrac
         RRect.fromLTRBAndCorners(
           thumbCenter.dx,
           trackRect.top + additionalActiveTrackHeight,
-          trackRect.right + 12 - additionalActiveTrackHeight,
+          trackRect.right + padding - additionalActiveTrackHeight,
           trackRect.bottom - additionalActiveTrackHeight,
           topRight: activeTrackRadius,
           bottomRight: activeTrackRadius,
@@ -1145,7 +1176,7 @@ class TDCapsuleRectSliderTrackShape extends SliderTrackShape with BaseSliderTrac
 ///
 ///游标的绘制
 ///
-class TDCapsuleSliderThumbShape extends SliderComponentShape {
+class TDCapsuleSliderThumbShape extends SliderComponentShape with TDCapsuleRectAdjustment {
   /// Create a slider thumb that draws a circle.
   const TDCapsuleSliderThumbShape({
     this.enabledThumbRadius = 10.0,
@@ -1185,6 +1216,7 @@ class TDCapsuleSliderThumbShape extends SliderComponentShape {
   /// example, a value of 12 will create a very large shadow.
   final double pressedElevation;
 
+  @override
   final TDSliderThemeData themeData;
 
   @override
@@ -1238,7 +1270,8 @@ class TDCapsuleSliderThumbShape extends SliderComponentShape {
     // draw thumb text
     if (themeData.showThumbValue && themeData.sliderMeasureData.trackerRect != null) {
       var trackerRect = themeData.sliderMeasureData.trackerRect!;
-      var ratio = (center.dx - trackerRect.left) / (trackerRect.right - trackerRect.left);
+      final padding = trackPadding();
+      var ratio = (center.dx - trackerRect.left - padding) / (trackerRect.right - trackerRect.left - padding * 2);
       //计算滑块的值
       var value = (themeData.max - themeData.min) * ratio + themeData.min;
       //格式化显示
@@ -1349,8 +1382,6 @@ class TDCapsuleSliderTickMarkShape extends SliderTickMarkShape {
         var index = ((center.dx - markStart) / perWidth).round();
         //获取当前刻度的值
         var value = themeData.min + index * ((themeData.max - themeData.min) / themeData.divisions!);
-        //修正x坐标
-        dx = rect.left + index * (((rect.right - rect.left) / themeData.divisions!));
         //格式化数值
         var valueFormatter = themeData.scaleFormatter != null ? themeData.scaleFormatter!(value) : value.toString();
         //绘制刻度的值
@@ -1362,23 +1393,20 @@ class TDCapsuleSliderTickMarkShape extends SliderTickMarkShape {
             textAlign: TextAlign.center)
           ..layout(maxWidth: 100);
         var x = dx - painter.size.width / 2;
-        if (index == 0) {
-          x = rect.left - trackHeight / 2;
-        } else if (index == themeData.divisions) {
-          x = rect.right - painter.size.width + trackHeight / 2;
-        }
         painter.paint(context.canvas, Offset(x, center.dy - painter.height - 16));
-      }
-      if (dx > rect!.left + 1 && dx < rect.right - 1) {
-        final isBetweenThumbs = thumbCenter.dx > center.dx;
-        final begin =
-            isBetweenThumbs ? sliderTheme.disabledActiveTickMarkColor : sliderTheme.disabledInactiveTickMarkColor;
-        final end = isBetweenThumbs ? sliderTheme.activeTickMarkColor : sliderTheme.inactiveTickMarkColor;
-        final paint = Paint()
-          ..strokeWidth = 2
-          ..color = ColorTween(begin: begin, end: end).evaluate(enableAnimation)!;
-        context.canvas.drawLine(Offset(dx, themeData.sliderMeasureData.trackerRect!.top + 3),
-            Offset(dx, themeData.sliderMeasureData.trackerRect!.bottom - 3), paint);
+
+        // 第一个和最后一个不展示
+        if (index > 0 && index < themeData.divisions!) {
+          final isBetweenThumbs = thumbCenter.dx > center.dx;
+          final begin =
+              isBetweenThumbs ? sliderTheme.disabledActiveTickMarkColor : sliderTheme.disabledInactiveTickMarkColor;
+          final end = isBetweenThumbs ? sliderTheme.activeTickMarkColor : sliderTheme.inactiveTickMarkColor;
+          final paint = Paint()
+            ..strokeWidth = 2
+            ..color = ColorTween(begin: begin, end: end).evaluate(enableAnimation)!;
+          context.canvas.drawLine(Offset(dx, themeData.sliderMeasureData.trackerRect!.top + 3),
+              Offset(dx, themeData.sliderMeasureData.trackerRect!.bottom - 3), paint);
+        }
       }
     }
   }
@@ -1411,7 +1439,7 @@ class TDCapsuleSliderTickMarkShape extends SliderTickMarkShape {
 ///  * [RangeSliderTrackShape], which can be used to create custom shapes for
 ///    the [RangeSlider]'s track.
 ///  * [RectangularRangeSliderTrackShape], for a similar track with sharp edges.
-class TDCapsuleRectRangeSliderTrackShape extends RangeSliderTrackShape with TDBaseRangeSliderTrackShape {
+class TDCapsuleRectRangeSliderTrackShape extends RangeSliderTrackShape with TDBaseRangeSliderTrackShape, TDCapsuleRectAdjustment {
   final Color trackColorWhenShowScale;
 
   /// Create a slider track with rounded outer edges.
@@ -1420,6 +1448,7 @@ class TDCapsuleRectRangeSliderTrackShape extends RangeSliderTrackShape with TDBa
   /// outer track segments are inactive.
   const TDCapsuleRectRangeSliderTrackShape({this.trackColorWhenShowScale = const Color(0xFFE7E7E7), required this.themeData});
 
+  @override
   final TDSliderThemeData themeData;
 
 
@@ -1437,7 +1466,8 @@ class TDCapsuleRectRangeSliderTrackShape extends RangeSliderTrackShape with TDBa
       isEnabled: isEnabled,
       isDiscrete: isDiscrete,
     );
-    return Rect.fromLTRB(rect.left + 12, rect.top, rect.right - 12, rect.bottom);
+    final padding = extraPadding();
+    return Rect.fromLTRB(rect.left + padding, rect.top, rect.right - padding, rect.bottom);
   }
 
   @override
@@ -1503,12 +1533,13 @@ class TDCapsuleRectRangeSliderTrackShape extends RangeSliderTrackShape with TDBa
     themeData.sliderMeasureData.trackerRect = trackRect;
 
     final trackRadius = Radius.circular(trackRect.height / 2);
+    final padding = extraPadding();
 
     context.canvas.drawRRect(
       RRect.fromLTRBAndCorners(
-        trackRect.left - 12,
+        trackRect.left - padding,
         trackRect.top,
-        trackRect.right + 12,
+        trackRect.right + padding,
         trackRect.bottom,
         topLeft: trackRadius,
         bottomLeft: trackRadius,
@@ -1522,7 +1553,7 @@ class TDCapsuleRectRangeSliderTrackShape extends RangeSliderTrackShape with TDBa
     if (showScale) {
       context.canvas.drawRRect(
         RRect.fromLTRBAndCorners(
-          trackRect.left - 9,
+          trackRect.left + additionalActiveTrackHeight,
           trackRect.top + additionalActiveTrackHeight,
           rightThumbOffset.dx,
           trackRect.bottom - additionalActiveTrackHeight,
@@ -1546,7 +1577,7 @@ class TDCapsuleRectRangeSliderTrackShape extends RangeSliderTrackShape with TDBa
         RRect.fromLTRBAndCorners(
           rightThumbOffset.dx,
           trackRect.top + additionalActiveTrackHeight,
-          trackRect.right + 9,
+          trackRect.right - additionalActiveTrackHeight,
           trackRect.bottom - additionalActiveTrackHeight,
           topRight: activeTrackRadius,
           bottomRight: activeTrackRadius,
@@ -1569,7 +1600,7 @@ class TDCapsuleRectRangeSliderTrackShape extends RangeSliderTrackShape with TDBa
 ///  * [RangeSlider], which includes thumbs defined by this shape.
 ///  * [SliderTheme], which can be used to configure the thumb shapes of all
 ///    range sliders in a widget subtree.
-class TDCapsuleRangeSliderThumbShape extends RangeSliderThumbShape {
+class TDCapsuleRangeSliderThumbShape extends RangeSliderThumbShape with TDCapsuleRectAdjustment {
   /// Create a slider thumb that draws a circle.
   const TDCapsuleRangeSliderThumbShape({
     this.enabledThumbRadius = 10.0,
@@ -1602,6 +1633,7 @@ class TDCapsuleRangeSliderThumbShape extends RangeSliderThumbShape {
   /// The default is 6.
   final double pressedElevation;
 
+  @override
   final TDSliderThemeData themeData;
 
   @override
@@ -1662,7 +1694,8 @@ class TDCapsuleRangeSliderThumbShape extends RangeSliderThumbShape {
     }
     if (themeData.showThumbValue && themeData.sliderMeasureData.trackerRect != null) {
       var trackerRect = themeData.sliderMeasureData.trackerRect!;
-      var ratio = (center.dx - trackerRect.left) / (trackerRect.right - trackerRect.left);
+      final padding = trackPadding();
+      var ratio = (center.dx - trackerRect.left - padding) / (trackerRect.right - trackerRect.left - padding * 2);
       //计算滑块的值
       var value = (themeData.max - themeData.min) * ratio + themeData.min;
       //格式化显示
@@ -1773,8 +1806,6 @@ class TDCapsuleRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
         var value = themeData.min + index * ((themeData.max - themeData.min) / themeData.divisions!);
         //格式化数值
         var valueFormatter = themeData.scaleFormatter != null ? themeData.scaleFormatter!(value) : value.toString();
-        //修正x坐标
-        dx = rect.left + index * (((rect.right - rect.left) / themeData.divisions!));
         //绘制刻度的值
         var painter = TextPainter(
             text: TextSpan(
@@ -1784,31 +1815,28 @@ class TDCapsuleRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
             textAlign: TextAlign.center)
           ..layout(maxWidth: 100);
         var x = dx - painter.size.width / 2;
-        if (index == 0) {
-          x = rect.left - trackHeight / 2;
-        } else if (index == themeData.divisions) {
-          x = rect.right - painter.size.width + trackHeight / 2;
-        }
         painter.paint(context.canvas, Offset(x, center.dy - painter.height - 16));
-      }
-      if (dx > rect!.left + 1 && dx < rect.right - 1) {
-        final bool isBetweenThumbs;
-        switch (textDirection) {
-          case TextDirection.ltr:
-            isBetweenThumbs = startThumbCenter.dx < center.dx && center.dx < endThumbCenter.dx;
-            break;
-          case TextDirection.rtl:
-            isBetweenThumbs = endThumbCenter.dx < center.dx && center.dx < startThumbCenter.dx;
-            break;
+        
+        // 第一个和最后一个不展示
+        if (index > 0 && index < themeData.divisions!) {
+          final bool isBetweenThumbs;
+          switch (textDirection) {
+            case TextDirection.ltr:
+              isBetweenThumbs = startThumbCenter.dx < center.dx && center.dx < endThumbCenter.dx;
+              break;
+            case TextDirection.rtl:
+              isBetweenThumbs = endThumbCenter.dx < center.dx && center.dx < startThumbCenter.dx;
+              break;
+          }
+          final begin =
+              isBetweenThumbs ? sliderTheme.disabledActiveTickMarkColor : sliderTheme.disabledInactiveTickMarkColor;
+          final end = isBetweenThumbs ? sliderTheme.activeTickMarkColor : sliderTheme.inactiveTickMarkColor;
+          final paint = Paint()
+            ..strokeWidth = 2
+            ..color = ColorTween(begin: begin, end: end).evaluate(enableAnimation)!;
+          context.canvas.drawLine(Offset(dx, themeData.sliderMeasureData.trackerRect!.top + 3),
+              Offset(dx, themeData.sliderMeasureData.trackerRect!.bottom - 3), paint);
         }
-        final begin =
-            isBetweenThumbs ? sliderTheme.disabledActiveTickMarkColor : sliderTheme.disabledInactiveTickMarkColor;
-        final end = isBetweenThumbs ? sliderTheme.activeTickMarkColor : sliderTheme.inactiveTickMarkColor;
-        final paint = Paint()
-          ..strokeWidth = 2
-          ..color = ColorTween(begin: begin, end: end).evaluate(enableAnimation)!;
-        context.canvas.drawLine(Offset(dx, themeData.sliderMeasureData.trackerRect!.top + 3),
-            Offset(dx, themeData.sliderMeasureData.trackerRect!.bottom - 3), paint);
       }
     }
   }
