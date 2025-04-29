@@ -42,3 +42,26 @@ jobs:
           number: ${{ github.event.number }}
           body: "体验APK: [下载](${{ steps.upload-apk.outputs.artifact-url }})"
           body-include: "<!-- EXAMPLE-APK -->"
+
+  build-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version: "3.16.9"
+          cache: true
+      - run: dart --version
+
+      - run: flutter --version
+
+      - name: flutter pub get
+        working-directory: ./tdesign-component
+        run: flutter pub get
+
+      - name: flutter build
+        working-directory: ./tdesign-component/example
+        run: flutter build web
+
