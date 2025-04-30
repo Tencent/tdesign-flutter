@@ -343,8 +343,8 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
 
   void _handleSelectChange(selected) {
     var isRadio = widget.multiple != true && selected is List<String>;
-    if (isRadio) {
-      selected.removeAt(0);
+    if (isRadio && selected.isNotEmpty) {
+      selected = [selected.last];
     }
     widget.options?.forEach((element) {
       element.selected = selected is List<String> ? selected.contains(element.value) : element.value == selected;
