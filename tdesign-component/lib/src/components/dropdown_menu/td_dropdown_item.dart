@@ -345,6 +345,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
     var isRadio = widget.multiple != true && selected is List<String>;
     if (isRadio && selected.isNotEmpty) {
       selected = [selected.last];
+      print("selected: $selected");
     }
     widget.options?.forEach((element) {
       element.selected = selected is List<String> ? selected.contains(element.value) : element.value == selected;
@@ -353,7 +354,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
       setState(() {});
     }
     widget.onChange?.call(_getSelected(widget.options).map((e) => e!.value).toList());
-    if (widget.multiple != true) {
+    if (widget.multiple != true && selected.isNotEmpty) {
       _handleClose();
     }
   }
