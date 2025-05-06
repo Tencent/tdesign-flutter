@@ -1,5 +1,5 @@
 
-  Widget _buildOnTapSingleHandle(BuildContext context) {
+  Widget _buildOnThumbTextTapSingleHandle(BuildContext context) {
     var currentValue = 40.0;
     Offset? tapOffset;
 
@@ -20,12 +20,16 @@
             ),
             TDSlider(
               sliderThemeData: TDSliderThemeData(
-                  context: context, min: 0, max: 100, showThumbValue: true),
+                context: context,
+                min: 0,
+                max: 100,
+                showThumbValue: true,
+              ),
               leftLabel: '0',
               rightLabel: '100',
               value: currentValue,
               onChanged: (value) {},
-              onTap: (offset, value) {
+              onThumbTextTap: (offset, value) {
                 setState(() {
                   currentValue = value;
                   tapOffset = offset;
