@@ -464,7 +464,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                           Navigator.maybePop(context);
                         },
                         child: Container(
-                          height: 200,
+                          height: 20,
                         ),
                       );
                     }));
@@ -495,7 +495,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                                     Navigator.maybePop(context);
                                   },
                                   child: Container(
-                                    height: 200,
+                                    height: 20,
                                   ),
                                 );
                               }));

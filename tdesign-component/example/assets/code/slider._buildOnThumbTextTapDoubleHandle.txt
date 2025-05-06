@@ -1,0 +1,50 @@
+
+  Widget _buildOnThumbTextTapDoubleHandle(BuildContext context) {
+    final displayRangeDataNotifier = ValueNotifier<DisplayRangeData>(
+      DisplayRangeData(
+        currentPosition: Position.start,
+        currentTapValue: 40.0,
+        tapOffset: null,
+      ),
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ValueListenableBuilder<DisplayRangeData>(
+          valueListenable: displayRangeDataNotifier,
+          builder: (context, data, child) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Position: ${data.currentPosition}'),
+                const SizedBox(width: 10),
+                Text('Value: ${data.currentTapValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
+                if (data.tapOffset != null)
+                  Text(
+                      'Tap at (${data.tapOffset!.dx.toStringAsFixed(0)}, ${data.tapOffset!.dy.toStringAsFixed(0)})'),
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: 10),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData(
+              context: context, min: 0, max: 100, showThumbValue: true),
+          leftLabel: '0',
+          rightLabel: '100',
+          value: const RangeValues(10, 60),
+          onChanged: (value) {},
+          onThumbTextTap: (position, offset, value) {
+            displayRangeDataNotifier.value = DisplayRangeData(
+              currentPosition: position,
+              currentTapValue: value,
+              tapOffset: offset,
+            );
+            print('onTap offset: $offset, value: $value');
+          },
+        ),
+      ],
+    );
+  }
