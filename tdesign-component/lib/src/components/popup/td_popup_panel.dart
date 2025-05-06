@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
@@ -41,12 +43,13 @@ abstract class TDPopupBasePanel extends StatefulWidget {
 
 abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
     with SingleTickerProviderStateMixin {
+  final GlobalKey _childKey = GlobalKey();
   static const _dragHandleHeight = 24.0;
   static const _headerHeight = 58.0;
 
   late AnimationController _controller;
-  late double _maxHeight;
-  late double _minHeight;
+  double _maxHeight = 0;
+  double _minHeight = 0;
   double _currentHeight = 0;
   bool _isFullscreen = false;
   bool _isAnimating = false;
@@ -58,6 +61,42 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
       duration: const Duration(milliseconds: 400),
       vsync: this,
     )..addListener(_updateHeight);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _measureChildHeight());
+  }
+
+  /// 测量子组件高度并更新弹窗布局参数
+  /// 1.获取子组件渲染尺寸
+  /// 2.计算各部位高度约束
+  /// 3.更新动画控制器状态
+  void _measureChildHeight() {
+    // 获取子组件渲染对象
+    final context = _childKey.currentContext;
+    if (context == null) return;
+    final renderBox = context.findRenderObject() as RenderBox?;
+    if (renderBox == null || !renderBox.hasSize) return;
+
+    final screenHeight = MediaQuery.of(context).size.height;
+    final childHeight = renderBox.size.height;
+    // 头部高度计算
+    final headerHeight = widget.draggable
+        ? _headerHeight
+        : _headerHeight;
+
+    // 高度约束计算
+    final maxAvailableHeight = screenHeight * widget.maxHeightRatio;
+    final totalHeight = _dragHandleHeight + headerHeight + childHeight;
+
+    setState(() {
+      // 动态设置最大高度
+      _maxHeight = max(maxAvailableHeight, totalHeight).clamp(
+          screenHeight * widget.minHeightRatio,
+          screenHeight
+      );
+      _minHeight = screenHeight * widget.minHeightRatio;
+      _currentHeight = totalHeight.clamp(_minHeight, _maxHeight);
+      _controller.value = (_currentHeight - _minHeight) /
+          (_maxHeight - _minHeight).clamp(0.1, 1.0);
+    });
   }
 
   void _updateHeight() => setState(() {
@@ -117,11 +156,6 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    _maxHeight = screenHeight * widget.maxHeightRatio;
-    _minHeight = screenHeight * widget.minHeightRatio;
-    if (_currentHeight == 0) _currentHeight = _minHeight;
-
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, _) => RepaintBoundary(
@@ -136,7 +170,9 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
           child: Column(children: [
             _buildDragHandle(),
             buildHeader(context),
-            Expanded(child: _buildContent()),
+            SizedBox(
+              child: _buildContent(),
+            ),
           ]),
         ),
       ),
@@ -154,7 +190,10 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
       }
       return false;
     },
-    child: widget.child,
+    child: Container(
+      key: _childKey,
+      child: widget.child,
+    ),
   );
 
   @protected
