@@ -6,6 +6,7 @@ isComponent: true
 ---
 
 <span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
+
 ## 引入
 
 在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
@@ -21,7 +22,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ### 1 组件类型
 
 单游标滑块
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -38,10 +39,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
 双游标滑块
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -58,10 +58,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
-带数值单游标滑块 
-            
+带数值单游标滑块
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -82,10 +81,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
 带数值双游标滑块
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -106,10 +104,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
 带刻度单游标滑块
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -129,10 +126,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
 带刻度双游标滑块
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -152,11 +148,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
+
 ### 1 组件状态
 
 禁用状态
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -174,10 +170,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
-
-            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -197,10 +190,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
-
-            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -219,11 +209,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
+
 ### 1 特殊样式
 
 胶囊型滑块
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -242,10 +232,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
-
-            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -263,10 +250,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
-
-            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -286,10 +270,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
-
-            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -310,10 +291,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
-
-            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -338,10 +316,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
-
-            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -364,10 +339,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
 胶囊型滑块
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -478,19 +452,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
 
 自定义盒子样式
-      
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">暂无演示代码</pre>
 
 </td-code-block>
-                
 
 自定义滑轨颜色
-            
+
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -529,11 +501,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                                  
-
 
 ## API
+
 ### TDSlider
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -547,10 +519,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | rightLabel | String? | - | 右侧标签 |
 | onChangeStart | ValueChanged<RangeValues>? | - | 滑动开始监听 |
 | onChangeEnd | ValueChanged<RangeValues>? | - | 滑动结束监听 |
+| onTap | Function(Offset offset, double value)? | - | 点击滑块触发 |
+| onTap | Function(Offset offset, double value)? | - | 点击浮标文字触发 |
 
-```
-```
- ### TDRangeSlider
+### TDRangeSlider
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -564,6 +537,5 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | rightLabel | String? | - | 右侧标签 |
 | onChangeStart | ValueChanged<RangeValues>? | - | 滑动开始监听 |
 | onChangeEnd | ValueChanged<RangeValues>? | - | 滑动结束监听 |
-
-
-  
+| onTap | Function(Position position, Offset offset, double value)? | - | 点击滑块触发 |
+| onThumbTextTap | Function(Position position, Offset offset, double value)? | - | 点击浮标文字触发 |
