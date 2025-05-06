@@ -621,6 +621,7 @@ Vertical Customize Steps 垂直自定义步骤条
 | successIcon | IconData? | - | 成功图标 |
 | errorIcon | IconData? | - | 失败图标 |
 | customContent | Widget? | - | 自定义内容 |
+| customTitle | Widget? | - | 自定义标题 |
 
 ```
 ```
@@ -637,6 +638,3 @@ Vertical Customize Steps 垂直自定义步骤条
 | simple | bool | false | 步骤条simple模式 |
 | readOnly | bool | false | 步骤条readOnly模式 |
 | verticalSelect | bool | false | 步骤条垂直自定义步骤条选择模式 |
-
-
-  
