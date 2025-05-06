@@ -353,7 +353,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
       setState(() {});
     }
     widget.onChange?.call(_getSelected(widget.options).map((e) => e!.value).toList());
-    if (widget.multiple != true) {
+    if (widget.multiple != true && selected.isNotEmpty) {
       _handleClose();
     }
   }
