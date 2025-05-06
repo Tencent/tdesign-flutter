@@ -8,12 +8,10 @@
         min: 0,
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
-      )
-        ..updateSliderThemeData((data) =>
-            data.copyWith(
-              activeTickMarkColor: const Color(0xFFE7E7E7),
-              inactiveTickMarkColor: const Color(0xFFE7E7E7),
-            )),
+      )..updateSliderThemeData((data) => data.copyWith(
+            activeTickMarkColor: const Color(0xFFE7E7E7),
+            inactiveTickMarkColor: const Color(0xFFE7E7E7),
+          )),
       value: 60,
       onChanged: (value) {},
     );
