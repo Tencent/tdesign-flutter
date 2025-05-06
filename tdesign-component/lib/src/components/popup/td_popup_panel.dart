@@ -458,8 +458,8 @@ class TDPopupCenterPanel extends StatelessWidget {
         children: [
           child,
           Positioned(
-            top: 16,
-            right: 16,
+            top: TDTheme.of(context).spacer8,
+            right: TDTheme.of(context).spacer8,
             child: IconButton(
               icon: Icon(TDIcons.close,
                 color: closeColor,

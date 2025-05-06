@@ -157,7 +157,10 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-    return builder.call(context);
+    return Material(
+      child: builder.call(context),
+      color: Colors.transparent,
+    );
   }
 
   @override
