@@ -26,7 +26,6 @@ class DisplayRangeData {
 }
 
 class _TDSliderPageState extends State<TDSliderPage> {
-  
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -53,6 +52,10 @@ class _TDSliderPageState extends State<TDSliderPage> {
           ExampleModule(title: '组件事件', children: [
             ExampleItem(desc: 'onTap', builder: _buildOnTapSingleHandle),
             ExampleItem(builder: _buildOnTapDoubleHandle),
+            ExampleItem(
+                desc: 'onThumbTextTap',
+                builder: _buildOnThumbTextTapSingleHandle),
+            ExampleItem(builder: _buildOnThumbTextTapDoubleHandle),
           ]),
           ExampleModule(title: '特殊样式', children: [
             ExampleItem(
@@ -219,6 +222,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Value: ${currentValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
                 if (tapOffset != null)
                   Text(
                       'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})'),
@@ -226,10 +230,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
             ),
             TDSlider(
               sliderThemeData: TDSliderThemeData(
-                context: context,
-                min: 0,
-                max: 100,
-              ),
+                  context: context, min: 0, max: 100, showThumbValue: true),
               leftLabel: '0',
               rightLabel: '100',
               value: currentValue,
@@ -250,8 +251,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
 
   @Demo(group: 'slider')
   Widget _buildOnTapDoubleHandle(BuildContext context) {
-    // 使用 ValueNotifier 保存显示数据，初始值与原来一致
-    final DisplayRangeDataNotifier = ValueNotifier<DisplayRangeData>(
+    final displayRangeDataNotifier = ValueNotifier<DisplayRangeData>(
       DisplayRangeData(
         currentPosition: Position.start,
         currentTapValue: 40.0,
@@ -263,7 +263,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         ValueListenableBuilder<DisplayRangeData>(
-          valueListenable: DisplayRangeDataNotifier,
+          valueListenable: displayRangeDataNotifier,
           builder: (context, data, child) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -282,17 +282,109 @@ class _TDSliderPageState extends State<TDSliderPage> {
         const SizedBox(height: 10),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData(
-            context: context,
-            min: 0,
-            max: 100,
-          ),
+              context: context, min: 0, max: 100, showThumbValue: true),
           leftLabel: '0',
           rightLabel: '100',
-          value: const RangeValues(10, 60), // 参数保持不变
+          value: const RangeValues(10, 60),
           onChanged: (value) {},
           onTap: (position, offset, value) {
-            // 更新仅限于文字显示
-            DisplayRangeDataNotifier.value = DisplayRangeData(
+            displayRangeDataNotifier.value = DisplayRangeData(
+              currentPosition: position,
+              currentTapValue: value,
+              tapOffset: offset,
+            );
+            print('onTap offset: $offset, value: $value');
+          },
+        ),
+      ],
+    );
+  }
+
+  @Demo(group: 'slider')
+  Widget _buildOnThumbTextTapSingleHandle(BuildContext context) {
+    var currentValue = 40.0;
+    Offset? tapOffset;
+
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Value: ${currentValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
+                if (tapOffset != null)
+                  Text(
+                      'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})'),
+              ],
+            ),
+            TDSlider(
+              sliderThemeData: TDSliderThemeData(
+                context: context,
+                min: 0,
+                max: 100,
+                showThumbValue: true,
+              ),
+              leftLabel: '0',
+              rightLabel: '100',
+              value: currentValue,
+              onChanged: (value) {},
+              onThumbTextTap: (offset, value) {
+                setState(() {
+                  currentValue = value;
+                  tapOffset = offset;
+                });
+                print('onTap  offset: $offset, value: $value');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @Demo(group: 'slider')
+  Widget _buildOnThumbTextTapDoubleHandle(BuildContext context) {
+    final displayRangeDataNotifier = ValueNotifier<DisplayRangeData>(
+      DisplayRangeData(
+        currentPosition: Position.start,
+        currentTapValue: 40.0,
+        tapOffset: null,
+      ),
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ValueListenableBuilder<DisplayRangeData>(
+          valueListenable: displayRangeDataNotifier,
+          builder: (context, data, child) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Position: ${data.currentPosition}'),
+                const SizedBox(width: 10),
+                Text('Value: ${data.currentTapValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
+                if (data.tapOffset != null)
+                  Text(
+                      'Tap at (${data.tapOffset!.dx.toStringAsFixed(0)}, ${data.tapOffset!.dy.toStringAsFixed(0)})'),
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: 10),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData(
+              context: context, min: 0, max: 100, showThumbValue: true),
+          leftLabel: '0',
+          rightLabel: '100',
+          value: const RangeValues(10, 60),
+          onChanged: (value) {},
+          onThumbTextTap: (position, offset, value) {
+            displayRangeDataNotifier.value = DisplayRangeData(
               currentPosition: position,
               currentTapValue: value,
               tapOffset: offset,
