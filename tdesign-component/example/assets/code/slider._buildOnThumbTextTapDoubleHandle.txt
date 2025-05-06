@@ -1,5 +1,5 @@
 
-  Widget _buildOnTapDoubleHandle(BuildContext context) {
+  Widget _buildOnThumbTextTapDoubleHandle(BuildContext context) {
     final displayRangeDataNotifier = ValueNotifier<DisplayRangeData>(
       DisplayRangeData(
         currentPosition: Position.start,
@@ -36,7 +36,7 @@
           rightLabel: '100',
           value: const RangeValues(10, 60),
           onChanged: (value) {},
-          onTap: (position, offset, value) {
+          onThumbTextTap: (position, offset, value) {
             displayRangeDataNotifier.value = DisplayRangeData(
               currentPosition: position,
               currentTapValue: value,
