@@ -228,20 +228,23 @@ class TDStepsVerticalItem extends StatelessWidget {
                     data.customTitle!
                   else if (data.title != null && data.title!.isNotEmpty)
                     Container(
-                      height: 22,
                       margin: const EdgeInsets.only(bottom: 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TDText(
-                            data.title!,
-                            style: TextStyle(
-                              fontWeight: (activeIndex == index && !readOnly)
-                                  ? FontWeight.w600
-                                  : FontWeight.w400,
-                              color: stepsTitleColor,
-                              fontSize: 14,
-                              height: 1.2,
+                          Expanded(
+                            child: TDText(
+                              data.title!,
+                              style: TextStyle(
+                                fontWeight: (activeIndex == index && !readOnly)
+                                    ? FontWeight.w600
+                                    : FontWeight.w400,
+                                color: stepsTitleColor,
+                                fontSize: 14,
+                                height: 1.2,
+                              ),
+                              softWrap: true,
+                              overflow: TextOverflow.visible,
                             ),
                           ),
                           verticalSelect
