@@ -106,6 +106,15 @@ Widget _buildSimple(BuildContext context) {
                   TDCalendarPopup(
                     context,
                     visible: true,
+                    onConfirm: (value) {
+                      var sb = StringBuffer('选择日期:');
+                      value.forEach((element) {
+                        final date = DateTime.fromMillisecondsSinceEpoch(element);
+                        sb.write('${date.year}-${date.month}-${date.day},');
+                      });
+                      print(sb.toString());
+                      TDToast.showText(sb.toString(), context: context);
+                    },
                     child: TDCalendar(
                       title: '请选择日期',
                       type: CalendarType.multiple,
@@ -122,6 +131,15 @@ Widget _buildSimple(BuildContext context) {
                   TDCalendarPopup(
                     context,
                     visible: true,
+                    onConfirm: (value) {
+                      var sb = StringBuffer('选择日期:');
+                      value.forEach((element) {
+                        final date = DateTime.fromMillisecondsSinceEpoch(element);
+                        sb.write('${date.year}-${date.month}-${date.day},');
+                      });
+                      print(sb.toString());
+                      TDToast.showText(sb.toString(), context: context);
+                    },
                     child: TDCalendar(
                       title: '请选择日期区间',
                       type: CalendarType.range,
@@ -243,6 +261,7 @@ Widget _buildSimple(BuildContext context) {
                   useTimePicker: true,
                   // pickerHeight: 100,
                   // pickerItemCount: 2,
+
                   onCellClick: (value, type, tdate) {
                     print('onCellClick:$value');
                   },
@@ -310,7 +329,7 @@ Widget _buildSimple(BuildContext context) {
                         dateStartTime.minute,
                         dateStartTime.second
                       ],
-                      dateEnd: [2099, 12, 30, 23, 59, 59],
+                      dateEnd: [2025, 10, 30, 23, 59, 59],
                       dateInitial:[dateEndTime.year, dateEndTime.month, dateEndTime.day, dateEndTime.hour, dateEndTime.minute, dateEndTime.second],
                     )
                   ],
