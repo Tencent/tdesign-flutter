@@ -1,17 +1,19 @@
 
   Widget _textTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }
