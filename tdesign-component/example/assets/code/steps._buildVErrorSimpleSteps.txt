@@ -1,5 +1,5 @@
 
-  Widget _buildVErrorSimpleSteps(BuildContext context){
+  Widget _buildVErrorSimpleSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Row(
