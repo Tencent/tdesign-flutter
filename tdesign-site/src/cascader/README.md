@@ -232,16 +232,5 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | action | TDCascaderAction? | - | 自定义选择器右上角按钮 |
 | onChange | MultiCascaderCallback | - | 值发生变更时触发 |
 
-```
-```
- ### TDCascaderAction
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| builder | WidgetBuilder? | - | 自定义builder |
-| text | String? | - | 自定义文本 |
-| onConfirm | MultiCascaderCallback | - | 事件响应 |
-
 
   
