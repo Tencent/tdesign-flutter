@@ -318,11 +318,10 @@ class _TDDatePickerState extends State<TDDatePicker> {
                         }
                         break;
                     }
-                    if (useAll()||(!widget.model.useYear &&
-                        !widget.model.useMonth &&
-                        !widget.model.useDay)) {
+                    if (useAll()) {
                       widget.model.refreshTimeDataInitialAndController(whichLine);
                     }
+
                     /// 使用动态高度，强制列表组件的state刷新，以展现更新的数据，详见下方链接
                     /// FIX:https://github.com/flutter/flutter/issues/22999
                     pickerHeight = pickerHeight - Random().nextDouble() / 100000000;
@@ -593,9 +592,9 @@ class DatePickerModel {
     var second = List.generate(60, (index) => index);
     if (dateStart.length > 3) {
       if(!useYear&&!useMonth&&!useDay&&dateEnd[0] == dateStart[0] && dateEnd[1] == dateStart[1]&& dateEnd[2] == dateStart[2]){
-          hour = List.generate((dateEnd[3]+1)-dateStart[3], (index) => index + dateStart[3]);
-          minute = List.generate((dateEnd[4]+1)-dateStart[4], (index) => index + dateStart[4]);
-          second = List.generate((dateEnd[5]+1)-dateStart[5], (index) => index + dateStart[5]);
+          hour = List.generate(dateEnd[3]+1, (index) => index + dateStart[3]);
+          minute = List.generate(dateEnd[4]+1, (index) => index + dateStart[4]);
+          second = List.generate(dateEnd[5]+1, (index) => index + dateStart[5]);
           data[4] = useHour && filterItems != null ? filterItems!(DateTypeKey.hour, hour) : hour;
           data[5] = useMinute && filterItems != null ? filterItems!(DateTypeKey.minute, minute) : minute;
           data[6] = useSecond && filterItems != null ? filterItems!(DateTypeKey.second, second) : second;
