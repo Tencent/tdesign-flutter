@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/src/util/auto_size.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
@@ -38,6 +40,7 @@ class _TDToastPageState extends State<TDToastPage> {
         ],
       test: [
         ExampleItem(desc: '禁止滚动+点击', builder: _preventTapToast),
+        ExampleItem(desc: '自定义宽度+行数', builder: _customMultipleToast),
       ],
     );
   }
@@ -245,6 +248,25 @@ class _TDToastPageState extends State<TDToastPage> {
       theme: TDButtonTheme.primary,
       isBlock: true,
       text: '禁止滚动+点击',
+    );
+  }
+
+
+  @Demo(group: 'toast')
+  Widget _customMultipleToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showText(
+            '最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字',
+            context: context,
+            constraints: BoxConstraints(maxWidth: 350.scale),
+            maxLines: 5);
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '多行文字',
     );
   }
 }
