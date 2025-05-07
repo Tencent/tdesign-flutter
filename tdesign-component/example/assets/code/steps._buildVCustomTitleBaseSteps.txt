@@ -1,5 +1,5 @@
 
-  Widget _buildHIconSteps2(BuildContext context) {
+  Widget _buildVCustomTitleBaseSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Row(
@@ -7,8 +7,8 @@
           Expanded(
             flex: 1,
             child: TDSteps(
-              steps: hIconStepsListData2,
-              direction: TDStepsDirection.horizontal,
+              steps: vCustomTitleBasicStepsListData,
+              direction: TDStepsDirection.vertical,
               activeIndex: 1,
             ),
           )
