@@ -142,8 +142,6 @@ class _TDCalendarState extends State<TDCalendar> {
   late TDCalendarInherited? inherited;
   late TDCalendarStyle _style;
   final List<DatePickerModel> timePickerModelList = [];
-  final selectedTime = ValueNotifier<List<int>>([]);
-  DatePickerModel? datePickerModel;
 
   @override
   void didChangeDependencies() {
@@ -177,8 +175,8 @@ class _TDCalendarState extends State<TDCalendar> {
   @override
   Widget build(BuildContext context) {
     inherited = TDCalendarInherited.of(context);
-
     _initValue();
+    timePickerModelList.clear();
     final verticalGap = _style.verticalGap ?? TDTheme.of(context).spacer8;
     return Container(
       height: widget.height,
@@ -228,13 +226,9 @@ class _TDCalendarState extends State<TDCalendar> {
                   data: data,
                   padding: verticalGap / 2,
                   onChange: (value) {
-                    if (widget.useTimePicker == true) {
-                      _reGetTimePicker(value);
-                    } else {
-                      final time = _getValue(value);
-                      inherited?.selected.value = time;
-                      widget.onChange?.call(time);
-                    }
+                    final time = _getValue(value);
+                    inherited?.selected.value = time;
+                    widget.onChange?.call(time);
                   },
                   onCellClick: widget.onCellClick,
                   onCellLongPress: widget.onCellLongPress,
@@ -263,139 +257,68 @@ class _TDCalendarState extends State<TDCalendar> {
     );
   }
 
-  _reGetTimePicker(time) {
-    if (widget.timePickerModel != null && widget.timePickerModel!.isNotEmpty) {
-      int len = widget.timePickerModel!.length - 1;
-      if (len > 0) {
-        //暂不支持两个时间
-        return;
-      }
-      final currDateTimeEpoch = time[0];
-      final currDateTime = DateTime.fromMillisecondsSinceEpoch(currDateTimeEpoch);
-      List<int>? initDateStartList = widget.timePickerModel?[0]!.dateStart;
-      final initDateStartEpoch =
-          DateTime(initDateStartList![0], initDateStartList![1], initDateStartList![2]).millisecondsSinceEpoch;
-      final preDateTime = DateTime.fromMillisecondsSinceEpoch(_getValue(inherited?.selected.value ?? [])[0]);
-      widget.timePickerModel![0].removeListener();
-      datePickerModel = DatePickerModel(
-          useYear: false,
-          useMonth: false,
-          useDay: false,
-          useWeekDay: false,
-          useHour: true,
-          useMinute: true,
-          useSecond: true,
-          dateStart: currDateTimeEpoch <= initDateStartEpoch
-              ? [
-                  initDateStartList![0],
-                  initDateStartList![1],
-                  initDateStartList![2],
-                  initDateStartList![3],
-                  initDateStartList![4],
-                  initDateStartList![5]
-                ]
-              : [currDateTime.year, currDateTime.month, currDateTime.day, 0, 0, 0],
-          dateEnd: [currDateTime.year, currDateTime.month, currDateTime.day, 23, 59, 59],
-          dateInitial: initDateStartList![3] == preDateTime.hour &&
-                      initDateStartList![4] == preDateTime.minute &&
-                      initDateStartList![5] == preDateTime.second
-              ? [
-                  initDateStartList![0],
-                  initDateStartList![1],
-                  initDateStartList![2],
-                  initDateStartList![3],
-                  initDateStartList![4],
-                  initDateStartList![5]
-                ]
-              : [
-                  currDateTime.year,
-                  currDateTime.month,
-                  currDateTime.day,
-                  preDateTime.hour,
-                  preDateTime.minute,
-                  preDateTime.second
-                ]);
-      final newDateTime = DateTime(currDateTime.year, currDateTime.month, currDateTime.day, preDateTime.hour,
-              preDateTime.minute, preDateTime.second)
-          .millisecondsSinceEpoch;
-      selectedTime.value = [newDateTime];
-    }
-  }
-
   Widget _getTimePicker() {
     final noRange = widget.type != CalendarType.range;
     final now = DateTime.now();
     final valueTime = widget._valueTime;
-    return ValueListenableBuilder(
-        valueListenable: selectedTime,
-        builder: (context, value, child) {
-          timePickerModelList.clear();
-          return Container(
-            decoration: BoxDecoration(
-              color: TDTheme.of(context).whiteColor1,
-              boxShadow: const [
-                BoxShadow(
-                  color: Color.fromRGBO(0, 0, 0, 0.04),
-                  blurRadius: 12,
-                  offset: Offset(0, -2),
-                ),
-              ],
-            ),
-            child: Row(
-              children: List.generate(
-                noRange ? 1 : 2,
-                (index) {
-                  final timePickerModel = datePickerModel ??
-                      widget.timePickerModel?.getOrNull(index) ??
-                      DatePickerModel(
-                        useYear: false,
-                        useMonth: false,
-                        useDay: false,
-                        useWeekDay: false,
-                        useHour: true,
-                        useMinute: true,
-                        useSecond: false,
-                        dateStart: [1999, 01, 01],
-                        dateEnd: [2999, 12, 31],
-                        dateInitial: [
-                          ...[1999, 01, 01],
-                          valueTime?.getOrNull(index)?.hour ?? now.hour,
-                          valueTime?.getOrNull(index)?.minute ?? now.minute,
-                          valueTime?.getOrNull(index)?.second ?? now.second
-                        ],
-                      );
-                  final timePicker = TDDatePicker(
-                    title: noRange
-                        ? context.resource.time
-                        : index == 0
-                            ? context.resource.start
-                            : context.resource.end,
-                    leftText: '',
-                    rightText: '',
-                    model: timePickerModel,
-                    pickerHeight: widget.pickerHeight ?? 178,
-                    pickerItemCount: widget.pickerItemCount ?? 3,
-                    isTimeUnit: widget.isTimeUnit ?? true,
-                    onConfirm: (selected) {},
-                    onSelectedItemChanged: (wheelIndex, index) {
-                      final time = _getValue(inherited?.selected.value ?? []);
-                      inherited?.selected.value = time;
-                      widget.onChange?.call(time);
-                    },
-                  );
-                  timePickerModelList.add(timePickerModel);
-                  if (datePickerModel != null) {
-                    final time = _getValue(value);
-                    inherited?.selected.value = time;
-                    widget.onChange?.call(time);
-                  }
-
-                  return Expanded(child: timePicker);
-                },
-              ),
-            ),
-          );
-        });
+    return Container(
+      decoration: BoxDecoration(
+        color: TDTheme.of(context).whiteColor1,
+        boxShadow: const [
+          BoxShadow(
+            color: Color.fromRGBO(0, 0, 0, 0.04),
+            blurRadius: 12,
+            offset: Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: List.generate(
+          noRange ? 1 : 2,
+          (index) {
+            final timePickerModel = widget.timePickerModel?.getOrNull(index) ??
+                DatePickerModel(
+                  useYear: false,
+                  useMonth: false,
+                  useDay: false,
+                  useWeekDay: false,
+                  useHour: true,
+                  useMinute: true,
+                  useSecond: false,
+                  dateStart: [1999, 01, 01],
+                  dateEnd: [2999, 12, 31],
+                  dateInitial: [
+                    ...[1999, 01, 01],
+                    valueTime?.getOrNull(index)?.hour ?? now.hour,
+                    valueTime?.getOrNull(index)?.minute ?? now.minute,
+                    valueTime?.getOrNull(index)?.second ?? now.second
+                  ],
+                );
+            final timePicker = TDDatePicker(
+              title: noRange
+                  ? context.resource.time
+                  : index == 0
+                      ? context.resource.start
+                      : context.resource.end,
+              leftText: '',
+              rightText: '',
+              model: timePickerModel,
+              pickerHeight: widget.pickerHeight ?? 178,
+              pickerItemCount: widget.pickerItemCount ?? 3,
+              isTimeUnit: widget.isTimeUnit ?? true,
+              onConfirm: (selected) {},
+              onSelectedItemChanged: (wheelIndex, index) {
+                final time = _getValue(inherited?.selected.value ?? []);
+                inherited?.selected.value = time;
+                widget.onChange?.call(time);
+              },
+            );
+            timePickerModelList.add(timePickerModel);
+            return Expanded(child: timePicker);
+          },
+        ),
+      ),
+    );
   }
 
   List<int> _getValue(List<int> value) {
@@ -407,9 +330,9 @@ class _TDCalendarState extends State<TDCalendar> {
       return dateValue;
     }
     final milliseconds = timePickerModelList.map((model) {
-      final hour = model.useHour ? model.hourIndex + model.data[4][0] : 0;
-      final minute = model.useMinute ? model.minuteIndex + model.data[5][0] : 0;
-      final second = model.useSecond ? model.secondIndex + model.data[6][0] : 0;
+      final hour = model.useHour ? model.hourFixedExtentScrollController.selectedItem : 0;
+      final minute = model.useMinute ? model.minuteFixedExtentScrollController.selectedItem : 0;
+      final second = model.useSecond ? model.secondFixedExtentScrollController.selectedItem : 0;
       return (hour * 60 * 60 + minute * 60 + second) * 1000;
     }).toList();
     if (widget.type == CalendarType.range && dateValue.length == 1) {
