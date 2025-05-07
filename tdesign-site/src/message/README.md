@@ -165,7 +165,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               content: _commonContent,
               theme: MessageTheme.info,
               duration: 3000,
-              link: '按钮',
+              link: MessageLink(
+                name: '按钮',
+                uri: Uri.parse('https://tdesign.tencent.com/'),
+              ),
+              // link: '按钮',
               onLinkClick: () {
                 print('link clicked!');
               });
