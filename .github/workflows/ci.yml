@@ -56,6 +56,14 @@ jobs:
         working-directory: ./tdesign-component/example
         run: flutter build ios --release --no-codesign
 
+      - name: upload ios
+        uses: actions/upload-artifact@v4
+        id: upload-ios
+        with:
+          name: tdesign-flutter-example.app
+          path: tdesign-component/example/build/ios/iphoneos/Runner.app
+          retention-days: 5  
+
   build-web:
     runs-on: ubuntu-latest
     steps:
@@ -76,3 +84,11 @@ jobs:
       - name: flutter build
         working-directory: ./tdesign-component/example
         run: flutter build web
+
+      - name: upload web
+        uses: actions/upload-artifact@v4
+        id: upload-web
+        with:
+          name: tdesign-flutter-example.app
+          path: tdesign-component/example/build/web
+          retention-days: 5    
