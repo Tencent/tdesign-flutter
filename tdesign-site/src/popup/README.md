@@ -370,9 +370,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
               return TDPopupBottomDisplayPanel(
                 title: '标题文字',
                 hideClose: true,
-                closeClick: () {
-                  Navigator.maybePop(context);
-                },
+                // closeClick: () {
+                //   Navigator.maybePop(context);
+                // },
                 child: Container(
                   height: 200,
                 ),

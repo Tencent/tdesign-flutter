@@ -9,6 +9,7 @@
 | successIcon | IconData? | - | 成功图标 |
 | errorIcon | IconData? | - | 失败图标 |
 | customContent | Widget? | - | 自定义内容 |
+| customTitle | Widget? | - | 自定义标题 |
 
 ```
 ```
