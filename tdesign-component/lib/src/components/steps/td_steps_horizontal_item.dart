@@ -26,12 +26,16 @@ class TDStepsHorizontalItem extends StatelessWidget {
   Widget build(BuildContext context) {
     /// 步骤条数字背景色
     var stepsNumberBgColor = TDTheme.of(context).brandNormalColor;
+
     /// 步骤条数字颜色
     var stepsNumberTextColor = TDTheme.of(context).whiteColor1;
+
     /// 步骤条标题颜色
     var stepsTitleColor = TDTheme.of(context).brandColor7;
+
     /// 步骤条icon颜色
     var stepsIconColor = TDTheme.of(context).brandColor7;
+
     /// 简略步骤条icon颜色
     var simpleStepsIconColor = TDTheme.of(context).brandColor7;
 
@@ -39,16 +43,26 @@ class TDStepsHorizontalItem extends StatelessWidget {
     bool shouldSetIconWidgetDecoration = true;
 
     Widget? completeIconWidget;
+
     /// 错误icon图标显示
-    Widget errorIconWidget = Icon(TDIcons.close, color: TDTheme.of(context).errorColor6, size: 16,);
+    Widget errorIconWidget = Icon(
+      TDIcons.close,
+      color: TDTheme.of(context).errorColor6,
+      size: 16,
+    );
 
     /// 激活索引大于当前索引
     if (activeIndex > index) {
       stepsNumberBgColor = TDTheme.of(context).brandColor1;
       stepsNumberTextColor = TDTheme.of(context).brandColor7;
       stepsTitleColor = TDTheme.of(context).fontGyColor1;
+
       /// 已完成的用icon图标显示
-      completeIconWidget = Icon(TDIcons.check, color: TDTheme.of(context).brandColor7, size: 16,);
+      completeIconWidget = Icon(
+        TDIcons.check,
+        color: TDTheme.of(context).brandColor7,
+        size: 16,
+      );
     } else if (activeIndex < index) {
       /// 激活索引小于当前索引
       stepsNumberBgColor = TDTheme.of(context).grayColor1;
@@ -75,7 +89,12 @@ class TDStepsHorizontalItem extends StatelessWidget {
 
     /// 传递了成功的icon图标, 已完成的step都需要显示
     if (data.successIcon != null) {
-      stepsIconWidget = Icon(data.successIcon, color: stepsIconColor, size: 22,);
+      stepsIconWidget = Icon(
+        data.successIcon,
+        color: stepsIconColor,
+        size: 22,
+      );
+
       /// 传了图标则不用设置背景色
       shouldSetIconWidgetDecoration = false;
     }
@@ -85,11 +104,17 @@ class TDStepsHorizontalItem extends StatelessWidget {
       /// 显示错误颜色
       stepsNumberBgColor = TDTheme.of(context).errorColor1;
       stepsTitleColor = TDTheme.of(context).errorColor6;
+
       /// 显示错误图标
       stepsIconWidget = errorIconWidget;
       if (data.errorIcon != null) {
-        stepsIconWidget = Icon(data.errorIcon, color: TDTheme.of(context).errorColor6, size: 22,);
+        stepsIconWidget = Icon(
+          data.errorIcon,
+          color: TDTheme.of(context).errorColor6,
+          size: 22,
+        );
       }
+
       /// 传了图标则不用设置背景色等Decoration
       shouldSetIconWidgetDecoration = data.errorIcon == null;
       if (simple) {
@@ -98,10 +123,12 @@ class TDStepsHorizontalItem extends StatelessWidget {
     }
 
     /// 步骤条icon图标背景和形状
-    BoxDecoration? iconWidgetDecoration = shouldSetIconWidgetDecoration ? BoxDecoration(
-      color: stepsNumberBgColor,
-      shape: BoxShape.circle,
-    ) : null;
+    BoxDecoration? iconWidgetDecoration = shouldSetIconWidgetDecoration
+        ? BoxDecoration(
+            color: stepsNumberBgColor,
+            shape: BoxShape.circle,
+          )
+        : null;
 
     /// icon组件容器大小
     double iconContainerSize = 22;
@@ -115,6 +142,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
       }
       iconContainerSize = 8;
       stepsIconWidget = null;
+
       /// 简略步骤条BoxDecoration
       var simpleDecoration = BoxDecoration(
         color: Colors.transparent,
@@ -145,10 +173,11 @@ class TDStepsHorizontalItem extends StatelessWidget {
               child: Opacity(
                 opacity: index == 0 ? 0 : 1,
                 child: Container(
-                  width: double.infinity,
-                  height: 1,
-                  color: (activeIndex >= index || readOnly) ? TDTheme.of(context).brandColor7 : TDTheme.of(context).grayColor4
-                ),
+                    width: double.infinity,
+                    height: 1,
+                    color: (activeIndex >= index || readOnly)
+                        ? TDTheme.of(context).brandColor7
+                        : TDTheme.of(context).grayColor4),
               ),
             ),
             Container(
@@ -166,20 +195,26 @@ class TDStepsHorizontalItem extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   height: 1,
-                  color: (activeIndex > index || readOnly) ? TDTheme.of(context).brandColor7 : TDTheme.of(context).grayColor4,
+                  color: (activeIndex > index || readOnly)
+                      ? TDTheme.of(context).brandColor7
+                      : TDTheme.of(context).grayColor4,
                 ),
               ),
             ),
           ],
         ),
-        if (data.title != null && data.title!.isNotEmpty)
+        if (data.customTitle != null)
+          data.customTitle!
+        else if (data.title != null && data.title!.isNotEmpty)
           Container(
             margin: const EdgeInsets.only(top: 8),
             alignment: Alignment.center,
             child: TDText(
               data.title!,
               style: TextStyle(
-                fontWeight: (activeIndex == index && !readOnly) ? FontWeight.w600 : FontWeight.w400,
+                fontWeight: (activeIndex == index && !readOnly)
+                    ? FontWeight.w600
+                    : FontWeight.w400,
                 color: stepsTitleColor,
                 fontSize: 14,
               ),
@@ -188,17 +223,17 @@ class TDStepsHorizontalItem extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(top: 4),
           alignment: Alignment.center,
-          child: data.customContent ?? TDText(
-            data.content ?? '',
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              color: TDTheme.of(context).fontGyColor3,
-              fontSize: 12,
-            ),
-          ),
+          child: data.customContent ??
+              TDText(
+                data.content ?? '',
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: TDTheme.of(context).fontGyColor3,
+                  fontSize: 12,
+                ),
+              ),
         ),
       ],
     );
   }
 }
-
