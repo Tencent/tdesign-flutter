@@ -4,6 +4,11 @@ description: TDesign Flutter组件库。
 spline: explain
 ---
 
+## 版本节奏
+TDesign Flutter 从0.2.0版本开始，正常情况下，每月初发一个版本，若有节假日等特殊情况再特殊处理。
+
+新版本携带的功能，可以通过issue的标签查看，带pre_x.x.x标签的issue，则表示已开发完成，预计在x.x.x发布。
+
 ## 自定义主题
 - 自定义主题用法请参考：https://tdesign.tencent.com/flutter/getting-started#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98
 - 如果自定义主题未生效，请检查是否设置：TDTheme.needMultiTheme(true);
