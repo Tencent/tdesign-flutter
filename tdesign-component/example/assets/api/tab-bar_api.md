@@ -24,6 +24,7 @@
 | unselectTabTextStyle | TextStyle? | - | 文本未选择样式 basicType为text时必填 |
 | badgeConfig | BadgeConfig? | - | 消息配置 |
 | popUpButtonConfig | TDBottomTabBarPopUpBtnConfig? | - | 弹窗配置 |
+| onLongPress | GestureLongPressCallback? | - | 长按事件 |
 
 ```
 ```

@@ -10,9 +10,11 @@
 | child |  | - |  |
 | title |  | - |  |
 | titleColor |  | - |  |
+| titleFontSize | double? | - | 标题字体大小 |
 | titleLeft | bool | false | 标题是否靠左 |
 | hideClose | bool | false | 是否隐藏关闭按钮 |
 | closeColor | Color? | - | 关闭按钮颜色 |
+| closeSize | double? | - | 关闭按钮图标尺寸 |
 | closeClick | PopupClick? | - | 关闭按钮点击回调 |
 | backgroundColor |  | - |  |
 | radius |  | - |  |
@@ -39,6 +41,9 @@
 | rightText | String? | - | 右边文本 |
 | rightTextColor | Color? | - | 右边文本颜色 |
 | rightClick | PopupClick? | - | 右边文本点击回调 |
+| titleFontSize | double? | - | 标题字体大小 |
+| leftTextFontSize | double? | - | 左边文本字体大小 |
+| rightTextFontSize | double? | - | 右边文本字体大小 |
 | backgroundColor |  | - |  |
 | radius |  | - |  |
 | draggable |  | - |  |
@@ -61,6 +66,7 @@
 | closeClick | PopupClick? | - | 关闭按钮点击回调 |
 | backgroundColor | Color? | - | 背景颜色 |
 | radius | double? | - | 圆角 |
+| closeSize | double? | - | 关闭按钮图标尺寸 |
 
 ```
 ```
