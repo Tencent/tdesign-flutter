@@ -30,3 +30,12 @@ class FontFamily {
   factory FontFamily.fromJson(Map<String, dynamic> map) =>
       FontFamily(fontFamily: map['fontFamily'], package: map['package']);
 }
+
+/// Font字体宽高的扩展
+extension FontExtensions on Font {
+  Font withSize(int newSize) => Font(
+      size: newSize,
+      lineHeight: (height * newSize).round(),
+      fontWeight: fontWeight
+  );
+}
