@@ -13,6 +13,9 @@ docClass: timeline
 - `TDBottomTabBar`: 新增自定义标题支持到步骤条组件 @RSS1102 ([#576](https://github.com/Tencent/tdesign-flutter/pull/576))
 - `TDSlider`: 添加滑块点击事件 `onTap` @RSS1102 ([#527](https://github.com/Tencent/tdesign-flutter/pull/527))
 - `TDCascader`: 添加右上角"确定"按钮，支持选择任意选项 @Luozf12345
+- `ImageViewer`: 支持单张图片删除 @ccXxx1aoBai ([#581](https://github.com/Tencent/tdesign-flutter/pull/581))
+- `TDPopup`: 为Popup组件添加标题、左文本、右文本和关闭按钮自定义尺寸属性 @Jzow ([#582](https://github.com/Tencent/tdesign-flutter/pull/582))
+- `TDBottomTabBarTabConfig`: 添加长按 tab 触发事件`onLongPress` @RSS1102 ([#580](https://github.com/Tencent/tdesign-flutter/pull/580))
 
 ### 🐞 Bug Fixes
 - `TDFooter`: 修复页脚链接模式时内容溢出问题 @runoob-coder ([#554](https://github.com/Tencent/tdesign-flutter/pull/554))

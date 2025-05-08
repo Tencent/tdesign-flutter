@@ -5,6 +5,9 @@
 - `TDBottomTabBar`: Added custom title support for step bar component. @RSS1102 ([#576](https://github.com/Tencent/tdesign-flutter/pull/576))
 - `TDSlider`: Added slider tap event `onTap`. @RSS1102 ([#527](https://github.com/Tencent/tdesign-flutter/pull/527))
 - `TDCascader`: Added "Confirm" button at top-right corner to support selecting any option. @Luozf12345
+- `ImageViewer`: Added single image deletion support. @ccXxx1aoBai ([#581](https://github.com/Tencent/tdesign-flutter/pull/581))
+- `TDPopup`: Added custom size properties for popup title, left text, right text, and close button. @Jzow ([#582](https://github.com/Tencent/tdesign-flutter/pull/582))
+- `TDBottomTabBarTabConfig`: Added `onLongPress` event triggered by long-pressing tabs. @RSS1102 ([#580](https://github.com/Tencent/tdesign-flutter/pull/580))
 
 ### 🐞 Bug Fixes
 - `TDFooter`: Fixed content overflow issue in link mode. @runoob-coder ([#554](https://github.com/Tencent/tdesign-flutter/pull/554))
