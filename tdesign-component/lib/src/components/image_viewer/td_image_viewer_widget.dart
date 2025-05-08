@@ -37,6 +37,7 @@ class TDImageViewerWidget extends StatefulWidget {
     this.height,
     this.onClose,
     this.onDelete,
+    this.ignoreDeleteError = false,
     this.onTap,
     this.onLongPress,
     this.leftItemBuilder,
@@ -93,6 +94,9 @@ class TDImageViewerWidget extends StatefulWidget {
 
   /// 删除点击
   final OnDelete? onDelete;
+
+  /// 是否忽略单张图片删除错误提示
+  final bool? ignoreDeleteError;
 
   /// 点击图片
   final OnImageTap? onTap;
@@ -250,7 +254,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
       visible: widget.deleteBtn ?? false,
       child: GestureDetector(
         onTap: () {
-          if(widget.images.length == 1) {
+          if(widget.images.length == 1 && !(widget.ignoreDeleteError ?? false)) {
             throw FlutterError('images must not be empty');
           }
           widget.images.removeAt(_index - 1);
