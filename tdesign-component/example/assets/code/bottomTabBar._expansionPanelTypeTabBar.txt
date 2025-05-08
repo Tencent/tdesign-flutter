@@ -39,7 +39,9 @@
                             //height: 30,
                             child: Text(
                               e,
-                              style: TextStyle(color: TDTheme.of(context).fontGyColor1, fontSize: 16),
+                              style: TextStyle(
+                                  color: TDTheme.of(context).fontGyColor1,
+                                  fontSize: 16),
                             ),
                           ),
                         ))
