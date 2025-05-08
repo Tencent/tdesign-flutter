@@ -16,9 +16,6 @@ class TDBottomTabBarPage extends StatefulWidget {
 }
 
 class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
-
-
-
   void onTapTab(BuildContext context, String tabName) {
     TDToast.showText('点击了 $tabName', context: context);
   }
@@ -179,6 +176,12 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
             builder: _capsuleTabBar,
           ),
         ]),
+        ExampleModule(title: '组件事件', children: [
+          ExampleItem(
+            desc: '长按触发',
+            builder: _capsuleTabBarOnLongPress,
+          ),
+        ]),
       ],
       test: [
         ExampleItem(desc: '自定义上边线样式', builder: _buildCustomTopStyle),
@@ -207,246 +210,262 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
 
   @Demo(group: 'bottomTabBar')
   Widget _textTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
   Widget _textTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
   Widget _textTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
   Widget _iconTextTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
   Widget _iconTextTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
   Widget _iconTextTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
   Widget _iconTextTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
@@ -459,140 +478,150 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
       TDIcons.app,
       color: TDTheme.of(context).brandNormalColor,
     );
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: selectedIcon,
-        unselectedIcon: unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: selectedIcon,
-        unselectedIcon: unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: selectedIcon,
-        unselectedIcon: unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签3');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: selectedIcon,
+            unselectedIcon: unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: selectedIcon,
+            unselectedIcon: unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: selectedIcon,
+            unselectedIcon: unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签3');
+            },
+          ),
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
   Widget _iconTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          })
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              })
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
   Widget _iconTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
   Widget _iconTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
   Widget _iconTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
@@ -636,7 +665,9 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
                             //height: 30,
                             child: Text(
                               e,
-                              style: TextStyle(color: TDTheme.of(context).fontGyColor1, fontSize: 16),
+                              style: TextStyle(
+                                  color: TDTheme.of(context).fontGyColor1,
+                                  fontSize: 16),
                             ),
                           ),
                         ))
@@ -801,6 +832,52 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
     );
   }
 
+    @Demo(group: 'bottomTabBar')
+  Widget _capsuleTabBarOnLongPress(BuildContext context) {
+    return TDBottomTabBar(
+      TDBottomTabBarBasicType.iconText,
+      componentType: TDBottomTabBarComponentType.label,
+      outlineType: TDBottomTabBarOutlineType.capsule,
+      useVerticalDivider: true,
+      navigationTabs: [
+        TDBottomTabBarTabConfig(
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签1');
+          },
+          onLongPress: () {
+            print('长按了标签1');
+            TDToast.showText('长按了标签1', context: context);
+          },
+        ),
+        TDBottomTabBarTabConfig(
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签2');
+          },
+          onLongPress: () {
+            TDToast.showText('长按了标签2', context: context);
+          },
+        ),
+        TDBottomTabBarTabConfig(
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签3');
+          },
+          onLongPress: () {
+            TDToast.showText('长按了标签3', context: context);
+          },
+        ),
+      ],
+    );
+  }
+
   @Demo(group: 'bottomTabBar')
   Widget _buildCustomTopStyle(BuildContext context) {
     return TDBottomTabBar(
@@ -910,14 +987,14 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
           ),
           TDBottomTabBarTabConfig(
             tabText: '标签',
-            unselectTabTextStyle: TextStyle(color: TDTheme.of(context).fontGyColor1),
+            unselectTabTextStyle:
+                TextStyle(color: TDTheme.of(context).fontGyColor1),
             onTap: () {
               onTapTab(context, '标签1');
             },
           ),
         ]);
   }
-
 
   var currentIndex = 0;
   @Demo(group: 'bottomTabBar')
@@ -945,7 +1022,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
             },
           )),
           TDBottomTabBar(
-            // 设置选择index
+              // 设置选择index
               currentIndex: currentIndex,
               TDBottomTabBarBasicType.icon,
               useVerticalDivider: true,
