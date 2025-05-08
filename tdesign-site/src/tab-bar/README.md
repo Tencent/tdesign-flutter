@@ -3611,6 +3611,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | onTap | GestureTapCallback? | - | tab点击事件 |
+| onLongPress | GestureLongPressCallback? | - | 长按 tab 事件 |
 | selectedIcon | Widget? | - | 选中时图标 |
 | unselectedIcon | Widget? | - | 未选中时图标 |
 | tabText | String? | - | tab文本 |
