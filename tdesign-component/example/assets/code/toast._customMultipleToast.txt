@@ -1,0 +1,17 @@
+
+  Widget _customMultipleToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showText(
+            '最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字',
+            context: context,
+            constraints: BoxConstraints(maxWidth: 350.scale),
+            maxLines: 5);
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '多行文字',
+    );
+  }
