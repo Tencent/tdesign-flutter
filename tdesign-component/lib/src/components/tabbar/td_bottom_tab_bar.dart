@@ -290,8 +290,8 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
     setState(() {
       if (_selectedIndex != index) {
         _selectedIndex = index;
-        widget.navigationTabs[index].onTap?.call();
       }
+      widget.navigationTabs[index].onTap?.call();
     });
   }
 
