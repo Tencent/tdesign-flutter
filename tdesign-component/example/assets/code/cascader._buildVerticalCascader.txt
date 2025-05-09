@@ -5,8 +5,8 @@
         TDCascader.showMultiCascader(context, title: '选择地址', data: _data, initialData: _initData, theme: 'step',
             onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
-            List result = [];
-            int len = selectData.length;
+            var result = [];
+            var len = selectData.length;
             _initData = selectData[len - 1].value!;
             selectData.forEach((element) {
               result.add(element.label);

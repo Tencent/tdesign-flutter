@@ -1,0 +1,88 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [develop, main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter-version:
+          - 3.16.9
+          - 3.x
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version: ${{ matrix.flutter-version }}
+          cache: true
+
+      - run: flutter --version
+
+      - name: flutter pub get
+        working-directory: ./tdesign-component
+        run: flutter pub get
+
+      - name: flutter build
+        working-directory: ./tdesign-component/example
+        run: flutter build apk
+
+  build-ios:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter-version:
+          - 3.16.9
+          - 3.x
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version: ${{ matrix.flutter-version }}
+          cache: true
+
+      - run: flutter --version
+
+      - name: flutter pub get
+        working-directory: ./tdesign-component
+        run: flutter pub get
+
+      - name: flutter build
+        working-directory: ./tdesign-component/example
+        run: flutter build ios --release --no-codesign
+
+  build-web:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter-version:
+          - 3.16.9
+          - 3.x
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version: ${{ matrix.flutter-version }}
+          cache: true
+
+      - run: flutter --version
+
+      - name: flutter pub get
+        working-directory: ./tdesign-component
+        run: flutter pub get
+
+      - name: flutter build
+        working-directory: ./tdesign-component/example
+        run: flutter build web
