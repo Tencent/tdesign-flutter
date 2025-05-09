@@ -27,20 +27,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -53,26 +55,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -83,32 +87,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -119,38 +125,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -161,32 +169,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -197,40 +207,42 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -241,48 +253,50 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -293,26 +307,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -323,32 +339,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -359,38 +377,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -403,26 +423,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -433,32 +455,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -469,38 +493,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -511,32 +537,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -547,40 +575,42 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -591,48 +621,50 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -643,26 +675,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -673,32 +707,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -709,38 +745,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -753,26 +791,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -783,32 +823,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -819,38 +861,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -861,32 +905,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -897,40 +943,42 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -941,48 +989,50 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -993,26 +1043,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1023,32 +1075,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1059,38 +1113,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1103,24 +1159,26 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1133,26 +1191,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1163,32 +1223,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1199,38 +1261,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1241,32 +1305,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1277,40 +1343,42 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1321,48 +1389,50 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1373,26 +1443,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1403,32 +1475,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1439,38 +1513,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1483,26 +1559,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1513,32 +1591,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1549,38 +1629,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1591,32 +1673,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1627,40 +1711,42 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1671,48 +1757,50 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1723,26 +1811,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1753,32 +1843,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1789,38 +1881,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1833,26 +1927,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1863,32 +1959,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1899,38 +1997,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1941,32 +2041,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -1977,40 +2079,42 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2021,48 +2125,50 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2073,26 +2179,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2103,32 +2211,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2139,38 +2249,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2183,20 +2295,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          })
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              })
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2209,26 +2323,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2239,32 +2355,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2275,38 +2393,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2317,32 +2437,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2353,40 +2475,42 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2397,48 +2521,50 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2449,26 +2575,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2479,32 +2607,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2515,38 +2645,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2559,26 +2691,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2589,32 +2723,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2625,38 +2761,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2667,32 +2805,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2703,40 +2843,42 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2747,48 +2889,50 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2799,26 +2943,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2829,32 +2975,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2865,38 +3013,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2909,26 +3059,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2939,32 +3091,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -2975,38 +3129,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -3017,32 +3173,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -3053,40 +3211,42 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -3097,48 +3257,50 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTextTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -3149,26 +3311,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar3tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -3179,32 +3343,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar4tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -3215,38 +3381,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _iconTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.icon, useVerticalDivider: true, navigationTabs: [
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签1');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-      TDBottomTabBarTabConfig(
-          selectedIcon: _selectedIcon,
-          unselectedIcon: _unSelectedIcon,
-          onTap: () {
-            onTapTab(context, '标签2');
-          }),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.icon,
+        useVerticalDivider: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签1');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+          TDBottomTabBarTabConfig(
+              selectedIcon: _selectedIcon,
+              unselectedIcon: _unSelectedIcon,
+              onTap: () {
+                onTapTab(context, '标签2');
+              }),
+        ]);
   }</pre>
 
 </td-code-block>
@@ -3297,7 +3465,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                             //height: 30,
                             child: Text(
                               e,
-                              style: TextStyle(color: TDTheme.of(context).fontGyColor1, fontSize: 16),
+                              style: TextStyle(
+                                  color: TDTheme.of(context).fontGyColor1,
+                                  fontSize: 16),
                             ),
                           ),
                         ))
@@ -3590,6 +3760,60 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
+### 1 组件事件
+
+长按触发
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _capsuleTabBarOnLongPress(BuildContext context) {
+    return TDBottomTabBar(
+      TDBottomTabBarBasicType.iconText,
+      componentType: TDBottomTabBarComponentType.label,
+      outlineType: TDBottomTabBarOutlineType.capsule,
+      useVerticalDivider: true,
+      navigationTabs: [
+        TDBottomTabBarTabConfig(
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签1');
+          },
+          onLongPress: () {
+            print('长按了标签1');
+            TDToast.showText('长按了标签1', context: context);
+          },
+        ),
+        TDBottomTabBarTabConfig(
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签2');
+          },
+          onLongPress: () {
+            TDToast.showText('长按了标签2', context: context);
+          },
+        ),
+        TDBottomTabBarTabConfig(
+          selectedIcon: _selectedIcon,
+          unselectedIcon: _unSelectedIcon,
+          tabText: '标签',
+          onTap: () {
+            onTapTab(context, '标签3');
+          },
+          onLongPress: () {
+            TDToast.showText('长按了标签3', context: context);
+          },
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
 
 
 ## API
@@ -3618,6 +3842,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | unselectTabTextStyle | TextStyle? | - | 文本未选择样式 basicType为text时必填 |
 | badgeConfig | BadgeConfig? | - | 消息配置 |
 | popUpButtonConfig | TDBottomTabBarPopUpBtnConfig? | - | 弹窗配置 |
+| onLongPress | GestureLongPressCallback? | - | 长按事件 |
 
 ```
 ```

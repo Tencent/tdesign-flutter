@@ -15,13 +15,15 @@ class TDCascader {
       double cascaderHeight = 500,
       String? initialData,
       String? closeText,
-        bool  isLetterSort=false,
+      bool isLetterSort = false,
       List<String>? subTitles,
+      TDCascaderAction? action,
       Function? onClose}) {
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
-        barrierColor: barrierColor ?? TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+        barrierColor:
+            barrierColor ?? TDTheme.of(context).fontGyColor2.withOpacity(0.6),
         builder: (context) {
           return TDMultiCascader(
               title: title,
@@ -32,8 +34,9 @@ class TDCascader {
               initialData: initialData,
               onChange: onChange,
               closeText: closeText,
+              action: action,
               theme: theme,
-              isLetterSort:isLetterSort,
+              isLetterSort: isLetterSort,
               subTitles: subTitles);
         });
   }
