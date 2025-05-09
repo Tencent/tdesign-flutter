@@ -86,6 +86,7 @@ class TDBottomTabBarTabConfig {
     this.unselectTabTextStyle,
     this.badgeConfig,
     this.popUpButtonConfig,
+    this.allowMultipleTaps = false
   }) : assert(() {
           if (badgeConfig?.showBadge ?? false) {
             if (badgeConfig?.tdBadge == null) {
@@ -119,6 +120,9 @@ class TDBottomTabBarTabConfig {
 
   /// 弹窗配置
   final TDBottomTabBarPopUpBtnConfig? popUpButtonConfig;
+
+  /// onTap方法允许点击多次
+  final bool allowMultipleTaps;
 }
 
 class TDBottomTabBar extends StatefulWidget {
@@ -288,10 +292,12 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
 
   void _onTap(int index) {
     setState(() {
+      if (_selectedIndex != index || widget.navigationTabs[index].allowMultipleTaps) {
+        widget.navigationTabs[index].onTap?.call();
+      }
       if (_selectedIndex != index) {
         _selectedIndex = index;
       }
-      widget.navigationTabs[index].onTap?.call();
     });
   }
 

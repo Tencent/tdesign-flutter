@@ -200,7 +200,8 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
             desc: 'icon默认大小底部文字不溢出',
             builder: (context) {
               return CodeWrapper(builder: _iconTextTypeTabBarOverflow);
-            })
+            }),
+        ExampleItem(desc: 'onTap支持重复触发', builder: _allowMultipleTaps),
       ],
     );
   }
@@ -966,5 +967,24 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
         ],
       ),
     );
+  }
+
+  @Demo(group: 'bottomTabBar')
+  Widget _allowMultipleTaps(BuildContext context) {
+    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
+      TDBottomTabBarTabConfig(
+        allowMultipleTaps: true,
+        tabText: '支持重复点击',
+        onTap: () {
+          onTapTab(context, '标签1');
+        },
+      ),
+      TDBottomTabBarTabConfig(
+        tabText: '不支持重复点击',
+        onTap: () {
+          onTapTab(context, '标签2');
+        },
+      ),
+    ]);
   }
 }
