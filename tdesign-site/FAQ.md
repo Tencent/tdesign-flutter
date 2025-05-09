@@ -4,6 +4,11 @@ description: TDesign Flutter组件库。
 spline: explain
 ---
 
+## 版本节奏
+TDesign Flutter 从0.2.0版本开始，正常情况下，每月初发一个版本，若有节假日等特殊情况再特殊处理。
+
+新版本携带的功能，可以通过issue的标签查看，带pre_x.x.x标签的issue，则表示已开发完成，预计在x.x.x发布。
+
 ## 自定义主题
 - 自定义主题用法请参考：https://tdesign.tencent.com/flutter/getting-started#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98
 - 如果自定义主题未生效，请检查是否设置：TDTheme.needMultiTheme(true);
@@ -15,9 +20,13 @@ spline: explain
 TDesignFlutter目前未内置暗色模式，请使用“自定义主题”方式自己适配。
 
 ## 文字居中
-0.1.4版本:Flutter 3.16之后,修改了渲染引擎,导致启用forceVerticalCenter参数的组件字体偏移更多,不再居中.可以通过设置kTextForceVerticalCenterEnable=false来禁用字体居中功能,让组件显示与官方Text一致
+Flutter官方SDK不支持文本居中功能，若要实现通用的文字居中方案，需要修改Flutter引擎，使用成本较高，因此，TDesign采用的是一个折中方案：针对常用字体，通过在其顶部添加padding的方式，达到居中的效果。
 
-0.1.5版本:适配了Android和iOS双端基础系统字体的中文居中,其他语言的字体,可以通过重写TDTextPaddingConfig的paddingRate和paddingExtraRate进行自定义适配,TDTextPaddingConfig使用方法可参考TDTextPage.
+默认计算padding的尺寸，以Pixel 4模拟器的默认字体为基准，不同机型的字体不一样，有的机型可能需要的尺寸与默认适配字体差异较大，因此会出现添加padding后，文字更不居中的问题。
+
+TDesign Flutter 0.1.4版本开始，添加了全局变量kTextForceVerticalCenterEnable来控制是否使用内部padding，如果将全局变量kTextForceVerticalCenterEnable设为false，则显示效果与直接使用官方Text一致。(部分机型，尤其是iOS机型，将kTextForceVerticalCenterEnable设为false，可能比设为true更居中，遇到文字不居中问题，可以尝试将kTextForceVerticalCenterEnable改为false看看效果。)
+
+TDesign Flutter 0.1.5版本之后，可以通过重写TDTextPaddingConfig的paddingRate和paddingExtraRate进行自定义适配,TDTextPaddingConfig使用方法可参考TDTextPage。如果kTextForceVerticalCenterEnable设为false也无法满足需求，则可以通过重写TDTextPaddingConfig自定义适配主流机型。
 
 ## 新增组件
 如果有新增组件的想法，可以提issue，或者在已有issue补充。如果想提交代码，开发实现，可以拉负责人一起评估。
@@ -26,7 +35,7 @@ TDesignFlutter目前未内置暗色模式，请使用“自定义主题”方式
 - 自定义高度： TDInput没有自带height参数，可以通过外部嵌套SizeBox来修改高度。不过修改高度后，内部相关高度不会等比缩放，需要业务自己同步修改。
 - 输入正则：Input的FilteringTextInputFormatter.allow(RegExp(r''))的正则是匹配即将输入的单个字符串的，不是匹配已输入的整个字符串的，按字符串匹配写的正则可能导致无法输入。
 
-## TDImage换成问题
+## TDImage缓存问题
 TDImage基于系统Image组件封装，未单独处理缓存逻辑，使用的是系统组件自带的缓存。
 
 ## Toast 使用context
