@@ -55,13 +55,19 @@ jobs:
       - name: flutter build
         working-directory: ./tdesign-component/example
         run: flutter build ios --release --no-codesign
+      - name: make ipa
+        working-directory: tdesign-component/example/build/ios/iphoneos
+        run: |
+            mkdir Payload
+            cp -R Runner.app Payload/
+            zip -qr Runner.ipa Payload
 
-      - name: upload ios
+      - name: upload ipa
         uses: actions/upload-artifact@v4
-        id: upload-ios
+        id: upload-ipa
         with:
-          name: tdesign-flutter-example.app
-          path: tdesign-component/example/build/ios/iphoneos
+          name: tdesign-flutter-example.ipa
+          path: tdesign-component/example/build/ios/iphoneos/Runner.ipa
           retention-days: 5  
 
   build-web:
