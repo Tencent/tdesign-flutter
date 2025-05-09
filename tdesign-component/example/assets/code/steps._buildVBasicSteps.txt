@@ -1,5 +1,5 @@
 
-  Widget _buildVBasicSteps(BuildContext context){
+  Widget _buildVBasicSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Row(

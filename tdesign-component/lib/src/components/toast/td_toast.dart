@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
+import '../../util/auto_size.dart';
 import '../../util/context_extension.dart';
 
 enum IconTextDirection {
@@ -380,7 +381,7 @@ class _TDTextToast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: constraints ?? const BoxConstraints(maxWidth: 191, maxHeight: 94),
+      constraints: constraints ?? BoxConstraints(maxWidth: 191.scale),
       child: Container(
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
           decoration: BoxDecoration(
