@@ -6,8 +6,11 @@
       options.add(TDSelectOption(label: '选项$i', value: i, children: []));
 
       for (var j = 1; j <= 10; j++) {
-        options[i - 1].children.add(
-            TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []));
+        options[i - 1].children.add(TDSelectOption(
+              label: '选项$i.$j',
+              value: i * 10 + j,
+              children: [],
+            ));
       }
     }
 
