@@ -29,6 +29,10 @@ jobs:
         working-directory: ./tdesign-component
         run: flutter pub get
 
+      - name: flutter pub get
+        working-directory: ./tdesign-component/example
+        run: flutter pub get
+
       - name: flutter build
         working-directory: ./tdesign-component/example
         run: flutter build apk
@@ -54,6 +58,10 @@ jobs:
 
       - name: flutter pub get
         working-directory: ./tdesign-component
+        run: flutter pub get
+      
+      - name: flutter pub get
+        working-directory: ./tdesign-component/example
         run: flutter pub get
 
       - name: flutter build
@@ -81,6 +89,10 @@ jobs:
 
       - name: flutter pub get
         working-directory: ./tdesign-component
+        run: flutter pub get
+      
+      - name: flutter pub get
+        working-directory: ./tdesign-component/example
         run: flutter pub get
 
       - name: flutter build
