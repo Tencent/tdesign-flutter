@@ -8,8 +8,8 @@
             initialData: _initData_5,
             theme: 'step', onChange: (List<MultiCascaderListModel> selectData) {
               setState(() {
-                List result = [];
-                int len = selectData.length;
+                var result = [];
+                var len = selectData.length;
                 _initData_5 = selectData[len - 1].value!;
                 selectData.forEach((element) {
                   result.add(element.label);
