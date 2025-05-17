@@ -1,0 +1,31 @@
+
+  Widget _buildSelectAnyItemCascader(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        var action = (List<MultiCascaderListModel> selectData) {
+          if(selectData.isEmpty){
+            TDToast.showText('请选择数据', context: context);
+            return;
+          }
+          setState(() {
+            var result = [];
+            var len = selectData.length;
+            _initData_6 = selectData[len - 1].value!;
+            selectData.forEach((element) {
+              result.add(element.label);
+            });
+            _selected_1 = result.join('/');
+          });
+        };
+        TDCascader.showMultiCascader(
+          context,
+          title: '选择地址',
+          data: _data,
+          initialData: _initData_6,
+          action: TDCascaderAction(onConfirm: action),
+          onChange: action,
+        );
+      },
+      child: _buildSelectRow(context, _selected_1, '选择地区'),
+    );
+  }
