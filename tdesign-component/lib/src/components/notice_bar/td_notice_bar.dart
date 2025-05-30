@@ -24,6 +24,7 @@ class TDNoticeBar extends StatefulWidget {
     this.suffixIcon,
     this.onTap,
     this.height = 22,
+    this.maxLines = 1,
   });
 
   /// 文本内容
@@ -64,6 +65,9 @@ class TDNoticeBar extends StatefulWidget {
 
   /// 文字高度 (当使用prefixIcon或suffixIcon时，icon大小值等于该属性）
   final double height;
+
+  /// 文本行数（仅静态有效）
+  final int? maxLines;
 
   @override
   State<StatefulWidget> createState() => _TDNoticeBarState();
@@ -188,7 +192,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
       ),
       locale: Localizations.localeOf(context),
       textDirection: TextDirection.ltr,
-      maxLines: 1,
+      maxLines: widget.marquee! ? 1 : widget.maxLines,
     )..layout(maxWidth: _size!.width);
     return textPainter.size;
   }
@@ -243,9 +247,6 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
 
   /// 获取文字高度
   double _getTextHeight() {
-    if(identical(0, 0.0)) {
-      return widget.height;
-    }
     return _getFontSize().height;
   }
 
@@ -256,7 +257,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     if (widget.context is String) {
       valid = true;
       textWidget = SizedBox(
-        height: widget.height,
+        height: _getTextHeight(),
         child: Align(
           alignment: Alignment.centerLeft,
           child: SizedBox(
@@ -264,7 +265,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
             child: TDText(
               widget.context,
               style: _style?.getTextStyle,
-              maxLines: 1,
+              maxLines: widget.marquee! ? 1 : widget.maxLines,
               forceVerticalCenter: true,
             ),
           ),
@@ -274,7 +275,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     if (widget.context is List<String>) {
       valid = true;
       textWidget = SizedBox(
-        height: widget.height,
+        height: _getTextHeight(),
         child: Align(
           alignment: Alignment.centerLeft,
           child: SizedBox(
@@ -306,7 +307,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
             children: [
               SizedBox(
                 key: _key,
-                height: widget.height,
+                height: _getTextHeight(),
                 child: textWidget,
               ),
               SizedBox(width: _getEmptyWidth()),
@@ -314,7 +315,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
                 width: _getEmptyWidth() > _getContextWidth()
                     ? _getEmptyWidth()
                     : _getContextWidth(),
-                height: widget.height,
+                height: _getTextHeight(),
                 child: textWidget,
               )
             ],
