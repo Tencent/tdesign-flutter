@@ -1,54 +1,49 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'td_form_inherited.dart';
 import '../../../tdesign_flutter.dart';
 
 /// 表格单元选用组件类型的枚举
-enum TDFormItemType {
-  input,
-  password,
-  radios,
-  dateTimePicker,
-  cascader,
-  stepper,
-  rate,
-  textarea,
-}
+enum TDFormItemType { input, radios, dateTimePicker, cascader, stepper, rate, textarea, upLoadImg }
 
 class TDFormItem extends StatefulWidget {
   TDFormItem({
     required this.type,
+    this.child,
+    this.formItemNotifier,
     this.label,
+    this.labelWidget,
     this.help,
+    this.name,
     this.labelAlign,
     this.contentAlign,
     this.labelWidth,
-    this.requiredMark,
+    this.tipAlign,
+    this.requiredMark= true,
     this.formRules,
     this.itemRule,
-    this.onChange,
     this.showErrorMessage = true,
-    this.maxLength,
     this.indicator,
     this.radioGroupSpacing,
-    this.allowHalf = false,
-    this.rateValue = 3,
-    this.rateCount = 5,
-    this.rateGap,
     this.additionInfo,
-    this.controller,
     this.select = '',
-    List<Map>? localData,
+    this.selectFn,
     Map<String, String>? radios,
     Key? key,
-  })  : localData = localData ?? const [],
-        radios = radios ?? const {},
-        super(key: key);
+  }) : super(key: key);
 
   /// 表单项标签左侧展示的内容
   final String? label;
 
+  /// 自定义标签
+  final Widget? labelWidget;
+
   /// 表格单元需要使用的组件类型
   final TDFormItemType type;
+
+  /// 表单字段名称
+  final String? name;
 
   /// TDInput的辅助信息
   final String? additionInfo;
@@ -68,21 +63,19 @@ class TDFormItem extends StatefulWidget {
   /// 标签宽度，如果提供则覆盖Form的labelWidth
   final double? labelWidth;
 
-  /// TODO: 竖直状态的左侧对齐 padding 需要目前部分组件的更新支持
-  /// 左侧 起始的 padding 位置不同
+  /// 组件提示内容对齐方式
+  final TextAlign? tipAlign;
 
-  /// Input 控制器
-  var controller;
+  /// 表单子组件
+  final Widget? child;
+
+  final FormItemNotifier? formItemNotifier;
 
   /// 选择器 适用于日期选择器等
   String select;
 
-  /// 传入数据 适用于级联选择器等
-  final List<Map> localData;
-
-  /// 单选按钮数据
-  /// < 序号 , 名称 >
-  final Map<String, String> radios;
+  /// 选择器方法 适用于日期选择器等
+  final Function? selectFn;
 
   /// 是否显示必填标记（*）
   final bool? requiredMark;
@@ -93,14 +86,8 @@ class TDFormItem extends StatefulWidget {
   /// 表单项验证规则
   final List? itemRule;
 
-  /// 表单 item 的回调函数
-  final ValueChanged? onChange;
-
   /// 是否显示错误信息
   final bool showErrorMessage;
-
-  /// TDTextarea 的属性，最大长度
-  final int? maxLength;
 
   /// TDTextarea 的属性，指示器
   final bool? indicator;
@@ -108,24 +95,36 @@ class TDFormItem extends StatefulWidget {
   /// TDRadioGroup 属性，文字与单选框的间距
   final double? radioGroupSpacing;
 
-  /// TDRate 属性，是否开启可选半个等级
-  final bool allowHalf;
-
-  /// TDRate 属性，评分的满分数
-  final int rateCount;
-
-  /// TDRate 属性，初始时的 value
-  final double rateValue;
-
-  /// TDRate 属性
-  /// 评分图标的间距，默认：TDTheme.of(context).spacer8
-  final double? rateGap;
-
   @override
   _TDFormItemState createState() => _TDFormItemState();
 }
 
 class _TDFormItemState extends State<TDFormItem> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.formItemNotifier?.addListener(() {
+      updateFormData(widget.formItemNotifier?.formVal);
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    if (widget.formItemNotifier != null) {
+      widget.formItemNotifier?.dispose();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (FormValidate) {
+      startValidation();
+    }
+  }
   /// 从 TDForm 继承获取整个表单的参数
   /// 获取真正的 LabelWidth
   double get LabelWidth {
@@ -143,6 +142,10 @@ class _TDFormItemState extends State<TDFormItem> {
     }
 
     return defaultLabelWidth;
+  }
+
+  Map<String, dynamic> get FormData {
+    return TDFormInherited.of(context)!.formData;
   }
 
   /// 获取 form 是否被禁用的状态
@@ -180,7 +183,9 @@ class _TDFormItemState extends State<TDFormItem> {
     final inherited = TDFormInherited.of(context);
     return inherited!.isValidate;
   }
-
+  bool get FormRequiredMark{
+    return TDFormInherited.of(context)!.requiredMark??false;
+  }
   /// 获取整个表格是否需要展示错误提示
   bool? get ShowErrorMessage {
     final inherited = TDFormInherited.of(context);
@@ -198,21 +203,10 @@ class _TDFormItemState extends State<TDFormItem> {
   }
 
   bool browseOn = false;
-  String? _initData;
-  String _selected_1 = '';
 
   /// 表单 item 的校验错误提示信息
   String? errorMessage;
 
-  double rate = 0;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (FormValidate) {
-      startValidation();
-    }
-  }
 
   /// 调用校验方法
   void startValidation() {
@@ -223,12 +217,11 @@ class _TDFormItemState extends State<TDFormItem> {
 
   /// 遍历校验规则并执行
   String? validate() {
-    String? value = widget.controller?.text;
-
+    String? value = widget.formItemNotifier?.formVal;
     for (var rule in FormRules!) {
       /// 只对类型匹配的项进行校验
       if (rule.type == widget.type) {
-        final result = rule.check(value);
+        final result = rule.check(widget.name!, value);
         if (result != null) {
           /// 返回第一个不通过的错误信息
           return result;
@@ -238,494 +231,328 @@ class _TDFormItemState extends State<TDFormItem> {
     return null;
   }
 
+  void updateFormData(value) {
+    if (widget.name != null) {
+      String name = widget.name!;
+      Map<String, dynamic> _formData = FormData;
+      _formData[name] = value;
+      TDFormInherited.of(context)!.onFormDataChange(_formData);
+      startValidation();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (FormIsHorizontal) {
-      switch (widget.type) {
-        case TDFormItemType.input:
-          return TDInput(
-            inputDecoration: InputDecoration(
-              hintText: widget.help,
-              contentPadding: EdgeInsets.only(
-                  left: FormContentAlign == TextAlign.center ? 0 : LabelWidth),
-              border: InputBorder.none,
-              errorText: ShowErrorMessage == true ? errorMessage : null,
-            ),
-
-            /// TODO: Input 校验失败时的提示 icon
-            // rightBtn: widget.showErrowMessage == true
-            //     ? Icon(
-            //         TDIcons.error_circle_filled,
-            //         color: TDTheme.of(context).fontGyColor3,
-            //       )
-            //     : null,
-            contentAlignment: FormContentAlign,
-            leftLabel: widget.label,
-            controller: widget.controller,
-            backgroundColor: Colors.white,
-            additionInfoColor: TDTheme.of(context).errorColor6,
-            readOnly: FormState,
-
-            /// TODO: requiredMark 会使得间距变大 要适应优化
-            // required: widget.requiredMark,
-          );
-        case TDFormItemType.password:
-          return TDInput(
-            inputDecoration: InputDecoration(
-              hintText: widget.help,
-              contentPadding: EdgeInsets.only(left: LabelWidth),
-              border: InputBorder.none,
-              errorText: ShowErrorMessage == true ? errorMessage : null,
-            ),
-            contentAlignment: FormContentAlign,
-            type: TDInputType.normal,
-            controller: widget.controller,
-            obscureText: !browseOn,
-            leftLabel: widget.label,
-            backgroundColor: Colors.white,
-            rightBtn: browseOn
-                ? Icon(
-                    TDIcons.browse,
-                    color: TDTheme.of(context).fontGyColor3,
-                  )
-                : Icon(
-                    TDIcons.browse_off,
-                    color: TDTheme.of(context).fontGyColor3,
-                  ),
-            onBtnTap: () {
-              setState(() {
-                browseOn = !browseOn;
-              });
-            },
-            needClear: false,
-            readOnly: FormState,
-            // additionInfo: widget.additionInfo,
-            // additionInfoColor: TDTheme.of(context).errorColor6,
-          );
-        case TDFormItemType.radios:
-          final theme = TDTheme.of(context);
-          return Container(
-            decoration: BoxDecoration(
-              color: theme.whiteColor1,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TDText(
-                    widget.label ?? '',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(width: LabelWidth),
-                  Expanded(
-                    child: TDRadioGroup(
-                      // spacing: widget.radioGroupSpacing,
-                      selectId: 'index:1',
-                      direction: Axis.horizontal,
-                      directionalTdRadios: widget.radios.entries.map((entry) {
-                        return TDRadio(
-                          id: entry.key,
-                          title: entry.value,
-                          radioStyle: TDRadioStyle.circle,
-                          showDivider: false,
-                          enable: !FormState,
-                        );
-                      }).toList(),
-
-                      /// TODO: TDRadioGroup 回调函数存在覆盖问题
-                      // onRadioGroupChange: (ids) {
-                      //   setState(() {
-                      //     print(ids);
-                      //   });
-                      // },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        case TDFormItemType.dateTimePicker:
-          return GestureDetector(
-            onTap: () {
-              TDPicker.showDatePicker(context, title: '选择时间',
-                  onConfirm: (selected) {
-                setState(() {
-                  widget.select =
-                      '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
-                  if (widget.onChange != null) {
-                    widget.onChange!(widget.select);
-                  }
-                });
-                Navigator.of(context).pop();
-              },
-                  dateStart: [1999, 01, 01],
-                  dateEnd: [2023, 12, 31],
-                  initialDate: [2012, 1, 1]);
-            },
-            child: _buildSelectRow(context, widget.select, '选择时间'),
-          );
-        case TDFormItemType.cascader:
-          return GestureDetector(
-            onTap: () {
-              TDCascader.showMultiCascader(context,
-                  title: '选择地址',
-                  data: widget.localData,
-                  initialData: _initData,
-                  theme: 'step',
-                  onChange: (List<MultiCascaderListModel> selectData) {
-                setState(() {
-                  var result = [];
-                  var len = selectData.length;
-                  _initData = selectData[len - 1].value!;
-                  selectData.forEach((element) {
-                    result.add(element.label);
-                  });
-                  _selected_1 = result.join('/');
-                  if (widget.onChange != null) {
-                    widget.onChange!(_selected_1);
-                  }
-                });
-              }, onClose: () {
-                Navigator.of(context).pop();
-              });
-            },
-            child: _buildSelectRow(context, _selected_1, '选择地区'),
-          );
-        case TDFormItemType.stepper:
-          final theme = TDTheme.of(context);
-          return Container(
-            decoration: BoxDecoration(
-              color: theme.whiteColor1,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TDText(
-                    widget.label,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  TDStepper(
-                    theme: TDStepperTheme.filled,
-                    disabled: FormState,
-                    onChange: (value) {
-                      setState(() {
-                        if (widget.onChange != null) {
-                          widget.onChange!(value);
-                        }
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        case TDFormItemType.rate:
-          return TDCell(
-              title: widget.label,
-              noteWidget: TDRate(
-                count: widget.rateCount,
-                value: widget.rateValue,
-                allowHalf: widget.allowHalf,
-                disabled: FormState,
-                onChange: (value) {
-                  setState(() {
-                    if (widget.onChange != null) {
-                      widget.onChange!(value);
-                    }
-                  });
-
-                  /// TODO: Rated 组件的校验
-                  // if (rate < 3) {}
-                },
-              ));
-        case TDFormItemType.textarea:
-          return TDTextarea(
-            backgroundColor: Colors.red,
-            controller: widget.controller,
-            label: widget.label,
-            hintText: widget.help,
-            maxLength: widget.maxLength,
-            indicator: widget.indicator,
-            readOnly: FormState,
-            additionInfo: ShowErrorMessage == true ? errorMessage : null,
-            additionInfoColor: TDTheme.of(context).errorColor6,
-          );
-      }
-    } else {
-      switch (widget.type) {
-        case TDFormItemType.input:
-          return TDInput(
-            spacer: TDInputSpacer(iconLabelSpace: 0),
-            type: TDInputType.twoLine,
-            inputDecoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 16),
-              hintText: widget.help,
-              border: InputBorder.none,
-            ),
-            leftLabelSpace: 16,
-            leftLabel: widget.label,
-            controller: widget.controller,
-            backgroundColor: Colors.white,
-
-            /// 竖直态的 TDInput 没用 additionInfo?
-            // additionInfo: widget.additionInfo,
-            readOnly: FormState,
-          );
-        case TDFormItemType.password:
-          return Column(
-            children: [
-              TDInput(
-                inputDecoration: InputDecoration(
-                  hintText: widget.help,
-                  contentPadding: const EdgeInsets.only(left: 16),
-                  border: InputBorder.none,
-                ),
-                leftLabelSpace: 16,
-                type: TDInputType.twoLine,
-                controller: widget.controller,
-                obscureText: !browseOn,
-                leftLabel: widget.label,
-                backgroundColor: Colors.white,
-                rightBtn: browseOn
-                    ? Icon(
-                        TDIcons.browse,
-                        color: TDTheme.of(context).fontGyColor3,
-                      )
-                    : Icon(
-                        TDIcons.browse_off,
-                        color: TDTheme.of(context).fontGyColor3,
-                      ),
-                onBtnTap: () {
-                  setState(() {
-                    browseOn = !browseOn;
-                  });
-                },
-                needClear: false,
-                readOnly: FormState,
-              ),
-            ],
-          );
-        case TDFormItemType.radios:
-          final theme = TDTheme.of(context);
-          return Container(
-            decoration: BoxDecoration(
-              color: theme.whiteColor1,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TDText(
-                    widget.label ?? '',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ),
-                const SizedBox(width: 20),
-                TDRadioGroup(
-                  selectId: 'index:1',
-                  direction: Axis.horizontal,
-                  directionalTdRadios: widget.radios.entries.map((entry) {
-                    return TDRadio(
-                      id: entry.key,
-                      title: entry.value,
-                      radioStyle: TDRadioStyle.circle,
-                      showDivider: false,
-                      enable: !FormState,
-                    );
-                  }).toList(),
-                  // onRadioGroupChange: (value) {
-                  //   setState(() {
-                  //   });
-                  // },
-                ),
-              ],
-            ),
-          );
-
-        case TDFormItemType.dateTimePicker:
-          return GestureDetector(
-            onTap: () {
-              TDPicker.showDatePicker(context, title: '选择时间',
-                  onConfirm: (selected) {
-                setState(() {
-                  widget.select =
-                      '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
-                  if (widget.onChange != null) {
-                    widget.onChange!(widget.select);
-                  }
-                });
-                Navigator.of(context).pop();
-              },
-                  dateStart: [1999, 01, 01],
-                  dateEnd: [2023, 12, 31],
-                  initialDate: [2012, 1, 1]);
-            },
-            child: _buildSelectRow(context, widget.select, '选择时间'),
-          );
-        case TDFormItemType.cascader:
-          return GestureDetector(
-            onTap: () {
-              TDCascader.showMultiCascader(context,
-                  title: '选择地址',
-                  data: widget.localData,
-                  initialData: _initData,
-                  theme: 'step',
-                  onChange: (List<MultiCascaderListModel> selectData) {
-                setState(() {
-                  var result = [];
-                  var len = selectData.length;
-                  _initData = selectData[len - 1].value!;
-                  selectData.forEach((element) {
-                    result.add(element.label);
-                  });
-                  _selected_1 = result.join('/');
-                  if (widget.onChange != null) {
-                    widget.onChange!(_selected_1);
-                  }
-                });
-              }, onClose: () {
-                Navigator.of(context).pop();
-              });
-            },
-            child: _buildSelectRow(context, _selected_1, '选择地区'),
-          );
-        case TDFormItemType.stepper:
-          return Container(
+    final theme = TDTheme.of(context);
+    Widget labelContent=  Visibility(
+        visible: widget.label != null ? true : false,
+        child: SizedBox(
+          width: LabelWidth,
+          child: widget.labelWidget ??
+              Row(
+                 children: [
+                   if(FormRequiredMark&&(widget.requiredMark!=null&&widget.requiredMark==true))
+                   TDText('*', style: const TextStyle(fontSize: 12),textColor: Colors.red, textAlign: widget.labelAlign),
+                   TDText(widget.label, style: const TextStyle(fontSize: 16), textAlign: widget.labelAlign),
+                 ],
+              )
+        ));
+    List<Widget> itemContent = [
+      labelContent,
+      Visibility(
+        visible: FormIsHorizontal,
+        child: Expanded(
+            child: Align(
+          alignment: Alignment.centerRight,
+          child: widget.child ?? SizedBox(),
+        )),
+        replacement: widget.child ?? SizedBox(),
+      )
+    ];
+    switch (widget.type) {
+      case TDFormItemType.input:
+      case TDFormItemType.radios:
+      case TDFormItemType.rate:
+        return Container(
             decoration: BoxDecoration(
               color: TDTheme.of(context).whiteColor1,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TDText(
-                    widget.label,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 8),
-                  TDStepper(
-                    theme: TDStepperTheme.filled,
-                    disabled: FormState,
-                    onChange: (value) {
-                      setState(() {
-                        if (widget.onChange != null) {
-                          widget.onChange!(value);
-                        }
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        case TDFormItemType.rate:
-          return Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: TDTheme.of(context).whiteColor1,
-              ),
-              child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TDText(
-                      widget.label,
-                      style: const TextStyle(fontSize: 16),
+                    Visibility(
+                      visible: FormIsHorizontal,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: itemContent,
+                      ),
+                      replacement: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: itemContent,
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    TDRate(
-                        count: widget.rateCount,
-                        value: widget.rateValue,
-                        allowHalf: widget.allowHalf,
-                        disabled: FormState,
-                        onChange: (value) {
-                          setState(() {
-                            if (widget.onChange != null) {
-                              widget.onChange!(value);
-                            }
-                          });
-                        }),
+                    _buildTipRow()
                   ],
+                )));
+      case TDFormItemType.dateTimePicker:
+      case TDFormItemType.cascader:
+        return _buildSelectRow(context, widget.select, widget.label ?? '', widget.selectFn);
+      case TDFormItemType.stepper:
+        return Container(
+          decoration: BoxDecoration(
+            color: theme.whiteColor1,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Visibility(
+                visible: FormIsHorizontal,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      labelContent,
+                      widget.child ?? SizedBox()
+                    ]),
+                replacement: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: itemContent,
                 ),
-              ));
-        case TDFormItemType.textarea:
-          return TDTextarea(
-            backgroundColor: Colors.red,
-            controller: widget.controller,
-            label: widget.label,
-            hintText: widget.help,
-            maxLength: widget.maxLength,
-            indicator: widget.indicator,
-            readOnly: FormState,
-            layout: TDTextareaLayout.vertical,
-            additionInfo: ShowErrorMessage == true ? errorMessage : null,
-            additionInfoColor: TDTheme.of(context).errorColor6,
-            onChanged: (value) {
-              setState(() {});
-            },
-          );
-      }
+              ),
+              SizedBox(
+                height: 6,
+              ),
+              _buildTipRow(right: 20)
+            ]),
+          ),
+        );
+      case TDFormItemType.textarea:
+        return Container(
+            decoration: BoxDecoration(
+              color: TDTheme.of(context).whiteColor1,
+            ),
+            child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Visibility(
+                      visible: FormIsHorizontal,
+                      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Visibility(
+                            visible: widget.label != null ? true : false,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child:labelContent,
+                            )),
+                        Expanded(child: widget.child ?? SizedBox()),
+                      ]),
+                      replacement: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Visibility(
+                            visible: widget.label != null ? true : false,
+                            child: SizedBox(
+                              width: LabelWidth,
+                              child: widget.labelWidget ??
+                                  TDText(widget.label,
+                                      style: const TextStyle(fontSize: 16), textAlign: widget.labelAlign),
+                            ),
+                          ),
+                          widget.child ?? SizedBox()
+                        ],
+                      ),
+                    ),
+                    _buildTipRow(left: 12)
+                  ],
+                )));
+      case TDFormItemType.upLoadImg:
+        return Container(
+          decoration: BoxDecoration(color: theme.whiteColor1),
+          child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Visibility(
+                    visible: FormIsHorizontal,
+                    child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: itemContent),
+                    replacement: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Visibility(
+                            visible: widget.label != null ? true : false,
+                            child: SizedBox(
+                              width: LabelWidth,
+                              child: widget.labelWidget ??
+                                  TDText(widget.label,
+                                      style: const TextStyle(fontSize: 16), textAlign: widget.labelAlign),
+                            )),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        widget.child ?? SizedBox()
+                      ],
+                    ),
+                  ),
+                  _buildTipRow()
+                ],
+              )),
+        );
     }
   }
 
-  Widget _buildSelectRow(BuildContext context, String output, String title) {
-    return Container(
-      color: TDTheme.of(context).whiteColor1,
-      height: 56,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-                child: TDText(
-                  title,
-                  font: TDTheme.of(context).fontBodyLarge,
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16, left: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: TDText(
-                        textAlign: FormContentAlign,
-                        output,
-                        font: TDTheme.of(context).fontBodyLarge,
-                        textColor:
-                            TDTheme.of(context).fontGyColor3.withOpacity(0.4),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      )),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Icon(
-                          TDIcons.chevron_right,
-                          color:
-                              TDTheme.of(context).fontGyColor3.withOpacity(0.4),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const TDDivider(
-            margin: EdgeInsets.only(
-              left: 16,
+  Widget _buildSelectRow(BuildContext context, String output, String title, Function? selectFn) {
+    Widget labelContent = SizedBox(
+      width: LabelWidth,
+      child: widget.labelWidget ??
+          Padding(
+            padding: EdgeInsets.only(left: FormIsHorizontal ? 0 : 2),
+            child:  Row(
+              children: [
+                if(FormRequiredMark&&(widget.requiredMark!=null&&widget.requiredMark==true))
+                  TDText('*', style: const TextStyle(fontSize: 12),textColor: Colors.red, textAlign: widget.labelAlign),
+                TDText(widget.label, style: const TextStyle(fontSize: 16), textAlign: widget.labelAlign),
+              ],
             ),
-          )
+          ),
+    );
+    Widget content = Padding(
+      padding: const EdgeInsets.only(right: 16, left: 16),
+      child: Row(
+        children: [
+          Expanded(
+              child: TDText(
+            textAlign: FormContentAlign,
+            output,
+            font: TDTheme.of(context).fontBodyLarge,
+            textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          )),
+          Padding(
+            padding: const EdgeInsets.only(left: 2),
+            child: Icon(
+              TDIcons.chevron_right,
+              color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
+            ),
+          ),
         ],
       ),
     );
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        if (selectFn != null) {
+          selectFn(context);
+        }
+      },
+      child: Container(
+        color: TDTheme.of(context).whiteColor1,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Visibility(
+              visible: FormIsHorizontal,
+              child: Row(
+                children: [
+                  labelContent,
+                  Expanded(
+                    child: content,
+                  ),
+                ],
+              ),
+              replacement: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      labelContent,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2, left: 2),
+                        child: TDText(
+                          textAlign: FormContentAlign,
+                          output,
+                          font: TDTheme.of(context).fontBodyLarge,
+                          textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  )),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 2),
+                    child: Icon(
+                      TDIcons.chevron_right,
+                      color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            _buildTipRow(right: 44)
+          ],
+        ),
+      ),
+    );
+  }
+
+  ///文案提示 如帮助信息，错误信息
+  Widget _buildTipRow({double left = 4, double right = 20}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.help != null)
+          Row(
+            children: [
+              if (widget.label != null && FormIsHorizontal) SizedBox(width: LabelWidth),
+              Expanded(
+                child: Padding(
+                    padding: EdgeInsets.only(left: left, right: right),
+                    child: TDText(
+                      widget.help,
+                      style: const TextStyle(fontSize: 12),
+                      textAlign: widget.tipAlign ?? TextAlign.left,
+                      textColor: const Color.fromRGBO(0, 0, 0, 0.4),
+                    )),
+              )
+            ],
+          ),
+        if (ShowErrorMessage != null && ShowErrorMessage! && errorMessage != null && errorMessage != '')
+          Row(
+            children: [
+              if (widget.label != null) SizedBox(width: LabelWidth),
+              Expanded(
+                  child: Padding(
+                      padding: EdgeInsets.only(left: left, right: right),
+                      child: TDText(
+                        errorMessage,
+                        style: const TextStyle(fontSize: 12),
+                        textAlign: widget.tipAlign ?? TextAlign.left,
+                        textColor: Color.fromRGBO(213, 73, 65, 1),
+                      )))
+            ],
+          ),
+      ],
+    );
+  }
+}
+
+class FormItemNotifier with ChangeNotifier {
+  String _formVal = '';
+  String get formVal => _formVal;
+  upDataForm(val) {
+    _formVal = val;
+    notifyListeners();
+  }
+
+  submit() {
+    notifyListeners();
   }
 }
