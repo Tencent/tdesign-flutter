@@ -1,28 +1,33 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/src/components/form/td_form_validation.dart';
 import 'td_form_inherited.dart';
 import '../../../tdesign_flutter.dart';
-
+GlobalKey<_TDFormState> globaTDFormlKey=GlobalKey();
 class TDForm extends StatefulWidget {
-  const TDForm({
-    Key? key,
-    required this.items,
-    required this.rules,
-    this.colon = false,
-    this.formContentAlign = TextAlign.left,
-    this.data,
-    this.isHorizontal = true,
-    this.disabled = false,
-    this.errorMessage,
-    this.formLabelAlign = TextAlign.left,
-    this.labelWidth = 20.0,
-    this.preventSubmitDefault = true,
-    this.requiredMark = true, // 此处必填项有小问题
-    this.isValidate = false,
-    this.scrollToFirstError,
-    this.formShowErrorMessage = true,
-    this.submitWithWarningMessage = false,
-  }) : super(key: key);
+  const TDForm(
+      {Key? key,
+      required this.items,
+      required this.rules,
+      required this.onSubmit,
+      required this.data,
+      this.colon = false,
+      this.formContentAlign = TextAlign.left,
+      this.isHorizontal = true,
+      this.disabled = false,
+      this.errorMessage,
+      this.formLabelAlign = TextAlign.left,
+      this.labelWidth = 20.0,
+      this.preventSubmitDefault = true,
+      this.requiredMark = true, // 此处必填项有小问题
+      this.isValidate = false,
+      this.scrollToFirstError,
+      this.formShowErrorMessage = true,
+      this.submitWithWarningMessage = false,
+      this.onReset,
+      this.btnGroup})
+      : super(key: key);
 
   /// 表单内容 items
   final List<TDFormItem> items;
@@ -37,8 +42,8 @@ class TDForm extends StatefulWidget {
   /// TODO: TDStepper TDRate 等组件没用实现通用性
   final TextAlign formContentAlign;
 
-  /// TODO: 整个表单数据 是否需要将所有 items 的数据整合输出？
-  final List<String>? data;
+  ///	表单数据
+  final Map<String, dynamic> data;
 
   /// 表单排列方式是否为 水平方向
   final bool isHorizontal;
@@ -83,30 +88,82 @@ class TDForm extends StatefulWidget {
   /// 【讨论中】当校验结果只有告警信息时，是否触发 submit 提交事件
   final bool? submitWithWarningMessage;
 
+  /// 表单提交时触发
+  final Function onSubmit;
+
+  /// 表单重置时触发
+  final Function? onReset;
+
+  /// 表单按钮组
+  final List<Widget>? btnGroup;
   @override
   State<TDForm> createState() => _TDFormState();
 }
 
 class _TDFormState extends State<TDForm> {
-  late final List<Widget> _formItems;
-
+   List<Widget> _formItems=[];
+  Map<String, dynamic> _formData={};
+  bool _isValidate=false;
   @override
   void initState() {
     super.initState();
-    _formItems =
-        widget.items.expand((item) => [item, SizedBox(height: 1)]).toList();
+
+  }
+
+  onSubmit() {
+  bool isValidateSuc=false;
+     _formData.forEach((key, value) {
+    isValidateSuc= validate(key,'${value}');
+   });
+     if(!isValidateSuc){
+       setState(() {
+         _isValidate=!_isValidate;
+
+       });
+   }else{
+      widget.onSubmit(_formData,false);
+    }
+
+  }
+  ///检验表单数据
+  bool validate(name,value) {
+
+     for (var rule in widget.rules!) {
+         final result = rule.check(name, value);
+         if (result != null) {
+           /// 返回第一个不通过的错误信息
+           return false;
+         }
+     }
+     return true;
+   }
+  void onReset() {
+
   }
 
   @override
   Widget build(BuildContext context) {
+    _formItems = widget.items.expand((item) => [item, SizedBox(height: 1)]).toList();
+    _formData = widget.data;
+    if (widget.btnGroup!.isNotEmpty) {
+      _formItems.addAll(widget.btnGroup ?? []);
+    }
     return TDFormInherited(
+      formData:widget.data,
       disabled: widget.disabled,
       labelWidth: widget.labelWidth,
       isHorizontal: widget.isHorizontal,
-      isValidate: widget.isValidate,
+      isValidate: _isValidate,
       rules: widget.rules,
       formContentAlign: widget.formContentAlign,
       formShowErrorMessage: widget.formShowErrorMessage,
+      requiredMark: widget.requiredMark,
+      onFormDataChange: (value) {
+        ///监听表单数据变化
+        _formData = value;
+      },
+      onSubmit: onSubmit,
+      onReset: onReset,
       child: ListView.builder(
         itemCount: _formItems.length,
         itemBuilder: (context, index) => _formItems[index],

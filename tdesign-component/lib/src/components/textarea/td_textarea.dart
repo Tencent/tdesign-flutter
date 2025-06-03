@@ -58,6 +58,7 @@ class TDTextarea extends StatefulWidget {
     this.padding,
     this.textareaDecoration,
     this.bordered,
+    this.showBottomDivider=true
   }) : super(key: key);
 
   /// 输入框宽度
@@ -180,6 +181,8 @@ class TDTextarea extends StatefulWidget {
   /// 是否显示外边框
   final bool? bordered;
 
+  /// 边框外部下划线
+  final bool? showBottomDivider;
   @override
   _TDTextareaState createState() => _TDTextareaState();
 }
@@ -219,6 +222,7 @@ class _TDTextareaState extends State<TDTextarea> {
     return Stack(
       children: [
         container,
+        if(widget.showBottomDivider!=null && widget!.showBottomDivider==true)
         Positioned(
           bottom: 0,
           left: padding,
