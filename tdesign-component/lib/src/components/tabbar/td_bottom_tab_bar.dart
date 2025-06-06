@@ -574,12 +574,12 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
             SizedBox(
               height: centerDistance,
             ),
-          _textItem(
+          itemConfig.tabText?.isNotEmpty ?? false ? _textItem(
             context,
             itemConfig,
             isSelected,
             TDTheme.of(context).fontBodyExtraSmall!,
-          )
+          ) : Container()
         ],
       );
     }
