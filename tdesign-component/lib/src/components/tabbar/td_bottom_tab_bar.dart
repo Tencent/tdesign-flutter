@@ -435,26 +435,29 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
     var badgeConfig = itemConfig.badgeConfig;
     var isInOrOutCapsule = componentType == TDBottomTabBarComponentType.label ||
         outlineType == TDBottomTabBarOutlineType.capsule;
+
+    void handleTap() {
+      onTap.call();
+      if (itemConfig.popUpButtonConfig != null) {
+        Navigator.push(
+            context,
+            PopRoute(
+              child: PopupDialog(
+                itemWidth - _kDefaultMenuItemWidthShrink,
+                btnContext: context,
+                config: popUpButtonConfig!.popUpDialogConfig,
+                items: popUpButtonConfig.items,
+                onClickMenu: (value) {
+                  popUpButtonConfig.onChanged(value);
+                },
+              ),
+            ));
+      }
+    }
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        onTap.call();
-        if (itemConfig.popUpButtonConfig != null) {
-          Navigator.push(
-              context,
-              PopRoute(
-                child: PopupDialog(
-                  itemWidth - _kDefaultMenuItemWidthShrink,
-                  btnContext: context,
-                  config: popUpButtonConfig!.popUpDialogConfig,
-                  items: popUpButtonConfig.items,
-                  onClickMenu: (value) {
-                    popUpButtonConfig.onChanged(value);
-                  },
-                ),
-              ));
-        }
-      },
+      onTap: handleTap,
       onLongPress: () {
         onLongPress?.call();
       },
@@ -467,32 +470,46 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
           children: [
             if (isSelected || unselectedBgColor != null)
               Visibility(
-                  visible: componentType == TDBottomTabBarComponentType.label,
-                  child: Container(
-                    /// 设计稿上 tab个数大于3时，左右边距为8，小于等于3时，左右边距为12
-                    width: itemWidth - (tabsLength > 3 ? 16 : 24),
-                    height: basiceType == TDBottomTabBarBasicType.text ||
-                            basiceType == TDBottomTabBarBasicType.expansionPanel
-                        ? 32
-                        : null,
-                    decoration: BoxDecoration(
-                        color: isSelected
-                            ? selectedBgColor ?? TDTheme.of(context).brandColor1
-                            : unselectedBgColor,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(24))),
-                  )),
-            Container(
-                padding: EdgeInsets.only(
+                visible: componentType == TDBottomTabBarComponentType.label,
+                child: Container(
+                  /// 设计稿上 tab个数大于3时，左右边距为8，小于等于3时，左右边距为12
+                  width: itemWidth - (tabsLength > 3 ? 16 : 24),
+                  height: basiceType == TDBottomTabBarBasicType.text ||
+                          basiceType == TDBottomTabBarBasicType.expansionPanel
+                      ? 32
+                      : null,
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? selectedBgColor ?? TDTheme.of(context).brandColor1
+                        : unselectedBgColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(24)),
+                  ),
+                ),
+              ),
+            Material(
+              color: Colors.transparent,
+              borderRadius: isInOrOutCapsule ? BorderRadius.circular(24) : null,
+              child: InkWell(
+                borderRadius:
+                    isInOrOutCapsule ? BorderRadius.circular(24) : null,
+                splashFactory: InkRipple.splashFactory,
+                splashColor: selectedBgColor ?? TDTheme.of(context).brandColor1,
+                onTap: handleTap,
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(
                     top: isInOrOutCapsule ? 3.0 : 2.0,
                     bottom: isInOrOutCapsule
                         ? (basiceType == TDBottomTabBarBasicType.iconText
                             ? 0.0
                             : 1.0)
-                        : 0.0),
-                child: _constructItem(context, badgeConfig, isInOrOutCapsule)),
-
-            /// )
+                        : 0.0,
+                  ),
+                  color: Colors.transparent,
+                  child: _constructItem(context, badgeConfig, isInOrOutCapsule),
+                ),
+              ),
+            ),
           ],
         ),
       ),
