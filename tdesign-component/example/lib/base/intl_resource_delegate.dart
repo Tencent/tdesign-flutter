@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:tdesign_flutter_example/l10n/app_localizations.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import '../localizations/app_localizations.dart';
 
 /// 国际化资源代理
 class IntlResourceDelegate extends TDResourceDelegate {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:tdesign_flutter_example/l10n/app_localizations.dart';
 import 'package:tdesign_flutter/src/util/log.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -9,6 +8,7 @@ import 'base/example_route.dart';
 import 'base/intl_resource_delegate.dart';
 import 'config.dart';
 import 'home.dart';
+import 'localizations/app_localizations.dart';
 
 void main() {
   Log.setCustomLogPrinter((level, tag, msg) => print('[$level] $tag ==> $msg'));
