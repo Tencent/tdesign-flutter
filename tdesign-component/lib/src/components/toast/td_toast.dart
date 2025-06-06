@@ -18,9 +18,10 @@ class TDToast {
       int? maxLines,
       BoxConstraints? constraints,
       bool? preventTap,
+      Widget? customWidget,
       Color? backgroundColor}) {
     _showOverlay(
-        _TDTextToast(text: text, maxLines: maxLines, constraints: constraints),
+        _TDTextToast(text: text, maxLines: maxLines, constraints: constraints, customWidget: customWidget,),
         context: context,
         duration: duration,
         preventTap: preventTap,
@@ -118,10 +119,12 @@ class TDToast {
         String? text,
         Duration duration = TDToast._infiniteDuration,
         bool? preventTap,
+        Widget? customWidget,
         Color? backgroundColor}) {
     _showOverlay(
         _TDToastLoading(
           text: text,
+          customWidget: customWidget,
         ),
         context: context,
         duration: duration,
@@ -312,7 +315,9 @@ class _TDIconTextToast extends StatelessWidget {
 class _TDToastLoading extends StatelessWidget {
   final String? text;
 
-  const _TDToastLoading({this.text});
+  final Widget? customWidget;
+
+  const _TDToastLoading({this.text, this.customWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -335,7 +340,7 @@ class _TDToastLoading extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            TDText(
+            customWidget ?? TDText(
               text ?? context.resource.loadingWithPoint,
               font: TDTheme.of(context).fontBodyMedium,
               fontWeight: FontWeight.w400,
@@ -376,7 +381,9 @@ class _TDTextToast extends StatelessWidget {
 
   final BoxConstraints? constraints;
 
-  const _TDTextToast({this.text, this.maxLines, this.constraints});
+  final Widget? customWidget;
+
+  const _TDTextToast({this.text, this.maxLines, this.constraints, this.customWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -388,7 +395,7 @@ class _TDTextToast extends StatelessWidget {
             color: TDTheme.of(context).fontGyColor1,
             borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
           ),
-          child: TDText(
+          child: customWidget ?? TDText(
             text ?? '',
             font: TDTheme.of(context).fontBodyMedium,
             fontWeight: FontWeight.w400,
