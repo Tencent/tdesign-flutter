@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/src/components/form/td_form_validation.dart';
 import 'td_form_inherited.dart';
 import '../../../tdesign_flutter.dart';
-GlobalKey<_TDFormState> globaTDFormlKey=GlobalKey();
+
 class TDForm extends StatefulWidget {
   const TDForm(
       {Key? key,
@@ -26,6 +26,7 @@ class TDForm extends StatefulWidget {
       this.formShowErrorMessage = true,
       this.submitWithWarningMessage = false,
       this.onReset,
+      this.formController,
       this.btnGroup})
       : super(key: key);
 
@@ -71,7 +72,7 @@ class TDForm extends StatefulWidget {
   final bool? requiredMark;
 
   /// 整个表单字段校验规则
-  final List<TDFormValidation> rules;
+  final Map<String, TDFormValidation> rules;
 
   /// 是否对整个 form 进行校验
   /// TODO: 无法重复点击提交按钮的校验进行重复校验
@@ -96,61 +97,62 @@ class TDForm extends StatefulWidget {
 
   /// 表单按钮组
   final List<Widget>? btnGroup;
+
+  /// 表单控制器
+  final FormController? formController;
   @override
   State<TDForm> createState() => _TDFormState();
 }
 
 class _TDFormState extends State<TDForm> {
-   List<Widget> _formItems=[];
-  Map<String, dynamic> _formData={};
-  bool _isValidate=false;
+  List<Widget> _formItems = [];
+  Map<String, dynamic> _formData = {};
+  bool _isValidate = false;
   @override
   void initState() {
     super.initState();
-
+    _formData = widget.data;
+    if (widget.formController != null) {
+      widget.formController?.addListener(onSubmit);
+    }
   }
+
 
   onSubmit() {
-  bool isValidateSuc=false;
-     _formData.forEach((key, value) {
-    isValidateSuc= validate(key,'${value}');
-   });
-     if(!isValidateSuc){
-       setState(() {
-         _isValidate=!_isValidate;
-
-       });
-   }else{
-      widget.onSubmit(_formData,false);
+    bool isValidateSuc = true;
+    _formData.forEach((key, value) {
+      if(isValidateSuc){
+        isValidateSuc = validate(key, '${value}');
+      }
+    });
+    if (!isValidateSuc) {
+      setState(() {
+        _isValidate = !_isValidate;
+      });
     }
-
+    widget.onSubmit(_formData, isValidateSuc);
   }
+
   ///检验表单数据
-  bool validate(name,value) {
-
-     for (var rule in widget.rules!) {
-         final result = rule.check(name, value);
-         if (result != null) {
-           /// 返回第一个不通过的错误信息
-           return false;
-         }
-     }
-     return true;
-   }
-  void onReset() {
-
+  bool validate(name, value) {
+    if(widget.rules[name]!=null){
+      final result = widget.rules[name]!.check(value);
+      if (result != null) {
+        /// 返回第一个不通过的错误信息
+        return false;
+      }
+    }
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     _formItems = widget.items.expand((item) => [item, SizedBox(height: 1)]).toList();
-    _formData = widget.data;
     if (widget.btnGroup!.isNotEmpty) {
       _formItems.addAll(widget.btnGroup ?? []);
     }
     return TDFormInherited(
-      formData:widget.data,
-      disabled: widget.disabled,
+      formData: widget.data,
       labelWidth: widget.labelWidth,
       isHorizontal: widget.isHorizontal,
       isValidate: _isValidate,
@@ -163,7 +165,6 @@ class _TDFormState extends State<TDForm> {
         _formData = value;
       },
       onSubmit: onSubmit,
-      onReset: onReset,
       child: ListView.builder(
         itemCount: _formItems.length,
         itemBuilder: (context, index) => _formItems[index],
@@ -172,5 +173,11 @@ class _TDFormState extends State<TDForm> {
         cacheExtent: 500,
       ),
     );
+  }
+}
+
+class FormController with ChangeNotifier {
+  submit() {
+    notifyListeners();
   }
 }
