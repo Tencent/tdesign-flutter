@@ -362,7 +362,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
             },
           ),
           TDBottomTabBarTabConfig(
-            tabText: '标签',
+            tabText: '',
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
             onTap: () {
