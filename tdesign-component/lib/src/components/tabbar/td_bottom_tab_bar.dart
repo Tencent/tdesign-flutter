@@ -494,6 +494,8 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
                     isInOrOutCapsule ? BorderRadius.circular(24) : null,
                 splashFactory: InkRipple.splashFactory,
                 splashColor: selectedBgColor ?? TDTheme.of(context).brandColor1,
+                highlightColor:
+                    selectedBgColor ?? TDTheme.of(context).brandColor1,
                 onTap: handleTap,
                 child: Container(
                   alignment: Alignment.center,
