@@ -148,14 +148,6 @@ class _TDFormItemState extends State<TDFormItem> {
     return TDFormInherited.of(context)!.formData;
   }
 
-  /// 获取 form 是否被禁用的状态
-  bool get FormState {
-    final inherited = TDFormInherited.of(context);
-    if (inherited?.disabled != null) {
-      return inherited!.disabled;
-    }
-    return false;
-  }
 
   /// 获取 form 以及 formItem 的内容排列方式
   TextAlign get FormContentAlign {
@@ -197,7 +189,7 @@ class _TDFormItemState extends State<TDFormItem> {
   }
 
   /// 获取整个表单的校验规则
-  List<TDFormValidation> get FormRules {
+  Map<String,TDFormValidation> get FormRules {
     final inherited = TDFormInherited.of(context);
     return inherited!.rules;
   }
@@ -218,16 +210,22 @@ class _TDFormItemState extends State<TDFormItem> {
   /// 遍历校验规则并执行
   String? validate() {
     String? value = widget.formItemNotifier?.formVal;
-    for (var rule in FormRules!) {
+    String name =widget.name!;
+    if(name==null){
+      return null;
+    }
+    if(FormRules[name]!=null){
+      TDFormValidation rule=FormRules[name]!;
       /// 只对类型匹配的项进行校验
       if (rule.type == widget.type) {
-        final result = rule.check(widget.name!, value);
+        final result = rule.check(value);
         if (result != null) {
           /// 返回第一个不通过的错误信息
           return result;
         }
       }
     }
+
     return null;
   }
 
@@ -549,10 +547,6 @@ class FormItemNotifier with ChangeNotifier {
   String get formVal => _formVal;
   upDataForm(val) {
     _formVal = val;
-    notifyListeners();
-  }
-
-  submit() {
     notifyListeners();
   }
 }

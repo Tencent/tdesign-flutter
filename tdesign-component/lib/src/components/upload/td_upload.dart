@@ -80,7 +80,7 @@ class TDUpload extends StatefulWidget {
       this.multiple = false,
       this.width = 80.0,
       this.height = 80.0,
-      this.type = TDUploadBoxType.roundedSquare,
+      this.type = TDUploadBoxType.roundedSquare, this.disabled=false,
       this.enabledReplaceType = false})
       : super(key: key);
 
@@ -129,6 +129,8 @@ class TDUpload extends StatefulWidget {
   /// 是否启用replace功能
   final bool? enabledReplaceType;
 
+  ///是否禁用
+  final bool? disabled;
   @override
   State<TDUpload> createState() => _TDUploadState();
 }
@@ -308,7 +310,7 @@ class _TDUploadState extends State<TDUpload> {
         children: [
           ...fileList.map((file) => _buildImageBox(context, file)).toList(),
           _buildUploadBox(context, shouldDisplay: canUpload, onTap: () async {
-            if (!canUpload) {
+            if (!canUpload||widget.disabled!) {
               return;
             }
 
