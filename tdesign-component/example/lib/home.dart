@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:tdesign_flutter_example/l10n/app_localizations.dart';
+
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'base/example_base.dart';
