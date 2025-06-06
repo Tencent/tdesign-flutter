@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/demo.dart';
@@ -13,10 +15,11 @@ class TDFormPage extends StatefulWidget {
 
 class _TDFormPageState extends State<TDFormPage> {
   List<TextEditingController> _controller = [];
-
+  FormController _formController = FormController();
+  StreamController<TDStepperEventType> _stepController=StreamController(sync:true);
   String _selected_1 = '请输入内容';
   String _selected_2 = '请输入内容';
-
+  double _tDRateValue=3;
   String? _initLocalData;
 
   /// form 禁用的状态
@@ -116,14 +119,11 @@ class _TDFormPageState extends State<TDFormPage> {
     },
   ];
   List<TDUploadFile> files = [
-    // TDUploadFile(key: 1, remotePath: 'https://tdesign.gtimg.com/demo/images/example1.png'),
-    // TDUploadFile(key: 2, remotePath: 'https://tdesign.gtimg.com/demo/images/example2.png'),
-    // TDUploadFile(key: 3, remotePath: 'https://tdesign.gtimg.com/demo/images/example3.png'),
   ];
 
   ///密码是否浏览
   bool browseOn = false;
-
+  TDCheckboxGroupController _genderCheckboxGroupController=TDCheckboxGroupController();
   /// 整个表单存放的数据
   Map<String, dynamic> _formData = {
     "name": '',
@@ -164,61 +164,74 @@ class _TDFormPageState extends State<TDFormPage> {
   /// 改变 _validate 值，从而触发校验
   /// 获取表单的数据
   void _onSubmit() {
-    globaTDFormlKey.currentState?.onSubmit();
+    _formController.submit();
   }
 
   /// 定义整个校验规则
-  final List<TDFormValidation> _validationRules = [
-    TDFormValidation(
+  final Map<String, TDFormValidation> _validationRules = {
+    'name': TDFormValidation(
       validate: (value) => value == null || value.isEmpty ? 'empty' : null,
       errorMessage: '输入不能为空',
       type: TDFormItemType.input,
-      name: 'name',
     ),
-    TDFormValidation(
+    "password": TDFormValidation(
       validate: (value) => RegExp(r'^[a-zA-Z]{8}$').hasMatch(value ?? '') ? null : 'invalid',
       errorMessage: '只能输入8个字符英文',
       type: TDFormItemType.input,
-      name: 'password',
     ),
-    TDFormValidation(
-        validate: (value) => value == null || value.isEmpty ? 'empty' : null,
-        errorMessage: '不能为空',
-        type: TDFormItemType.radios,
-        name: 'gender'),
-    TDFormValidation(
-        validate: (value) => value == null || value.isEmpty ? 'empty' : null,
-        errorMessage: '不能为空',
-        type: TDFormItemType.dateTimePicker,
-        name: 'birth'),
-    TDFormValidation(
-        validate: (value) => value == null || value.isEmpty ? 'empty' : null,
-        errorMessage: '不能为空',
-        type: TDFormItemType.cascader,
-        name: 'place'),
-    TDFormValidation(
-        validate: (value) {
-          if (value == null || value.isEmpty) {
-            return 'empty';
-          } else if (int.parse(value) == 0) {
-            return 'empty';
-          }
-          return null;
-        },
-        errorMessage: '年限需要大于0',
-        type: TDFormItemType.stepper,
-        name: "age"),
-    TDFormValidation(
-        validate: (value) => value == null || value.isEmpty ? 'empty' : null,
-        errorMessage: '不能为空',
-        type: TDFormItemType.textarea,
-        name: 'resume'),
-    TDFormValidation(
-        validate: (value) => value == null || value.isEmpty ? 'empty' : null,
-        errorMessage: '不能为空',
-        type: TDFormItemType.upLoadImg,
-        name: 'photo'),
-  ];
+    "gender": TDFormValidation(
+      validate: (value) => value == null || value.isEmpty ? 'empty' : null,
+      errorMessage: '不能为空',
+      type: TDFormItemType.radios,
+    ),
+    "birth": TDFormValidation(
+      validate: (value) => value == null || value.isEmpty ? 'empty' : null,
+      errorMessage: '不能为空',
+      type: TDFormItemType.dateTimePicker,
+    ),
+    "place": TDFormValidation(
+      validate: (value) => value == null || value.isEmpty ? 'empty' : null,
+      errorMessage: '不能为空',
+      type: TDFormItemType.cascader,
+    ),
+    "age": TDFormValidation(
+      validate: (value) {
+        if (value == null || value.isEmpty) {
+          return 'empty';
+        } else if (int.parse(value) == 0) {
+          return 'empty';
+        }
+        return null;
+      },
+      errorMessage: '年限需要大于0',
+      type: TDFormItemType.stepper,
+    ),
+    "description":TDFormValidation(
+      validate: (value) {
+        if (value == null || value.isEmpty) {
+          return 'empty';
+        } else if (int.parse(value) < 4) {
+          return 'empty';
+        }
+        return null;
+      },
+      errorMessage: '分数过低会影响整体评价',
+      type: TDFormItemType.rate,
+    ),
+    "resume": TDFormValidation(
+      validate: (value) => value == null || value.isEmpty ? 'empty' : null,
+      errorMessage: '不能为空',
+      type: TDFormItemType.textarea,
+    ),
+    "photo": TDFormValidation(
+      validate: (value) => value == null || value.isEmpty ? 'empty' : null,
+      errorMessage: '不能为空',
+      type: TDFormItemType.upLoadImg,
+    ),
+  };
+  //
+
+  // ];
 
   ///表单提交数据
   onSubmit(Map<String, dynamic> formData, isValidateSuc) {
@@ -254,7 +267,7 @@ class _TDFormPageState extends State<TDFormPage> {
   Widget _buildForm(BuildContext context) {
     final theme = TDTheme.of(context);
     return TDForm(
-        key: globaTDFormlKey,
+        formController: _formController,
         disabled: _formDisableState,
         data: _formData,
         isHorizontal: _isFormHorizontal,
@@ -277,7 +290,7 @@ class _TDFormPageState extends State<TDFormPage> {
 
               /// 控制单个 item 是否展示错误提醒
               showErrorMessage: true,
-              requiredMark: false,
+              requiredMark: true,
               child: TDInput(
                   inputDecoration: InputDecoration(
                     hintText: "请输入用户名",
@@ -299,30 +312,28 @@ class _TDFormPageState extends State<TDFormPage> {
             label: '密码',
             name: 'password',
             type: TDFormItemType.input,
-            help: '请输入密码',
             labelWidth: 60.0,
             formItemNotifier: _formItemNotifier['password'],
             showErrorMessage: true,
             child: TDInput(
-              inputDecoration: InputDecoration(
-                hintText: '请输入密码',
-                border: InputBorder.none,
-              ),
-              type: TDInputType.normal,
-              controller: _controller[1],
-              obscureText: !browseOn,
-              backgroundColor: Colors.white,
-              needClear: false,
-              readOnly: _formDisableState,
-              showBottomDivider: false,
-              onChanged: (val) {
-                _formItemNotifier['password']?.upDataForm(val);
-              },
+                inputDecoration: InputDecoration(
+                  hintText: '请输入密码',
+                  border: InputBorder.none,
+                ),
+                type: TDInputType.normal,
+                controller: _controller[1],
+                obscureText: !browseOn,
+                backgroundColor: Colors.white,
+                needClear: false,
+                readOnly: _formDisableState,
+                showBottomDivider: false,
+                onChanged: (val) {
+                  _formItemNotifier['password']?.upDataForm(val);
+                },
                 onClearTap: () {
                   _controller[1].clear();
                   _formItemNotifier['password']?.upDataForm("");
-                }
-            ),
+                }),
           ),
           TDFormItem(
             label: '性别',
@@ -335,6 +346,7 @@ class _TDFormPageState extends State<TDFormPage> {
             child: TDRadioGroup(
               spacing: 0,
               direction: Axis.horizontal,
+              controller: _genderCheckboxGroupController,
               directionalTdRadios: _radios.entries.map((entry) {
                 return TDRadio(
                   id: entry.key,
@@ -345,13 +357,15 @@ class _TDFormPageState extends State<TDFormPage> {
                 );
               }).toList(),
               onRadioGroupChange: (ids) {
+                if(ids==null){
+                  return;
+                }
                 _formItemNotifier['gender']?.upDataForm(ids);
               },
             ),
           ),
           TDFormItem(
             label: '生日',
-            help: '请输入生日',
             name: 'birth',
             labelWidth: 60.0,
             type: TDFormItemType.dateTimePicker,
@@ -360,6 +374,9 @@ class _TDFormPageState extends State<TDFormPage> {
             formItemNotifier: _formItemNotifier['birth'],
             select: _selected_1,
             selectFn: (BuildContext context) {
+              if (_formDisableState) {
+                return;
+              }
               TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
                 setState(() {
                   _selected_1 =
@@ -377,10 +394,12 @@ class _TDFormPageState extends State<TDFormPage> {
             contentAlign: _isFormHorizontal ? TextAlign.right : TextAlign.left,
             tipAlign: _isFormHorizontal ? TextAlign.right : TextAlign.left,
             labelWidth: 60.0,
-            help: '请输入籍贯',
             select: _selected_2,
             formItemNotifier: _formItemNotifier['place'],
             selectFn: (BuildContext context) {
+              if (_formDisableState) {
+                return;
+              }
               TDCascader.showMultiCascader(context,
                   title: '选择地址',
                   data: _data,
@@ -404,7 +423,6 @@ class _TDFormPageState extends State<TDFormPage> {
           TDFormItem(
               label: '年限',
               name: 'age',
-              help: '请选择年限',
               labelWidth: 60.0,
               type: TDFormItemType.stepper,
               tipAlign: _isFormHorizontal ? TextAlign.right : TextAlign.left,
@@ -414,6 +432,7 @@ class _TDFormPageState extends State<TDFormPage> {
                 child: TDStepper(
                   theme: TDStepperTheme.filled,
                   disabled: _formDisableState,
+                  eventController: _stepController!,
                   onChange: (value) {
                     _formItemNotifier['age']?.upDataForm('${value}');
                   },
@@ -422,7 +441,6 @@ class _TDFormPageState extends State<TDFormPage> {
           TDFormItem(
             label: '自我评价',
             name: 'description',
-            help: '请选择自我评价',
             tipAlign: _isFormHorizontal ? TextAlign.right : TextAlign.left,
             type: TDFormItemType.rate,
             labelWidth: 78.0,
@@ -433,7 +451,7 @@ class _TDFormPageState extends State<TDFormPage> {
                   padding: EdgeInsets.only(top: _isFormHorizontal ? 0 : 5, right: 18, bottom: 5),
                   child: TDRate(
                     count: 5,
-                    value: 3,
+                    value:_tDRateValue,
                     allowHalf: false,
                     disabled: _formDisableState,
                     onChange: (value) {
@@ -447,7 +465,6 @@ class _TDFormPageState extends State<TDFormPage> {
             labelWidth: 78.0,
             name: 'resume',
             type: TDFormItemType.textarea,
-            help: '请输入个人简介',
             formItemNotifier: _formItemNotifier['resume'],
             child: TDTextarea(
               backgroundColor: Colors.red,
@@ -456,6 +473,7 @@ class _TDFormPageState extends State<TDFormPage> {
               indicator: true,
               readOnly: _formDisableState,
               layout: TDTextareaLayout.vertical,
+              controller:_controller[3],
               showBottomDivider: false,
               onChanged: (value) {
                 _formItemNotifier['resume']?.upDataForm(value);
@@ -465,7 +483,6 @@ class _TDFormPageState extends State<TDFormPage> {
           TDFormItem(
             label: '上传图片',
             name: 'photo',
-            help: '请上传个人图片',
             labelWidth: 76.0,
             type: TDFormItemType.upLoadImg,
             formItemNotifier: _formItemNotifier['photo'],
@@ -475,7 +492,11 @@ class _TDFormPageState extends State<TDFormPage> {
               max: 6,
               onError: print,
               onValidate: print,
+              disabled: _formDisableState,
               onChange: ((imgList, type) {
+                if (_formDisableState) {
+                  return;
+                }
                 files = _onValueChanged(files ?? [], imgList, type);
                 List imgs = files.map((e) => e.remotePath ?? e.assetPath).toList();
                 setState(() {
@@ -515,6 +536,25 @@ class _TDFormPageState extends State<TDFormPage> {
                       shape: TDButtonShape.rectangle,
                       disabled: _formDisableState,
                       onTap: () {
+
+                        //用户名称
+                        _controller[0].clear();
+                        //密码
+                        _controller[1].clear();
+                        // 性别
+                        _genderCheckboxGroupController.toggle('',false);
+                        //个人简介
+                        _controller[2].clear();
+                        //生日
+                        _selected_1='请输入内容';
+                        //籍贯
+                        _selected_2='请输入内容';
+                        //年限
+                        _stepController.add(TDStepperEventType.cleanValue);
+                        //自我评价
+                        _tDRateValue=0;
+                        //上传图片
+                        files.clear();
                         setState(() {
                           _formData = {
                             "name": '',
@@ -522,8 +562,8 @@ class _TDFormPageState extends State<TDFormPage> {
                             "gender": '',
                             "birth": '',
                             "place": '',
-                            "age": 3,
-                            "description": 2,
+                            "age": "3",
+                            "description": "2",
                             "resume": '',
                             "photo": ''
                           };

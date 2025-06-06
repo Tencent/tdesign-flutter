@@ -204,6 +204,8 @@ class TDRadioGroup extends TDCheckboxGroup {
     OnRadioGroupChange? onRadioGroupChange, // 切换监听
     this.showDivider = false,
     this.divider,
+    /// 可以通过控制器操作勾选状态
+     TDCheckboxGroupController? controller
   })  : assert(() {
           // 使用direction属性则必须配合directionalTdRadios，child字段无效
           if (direction != null && directionalTdRadios == null) {
@@ -334,7 +336,7 @@ class TDRadioGroup extends TDCheckboxGroup {
           onChangeGroup: (ids) {
             onRadioGroupChange?.call(ids.isNotEmpty ? ids[0] : null);
           },
-          controller: null,
+          controller: controller,
           checkedIds: selectId != null ? [selectId] : null,
           maxChecked: 1,
           titleMaxLine: titleMaxLine,
