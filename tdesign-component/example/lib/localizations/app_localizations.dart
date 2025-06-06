@@ -6,7 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
-import 'app_localizations_zh.dart';
+import '../localizations/app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
 
