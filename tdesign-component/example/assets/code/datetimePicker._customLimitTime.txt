@@ -1,16 +1,15 @@
 
   Widget _customLimitTime(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        TDPicker.showDatePicker(context, title: '选择时间',
-            onConfirm: (selected) {
-              setState(() {
-                selected_4 = '${selected['hour'].toString().padLeft(2, '0')}:'
-                    '${selected['minute'].toString().padLeft(2, '0')}:'
-                    '${selected['second'].toString().padLeft(2, '0')}';
-              });
-              Navigator.of(context).pop();
-            },
+      onTap: () {
+        TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+          setState(() {
+            selected_4 = '${selected['hour'].toString().padLeft(2, '0')}:'
+                '${selected['minute'].toString().padLeft(2, '0')}:'
+                '${selected['second'].toString().padLeft(2, '0')}';
+          });
+          Navigator.of(context).pop();
+        },
             useYear: false,
             useMonth: false,
             useDay: false,
