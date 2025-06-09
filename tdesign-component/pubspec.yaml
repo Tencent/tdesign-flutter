@@ -24,6 +24,9 @@ dependencies:
   # 相册选择组件
   image_picker: 1.0.8
 
+  tdesign_adaptation:
+    path: ../tdesign_adaptation
+
 dev_dependencies:
   flutter_lints: ^1.0.4
   flutter_test:
