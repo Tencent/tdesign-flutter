@@ -177,6 +177,8 @@ class SliverStickyHeader extends RenderObjectWidget {
   }) : this(
           key: key,
           header: ValueLayoutBuilder<SliverStickyHeaderState>(
+            // 这里需要传入一个 state实例 现在先写死了 是为了兼容新版本 Flutter3.32.2 的 ValueLayoutBuilder
+            value: const SliverStickyHeaderState(0.0, false),
             builder: (context, constraints) => builder(context, constraints.value),
           ),
           sliver: sliver,
