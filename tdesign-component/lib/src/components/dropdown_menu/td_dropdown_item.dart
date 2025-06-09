@@ -133,7 +133,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
   Widget _getCheckboxList() {
     var isMultiple = widget.multiple == true;
     var paddingNum = TDTheme.of(context).spacer16;
-    var groupCunck = _groupChunkOptions();
+    var groupChunk = _groupChunkOptions();
     var maxContentHeight = widget.maxContentHeight != null
         ? widget.maxContentHeight!
         : directionListenable.value == TDDropdownMenuDirection.auto
@@ -147,13 +147,13 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
             constraints: BoxConstraints(minHeight: widget.minContentHeight ?? 0.0, maxHeight: maxContentHeight),
             child: SingleChildScrollView(
               child: Column(
-                children: List.generate(groupCunck.length, (index) {
-                  var entry = groupCunck.entries.elementAt(index);
+                children: List.generate(groupChunk.length, (index) {
+                  var entry = groupChunk.entries.elementAt(index);
                   var chunks = entry.value;
                   var selectIds = _getSelected(widget.options).map((e) => e!.value).toList();
                   return Column(
                     children: [
-                      groupCunck.length == 1 && entry.key == '__default__'
+                      groupChunk.length == 1 && entry.key == '__default__'
                           ? const SizedBox.shrink()
                           : Container(
                               width: double.infinity,
@@ -215,6 +215,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
           (index) => TDRadio(
             id: widget.options![index].value,
             title: widget.options![index].label,
+            selectColor: widget.options![index].selectedColor,
             enable: !(widget.options![index].disabled ?? false),
           ),
         ),
@@ -242,6 +243,8 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
       id: col.value,
       title: col.label,
       enable: !(col.disabled ?? false),
+      selectColor: col.selectedColor,
+      disableColor: col.disabledColor,
       customIconBuilder: (context, checked) => null,
       customContentBuilder: (context, checked, content) => Container(
         height: 40,
@@ -374,6 +377,8 @@ class TDDropdownItemOption {
     this.disabled = false,
     this.group,
     this.selected = false,
+    this.selectedColor,
+    this.disabledColor
   });
 
   /// 选项值
@@ -390,4 +395,10 @@ class TDDropdownItemOption {
 
   /// 是否选中
   late bool? selected;
+
+  /// 选中颜色
+  final Color? selectedColor;
+
+  /// 禁用颜色
+  final Color? disabledColor;
 }
