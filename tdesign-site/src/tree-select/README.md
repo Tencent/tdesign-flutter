@@ -32,8 +32,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       options.add(TDSelectOption(label: '选项$i', value: i, children: []));
 
       for (var j = 1; j <= 10; j++) {
-        options[i - 1].children.add(
-            TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []));
+        options[i - 1].children.add(TDSelectOption(
+              label: '选项$i.$j',
+              value: i * 10 + j,
+              children: [],
+            ));
       }
     }
 
@@ -124,6 +127,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | label | String | - | 标签 |
 | value | int | - | 值 |
 | children | List<TDSelectOption> | const [] | 子选项 |
+| multiple | bool | false | 当前子项支持多选 |
 
 ```
 ```

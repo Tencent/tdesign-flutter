@@ -332,6 +332,7 @@ Widget _cardNoticeBar(BuildContext context) {
 | suffixIcon | IconData? | - | 右侧图标 |
 | onTap | ValueChanged? | - | 点击事件 |
 | height | double | 22 | 文字高度 (当使用prefixIcon或suffixIcon时，icon大小值等于该属性） |
+| maxLines | int? | 1 | 文本行数（仅静态有效） |
 
 
   
