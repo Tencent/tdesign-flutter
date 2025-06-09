@@ -2,8 +2,7 @@
   Widget _successVerticalToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showSuccess('成功文案',
-            direction: IconTextDirection.vertical, context: context);
+        TDToast.showSuccess('成功文案', direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,

@@ -1,0 +1,20 @@
+
+  Widget _textCustomToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showText('自定义纯文字',
+            context: context,
+            customWidget: Container(
+              width: 50,
+              height: 20,
+              child: const TDText('自定义纯文字'),
+              color: TDTheme.of(context).brandClickColor,
+            ));
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '纯文字',
+    );
+  }

@@ -1,0 +1,18 @@
+
+  Widget _loadingCustomToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showLoading(context: context, customWidget: Container(
+          width: 50,
+          height: 20,
+          child: const TDText('自定义加载'),
+          color: TDTheme.of(context).brandColor1,
+        ));
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '加载状态',
+    );
+  }
