@@ -1,44 +1,44 @@
-buildscript {
-    ext.kotlin_version = '1.7.10'
-
-    ext {
-
-        config = [
-                // 蓝盾自带变量
-                isCI           : System.env.isCI          // 是否在RMD的持续集成构建环境中
-                , VersionCode  : System.env.VersionCode   // VersionCode，每次发版本+2
-                , devopsUUID   : System.env.uuid          //蓝盾构建UUID
-                , MajorVersion : System.env.MajorVersion  // 主版本号
-                , MinorVersion : System.env.MinorVersion  // 特性版本号
-                , FixVersion   : System.env.FixVersion    // 修正版本号
-                , BuildNo      : System.env.BuildNo       // 构建号
-                , isPublish    : System.env.isPublish     // 是否是外发版本，用来控制调试入口等
-                , isBeta       : System.env.isBeta        // 是否是灰度版本
-                , gitVersion   : System.env.gitVersion    // git提交hash
-                , keyAlias     : System.env.keyAlias     // 签名信息
-                , storePassword: System.env.storePassword        // storePassword
-                , abi_filters: System.env.abi_filters        // abi类型配置
-        ]
-
-        def dir = System.getProperty("user.dir")
-        def file = new File(dir, 'local.properties')
-        Properties properties = new Properties()
-        if (file.exists()) {
-            properties.load(file.newDataInputStream())
-        }
-        enableWatchman = Boolean.valueOf(properties.getProperty('enableWatchman', ""))
-    }
-
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
+//buildscript {
+//    ext.kotlin_version = '1.7.10'
+//
+//    ext {
+//
+//        config = [
+//                // 蓝盾自带变量
+//                isCI           : System.env.isCI          // 是否在RMD的持续集成构建环境中
+//                , VersionCode  : System.env.VersionCode   // VersionCode，每次发版本+2
+//                , devopsUUID   : System.env.uuid          //蓝盾构建UUID
+//                , MajorVersion : System.env.MajorVersion  // 主版本号
+//                , MinorVersion : System.env.MinorVersion  // 特性版本号
+//                , FixVersion   : System.env.FixVersion    // 修正版本号
+//                , BuildNo      : System.env.BuildNo       // 构建号
+//                , isPublish    : System.env.isPublish     // 是否是外发版本，用来控制调试入口等
+//                , isBeta       : System.env.isBeta        // 是否是灰度版本
+//                , gitVersion   : System.env.gitVersion    // git提交hash
+//                , keyAlias     : System.env.keyAlias     // 签名信息
+//                , storePassword: System.env.storePassword        // storePassword
+//                , abi_filters: System.env.abi_filters        // abi类型配置
+//        ]
+//
+//        def dir = System.getProperty("user.dir")
+//        def file = new File(dir, 'local.properties')
+//        Properties properties = new Properties()
+//        if (file.exists()) {
+//            properties.load(file.newDataInputStream())
+//        }
+//        enableWatchman = Boolean.valueOf(properties.getProperty('enableWatchman', ""))
+//    }
+//
+//    repositories {
+//        google()
+//        mavenCentral()
+//    }
+//
+//    dependencies {
+//        classpath 'com.android.tools.build:gradle:7.0.1'
+//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+//    }
+//}
 
 allprojects {
     repositories {
@@ -59,17 +59,17 @@ tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
 
-buildscript {
-    //待统一的kollin版本
-    ext.kotlin_version = '1.7.10'
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        //kotlin版本对应的gradle version
-        classpath 'com.android.tools.build:gradle:7.1.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
+//buildscript {
+//    //待统一的kollin版本
+//    ext.kotlin_version = '1.7.10'
+//    repositories {
+//        google()
+//        mavenCentral()
+//    }
+//
+//    dependencies {
+//        //kotlin版本对应的gradle version
+//        classpath 'com.android.tools.build:gradle:7.1.2'
+//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+//    }
+//}
