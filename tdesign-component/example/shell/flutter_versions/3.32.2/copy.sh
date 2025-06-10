@@ -1,0 +1,1 @@
+cp ./pubspec_overrides.yaml ../../../
