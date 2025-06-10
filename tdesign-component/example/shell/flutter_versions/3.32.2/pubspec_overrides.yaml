@@ -1,0 +1,6 @@
+dependency_overrides:
+  tdesign_adaptation:
+    git:
+      url: https://github.com/Tencent/tdesign-flutter.git
+      path: tdesign_adaptation/
+      ref: feature/3.32_adaptation
