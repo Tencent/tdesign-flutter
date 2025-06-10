@@ -1,5 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'layout_builder_hook.dart' as hook;
 
 /// The signature of the [ValueLayoutBuilder] builder function.
 typedef ValueLayoutWidgetBuilder<T> = Widget Function(
@@ -51,7 +52,7 @@ class BoxValueConstraints<T> extends BoxConstraints {
 /// Similar to the [LayoutBuilder] widget except that the constraints contains
 /// an extra value.
 ///
-class ValueLayoutBuilder<T> extends ConstrainedLayoutBuilder<BoxValueConstraints<T>> {
+class ValueLayoutBuilder<T> extends hook.ConstrainedLayoutBuilder<BoxValueConstraints<T>> {
   /// Creates a widget that defers its building until layout.
   const ValueLayoutBuilder({
     Key? key,
@@ -66,7 +67,7 @@ class ValueLayoutBuilder<T> extends ConstrainedLayoutBuilder<BoxValueConstraints
 }
 
 class _RenderValueLayoutBuilder<T> extends RenderBox
-    with RenderObjectWithChildMixin<RenderBox>, RenderObjectWithLayoutCallbackMixin, RenderAbstractLayoutBuilderMixin<BoxValueConstraints<T>, RenderBox> {
+    with RenderObjectWithChildMixin<RenderBox>, hook.RenderConstrainedLayoutBuilder<BoxValueConstraints<T>, RenderBox> {
   @override
   double computeMinIntrinsicWidth(double height) {
     assert(_debugThrowIfNotCheckingIntrinsics());
@@ -94,7 +95,7 @@ class _RenderValueLayoutBuilder<T> extends RenderBox
   @override
   void performLayout() {
     final constraints = this.constraints;
-    runLayoutCallback();
+    rebuildIfNecessary();
     if (child != null) {
       child!.layout(constraints, parentUsesSize: true);
       size = constraints.constrain(child!.size);
@@ -126,10 +127,5 @@ class _RenderValueLayoutBuilder<T> extends RenderBox
     }());
 
     return true;
-  }
-
-  @override
-  void layoutCallback() {
-    // TODO: implement layoutCallback
   }
 }
