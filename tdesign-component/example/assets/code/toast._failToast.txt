@@ -2,8 +2,7 @@
   Widget _failToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showFail('失败文案',
-            direction: IconTextDirection.horizontal, context: context);
+        TDToast.showFail('失败文案', direction: IconTextDirection.horizontal, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
