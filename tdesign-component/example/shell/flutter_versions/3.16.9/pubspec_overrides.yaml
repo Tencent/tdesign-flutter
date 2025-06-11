@@ -2,8 +2,5 @@ dependency_overrides:
   tdesign_adaptation:
     git:
       url: https://github.com/Tencent/tdesign-flutter.git
-      path: tdesign_adaptation/
+      path: tdesign-adaptation/
       ref: feature/3.16_adaptation
-
-  image_picker: 1.0.8
-  image_picker_android: 0.8.9+6
