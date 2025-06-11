@@ -76,3 +76,5 @@ build/
 !**/ios/**/default.perspectivev3
 /.fvm/
 /tdesign-component/local_dependency_override.yaml
+/tdesign-component/pubspec_overrides.yaml
+/tdesign-component/example/pubspec_overrides.yaml

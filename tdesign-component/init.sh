@@ -55,7 +55,11 @@ cd $BASE_DIR
 echo "在 $BASE_DIR 执行清理操作..."
 $FLUTTER_CMD clean
 
+rm $BASE_DIR/pubspec.lock
+rm $BASE_DIR/example/pubspec.lock
+
 echo "获取项目依赖..."
+
 $FLUTTER_CMD pub get
 
 echo "✅ 所有操作完成"
