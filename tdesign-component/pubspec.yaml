@@ -81,6 +81,3 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/custom-fonts/#from-packages
-
-
-import: local_dependency_override.yaml?  # 加 `?` 表示文件可选
