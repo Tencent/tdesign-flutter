@@ -25,6 +25,7 @@
 | badgeConfig | BadgeConfig? | - | 消息配置 |
 | popUpButtonConfig | TDBottomTabBarPopUpBtnConfig? | - | 弹窗配置 |
 | onLongPress | GestureLongPressCallback? | - | 长按事件 |
+| allowMultipleTaps | bool | false | onTap方法允许点击多次 |
 
 ```
 ```
