@@ -75,3 +75,4 @@ build/
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 /.fvm/
+/tdesign-component/local_dependency_override.yaml
