@@ -53,7 +53,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(
+    var child = ExamplePage(
       backgroundColor: const Color(0xFFF0F2F5),
       title: tdTitle(),
       desc: '用于在预设的一组选项中执行单项选择，并呈现选择结果。',
@@ -108,6 +108,12 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         ExampleItem(desc: '设置contentPadding内容与分割线对齐', builder: _contentPadding)
       ],
     );
+    if(PlatformUtil.isWeb){
+      return FutureBuilder(future: awaitFontLoad(), builder: (context, s){
+        return child;
+      });
+    }
+    return child;
   }
 
   @Demo(group: 'input')
@@ -936,5 +942,10 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         ],
       ),
     );
+  }
+
+  awaitFontLoad() async {
+    // 等待500ms，让字体加载完成
+    await Future.delayed(const Duration(milliseconds: 500));
   }
 }

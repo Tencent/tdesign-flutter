@@ -404,7 +404,9 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
         TDPicker.showDatePicker(
           context,
           title: '只有时分',
-          onConfirm: (selected) {},
+          onConfirm: (selected) {
+            Navigator.of(context).pop();
+          },
           useYear: false,
           useMonth: false,
           useDay: false,
