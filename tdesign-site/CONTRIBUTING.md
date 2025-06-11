@@ -59,6 +59,8 @@ flutter run
 ### 2.4 Flutter多版本兼容
 在flutte 3.32版本，sdk代码变更较大，同一代码可能无法同时支持跨版本运行，因此抽离了tdesign-adaptation库，用于进行不同flutter版本之间的代码适配。
 
+
+#### 2.4.1 版本切换
 首次运行，可以先将flutter sdk 切到3.16.9版本，执行init.sh脚本，配置对应依赖。
 
 开发玩出，切换至最新稳定版尝试运行，如果有不兼容代码，需要在tdesign-adaptation库进行适配。
@@ -72,6 +74,9 @@ dependency_overrides:
     path: ../tdesign-adaptation  # 本地相对路径
 ```
 但是，提交git时，不要提交到仓库！！！
+
+#### 2.4.2 国际化适配
+由于3.32版本的国际化功能与3.16版本差异比较大，代码生成位置发生变更，无法跨版本兼容。因此，国际化资源代码改为手动依赖方式。如果需要修改字段内容，需要把生成的app_localizations(_en、_zh).dart文件拷贝到example/lib/localizations目录
 
 
 ### 2.5 运行前端官网项目
