@@ -65,7 +65,7 @@ flutter run
 
 其中，高于3.32版本的代码，请在feature/3.32_adaptation分支开发，低于3.32版本的代码，请在feature/3.16_adaptation分支开发。
 
-本地开发tdesign-adaptation，可以新建tdesign-component/local_dependency_override.yaml文件，使用本地依赖，内容如下：
+本地开发tdesign-adaptation，可以新建tdesign-component/pubspec_overrides.yaml和tdesign-component/example/pubspec_overrides.yaml文件，使用本地依赖，内容如下：
 ```yaml
 dependency_overrides:
   tdesign_adaptation:
