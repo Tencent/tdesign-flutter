@@ -22,7 +22,10 @@ dependencies:
   flutter_slidable: 3.1.2
 
   tdesign_adaptation:
-    path: ../tdesign-adaptation
+    git:
+      url: https://github.com/Tencent/tdesign-flutter.git
+      path: tdesign-adaptation/
+      ref: feature/3.32_adaptation
 
 dev_dependencies:
   flutter_lints: ^1.0.4
@@ -78,3 +81,6 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/custom-fonts/#from-packages
+
+
+import: local_dependency_override.yaml?  # 加 `?` 表示文件可选
