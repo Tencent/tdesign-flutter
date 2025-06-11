@@ -86,6 +86,7 @@ class TDBottomTabBarTabConfig {
     this.unselectTabTextStyle,
     this.badgeConfig,
     this.popUpButtonConfig,
+    this.onLongPress,
     this.allowMultipleTaps = false
   }) : assert(() {
           if (badgeConfig?.showBadge ?? false) {
