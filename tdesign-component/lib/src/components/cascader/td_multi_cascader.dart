@@ -110,20 +110,20 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     if (widget.isLetterSort) {
       _listDataSegmenter();
     }
-    _selectListData = _listData.where((element) => element.level == 0).toList();
-    _tabListData.add(MultiCascaderListModel(
-      labelFun: ()=>context.resource.cascadeLabel,
-    ));
-    if (widget.initialData != null) {
-      _tabListData.clear();
-      _initLocation(widget.initialData!);
+      _initLocation(widget.initialData??'');
       _currentTabIndex = _tabListData.length - 1;
-      _level = _currentTabIndex;
-      _tabListData = _tabListData.reversed.toList();
-      _selectTabValue = widget.initialData;
-      _selectListData =
-          _listData.where((element) => element.parentValue == _tabListData[_currentTabIndex].parentValue).toList();
-    }
+      _level = _currentTabIndex>0?_currentTabIndex:0;
+      if(_currentTabIndex>=0){
+        _tabListData = _tabListData.reversed.toList();
+        _selectTabValue = widget.initialData;
+        _selectListData =
+            _listData.where((element) => element.parentValue == _tabListData[_currentTabIndex].parentValue).toList();
+      }else{
+        _selectListData = _listData.where((element) => element.level == 0).toList();
+        _tabListData.add(MultiCascaderListModel(
+          labelFun: ()=>context.resource.cascadeLabel,
+        ));
+      }
   }
 
   @override

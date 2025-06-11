@@ -1,13 +1,21 @@
 import java.text.SimpleDateFormat
 
-def cfg = rootProject.ext.config
+def getCfg() {
+    // 确保rootProject存在ext，并且ext中有config
+    if (rootProject.hasProperty('ext') && rootProject.ext.hasProperty('config')) {
+        return rootProject.ext.config
+    }
+    return null
+}
+
 ext.createVersionCode = { ->
+    def cfg = getCfg()
     Date now = new Date()
     SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd")
     String nowStr = sf.format(now)
     int nowInt = Integer.valueOf(nowStr)
     //20210408//在指挥官全量之前，保证指挥官灰度版本大于线上全量版本，避免指挥官灰度版本被应用市场覆盖。指挥官版本最低2021041211，线上5.7.6.81版本是2021040781
-    if (cfg.isCI != null && cfg.isCI.toBoolean()) {
+    if (cfg != null && cfg.isCI != null && cfg.isCI.toBoolean()) {
         // 蓝盾环境
         nowInt * 100 + Integer.parseInt(cfg.BuildNo) % 100
     } else {
@@ -17,7 +25,8 @@ ext.createVersionCode = { ->
 }
 
 ext.createVersionName = { ->
-    if (cfg.isCI != null && cfg.isCI.toBoolean()) {
+    def cfg = getCfg()
+    if (cfg != null && cfg.isCI != null && cfg.isCI.toBoolean()) {
         // 蓝盾环境
         cfg.MajorVersion + "." + cfg.MinorVersion + "." + cfg.FixVersion + "." + cfg.BuildNo
     } else {

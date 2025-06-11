@@ -27,19 +27,33 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _textTypeTabBar(BuildContext context) {
+    var _currentIndex = 0;
+    void _onTapTab(BuildContext context, String tabName, int currentIndex,
+        int currentSelectIndex) {
+          print('点击了 $tabName, 当前index: $currentIndex, 当前选择index: $currentSelectIndex');
+      if (currentIndex == currentSelectIndex) {
+        TDToast.showText('$tabName 已经被选中了', context: context);
+        return;
+      }
+      TDToast.showText('点击了 $tabName', context: context);
+    }
+
     return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        currentIndex: _currentIndex,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
             tabText: '标签',
             onTap: () {
-              onTapTab(context, '标签1');
+              _onTapTab(context, '标签1', 0, _currentIndex);
+              _currentIndex = 0;
             },
           ),
           TDBottomTabBarTabConfig(
             tabText: '标签',
             onTap: () {
-              onTapTab(context, '标签1');
+              _onTapTab(context, '标签2', 1, _currentIndex);
+              _currentIndex = 1;
             },
           ),
         ]);

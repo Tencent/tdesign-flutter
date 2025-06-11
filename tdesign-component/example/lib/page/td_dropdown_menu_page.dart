@@ -77,6 +77,13 @@ class TDDropdownMenuPage extends StatelessWidget {
                 return const CodeWrapper(builder: _buildOverflow);
               },
             ),
+            ExampleItem(
+              ignoreCode: true,
+              desc: '可横向滚动菜单（自定义禁用、选中颜色）',
+              builder: (BuildContext context) {
+                return const CodeWrapper(builder: _buildCustomOverflow);
+              },
+            ),
           ],
         ));
   }
@@ -441,5 +448,38 @@ TDDropdownMenu _buildOverflow(BuildContext context) {
         ),
       ];
     },
+  );
+}
+
+@Demo(group: 'dropdownMenu')
+TDDropdownMenu _buildCustomOverflow(BuildContext context) {
+  return TDDropdownMenu(
+    direction: TDDropdownMenuDirection.up,
+    onMenuOpened: (value) {
+      print('打开第$value个菜单');
+    },
+    onMenuClosed: (value) {
+      print('关闭第$value个菜单');
+    },
+    items: [
+      TDDropdownItem(
+        options: [
+          TDDropdownItemOption(label: '全部产品', value: 'all', selected: true, selectedColor: Colors.red),
+          TDDropdownItemOption(label: '最新产品', value: 'new', selectedColor: Colors.blue),
+          TDDropdownItemOption(label: '最火产品', value: 'hot', selectedColor: Colors.green),
+        ],
+        onChange: (value) {
+          print('选择：$value');
+        },
+      ),
+      TDDropdownItem(
+        multiple: true,
+        options: [
+          TDDropdownItemOption(label: '默认排序', value: 'default', selected: true, selectedColor: Colors.red),
+          TDDropdownItemOption(label: '价格从高到低', value: 'price', selectedColor: Colors.green),
+
+        ],
+      ),
+    ],
   );
 }

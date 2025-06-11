@@ -43,3 +43,14 @@ TDImage基于系统Image组件封装，未单独处理缓存逻辑，使用的�
 
 ## 内部写死的颜色或尺寸
 如果发现组件内部写死了颜色或尺寸，导致无法适应业务场景，可以直接提issue优化。
+
+## flutter 3.32以下SDK 无法运行
+flutter 3.32版本的sdk代码变更很大，无法跨版本兼容，因此引入了tdesign-adaptation库。如果你是flutter 3.32以下的sdk版本，请在项目的pubspec.yaml中添加以下依赖覆盖：
+```yaml
+dependency_overrides:
+  tdesign_adaptation:
+    git:
+      url: https://github.com/Tencent/tdesign-flutter.git
+      path: tdesign-adaptation/
+      ref: feature/3.16_adaptation
+```

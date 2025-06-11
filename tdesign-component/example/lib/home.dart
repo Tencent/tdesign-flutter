@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'base/example_base.dart';
 import 'base/example_route.dart';
 import 'base/web_md_tool.dart';
 import 'config.dart';
+import 'localizations/app_localizations.dart';
 
 var _kShowTodoComponent = false;
 
