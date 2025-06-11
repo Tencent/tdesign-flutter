@@ -31,8 +31,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDCascader.showMultiCascader(context, title: '选择地址', data: _data, initialData: _initData, theme: 'step',
             onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
-            List result = [];
-            int len = selectData.length;
+            var result = [];
+            var len = selectData.length;
             _initData = selectData[len - 1].value!;
             selectData.forEach((element) {
               result.add(element.label);
@@ -61,8 +61,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDCascader.showMultiCascader(context, title: '选择地址', data: _data_2, initialData: _initData_2, theme: 'step',
             onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
-            List result = [];
-            int len = selectData.length;
+            var result = [];
+            var len = selectData.length;
             _initData_2 = selectData[len - 1].value!;
             selectData.forEach((element) {
               result.add(element.label);
@@ -95,8 +95,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             initialData: _initData,
             theme: 'tab', onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
-            List result = [];
-            int len = selectData.length;
+            var result = [];
+            var len = selectData.length;
             _initData = selectData[len - 1].value!;
             selectData.forEach((element) {
               result.add(element.label);
@@ -129,8 +129,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             isLetterSort: true,
             theme: 'tab', onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
-            List result = [];
-            int len = selectData.length;
+            var result = [];
+            var len = selectData.length;
             _initData_2 = selectData[len - 1].value!;
             selectData.forEach((element) {
               result.add(element.label);
@@ -159,8 +159,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDCascader.showMultiCascader(context, title: '选择部门人员', data: _data_3,isLetterSort: true, initialData: _initData_3, theme: 'tab',
             onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
-            List result = [];
-            int len = selectData.length;
+            var result = [];
+            var len = selectData.length;
             _initData_3 = selectData[len - 1].value!;
             selectData.forEach((element) {
               result.add(element.label);
@@ -189,8 +189,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDCascader.showMultiCascader(context, title: '选择部门人员', data: _data_3,isLetterSort: true, initialData: _initData_3, theme: 'step',
             onChange: (List<MultiCascaderListModel> selectData) {
           setState(() {
-            List result = [];
-            int len = selectData.length;
+            var result = [];
+            var len = selectData.length;
             _initData_3 = selectData[len - 1].value!;
             selectData.forEach((element) {
               result.add(element.label);

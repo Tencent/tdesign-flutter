@@ -1,5 +1,25 @@
 ## API
-### TDCell
+### TDCellGroup
+#### 简介
+单元格组组件
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key |  | - |  |
+| bordered | bool? | false | 是否显示组边框 |
+| theme | TDCellGroupTheme? | TDCellGroupTheme.defaultTheme | 单元格组风格。可选项：default/card |
+| title | String? | - | 单元格组标题 |
+| cells | List<TDCell> | - | 单元格列表 |
+| builder | CellBuilder? | - | cell构建器，可自定义cell父组件，如Dismissible |
+| style | TDCellStyle? | - | 自定义样式 |
+| titleWidget | Widget? | - | 单元格组标题组件 |
+| scrollable | bool? | false | 可滚动 |
+| isShowLastBordered | bool? | false | 是否显示最后一个cell的下边框 |
+
+```
+```
+ ### TDCell
 #### 简介
 单元格组件
 #### 默认构造方法
@@ -30,6 +50,8 @@
 | rightIconWidget | Widget? | - | 最右侧图标组件 |
 | disabled | bool? | false | 禁用 |
 | imageCircle | double? | 50 | 主图圆角，默认50（圆形） |
+| showBottomBorder | bool? | false | 是否显示下边框（建议TDCellGroup组件下false，避免与bordered重叠） |
+| height | double? | - | 高度 |
 
 ```
 ```
@@ -65,23 +87,3 @@
 | 名称  | 说明 |
 | --- |  --- |
 | TDCellStyle.cellStyle  | 生成单元格默认样式 |
-
-```
-```
- ### TDCellGroup
-#### 简介
-单元格组组件
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| bordered | bool? | false | 是否显示组边框 |
-| theme | TDCellGroupTheme? | TDCellGroupTheme.defaultTheme | 单元格组风格。可选项：default/card |
-| title | String? | - | 单元格组标题 |
-| cells | List<TDCell> | - | 单元格列表 |
-| builder | CellBuilder? | - | cell构建器，可自定义cell父组件，如Dismissible |
-| style | TDCellStyle? | - | 自定义样式 |
-| titleWidget | Widget? | - | 单元格组标题组件 |
-| scrollable | bool? | false | 可滚动 |
-| isShowLastBordered | bool? | false | 是否显示最后一个cell的下边框 |
