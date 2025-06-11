@@ -148,7 +148,7 @@ packages:
     source: hosted
     version: "0.6.23"
   flutter_plugin_android_lifecycle:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: flutter_plugin_android_lifecycle
       sha256: f948e346c12f8d5480d2825e03de228d0eb8c3a737e4cdaa122267b89c022b5e
@@ -419,11 +419,13 @@ packages:
     source: hosted
     version: "1.4.1"
   tdesign_adaptation:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      path: "../../tdesign_adaptation"
-      relative: true
-    source: path
+      path: tdesign-adaptation
+      ref: "feature/3.32_adaptation"
+      resolved-ref: "92d69c60c572c382b8f6711a37bb1952f4ca6586"
+      url: "https://github.com/Tencent/tdesign-flutter.git"
+    source: git
     version: "0.0.1"
   tdesign_flutter:
     dependency: "direct main"
