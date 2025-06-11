@@ -29,7 +29,7 @@ class _AboutPageState extends State<AboutPage> {
   
   Future<void> _getPublishTime() async {
     var timeStamp = await rootBundle.loadString('assets/publish_time');
-    var exactTime = DateTime.fromMillisecondsSinceEpoch(int.parse(timeStamp));
+    var exactTime = DateTime.fromMillisecondsSinceEpoch(int.parse(timeStamp.trim()));
     publishTime = '${exactTime.year}-${exactTime.month}-${exactTime.day}';
     setState(() {});
   }
