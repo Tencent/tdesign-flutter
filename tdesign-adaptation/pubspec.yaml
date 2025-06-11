@@ -11,6 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # 相册选择组件
+  image_picker: 1.1.2
+  image_picker_android: 0.8.12+23
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
