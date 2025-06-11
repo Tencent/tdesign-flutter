@@ -26,25 +26,29 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
-        desc: '适用于选择树形的数据结构',
-        exampleCodeGroup: 'tree',
-        backgroundColor: TDTheme.of(context).grayColor2,
-        children: [
-          ExampleModule(
-            title: '组件类型',
-            children: [
-              ExampleItem(desc: '基础树形选择', builder: _buildDefaultTreeSelect),
-              ExampleItem(desc: '多选树形选择', builder: _buildMultipleTreeSelect),
-            ],
-          ),
-          ExampleModule(
-            title: '组件状态',
-            children: [
-              ExampleItem(desc: '三级树形选择', builder: _buildThirdTreeSelect),
-            ],
-          ),
-        ]);
+      title: tdTitle(),
+      desc: '适用于选择树形的数据结构',
+      exampleCodeGroup: 'tree',
+      backgroundColor: TDTheme.of(context).grayColor2,
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(desc: '基础树形选择', builder: _buildDefaultTreeSelect),
+            ExampleItem(desc: '多选树形选择', builder: _buildMultipleTreeSelect),
+          ],
+        ),
+        ExampleModule(
+          title: '组件状态',
+          children: [
+            ExampleItem(desc: '三级树形选择', builder: _buildThirdTreeSelect),
+          ],
+        ),
+      ],
+      test: [
+        ExampleItem(desc: '局部多选', builder: _buildPartMultipleTreeSelect),
+      ],
+    );
   }
 
   @Demo(group: 'tree')
@@ -55,8 +59,11 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
       options.add(TDSelectOption(label: '选项$i', value: i, children: []));
 
       for (var j = 1; j <= 10; j++) {
-        options[i - 1].children.add(
-            TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []));
+        options[i - 1].children.add(TDSelectOption(
+              label: '选项$i.$j',
+              value: i * 10 + j,
+              children: [],
+            ));
       }
     }
 
@@ -113,6 +120,32 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
     return TDTreeSelect(
       options: options,
       defaultValue: values3,
+      onChange: (val, level) {
+        print('$val, $level');
+      },
+    );
+  }
+
+  @Demo(group: 'tree')
+  Widget _buildPartMultipleTreeSelect(BuildContext context) {
+    var options = <TDSelectOption>[];
+
+    for (var i = 1; i <= 2; i++) {
+      options.add(TDSelectOption(
+          label: '${i == 1 ? '单选' : '多选'}', value: i, children: []));
+
+      for (var j = 1; j <= 10; j++) {
+        options[i - 1].children.add(TDSelectOption(
+            label: '选项$i.$j',
+            value: i * 10 + j,
+            children: [],
+            multiple: i == 2));
+      }
+    }
+
+    return TDTreeSelect(
+      options: options,
+      defaultValue: values1,
       onChange: (val, level) {
         print('$val, $level');
       },

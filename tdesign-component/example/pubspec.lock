@@ -148,13 +148,13 @@ packages:
     source: hosted
     version: "0.6.20"
   flutter_plugin_android_lifecycle:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: flutter_plugin_android_lifecycle
-      sha256: "6f25e9e30df26b3971041847c9106c5a037e72517c8e6514ada99ca42e07e2c7"
+      sha256: "8cf40eebf5dec866a6d1956ad7b4f7016e6c0cc69847ab946833b7d43743809f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.19"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -394,13 +394,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  tdesign_adaptation:
+    dependency: "direct overridden"
+    description:
+      path: tdesign-adaptation
+      ref: "feature/3.16_adaptation"
+      resolved-ref: "08f49ab236d74fd1aff45d378ea04f39577e6bf8"
+      url: "https://github.com/Tencent/tdesign-flutter.git"
+    source: git
+    version: "0.0.1"
   tdesign_flutter:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.1.9"
+    version: "0.2.0"
   term_glyph:
     dependency: transitive
     description:
