@@ -63,7 +63,7 @@ flutter run
 #### 2.4.1 版本切换
 首次运行，可以先将flutter sdk 切到3.16.9版本，执行init.sh脚本，配置对应依赖。
 
-开发玩出，切换至最新稳定版尝试运行，如果有不兼容代码，需要在tdesign-adaptation库进行适配。
+开发完成，切换至最新稳定版尝试运行，如果有不兼容代码，需要在tdesign-adaptation库进行适配。
 
 其中，高于3.32版本的代码，请在feature/3.32_adaptation分支开发，低于3.32版本的代码，请在feature/3.16_adaptation分支开发。
 
