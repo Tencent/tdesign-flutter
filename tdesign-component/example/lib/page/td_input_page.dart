@@ -112,6 +112,9 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
     };
     if(PlatformUtil.isWeb){
       return FutureBuilder(future: awaitFontLoad(), builder: (context, s){
+        if(s.data == null){
+          return Container();
+        }
         return childBuilder.call(context);
       });
     }
@@ -946,8 +949,9 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
     );
   }
 
-  awaitFontLoad() async {
+  Future<bool> awaitFontLoad() async {
     // 等待500ms，让字体加载完成
     await Future.delayed(const Duration(milliseconds: 1000));
+    return true;
   }
 }
