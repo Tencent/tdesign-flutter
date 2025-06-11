@@ -77,17 +77,17 @@ class BadgeConfig {
 
 /// 单个tab配置
 class TDBottomTabBarTabConfig {
-  TDBottomTabBarTabConfig(
-      {required this.onTap,
-      this.selectedIcon,
-      this.unselectedIcon,
-      this.tabText,
-      this.selectTabTextStyle,
-      this.unselectTabTextStyle,
-      this.badgeConfig,
-      this.popUpButtonConfig,
-      this.onLongPress})
-      : assert(() {
+  TDBottomTabBarTabConfig({
+    required this.onTap,
+    this.selectedIcon,
+    this.unselectedIcon,
+    this.tabText,
+    this.selectTabTextStyle,
+    this.unselectTabTextStyle,
+    this.badgeConfig,
+    this.popUpButtonConfig,
+    this.allowMultipleTaps = false
+  }) : assert(() {
           if (badgeConfig?.showBadge ?? false) {
             if (badgeConfig?.tdBadge == null) {
               throw FlutterError('[NavigationTab] if set showBadge = true, '
@@ -120,6 +120,9 @@ class TDBottomTabBarTabConfig {
 
   /// 弹窗配置
   final TDBottomTabBarPopUpBtnConfig? popUpButtonConfig;
+
+  /// onTap方法允许点击多次
+  final bool allowMultipleTaps;
 
   /// 长按事件
   final GestureLongPressCallback? onLongPress;
@@ -311,7 +314,9 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
 
   void _onTap(int index) {
     setState(() {
-      widget.navigationTabs[index].onTap?.call();
+      if (_selectedIndex != index || widget.navigationTabs[index].allowMultipleTaps) {
+        widget.navigationTabs[index].onTap?.call();
+      }
       if (_selectedIndex != index) {
         _selectedIndex = index;
       }
