@@ -229,6 +229,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | closeText | String? | - | 关闭按钮文本 |
 | isLetterSort | bool | false | 是否开启字母排序 |
 | onClose | Function? | - | 选择器关闭按钮回调 |
+| action | TDCascaderAction? | - | 自定义选择器右上角按钮 |
 | onChange | MultiCascaderCallback | - | 值发生变更时触发 |
 
 

@@ -1,29 +1,23 @@
 
   Widget _verticalRadios(BuildContext context) {
-    return TDRadioGroup(
-      selectId: 'index:1',
-      child: ListView.builder(
-        padding: const EdgeInsets.all(0),
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) {
-          var title = '单选';
-          var subTitle = '';
-          if (index == 2) {
-            title = '单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行';
-          }
-          if (index == 3) {
-            subTitle = '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息';
-          }
-          return TDRadio(
-            id: 'index:$index',
-            title: title,
-            titleMaxLine: 2,
-            subTitleMaxLine: 2,
-            subTitle: subTitle,
-          );
-        },
-        itemCount: 4,
+    return TDCell(
+      title: '单选标题',
+      hover: false,
+      required: true,
+      descriptionWidget: TDRadioGroup(
+        selectId: '0',
+        direction: Axis.horizontal,
+        directionalTdRadios: const [TDRadio(
+          id: '0',
+          title: '单选标题0',
+          showDivider: false,
+        ),
+          TDRadio(
+            id: '1',
+            title: '单选标题1',
+            showDivider: false,
+          ),
+        ],
       ),
     );
   }

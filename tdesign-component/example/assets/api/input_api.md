@@ -36,7 +36,6 @@
 | contentPadding | EdgeInsetsGeometry? | - | textInput内边距 |
 | type | TDInputType | TDInputType.normal | 输入框类型 |
 | size | TDInputSize | TDInputSize.large | 输入框规格 |
-| leftInfoWidth | double? | - | 输入框左侧的宽度（输入框有16dp的左侧padding，因而左侧部分不用考虑这16dp） |
 | maxLength | int? | 500 | 最大字数限制 |
 | additionInfo | String? | '' | 错误提示信息 |
 | additionInfoColor | Color? | - | 错误提示颜色 |
@@ -54,3 +53,4 @@
 | spacer | TDInputSpacer | - | 组件各模块间间距 |
 | cardStyleBottomText | String? | - | 卡片模式下方文字 |
 | onTapOutside | TapRegionCallback? | - | 点击输入框外部区域回调 |
+| leftInfoWidth | double? | - | 输入框左侧的宽度（输入框有16dp的左侧padding，因而左侧部分不用考虑这16dp） |
