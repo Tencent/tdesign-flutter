@@ -19,7 +19,6 @@ class _TDFormPageState extends State<TDFormPage> {
   StreamController<TDStepperEventType> _stepController=StreamController.broadcast();
   String _selected_1 = '请输入内容';
   String _selected_2 = '请输入内容';
-  double _tDRateValue=3;
   String? _initLocalData;
 
   /// form 禁用的状态
@@ -27,9 +26,6 @@ class _TDFormPageState extends State<TDFormPage> {
 
   /// form 排列方式是否为水平
   bool _isFormHorizontal = true;
-
-  /// 控制是否进行表单校验
-  bool _validateForm = false;
 
   /// 设置按钮是否可点击状态
   /// true 表示处于 active 状态
@@ -131,7 +127,7 @@ class _TDFormPageState extends State<TDFormPage> {
     "gender": '',
     "birth": '',
     "place": '',
-    "age": "3",
+    "age": "0",
     "description": "2",
     "resume": '',
     "photo": '',
@@ -159,7 +155,12 @@ class _TDFormPageState extends State<TDFormPage> {
     });
     super.initState();
   }
-
+ @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _stepController.close();
+  }
   /// 提交按钮钮点击事件：
   /// 改变 _validate 值，从而触发校验
   /// 获取表单的数据
@@ -210,7 +211,7 @@ class _TDFormPageState extends State<TDFormPage> {
       validate: (value) {
         if (value == null || value.isEmpty) {
           return 'empty';
-        } else if (int.parse(value) < 4) {
+        } else if (double.parse(value) < 4) {
           return 'empty';
         }
         return null;
@@ -232,9 +233,7 @@ class _TDFormPageState extends State<TDFormPage> {
 
   ///表单提交数据
   onSubmit(Map<String, dynamic> formData, isValidateSuc) {
-    setState(() {
-      _validateForm = !_validateForm;
-    });
+
   }
 
   @override
@@ -265,11 +264,9 @@ class _TDFormPageState extends State<TDFormPage> {
         disabled: _formDisableState,
         data: _formData,
         isHorizontal: _isFormHorizontal,
-        isValidate: _validateForm,
         rules: _validationRules,
         formContentAlign: TextAlign.left,
         requiredMark: true,
-
         /// 确定整个表单是否展示提示信息
         formShowErrorMessage: true,
         onSubmit: onSubmit,
@@ -445,10 +442,13 @@ class _TDFormPageState extends State<TDFormPage> {
                   padding: EdgeInsets.only(top: _isFormHorizontal ? 0 : 5, right: 18, bottom: 5),
                   child: TDRate(
                     count: 5,
-                    value:_tDRateValue,
+                    value:double.parse(_formData['description']),
                     allowHalf: false,
                     disabled: _formDisableState,
                     onChange: (value) {
+                      setState(() {
+                        _formData['description']='${value}';
+                      });
                       _formItemNotifier['description']?.upDataForm('${value}');
                     },
                   )),
@@ -467,7 +467,7 @@ class _TDFormPageState extends State<TDFormPage> {
               indicator: true,
               readOnly: _formDisableState,
               layout: TDTextareaLayout.vertical,
-              controller:_controller[3],
+              controller:_controller[2],
               showBottomDivider: false,
               onChanged: (value) {
                 _formItemNotifier['resume']?.upDataForm(value);
@@ -545,22 +545,25 @@ class _TDFormPageState extends State<TDFormPage> {
                         _selected_2='请输入内容';
                         //年限
                         _stepController.add(TDStepperEventType.cleanValue);
-                        //自我评价
-                        _tDRateValue=0;
                         //上传图片
                         files.clear();
+                        _formData={
+                          "name": '',
+                          "password": '',
+                          "gender": '',
+                          "birth": '',
+                          "place": '',
+                          "age": "0",
+                          "description": "2",
+                          "resume": '',
+                          "photo": ''
+                        };
+                        _formData.forEach((key, value) {
+                          _formItemNotifier[key].upDataForm(value);
+                        });
+                        _formController.reset(_formData);
                         setState(() {
-                          _formData = {
-                            "name": '',
-                            "password": '',
-                            "gender": '',
-                            "birth": '',
-                            "place": '',
-                            "age": "3",
-                            "description": "2",
-                            "resume": '',
-                            "photo": ''
-                          };
+
                         });
                       },
                     )),
