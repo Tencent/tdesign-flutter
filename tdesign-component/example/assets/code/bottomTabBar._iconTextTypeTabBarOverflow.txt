@@ -8,30 +8,32 @@
       TDIcons.app,
       color: TDTheme.of(context).brandNormalColor,
     );
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: selectedIcon,
-        unselectedIcon: unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: selectedIcon,
-        unselectedIcon: unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: selectedIcon,
-        unselectedIcon: unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签3');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: selectedIcon,
+            unselectedIcon: unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: selectedIcon,
+            unselectedIcon: unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: selectedIcon,
+            unselectedIcon: unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签3');
+            },
+          ),
+        ]);
   }

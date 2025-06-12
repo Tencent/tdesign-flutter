@@ -4,9 +4,8 @@ import '../../../tdesign_flutter.dart';
 /// 校验规则 和 错误提醒
 class TDFormValidation {
   /// 校验方法
-  final String? Function(String?) validate;
+  final String? Function(dynamic) validate;
   final String errorMessage;
-
   /// 校验对象的类型
   final TDFormItemType type;
 
