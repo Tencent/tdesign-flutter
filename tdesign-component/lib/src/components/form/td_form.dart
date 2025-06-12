@@ -21,7 +21,6 @@ class TDForm extends StatefulWidget {
       this.labelWidth = 20.0,
       this.preventSubmitDefault = true,
       this.requiredMark = true, // 此处必填项有小问题
-      this.isValidate = false,
       this.scrollToFirstError,
       this.formShowErrorMessage = true,
       this.submitWithWarningMessage = false,
@@ -74,10 +73,6 @@ class TDForm extends StatefulWidget {
   /// 整个表单字段校验规则
   final Map<String, TDFormValidation> rules;
 
-  /// 是否对整个 form 进行校验
-  /// TODO: 无法重复点击提交按钮的校验进行重复校验
-  final bool isValidate;
-
   /// 表单校验不通过时，是否自动滚动到第一个校验不通过的字段，平滑滚动或是瞬间直达。
   /// 值为空则表示不滚动。可选项：''/smooth/auto
   final String? scrollToFirstError;
@@ -108,17 +103,33 @@ class _TDFormState extends State<TDForm> {
   List<Widget> _formItems = [];
   Map<String, dynamic> _formData = {};
   bool _isValidate = false;
+  bool _isReset=false;
+  //用于更新表单
+  int _upDataCount=1;
   @override
   void initState() {
     super.initState();
     _formData = widget.data;
     if (widget.formController != null) {
-      widget.formController?.addListener(onSubmit);
+      widget.formController?.addListener((){
+           if(widget.formController?.eventType=='submit'){
+             onSubmit();
+           }else if(widget.formController?.eventType=='reset'){
+             onReset();
+           }
+      });
     }
   }
-
-
+  onReset(){
+    _upDataCount+=1;
+    setState(() {
+      _formData=widget.formController!.formData;
+      _isReset=true;
+    });
+  }
   onSubmit() {
+    _upDataCount+=1;
+    _isReset=false;
     bool isValidateSuc = true;
     _formData.forEach((key, value) {
       if(isValidateSuc){
@@ -127,7 +138,7 @@ class _TDFormState extends State<TDForm> {
     });
     if (!isValidateSuc) {
       setState(() {
-        _isValidate = !_isValidate;
+        _isValidate =true;
       });
     }
     widget.onSubmit(_formData, isValidateSuc);
@@ -160,10 +171,12 @@ class _TDFormState extends State<TDForm> {
       formContentAlign: widget.formContentAlign,
       formShowErrorMessage: widget.formShowErrorMessage,
       requiredMark: widget.requiredMark,
+      updataCount: _upDataCount,
       onFormDataChange: (value) {
         ///监听表单数据变化
         _formData = value;
       },
+      isReset:_isReset,
       onSubmit: onSubmit,
       child: ListView.builder(
         itemCount: _formItems.length,
@@ -177,7 +190,15 @@ class _TDFormState extends State<TDForm> {
 }
 
 class FormController with ChangeNotifier {
+  String eventType='';
+   Map<String,dynamic>  formData={};
   submit() {
+    eventType='submit';
+    notifyListeners();
+  }
+  reset(Map<String,dynamic>  data){
+    formData=data;
+    eventType='reset';
     notifyListeners();
   }
 }

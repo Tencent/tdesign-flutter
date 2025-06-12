@@ -120,10 +120,14 @@ class _TDFormItemState extends State<TDFormItem> {
 
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();
+
     if (FormValidate) {
       startValidation();
     }
+    if(FormIsReset){
+      errorMessage='';
+    }
+    super.didChangeDependencies();
   }
   /// 从 TDForm 继承获取整个表单的参数
   /// 获取真正的 LabelWidth
@@ -160,7 +164,6 @@ class _TDFormItemState extends State<TDFormItem> {
     /// 如果 没用为 item 定制内容排列方式 则全部使用总表单的内容排列方式
     return inherited!.formContentAlign;
   }
-
   /// 获取 form 是否为水平排列的状态
   bool get FormIsHorizontal {
     final inherited = TDFormInherited.of(context);
@@ -169,7 +172,13 @@ class _TDFormItemState extends State<TDFormItem> {
     }
     return false;
   }
-
+  bool get FormIsReset{
+    final inherited = TDFormInherited.of(context);
+    if(inherited?.isReset!=null){
+      return  inherited!.isReset;
+    }
+    return false;
+  }
   /// 获取 form 整体是否校验的信号状态
   bool get FormValidate {
     final inherited = TDFormInherited.of(context);
@@ -525,7 +534,7 @@ class _TDFormItemState extends State<TDFormItem> {
         if (ShowErrorMessage != null && ShowErrorMessage! && errorMessage != null && errorMessage != '')
           Row(
             children: [
-              if (widget.label != null) SizedBox(width: LabelWidth),
+              if (widget.label != null&& FormIsHorizontal) SizedBox(width: LabelWidth),
               Expanded(
                   child: Padding(
                       padding: EdgeInsets.only(left: left, right: right),
