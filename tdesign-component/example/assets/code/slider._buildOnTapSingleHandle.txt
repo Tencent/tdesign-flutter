@@ -1,0 +1,40 @@
+
+  Widget _buildOnTapSingleHandle(BuildContext context) {
+    var currentValue = 40.0;
+    Offset? tapOffset;
+
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Value: ${currentValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
+                if (tapOffset != null)
+                  Text(
+                      'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})'),
+              ],
+            ),
+            TDSlider(
+              sliderThemeData: TDSliderThemeData(
+                  context: context, min: 0, max: 100, showThumbValue: true),
+              leftLabel: '0',
+              rightLabel: '100',
+              value: currentValue,
+              onChanged: (value) {},
+              onTap: (offset, value) {
+                setState(() {
+                  currentValue = value;
+                  tapOffset = offset;
+                });
+                print('onTap  offset: $offset, value: $value');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }

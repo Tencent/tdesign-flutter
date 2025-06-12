@@ -13,6 +13,8 @@
 | rightLabel | String? | - | 右侧标签 |
 | onChangeStart | ValueChanged<RangeValues>? | - | 滑动开始监听 |
 | onChangeEnd | ValueChanged<RangeValues>? | - | 滑动结束监听 |
+| onTap |  Function(Position position, Offset offset, double value)? | - |  |
+| onThumbTextTap |  Function(Position position, Offset offset, double value)? | - | Thumb 点击浮标文字 位置、坐标、当前值 |
 
 ```
 ```
@@ -30,3 +32,5 @@
 | rightLabel | String? | - | 右侧标签 |
 | onChangeStart | ValueChanged<RangeValues>? | - | 滑动开始监听 |
 | onChangeEnd | ValueChanged<RangeValues>? | - | 滑动结束监听 |
+| onTap |  Function(Position position, Offset offset, double value)? | - |  |
+| onThumbTextTap |  Function(Position position, Offset offset, double value)? | - | Thumb 点击浮标文字 位置、坐标、当前值 |

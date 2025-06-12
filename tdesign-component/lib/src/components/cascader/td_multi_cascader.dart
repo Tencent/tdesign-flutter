@@ -44,6 +44,9 @@ class TDMultiCascader extends StatefulWidget {
   /// 选择器关闭按钮回调
   final Function? onClose;
 
+  /// 自定义选择器右上角按钮
+  final TDCascaderAction? action;
+
   /// 值发生变更时触发
   final MultiCascaderCallback onChange;
   const TDMultiCascader(
@@ -61,6 +64,7 @@ class TDMultiCascader extends StatefulWidget {
       this.closeText,
       this.isLetterSort = false,
       this.onClose,
+      this.action,
       required this.onChange});
 
   @override
@@ -219,7 +223,14 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
               top: 0,
               child: GestureDetector(
                   onTap: () {
-                    if (widget.onClose != null) {
+                    if(widget.action != null){
+                      var result = _tabListData.where((element) => element.label != context.resource.cascadeLabel).toList();
+                      widget.action?.onConfirm(result);
+                      if(result.isNotEmpty){
+                        // 返回数据不空，才会自己关闭。如果数据是空的，有业务在回调中自己选择是否关闭
+                        Navigator.of(context).pop();
+                      }
+                    } else if (widget.onClose != null) {
                       widget.onClose!();
                     }
                   },
@@ -228,17 +239,20 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                     alignment: Alignment.center,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 2, right: 16),
-                      child: widget.closeText == null
-                          ? Icon(
-                              TDIcons.close,
-                              color: TDTheme.of(context).fontGyColor1,
-                            )
-                          : TDText(
-                              widget.closeText,
-                              style: TextStyle(
-                                  fontSize: TDTheme.of(context).fontTitleMedium!.size,
-                                  color: TDTheme.of(context).fontGyColor1),
-                            ),
+                      child: widget.action?.build(context) ??
+                          (widget.closeText == null
+                              ? Icon(
+                                  TDIcons.close,
+                                  color: TDTheme.of(context).fontGyColor1,
+                                )
+                              : TDText(
+                                  widget.closeText,
+                                  style: TextStyle(
+                                      fontSize: TDTheme.of(context)
+                                          .fontTitleMedium!
+                                          .size,
+                                      color: TDTheme.of(context).fontGyColor1),
+                                )),
                     ),
                   ))),
         ],

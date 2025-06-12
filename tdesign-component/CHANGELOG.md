@@ -1,5 +1,31 @@
-## 🌈 0.1.9 `2025-03-31`
+## 🌈 0.2.0 `2025-05-07`
+### 🚀 Features
+- `TDCellGroup`: Added `titleBackgroundColor` property for cell group title background color. @runoob-coder ([#539](https://github.com/Tencent/tdesign-flutter/pull/539))
+- `TDLink`: Replaced link parameter `LinkObj` with `MessageLink`, adjusted `TDLink` styles, and added click callback. @runoob-coder ([#554](https://github.com/Tencent/tdesign-flutter/pull/554))
+- `TDBottomTabBar`: Added custom title support for step bar component. @RSS1102 ([#576](https://github.com/Tencent/tdesign-flutter/pull/576))
+- `TDSlider`: Added slider tap event `onTap`. @RSS1102 ([#527](https://github.com/Tencent/tdesign-flutter/pull/527))
+- `TDCascader`: Added "Confirm" button at top-right corner to support selecting any option. @Luozf12345
+- `ImageViewer`: Added single image deletion support. @ccXxx1aoBai ([#581](https://github.com/Tencent/tdesign-flutter/pull/581))
+- `TDPopup`: Added custom size properties for popup title, left text, right text, and close button. @Jzow ([#582](https://github.com/Tencent/tdesign-flutter/pull/582))
+- `TDBottomTabBarTabConfig`: Added `onLongPress` event triggered by long-pressing tabs. @RSS1102 ([#580](https://github.com/Tencent/tdesign-flutter/pull/580))
 
+### 🐞 Bug Fixes
+- `TDFooter`: Fixed content overflow issue in link mode. @runoob-coder ([#554](https://github.com/Tencent/tdesign-flutter/pull/554))
+- `TDUpload`: Fixed file size limit error. @epoll-j ([#544](https://github.com/Tencent/tdesign-flutter/pull/544))
+- `TDImageViewer`: Added Swiper component property passthrough, click events, and style properties; supports custom buttons. @ccXxx1aoBai ([#561](https://github.com/Tencent/tdesign-flutter/pull/561))
+- `TDSlider`: Fixed edge drag failure and value/scale display issues in capsule type with range. @qfish ([#567](https://github.com/Tencent/tdesign-flutter/pull/567))
+- `TDInput`: Fixed width calculation defect for non-Chinese label input fields. @Jzow ([#564](https://github.com/Tencent/tdesign-flutter/pull/564))
+- `TDPopup`: Fixed inability to modify popup height via `height` in child component. @Jzow ([#571](https://github.com/Tencent/tdesign-flutter/pull/571))
+- `TDDropdownMenu`: Fixed single-select failure in specific scenarios. @1jialong ([#575](https://github.com/Tencent/tdesign-flutter/pull/575))
+- `TDToast`: Fixed multi-line text display issue. @Luozf12345
+- `TDPopup`: Fixed horizontal line display issue when popup lacks outer Scaffold. @Luozf12345
+
+### 🚧 Others
+- `TDFooter`: Refactored `TDFooter` component; Removed `LinkObj` class and directly used `TDLink` class; Removed `isWithUnderline` parameter (link styles now set in `TDLink`). @runoob-coder ([#554](https://github.com/Tencent/tdesign-flutter/pull/554))
+
+
+
+## 🌈 0.1.9 `2025-03-31`
 ### 🚀 Features
 - `TDProgress`: Added `Progress` component @CORCTON ([#307](https://github.com/Tencent/tdesign-flutter/pull/307))
 - `TDMessage`: Added `Message` (Global Prompt) component @chendingya ([#316](https://github.com/Tencent/tdesign-flutter/pull/316))

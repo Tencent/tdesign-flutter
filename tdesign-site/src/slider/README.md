@@ -27,14 +27,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildSingleHandle(BuildContext context) {
     return TDSlider(
-      sliderThemeData: TDSliderThemeData(
-        context: context,
-        min: 0,
-        max: 100,
-      ),
-      value: 10,
-      onChanged: (value) {},
-    );
+        sliderThemeData: TDSliderThemeData(
+          context: context,
+          min: 0,
+          max: 100,
+        ),
+        value: 10,
+        onChanged: (value) {});
   }</pre>
 
 </td-code-block>
@@ -220,6 +219,223 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
+### 1 组件事件
+
+onTap
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildOnTapSingleHandle(BuildContext context) {
+    var currentValue = 40.0;
+    Offset? tapOffset;
+
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Value: ${currentValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
+                if (tapOffset != null)
+                  Text(
+                      'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})'),
+              ],
+            ),
+            TDSlider(
+              sliderThemeData: TDSliderThemeData(
+                  context: context, min: 0, max: 100, showThumbValue: true),
+              leftLabel: '0',
+              rightLabel: '100',
+              value: currentValue,
+              onChanged: (value) {},
+              onTap: (offset, value) {
+                setState(() {
+                  currentValue = value;
+                  tapOffset = offset;
+                });
+                print('onTap  offset: $offset, value: $value');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildOnTapDoubleHandle(BuildContext context) {
+    final displayRangeDataNotifier = ValueNotifier<DisplayRangeData>(
+      DisplayRangeData(
+        currentPosition: Position.start,
+        currentTapValue: 40.0,
+        tapOffset: null,
+      ),
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ValueListenableBuilder<DisplayRangeData>(
+          valueListenable: displayRangeDataNotifier,
+          builder: (context, data, child) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Position: ${data.currentPosition}'),
+                const SizedBox(width: 10),
+                Text('Value: ${data.currentTapValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
+                if (data.tapOffset != null)
+                  Text(
+                      'Tap at (${data.tapOffset!.dx.toStringAsFixed(0)}, ${data.tapOffset!.dy.toStringAsFixed(0)})'),
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: 10),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData(
+              context: context, min: 0, max: 100, showThumbValue: true),
+          leftLabel: '0',
+          rightLabel: '100',
+          value: const RangeValues(10, 60),
+          onChanged: (value) {},
+          onTap: (position, offset, value) {
+            displayRangeDataNotifier.value = DisplayRangeData(
+              currentPosition: position,
+              currentTapValue: value,
+              tapOffset: offset,
+            );
+            print('onTap offset: $offset, value: $value');
+          },
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+onThumbTextTap
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildOnThumbTextTapSingleHandle(BuildContext context) {
+    var currentValue = 40.0;
+    Offset? tapOffset;
+
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Value: ${currentValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
+                if (tapOffset != null)
+                  Text(
+                      'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})'),
+              ],
+            ),
+            TDSlider(
+              sliderThemeData: TDSliderThemeData(
+                context: context,
+                min: 0,
+                max: 100,
+                showThumbValue: true,
+              ),
+              leftLabel: '0',
+              rightLabel: '100',
+              value: currentValue,
+              onChanged: (value) {},
+              onThumbTextTap: (offset, value) {
+                setState(() {
+                  currentValue = value;
+                  tapOffset = offset;
+                });
+                print('onTap  offset: $offset, value: $value');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildOnThumbTextTapDoubleHandle(BuildContext context) {
+    final displayRangeDataNotifier = ValueNotifier<DisplayRangeData>(
+      DisplayRangeData(
+        currentPosition: Position.start,
+        currentTapValue: 40.0,
+        tapOffset: null,
+      ),
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ValueListenableBuilder<DisplayRangeData>(
+          valueListenable: displayRangeDataNotifier,
+          builder: (context, data, child) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Position: ${data.currentPosition}'),
+                const SizedBox(width: 10),
+                Text('Value: ${data.currentTapValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
+                if (data.tapOffset != null)
+                  Text(
+                      'Tap at (${data.tapOffset!.dx.toStringAsFixed(0)}, ${data.tapOffset!.dy.toStringAsFixed(0)})'),
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: 10),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData(
+              context: context, min: 0, max: 100, showThumbValue: true),
+          leftLabel: '0',
+          rightLabel: '100',
+          value: const RangeValues(10, 60),
+          onChanged: (value) {},
+          onThumbTextTap: (position, offset, value) {
+            displayRangeDataNotifier.value = DisplayRangeData(
+              currentPosition: position,
+              currentTapValue: value,
+              tapOffset: offset,
+            );
+            print('onTap offset: $offset, value: $value');
+          },
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
 ### 1 特殊样式
 
 胶囊型滑块
@@ -326,12 +542,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         min: 0,
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
-      )
-        ..updateSliderThemeData((data) =>
-            data.copyWith(
-              activeTickMarkColor: const Color(0xFFE7E7E7),
-              inactiveTickMarkColor: const Color(0xFFE7E7E7),
-            )),
+      )..updateSliderThemeData((data) => data.copyWith(
+            activeTickMarkColor: const Color(0xFFE7E7E7),
+            inactiveTickMarkColor: const Color(0xFFE7E7E7),
+          )),
       value: 60,
       onChanged: (value) {},
     );
@@ -355,9 +569,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
       )..updateSliderThemeData((data) => data.copyWith(
-        activeTickMarkColor: const Color(0xFFE7E7E7),
-        inactiveTickMarkColor: const Color(0xFFE7E7E7),
-      )),
+            activeTickMarkColor: const Color(0xFFE7E7E7),
+            inactiveTickMarkColor: const Color(0xFFE7E7E7),
+          )),
       value: const RangeValues(20, 60),
       onChanged: (value) {},
     );
@@ -444,12 +658,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             min: 0,
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
-          )
-            ..updateSliderThemeData((data) =>
-                data.copyWith(
-                  activeTickMarkColor: const Color(0xFFE7E7E7),
-                  inactiveTickMarkColor: const Color(0xFFE7E7E7),
-                )),
+          )..updateSliderThemeData((data) => data.copyWith(
+                activeTickMarkColor: const Color(0xFFE7E7E7),
+                inactiveTickMarkColor: const Color(0xFFE7E7E7),
+              )),
           value: 60,
           // divisions: 5,
           onChanged: (value) {},
@@ -481,13 +693,44 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                                   
 
 自定义盒子样式
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _buildCustomDecoration(BuildContext context) {
+    return Column(
+      children: [
+        TDSlider(
+          sliderThemeData: TDSliderThemeData(
+            context: context,
+            min: 0,
+            max: 100,
+          ),
+          value: 40,
+          boxDecoration: const BoxDecoration(color: Colors.amber),
+          // divisions: 5,
+          onChanged: (value) {},
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        TDRangeSlider(
+          sliderThemeData: TDSliderThemeData.capsule(
+            context: context,
+            min: 0,
+            max: 100,
+            scaleFormatter: (value) => value.toInt().toString(),
+          ),
+          boxDecoration: const BoxDecoration(color: Colors.deepOrangeAccent),
+          value: const RangeValues(20, 60),
+          onChanged: (value) {},
+        ),
+      ],
+    );
+  }</pre>
 
 </td-code-block>
-                
+                                  
 
 自定义滑轨颜色
             
@@ -547,6 +790,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | rightLabel | String? | - | 右侧标签 |
 | onChangeStart | ValueChanged<RangeValues>? | - | 滑动开始监听 |
 | onChangeEnd | ValueChanged<RangeValues>? | - | 滑动结束监听 |
+| onTap |  Function(Position position, Offset offset, double value)? | - |  |
+| onThumbTextTap |  Function(Position position, Offset offset, double value)? | - | Thumb 点击浮标文字 位置、坐标、当前值 |
 
 ```
 ```
@@ -564,6 +809,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | rightLabel | String? | - | 右侧标签 |
 | onChangeStart | ValueChanged<RangeValues>? | - | 滑动开始监听 |
 | onChangeEnd | ValueChanged<RangeValues>? | - | 滑动结束监听 |
+| onTap |  Function(Position position, Offset offset, double value)? | - |  |
+| onThumbTextTap |  Function(Position position, Offset offset, double value)? | - | Thumb 点击浮标文字 位置、坐标、当前值 |
 
 
   

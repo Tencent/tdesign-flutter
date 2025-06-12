@@ -10,7 +10,10 @@ import '../navbar/td_nav_bar.dart';
 typedef OnIndexChange = Function(int index);
 typedef OnClose = Function(int index);
 typedef OnDelete = Function(int index);
+typedef OnImageTap = Function(int index);
 typedef OnLongPress = Function(int index);
+typedef LeftItemBuilder = Widget Function(BuildContext context, int index);
+typedef RightItemBuilder = Widget Function(BuildContext context, int index);
 
 class TDImageViewerWidget extends StatefulWidget {
   const TDImageViewerWidget({
@@ -20,13 +23,25 @@ class TDImageViewerWidget extends StatefulWidget {
     required this.images,
     this.labels,
     this.showIndex,
+    this.loop,
+    this.autoplay,
+    this.duration,
+    this.bgColor,
+    this.navBarBgColor,
+    this.iconColor,
+    this.labelStyle,
+    this.indexStyle,
     this.defaultIndex,
     this.onIndexChange,
     this.width,
     this.height,
     this.onClose,
     this.onDelete,
+    this.ignoreDeleteError = false,
+    this.onTap,
     this.onLongPress,
+    this.leftItemBuilder,
+    this.rightItemBuilder,
   }) : super(key: key);
 
   /// 是否展示关闭按钮
@@ -44,6 +59,30 @@ class TDImageViewerWidget extends StatefulWidget {
   /// 是否显示页码
   final bool? showIndex;
 
+  /// 图片是否循环
+  final bool? loop;
+
+  /// 图片轮播是否自动播放
+  final bool? autoplay;
+
+  /// 自动播放间隔
+  final int? duration;
+
+  /// 背景色
+  final Color? bgColor;
+
+  /// 导航栏背景色
+  final Color? navBarBgColor;
+
+  /// 图标颜色
+  final Color? iconColor;
+
+  /// label文字样式
+  final TextStyle? labelStyle;
+
+  /// 页码样式
+  final TextStyle? indexStyle;
+
   /// 默认预览图片所在的下标
   final int? defaultIndex;
 
@@ -56,6 +95,12 @@ class TDImageViewerWidget extends StatefulWidget {
   /// 删除点击
   final OnDelete? onDelete;
 
+  /// 是否忽略单张图片删除错误提示
+  final bool? ignoreDeleteError;
+
+  /// 点击图片
+  final OnImageTap? onTap;
+
   /// 长按图片
   final OnLongPress? onLongPress;
 
@@ -64,6 +109,12 @@ class TDImageViewerWidget extends StatefulWidget {
 
   /// 图片高度
   final double? height;
+
+  /// 左侧自定义操作
+  final LeftItemBuilder? leftItemBuilder;
+
+  /// 右侧自定义操作
+  final RightItemBuilder? rightItemBuilder;
 
   @override
   State<StatefulWidget> createState() {
@@ -151,17 +202,17 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Visibility(
-            visible: (widget.labels![_index - 1] ?? '') != '',
+            visible: (widget.labels![_index - 1]) != '',
             child: Text(widget.labels![_index - 1],
               textAlign: TextAlign.center,
-              style: TextStyle(color: TDTheme.of(context).whiteColor1),
+              style: widget.labelStyle ?? TextStyle(color: TDTheme.of(context).whiteColor1),
             ),
           ),
           Visibility(
             visible: widget.showIndex ?? false,
             child: Text('$_index / ${widget.images.length}',
               textAlign: TextAlign.center,
-              style: TextStyle(color: TDTheme.of(context).grayColor5, fontSize: 10),
+              style: widget.indexStyle ?? TextStyle(color: TDTheme.of(context).brandClickColor, fontSize: 10),
             ),
           )
         ],
@@ -172,7 +223,53 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
           ? '$_index / ${widget.images.length}'
           : '',
       textAlign: TextAlign.center,
-      style: TextStyle(color: TDTheme.of(context).whiteColor1),
+      style: widget.indexStyle ?? TextStyle(color: TDTheme.of(context).whiteColor1),
+    );
+  }
+
+  Widget _getLeft() {
+    if(widget.leftItemBuilder != null) {
+      return widget.leftItemBuilder!(context, _index - 1);
+    }
+    return GestureDetector(
+      onTap: () {
+        if (widget.onClose != null) {
+          widget.onClose!.call(_index - 1);
+        } else {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Icon(
+        TDIcons.close,
+        color: widget.iconColor ?? TDTheme.of(context).whiteColor1,
+      ),
+    );
+  }
+
+  Widget _getRight() {
+    if(widget.rightItemBuilder != null) {
+      return widget.rightItemBuilder!(context, _index - 1);
+    }
+    return Visibility(
+      visible: widget.deleteBtn ?? false,
+      child: GestureDetector(
+        onTap: () {
+          if(widget.images.length == 1 && !(widget.ignoreDeleteError ?? false)) {
+            throw FlutterError('images must not be empty');
+          }
+          widget.images.removeAt(_index - 1);
+          widget.onDelete?.call(_index - 1);
+          setState(() {
+            if(_index > 1) {
+              _index--;
+            }
+          });
+        },
+        child: Icon(
+          TDIcons.delete,
+          color: widget.iconColor ?? TDTheme.of(context).whiteColor1,
+        ),
+      ),
     );
   }
 
@@ -188,7 +285,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
           left: 0,
           right: 0,
           child: Container(
-            color: TDTheme.of(context).fontGyColor1,
+            color: widget.bgColor ?? TDTheme.of(context).fontGyColor1,
           ),
         ),
         Positioned(
@@ -198,9 +295,13 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
           right: 0,
           child: Swiper(
             index: _index - 1,
+            loop: widget.loop ?? true,
+            autoplay: widget.autoplay ?? false,
+            duration: widget.duration ?? kDefaultAutoplayTransactionDuration,
             itemBuilder: (BuildContext context, int index) {
               var image = widget.images[index];
               return GestureDetector(
+                onTap: () => widget.onTap?.call(index),
                 onLongPress: () => widget.onLongPress?.call(index),
                 child: _getImage(image),
               );
@@ -218,47 +319,17 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
         ),
         SafeArea(
           child: Container(
-            color: const Color(0x66000000),
+            color: widget.navBarBgColor ?? const Color(0x66000000),
             height: 44,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    if (widget.onClose != null) {
-                      widget.onClose!.call(_index - 1);
-                    } else {
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: Icon(
-                    TDIcons.close,
-                    color: TDTheme.of(context).whiteColor1,
-                  ),
-                ),
+                _getLeft(),
                 Expanded(
                   flex: 1,
                   child: _getPageTitle(),
                 ),
-                if (widget.deleteBtn ?? false)
-                  GestureDetector(
-                    onTap: () {
-                      if(widget.images.length == 1) {
-                        throw FlutterError('images must not be empty');
-                      }
-                      widget.images.removeAt(_index - 1);
-                      widget.onDelete?.call(_index - 1);
-                      setState(() {
-                        if(_index > 1) {
-                          _index--;
-                        }
-                      });
-                    },
-                    child: Icon(
-                      TDIcons.delete,
-                      color: TDTheme.of(context).whiteColor1,
-                    ),
-                  )
+                _getRight(),
               ],
             ),
           ),
