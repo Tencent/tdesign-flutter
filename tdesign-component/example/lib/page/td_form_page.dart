@@ -16,7 +16,7 @@ class TDFormPage extends StatefulWidget {
 class _TDFormPageState extends State<TDFormPage> {
   List<TextEditingController> _controller = [];
   FormController _formController = FormController();
-  StreamController<TDStepperEventType> _stepController=StreamController(sync:true);
+  StreamController<TDStepperEventType> _stepController=StreamController.broadcast();
   String _selected_1 = '请输入内容';
   String _selected_2 = '请输入内容';
   double _tDRateValue=3;
@@ -229,18 +229,12 @@ class _TDFormPageState extends State<TDFormPage> {
       type: TDFormItemType.upLoadImg,
     ),
   };
-  //
-
-  // ];
 
   ///表单提交数据
   onSubmit(Map<String, dynamic> formData, isValidateSuc) {
     setState(() {
       _validateForm = !_validateForm;
     });
-
-    /// 其他通过回调获取数据
-    print('Form Data: $formData');
   }
 
   @override
