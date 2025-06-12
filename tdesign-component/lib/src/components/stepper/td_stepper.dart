@@ -112,9 +112,6 @@ class _TDStepperState extends State<TDStepper> {
   void dispose() {
     _controller.dispose();
     _focusNode.dispose();
-    if( widget.eventController!=null){
-      widget.eventController!.close();
-    }
     super.dispose();
   }
 
