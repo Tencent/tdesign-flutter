@@ -131,6 +131,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onTextChanged | TDSearchBarEvent? | - | 文字改变回调 |
 | onSubmitted | TDSearchBarEvent? | - | 提交回调 |
 | onEditComplete | TDSearchBarCallBack? | - | 编辑完成回调 |
+| onTapOutside |  | - |  |
 | onInputClick | GestureTapCallback? | - | 输入框点击事件 |
 | autoHeight | bool | false | 是否自动计算高度 |
 | padding | EdgeInsets | const EdgeInsets.fromLTRB(16, 8, 16, 8) | 内部填充 |
