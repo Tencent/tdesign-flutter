@@ -1,45 +1,47 @@
 
   Widget _iconTextTypeTabBar5tabs(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.iconText, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '标签',
-        selectedIcon: _selectedIcon,
-        unselectedIcon: _unSelectedIcon,
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
@@ -41,12 +43,13 @@ abstract class TDPopupBasePanel extends StatefulWidget {
 
 abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
     with SingleTickerProviderStateMixin {
+  final GlobalKey _childKey = GlobalKey();
   static const _dragHandleHeight = 24.0;
   static const _headerHeight = 58.0;
 
   late AnimationController _controller;
-  late double _maxHeight;
-  late double _minHeight;
+  double _maxHeight = 0;
+  double _minHeight = 0;
   double _currentHeight = 0;
   bool _isFullscreen = false;
   bool _isAnimating = false;
@@ -58,6 +61,42 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
       duration: const Duration(milliseconds: 400),
       vsync: this,
     )..addListener(_updateHeight);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _measureChildHeight());
+  }
+
+  /// 测量子组件高度并更新弹窗布局参数
+  /// 1.获取子组件渲染尺寸
+  /// 2.计算各部位高度约束
+  /// 3.更新动画控制器状态
+  void _measureChildHeight() {
+    // 获取子组件渲染对象
+    final context = _childKey.currentContext;
+    if (context == null) return;
+    final renderBox = context.findRenderObject() as RenderBox?;
+    if (renderBox == null || !renderBox.hasSize) return;
+
+    final screenHeight = MediaQuery.of(context).size.height;
+    final childHeight = renderBox.size.height;
+    // 头部高度计算
+    final headerHeight = widget.draggable
+        ? _headerHeight
+        : _headerHeight;
+
+    // 高度约束计算
+    final maxAvailableHeight = screenHeight * widget.maxHeightRatio;
+    final totalHeight = _dragHandleHeight + headerHeight + childHeight;
+
+    setState(() {
+      // 动态设置最大高度
+      _maxHeight = max(maxAvailableHeight, totalHeight).clamp(
+          screenHeight * widget.minHeightRatio,
+          screenHeight
+      );
+      _minHeight = screenHeight * widget.minHeightRatio;
+      _currentHeight = totalHeight.clamp(_minHeight, _maxHeight);
+      _controller.value = (_currentHeight - _minHeight) /
+          (_maxHeight - _minHeight).clamp(0.1, 1.0);
+    });
   }
 
   void _updateHeight() => setState(() {
@@ -117,11 +156,6 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    _maxHeight = screenHeight * widget.maxHeightRatio;
-    _minHeight = screenHeight * widget.minHeightRatio;
-    if (_currentHeight == 0) _currentHeight = _minHeight;
-
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, _) => RepaintBoundary(
@@ -136,7 +170,9 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
           child: Column(children: [
             _buildDragHandle(),
             buildHeader(context),
-            Expanded(child: _buildContent()),
+            SizedBox(
+              child: _buildContent(),
+            ),
           ]),
         ),
       ),
@@ -154,7 +190,10 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
       }
       return false;
     },
-    child: widget.child,
+    child: Container(
+      key: _childKey,
+      child: widget.child,
+    ),
   );
 
   @protected
@@ -193,9 +232,11 @@ class TDPopupBottomDisplayPanel extends TDPopupBasePanel {
     required super.child,
     super.title,
     super.titleColor,
+    this.titleFontSize,
     this.titleLeft = false,
     this.hideClose = false,
     this.closeColor,
+    this.closeSize,
     this.closeClick,
     super.backgroundColor,
     super.radius,
@@ -203,13 +244,16 @@ class TDPopupBottomDisplayPanel extends TDPopupBasePanel {
     super.maxHeightRatio,
     super.minHeightRatio,
   });
-
+  /// 标题字体大小
+  final double? titleFontSize;
   /// 标题是否靠左
   final bool titleLeft;
   /// 是否隐藏关闭按钮
   final bool hideClose;
   /// 关闭按钮颜色
   final Color? closeColor;
+  /// 关闭按钮图标尺寸
+  final double? closeSize;
   /// 关闭按钮点击回调
   final PopupClick? closeClick;
 
@@ -226,7 +270,10 @@ class _TDPopupBottomDisplayPanelState extends _TDPopupBaseState<TDPopupBottomDis
       child: TDText(
         widget.title ?? '',
         textColor: widget.titleColor ?? TDTheme.of(context).fontGyColor1,
-        font: TDTheme.of(context).fontTitleLarge,
+        font: TDTheme.of(context).fontTitleLarge?.withSize(
+            widget.titleFontSize?.toInt() ??
+                TDTheme.of(context).fontTitleLarge!.size.toInt()
+        ),
         fontWeight: FontWeight.w700,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -249,7 +296,7 @@ class _TDPopupBottomDisplayPanelState extends _TDPopupBaseState<TDPopupBottomDis
             child: IconButton(
               icon: Icon(TDIcons.close,
                 color: widget.closeColor,
-                size: 24,
+                size: widget.closeSize,
               ),
               onPressed: widget.closeClick,
             ),
@@ -295,21 +342,29 @@ class TDPopupBottomConfirmPanel extends TDPopupBasePanel {
     this.rightText,
     this.rightTextColor,
     this.rightClick,
+    this.titleFontSize,
+    this.leftTextFontSize,
+    this.rightTextFontSize,
     super.backgroundColor,
     super.radius,
     super.draggable,
     super.maxHeightRatio,
     super.minHeightRatio,
   });
-
+  /// 标题字体大小
+  final double? titleFontSize;
   /// 左边文本
   final String? leftText;
+  /// 左边文本字体大小
+  final double? leftTextFontSize;
   /// 左边文本颜色
   final Color? leftTextColor;
   /// 左边文本点击回调
   final PopupClick? leftClick;
   /// 右边文本
   final String? rightText;
+  /// 右边文本字体大小
+  final double? rightTextFontSize;
   /// 右边文本颜色
   final Color? rightTextColor;
   /// 右边文本点击回调
@@ -340,7 +395,10 @@ class _TDPopupBottomConfirmPanelState extends _TDPopupBaseState<TDPopupBottomCon
               child: TDText(
                 widget.title ?? '',
                 textColor: widget.titleColor ?? TDTheme.of(context).fontGyColor1,
-                font: TDTheme.of(context).fontTitleLarge,
+                font: TDTheme.of(context).fontTitleLarge?.withSize(
+                    widget.titleFontSize?.toInt() ??
+                        TDTheme.of(context).fontTitleLarge!.size.toInt()
+                ),
                 fontWeight: FontWeight.w700,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -373,9 +431,14 @@ class _TDPopupBottomConfirmPanelState extends _TDPopupBaseState<TDPopupBottomCon
       child: TDText(
         text,
         textColor: color,
-        font: left
+        font: (left
             ? TDTheme.of(context).fontBodyLarge
-            : TDTheme.of(context).fontTitleMedium,
+            : TDTheme.of(context).fontTitleMedium
+        )?.withSize(
+            left
+                ? widget.leftTextFontSize?.toInt() ?? TDTheme.of(context).fontBodyLarge!.size.toInt()
+                : widget.rightTextFontSize?.toInt() ?? TDTheme.of(context).fontTitleMedium!.size.toInt()
+        ),
         fontWeight: left ? FontWeight.w400 : FontWeight.w600,
       ),
     ),
@@ -408,6 +471,7 @@ class TDPopupCenterPanel extends StatelessWidget {
     this.closeClick,
     this.backgroundColor,
     this.radius,
+    this.closeSize,
   });
 
   /// 子控件
@@ -416,6 +480,8 @@ class TDPopupCenterPanel extends StatelessWidget {
   final bool closeUnderBottom;
   /// 关闭按钮颜色
   final Color? closeColor;
+  /// 关闭按钮图标尺寸
+  final double? closeSize;
   /// 关闭按钮点击回调
   final PopupClick? closeClick;
   /// 背景颜色
@@ -441,7 +507,7 @@ class TDPopupCenterPanel extends StatelessWidget {
           IconButton(
             icon: Icon(TDIcons.close_circle,
               color: closeColor ?? TDTheme.of(context).fontWhColor1,
-              size: 40,
+              size: closeSize,
             ),
             onPressed: closeClick,
           ),
@@ -458,12 +524,12 @@ class TDPopupCenterPanel extends StatelessWidget {
         children: [
           child,
           Positioned(
-            top: 16,
-            right: 16,
+            top: TDTheme.of(context).spacer8,
+            right: TDTheme.of(context).spacer8,
             child: IconButton(
               icon: Icon(TDIcons.close,
                 color: closeColor,
-                size: 24,
+                size: closeSize,
               ),
               onPressed: closeClick,
             ),

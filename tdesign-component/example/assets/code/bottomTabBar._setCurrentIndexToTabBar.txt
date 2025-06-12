@@ -23,7 +23,7 @@
             },
           )),
           TDBottomTabBar(
-            // 设置选择index
+              // 设置选择index
               currentIndex: currentIndex,
               TDBottomTabBarBasicType.icon,
               useVerticalDivider: true,

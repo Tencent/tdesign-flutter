@@ -6,6 +6,33 @@ docClass: timeline
 ---
 
 
+## 🌈 0.2.0 `2025-05-08`
+### 🚀 Features
+- `TDCellGroup`: 添加单元格组标题背景颜色`titleBackgroundColor`属性. @runoob-coder ([#539](https://github.com/Tencent/tdesign-flutter/pull/539))
+- `TDLink`: link参数链接对象`LinkObj`替换为`MessageLink`，调整`TDLink`样式，新增点击回调； @runoob-coder ([#554](https://github.com/Tencent/tdesign-flutter/pull/554))
+- `TDBottomTabBar`: 新增自定义标题支持到步骤条组件 @RSS1102 ([#576](https://github.com/Tencent/tdesign-flutter/pull/576))
+- `TDSlider`: 添加滑块点击事件 `onTap` @RSS1102 ([#527](https://github.com/Tencent/tdesign-flutter/pull/527))
+- `TDCascader`: 添加右上角"确定"按钮，支持选择任意选项 @Luozf12345
+- `ImageViewer`: 支持单张图片删除 @ccXxx1aoBai ([#581](https://github.com/Tencent/tdesign-flutter/pull/581))
+- `TDPopup`: 为Popup组件添加标题、左文本、右文本和关闭按钮自定义尺寸属性 @Jzow ([#582](https://github.com/Tencent/tdesign-flutter/pull/582))
+- `TDBottomTabBarTabConfig`: 添加长按 tab 触发事件`onLongPress` @RSS1102 ([#580](https://github.com/Tencent/tdesign-flutter/pull/580))
+
+### 🐞 Bug Fixes
+- `TDFooter`: 修复页脚链接模式时内容溢出问题 @runoob-coder ([#554](https://github.com/Tencent/tdesign-flutter/pull/554))
+- `TDUpload`: 修复文件大小限制错误 @epoll-j ([#544](https://github.com/Tencent/tdesign-flutter/pull/544))
+- `TDImageViewer`: 增加Swiper组件属性透传，增加点击事件及部分样式属性，支持自定义按钮 @ccXxx1aoBai ([#561](https://github.com/Tencent/tdesign-flutter/pull/561))
+- `TDSlider`: 修复是胶囊类型且有区间时，滑块无法拖动到边缘以及数值和刻度展示问题 @qfish ([#567](https://github.com/Tencent/tdesign-flutter/pull/567))
+- `TDInput`: 修复非中文标签Input框宽度计算缺陷 @Jzow ([#564](https://github.com/Tencent/tdesign-flutter/pull/564))
+- `TDPopup`: 修复无法通过child中的height来修改弹出层高度 @Jzow ([#571](https://github.com/Tencent/tdesign-flutter/pull/571))
+- `TDDropdownMenu`: 修复特定情况下的单选失效 @1jialong ([#575](https://github.com/Tencent/tdesign-flutter/pull/575))
+- `TDToast`: 修复Toast多行文字不生效的问题 @Luozf12345
+- `TDPopup`: 修复Popup外层没有Scaffold时展示文字有横线的问题 @Luozf12345
+
+###  🚧 Others
+- `TDFooter`: 重构 `TDFooter` 组件；将 `LinkObj` 类移除，直接使用 `TDLink` 类；移除了 `isWithUnderline` 参数，改为在 `TDLink` 中设置链接样式； @runoob-coder ([#554](https://github.com/Tencent/tdesign-flutter/pull/554))
+
+
+
 ## 🌈 0.1.9 `2025-03-31`
 ### 🚀 Features
 - `TDProgress`: 新增`Progress 进度条`组件 @CORCTON ([#307](https://github.com/Tencent/tdesign-flutter/pull/307))
