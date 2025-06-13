@@ -1,5 +1,37 @@
 ## API
-### TDTabBar
+### TDTab
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key |  | - |  |
+| text | String? | - | 文字内容 |
+| child | Widget? | - | 子widget |
+| icon | Widget? | - | 图标 |
+| badge | TDBadge? | - | 图标 |
+| height | double? | - | tab高度 |
+| contentHeight | double? | - | 中间内容高度 |
+| textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |
+| size | TDTabSize | TDTabSize.small | 选项卡尺寸 |
+| outlineType | TDTabOutlineType | TDTabOutlineType.filled | 选项卡样式 |
+| enable | bool | true | 是否可用，默认true |
+| iconMargin | EdgeInsetsGeometry | const EdgeInsets.only(bottom: 4.0, right: 4.0) | 图标间距 |
+
+```
+```
+ ### TDTabBarView
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key |  | - |  |
+| children | List<Widget> | - | 子widget列表 |
+| controller | TabController? | - | 控制器 |
+| isSlideSwitch | bool | false | 是否可以滑动切换 |
+
+```
+```
+ ### TDTabBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -31,35 +63,3 @@
 | selectedBgColor | Color? | - | 被选中背景色，只有outlineType为capsule时有效 |
 | unSelectedBgColor | Color? | - | 未选中背景色，只有outlineType为capsule时有效 |
 | tabAlignment |  | - |  |
-
-```
-```
- ### TDTab
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| text | String? | - | 文字内容 |
-| child | Widget? | - | 子widget |
-| icon | Widget? | - | 图标 |
-| badge | TDBadge? | - | 图标 |
-| height | double? | - | tab高度 |
-| contentHeight | double? | - | 中间内容高度 |
-| textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |
-| size | TDTabSize | TDTabSize.small | 选项卡尺寸 |
-| outlineType | TDTabOutlineType | TDTabOutlineType.filled | 选项卡样式 |
-| enable | bool | true | 是否可用，默认true |
-| iconMargin | EdgeInsetsGeometry | const EdgeInsets.only(bottom: 4.0, right: 4.0) | 图标间距 |
-
-```
-```
- ### TDTabBarView
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| children | List<Widget> | - | 子widget列表 |
-| controller | TabController? | - | 控制器 |
-| isSlideSwitch | bool | false | 是否可以滑动切换 |

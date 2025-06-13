@@ -3884,6 +3884,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | backgroundColor | Color? | - | 背景颜色 （可选） |
 | centerDistance | double? | - | icon与文本中间距离（可选） |
 | currentIndex | int? | - | 选中的index（可选） |
+| needInkWell | bool | false | 是否需要水波纹效果 |
 
 ```
 ```
