@@ -1,6 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tdesign_adaptation/components/indexes/sticky_header/value_layout_builder.dart';
+import 'package:tdesign_flutter_adaptation/components/indexes/sticky_header/value_layout_builder.dart';
 
 import 'sticky_header_render.dart';
 
