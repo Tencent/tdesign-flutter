@@ -418,14 +418,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
-  tdesign_adaptation:
-    dependency: transitive
-    description:
-      name: tdesign_adaptation
-      sha256: "007b358ee091bc05d2b845095a5f4d48856bf5333bdcf800473b5587018eeac7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.32.0"
   tdesign_flutter:
     dependency: "direct main"
     description:
@@ -433,6 +425,14 @@ packages:
       relative: true
     source: path
     version: "0.2.1"
+  tdesign_flutter_adaptation:
+    dependency: transitive
+    description:
+      name: tdesign_flutter_adaptation
+      sha256: "707bbc52ec8b5872ea808500200f402007acf24c03a1cc823a3be2113c1d813a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.32.0"
   term_glyph:
     dependency: transitive
     description:
