@@ -87,7 +87,10 @@ class TDAvatar extends StatelessWidget {
   /// 自定义文案时背景色
   final Color? backgroundColor;
 
+  /// 自定义图片对齐方式
   final BoxFit? fit;
+
+
   double _getAvatarWidth() {
     double width;
     switch (size) {
