@@ -80,6 +80,7 @@ iOS请运行项目预览 ↓
 ![img.png](/flutter/assets/select_color.png)
 
 2.此时你得到是一个theme.css文件,可以将该文件放到tdesign-component/example/shell/theme/文件夹下,把该文件夹下的css2JsonTheme.dart修改为你自己的文件名、主题名和输出路径,即可得到一个theme.json文件
+
 ![img.png](/flutter/assets/dart_modify.png)
 
 3.将主题json加载进TDTheme,美观的自定义主题就设置完成了.
@@ -149,6 +150,8 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
 3.flutter国际化配置方法,官方文档:[Flutter 应用里的国际化](https://docs.flutter.cn/ui/accessibility-and-internationalization/internationalization)
 
+4.flutter 3.32版本的国际化适配与底版本不兼容，因此改用手动设置，具体参考《贡献指南》。
+
 ## 常见问题
 
 - 文本居中:
@@ -158,9 +161,7 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
 ## 组件规划
 
-- 开发中组件: ActionSheet,Progress,Footer,Message,Form
-
-- 待开发组件: Popover
+- 开发中组件: Form
 
 - 其他事项: API优化,单元测试,多端适配,深色模式
 
