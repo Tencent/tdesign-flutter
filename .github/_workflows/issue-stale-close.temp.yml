@@ -1,3 +1,4 @@
+##  忽略当前 ci 功能，待修复
 ## force copy from tencent/tdesign
 ## 国际标准时间+8
 #name: Close stale issues and PRs
