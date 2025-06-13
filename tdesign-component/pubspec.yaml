@@ -21,8 +21,7 @@ dependencies:
   # 滑动单元格组件
   flutter_slidable: 3.1.2
 
-  tdesign_adaptation:
-    path: ../tdesign-adaptation
+  tdesign_adaptation: ^3.32.0
 
 dev_dependencies:
   flutter_lints: ^1.0.4
