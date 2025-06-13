@@ -53,6 +53,7 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
   double _currentHeight = 0;
   bool _isFullscreen = false;
   bool _isAnimating = false;
+  bool _isDragging = false;
 
   @override
   void initState() {
@@ -156,8 +157,12 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
 
   @override
   Widget build(BuildContext context) {
-    // 每次 build 测量子内容高度内容变化时高度自适应
-    WidgetsBinding.instance.addPostFrameCallback((_) => _measureChildHeight());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 每次 build 都测量子内容高度，确保内容变化时高度自适应 （拖动时不测量）
+      if (!_isDragging) {
+        _measureChildHeight();
+      }
+    });
     
     return AnimatedBuilder(
       animation: _controller,
@@ -209,6 +214,7 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
   Widget buildHeader(BuildContext context);
 
   void _baseHandleDragUpdate(DragUpdateDetails details) {
+    _isDragging = true;
     if (_isAnimating || !widget.draggable) return;
 
     final newHeight = _currentHeight - details.primaryDelta! * 1.2;
@@ -225,6 +231,7 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
     } else if (predictedHeight < _minHeight * 1.3 || velocity > 800) {
       _animateTo(_minHeight);
     }
+    _isDragging = false;
   }
 }
 

@@ -473,7 +473,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                   Container(
                       margin: const EdgeInsets.all(8),
                       child: TDButton(
-                        text: '可拖动全屏',
+                        text: '可拖动全屏-带标题及操作',
                         isBlock: true,
                         theme: TDButtonTheme.primary,
                         type: TDButtonType.outline,
@@ -495,7 +495,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                                     Navigator.maybePop(context);
                                   },
                                   child: Container(
-                                    height: 100,
+                                    height: 200,
                                   ),
                                 );
                               }));
