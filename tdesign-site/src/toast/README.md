@@ -70,8 +70,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _horizontalIconToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showIconText('带横向图标',
-            icon: TDIcons.check_circle, context: context);
+        TDToast.showIconText('带横向图标', icon: TDIcons.check_circle, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -93,9 +92,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return TDButton(
       onTap: () {
         TDToast.showIconText('带竖向图标',
-            icon: TDIcons.check_circle,
-            direction: IconTextDirection.vertical,
-            context: context);
+            icon: TDIcons.check_circle, direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -130,13 +127,30 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                                   
 
 加载状态自定义
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _loadingCustomToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showLoading(context: context, customWidget: Container(
+          width: 50,
+          height: 20,
+          child: const TDText('自定义加载'),
+          color: TDTheme.of(context).brandColor1,
+        ));
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '加载状态',
+    );
+  }</pre>
 
 </td-code-block>
-                
+                                  
 
 加载状态(无文字)
             
@@ -179,13 +193,32 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                                   
 
 自定义纯文字
-      
+            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
+  <pre slot="Dart" lang="javascript">
+  Widget _textCustomToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showText('自定义纯文字',
+            context: context,
+            customWidget: Container(
+              width: 50,
+              height: 20,
+              child: const TDText('自定义纯文字'),
+              color: TDTheme.of(context).brandClickColor,
+            ));
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '纯文字',
+    );
+  }</pre>
 
 </td-code-block>
-                
+                                  
 ### 1 组件状态
 
 成功提示
@@ -196,7 +229,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _successToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showSuccess('成功文案',context: context);
+        TDToast.showSuccess('成功文案', context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -217,8 +250,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _successVerticalToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showSuccess('成功文案',
-            direction: IconTextDirection.vertical, context: context);
+        TDToast.showSuccess('成功文案', direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -239,8 +271,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _warningToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showWarning('警告文案',
-            direction: IconTextDirection.horizontal, context: context);
+        TDToast.showWarning('警告文案', direction: IconTextDirection.horizontal, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -261,8 +292,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _warningVerticalToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showWarning('警告文案',
-            direction: IconTextDirection.vertical, context: context);
+        TDToast.showWarning('警告文案', direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -283,8 +313,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _failToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showFail('失败文案',
-            direction: IconTextDirection.horizontal, context: context);
+        TDToast.showFail('失败文案', direction: IconTextDirection.horizontal, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -305,8 +334,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _failVerticalToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showFail('失败文案',
-            direction: IconTextDirection.vertical, context: context);
+        TDToast.showFail('失败文案', direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
