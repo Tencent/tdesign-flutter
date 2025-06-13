@@ -61,19 +61,19 @@ flutter run
 
 
 #### 2.4.1 版本切换
-首次运行，可以先将flutter sdk 切到3.16.9版本，执行init.sh脚本，配置对应依赖。
+首次运行，可以先将flutter sdk 切到3.16.9版本，执行tdesign-component/init.sh脚本，配置对应依赖。
 
-开发玩出，切换至最新稳定版尝试运行，如果有不兼容代码，需要在tdesign-adaptation库进行适配。
+开发完成，切换至最新稳定版尝试运行，如果有不兼容代码，需要在tdesign-adaptation库进行适配。
 
 其中，高于3.32版本的代码，请在feature/3.32_adaptation分支开发，低于3.32版本的代码，请在feature/3.16_adaptation分支开发。
 
-本地开发tdesign-adaptation，可以新建tdesign-component/pubspec_overrides.yaml和tdesign-component/example/pubspec_overrides.yaml文件，使用本地依赖，内容如下：
+本地开发tdesign-adaptation，可以修改tdesign-component/pubspec_overrides.yaml和tdesign-component/example/pubspec_overrides.yaml文件，使用本地依赖，内容如下：
 ```yaml
 dependency_overrides:
   tdesign_adaptation:
     path: ../tdesign-adaptation  # 本地相对路径
 ```
-但是，提交git时，不要提交到仓库！！！
+但是，提交git时，请不要将pubspec_overrides.yaml提交到仓库！！！
 
 #### 2.4.2 国际化适配
 由于3.32版本的国际化功能与3.16版本差异比较大，代码生成位置发生变更，无法跨版本兼容。因此，国际化资源代码改为手动依赖方式。如果需要修改字段内容，需要把生成的app_localizations(_en、_zh).dart文件拷贝到example/lib/localizations目录
@@ -128,7 +128,6 @@ npm run site:dev
 - 组件API和演示代码，请参考demo_tool/README.md文件。
 - 组件内部的固定文案,都应该抽离到TDResourceDelegate中统一管理,方便业务进行国际化适配
 - 如果使用的组件TD有封装，尽量使用TD已有组件，而非直接使用系统组件
-- 
 
 
 ## 5.验收标准
