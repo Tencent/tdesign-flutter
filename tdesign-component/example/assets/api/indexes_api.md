@@ -1,5 +1,21 @@
 ## API
-### TDIndexes
+### TDIndexesAnchor
+#### 简介
+索引锚点
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key |  | - |  |
+| sticky | bool | - | 索引是否吸顶 |
+| text | String | - | 锚点文本 |
+| capsuleTheme | bool | - | 是否为胶囊式样式 |
+| builderAnchor | Widget? Function(BuildContext context, String index, bool isPinnedToTop)? | - | 索引锚点构建 |
+| activeIndex | ValueNotifier<String> | - | 选中索引 |
+
+```
+```
+ ### TDIndexes
 #### 简介
 索引
 #### 默认构造方法
@@ -19,22 +35,6 @@
 | builderContent | Widget? Function(BuildContext context, String index) | - | 内容自定义构建 |
 | builderAnchor | Widget? Function(BuildContext context, String index, bool isPinnedToTop)? | - | 锚点自定义构建 |
 | builderIndex | Widget Function(BuildContext context, String index, bool isActive)? | - | 索引文本自定义构建，包括索引激活左侧提示 |
-
-```
-```
- ### TDIndexesAnchor
-#### 简介
-索引锚点
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| sticky | bool | - | 索引是否吸顶 |
-| text | String | - | 锚点文本 |
-| capsuleTheme | bool | - | 是否为胶囊式样式 |
-| builderAnchor | Widget? Function(BuildContext context, String index, bool isPinnedToTop)? | - | 索引锚点构建 |
-| activeIndex | ValueNotifier<String> | - | 选中索引 |
 
 ```
 ```
