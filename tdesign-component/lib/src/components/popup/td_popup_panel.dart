@@ -156,6 +156,9 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
 
   @override
   Widget build(BuildContext context) {
+    // 每次 build 测量子内容高度内容变化时高度自适应
+    WidgetsBinding.instance.addPostFrameCallback((_) => _measureChildHeight());
+    
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, _) => RepaintBoundary(
