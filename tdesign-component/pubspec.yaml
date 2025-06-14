@@ -39,8 +39,6 @@ flutter:
   # be modified. They are used by the tooling to maintain consistency when
   # adding or updating assets for this project.
   uses-material-design: true
-  generate: true
-
   fonts:
     - family: TDIcons
       fonts:
