@@ -72,9 +72,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
-  # 国际化配置
-  generate: true # Add this line
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:

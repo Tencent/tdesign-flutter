@@ -6,7 +6,7 @@ import 'base/example_base.dart';
 import 'base/example_route.dart';
 import 'base/web_md_tool.dart';
 import 'config.dart';
-import 'localizations/app_localizations.dart';
+import 'l10n/app_localizations.dart';
 
 var _kShowTodoComponent = false;
 
