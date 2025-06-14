@@ -56,10 +56,11 @@ class TDDropdownPopup {
   double get maxContentHeight => direction == TDDropdownPopupDirection.down ? _initContentBottom : _initContentTop;
 
   void _init(TDDropdownPopupDirection d) {
+    final ancestor = Navigator.of(parentContext).context.findRenderObject();
+    final popupContainerHeight = (ancestor as RenderBox).size.height;
     var renderBox = parentContext.findRenderObject() as RenderBox;
-    var position = renderBox.localToGlobal(Offset.zero);
+    var position = renderBox.localToGlobal(Offset.zero, ancestor: ancestor);
     var size = renderBox.size;
-    var screenHeight = MediaQuery.of(parentContext).size.height;
     if (d == TDDropdownPopupDirection.down) {
       _overlay1Top = position.dy + size.height;
       _overlay2Top = position.dy;
@@ -67,23 +68,23 @@ class TDDropdownPopup {
       _initContentTop = position.dy + size.height;
 
       _overlay1Bottom = 0;
-      _overlay2Bottom = screenHeight - position.dy - size.height;
-      _overlay3Bottom = screenHeight - position.dy;
+      _overlay2Bottom = popupContainerHeight - position.dy - size.height;
+      _overlay3Bottom = popupContainerHeight - position.dy;
 
       _overlay3Height = position.dy;
-      _initContentBottom = screenHeight - position.dy - size.height;
+      _initContentBottom = popupContainerHeight - position.dy - size.height;
     } else {
       _overlay1Top = 0;
       _overlay2Top = position.dy;
       _overlay3Top = position.dy + size.height;
       _initContentTop = position.dy;
 
-      _overlay1Bottom = screenHeight - position.dy;
-      _overlay2Bottom = screenHeight - position.dy - size.height;
+      _overlay1Bottom = popupContainerHeight - position.dy;
+      _overlay2Bottom = popupContainerHeight - position.dy - size.height;
       _overlay3Bottom = 0;
 
-      _overlay3Height = screenHeight - position.dy - size.height;
-      _initContentBottom = screenHeight - position.dy;
+      _overlay3Height = popupContainerHeight - position.dy - size.height;
+      _initContentBottom = popupContainerHeight - position.dy;
     }
   }
 
