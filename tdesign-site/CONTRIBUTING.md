@@ -16,6 +16,8 @@ tdesign-component/
 └── tests           // 组件测试
 
 tdesign-site/       // tdesign flutter站点
+
+tdesign-adaptation/       // tdesign flutter 版本适配仓库
 ```
 ## 2.如何运行
 ### 2.1 Flutter基础知识
@@ -27,7 +29,7 @@ tdesign-site/       // tdesign flutter站点
 ### 2.2 开发环境要求
 flutter sdk 版本：3.16.9
 
-（注: TD需要支持3.16.9~最新稳定版本，因此最好再3.16.9版本开发完成后，使用最新稳定版本确认能否正常运行）
+（注: TD需要支持3.16.9~最新稳定版本，因此最好再3.16.9版本开发完成后，使用最新稳定版本确认能否正常运行，如过版本代码无法兼容，请将不兼容文件移至tdesign-adaptation，做兼容处理）
 
 ### 2.3 克隆项目
 ```
@@ -37,7 +39,9 @@ git clone https://github.com/Tencent/tdesign-flutter.git
 
 
 ### 2.3 运行flutter项目
-下面是命令行运行方法，正常也可以不使用命令行，而在IDE直接运行，推荐使用Android Studio进行开发。运行时请选择Android设备和iOS模拟器，不要直接在浏览器运行
+下面是命令行运行方法，正常也可以不使用命令行，而在IDE直接运行，推荐使用Android Studio进行开发。运行时请选择Android设备和iOS模拟器，不要直接在浏览器运行。
+
+*注：首次开发请先运行tdesign-flutter/tdesign-component/init.sh脚本，它会根据当前flutter版本，选择适合的tdesign-adaptation依赖*
 ```
 // 运行flutter组件项目
 cd tdesign-flutter/tdesign-component/
@@ -52,7 +56,30 @@ cd example/
 flutter run
 ```
 
-### 2.4 运行前端官网项目
+### 2.4 Flutter多版本兼容
+在flutte 3.32版本，sdk代码变更较大，同一代码可能无法同时支持跨版本运行，因此抽离了tdesign-adaptation库，用于进行不同flutter版本之间的代码适配。
+
+
+#### 2.4.1 版本切换
+首次运行，可以先将flutter sdk 切到3.16.9版本，执行tdesign-component/init.sh脚本，配置对应依赖。
+
+开发完成，切换至最新稳定版尝试运行，如果有不兼容代码，需要在tdesign-adaptation库进行适配。
+
+其中，高于3.32版本的代码，请在feature/3.32_adaptation分支开发，低于3.32版本的代码，请在feature/3.16_adaptation分支开发。
+
+本地开发tdesign-adaptation，可以修改tdesign-component/pubspec_overrides.yaml和tdesign-component/example/pubspec_overrides.yaml文件，使用本地依赖，内容如下：
+```yaml
+dependency_overrides:
+  tdesign_adaptation:
+    path: ../tdesign-adaptation  # 本地相对路径
+```
+但是，提交git时，请不要将pubspec_overrides.yaml提交到仓库！！！
+
+#### 2.4.2 国际化适配
+由于3.32版本的国际化功能与3.16版本差异比较大，代码生成位置发生变更，无法跨版本兼容。因此，国际化资源代码改为手动依赖方式。如果需要修改字段内容，需要把生成的app_localizations(_en、_zh).dart文件拷贝到example/lib/localizations目录
+
+
+### 2.5 运行前端官网项目
 
 ```
 // 进入官网前端项目
@@ -71,6 +98,8 @@ npm run site:dev
 <br/>
 <img width="260" src="https://tdesign.tencent.com/flutter/assets/contributing_example.png" />
 <br/>
+
+
 ## 3.如何领取issue
 ### 3.1 一个issue的完整流程：
 - 用户发现功能不满足，查看API文档确认不支持，然后提issue。[常见问题](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-site/FAQ.md)
