@@ -86,14 +86,13 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
     final pages = <Widget>[];
 
     for (var i = 0; i < 20; i++) {
-      list.add(
-          SideItemProps(index: i, label: '选项', value: i, icon: TDIcons.app));
+      list.add(SideItemProps(index: i, label: '选项', value: i, icon: TDIcons.app));
       pages.add(getAnchorDemo(i));
     }
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
     ));
 
     list[1].badge = const TDBadge(TDBadgeType.redPoint);
@@ -115,10 +114,7 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
             controller: _sideBarController,
             children: list
                 .map((ele) => TDSideBarItem(
-                    label: ele.label ?? '',
-                    badge: ele.badge,
-                    value: ele.value,
-                    icon: ele.icon))
+                    label: ele.label ?? '', badge: ele.badge, value: ele.value, icon: ele.icon))
                 .toList(),
             onChanged: onChanged,
             onSelected: onSelected,
@@ -140,7 +136,7 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
 
   Widget getAnchorDemo(int index) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
