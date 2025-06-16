@@ -4,6 +4,7 @@
   "defaultTheme": "defaultTheme",
   "greenTheme": "greenTheme",
   "redTheme": "redTheme",
+  "darkTheme": "Dark Mode",
   "cancel": "Cancel",
   "confirm": "Confirm",
   "switchClose": "C",
