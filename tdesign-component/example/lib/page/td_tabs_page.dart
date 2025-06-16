@@ -137,7 +137,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(2),
       controller: _tabController1,
-      backgroundColor: Colors.white,
       showIndicator: true,
     );
   }
@@ -147,7 +146,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(3),
       controller: _tabController2,
-      backgroundColor: Colors.white,
       showIndicator: true,
     );
   }
@@ -157,7 +155,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(4),
       controller: _tabController3,
-      backgroundColor: Colors.white,
       showIndicator: true,
     );
   }
@@ -167,7 +164,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(5),
       controller: _tabController4,
-      backgroundColor: Colors.white,
       showIndicator: true,
     );
   }
@@ -177,7 +173,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(16),
       controller: TabController(length: 16, vsync: this),
-      backgroundColor: Colors.white,
       labelPadding: const EdgeInsets.all(10),
       showIndicator: true,
       isScrollable: true,
@@ -212,8 +207,7 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
         tabs: tabs,
         controller: TabController(length: 3, vsync: this),
-        backgroundColor: Colors.white,
-        showIndicator: true);
+          showIndicator: true);
   }
 
   @Demo(group: 'tabs')
@@ -246,8 +240,7 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
         tabs: tabs,
         controller: TabController(length: 3, vsync: this),
-        backgroundColor: Colors.white,
-        showIndicator: true);
+          showIndicator: true);
   }
 
   @Demo(group: 'tabs')
@@ -261,11 +254,10 @@ class _TDTabsPageState extends State<TDTabsPage>
               tabs: subList(3),
               controller: tabController,
               showIndicator: true,
-              backgroundColor: Colors.white,
-              isScrollable: false,),
+                      isScrollable: false,),
           Container(
             height: 120,
-            color: Colors.white,
+            color: TDTheme.of(context).bgColorContainer,
             child: TDTabBarView(
               children: _getTabViews(),
               controller: tabController,
@@ -293,8 +285,7 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
         tabs: tabs,
         controller: TabController(length: 3, vsync: this),
-        backgroundColor: Colors.white,
-        showIndicator: true);
+          showIndicator: true);
   }
 
   @Demo(group: 'tabs')
@@ -316,8 +307,7 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
         tabs: tabs,
         controller: TabController(length: 4, vsync: this),
-        backgroundColor: Colors.white,
-        showIndicator: true);
+          showIndicator: true);
   }
 
   @Demo(group: 'tabs')
@@ -343,8 +333,7 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
         tabs: tabs,
         controller: TabController(length: 4, vsync: this),
-        backgroundColor: Colors.white,
-        showIndicator: true);
+          showIndicator: true);
   }
 
   @Demo(group: 'tabs')
@@ -367,8 +356,7 @@ class _TDTabsPageState extends State<TDTabsPage>
         tabs: tabs,
         outlineType: TDTabBarOutlineType.capsule,
         controller: TabController(length: 4, vsync: this),
-        backgroundColor: Colors.white,
-        showIndicator: false);
+          showIndicator: false);
   }
 
   @Demo(group: 'tabs')
@@ -391,8 +379,7 @@ class _TDTabsPageState extends State<TDTabsPage>
         tabs: tabs,
         outlineType: TDTabBarOutlineType.card,
         controller: TabController(length: 4, vsync: this),
-        backgroundColor: Colors.white,
-        showIndicator: false);
+          showIndicator: false);
   }
 
   @Demo(group: 'tabs')
@@ -400,7 +387,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(2),
       controller: _tabController1,
-      backgroundColor: Colors.white,
       showIndicator: true,
       indicatorColor: Colors.red,
       indicatorHeight: 20,
@@ -414,7 +400,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(2),
       controller: _tabController1,
-      backgroundColor: Colors.white,
       showIndicator: true,
       dividerColor: Colors.red,
       dividerHeight: 5,
@@ -426,7 +411,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(2),
       controller: _tabController1,
-      backgroundColor: Colors.white,
       showIndicator: true,
       dividerColor: Colors.red,
       dividerHeight: 0,

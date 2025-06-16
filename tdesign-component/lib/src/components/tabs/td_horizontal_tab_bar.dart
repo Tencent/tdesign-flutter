@@ -771,18 +771,18 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   BoxDecoration? _getContentDecorateOuter(int index) {
     if (widget.outlineType == TDTabBarOutlineType.capsule) {
       return BoxDecoration(
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
       );
     } else if (widget.outlineType == TDTabBarOutlineType.card) {
       if (index == _currentIndex) {
         return BoxDecoration(
-            color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+            color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(index + 1 < widget.tabs.length ? 9 : 0),
                 topLeft: Radius.circular(index > 0 ? 9 : 0)));
       } else {
         return BoxDecoration(
-          color: TDTheme.of(context).grayColor1,
+          color: TDTheme.of(context).bgColorSecondaryContainer,
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(index - 1 == _currentIndex ? 9 : 0),
             bottomRight: Radius.circular(index + 1 == _currentIndex ? 9 : 0),
@@ -796,7 +796,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   Color? _getBackgroundColor(int index) {
     if (widget.outlineType == TDTabBarOutlineType.card) {
       if (index == _currentIndex) {
-        return TDTheme.of(context).grayColor1;
+        return TDTheme.of(context).bgColorSecondaryContainer;
       }
     }
     return null;
