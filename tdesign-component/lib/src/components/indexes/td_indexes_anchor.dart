@@ -41,12 +41,12 @@ class TDIndexesAnchor extends StatelessWidget {
                   EdgeInsets.symmetric(vertical: TDTheme.of(context).spacer4, horizontal: TDTheme.of(context).spacer16),
               margin: capsuleTheme ? EdgeInsets.symmetric(horizontal: TDTheme.of(context).spacer8) : null,
               decoration: BoxDecoration(
-                color: isPinned ? TDTheme.of(context).whiteColor1 : TDTheme.of(context).grayColor1,
+                color: isPinned ? TDTheme.of(context).bgColorContainer : TDTheme.of(context).bgColorSecondaryContainer,
                 borderRadius: capsuleTheme ? BorderRadius.circular(TDTheme.of(context).radiusCircle) : null,
                 border: isPinned
                     ? capsuleTheme
-                        ? Border.all(color: TDTheme.of(context).grayColor1)
-                        : Border(bottom: BorderSide(color: TDTheme.of(context).grayColor1))
+                        ? Border.all(color: TDTheme.of(context).componentBorderColor)
+                        : Border(bottom: BorderSide(color: TDTheme.of(context).componentBorderColor))
                     : null,
               ),
               child: TDText(
