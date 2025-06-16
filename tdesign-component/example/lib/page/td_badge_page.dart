@@ -159,7 +159,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
     return Container(
         alignment: Alignment.bottomLeft,
         margin: const EdgeInsets.only(left: 16, right: 16),
-        child: SizedBox(
+        child: const SizedBox(
           width: 27,
           height: 27,
           child: Stack(
@@ -181,7 +181,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
     return Container(
         alignment: Alignment.bottomLeft,
         margin: const EdgeInsets.only(left: 16, right: 16),
-        child: SizedBox(
+        child: const SizedBox(
           width: 83,
           height: 48,
           child: Stack(
@@ -237,7 +237,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
     return Container(
         alignment: Alignment.bottomLeft,
         margin: const EdgeInsets.only(left: 16),
-        child: SizedBox(
+        child: const SizedBox(
           width: 42,
           height: 36,
           child: Stack(
@@ -262,7 +262,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
     return Container(
         alignment: Alignment.bottomLeft,
         margin: const EdgeInsets.only(left: 16),
-        child: SizedBox(
+        child: const SizedBox(
           width: 86,
           height: 54,
           child: Stack(
@@ -301,7 +301,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
               Container(
                 child: const Icon(TDIcons.notification),
                 decoration: BoxDecoration(
-                    color: TDTheme.of(context).grayColor2,
+                    color: TDTheme.of(context).bgColorComponent,
                     borderRadius: BorderRadius.circular(
                         TDTheme.of(context).radiusDefault)),
                 height: 48,
@@ -334,7 +334,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
               Container(
                 child: const Icon(TDIcons.notification),
                 decoration: BoxDecoration(
-                    color: TDTheme.of(context).grayColor2,
+                    color: TDTheme.of(context).bgColorComponent,
                     borderRadius: BorderRadius.circular(
                         TDTheme.of(context).radiusDefault)),
                 height: 48,
@@ -367,7 +367,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
               Container(
                 child: const Icon(TDIcons.notification),
                 decoration: BoxDecoration(
-                    color: TDTheme.of(context).grayColor2,
+                    color: TDTheme.of(context).bgColorComponent,
                     borderRadius: BorderRadius.circular(
                         TDTheme.of(context).radiusDefault)),
                 height: 48,
@@ -389,7 +389,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
 
   @Demo(group: 'badge')
   Widget _buildCircleBadge(BuildContext context) {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
@@ -418,7 +418,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
 
   @Demo(group: 'badge')
   Widget _buildSquareBadge(BuildContext context) {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
@@ -461,7 +461,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 Container(
                   child: const Icon(TDIcons.shop),
                   decoration: BoxDecoration(
-                      color: TDTheme.of(context).grayColor2,
+                      color: TDTheme.of(context).bgColorComponent,
                       borderRadius: BorderRadius.circular(
                           TDTheme.of(context).radiusDefault)),
                   height: 48,
@@ -496,7 +496,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
             textColor: TDTheme.of(context).fontGyColor1,
             font: TDTheme.of(context).fontBodyLarge,
           ),
-          color: Colors.white,
+          color: TDTheme.of(context).bgColorContainer,
           height: 48,
           width: MediaQuery.of(context).size.width,
         ),
@@ -510,7 +510,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
 
   @Demo(group: 'badge')
   Widget _buildLargeBadge(BuildContext context) {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
@@ -545,7 +545,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
   Widget _buildMediumBadge(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 16),
-      child: Row(
+      child: const Row(
         children: [
           SizedBox(
             width: 120,
@@ -578,7 +578,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
     return Container(
         alignment: Alignment.bottomLeft,
         margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-        child: SizedBox(
+        child: const SizedBox(
           width: 60,
           height: 50,
           child: Stack(
@@ -609,7 +609,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
     return Container(
         alignment: Alignment.bottomLeft,
         margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-        child: SizedBox(
+        child: const SizedBox(
           width: 60,
           height: 50,
           child: Stack(
