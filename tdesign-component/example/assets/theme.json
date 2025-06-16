@@ -178,11 +178,11 @@
   "dark": {
     "ref": {
       "brandLightColor": "brandColor1",
-      "brandFocusColor": "brandColor2",
+      "brandFocusColor": "brandColor1",
       "brandDisabledColor": "brandColor3",
       "brandHoverColor": "brandColor5",
-      "brandNormalColor": "brandColor6",
-      "brandActiveColor": "brandColor7",
+      "brandNormalColor": "brandColor8",
+      "brandActiveColor": "brandColor2",
       "warningNormalColor": "warningColor5",
       "warningHoverColor": "warningColor4",
       "warningFocusColor": "warningColor2",
@@ -228,7 +228,7 @@
       "textColorLink": "brandColor8"
     },
     "color": {
-      "brandColor1": "#201b2f51",
+      "brandColor1": "#1b2f51",
       "brandColor2": "#173463",
       "brandColor3": "#143975",
       "brandColor4": "#103d88",
