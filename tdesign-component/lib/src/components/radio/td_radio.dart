@@ -109,10 +109,10 @@ class TDRadio extends TDCheckbox {
       return Icon(iconData,
           size: size,
           color: !enable
-              ? (isSelected ? (disableColor ?? theme.brandDisabledColor) : theme.grayColor4)
+              ? (isSelected ? (disableColor ?? theme.brandDisabledColor) : theme.componentStrokeColor)
               : isSelected
                   ? selectColor ?? theme.brandNormalColor
-                  : theme.grayColor4);
+                  : theme.componentStrokeColor);
     } else {
       return SizedBox(
         width: size,
