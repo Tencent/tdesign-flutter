@@ -162,7 +162,7 @@ class TDCheckbox extends StatefulWidget {
     var size = 24.0;
     final style = this.style ?? groupState?.widget.style ?? TDCheckboxStyle.circle;
     final theme = TDTheme.of(context);
-    final deSelectedColor = style == TDCheckboxStyle.check ? Colors.transparent : theme.grayColor4;
+    final deSelectedColor = style == TDCheckboxStyle.check ? Colors.transparent : theme.componentBorderColor;
     current = Icon(
       style == TDCheckboxStyle.circle
           ? isChecked
@@ -396,7 +396,7 @@ class TDCheckboxState extends State<TDCheckbox> {
     return Container(
       clipBehavior: widget.cardMode ? Clip.hardEdge : Clip.none,
       decoration: BoxDecoration(
-          color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+          color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
           border: widget.cardMode
               ? checked
                   ? Border.all(width: 1.5, color: widget.selectColor ?? TDTheme.of(context).brandNormalColor)
