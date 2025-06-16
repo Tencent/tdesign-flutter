@@ -43,7 +43,7 @@ class TDText extends StatelessWidget {
     this.font,
     this.fontWeight,
     this.fontFamily,
-    this.textColor = Colors.black,
+    this.textColor,
     this.backgroundColor,
     this.isTextThrough = false,
     this.lineThroughColor = Colors.white,
@@ -73,7 +73,7 @@ class TDText extends StatelessWidget {
     this.font,
     this.fontWeight,
     this.fontFamily,
-    this.textColor = Colors.black,
+    this.textColor,
     this.backgroundColor,
     this.isTextThrough = false,
     this.lineThroughColor = Colors.white,
@@ -107,7 +107,7 @@ class TDText extends StatelessWidget {
   final FontFamily? fontFamily;
 
   /// 文本颜色
-  final Color textColor;
+  final Color? textColor;
 
   /// 背景颜色
   final Color? backgroundColor;
@@ -222,7 +222,7 @@ class TDText extends StatelessWidget {
     }
     return TextStyle(
       inherit: style?.inherit ?? true,
-      color: style?.color ?? textColor,
+      color: style?.color ?? textColor ?? TDTheme.of(context).textColorPrimary,
 
       /// 不使用系统本身的背景色，因为系统属性存在中英文是，会导致颜色出现阶梯状
       backgroundColor: backgroundColor,
@@ -301,7 +301,7 @@ class TDTextSpan extends TextSpan {
     Font? font,
     FontWeight? fontWeight,
     FontFamily? fontFamily,
-    Color textColor = Colors.black,
+    Color? textColor,
     bool? isTextThrough = false,
     Color? lineThroughColor = Colors.white,
     String? package,
@@ -331,7 +331,7 @@ class TDTextSpan extends TextSpan {
     Font? font,
     FontWeight? fontWeight,
     FontFamily? fontFamily,
-    Color textColor,
+    Color? textColor,
     bool? isTextThrough,
     Color? lineThroughColor,
     String? package,
@@ -339,7 +339,7 @@ class TDTextSpan extends TextSpan {
     var textFont = font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
     return TextStyle(
       inherit: style?.inherit ?? true,
-      color: style?.color ?? textColor,
+      color: style?.color ?? textColor ?? TDTheme.of(context).textColorPrimary,
       backgroundColor: style?.backgroundColor,
       fontSize: style?.fontSize ?? textFont.size,
       fontWeight: style?.fontWeight ?? fontWeight ?? textFont.fontWeight,
