@@ -15,7 +15,6 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        backgroundColor: const Color(0xFFF0F2F5),
         title: tdTitle(),
         desc: '当功能使用图标即可表意清楚时，可使用纯图标悬浮按钮，例如：添加、发布。',
         exampleCodeGroup: 'link',
@@ -39,7 +38,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   @Demo(group: 'link')
   Widget _basicTypeBasic(BuildContext context) {
     return Container(
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: _buildLinksWithType(TDLinkType.basic),
@@ -73,7 +72,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   @Demo(group: 'link')
   Widget _withUnderline(BuildContext context) {
     return Container(
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: _buildLinksWithType(TDLinkType.withUnderline),
@@ -83,7 +82,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   @Demo(group: 'link')
   Widget _withSuffixIcon(BuildContext context) {
     return Container(
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: _buildLinksWithType(TDLinkType.withSuffixIcon),
@@ -93,7 +92,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   @Demo(group: 'link')
   Widget _withPrefixIcon(BuildContext context) {
     return Container(
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: _buildLinksWithType(TDLinkType.withPrefixIcon),
@@ -114,7 +113,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
     return Column(
       children: [
         Container(
-            color: TDTheme.of(context).whiteColor1,
+            color: TDTheme.of(context).bgColorContainer,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -127,7 +126,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
             )),
         const SizedBox(height: 16),
         Container(
-            color: TDTheme.of(context).whiteColor1,
+            color: TDTheme.of(context).bgColorContainer,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -153,7 +152,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   @Demo(group: 'link')
   Widget _buildLinkSizes(BuildContext context) {
     return Container(
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
