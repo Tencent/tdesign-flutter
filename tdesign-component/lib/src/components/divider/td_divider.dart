@@ -100,7 +100,7 @@ class TDDivider extends StatelessWidget {
                 context,
                 width: 16,
                 height: height ?? 0.5,
-                color: color ?? TDTheme.of(context).grayColor3,
+                color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
               ),
               Padding(
                   padding: gapPadding ?? const EdgeInsets.only(left: 8, right: 8),
@@ -110,7 +110,7 @@ class TDDivider extends StatelessWidget {
                       child: _buildLine(
                         context,
                         height: height ?? 0.5,
-                        color: color ?? TDTheme.of(context).grayColor3,
+                        color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
                       ))),
             ],
           ),
@@ -127,7 +127,7 @@ class TDDivider extends StatelessWidget {
                     child: _buildLine(
                       context,
                       height: height ?? 0.5,
-                      color: color ?? TDTheme.of(context).grayColor3,
+                      color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
                     ),
                   )),
               Padding(
@@ -138,7 +138,7 @@ class TDDivider extends StatelessWidget {
                       child: _buildLine(
                         context,
                         height: height ?? 0.5,
-                        color: color ?? TDTheme.of(context).grayColor3,
+                        color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
                       ))),
             ],
           ),
@@ -155,7 +155,7 @@ class TDDivider extends StatelessWidget {
                     child: _buildLine(
                       context,
                       height: height ?? 0.5,
-                      color: color ?? TDTheme.of(context).grayColor3,
+                      color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
                     ),
                   )),
               Padding(
@@ -165,7 +165,7 @@ class TDDivider extends StatelessWidget {
                 context,
                 width: 16,
                 height: height ?? 0.5,
-                color: color ?? TDTheme.of(context).grayColor3,
+                color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
               ),
             ],
           ),
@@ -186,7 +186,7 @@ class TDDivider extends StatelessWidget {
         child: DashedWidget(
           width: width,
           height: height,
-          color: color ?? TDTheme.of(context).grayColor3,
+          color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
           direction: direction,
         ),
       );
@@ -195,7 +195,7 @@ class TDDivider extends StatelessWidget {
         width: width,
         height: height ?? 0.5,
         margin: margin,
-        color: color ?? TDTheme.of(context).grayColor3,
+        color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
       );
     }
   }
