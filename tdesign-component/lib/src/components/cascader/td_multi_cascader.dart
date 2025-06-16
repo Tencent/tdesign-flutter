@@ -133,7 +133,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     return Container(
       width: maxWidth,
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
           topRight: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
@@ -268,8 +268,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   Widget _buildStepBox(BuildContext context) {
     var maxWidth = MediaQuery.of(context).size.width;
     return Container(
-        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.1), width: 0.5))),
-        padding: EdgeInsets.only(bottom: 11),
+        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: TDTheme.of(context).componentStrokeColor, width: 0.5))),
         width: maxWidth,
         child: ListView(
             shrinkWrap: true,
@@ -298,7 +297,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                             '${_tabListData[index].label}',
                             style: TextStyle(
                                 fontSize: 14,
-                                color: _currentTabIndex == index ? TDTheme.of(context).brandNormalColor : Colors.black),
+                                color: _currentTabIndex == index ? TDTheme.of(context).brandNormalColor : TDTheme.of(context).textColorPrimary),
                             fontWeight: _currentTabIndex == index ? FontWeight.w600 : FontWeight.w400,
                           ),
                         ),
@@ -319,7 +318,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     var maxWidth = MediaQuery.of(context).size.width;
     return Container(
       height: 48,
-      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.1), width: 0.5))),
+      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: TDTheme.of(context).componentStrokeColor, width: 0.5))),
       width: maxWidth,
       child: TDCustomTab(
         tabs: List.generate(_tabListData.length, (index) {
@@ -349,7 +348,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                   ),
                   child: TDText(
                     widget.subTitles![_level],
-                    style: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.4)),
+                    style: TextStyle(color: TDTheme.of(context).textColorPlaceholder),
                     font: TDTheme.of(context).fontTitleSmall,
                   ) //,
                   ),
