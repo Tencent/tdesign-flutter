@@ -187,7 +187,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
       width: maxWidth,
       padding: widget.padding ?? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
           topRight: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
@@ -211,7 +211,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                       Container(
                         height: 40,
                         decoration: BoxDecoration(
-                            color: TDTheme.of(context).grayColor1,
+                            color: TDTheme.of(context).bgColorSecondaryContainer,
                             borderRadius: const BorderRadius.all(Radius.circular(6))),
                       ),
                 ),
@@ -247,8 +247,8 @@ class _TDDatePickerState extends State<TDDatePicker> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
-                        TDTheme.of(context).whiteColor1,
-                        TDTheme.of(context).whiteColor1.withOpacity(0)
+                        TDTheme.of(context).bgColorContainer,
+                        TDTheme.of(context).bgColorContainer.withOpacity(0)
                       ])),
                     ),
                   ),
@@ -262,8 +262,8 @@ class _TDDatePickerState extends State<TDDatePicker> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [
-                        TDTheme.of(context).whiteColor1,
-                        TDTheme.of(context).whiteColor1.withOpacity(0)
+                        TDTheme.of(context).bgColorContainer,
+                        TDTheme.of(context).bgColorContainer.withOpacity(0)
                       ])),
                     ),
                   ),
