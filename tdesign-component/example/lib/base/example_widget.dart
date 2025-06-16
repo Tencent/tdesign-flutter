@@ -25,7 +25,7 @@ class ExamplePage extends StatefulWidget {
     this.desc = '',
     this.children = const [],
     this.padding,
-    this.backgroundColor,
+    @deprecated this.backgroundColor,
     required this.exampleCodeGroup,
     this.test = const [],
     this.showSingleChild = false,
