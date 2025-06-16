@@ -315,7 +315,7 @@ class TDInput extends StatelessWidget {
           alignment: Alignment.centerLeft,
           color: (cardStyleDecoration != null || decoration != null)
               ? null
-              : backgroundColor,
+              : (backgroundColor ?? TDTheme.of(context).bgColorContainer),
           decoration: cardStyleDecoration ?? decoration,
           child: Row(
             crossAxisAlignment: additionInfo != ''
@@ -517,27 +517,27 @@ class TDInput extends StatelessWidget {
       switch (cardStyle) {
         case TDCardStyle.topText:
           cardStyleDecoration = BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: TDTheme.of(context).grayColor4),
+              color: TDTheme.of(context).bgColorContainer,
+              border: Border.all(color: TDTheme.of(context).componentStrokeColor),
               borderRadius: BorderRadius.circular(6));
           break;
         case TDCardStyle.topTextWithBlueBorder:
           cardStyleDecoration = BoxDecoration(
-              color: Colors.white,
+              color: TDTheme.of(context).bgColorContainer,
               border: Border.all(
                   color: TDTheme.of(context).brandNormalColor, width: 1.5),
               borderRadius: BorderRadius.circular(6));
           break;
         case TDCardStyle.errorStyle:
           cardStyleDecoration = BoxDecoration(
-              color: Colors.white,
+              color: TDTheme.of(context).bgColorContainer,
               border: Border.all(
                   color: TDTheme.of(context).errorColor6, width: 1.5),
               borderRadius: BorderRadius.circular(6));
           break;
         default:
           cardStyleDecoration = BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(6));
+              color: TDTheme.of(context).bgColorContainer, borderRadius: BorderRadius.circular(6));
           break;
       }
     }
@@ -547,7 +547,7 @@ class TDInput extends StatelessWidget {
   Widget buildTwoLineInput(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
-      color: decoration != null ? null : backgroundColor,
+      color: decoration != null ? null : (backgroundColor ?? TDTheme.of(context).bgColorContainer),
       decoration: decoration,
       child: Stack(
         alignment: Alignment.bottomCenter,
@@ -701,7 +701,7 @@ class TDInput extends StatelessWidget {
   Widget buildLongTextInput(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
-      color: decoration != null ? null : backgroundColor,
+      color: decoration != null ? null : (backgroundColor ?? TDTheme.of(context).bgColorContainer),
       decoration: decoration,
       height: leftLabel != null ? 197 : 148,
       child: Column(
@@ -781,7 +781,7 @@ class TDInput extends StatelessWidget {
       children: [
         Container(
           alignment: Alignment.centerLeft,
-          color: decoration != null ? null : backgroundColor,
+          color: decoration != null ? null : (backgroundColor ?? TDTheme.of(context).bgColorContainer),
           decoration: decoration,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
