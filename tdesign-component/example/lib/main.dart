@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.light(
           primary: _themeData.brandNormalColor,
         ),
-        scaffoldBackgroundColor: _themeData.grayColor2,
+        scaffoldBackgroundColor: _themeData.bgColorPage,
         iconTheme: IconThemeData().copyWith(
           color: _themeData.brandNormalColor,
         ),
@@ -72,8 +72,8 @@ class _MyAppState extends State<MyApp> {
           secondary: _themeData.brandNormalColor,
         ),
         scaffoldBackgroundColor: _themeData.grayColor14,
-        bottomNavigationBarTheme: BottomNavigationBarThemeData()
-            .copyWith(backgroundColor: _themeData.grayColor14),
+        bottomNavigationBarTheme:
+            BottomNavigationBarThemeData().copyWith(backgroundColor: _themeData.grayColor14),
         appBarTheme: AppBarTheme().copyWith(
           backgroundColor: _themeData.grayColor13,
         ),
@@ -87,8 +87,7 @@ class _MyAppState extends State<MyApp> {
           : Builder(
               builder: (context) {
                 // 设置文案代理,国际化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
-                TDTheme.setResourceBuilder(
-                    (context) => delegate..updateContext(context),
+                TDTheme.setResourceBuilder((context) => delegate..updateContext(context),
                     needAlwaysBuild: true);
                 return MyHomePage(
                   title: AppLocalizations.of(context)?.components ?? '',
@@ -121,8 +120,7 @@ class _MyAppState extends State<MyApp> {
       return {
         for (var model in examplePageList)
           model.name: (context) => model.pageBuilder.call(context, model)
-      }..putIfAbsent('/',
-          () => (context) => const MyHomePage(title: 'TDesign Flutter 组件库'));
+      }..putIfAbsent('/', () => (context) => const MyHomePage(title: 'TDesign Flutter 组件库'));
     } else {
       return const {};
     }
