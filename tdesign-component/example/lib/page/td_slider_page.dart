@@ -65,7 +65,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
             ExampleItem(builder: _buildCapsuleDoubleHandleWithNumber),
             ExampleItem(builder: _buildCapsuleSingleHandleWithScale),
             ExampleItem(builder: _buildCapsuleDoubleHandleWithScale),
-            ExampleItem(desc: '胶囊型滑块', builder: _buildCapsule),
+            ExampleItem(desc: '胶囊型滑块 - 禁用状态', builder: _buildCapsule),
             ExampleItem(desc: '自定义盒子样式', builder: _buildCustomDecoration),
             ExampleItem(desc: '自定义滑轨颜色', builder: _buildCustomActiveColor),
           ]),
@@ -491,7 +491,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
           ),
           value: 40,
           // divisions: 5,
-          onChanged: (value) {},
         ),
         const SizedBox(
           height: 16,
@@ -505,7 +504,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
           ),
           value: const RangeValues(20, 60),
           // divisions: 5,
-          onChanged: (value) {},
         ),
         const SizedBox(
           height: 16,
@@ -521,7 +519,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
           rightLabel: '100',
           value: 40,
           // divisions: 5,
-          onChanged: (value) {},
         ),
         const SizedBox(
           height: 16,
@@ -538,7 +535,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
           leftLabel: '0',
           rightLabel: '100',
           // divisions: 5,
-          onChanged: (value) {},
         ),
         const SizedBox(
           height: 16,
@@ -557,7 +553,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
               )),
           value: 60,
           // divisions: 5,
-          onChanged: (value) {},
         ),
         const SizedBox(
           height: 16,
@@ -576,7 +571,6 @@ class _TDSliderPageState extends State<TDSliderPage> {
               )),
           value: const RangeValues(20, 60),
           // divisions: 5,
-          onChanged: (value) {},
         )
       ],
     );
