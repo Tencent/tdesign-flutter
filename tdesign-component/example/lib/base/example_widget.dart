@@ -25,7 +25,7 @@ class ExamplePage extends StatefulWidget {
     this.desc = '',
     this.children = const [],
     this.padding,
-    this.backgroundColor,
+    @deprecated this.backgroundColor,
     required this.exampleCodeGroup,
     this.test = const [],
     this.showSingleChild = false,
@@ -101,8 +101,6 @@ class _ExamplePageState extends State<ExamplePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: widget.floatingActionButton,
-        backgroundColor:
-            widget.backgroundColor ?? TDTheme.of(context).grayColor1,
         body: ScrollbarTheme(
             data: ScrollbarThemeData(
                 trackVisibility: MaterialStateProperty.all(true)),

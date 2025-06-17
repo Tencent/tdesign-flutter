@@ -65,11 +65,11 @@ class TDStepsHorizontalItem extends StatelessWidget {
       );
     } else if (activeIndex < index) {
       /// 激活索引小于当前索引
-      stepsNumberBgColor = TDTheme.of(context).grayColor1;
+      stepsNumberBgColor = TDTheme.of(context).bgColorSecondaryContainer;
       stepsNumberTextColor = TDTheme.of(context).fontGyColor3;
       stepsTitleColor = TDTheme.of(context).fontGyColor3;
       stepsIconColor = TDTheme.of(context).fontGyColor3;
-      simpleStepsIconColor = TDTheme.of(context).grayColor4;
+      simpleStepsIconColor = TDTheme.of(context).componentBorderColor;
     }
 
     /// 步骤条icon图标组件，默认为索引文字
@@ -177,7 +177,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
                     height: 1,
                     color: (activeIndex >= index || readOnly)
                         ? TDTheme.of(context).brandColor7
-                        : TDTheme.of(context).grayColor4),
+                        : TDTheme.of(context).componentBorderColor),
               ),
             ),
             Container(
@@ -197,7 +197,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
                   height: 1,
                   color: (activeIndex > index || readOnly)
                       ? TDTheme.of(context).brandColor7
-                      : TDTheme.of(context).grayColor4,
+                      : TDTheme.of(context).componentBorderColor,
                 ),
               ),
             ),

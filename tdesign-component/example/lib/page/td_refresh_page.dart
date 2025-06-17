@@ -45,7 +45,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
               height: 171,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: TDTheme.of(context).grayColor1,
+                  color: TDTheme.of(context).bgColorContainer,
                   borderRadius: BorderRadius.all(Radius.circular(TDTheme.of(context).radiusLarge))),
               margin: const EdgeInsets.only(left: 16, right: 16),
               child: TDText(
@@ -58,7 +58,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
               height: 70,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: TDTheme.of(context).grayColor1,
+                  color: TDTheme.of(context).bgColorContainer,
                   borderRadius: BorderRadius.all(Radius.circular(TDTheme.of(context).radiusLarge))),
               margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
               child: TDText(

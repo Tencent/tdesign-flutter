@@ -116,6 +116,7 @@ class _TDNavBarState extends State<TDNavBar> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(border.radius),
+        // color: TDTheme.of(context).bgColorContainer,
         border: Border.all(
           color: borderColor,
           width: border.width,
@@ -163,7 +164,7 @@ class _TDNavBarState extends State<TDNavBar> {
   }
 
   TextStyle _getTitleStyle(BuildContext context) {
-    var titleColor = widget.titleColor ?? TDTheme.of(context).fontGyColor1;
+    var titleColor = widget.titleColor ?? TDTheme.of(context).textColorPrimary;
 
     var titleFont = widget.titleFont ?? TDTheme.of(context).fontBodyLarge;
 
@@ -216,7 +217,7 @@ class _TDNavBarState extends State<TDNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    var bcc = widget.backgroundColor ?? TDTheme.of(context).whiteColor1;
+    var bcc = widget.backgroundColor ?? TDTheme.of(context).bgColorContainer;
     if (bcc != Colors.transparent) {
       bcc = bcc.withOpacity(widget.opacity);
     }

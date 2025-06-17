@@ -86,11 +86,11 @@ class TDWrapSideBarItem extends StatelessWidget {
         constraints: const BoxConstraints(minHeight: 56),
         child: Container(
           // height: 86,
-          decoration: const BoxDecoration(color: Color.fromRGBO(246, 246, 246, 1)),
+          decoration: BoxDecoration(color: TDTheme.of(context).bgColorSecondaryContainer),
           padding: const EdgeInsets.all(8),
           child: Container(
             decoration: BoxDecoration(
-                color: selected && !disabled ? Colors.white : null, borderRadius: BorderRadius.circular(6)),
+                color: selected && !disabled ? TDTheme.of(context).bgColorContainer : null, borderRadius: BorderRadius.circular(6)),
             padding: const EdgeInsets.all(8),
             child: renderMainContent(context),
           ),
@@ -151,7 +151,7 @@ class TDWrapSideBarItem extends StatelessWidget {
                     ? selectedTextStyle != null
                         ? selectedTextStyle?.color
                         : (selectedColor ?? TDTheme.of(context).brandNormalColor)
-                    : Colors.black,
+                    : TDTheme.of(context).textColorPrimary,
           ),
         ));
   }
@@ -169,7 +169,7 @@ class TDWrapSideBarItem extends StatelessWidget {
                     ? TDTheme.of(context).fontGyColor4
                     : selected
                     ? selectedColor ?? TDTheme.of(context).brandNormalColor
-                    : Colors.black,
+                    : TDTheme.of(context).textColorPrimary,
                 // forceVerticalCenter: true,
               )),
           if(label.length<4)

@@ -128,6 +128,12 @@ abstract class AppLocalizations {
   /// **'redTheme'**
   String get redTheme;
 
+  /// No description provided for @darkTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get darkTheme;
+
   /// No description provided for @cancel.
   ///
   /// In en, this message translates to:

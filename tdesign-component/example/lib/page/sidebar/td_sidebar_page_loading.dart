@@ -99,7 +99,7 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
     ));
 
     list[1].badge = const TDBadge(TDBadgeType.redPoint);
@@ -107,7 +107,7 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
       TDBadgeType.message,
       count: '8',
     );
-    if(_sideBarController.loading) {
+    if (_sideBarController.loading) {
       _sideBarController.init(list);
       _sideBarController.selectTo(currentValue);
       // 初始化时避免右侧内容与左侧item不匹配
@@ -135,10 +135,7 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
             loading: true,
             children: list
                 .map((ele) => TDSideBarItem(
-                    label: ele.label ?? '',
-                    badge: ele.badge,
-                    value: ele.value,
-                    icon: ele.icon))
+                    label: ele.label ?? '', badge: ele.badge, value: ele.value, icon: ele.icon))
                 .toList(),
             onChanged: onChanged,
             onSelected: onSelected,
@@ -160,7 +157,7 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
 
   Widget getLoadingDemo(int index) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

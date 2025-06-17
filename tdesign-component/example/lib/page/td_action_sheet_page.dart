@@ -47,89 +47,87 @@ class TDActionSheetPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: TDTheme.of(context).grayColor2,
-        child: ExamplePage(
-          title: tdTitle(context),
-          desc: '从底部弹出的模态框，提供和当前场景相关的操作动作，也支持提供信息输入和描述。',
-          exampleCodeGroup: 'action_sheet',
-          children: [
-            ExampleModule(title: '组件类型', children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '列表型动作面板',
-                builder: (BuildContext context) {
-                  return const Column(
-                    children: [
-                      CodeWrapper(builder: _buildBaseListActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildDescListActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildIconListActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildBadgeListActionSheet),
-                    ],
-                  );
-                },
-              ),
-              ExampleItem(
-                ignoreCode: true,
-                desc: '宫格型动作面板',
-                builder: (BuildContext context) {
-                  return const Column(
-                    children: [
-                      CodeWrapper(builder: _buildBaseGridActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildDescGridActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildPaginationGridActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildScrollGridActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildMultiScrollGridActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildBadgeGridActionSheet),
-                    ],
-                  );
-                },
-              ),
-            ]),
-            ExampleModule(title: '组件状态', children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '列表型选项状态',
-                builder: (BuildContext context) {
-                  return const Column(
-                    children: [
-                      CodeWrapper(builder: _buildBaseListStateActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildIconListStateActionSheet),
-                    ],
-                  );
-                },
-              )
-            ]),
-            ExampleModule(title: '组件样式', children: [
-              ExampleItem(
-                  ignoreCode: true,
-                  desc: '列表型对齐方式',
-                  builder: (BuildContext context) {
-                    return const Column(
-                      children: [
-                        CodeWrapper(builder: _buildBadgeListCenterActionSheet),
-                        SizedBox(height: 16),
-                        CodeWrapper(builder: _buildIconListCenterActionSheet),
-                        SizedBox(height: 16),
-                        CodeWrapper(builder: _buildBadgeListLeftActionSheet),
-                        SizedBox(height: 16),
-                        CodeWrapper(builder: _buildIconListLeftActionSheet),
-                      ],
-                    );
-                  })
-            ])
-          ],
-          test: const [],
-        ));
+    return ExamplePage(
+      title: tdTitle(context),
+      desc: '从底部弹出的模态框，提供和当前场景相关的操作动作，也支持提供信息输入和描述。',
+      exampleCodeGroup: 'action_sheet',
+      children: [
+        ExampleModule(title: '组件类型', children: [
+          ExampleItem(
+            ignoreCode: true,
+            desc: '列表型动作面板',
+            builder: (BuildContext context) {
+              return const Column(
+                children: [
+                  CodeWrapper(builder: _buildBaseListActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildDescListActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildIconListActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildBadgeListActionSheet),
+                ],
+              );
+            },
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            desc: '宫格型动作面板',
+            builder: (BuildContext context) {
+              return const Column(
+                children: [
+                  CodeWrapper(builder: _buildBaseGridActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildDescGridActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildPaginationGridActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildScrollGridActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildMultiScrollGridActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildBadgeGridActionSheet),
+                ],
+              );
+            },
+          ),
+        ]),
+        ExampleModule(title: '组件状态', children: [
+          ExampleItem(
+            ignoreCode: true,
+            desc: '列表型选项状态',
+            builder: (BuildContext context) {
+              return const Column(
+                children: [
+                  CodeWrapper(builder: _buildBaseListStateActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildIconListStateActionSheet),
+                ],
+              );
+            },
+          )
+        ]),
+        ExampleModule(title: '组件样式', children: [
+          ExampleItem(
+              ignoreCode: true,
+              desc: '列表型对齐方式',
+              builder: (BuildContext context) {
+                return const Column(
+                  children: [
+                    CodeWrapper(builder: _buildBadgeListCenterActionSheet),
+                    SizedBox(height: 16),
+                    CodeWrapper(builder: _buildIconListCenterActionSheet),
+                    SizedBox(height: 16),
+                    CodeWrapper(builder: _buildBadgeListLeftActionSheet),
+                    SizedBox(height: 16),
+                    CodeWrapper(builder: _buildIconListLeftActionSheet),
+                  ],
+                );
+              })
+        ])
+      ],
+      test: const [],
+    );
   }
 }
 

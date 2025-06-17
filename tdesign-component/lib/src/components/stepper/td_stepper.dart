@@ -139,10 +139,10 @@ class _TDStepperState extends State<TDStepper> {
     switch (widget.theme) {
       case TDStepperTheme.filled:
         return widget.disabled
-            ? TDTheme.of(context).grayColor2
-            : TDTheme.of(context).grayColor1;
+            ? TDTheme.of(context).bgColorComponentDisabled
+            : TDTheme.of(context).bgColorSecondaryContainer;
       case TDStepperTheme.outline:
-        return TDTheme.of(context).whiteColor1;
+        return null;
       case TDStepperTheme.normal:
       default:
         return null;
@@ -241,10 +241,10 @@ class _TDStepperState extends State<TDStepper> {
               border: widget.theme == TDStepperTheme.outline
                   ? Border(
                       top: BorderSide(
-                        color: TDTheme.of(context).grayColor4,
+                        color: TDTheme.of(context).componentBorderColor,
                       ),
                       bottom: BorderSide(
-                        color: TDTheme.of(context).grayColor4,
+                        color: TDTheme.of(context).componentBorderColor,
                       ))
                   : null),
           child: Padding(
@@ -399,10 +399,10 @@ class TDStepperIconButton extends StatelessWidget {
     switch (theme) {
       case TDStepperTheme.filled:
         return disabled
-            ? TDTheme.of(context).grayColor2
-            : TDTheme.of(context).grayColor1;
+            ? TDTheme.of(context).bgColorComponentDisabled
+            : TDTheme.of(context).bgColorSecondaryContainer;
       case TDStepperTheme.outline:
-        return disabled ? TDTheme.of(context).grayColor2 : null;
+        return disabled ? TDTheme.of(context).bgColorComponentDisabled : null;
       case TDStepperTheme.normal:
       default:
         return null;
@@ -424,7 +424,7 @@ class TDStepperIconButton extends StatelessWidget {
   BoxBorder? _getBoxBorder(BuildContext context) {
     if (theme == TDStepperTheme.outline) {
       return Border.all(
-        color: TDTheme.of(context).grayColor4,
+        color: TDTheme.of(context).componentBorderColor,
       );
     }
 

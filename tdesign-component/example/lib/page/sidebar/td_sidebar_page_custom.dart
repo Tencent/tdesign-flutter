@@ -49,6 +49,7 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
         index: i,
         label: '选项',
         value: i,
+        textStyle:  TextStyle(color: TDTheme.of(context).textColorAnti),
       ));
       pages.add(getPageDemo(i));
     }
@@ -109,7 +110,7 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
 
   Widget getPageDemo(int index) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration:  const BoxDecoration(color: Colors.blue),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

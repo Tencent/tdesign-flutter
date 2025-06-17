@@ -140,21 +140,21 @@ class TDProgress extends StatelessWidget {
       case TDProgressType.linear:
         return _DefaultValues(
           strokeWidth: 20.0,
-          backgroundColor: TDTheme.of(context).grayColor3,
+          backgroundColor: TDTheme.of(context).bgColorComponent,
           linearBorderRadius: BorderRadius.circular(20),
           circleRadius: 0,
         );
       case TDProgressType.circular:
         return _DefaultValues(
           strokeWidth: 5.0,
-          backgroundColor: TDTheme.of(context).grayColor2,
+          backgroundColor: TDTheme.of(context).bgColorComponent,
           linearBorderRadius: BorderRadius.circular(20),
           circleRadius: 100.0,
         );
       case TDProgressType.micro:
         return _DefaultValues(
           strokeWidth: 2.0,
-          backgroundColor: TDTheme.of(context).grayColor2,
+          backgroundColor: TDTheme.of(context).bgColorComponent,
           linearBorderRadius: BorderRadius.circular(20),
           circleRadius: 25.0,
         );

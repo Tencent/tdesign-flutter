@@ -137,7 +137,7 @@ class _TDCollapseState extends State<TDCollapse> {
       items.add(
         MaterialSlice(
             key: TDCollapseSaltedKey<BuildContext, int>(context, index * 2),
-            color: child.backgroundColor,
+            color: child.backgroundColor ?? TDTheme.of(context).bgColorContainer,
             child: Column(
               // to prevent collapse state change when parent rebuild
               key: TDCollapseSaltedKey<BuildContext, int>(context, index * 2),
@@ -312,7 +312,7 @@ class _TDCollapseState extends State<TDCollapse> {
           Text(child.expandIconTextBuilder!(context, _isChildExpanded(index)),
               textAlign: TextAlign.right,
               style: TextStyle(
-                color: Colors.black.withOpacity(0.4),
+                color: TDTheme.of(context).textColorPlaceholder,
               )),
         expandedIcon,
       ],

@@ -121,7 +121,7 @@ class TDMultiPicker extends StatelessWidget {
       width: maxWidth,
       padding: padding ?? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
-        color: backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: backgroundColor ?? TDTheme.of(context).bgColorContainer,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(topRadius ?? TDTheme.of(context).radiusExtraLarge),
           topRight: Radius.circular(topRadius ?? TDTheme.of(context).radiusExtraLarge),
@@ -139,7 +139,7 @@ class TDMultiPicker extends StatelessWidget {
                 child: customSelectWidget ?? Container(
                   height: 40,
                   decoration: BoxDecoration(
-                      color: TDTheme.of(context).grayColor1,
+                      color: TDTheme.of(context).bgColorSecondaryContainer,
                       borderRadius: BorderRadius.all(Radius.circular(TDTheme.of(context).radiusDefault))
                   ),
                 ),
@@ -169,7 +169,7 @@ class TDMultiPicker extends StatelessWidget {
                         gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
-                            colors: [TDTheme.of(context).whiteColor1, TDTheme.of(context).whiteColor1.withOpacity(0)]
+                            colors: [TDTheme.of(context).bgColorContainer, TDTheme.of(context).bgColorContainer.withOpacity(0)]
                         )
                     ),
                   ),
@@ -186,7 +186,7 @@ class TDMultiPicker extends StatelessWidget {
                         gradient: LinearGradient(
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
-                            colors: [TDTheme.of(context).whiteColor1, TDTheme.of(context).whiteColor1.withOpacity(0)]
+                            colors: [TDTheme.of(context).bgColorContainer, TDTheme.of(context).bgColorContainer.withOpacity(0)]
                         )
                     ),
                   ),
@@ -445,7 +445,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
       width: maxWidth,
       padding: widget.padding ?? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
           topRight: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
@@ -465,7 +465,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                   child: widget.customSelectWidget ?? Container(
                     height: 40,
                     decoration: BoxDecoration(
-                        color: TDTheme.of(context).grayColor1,
+                        color: TDTheme.of(context).bgColorSecondaryContainer,
                         borderRadius: BorderRadius.all(Radius.circular(TDTheme.of(context).radiusDefault))
                     ),
                   ),
@@ -496,7 +496,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                           gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              colors: [TDTheme.of(context).whiteColor1, TDTheme.of(context).whiteColor1.withOpacity(0)]
+                              colors: [TDTheme.of(context).bgColorContainer, TDTheme.of(context).bgColorContainer.withOpacity(0)]
                           )
                       ),
                     ),
@@ -513,7 +513,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                           gradient: LinearGradient(
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
-                              colors: [TDTheme.of(context).whiteColor1, TDTheme.of(context).whiteColor1.withOpacity(0)]
+                              colors: [TDTheme.of(context).bgColorContainer, TDTheme.of(context).bgColorContainer.withOpacity(0)]
                           )
                       ),
                     ),

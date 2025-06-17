@@ -263,7 +263,7 @@ class _TDCalendarState extends State<TDCalendar> {
     final valueTime = widget._valueTime;
     return Container(
       decoration: BoxDecoration(
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.04),

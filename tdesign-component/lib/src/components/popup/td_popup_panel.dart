@@ -170,7 +170,7 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
         child: Container(
           height: _currentHeight,
           decoration: BoxDecoration(
-            color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+            color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
             borderRadius: _isFullscreen
                 ? null
                 : BorderRadius.vertical(top: Radius.circular(widget.radius ?? 12)),
@@ -509,7 +509,7 @@ class TDPopupCenterPanel extends StatelessWidget {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 24),
             decoration: BoxDecoration(
-              color: backgroundColor ?? TDTheme.of(context).whiteColor1,
+              color: backgroundColor ?? TDTheme.of(context).bgColorContainer,
               borderRadius: BorderRadius.circular(radius ?? 12),
             ),
             child: child,
@@ -517,7 +517,7 @@ class TDPopupCenterPanel extends StatelessWidget {
           IconButton(
             icon: Icon(TDIcons.close_circle,
               color: closeColor ?? TDTheme.of(context).fontWhColor1,
-              size: closeSize,
+              size: closeSize ?? 32,
             ),
             onPressed: closeClick,
           ),
@@ -527,7 +527,7 @@ class TDPopupCenterPanel extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: backgroundColor ?? TDTheme.of(context).bgColorContainer,
         borderRadius: BorderRadius.circular(radius ?? 12),
       ),
       child: Stack(

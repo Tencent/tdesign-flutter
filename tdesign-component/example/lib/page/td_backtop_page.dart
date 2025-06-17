@@ -151,7 +151,7 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
           width: 163,
           height: 163,
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(12)),
+              color: TDTheme.of(context).bgColorContainer, borderRadius: BorderRadius.circular(12)),
         ),
         const SizedBox(
           height: 10,
@@ -160,7 +160,7 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
           width: 163,
           height: 16,
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(3)),
+              color: TDTheme.of(context).bgColorContainer, borderRadius: BorderRadius.circular(3)),
         ),
         const SizedBox(
           height: 10,
@@ -169,7 +169,7 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
             width: 100,
             height: 16,
             decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(3))),
+                color: TDTheme.of(context).bgColorContainer, borderRadius: BorderRadius.circular(3))),
       ],
     );
   }

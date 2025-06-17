@@ -287,7 +287,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
                 ? const EdgeInsets.symmetric(horizontal: 16)
                 : null,
             decoration: BoxDecoration(
-                color: widget.backgroundColor ?? Colors.white,
+                color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
                 borderRadius:
                     isCapsuleOutlineType ? BorderRadius.circular(56) : null,
                 border: widget.showTopBorder! && !isCapsuleOutlineType
@@ -373,7 +373,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
             width: widget.dividerThickness ?? 0.5,
             height: widget.dividerHeight ?? 32,
             child: VerticalDivider(
-              color: widget.dividerColor ?? TDTheme.of(context).grayColor3,
+              color: widget.dividerColor ?? TDTheme.of(context).componentStrokeColor,
               thickness: widget.dividerThickness ?? 0.5,
             ),
           );
@@ -472,7 +472,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
                       : null,
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? selectedBgColor ?? TDTheme.of(context).brandColor1
+                        ? selectedBgColor ?? TDTheme.of(context).brandLightColor
                         : unselectedBgColor,
                     borderRadius: const BorderRadius.all(Radius.circular(24)),
                   ),
@@ -511,7 +511,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
               size: 16.0,
               color: isSelected
                   ? TDTheme.of(context).brandNormalColor
-                  : TDTheme.of(context).fontGyColor1,
+                  : TDTheme.of(context).textColorPrimary,
             ),
             const SizedBox(width: 5),
             _textItem(context, itemConfig, isSelected,
@@ -575,7 +575,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
           isSelected ? config.selectTabTextStyle : config.unselectTabTextStyle,
       textColor: isSelected
           ? TDTheme.of(context).brandNormalColor
-          : TDTheme.of(context).fontGyColor1,
+          : TDTheme.of(context).textColorPrimary,
       forceVerticalCenter: true,
     );
   }

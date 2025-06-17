@@ -61,7 +61,7 @@ class TDCalendarStyle {
   /// 生成默认样式
   TDCalendarStyle.generateStyle(BuildContext context) {
     decoration = BoxDecoration(
-      color: TDTheme.of(context).whiteColor1,
+      color: TDTheme.of(context).bgColorContainer,
       borderRadius: BorderRadius.vertical(
         top: Radius.circular(TDTheme.of(context).radiusExtraLarge),
       ),

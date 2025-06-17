@@ -79,7 +79,7 @@ class TDSkeletonRowColObjStyle {
 
   /// 默认背景颜色
   static Color _defaultBackground(BuildContext context) =>
-      TDTheme.of(context).grayColor1;
+      TDTheme.of(context).bgColorSecondaryContainer;
 
   /// 透明背景颜色
   static Color _transparentBackground(BuildContext context) =>

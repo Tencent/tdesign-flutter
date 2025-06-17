@@ -2,6 +2,8 @@
 ///  Created by arvinwli@tencent.com on 4/24/23.
 ///
 import 'package:flutter/material.dart';
+import '../../theme/td_colors.dart';
+import '../../theme/td_theme.dart';
 import 'td_slider_theme.dart';
 
 enum Position {
@@ -80,7 +82,7 @@ class TDSliderState extends State<TDSlider> {
 
   TextStyle get labelTextStyle => TextStyle(
       fontSize: 16,
-      color: enabled ? const Color(0xE6000000) : const Color(0x42000000));
+      color: enabled ? TDTheme.of(context).textColorPrimary : TDTheme.of(context).textColorDisabled);
 
   Widget get leftLabel => widget.leftLabel?.isNotEmpty == true
       ? Padding(
@@ -127,8 +129,8 @@ class TDSliderState extends State<TDSlider> {
             bottom: 8,
           ),
           decoration: widget.boxDecoration ??
-              const BoxDecoration(
-                color: Colors.white,
+               BoxDecoration(
+                color: TDTheme.of(context).bgColorContainer,
               ),
           child: Row(
             children: [
@@ -255,7 +257,7 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
 
   TextStyle get labelTextStyle => TextStyle(
       fontSize: 16,
-      color: enabled ? const Color(0xE6000000) : const Color(0x42000000));
+      color: enabled ? TDTheme.of(context).textColorPrimary : TDTheme.of(context).textColorDisabled);
 
   Widget get leftLabel => widget.leftLabel?.isNotEmpty == true
       ? Padding(
@@ -310,8 +312,8 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
           bottom: 8,
         ),
         decoration: widget.boxDecoration ??
-            const BoxDecoration(
-              color: Colors.white,
+            BoxDecoration(
+              color: TDTheme.of(context).bgColorContainer,
             ),
         child: Row(
           children: [

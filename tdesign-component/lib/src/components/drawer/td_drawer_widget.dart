@@ -117,7 +117,7 @@ class TDDrawerWidget extends StatelessWidget {
       );
     }
     return Container(
-      color: backgroundColor ?? Colors.white,
+      color: backgroundColor ?? TDTheme.of(context).bgColorContainer,
       width: width ?? 280,
       height: double.infinity,
       child: content,

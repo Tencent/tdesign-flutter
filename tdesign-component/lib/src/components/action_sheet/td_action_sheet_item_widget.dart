@@ -116,10 +116,10 @@ Widget buildCancelButton(BuildContext context, bool showPagination, String cance
       },
       child: Container(
         decoration: BoxDecoration(
-          color: TDTheme.of(context).fontWhColor1,
+          color: TDTheme.of(context).bgColorContainer,
           border: Border(
             top: BorderSide(
-              color: TDTheme.of(context).grayColor3,
+              color: TDTheme.of(context).componentStrokeColor,
               width: 0.5,
             ),
           ),
