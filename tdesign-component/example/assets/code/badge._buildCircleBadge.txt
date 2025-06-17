@@ -1,6 +1,6 @@
 
   Widget _buildCircleBadge(BuildContext context) {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [

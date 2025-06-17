@@ -4,7 +4,6 @@
       alignment: Alignment.center,
       padding: const EdgeInsets.only(top: 16, bottom: 24),
       width: MediaQuery.of(context).size.width,
-      color: Colors.white,
       child: TDInput(
         type: TDInputType.cardStyle,
         cardStyle: TDCardStyle.topText,

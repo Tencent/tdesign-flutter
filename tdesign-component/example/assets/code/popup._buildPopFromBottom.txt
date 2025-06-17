@@ -12,7 +12,7 @@
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
               return Container(
-                color: Colors.white,
+                color: TDTheme.of(context).bgColorContainer,
                 height: 240,
               );
             }));

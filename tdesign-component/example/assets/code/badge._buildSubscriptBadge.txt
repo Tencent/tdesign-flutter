@@ -11,7 +11,7 @@
             textColor: TDTheme.of(context).fontGyColor1,
             font: TDTheme.of(context).fontBodyLarge,
           ),
-          color: Colors.white,
+          color: TDTheme.of(context).bgColorContainer,
           height: 48,
           width: MediaQuery.of(context).size.width,
         ),
