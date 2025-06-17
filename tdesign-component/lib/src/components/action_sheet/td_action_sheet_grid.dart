@@ -34,6 +34,7 @@ class TDActionSheetGrid extends StatefulWidget {
     this.align = TDActionSheetAlign.center,
     this.count = 8,
     this.rows = 2,
+    // @todo
     this.cancelText = '取消',
     this.showCancel = true,
     this.showPagination = false,
@@ -58,7 +59,7 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
       ),
       clipBehavior: Clip.antiAlias,
       padding: widget.useSafeArea ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom) : EdgeInsets.zero,
@@ -202,7 +203,7 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
           height: 8.0,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: currentPage == index ? TDTheme.of(context).brandColor7 : TDTheme.of(context).grayColor4,
+            color: currentPage == index ? TDTheme.of(context).brandColor7 : TDTheme.of(context).bgColorSecondaryContainerActive,
           ),
         );
       }),

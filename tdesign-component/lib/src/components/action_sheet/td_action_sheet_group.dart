@@ -44,7 +44,7 @@ class TDActionSheetGroup extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
       ),
       clipBehavior: Clip.antiAlias,
       padding: useSafeArea ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom) : EdgeInsets.zero,
@@ -98,7 +98,7 @@ class TDActionSheetGroup extends StatelessWidget {
                       color: TDTheme.of(context).fontWhColor1,
                       border: Border(
                         top: BorderSide(
-                          color: TDTheme.of(context).grayColor3,
+                          color: TDTheme.of(context).componentStrokeColor,
                           width: 0.5,
                         ),
                       ),
