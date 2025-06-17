@@ -68,6 +68,14 @@ class _TDStepperPageState extends State<TDStepperPage> {
         theme: TDStepperTheme.filled,
         disabled: true,
       ),
+      const TDStepper(
+        theme: TDStepperTheme.outline,
+        disabled: true,
+      ),
+      const TDStepper(
+        theme: TDStepperTheme.normal,
+        disabled: true,
+      ),
     ]);
   }
 
@@ -98,7 +106,7 @@ class _TDStepperPageState extends State<TDStepperPage> {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.whiteColor1,
+        color: theme.bgColorContainer,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
