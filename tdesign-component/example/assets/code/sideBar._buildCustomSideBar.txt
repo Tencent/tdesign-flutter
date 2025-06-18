@@ -9,6 +9,7 @@
         index: i,
         label: '选项',
         value: i,
+        textStyle:  TextStyle(color: TDTheme.of(context).textColorAnti),
       ));
       pages.add(getPageDemo(i));
     }

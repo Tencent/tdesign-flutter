@@ -6,7 +6,6 @@
       controller: controller[4],
       hintText: '请输入文字',
       additionInfo: '辅助说明',
-      backgroundColor: Colors.white,
       onChanged: (text) {
         setState(() {});
       },

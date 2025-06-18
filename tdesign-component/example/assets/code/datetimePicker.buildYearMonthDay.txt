@@ -1,18 +1,16 @@
 
   Widget buildYearMonthDay(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
+    return TDCell(
+      title: '选择时间',
+      note: selected_1,
+      onClick: (click) {
         TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
           setState(() {
             selected_1 =
                 '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
           });
           Navigator.of(context).pop();
-        },
-            dateStart: [1999, 01, 01],
-            dateEnd: [2023, 12, 31],
-            initialDate: [2012, 1, 1]);
+        }, dateStart: [1999, 01, 01], dateEnd: [2023, 12, 31], initialDate: [2012, 1, 1]);
       },
-      child: buildSelectRow(context, selected_1, '选择时间'),
     );
   }

@@ -5,7 +5,6 @@
         TDInput(
           leftLabel: 'Label Text',
           controller: controller[0],
-          backgroundColor: Colors.white,
           hintText: 'Please enter text',
           onChanged: (text) {
             setState(() {});

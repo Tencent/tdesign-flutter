@@ -28,6 +28,5 @@
     return TDTabBar(
         tabs: tabs,
         controller: TabController(length: 3, vsync: this),
-        backgroundColor: Colors.white,
-        showIndicator: true);
+          showIndicator: true);
   }

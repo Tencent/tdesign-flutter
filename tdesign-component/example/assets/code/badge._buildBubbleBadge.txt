@@ -13,7 +13,7 @@
                 Container(
                   child: const Icon(TDIcons.shop),
                   decoration: BoxDecoration(
-                      color: TDTheme.of(context).grayColor2,
+                      color: TDTheme.of(context).bgColorComponent,
                       borderRadius: BorderRadius.circular(
                           TDTheme.of(context).radiusDefault)),
                   height: 48,

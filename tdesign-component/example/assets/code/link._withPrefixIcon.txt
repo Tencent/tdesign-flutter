@@ -1,7 +1,7 @@
 
   Widget _withPrefixIcon(BuildContext context) {
     return Container(
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: _buildLinksWithType(TDLinkType.withPrefixIcon),

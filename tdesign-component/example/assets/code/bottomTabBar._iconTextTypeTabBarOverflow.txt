@@ -6,7 +6,7 @@
     );
     final unSelectedIcon = Icon(
       TDIcons.app,
-      color: TDTheme.of(context).brandNormalColor,
+      color: TDTheme.of(context).textColorPrimary,
     );
     return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
         useVerticalDivider: false,

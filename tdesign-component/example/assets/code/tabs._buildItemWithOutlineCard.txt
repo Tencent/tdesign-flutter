@@ -18,6 +18,5 @@
         tabs: tabs,
         outlineType: TDTabBarOutlineType.card,
         controller: TabController(length: 4, vsync: this),
-        backgroundColor: Colors.white,
-        showIndicator: false);
+          showIndicator: false);
   }

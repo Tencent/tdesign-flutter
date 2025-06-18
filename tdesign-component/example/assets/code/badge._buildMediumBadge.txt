@@ -2,7 +2,7 @@
   Widget _buildMediumBadge(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 16),
-      child: Row(
+      child: const Row(
         children: [
           SizedBox(
             width: 120,
