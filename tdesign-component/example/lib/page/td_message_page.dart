@@ -18,7 +18,6 @@ class _TDMessagePageState extends State<TDMessagePage> {
   Widget build(BuildContext context) {
     return ExamplePage(
         title: tdTitle(),
-        backgroundColor: Colors.white,
         desc: '用于轻量级反馈或提示，不会打断用户操作。',
         exampleCodeGroup: 'message',
         children: [

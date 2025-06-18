@@ -227,8 +227,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
     if (widget.visible == false) {
       return const SizedBox.shrink();
     }
-    var _leftOffset = widget.offset?[0] ??
-        (MediaQuery.of(context).size.width - totalWidth) / 2;
+    var _leftOffset = widget.offset?[0] ?? (MediaQuery.of(context).size.width - totalWidth) / 2;
 
     Widget getText(BuildContext context) {
       if (widget.marquee == null) {
@@ -236,7 +235,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
           alignment: Alignment.centerLeft,
           child: Text(
             widget.content ?? '',
-            style: const TextStyle(color: Colors.black),
+            style: TextStyle(color: TDTheme.of(context).textColorPrimary),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -245,7 +244,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
         final textPainter = TextPainter(
           text: TextSpan(
               text: widget.content ?? '',
-              style: const TextStyle(color: Colors.black)),
+              style: TextStyle(color: TDTheme.of(context).textColorPrimary)),
           maxLines: 1,
           textDirection: TextDirection.ltr,
         )..layout(minWidth: 0, maxWidth: double.infinity);
@@ -253,8 +252,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
 
         final containerWidth = calculateTextWidth();
 
-        final animationDuration =
-            Duration(milliseconds: (widget.marquee!.speed ?? 10000));
+        final animationDuration = Duration(milliseconds: (widget.marquee!.speed ?? 10000));
         animationController!.duration = animationDuration;
 
         final tween = Tween<Offset>(
@@ -263,8 +261,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
         );
 
         if (widget.marquee!.delay != null && widget.marquee!.delay! > 0) {
-          Future.delayed(
-              Duration(milliseconds: widget.marquee!.delay!), startAnimation);
+          Future.delayed(Duration(milliseconds: widget.marquee!.delay!), startAnimation);
         } else {
           startAnimation();
         }
@@ -275,11 +272,10 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
               child: SizedBox(
                 width: containerWidth,
                 child: AnimatedBuilder(
-                  animation:
-                      animationController ?? const AlwaysStoppedAnimation(0),
+                  animation: animationController ?? const AlwaysStoppedAnimation(0),
                   builder: (context, child) {
-                    final offset = tween.evaluate(
-                        animationController ?? const AlwaysStoppedAnimation(0));
+                    final offset =
+                        tween.evaluate(animationController ?? const AlwaysStoppedAnimation(0));
                     return OverflowBox(
                       minWidth: 0,
                       maxWidth: double.infinity,
@@ -289,7 +285,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                         child: SizedBox(
                           child: Text(
                             widget.content ?? '',
-                            style: const TextStyle(color: Colors.black),
+                            style: TextStyle(color: TDTheme.of(context).textColorPrimary),
                             maxLines: 1,
                           ),
                         ),
@@ -308,17 +304,13 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       } else {
         switch (widget.theme) {
           case MessageTheme.info:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).brandColor7);
+            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).brandColor7);
           case MessageTheme.success:
-            return Icon(TDIcons.check_circle_filled,
-                color: TDTheme.of(context).successColor5);
+            return Icon(TDIcons.check_circle_filled, color: TDTheme.of(context).successColor5);
           case MessageTheme.warning:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).warningColor5);
+            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).warningColor5);
           case MessageTheme.error:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).errorColor6);
+            return Icon(TDIcons.error_circle_filled, color: TDTheme.of(context).errorColor6);
           case null:
             return const SizedBox.shrink();
         }
@@ -339,9 +331,9 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       } else if (widget.closeBtn == true) {
         return GestureDetector(
           onTap: clickCloseButton,
-          child: const Icon(
+          child: Icon(
             TDIcons.close,
-            color: Color.fromRGBO(0, 0, 0, 0.4),
+            color: TDTheme.of(context).textColorPlaceholder,
           ),
         );
       } else if (widget.closeBtn is String) {
@@ -366,7 +358,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
               label: widget.link.name,
               style: TDLinkStyle.primary,
               type: TDLinkType.basic,
-              uri: widget.link.uri ?? Uri.parse('https://example.com'),
+              uri: widget.link.uri,
               size: TDLinkSize.medium,
               color: widget.link.color ?? TDTheme.of(context).brandColor7,
               linkClick: (link) => clickLink(),
@@ -404,7 +396,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                 height: 48,
                 padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: TDTheme.of(context).bgColorContainer,
                     borderRadius: BorderRadius.circular(6),
                     boxShadow: TDTheme.of(context).shadowsMiddle),
                 child: Row(
