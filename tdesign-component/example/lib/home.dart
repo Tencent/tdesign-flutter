@@ -83,6 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
               }
             },
           ),
+          if(AppLocalizations.of(context)!=null)
           GestureDetector(
             child: Container(
               alignment: Alignment.centerRight,
