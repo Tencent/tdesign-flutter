@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../tdesign_flutter.dart';
 import '../../theme/td_spacers.dart';
 import '../../theme/td_theme.dart';
 import '../icon/td_icons.dart';
@@ -39,6 +40,8 @@ class TDCell extends StatefulWidget {
     this.rightIconWidget,
     this.disabled = false,
     this.imageCircle = 50,
+    this.showBottomBorder = false,
+    this.height,
   }) : super(key: key);
 
   /// 内容的对齐方式，默认居中对齐。可选项：top/middle/bottom
@@ -110,6 +113,12 @@ class TDCell extends StatefulWidget {
   /// 禁用
   final bool? disabled;
 
+  /// 是否显示下边框（建议TDCellGroup组件下false，避免与bordered重叠）
+  final bool? showBottomBorder;
+
+  /// 高度
+  final double? height;
+
   @override
   _TDCellState createState() => _TDCellState();
 }
@@ -121,6 +130,11 @@ class _TDCellState extends State<TDCell> {
   Widget build(BuildContext context) {
     var style = widget.style ?? TDCellInherited.of(context)?.style ?? TDCellStyle.cellStyle(context);
     var crossAxisAlignment = _getAlign();
+    var color = _status == 'default' ? style.backgroundColor : style.clickBackgroundColor;
+    var border;
+    if(widget.showBottomBorder!) {
+      border = Border(bottom: BorderSide(width: 1, color: style.borderedColor ?? TDTheme.of(context).grayColor3));
+    }
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -144,8 +158,9 @@ class _TDCellState extends State<TDCell> {
         _setStatus('default', 0);
       },
       child: Container(
-        color: _status == 'default' ? style.backgroundColor : style.clickBackgroundColor,
+        height: widget.height,
         padding: style.padding,
+        decoration: BoxDecoration(color: color, border: border),
         child: Row(
           crossAxisAlignment: crossAxisAlignment,
           children: [

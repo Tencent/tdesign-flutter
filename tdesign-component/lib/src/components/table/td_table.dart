@@ -9,6 +9,9 @@ enum TDTableColAlign { left, center, right }
 
 typedef OnCellTap = void Function(int rowIndex, dynamic row, TDTableCol col);
 typedef OnScroll = void Function(ScrollController controller);
+typedef OnSelect = void Function(List<dynamic>? data);
+typedef OnRowSelect = void Function(int index, bool checked);
+typedef SelectableFunc = bool Function(int index, dynamic row);
 
 /// 表格列配置
 class TDTableCol {
@@ -22,7 +25,12 @@ class TDTableCol {
     this.cellBuilder,
     this.align = TDTableColAlign.left,
     this.sortable = false,
+    this.selection,
+    this.selectable,
   });
+
+  /// 行是否显示复选框，自定义列时无效
+  bool? selection;
 
   /// 表头标题
   String? title;
@@ -51,6 +59,9 @@ class TDTableCol {
   /// 是否可排序
   bool? sortable;
 
+  /// 当前行CheckBox是否可选，仅selection：true有效
+  SelectableFunc? selectable;
+
   double? get widthPx => width;
 }
 
@@ -75,6 +86,7 @@ class TDTable extends StatefulWidget {
     this.data,
     this.empty,
     this.height,
+    this.rowHeight,
     this.loading = false,
     this.loadingWidget,
     this.showHeader = true,
@@ -84,6 +96,8 @@ class TDTable extends StatefulWidget {
     this.defaultSort,
     this.onCellTap,
     this.onScroll,
+    this.onSelect,
+    this.onRowSelect,
   });
 
   /// 是否显示表格边框
@@ -100,6 +114,9 @@ class TDTable extends StatefulWidget {
 
   /// 表格高度，超出后会出现滚动条
   final double? height;
+
+  /// 行高
+  final double? rowHeight;
 
   /// 加载中状态
   final bool? loading;
@@ -128,6 +145,12 @@ class TDTable extends StatefulWidget {
   /// 表格滚动事件
   final OnScroll? onScroll;
 
+  /// 选中行事件
+  final OnSelect? onSelect;
+
+  /// 行选择事件
+  final OnRowSelect? onRowSelect;
+
   @override
   State<TDTable> createState() => TDTableState();
 }
@@ -135,6 +158,8 @@ class TDTable extends StatefulWidget {
 class TDTableState extends State<TDTable> {
   bool? _sortable;
   String? _sortKey;
+  int _hasChecked = 0;
+  late List<bool> _checkedList;
   final _scrollController = ScrollController();
 
   /// 获取单元格对齐方式
@@ -274,6 +299,79 @@ class TDTableState extends State<TDTable> {
       leftBorder = doubleBorder;
     }
 
+    // 单元格内容
+    var text = _getCellText(col, title, ellipsis, isHeader, sortable, index);
+    var content = text;
+    if((col.selection ?? false) && col.cellBuilder == null) {
+      var enable = col.selectable?.call(index, widget.data?[index]) ?? true;
+      // 行选择框
+      var checkBox = TDCheckbox(
+        id: 'index:$index',
+        checked: _checkedList[index],
+        enable: enable,
+        customIconBuilder: (context, checked) {
+          if(checked) {
+            return Icon(TDIcons.check_rectangle_filled, size: 16,
+              color: TDTheme.of(context).brandNormalColor);
+          }
+          return Icon(TDIcons.rectangle, size: 16,
+            color: enable ?
+                  TDTheme.of(context).fontGyColor1 :
+                  TDTheme.of(context).fontGyColor3);
+        },
+        onCheckBoxChanged: (checked) {
+          setState(() {
+            _checkedList[index] = checked;
+            if(checked) {
+              _hasChecked += 1;
+            } else {
+              _hasChecked -= 1;
+            }
+            var selectList = [];
+            for(var i = 0; i < _checkedList.length; i++) {
+               if(_checkedList[i]) {
+                 selectList.add(widget.data![i]);
+               }
+            }
+            widget.onSelect?.call(selectList);
+            widget.onRowSelect?.call(index, checked);
+          });
+        },
+      );
+
+      // 表头选择框
+      if(isHeader) {
+        checkBox = TDCheckbox(
+          id: 'header',
+          checked: _hasChecked == widget.data!.length,
+          customIconBuilder: (context, checked) {
+            if(_hasChecked == 0) {
+              return Icon(TDIcons.rectangle, size: 16, color: TDTheme.of(context).fontGyColor3,);
+            }
+            var allCheck = _hasChecked >= widget.data!.length;
+            var halfSelected = _hasChecked > 0 && _hasChecked < widget.data!.length;
+            return getAllIcon(allCheck, halfSelected);
+          },
+          onCheckBoxChanged: (checked) {
+            setState(() {
+              _hasChecked = checked ? widget.data!.length : 0;
+              for  (var i = 0; i < widget.data!.length; i++) {
+                _checkedList[i] = checked;
+              }
+              widget.onSelect?.call(checked ? widget.data : []);
+            });
+          },
+        );
+      }
+
+      content = Row(
+        children: [
+          checkBox,
+          text,
+        ],
+      );
+    }
+
     // 单元格构建
     var cell = GestureDetector(
       onTap: () {
@@ -293,11 +391,10 @@ class TDTableState extends State<TDTable> {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: SizedBox(
-              height: 22,
+              height: widget.rowHeight ?? 22,
               child: Align(
                 alignment: _getVerticalAlign(col.align!),
-                child: _getCellText(
-                    col, title, ellipsis, isHeader, sortable, index),
+                child: content,
               ),
             ),
           )),
@@ -397,6 +494,7 @@ class TDTableState extends State<TDTable> {
     _scrollController.addListener(() {
       widget.onScroll?.call(_scrollController);
     });
+    _checkedList = List.generate((widget.data?.length ?? 0), (index) => false);
   }
 
   /// 生成固定列表格
@@ -568,6 +666,15 @@ class TDTableState extends State<TDTable> {
       list.add(titles);
     }
     return list;
+  }
+
+  /// 半选图标
+  Widget getAllIcon(bool checked, bool halfSelected) {
+    return Icon(
+        checked ? TDIcons.check_rectangle_filled : halfSelected ? TDIcons.minus_rectangle_filled : TDIcons.circle,
+        size: 16,
+        color: (checked || halfSelected) ? TDTheme.of(context).brandNormalColor : TDTheme.of(context).grayColor4
+    );
   }
 
   @override

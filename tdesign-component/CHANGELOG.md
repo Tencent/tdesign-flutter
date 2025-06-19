@@ -1,3 +1,31 @@
+## 🌈 0.2.1 `2025-06-13`
+
+### 🚀 Features
+
+- `TDTable`: Added support for row selection and custom row height. @ccXxx1aoBai ([#594](https://github.com/Tencent/tdesign-flutter/pull/594))
+- `TDTreeSelect`: Added partial multi-selection support. @epoll-j ([#587](https://github.com/Tencent/tdesign-flutter/pull/587))
+- `TDCell`: Added support for custom height and bottom divider. @ccXxx1aoBai ([#611](https://github.com/Tencent/tdesign-flutter/pull/611))
+- `TDNoticeBar`: Added support for custom number of text lines. @ccXxx1aoBai ([#611](https://github.com/Tencent/tdesign-flutter/pull/611))
+- `TDBottomTabBar`: Made onTap in TDButtonBottomTabBar support repeated clicks. @epoll-j @RSS1102 ([#586](https://github.com/Tencent/tdesign-flutter/pull/586))
+- `TDBottomTabBar`: Implemented tap ripple effects. @RSS1102 ([#626](https://github.com/Tencent/tdesign-flutter/pull/626))
+- `TDAvatar`: Added custom BoxFit parameter. @shizhe2018 ([#633](https://github.com/Tencent/tdesign-flutter/pull/633))
+
+### 🐞 Bug Fixes
+
+- `TDDatePicker`: Fixed minute-level time display issue and optimized hour/minute/second range calculation logic. @epoll-j ([#585](https://github.com/Tencent/tdesign-flutter/pull/585))
+- `TDSearchBar`: Added onTapOutside callback support. @cyjaysong ([#608](https://github.com/Tencent/tdesign-flutter/pull/608))
+- `TDDropdownMenu`: Added support for modifying selected icon color. @jflin19990707 ([#631](https://github.com/Tencent/tdesign-flutter/pull/631))
+- `TDTabBar`: Fixed text-icon conflict in TDBottomTabBarBasicType.iconText mode. @jflin19990707 ([#628](https://github.com/Tencent/tdesign-flutter/pull/628))
+- `TDEmpty`: Added custom styling support for action buttons. @jflin19990707 ([#624](https://github.com/Tencent/tdesign-flutter/pull/624))
+- `TDToast`: Added custom text support for toast. @jflin19990707 ([#625](https://github.com/Tencent/tdesign-flutter/pull/625))
+- `TDPopup`: Modified _measureChildHeight method to fix inability to adjust popup height via child component. @Jzow ([#591](https://github.com/Tencent/tdesign-flutter/pull/591))
+- `TDCascader`: Fixed empty state handling for query data. @shizhe2018 ([#635](https://github.com/Tencent/tdesign-flutter/pull/635))
+
+### 🚧 Others
+
+-  Adapted for Flutter 3.32 version. @Luozf12345 ([#636](https://github.com/Tencent/tdesign-flutter/pull/636))
+
+
 ## 🌈 0.2.0 `2025-05-07`
 ### 🚀 Features
 - `TDCellGroup`: Added `titleBackgroundColor` property for cell group title background color. @runoob-coder ([#539](https://github.com/Tencent/tdesign-flutter/pull/539))

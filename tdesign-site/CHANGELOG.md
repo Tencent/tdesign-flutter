@@ -6,6 +6,35 @@ docClass: timeline
 ---
 
 
+## 🌈 0.2.2 `2025-06-13`
+
+### 🚀 Features
+
+- `TDTable`: 支持表格行选择、自定义行高 @ccXxx1aoBai ([#594](https://github.com/Tencent/tdesign-flutter/pull/594))
+- `TDTreeSelect`: 支持局部多选 @epoll-j ([#587](https://github.com/Tencent/tdesign-flutter/pull/587))
+- `TDCell`: 支持自定义高度，底部分割线 @ccXxx1aoBai ([#611](https://github.com/Tencent/tdesign-flutter/pull/611))
+- `TDNoticeBar`: 支持自定义文字行数 @ccXxx1aoBai ([#611](https://github.com/Tencent/tdesign-flutter/pull/611))
+- `TDBottomTabBar`: TDButtonBottomTabBar 中的 onTap 支持重复点击 @epoll-j @RSS1102([#586](https://github.com/Tencent/tdesign-flutter/pull/586))
+- `TDBottomTabBar`: 实现点击水波纹效果 @RSS1102 ([#626](https://github.com/Tencent/tdesign-flutter/pull/626))
+- `TDAvatar` 增加自定义BoxFit参数 @shizhe2018 ([#633](https://github.com/Tencent/tdesign-flutter/pull/633))
+
+### 🐞 Bug Fixes
+
+- `TDDatePicker`: 修复时间选择器分钟级时间数据展示问题- 优化小时、分钟、秒的选择范围计算逻辑 @epoll-j ([#585](https://github.com/Tencent/tdesign-flutter/pull/585))
+- `TDSearchBar`: 支持设置onTapOutside回调 @cyjaysong ([#608](https://github.com/Tencent/tdesign-flutter/pull/608))
+- `TDDropdownMenu`:  支持修改选中icon颜色 @jflin19990707 ([#631](https://github.com/Tencent/tdesign-flutter/pull/631))
+- `TDTabBar`: fix:TDBottomTabBarBasicType.iconText模式下，text icon 冲突问题 @jflin19990707 ([#628](https://github.com/Tencent/tdesign-flutter/pull/628))
+- `TDEmpty`: 支持操作按钮自定义样式 @jflin19990707 ([#624](https://github.com/Tencent/tdesign-flutter/pull/624))
+- `TDToast`: toast支持自定义文案 @jflin19990707 ([#625](https://github.com/Tencent/tdesign-flutter/pull/625))
+- `TDPopup`: 修改_measureChildHeight方法用于修复child无法修改弹窗高度 @Jzow ([#591](https://github.com/Tencent/tdesign-flutter/pull/591))
+- `TDCascader` 修改查询data数据为空状态处理 @shizhe2018 ([#635](https://github.com/Tencent/tdesign-flutter/pull/635))
+
+### 🚧 Others
+
+- [其他]适配flutter 3.32版本 @Luozf12345 ([#636](https://github.com/Tencent/tdesign-flutter/pull/636))
+
+
+
 ## 🌈 0.2.0 `2025-05-08`
 ### 🚀 Features
 - `TDCellGroup`: 添加单元格组标题背景颜色`titleBackgroundColor`属性. @runoob-coder ([#539](https://github.com/Tencent/tdesign-flutter/pull/539))

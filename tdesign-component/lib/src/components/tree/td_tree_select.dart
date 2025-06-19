@@ -6,7 +6,7 @@ typedef TDTreeSelectChangeEvent = void Function(List<dynamic>, int level);
 
 class TDSelectOption {
   TDSelectOption(
-      {required this.label, required this.value, this.children = const []});
+      {required this.label, required this.value, this.children = const [], this.multiple = false});
 
   /// 标签
   final String label;
@@ -16,6 +16,9 @@ class TDSelectOption {
 
   /// 子选项
   List<TDSelectOption> children;
+
+  /// 当前子项支持多选
+  final bool multiple;
 }
 
 enum TDTreeSelectStyle {
@@ -86,7 +89,8 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
 
     values = List.from(widget.defaultValue);
     if (values.isEmpty && widget.options.isNotEmpty) {
-      values.add(widget.options[0].value);
+      final option = widget.options[0];
+      values.add((widget.multiple || option.multiple) ? [option.value] : option.value);
     }
   }
 
@@ -187,9 +191,10 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
             itemCount: displayOptions.length,
             itemBuilder: (BuildContext ctx, int index) {
               var currentValue = displayOptions[index].value;
+              final isMultiple = widget.multiple ? widget.multiple : displayOptions[index].multiple;
               // 判断是否被选中
               var selected = false;
-              if (widget.multiple) {
+              if (isMultiple) {
                 if (level == 2) {
                   if (maxLevel() == 2) {
                     selected = secondValue != null
@@ -215,12 +220,12 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                       if (level == 2) {
                         switch (values.length) {
                           case 1:
-                            values.add(widget.multiple
+                            values.add(isMultiple
                                 ? [currentValue]
                                 : currentValue);
                             break;
                           case 2:
-                            if (widget.multiple) {
+                            if (isMultiple) {
                               var hasContains = (values[1] as List<int>)
                                   .contains(currentValue);
                               if (hasContains) {
@@ -246,12 +251,12 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                         switch (values.length) {
                           case 1:
                           case 2:
-                            values.add(widget.multiple
+                            values.add(isMultiple
                                 ? [currentValue]
                                 : currentValue);
                             break;
                           default:
-                            if (widget.multiple) {
+                            if (isMultiple) {
                               var hasContains = (values[2] as List<int>)
                                   .contains(currentValue);
                               if (hasContains) {

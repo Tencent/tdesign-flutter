@@ -32,6 +32,7 @@ class TDSearchBar extends StatefulWidget {
     this.onTextChanged,
     this.onSubmitted,
     this.onEditComplete,
+    this.onTapOutside,
     this.onInputClick,
     this.autoHeight = false,
     this.padding = const EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -92,6 +93,9 @@ class TDSearchBar extends StatefulWidget {
 
   /// 编辑完成回调
   final TDSearchBarCallBack? onEditComplete;
+
+  // 点击输入框外部回调
+  final TapRegionCallback? onTapOutside;
 
   /// 自定义操作文字
   final String action;
@@ -246,6 +250,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                           onChanged: widget.onTextChanged,
                           onSubmitted: widget.onSubmitted,
                           onEditingComplete: widget.onEditComplete,
+                          onTapOutside: widget.onTapOutside,
                           style: TextStyle(
                               textBaseline: TextBaseline.ideographic,
                               fontSize: getSize(context)?.size,

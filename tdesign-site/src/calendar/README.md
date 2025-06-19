@@ -29,196 +29,31 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 Widget _buildSimple(BuildContext context) {
   final size = MediaQuery.of(context).size;
   final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
-  final selectedStartTime = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch]);
-  final selectedEndTime = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch]);
-  return Column(
-    children: [
-      ValueListenableBuilder(
-        valueListenable: selected,
-        builder: (context, value, child) {
-          final date = DateTime.fromMillisecondsSinceEpoch(value[0]);
-
-          return TDCellGroup(
-            cells: [
-              TDCell(
-                title: '单个选择日历',
-                arrow: true,
-                note: '${date.year}-${date.month}-${date.day}',
-                onClick: (cell) {
-                  TDCalendarPopup(
-                    context,
-                    visible: true,
-                    onConfirm: (value) {
-                      print('onConfirm:$value');
-                      selected.value = value;
-                    },
-                    onClose: () {
-                      print('onClose');
-                    },
-                    child: TDCalendar(
-                      title: '请选择日期',
-                      value: value,
-                      height: size.height * 0.6 + 176,
-                      onCellClick: (value, type, tdate) {
-                        print('onCellClick:$value');
-                      },
-                      onCellLongPress: (value, type, tdate) {
-                        print('onCellLongPress:$value');
-                      },
-                      onHeaderClick: (index, week) {
-                        print('onHeaderClick:$week');
-                      },
-                      onChange: (value) {
-                        print('onChange:$value');
-                      },
-                    ),
-                  );
-                },
-              ),
-              TDCell(
-                title: '多个选择日历',
-                arrow: true,
-                onClick: (cell) {
-                  TDCalendarPopup(
-                    context,
-                    visible: true,
-                    child: TDCalendar(
-                      title: '请选择日期',
-                      type: CalendarType.multiple,
-                      value: [DateTime.now().millisecondsSinceEpoch],
-                      height: size.height * 0.6 + 176,
-                    ),
-                  );
-                },
-              ),
-              TDCell(
-                title: '区间选择日历',
-                arrow: true,
-                onClick: (cell) {
-                  TDCalendarPopup(
-                    context,
-                    visible: true,
-                    child: TDCalendar(
-                      title: '请选择日期区间',
-                      type: CalendarType.range,
-                      value: [
-                        DateTime.now().millisecondsSinceEpoch,
-                        DateTime.now().add(const Duration(days: 6)).millisecondsSinceEpoch,
-                      ],
-                      height: size.height * 0.6 + 176,
-                    ),
-                  );
-                },
-              ),
-              TDCell(
-                title: '单个选择日历和时间',
-                arrow: true,
-                note: '${date.year}-${date.month}-${date.day} ${date.hour}:${date.minute}',
-                onClick: (cell) {
-                  TDCalendarPopup(
-                    context,
-                    visible: true,
-                    onConfirm: (value) {
-                      print('onConfirm:$value');
-                      selected.value = value;
-                    },
-                    onClose: () {
-                      print('onClose');
-                    },
-                    child: TDCalendar(
-                      title: '请选择日期和时间',
-                      value: value,
-                      height: size.height * 0.92,
-                      useTimePicker: true,
-                      // pickerHeight: 100,
-                      // pickerItemCount: 2,
-                      onCellClick: (value, type, tdate) {
-                        print('onCellClick:$value');
-                      },
-                      onCellLongPress: (value, type, tdate) {
-                        print('onCellLongPress:$value');
-                      },
-                      onHeaderClick: (index, week) {
-                        print('onHeaderClick:$week');
-                      },
-                      onChange: (value) {
-                        print('onChange:$value');
-                      },
-                    ),
-                  );
-                },
-              ),
-              TDCell(
-                title: '区间选择日历和时间',
-                arrow: true,
-                onClick: (cell) {
-                  TDCalendarPopup(
-                    context,
-                    visible: true,
-                    onConfirm: (value) {
-                      print('onConfirm:$value');
-                    },
-                    onClose: () {
-                      print('onClose');
-                    },
-                    child: TDCalendar(
-                      title: '请选择日期和时间区间',
-                      height: size.height * 0.92,
-                      type: CalendarType.range,
-                      value: [
-                        DateTime.now().millisecondsSinceEpoch,
-                        DateTime.now().add(const Duration(days: 3)).millisecondsSinceEpoch,
-                      ],
-                      useTimePicker: true,
-                      onCellClick: (value, type, tdate) {
-                        print('onCellClick:$value');
-                      },
-                      onCellLongPress: (value, type, tdate) {
-                        print('onCellLongPress:$value');
-                      },
-                      onHeaderClick: (index, week) {
-                        print('onHeaderClick:$week');
-                      },
-                      onChange: (value) {
-                        print('onChange:$value');
-                      },
-                    ),
-                  );
-                },
-              ),
-            ],
-          );
-        },
-      ),
-      ValueListenableBuilder(valueListenable: selectedStartTime, builder: (context, value, child) {
-        DateTime dateStartTime = DateTime.fromMillisecondsSinceEpoch(value[0]);
-        return TDCellGroup(  cells: [
+  return ValueListenableBuilder(
+    valueListenable: selected,
+    builder: (context, value, child) {
+      final date = DateTime.fromMillisecondsSinceEpoch(value[0]);
+      return TDCellGroup(
+        cells: [
           TDCell(
-            title: '选择开始日历和时间',
+            title: '单个选择日历',
             arrow: true,
-            note:
-            '${dateStartTime.year}-${dateStartTime.month}-${dateStartTime.day} ${dateStartTime.hour}:${dateStartTime.minute}:${dateStartTime.second}',
+            note: '${date.year}-${date.month}-${date.day}',
             onClick: (cell) {
               TDCalendarPopup(
                 context,
                 visible: true,
                 onConfirm: (value) {
                   print('onConfirm:$value');
-                  DateTime dateStartTime=  DateTime.fromMillisecondsSinceEpoch(value[0]);
-                  print('${dateStartTime.year}-${dateStartTime.month}-${dateStartTime.day} ${dateStartTime.hour}:${dateStartTime.minute}:${dateStartTime.second}');
-                  selectedStartTime.value = value;
-                  selectedEndTime.value=value;
+                  selected.value = value;
                 },
                 onClose: () {
                   print('onClose');
                 },
                 child: TDCalendar(
-                  title: '选择开始日历和时间',
+                  title: '请选择日期',
                   value: value,
-                  height: size.height * 0.92,
-                  useTimePicker: true,
-                  // pickerHeight: 100,
-                  // pickerItemCount: 2,
+                  height: size.height * 0.6 + 176,
                   onCellClick: (value, type, tdate) {
                     print('onCellClick:$value');
                   },
@@ -235,61 +70,61 @@ Widget _buildSimple(BuildContext context) {
               );
             },
           ),
-        ]);
-      }),
-      ValueListenableBuilder(valueListenable: selectedEndTime, builder: (context, value, child) {
-        DateTime dateStartTime=DateTime.fromMillisecondsSinceEpoch(selectedStartTime.value[0]);
-        DateTime dateEndTime = DateTime.fromMillisecondsSinceEpoch(value[0]);
-        return TDCellGroup(  cells: [
           TDCell(
-            title: '选择结束日历和时间',
+            title: '多个选择日历',
             arrow: true,
-            note:
-            '${dateEndTime.year}-${dateEndTime.month}-${dateEndTime.day} ${dateEndTime.hour}:${dateEndTime.minute}:${dateEndTime.second}',
             onClick: (cell) {
               TDCalendarPopup(
                 context,
                 visible: true,
-                onConfirm: (value) {
-                  print('onConfirm:$value');
-
-                  DateTime dateStartTime=DateTime.fromMillisecondsSinceEpoch(selectedStartTime.value[0]);
-                  print( '开始：${dateStartTime.year}-${dateStartTime.month}-${dateStartTime.day} ${dateStartTime.hour}:${dateStartTime.minute}:${dateStartTime.second}');
-
-                  DateTime dateEndTime=DateTime.fromMillisecondsSinceEpoch(value[0]);
-                  print('结束：${dateEndTime.year}-${dateEndTime.month}-${dateEndTime.day} ${dateEndTime.hour}:${dateEndTime.minute}:${dateEndTime.second}');
-                  selectedEndTime.value = value;
-                },
-                onClose: () {
-                  print('onClose');
-                },
                 child: TDCalendar(
-                  title: '选择结束日历和时间',
-                  value: value,
-                  minDate:selectedStartTime.value[0],
-                  height: size.height * 0.92,
-                  useTimePicker: true,
-                  timePickerModel: [
-                    DatePickerModel(
-                      useYear: false,
-                      useMonth: false,
-                      useDay: false,
-                      useWeekDay: false,
-                      useHour: true,
-                      useMinute: true,
-                      useSecond: true,
-                      dateStart: [
-                        dateStartTime.year,
-                        dateStartTime.month,
-                        dateStartTime.day,
-                        dateStartTime.hour,
-                        dateStartTime.minute,
-                        dateStartTime.second
-                      ],
-                      dateEnd: [2099, 12, 30, 23, 59, 59],
-                      dateInitial:[dateEndTime.year, dateEndTime.month, dateEndTime.day, dateEndTime.hour, dateEndTime.minute, dateEndTime.second],
-                    )
+                  title: '请选择日期',
+                  type: CalendarType.multiple,
+                  value: [DateTime.now().millisecondsSinceEpoch],
+                  height: size.height * 0.6 + 176,
+                ),
+              );
+            },
+          ),
+          TDCell(
+            title: '区间选择日历',
+            arrow: true,
+            onClick: (cell) {
+              TDCalendarPopup(
+                context,
+                visible: true,
+                child: TDCalendar(
+                  title: '请选择日期区间',
+                  type: CalendarType.range,
+                  value: [
+                    DateTime.now().millisecondsSinceEpoch,
+                    DateTime.now().add(const Duration(days: 6)).millisecondsSinceEpoch,
                   ],
+                  height: size.height * 0.6 + 176,
+                ),
+              );
+            },
+          ),
+          TDCell(
+            title: '单个选择日历和时间',
+            arrow: true,
+            note: '${date.year}-${date.month}-${date.day} ${date.hour}:${date.minute}',
+            onClick: (cell) {
+              TDCalendarPopup(
+                context,
+                visible: true,
+                onConfirm: (value) {
+                  print('onConfirm:$value');
+                  selected.value = value;
+                },
+                onClose: () {
+                  print('onClose');
+                },
+                child: TDCalendar(
+                  title: '请选择日期和时间',
+                  value: value,
+                  height: size.height * 0.92,
+                  useTimePicker: true,
                   // pickerHeight: 100,
                   // pickerItemCount: 2,
                   onCellClick: (value, type, tdate) {
@@ -308,9 +143,47 @@ Widget _buildSimple(BuildContext context) {
               );
             },
           ),
-        ]);
-      }),
-    ],
+          TDCell(
+            title: '区间选择日历和时间',
+            arrow: true,
+            onClick: (cell) {
+              TDCalendarPopup(
+                context,
+                visible: true,
+                onConfirm: (value) {
+                  print('onConfirm:$value');
+                },
+                onClose: () {
+                  print('onClose');
+                },
+                child: TDCalendar(
+                  title: '请选择日期和时间区间',
+                  height: size.height * 0.92,
+                  type: CalendarType.range,
+                  value: [
+                    DateTime.now().millisecondsSinceEpoch,
+                    DateTime.now().add(const Duration(days: 3)).millisecondsSinceEpoch,
+                  ],
+                  useTimePicker: true,
+                  onCellClick: (value, type, tdate) {
+                    print('onCellClick:$value');
+                  },
+                  onCellLongPress: (value, type, tdate) {
+                    print('onCellLongPress:$value');
+                  },
+                  onHeaderClick: (index, week) {
+                    print('onHeaderClick:$week');
+                  },
+                  onChange: (value) {
+                    print('onChange:$value');
+                  },
+                ),
+              );
+            },
+          ),
+        ],
+      );
+    },
   );
 }</pre>
 
@@ -630,24 +503,7 @@ Widget _buildBlock(BuildContext context) {
 
 
 ## API
-### TDCalendarPopup
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | context | 上下文 |
-| top | double? | - | 距离顶部的距离 |
-| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
-| confirmBtn | Widget? | - | 自定义确认按钮 |
-| visible | bool? | - | 默认是否显示日历 |
-| onClose | VoidCallback? | - | 关闭时触发 |
-| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
-| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
-| child | TDCalendar? | - | 日历控件 |
-
-```
-```
- ### TDCalendar
+### TDCalendar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -705,6 +561,23 @@ Widget _buildBlock(BuildContext context) {
 | --- |  --- |
 | TDCalendarStyle.generateStyle  | 生成默认样式 |
 | TDCalendarStyle.cellStyle  | 日期样式 |
+
+```
+```
+ ### TDCalendarPopup
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | context | 上下文 |
+| top | double? | - | 距离顶部的距离 |
+| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
+| confirmBtn | Widget? | - | 自定义确认按钮 |
+| visible | bool? | - | 默认是否显示日历 |
+| onClose | VoidCallback? | - | 关闭时触发 |
+| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
+| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
+| child | TDCalendar? | - | 日历控件 |
 
 
   

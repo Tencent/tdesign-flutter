@@ -25,6 +25,7 @@
 | badgeConfig | BadgeConfig? | - | 消息配置 |
 | popUpButtonConfig | TDBottomTabBarPopUpBtnConfig? | - | 弹窗配置 |
 | onLongPress | GestureLongPressCallback? | - | 长按事件 |
+| allowMultipleTaps | bool | false | onTap方法允许点击多次 |
 
 ```
 ```
@@ -51,6 +52,7 @@
 | backgroundColor | Color? | - | 背景颜色 （可选） |
 | centerDistance | double? | - | icon与文本中间距离（可选） |
 | currentIndex | int? | - | 选中的index（可选） |
+| needInkWell | bool | false | 是否需要水波纹效果 |
 
 ```
 ```
