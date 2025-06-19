@@ -63,3 +63,5 @@
 | disabled | bool? | false | 是否禁用 |
 | group | String? | - | 分组，相同的为一组 |
 | selected | bool? | false | 是否选中 |
+| selectedColor | Color? | - | 选中颜色 |
+| disabledColor | Color? | - | 禁用颜色 |

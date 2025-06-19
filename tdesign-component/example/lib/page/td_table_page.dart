@@ -79,6 +79,7 @@ class TDTablePage extends StatelessWidget {
         ExampleItem(desc: '内容居中表格', builder: _centerTable),
         ExampleItem(desc: '空数据表格', builder: _emptyTable),
         ExampleItem(desc: '加载动画表格', builder: _loadingTable),
+        ExampleItem(desc: '可选表格', builder: _selectTable),
       ],
     );
   }
@@ -352,6 +353,22 @@ class TDTablePage extends StatelessWidget {
         TDTableCol(title: '标题', colKey: 'title4')
       ],
       loading: true,
+    );
+  }
+
+  @Demo(group: 'table')
+  Widget _selectTable(BuildContext context) {
+    return TDTable(
+      data: _getData(10),
+      columns: [
+        TDTableCol(selection: true, width: 50, selectable: (index, row) {
+          return index % 2 == 0;
+        }),
+        TDTableCol(title: '标题', colKey: 'title1'),
+        TDTableCol(title: '标题', colKey: 'title2'),
+        TDTableCol(title: '标题', colKey: 'title3'),
+        TDTableCol(title: '标题', colKey: 'title4')
+      ],
     );
   }
 }

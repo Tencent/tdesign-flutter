@@ -60,6 +60,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
         ExampleItem(desc: '限制时分秒时间', builder: _customLimitTime),
         ExampleItem(desc: '自定义时间选项', builder: _customItems),
         ExampleItem(desc: '自定义选中选项', builder: _customSelectWidget),
+        ExampleItem(desc: '只有时分限制时间', builder: _customItemsOnlyHour),
       ],
     );
   }
@@ -319,16 +320,15 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
   @Demo(group: 'datetimePicker')
   Widget _customLimitTime(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        TDPicker.showDatePicker(context, title: '选择时间',
-            onConfirm: (selected) {
-              setState(() {
-                selected_4 = '${selected['hour'].toString().padLeft(2, '0')}:'
-                    '${selected['minute'].toString().padLeft(2, '0')}:'
-                    '${selected['second'].toString().padLeft(2, '0')}';
-              });
-              Navigator.of(context).pop();
-            },
+      onTap: () {
+        TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+          setState(() {
+            selected_4 = '${selected['hour'].toString().padLeft(2, '0')}:'
+                '${selected['minute'].toString().padLeft(2, '0')}:'
+                '${selected['second'].toString().padLeft(2, '0')}';
+          });
+          Navigator.of(context).pop();
+        },
             useYear: false,
             useMonth: false,
             useDay: false,
@@ -391,6 +391,31 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                   )
                 : null;
           },
+        );
+      },
+      child: buildSelectRow(context, selected_9, '选择时间'),
+    );
+  }
+
+  @Demo(group: 'datetimePicker')
+  Widget _customItemsOnlyHour(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        TDPicker.showDatePicker(
+          context,
+          title: '只有时分',
+          onConfirm: (selected) {
+            Navigator.of(context).pop();
+          },
+          useYear: false,
+          useMonth: false,
+          useDay: false,
+          useSecond: false,
+          useHour: true,
+          useMinute: true,
+          dateStart: [2025, 1, 1, 20, 0, 0],
+          dateEnd: [2025, 1, 1, 23, 59, 0],
+          initialDate: [2025, 1, 1, 22, 46, 0],
         );
       },
       child: buildSelectRow(context, selected_9, '选择时间'),

@@ -16,7 +16,10 @@ class TDBottomTabBarPage extends StatefulWidget {
 }
 
 class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
-  void onTapTab(BuildContext context, String tabName) {
+  void onTapTab(
+    BuildContext context,
+    String tabName,
+  ) {
     TDToast.showText('点击了 $tabName', context: context);
   }
 
@@ -203,26 +206,42 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
             desc: 'icon默认大小底部文字不溢出',
             builder: (context) {
               return CodeWrapper(builder: _iconTextTypeTabBarOverflow);
-            })
+            }),
+        ExampleItem(desc: 'onTap支持重复触发', builder: _allowMultipleTaps),
+        ExampleItem(desc: '支持水波纹效果', builder: _needInkWellTabBar),
       ],
     );
   }
 
   @Demo(group: 'bottomTabBar')
   Widget _textTypeTabBar(BuildContext context) {
+    var _currentIndex = 0;
+    void _onTapTab(BuildContext context, String tabName, int currentIndex,
+        int currentSelectIndex) {
+          print('点击了 $tabName, 当前index: $currentIndex, 当前选择index: $currentSelectIndex');
+      if (currentIndex == currentSelectIndex) {
+        TDToast.showText('$tabName 已经被选中了', context: context);
+        return;
+      }
+      TDToast.showText('点击了 $tabName', context: context);
+    }
+
     return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        currentIndex: _currentIndex,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
             tabText: '标签',
             onTap: () {
-              onTapTab(context, '标签1');
+              _onTapTab(context, '标签1', 0, _currentIndex);
+              _currentIndex = 0;
             },
           ),
           TDBottomTabBarTabConfig(
             tabText: '标签',
             onTap: () {
-              onTapTab(context, '标签1');
+              _onTapTab(context, '标签2', 1, _currentIndex);
+              _currentIndex = 1;
             },
           ),
         ]);
@@ -362,7 +381,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
             },
           ),
           TDBottomTabBarTabConfig(
-            tabText: '标签',
+            tabText: '',
             selectedIcon: _selectedIcon,
             unselectedIcon: _unSelectedIcon,
             onTap: () {
@@ -832,7 +851,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
     );
   }
 
-    @Demo(group: 'bottomTabBar')
+  @Demo(group: 'bottomTabBar')
   Widget _capsuleTabBarOnLongPress(BuildContext context) {
     return TDBottomTabBar(
       TDBottomTabBarBasicType.iconText,
@@ -1043,5 +1062,56 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
         ],
       ),
     );
+  }
+
+  @Demo(group: 'bottomTabBar')
+  Widget _allowMultipleTaps(BuildContext context) {
+    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
+      TDBottomTabBarTabConfig(
+        allowMultipleTaps: true,
+        tabText: '支持重复点击',
+        onTap: () {
+          onTapTab(context, '标签1');
+        },
+      ),
+      TDBottomTabBarTabConfig(
+        tabText: '不支持重复点击',
+        onTap: () {
+          onTapTab(context, '标签2');
+        },
+      ),
+    ]);
+  }
+
+  @Demo(group: 'bottomTabBar')
+  Widget _needInkWellTabBar(BuildContext context) {
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        needInkWell: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }
 }

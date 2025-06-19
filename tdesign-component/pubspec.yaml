@@ -1,6 +1,6 @@
 name: tdesign_flutter
 description: Tencent TDesign UI component library of Flutter, suitable for use in mobile projects.
-version: 0.2.0
+version: 0.2.2
 homepage: https://github.com/Tencent/tdesign-flutter
 
 environment:
@@ -21,8 +21,9 @@ dependencies:
   # 滑动单元格组件
   flutter_slidable: 3.1.2
 
-  # 相册选择组件
-  image_picker: 1.0.8
+  tdesign_flutter_adaptation: 3.32.0
+
+  image_picker: 1.1.2
 
 dev_dependencies:
   flutter_lints: ^1.0.4

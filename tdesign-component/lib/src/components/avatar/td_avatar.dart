@@ -36,6 +36,7 @@ class TDAvatar extends StatelessWidget {
     this.avatarDisplayBorder = 2,
     this.avatarDisplayListAsset,
     this.backgroundColor,
+    this.fit,
   }) : super(key: key);
 
   /// 头像地址
@@ -85,6 +86,10 @@ class TDAvatar extends StatelessWidget {
 
   /// 自定义文案时背景色
   final Color? backgroundColor;
+
+  /// 自定义图片对齐方式
+  final BoxFit? fit;
+
 
   double _getAvatarWidth() {
     double width;
@@ -271,7 +276,7 @@ class TDAvatar extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(color: Colors.white, width: avatarDisplayBorder)),
-                      image: DecorationImage(image: NetworkImage(avatarDisplayList![i]), fit: BoxFit.cover)))));
+                      image: DecorationImage(image: NetworkImage(avatarDisplayList![i]), fit:fit??BoxFit.cover)))));
         }
       }
     } else if (avatarDisplayListAsset != null) {
@@ -313,7 +318,7 @@ class TDAvatar extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(color: Colors.white, width: avatarDisplayBorder)),
-                      image: DecorationImage(image: AssetImage(avatarDisplayListAsset![i]), fit: BoxFit.fill)))));
+                      image: DecorationImage(image: AssetImage(avatarDisplayListAsset![i]), fit:fit?? BoxFit.fill)))));
         }
       }
     }
@@ -372,7 +377,7 @@ class TDAvatar extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(color: Colors.white, width: avatarDisplayBorder)),
-                      image: DecorationImage(image: NetworkImage(avatarDisplayList![i]), fit: BoxFit.cover)))));
+                      image: DecorationImage(image: NetworkImage(avatarDisplayList![i]), fit:fit??BoxFit.cover)))));
         }
       }
     } else if (avatarDisplayListAsset != null) {
@@ -413,7 +418,7 @@ class TDAvatar extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
                           side: BorderSide(color: Colors.white, width: avatarDisplayBorder)),
-                      image: DecorationImage(image: AssetImage(avatarDisplayListAsset![i]), fit: BoxFit.cover)))));
+                      image: DecorationImage(image: AssetImage(avatarDisplayListAsset![i]), fit:fit??BoxFit.cover)))));
         }
       }
     }

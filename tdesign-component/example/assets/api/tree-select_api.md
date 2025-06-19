@@ -7,6 +7,7 @@
 | label | String | - | 标签 |
 | value | int | - | 值 |
 | children | List<TDSelectOption> | const [] | 子选项 |
+| multiple | bool | false | 当前子项支持多选 |
 
 ```
 ```
