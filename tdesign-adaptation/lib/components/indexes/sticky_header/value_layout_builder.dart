@@ -3,20 +3,20 @@ import 'package:flutter/widgets.dart';
 
 /// The signature of the [ValueLayoutBuilder] builder function.
 typedef ValueLayoutWidgetBuilder<T> = Widget Function(
-  BuildContext context,
-  BoxValueConstraints<T> constraints,
-);
+    BuildContext context,
+    BoxValueConstraints<T> constraints,
+    );
 
 class BoxValueConstraints<T> extends BoxConstraints {
   BoxValueConstraints({
     required this.value,
     required BoxConstraints constraints,
   }) : super(
-          minWidth: constraints.minWidth,
-          maxWidth: constraints.maxWidth,
-          minHeight: constraints.minHeight,
-          maxHeight: constraints.maxHeight,
-        );
+    minWidth: constraints.minWidth,
+    maxWidth: constraints.maxWidth,
+    minHeight: constraints.minHeight,
+    maxHeight: constraints.maxHeight,
+  );
 
   final T value;
 
@@ -66,7 +66,7 @@ class ValueLayoutBuilder<T> extends ConstrainedLayoutBuilder<BoxValueConstraints
 }
 
 class _RenderValueLayoutBuilder<T> extends RenderBox
-    with RenderObjectWithChildMixin<RenderBox>, RenderConstrainedLayoutBuilder<BoxValueConstraints<T>, RenderBox> {
+    with RenderObjectWithChildMixin<RenderBox>, RenderObjectWithLayoutCallbackMixin, RenderAbstractLayoutBuilderMixin<BoxValueConstraints<T>, RenderBox> {
   @override
   double computeMinIntrinsicWidth(double height) {
     assert(_debugThrowIfNotCheckingIntrinsics());
@@ -94,7 +94,7 @@ class _RenderValueLayoutBuilder<T> extends RenderBox
   @override
   void performLayout() {
     final constraints = this.constraints;
-    rebuildIfNecessary();
+    runLayoutCallback();
     if (child != null) {
       child!.layout(constraints, parentUsesSize: true);
       size = constraints.constrain(child!.size);

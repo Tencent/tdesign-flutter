@@ -16,6 +16,7 @@ class TDEmpty extends StatelessWidget {
         this.onTapEvent,
         this.emptyTextColor,
         this.emptyTextFont,
+        this.customOperationWidget,
         Key? key})
       : super(key: key);
 
@@ -35,6 +36,8 @@ class TDEmpty extends StatelessWidget {
   final TDButtonTheme? operationTheme;
   /// 类型，为operation有操作按钮，plain无按钮
   final TDEmptyType type;
+  /// 自定义操作按钮
+  final Widget? customOperationWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +59,7 @@ class TDEmpty extends StatelessWidget {
             textColor: emptyTextColor??TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
           (type == TDEmptyType.operation)
-              ? Padding(
+              ? customOperationWidget ?? Padding(
                   padding: const EdgeInsets.only(top: 32),
                   child: TDButton(
                     text: operationText ?? '',

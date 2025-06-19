@@ -21,3 +21,4 @@
 | avatarDisplayBorder | double | 2 | 带操作\展示的头像描边宽度 |
 | avatarDisplayListAsset | List<String>? | - | 带操作\展示的头像列表 (本地资源) |
 | backgroundColor | Color? | - | 自定义文案时背景色 |
+| fit | BoxFit? | - | 自定义图片对齐方式 |
