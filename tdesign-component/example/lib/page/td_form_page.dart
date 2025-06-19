@@ -230,12 +230,10 @@ class _TDFormPageState extends State<TDFormPage> {
       type: TDFormItemType.upLoadImg,
     ),
   };
-
   ///表单提交数据
   onSubmit(Map<String, dynamic> formData, isValidateSuc) {
 
   }
-
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
