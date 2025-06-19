@@ -7,14 +7,9 @@ Widget _buildSimple(BuildContext context) {
     cells: [
       // 可单独修改样式
       TDCell(arrow: true, title: '单行标题', style: TDCellStyle.cellStyle(context)),
-      TDCell(
-        arrow: true,
-        title: '单行标题',
-        required: true,
-        onClick: (cell) {
-          print('单行标题');
-        },
-      ),
+      TDCell(arrow: true, title: '单行标题', required: true, onClick: (cell) {
+            print('单行标题');
+          }),
       const TDCell(arrow: true, title: '单行标题', noteWidget: TDBadge(TDBadgeType.message, count: '8')),
       const TDCell(arrow: false, title: '单行标题', rightIconWidget: TDSwitch(isOn: true)),
       const TDCell(arrow: true, title: '单行标题', note: '辅助信息'),
