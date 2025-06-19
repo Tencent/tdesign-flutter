@@ -276,7 +276,7 @@ class _TDFormPageState extends State<TDFormPage> {
               name: 'name',
               type: TDFormItemType.input,
               help: '请输入用户名',
-              labelWidth: 60.0,
+              labelWidth: 82.0,
               formItemNotifier: _formItemNotifier['name'],
 
               /// 控制单个 item 是否展示错误提醒
@@ -303,7 +303,7 @@ class _TDFormPageState extends State<TDFormPage> {
             label: '密码',
             name: 'password',
             type: TDFormItemType.input,
-            labelWidth: 60.0,
+            labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['password'],
             showErrorMessage: true,
             child: TDInput(
@@ -330,8 +330,7 @@ class _TDFormPageState extends State<TDFormPage> {
             label: '性别',
             name: 'gender',
             type: TDFormItemType.radios,
-            labelWidth: 60.0,
-            radioGroupSpacing: 0,
+            labelWidth: 68.0,
             showErrorMessage: true,
             formItemNotifier: _formItemNotifier['gender'],
             child: TDRadioGroup(
@@ -344,6 +343,7 @@ class _TDFormPageState extends State<TDFormPage> {
                   title: entry.value,
                   radioStyle: TDRadioStyle.circle,
                   showDivider: false,
+                  spacing: 4,
                   enable: !_formDisableState,
                 );
               }).toList(),
@@ -358,10 +358,10 @@ class _TDFormPageState extends State<TDFormPage> {
           TDFormItem(
             label: '生日',
             name: 'birth',
-            labelWidth: 60.0,
+            labelWidth: 82.0,
             type: TDFormItemType.dateTimePicker,
-            contentAlign: _isFormHorizontal ? TextAlign.right : TextAlign.left,
-            tipAlign: _isFormHorizontal ? TextAlign.right : TextAlign.left,
+            contentAlign: TextAlign.left,
+            tipAlign: TextAlign.left,
             formItemNotifier: _formItemNotifier['birth'],
             select: _selected_1,
             selectFn: (BuildContext context) {
@@ -382,9 +382,9 @@ class _TDFormPageState extends State<TDFormPage> {
             label: '籍贯',
             name: 'place',
             type: TDFormItemType.cascader,
-            contentAlign: _isFormHorizontal ? TextAlign.right : TextAlign.left,
-            tipAlign: _isFormHorizontal ? TextAlign.right : TextAlign.left,
-            labelWidth: 60.0,
+            contentAlign:TextAlign.left,
+            tipAlign: TextAlign.left,
+            labelWidth: 80.0,
             select: _selected_2,
             formItemNotifier: _formItemNotifier['place'],
             selectFn: (BuildContext context) {
@@ -414,9 +414,8 @@ class _TDFormPageState extends State<TDFormPage> {
           TDFormItem(
               label: '年限',
               name: 'age',
-              labelWidth: 60.0,
+              labelWidth: 82.0,
               type: TDFormItemType.stepper,
-              tipAlign: _isFormHorizontal ? TextAlign.right : TextAlign.left,
               formItemNotifier: _formItemNotifier['age'],
               child: Padding(
                 padding: EdgeInsets.only(top: _isFormHorizontal ? 0 : 4, right: 18),
@@ -432,12 +431,12 @@ class _TDFormPageState extends State<TDFormPage> {
           TDFormItem(
             label: '自我评价',
             name: 'description',
-            tipAlign: _isFormHorizontal ? TextAlign.right : TextAlign.left,
+            tipAlign: TextAlign.left,
             type: TDFormItemType.rate,
-            labelWidth: 78.0,
+            labelWidth:82.0,
             formItemNotifier: _formItemNotifier['description'],
             child: Align(
-              alignment: _isFormHorizontal ? Alignment.centerRight : Alignment.centerLeft,
+              alignment: Alignment.centerLeft,
               child: Padding(
                   padding: EdgeInsets.only(top: _isFormHorizontal ? 0 : 5, right: 18, bottom: 5),
                   child: TDRate(
@@ -456,12 +455,13 @@ class _TDFormPageState extends State<TDFormPage> {
           ),
           TDFormItem(
             label: '个人简介',
-            labelWidth: 78.0,
+            labelWidth: 82.0,
             name: 'resume',
             type: TDFormItemType.textarea,
             formItemNotifier: _formItemNotifier['resume'],
             child: TDTextarea(
               backgroundColor: Colors.red,
+              padding:EdgeInsets.all(0),
               hintText: '请输入个人简介',
               maxLength: 500,
               indicator: true,
@@ -477,7 +477,7 @@ class _TDFormPageState extends State<TDFormPage> {
           TDFormItem(
             label: '上传图片',
             name: 'photo',
-            labelWidth: 76.0,
+            labelWidth: 82.0,
             type: TDFormItemType.upLoadImg,
             formItemNotifier: _formItemNotifier['photo'],
             child: TDUpload(
@@ -511,6 +511,55 @@ class _TDFormPageState extends State<TDFormPage> {
                   children: [
                     Expanded(
                         child: TDButton(
+                          text: '重置',
+                          size: TDButtonSize.large,
+                          type: TDButtonType.fill,
+                          theme: TDButtonTheme.light,
+                          shape: TDButtonShape.rectangle,
+                          disabled: _formDisableState,
+                          onTap: () {
+
+                            //用户名称
+                            _controller[0].clear();
+                            //密码
+                            _controller[1].clear();
+                            // 性别
+                            _genderCheckboxGroupController.toggle('',false);
+                            //个人简介
+                            _controller[2].clear();
+                            //生日
+                            _selected_1='请输入内容';
+                            //籍贯
+                            _selected_2='请输入内容';
+                            //年限
+                            _stepController.add(TDStepperEventType.cleanValue);
+                            //上传图片
+                            files.clear();
+                            _formData={
+                              "name": '',
+                              "password": '',
+                              "gender": '',
+                              "birth": '',
+                              "place": '',
+                              "age": "0",
+                              "description": "2",
+                              "resume": '',
+                              "photo": ''
+                            };
+                            _formData.forEach((key, value) {
+                              _formItemNotifier[key].upDataForm(value);
+                            });
+                            _formController.reset(_formData);
+                            setState(() {
+
+                            });
+                          },
+                        )),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                        child: TDButton(
                             text: '提交',
                             size: TDButtonSize.large,
                             type: TDButtonType.fill,
@@ -518,55 +567,6 @@ class _TDFormPageState extends State<TDFormPage> {
                             shape: TDButtonShape.rectangle,
                             onTap: _onSubmit,
                             disabled: _formDisableState)),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Expanded(
-                        child: TDButton(
-                      text: '重置',
-                      size: TDButtonSize.large,
-                      type: TDButtonType.fill,
-                      theme: TDButtonTheme.light,
-                      shape: TDButtonShape.rectangle,
-                      disabled: _formDisableState,
-                      onTap: () {
-
-                        //用户名称
-                        _controller[0].clear();
-                        //密码
-                        _controller[1].clear();
-                        // 性别
-                        _genderCheckboxGroupController.toggle('',false);
-                        //个人简介
-                        _controller[2].clear();
-                        //生日
-                        _selected_1='请输入内容';
-                        //籍贯
-                        _selected_2='请输入内容';
-                        //年限
-                        _stepController.add(TDStepperEventType.cleanValue);
-                        //上传图片
-                        files.clear();
-                        _formData={
-                          "name": '',
-                          "password": '',
-                          "gender": '',
-                          "birth": '',
-                          "place": '',
-                          "age": "0",
-                          "description": "2",
-                          "resume": '',
-                          "photo": ''
-                        };
-                        _formData.forEach((key, value) {
-                          _formItemNotifier[key].upDataForm(value);
-                        });
-                        _formController.reset(_formData);
-                        setState(() {
-
-                        });
-                      },
-                    )),
                   ],
                 )),
           )
