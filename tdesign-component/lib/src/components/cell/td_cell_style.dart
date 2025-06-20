@@ -22,7 +22,7 @@ class TDCellStyle {
     this.cardBorderRadius,
     this.cardPadding,
     this.titlePadding,
-    this.titleBackgroundColor,
+    @deprecated this.titleBackgroundColor,
   }) {
     if (context != null) {
       defaultStyle(context!);
