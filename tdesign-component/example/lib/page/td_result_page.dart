@@ -19,16 +19,10 @@ class _TDResultPageState extends State<TDResultPage> {
       exampleCodeGroup: 'result',
       children: [
         ExampleModule(title: '组件类型', children: [
-          ExampleItem(
-              desc: '基础结果', ignoreCode: true, builder: _buildBasicResult),
-          ExampleItem(
-              desc: '带描述的结果',
-              ignoreCode: true,
-              builder: _buildResultWithDescription),
-          ExampleItem(
-              desc: '自定义结果', ignoreCode: true, builder: _buildCustomResult),
-          ExampleItem(
-              desc: '页面示例', ignoreCode: true, builder: _buildPageExample),
+          ExampleItem(desc: '基础结果', ignoreCode: true, builder: _buildBasicResult),
+          ExampleItem(desc: '带描述的结果', ignoreCode: true, builder: _buildResultWithDescription),
+          ExampleItem(desc: '自定义结果', ignoreCode: true, builder: _buildCustomResult),
+          ExampleItem(desc: '页面示例', ignoreCode: true, builder: _buildPageExample),
         ]),
       ],
     );
