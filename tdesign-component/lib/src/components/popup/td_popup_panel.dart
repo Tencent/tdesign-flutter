@@ -133,7 +133,9 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
   }
 
   Widget _buildDragHandle() {
-    if (!widget.draggable) return const SizedBox.shrink();
+    if (!widget.draggable) {
+      return const SizedBox.shrink();
+    }
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -147,7 +149,7 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
           width: 48,
           height: 4,
           decoration: BoxDecoration(
-            color: TDTheme.of(context).grayColor3,
+            color: TDTheme.of(context).componentStrokeColor,
             borderRadius: BorderRadius.circular(2),
           ),
         ),
@@ -279,7 +281,7 @@ class _TDPopupBottomDisplayPanelState extends _TDPopupBaseState<TDPopupBottomDis
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: TDText(
         widget.title ?? '',
-        textColor: widget.titleColor ?? TDTheme.of(context).fontGyColor1,
+        textColor: widget.titleColor ?? TDTheme.of(context).textColorPrimary,
         font: TDTheme.of(context).fontTitleLarge?.withSize(
             widget.titleFontSize?.toInt() ??
                 TDTheme.of(context).fontTitleLarge!.size.toInt()
@@ -396,7 +398,7 @@ class _TDPopupBottomConfirmPanelState extends _TDPopupBaseState<TDPopupBottomCon
         children: [
           _buildActionButton(
             text: widget.leftText ?? context.resource.cancel,
-            color: widget.leftTextColor ?? TDTheme.of(context).fontGyColor2,
+            color: widget.leftTextColor ?? TDTheme.of(context).textColorSecondary,
             onTap: widget.leftClick,
             left: true,
           ),
@@ -404,7 +406,7 @@ class _TDPopupBottomConfirmPanelState extends _TDPopupBaseState<TDPopupBottomCon
             child: Center(
               child: TDText(
                 widget.title ?? '',
-                textColor: widget.titleColor ?? TDTheme.of(context).fontGyColor1,
+                textColor: widget.titleColor ?? TDTheme.of(context).textColorPrimary,
                 font: TDTheme.of(context).fontTitleLarge?.withSize(
                     widget.titleFontSize?.toInt() ??
                         TDTheme.of(context).fontTitleLarge!.size.toInt()
