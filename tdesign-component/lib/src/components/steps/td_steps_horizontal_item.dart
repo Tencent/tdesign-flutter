@@ -55,7 +55,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
     if (activeIndex > index) {
       stepsNumberBgColor = TDTheme.of(context).brandColor1;
       stepsNumberTextColor = TDTheme.of(context).brandColor7;
-      stepsTitleColor = TDTheme.of(context).fontGyColor1;
+      stepsTitleColor = TDTheme.of(context).textColorPrimary;
 
       /// 已完成的用icon图标显示
       completeIconWidget = Icon(
@@ -66,9 +66,9 @@ class TDStepsHorizontalItem extends StatelessWidget {
     } else if (activeIndex < index) {
       /// 激活索引小于当前索引
       stepsNumberBgColor = TDTheme.of(context).bgColorSecondaryContainer;
-      stepsNumberTextColor = TDTheme.of(context).fontGyColor3;
-      stepsTitleColor = TDTheme.of(context).fontGyColor3;
-      stepsIconColor = TDTheme.of(context).fontGyColor3;
+      stepsNumberTextColor = TDTheme.of(context).textColorPlaceholder;
+      stepsTitleColor = TDTheme.of(context).textColorPlaceholder;
+      stepsIconColor = TDTheme.of(context).textColorPlaceholder;
       simpleStepsIconColor = TDTheme.of(context).componentBorderColor;
     }
 
@@ -138,7 +138,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
       /// readOnly纯展示
       if (readOnly) {
         simpleStepsIconColor = TDTheme.of(context).brandColor7;
-        stepsTitleColor = TDTheme.of(context).fontGyColor1;
+        stepsTitleColor = TDTheme.of(context).textColorPrimary;
       }
       iconContainerSize = 8;
       stepsIconWidget = null;
@@ -228,7 +228,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
                 data.content ?? '',
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
-                  color: TDTheme.of(context).fontGyColor3,
+                  color: TDTheme.of(context).textColorPlaceholder,
                   fontSize: 12,
                 ),
               ),

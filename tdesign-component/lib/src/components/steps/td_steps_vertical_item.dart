@@ -71,9 +71,9 @@ class TDStepsVerticalItem extends StatelessWidget {
     } else if (activeIndex < index) {
       /// 激活索引小于当前索引
       stepsNumberBgColor = TDTheme.of(context).bgColorSecondaryContainer;
-      stepsNumberTextColor = TDTheme.of(context).fontGyColor3;
-      stepsTitleColor = TDTheme.of(context).fontGyColor3;
-      stepsIconColor = TDTheme.of(context).fontGyColor3;
+      stepsNumberTextColor = TDTheme.of(context).textColorPlaceholder;
+      stepsTitleColor = TDTheme.of(context).textColorPlaceholder;
+      stepsIconColor = TDTheme.of(context).textColorPlaceholder;
       simpleStepsIconColor = TDTheme.of(context).componentBorderColor;
     }
 
@@ -146,7 +146,7 @@ class TDStepsVerticalItem extends StatelessWidget {
       /// readOnly纯展示
       if (readOnly) {
         simpleStepsIconColor = TDTheme.of(context).brandColor7;
-        stepsTitleColor = TDTheme.of(context).fontGyColor1;
+        stepsTitleColor = TDTheme.of(context).textColorPrimary;
       }
       iconContainerSize = 8;
       iconMarginBottom = 4;
@@ -250,7 +250,7 @@ class TDStepsVerticalItem extends StatelessWidget {
                           verticalSelect
                               ? Icon(
                                   TDIcons.chevron_right,
-                                  color: TDTheme.of(context).fontGyColor1,
+                                  color: TDTheme.of(context).textColorPrimary,
                                   size: 16,
                                 )
                               : Container(),
