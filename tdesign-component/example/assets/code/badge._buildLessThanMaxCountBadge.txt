@@ -1,7 +1,6 @@
 
   Widget _buildLessThanMaxCountBadge(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
         margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
         child: const SizedBox(
           width: 60,

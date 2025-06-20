@@ -14,8 +14,7 @@
                   child: const Icon(TDIcons.shop),
                   decoration: BoxDecoration(
                       color: TDTheme.of(context).bgColorComponent,
-                      borderRadius: BorderRadius.circular(
-                          TDTheme.of(context).radiusDefault)),
+                      borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault)),
                   height: 48,
                   width: 48,
                 ),

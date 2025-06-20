@@ -1,8 +1,7 @@
 
   Widget _buildRedPointIconBadge(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
-        margin: const EdgeInsets.only(left: 16, right: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
         child: const SizedBox(
           width: 27,
           height: 27,
