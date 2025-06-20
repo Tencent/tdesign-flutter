@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import 'dashed_widget.dart';
 
-enum TextAlignment {
-  left,
-  center,
-  right
-}
+enum TextAlignment { left, center, right }
 
 /// 分割线
 /// 对于非flutter原有的控件，则只需满足TDesign规范即可；
@@ -69,8 +65,7 @@ class TDDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     // 普通直线
     if (widget == null && text == null) {
-      return _buildLine(context,
-          width: width, height: height, margin: margin, color: color);
+      return _buildLine(context, width: width, height: height, margin: margin, color: color);
     }
 
     // 隐藏线条，纯文本分割
@@ -88,7 +83,7 @@ class TDDivider extends StatelessWidget {
   }
 
   Widget _buildDivider(BuildContext context, TextAlignment alignment) {
-    switch(alignment) {
+    switch (alignment) {
       case TextAlignment.left:
         return Container(
           width: width,
@@ -99,19 +94,19 @@ class TDDivider extends StatelessWidget {
               _buildLine(
                 context,
                 width: 16,
-                height: height ?? 0.5,
-                color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
+                height: height,
+                color: color,
               ),
               Padding(
-                  padding: gapPadding ?? const EdgeInsets.only(left: 8, right: 8),
+                  padding: gapPadding ?? const EdgeInsets.symmetric(horizontal: 8),
                   child: _buildMiddleWidget(context)),
               Expanded(
                   child: Center(
                       child: _buildLine(
-                        context,
-                        height: height ?? 0.5,
-                        color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
-                      ))),
+                context,
+                height: height,
+                color: color,
+              ))),
             ],
           ),
         );
@@ -124,22 +119,22 @@ class TDDivider extends StatelessWidget {
             children: [
               Expanded(
                   child: Center(
-                    child: _buildLine(
-                      context,
-                      height: height ?? 0.5,
-                      color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
-                    ),
-                  )),
+                child: _buildLine(
+                  context,
+                  height: height,
+                  color: color,
+                ),
+              )),
               Padding(
-                  padding: gapPadding ?? const EdgeInsets.only(left: 8, right: 8),
+                  padding: gapPadding ?? const EdgeInsets.symmetric(horizontal: 8),
                   child: _buildMiddleWidget(context)),
               Expanded(
                   child: Center(
                       child: _buildLine(
-                        context,
-                        height: height ?? 0.5,
-                        color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
-                      ))),
+                context,
+                height: height,
+                color: color,
+              ))),
             ],
           ),
         );
@@ -152,20 +147,20 @@ class TDDivider extends StatelessWidget {
             children: [
               Expanded(
                   child: Center(
-                    child: _buildLine(
-                      context,
-                      height: height ?? 0.5,
-                      color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
-                    ),
-                  )),
+                child: _buildLine(
+                  context,
+                  height: height,
+                  color: color,
+                ),
+              )),
               Padding(
-                  padding: gapPadding ?? const EdgeInsets.only(left: 8, right: 8),
+                  padding: gapPadding ?? const EdgeInsets.symmetric(horizontal: 8),
                   child: _buildMiddleWidget(context)),
               _buildLine(
                 context,
                 width: 16,
-                height: height ?? 0.5,
-                color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
+                height: height,
+                color: color,
               ),
             ],
           ),
@@ -175,18 +170,15 @@ class TDDivider extends StatelessWidget {
 
   /// 绘制线条
   Container _buildLine(BuildContext context,
-      {double? width,
-      double? height,
-      EdgeInsetsGeometry? margin,
-      Color? color}) {
+      {double? width, double? height = 0.5, EdgeInsetsGeometry? margin, Color? color}) {
     if (isDashed) {
       return Container(
         width: width,
         margin: margin,
         child: DashedWidget(
           width: width,
-          height: height,
-          color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
+          height: height ?? 0.5,
+          color: color ?? TDTheme.of(context).componentStrokeColor,
           direction: direction,
         ),
       );
@@ -195,7 +187,7 @@ class TDDivider extends StatelessWidget {
         width: width,
         height: height ?? 0.5,
         margin: margin,
-        color: color ?? TDTheme.of(context).bgColorSecondaryContainer,
+        color: color ?? TDTheme.of(context).componentStrokeColor,
       );
     }
   }
@@ -206,7 +198,7 @@ class TDDivider extends StatelessWidget {
         TDText(
           text,
           font: TDTheme.of(context).fontBodySmall,
-          textColor: TDTheme.of(context).fontGyColor3,
+          textColor: TDTheme.of(context).textColorPlaceholder,
           forceVerticalCenter: true,
           style: textStyle,
         );
