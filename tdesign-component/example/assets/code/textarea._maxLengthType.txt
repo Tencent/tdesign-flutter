@@ -8,7 +8,6 @@
       minLines: 4,
       maxLength: 500,
       indicator: true,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }
