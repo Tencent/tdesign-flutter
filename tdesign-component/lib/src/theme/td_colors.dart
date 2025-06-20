@@ -226,16 +226,16 @@ extension TDColors on TDThemeData {
   ///#42000000
   Color get fontGyColor4 => colorMap['fontGyColor4'] ?? const Color(0x42000000);
 
-  ///#ff000000
+  ///#FFFFFFFF
   Color get fontWhColor1 => colorMap['fontWhColor1'] ?? const Color(0xFFFFFFFF);
 
-  ///#8c000000
+  ///#8CFFFFFF
   Color get fontWhColor2 => colorMap['fontWhColor2'] ?? const Color(0x8CFFFFFF);
 
-  ///#59000000
+  ///#59FFFFFF
   Color get fontWhColor3 => colorMap['fontWhColor3'] ?? const Color(0x59FFFFFF);
 
-  ///#38000000
+  ///#38FFFFFF
   Color get fontWhColor4 => colorMap['fontWhColor4'] ?? const Color(0x38FFFFFF);
 
   /// 中性面板色组----------------------------------------------------
