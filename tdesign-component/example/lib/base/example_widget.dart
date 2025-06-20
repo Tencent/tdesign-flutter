@@ -269,7 +269,7 @@ class _ExamplePageState extends State<ExamplePage> {
           TDText(
             widget.title,
             font: TDTheme.of(context).fontHeadlineSmall,
-            textColor: TDTheme.of(context).fontGyColor1,
+            textColor: TDTheme.of(context).textColorPrimary,
           ),
           Container(
             margin: const EdgeInsets.only(
@@ -278,7 +278,7 @@ class _ExamplePageState extends State<ExamplePage> {
             child: TDText(
               widget.desc,
               font: TDTheme.of(context).fontBodyMedium,
-              textColor: TDTheme.of(context).fontGyColor2,
+              textColor: TDTheme.of(context).textColorSecondary,
             ),
           ),
           // Expanded(child: ),
@@ -297,7 +297,7 @@ class _ExamplePageState extends State<ExamplePage> {
           child: TDText(
             '${index < 10 ? "0$index" : index} ${data.title}',
             font: TDTheme.of(context).fontTitleLarge,
-            textColor: TDTheme.of(context).fontGyColor1,
+            textColor: TDTheme.of(context).textColorPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -429,7 +429,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
                 child: TDText(
                   widget.data.desc,
                   font: TDTheme.of(context).fontBodyMedium,
-                  textColor: TDTheme.of(context).fontGyColor2,
+                  textColor: TDTheme.of(context).textColorSecondary,
                 ),
               ),
         child
