@@ -111,7 +111,7 @@ class TDRateTips extends StatelessWidget {
                     child: TDText(
                       allowHalf == true ? (isClick ? '${index + 0.5}' : '${activeValue}') : '${index + 1}',
                       font: TDTheme.of(context).fontBodySmall,
-                      textColor: TDTheme.of(context).fontGyColor1,
+                      textColor: TDTheme.of(context).textColorPrimary,
                     ),
                   ),
                 ],
@@ -143,7 +143,7 @@ class TDRateTips extends StatelessWidget {
                       child: TDText(
                         '${index + 1}',
                         font: TDTheme.of(context).fontBodySmall,
-                        textColor: TDTheme.of(context).fontGyColor1,
+                        textColor: TDTheme.of(context).textColorPrimary,
                       ),
                     ),
                   ],

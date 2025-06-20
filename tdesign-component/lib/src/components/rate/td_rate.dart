@@ -361,7 +361,7 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
         child: TDText(
           notRated ? context.resource.notRated : widget.texts?.getOrNull(textIndex.toInt()) ?? '$_activeValue',
           font: notRated ? TDTheme.of(context).fontBodyLarge : TDTheme.of(context).fontTitleMedium,
-          textColor: notRated ? TDTheme.of(context).fontGyColor4 : TDTheme.of(context).fontGyColor1,
+          textColor: notRated ? TDTheme.of(context).textColorDisabled : TDTheme.of(context).textColorPrimary,
         ),
       ),
     );
