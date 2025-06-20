@@ -69,8 +69,8 @@
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           )..updateSliderThemeData((data) => data.copyWith(
-                activeTickMarkColor: const Color(0xFFE7E7E7),
-                inactiveTickMarkColor: const Color(0xFFE7E7E7),
+                activeTickMarkColor: TDTheme.of(context).componentStrokeColor,
+                inactiveTickMarkColor: TDTheme.of(context).componentStrokeColor,
               )),
           value: 60,
           // divisions: 5,
