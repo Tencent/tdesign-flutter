@@ -70,6 +70,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return TDCell(
       title: '选择时间',
       note: selected_1,
+      arrow: true,
       onClick: (click) {
         TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
           setState(() {
@@ -87,6 +88,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return TDCell(
         title: '选择时间',
         note: selected_2,
+        arrow: true,
         onClick: (click) {
           TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
             setState(() {
@@ -107,6 +109,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return TDCell(
         title: '选择时间',
         note: selected_3,
+        arrow: true,
         onClick: (click) {
           TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
             setState(() {
@@ -127,6 +130,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return TDCell(
         title: '选择时间',
         note: selected_4,
+        arrow: true,
         onClick: (click) {
           TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
             setState(() {
@@ -153,6 +157,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return TDCell(
         title: '选择时间',
         note: selected_5,
+        arrow: true,
         onClick: (click) {
           TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
             setState(() {
@@ -179,6 +184,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return TDCell(
         title: '选择时间',
         note: selected_6,
+        arrow: true,
         onClick: (click) {
           TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
             setState(() {
@@ -201,6 +207,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return TDCell(
         title: '选择时间',
         note: selected_7,
+        arrow: true,
         onClick: (click) {
           TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
             setState(() {
@@ -218,6 +225,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return TDCell(
         title: '选择时间',
         note: selected_8,
+        arrow: true,
         onClick: (click) {
           TDPicker.showDatePicker(context, title: '', onConfirm: (selected) {
             setState(() {
@@ -235,6 +243,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return TDCell(
         title: '选择时间',
         note: selected_5,
+        arrow: true,
         onClick: (click) {
           TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
             setState(() {
@@ -264,6 +273,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return TDCell(
         title: '选择时间',
         note: selected_4,
+        arrow: true,
         onClick: (click) {
           TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
             setState(() {
@@ -290,6 +300,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return TDCell(
         title: '选择时间',
         note: selected_9,
+        arrow: true,
         onClick: (click) {
           TDPicker.showDatePicker(
             context,
@@ -327,7 +338,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
                         fontWeight: itemDistanceCalculator.calculateFontWeight(context, distance),
                         fontSize: index % 2 == 0 ? 20 : 10,
                         color: index % 2 == 1
-                            ? TDTheme.of(context).fontGyColor1
+                            ? TDTheme.of(context).textColorPrimary
                             : TDTheme.of(context).successColor6,
                       ),
                     )
@@ -342,6 +353,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return TDCell(
         title: '选择时间',
         note: selected_9,
+        arrow: true,
         onClick: (click) {
           TDPicker.showDatePicker(
             context,
@@ -367,6 +379,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
     return TDCell(
         title: '选择时间',
         note: selected_9,
+        arrow: true,
         onClick: (click) {
           TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
             setState(() {
