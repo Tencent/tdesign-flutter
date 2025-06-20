@@ -230,7 +230,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                     Icon(
                       TDIcons.search,
                       size: widget.mediumStyle ? 20 : 24,
-                      color: TDTheme.of(context).fontGyColor3,
+                      color: TDTheme.of(context).textColorPlaceholder,
                     ),
                     const Padding(padding: EdgeInsets.only(left: 3)),
                     Expanded(
@@ -263,7 +263,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                             hintText: widget.placeHolder,
                             hintStyle: TextStyle(
                               fontSize: getSize(context)?.size,
-                              color: TDTheme.of(context).fontGyColor3,
+                              color: TDTheme.of(context).textColorPlaceholder,
                               textBaseline: TextBaseline.ideographic,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -294,7 +294,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                           child: Icon(
                             TDIcons.close_circle_filled,
                             size: widget.mediumStyle ? 17 : 21,
-                            color: TDTheme.of(context).fontGyColor3,
+                            color: TDTheme.of(context).textColorPlaceholder,
                           )),
                     ),
                     const Padding(padding: EdgeInsets.only(right: 9)),
