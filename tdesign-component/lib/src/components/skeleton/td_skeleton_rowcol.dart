@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-
 /// 骨架屏样式
 class TDSkeletonRowColStyle {
   const TDSkeletonRowColStyle({
@@ -13,10 +12,8 @@ class TDSkeletonRowColStyle {
   final double Function(BuildContext) rowSpacing;
 
   /// 默认行间距
-  static double _defaultRowSpacing(BuildContext context) =>
-      TDTheme.of(context).spacer16;
+  static double _defaultRowSpacing(BuildContext context) => TDTheme.of(context).spacer16;
 }
-
 
 /// 骨架屏行列框架
 class TDSkeletonRowCol {
@@ -34,14 +31,13 @@ class TDSkeletonRowCol {
   /// 视觉高度
   double visualHeight(BuildContext context) {
     var rowSpacing = style.rowSpacing(context);
-    assert (rowSpacing >= 0); 
+    assert(rowSpacing >= 0);
     if (rowSpacing < 0) {
       rowSpacing = 0;
     }
 
     return objects
-            .map((row) =>
-                row.fold(.0, (a, b) => a > b.visualHeight ? a : b.visualHeight))
+            .map((row) => row.fold(.0, (a, b) => a > b.visualHeight ? a : b.visualHeight))
             .fold(.0, (a, b) => a + b) +
         rowSpacing * (objects.length - 1);
   }
@@ -78,26 +74,20 @@ class TDSkeletonRowColObjStyle {
   final double Function(BuildContext) borderRadius;
 
   /// 默认背景颜色
-  static Color _defaultBackground(BuildContext context) =>
-      TDTheme.of(context).bgColorSecondaryContainer;
+  static Color _defaultBackground(BuildContext context) => TDTheme.of(context).bgColorComponent;
 
   /// 透明背景颜色
-  static Color _transparentBackground(BuildContext context) =>
-      Colors.transparent;
+  static Color _transparentBackground(BuildContext context) => Colors.transparent;
 
   /// 圆形圆角
-  static double _circleBorderRadius(BuildContext context) =>
-      TDTheme.of(context).radiusCircle;
+  static double _circleBorderRadius(BuildContext context) => TDTheme.of(context).radiusCircle;
 
   /// 矩形圆角
-  static double _rectBorderRadius(BuildContext context) =>
-      TDTheme.of(context).radiusDefault;
+  static double _rectBorderRadius(BuildContext context) => TDTheme.of(context).radiusDefault;
 
   /// 文本圆角
-  static double _textBorderRadius(BuildContext context) =>
-      TDTheme.of(context).radiusSmall;
+  static double _textBorderRadius(BuildContext context) => TDTheme.of(context).radiusSmall;
 }
-
 
 /// 骨架屏元素
 class TDSkeletonRowColObj {
