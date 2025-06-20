@@ -8,11 +8,10 @@
           child: TDText(
             '拉伸',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           width: 121,
           height: 72,
           child: Stack(
