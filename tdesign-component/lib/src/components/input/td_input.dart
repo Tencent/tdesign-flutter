@@ -390,7 +390,7 @@ class TDInput extends StatelessWidget {
                   children: [
                     TDInputView(
                       textStyle: textStyle ??
-                          TextStyle(color: TDTheme.of(context).fontGyColor1),
+                          TextStyle(color: TDTheme.of(context).textColorPrimary),
                       readOnly: readOnly,
                       autofocus: autofocus,
                       obscureText: obscureText,
@@ -408,7 +408,7 @@ class TDInput extends StatelessWidget {
                       isCollapsed: true,
                       textAlign: contentAlignment,
                       hintTextStyle: hintTextStyle ??
-                          TextStyle(color: TDTheme.of(context).fontGyColor3),
+                          TextStyle(color: TDTheme.of(context).textColorPlaceholder),
                       cursorColor: cursorColor,
                       textInputBackgroundColor: textInputBackgroundColor,
                       controller: controller,
@@ -437,7 +437,7 @@ class TDInput extends StatelessWidget {
                               ? contentAlignment
                               : TextAlign.start,
                           textColor: additionInfoColor ??
-                              TDTheme.of(context).fontGyColor3,
+                              TDTheme.of(context).textColorPlaceholder,
                         ),
                       ),
                       visible: additionInfo != '',
@@ -472,7 +472,7 @@ class TDInput extends StatelessWidget {
                         size: clearIconSize,
                         TDIcons.close_circle_filled,
                         color:
-                            clearBtnColor ?? TDTheme.of(context).fontGyColor3,
+                            clearBtnColor ?? TDTheme.of(context).textColorPlaceholder,
                       ),
                     ),
                     onTap: onClearTap ??
@@ -615,7 +615,7 @@ class TDInput extends StatelessWidget {
                       flex: 1,
                       child: TDInputView(
                         textStyle: textStyle ??
-                            TextStyle(color: TDTheme.of(context).fontGyColor1),
+                            TextStyle(color: TDTheme.of(context).textColorPrimary),
                         readOnly: readOnly,
                         autofocus: autofocus,
                         obscureText: obscureText,
@@ -631,7 +631,7 @@ class TDInput extends StatelessWidget {
                         maxLines: maxLines,
                         focusNode: focusNode,
                         hintTextStyle: hintTextStyle ??
-                            TextStyle(color: TDTheme.of(context).fontGyColor3),
+                            TextStyle(color: TDTheme.of(context).textColorPlaceholder),
                         cursorColor: cursorColor,
                         textInputBackgroundColor: textInputBackgroundColor,
                         controller: controller,
@@ -661,7 +661,7 @@ class TDInput extends StatelessWidget {
                             size: clearIconSize,
                             TDIcons.close_circle_filled,
                             color: clearBtnColor ??
-                                TDTheme.of(context).fontGyColor3,
+                                TDTheme.of(context).textColorPlaceholder,
                           ),
                         ),
                         onTap: onClearTap,
@@ -735,7 +735,7 @@ class TDInput extends StatelessWidget {
             flex: 1,
             child: TDInputView(
               textStyle: textStyle ??
-                  TextStyle(color: TDTheme.of(context).fontGyColor1),
+                  TextStyle(color: TDTheme.of(context).textColorPrimary),
               readOnly: readOnly,
               autofocus: autofocus,
               obscureText: obscureText,
@@ -751,7 +751,7 @@ class TDInput extends StatelessWidget {
               maxLines: maxLines,
               focusNode: focusNode,
               hintTextStyle: hintTextStyle ??
-                  TextStyle(color: TDTheme.of(context).fontGyColor3),
+                  TextStyle(color: TDTheme.of(context).textColorPlaceholder),
               cursorColor: cursorColor,
               textInputBackgroundColor: textInputBackgroundColor,
               controller: controller,
@@ -767,7 +767,7 @@ class TDInput extends StatelessWidget {
             child: TDText(
               '${controller?.text.length}/${maxLength}',
               font: TDTheme.of(context).fontBodySmall,
-              textColor: TDTheme.of(context).fontGyColor3,
+              textColor: TDTheme.of(context).textColorPlaceholder,
             ),
           ),
         ],
@@ -821,7 +821,7 @@ class TDInput extends StatelessWidget {
                   padding: EdgeInsets.only(left: spacer.labelInputSpace!),
                   child: TDInputView(
                     textStyle: textStyle ??
-                        TextStyle(color: TDTheme.of(context).fontGyColor1),
+                        TextStyle(color: TDTheme.of(context).textColorPrimary),
                     readOnly: readOnly,
                     autofocus: autofocus,
                     obscureText: obscureText,
@@ -836,7 +836,7 @@ class TDInput extends StatelessWidget {
                     focusNode: focusNode,
                     isCollapsed: true,
                     hintTextStyle: hintTextStyle ??
-                        TextStyle(color: TDTheme.of(context).fontGyColor3),
+                        TextStyle(color: TDTheme.of(context).textColorPlaceholder),
                     cursorColor: cursorColor,
                     textInputBackgroundColor: textInputBackgroundColor,
                     controller: controller,
