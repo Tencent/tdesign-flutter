@@ -23,7 +23,7 @@
                 _countdownTime > 0
                     ? TDText(
                         '${countDownText}(${_countdownTime}秒)',
-                        textColor: TDTheme.of(context).fontGyColor4,
+                        textColor: TDTheme.of(context).textColorDisabled,
                       )
                     : TDText(confirmText, textColor: TDTheme.of(context).brandNormalColor),
               ],
