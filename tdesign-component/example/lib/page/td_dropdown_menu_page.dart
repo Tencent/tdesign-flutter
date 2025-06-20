@@ -8,84 +8,82 @@ class TDDropdownMenuPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: TDTheme.of(context).grayColor2,
-        child: ExamplePage(
-          title: tdTitle(context),
-          desc: '菜单呈现数个并列的选项类目，用于整个页面的内容筛选，由菜单面板和菜单选项组成。',
-          exampleCodeGroup: 'dropdownMenu',
-          children: [
-            ExampleModule(title: '组件类型', children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '单选下拉菜单',
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildDownSimple);
-                },
-              ),
-              ExampleItem(
-                ignoreCode: true,
-                desc: '分栏下拉菜单',
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildDownChunk);
-                },
-              ),
-              ExampleItem(
-                ignoreCode: true,
-                desc: '向上展开',
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildUp);
-                },
-              ),
-            ]),
-            ExampleModule(title: '组件状态', children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '禁用状态',
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildDisabled);
-                },
-              ),
-              ExampleItem(
-                ignoreCode: true,
-                desc: '分组菜单',
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildGroup);
-                },
-              ),
-            ]),
-          ],
-          test: [
-            ExampleItem(
-              ignoreCode: true,
-              desc: '自动弹出方向',
-              builder: (BuildContext context) {
-                return const CodeWrapper(builder: _buildHidden);
-              },
-            ),
-            ExampleItem(
-              ignoreCode: true,
-              desc: '最大高度限制',
-              builder: (BuildContext context) {
-                return const CodeWrapper(builder: _buildHeight);
-              },
-            ),
-            ExampleItem(
-              ignoreCode: true,
-              desc: '可横向滚动菜单',
-              builder: (BuildContext context) {
-                return const CodeWrapper(builder: _buildOverflow);
-              },
-            ),
-            ExampleItem(
-              ignoreCode: true,
-              desc: '可横向滚动菜单（自定义禁用、选中颜色）',
-              builder: (BuildContext context) {
-                return const CodeWrapper(builder: _buildCustomOverflow);
-              },
-            ),
-          ],
-        ));
+    return ExamplePage(
+      title: tdTitle(context),
+      desc: '菜单呈现数个并列的选项类目，用于整个页面的内容筛选，由菜单面板和菜单选项组成。',
+      exampleCodeGroup: 'dropdownMenu',
+      children: [
+        ExampleModule(title: '组件类型', children: [
+          ExampleItem(
+            ignoreCode: true,
+            desc: '单选下拉菜单',
+            builder: (BuildContext context) {
+              return const CodeWrapper(builder: _buildDownSimple);
+            },
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            desc: '分栏下拉菜单',
+            builder: (BuildContext context) {
+              return const CodeWrapper(builder: _buildDownChunk);
+            },
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            desc: '向上展开',
+            builder: (BuildContext context) {
+              return const CodeWrapper(builder: _buildUp);
+            },
+          ),
+        ]),
+        ExampleModule(title: '组件状态', children: [
+          ExampleItem(
+            ignoreCode: true,
+            desc: '禁用状态',
+            builder: (BuildContext context) {
+              return const CodeWrapper(builder: _buildDisabled);
+            },
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            desc: '分组菜单',
+            builder: (BuildContext context) {
+              return const CodeWrapper(builder: _buildGroup);
+            },
+          ),
+        ]),
+      ],
+      test: [
+        ExampleItem(
+          ignoreCode: true,
+          desc: '自动弹出方向',
+          builder: (BuildContext context) {
+            return const CodeWrapper(builder: _buildHidden);
+          },
+        ),
+        ExampleItem(
+          ignoreCode: true,
+          desc: '最大高度限制',
+          builder: (BuildContext context) {
+            return const CodeWrapper(builder: _buildHeight);
+          },
+        ),
+        ExampleItem(
+          ignoreCode: true,
+          desc: '可横向滚动菜单',
+          builder: (BuildContext context) {
+            return const CodeWrapper(builder: _buildOverflow);
+          },
+        ),
+        ExampleItem(
+          ignoreCode: true,
+          desc: '可横向滚动菜单（自定义禁用、选中颜色）',
+          builder: (BuildContext context) {
+            return const CodeWrapper(builder: _buildCustomOverflow);
+          },
+        ),
+      ],
+    );
   }
 }
 
@@ -464,7 +462,8 @@ TDDropdownMenu _buildCustomOverflow(BuildContext context) {
     items: [
       TDDropdownItem(
         options: [
-          TDDropdownItemOption(label: '全部产品', value: 'all', selected: true, selectedColor: Colors.red),
+          TDDropdownItemOption(
+              label: '全部产品', value: 'all', selected: true, selectedColor: Colors.red),
           TDDropdownItemOption(label: '最新产品', value: 'new', selectedColor: Colors.blue),
           TDDropdownItemOption(label: '最火产品', value: 'hot', selectedColor: Colors.green),
         ],
@@ -475,9 +474,9 @@ TDDropdownMenu _buildCustomOverflow(BuildContext context) {
       TDDropdownItem(
         multiple: true,
         options: [
-          TDDropdownItemOption(label: '默认排序', value: 'default', selected: true, selectedColor: Colors.red),
+          TDDropdownItemOption(
+              label: '默认排序', value: 'default', selected: true, selectedColor: Colors.red),
           TDDropdownItemOption(label: '价格从高到低', value: 'price', selectedColor: Colors.green),
-
         ],
       ),
     ],
