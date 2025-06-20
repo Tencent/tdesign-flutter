@@ -265,8 +265,8 @@ class TDTableState extends State<TDTable> {
       }
       cells.add(Container(
         color: (widget.stripe ?? false) && i % 2 == 0
-            ? const Color(0xffF3F3F3)
-            : Colors.white,
+            ? TDTheme.of(context).bgColorSecondaryContainer
+            : TDTheme.of(context).bgColorContainer,
         child: Row(children: row),
       ));
     }
@@ -283,8 +283,8 @@ class TDTableState extends State<TDTable> {
     var sortable = col.sortable ?? false;
 
     // 单元格边框
-    var halfBorder = const BorderSide(width: 0.5, color: Color(0xffE7E7E7));
-    var doubleBorder = const BorderSide(width: 2, color: Color(0xffE7E7E7));
+    var halfBorder = BorderSide(width: 0.5, color: TDTheme.of(context).componentStrokeColor);
+    var doubleBorder = BorderSide(width: 1, color: TDTheme.of(context).componentStrokeColor);
     var topBorder = BorderSide.none,
         rightBorder = BorderSide.none,
         leftBorder = BorderSide.none;
@@ -316,8 +316,8 @@ class TDTableState extends State<TDTable> {
           }
           return Icon(TDIcons.rectangle, size: 16,
             color: enable ?
-                  TDTheme.of(context).fontGyColor1 :
-                  TDTheme.of(context).fontGyColor3);
+                  TDTheme.of(context).textColorPrimary :
+                  TDTheme.of(context).textColorPlaceholder);
         },
         onCheckBoxChanged: (checked) {
           setState(() {
@@ -346,7 +346,7 @@ class TDTableState extends State<TDTable> {
           checked: _hasChecked == widget.data!.length,
           customIconBuilder: (context, checked) {
             if(_hasChecked == 0) {
-              return Icon(TDIcons.rectangle, size: 16, color: TDTheme.of(context).fontGyColor3,);
+              return Icon(TDIcons.rectangle, size: 16, color: TDTheme.of(context).textColorPlaceholder,);
             }
             var allCheck = _hasChecked >= widget.data!.length;
             var halfSelected = _hasChecked > 0 && _hasChecked < widget.data!.length;
@@ -411,8 +411,8 @@ class TDTableState extends State<TDTable> {
         overflow: overflow,
         style: TextStyle(
           color: isHeader
-              ? TDTheme.of(context).fontGyColor3
-              : TDTheme.of(context).fontGyColor1,
+              ? TDTheme.of(context).textColorPlaceholder
+              : TDTheme.of(context).textColorPrimary,
           fontSize: 14,
           height: 1,
           letterSpacing: 0,
@@ -421,7 +421,7 @@ class TDTableState extends State<TDTable> {
     // 表头（需考虑排序模式）
     if (isHeader) {
       var selectColor = TDTheme.of(context).brandNormalColor;
-      var unSelectColor = TDTheme.of(context).fontGyColor3;
+      var unSelectColor = TDTheme.of(context).textColorPlaceholder;
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -555,7 +555,7 @@ class TDTableState extends State<TDTable> {
       }
       return Container(
         width: width,
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -578,7 +578,7 @@ class TDTableState extends State<TDTable> {
     }
     var child = Container(
       width: width,
-      color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+      color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
       child: Row(
         children: [
           ...fixedLeftCols,
@@ -599,7 +599,7 @@ class TDTableState extends State<TDTable> {
       );
     }
     return Container(
-      color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+      color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
       child: Column(children: [child, placeholder]),
     );
   }
@@ -698,7 +698,7 @@ class TDTableState extends State<TDTable> {
     if (width < _getColsWidth()) {
       return Container(
         width: width,
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           physics: const ClampingScrollPhysics(),
@@ -723,7 +723,7 @@ class TDTableState extends State<TDTable> {
     }
     return Container(
       width: width,
-      color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+      color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
       child: Column(
         children: [
           Visibility(
