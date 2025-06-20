@@ -64,7 +64,7 @@ class _TabStyle extends AnimatedWidget {
     final unselectedColor = unselectedLabelColor ??
         tabBarTheme.unselectedLabelColor ??
         unselectedLabelStyle?.color ??
-        TDTheme.of(context).fontGyColor2; // selectedColor.withAlpha(0xB2) // 70% alpha ??
+        TDTheme.of(context).textColorPrimary;
 
     final color = selected
         ? Color.lerp(selectedColor, unselectedColor, animation.value)!
