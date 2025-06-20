@@ -4,6 +4,7 @@
     return TDCell(
         title: title,
         note: _selected_1,
+        arrow: true,
         onClick: (click) {
           var action = (List<MultiCascaderListModel> selectData) {
             if (selectData.isEmpty) {
