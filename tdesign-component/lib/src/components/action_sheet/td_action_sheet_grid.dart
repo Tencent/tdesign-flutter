@@ -98,7 +98,7 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
           TDText(
             widget.description!,
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor3,
+            textColor: TDTheme.of(context).textColorPlaceholder,
           ),
         ],
       ),

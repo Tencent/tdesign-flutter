@@ -69,7 +69,7 @@ class TDActionSheetGroup extends StatelessWidget {
                       TDText(
                         k!,
                         font: TDTheme.of(context).fontBodyMedium,
-                        textColor: TDTheme.of(context).fontGyColor3,
+                        textColor: TDTheme.of(context).textColorPlaceholder,
                       ),
                     ],
                   ),

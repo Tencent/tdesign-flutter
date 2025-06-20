@@ -40,7 +40,9 @@ class TDActionSheetList extends StatelessWidget {
         color: TDTheme.of(context).bgColorPage,
       ),
       clipBehavior: Clip.antiAlias,
-      padding: useSafeArea ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom) : EdgeInsets.zero,
+      padding: useSafeArea
+          ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom)
+          : EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -116,8 +118,9 @@ class TDActionSheetList extends StatelessWidget {
                     IconTheme(
                       data: IconThemeData(
                         color: item.disabled
-                            ? TDTheme.of(context).fontGyColor4 // 禁用状态下的图标颜色
-                            : (item.textStyle?.color ?? TDTheme.of(context).fontGyColor1), // 正常状态下的图标颜色
+                            ? TDTheme.of(context).textColorDisabled // 禁用状态下的图标颜色
+                            : (item.textStyle?.color ??
+                                TDTheme.of(context).textColorPrimary), // 正常状态下的图标颜色
                         size: item.textStyle?.fontSize,
                       ),
                       child: SizedBox(
@@ -132,8 +135,8 @@ class TDActionSheetList extends StatelessWidget {
                     item.label,
                     font: TDTheme.of(context).fontBodyLarge,
                     textColor: item.disabled
-                        ? TDTheme.of(context).fontGyColor4 // 禁用状态下的文本颜色
-                        : TDTheme.of(context).fontGyColor1, // 正常状态下的文本颜色
+                        ? TDTheme.of(context).textColorDisabled // 禁用状态下的文本颜色
+                        : TDTheme.of(context).textColorPrimary, // 正常状态下的文本颜色
                     style: item.textStyle,
                   ),
                   if (item.badge != null) ...[
