@@ -3,6 +3,7 @@
     return TDCell(
         title: '选择时间',
         note: selected_2,
+        arrow: true,
         onClick: (click) {
           TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
             setState(() {

@@ -6,6 +6,6 @@
       leftLabel: '数量',
       hintText: '填写个数',
       textAlign: TextAlign.end,
-      rightWidget: TDText('个', textColor: TDTheme.of(context).fontGyColor1),
+      rightWidget: TDText('个', textColor: TDTheme.of(context).textColorPrimary),
     );
   }
