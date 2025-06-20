@@ -81,13 +81,13 @@ class TDSliderThemeData {
     this.inactiveTrackColor,
     SliderThemeData? sliderThemeData,
   })  : scaleTextStyle = scaleTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor1),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPrimary),
         disabledScaleTextStyle = disabledScaleTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor4),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPlaceholder),
         thumbTextStyle = thumbTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor1),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPrimary),
         disabledThumbTextStyle = disabledThumbTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor4),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPlaceholder),
         _sliderThemeData = sliderThemeData,
         _capsule = false;
 
@@ -108,13 +108,13 @@ class TDSliderThemeData {
     this.inactiveTrackColor,
     SliderThemeData? sliderThemeData,
   })  : scaleTextStyle = scaleTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor1),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPrimary),
         disabledScaleTextStyle = disabledScaleTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor4),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPlaceholder),
         thumbTextStyle = thumbTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor1),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPrimary),
         disabledThumbTextStyle = disabledThumbTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor4),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPlaceholder),
         _sliderThemeData = sliderThemeData,
         _capsule = true;
 
