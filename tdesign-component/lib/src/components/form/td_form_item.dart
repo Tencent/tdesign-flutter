@@ -260,8 +260,8 @@ class _TDFormItemState extends State<TDFormItem> {
                   children: [
                     TDText(widget.label, style: const TextStyle(fontSize: 16), textAlign: widget.labelAlign),
                     if (FormRequiredMark && (widget.requiredMark != null && widget.requiredMark == true))
-                      TDText('*',
-                          style: const TextStyle(fontSize: 12), textColor: Colors.red, textAlign: widget.labelAlign),
+                      Padding(padding:const EdgeInsets.only(left: 4),child: TDText('*',
+                          style: const TextStyle(fontSize: 12), textColor: Colors.red, textAlign: widget.labelAlign),),
                   ],
                 )));
     List<Widget> itemContent = [
@@ -278,7 +278,6 @@ class _TDFormItemState extends State<TDFormItem> {
     ];
     switch (widget.type) {
       case TDFormItemType.input:
-
       case TDFormItemType.rate:
         return Container(
             decoration: BoxDecoration(
@@ -300,7 +299,7 @@ class _TDFormItemState extends State<TDFormItem> {
                         children: itemContent,
                       ),
                     ),
-                    _buildTipRow()
+                    _buildTipRow(top: 8)
                   ],
                 )));
       case TDFormItemType.radios:
@@ -321,10 +320,22 @@ class _TDFormItemState extends State<TDFormItem> {
                       ),
                       replacement: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: itemContent,
+                        children:[
+                          labelContent,
+                          SizedBox(height: 5,),
+                          Visibility(
+                            visible: FormIsHorizontal,
+                            child: Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: widget.child ?? SizedBox(),
+                                )),
+                            replacement: widget.child ?? SizedBox(),
+                          )
+                        ],
                       ),
                     ),
-                    _buildTipRow(left: 14)
+                    _buildTipRow(left: 0,top: 8)
                   ],
                 )));
       case TDFormItemType.dateTimePicker:
@@ -349,10 +360,7 @@ class _TDFormItemState extends State<TDFormItem> {
                   children: itemContent,
                 ),
               ),
-              SizedBox(
-                height: 6,
-              ),
-              _buildTipRow(right: 20)
+              _buildTipRow(right: 20,top: 8)
             ]),
           ),
         );
@@ -390,7 +398,7 @@ class _TDFormItemState extends State<TDFormItem> {
                         ],
                       ),
                     ),
-                    _buildTipRow(left: 0)
+                    _buildTipRow(left: 0,top: 8)
                   ],
                 )));
       case TDFormItemType.upLoadImg:
@@ -421,8 +429,7 @@ class _TDFormItemState extends State<TDFormItem> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 8,),
-                  _buildTipRow()
+                  _buildTipRow(top: 8)
                 ],
               )),
         );
@@ -439,8 +446,8 @@ class _TDFormItemState extends State<TDFormItem> {
               children: [
                 TDText(widget.label, style: const TextStyle(fontSize: 16), textAlign: widget.labelAlign),
                 if (FormRequiredMark && (widget.requiredMark != null && widget.requiredMark == true))
-                  TDText('*',
-                      style: const TextStyle(fontSize: 12), textColor: Colors.red, textAlign: widget.labelAlign),
+                  Padding(padding:const EdgeInsets.only(left: 4),child: TDText('*',
+                      style: const TextStyle(fontSize: 12), textColor: Colors.red, textAlign: widget.labelAlign),),
               ],
             ),
           ),
@@ -528,7 +535,7 @@ class _TDFormItemState extends State<TDFormItem> {
   }
 
   ///文案提示 如帮助信息，错误信息
-  Widget _buildTipRow({double left = 4, double right = 20}) {
+  Widget _buildTipRow({double top =6,double left = 4, double right = 20}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -538,7 +545,7 @@ class _TDFormItemState extends State<TDFormItem> {
               if (widget.label != null && FormIsHorizontal) SizedBox(width: LabelWidth),
               Expanded(
                 child: Padding(
-                    padding: EdgeInsets.only(left: left, right: right),
+                    padding: EdgeInsets.only(left: left, right: right,top: top),
                     child: TDText(
                       widget.help,
                       style: const TextStyle(fontSize: 12),
@@ -554,7 +561,7 @@ class _TDFormItemState extends State<TDFormItem> {
               if (widget.label != null && FormIsHorizontal) SizedBox(width: LabelWidth),
               Expanded(
                   child: Padding(
-                      padding: EdgeInsets.only(left: left, right: right),
+                      padding: EdgeInsets.only(left: left, right: right,top: top),
                       child: TDText(
                         errorMessage,
                         style: const TextStyle(fontSize: 12),

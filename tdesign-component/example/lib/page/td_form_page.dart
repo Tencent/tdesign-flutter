@@ -16,7 +16,7 @@ class TDFormPage extends StatefulWidget {
 class _TDFormPageState extends State<TDFormPage> {
   List<TextEditingController> _controller = [];
   FormController _formController = FormController();
-  StreamController<TDStepperEventType> _stepController=StreamController.broadcast();
+  StreamController<TDStepperEventType> _stepController = StreamController.broadcast();
   String _selected_1 = '请输入内容';
   String _selected_2 = '请输入内容';
   String? _initLocalData;
@@ -114,12 +114,12 @@ class _TDFormPageState extends State<TDFormPage> {
       ],
     },
   ];
-  List<TDUploadFile> files = [
-  ];
+  List<TDUploadFile> files = [];
 
   ///密码是否浏览
   bool browseOn = false;
-  TDCheckboxGroupController _genderCheckboxGroupController=TDCheckboxGroupController();
+  TDCheckboxGroupController _genderCheckboxGroupController = TDCheckboxGroupController();
+
   /// 整个表单存放的数据
   Map<String, dynamic> _formData = {
     "name": '',
@@ -155,12 +155,14 @@ class _TDFormPageState extends State<TDFormPage> {
     });
     super.initState();
   }
- @override
+
+  @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     _stepController.close();
   }
+
   /// 提交按钮钮点击事件：
   /// 改变 _validate 值，从而触发校验
   /// 获取表单的数据
@@ -207,7 +209,7 @@ class _TDFormPageState extends State<TDFormPage> {
       errorMessage: '年限需要大于0',
       type: TDFormItemType.stepper,
     ),
-    "description":TDFormValidation(
+    "description": TDFormValidation(
       validate: (value) {
         if (value == null || value.isEmpty) {
           return 'empty';
@@ -230,10 +232,9 @@ class _TDFormPageState extends State<TDFormPage> {
       type: TDFormItemType.upLoadImg,
     ),
   };
-  ///表单提交数据
-  onSubmit(Map<String, dynamic> formData, isValidateSuc) {
 
-  }
+  ///表单提交数据
+  onSubmit(Map<String, dynamic> formData, isValidateSuc) {}
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -265,38 +266,39 @@ class _TDFormPageState extends State<TDFormPage> {
         rules: _validationRules,
         formContentAlign: TextAlign.left,
         requiredMark: true,
+
         /// 确定整个表单是否展示提示信息
         formShowErrorMessage: true,
         onSubmit: onSubmit,
         items: [
           TDFormItem(
-              label: '用户名',
-              name: 'name',
-              type: TDFormItemType.input,
-              help: '请输入用户名',
-              labelWidth: 82.0,
-              formItemNotifier: _formItemNotifier['name'],
+            label: '用户名',
+            name: 'name',
+            type: TDFormItemType.input,
+            help: '请输入用户名',
+            labelWidth: 82.0,
+            formItemNotifier: _formItemNotifier['name'],
 
-              /// 控制单个 item 是否展示错误提醒
-              showErrorMessage: true,
-              requiredMark: true,
-              child: TDInput(
-                  inputDecoration: InputDecoration(
-                    hintText: "请输入用户名",
-                    border: InputBorder.none,
-                  ),
-                  controller: _controller[0],
-                  backgroundColor: Colors.white,
-                  additionInfoColor: TDTheme.of(context).errorColor6,
-                  showBottomDivider: false,
-                  readOnly: _formDisableState,
-                  onChanged: (val) {
-                    _formItemNotifier['name']?.upDataForm(val);
-                  },
-                  onClearTap: () {
-                    _controller[0].clear();
-                    _formItemNotifier['name']?.upDataForm("");
-                  })),
+            /// 控制单个 item 是否展示错误提醒
+            showErrorMessage: true,
+            requiredMark: true,
+            child: TDInput(
+                leftContentSpace: 0,
+                inputDecoration:
+                    InputDecoration(hintText: "请输入用户名", border: InputBorder.none, contentPadding: EdgeInsets.all(0)),
+                controller: _controller[0],
+                backgroundColor: Colors.white,
+                additionInfoColor: TDTheme.of(context).errorColor6,
+                showBottomDivider: false,
+                readOnly: _formDisableState,
+                onChanged: (val) {
+                  _formItemNotifier['name']?.upDataForm(val);
+                },
+                onClearTap: () {
+                  _controller[0].clear();
+                  _formItemNotifier['name']?.upDataForm("");
+                }),
+          ),
           TDFormItem(
             label: '密码',
             name: 'password',
@@ -305,6 +307,7 @@ class _TDFormPageState extends State<TDFormPage> {
             formItemNotifier: _formItemNotifier['password'],
             showErrorMessage: true,
             child: TDInput(
+                leftContentSpace: 0,
                 inputDecoration: InputDecoration(
                   hintText: '请输入密码',
                   border: InputBorder.none,
@@ -328,7 +331,7 @@ class _TDFormPageState extends State<TDFormPage> {
             label: '性别',
             name: 'gender',
             type: TDFormItemType.radios,
-            labelWidth: 68.0,
+            labelWidth: 82.0,
             showErrorMessage: true,
             formItemNotifier: _formItemNotifier['gender'],
             child: TDRadioGroup(
@@ -342,11 +345,13 @@ class _TDFormPageState extends State<TDFormPage> {
                   radioStyle: TDRadioStyle.circle,
                   showDivider: false,
                   spacing: 4,
+                  checkBoxLeftSpace:0,
+                  customSpace: EdgeInsets.all(0),
                   enable: !_formDisableState,
                 );
               }).toList(),
               onRadioGroupChange: (ids) {
-                if(ids==null){
+                if (ids == null) {
                   return;
                 }
                 _formItemNotifier['gender']?.upDataForm(ids);
@@ -380,7 +385,7 @@ class _TDFormPageState extends State<TDFormPage> {
             label: '籍贯',
             name: 'place',
             type: TDFormItemType.cascader,
-            contentAlign:TextAlign.left,
+            contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             labelWidth: 80.0,
             select: _selected_2,
@@ -431,20 +436,20 @@ class _TDFormPageState extends State<TDFormPage> {
             name: 'description',
             tipAlign: TextAlign.left,
             type: TDFormItemType.rate,
-            labelWidth:82.0,
+            labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['description'],
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                  padding: EdgeInsets.only(top: _isFormHorizontal ? 0 : 5, right: 18, bottom: 5),
+                  padding: EdgeInsets.only(top: _isFormHorizontal ? 0 : 5, right: 18),
                   child: TDRate(
                     count: 5,
-                    value:double.parse(_formData['description']),
+                    value: double.parse(_formData['description']),
                     allowHalf: false,
                     disabled: _formDisableState,
                     onChange: (value) {
                       setState(() {
-                        _formData['description']='${value}';
+                        _formData['description'] = '${value}';
                       });
                       _formItemNotifier['description']?.upDataForm('${value}');
                     },
@@ -459,13 +464,13 @@ class _TDFormPageState extends State<TDFormPage> {
             formItemNotifier: _formItemNotifier['resume'],
             child: TDTextarea(
               backgroundColor: Colors.red,
-              padding:EdgeInsets.all(0),
+              padding: EdgeInsets.all(0),
               hintText: '请输入个人简介',
               maxLength: 500,
               indicator: true,
               readOnly: _formDisableState,
               layout: TDTextareaLayout.vertical,
-              controller:_controller[2],
+              controller: _controller[2],
               showBottomDivider: false,
               onChanged: (value) {
                 _formItemNotifier['resume']?.upDataForm(value);
@@ -509,50 +514,47 @@ class _TDFormPageState extends State<TDFormPage> {
                   children: [
                     Expanded(
                         child: TDButton(
-                          text: '重置',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          theme: TDButtonTheme.light,
-                          shape: TDButtonShape.rectangle,
-                          disabled: _formDisableState,
-                          onTap: () {
-
-                            //用户名称
-                            _controller[0].clear();
-                            //密码
-                            _controller[1].clear();
-                            // 性别
-                            _genderCheckboxGroupController.toggle('',false);
-                            //个人简介
-                            _controller[2].clear();
-                            //生日
-                            _selected_1='请输入内容';
-                            //籍贯
-                            _selected_2='请输入内容';
-                            //年限
-                            _stepController.add(TDStepperEventType.cleanValue);
-                            //上传图片
-                            files.clear();
-                            _formData={
-                              "name": '',
-                              "password": '',
-                              "gender": '',
-                              "birth": '',
-                              "place": '',
-                              "age": "0",
-                              "description": "2",
-                              "resume": '',
-                              "photo": ''
-                            };
-                            _formData.forEach((key, value) {
-                              _formItemNotifier[key].upDataForm(value);
-                            });
-                            _formController.reset(_formData);
-                            setState(() {
-
-                            });
-                          },
-                        )),
+                      text: '重置',
+                      size: TDButtonSize.large,
+                      type: TDButtonType.fill,
+                      theme: TDButtonTheme.light,
+                      shape: TDButtonShape.rectangle,
+                      disabled: _formDisableState,
+                      onTap: () {
+                        //用户名称
+                        _controller[0].clear();
+                        //密码
+                        _controller[1].clear();
+                        // 性别
+                        _genderCheckboxGroupController.toggle('', false);
+                        //个人简介
+                        _controller[2].clear();
+                        //生日
+                        _selected_1 = '请输入内容';
+                        //籍贯
+                        _selected_2 = '请输入内容';
+                        //年限
+                        _stepController.add(TDStepperEventType.cleanValue);
+                        //上传图片
+                        files.clear();
+                        _formData = {
+                          "name": '',
+                          "password": '',
+                          "gender": '',
+                          "birth": '',
+                          "place": '',
+                          "age": "0",
+                          "description": "2",
+                          "resume": '',
+                          "photo": ''
+                        };
+                        _formData.forEach((key, value) {
+                          _formItemNotifier[key].upDataForm(value);
+                        });
+                        _formController.reset(_formData);
+                        setState(() {});
+                      },
+                    )),
                     SizedBox(
                       width: 20,
                     ),
