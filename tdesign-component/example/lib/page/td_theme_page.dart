@@ -251,7 +251,7 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
           var light = index < 6;
           if (index == 0) {
             return Container(
-              color: TDTheme.of(context).colorMap['whiteColor1'],
+              color: TDTheme.of(context).bgColorContainer,
               child: const TDText('whiteColor1'),
             );
           } else {
