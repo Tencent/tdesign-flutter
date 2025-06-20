@@ -94,7 +94,7 @@ class TDFab extends StatelessWidget {
       case TDFabTheme.primary:
         return TDTheme.of(context).brandColor7;
       case TDFabTheme.defaultTheme:
-        return TDTheme.of(context).bgColorComponent;
+        return TDTheme.of(context).grayColor3;
       case TDFabTheme.light:
         return TDTheme.of(context).brandColor1;
       case TDFabTheme.danger:
@@ -109,13 +109,13 @@ class TDFab extends StatelessWidget {
       case TDFabTheme.primary:
         return Colors.white;
       case TDFabTheme.defaultTheme:
-        return TDTheme.of(context).fontGyColor1.withOpacity(0.9);
+        return TDTheme.of(context).fontGyColor1;
       case TDFabTheme.light:
         return TDTheme.of(context).brandColor7;
       case TDFabTheme.danger:
         return Colors.white;
       default:
-        return TDTheme.of(context).fontGyColor1.withOpacity(0.9);
+        return TDTheme.of(context).fontGyColor1;
     }
   }
 
