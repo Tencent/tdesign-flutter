@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
           primary: _themeData.brandNormalColor,
         ),
         scaffoldBackgroundColor: _themeData.bgColorPage,
-        iconTheme: IconThemeData().copyWith(
+        iconTheme: const IconThemeData().copyWith(
           color: _themeData.brandNormalColor,
         ),
       ),
@@ -71,13 +71,13 @@ class _MyAppState extends State<MyApp> {
           primary: _themeData.brandNormalColor,
           secondary: _themeData.brandNormalColor,
         ),
-        scaffoldBackgroundColor: _themeData.grayColor14,
+        scaffoldBackgroundColor: _themeData.bgColorPage,
         bottomNavigationBarTheme:
-            BottomNavigationBarThemeData().copyWith(backgroundColor: _themeData.grayColor14),
-        appBarTheme: AppBarTheme().copyWith(
+            const BottomNavigationBarThemeData().copyWith(backgroundColor: _themeData.grayColor14),
+        appBarTheme: const AppBarTheme().copyWith(
           backgroundColor: _themeData.grayColor13,
         ),
-        iconTheme: IconThemeData().copyWith(
+        iconTheme: const IconThemeData().copyWith(
           color: _themeData.brandNormalColor,
         ),
       ),
