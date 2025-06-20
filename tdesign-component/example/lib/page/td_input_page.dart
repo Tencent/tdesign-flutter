@@ -53,9 +53,8 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    var childBuilder = (context){
+    var childBuilder = (context) {
       return ExamplePage(
-        backgroundColor: const Color(0xFFF0F2F5),
         title: tdTitle(),
         desc: '用于在预设的一组选项中执行单项选择，并呈现选择结果。',
         exampleCodeGroup: 'input',
@@ -110,13 +109,15 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         ],
       );
     };
-    if(PlatformUtil.isWeb){
-      return FutureBuilder(future: awaitFontLoad(), builder: (context, s){
-        if(s.data == null){
-          return Container();
-        }
-        return childBuilder.call(context);
-      });
+    if (PlatformUtil.isWeb) {
+      return FutureBuilder(
+          future: awaitFontLoad(),
+          builder: (context, s) {
+            if (s.data == null) {
+              return Container();
+            }
+            return childBuilder.call(context);
+          });
     }
     return childBuilder.call(context);
   }
@@ -286,7 +287,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           hintText: '请输入文字',
           rightBtn: Icon(
             TDIcons.error_circle_filled,
-            color: TDTheme.of(context).fontGyColor3,
+            color: TDTheme.of(context).textColorPlaceholder,
           ),
           onBtnTap: () {
             TDToast.showText('点击右侧按钮', context: context);
@@ -348,7 +349,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       hintText: '请输入文字',
       rightBtn: Icon(
         TDIcons.user_avatar,
-        color: TDTheme.of(context).fontGyColor3,
+        color: TDTheme.of(context).textColorPlaceholder,
       ),
       onBtnTap: () {
         TDToast.showText('点击操作按钮', context: context);
@@ -423,11 +424,11 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           rightBtn: browseOn
               ? Icon(
                   TDIcons.browse,
-                  color: TDTheme.of(context).fontGyColor3,
+                  color: TDTheme.of(context).textColorPlaceholder,
                 )
               : Icon(
                   TDIcons.browse_off,
-                  color: TDTheme.of(context).fontGyColor3,
+                  color: TDTheme.of(context).textColorPlaceholder,
                 ),
           onBtnTap: () {
             setState(() {
@@ -508,7 +509,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 _countdownTime > 0
                     ? TDText(
                         '${countDownText}(${_countdownTime}秒)',
-                        textColor: TDTheme.of(context).fontGyColor4,
+                        textColor: TDTheme.of(context).textColorDisabled,
                       )
                     : TDText(confirmText, textColor: TDTheme.of(context).brandNormalColor),
               ],
@@ -542,7 +543,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           leftLabel: '价格',
           hintText: '0.00',
           textAlign: TextAlign.end,
-          rightWidget: TDText('元', textColor: TDTheme.of(context).fontGyColor1),
+          rightWidget: TDText('元', textColor: TDTheme.of(context).textColorPrimary),
         ),
         const SizedBox(
           height: 16,
@@ -559,7 +560,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       leftLabel: '数量',
       hintText: '填写个数',
       textAlign: TextAlign.end,
-      rightWidget: TDText('个', textColor: TDTheme.of(context).fontGyColor1),
+      rightWidget: TDText('个', textColor: TDTheme.of(context).textColorPrimary),
     );
   }
 
@@ -631,7 +632,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       controller: controller[19],
       hintText: '输入文字超长不超过两行输入文字超长不超过两行',
       hintTextStyle: TextStyle(
-        color: TDTheme.of(context).fontGyColor1,
+        color: TDTheme.of(context).textColorPrimary,
       ),
       maxLines: 2,
     );
@@ -647,7 +648,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       hintText: '请输入文字',
       rightBtn: Icon(
         TDIcons.error_circle_filled,
-        color: TDTheme.of(context).fontGyColor3,
+        color: TDTheme.of(context).textColorPlaceholder,
       ),
       onBtnTap: () {
         TDToast.showText('点击右侧按钮', context: context);
@@ -695,7 +696,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         hintText: '请输入文字',
         rightBtn: Icon(
           TDIcons.error_circle_filled,
-          color: TDTheme.of(context).fontGyColor3,
+          color: TDTheme.of(context).textColorPlaceholder,
         ),
         onBtnTap: () {
           TDToast.showText('点击右侧按钮', context: context);
@@ -811,20 +812,19 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
       padding: const EdgeInsets.only(top: 16, bottom: 24),
       width: MediaQuery.of(context).size.width,
       child: TDInput(
-        type: TDInputType.longText,
-        cardStyle: TDCardStyle.topText,
-        width: MediaQuery.of(context).size.width - 32,
-        cardStyleTopText: '标签文字',
-        controller: controller,
-        hintText: '请输入文字',
-        rightBtn: Icon(
-          TDIcons.error_circle_filled,
-          color: TDTheme.of(context).fontGyColor3,
-        ),
-        onBtnTap: () {
-          TDToast.showText('点击右侧按钮', context: context);
-        }
-      ),
+          type: TDInputType.longText,
+          cardStyle: TDCardStyle.topText,
+          width: MediaQuery.of(context).size.width - 32,
+          cardStyleTopText: '标签文字',
+          controller: controller,
+          hintText: '请输入文字',
+          rightBtn: Icon(
+            TDIcons.error_circle_filled,
+            color: TDTheme.of(context).textColorPlaceholder,
+          ),
+          onBtnTap: () {
+            TDToast.showText('点击右侧按钮', context: context);
+          }),
     );
   }
 
@@ -893,21 +893,21 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           TDInput(
             size: TDInputSize.small,
             controller: controller,
-              contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             hintText: '请输入文字',
           ),
           TDInput(
             type: TDInputType.twoLine,
             size: TDInputSize.small,
             controller: controller,
-              contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
             hintText: '请输入文字',
           ),
           TDInput(
             type: TDInputType.normalMaxTwoLine,
             size: TDInputSize.small,
             controller: controller,
-              contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
+            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
             hintText: '请输入文字',
           ),
         ],
