@@ -323,6 +323,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
     return TDCell(
         title: title,
         note: _selected_1,
+        arrow: true,
         onClick: (click) {
           TDCascader.showMultiCascader(context,
               title: title,
@@ -350,6 +351,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
     return TDCell(
         title: title,
         note: _selected_2,
+        arrow: true,
         onClick: (click) {
           TDCascader.showMultiCascader(context,
               title: title,
@@ -377,6 +379,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
     return TDCell(
         title: title,
         note: _selected_1,
+        arrow: true,
         onClick: (click) {
           TDCascader.showMultiCascader(context,
               title: title,
@@ -405,6 +408,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
     return TDCell(
         title: title,
         note: _selected_2,
+        arrow: true,
         onClick: (click) {
           TDCascader.showMultiCascader(context,
               title: title,
@@ -433,6 +437,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
     return TDCell(
         title: title,
         note: _selected_3,
+        arrow: true,
         onClick: (click) {
           TDCascader.showMultiCascader(context,
               title: title,
@@ -461,6 +466,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
     return TDCell(
         title: title,
         note: _selected_3,
+        arrow: true,
         onClick: (click) {
           TDCascader.showMultiCascader(context,
               title: title,
@@ -489,6 +495,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
     return TDCell(
         title: title,
         note: _selected_1,
+        arrow: true,
         onClick: (click) {
           TDCascader.showMultiCascader(context,
               title: title,
@@ -517,6 +524,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
     return TDCell(
         title: title,
         note: _selected_4,
+        arrow: true,
         onClick: (click) {
           TDCascader.showMultiCascader(context,
               title: title,
@@ -544,6 +552,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
     return TDCell(
         title: title,
         note: _selected_1,
+        arrow: true,
         onClick: (click) {
           var action = (List<MultiCascaderListModel> selectData) {
             if (selectData.isEmpty) {

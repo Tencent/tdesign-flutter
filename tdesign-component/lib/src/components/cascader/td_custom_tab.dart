@@ -43,7 +43,7 @@ class _TDCustomTabState extends State<TDCustomTab> {
                 onTap:(){
                   _onChangeTab(index);
                 },
-                child: Container(
+                child: SizedBox(
                     width: 96,
                     height: 52,
                     child: Stack(
