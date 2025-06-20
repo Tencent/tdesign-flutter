@@ -40,7 +40,7 @@
                             child: Text(
                               e,
                               style: TextStyle(
-                                  color: TDTheme.of(context).fontGyColor1,
+                                  color: TDTheme.of(context).textColorPrimary,
                                   fontSize: 16),
                             ),
                           ),
