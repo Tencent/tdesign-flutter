@@ -13,15 +13,14 @@ class TDImagePage extends StatefulWidget {
   State<StatefulWidget> createState() => TDImageState();
 }
 
-class TDImageState extends State<TDImagePage>
-    with SingleTickerProviderStateMixin {
+class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
+
   @override
   void initState() {
     super.initState();
-    animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 4));
+    animationController = AnimationController(vsync: this, duration: const Duration(seconds: 4));
     animation = Tween(begin: 0.0, end: 4.0).animate(animationController);
     animationController.repeat();
   }
@@ -216,7 +215,6 @@ class TDImageState extends State<TDImagePage>
           child: TDText(
             '裁剪',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -226,6 +224,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
+
 /* 图片拉伸 */
   @Demo(group: 'image')
   Widget _imageStretch(BuildContext context) {
@@ -237,11 +236,10 @@ class TDImageState extends State<TDImagePage>
           child: TDText(
             '拉伸',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           width: 121,
           height: 72,
           child: Stack(
@@ -259,6 +257,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
+
 /* 图片适应高 */
   @Demo(group: 'image')
   Widget _imageFitHeight(BuildContext context) {
@@ -270,13 +269,12 @@ class TDImageState extends State<TDImagePage>
           child: TDText(
             '适应高',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 89,
           height: 72,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitHeight,
@@ -285,6 +283,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
+
   /* 图片适应宽 */
   @Demo(group: 'image')
   Widget _imageFitWidth(BuildContext context) {
@@ -296,13 +295,12 @@ class TDImageState extends State<TDImagePage>
           child: TDText(
             '适应宽',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 72,
           height: 89,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitWidth,
@@ -311,6 +309,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
+
 /* 方形 */
   @Demo(group: 'image')
   Widget _imageSquare(BuildContext context) {
@@ -322,7 +321,6 @@ class TDImageState extends State<TDImagePage>
           child: TDText(
             '方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -332,6 +330,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
+
 /* 圆角方形 */
   @Demo(group: 'image')
   Widget _imageRoundedSquare(BuildContext context) {
@@ -343,7 +342,6 @@ class TDImageState extends State<TDImagePage>
           child: TDText(
             '圆角方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -355,6 +353,7 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
+
 /* 圆形 */
   @Demo(group: 'image')
   Widget _imageCircle(BuildContext context) {
@@ -366,7 +365,6 @@ class TDImageState extends State<TDImagePage>
           child: TDText(
             '圆形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -378,18 +376,18 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
+
 /* 加载默认提示 */
   @Demo(group: 'image')
   Widget _loadingDefault(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载默认提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
@@ -397,17 +395,16 @@ class TDImageState extends State<TDImagePage>
             width: 72,
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
+                color: TDTheme.of(context).bgColorContainerHover,
                 child: Icon(
                   TDIcons.ellipsis,
                   size: 22,
-                  color: TDTheme.of(context).fontGyColor3,
+                  color: TDTheme.of(context).textColorPlaceholder,
                 ))),
-        // 实际组件写法如下：上面仅为加载展示
+        /// @tips 实际组件写法如下：上面仅为加载展示
         // const TDImage(
         //   imgUrl:
         //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
@@ -416,18 +413,18 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
+
 /* 加载自定义提示 */
   @Demo(group: 'image')
   Widget _loadingCustom(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载自定义提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
@@ -435,11 +432,10 @@ class TDImageState extends State<TDImagePage>
             width: 72,
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
+                color: TDTheme.of(context).bgColorContainerHover,
                 child: RotationTransition(
                     turns: animation,
                     alignment: Alignment.center,
@@ -465,18 +461,18 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
+
 /* 失败默认提示 */
   @Demo(group: 'image')
   Widget _failDefault(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '失败默认提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -486,18 +482,18 @@ class TDImageState extends State<TDImagePage>
       ],
     );
   }
+
 /* 失败自定义提示 */
   @Demo(group: 'image')
   Widget _failCustom(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '失败自定义提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         TDImage(
@@ -506,8 +502,6 @@ class TDImageState extends State<TDImagePage>
             '加载失败',
             forceVerticalCenter: true,
             font: TDTheme.of(context).fontBodyExtraSmall,
-            fontWeight: FontWeight.w500,
-            textColor: TDTheme.of(context).fontGyColor3,
           ),
           type: TDImageType.roundedSquare,
         ),
@@ -517,7 +511,7 @@ class TDImageState extends State<TDImagePage>
 
   @Demo(group: 'image')
   Widget _imageFile(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 72,
       height: 72,
       child: TDImage(

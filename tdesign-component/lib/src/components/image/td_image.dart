@@ -126,6 +126,8 @@ class TDImage extends StatefulWidget {
 }
 
 class _TDImageState extends State<TDImage> {
+
+  /// @todo 重复代码，需简化
   @override
   Widget build(BuildContext context) {
     switch (widget.type) {
