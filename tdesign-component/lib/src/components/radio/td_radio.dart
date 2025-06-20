@@ -15,31 +15,33 @@ class TDRadio extends TDCheckbox {
   /// 单选框按钮样式
   final TDRadioStyle radioStyle;
 
-  const TDRadio(
-      {String? id,
-      Key? key,
-      String? title,
-      Font? titleFont,
-      String? subTitle,
-      Font? subTitleFont,
-      bool enable = true,
-      int subTitleMaxLine = 1,
-      int titleMaxLine = 1,
-      Color? selectColor,
-      Color? disableColor,
-      ContentBuilder? customContentBuilder,
-      double? spacing,
-      bool? cardMode,
-      bool? showDivider,
-      TDCheckBoxSize size = TDCheckBoxSize.small,
-      this.radioStyle = TDRadioStyle.circle,
-      TDContentDirection contentDirection = TDContentDirection.right,
-      IconBuilder? customIconBuilder,
-      Color? titleColor,
-      Color? subTitleColor,
-      Color? backgroundColor,
-      double? checkBoxLeftSpace})
-      : super(
+  const TDRadio({
+    String? id,
+    Key? key,
+    String? title,
+    Font? titleFont,
+    String? subTitle,
+    Font? subTitleFont,
+    bool enable = true,
+    int subTitleMaxLine = 1,
+    int titleMaxLine = 1,
+    Color? selectColor,
+    Color? disableColor,
+    ContentBuilder? customContentBuilder,
+    double? spacing,
+    bool? cardMode,
+    bool? showDivider,
+    TDCheckBoxSize size = TDCheckBoxSize.small,
+    this.radioStyle = TDRadioStyle.circle,
+    TDContentDirection contentDirection = TDContentDirection.right,
+    IconBuilder? customIconBuilder,
+    Color? titleColor,
+    Color? subTitleColor,
+    Color? backgroundColor,
+    double? checkBoxLeftSpace,
+    double? insetSpacing,
+    EdgeInsetsGeometry? customSpace,
+  }) : super(
             id: id,
             key: key,
             title: title,
@@ -61,7 +63,9 @@ class TDRadio extends TDCheckbox {
             titleColor: titleColor,
             subTitleColor: subTitleColor,
             backgroundColor: backgroundColor,
-            checkBoxLeftSpace: checkBoxLeftSpace);
+            checkBoxLeftSpace: checkBoxLeftSpace,
+            insetSpacing: insetSpacing,
+            customSpace: customSpace);
 
   @override
   Widget buildDefaultIcon(BuildContext context, TDCheckboxGroupState? groupState, bool isSelected) {
@@ -185,26 +189,29 @@ class TDRadioGroup extends TDCheckboxGroup {
   ///每行几列
   final int rowCount;
 
-  TDRadioGroup({
-    Key? key,
-    Widget? child, // 使用child 则请勿设置direction
-    Axis? direction, // direction 对 directionalTdRadios 起作用
-    List<TDRadio>? directionalTdRadios,
-    String? selectId, // 默认选择项的id
-    bool? passThrough, // 非通栏单选样式 用于使用child 或 direction == Axis.vertical 场景
-    bool cardMode = false,
-    this.strictMode = true,
-    this.radioCheckStyle,
-    int? titleMaxLine, // item的行数
-    IconBuilder? customIconBuilder,
-    ContentBuilder? customContentBuilder,
-    double? spacing, // icon和文字距离
-    this.rowCount=1,
-    TDContentDirection? contentDirection,
-    OnRadioGroupChange? onRadioGroupChange, // 切换监听
-    this.showDivider = false,
-    this.divider,
-  })  : assert(() {
+  TDRadioGroup(
+      {Key? key,
+      Widget? child, // 使用child 则请勿设置direction
+      Axis? direction, // direction 对 directionalTdRadios 起作用
+      List<TDRadio>? directionalTdRadios,
+      String? selectId, // 默认选择项的id
+      bool? passThrough, // 非通栏单选样式 用于使用child 或 direction == Axis.vertical 场景
+      bool cardMode = false,
+      this.strictMode = true,
+      this.radioCheckStyle,
+      int? titleMaxLine, // item的行数
+      IconBuilder? customIconBuilder,
+      ContentBuilder? customContentBuilder,
+      double? spacing, // icon和文字距离
+      this.rowCount = 1,
+      TDContentDirection? contentDirection,
+      OnRadioGroupChange? onRadioGroupChange, // 切换监听
+      this.showDivider = false,
+      this.divider,
+
+      /// 可以通过控制器操作勾选状态
+      TDCheckboxGroupController? controller})
+      : assert(() {
           // 使用direction属性则必须配合directionalTdRadios，child字段无效
           if (direction != null && directionalTdRadios == null) {
             throw FlutterError('[TDRadioGroup] direction and directionalTdRadios must set at the same time');
@@ -294,31 +301,29 @@ class TDRadioGroup extends TDCheckboxGroup {
                       )
                     : Container(
                         margin: cardMode ? const EdgeInsets.symmetric(horizontal: 16) : null,
-                        height: cardMode ? (directionalTdRadios!.length/rowCount).ceil()*(56+10) : null,
-                        // height: 56,
+                        height: cardMode ? (directionalTdRadios!.length / rowCount).ceil() * (56 + 10) : null,
                         alignment: cardMode ? Alignment.topLeft : null,
-                        child: cardMode&&rowCount!=null
-                            ?
-                               GridView.builder(
-                                    itemCount: directionalTdRadios!.length,
-                                    gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisSpacing: 10.0,
-                                      mainAxisSpacing: 10.0,
-                                      crossAxisCount: rowCount,//一行的 Widget 数量
-                                      mainAxisExtent:56,
-                                    ),
-                                    itemBuilder: (BuildContext context,int index){
-                                      return Container(
-                                                width: 160.scale,
-                                                height: 56,
-                                                child: directionalTdRadios![index],
-                                              );
-                                    }
-                                )
+                        child: cardMode && rowCount != null
+                            ? GridView.builder(
+                                itemCount: directionalTdRadios!.length,
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisSpacing: 10.0,
+                                  mainAxisSpacing: 10.0,
+                                  crossAxisCount: rowCount, //一行的 Widget 数量
+                                  mainAxisExtent: 56,
+                                ),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Container(
+                                    width: 160.scale,
+                                    height: 56,
+                                    child: directionalTdRadios![index],
+                                  );
+                                })
                             : Column(
                                 children: [
                                   Row(
                                     mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: directionalTdRadios!.map((e) => Expanded(child: e)).toList(),
                                   ),
                                   if (showDivider)
@@ -334,7 +339,7 @@ class TDRadioGroup extends TDCheckboxGroup {
           onChangeGroup: (ids) {
             onRadioGroupChange?.call(ids.isNotEmpty ? ids[0] : null);
           },
-          controller: null,
+          controller: controller,
           checkedIds: selectId != null ? [selectId] : null,
           maxChecked: 1,
           titleMaxLine: titleMaxLine,
