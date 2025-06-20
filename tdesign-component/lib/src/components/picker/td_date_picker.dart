@@ -376,7 +376,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
               child: TDText(widget.leftText ?? context.resource.cancel,
                   style: widget.leftTextStyle ??
                       TextStyle(
-                          fontSize: TDTheme.of(context).fontBodyLarge!.size, color: TDTheme.of(context).fontGyColor2))),
+                          fontSize: TDTheme.of(context).fontBodyLarge!.size, color: TDTheme.of(context).textColorSecondary))),
 
           /// 中间title
           Expanded(
@@ -387,7 +387,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                     TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: TDTheme.of(context).fontGyColor1,
+                      color: TDTheme.of(context).textColorPrimary,
                     ),
               ),
             ),

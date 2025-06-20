@@ -235,7 +235,7 @@ class TDMultiPicker extends StatelessWidget {
                 leftText ?? context.resource.cancel,
                 style: leftTextStyle?? TextStyle(
                   fontSize: TDTheme.of(context).fontBodyLarge!.size,
-                  color: TDTheme.of(context).fontGyColor2
+                  color: TDTheme.of(context).textColorSecondary
                 ),
               )),
 
@@ -249,7 +249,7 @@ class TDMultiPicker extends StatelessWidget {
                       style: centerTextStyle ?? TextStyle(
                         fontSize: TDTheme.of(context).fontTitleLarge!.size,
                         fontWeight: FontWeight.w600,
-                        color: TDTheme.of(context).fontGyColor1
+                        color: TDTheme.of(context).textColorPrimary
                       ),
                     ),
                   ),
@@ -606,7 +606,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                 widget.leftText ?? context.resource.cancel,
                 style: widget.leftTextStyle ?? TextStyle(
                   fontSize: TDTheme.of(context).fontBodyLarge!.size,
-                  color: TDTheme.of(context).fontGyColor2,
+                  color: TDTheme.of(context).textColorSecondary,
                 ),
               )),
 
@@ -620,7 +620,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                       style: widget.centerTextStyle ?? TextStyle(
                         fontSize: TDTheme.of(context).fontTitleLarge!.size,
                         fontWeight: FontWeight.w700,
-                        color: TDTheme.of(context).fontGyColor1
+                        color: TDTheme.of(context).textColorPrimary
                       ),
                     ),
                   ),
