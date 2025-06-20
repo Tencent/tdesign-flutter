@@ -69,18 +69,18 @@ class TDCalendarStyle {
     titleStyle = TextStyle(
       fontSize: TDTheme.of(context).fontTitleLarge?.size,
       fontWeight: TDTheme.of(context).fontTitleLarge?.fontWeight,
-      color: TDTheme.of(context).fontGyColor1,
+      color: TDTheme.of(context).textColorPrimary,
     );
     titleMaxLine = 1;
     titleCloseColor = titleStyle?.color;
     weekdayStyle = TextStyle(
       fontSize: TDTheme.of(context).fontTitleSmall?.size,
-      color: TDTheme.of(context).fontGyColor2,
+      color: TDTheme.of(context).textColorSecondary,
     );
     monthTitleStyle = TextStyle(
       fontSize: TDTheme.of(context).fontMarkMedium?.size,
       fontWeight: TDTheme.of(context).fontMarkMedium?.fontWeight,
-      color: TDTheme.of(context).fontGyColor1,
+      color: TDTheme.of(context).textColorPrimary,
     );
     verticalGap = TDTheme.of(context).spacer8;
     bodyPadding = TDTheme.of(context).spacer16;
@@ -102,17 +102,17 @@ class TDCalendarStyle {
     centreColor = TDTheme.of(context).brandColor1;
     switch (type) {
       case DateSelectType.empty:
-        cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontGyColor1);
+        cellStyle = defStyle.copyWith(color: TDTheme.of(context).textColorPrimary);
         todayStyle = defStyle.copyWith(color: TDTheme.of(context).brandColor7);
         cellPrefixStyle = prefixStyle.copyWith(color: TDTheme.of(context).errorColor6);
-        cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontGyColor3);
+        cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).textColorPlaceholder);
         cellDecoration = null;
         break;
       case DateSelectType.disabled:
-        cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontGyColor4);
+        cellStyle = defStyle.copyWith(color: TDTheme.of(context).textColorDisabled);
         todayStyle = defStyle.copyWith(color: TDTheme.of(context).brandColor3);
         cellPrefixStyle = prefixStyle.copyWith(color: TDTheme.of(context).errorColor3);
-        cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontGyColor4);
+        cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).textColorDisabled);
         cellDecoration = null;
         break;
       case DateSelectType.selected:
@@ -125,9 +125,9 @@ class TDCalendarStyle {
         );
         break;
       case DateSelectType.centre:
-        cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontGyColor1);
+        cellStyle = defStyle.copyWith(color: TDTheme.of(context).textColorPrimary);
         cellPrefixStyle = prefixStyle.copyWith(color: TDTheme.of(context).errorColor6);
-        cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).fontGyColor3);
+        cellSuffixStyle = prefixStyle.copyWith(color: TDTheme.of(context).textColorPlaceholder);
         cellDecoration = BoxDecoration(
           color: centreColor,
         );
