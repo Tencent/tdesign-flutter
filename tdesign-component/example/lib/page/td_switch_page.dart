@@ -157,29 +157,6 @@ class TDSwitchPageState extends State<TDSwitchPage> {
   }
 
   @Demo(group: 'switch')
-  Widget _buildSwitch({
-    bool on = true,
-    bool enable = true,
-    Color? trackOnColor,
-    Color? trackOffColor,
-    Color? thumbContentOnColor,
-    Color? thumbContentOffColor,
-    TDSwitchSize? size,
-    TDSwitchType? type,
-  }) {
-    return TDSwitch(
-      isOn: on,
-      trackOnColor: trackOnColor,
-      trackOffColor: trackOffColor,
-      thumbContentOnColor: thumbContentOnColor,
-      thumbContentOffColor: thumbContentOffColor,
-      enable: enable,
-      size: size,
-      type: type,
-    );
-  }
-
-  @Demo(group: 'switch')
   Widget _customText(BuildContext context) {
     return const TDCell(
       title: '基础开关',
