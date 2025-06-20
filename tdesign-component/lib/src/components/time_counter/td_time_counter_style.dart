@@ -171,13 +171,13 @@ class TDTimeCounterStyle {
         break;
       case TDTimeCounterTheme.defaultTheme:
         timeBox = null;
-        timeColor = splitColor = TDTheme.of(context).fontGyColor1;
+        timeColor = splitColor = TDTheme.of(context).textColorPrimary;
         timeWidth = null;
         timeHeight = null;
     }
 
     if (splitWithUnit ?? false) {
-      splitColor = TDTheme.of(context).fontGyColor1;
+      splitColor = TDTheme.of(context).textColorPrimary;
     }
   }
 }
