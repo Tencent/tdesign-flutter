@@ -15,7 +15,7 @@
           TDBottomTabBarTabConfig(
             tabText: '标签',
             unselectTabTextStyle:
-                TextStyle(color: TDTheme.of(context).fontGyColor1),
+                TextStyle(color: TDTheme.of(context).textColorPrimary),
             onTap: () {
               onTapTab(context, '标签1');
             },
