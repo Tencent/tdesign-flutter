@@ -29,7 +29,6 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
       title: tdTitle(),
       desc: '适用于选择树形的数据结构',
       exampleCodeGroup: 'tree',
-      backgroundColor: TDTheme.of(context).grayColor2,
       children: [
         ExampleModule(
           title: '组件类型',

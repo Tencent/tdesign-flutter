@@ -685,7 +685,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
                             child: Text(
                               e,
                               style: TextStyle(
-                                  color: TDTheme.of(context).fontGyColor1,
+                                  color: TDTheme.of(context).textColorPrimary,
                                   fontSize: 16),
                             ),
                           ),
@@ -1007,7 +1007,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
           TDBottomTabBarTabConfig(
             tabText: '标签',
             unselectTabTextStyle:
-                TextStyle(color: TDTheme.of(context).fontGyColor1),
+                TextStyle(color: TDTheme.of(context).textColorPrimary),
             onTap: () {
               onTapTab(context, '标签1');
             },

@@ -22,7 +22,6 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
         title: tdTitle(),
         desc: '用于一组预设数据中的选择。',
         exampleCodeGroup: 'search',
-        backgroundColor: TDTheme.of(context).grayColor2,
         children: [
           ExampleModule(
             title: '组件类型',

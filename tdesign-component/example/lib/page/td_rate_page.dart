@@ -28,7 +28,6 @@ class TDRatePageState extends State<TDRatePage> {
         title: tdTitle(),
         desc: '用于对某行为/事物进行打分。',
         exampleCodeGroup: 'rate',
-        backgroundColor: TDTheme.of(context).grayColor2,
         children: [
           ExampleModule(title: '组件类型', children: [
             ExampleItem(desc: '实心评分', builder: _buildFilledRate),
