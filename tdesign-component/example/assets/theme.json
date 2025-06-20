@@ -222,8 +222,8 @@
       "textColorPrimary": "fontWhColor1",
       "textColorSecondary": "fontWhColor2",
       "textColorPlaceholder": "fontWhColor3",
-      "textColorDisabled": "fontGyColor4",
-      "textColorAnti": "grayColor1",
+      "textColorDisabled": "fontWhColor4",
+      "textColorAnti": "fontWhColor1",
       "textColorBrand": "brandColor8",
       "textColorLink": "brandColor8"
     },
@@ -281,16 +281,7 @@
       "grayColor11": "#383838",
       "grayColor12": "#2c2c2c",
       "grayColor13": "#242424",
-      "grayColor14": "#181818",
-      "fontGyColor1": "#e6ffffff",
-      "fontGyColor2": "#99ffffff",
-      "fontGyColor3": "#66ffffff",
-      "fontGyColor4": "#42ffffff",
-      "fontWhColor1": "#FFFFFFFF",
-      "fontWhColor2": "#8CFFFFFF",
-      "fontWhColor3": "#59FFFFFF",
-      "fontWhColor4": "#38FFFFFF",
-      "whiteColor1": "#FFFFFF"
+      "grayColor14": "#181818"
     }
   }
 }
