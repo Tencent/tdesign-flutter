@@ -100,7 +100,7 @@ class TDSwitchState extends State<TDSwitch> {
     final thumbContentOnColor =
         widget.thumbContentOnColor ?? theme.brandNormalColor;
     final thumbContentOffColor =
-        widget.thumbContentOffColor ?? theme.fontGyColor4;
+        widget.thumbContentOffColor ?? theme.textColorDisabled;
     final thumbContentOnFont =
         widget.thumbContentOnFont ?? const TextStyle(fontSize: 14);
     final thumbContentOffFont =

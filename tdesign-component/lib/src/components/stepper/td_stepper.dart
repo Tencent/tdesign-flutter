@@ -269,8 +269,8 @@ class _TDStepperState extends State<TDStepper> {
                       style: TextStyle(
                           fontSize: _getFontSize(),
                           color: widget.disabled
-                              ? TDTheme.of(context).fontGyColor4
-                              : TDTheme.of(context).fontGyColor1),
+                              ? TDTheme.of(context).textColorDisabled
+                              : TDTheme.of(context).textColorPrimary),
                       textAlign: TextAlign.center,
                       textAlignVertical: TextAlignVertical.center,
                       keyboardType: TextInputType.number,
@@ -391,8 +391,8 @@ class TDStepperIconButton extends StatelessWidget {
     return Icon(iconType,
         size: _getIconSize(),
         color: disabled
-            ? TDTheme.of(context).fontGyColor4
-            : TDTheme.of(context).fontGyColor1);
+            ? TDTheme.of(context).textColorDisabled
+            : TDTheme.of(context).textColorPrimary);
   }
 
   Color? _getBackgroundColor(BuildContext context) {
