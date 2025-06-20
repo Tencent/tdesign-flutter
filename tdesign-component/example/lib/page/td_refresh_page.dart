@@ -51,7 +51,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
               child: TDText(
                 PlatformUtil.isWeb ? 'Web暂不支持下拉，请下载安装apk体验' : '拖拽该区域演示 顶部下拉刷新',
                 font: TDTheme.of(context).fontBodyLarge,
-                textColor: TDTheme.of(context).fontGyColor4,
+                textColor: TDTheme.of(context).textColorPlaceholder,
               ),
             ),
             Container(
@@ -64,7 +64,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
               child: TDText(
                 '下拉刷新次数：${count}',
                 font: TDTheme.of(context).fontBodyLarge,
-                textColor: TDTheme.of(context).fontGyColor4,
+                textColor: TDTheme.of(context).textColorPlaceholder,
               ),
             ),
             const SizedBox(height: 500),
