@@ -17,7 +17,7 @@ class IconWithBackground extends StatelessWidget {
       width: 40.0,
       height: 40.0,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).grayColor1,
+        color: TDTheme.of(context).bgColorSecondaryContainer,
         borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
       ),
       child: Center(
