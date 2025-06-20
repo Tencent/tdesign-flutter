@@ -294,7 +294,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
                     ? Border(
                         top: widget.topBorder ??
                             BorderSide(
-                                color: TDTheme.of(context).grayColor3,
+                                color: TDTheme.of(context).componentStrokeColor,
                                 width: 0.5))
                     : null,
                 boxShadow: isCapsuleOutlineType
@@ -668,7 +668,7 @@ class TDBottomTabBarPopUpBtnConfig {
 class TDBottomTabBarPopUpShapeConfig {
   TDBottomTabBarPopUpShapeConfig(
       {this.popUpWidth,
-      this.popUpitemHeight = _kDefaultMenuItemHeight,
+      this.popUpItemHeight = _kDefaultMenuItemHeight,
       this.backgroundColor,
       this.radius,
       this.arrowWidth,
@@ -678,7 +678,7 @@ class TDBottomTabBarPopUpShapeConfig {
   final double? popUpWidth;
 
   /// 单个选项高度 所有选项等高 不设置则使用默认值 48
-  final double? popUpitemHeight;
+  final double? popUpItemHeight;
 
   /// 弹窗背景颜色
   final Color? backgroundColor;
@@ -801,8 +801,8 @@ class PopupDialogState extends State<PopupDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var popUpitemHeight =
-        widget.config?.popUpitemHeight ?? _kDefaultMenuItemHeight;
+    var popUpItemHeight =
+        widget.config?.popUpItemHeight ?? _kDefaultMenuItemHeight;
     var popUpItemWidth = widget.config?.popUpWidth ?? widget.defaultPopUpWidth;
     var menuItems = widget.items
         .map((e) => GestureDetector(
@@ -812,7 +812,7 @@ class PopupDialogState extends State<PopupDialog> {
               Navigator.of(context).pop();
             },
             child: SizedBox(
-              height: popUpitemHeight,
+              height: popUpItemHeight,
               child: e,
             )))
         .toList();
@@ -833,14 +833,14 @@ class PopupDialogState extends State<PopupDialog> {
                 /// 这里 -8 是因为widget.btnContext是TDBottomTabBarItemWithBadge的，它在父widget内有8dp的padding
                 /// -4 是设计稿上箭头和tab有4dp的距离
                 top: position!.top -
-                    (popUpitemHeight * widget.items.length +
+                    (popUpItemHeight * widget.items.length +
                         (widget.config?.arrowHeight ?? _kArrowHeight)) -
                     8 -
                     4,
                 right: position!.right - (popUpItemWidth + size!.width) / 2,
                 child: Container(
                   width: popUpItemWidth,
-                  height: popUpitemHeight * widget.items.length +
+                  height: popUpItemHeight * widget.items.length +
                       (widget.config?.arrowHeight ?? _kArrowHeight),
                   decoration:
                       BoxDecoration(boxShadow: TDTheme.of(context).shadowsTop),
@@ -848,10 +848,10 @@ class PopupDialogState extends State<PopupDialog> {
                     painter: PanelWithDownArrow(config: widget.config),
                     child: Container(
                       alignment: Alignment.topCenter,
-                      height: popUpitemHeight * widget.items.length,
+                      height: popUpItemHeight * widget.items.length,
                       child: Container(
                         constraints: BoxConstraints(
-                            maxHeight: popUpitemHeight * widget.items.length),
+                            maxHeight: popUpItemHeight * widget.items.length),
                         child: Stack(
                           children: [
                             Column(children: menuItems),
@@ -865,7 +865,7 @@ class PopupDialogState extends State<PopupDialog> {
                                         child: Divider(
                                           thickness: 0.5,
                                           height: 0.5,
-                                          color: TDTheme.of(context).grayColor3,
+                                          color: TDTheme.of(context).componentStrokeColor,
                                         ),
                                       )),
                             )
@@ -894,6 +894,7 @@ class PanelWithDownArrow extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
       ..isAntiAlias = true
+      /// @todo
       ..color = config?.backgroundColor ?? Colors.white
       ..style = PaintingStyle.fill;
     var path = Path();
