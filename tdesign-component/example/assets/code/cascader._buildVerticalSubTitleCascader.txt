@@ -4,6 +4,7 @@
     return TDCell(
         title: title,
         note: _selected_1,
+        arrow: true,
         onClick: (click) {
           TDCascader.showMultiCascader(context,
               title: title,
