@@ -291,8 +291,8 @@ class TDCheckboxState extends State<TDCheckbox> {
                               maxLines: widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
                               textColor: widget.enable
-                                  ? (widget.subTitleColor ?? TDTheme.of(context).fontGyColor3)
-                                  : TDTheme.of(context).fontGyColor4,
+                                  ? (widget.subTitleColor ?? TDTheme.of(context).textColorPlaceholder)
+                                  : TDTheme.of(context).textColorDisabled,
                               font: TDTheme.of(context).fontBodyMedium),
                         ),
                       )
@@ -345,8 +345,8 @@ class TDCheckboxState extends State<TDCheckbox> {
                               maxLines: widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
                               textColor: widget.enable
-                                  ? (widget.subTitleColor ?? TDTheme.of(context).fontGyColor3)
-                                  : TDTheme.of(context).fontGyColor4,
+                                  ? (widget.subTitleColor ?? TDTheme.of(context).textColorPlaceholder)
+                                  : TDTheme.of(context).textColorDisabled,
                               font: widget.subTitleFont ?? TDTheme.of(context).fontBodyMedium),
                         ),
                       )
@@ -466,8 +466,8 @@ class TDCheckboxState extends State<TDCheckbox> {
             maxLines: widget.titleMaxLine ?? groupState?.widget.titleMaxLine,
             overflow: TextOverflow.ellipsis,
             textColor: widget.enable
-                ? (widget.titleColor ?? TDTheme.of(context).fontGyColor1)
-                : TDTheme.of(context).fontGyColor4,
+                ? (widget.titleColor ?? TDTheme.of(context).textColorPrimary)
+                : TDTheme.of(context).textColorDisabled,
             font: widget.titleFont ??
                 TDTheme.of(context)
                     .fontBodyLarge); // TODO custom fontSize https://github.com/Tencent/tdesign-flutter/issues/66
