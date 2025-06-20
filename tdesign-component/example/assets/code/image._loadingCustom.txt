@@ -1,14 +1,13 @@
 
   Widget _loadingCustom(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载自定义提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
@@ -16,11 +15,10 @@
             width: 72,
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+                borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
+                color: TDTheme.of(context).bgColorContainerHover,
                 child: RotationTransition(
                     turns: animation,
                     alignment: Alignment.center,
