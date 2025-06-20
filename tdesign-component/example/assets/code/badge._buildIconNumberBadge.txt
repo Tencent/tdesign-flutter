@@ -1,7 +1,6 @@
 
   Widget _buildIconNumberBadge(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
         margin: const EdgeInsets.only(left: 16),
         child: const SizedBox(
           width: 42,
