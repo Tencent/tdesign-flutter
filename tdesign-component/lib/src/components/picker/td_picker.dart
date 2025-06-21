@@ -43,7 +43,7 @@ class TDPicker {
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
-        barrierColor: barrierColor ?? TDTheme.of(context).fontGyColor2.withValues(alpha: 0.6),
+        barrierColor: barrierColor ?? TDTheme.of(context).fontGyColor2..withOpacity(0.6),
         enableDrag:false,
         builder: (context) {
           return TDDatePicker(
@@ -101,7 +101,7 @@ class TDPicker {
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
-        barrierColor: barrierColor ?? TDTheme.of(context).fontGyColor2.withValues(alpha: 0.6),
+        barrierColor: barrierColor ?? TDTheme.of(context).fontGyColor2..withOpacity(0.6),
         builder: (context) {
           return TDMultiPicker(
             title: title,
@@ -147,7 +147,7 @@ class TDPicker {
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
-        barrierColor: barrierColor ?? TDTheme.of(context).fontGyColor2.withValues(alpha: 0.6),
+        barrierColor: barrierColor ?? TDTheme.of(context).fontGyColor2..withOpacity(0.6),
         builder: (context) {
           return TDMultiLinkedPicker(
             title: title,

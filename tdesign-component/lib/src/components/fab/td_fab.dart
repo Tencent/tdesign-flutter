@@ -165,17 +165,17 @@ class TDFab extends StatelessWidget {
                     offset: const Offset(0, 5),
                     blurRadius: 2.5,
                     spreadRadius: -1.5,
-                    color: Colors.black.withValues(alpha: 0.1)),
+                    color: Colors.black..withOpacity(0.1)),
                 BoxShadow(
                     offset: const Offset(0, 8),
                     blurRadius: 5,
                     spreadRadius: 0.5,
-                    color: Colors.black.withValues(alpha: 0.06)),
+                    color: Colors.black..withOpacity(0.06)),
                 BoxShadow(
                     offset: const Offset(0, 3),
                     blurRadius: 7,
                     spreadRadius: 1,
-                    color: Colors.black.withValues(alpha: 0.05))
+                    color: Colors.black..withOpacity(0.05))
               ],
               borderRadius: shape == TDFabShape.circle
                   ? BorderRadius.circular(TDTheme.of(context).radiusCircle)

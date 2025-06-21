@@ -567,7 +567,7 @@ class _CodeWrapperState extends State<CodeWrapper> {
     codeString ??= await loadCodeString();
     await showModalBottomSheet(
         isScrollControlled: true,
-        barrierColor: Colors.black.withValues(alpha: 0.5),
+        barrierColor: Colors.black.withOpacity(0.5),
         backgroundColor: Colors.transparent,
         context: context,
         builder: (_) {

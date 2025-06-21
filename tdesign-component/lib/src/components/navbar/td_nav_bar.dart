@@ -219,7 +219,7 @@ class _TDNavBarState extends State<TDNavBar> {
   Widget build(BuildContext context) {
     var bcc = widget.backgroundColor ?? TDTheme.of(context).bgColorContainer;
     if (bcc != Colors.transparent) {
-      bcc = bcc.withValues(alpha: widget.opacity);
+      bcc = bcc..withOpacity(widget.opacity);
     }
 
     var paddingTop = widget.screenAdaptation ? MediaQuery.of(context).padding.top : 0.0;
