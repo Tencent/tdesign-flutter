@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
-import '../../theme/td_theme.dart';
 
 /// 虚线控件
 class DashedWidget extends StatelessWidget {

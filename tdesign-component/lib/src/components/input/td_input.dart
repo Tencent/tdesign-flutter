@@ -253,8 +253,10 @@ class TDInput extends StatelessWidget {
   /// 排版控制：letterSpacing=0消除字间距，height=1.0避免行高影响
   /// 默认最大行数排版为1行
   double _measureTextWidth(String? text, TextStyle? style, BuildContext context) {
-    if (text == null || text.isEmpty) return 0;
-    final effectiveStyle = (style ?? TextStyle()).copyWith(
+    if (text == null || text.isEmpty) {
+      return 0;
+    }
+    final effectiveStyle = (style ?? const TextStyle()).copyWith(
       fontSize: TDTheme.of(context).fontBodyLarge?.size,
       letterSpacing: 0,
       height: 1.0,

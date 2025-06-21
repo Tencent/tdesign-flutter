@@ -73,9 +73,13 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
   void _measureChildHeight() {
     // 获取子组件渲染对象
     final context = _childKey.currentContext;
-    if (context == null) return;
+    if (context == null) {
+      return;
+    }
     final renderBox = context.findRenderObject() as RenderBox?;
-    if (renderBox == null || !renderBox.hasSize) return;
+    if (renderBox == null || !renderBox.hasSize) {
+      return;
+    }
 
     final screenHeight = MediaQuery.of(context).size.height;
     final childHeight = renderBox.size.height;
@@ -105,7 +109,9 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
   });
 
   void _toggleFullscreen(bool fullscreen) {
-    if (_isAnimating || _isFullscreen == fullscreen) return;
+    if (_isAnimating || _isFullscreen == fullscreen) {
+      return;
+    }
 
     setState(() {
       _isFullscreen = fullscreen;
@@ -122,7 +128,9 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
   }
 
   void _animateTo(double height) {
-    if (_isAnimating) return;
+    if (_isAnimating) {
+      return;
+    }
     _isAnimating = true;
 
     final value = (height - _minHeight) / (_maxHeight - _minHeight);

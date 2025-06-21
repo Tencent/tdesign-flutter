@@ -502,7 +502,7 @@ class LeftLineWidget extends StatelessWidget {
   /// 是否显示圆圈上方线条
   final bool isShowTopLine;
 
-  const LeftLineWidget({this.isShowTopLine = false, this.topLineColor, this.isCircleFill = false});
+  const LeftLineWidget({super.key, this.isShowTopLine = false, this.topLineColor, this.isCircleFill = false});
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../../../tdesign_flutter.dart';
-import '../../util/string_util.dart';
-import 'dart:io';
 
 enum TDImageType {
   /// 裁剪
