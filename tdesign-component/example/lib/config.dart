@@ -54,7 +54,6 @@ import 'page/td_slider_page.dart';
 import 'page/td_stepper_page.dart';
 import 'page/td_steps_page.dart';
 import 'page/td_swipe_cell_page.dart';
-import 'page/td_steps_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
 import 'page/td_table_page.dart';

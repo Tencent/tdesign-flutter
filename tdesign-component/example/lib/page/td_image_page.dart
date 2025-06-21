@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
-import 'dart:io';
 
 class TDImagePage extends StatefulWidget {
   const TDImagePage({Key? key}) : super(key: key);
@@ -242,7 +242,7 @@ class TDImageState extends State<TDImagePage> with SingleTickerProviderStateMixi
           color: TDTheme.of(context).bgColorContainerHover,
           width: 121,
           height: 72,
-          child: Stack(
+          child: const Stack(
             alignment: Alignment.center,
             children: [
               TDImage(

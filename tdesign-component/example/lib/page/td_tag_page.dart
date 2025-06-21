@@ -201,9 +201,9 @@ class TDTagPage extends StatelessWidget {
               desc: '非浅色填充的各主题展示',
               ignoreCode: true,
               builder: (context) {
-                return Wrap(
+                return const Wrap(
                   spacing: 8,
-                  children: const [
+                  children: [
                     TDTag(
                       '标签文字',
                     ),
@@ -230,9 +230,9 @@ class TDTagPage extends StatelessWidget {
               desc: '浅色填充的各主题展示',
               ignoreCode: true,
               builder: (context) {
-                return Wrap(
+                return const Wrap(
                   spacing: 8,
-                  children: const [
+                  children: [
                     TDTag(
                       '标签文字',
                       isLight: true,
@@ -264,9 +264,9 @@ class TDTagPage extends StatelessWidget {
               desc: '非浅色描边的各主题展示',
               ignoreCode: true,
               builder: (context) {
-                return Wrap(
+                return const Wrap(
                   spacing: 8,
-                  children: const [
+                  children: [
                     TDTag(
                       '标签文字',
                       isOutline: true,
@@ -298,9 +298,9 @@ class TDTagPage extends StatelessWidget {
               desc: '浅色描边的各主题展示',
               ignoreCode: true,
               builder: (context) {
-                return Wrap(
+                return const Wrap(
                   spacing: 8,
-                  children: const [
+                  children: [
                     TDTag(
                       '标签文字',
                       isOutline: true,
@@ -337,10 +337,10 @@ class TDTagPage extends StatelessWidget {
               desc: '各主题关闭图标颜色不会变',
               ignoreCode: true,
               builder: (context) {
-                return Wrap(
+                return const Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: const [
+                  children: [
                     TDTag(
                       '标签文字',
                       isOutline: true,
@@ -401,8 +401,8 @@ class TDTagPage extends StatelessWidget {
               desc: '带图标可关闭的标签',
               ignoreCode: true,
               builder: (context) {
-                return Row(
-                  children: const [
+                return const Row(
+                  children: [
                     SizedBox(
                       width: 16,
                     ),
@@ -432,7 +432,7 @@ class TDTagPage extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
                       TDTag(
                         '加大尺寸',
                         icon: TDIcons.discount,
@@ -463,7 +463,7 @@ class TDTagPage extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
                       TDTag(
                         '加大尺寸',
                         isOutline: true,
@@ -505,7 +505,7 @@ class TDTagPage extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
                       TDSelectTag(
                         'Tag',
                         theme: TDTagTheme.primary,
@@ -549,7 +549,7 @@ class TDTagPage extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
                       TDSelectTag(
                         'Tag',
                         theme: TDTagTheme.primary,
@@ -599,7 +599,7 @@ class TDTagPage extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
                       TDSelectTag(
                         'Tag',
                         theme: TDTagTheme.primary,
@@ -649,7 +649,7 @@ class TDTagPage extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
                       TDSelectTag(
                         'Tag',
                         theme: TDTagTheme.primary,
@@ -712,7 +712,7 @@ class TDTagPage extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
                       TDTag(
                         'Tag',
                         theme: TDTagTheme.primary,
@@ -744,7 +744,7 @@ class TDTagPage extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
                       TDTag(
                         'Tag',
                         theme: TDTagTheme.primary,
@@ -780,7 +780,7 @@ class TDTagPage extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
                       TDTag(
                         'Tag',
                         theme: TDTagTheme.primary,
@@ -816,7 +816,7 @@ class TDTagPage extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: const EdgeInsets.only(left: 16, right: 16),
-                    child: Wrap(spacing: 8, runSpacing: 8, children: const [
+                    child: const Wrap(spacing: 8, runSpacing: 8, children: [
                       TDTag(
                         'Tag',
                         theme: TDTagTheme.primary,
@@ -941,7 +941,7 @@ class TDTagPage extends StatelessWidget {
 
   @Demo(group: 'tag')
   Widget _buildDarkSelectTags(BuildContext context) {
-    return Wrap(spacing: 8, children: const [
+    return const Wrap(spacing: 8, children: [
       TDSelectTag(
         '未选中态',
         theme: TDTagTheme.primary,
@@ -961,7 +961,7 @@ class TDTagPage extends StatelessWidget {
 
   @Demo(group: 'tag')
   Widget _buildLightSelectTags(BuildContext context) {
-    return Wrap(spacing: 8, children: const [
+    return const Wrap(spacing: 8, children: [
       TDSelectTag(
         '未选中态',
         theme: TDTagTheme.primary,
@@ -984,7 +984,7 @@ class TDTagPage extends StatelessWidget {
 
   @Demo(group: 'tag')
   Widget _buildOutlineSelectTags(BuildContext context) {
-    return Wrap(spacing: 8, children: const [
+    return const Wrap(spacing: 8, children: [
       TDSelectTag(
         '未选中态',
         theme: TDTagTheme.primary,
@@ -1007,7 +1007,7 @@ class TDTagPage extends StatelessWidget {
 
   @Demo(group: 'tag')
   Widget _buildLightOutlineSelectTags(BuildContext context) {
-    return Wrap(spacing: 8, children: const [
+    return const Wrap(spacing: 8, children: [
       TDSelectTag(
         '未选中态',
         theme: TDTagTheme.primary,
@@ -1033,9 +1033,9 @@ class TDTagPage extends StatelessWidget {
 
   @Demo(group: 'tag')
   Widget _buildLightShowTags(BuildContext context) {
-    return Wrap(
+    return const Wrap(
       spacing: 8,
-      children: const [
+      children: [
         TDTag('默认', isLight: true),
         TDTag(
           '主要',
@@ -1063,9 +1063,9 @@ class TDTagPage extends StatelessWidget {
 
   @Demo(group: 'tag')
   Widget _buildDarkShowTags(BuildContext context) {
-    return Wrap(
+    return const Wrap(
       spacing: 8,
-      children: const [
+      children: [
         TDTag('默认'),
         TDTag(
           '主要',
@@ -1089,9 +1089,9 @@ class TDTagPage extends StatelessWidget {
 
   @Demo(group: 'tag')
   Widget _buildOutlineShowTags(BuildContext context) {
-    return Wrap(
+    return const Wrap(
       spacing: 8,
-      children: const [
+      children: [
         TDTag('默认', isOutline: true),
         TDTag(
           '主要',
@@ -1119,9 +1119,9 @@ class TDTagPage extends StatelessWidget {
 
   @Demo(group: 'tag')
   Widget _buildLightOutlineShowTags(BuildContext context) {
-    return Wrap(
+    return const Wrap(
       spacing: 8,
-      children: const [
+      children: [
         TDTag('默认', isOutline: true, isLight: true),
         TDTag(
           '主要',
@@ -1153,7 +1153,7 @@ class TDTagPage extends StatelessWidget {
 
   @Demo(group: 'tag')
   Widget _buildAllSizeTags(BuildContext context) {
-    return Wrap(spacing: 8, children: const [
+    return const Wrap(spacing: 8, children: [
       TDTag(
         '加大尺寸',
         size: TDTagSize.extraLarge,
@@ -1175,7 +1175,7 @@ class TDTagPage extends StatelessWidget {
 
   @Demo(group: 'tag')
   Widget _buildAllSizeCloseTags(BuildContext context) {
-    return Wrap(spacing: 8, children: const [
+    return const Wrap(spacing: 8, children: [
       TDTag(
         '加大尺寸',
         needCloseIcon: true,

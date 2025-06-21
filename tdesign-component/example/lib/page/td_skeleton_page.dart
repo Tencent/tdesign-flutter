@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/demo.dart';

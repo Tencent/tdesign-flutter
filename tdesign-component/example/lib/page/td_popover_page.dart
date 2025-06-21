@@ -256,25 +256,23 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             ? TDTheme.of(context).fontGyColor1
             : TDTheme.of(context).fontWhColor1);
 
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-            child: TDText('选项1', style: textStyle),
-          ),
-          const TDDivider(height: 0.5),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-            child: TDText('选项2', style: textStyle),
-          ),
-          const TDDivider(height: 0.5),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-            child: TDText('选项3', style: textStyle),
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+          child: TDText('选项1', style: textStyle),
+        ),
+        const TDDivider(height: 0.5),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+          child: TDText('选项2', style: textStyle),
+        ),
+        const TDDivider(height: 0.5),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+          child: TDText('选项3', style: textStyle),
+        ),
+      ],
     );
   }
 

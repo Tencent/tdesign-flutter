@@ -181,11 +181,11 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
   }
 
   Widget displayImageItem() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: const [
+        children: [
           TDImage(
             assetUrl: 'assets/img/empty.png',
             type: TDImageType.roundedSquare,

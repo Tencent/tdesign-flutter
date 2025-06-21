@@ -96,7 +96,7 @@ class _TDFooterPageState extends State<TDFooterPage> {
 
   @Demo(group: 'footer')
   Widget _buildBrandFooter(BuildContext context) {
-    return TDFooter(
+    return const TDFooter(
       TDFooterType.brand,
       logo: 'assets/img/td_brand.png',
       width: 204,

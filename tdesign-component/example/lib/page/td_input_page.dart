@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
-import 'dart:async';
 
 class TDInputViewPage extends StatefulWidget {
   const TDInputViewPage({Key? key}) : super(key: key);
