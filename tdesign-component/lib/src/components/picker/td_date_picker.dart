@@ -248,7 +248,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                       decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
                         TDTheme.of(context).bgColorContainer,
-                        TDTheme.of(context).bgColorContainer.withOpacity(0)
+                        TDTheme.of(context).bgColorContainer.withValues(alpha: 0)
                       ])),
                     ),
                   ),
@@ -263,7 +263,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                       decoration: BoxDecoration(
                           gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [
                         TDTheme.of(context).bgColorContainer,
-                        TDTheme.of(context).bgColorContainer.withOpacity(0)
+                        TDTheme.of(context).bgColorContainer.withValues(alpha: 0)
                       ])),
                     ),
                   ),

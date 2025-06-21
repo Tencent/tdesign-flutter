@@ -624,7 +624,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator> with SingleTicker
         gradient: LinearGradient(
           colors: [
             _effectiveColor,
-            TDTheme.of(widget.context).brandDisabledColor.withOpacity(.5)
+            TDTheme.of(widget.context).brandDisabledColor.withValues(alpha: .5)
           ],
         ),
       ),
