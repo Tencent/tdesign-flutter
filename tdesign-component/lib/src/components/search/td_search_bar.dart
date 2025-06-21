@@ -258,7 +258,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                           style: TextStyle(
                               textBaseline: TextBaseline.ideographic,
                               fontSize: getSize(context)?.size,
-                              color: TDTheme.of(context).fontGyColor1),
+                              color: TDTheme.of(context).textColorPrimary),
                           decoration: InputDecoration(
                             hintText: widget.placeHolder,
                             hintStyle: TextStyle(
