@@ -2,7 +2,7 @@
 
 ### 基础
 
-- [ ] Button 按钮
+- [x] Button 按钮
 - [x] Divider 分割线
 - [x] Fab 悬浮按钮
 - [x] Icon 图标
@@ -17,7 +17,7 @@
 - [x] NavBar 导航栏
 - [x] SideBar 侧边栏
 - [x] Steps 步骤条
-- [ ] TabBar 标签栏 (展开项待处理)
+- [x] TabBar 标签栏
 - [x] Tabs 选项卡
 
 ### 输入
@@ -58,14 +58,13 @@
 
 ### 反馈
 - [x] ActionSheet 动作面板
-- [ ] Dialog 对话框（部分适配）
+- [x] Dialog 对话框
 - [x] DropdownMenu 下拉菜单
 - [x] Loading 加载
 - [x] Message 全局提示
 - [ ] NoticeBar 消息提醒
-- [ ] Popover 弹出气泡
+- [x] Popover 弹出气泡
 - [x] Popup 弹出层
 - [x] PullDownRefresh 下拉刷新
 - [x] SwipeCell 滑动操作
 - [x] Toast 轻提示
-
