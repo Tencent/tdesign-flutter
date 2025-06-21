@@ -7,6 +7,7 @@ import '../../util/context_extension.dart';
 import 'no_wave_behavior.dart';
 
 typedef DatePickerCallback = void Function(Map<String, int> selected);
+
 enum DateTypeKey { year, month, weekDay, day, hour, minute, second }
 
 /// 时间选择器
@@ -106,7 +107,7 @@ class TDDatePicker extends StatefulWidget {
   final bool? isTimeUnit;
 
   /// 选择器选中项改变回调
-  final void Function(int wheelIndex,int index)? onSelectedItemChanged;
+  final void Function(int wheelIndex, int index)? onSelectedItemChanged;
 
   /// 自定义item构建
   final ItemBuilderType? itemBuilder;
@@ -151,19 +152,23 @@ class _TDDatePickerState extends State<TDDatePicker> {
       'month': widget.model.useMonth
           ? widget.model.monthFixedExtentScrollController.selectedItem + widget.model.data[1][0]
           : -1,
-      'day':
-          widget.model.useDay ? widget.model.dayFixedExtentScrollController.selectedItem + widget.model.data[2][0] : -1,
+      'day': widget.model.useDay
+          ? widget.model.dayFixedExtentScrollController.selectedItem + widget.model.data[2][0]
+          : -1,
       'weekDay': widget.model.useWeekDay
           ? widget.model.weekDayFixedExtentScrollController.selectedItem + widget.model.data[3][0]
           : -1,
       'hour': widget.model.useHour
-          ? selectItemValue(widget.model.data[4], widget.model.hourFixedExtentScrollController.selectedItem)
+          ? selectItemValue(
+              widget.model.data[4], widget.model.hourFixedExtentScrollController.selectedItem)
           : -1,
       'minute': widget.model.useMinute
-          ? selectItemValue(widget.model.data[5], widget.model.minuteFixedExtentScrollController.selectedItem)
+          ? selectItemValue(
+              widget.model.data[5], widget.model.minuteFixedExtentScrollController.selectedItem)
           : -1,
       'second': widget.model.useSecond
-          ? selectItemValue(widget.model.data[6], widget.model.secondFixedExtentScrollController.selectedItem)
+          ? selectItemValue(
+              widget.model.data[6], widget.model.secondFixedExtentScrollController.selectedItem)
           : -1,
     };
     if (ev == 'onCancel' && widget.onCancel != null) {
@@ -212,7 +217,8 @@ class _TDDatePickerState extends State<TDDatePicker> {
                         height: 40,
                         decoration: BoxDecoration(
                             color: TDTheme.of(context).bgColorSecondaryContainer,
-                            borderRadius: const BorderRadius.all(Radius.circular(6))),
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(TDTheme.of(context).radiusDefault))),
                       ),
                 ),
                 Container(
@@ -229,12 +235,20 @@ class _TDDatePickerState extends State<TDDatePicker> {
                                   )
                                 : Expanded(child: buildList(context, 0))
                             : Container(),
-                        widget.model.useMonth ? Expanded(child: buildList(context, 1)) : Container(),
+                        widget.model.useMonth
+                            ? Expanded(child: buildList(context, 1))
+                            : Container(),
                         widget.model.useDay ? Expanded(child: buildList(context, 2)) : Container(),
-                        widget.model.useWeekDay ? Expanded(child: buildList(context, 3)) : Container(),
+                        widget.model.useWeekDay
+                            ? Expanded(child: buildList(context, 3))
+                            : Container(),
                         widget.model.useHour ? Expanded(child: buildList(context, 4)) : Container(),
-                        widget.model.useMinute ? Expanded(child: buildList(context, 5)) : Container(),
-                        widget.model.useSecond ? Expanded(child: buildList(context, 6)) : Container(),
+                        widget.model.useMinute
+                            ? Expanded(child: buildList(context, 5))
+                            : Container(),
+                        widget.model.useSecond
+                            ? Expanded(child: buildList(context, 6))
+                            : Container(),
                       ],
                     )),
                 // 蒙层
@@ -246,10 +260,13 @@ class _TDDatePickerState extends State<TDDatePicker> {
                       height: _pickerTitleHeight,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
-                        TDTheme.of(context).bgColorContainer,
-                        TDTheme.of(context).bgColorContainer.withValues(alpha: 0)
-                      ])),
+                          gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                            TDTheme.of(context).bgColorContainer,
+                            TDTheme.of(context).bgColorContainer.withValues(alpha: 0)
+                          ])),
                     ),
                   ),
                 ),
@@ -261,10 +278,13 @@ class _TDDatePickerState extends State<TDDatePicker> {
                       height: _pickerTitleHeight,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [
-                        TDTheme.of(context).bgColorContainer,
-                        TDTheme.of(context).bgColorContainer.withValues(alpha: 0)
-                      ])),
+                          gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                            TDTheme.of(context).bgColorContainer,
+                            TDTheme.of(context).bgColorContainer.withValues(alpha: 0)
+                          ])),
                     ),
                   ),
                 )
@@ -288,7 +308,9 @@ class _TDDatePickerState extends State<TDDatePicker> {
               itemExtent: pickerHeight / widget.pickerItemCount,
               diameterRatio: 100,
               controller: widget.model.controllers[whichLine],
-              physics: whichLine == 3 ? const NeverScrollableScrollPhysics() : const FixedExtentScrollPhysics(),
+              physics: whichLine == 3
+                  ? const NeverScrollableScrollPhysics()
+                  : const FixedExtentScrollPhysics(),
               onSelectedItemChanged: (index) {
                 if (whichLine == 0 ||
                     whichLine == 1 ||
@@ -327,7 +349,7 @@ class _TDDatePickerState extends State<TDDatePicker> {
                     pickerHeight = pickerHeight - Random().nextDouble() / 100000000;
                   });
                 }
-                widget.onSelectedItemChanged?.call(whichLine,index);
+                widget.onSelectedItemChanged?.call(whichLine, index);
               },
               childDelegate: ListWheelChildBuilderDelegate(
                   childCount: widget.model.data[whichLine].length,
@@ -342,7 +364,8 @@ class _TDDatePickerState extends State<TDDatePicker> {
                           itemHeight: pickerHeight / widget.pickerItemCount,
                           content: whichLine == 3
                               ? weekUnitMap(widget.model.data[whichLine][index] - 1)
-                              : widget.model.data[whichLine][index].toString() + timeUnitMap(widget.model.mapping[whichLine]),
+                              : widget.model.data[whichLine][index].toString() +
+                                  timeUnitMap(widget.model.mapping[whichLine]),
                           fixedExtentScrollController: widget.model.controllers[whichLine],
                           itemDistanceCalculator: widget.itemDistanceCalculator,
                           itemBuilder: widget.itemBuilder,
@@ -376,7 +399,8 @@ class _TDDatePickerState extends State<TDDatePicker> {
               child: TDText(widget.leftText ?? context.resource.cancel,
                   style: widget.leftTextStyle ??
                       TextStyle(
-                          fontSize: TDTheme.of(context).fontBodyLarge!.size, color: TDTheme.of(context).textColorSecondary))),
+                          fontSize: TDTheme.of(context).fontBodyLarge!.size,
+                          color: TDTheme.of(context).textColorSecondary))),
 
           /// 中间title
           Expanded(
@@ -403,32 +427,34 @@ class _TDDatePickerState extends State<TDDatePicker> {
               widget.rightText ?? context.resource.confirm,
               style: widget.rightTextStyle ??
                   TextStyle(
-                      fontSize: TDTheme.of(context).fontBodyLarge!.size, color: TDTheme.of(context).brandNormalColor),
+                      fontSize: TDTheme.of(context).fontBodyLarge!.size,
+                      color: TDTheme.of(context).brandNormalColor),
             ),
           ),
         ],
       ),
     );
   }
-  timeUnitMap(String name){
-    if(widget.isTimeUnit!=null&&widget.isTimeUnit==true){
-      var times={
-        '年':context.resource.yearLabel,
-        '月':context.resource.monthLabel,
+
+  timeUnitMap(String name) {
+    if (widget.isTimeUnit != null && widget.isTimeUnit == true) {
+      var times = {
+        '年': context.resource.yearLabel,
+        '月': context.resource.monthLabel,
         '日': context.resource.dateLabel,
-        '周':context.resource.weeksLabel,
-        '时':context.resource.hours,
-        '分':context.resource.minutes,
-        '秒':context.resource.seconds
+        '周': context.resource.weeksLabel,
+        '时': context.resource.hours,
+        '分': context.resource.minutes,
+        '秒': context.resource.seconds
       };
       return times[name];
-    }else{
+    } else {
       return '';
     }
   }
 
-  weekUnitMap(int index){
-    if(index < 0 || index > 6){
+  weekUnitMap(int index) {
+    if (index < 0 || index > 6) {
       return '';
     }
     return [
@@ -441,7 +467,6 @@ class _TDDatePickerState extends State<TDDatePicker> {
       context.resource.sunday,
     ][index];
   }
-
 
   double getTitleHeight() => widget.titleHeight ?? _pickerTitleHeight;
 }
@@ -459,8 +484,8 @@ class DatePickerModel {
   List<int> dateEnd;
   List<int>? dateInitial;
   List<int> Function(DateTypeKey key, List<int> nums)? filterItems;
-  final mapping =  ['年', '月', '日', '周', '时', '分', '秒'];
-  final weekMap= ['一', '二', '三', '四', '五', '六', '日'];
+  final mapping = ['年', '月', '日', '周', '时', '分', '秒'];
+  final weekMap = ['一', '二', '三', '四', '五', '六', '日'];
 
   late DateTime initialTime;
 
@@ -490,20 +515,21 @@ class DatePickerModel {
   late FixedExtentScrollController minuteFixedExtentScrollController;
   late FixedExtentScrollController secondFixedExtentScrollController;
 
-  DatePickerModel(
-      {required this.useYear,
-      required this.useMonth,
-      required this.useDay,
-      required this.useHour,
-      required this.useMinute,
-      required this.useWeekDay,
-      required this.useSecond,
-      required this.dateStart,
-      required this.dateEnd,
-      this.dateInitial,
-      this.filterItems,
-}) {
-    assert(!useWeekDay || (!useSecond && !useMinute && !useHour), 'WeekDay can only used with Year, Month and Day!');
+  DatePickerModel({
+    required this.useYear,
+    required this.useMonth,
+    required this.useDay,
+    required this.useHour,
+    required this.useMinute,
+    required this.useWeekDay,
+    required this.useSecond,
+    required this.dateStart,
+    required this.dateEnd,
+    this.dateInitial,
+    this.filterItems,
+  }) {
+    assert(!useWeekDay || (!useSecond && !useMinute && !useHour),
+        'WeekDay can only used with Year, Month and Day!');
     setInitialTime();
     setInitialYearData();
     setInitialMonthData();
@@ -516,7 +542,8 @@ class DatePickerModel {
 
   void setInitialTime() {
     dateStart = List.generate(6, (index) => index < dateStart.length ? dateStart[index] : 0);
-    var startTime = DateTime(dateStart[0], dateStart[1], dateStart[2], dateStart[3], dateStart[4], dateStart[5]);
+    var startTime = DateTime(
+        dateStart[0], dateStart[1], dateStart[2], dateStart[3], dateStart[4], dateStart[5]);
     dateEnd = List.generate(6, (index) => index < dateEnd.length ? dateEnd[index] : 0);
     var endTime = DateTime(
       dateEnd[0],
@@ -527,8 +554,10 @@ class DatePickerModel {
       dateEnd[5],
     );
     if (dateInitial != null) {
-      var initList = List.generate(6, (index) => index < dateInitial!.length ? dateInitial![index] : 0);
-      initialTime = DateTime(initList[0], initList[1], initList[2], initList[3], initList[4], initList[5]);
+      var initList =
+          List.generate(6, (index) => index < dateInitial!.length ? dateInitial![index] : 0);
+      initialTime =
+          DateTime(initList[0], initList[1], initList[2], initList[3], initList[4], initList[5]);
       if (initialTime.isBefore(startTime)) {
         initialTime = startTime;
       } else if (initialTime.isAfter(endTime)) {
@@ -572,18 +601,21 @@ class DatePickerModel {
       day = List.generate(dateEnd[2] - dateStart[2] + 1, (index) => index + dateStart[2]);
     } else if (initialTime.year == dateStart[0] && initialTime.month == dateStart[1]) {
       day = List.generate(
-          DateTime(initialTime.year, initialTime.month + 1, 0).day - dateStart[2] + 1, (index) => index + dateStart[2]);
+          DateTime(initialTime.year, initialTime.month + 1, 0).day - dateStart[2] + 1,
+          (index) => index + dateStart[2]);
     } else if (initialTime.year == dateEnd[0] && initialTime.month == dateEnd[1]) {
       day = List.generate(dateEnd[2], (index) => index + 1);
     } else {
-      day = List.generate(DateTime(initialTime.year, initialTime.month + 1, 0).day, (index) => index + 1);
+      day = List.generate(
+          DateTime(initialTime.year, initialTime.month + 1, 0).day, (index) => index + 1);
     }
     data[2] = useDay && filterItems != null ? filterItems!(DateTypeKey.day, day) : day;
   }
 
   void setInitialWeekDayData() {
     var weekDay = [1, 2, 3, 4, 5, 6, 7];
-    data[3] = useWeekDay && filterItems != null ? filterItems!(DateTypeKey.weekDay, weekDay) : weekDay;
+    data[3] =
+        useWeekDay && filterItems != null ? filterItems!(DateTypeKey.weekDay, weekDay) : weekDay;
   }
 
   void setInitialTimeData() {
@@ -591,15 +623,22 @@ class DatePickerModel {
     var minute = List.generate(60, (index) => index);
     var second = List.generate(60, (index) => index);
     if (dateStart.length > 3) {
-      if(!useYear&&!useMonth&&!useDay&&dateEnd[0] == dateStart[0] && dateEnd[1] == dateStart[1]&& dateEnd[2] == dateStart[2]){
-          hour = List.generate(max(0, dateEnd[3] - dateStart[3] + 1), (i) => i + dateStart[3]);
-          minute = List.generate(max(0, dateEnd[4] - dateStart[4] + 1), (i) => i + dateStart[4]);
-          second = List.generate(max(0, dateEnd[5] - dateStart[5] + 1), (i) => i + dateStart[5]);
+      if (!useYear &&
+          !useMonth &&
+          !useDay &&
+          dateEnd[0] == dateStart[0] &&
+          dateEnd[1] == dateStart[1] &&
+          dateEnd[2] == dateStart[2]) {
+        hour = List.generate(max(0, dateEnd[3] - dateStart[3] + 1), (i) => i + dateStart[3]);
+        minute = List.generate(max(0, dateEnd[4] - dateStart[4] + 1), (i) => i + dateStart[4]);
+        second = List.generate(max(0, dateEnd[5] - dateStart[5] + 1), (i) => i + dateStart[5]);
 
-          data[4] = useHour && filterItems != null ? filterItems!(DateTypeKey.hour, hour) : hour;
-          data[5] = useMinute && filterItems != null ? filterItems!(DateTypeKey.minute, minute) : minute;
-          data[6] = useSecond && filterItems != null ? filterItems!(DateTypeKey.second, second) : second;
-          return;
+        data[4] = useHour && filterItems != null ? filterItems!(DateTypeKey.hour, hour) : hour;
+        data[5] =
+            useMinute && filterItems != null ? filterItems!(DateTypeKey.minute, minute) : minute;
+        data[6] =
+            useSecond && filterItems != null ? filterItems!(DateTypeKey.second, second) : second;
+        return;
       }
       if (initialTime.hour >= dateStart[3]) {
         hour = List.generate(24 - dateStart[3], (index) => index + dateStart[3]);
@@ -706,7 +745,8 @@ class DatePickerModel {
       month = List.generate(12, (index) => index + 1);
     }
     data[1] = useMonth && filterItems != null ? filterItems!(DateTypeKey.month, month) : month;
-    monthFixedExtentScrollController.jumpToItem(monthIndex > data[1].length - 1 ? data[1].length - 1 : monthIndex);
+    monthFixedExtentScrollController
+        .jumpToItem(monthIndex > data[1].length - 1 ? data[1].length - 1 : monthIndex);
   }
 
   void refreshDayDataAndController() {
@@ -717,20 +757,23 @@ class DatePickerModel {
     if (dateEnd[0] == dateStart[0] && dateEnd[1] == dateStart[1]) {
       day = List.generate(dateEnd[2] - dateStart[2] + 1, (index) => index + dateStart[2]);
     } else if (selectedYear == dateStart[0] && selectedMonth == dateStart[1]) {
-      day = List.generate(
-          DateTime(selectedYear, selectedMonth + 1, 0).day - dateStart[2] + 1, (index) => index + dateStart[2]);
+      day = List.generate(DateTime(selectedYear, selectedMonth + 1, 0).day - dateStart[2] + 1,
+          (index) => index + dateStart[2]);
     } else if (selectedYear == dateEnd[0] && selectedMonth == dateEnd[1]) {
       day = List.generate(dateEnd[2], (index) => index + 1);
     } else {
       day = List.generate(DateTime(selectedYear, selectedMonth + 1, 0).day, (index) => index + 1);
     }
     data[2] = useDay && filterItems != null ? filterItems!(DateTypeKey.day, day) : day;
-    dayFixedExtentScrollController.jumpToItem(dayIndex > data[2].length - 1 ? data[2].length - 1 : dayIndex);
+    dayFixedExtentScrollController
+        .jumpToItem(dayIndex > data[2].length - 1 ? data[2].length - 1 : dayIndex);
   }
 
   void refreshWeekDayDataAndController() {
-    var date = DateTime(data[0][yearFixedExtentScrollController.selectedItem],
-        data[1][monthFixedExtentScrollController.selectedItem], data[2][dayFixedExtentScrollController.selectedItem]);
+    var date = DateTime(
+        data[0][yearFixedExtentScrollController.selectedItem],
+        data[1][monthFixedExtentScrollController.selectedItem],
+        data[2][dayFixedExtentScrollController.selectedItem]);
     weekDayFixedExtentScrollController.jumpToItem(date.weekday - 1);
   }
 
@@ -739,20 +782,29 @@ class DatePickerModel {
     var selectedMonth = monthIndex + data[1][0];
     var selectDay = dayIndex + data[2][0];
     if (wheel <= 2) {
-      refreshHourData(selectedYear: selectedYear, selectedMonth: selectedMonth, selectDay: selectDay);
-      refreshMinuteData(selectedYear: selectedYear, selectedMonth: selectedMonth, selectDay: selectDay);
+      refreshHourData(
+          selectedYear: selectedYear, selectedMonth: selectedMonth, selectDay: selectDay);
+      refreshMinuteData(
+          selectedYear: selectedYear, selectedMonth: selectedMonth, selectDay: selectDay);
     } else {
-      refreshMinuteData(selectedYear: selectedYear, selectedMonth: selectedMonth, selectDay: selectDay);
+      refreshMinuteData(
+          selectedYear: selectedYear, selectedMonth: selectedMonth, selectDay: selectDay);
     }
-    refreshSecondData(selectedYear: selectedYear, selectedMonth: selectedMonth, selectDay: selectDay);
+    refreshSecondData(
+        selectedYear: selectedYear, selectedMonth: selectedMonth, selectDay: selectDay);
   }
 
-  void refreshHourData({required int selectedYear, required int selectedMonth, required int selectDay}) {
+  void refreshHourData(
+      {required int selectedYear, required int selectedMonth, required int selectDay}) {
     var selectHour = selectDay == data[2][0] ? 0 : hourIndex;
     late List<int> hour;
-    if (selectedYear == dateStart[0] && selectedMonth == dateStart[1] && selectDay == dateStart[2]) {
+    if (selectedYear == dateStart[0] &&
+        selectedMonth == dateStart[1] &&
+        selectDay == dateStart[2]) {
       hour = List.generate(24 - (dateStart[3]), (index) => index + dateStart[3]);
-    } else if (selectedYear == dateEnd[0] && selectedMonth == dateEnd[1] && selectDay == dateEnd[2]) {
+    } else if (selectedYear == dateEnd[0] &&
+        selectedMonth == dateEnd[1] &&
+        selectDay == dateEnd[2]) {
       hour = dateEnd[3] >= dateStart[3]
           ? List.generate(dateEnd[3] + 1, (index) => index)
           : List.generate(24 - dateStart[3], (index) => index);
@@ -763,7 +815,8 @@ class DatePickerModel {
     hourFixedExtentScrollController.jumpToItem(selectHour > 0 ? hourIndex : 0);
   }
 
-  void refreshMinuteData({required int selectedYear, required int selectedMonth, required int selectDay}) {
+  void refreshMinuteData(
+      {required int selectedYear, required int selectedMonth, required int selectDay}) {
     var selectHour = hourIndex + data[4][0];
     late List<int> minute;
     if (selectedYear == dateStart[0] &&
@@ -784,7 +837,8 @@ class DatePickerModel {
     data[5] = useMinute && filterItems != null ? filterItems!(DateTypeKey.minute, minute) : minute;
   }
 
-  void refreshSecondData({required int selectedYear, required int selectedMonth, required int selectDay}) {
+  void refreshSecondData(
+      {required int selectedYear, required int selectedMonth, required int selectDay}) {
     var selectHour = hourIndex + data[4][0];
     var selectMinute = minuteIndex + data[5][0];
     late List<int> second;

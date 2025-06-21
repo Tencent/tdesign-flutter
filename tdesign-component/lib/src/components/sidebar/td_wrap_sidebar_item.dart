@@ -53,6 +53,7 @@ class TDWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderNormalItem(BuildContext context) {
+    /// todo
     return Container(
       decoration: BoxDecoration(
         color: selectedBgColor ?? Colors.white,
@@ -146,7 +147,7 @@ class TDWrapSideBarItem extends StatelessWidget {
             icon,
             size: 20,
             color: disabled
-                ? TDTheme.of(context).fontGyColor4
+                ? TDTheme.of(context).textColorDisabled
                 : selected
                     ? selectedTextStyle != null
                         ? selectedTextStyle?.color
@@ -166,7 +167,7 @@ class TDWrapSideBarItem extends StatelessWidget {
                 style: selected ? (selectedTextStyle ?? TextStyle(color: selectedColor)) : textStyle,
                 fontWeight: selected && !disabled ? FontWeight.w600 : FontWeight.w400,
                 textColor: disabled
-                    ? TDTheme.of(context).fontGyColor4
+                    ? TDTheme.of(context).textColorDisabled
                     : selected
                     ? selectedColor ?? TDTheme.of(context).brandNormalColor
                     : TDTheme.of(context).textColorPrimary,

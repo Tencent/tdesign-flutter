@@ -84,7 +84,7 @@ class _TDBackTopState extends State<TDBackTop> {
       height: 48,
       padding: EdgeInsets.symmetric(vertical: widget.showText ? 6 : 13),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
           border: Border.all(color: _borderColor, width: 0.5),
           color: _bgColor),
       child: Center(
@@ -117,8 +117,9 @@ class _TDBackTopState extends State<TDBackTop> {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
               color: _bgColor,
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(999), bottomLeft: Radius.circular(999)),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(TDTheme.of(context).radiusCircle),
+                  bottomLeft: Radius.circular(TDTheme.of(context).radiusCircle)),
               border: Border.all(color: _borderColor, width: 0.5)),
           child: Row(
             mainAxisSize: MainAxisSize.min,

@@ -397,7 +397,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                 padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
                 decoration: BoxDecoration(
                     color: TDTheme.of(context).bgColorContainer,
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
                     boxShadow: TDTheme.of(context).shadowsMiddle),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
