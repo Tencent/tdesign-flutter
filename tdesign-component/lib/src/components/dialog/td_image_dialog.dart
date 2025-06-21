@@ -21,10 +21,10 @@ class TDImageDialog extends StatelessWidget {
     Key? key,
     required this.image,
     this.imagePosition = TDDialogImagePosition.top,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor,
     this.radius = 12.0,
     this.title,
-    this.titleColor = const Color(0xE6000000),
+    this.titleColor,
     this.titleAlignment,
     this.contentWidget,
     this.content,
@@ -37,7 +37,7 @@ class TDImageDialog extends StatelessWidget {
   }) : super(key: key);
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// 圆角
   final double radius;
@@ -46,7 +46,7 @@ class TDImageDialog extends StatelessWidget {
   final String? title;
 
   /// 标题颜色
-  final Color titleColor;
+  final Color? titleColor;
 
   /// 标题对齐模式
   final AlignmentGeometry? titleAlignment;
@@ -95,9 +95,8 @@ class TDImageDialog extends StatelessWidget {
   Widget _buildTopImage(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       ClipRRect(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(radius),
-            topRight: Radius.circular(radius)),
+        borderRadius:
+            BorderRadius.only(topLeft: Radius.circular(radius), topRight: Radius.circular(radius)),
         child: _buildImage(context),
       ),
       TDDialogInfoWidget(
@@ -139,9 +138,8 @@ class TDImageDialog extends StatelessWidget {
   Widget _buildOnlyImage(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       ClipRRect(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(radius),
-            topRight: Radius.circular(radius)),
+        borderRadius:
+            BorderRadius.only(topLeft: Radius.circular(radius), topRight: Radius.circular(radius)),
         child: _buildImage(context),
       ),
       const TDDivider(height: 24, color: Colors.transparent),

@@ -14,7 +14,7 @@ class TDDialogScaffold extends StatelessWidget {
     Key? key,
     required this.body,
     this.showCloseButton,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor,
     this.radius = 12.0,
   }) : super(key: key);
 
@@ -25,7 +25,7 @@ class TDDialogScaffold extends StatelessWidget {
   final bool? showCloseButton;
 
   /// 背景色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// 圆角
   final double radius;
@@ -33,42 +33,42 @@ class TDDialogScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Material(
-          type: MaterialType.transparency,
-          child: Container(
-            width: 311,
-            decoration: BoxDecoration(
-              color: backgroundColor, // 底色
-              borderRadius: BorderRadius.all(Radius.circular(radius)),
-            ),
-            child: Stack(
-              children: [
-                body,
-                showCloseButton ?? false
-                    ? Positioned(
-                    top: 0,
-                    right: 0,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: SizedBox(
-                        width: 38,
-                        height: 38,
-                        child: Center(
-                          child: Icon(
-                            TDIcons.close,
-                            size: 22,
-                            color: TDTheme.of(context).fontGyColor3,
+      child: Material(
+        type: MaterialType.transparency,
+        child: Container(
+          width: 311,
+          decoration: BoxDecoration(
+            color: backgroundColor ?? TDTheme.of(context).bgColorContainer, // 底色
+            borderRadius: BorderRadius.all(Radius.circular(radius)),
+          ),
+          child: Stack(
+            children: [
+              body,
+              showCloseButton ?? false
+                  ? Positioned(
+                      top: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: SizedBox(
+                          width: 38,
+                          height: 38,
+                          child: Center(
+                            child: Icon(
+                              TDIcons.close,
+                              size: 22,
+                              color: TDTheme.of(context).textColorPlaceholder,
+                            ),
                           ),
                         ),
-                      ),
-                    ))
-                    : Container(height: 0)
-              ],
-            ),
+                      ))
+                  : Container(height: 0)
+            ],
           ),
         ),
+      ),
     );
   }
 }
@@ -131,7 +131,7 @@ class TDDialogInfoWidget extends StatelessWidget {
   const TDDialogInfoWidget({
     Key? key,
     this.title,
-    this.titleColor = Colors.black,
+    this.titleColor,
     this.titleAlignment,
     this.contentWidget,
     this.content,
@@ -144,7 +144,7 @@ class TDDialogInfoWidget extends StatelessWidget {
   final String? title;
 
   /// 标题颜色
-  final Color titleColor;
+  final Color? titleColor;
 
   /// 标题对齐模式
   final AlignmentGeometry? titleAlignment;
@@ -178,7 +178,7 @@ class TDDialogInfoWidget extends StatelessWidget {
               alignment: titleAlignment ?? Alignment.center,
               child: TDText(
                 title,
-                textColor: titleColor,
+                textColor: titleColor ?? TDTheme.of(context).textColorPrimary,
                 fontWeight: FontWeight.w600,
                 font: Font(size: 18, lineHeight: 26),
                 textAlign: TextAlign.center,
@@ -198,7 +198,7 @@ class TDDialogInfoWidget extends StatelessWidget {
                       scrollDirection: Axis.vertical,
                       child: TDDialogContent(
                         content: content!,
-                        contentColor: contentColor ?? const Color(0x99000000),
+                        contentColor: contentColor ?? TDTheme.of(context).textColorSecondary,
                       ),
                     ),
                   ),
@@ -242,7 +242,7 @@ class HorizontalNormalButtons extends StatelessWidget {
               height: leftBtn.height,
               buttonTextFontWeight: leftBtn.fontWeight ?? FontWeight.w600,
               onPressed: () {
-                if(leftBtn.action != null){
+                if (leftBtn.action != null) {
                   leftBtn.action!();
                 } else {
                   Navigator.pop(context);
@@ -251,6 +251,7 @@ class HorizontalNormalButtons extends StatelessWidget {
             ),
           ),
           const TDDivider(
+            height: 0.5,
             width: 12,
             color: Colors.transparent,
           ),
@@ -265,7 +266,7 @@ class HorizontalNormalButtons extends StatelessWidget {
               height: rightBtn.height,
               buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
               onPressed: () {
-                if(rightBtn.action != null) {
+                if (rightBtn.action != null) {
                   rightBtn.action!();
                 } else {
                   Navigator.pop(context);
@@ -298,7 +299,7 @@ class HorizontalTextButtons extends StatelessWidget {
     // 标题和内容不能同时为空
     return Column(
       children: [
-        const TDDivider(height: 1),
+        const TDDivider(height: 0.5),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -314,7 +315,7 @@ class HorizontalTextButtons extends StatelessWidget {
                 height: 56,
                 buttonTextFontWeight: leftBtn.fontWeight,
                 onPressed: () {
-                  if(leftBtn.action != null){
+                  if (leftBtn.action != null) {
                     leftBtn.action!();
                   } else {
                     Navigator.pop(context);
@@ -323,7 +324,7 @@ class HorizontalTextButtons extends StatelessWidget {
               ),
             ),
             const TDDivider(
-              width: 1,
+              width: 0.5,
               height: 56,
             ),
             Expanded(
@@ -337,7 +338,7 @@ class HorizontalTextButtons extends StatelessWidget {
                 height: 56,
                 buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
                 onPressed: () {
-                  if(rightBtn.action != null){
+                  if (rightBtn.action != null) {
                     rightBtn.action!();
                   } else {
                     Navigator.pop(context);
@@ -410,7 +411,8 @@ class TDDialogButton extends StatelessWidget {
       type: buttonType ?? TDButtonType.fill,
       theme: buttonTheme,
       text: buttonText,
-      textStyle: TextStyle(fontWeight: buttonTextFontWeight,color:buttonTextColor,fontSize: buttonTextSize),
+      textStyle: TextStyle(
+          fontWeight: buttonTextFontWeight, color: buttonTextColor, fontSize: buttonTextSize),
       width: width,
       height: height,
       isBlock: isBlock,
