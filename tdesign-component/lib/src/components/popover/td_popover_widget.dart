@@ -277,11 +277,11 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
       case TDPopoverPlacement.rightTop:
       case TDPopoverPlacement.right:
       case TDPopoverPlacement.rightBottom:
-        return dx + widgetWidth + widget.offset + 8;
+        return dx + widgetWidth + widget.offset;
       case TDPopoverPlacement.leftTop:
       case TDPopoverPlacement.left:
       case TDPopoverPlacement.leftBottom:
-        return dx - popoverWidth - widget.arrowSize - widget.offset - 8;
+        return dx - popoverWidth - widget.arrowSize - widget.offset;
       default:
         return dx - (popoverWidth - widgetWidth) / 2;
     }
@@ -361,34 +361,38 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
     return textPainter.size;
   }
 
+  Widget _getContainerWidget() {
+    return Container(
+      width: widget.width,
+      height: widget.height,
+      padding: widget.padding ?? const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+          color: _backgroundColor,
+          boxShadow: const [
+            BoxShadow(
+                color: Color(0x0d000000), offset: Offset(0, 6), blurRadius: 30, spreadRadius: 5),
+            BoxShadow(
+                color: Color(0x0a000000), offset: Offset(0, 16), blurRadius: 24, spreadRadius: 2),
+            BoxShadow(
+                color: Color(0x14000000), offset: Offset(0, 8), blurRadius: 10, spreadRadius: -5),
+          ]),
+      child: widget.contentWidget != null
+          ? widget.contentWidget!
+          : TDText(widget.content,
+              style: TextStyle(
+                color: _color,
+                letterSpacing: 0,
+                fontSize: 16,
+                height: 1.5,
+              )),
+    );
+  }
+
   /// 获取子Widget
   Widget _getChild() {
     var children = [
-      Container(
-        width: widget.width,
-        height: widget.height,
-        padding: widget.padding ?? const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
-            color: _backgroundColor,
-            boxShadow: const [
-              BoxShadow(
-                  color: Color(0x0d000000), offset: Offset(0, 6), blurRadius: 30, spreadRadius: 5),
-              BoxShadow(
-                  color: Color(0x0a000000), offset: Offset(0, 16), blurRadius: 24, spreadRadius: 2),
-              BoxShadow(
-                  color: Color(0x14000000), offset: Offset(0, 8), blurRadius: 10, spreadRadius: -5),
-            ]),
-        child: widget.contentWidget != null
-            ? widget.contentWidget!
-            : TDText(widget.content,
-                style: TextStyle(
-                  color: _color,
-                  letterSpacing: 0,
-                  fontSize: 16,
-                  height: 1.5,
-                )),
-      ),
+      _getContainerWidget(),
       Visibility(
         visible: widget.showArrow ?? false,
         child: _getArrowWidget(),
@@ -412,32 +416,9 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
         children = [
           Visibility(
             visible: widget.showArrow ?? false,
-            child: Container(
-              child: _getArrowWidget(),
-            ),
+            child: _getArrowWidget(),
           ),
-          Container(
-            padding: widget.padding ?? const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
-                color: _backgroundColor,
-                boxShadow: [
-                  BoxShadow(
-                      color: TDTheme.of(context).grayColor7,
-                      offset: const Offset(6, 3),
-                      blurRadius: 6)
-                ]),
-            child: widget.contentWidget != null
-                ? widget.contentWidget!
-                : TDText(widget.content,
-                    style: TextStyle(
-                      color: _color,
-                      letterSpacing: 0,
-                      fontSize: 16,
-                      height: 1.5,
-                      overflow: TextOverflow.ellipsis,
-                    )),
-          ),
+          _getContainerWidget(),
         ];
         break;
       default:
