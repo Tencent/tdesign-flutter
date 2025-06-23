@@ -307,7 +307,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                                       hintText: '请输入文字',
                                       maxLength: 10,
                                       additionInfo: '最大输入10个字符',
-                                      backgroundColor:  TDTheme.of(context).bgColorContainer,
+                                      backgroundColor: TDTheme.of(context).bgColorContainer,
                                     ),
                                   ),
                                 ),
@@ -346,7 +346,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                                       hintText: '请输入文字',
                                       maxLength: 10,
                                       additionInfo: '最大输入10个字符',
-                                      backgroundColor:  TDTheme.of(context).bgColorContainer,
+                                      backgroundColor: TDTheme.of(context).bgColorContainer,
                                     ),
                                   ),
                                 ),
@@ -385,42 +385,42 @@ class TDPopupPageState extends State<TDPopupPage> {
                                             leftLabel: '标签文字1',
                                             hintText: '请输入文字1',
                                             maxLength: 10,
-                                            backgroundColor:  TDTheme.of(context).bgColorContainer,
+                                            backgroundColor: TDTheme.of(context).bgColorContainer,
                                           ),
                                           TDInput(
                                             type: TDInputType.normal,
                                             leftLabel: '标签文字2',
                                             hintText: '请输入文字2',
                                             maxLength: 10,
-                                            backgroundColor:  TDTheme.of(context).bgColorContainer,
+                                            backgroundColor: TDTheme.of(context).bgColorContainer,
                                           ),
                                           TDInput(
                                             type: TDInputType.normal,
                                             leftLabel: '标签文字3',
                                             hintText: '请输入文字3',
                                             maxLength: 10,
-                                            backgroundColor:  TDTheme.of(context).bgColorContainer,
+                                            backgroundColor: TDTheme.of(context).bgColorContainer,
                                           ),
                                           TDInput(
                                             type: TDInputType.normal,
                                             leftLabel: '标签文字4',
                                             hintText: '请输入文字4',
                                             maxLength: 10,
-                                            backgroundColor:  TDTheme.of(context).bgColorContainer,
+                                            backgroundColor: TDTheme.of(context).bgColorContainer,
                                           ),
                                           TDInput(
                                             type: TDInputType.normal,
                                             leftLabel: '会被键盘遮挡的输入框1',
                                             hintText: '会被键盘遮挡小部分',
                                             maxLength: 10,
-                                            backgroundColor:  TDTheme.of(context).bgColorContainer,
+                                            backgroundColor: TDTheme.of(context).bgColorContainer,
                                           ),
                                           TDInput(
                                             type: TDInputType.normal,
                                             leftLabel: '会被键盘遮挡的输入框2',
                                             hintText: '会被键盘遮挡全遮挡',
                                             maxLength: 10,
-                                            backgroundColor:  TDTheme.of(context).bgColorContainer,
+                                            backgroundColor: TDTheme.of(context).bgColorContainer,
                                           )
                                         ],
                                       ),
@@ -441,34 +441,33 @@ class TDPopupPageState extends State<TDPopupPage> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-            Container(
-            margin: const EdgeInsets.all(8),
-            child: TDButton(
-              text: '可拖动全屏',
-              isBlock: true,
-              theme: TDButtonTheme.primary,
-              type: TDButtonType.outline,
-              size: TDButtonSize.large,
-              onTap: () {
-
-                Navigator.of(context).push(TDSlidePopupRoute(
-                    modalBarrierColor: TDTheme.of(context).fontGyColor2,
-                    slideTransitionFrom: SlideTransitionFrom.bottom,
-                    builder: (context) {
-                      return TDPopupBottomDisplayPanel(
-                        title: '标题文字',
-                        draggable: true,
-                        closeColor: TDTheme.of(context).errorNormalColor,
-                        closeClick: () {
-                          Navigator.maybePop(context);
+                  Container(
+                      margin: const EdgeInsets.all(8),
+                      child: TDButton(
+                        text: '可拖动全屏',
+                        isBlock: true,
+                        theme: TDButtonTheme.primary,
+                        type: TDButtonType.outline,
+                        size: TDButtonSize.large,
+                        onTap: () {
+                          Navigator.of(context).push(TDSlidePopupRoute(
+                              modalBarrierColor: TDTheme.of(context).fontGyColor2,
+                              slideTransitionFrom: SlideTransitionFrom.bottom,
+                              builder: (context) {
+                                return TDPopupBottomDisplayPanel(
+                                  title: '标题文字',
+                                  draggable: true,
+                                  closeColor: TDTheme.of(context).errorNormalColor,
+                                  closeClick: () {
+                                    Navigator.maybePop(context);
+                                  },
+                                  child: Container(
+                                    height: 200,
+                                  ),
+                                );
+                              }));
                         },
-                        child: Container(
-                          height: 200,
-                        ),
-                      );
-                    }));
-              },
-            )),
+                      )),
                   Container(
                       margin: const EdgeInsets.all(8),
                       child: TDButton(
@@ -478,7 +477,6 @@ class TDPopupPageState extends State<TDPopupPage> {
                         type: TDButtonType.outline,
                         size: TDButtonSize.large,
                         onTap: () {
-
                           Navigator.of(context).push(TDSlidePopupRoute(
                               modalBarrierColor: TDTheme.of(context).fontGyColor2,
                               slideTransitionFrom: SlideTransitionFrom.bottom,
@@ -571,7 +569,10 @@ class TDPopupPageState extends State<TDPopupPage> {
             slideTransitionFrom: SlideTransitionFrom.center,
             builder: (context) {
               return Container(
-                color: TDTheme.of(context).bgColorContainer,
+                decoration: BoxDecoration(
+                  color: TDTheme.of(context).bgColorContainer,
+                  borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge),
+                ),
                 width: 240,
                 height: 240,
               );
