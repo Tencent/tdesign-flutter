@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tdesign_flutter/src/util/log.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'base/example_base.dart';
 import 'base/example_route.dart';
 import 'base/web_md_tool.dart';
 import 'config.dart';
+import 'localizations/app_localizations.dart';
 
 var _kShowTodoComponent = false;
 
@@ -83,7 +83,6 @@ class _MyHomePageState extends State<MyHomePage> {
               }
             },
           ),
-          if(AppLocalizations.of(context)!=null)
           GestureDetector(
             child: Container(
               alignment: Alignment.centerRight,
@@ -110,13 +109,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return SafeArea(
         child: Align(
           alignment: Alignment.topCenter,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: _buildChildren(context),
-        ),
-      ),
-    ));
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: _buildChildren(context),
+            ),
+          ),
+        ));
   }
 
   List<Widget> _buildChildren(BuildContext context) {
@@ -141,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       widget.onThemeChange?.call(TDTheme.defaultData());
                     },
                   )),),
-        Padding(padding: const EdgeInsets.only(left: 4, right: 4),child: TDTheme(
+              Padding(padding: const EdgeInsets.only(left: 4, right: 4),child: TDTheme(
                   data: TDThemeData.fromJson('green', greenThemeConfig) ?? TDThemeData.defaultData(),
                   child: TDButton(
                       text: AppLocalizations.of(context)?.greenTheme,
@@ -151,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         var newData = TDThemeData.fromJson('green', jsonString);
                         widget.onThemeChange?.call(newData ?? TDTheme.defaultData());
                       }))),
-        Padding(padding: const EdgeInsets.only(left: 4, right: 8),child: TDTheme(
+              Padding(padding: const EdgeInsets.only(left: 4, right: 8),child: TDTheme(
                   data: TDThemeData.fromJson('red', greenThemeConfig) ?? TDThemeData.defaultData(),
                   child: TDButton(
                       text: AppLocalizations.of(context)?.redTheme,
