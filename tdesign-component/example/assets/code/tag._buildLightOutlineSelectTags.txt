@@ -1,6 +1,6 @@
 
   Widget _buildLightOutlineSelectTags(BuildContext context) {
-    return Wrap(spacing: 8, children: const [
+    return const Wrap(spacing: 8, children: [
       TDSelectTag(
         '未选中态',
         theme: TDTagTheme.primary,
