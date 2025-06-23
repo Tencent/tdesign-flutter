@@ -171,7 +171,7 @@ class TDMultiPicker extends StatelessWidget {
                             end: Alignment.bottomCenter,
                             colors: [
                           TDTheme.of(context).bgColorContainer,
-                          TDTheme.of(context).bgColorContainer..withOpacity(0)
+                          TDTheme.of(context).bgColorContainer.withOpacity(0)
                         ])),
                   ),
                 ),
@@ -189,7 +189,7 @@ class TDMultiPicker extends StatelessWidget {
                             end: Alignment.topCenter,
                             colors: [
                           TDTheme.of(context).bgColorContainer,
-                          TDTheme.of(context).bgColorContainer..withOpacity(0)
+                          TDTheme.of(context).bgColorContainer.withOpacity(0)
                         ])),
                   ),
                 ),
@@ -495,7 +495,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                               end: Alignment.bottomCenter,
                               colors: [
                             TDTheme.of(context).bgColorContainer,
-                            TDTheme.of(context).bgColorContainer..withOpacity(0)
+                            TDTheme.of(context).bgColorContainer.withOpacity(0)
                           ])),
                     ),
                   ),
@@ -513,7 +513,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                               end: Alignment.topCenter,
                               colors: [
                             TDTheme.of(context).bgColorContainer,
-                            TDTheme.of(context).bgColorContainer..withOpacity(0)
+                            TDTheme.of(context).bgColorContainer.withOpacity(0)
                           ])),
                     ),
                   ),
