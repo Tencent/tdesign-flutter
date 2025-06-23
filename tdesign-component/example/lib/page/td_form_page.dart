@@ -127,7 +127,7 @@ class _TDFormPageState extends State<TDFormPage> {
     "gender": '',
     "birth": '',
     "place": '',
-    "age": "0",
+    "age": "2",
     "description": "2",
     "resume": '',
     "photo": '',
@@ -138,7 +138,7 @@ class _TDFormPageState extends State<TDFormPage> {
     "gender": '',
     "birth": '',
     "place": '',
-    "age": '',
+    "age": '2',
     "description": '',
     "resume": '',
     "photo": "",
@@ -201,12 +201,12 @@ class _TDFormPageState extends State<TDFormPage> {
       validate: (value) {
         if (value == null || value.isEmpty) {
           return 'empty';
-        } else if (int.parse(value) == 0) {
+        } else if (int.parse(value) < 3) {
           return 'empty';
         }
         return null;
       },
-      errorMessage: '年限需要大于0',
+      errorMessage: '输入的数字不能大于用户所填生日对应的年龄',
       type: TDFormItemType.stepper,
     ),
     "description": TDFormValidation(
@@ -284,8 +284,11 @@ class _TDFormPageState extends State<TDFormPage> {
             requiredMark: true,
             child: TDInput(
                 leftContentSpace: 0,
-                inputDecoration:
-                    InputDecoration(hintText: "请输入用户名", border: InputBorder.none, contentPadding: EdgeInsets.all(0)),
+                inputDecoration: InputDecoration(
+                    hintText: "请输入用户名",
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(0),
+                    hintStyle: TextStyle(color: TDTheme.of(context).fontGyColor3.withOpacity(0.4))),
                 controller: _controller[0],
                 backgroundColor: Colors.white,
                 additionInfoColor: TDTheme.of(context).errorColor6,
@@ -309,9 +312,9 @@ class _TDFormPageState extends State<TDFormPage> {
             child: TDInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
-                  hintText: '请输入密码',
-                  border: InputBorder.none,
-                ),
+                    hintText: '请输入密码',
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(color: TDTheme.of(context).fontGyColor3.withOpacity(0.4))),
                 type: TDInputType.normal,
                 controller: _controller[1],
                 obscureText: !browseOn,
@@ -345,7 +348,7 @@ class _TDFormPageState extends State<TDFormPage> {
                   radioStyle: TDRadioStyle.circle,
                   showDivider: false,
                   spacing: 4,
-                  checkBoxLeftSpace:0,
+                  checkBoxLeftSpace: 0,
                   customSpace: EdgeInsets.all(0),
                   enable: !_formDisableState,
                 );
@@ -387,7 +390,7 @@ class _TDFormPageState extends State<TDFormPage> {
             type: TDFormItemType.cascader,
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
-            labelWidth: 80.0,
+            labelWidth: 82.0,
             select: _selected_2,
             formItemNotifier: _formItemNotifier['place'],
             selectFn: (BuildContext context) {
@@ -421,11 +424,12 @@ class _TDFormPageState extends State<TDFormPage> {
               type: TDFormItemType.stepper,
               formItemNotifier: _formItemNotifier['age'],
               child: Padding(
-                padding: EdgeInsets.only(top: _isFormHorizontal ? 0 : 4, right: 18),
+                padding: EdgeInsets.only( right: 18),
                 child: TDStepper(
                   theme: TDStepperTheme.filled,
                   disabled: _formDisableState,
                   eventController: _stepController!,
+                  value:int.parse(_formData['age']),
                   onChange: (value) {
                     _formItemNotifier['age']?.upDataForm('${value}');
                   },
@@ -441,7 +445,7 @@ class _TDFormPageState extends State<TDFormPage> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                  padding: EdgeInsets.only(top: _isFormHorizontal ? 0 : 5, right: 18),
+                  padding: EdgeInsets.only(right: 18),
                   child: TDRate(
                     count: 5,
                     value: double.parse(_formData['description']),
@@ -457,51 +461,55 @@ class _TDFormPageState extends State<TDFormPage> {
             ),
           ),
           TDFormItem(
-            label: '个人简介',
-            labelWidth: 82.0,
-            name: 'resume',
-            type: TDFormItemType.textarea,
-            formItemNotifier: _formItemNotifier['resume'],
-            child: TDTextarea(
-              backgroundColor: Colors.red,
-              padding: EdgeInsets.all(0),
-              hintText: '请输入个人简介',
-              maxLength: 500,
-              indicator: true,
-              readOnly: _formDisableState,
-              layout: TDTextareaLayout.vertical,
-              controller: _controller[2],
-              showBottomDivider: false,
-              onChanged: (value) {
-                _formItemNotifier['resume']?.upDataForm(value);
-              },
-            ),
-          ),
+              label: '个人简介',
+              labelWidth: 82.0,
+              name: 'resume',
+              type: TDFormItemType.textarea,
+              formItemNotifier: _formItemNotifier['resume'],
+              child: Padding(
+                padding: EdgeInsets.only(top: 8,bottom: 4),
+                child: TDTextarea(
+                  backgroundColor: Colors.red,
+                  padding: EdgeInsets.all(0),
+                  hintText: '请输入个人简介',
+                  maxLength: 500,
+                  indicator: true,
+                  readOnly: _formDisableState,
+                  layout: TDTextareaLayout.vertical,
+                  controller: _controller[2],
+                  showBottomDivider: false,
+                  onChanged: (value) {
+                    _formItemNotifier['resume']?.upDataForm(value);
+                  },
+                ),
+              )),
           TDFormItem(
-            label: '上传图片',
-            name: 'photo',
-            labelWidth: 82.0,
-            type: TDFormItemType.upLoadImg,
-            formItemNotifier: _formItemNotifier['photo'],
-            child: TDUpload(
-              files: files,
-              multiple: true,
-              max: 6,
-              onError: print,
-              onValidate: print,
-              disabled: _formDisableState,
-              onChange: ((imgList, type) {
-                if (_formDisableState) {
-                  return;
-                }
-                files = _onValueChanged(files ?? [], imgList, type);
-                List imgs = files.map((e) => e.remotePath ?? e.assetPath).toList();
-                setState(() {
-                  _formItemNotifier['photo'].upDataForm(imgs.join(','));
-                });
-              }),
-            ),
-          )
+              label: '上传图片',
+              name: 'photo',
+              labelWidth: 82.0,
+              type: TDFormItemType.upLoadImg,
+              formItemNotifier: _formItemNotifier['photo'],
+              child: Padding(
+                padding: EdgeInsets.only(top:8,bottom: 4),
+                child: TDUpload(
+                  files: files,
+                  multiple: true,
+                  max: 6,
+                  onError: print,
+                  onValidate: print,
+                  disabled: _formDisableState,
+                  onChange: ((imgList, type) {
+                    if (_formDisableState) {
+                      return;
+                    }
+                    files = _onValueChanged(files ?? [], imgList, type);
+                    List imgs = files.map((e) => e.remotePath ?? e.assetPath).toList();
+                    setState(() {
+                      _formItemNotifier['photo'].upDataForm(imgs.join(','));
+                    });
+                  }),
+                ),
+              ))
         ],
         btnGroup: [
           Container(
