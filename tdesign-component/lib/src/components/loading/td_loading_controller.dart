@@ -16,7 +16,7 @@ class TDLoadingController {
       Color? iconColor,
       String? text,
       Widget? refreshWidget,
-      Color textColor = Colors.black,
+      Color? textColor,
       Axis axis = Axis.vertical,
       Widget? customIcon,
       int duration = 2000}) {
