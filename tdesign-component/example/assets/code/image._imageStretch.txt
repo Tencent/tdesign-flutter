@@ -14,7 +14,7 @@
           color: TDTheme.of(context).bgColorContainerHover,
           width: 121,
           height: 72,
-          child: Stack(
+          child: const Stack(
             alignment: Alignment.center,
             children: [
               TDImage(
