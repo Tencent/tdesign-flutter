@@ -78,11 +78,11 @@ class TDDialogTitle extends StatelessWidget {
   const TDDialogTitle({
     Key? key,
     this.title,
-    this.titleColor = Colors.black,
+    this.titleColor,
   }) : super(key: key);
 
   /// 标题颜色
-  final Color titleColor;
+  final Color? titleColor;
 
   /// 标题文字
   final String? title;
@@ -92,9 +92,9 @@ class TDDialogTitle extends StatelessWidget {
     // 标题和内容不能同时为空
     return TDText(
       title,
-      textColor: titleColor,
+      textColor: titleColor ?? TDTheme.of(context).textColorPrimary,
       fontWeight: FontWeight.w600,
-      font: Font(size: 16, lineHeight: 24),
+      font: Font(size: 18, lineHeight: 26),
       textAlign: TextAlign.center,
     );
   }
@@ -105,11 +105,11 @@ class TDDialogContent extends StatelessWidget {
   const TDDialogContent({
     Key? key,
     this.content,
-    this.contentColor = const Color(0x99000000),
+    this.contentColor,
   }) : super(key: key);
 
   /// 标题颜色
-  final Color contentColor;
+  final Color? contentColor;
 
   /// 标题文字
   final String? content;
@@ -119,7 +119,7 @@ class TDDialogContent extends StatelessWidget {
     // 标题和内容不能同时为空
     return TDText(
       content,
-      textColor: contentColor,
+      textColor: contentColor ?? TDTheme.of(context).textColorSecondary,
       font: Font(size: 16, lineHeight: 24),
       textAlign: TextAlign.center,
     );
@@ -176,12 +176,9 @@ class TDDialogInfoWidget extends StatelessWidget {
           if (title != null)
             Align(
               alignment: titleAlignment ?? Alignment.center,
-              child: TDText(
-                title,
-                textColor: titleColor ?? TDTheme.of(context).textColorPrimary,
-                fontWeight: FontWeight.w600,
-                font: Font(size: 18, lineHeight: 26),
-                textAlign: TextAlign.center,
+              child: TDDialogTitle(
+                title: title,
+                titleColor: titleColor,
               ),
             ),
           if (contentWidget != null || content != null)
