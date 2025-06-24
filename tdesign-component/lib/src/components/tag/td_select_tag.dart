@@ -136,7 +136,8 @@ class _TDClickTagState extends State<TDSelectTag> {
     if (widget.disableSelectStyle != null) {
       return widget.disableSelectStyle!;
     }
-    return TDTagStyle.generateDisableSelectStyle(context,widget.isOutline, widget.shape);
+    return TDTagStyle.generateDisableSelectStyle(
+        context, widget.isLight, widget.isOutline, widget.shape);
   }
 
   TDTagStyle _getSelectStyle() {
@@ -146,8 +147,7 @@ class _TDClickTagState extends State<TDSelectTag> {
     return widget.isOutline
         ? TDTagStyle.generateOutlineStyleByTheme(
             context, widget.theme, widget.isLight, widget.shape)
-        : TDTagStyle.generateFillStyleByTheme(
-            context, widget.theme, widget.isLight, widget.shape);
+        : TDTagStyle.generateFillStyleByTheme(context, widget.theme, widget.isLight, widget.shape);
   }
 
   TDTagStyle _getUnSelectStyle() {
@@ -156,9 +156,9 @@ class _TDClickTagState extends State<TDSelectTag> {
     }
     return widget.isOutline
         ? TDTagStyle.generateOutlineStyleByTheme(
-        context, TDTagTheme.defaultTheme, widget.isLight, widget.shape)
+            context, TDTagTheme.defaultTheme, widget.isLight, widget.shape)
         : TDTagStyle.generateFillStyleByTheme(
-        context, TDTagTheme.defaultTheme, widget.isLight, widget.shape);
+            context, TDTagTheme.defaultTheme, widget.isLight, widget.shape);
   }
 
   @override
