@@ -86,8 +86,7 @@ class _ExamplePageState extends State<ExamplePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var modelTheme = context
-          .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
+      var modelTheme = context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
       model = modelTheme?.model;
       model?.codePath = widget.exampleCodeGroup;
       model?.apiVisible = apiVisible;
@@ -102,8 +101,7 @@ class _ExamplePageState extends State<ExamplePage> {
     return Scaffold(
         floatingActionButton: widget.floatingActionButton,
         body: ScrollbarTheme(
-            data: ScrollbarThemeData(
-                trackVisibility: MaterialStateProperty.all(true)),
+            data: ScrollbarThemeData(trackVisibility: MaterialStateProperty.all(true)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -112,63 +110,59 @@ class _ExamplePageState extends State<ExamplePage> {
                     child: widget.showSingleChild && widget.singleChild != null
                         ? _singleChild()
                         : MediaQuery(
-                      // 去掉底部安全区域,保证示例展示正常
-                      data: MediaQuery.of(context).copyWith(padding: EdgeInsets.zero),
-                      child: ListView.builder(
-                        controller: widget.scrollController,
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.only(top: 24, bottom: 24),
-                        itemCount: widget.children.length + 3,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return _buildHeader(context);
-                          }
-                          if (index == widget.children.length + 2) {
-                            return WebMdTool.needGenerateWebMd
-                                ? Container(
-                              margin: const EdgeInsets.only(top: 24),
-                              child: Column(
-                                children: [
-                                  TDButton(
-                                    text: '生成Web使用md',
-                                    type: TDButtonType.fill,
-                                    onTap: () => WebMdTool.generateWebMd(
-                                        model: model,
-                                        description: widget.desc,
-                                        exampleCodeGroup:
-                                        widget.exampleCodeGroup,
-                                        exampleModuleList:
-                                        widget.children,
-                                        testList: widget.test,
-                                        singleChild:
-                                        widget.showSingleChild
-                                            ? widget.singleChild
-                                            : null),
-                                  ),
-                                  TDButton(
-                                    text: '返回首页',
-                                    type: TDButtonType.fill,
-                                    onTap: () => Navigator.of(context).maybePop(),
-                                  ),
-                                ],
-                              ),
-                            )
-                                : Container();
-                          }
-                          ExampleModule data;
-                          if (index <= widget.children.length) {
-                            data = widget.children[index - 1];
-                          } else {
-                            data = ExampleModule(title: '单元测试', children: [
-                              _buildTestExampleItem(),
-                              ...widget.test
-                            ]);
-                          }
-                          return _buildModule(index, data, context);
-                        },
-                      ),
-                    )),
+                            // 去掉底部安全区域,保证示例展示正常
+                            data: MediaQuery.of(context).copyWith(padding: EdgeInsets.zero),
+                            child: ListView.builder(
+                              controller: widget.scrollController,
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              padding: const EdgeInsets.only(top: 24, bottom: 24),
+                              itemCount: widget.children.length + 3,
+                              itemBuilder: (context, index) {
+                                if (index == 0) {
+                                  return _buildHeader(context);
+                                }
+                                if (index == widget.children.length + 2) {
+                                  return WebMdTool.needGenerateWebMd
+                                      ? Container(
+                                          margin: const EdgeInsets.only(top: 24),
+                                          child: Column(
+                                            children: [
+                                              TDButton(
+                                                text: '生成Web使用md',
+                                                type: TDButtonType.fill,
+                                                onTap: () => WebMdTool.generateWebMd(
+                                                    model: model,
+                                                    description: widget.desc,
+                                                    exampleCodeGroup: widget.exampleCodeGroup,
+                                                    exampleModuleList: widget.children,
+                                                    testList: widget.test,
+                                                    singleChild: widget.showSingleChild
+                                                        ? widget.singleChild
+                                                        : null),
+                                              ),
+                                              TDButton(
+                                                text: '返回首页',
+                                                type: TDButtonType.fill,
+                                                onTap: () => Navigator.of(context).maybePop(),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Container();
+                                }
+                                ExampleModule data;
+                                if (index <= widget.children.length) {
+                                  data = widget.children[index - 1];
+                                } else {
+                                  data = ExampleModule(
+                                      title: '单元测试',
+                                      children: [_buildTestExampleItem(), ...widget.test]);
+                                }
+                                return _buildModule(index, data, context);
+                              },
+                            ),
+                          )),
               ],
             )));
   }
@@ -196,8 +190,7 @@ class _ExamplePageState extends State<ExamplePage> {
                         exampleCodeGroup: widget.exampleCodeGroup,
                         exampleModuleList: widget.children,
                         testList: widget.test,
-                        singleChild:
-                        widget.showSingleChild ? widget.singleChild : null),
+                        singleChild: widget.showSingleChild ? widget.singleChild : null),
                   ),
                   TDButton(
                     text: '返回首页',
@@ -240,8 +233,7 @@ class _ExamplePageState extends State<ExamplePage> {
                   model!.apiVisible = apiVisible;
                 }
               });
-              TNotification.postNotification(
-                  'onApiVisibleChange', {'apiVisible': apiVisible});
+              TNotification.postNotification('onApiVisibleChange', {'apiVisible': apiVisible});
             }));
       }
     }
@@ -265,7 +257,7 @@ class _ExamplePageState extends State<ExamplePage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if(WebMdTool.needGenerateWebMd) const TDText('WebGenTag'),
+          if (WebMdTool.needGenerateWebMd) const TDText('WebGenTag'),
           TDText(
             widget.title,
             font: TDTheme.of(context).fontHeadlineSmall,
@@ -301,8 +293,7 @@ class _ExamplePageState extends State<ExamplePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        for (var index = 0; index < data.children.length; index++)
-          _buildExampleItem(data, index)
+        for (var index = 0; index < data.children.length; index++) _buildExampleItem(data, index)
       ],
     );
   }
@@ -355,8 +346,7 @@ class ExampleItem {
 
 /// 组件示例
 class ExampleItemInherited extends InheritedWidget {
-  const ExampleItemInherited(
-      {required this.path, Key? key, required Widget child})
+  const ExampleItemInherited({required this.path, Key? key, required Widget child})
       : super(key: key, child: child);
 
   final String path;
@@ -370,11 +360,7 @@ class ExampleItemInherited extends InheritedWidget {
 /// 组件示例
 class ExampleItemWidget extends StatefulWidget {
   const ExampleItemWidget(
-      {required this.data,
-      Key? key,
-      required this.index,
-      this.exampleCodeGroup,
-      this.moduleTitle})
+      {required this.data, Key? key, required this.index, this.exampleCodeGroup, this.moduleTitle})
       : super(key: key);
 
   final ExampleItem data;
@@ -413,19 +399,14 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
     }
     child = Column(
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: widget.data.center
-          ? CrossAxisAlignment.center
-          : CrossAxisAlignment.start,
+      crossAxisAlignment: widget.data.center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         widget.data.desc.isEmpty
             ? Container()
             : Container(
                 alignment: Alignment.topLeft,
                 margin: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    top: widget.index == 0 ? 8 : 24,
-                    bottom: 16),
+                    left: 16, right: 16, top: widget.index == 0 ? 8 : 24, bottom: 16),
                 child: TDText(
                   widget.data.desc,
                   font: TDTheme.of(context).fontBodyMedium,
@@ -437,8 +418,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
     );
     return ExampleItemInherited(
       child: child,
-      path: WebMdTool.getItemKey(
-          widget.exampleCodeGroup, widget.moduleTitle, widget.data.desc),
+      path: WebMdTool.getItemKey(widget.exampleCodeGroup, widget.moduleTitle, widget.data.desc),
     );
   }
 }
@@ -471,6 +451,8 @@ class _CodeWrapperState extends State<CodeWrapper> {
 
   String? codeString;
 
+  Brightness brightness = Brightness.light;
+
   @override
   void initState() {
     super.initState();
@@ -484,10 +466,10 @@ class _CodeWrapperState extends State<CodeWrapper> {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
-        var modelTheme = context
-            .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
+        var modelTheme = context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
         exampleCodeGroup = modelTheme?.model.codePath ?? '';
         apiVisible = modelTheme?.model.apiVisible ?? false;
+        brightness = Theme.of(context).brightness;
       });
 
       if (WebMdTool.needGenerateWebMd && !widget.isFromItem) {
@@ -497,8 +479,7 @@ class _CodeWrapperState extends State<CodeWrapper> {
   }
 
   void loadManualCode() async {
-    var modelTheme =
-        context.dependOnInheritedWidgetOfExactType<ExampleItemInherited>();
+    var modelTheme = context.dependOnInheritedWidgetOfExactType<ExampleItemInherited>();
     if (modelTheme?.path != null) {
       codeString ??= await loadCodeString();
       var list = WebMdTool.manualExampleCode[modelTheme!.path] ?? [];
@@ -575,37 +556,41 @@ class _CodeWrapperState extends State<CodeWrapper> {
             return Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: TDTheme.of(context).grayColor1,
+                  color: TDTheme.of(context).bgColorSecondaryContainer,
                   borderRadius: BorderRadius.vertical(
                       top: Radius.circular(TDTheme.of(context).radiusDefault))),
               height: 500,
-              child:
-                  TDText(PlatformUtil.isWeb ? 'web不支持演示代码，请在移动端查看' : '暂无演示代码'),
+              child: TDText(PlatformUtil.isWeb ? 'web不支持演示代码，请在移动端查看' : '暂无演示代码'),
             );
           }
 
           var lines = codeString!.split('\n');
           print('lines: ${lines.length}');
-          double height = min(max(300, lines.length * 17 + 32),
-              MediaQuery.of(context).size.height - 150);
+          double height =
+              min(max(300, lines.length * 17 + 32), MediaQuery.of(context).size.height - 150);
           var mdText = '''
 ```dart
 ${codeString}
 ```
                   ''';
+
+          var syntaxHighlighterStyle = brightness == Brightness.light
+              ? SyntaxHighlighterStyle.lightThemeStyle()
+              : SyntaxHighlighterStyle.darkThemeStyle();
+
           return Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: TDTheme.of(context).grayColor1,
-                borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(TDTheme.of(context).radiusDefault))),
+                color: TDTheme.of(context).bgColorSecondaryContainer,
+                borderRadius:
+                    BorderRadius.vertical(top: Radius.circular(TDTheme.of(context).radiusDefault))),
             height: height,
             child: Markdown(
               physics: const BouncingScrollPhysics(),
               padding: EdgeInsets.zero,
               selectable: false,
               shrinkWrap: true,
-              syntaxHighlighter: DartSyntaxHighlighter(),
+              syntaxHighlighter: DartSyntaxHighlighter(syntaxHighlighterStyle),
               data: mdText,
               extensionSet: md.ExtensionSet(
                 md.ExtensionSet.gitHubWeb.blockSyntaxes,
@@ -633,8 +618,7 @@ ${codeString}
 /// State获取标题的扩展
 extension TDStateExs on State {
   String tdTitle() {
-    var modelTheme =
-        context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
+    var modelTheme = context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
     return modelTheme?.model.text ?? '';
   }
 }
@@ -642,8 +626,7 @@ extension TDStateExs on State {
 /// StatelessWidget获取标题的扩展
 extension TDWidgetExs on StatelessWidget {
   String tdTitle(BuildContext context) {
-    var modelTheme =
-        context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
+    var modelTheme = context.dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
     return modelTheme?.model.text ?? '';
   }
 }
