@@ -18,7 +18,7 @@ import 'page/td_calendar_page.dart';
 import 'page/td_cascader_page.dart';
 import 'page/td_cell_page.dart';
 import 'page/td_checkbox_page.dart';
-import 'page/td_collapse.dart';
+import 'page/td_collapse_page.dart';
 import 'page/td_date_picker_page.dart';
 import 'page/td_dialog_page.dart';
 import 'page/td_divider_page.dart';
