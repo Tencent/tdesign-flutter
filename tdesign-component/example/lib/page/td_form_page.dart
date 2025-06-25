@@ -17,8 +17,8 @@ class _TDFormPageState extends State<TDFormPage> {
   List<TextEditingController> _controller = [];
   FormController _formController = FormController();
   StreamController<TDStepperEventType> _stepController = StreamController.broadcast();
-  String _selected_1 = '请输入内容';
-  String _selected_2 = '请输入内容';
+  String _selected_1 = '';
+  String _selected_2 = '';
   String? _initLocalData;
 
   /// form 禁用的状态
@@ -369,6 +369,7 @@ class _TDFormPageState extends State<TDFormPage> {
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             formItemNotifier: _formItemNotifier['birth'],
+            hintText:'请输入内容',
             select: _selected_1,
             selectFn: (BuildContext context) {
               if (_formDisableState) {
@@ -391,6 +392,7 @@ class _TDFormPageState extends State<TDFormPage> {
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             labelWidth: 82.0,
+            hintText:'请输入内容',
             select: _selected_2,
             formItemNotifier: _formItemNotifier['place'],
             selectFn: (BuildContext context) {
@@ -490,7 +492,7 @@ class _TDFormPageState extends State<TDFormPage> {
               type: TDFormItemType.upLoadImg,
               formItemNotifier: _formItemNotifier['photo'],
               child: Padding(
-                padding: EdgeInsets.only(top:8,bottom: 4),
+                padding: EdgeInsets.only(top:4,bottom: 4),
                 child: TDUpload(
                   files: files,
                   multiple: true,
@@ -538,9 +540,9 @@ class _TDFormPageState extends State<TDFormPage> {
                         //个人简介
                         _controller[2].clear();
                         //生日
-                        _selected_1 = '请输入内容';
+                        _selected_1 = '';
                         //籍贯
-                        _selected_2 = '请输入内容';
+                        _selected_2 = '';
                         //年限
                         _stepController.add(TDStepperEventType.cleanValue);
                         //上传图片
