@@ -28,6 +28,7 @@ class TDFormItem extends StatefulWidget {
     this.additionInfo,
     this.select = '',
     this.selectFn,
+    this.hintText='',
     Map<String, String>? radios,
     Key? key,
   }) : super(key: key);
@@ -91,6 +92,8 @@ class TDFormItem extends StatefulWidget {
   /// TDTextarea 的属性，指示器
   final bool? indicator;
 
+  ///提示内容
+  final hintText;
   @override
   _TDFormItemState createState() => _TDFormItemState();
 }
@@ -341,7 +344,7 @@ class _TDFormItemState extends State<TDFormItem> {
                 )));
       case TDFormItemType.dateTimePicker:
       case TDFormItemType.cascader:
-        return _buildSelectRow(context, widget.select, widget.label ?? '', widget.selectFn);
+        return _buildSelectRow(context);
       case TDFormItemType.stepper:
         return Container(
           decoration: BoxDecoration(
@@ -434,7 +437,7 @@ class _TDFormItemState extends State<TDFormItem> {
     }
   }
 
-  Widget _buildSelectRow(BuildContext context, String output, String title, Function? selectFn) {
+  Widget _buildSelectRow(BuildContext context) {
     Widget labelContent = SizedBox(
       width: LabelWidth,
       child: widget.labelWidget ??
@@ -442,7 +445,7 @@ class _TDFormItemState extends State<TDFormItem> {
             padding: EdgeInsets.only(left:2),
             child: Row(
               children: [
-                TDText(title, style: const TextStyle(fontSize: 14), textAlign: widget.labelAlign),
+                TDText(widget.label ?? '', style: const TextStyle(fontSize: 14), textAlign: widget.labelAlign),
                 if (FormRequiredMark && (widget.requiredMark != null && widget.requiredMark == true))
                   Padding(padding:const EdgeInsets.only(left: 4),child: TDText('*',
                       style: const TextStyle(fontSize: 12), textColor: Colors.red, textAlign: widget.labelAlign),),
@@ -450,17 +453,18 @@ class _TDFormItemState extends State<TDFormItem> {
             ),
           ),
     );
+    Widget selectText=TDText(
+      textAlign: FormContentAlign,
+      widget.select!=''?widget.select:widget.hintText,
+      font: TDTheme.of(context).fontBodyLarge,
+      textColor:  widget.select!=''?TDTheme.of(context).fontGyColor1:TDTheme.of(context).fontGyColor3.withOpacity(0.4),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
     Widget content = Row(
       children: [
         Expanded(
-            child: TDText(
-              textAlign: FormContentAlign,
-              output,
-              font: TDTheme.of(context).fontBodyLarge,
-              textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            )),
+            child: selectText),
         Padding(
           padding: const EdgeInsets.only(left: 2),
           child: Icon(
@@ -473,8 +477,8 @@ class _TDFormItemState extends State<TDFormItem> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        if (selectFn != null) {
-          selectFn(context);
+        if (widget.selectFn != null) {
+          widget.selectFn!(context);
         }
       },
       child: Container(
@@ -504,14 +508,7 @@ class _TDFormItemState extends State<TDFormItem> {
                       labelContent,
                       Padding(
                         padding: const EdgeInsets.only(top:8, left: 2),
-                        child: TDText(
-                          textAlign: FormContentAlign,
-                          output,
-                          font: TDTheme.of(context).fontBodyLarge,
-                          textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                        child: selectText,
                       ),
                     ],
                   )),
