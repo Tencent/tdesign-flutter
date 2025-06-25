@@ -469,7 +469,7 @@ class _TDFormPageState extends State<TDFormPage> {
               type: TDFormItemType.textarea,
               formItemNotifier: _formItemNotifier['resume'],
               child: Padding(
-                padding: EdgeInsets.only(top: 8,bottom: 4),
+                padding: EdgeInsets.only(top: _isFormHorizontal?0:8,bottom: 4),
                 child: TDTextarea(
                   backgroundColor: Colors.red,
                   padding: EdgeInsets.all(0),
