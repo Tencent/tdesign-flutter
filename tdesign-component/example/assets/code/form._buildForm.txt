@@ -112,6 +112,7 @@
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             formItemNotifier: _formItemNotifier['birth'],
+            hintText:'请输入内容',
             select: _selected_1,
             selectFn: (BuildContext context) {
               if (_formDisableState) {
@@ -134,6 +135,7 @@
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             labelWidth: 82.0,
+            hintText:'请输入内容',
             select: _selected_2,
             formItemNotifier: _formItemNotifier['place'],
             selectFn: (BuildContext context) {
@@ -233,7 +235,7 @@
               type: TDFormItemType.upLoadImg,
               formItemNotifier: _formItemNotifier['photo'],
               child: Padding(
-                padding: EdgeInsets.only(top:8,bottom: 4),
+                padding: EdgeInsets.only(top:4,bottom: 4),
                 child: TDUpload(
                   files: files,
                   multiple: true,
@@ -281,9 +283,9 @@
                         //个人简介
                         _controller[2].clear();
                         //生日
-                        _selected_1 = '请输入内容';
+                        _selected_1 = '';
                         //籍贯
-                        _selected_2 = '请输入内容';
+                        _selected_2 = '';
                         //年限
                         _stepController.add(TDStepperEventType.cleanValue);
                         //上传图片
