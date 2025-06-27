@@ -382,14 +382,15 @@ class _TDButtonPageState extends State<TDButtonPage> {
             ExampleItem(
                 ignoreCode: true,
                 desc: '按钮中路由跳转',
-                builder: (context){
+                builder: (context) {
                   return TDButton(
                     text: '点击跳转',
                     size: TDButtonSize.large,
                     // type: TDButtonType.text,
                     shape: TDButtonShape.rectangle,
-                    onTap: () async{
-                      var result = await Navigator.of(context).pushNamedAndRemoveUntil('divider',(router){
+                    onTap: () async {
+                      var result = await Navigator.of(context)
+                          .pushNamedAndRemoveUntil('divider', (router) {
                         return true;
                       });
                       print('pushNamedAndRemoveUntil result: $result');
