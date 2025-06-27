@@ -5,4 +5,13 @@
       const TDSwitch(),
       title: '基础开关',
     );
+  }ged: (value) {
+          setState(() {
+            _formDisableState = value;
+          });
+          return false;
+        },
+      ),
+      title: '禁用态',
+    );
   }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,6 +13,8 @@ enum TDStepperIconType { remove, add }
 
 enum TDStepperOverlimitType { minus, plus }
 
+enum TDStepperEventType { cleanValue }
+
 typedef TDStepperOverlimitFunction = void Function(TDStepperOverlimitType type);
 
 class TDStepper extends StatefulWidget {
@@ -19,6 +23,7 @@ class TDStepper extends StatefulWidget {
     this.disableInput = false,
     this.disabled = false,
     this.inputWidth,
+    this.eventController,
     this.max = 100,
     this.min = 0,
     this.size = TDStepperSize.medium,
@@ -70,6 +75,8 @@ class TDStepper extends StatefulWidget {
   /// 数值超出限制时触发
   final TDStepperOverlimitFunction? onOverlimit;
 
+  /// 事件控制器
+  final StreamController<TDStepperEventType>? eventController;
   @override
   State<TDStepper> createState() => _TDStepperState();
 }
@@ -83,7 +90,15 @@ class _TDStepperState extends State<TDStepper> {
   void initState() {
     super.initState();
     value = widget.value ?? widget.defaultValue ?? 0;
+    if(widget.eventController!=null){
+      widget.eventController?.stream.listen((TDStepperEventType event){
+          if(event == TDStepperEventType.cleanValue){
+            cleanValue();
+          }
+      });
+    }
     _controller = TextEditingController(text: value.toString());
+
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
         if (widget.onBlur != null) {
@@ -210,7 +225,16 @@ class _TDStepperState extends State<TDStepper> {
     });
     renderNumber();
   }
-
+  cleanValue(){
+    value=0;
+    _controller.value = TextEditingValue(
+        text: value.toString(),
+        selection: TextSelection.fromPosition(TextPosition(
+          affinity: TextAffinity.downstream,
+          offset: value.toString().length,
+        )));
+    _focusNode.unfocus();
+  }
   void renderNumber() {
     _controller.value = TextEditingValue(
         text: value.toString(),
@@ -448,3 +472,4 @@ class TDStepperIconButton extends StatelessWidget {
         ));
   }
 }
+

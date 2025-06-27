@@ -109,13 +109,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return SafeArea(
         child: Align(
           alignment: Alignment.topCenter,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: _buildChildren(context),
-        ),
-      ),
-    ));
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: _buildChildren(context),
+            ),
+          ),
+        ));
   }
 
   List<Widget> _buildChildren(BuildContext context) {
@@ -140,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       widget.onThemeChange?.call(TDTheme.defaultData());
                     },
                   )),),
-        Padding(padding: const EdgeInsets.only(left: 4, right: 4),child: TDTheme(
+              Padding(padding: const EdgeInsets.only(left: 4, right: 4),child: TDTheme(
                   data: TDThemeData.fromJson('green', greenThemeConfig) ?? TDThemeData.defaultData(),
                   child: TDButton(
                       text: AppLocalizations.of(context)?.greenTheme,
@@ -150,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         var newData = TDThemeData.fromJson('green', jsonString);
                         widget.onThemeChange?.call(newData ?? TDTheme.defaultData());
                       }))),
-        Padding(padding: const EdgeInsets.only(left: 4, right: 8),child: TDTheme(
+              Padding(padding: const EdgeInsets.only(left: 4, right: 8),child: TDTheme(
                   data: TDThemeData.fromJson('red', greenThemeConfig) ?? TDThemeData.defaultData(),
                   child: TDButton(
                       text: AppLocalizations.of(context)?.redTheme,
