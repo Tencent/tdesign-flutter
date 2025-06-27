@@ -71,7 +71,8 @@ class TDCheckbox extends StatefulWidget {
       this.onCheckBoxChanged,
       this.titleColor,
       this.subTitleColor,
-      this.checkBoxLeftSpace})
+      this.checkBoxLeftSpace,
+      this.customSpace})
       : super(key: key);
 
   /// id
@@ -150,6 +151,9 @@ class TDCheckbox extends StatefulWidget {
 
   /// 选项框左侧间距
   final double? checkBoxLeftSpace;
+
+  /// 自定义组件间距
+  final EdgeInsetsGeometry? customSpace;
   @override
   State createState() => TDCheckboxState();
 
@@ -261,7 +265,7 @@ class TDCheckboxState extends State<TDCheckbox> {
               alignment: Alignment.bottomCenter,
               children: [
                 Padding(
-                  padding: _getPadding(widget.size),
+                  padding:widget.customSpace??_getPadding(widget.size),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -312,7 +316,7 @@ class TDCheckboxState extends State<TDCheckbox> {
               alignment: Alignment.bottomCenter,
               children: [
                 Padding(
-                  padding: _getPadding(widget.size),
+                  padding:widget.customSpace?? _getPadding(widget.size),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
