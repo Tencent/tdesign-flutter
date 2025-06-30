@@ -77,6 +77,7 @@ export 'src/components/switch/td_switch.dart';
 export 'src/components/tabbar/td_bottom_tab_bar.dart';
 export 'src/components/table/td_table.dart';
 export 'src/components/table/td_table_col.dart';
+export 'src/components/table/td_table_empty.dart';
 export 'src/components/tabs/td_tab.dart';
 export 'src/components/tabs/td_tab_bar.dart';
 export 'src/components/tabs/td_tab_bar_view.dart';
