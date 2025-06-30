@@ -9,20 +9,6 @@ typedef OnScroll = void Function(ScrollController controller);
 typedef OnSelect = void Function(List<dynamic>? data);
 typedef OnRowSelect = void Function(int index, bool checked);
 
-
-class TDTableEmpty {
-  TDTableEmpty({
-    this.assetUrl,
-    this.text,
-  });
-
-  /// 空状态图片
-  String? assetUrl;
-
-  /// 空状态文字
-  String? text;
-}
-
 class TDTable extends StatefulWidget {
   const TDTable({
     super.key,
