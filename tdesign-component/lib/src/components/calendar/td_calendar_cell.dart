@@ -18,6 +18,7 @@ class TDCalendarCell extends StatefulWidget {
     required this.rowIndex,
     required this.colIndex,
     required this.dateList,
+    this.cellWidget,
   }) : super(key: key);
 
   final TDate? tdate;
@@ -32,6 +33,7 @@ class TDCalendarCell extends StatefulWidget {
   final int rowIndex;
   final int colIndex;
   final List<TDate?> dateList;
+  final Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? cellWidget;
 
   @override
   _TDCalendarCellState createState() => _TDCalendarCellState();
@@ -72,6 +74,44 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
     final cellStyle = TDCalendarStyle.cellStyle(context, widget.tdate!._type);
     final decoration = tdate.decoration ?? cellStyle.cellDecoration;
     final positionColor = _getColor(cellStyle, decoration);
+
+    // 新增自定义cell内容判断逻辑
+    final content = widget.cellWidget?.call(context, tdate, widget.tdate!._type) ??
+        Column(
+          children: [
+            Expanded(
+              flex: 2,
+              child: tdate.prefixWidget ??
+                  TDText(
+                    tdate.prefix ?? '',
+                    style: tdate.prefixStyle ?? cellStyle.cellPrefixStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Center(
+                child: TDText(
+                  forceVerticalCenter: true,
+                  widget.tdate!.date.day.toString(),
+                  style: (isToday ? cellStyle.todayStyle : null) ?? tdate.style ?? cellStyle.cellStyle,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: tdate.suffixWidget ??
+                  TDText(
+                    tdate.suffix ?? '',
+                    style: tdate.suffixStyle ?? cellStyle.cellSuffixStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+            ),
+          ],
+        );
+
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: _cellTap,
@@ -87,40 +127,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
             height: widget.height,
             decoration: decoration,
             padding: EdgeInsets.all(widget.padding),
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: tdate.prefixWidget ??
-                      TDText(
-                        tdate.prefix ?? '',
-                        style: tdate.prefixStyle ?? cellStyle.cellPrefixStyle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Center(
-                    child: TDText(
-                      forceVerticalCenter: true,
-                      widget.tdate!.date.day.toString(),
-                      style: (isToday ? cellStyle.todayStyle : null) ?? tdate.style ?? cellStyle.cellStyle,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: tdate.suffixWidget ??
-                      TDText(
-                        tdate.suffix ?? '',
-                        style: tdate.suffixStyle ?? cellStyle.cellSuffixStyle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                ),
-              ],
-            ),
+            child: content, // 使用自定义内容
           ),
           if (widget.colIndex < 6)
             Positioned(
