@@ -79,7 +79,7 @@ class TDTablePage extends StatelessWidget {
         ExampleItem(desc: '内容居中表格', builder: _centerTable),
         ExampleItem(desc: '空数据表格', builder: _emptyTable),
         ExampleItem(desc: '加载动画表格', builder: _loadingTable),
-        ExampleItem(desc: '可选表格', builder: _selectTable),
+        ExampleItem(desc: '可选表格+默认选中', builder: _selectTable),
       ],
     );
   }
@@ -361,7 +361,9 @@ class TDTablePage extends StatelessWidget {
     return TDTable(
       data: _getData(10),
       columns: [
-        TDTableCol(selection: true, width: 50, selectable: (index, row) {
+        TDTableCol(selection: true, checked: (index, row) {
+          return index == 0;
+        }, width: 50, selectable: (index, row) {
           return index % 2 == 0;
         }),
         TDTableCol(title: '标题', colKey: 'title1'),
