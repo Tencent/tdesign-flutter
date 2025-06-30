@@ -2,68 +2,13 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
-
-enum TDTableColFixed { left, right, none }
-
-enum TDTableColAlign { left, center, right }
+import 'td_table_col.dart';
 
 typedef OnCellTap = void Function(int rowIndex, dynamic row, TDTableCol col);
 typedef OnScroll = void Function(ScrollController controller);
 typedef OnSelect = void Function(List<dynamic>? data);
 typedef OnRowSelect = void Function(int index, bool checked);
-typedef SelectableFunc = bool Function(int index, dynamic row);
 
-/// 表格列配置
-class TDTableCol {
-  TDTableCol({
-    this.title,
-    this.colKey,
-    this.width,
-    this.fixed = TDTableColFixed.none,
-    this.ellipsis,
-    this.ellipsisTitle,
-    this.cellBuilder,
-    this.align = TDTableColAlign.left,
-    this.sortable = false,
-    this.selection,
-    this.selectable,
-  });
-
-  /// 行是否显示复选框，自定义列时无效
-  bool? selection;
-
-  /// 表头标题
-  String? title;
-
-  /// 列取值字段
-  String? colKey;
-
-  /// 列宽
-  double? width;
-
-  /// 固定列
-  TDTableColFixed? fixed;
-
-  /// 列内容超出时是否省略
-  bool? ellipsis;
-
-  /// 列标题超出时显示省略内容
-  bool? ellipsisTitle;
-
-  /// 自定义列
-  IndexedWidgetBuilder? cellBuilder;
-
-  /// 列内容横向对齐方式
-  TDTableColAlign? align;
-
-  /// 是否可排序
-  bool? sortable;
-
-  /// 当前行CheckBox是否可选，仅selection：true有效
-  SelectableFunc? selectable;
-
-  double? get widthPx => width;
-}
 
 class TDTableEmpty {
   TDTableEmpty({
@@ -159,6 +104,8 @@ class TDTableState extends State<TDTable> {
   bool? _sortable;
   String? _sortKey;
   int _hasChecked = 0;
+  int _totalSelectable = 0;
+  late TDTableCol _selectableCol;
   late List<bool> _checkedList;
   final _scrollController = ScrollController();
 
@@ -335,6 +282,7 @@ class TDTableState extends State<TDTable> {
             }
             widget.onSelect?.call(selectList);
             widget.onRowSelect?.call(index, checked);
+            print('!!!!::::${_hasChecked}');
           });
         },
       );
@@ -343,20 +291,23 @@ class TDTableState extends State<TDTable> {
       if(isHeader) {
         checkBox = TDCheckbox(
           id: 'header',
-          checked: _hasChecked == widget.data!.length,
+          checked: _hasChecked == _totalSelectable,
           customIconBuilder: (context, checked) {
             if(_hasChecked == 0) {
-              return Icon(TDIcons.rectangle, size: 16, color: TDTheme.of(context).fontGyColor3,);
+              return Icon(TDIcons.rectangle, size: 16, color: TDTheme.of(context).fontGyColor3);
             }
-            var allCheck = _hasChecked >= widget.data!.length;
+            var allCheck = _hasChecked >= _totalSelectable;
             var halfSelected = _hasChecked > 0 && _hasChecked < widget.data!.length;
             return getAllIcon(allCheck, halfSelected);
           },
           onCheckBoxChanged: (checked) {
             setState(() {
-              _hasChecked = checked ? widget.data!.length : 0;
+              _hasChecked = checked ? _totalSelectable : 0;
               for  (var i = 0; i < widget.data!.length; i++) {
-                _checkedList[i] = checked;
+                // 不选中selectable == false的行
+                if(_selectableCol.selectable!(i, widget.data![i]) ?? true) {
+                  _checkedList[i] = checked;
+                }
               }
               widget.onSelect?.call(checked ? widget.data : []);
             });
@@ -494,7 +445,37 @@ class TDTableState extends State<TDTable> {
     _scrollController.addListener(() {
       widget.onScroll?.call(_scrollController);
     });
+    _initCols();
+  }
+
+  @override
+  void didUpdateWidget(covariant TDTable oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _initCols();
+  }
+
+  void _initCols() {
+    _totalSelectable = 0;
+    _hasChecked = 0;
     _checkedList = List.generate((widget.data?.length ?? 0), (index) => false);
+    var cols = widget.columns.where((col) => col.selection ?? false);
+    if(cols.length > 1) {
+      throw FlutterError('selectable column must be only one');
+    }
+    if(widget.data != null && cols.isNotEmpty) {
+      _selectableCol = cols.first;
+      var data = widget.data!;
+      for(var i = 0; i < data.length; i++) {
+        var check = _selectableCol.checked?.call(i, data[i]) ?? false;
+        _checkedList[i] = check;
+        if(check) {
+          _hasChecked++;
+        }
+        if(_selectableCol.selectable?.call(i, data[i]) ?? false) {
+          _totalSelectable++;
+        }
+      }
+    }
   }
 
   /// 生成固定列表格
@@ -671,7 +652,7 @@ class TDTableState extends State<TDTable> {
   /// 半选图标
   Widget getAllIcon(bool checked, bool halfSelected) {
     return Icon(
-        checked ? TDIcons.check_rectangle_filled : halfSelected ? TDIcons.minus_rectangle_filled : TDIcons.circle,
+        checked ? TDIcons.check_rectangle_filled : halfSelected ? TDIcons.minus_rectangle_filled : TDIcons.check_rectangle,
         size: 16,
         color: (checked || halfSelected) ? TDTheme.of(context).brandNormalColor : TDTheme.of(context).grayColor4
     );
