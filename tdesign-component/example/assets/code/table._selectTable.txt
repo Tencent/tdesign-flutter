@@ -3,7 +3,9 @@
     return TDTable(
       data: _getData(10),
       columns: [
-        TDTableCol(selection: true, width: 50, selectable: (index, row) {
+        TDTableCol(selection: true, checked: (index, row) {
+          return index == 0;
+        }, width: 50, selectable: (index, row) {
           return index % 2 == 0;
         }),
         TDTableCol(title: '标题', colKey: 'title1'),
