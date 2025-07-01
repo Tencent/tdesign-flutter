@@ -100,7 +100,7 @@
 # swiper
 ./bin/api_tool_linux generate --folder ../lib/src/components/swiper --name TDSwiperPagination,TDPageTransformer --folder-name swiper --output ../example/assets/api/ --only-api --get-comments
 # table
-./bin/api_tool_linux generate --folder ../lib/src/components/table --name TDTable --folder-name table --output ../example/assets/api/ --only-api
+./bin/api_tool_linux generate --folder ../lib/src/components/table --name TDTable,TDTableCol,TDTableEmpty --folder-name table --output ../example/assets/api/ --only-api
 # tag
 ./bin/api_tool_linux generate --folder ../lib/src/components/tag --name TDTag,TDSelectTag,TDTagStyle --folder-name tag --output ../example/assets/api/ --only-api
 
