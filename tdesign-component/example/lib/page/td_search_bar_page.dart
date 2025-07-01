@@ -19,27 +19,29 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
-        desc: '用于一组预设数据中的选择。',
-        exampleCodeGroup: 'search',
-        backgroundColor: TDTheme.of(context).grayColor2,
-        children: [
-          ExampleModule(
-            title: '组件类型',
-            children: [
-              ExampleItem(desc: '基础搜索框', builder: _buildDefaultSearchBar),
-              ExampleItem(desc: '获取焦点后显示取消按钮', builder: _buildFocusSearchBar),
-            ],
-          ),
-          ExampleModule(title: '组件样式', children: [
-            ExampleItem(desc: '搜索框形状', builder: _buildSearchBarWithShape),
-            ExampleItem(desc: '默认状态其他对齐方式', builder: _buildCenterSearchBar),
-          ]),
-        ],
+      title: tdTitle(),
+      desc: '用于一组预设数据中的选择。',
+      exampleCodeGroup: 'search',
+      backgroundColor: TDTheme.of(context).grayColor2,
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(desc: '基础搜索框', builder: _buildDefaultSearchBar),
+            ExampleItem(desc: '获取焦点后显示取消按钮', builder: _buildFocusSearchBar),
+          ],
+        ),
+        ExampleModule(title: '组件样式', children: [
+          ExampleItem(desc: '搜索框形状', builder: _buildSearchBarWithShape),
+          ExampleItem(desc: '默认状态其他对齐方式', builder: _buildCenterSearchBar),
+        ]),
+      ],
       test: [
         ExampleItem(desc: '获取焦点后显示自定义操作按钮', builder: _buildSearchBarWithAction),
-          ExampleItem(desc: '自定义获取焦点后显示按钮', builder: _buildFocusSearchBarWithAction),
-      ],);
+        ExampleItem(
+            desc: '自定义获取焦点后显示按钮', builder: _buildFocusSearchBarWithAction),
+      ],
+    );
   }
 
   @Demo(group: 'search')
@@ -141,7 +143,9 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
             });
           },
         ),
-        const SizedBox(height: 10,),
+        const SizedBox(
+          height: 10,
+        ),
         Container(
           padding: const EdgeInsets.only(left: 15),
           alignment: Alignment.centerLeft,
