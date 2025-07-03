@@ -91,6 +91,7 @@ class TDTableState extends State<TDTable> {
   String? _sortKey;
   int _hasChecked = 0;
   int _totalSelectable = 0;
+  bool _checkAll = false;
   late TDTableCol _selectableCol;
   late List<bool> _checkedList;
   final _scrollController = ScrollController();
@@ -236,62 +237,69 @@ class TDTableState extends State<TDTable> {
     var text = _getCellText(col, title, ellipsis, isHeader, sortable, index);
     var content = text;
     if((col.selection ?? false) && col.cellBuilder == null) {
-      var enable = col.selectable?.call(index, widget.data?[index]) ?? true;
+      var checkBox;
       // 行选择框
-      var checkBox = TDCheckbox(
-        id: 'index:$index',
-        checked: _checkedList[index],
-        enable: enable,
-        customIconBuilder: (context, checked) {
-          if(checked) {
-            return Icon(TDIcons.check_rectangle_filled, size: 16,
-              color: TDTheme.of(context).brandNormalColor);
-          }
-          return Icon(TDIcons.rectangle, size: 16,
-            color: enable ?
-                  TDTheme.of(context).fontGyColor1 :
-                  TDTheme.of(context).fontGyColor3);
-        },
-        onCheckBoxChanged: (checked) {
-          setState(() {
-            _checkedList[index] = checked;
+      if(_notEmptyData()) {
+        var enable = col.selectable?.call(index, widget.data?[index]) ?? true;
+        checkBox = TDCheckbox(
+          id: 'index:$index',
+          checked: _checkedList[index],
+          enable: enable,
+          customIconBuilder: (context, checked) {
             if(checked) {
-              _hasChecked += 1;
-            } else {
-              _hasChecked -= 1;
+              return Icon(TDIcons.check_rectangle_filled, size: 16,
+                  color: TDTheme.of(context).brandNormalColor);
             }
-            var selectList = [];
-            for(var i = 0; i < _checkedList.length; i++) {
-               if(_checkedList[i]) {
-                 selectList.add(widget.data![i]);
-               }
-            }
-            widget.onSelect?.call(selectList);
-            widget.onRowSelect?.call(index, checked);
-            print('!!!!::::${_hasChecked}');
-          });
-        },
-      );
+            return Icon(TDIcons.rectangle, size: 16,
+                color: enable ?
+                TDTheme.of(context).fontGyColor1 :
+                TDTheme.of(context).fontGyColor3);
+          },
+          onCheckBoxChanged: (checked) {
+            setState(() {
+              _checkedList[index] = checked;
+              if(checked) {
+                _hasChecked += 1;
+              } else {
+                _hasChecked -= 1;
+              }
+              _checkAll = _hasChecked == _totalSelectable;
+              var selectList = [];
+              for(var i = 0; i < _checkedList.length; i++) {
+                if(_checkedList[i]) {
+                  selectList.add(widget.data![i]);
+                }
+              }
+              widget.onSelect?.call(selectList);
+              widget.onRowSelect?.call(index, checked);
+            });
+          },
+        );
+      }
 
       // 表头选择框
       if(isHeader) {
         checkBox = TDCheckbox(
           id: 'header',
-          checked: _hasChecked == _totalSelectable,
+          checked: _checkAll,
           customIconBuilder: (context, checked) {
-            if(_hasChecked == 0) {
+            if(_hasChecked == 0 || _totalSelectable == 0) {
               return Icon(TDIcons.rectangle, size: 16, color: TDTheme.of(context).fontGyColor3);
             }
             var allCheck = _hasChecked >= _totalSelectable;
-            var halfSelected = _hasChecked > 0 && _hasChecked < widget.data!.length;
+            var halfSelected = _hasChecked > 0 && _hasChecked < _totalSelectable;
             return getAllIcon(allCheck, halfSelected);
           },
           onCheckBoxChanged: (checked) {
             setState(() {
+              if(!_notEmptyData() && checked) {
+                _hasChecked = _totalSelectable = 1;
+              }
+              _checkAll = checked;
               _hasChecked = checked ? _totalSelectable : 0;
               for  (var i = 0; i < widget.data!.length; i++) {
                 // 不选中selectable == false的行
-                if(_selectableCol.selectable!(i, widget.data![i]) ?? true) {
+                if(_selectableCol.selectable!(i, widget.data![i])) {
                   _checkedList[i] = checked;
                 }
               }
@@ -421,6 +429,10 @@ class TDTableState extends State<TDTable> {
       width += (col.width ?? 0);
     });
     return width;
+  }
+
+  bool _notEmptyData() {
+    return widget.data != null && widget.data!.isNotEmpty;
   }
 
   @override
