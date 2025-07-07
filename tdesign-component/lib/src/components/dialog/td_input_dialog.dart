@@ -83,47 +83,50 @@ class TDInputDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TDDialogScaffold(
-      showCloseButton: showCloseButton,
-      backgroundColor: backgroundColor,
-      radius: radius,
-      body: Material(
-        color: backgroundColor,
-        borderRadius: BorderRadius.all(Radius.circular(radius)),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          TDDialogInfoWidget(
-            title: title,
-            titleColor: titleColor,
-            titleAlignment: titleAlignment,
-            contentWidget: contentWidget,
-            content: content,
-            contentColor: contentColor,
-            padding: padding,
-          ),
-          SizedBox(
-            child: customInputWidget != null
-                ? customInputWidget!
-                : Container(
-                    color: Colors.white,
-                    height: 48,
-                    margin: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-                    child: TextField(
-                      controller: textEditingController,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6), borderSide: BorderSide.none),
-                        hintText: hintText,
-                        hintStyle: const TextStyle(color: Color(0x66000000)),
-                        fillColor: const Color(0xFFF3F3F3),
-                        filled: true,
-                        // labelText: '左上角',
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: TDDialogScaffold(
+        showCloseButton: showCloseButton,
+        backgroundColor: backgroundColor,
+        radius: radius,
+        body: Material(
+          color: backgroundColor,
+          borderRadius: BorderRadius.all(Radius.circular(radius)),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            TDDialogInfoWidget(
+              title: title,
+              titleColor: titleColor,
+              titleAlignment: titleAlignment,
+              contentWidget: contentWidget,
+              content: content,
+              contentColor: contentColor,
+              padding: padding,
+            ),
+            SizedBox(
+              child: customInputWidget != null
+                  ? customInputWidget!
+                  : Container(
+                      color: Colors.white,
+                      height: 48,
+                      margin: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+                      child: TextField(
+                        controller: textEditingController,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(6), borderSide: BorderSide.none),
+                          hintText: hintText,
+                          hintStyle: const TextStyle(color: Color(0x66000000)),
+                          fillColor: const Color(0xFFF3F3F3),
+                          filled: true,
+                          // labelText: '左上角',
+                        ),
                       ),
                     ),
-                  ),
-          ),
-          _horizontalButtons(context),
-        ]),
+            ),
+            _horizontalButtons(context),
+          ]),
+        ),
       ),
     );
   }
