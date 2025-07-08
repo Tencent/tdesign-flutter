@@ -249,8 +249,16 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
     return _items![index].disabled == true;
   }
 
+  Future<void> openMenu(int index) async {
+    await _openMenu(index);
+  }
+
+  Future<void> closeMenu() async {
+    await _closeMenu();
+  }
+
   /// 打开菜单
-  void _openMenu(int index) async {
+  Future<void>  _openMenu(int index) async {
     /// 如果已经打开了，则关闭
     if (_isOpened.contains(true)) {
       await Navigator.maybePop(context);

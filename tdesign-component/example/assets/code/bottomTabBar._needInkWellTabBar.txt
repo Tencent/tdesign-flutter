@@ -1,0 +1,31 @@
+
+  Widget _needInkWellTabBar(BuildContext context) {
+    return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
+        needInkWell: true,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
+  }

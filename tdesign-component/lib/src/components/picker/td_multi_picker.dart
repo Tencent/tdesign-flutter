@@ -391,6 +391,9 @@ class TDMultiLinkedPicker extends StatefulWidget {
   /// 自定义item构建
   final ItemBuilderType? itemBuilder;
 
+  /// 是否保留相同选项
+  final bool keepSameSelection;
+
   const TDMultiLinkedPicker({
     this.title,
     required this.onConfirm,
@@ -416,6 +419,7 @@ class TDMultiLinkedPicker extends StatefulWidget {
     this.padding,
     this.itemDistanceCalculator,
     this.itemBuilder,
+    this.keepSameSelection = false,
     Key? key,
   }) : super(key: key);
 
@@ -435,7 +439,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
     super.initState();
     pickerHeight = widget.pickerHeight;
     model = MultiLinkedPickerModel(
-        data: widget.data, columnNum: widget.columnNum, initialData: widget.selectedData);
+        data: widget.data, columnNum: widget.columnNum, initialData: widget.selectedData, keepSameSelection: widget.keepSameSelection);
   }
 
   @override
@@ -671,10 +675,14 @@ class MultiLinkedPickerModel {
   /// 每一列展示的数据
   late List<List> presentData = [];
 
+  /// 是否保留相同选项
+  bool keepSameSelection = false;
+
   MultiLinkedPickerModel({
     required this.data,
     required this.columnNum,
     required List initialData,
+    this.keepSameSelection = false,
   }) {
     selectedData = [];
     selectedIndexes = [];
@@ -773,6 +781,22 @@ class MultiLinkedPickerModel {
       } else {
         presentData[position + 1] = findColumnData(position + 1);
       }
+
+      // 新增保留相同选项逻辑
+      if (keepSameSelection && position + 1 < selectedData.length) {
+        var nextPosition = position + 1;
+        var oldSelected = selectedData[nextPosition];
+        var newDataList = presentData[nextPosition];
+
+        // 查找旧值是否存在于新数据列表中
+        var index = newDataList.indexOf(oldSelected);
+        if (index != -1) {
+          // 存在相同值则保留原选择
+          refreshPresentDataAndController(nextPosition, index, true);
+          return;
+        }
+      }
+
       refreshPresentDataAndController(position + 1, 0, true);
     }
   }

@@ -46,6 +46,7 @@ class TDCalendar extends StatefulWidget {
     this.pickerItemCount = 3,
     this.isTimeUnit = true,
     this.animateTo = false,
+    this.cellWidget,
   }) : super(key: key);
 
   /// 第一天从星期几开始，默认 0 = 周日
@@ -122,6 +123,9 @@ class TDCalendar extends StatefulWidget {
 
   /// 动画滚动到指定位置
   final bool? animateTo;
+
+  /// 自定义日期单元格组件
+  final Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? cellWidget;
 
   List<DateTime>? get _value => value?.map((e) {
         final date = DateTime.fromMillisecondsSinceEpoch(e);
@@ -235,6 +239,7 @@ class _TDCalendarState extends State<TDCalendar> {
                   dateList: dateList,
                   rowIndex: rowIndex,
                   colIndex: colIndex,
+                  cellWidget: widget.cellWidget,
                 );
               },
             ),
