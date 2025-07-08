@@ -42,6 +42,8 @@
 ./bin/api_tool_linux generate --folder ../lib/src/components/checkbox --name TDCheckbox,TDCheckboxGroup --folder-name checkbox --output ../example/assets/api/ --only-api
 # date_picker
 ./bin/api_tool_linux generate --folder ../lib/src/components/picker --name TDPicker,TDDatePicker --folder-name date-time-picker --output ../example/assets/api/ --only-api
+# form
+./bin/api_tool_linux generate --folder ../lib/src/components/form --name TDForm,TDFormItem,TDFormItemType,TDFormValidation --folder-name form --output ../example/assets/api/ --only-api
 # input
 ./bin/api_tool_linux generate --file ../lib/src/components/input/td_input.dart --name TDInput, TDInputSpacer --folder-name input --output ../example/assets/api/ --only-api
 # picker
