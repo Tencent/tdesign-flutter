@@ -703,7 +703,31 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDDialogButtonOptions
+### TDImageDialog
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key |  | - |  |
+| image | Image | - | 图片 |
+| imagePosition | TDDialogImagePosition? | TDDialogImagePosition.top | 图片位置 |
+| backgroundColor | Color | Colors.white | 背景颜色 |
+| radius | double | 12.0 | 圆角 |
+| title | String? | - | 标题 |
+| titleColor | Color | const Color(0xE6000000) | 标题颜色 |
+| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
+| contentWidget | Widget? | - | 内容Widget |
+| content | String? | - | 内容 |
+| contentColor | Color? | - | 内容颜色 |
+| leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
+| rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
+| showCloseButton | bool? | - | 显示右上角关闭按钮 |
+| padding | EdgeInsets? | - | 内容内边距 |
+| buttonWidget | Widget? | - | 自定义按钮 |
+
+```
+```
+ ### TDDialogButtonOptions
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -717,31 +741,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | theme | TDButtonTheme? | - | 按钮类型 |
 | height | double? | - | 按钮高度 |
 | fontWeight | FontWeight? | - | 字体粗细 |
-
-```
-```
- ### TDInputDialog
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| textEditingController | TextEditingController | - | 输入controller |
-| backgroundColor | Color | Colors.white | 背景颜色 |
-| radius | double | 12.0 | 圆角 |
-| title | String? | - | 标题 |
-| titleColor | Color | const Color(0xE6000000) | 标题颜色 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| contentWidget | Widget? | - | 内容Widget |
-| content | String? | - | 内容 |
-| hintText | String? | '' | 输入提示 |
-| contentColor | Color? | - | 内容颜色 |
-| leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
-| rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
-| buttonWidget | Widget? | - | 自定义按钮 |
-| customInputWidget | Widget? | - | 自定义输入框 |
 
 ```
 ```
@@ -770,14 +769,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDImageDialog
+ ### TDInputDialog
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | key |  | - |  |
-| image | Image | - | 图片 |
-| imagePosition | TDDialogImagePosition? | TDDialogImagePosition.top | 图片位置 |
+| textEditingController | TextEditingController | - | 输入controller |
 | backgroundColor | Color | Colors.white | 背景颜色 |
 | radius | double | 12.0 | 圆角 |
 | title | String? | - | 标题 |
@@ -785,12 +783,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
 | contentWidget | Widget? | - | 内容Widget |
 | content | String? | - | 内容 |
+| hintText | String? | '' | 输入提示 |
 | contentColor | Color? | - | 内容颜色 |
 | leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
 | rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
 | showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| padding | EdgeInsets? | - | 内容内边距 |
+| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
 | buttonWidget | Widget? | - | 自定义按钮 |
+| customInputWidget | Widget? | - | 自定义输入框 |
 
 ```
 ```
