@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tdesign_flutter/src/util/log.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'base/example_base.dart';
