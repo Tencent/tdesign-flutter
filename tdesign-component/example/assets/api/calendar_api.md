@@ -1,5 +1,32 @@
 ## API
-### TDCalendar
+### TDCalendarStyle
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| decoration |  | - |  |
+| titleStyle | TextStyle? | - | header区域 [TDCalendar.title]的样式 |
+| titleMaxLine | int? | - | header区域 [TDCalendar.title]的行数 |
+| titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
+| weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
+| monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
+| cellStyle | TextStyle? | - | 日期样式 |
+| centreColor | Color? | - | 日期范围内背景样式 |
+| cellDecoration | BoxDecoration? | - | 日期decoration |
+| cellPrefixStyle | TextStyle? | - | 日期前面的字符串的样式 |
+| cellSuffixStyle | TextStyle? | - | 日期后面的字符串的样式 |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TDCalendarStyle.generateStyle  | 生成默认样式 |
+| TDCalendarStyle.cellStyle  | 日期样式 |
+
+```
+```
+ ### TDCalendar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -30,33 +57,7 @@
 | pickerItemCount | int? | 3 | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
 | isTimeUnit | bool? | true | 是否显示时间单位 |
 | animateTo | bool? | false | 动画滚动到指定位置 |
-
-```
-```
- ### TDCalendarStyle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| decoration |  | - |  |
-| titleStyle | TextStyle? | - | header区域 [TDCalendar.title]的样式 |
-| titleMaxLine | int? | - | header区域 [TDCalendar.title]的行数 |
-| titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
-| weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
-| monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
-| cellStyle | TextStyle? | - | 日期样式 |
-| centreColor | Color? | - | 日期范围内背景样式 |
-| cellDecoration | BoxDecoration? | - | 日期decoration |
-| cellPrefixStyle | TextStyle? | - | 日期前面的字符串的样式 |
-| cellSuffixStyle | TextStyle? | - | 日期后面的字符串的样式 |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TDCalendarStyle.generateStyle  | 生成默认样式 |
-| TDCalendarStyle.cellStyle  | 日期样式 |
+| cellWidget | Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? | - | 自定义日期单元格组件 |
 
 ```
 ```

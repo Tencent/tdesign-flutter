@@ -202,6 +202,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | padding | EdgeInsets? | - | 适配padding |
 | itemDistanceCalculator | ItemDistanceCalculator? | - | 不同距离自选项计算策略 |
 | itemBuilder | ItemBuilderType? | - | 自定义item构建 |
+| keepSameSelection | bool | false | 是否保留相同选项 |
 | key |  | - |  |
 
 ```
@@ -214,6 +215,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | data | Map | - | 总的数据 |
 | columnNum | int | - | 总列数 |
 | initialData |  | - |  |
+| keepSameSelection | bool | false | 是否保留相同选项 |
 
 ```
 ```
@@ -225,7 +227,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | showDatePicker |  |   required null context,  required String title,  required DatePickerCallback? onConfirm,  DatePickerCallback? onCancel,  bool useYear,  bool useMonth,  bool useDay,  bool useHour,  bool useMinute,  bool useSecond,  bool useWeekDay,  Color? barrierColor,  List<int> dateStart,  List<int>? dateEnd,  List<int>? initialDate,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  Color? titleDividerColor,  Widget? customSelectWidget,  Duration duration,  double pickerHeight,  bool isTimeUnit,   Function(int wheelIndex, int index)? onSelectedItemChanged,  int pickerItemCount,  List<int> Function(DateTypeKey key, List<int> nums)? filterItems,  ItemBuilderType? itemBuilder, | 显示时间选择器 |
 | showMultiPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List<List<String>> data,  List<int>? initialIndexes,  Duration duration,  Color? barrierColor,  double pickerHeight,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  Color? titleDividerColor,  double? topPadding,  int pickerItemCount,  Widget? customSelectWidget,  ItemBuilderType? itemBuilder, | 显示多级选择器 |
-| showMultiLinkedPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required Map data,  required int columnNum,  required List initialData,  Duration duration,  Color? barrierColor,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double pickerHeight,  Color? titleDividerColor,  Widget? customSelectWidget,  double? topPadding,  int pickerItemCount, | 显示多级联动选择器 |
+| showMultiLinkedPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required Map data,  required int columnNum,  required List initialData,  Duration duration,  Color? barrierColor,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double pickerHeight,  Color? titleDividerColor,  Widget? customSelectWidget,  double? topPadding,  bool keepSameSelection,  int pickerItemCount, | 显示多级联动选择器 |
 
 
   

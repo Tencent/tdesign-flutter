@@ -205,6 +205,13 @@ export default {
           component: () => import('@/date-time-picker/README.md'),
         },
         {
+          title: 'Form 表单',
+          name: 'form',
+          meta: { docType: 'form' },
+          path: '/flutter/components/form',
+          component: () => import('@/form/README.md'),
+        },
+        {
           title: 'Input 输入框',
           name: 'input',
           meta: { docType: 'form' },
