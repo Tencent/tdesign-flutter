@@ -411,6 +411,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | titleColor | Color? | - | 标题文字颜色 |
 | subTitleColor | Color? | - | 副标题文字颜色 |
 | checkBoxLeftSpace | double? | - | 选项框左侧间距 |
+| customSpace | EdgeInsetsGeometry? | - | 自定义组件间距 |
 
 ```
 ```
