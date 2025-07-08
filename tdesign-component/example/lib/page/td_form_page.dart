@@ -240,13 +240,13 @@ class _TDFormPageState extends State<TDFormPage> {
     return ExamplePage(
       title: tdTitle(),
       exampleCodeGroup: 'form',
-      desc: '基础表单',
+      desc: '用以收集、校验和提交数据，一般由输入框、单选框、复选框、选择器等控件组成。',
       backgroundColor: const Color(0xfff6f6f6),
       children: [
         ExampleModule(title: '基础类型', children: [
-          ExampleItem(desc: '基础表单', builder: _buildArrangementSwitch),
-          ExampleItem(desc: '', builder: _buildSwitchWithBase),
-          ExampleItem(builder: (BuildContext context) {
+          ExampleItem(ignoreCode: true,desc: '基础表单', builder: _buildArrangementSwitch),
+          ExampleItem(ignoreCode: true,desc: '', builder: _buildSwitchWithBase),
+          ExampleItem(ignoreCode: true, builder: (BuildContext context) {
             return CodeWrapper(builder: _buildForm);
           }),
           // ExampleItem(ignoreCode: true, desc: '', builder: (_) => CodeWrapper(builder: _buildCombinationButtons)),
@@ -603,7 +603,6 @@ class _TDFormPageState extends State<TDFormPage> {
   }
 
   /// 横 竖 排版模式切换按钮
-  @Demo(group: 'form')
   Widget _buildArrangementSwitch(BuildContext buildContext) {
     final theme = TDTheme.of(context);
     return Container(
@@ -684,7 +683,6 @@ class _TDFormPageState extends State<TDFormPage> {
             )));
   }
 
-  @Demo(group: 'switch')
   Widget _buildSwitchWithBase(BuildContext context) {
     return _buildItem(
       context,
