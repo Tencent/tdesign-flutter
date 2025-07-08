@@ -971,6 +971,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | hintTextStyle | TextStyle? | - | 提示文本颜色，默认为文本颜色 |
 | onBtnTap | GestureTapCallback? | - | 右侧按钮点击 |
 | labelWidget | Widget? | - | leftLabel右侧组件，支持自定义 |
+| leftInfoWidth | double? | - | 输入框左侧的宽度（输入框有16dp的左侧padding，因而左侧部分不用考虑这16dp） |
+| leftContentSpace | double? | - | 输入框内容左侧间距 |
 | textInputBackgroundColor | Color? | - | 文本框背景色 |
 | contentPadding | EdgeInsetsGeometry? | - | textInput内边距 |
 | type | TDInputType | TDInputType.normal | 输入框类型 |
@@ -992,7 +994,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | spacer | TDInputSpacer | - | 组件各模块间间距 |
 | cardStyleBottomText | String? | - | 卡片模式下方文字 |
 | onTapOutside | TapRegionCallback? | - | 点击输入框外部区域回调 |
-| leftInfoWidth | double? | - | 输入框左侧的宽度（输入框有16dp的左侧padding，因而左侧部分不用考虑这16dp） |
 
 
   
