@@ -175,6 +175,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | width | double? | 80.0 | 图片宽度 |
 | height | double? | 80.0 | 图片高度 |
 | type | TDUploadBoxType | TDUploadBoxType.roundedSquare | Box类型 |
+| disabled | bool? | false | 是否禁用 |
 | enabledReplaceType | bool? | false | 是否启用replace功能 |
 
 
