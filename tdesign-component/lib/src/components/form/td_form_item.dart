@@ -103,16 +103,17 @@ class _TDFormItemState extends State<TDFormItem> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    widget.formItemNotifier?.addListener(() {
-      updateFormData(widget.formItemNotifier?.formVal);
-    });
+    if(!(widget.formItemNotifier?.isDisposed ?? true)) {
+      widget.formItemNotifier?.addListener(() {
+        updateFormData(widget.formItemNotifier?.formVal);
+      });
+    }
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
-    if (widget.formItemNotifier != null) {
+    if (widget.formItemNotifier != null && !widget.formItemNotifier!.isDisposed) {
       widget.formItemNotifier?.dispose();
     }
   }
@@ -581,10 +582,18 @@ class _TDFormItemState extends State<TDFormItem> {
 }
 
 class FormItemNotifier with ChangeNotifier {
+
+  bool isDisposed = false;
   String _formVal = '';
   String get formVal => _formVal;
   upDataForm(val) {
     _formVal = val;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    isDisposed = true;
   }
 }
