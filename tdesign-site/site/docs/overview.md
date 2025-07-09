@@ -154,7 +154,7 @@ spline: explain
     </a>
   </div>
   <div class="image-wrapper">
-    <a class="item" href="/flutter/components/input">
+    <a class="item" href="/flutter/components/form">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-form.png">
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-form-dark.png">
       <p class="name">Form 表单</p>
