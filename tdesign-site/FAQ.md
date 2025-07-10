@@ -1,6 +1,6 @@
 ---
-title: Flutter
-description: TDesign Flutter组件库。
+title: 常见问题
+description: 
 spline: explain
 ---
 
@@ -45,9 +45,18 @@ TDImage基于系统Image组件封装，未单独处理缓存逻辑，使用的�
 如果发现组件内部写死了颜色或尺寸，导致无法适应业务场景，可以直接提issue优化。
 
 ## flutter 3.32以下SDK 无法运行
-flutter 3.32版本的sdk代码变更很大，无法跨版本兼容，因此引入了tdesign_flutter_adaptation库。如果你是flutter 3.32以下的sdk版本，请在项目的pubspec.yaml中添加以下依赖覆盖：
+flutter 3.32版本的sdk代码变更很大，无法跨版本兼容，因此引入了tdesign_flutter_adaptation库。
+
+如果你是flutter 3.32以下的sdk版本，请在项目的pubspec.yaml中添加以下依赖覆盖：
 ```yaml
 dependency_overrides:
   tdesign_flutter_adaptation: 3.16.0
   image_picker: 1.0.8
+```
+
+如果你是tdesign_flutter 0.2.3版本，且使用了3.32版本以上的Flutter SDK，请在项目的pubspec.yaml中添加以下依赖覆盖：
+```yaml
+dependency_overrides:
+  tdesign_flutter_adaptation: 3.32.0
+  image_picker: 1.1.2
 ```
