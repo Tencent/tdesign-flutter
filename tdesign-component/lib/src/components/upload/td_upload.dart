@@ -80,8 +80,12 @@ class TDUpload extends StatefulWidget {
       this.multiple = false,
       this.width = 80.0,
       this.height = 80.0,
-      this.type = TDUploadBoxType.roundedSquare, this.disabled=false,
-      this.enabledReplaceType = false})
+      this.type = TDUploadBoxType.roundedSquare,
+      this.disabled=false,
+      this.enabledReplaceType = false,
+      this.wrapSpacing,
+      this.wrapRunSpacing,
+      this.wrapAlignment})
       : super(key: key);
 
   /// 控制展示的文件列表
@@ -131,6 +135,16 @@ class TDUpload extends StatefulWidget {
 
   ///是否禁用
   final bool? disabled;
+
+  /// 多图布局时的 spacing
+  final double? wrapSpacing;
+
+  /// 多图布局时的 runSpacing
+  final double? wrapRunSpacing;
+
+  /// 多图对其方式
+  final WrapAlignment? wrapAlignment;
+
   @override
   State<TDUpload> createState() => _TDUploadState();
 }
@@ -305,8 +319,9 @@ class _TDUploadState extends State<TDUpload> {
     return SizedBox(
       width: double.infinity,
       child: Wrap(
-        spacing: 8,
-        runSpacing: 16,
+        spacing: widget.wrapSpacing ?? 8,
+        runSpacing: widget.wrapRunSpacing ?? 16,
+        alignment: widget.wrapAlignment ?? WrapAlignment.start,
         children: [
           ...fileList.map((file) => _buildImageBox(context, file)).toList(),
           _buildUploadBox(context, shouldDisplay: canUpload, onTap: () async {
