@@ -6,6 +6,20 @@ docClass: timeline
 ---
 
 
+## 🌈 0.2.3 `2025-07-09` 
+### 🚀 Features
+- `TDPicker`: 支持切换时优先保持级联的选项值 @epoll-j ([#666](https://github.com/Tencent/tdesign-flutter/pull/666))
+- `TDTable`: 支持行默认选中 @ccXxx1aoBai ([#665](https://github.com/Tencent/tdesign-flutter/pull/665))
+- `TDCalendar`: 增加自定义日期单元格功能 @epoll-j ([#667](https://github.com/Tencent/tdesign-flutter/pull/667))
+- `TDForm`: 增加Form 表单组件 @shizhe2018 @SimonWuZY ([#620](https://github.com/Tencent/tdesign-flutter/pull/620))
+- `TDTable`: TDTableCol属性配置分离，空数据配置分离 @ccXxx1aoBai ([#665](https://github.com/Tencent/tdesign-flutter/pull/665))
+### 🐞 Bug Fixes
+- `TDTable`: 解决表头未选中图标显示问题，禁用状态下全选选中状态问题 @ccXxx1aoBai ([#665](https://github.com/Tencent/tdesign-flutter/pull/665))
+- `TDTable`: 表格空数据问题 @ccXxx1aoBai ([#671](https://github.com/Tencent/tdesign-flutter/pull/671))
+- `TDDialog`: 弹窗遮挡键盘问题 @jflin19990707 ([#669](https://github.com/Tencent/tdesign-flutter/pull/669))
+- `TDCollapse`: collapse demo页面名称修改 @jflin19990707 ([#670](https://github.com/Tencent/tdesign-flutter/pull/670))
+- `TDDropdownMenu`: 嵌套路由场景 弹窗位置计算错误 @hcanyz ([#648](https://github.com/Tencent/tdesign-flutter/pull/648))
+
 ## 🌈 0.2.2 `2025-06-13`
 
 ### 🚀 Features
