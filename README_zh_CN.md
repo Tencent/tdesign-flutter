@@ -91,6 +91,10 @@ TDesign Flutter 依赖以下组件库，感谢作者的开源贡献：
 
 欢迎贡献代码。在提交 [Pull Request](https://github.com/Tencent/tdesign-flutter/pulls) 之前，请先阅读[贡献指南]((CONTRIBUTING.md))。
 
+<a href="https://github.com/Tencent/tdesign-flutter/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Tencent/tdesign-flutter" />
+</a>
+
 # 反馈
 
 有任何问题，建议通过 [Github issues](https://github.com/Tencent/tdesign-flutter/issues) 反馈或扫码加入用户微信群。
