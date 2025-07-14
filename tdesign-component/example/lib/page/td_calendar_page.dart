@@ -34,6 +34,14 @@ class TDCalendarPage extends StatelessWidget {
               },
             ),
             ExampleItem(
+              desc: '自定义日期单元格',
+              ignoreCode: true,
+              center: false,
+              builder: (BuildContext context) {
+                return const CodeWrapper(builder: _buildCustomCell);
+              },
+            ),
+            ExampleItem(
               desc: '不使用Popup',
               ignoreCode: true,
               center: false,
@@ -349,5 +357,76 @@ Widget _buildBlock(BuildContext context) {
         },
       ),
     ],
+  );
+}
+
+@Demo(group: 'calendar')
+Widget _buildCustomCell(BuildContext context) {
+  final size = MediaQuery.of(context).size;
+  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+  return ValueListenableBuilder(
+    valueListenable: selected,
+    builder: (context, value, child) {
+      final date = DateTime.fromMillisecondsSinceEpoch(value[0]);
+      return TDCellGroup(
+        cells: [
+          TDCell(
+            title: '自定义日期单元格',
+            arrow: true,
+            note: '${date.year}-${date.month}-${date.day}',
+            onClick: (cell) {
+              TDCalendarPopup(
+                context,
+                visible: true,
+                onConfirm: (value) {
+                  print('onConfirm:$value');
+                  selected.value = value;
+                },
+                onClose: () {
+                  print('onClose');
+                },
+                child: TDCalendar(
+                  title: '请选择日期',
+                  value: value,
+                  height: size.height * 0.6 + 176,
+                  onCellClick: (value, type, tdate) {
+                    print('onCellClick:$value');
+                  },
+                  onCellLongPress: (value, type, tdate) {
+                    print('onCellLongPress:$value');
+                  },
+                  onHeaderClick: (index, week) {
+                    print('onHeaderClick:$week');
+                  },
+                  onChange: (value) {
+                    print('onChange:$value');
+                  },
+                  cellWidget: (context, tdate, selectType) {
+                    if (selectType == DateSelectType.selected) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('${tdate.date.day}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                          Text('文案文案', style: TextStyle(fontSize: 6, color: Colors.white)),
+                          Text('自定义', style: TextStyle(fontSize: 12, color: Colors.white)),
+                        ],
+                      );
+                    }
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('${tdate.date.day}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        Text('文案文案', style: TextStyle(fontSize: 8)),
+                        Text('自定义', style: TextStyle(fontSize: 8)),
+                      ],
+                    );
+                  }
+                ),
+              );
+            },
+          ),
+        ],
+      );
+    },
   );
 }

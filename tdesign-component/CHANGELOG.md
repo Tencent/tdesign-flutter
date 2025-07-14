@@ -1,7 +1,21 @@
-## 🌈 0.2.1 `2025-06-13`
-
+## 🌈 0.2.3 `2025-07-09`
 ### 🚀 Features
+- `TDPicker`: Supports prioritizing the retention of cascaded option values when switching @epoll-j ([#666](https://github.com/Tencent/tdesign-flutter/pull/666))
+- `TDTable`: Supports default row selection @ccXxx1aoBai ([#665](https://github.com/Tencent/tdesign-flutter/pull/665))
+- `TDCalendar`: Adds custom date cell functionality @epoll-j ([#667](https://github.com/Tencent/tdesign-flutter/pull/667))
+- `TDForm`: Adds Form component @shizhe2018 @SimonWuZY ([#620](https://github.com/Tencent/tdesign-flutter/pull/620))
+- `TDTable`: Separates TDTableCol attribute configuration and empty data configuration @ccXxx1aoBai ([#665](https://github.com/Tencent/tdesign-flutter/pull/665))
 
+### 🐞 Bug Fixes
+- `TDTable`: Fixes the issue with unselected icon display in table headers and the selection state problem under disabled conditions @ccXxx1aoBai ([#665](https://github.com/Tencent/tdesign-flutter/pull/665))
+- `TDTable`: Fixes the empty data issue in tables @ccXxx1aoBai ([#671](https://github.com/Tencent/tdesign-flutter/pull/671))
+- `TDDialog`: Fixes the issue where dialogs block the keyboard @jflin19990707 ([#669](https://github.com/Tencent/tdesign-flutter/pull/669))
+- `TDCollapse`: Updates the demo page name for collapse @jflin19990707 ([#670](https://github.com/Tencent/tdesign-flutter/pull/670))
+- `TDDropdownMenu`: Fixes the incorrect popup position calculation in nested routing scenarios @hcanyz ([#648](https://github.com/Tencent/tdesign-flutter/pull/648))
+
+
+## 🌈 0.2.2 `2025-06-13`
+### 🚀 Features
 - `TDTable`: Added support for row selection and custom row height. @ccXxx1aoBai ([#594](https://github.com/Tencent/tdesign-flutter/pull/594))
 - `TDTreeSelect`: Added partial multi-selection support. @epoll-j ([#587](https://github.com/Tencent/tdesign-flutter/pull/587))
 - `TDCell`: Added support for custom height and bottom divider. @ccXxx1aoBai ([#611](https://github.com/Tencent/tdesign-flutter/pull/611))
@@ -11,7 +25,6 @@
 - `TDAvatar`: Added custom BoxFit parameter. @shizhe2018 ([#633](https://github.com/Tencent/tdesign-flutter/pull/633))
 
 ### 🐞 Bug Fixes
-
 - `TDDatePicker`: Fixed minute-level time display issue and optimized hour/minute/second range calculation logic. @epoll-j ([#585](https://github.com/Tencent/tdesign-flutter/pull/585))
 - `TDSearchBar`: Added onTapOutside callback support. @cyjaysong ([#608](https://github.com/Tencent/tdesign-flutter/pull/608))
 - `TDDropdownMenu`: Added support for modifying selected icon color. @jflin19990707 ([#631](https://github.com/Tencent/tdesign-flutter/pull/631))

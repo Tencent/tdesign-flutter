@@ -17,7 +17,9 @@
             });
           },
         ),
-        const SizedBox(height: 10,),
+        const SizedBox(
+          height: 10,
+        ),
         Container(
           padding: const EdgeInsets.only(left: 15),
           alignment: Alignment.centerLeft,

@@ -115,14 +115,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildBody(BuildContext context) {
     return SafeArea(
         child: Align(
-      alignment: Alignment.topCenter,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: _buildChildren(context),
-        ),
-      ),
-    ));
+          alignment: Alignment.topCenter,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: _buildChildren(context),
+            ),
+          ),
+        ));
   }
 
   List<Widget> _buildChildren(BuildContext context) {

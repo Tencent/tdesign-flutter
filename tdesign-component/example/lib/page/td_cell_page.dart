@@ -67,14 +67,9 @@ Widget _buildSimple(BuildContext context) {
     cells: [
       // 可单独修改样式
       TDCell(arrow: true, title: '单行标题', style: TDCellStyle.cellStyle(context)),
-      TDCell(
-        arrow: true,
-        title: '单行标题',
-        required: true,
-        onClick: (cell) {
-          print('单行标题');
-        },
-      ),
+      TDCell(arrow: true, title: '单行标题', required: true, onClick: (cell) {
+            print('单行标题');
+          }),
       const TDCell(arrow: true, title: '单行标题', noteWidget: TDBadge(TDBadgeType.message, count: '8')),
       const TDCell(arrow: false, title: '单行标题', rightIconWidget: TDSwitch(isOn: true)),
       const TDCell(arrow: true, title: '单行标题', note: '辅助信息'),
@@ -89,14 +84,36 @@ Widget _buildDesSimple(BuildContext context) {
   return const TDCellGroup(
     cells: [
       TDCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字'),
-      TDCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字', required: true),
       TDCell(
-          arrow: true, title: '单行标题', description: '一段很长很长的内容文字', noteWidget: TDBadge(TDBadgeType.message, count: '8')),
-      TDCell(arrow: false, title: '单行标题', description: '一段很长很长的内容文字', rightIconWidget: TDSwitch(isOn: true)),
-      TDCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字', note: '辅助信息'),
-      TDCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内', leftIcon: TDIcons.lock_on),
-      TDCell(arrow: false, title: '单行标题', description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
-      TDCell(arrow: false, title: '多行高度不定，长文本自动换行，该选项的描述是一段很长的内容', description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
+          arrow: true,
+          title: '单行标题',
+          description: '一段很长很长的内容文字',
+          required: true),
+      TDCell(
+          arrow: true,
+          title: '单行标题',
+          description: '一段很长很长的内容文字',
+          noteWidget: TDBadge(TDBadgeType.message, count: '8')),
+      TDCell(
+          arrow: false,
+          title: '单行标题',
+          description: '一段很长很长的内容文字',
+          rightIconWidget: TDSwitch(isOn: true)),
+      TDCell(
+          arrow: true, title: '单行标题', description: '一段很长很长的内容文字', note: '辅助信息'),
+      TDCell(
+          arrow: true,
+          title: '单行标题',
+          description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内',
+          leftIcon: TDIcons.lock_on),
+      TDCell(
+          arrow: false,
+          title: '单行标题',
+          description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
+      TDCell(
+          arrow: false,
+          title: '多行高度不定，长文本自动换行，该选项的描述是一段很长的内容',
+          description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
       TDCell(
         arrow: true,
         title: '多行带头像',

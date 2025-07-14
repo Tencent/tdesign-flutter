@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import 'td_cell_inherited.dart';
 
-typedef CellBuilder = Widget Function(BuildContext context, TDCell cell, int index);
+typedef CellBuilder = Widget Function(
+    BuildContext context, TDCell cell, int index);
 
 enum TDCellGroupTheme { defaultTheme, cardTheme }
 
@@ -130,7 +131,10 @@ class _TDCellGroupState extends State<TDCellGroup> {
   Widget _borderWidget(TDCellStyle style) {
     return Row(
       children: [
-        Container(height: 0.5, width: TDTheme.of(context).spacer16, color: style.backgroundColor),
+        Container(
+            height: 0.5,
+            width: TDTheme.of(context).spacer16,
+            color: style.backgroundColor),
         Expanded(
           child: Container(
               height: 0.5, color: style.borderedColor ?? TDTheme.of(context).componentStrokeColor),

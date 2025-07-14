@@ -24,8 +24,12 @@ class _TDPickerPageState extends State<TDPickerPage> {
       '佛山市': [''],
       '广州市广州市广州市广州市广州市广州市广州市广州市广州市广州市广州市': ['花都区']
     },
+    '广东省2': {
+      '深圳市': ['南山区南山区南山区南山区南山区', '罗湖区', '福田区'],
+      '广州市广州市广州市广州市广州市广州市广州市广州市广州市广州市广州市': ['花都区']
+    },
     '重庆市': {
-      '重庆市重庆市重庆市重庆市重庆市重庆市重庆市': ['九龙坡区', '江北区']
+      '重庆市重庆市重庆市重庆市重庆市重庆市重庆市': ['九龙坡区', '江北区'],
     },
     '浙江省浙江省浙江省浙江省浙江省浙江省浙江省浙江省': {
       '杭州市': ['西湖区', '余杭区', '萧山区'],
@@ -33,7 +37,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
     },
     '香港': {
       '香港': ['九龙城区', '黄大仙区', '离岛区', '湾仔区']
-    }
+    },
   };
 
   String selected_5 = '';
@@ -73,7 +77,10 @@ class _TDPickerPageState extends State<TDPickerPage> {
         )
       ],
       test: [
-        ExampleItem(desc: '自定义left/right text', builder: buildCustomLeftRightText),
+        ExampleItem(
+            desc: '自定义left/right text', builder: buildCustomLeftRightText),
+        ExampleItem(
+            desc: '级联选择保持下一级选项', builder: buildKeepMultiArea),
       ],
     );
   }
@@ -193,6 +200,69 @@ class _TDPickerPageState extends State<TDPickerPage> {
               }, data: data_3, columnNum: 3, initialData: ['浙江省', '杭州市', '西湖区']);
             })
       ],
+    );
+  }
+
+
+  @Demo(group: 'picker')
+  Widget buildKeepMultiArea(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        TDPicker.showMultiLinkedPicker(context, title: '选择地区',
+            onConfirm: (selected) {
+              setState(() {
+                selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
+              });
+              Navigator.of(context).pop();
+            },
+            data: data_3,
+            columnNum: 3,
+            keepSameSelection: true,
+            initialData: ['广东省', '深圳市', '罗湖区']);
+      },
+      child: buildSelectRow(context, selected_3, '选择地区'),
+    );
+  }
+
+  Widget buildSelectRow(BuildContext context, String output, String title) {
+    return Container(
+      color: TDTheme.of(context).whiteColor1,
+      height: 56,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
+                child: TDText(title, font: TDTheme.of(context).fontBodyLarge,),
+              ),
+              Expanded(child: Padding(
+                padding: const EdgeInsets.only(right: 16, left: 16),
+                child: Row(
+                  children: [
+                    Expanded(child: TDText(
+                      output,
+                      font: TDTheme.of(context).fontBodyLarge,
+                      textColor: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 2),
+                      child: Icon(
+                        TDIcons.chevron_right,
+                        color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),),
+                    ),
+                  ],
+                ),
+              )),
+            ],
+          ),
+          const TDDivider(margin: EdgeInsets.only(left: 16, ),)
+        ],
+      ),
     );
   }
 }

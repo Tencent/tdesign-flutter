@@ -41,6 +41,8 @@ class TDInput extends StatelessWidget {
     this.hintTextStyle,
     this.onBtnTap,
     this.labelWidget,
+    this.leftInfoWidth,
+    this.leftContentSpace,
     this.textInputBackgroundColor,
     this.contentPadding,
     this.type = TDInputType.normal,
@@ -62,7 +64,6 @@ class TDInput extends StatelessWidget {
     TDInputSpacer? spacer,
     this.cardStyleBottomText,
     this.onTapOutside,
-    this.leftInfoWidth,
   }) : spacer = spacer ?? TDInputSpacer.generateDefault();
 
   /// 输入框宽度(TDCardStyle时必须设置该参数)
@@ -79,6 +80,9 @@ class TDInput extends StatelessWidget {
 
   /// 输入框左侧文案间距
   final double? leftLabelSpace;
+
+  /// 输入框内容左侧间距
+  final double? leftContentSpace;
 
   /// 是否必填标志（红色*）
   final bool? required;
@@ -236,7 +240,7 @@ class TDInput extends StatelessWidget {
     final iconWidth = leftIcon != null ? 24 + iconSpace : 0;
     final labelWidth = _measureTextWidth(leftLabel, leftLabelStyle, context);
     final requiredWidth = (required ?? false) ? 14 : 0;
-    return iconWidth + labelWidth + requiredWidth + 4;
+    return iconWidth + labelWidth + requiredWidth + (leftContentSpace??4);
   }
 
   /// 计算文本渲染宽度
@@ -438,10 +442,7 @@ class TDInput extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: controller != null &&
-                    controller!.text.isNotEmpty &&
-                    needClear &&
-                    rightWidget == null,
+                visible: controller != null && controller!.text.isNotEmpty && needClear && rightWidget == null,
                 child: GestureDetector(
                     child: Container(
                       margin: EdgeInsets.only(
@@ -750,10 +751,8 @@ class TDInput extends StatelessWidget {
               Visibility(
                 visible: leftLabel != null,
                 child: Padding(
-                  padding: EdgeInsets.only(
-                      left: leftLabelSpace ?? 16,
-                      top: getInputPadding(),
-                      bottom: getInputPadding()),
+                  padding:
+                      EdgeInsets.only(left: leftLabelSpace ?? 16, top: getInputPadding(), bottom: getInputPadding()),
                   child: leftInfoWidth != null
                       ? SizedBox(
                           width: _leftLabelWidth,
@@ -803,9 +802,7 @@ class TDInput extends StatelessWidget {
                     textAlign: textAlign,
                     contentPadding: contentPadding ??
                         EdgeInsets.only(
-                            right: spacer.inputRightSpace!,
-                            bottom: getInputPadding(),
-                            top: getInputPadding()),
+                            right: spacer.inputRightSpace!, bottom: getInputPadding(), top: getInputPadding()),
                     inputAction: inputAction,
                   ),
                 ),
@@ -922,8 +919,7 @@ class Chinese2Formatter extends TextInputFormatter {
           return newValue.copyWith(
               text: text,
               composing: TextRange.empty,
-              selection: TextSelection.fromPosition(
-                  TextPosition(offset: i, affinity: TextAffinity.downstream)));
+              selection: TextSelection.fromPosition(TextPosition(offset: i, affinity: TextAffinity.downstream)));
         }
       }
     }

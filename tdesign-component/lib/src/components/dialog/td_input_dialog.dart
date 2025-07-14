@@ -83,7 +83,9 @@ class TDInputDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TDDialogScaffold(
+  return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: TDDialogScaffold(
       showCloseButton: showCloseButton,
       backgroundColor: backgroundColor,
       radius: radius,
@@ -118,7 +120,8 @@ class TDInputDialog extends StatelessWidget {
                 ),
               ),
         _horizontalButtons(context),
-      ]),
+      ])
+        ),
     );
   }
 

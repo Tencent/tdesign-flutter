@@ -1,0 +1,80 @@
+
+  Widget _buildArrangementSwitch(BuildContext buildContext) {
+    final theme = TDTheme.of(context);
+    return Container(
+        decoration: BoxDecoration(
+          color: theme.whiteColor1,
+        ),
+        child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TDButton(
+                    text: '水平排布',
+                    shape: TDButtonShape.round,
+                    style: TDButtonStyle(backgroundColor: horizontalButtonColor),
+                    textStyle: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: horizontalTextColor,
+                    ),
+                    onTap: () {
+                      setState(() {
+                        if (horizontalButton) {
+                          /// 置换按钮状态
+                          horizontalButton = false;
+                          verticalButton = true;
+
+                          /// 置换按钮颜色
+                          final currentVerticalColor = verticalButtonColor;
+                          verticalButtonColor = horizontalButtonColor;
+                          horizontalButtonColor = currentVerticalColor;
+
+                          /// 置换文字颜色
+                          final currentTextColor = verticalTextColor;
+                          verticalTextColor = horizontalTextColor;
+                          horizontalTextColor = currentTextColor;
+                          _isFormHorizontal = true;
+                          print(_isFormHorizontal);
+                        }
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TDButton(
+                    text: '竖直排布',
+                    shape: TDButtonShape.round,
+                    style: TDButtonStyle(backgroundColor: verticalButtonColor),
+                    textStyle: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: verticalTextColor,
+                    ),
+                    onTap: () {
+                      setState(() {
+                        if (verticalButton) {
+                          /// 置换按钮状态
+                          horizontalButton = true;
+                          verticalButton = false;
+
+                          /// 置换按钮颜色
+                          final currentVerticalColor = verticalButtonColor;
+                          verticalButtonColor = horizontalButtonColor;
+                          horizontalButtonColor = currentVerticalColor;
+
+                          /// 置换文字颜色
+                          final currentTextColor = verticalTextColor;
+                          verticalTextColor = horizontalTextColor;
+                          horizontalTextColor = currentTextColor;
+
+                          _isFormHorizontal = false;
+                          print(_isFormHorizontal);
+                        }
+                      });
+                    },
+                  ),
+                ),
+              ],
+            )));
+  }

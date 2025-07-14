@@ -116,6 +116,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | disableInput | bool | false | 禁用输入框 |
 | disabled | bool | false | 禁用全部操作 |
 | inputWidth | double? | - | 禁用全部操作 |
+| eventController | StreamController<TDStepperEventType>? | - | 事件控制器 |
 | max | int | 100 | 最大值 |
 | min | int | 0 | 最小值 |
 | size | TDStepperSize | TDStepperSize.medium | 组件尺寸 |

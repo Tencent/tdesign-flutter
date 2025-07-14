@@ -4,4 +4,13 @@
       title: '基础开关',
       noteWidget: TDSwitch(),
     );
+  }ged: (value) {
+          setState(() {
+            _formDisableState = value;
+          });
+          return false;
+        },
+      ),
+      title: '禁用态',
+    );
   }

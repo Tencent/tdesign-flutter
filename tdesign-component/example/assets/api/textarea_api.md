@@ -47,3 +47,4 @@
 | padding | EdgeInsetsGeometry? | - | 内边距 |
 | textareaDecoration | Decoration? | - | 输入框样式(不包括标签) |
 | bordered | bool? | - | 是否显示外边框 |
+| showBottomDivider | bool? | true | 边框外部下划线 |

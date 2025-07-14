@@ -34,14 +34,9 @@ Widget _buildSimple(BuildContext context) {
     cells: [
       // 可单独修改样式
       TDCell(arrow: true, title: '单行标题', style: TDCellStyle.cellStyle(context)),
-      TDCell(
-        arrow: true,
-        title: '单行标题',
-        required: true,
-        onClick: (cell) {
-          print('单行标题');
-        },
-      ),
+      TDCell(arrow: true, title: '单行标题', required: true, onClick: (cell) {
+            print('单行标题');
+          }),
       const TDCell(arrow: true, title: '单行标题', noteWidget: TDBadge(TDBadgeType.message, count: '8')),
       const TDCell(arrow: false, title: '单行标题', rightIconWidget: TDSwitch(isOn: true)),
       const TDCell(arrow: true, title: '单行标题', note: '辅助信息'),
@@ -66,14 +61,9 @@ Widget _buildSimple(BuildContext context) {
     cells: [
       // 可单独修改样式
       TDCell(arrow: true, title: '单行标题', style: TDCellStyle.cellStyle(context)),
-      TDCell(
-        arrow: true,
-        title: '单行标题',
-        required: true,
-        onClick: (cell) {
-          print('单行标题');
-        },
-      ),
+      TDCell(arrow: true, title: '单行标题', required: true, onClick: (cell) {
+            print('单行标题');
+          }),
       const TDCell(arrow: true, title: '单行标题', noteWidget: TDBadge(TDBadgeType.message, count: '8')),
       const TDCell(arrow: false, title: '单行标题', rightIconWidget: TDSwitch(isOn: true)),
       const TDCell(arrow: true, title: '单行标题', note: '辅助信息'),
@@ -96,14 +86,36 @@ Widget _buildDesSimple(BuildContext context) {
   return const TDCellGroup(
     cells: [
       TDCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字'),
-      TDCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字', required: true),
       TDCell(
-          arrow: true, title: '单行标题', description: '一段很长很长的内容文字', noteWidget: TDBadge(TDBadgeType.message, count: '8')),
-      TDCell(arrow: false, title: '单行标题', description: '一段很长很长的内容文字', rightIconWidget: TDSwitch(isOn: true)),
-      TDCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字', note: '辅助信息'),
-      TDCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内', leftIcon: TDIcons.lock_on),
-      TDCell(arrow: false, title: '单行标题', description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
-      TDCell(arrow: false, title: '多行高度不定，长文本自动换行，该选项的描述是一段很长的内容', description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
+          arrow: true,
+          title: '单行标题',
+          description: '一段很长很长的内容文字',
+          required: true),
+      TDCell(
+          arrow: true,
+          title: '单行标题',
+          description: '一段很长很长的内容文字',
+          noteWidget: TDBadge(TDBadgeType.message, count: '8')),
+      TDCell(
+          arrow: false,
+          title: '单行标题',
+          description: '一段很长很长的内容文字',
+          rightIconWidget: TDSwitch(isOn: true)),
+      TDCell(
+          arrow: true, title: '单行标题', description: '一段很长很长的内容文字', note: '辅助信息'),
+      TDCell(
+          arrow: true,
+          title: '单行标题',
+          description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内',
+          leftIcon: TDIcons.lock_on),
+      TDCell(
+          arrow: false,
+          title: '单行标题',
+          description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
+      TDCell(
+          arrow: false,
+          title: '多行高度不定，长文本自动换行，该选项的描述是一段很长的内容',
+          description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
       TDCell(
         arrow: true,
         title: '多行带头像',
@@ -133,14 +145,36 @@ Widget _buildDesSimple(BuildContext context) {
   return const TDCellGroup(
     cells: [
       TDCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字'),
-      TDCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字', required: true),
       TDCell(
-          arrow: true, title: '单行标题', description: '一段很长很长的内容文字', noteWidget: TDBadge(TDBadgeType.message, count: '8')),
-      TDCell(arrow: false, title: '单行标题', description: '一段很长很长的内容文字', rightIconWidget: TDSwitch(isOn: true)),
-      TDCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字', note: '辅助信息'),
-      TDCell(arrow: true, title: '单行标题', description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内', leftIcon: TDIcons.lock_on),
-      TDCell(arrow: false, title: '单行标题', description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
-      TDCell(arrow: false, title: '多行高度不定，长文本自动换行，该选项的描述是一段很长的内容', description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
+          arrow: true,
+          title: '单行标题',
+          description: '一段很长很长的内容文字',
+          required: true),
+      TDCell(
+          arrow: true,
+          title: '单行标题',
+          description: '一段很长很长的内容文字',
+          noteWidget: TDBadge(TDBadgeType.message, count: '8')),
+      TDCell(
+          arrow: false,
+          title: '单行标题',
+          description: '一段很长很长的内容文字',
+          rightIconWidget: TDSwitch(isOn: true)),
+      TDCell(
+          arrow: true, title: '单行标题', description: '一段很长很长的内容文字', note: '辅助信息'),
+      TDCell(
+          arrow: true,
+          title: '单行标题',
+          description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内',
+          leftIcon: TDIcons.lock_on),
+      TDCell(
+          arrow: false,
+          title: '单行标题',
+          description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
+      TDCell(
+          arrow: false,
+          title: '多行高度不定，长文本自动换行，该选项的描述是一段很长的内容',
+          description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内'),
       TDCell(
         arrow: true,
         title: '多行带头像',
@@ -203,7 +237,27 @@ Widget _buildCard(BuildContext context) {
 
 
 ## API
-### TDCellStyle
+### TDCellGroup
+#### 简介
+单元格组组件
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key |  | - |  |
+| bordered | bool? | false | 是否显示组边框 |
+| theme | TDCellGroupTheme? | TDCellGroupTheme.defaultTheme | 单元格组风格。可选项：default/card |
+| title | String? | - | 单元格组标题 |
+| cells | List<TDCell> | - | 单元格列表 |
+| builder | CellBuilder? | - | cell构建器，可自定义cell父组件，如Dismissible |
+| style | TDCellStyle? | - | 自定义样式 |
+| titleWidget | Widget? | - | 单元格组标题组件 |
+| scrollable | bool? | false | 可滚动 |
+| isShowLastBordered | bool? | false | 是否显示最后一个cell的下边框 |
+
+```
+```
+ ### TDCellStyle
 #### 简介
 单元格组件样式
 #### 默认构造方法
@@ -271,26 +325,6 @@ Widget _buildCard(BuildContext context) {
 | imageCircle | double? | 50 | 主图圆角，默认50（圆形） |
 | showBottomBorder | bool? | false | 是否显示下边框（建议TDCellGroup组件下false，避免与bordered重叠） |
 | height | double? | - | 高度 |
-
-```
-```
- ### TDCellGroup
-#### 简介
-单元格组组件
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| bordered | bool? | false | 是否显示组边框 |
-| theme | TDCellGroupTheme? | TDCellGroupTheme.defaultTheme | 单元格组风格。可选项：default/card |
-| title | String? | - | 单元格组标题 |
-| cells | List<TDCell> | - | 单元格列表 |
-| builder | CellBuilder? | - | cell构建器，可自定义cell父组件，如Dismissible |
-| style | TDCellStyle? | - | 自定义样式 |
-| titleWidget | Widget? | - | 单元格组标题组件 |
-| scrollable | bool? | false | 可滚动 |
-| isShowLastBordered | bool? | false | 是否显示最后一个cell的下边框 |
 
 
   

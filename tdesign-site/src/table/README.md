@@ -267,7 +267,37 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDTable
+### TDTableCol
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| title | String? | - | 表头标题 |
+| colKey | String? | - | 列取值字段 |
+| width | double? | - | 列宽 |
+| fixed | TDTableColFixed? | TDTableColFixed.none | 固定列 |
+| ellipsis | bool? | - | 列内容超出时是否省略 |
+| ellipsisTitle | bool? | - | 列标题超出时显示省略内容 |
+| cellBuilder | IndexedWidgetBuilder? | - | 自定义列 |
+| align | TDTableColAlign? | TDTableColAlign.left | 列内容横向对齐方式 |
+| sortable | bool? | false | 是否可排序 |
+| selection | bool? | - | 行是否显示复选框，自定义列时无效 |
+| selectable | SelectableFunc? | - | 当前行CheckBox是否可选，仅selection：true有效 |
+| checked | RowCheckFunc? | - | 当前行是否选中 |
+
+```
+```
+ ### TDTableEmpty
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| assetUrl | String? | - | 空状态图片 |
+| text | String? | - | 空状态文字 |
+
+```
+```
+ ### TDTable
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
