@@ -26,6 +26,7 @@
 - [x] Cascader 级联选择器
 - [x] Checkbox 多选框
 - [x] DateTimePicker 日期选择器
+- [x] Form 表单
 - [x] Input 输入框
 - [x] Picker 选择器
 - [x] Radio 单选框
@@ -54,7 +55,7 @@
 - [x] Skeleton 骨架屏
 - [x] Swiper 轮播图
 - [x] Table 表格
-- [ ] Tag 标签
+- [ ] Tag 标签（关闭按钮颜色待处理）
 
 ### 反馈
 - [x] ActionSheet 动作面板

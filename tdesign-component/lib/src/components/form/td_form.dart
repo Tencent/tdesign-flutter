@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
@@ -94,6 +93,7 @@ class TDForm extends StatefulWidget {
 
   /// 表单控制器
   final FormController? formController;
+
   @override
   State<TDForm> createState() => _TDFormState();
 }
@@ -102,42 +102,46 @@ class _TDFormState extends State<TDForm> {
   List<Widget> _formItems = [];
   Map<String, dynamic> _formData = {};
   bool _isValidate = false;
-  bool _isReset=false;
+  bool _isReset = false;
+
   //用于更新表单
-  int _upDataCount=1;
+  int _upDataCount = 1;
+
   @override
   void initState() {
     super.initState();
     _formData = widget.data;
     if (widget.formController != null) {
-      widget.formController?.addListener((){
-           if(widget.formController?.eventType=='submit'){
-             onSubmit();
-           }else if(widget.formController?.eventType=='reset'){
-             onReset();
-           }
+      widget.formController?.addListener(() {
+        if (widget.formController?.eventType == 'submit') {
+          onSubmit();
+        } else if (widget.formController?.eventType == 'reset') {
+          onReset();
+        }
       });
     }
   }
-  onReset(){
-    _upDataCount+=1;
+
+  onReset() {
+    _upDataCount += 1;
     setState(() {
-      _formData=widget.formController!.formData;
-      _isReset=true;
+      _formData = widget.formController!.formData;
+      _isReset = true;
     });
   }
+
   onSubmit() {
-    _upDataCount+=1;
-    _isReset=false;
+    _upDataCount += 1;
+    _isReset = false;
     bool isValidateSuc = true;
     _formData.forEach((key, value) {
-      if(isValidateSuc){
+      if (isValidateSuc) {
         isValidateSuc = validate(key, '${value}');
       }
     });
     if (!isValidateSuc) {
       setState(() {
-        _isValidate =true;
+        _isValidate = true;
       });
     }
     widget.onSubmit(_formData, isValidateSuc);
@@ -145,7 +149,7 @@ class _TDFormState extends State<TDForm> {
 
   ///检验表单数据
   bool validate(name, value) {
-    if(widget.rules[name]!=null){
+    if (widget.rules[name] != null) {
       final result = widget.rules[name]!.check(value);
       if (result != null) {
         /// 返回第一个不通过的错误信息
@@ -157,7 +161,8 @@ class _TDFormState extends State<TDForm> {
 
   @override
   Widget build(BuildContext context) {
-    _formItems = widget.items.expand((item) => [item, SizedBox(height: 1)]).toList();
+    _formItems =
+        widget.items.expand((item) => [item, SizedBox(height: 1)]).toList();
     if (widget.btnGroup!.isNotEmpty) {
       _formItems.addAll(widget.btnGroup ?? []);
     }
@@ -175,13 +180,13 @@ class _TDFormState extends State<TDForm> {
         ///监听表单数据变化
         _formData = value;
       },
-      isReset:_isReset,
+      isReset: _isReset,
       onSubmit: onSubmit,
       child: ListView.builder(
         itemCount: _formItems.length,
         itemBuilder: (context, index) => _formItems[index],
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         cacheExtent: 500,
       ),
     );
@@ -189,15 +194,17 @@ class _TDFormState extends State<TDForm> {
 }
 
 class FormController with ChangeNotifier {
-  String eventType='';
-   Map<String,dynamic>  formData={};
+  String eventType = '';
+  Map<String, dynamic> formData = {};
+
   submit() {
-    eventType='submit';
+    eventType = 'submit';
     notifyListeners();
   }
-  reset(Map<String,dynamic>  data){
-    formData=data;
-    eventType='reset';
+
+  reset(Map<String, dynamic> data) {
+    formData = data;
+    eventType = 'reset';
     notifyListeners();
   }
 }
