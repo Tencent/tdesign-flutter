@@ -143,6 +143,7 @@ class TDPicker {
       Color? titleDividerColor,
       Widget? customSelectWidget,
       double? topPadding,
+      bool keepSameSelection = false,
       int pickerItemCount = 5}) {
     showModalBottomSheet(
         context: context,
@@ -166,6 +167,7 @@ class TDPicker {
             titleDividerColor: titleDividerColor,
             topPadding: topPadding,
             customSelectWidget: customSelectWidget,
+            keepSameSelection: keepSameSelection,
           );
         });
   }
