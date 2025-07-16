@@ -105,7 +105,7 @@ class _TDFormState extends State<TDForm> {
   bool _isReset = false;
 
   //用于更新表单
-  int _upDataCount = 1;
+  int _updateCount = 1;
 
   @override
   void initState() {
@@ -123,7 +123,7 @@ class _TDFormState extends State<TDForm> {
   }
 
   onReset() {
-    _upDataCount += 1;
+    _updateCount += 1;
     setState(() {
       _formData = widget.formController!.formData;
       _isReset = true;
@@ -131,7 +131,7 @@ class _TDFormState extends State<TDForm> {
   }
 
   onSubmit() {
-    _upDataCount += 1;
+    _updateCount += 1;
     _isReset = false;
     bool isValidateSuc = true;
     _formData.forEach((key, value) {
@@ -175,7 +175,7 @@ class _TDFormState extends State<TDForm> {
       formContentAlign: widget.formContentAlign,
       formShowErrorMessage: widget.formShowErrorMessage,
       requiredMark: widget.requiredMark,
-      updataCount: _upDataCount,
+      updateCount: _updateCount,
       onFormDataChange: (value) {
         ///监听表单数据变化
         _formData = value;
