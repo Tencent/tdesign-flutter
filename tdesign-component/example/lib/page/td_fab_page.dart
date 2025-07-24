@@ -3,6 +3,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
+
 class TDFabPage extends StatefulWidget {
   const TDFabPage({Key? key}) : super(key: key);
 
@@ -18,8 +19,7 @@ class _TDFabPageState extends State<TDFabPage> {
     return ExamplePage(title: tdTitle(), exampleCodeGroup: 'fab', children: [
       ExampleModule(title: '组件类型', children: [
         ExampleItem(desc: 'Icon Fab 纯图标悬浮按钮', builder: _buildPureIconFab),
-        ExampleItem(
-            desc: 'Icon Fab with Text 图标加文字悬浮按钮', builder: _buildTextFab)
+        ExampleItem(desc: 'Icon Fab with Text 图标加文字悬浮按钮', builder: _buildTextFab)
       ]),
       ExampleModule(title: '组件状态', children: [
         ExampleItem(desc: 'Fab Theme 悬浮按钮主题', builder: _buildThemeFab),
@@ -171,8 +171,7 @@ class _TDFabPageState extends State<TDFabPage> {
                     ),
                     TDText(
                       fab['desc'],
-                      style: TextStyle(
-                          fontSize: 14, color: Colors.black.withOpacity(0.4)),
+                      style: const TextStyle(fontSize: 14),
                     )
                   ],
                 ),

@@ -166,7 +166,7 @@ class TDCheckbox extends StatefulWidget {
     var size = 24.0;
     final style = this.style ?? groupState?.widget.style ?? TDCheckboxStyle.circle;
     final theme = TDTheme.of(context);
-    final deSelectedColor = style == TDCheckboxStyle.check ? Colors.transparent : theme.grayColor4;
+    final deSelectedColor = style == TDCheckboxStyle.check ? Colors.transparent : theme.componentBorderColor;
     current = Icon(
       style == TDCheckboxStyle.circle
           ? isChecked
@@ -295,8 +295,8 @@ class TDCheckboxState extends State<TDCheckbox> {
                               maxLines: widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
                               textColor: widget.enable
-                                  ? (widget.subTitleColor ?? TDTheme.of(context).fontGyColor3)
-                                  : TDTheme.of(context).fontGyColor4,
+                                  ? (widget.subTitleColor ?? TDTheme.of(context).textColorPlaceholder)
+                                  : TDTheme.of(context).textColorDisabled,
                               font: TDTheme.of(context).fontBodyMedium),
                         ),
                       )
@@ -349,8 +349,8 @@ class TDCheckboxState extends State<TDCheckbox> {
                               maxLines: widget.subTitleMaxLine,
                               overflow: TextOverflow.ellipsis,
                               textColor: widget.enable
-                                  ? (widget.subTitleColor ?? TDTheme.of(context).fontGyColor3)
-                                  : TDTheme.of(context).fontGyColor4,
+                                  ? (widget.subTitleColor ?? TDTheme.of(context).textColorPlaceholder)
+                                  : TDTheme.of(context).textColorDisabled,
                               font: widget.subTitleFont ?? TDTheme.of(context).fontBodyMedium),
                         ),
                       )
@@ -400,7 +400,7 @@ class TDCheckboxState extends State<TDCheckbox> {
     return Container(
       clipBehavior: widget.cardMode ? Clip.hardEdge : Clip.none,
       decoration: BoxDecoration(
-          color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+          color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
           border: widget.cardMode
               ? checked
                   ? Border.all(width: 1.5, color: widget.selectColor ?? TDTheme.of(context).brandNormalColor)
@@ -470,8 +470,8 @@ class TDCheckboxState extends State<TDCheckbox> {
             maxLines: widget.titleMaxLine ?? groupState?.widget.titleMaxLine,
             overflow: TextOverflow.ellipsis,
             textColor: widget.enable
-                ? (widget.titleColor ?? TDTheme.of(context).fontGyColor1)
-                : TDTheme.of(context).fontGyColor4,
+                ? (widget.titleColor ?? TDTheme.of(context).textColorPrimary)
+                : TDTheme.of(context).textColorDisabled,
             font: widget.titleFont ??
                 TDTheme.of(context)
                     .fontBodyLarge); // TODO custom fontSize https://github.com/Tencent/tdesign-flutter/issues/66

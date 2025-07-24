@@ -12,7 +12,10 @@
             slideTransitionFrom: SlideTransitionFrom.center,
             builder: (context) {
               return Container(
-                color: Colors.white,
+                decoration: BoxDecoration(
+                  color: TDTheme.of(context).bgColorContainer,
+                  borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge),
+                ),
                 width: 240,
                 height: 240,
               );

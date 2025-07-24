@@ -153,7 +153,7 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget> with TickerProvi
         iconColor: TDTheme.of(context).brandNormalColor,
         axis: Axis.horizontal,
         text: context.resource.refreshing,
-        textColor: TDTheme.of(context).fontGyColor3,
+        textColor: TDTheme.of(context).textColorPlaceholder,
       );
 
   @override
@@ -189,7 +189,7 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget> with TickerProvi
                             ? context.resource.completeRefresh
                             : context.resource.releaseRefresh,
                     font: TDTheme.of(context).fontBodyMedium,
-                    textColor: TDTheme.of(context).fontGyColor3,
+                    textColor: TDTheme.of(context).textColorPlaceholder,
                   ),
                 ),
               ),

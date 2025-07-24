@@ -4,6 +4,6 @@ Widget _customNoticeBar(BuildContext context) {
     context: '这是一条普通的通知信息',
     prefixIcon: TDIcons.notification,
     suffixIcon: TDIcons.chevron_right,
-    style: TDNoticeBarStyle(backgroundColor: TDTheme.of(context).grayColor3),
+    style: TDNoticeBarStyle(backgroundColor: TDTheme.of(context).bgColorComponent),
   );
 }

@@ -105,7 +105,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    var animValue = decelerateEasing.transform(animation.value);
+    var animValue = Easing.legacyDecelerate.transform(animation.value);
     return Stack(
       children: [
         if (!modalBarrierFull)

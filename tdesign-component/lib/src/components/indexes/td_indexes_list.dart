@@ -141,7 +141,7 @@ class _TDIndexesListState extends State<TDIndexesList> {
                                     forceVerticalCenter: true,
                                     font: isActive ?  TDTheme.of(context).fontMarkSmall : TDTheme.of(context).fontLinkSmall,
                                     textColor:
-                                        isActive ? TDTheme.of(context).fontWhColor1 : TDTheme.of(context).fontGyColor1,
+                                        isActive ? TDTheme.of(context).fontWhColor1 : TDTheme.of(context).textColorPrimary,
                                   ),
                                 ),
                               ),

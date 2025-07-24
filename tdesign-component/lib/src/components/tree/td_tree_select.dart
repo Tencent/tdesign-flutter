@@ -64,18 +64,24 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
   ScrollController controller3 = ScrollController();
 
   List<dynamic> values = [];
+
   int get currentLevel => values.length + 1;
+
   int? get firstValue => values.isNotEmpty ? values[0] : null;
+
   dynamic get secondValue => values.length >= 2 ? values[1] : null;
+
   dynamic get thirdValue => values.length >= 3 ? values[2] : null;
 
   List<TDSelectOption> get firstOptions => widget.options;
+
   List<TDSelectOption> get secondOptions => maxLevel() <= 1 || values.isEmpty
       ? []
       : firstOptions
           .firstWhere((opt) => opt.value == firstValue,
               orElse: () => TDSelectOption(value: -1, label: '', children: []))
           .children;
+
   List<TDSelectOption> get thirdOptions => maxLevel() <= 2 || currentLevel < 3
       ? []
       : secondOptions
@@ -107,8 +113,8 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
       return 1;
     }
 
-    var hasThirdLevel = secondLevelOptions
-        .any((list) => list.any((element) => element.children.isNotEmpty));
+    var hasThirdLevel =
+        secondLevelOptions.any((list) => list.any((element) => element.children.isNotEmpty));
 
     return hasThirdLevel ? 3 : 2;
   }
@@ -118,41 +124,43 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
     return Row(
       children: [
         SizedBox(
-          width: 106,
-          child: TDSideBar(
-            height: widget.height,
-            value: firstValue,
-            style: widget.style == TDTreeSelectStyle.outline
-                ? TDSideBarStyle.outline
-                : TDSideBarStyle.normal,
-            children: widget.options
-                .map((ele) => TDSideBarItem(
-                      value: ele.value,
-                      label: ele.label,
-                    ))
-                .toList(),
-            onSelected: (value) {
-              setState(() {
-                if (values.isEmpty) {
-                  values.add(value);
-                } else {
-                  values = [value];
-                  if (controller2.hasClients) {
-                    controller2.jumpTo(0);
-                  }
-                }
+            width: 106,
+            child: Container(
+              color: TDTheme.of(context).bgColorSecondaryContainer,
+              child: TDSideBar(
+                height: widget.height,
+                value: firstValue,
+                style: widget.style == TDTreeSelectStyle.outline
+                    ? TDSideBarStyle.outline
+                    : TDSideBarStyle.normal,
+                children: widget.options
+                    .map((ele) => TDSideBarItem(
+                          value: ele.value,
+                          label: ele.label,
+                        ))
+                    .toList(),
+                onSelected: (value) {
+                  setState(() {
+                    if (values.isEmpty) {
+                      values.add(value);
+                    } else {
+                      values = [value];
+                      if (controller2.hasClients) {
+                        controller2.jumpTo(0);
+                      }
+                    }
 
-                if (widget.onChange != null) {
-                  widget.onChange!(values, 1);
-                }
-              });
-            },
-          ),
-        ),
+                    if (widget.onChange != null) {
+                      widget.onChange!(values, 1);
+                    }
+                  });
+                },
+              ),
+            )),
         Expanded(
             child: Container(
           height: widget.height,
-          decoration: const BoxDecoration(color: Colors.white),
+          color: TDTheme.of(context).bgColorContainer,
           child: _buildRightParts(context),
         ))
       ],
@@ -170,16 +178,14 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                 children: [
                   SizedBox(
                     width: 103,
-                    child:
-                        _buildNextColumn(context, level: 2, lastColumn: false),
+                    child: _buildNextColumn(context, level: 2, lastColumn: false),
                   ),
                   Expanded(child: _buildNextColumn(context, level: 3))
                 ],
               ));
   }
 
-  Widget _buildNextColumn(BuildContext context,
-      {int level = 2, bool lastColumn = true}) {
+  Widget _buildNextColumn(BuildContext context, {int level = 2, bool lastColumn = true}) {
     var displayOptions = level == 2 ? secondOptions : thirdOptions;
     return MediaQuery.removePadding(
         context: context,
@@ -204,13 +210,11 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                     selected = secondValue == currentValue;
                   }
                 } else {
-                  selected = thirdValue != null
-                      ? (thirdValue as List<int>).contains(currentValue)
-                      : false;
+                  selected =
+                      thirdValue != null ? (thirdValue as List<int>).contains(currentValue) : false;
                 }
               } else {
-                selected =
-                    (level == 2 ? secondValue : thirdValue) == currentValue;
+                selected = (level == 2 ? secondValue : thirdValue) == currentValue;
               }
 
               return GestureDetector(
@@ -220,14 +224,11 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                       if (level == 2) {
                         switch (values.length) {
                           case 1:
-                            values.add(isMultiple
-                                ? [currentValue]
-                                : currentValue);
+                            values.add(isMultiple ? [currentValue] : currentValue);
                             break;
                           case 2:
                             if (isMultiple) {
-                              var hasContains = (values[1] as List<int>)
-                                  .contains(currentValue);
+                              var hasContains = (values[1] as List<int>).contains(currentValue);
                               if (hasContains) {
                                 (values[1] as List<int>).remove(currentValue);
                               } else {
@@ -251,14 +252,11 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                         switch (values.length) {
                           case 1:
                           case 2:
-                            values.add(isMultiple
-                                ? [currentValue]
-                                : currentValue);
+                            values.add(isMultiple ? [currentValue] : currentValue);
                             break;
                           default:
                             if (isMultiple) {
-                              var hasContains = (values[2] as List<int>)
-                                  .contains(currentValue);
+                              var hasContains = (values[2] as List<int>).contains(currentValue);
                               if (hasContains) {
                                 (values[2] as List<int>).remove(currentValue);
                               } else {
@@ -281,18 +279,16 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(
-                              top: 16, left: 16, bottom: 16),
+                          padding: const EdgeInsets.only(top: 16, left: 16, bottom: 16),
                           child: TDText(
                             displayOptions[index].label,
                             textColor: (!lastColumn && selected)
-                                ?  TDTheme.of(context).brandNormalColor
-                                : const Color.fromRGBO(0, 0, 0, 0.9),
+                                ? TDTheme.of(context).brandNormalColor
+                                : TDTheme.of(context).textColorPrimary,
                             style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: (!lastColumn && selected)
-                                    ? FontWeight.w600
-                                    : FontWeight.w400),
+                                fontWeight:
+                                    (!lastColumn && selected) ? FontWeight.w600 : FontWeight.w400),
                           ),
                         ),
                         Visibility(

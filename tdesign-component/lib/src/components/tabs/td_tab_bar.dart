@@ -141,14 +141,14 @@ class _TDTabBarState extends State<TDTabBar> {
       height: widget.height ?? _defaultHeight,
       decoration: widget.decoration ??
           (widget.outlineType == TDTabBarOutlineType.card
-              ? BoxDecoration(color: widget.backgroundColor)
+              ? BoxDecoration(color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer)
               : BoxDecoration(
-              color: widget.backgroundColor,
+              color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
               border: widget.dividerHeight <= 0
                   ? null
                   : Border(
                   bottom: BorderSide(
-                      color: widget.dividerColor ?? TDTheme.of(context).grayColor3,
+                      color: widget.dividerColor ?? TDTheme.of(context).componentStrokeColor,
                       width: widget.dividerHeight)))),
       child: TDHorizontalTabBar(
         physics: widget.physics,
@@ -156,7 +156,7 @@ class _TDTabBarState extends State<TDTabBar> {
         indicator: widget.indicator ?? _getIndicator(context),
         indicatorColor: widget.indicatorColor,
         unselectedLabelColor: widget.unselectedLabelColor,
-        labelColor: widget.labelColor,
+        labelColor: widget.labelColor ?? TDTheme.of(context).brandNormalColor,
         labelStyle: widget.labelStyle ?? _getLabelStyle(context),
         labelPadding: widget.labelPadding ?? const EdgeInsets.all(8),
         unselectedLabelStyle:widget.unselectedLabelStyle ?? _getUnSelectLabelStyle(context),
@@ -166,7 +166,7 @@ class _TDTabBarState extends State<TDTabBar> {
         controller: widget.controller,
         backgroundColor: widget.backgroundColor,
         selectedBgColor: widget.selectedBgColor,
-        unSelectedBgColor: widget.unSelectedBgColor,
+        unSelectedBgColor: widget.unSelectedBgColor ?? TDTheme.of(context).bgColorSecondaryContainer,
         tabAlignment:widget.tabAlignment,
         onTap: (index) {
           widget.onTap?.call(index);
@@ -178,15 +178,13 @@ class _TDTabBarState extends State<TDTabBar> {
   TextStyle _getUnSelectLabelStyle(BuildContext context) {
     return TextStyle(
         fontWeight: FontWeight.w400,
-        // fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14,
-        color: TDTheme.of(context).fontGyColor2);
+        color: TDTheme.of(context).textColorPrimary);
   }
 
   TextStyle _getLabelStyle(BuildContext context) {
     return TextStyle(
         fontWeight: FontWeight.w600,
-        // fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14,
-        color: TDTheme.of(context).fontGyColor2);
+        color: TDTheme.of(context).textColorPrimary);
   }
 
   Decoration _getIndicator(BuildContext context) {

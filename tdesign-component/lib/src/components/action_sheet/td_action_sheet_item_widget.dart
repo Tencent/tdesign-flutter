@@ -72,7 +72,7 @@ class TDActionSheetItemWidget extends StatelessWidget {
           TDText(
             item!.label,
             font: TDTheme.of(context).fontBodySmall,
-            textColor: TDTheme.of(context).fontGyColor1,
+            textColor: TDTheme.of(context).textColorPrimary,
             style: item!.textStyle,
           ),
         ],
@@ -116,10 +116,10 @@ Widget buildCancelButton(BuildContext context, bool showPagination, String cance
       },
       child: Container(
         decoration: BoxDecoration(
-          color: TDTheme.of(context).fontWhColor1,
+          color: TDTheme.of(context).bgColorContainer,
           border: Border(
             top: BorderSide(
-              color: TDTheme.of(context).grayColor3,
+              color: TDTheme.of(context).componentStrokeColor,
               width: 0.5,
             ),
           ),
@@ -129,7 +129,7 @@ Widget buildCancelButton(BuildContext context, bool showPagination, String cance
           child: TDText(
             cancelText,
             font: TDTheme.of(context).fontBodyLarge,
-            textColor: TDTheme.of(context).fontGyColor1,
+            textColor: TDTheme.of(context).textColorPrimary,
           ),
         ),
       ),

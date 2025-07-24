@@ -18,8 +18,7 @@ class TDSwiperPagination extends SwiperPlugin {
   static const SwiperPlugin dots = TDSwiperDotsPagination();
 
   /// 圆角矩形 + 圆点样式 默认宽度20，高度6
-  static const SwiperPlugin dotsBar =
-      TDSwiperDotsPagination(roundedRectangleWidth: 20);
+  static const SwiperPlugin dotsBar = TDSwiperDotsPagination(roundedRectangleWidth: 20);
 
   /// 数字样式
   static const SwiperPlugin fraction = TDFractionPagination();
@@ -102,13 +101,11 @@ class TDSwiperDotsPagination extends SwiperPlugin {
           'we suggest use TDFractionPaginationBuilder');
     }
     var activeColor = this.activeColor ??
-        (config.outer
-            ? TDTheme.of(context).brandNormalColor
-            : TDTheme.of(context).whiteColor1);
+        (config.outer ? TDTheme.of(context).brandNormalColor : TDTheme.of(context).whiteColor1);
     var color = this.color ??
         (config.outer
-            ? TDTheme.of(context).grayColor3
-            : TDTheme.of(context).whiteColor1.withOpacity(0.55));
+            ? TDTheme.of(context).bgColorComponentHover
+            : TDTheme.of(context).fontWhColor2);
 
     if (config.indicatorLayout != PageIndicatorLayout.NONE &&
         config.layout == SwiperLayout.DEFAULT) {
@@ -130,22 +127,18 @@ class TDSwiperDotsPagination extends SwiperPlugin {
 
     for (var i = 0; i < itemCount; ++i) {
       var active = i == activeIndex;
-      var isActiviRectangle =
-          roundedRectangleWidth != null && roundedRectangleWidth! > 0 && active;
+      var isActiviRectangle = roundedRectangleWidth != null && roundedRectangleWidth! > 0 && active;
       double? scalableLen;
       double? fixedLen;
 
-      scalableLen = isActiviRectangle
-          ? roundedRectangleWidth
-          : (active ? activeSize : size);
+      scalableLen = isActiviRectangle ? roundedRectangleWidth : (active ? activeSize : size);
       fixedLen = active ? activeSize : size;
 
       list.add(Container(
         key: Key('pagination_$i'),
         margin: EdgeInsets.all(space),
         child: AnimatedContainer(
-          duration:
-              Duration(milliseconds: animationDuration ?? _kAminatedDuration),
+          duration: Duration(milliseconds: animationDuration ?? _kAminatedDuration),
           width: config.scrollDirection == Axis.horizontal ? scalableLen : fixedLen,
           height: config.scrollDirection == Axis.horizontal ? fixedLen : scalableLen,
           decoration: BoxDecoration(
@@ -288,13 +281,11 @@ class TDSwiperArrowPagination extends SwiperPlugin {
 
     return Row(children: [
       Visibility(
-        visible: config.loop ||
-            ((autoHideWhenAtBoundary ?? false) && activeIndex != 0),
+        visible: config.loop || ((autoHideWhenAtBoundary ?? false) && activeIndex != 0),
         child: GestureDetector(
           child: CircleAvatar(
             radius: radius ?? 10.0,
-            backgroundColor:
-                backgroundColor ?? TDTheme.of(context).fontGyColor3,
+            backgroundColor: backgroundColor ?? TDTheme.of(context).textColorPlaceholder,
             child: backArrow ??
                 const Icon(
                   Icons.arrow_back_ios_outlined,
@@ -309,13 +300,11 @@ class TDSwiperArrowPagination extends SwiperPlugin {
       ),
       const Spacer(),
       Visibility(
-        visible: config.loop ||
-            ((autoHideWhenAtBoundary ?? false) && activeIndex != itemCount - 1),
+        visible: config.loop || ((autoHideWhenAtBoundary ?? false) && activeIndex != itemCount - 1),
         child: GestureDetector(
           child: CircleAvatar(
             radius: radius ?? 10.0,
-            backgroundColor:
-                backgroundColor ?? TDTheme.of(context).fontGyColor3,
+            backgroundColor: backgroundColor ?? TDTheme.of(context).textColorPlaceholder,
             child: forwardArrow ??
                 const Icon(
                   Icons.arrow_forward_ios_outlined,

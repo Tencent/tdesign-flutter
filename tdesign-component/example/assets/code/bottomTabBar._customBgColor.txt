@@ -3,7 +3,7 @@
     return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
         useVerticalDivider: false,
         selectedBgColor: TDTheme.of(context).errorColor3,
-        unselectedBgColor: TDTheme.of(context).grayColor3,
+        unselectedBgColor: TDTheme.of(context).bgColorSecondaryContainer,
         navigationTabs: [
           TDBottomTabBarTabConfig(
             tabText: '标签',

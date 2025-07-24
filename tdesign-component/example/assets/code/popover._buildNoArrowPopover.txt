@@ -7,10 +7,8 @@
           text: '不带箭头',
           type: TDButtonType.outline,
           theme: TDButtonTheme.primary,
-             
           onTap: () {
-            TDPopover.showPopover(
-                context: _, content: '弹出气泡内容', showArrow: false);
+            TDPopover.showPopover(context: _, content: '弹出气泡内容', showArrow: false, theme: theme);
           },
         );
       },

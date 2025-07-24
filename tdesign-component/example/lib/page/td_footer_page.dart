@@ -16,7 +16,6 @@ class _TDFooterPageState extends State<TDFooterPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tdTitle(),
-      backgroundColor: TDTheme.of(context).whiteColor1,
       desc: '用于展示App的版权声明、联系信息、重要页面链接和其他相关内容等信息。',
       exampleCodeGroup: 'footer',
       children: [
@@ -97,7 +96,7 @@ class _TDFooterPageState extends State<TDFooterPage> {
 
   @Demo(group: 'footer')
   Widget _buildBrandFooter(BuildContext context) {
-    return TDFooter(
+    return const TDFooter(
       TDFooterType.brand,
       logo: 'assets/img/td_brand.png',
       width: 204,

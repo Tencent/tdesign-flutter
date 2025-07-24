@@ -288,8 +288,8 @@ class _TDSideBarState extends State<TDSideBar> {
                             currentIndex! + 1 == ele.index,
                         bottomAdjacent: currentIndex != null &&
                             currentIndex! - 1 == ele.index,
-                        selectedBgColor: widget.selectedBgColor,
-                          unSelectedBgColor: widget.unSelectedBgColor,
+                        selectedBgColor: widget.selectedBgColor ?? TDTheme.of(context).bgColorContainer,
+                          unSelectedBgColor: widget.unSelectedBgColor ?? TDTheme.of(context).bgColorSecondaryContainer,
                         onTap: () {
                           if (!(ele.disabled ?? false)) {
                             onSelect(ele, isController: false);

@@ -1,8 +1,4 @@
-// ignore: unused_import
-import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
-
-// ignore_for_file: type=lint
 
 /// The translations for Chinese (`zh`).
 class AppLocalizationsZh extends AppLocalizations {
@@ -22,6 +18,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get redTheme => '红色主题';
+
+  @override
+  String get darkTheme => '暗黑模式';
 
   @override
   String get cancel => '取消';

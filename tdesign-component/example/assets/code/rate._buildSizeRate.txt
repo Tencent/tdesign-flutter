@@ -1,8 +1,7 @@
 
   Widget _buildSizeRate(BuildContext context) {
-    return Column(children: const [
+    return const TDCellGroup(cells: [
       TDCell(title: '默认尺寸24', noteWidget: TDRate(value: 3)),
-      SizedBox(height: 16),
       TDCell(title: '小尺寸20', noteWidget: TDRate(value: 3, size: 20)),
     ]);
   }

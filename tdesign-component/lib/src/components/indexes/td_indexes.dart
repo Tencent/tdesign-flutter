@@ -105,7 +105,7 @@ class _TDIndexesState extends State<TDIndexes> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: TDTheme.of(context).whiteColor1,
+      color: TDTheme.of(context).bgColorContainer,
       child: Stack(
         children: [
           CustomScrollView(

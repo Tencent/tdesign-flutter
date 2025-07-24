@@ -34,7 +34,7 @@ class TDLoading extends StatelessWidget {
     this.text,
     this.refreshWidget,
     this.customIcon,
-    this.textColor = Colors.black,
+    this.textColor,
     this.duration = 2000,
   }) : super(key: key);
 
@@ -49,7 +49,7 @@ class TDLoading extends StatelessWidget {
   /// 失败刷新组件
   final Widget? refreshWidget;
   /// 文案颜色
-  final Color textColor;
+  final Color? textColor;
   /// 文案和图标相对方向
   final Axis axis;
   /// 自定义图标，优先级高于icon
@@ -62,13 +62,13 @@ class TDLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      children: [_contentWidget()],
+      children: [_contentWidget(context)],
     );
   }
 
-  Widget _contentWidget() {
+  Widget _contentWidget(BuildContext context) {
     if (icon == null) {
-      return textWidget();
+      return textWidget(context);
     } else {
       Widget? indicator;
       if (customIcon != null) {
@@ -112,7 +112,7 @@ class TDLoading extends StatelessWidget {
           SizedBox(
             height: _getPaddingWidth(),
           ),
-          textWidget(),
+          textWidget(context),
         ]);
       } else {
         return Row(
@@ -122,7 +122,7 @@ class TDLoading extends StatelessWidget {
           SizedBox(
             width: _getPaddingWidth(),
           ),
-          textWidget()
+          textWidget(context)
         ]);
       }
     }
@@ -176,10 +176,10 @@ class TDLoading extends StatelessWidget {
     }
   }
 
-  Widget textWidget() {
+  Widget textWidget(BuildContext context) {
     Widget result =  TDText(
       text,
-      textColor: textColor,
+      textColor: textColor ?? TDTheme.of(context).textColorPrimary,
       fontWeight: FontWeight.w400,
       font: fitFont(),
       textAlign: TextAlign.center,

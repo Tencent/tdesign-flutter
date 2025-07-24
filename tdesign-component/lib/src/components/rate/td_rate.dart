@@ -361,7 +361,7 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
         child: TDText(
           notRated ? context.resource.notRated : widget.texts?.getOrNull(textIndex.toInt()) ?? '$_activeValue',
           font: notRated ? TDTheme.of(context).fontBodyLarge : TDTheme.of(context).fontTitleMedium,
-          textColor: notRated ? TDTheme.of(context).fontGyColor4 : TDTheme.of(context).fontGyColor1,
+          textColor: notRated ? TDTheme.of(context).textColorDisabled : TDTheme.of(context).textColorPrimary,
         ),
       ),
     );
@@ -370,7 +370,7 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
   Color _getIconColor({double? value, bool? isActive}) {
     return (value != null && _activeValue >= value) || (isActive != null && isActive)
         ? widget.color?.getOrNull(0) ?? TDTheme.of(context).warningColor5
-        : widget.color?.getOrNull(1) ?? TDTheme.of(context).grayColor4;
+        : widget.color?.getOrNull(1) ?? TDTheme.of(context).bgColorComponent;
   }
 
   IconData _getIcon({double? value, bool? isActive}) {

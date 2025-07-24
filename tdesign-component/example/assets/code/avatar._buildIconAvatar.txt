@@ -1,13 +1,16 @@
 
-  Widget _buildIconAvatar(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
+  Widget _buildIconAvatar(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.only(left: 16),
       child: Row(
-        children: const [
+        children: [
           TDAvatar(
             size: TDAvatarSize.medium,
-            type: TDAvatarType.icon,),
-          SizedBox(width: 32,),
+            type: TDAvatarType.icon,
+          ),
+          SizedBox(
+            width: 32,
+          ),
           TDAvatar(
             size: TDAvatarSize.medium,
             type: TDAvatarType.icon,

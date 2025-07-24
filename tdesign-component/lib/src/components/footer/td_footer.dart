@@ -110,9 +110,7 @@ class _TDFooterState extends State<TDFooter> {
               return Container(
                 decoration: index < (widget.links.length - 1)
                     ? BoxDecoration(
-                        border: Border(
-                            right: BorderSide(
-                                color: TDTheme.of(context).grayColor3)))
+                        border: Border(right: BorderSide(color: TDTheme.of(context).textColorPlaceholder)))
                     : null,
                 padding: const EdgeInsets.symmetric(horizontal: 6),
                 child: link,
@@ -136,7 +134,7 @@ class _TDFooterState extends State<TDFooter> {
       textAlign: TextAlign.center,
       style: TextStyle(
         fontSize: 12,
-        color: TDTheme.of(context).fontGyColor3,
+        color: TDTheme.of(context).textColorPlaceholder,
       ),
     );
   }

@@ -142,7 +142,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
     return Column(
       children: [
         Container(
-          color: TDTheme.of(context).whiteColor1,
+          color: TDTheme.of(context).bgColorContainer,
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: widget.minContentHeight ?? 0.0, maxHeight: maxContentHeight),
             child: SingleChildScrollView(
@@ -158,12 +158,12 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
                           : Container(
                               width: double.infinity,
                               padding: EdgeInsets.only(left: paddingNum, top: paddingNum, right: paddingNum),
-                              color: TDTheme.of(context).whiteColor1,
+                              color: TDTheme.of(context).bgColorContainer,
                               child: TDText(entry.key == '__default__' ? context.resource.other : entry.key),
                             ),
                       Container(
                         padding: EdgeInsets.all(paddingNum),
-                        color: TDTheme.of(context).whiteColor1,
+                        color: TDTheme.of(context).bgColorContainer,
                         child: TDCheckboxGroupContainer(
                           selectIds: isMultiple
                               ? selectIds
@@ -223,7 +223,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
     );
     return widget.minContentHeight != null || widget.maxContentHeight != null
         ? Container(
-            color: TDTheme.of(context).whiteColor1,
+            color: TDTheme.of(context).bgColorContainer,
             child: ConstrainedBox(
               constraints: BoxConstraints(
                   minHeight: widget.minContentHeight ?? 0.0, maxHeight: widget.maxContentHeight ?? double.infinity),
@@ -252,8 +252,8 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
           color: enable
               ? checked
                   ? TDTheme.of(context).brandLightColor
-                  : TDTheme.of(context).grayColor1
-              : TDTheme.of(context).grayColor2,
+                  : TDTheme.of(context).bgColorSecondaryContainer
+              : TDTheme.of(context).bgColorSecondaryContainerHover,
           borderRadius: BorderRadius.all(
             Radius.circular(TDTheme.of(context).radiusDefault),
           ),
@@ -264,8 +264,8 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
             textColor: enable
                 ? checked
                     ? TDTheme.of(context).brandColor7
-                    : TDTheme.of(context).fontGyColor1
-                : TDTheme.of(context).fontGyColor4,
+                    : TDTheme.of(context).textColorPrimary
+                : TDTheme.of(context).textColorDisabled,
           ),
         ),
       ),
@@ -277,16 +277,16 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
       height: TDDropdownItem.operateHeight,
       padding: EdgeInsets.all(TDTheme.of(context).spacer16),
       decoration: BoxDecoration(
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
         border: Border(
           top: BorderSide(
-            color: TDTheme.of(context).grayColor3,
-            width: 1,
+            color: TDTheme.of(context).componentStrokeColor,
+            width: 0.5,
           ),
           bottom: directionListenable.value == TDDropdownMenuDirection.up
               ? BorderSide(
-                  color: TDTheme.of(context).grayColor3,
-                  width: 1,
+                  color: TDTheme.of(context).componentStrokeColor,
+                  width: 0.5,
                 )
               : BorderSide.none,
         ),

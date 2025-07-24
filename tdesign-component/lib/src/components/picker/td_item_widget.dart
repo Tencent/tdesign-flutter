@@ -98,9 +98,9 @@ class ItemDistanceCalculator {
   Color calculateColor(BuildContext context, double distance) {
     /// 线性插值
     if (distance < 0.5) {
-      return TDTheme.of(context).fontGyColor1;
+      return TDTheme.of(context).textColorPrimary;
     } else {
-      return TDTheme.of(context).fontGyColor4;
+      return TDTheme.of(context).textColorDisabled;
     }
   }
 

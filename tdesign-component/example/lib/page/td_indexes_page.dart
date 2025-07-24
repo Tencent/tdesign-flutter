@@ -144,21 +144,18 @@ Widget _buildSimple(BuildContext context) {
           slideTransitionFrom: SlideTransitionFrom.right,
           modalTop: renderBox?.size.height,
           builder: (context) {
-            return Container(
-              color: Colors.white,
-              child: TDIndexes(
-                indexList: indexList,
-                builderContent: (context, index) {
-                  final list = _list.firstWhere((element) => element['index'] == index)['children'] as List<String>;
-                  return TDCellGroup(
-                    cells: list
-                        .map((e) => TDCell(
-                              title: e,
-                            ))
-                        .toList(),
-                  );
-                },
-              ),
+            return TDIndexes(
+              indexList: indexList,
+              builderContent: (context, index) {
+                final list = _list.firstWhere((element) => element['index'] == index)['children'] as List<String>;
+                return TDCellGroup(
+                  cells: list
+                      .map((e) => TDCell(
+                            title: e,
+                          ))
+                      .toList(),
+                );
+              },
             );
           },
         ),
@@ -183,22 +180,19 @@ Widget _buildOther(BuildContext context) {
           slideTransitionFrom: SlideTransitionFrom.right,
           modalTop: renderBox?.size.height,
           builder: (context) {
-            return Container(
-              color: Colors.white,
-              child: TDIndexes(
-                indexList: indexList,
-                capsuleTheme: true,
-                builderContent: (context, index) {
-                  final list = _list.firstWhere((element) => element['index'] == index)['children'] as List<String>;
-                  return TDCellGroup(
-                    cells: list
-                        .map((e) => TDCell(
-                              title: e,
-                            ))
-                        .toList(),
-                  );
-                },
-              ),
+            return TDIndexes(
+              indexList: indexList,
+              capsuleTheme: true,
+              builderContent: (context, index) {
+                final list = _list.firstWhere((element) => element['index'] == index)['children'] as List<String>;
+                return TDCellGroup(
+                  cells: list
+                      .map((e) => TDCell(
+                            title: e,
+                          ))
+                      .toList(),
+                );
+              },
             );
           },
         ),

@@ -33,7 +33,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
     _unSelectedIcon = Icon(
       TDIcons.app,
       size: 20,
-      color: TDTheme.of(context).brandNormalColor,
+      color: TDTheme.of(context).textColorPrimary,
     );
     return ExamplePage(
       title: tdTitle(),
@@ -495,7 +495,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
     );
     final unSelectedIcon = Icon(
       TDIcons.app,
-      color: TDTheme.of(context).brandNormalColor,
+      color: TDTheme.of(context).textColorPrimary,
     );
     return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
         useVerticalDivider: false,
@@ -685,7 +685,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
                             child: Text(
                               e,
                               style: TextStyle(
-                                  color: TDTheme.of(context).fontGyColor1,
+                                  color: TDTheme.of(context).textColorPrimary,
                                   fontSize: 16),
                             ),
                           ),
@@ -945,7 +945,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
     return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
         useVerticalDivider: false,
         selectedBgColor: TDTheme.of(context).errorColor3,
-        unselectedBgColor: TDTheme.of(context).grayColor3,
+        unselectedBgColor: TDTheme.of(context).bgColorSecondaryContainer,
         navigationTabs: [
           TDBottomTabBarTabConfig(
             tabText: '标签',
@@ -1007,7 +1007,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
           TDBottomTabBarTabConfig(
             tabText: '标签',
             unselectTabTextStyle:
-                TextStyle(color: TDTheme.of(context).fontGyColor1),
+                TextStyle(color: TDTheme.of(context).textColorPrimary),
             onTap: () {
               onTapTab(context, '标签1');
             },

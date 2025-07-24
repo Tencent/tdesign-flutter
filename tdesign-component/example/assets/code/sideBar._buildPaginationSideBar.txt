@@ -39,10 +39,7 @@
             controller: _sideBarController,
             children: list
                 .map((ele) => TDSideBarItem(
-                    label: ele.label ?? '',
-                    badge: ele.badge,
-                    value: ele.value,
-                    icon: ele.icon))
+                    label: ele.label ?? '', badge: ele.badge, value: ele.value, icon: ele.icon))
                 .toList(),
             onSelected: setCurrentValue,
           ),

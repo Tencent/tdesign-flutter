@@ -43,10 +43,10 @@ class TDText extends StatelessWidget {
     this.font,
     this.fontWeight,
     this.fontFamily,
-    this.textColor = Colors.black,
+    this.textColor,
     this.backgroundColor,
     this.isTextThrough = false,
-    this.lineThroughColor = Colors.white,
+    this.lineThroughColor,
     this.package,
     this.style,
     this.strutStyle,
@@ -73,10 +73,10 @@ class TDText extends StatelessWidget {
     this.font,
     this.fontWeight,
     this.fontFamily,
-    this.textColor = Colors.black,
+    this.textColor,
     this.backgroundColor,
     this.isTextThrough = false,
-    this.lineThroughColor = Colors.white,
+    this.lineThroughColor,
     this.package,
     Key? key,
     this.style,
@@ -107,7 +107,7 @@ class TDText extends StatelessWidget {
   final FontFamily? fontFamily;
 
   /// 文本颜色
-  final Color textColor;
+  final Color? textColor;
 
   /// 背景颜色
   final Color? backgroundColor;
@@ -220,9 +220,10 @@ class TDText extends StatelessWidget {
       stylePackage = null;
       styleFontFamily = 'PingFang SC';
     }
+    var color = style?.color ?? textColor ?? TDTheme.of(context).textColorPrimary;
     return TextStyle(
       inherit: style?.inherit ?? true,
-      color: style?.color ?? textColor,
+      color: color,
 
       /// 不使用系统本身的背景色，因为系统属性存在中英文是，会导致颜色出现阶梯状
       backgroundColor: backgroundColor,
@@ -239,8 +240,9 @@ class TDText extends StatelessWidget {
       background: style?.background,
       shadows: style?.shadows,
       fontFeatures: style?.fontFeatures,
-      decoration: style?.decoration ?? (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
-      decorationColor: style?.decorationColor ?? lineThroughColor,
+      decoration:
+          style?.decoration ?? (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
+      decorationColor: style?.decorationColor ?? lineThroughColor ?? color,
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
@@ -301,9 +303,9 @@ class TDTextSpan extends TextSpan {
     Font? font,
     FontWeight? fontWeight,
     FontFamily? fontFamily,
-    Color textColor = Colors.black,
+    Color? textColor,
     bool? isTextThrough = false,
-    Color? lineThroughColor = Colors.white,
+    Color? lineThroughColor,
     String? package,
     String? text,
     List<InlineSpan>? children,
@@ -316,8 +318,8 @@ class TDTextSpan extends TextSpan {
   }) : super(
           text: text,
           children: children,
-          style: _getTextStyle(
-              context, style, font, fontWeight, fontFamily, textColor, isTextThrough, lineThroughColor, package),
+          style: _getTextStyle(context, style, font, fontWeight, fontFamily, textColor,
+              isTextThrough, lineThroughColor, package),
           recognizer: recognizer,
           mouseCursor: mouseCursor,
           onEnter: onEnter,
@@ -331,15 +333,16 @@ class TDTextSpan extends TextSpan {
     Font? font,
     FontWeight? fontWeight,
     FontFamily? fontFamily,
-    Color textColor,
+    Color? textColor,
     bool? isTextThrough,
     Color? lineThroughColor,
     String? package,
   ) {
     var textFont = font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
+    var color = style?.color ?? textColor ?? TDTheme.of(context).textColorPrimary;
     return TextStyle(
       inherit: style?.inherit ?? true,
-      color: style?.color ?? textColor,
+      color: color,
       backgroundColor: style?.backgroundColor,
       fontSize: style?.fontSize ?? textFont.size,
       fontWeight: style?.fontWeight ?? fontWeight ?? textFont.fontWeight,
@@ -354,8 +357,9 @@ class TDTextSpan extends TextSpan {
       background: style?.background,
       shadows: style?.shadows,
       fontFeatures: style?.fontFeatures,
-      decoration: style?.decoration ?? (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
-      decorationColor: style?.decorationColor ?? lineThroughColor,
+      decoration:
+          style?.decoration ?? (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
+      decorationColor: style?.decorationColor ?? lineThroughColor ?? color,
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
@@ -374,7 +378,8 @@ class TDTextConfiguration extends InheritedWidget {
   /// 全局字体,kTextNeedGlobalFontFamily=true时生效
   final FontFamily? globalFontFamily;
 
-  const TDTextConfiguration({Key? key, required Widget child, this.paddingConfig, this.globalFontFamily})
+  const TDTextConfiguration(
+      {Key? key, required Widget child, this.paddingConfig, this.globalFontFamily})
       : super(key: key, child: child);
 
   @override
@@ -436,8 +441,8 @@ class TDTextPaddingConfig {
           : PlatformUtil.isAndroid
               ? -20 / 128
               : PlatformUtil.isOhos
-                ? 43 / 128
-                : -10 / 128;
+                  ? 43 / 128
+                  : -10 / 128;
     }
     return PlatformUtil.isWeb
         ? 3 / 8

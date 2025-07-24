@@ -243,7 +243,7 @@ class _TDIconTextToast extends StatelessWidget {
       child: Container(
           padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
           decoration: BoxDecoration(
-            color: TDTheme.of(context).fontGyColor1,
+            color: TDTheme.of(context).fontGyColor2,
             borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
           ),
           child: Row(
@@ -277,7 +277,7 @@ class _TDIconTextToast extends StatelessWidget {
         child: Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: TDTheme.of(context).fontGyColor1,
+              color: TDTheme.of(context).fontGyColor2,
               borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
             ),
             child: Column(
@@ -325,7 +325,7 @@ class _TDToastLoading extends StatelessWidget {
         height: 110,
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: TDTheme.of(context).fontGyColor1,
+          color: TDTheme.of(context).fontGyColor2,
           borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
         ),
         child: Column(
@@ -363,7 +363,7 @@ class _TDToastLoadingWithoutText extends StatelessWidget {
         height: 80,
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: TDTheme.of(context).fontGyColor1,
+          color: TDTheme.of(context).fontGyColor2,
           borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
         ),
         child: TDCircleIndicator(
@@ -392,7 +392,7 @@ class _TDTextToast extends StatelessWidget {
       child: Container(
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
           decoration: BoxDecoration(
-            color: TDTheme.of(context).fontGyColor1,
+            color: TDTheme.of(context).fontGyColor2,
             borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
           ),
           child: customWidget ?? TDText(

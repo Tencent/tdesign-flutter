@@ -142,8 +142,7 @@ extension TDColors on TDThemeData {
   Color get warningColor9 => colorMap['warningColor9'] ?? const Color(0xFF532300);
 
   ///#3B1700
-  Color get warningColor10 =>
-      colorMap['warningColor10'] ?? const Color(0xFF3B1700);
+  Color get warningColor10 => colorMap['warningColor10'] ?? const Color(0xFF3B1700);
 
   ///#FFF1E9
   Color get warningLightColor => colorMap['warningLightColor'] ?? warningColor1;
@@ -152,8 +151,7 @@ extension TDColors on TDThemeData {
   Color get warningFocusColor => colorMap['warningFocusColor'] ?? warningColor2;
 
   ///#FFB98C
-  Color get warningDisabledColor =>
-      colorMap['warningDisabledColor'] ?? warningColor3;
+  Color get warningDisabledColor => colorMap['warningDisabledColor'] ?? warningColor3;
 
   ///#FA9550
   Color get warningHoverColor => colorMap['warningHoverColor'] ?? warningColor4;
@@ -194,8 +192,7 @@ extension TDColors on TDThemeData {
   Color get successColor9 => colorMap['successColor9'] ?? const Color(0xFF003B23);
 
   ///#002515
-  Color get successColor10 =>
-      colorMap['successColor10'] ?? const Color(0xFF002515);
+  Color get successColor10 => colorMap['successColor10'] ?? const Color(0xFF002515);
 
   ///#E3F9E9
   Color get successLightColor => colorMap['successLightColor'] ?? successColor1;
@@ -204,8 +201,7 @@ extension TDColors on TDThemeData {
   Color get successFocusColor => colorMap['successFocusColor'] ?? successColor2;
 
   ///#92DAB2
-  Color get successDisabledColor =>
-      colorMap['successDisabledColor'] ?? successColor3;
+  Color get successDisabledColor => colorMap['successDisabledColor'] ?? successColor3;
 
   ///#56C08D
   Color get successHoverColor => colorMap['successHoverColor'] ?? successColor4;
@@ -230,16 +226,16 @@ extension TDColors on TDThemeData {
   ///#42000000
   Color get fontGyColor4 => colorMap['fontGyColor4'] ?? const Color(0x42000000);
 
-  ///#ff000000
+  ///#FFFFFFFF
   Color get fontWhColor1 => colorMap['fontWhColor1'] ?? const Color(0xFFFFFFFF);
 
-  ///#8c000000
+  ///#8CFFFFFF
   Color get fontWhColor2 => colorMap['fontWhColor2'] ?? const Color(0x8CFFFFFF);
 
-  ///#59000000
+  ///#59FFFFFF
   Color get fontWhColor3 => colorMap['fontWhColor3'] ?? const Color(0x59FFFFFF);
 
-  ///#38000000
+  ///#38FFFFFF
   Color get fontWhColor4 => colorMap['fontWhColor4'] ?? const Color(0x38FFFFFF);
 
   /// 中性面板色组----------------------------------------------------
@@ -288,4 +284,52 @@ extension TDColors on TDThemeData {
 
   ///#181818
   Color get grayColor14 => colorMap['grayColor14'] ?? const Color(0xFF181818);
+
+  /// 组件颜色配置----------------------------------------------------
+
+  Color get bgColorPage => colorMap['bgColorPage'] ?? grayColor2;
+
+  Color get bgColorContainer => colorMap['bgColorContainer'] ?? whiteColor1;
+
+  Color get bgColorContainerSelect => colorMap['bgColorContainerSelect'] ?? whiteColor1;
+
+  Color get bgColorContainerHover => colorMap['bgColorContainerHover'] ?? grayColor1;
+
+  Color get bgColorContainerActive => colorMap['bgColorContainerActive'] ?? grayColor3;
+
+  Color get bgColorSecondaryContainer => colorMap['bgColorSecondaryContainer'] ?? grayColor1;
+
+  Color get bgColorSecondaryContainerHover =>
+      colorMap['bgColorSecondaryContainerHover'] ?? grayColor2;
+
+  Color get bgColorSecondaryContainerActive =>
+      colorMap['bgColorSecondaryContainerActive'] ?? grayColor4;
+
+  Color get bgColorComponent => colorMap['bgColorComponent'] ?? grayColor3;
+
+  Color get bgColorComponentHover => colorMap['bgColorComponentHover'] ?? grayColor4;
+
+  Color get bgColorComponentActive => colorMap['bgColorComponentActive'] ?? grayColor6;
+
+  Color get bgColorComponentDisabled => colorMap['bgColorComponentDisabled'] ?? grayColor2;
+
+  Color get componentStrokeColor => colorMap['componentStrokeColor'] ?? grayColor3;
+
+  Color get componentBorderColor => colorMap['componentBorderColor'] ?? grayColor4;
+
+  /// 文字颜色配置----------------------------------------------------
+
+  Color get textColorPrimary => colorMap['textColorPrimary'] ?? fontGyColor1;
+
+  Color get textColorSecondary => colorMap['textColorSecondary'] ?? fontGyColor2;
+
+  Color get textColorPlaceholder => colorMap['textColorPlaceholder'] ?? fontGyColor3;
+
+  Color get textColorDisabled => colorMap['textColorDisabled'] ?? fontGyColor4;
+
+  Color get textColorAnti => colorMap['textColorAnti'] ?? whiteColor1;
+
+  Color get textColorBrand => colorMap['textColorBrand'] ?? brandNormalColor;
+
+  Color get textColorLink => colorMap['textColorLink'] ?? brandNormalColor;
 }

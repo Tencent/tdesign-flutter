@@ -4,7 +4,7 @@
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.whiteColor1,
+        color: theme.bgColorContainer,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),

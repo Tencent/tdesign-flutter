@@ -13,7 +13,7 @@ class TDFormInherited extends InheritedWidget {
   final TextAlign formContentAlign;
   final Function onFormDataChange;
   final bool isReset;
-  final int updataCount;
+  final int updateCount;
   final Function onSubmit;
   const TDFormInherited({
     super.key,
@@ -26,7 +26,7 @@ class TDFormInherited extends InheritedWidget {
     required this.onFormDataChange,
     required this.onSubmit,
     required this.requiredMark,
-    required this.updataCount,
+    required this.updateCount,
     this.labelWidth,
     this.formShowErrorMessage,
     required this.isReset,
@@ -38,7 +38,7 @@ class TDFormInherited extends InheritedWidget {
 
   @override
   bool updateShouldNotify(TDFormInherited oldWidget) {
-    return updataCount != oldWidget.updataCount ||
+    return updateCount != oldWidget.updateCount ||
         isReset != oldWidget.isReset ||
         labelWidth != oldWidget.labelWidth ||
         isHorizontal != oldWidget.isHorizontal ||

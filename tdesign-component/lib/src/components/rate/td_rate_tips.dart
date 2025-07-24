@@ -37,7 +37,7 @@ class TDRateTips extends StatelessWidget {
     return Container(
       key: _tipKey,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.12),
@@ -72,8 +72,8 @@ class TDRateTips extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: allowHalf == true && index + 0.5 == activeValue && isClick
-                    ? TDTheme.of(context).grayColor3
-                    : TDTheme.of(context).whiteColor1,
+                    ? TDTheme.of(context).bgColorComponent
+                    : Colors.transparent,
                 borderRadius: BorderRadius.circular(TDTheme.of(context).radiusSmall),
               ),
               padding: EdgeInsets.only(left: TDTheme.of(context).spacer4, right: TDTheme.of(context).spacer4),
@@ -111,7 +111,7 @@ class TDRateTips extends StatelessWidget {
                     child: TDText(
                       allowHalf == true ? (isClick ? '${index + 0.5}' : '${activeValue}') : '${index + 1}',
                       font: TDTheme.of(context).fontBodySmall,
-                      textColor: TDTheme.of(context).fontGyColor1,
+                      textColor: TDTheme.of(context).textColorPrimary,
                     ),
                   ),
                 ],
@@ -128,7 +128,7 @@ class TDRateTips extends StatelessWidget {
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: index + 1 != activeValue ? TDTheme.of(context).whiteColor1 : TDTheme.of(context).grayColor3,
+                  color: index + 1 != activeValue ?  Colors.transparent : TDTheme.of(context).bgColorComponent,
                   borderRadius: BorderRadius.circular(TDTheme.of(context).radiusSmall),
                 ),
                 padding: EdgeInsets.only(left: TDTheme.of(context).spacer4, right: TDTheme.of(context).spacer4),
@@ -143,7 +143,7 @@ class TDRateTips extends StatelessWidget {
                       child: TDText(
                         '${index + 1}',
                         font: TDTheme.of(context).fontBodySmall,
-                        textColor: TDTheme.of(context).fontGyColor1,
+                        textColor: TDTheme.of(context).textColorPrimary,
                       ),
                     ),
                   ],

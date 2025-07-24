@@ -81,13 +81,13 @@ class TDSliderThemeData {
     this.inactiveTrackColor,
     SliderThemeData? sliderThemeData,
   })  : scaleTextStyle = scaleTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor1),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPrimary),
         disabledScaleTextStyle = disabledScaleTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor4),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPlaceholder),
         thumbTextStyle = thumbTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor1),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPrimary),
         disabledThumbTextStyle = disabledThumbTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor4),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPlaceholder),
         _sliderThemeData = sliderThemeData,
         _capsule = false;
 
@@ -108,13 +108,13 @@ class TDSliderThemeData {
     this.inactiveTrackColor,
     SliderThemeData? sliderThemeData,
   })  : scaleTextStyle = scaleTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor1),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPrimary),
         disabledScaleTextStyle = disabledScaleTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor4),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPlaceholder),
         thumbTextStyle = thumbTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor1),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPrimary),
         disabledThumbTextStyle = disabledThumbTextStyle ??
-            TextStyle(fontSize: 14, color: TDTheme.of(context).fontGyColor4),
+            TextStyle(fontSize: 14, color: TDTheme.of(context).textColorPlaceholder),
         _sliderThemeData = sliderThemeData,
         _capsule = true;
 
@@ -135,15 +135,15 @@ class TDSliderThemeData {
       trackHeight: 4,
       activeTrackColor:
           activeTrackColor ?? TDTheme.of(context).brandNormalColor,
-      inactiveTrackColor: inactiveTrackColor ?? TDTheme.of(context).grayColor4,
+      inactiveTrackColor: inactiveTrackColor ?? TDTheme.of(context).bgColorComponent,
       disabledActiveTrackColor: TDTheme.of(context).brandDisabledColor,
-      disabledInactiveTrackColor: TDTheme.of(context).grayColor2,
+      disabledInactiveTrackColor: TDTheme.of(context).bgColorComponentDisabled,
       activeTickMarkColor: TDTheme.of(context).brandNormalColor,
-      inactiveTickMarkColor: TDTheme.of(context).grayColor4,
+      inactiveTickMarkColor: TDTheme.of(context).bgColorComponent,
       disabledActiveTickMarkColor: TDTheme.of(context).brandDisabledColor,
-      disabledInactiveTickMarkColor: TDTheme.of(context).grayColor2,
+      disabledInactiveTickMarkColor: TDTheme.of(context).bgColorComponentDisabled,
       thumbColor: Colors.white,
-      disabledThumbColor: Colors.white,
+      disabledThumbColor: TDTheme.of(context).bgColorSecondaryContainer,
       overlayShape: const TDNoOverlayShape(),
       tickMarkShape: TDRoundSliderTickMarkShape(themeData: this),
       thumbShape: TDRoundSliderThumbShape(themeData: this),
@@ -169,13 +169,13 @@ class TDSliderThemeData {
       disabledActiveTickMarkColor: TDTheme.of(context).grayColor3,
       disabledInactiveTickMarkColor: TDTheme.of(context).grayColor3,
       thumbColor: Colors.white,
-      disabledThumbColor: Colors.white,
+      disabledThumbColor: TDTheme.of(context).bgColorSecondaryContainer,
       trackHeight: 24,
       activeTrackColor:
           activeTrackColor ?? TDTheme.of(context).brandNormalColor,
-      inactiveTrackColor: inactiveTrackColor ?? TDTheme.of(context).grayColor4,
+      inactiveTrackColor: inactiveTrackColor ?? TDTheme.of(context).bgColorComponent,
       disabledActiveTrackColor: TDTheme.of(context).brandDisabledColor,
-      disabledInactiveTrackColor: TDTheme.of(context).grayColor2,
+      disabledInactiveTrackColor: TDTheme.of(context).bgColorComponentDisabled,
       overlayShape: const TDNoOverlayShape(),
       showValueIndicator: ShowValueIndicator.never,
     );

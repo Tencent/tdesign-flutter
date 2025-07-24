@@ -14,7 +14,8 @@
             text: '加载中…',
             duration: _currentSliderValue.round(),
           ),
-          TDSlider(value: _currentSliderValue,
+          TDSlider(
+            value: _currentSliderValue,
             sliderThemeData: TDSliderThemeData(
               context: context,
               max: 2000,
@@ -27,7 +28,8 @@
               setState(() {
                 _currentSliderValue = value;
               });
-            },)
+            },
+          )
         ],
       ),
     );

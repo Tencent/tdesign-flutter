@@ -1,8 +1,8 @@
 
   Widget _customTextFont(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
+    return const TDCell(
+      title: '基础开关',
+      noteWidget: TDSwitch(
         type: TDSwitchType.text,
         openText: '开',
         closeText: '关',
@@ -11,6 +11,5 @@
         thumbContentOnFont: TextStyle(fontSize: 18),
         thumbContentOffFont: TextStyle(fontSize: 12),
       ),
-      title: '基础开关',
     );
   }

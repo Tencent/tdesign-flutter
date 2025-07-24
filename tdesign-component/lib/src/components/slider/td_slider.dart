@@ -2,6 +2,8 @@
 ///  Created by arvinwli@tencent.com on 4/24/23.
 ///
 import 'package:flutter/material.dart';
+import '../../theme/td_colors.dart';
+import '../../theme/td_theme.dart';
 import 'td_slider_theme.dart';
 
 enum Position {
@@ -64,6 +66,7 @@ class TDSlider extends StatefulWidget {
 class TDSliderState extends State<TDSlider> {
   final GlobalKey _sliderKey = GlobalKey();
   double value = 0;
+
   @override
   void initState() {
     super.initState();
@@ -80,7 +83,8 @@ class TDSliderState extends State<TDSlider> {
 
   TextStyle get labelTextStyle => TextStyle(
       fontSize: 16,
-      color: enabled ? const Color(0xE6000000) : const Color(0x42000000));
+      color:
+          enabled ? TDTheme.of(context).textColorPrimary : TDTheme.of(context).textColorDisabled);
 
   Widget get leftLabel => widget.leftLabel?.isNotEmpty == true
       ? Padding(
@@ -101,8 +105,7 @@ class TDSliderState extends State<TDSlider> {
     var tdSliderThemeData = widget.sliderThemeData ?? TDSliderThemeData();
     return Listener(
         onPointerDown: (event) {
-          final sliderBox =
-              _sliderKey.currentContext?.findRenderObject() as RenderBox?;
+          final sliderBox = _sliderKey.currentContext?.findRenderObject() as RenderBox?;
           if (sliderBox == null ||
               widget.onThumbTextTap == null ||
               !tdSliderThemeData.showThumbValue) {
@@ -119,16 +122,13 @@ class TDSliderState extends State<TDSlider> {
         },
         child: Container(
           padding: EdgeInsets.only(
-            top: (tdSliderThemeData.showScaleValue ||
-                        tdSliderThemeData.showThumbValue
-                    ? 16
-                    : 0) +
-                8,
+            top:
+                (tdSliderThemeData.showScaleValue || tdSliderThemeData.showThumbValue ? 16 : 0) + 8,
             bottom: 8,
           ),
           decoration: widget.boxDecoration ??
-              const BoxDecoration(
-                color: Colors.white,
+              BoxDecoration(
+                color: TDTheme.of(context).bgColorContainer,
               ),
           child: Row(
             children: [
@@ -141,8 +141,7 @@ class TDSliderState extends State<TDSlider> {
                       return;
                     }
 
-                    final sliderBox = _sliderKey.currentContext
-                        ?.findRenderObject() as RenderBox?;
+                    final sliderBox = _sliderKey.currentContext?.findRenderObject() as RenderBox?;
                     if (sliderBox == null) {
                       return;
                     }
@@ -212,8 +211,7 @@ class TDRangeSlider extends StatefulWidget {
   final Function(Position position, Offset offset, double value)? onTap;
 
   ///  Thumb 点击浮标文字 位置、坐标、当前值
-  final Function(Position position, Offset offset, double value)?
-      onThumbTextTap;
+  final Function(Position position, Offset offset, double value)? onThumbTextTap;
 
   const TDRangeSlider(
       {Key? key,
@@ -255,7 +253,8 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
 
   TextStyle get labelTextStyle => TextStyle(
       fontSize: 16,
-      color: enabled ? const Color(0xE6000000) : const Color(0x42000000));
+      color:
+          enabled ? TDTheme.of(context).textColorPrimary : TDTheme.of(context).textColorDisabled);
 
   Widget get leftLabel => widget.leftLabel?.isNotEmpty == true
       ? Padding(
@@ -277,10 +276,8 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
 
     return Listener(
       onPointerDown: (event) {
-        final sliderBox =
-            _sliderRangeKey.currentContext?.findRenderObject() as RenderBox?;
-        final localOffset =
-            sliderBox?.globalToLocal(event.position) ?? Offset.zero;
+        final sliderBox = _sliderRangeKey.currentContext?.findRenderObject() as RenderBox?;
+        final localOffset = sliderBox?.globalToLocal(event.position) ?? Offset.zero;
 
         if (sliderBox == null ||
             widget.onThumbTextTap == null ||
@@ -289,8 +286,7 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
         }
 
         final themeData = widget.sliderThemeData ?? TDSliderThemeData();
-        final startTextRect =
-            themeData.sliderMeasureData.startRangeThumbTextRect;
+        final startTextRect = themeData.sliderMeasureData.startRangeThumbTextRect;
         final endTextRect = themeData.sliderMeasureData.endRangeThumbTextRect;
 
         if (startTextRect?.contains(localOffset) ?? false) {
@@ -302,16 +298,12 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
       },
       child: Container(
         padding: EdgeInsets.only(
-          top: (tdSliderThemeData.showScaleValue ||
-                      tdSliderThemeData.showThumbValue
-                  ? 16
-                  : 0) +
-              8,
+          top: (tdSliderThemeData.showScaleValue || tdSliderThemeData.showThumbValue ? 16 : 0) + 8,
           bottom: 8,
         ),
         decoration: widget.boxDecoration ??
-            const BoxDecoration(
-              color: Colors.white,
+            BoxDecoration(
+              color: TDTheme.of(context).bgColorContainer,
             ),
         child: Row(
           children: [
@@ -324,8 +316,8 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
                     return;
                   }
 
-                  final sliderBox = _sliderRangeKey.currentContext
-                      ?.findRenderObject() as RenderBox?;
+                  final sliderBox =
+                      _sliderRangeKey.currentContext?.findRenderObject() as RenderBox?;
                   if (sliderBox == null) {
                     return;
                   }
@@ -355,12 +347,10 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
                   final verticalCenter = sliderBox.size.height / 2;
 
                   // 检测点击区域
-                  final isStartTap =
-                      (tapOffset.dx - startCenterX).abs() <= thumbRadius &&
-                          (tapOffset.dy - verticalCenter).abs() <= thumbRadius;
-                  final isEndTap =
-                      (tapOffset.dx - endCenterX).abs() <= thumbRadius &&
-                          (tapOffset.dy - verticalCenter).abs() <= thumbRadius;
+                  final isStartTap = (tapOffset.dx - startCenterX).abs() <= thumbRadius &&
+                      (tapOffset.dy - verticalCenter).abs() <= thumbRadius;
+                  final isEndTap = (tapOffset.dx - endCenterX).abs() <= thumbRadius &&
+                      (tapOffset.dy - verticalCenter).abs() <= thumbRadius;
 
                   Position position;
                   double tappedValue;
@@ -372,14 +362,10 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
                     position = Position.end;
                     tappedValue = rangeValues.end;
                   } else {
-                    tappedValue =
-                        (tapOffset.dx / sliderWidth) * (max - min) + min;
-                    final startDistance =
-                        (tappedValue - rangeValues.start).abs();
+                    tappedValue = (tapOffset.dx / sliderWidth) * (max - min) + min;
+                    final startDistance = (tappedValue - rangeValues.start).abs();
                     final endDistance = (tappedValue - rangeValues.end).abs();
-                    position = startDistance < endDistance
-                        ? Position.start
-                        : Position.end;
+                    position = startDistance < endDistance ? Position.start : Position.end;
                   }
                   widget.onTap?.call(position, tapOffset, tappedValue);
                 },

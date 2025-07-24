@@ -30,8 +30,8 @@
         ),
         const SizedBox(height: 10),
         TDRangeSlider(
-          sliderThemeData: TDSliderThemeData(
-              context: context, min: 0, max: 100, showThumbValue: true),
+          sliderThemeData:
+              TDSliderThemeData(context: context, min: 0, max: 100, showThumbValue: true),
           leftLabel: '0',
           rightLabel: '100',
           value: const RangeValues(10, 60),

@@ -43,7 +43,7 @@ class _TDCustomTabState extends State<TDCustomTab> {
                 onTap:(){
                   _onChangeTab(index);
                 },
-                child: Container(
+                child: SizedBox(
                     width: 96,
                     height: 52,
                     child: Stack(
@@ -53,7 +53,7 @@ class _TDCustomTabState extends State<TDCustomTab> {
                             widget.tabs[index],
                             style: TextStyle(
                                 fontSize: 16,
-                                color: _currentTabIndex == index ? TDTheme.of(context).brandNormalColor : Colors.black),
+                                color: _currentTabIndex == index ? TDTheme.of(context).brandNormalColor : TDTheme.of(context).textColorPrimary),
                                 fontWeight: _currentTabIndex == index ?FontWeight.w600:FontWeight.w400,
                           ),
                         ),

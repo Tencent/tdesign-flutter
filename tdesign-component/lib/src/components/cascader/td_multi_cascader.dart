@@ -133,7 +133,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     return Container(
       width: maxWidth,
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
           topRight: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
@@ -150,7 +150,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   void didChangeDependencies() {
     /// 该方法在开始处必须调用父类的方法
     super.didChangeDependencies();
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       List.generate(_selectListData.length, (index) {
         if (_selectListData[index].value == _selectTabValue) {
           _scrollToListIndex(index);
@@ -202,7 +202,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   }
 
   Widget _buildTitle(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 58,
       child: Stack(
         children: [
@@ -215,7 +215,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                         TextStyle(
                             fontSize: TDTheme.of(context).fontTitleLarge!.size,
                             fontWeight: FontWeight.w700,
-                            color: TDTheme.of(context).fontGyColor1),
+                            color: TDTheme.of(context).textColorPrimary),
                   ),
                 ),
           Positioned(
@@ -243,7 +243,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                           (widget.closeText == null
                               ? Icon(
                                   TDIcons.close,
-                                  color: TDTheme.of(context).fontGyColor1,
+                                  color: TDTheme.of(context).textColorPrimary,
                                 )
                               : TDText(
                                   widget.closeText,
@@ -251,7 +251,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                                       fontSize: TDTheme.of(context)
                                           .fontTitleMedium!
                                           .size,
-                                      color: TDTheme.of(context).fontGyColor1),
+                                      color: TDTheme.of(context).textColorPrimary),
                                 )),
                     ),
                   ))),
@@ -268,8 +268,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   Widget _buildStepBox(BuildContext context) {
     var maxWidth = MediaQuery.of(context).size.width;
     return Container(
-        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.1), width: 0.5))),
-        padding: EdgeInsets.only(bottom: 11),
+        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: TDTheme.of(context).componentStrokeColor, width: 0.5))),
         width: maxWidth,
         child: ListView(
             shrinkWrap: true,
@@ -279,13 +278,13 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                   onTap: () {
                     _tabListChange(index);
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: 38,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
+                        SizedBox(
                           // 圆和线
                           height: 8,
                           child: LeftLineWidget(
@@ -298,7 +297,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                             '${_tabListData[index].label}',
                             style: TextStyle(
                                 fontSize: 14,
-                                color: _currentTabIndex == index ? TDTheme.of(context).brandNormalColor : Colors.black),
+                                color: _currentTabIndex == index ? TDTheme.of(context).brandNormalColor : TDTheme.of(context).textColorPrimary),
                             fontWeight: _currentTabIndex == index ? FontWeight.w600 : FontWeight.w400,
                           ),
                         ),
@@ -306,7 +305,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                           padding: const EdgeInsets.only(left: 2, right: 16),
                           child: Icon(
                             TDIcons.chevron_right,
-                            color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
+                            color: TDTheme.of(context).textColorPrimary,
                           ),
                         ),
                       ],
@@ -319,16 +318,14 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     var maxWidth = MediaQuery.of(context).size.width;
     return Container(
       height: 48,
-      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.1), width: 0.5))),
+      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: TDTheme.of(context).componentStrokeColor, width: 0.5))),
       width: maxWidth,
       child: TDCustomTab(
         tabs: List.generate(_tabListData.length, (index) {
           return _tabListData[index].label ?? '';
         }),
         initialIndex: _currentTabIndex,
-        onTap: (int index) {
-          _tabListChange(index);
-        },
+        onTap: _tabListChange,
       ),
     );
   }
@@ -337,19 +334,19 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     var maxWidth = MediaQuery.of(context).size.width;
     return Container(
         width: maxWidth,
-        padding: EdgeInsets.only(left: 16, right: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (widget.subTitles != null)
               Container(
                   height: 50,
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     top: 20,
                   ),
                   child: TDText(
                     widget.subTitles![_level],
-                    style: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.4)),
+                    style: TextStyle(color: TDTheme.of(context).textColorPlaceholder),
                     font: TDTheme.of(context).fontTitleSmall,
                   ) //,
                   ),
@@ -399,26 +396,24 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    if (item.segmentValue != null)
-                                      SizedBox(
-                                        width: 32,
-                                        child: item.segmentValue != preItem.segmentValue
-                                            ? TDText(
-                                                '${item.segmentValue}',
-                                                font: Font(size: 16, lineHeight: 24),
-                                              )
-                                            : null,
-                                      ),
-                                    TDText(
-                                      '${item.label}',
-                                      font: Font(size: 16, lineHeight: 24),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  if (item.segmentValue != null)
+                                    SizedBox(
+                                      width: 32,
+                                      child: item.segmentValue != preItem.segmentValue
+                                          ? TDText(
+                                              '${item.segmentValue}',
+                                              font: Font(size: 16, lineHeight: 24),
+                                            )
+                                          : null,
                                     ),
-                                  ],
-                                ),
+                                  TDText(
+                                    '${item.label}',
+                                    font: Font(size: 16, lineHeight: 24),
+                                  ),
+                                ],
                               ),
                               if (_selectTabValue == item.value)
                                 Icon(
@@ -489,9 +484,9 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   void _scrollToListIndex(int index) async {
     // 计算列表中特定索引的位置
     double scrollTo = index * 56.0; // 每个列表项的高度是56.0
-    _scrollListController.animateTo(
+    await _scrollListController.animateTo(
       scrollTo,
-      duration: Duration(milliseconds: 1),
+      duration: const Duration(milliseconds: 1),
       curve: Curves.ease,
     );
   }
@@ -507,12 +502,12 @@ class LeftLineWidget extends StatelessWidget {
   /// 是否显示圆圈上方线条
   final bool isShowTopLine;
 
-  const LeftLineWidget({this.isShowTopLine = false, this.topLineColor, this.isCircleFill = false});
+  const LeftLineWidget({super.key, this.isShowTopLine = false, this.topLineColor, this.isCircleFill = false});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       width: 16,
       child: CustomPaint(
         painter: LeftLinePainter(isShowTopLine: isShowTopLine, topLineColor: topLineColor ?? TDTheme.of(context).brandNormalColor, isCircleFill: isCircleFill),

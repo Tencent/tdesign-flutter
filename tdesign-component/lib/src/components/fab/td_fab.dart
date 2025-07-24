@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
-
 
 enum TDFabTheme { primary, defaultTheme, light, danger }
 
@@ -100,7 +98,7 @@ class TDFab extends StatelessWidget {
       case TDFabTheme.danger:
         return TDTheme.of(context).errorColor6;
       default:
-        return TDTheme.of(context).grayColor3;
+        return TDTheme.of(context).bgColorComponent;
     }
   }
 
@@ -109,13 +107,13 @@ class TDFab extends StatelessWidget {
       case TDFabTheme.primary:
         return Colors.white;
       case TDFabTheme.defaultTheme:
-        return TDTheme.of(context).fontGyColor1.withOpacity(0.9);
+        return TDTheme.of(context).fontGyColor1;
       case TDFabTheme.light:
         return TDTheme.of(context).brandColor7;
       case TDFabTheme.danger:
         return Colors.white;
       default:
-        return TDTheme.of(context).fontGyColor1.withOpacity(0.9);
+        return TDTheme.of(context).fontGyColor1;
     }
   }
 
@@ -166,22 +164,22 @@ class TDFab extends StatelessWidget {
                 BoxShadow(
                     offset: const Offset(0, 5),
                     blurRadius: 2.5,
-                    spreadRadius:-1.5,
+                    spreadRadius: -1.5,
                     color: Colors.black.withOpacity(0.1)),
                 BoxShadow(
                     offset: const Offset(0, 8),
                     blurRadius: 5,
-                    spreadRadius:0.5,
+                    spreadRadius: 0.5,
                     color: Colors.black.withOpacity(0.06)),
                 BoxShadow(
                     offset: const Offset(0, 3),
                     blurRadius: 7,
-                    spreadRadius:1,
+                    spreadRadius: 1,
                     color: Colors.black.withOpacity(0.05))
               ],
               borderRadius: shape == TDFabShape.circle
-                  ? BorderRadius.circular(24)
-                  : BorderRadius.circular(6)),
+                  ? BorderRadius.circular(TDTheme.of(context).radiusCircle)
+                  : BorderRadius.circular(TDTheme.of(context).radiusDefault)),
           height: getMinWidthOrHeight(),
           child: Row(
             mainAxisSize: MainAxisSize.min,

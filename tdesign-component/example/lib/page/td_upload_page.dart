@@ -17,6 +17,7 @@ class TDUploadState extends State<TDUploadPage> {
     TDUploadFile(key: 1, remotePath: 'https://tdesign.gtimg.com/demo/images/example1.png'),
     TDUploadFile(key: 2, remotePath: 'https://tdesign.gtimg.com/demo/images/example2.png'),
     TDUploadFile(key: 3, remotePath: 'https://tdesign.gtimg.com/demo/images/example3.png'),
+    TDUploadFile(key: 4, remotePath: 'https://tdesign.gtimg.com/demo/images/example4.png'),
   ];
   final List<TDUploadFile> files3 = [
     TDUploadFile(
@@ -112,7 +113,7 @@ class TDUploadState extends State<TDUploadPage> {
   Widget wrapDemoContainer(String title, {required Widget child}) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(color: Colors.white),
+      color: TDTheme.of(context).bgColorContainer,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

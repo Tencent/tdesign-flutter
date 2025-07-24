@@ -6,7 +6,6 @@
       hintText: '请输入文字',
       maxLines: 4,
       minLines: 4,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }

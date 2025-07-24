@@ -8,7 +8,7 @@
       TDLoading(
         size: TDLoadingSize.small,
         text: '加载失败',
-        textColor: TDTheme.of(context).fontGyColor3,
+        textColor: TDTheme.of(context).textColorPlaceholder,
       ),
       TDLoading(
         size: TDLoadingSize.small,

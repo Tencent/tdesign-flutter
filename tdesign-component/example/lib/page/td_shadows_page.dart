@@ -11,7 +11,6 @@ class TDShadowsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      backgroundColor: TDTheme.of(context).whiteColor1,
         title: tdTitle(context),
         exampleCodeGroup: 'shadows',
         children: [
@@ -29,7 +28,7 @@ class TDShadowsPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).whiteColor1,
+          color: TDTheme.of(context).bgColorContainer,
           boxShadow: TDTheme.of(context).shadowsBase,
           borderRadius:
               BorderRadius.circular(TDTheme.of(context).radiusDefault)),
@@ -42,7 +41,7 @@ class TDShadowsPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).whiteColor1,
+          color: TDTheme.of(context).bgColorContainer,
           boxShadow: TDTheme.of(context).shadowsMiddle,
           borderRadius:
               BorderRadius.circular(TDTheme.of(context).radiusDefault)),
@@ -55,7 +54,7 @@ class TDShadowsPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).whiteColor1,
+          color: TDTheme.of(context).bgColorContainer,
           boxShadow: TDTheme.of(context).shadowsTop,
           borderRadius:
               BorderRadius.circular(TDTheme.of(context).radiusDefault)),

@@ -1,6 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
-import 'dart:io';
 
 ///封装图片加载控件，增加图片加载失败时加载默认图片
 class ImageWidget extends StatefulWidget {
@@ -196,16 +196,13 @@ class ImageWidget extends StatefulWidget {
     this.errorWidget,
     this.loadingWidget,
     this.src,
-  })  : image = ResizeImage.resizeIfNeeded(cacheWidth, cacheHeight, FileImage(imageFile!, scale: scale)),
+  })  : image = ResizeImage.resizeIfNeeded(
+            cacheWidth, cacheHeight, FileImage(imageFile!, scale: scale)),
         loadingBuilder = null,
-        assert(alignment != null),
-        assert(repeat != null),
-        assert(filterQuality != null),
-        assert(matchTextDirection != null),
         assert(cacheWidth == null || cacheWidth > 0),
         assert(cacheHeight == null || cacheHeight > 0),
-        assert(isAntiAlias != null),
         super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _StateImageWidget();
@@ -333,32 +330,43 @@ class _StateImageWidget extends State<ImageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (error == false && loading == true) {
+    final alignment = widget.alignment;
+    final color = widget.color ?? TDTheme.of(context).bgColorContainerHover;
+
+    // 优先处理 loading 状态
+    if (loading) {
       return Container(
-          alignment: widget.alignment,
-          color: widget.color ?? TDTheme.of(context).grayColor2,
-          child: widget.loadingWidget ??
-              Icon(
-                TDIcons.ellipsis,
-                size: 22,
-                color: TDTheme.of(context).fontGyColor3,
-              ));
+        alignment: alignment,
+        color: color,
+        child: widget.loadingWidget ??
+            Icon(
+              TDIcons.ellipsis,
+              size: 22,
+              color: TDTheme.of(context).textColorPlaceholder,
+            ),
+      );
     }
-    if (error == true && loading == false) {
+
+    // 其次处理 error 状态
+    if (error) {
       return Container(
-        alignment: widget.alignment,
-        color: widget.color ?? TDTheme.of(context).grayColor2,
+        alignment: alignment,
+        color: color,
         child: widget.errorWidget ??
             Icon(
               TDIcons.close,
               size: 22,
-              color: TDTheme.of(context).fontGyColor3,
+              color: TDTheme.of(context).textColorPlaceholder,
             ),
       );
     }
-    if (loading == false && error == false) {
+
+    // 默认显示图片
+    if (!loading && !error) {
       return _image;
     }
+
+    // 特殊状态组合兜底（理论上不会走到这里）
     return Container();
   }
 

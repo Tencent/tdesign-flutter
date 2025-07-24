@@ -15,7 +15,7 @@
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
     ));
 
     list[1].badge = const TDBadge(TDBadgeType.redPoint);

@@ -40,7 +40,6 @@ class _TDIconPageState extends State<TDIconPage> {
   @Demo(group: 'icon')
   Widget _showAllIcons(BuildContext context) {
     return Container(
-      color: Colors.white,
       alignment: Alignment.center,
       child: Column(
         children: [

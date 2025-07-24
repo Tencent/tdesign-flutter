@@ -192,8 +192,8 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
     return TDCheckboxGroupContainer(
       contentDirection: TDContentDirection.right,
       selectIds: const ['0'],
-      child: Column(
-        children: const [
+      child: const Column(
+        children: [
           TDCheckbox(
             id: '0',
             title: '选项禁用-已选',

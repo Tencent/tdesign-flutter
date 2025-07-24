@@ -26,7 +26,8 @@ enum TDDropdownMenuDirection {
 typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(BuildContext context);
 
 /// 自定义标签内容
-typedef LabelBuilder = Widget Function(BuildContext context, String label, bool isOpened, int index);
+typedef LabelBuilder = Widget Function(
+    BuildContext context, String label, bool isOpened, int index);
 
 /// 下拉菜单
 class TDDropdownMenu extends StatefulWidget {
@@ -159,11 +160,11 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
       width: widget.width ?? double.infinity,
       decoration: widget.decoration ??
           BoxDecoration(
-            color: TDTheme.of(context).whiteColor1,
+            color: TDTheme.of(context).bgColorContainer,
             border: Border(
               bottom: BorderSide(
-                color: TDTheme.of(context).grayColor3,
-                width: 1,
+                color: TDTheme.of(context).componentStrokeColor,
+                width: 0.5,
               ),
             ),
           ),
@@ -188,7 +189,8 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
               duration: Duration(milliseconds: (widget.duration ?? 200).toInt()),
               vsync: this,
             ));
-    _iconAnimations = _iconControllers?.map((e) => Tween<double>(begin: 0, end: 0.5).animate(e)).toList() ?? [];
+    _iconAnimations =
+        _iconControllers?.map((e) => Tween<double>(begin: 0, end: 0.5).animate(e)).toList() ?? [];
   }
 
   Widget _tabBarContent(int index) {
@@ -202,7 +204,8 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
       },
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: _items![index].tabBarAlign ?? widget.tabBarAlign ?? MainAxisAlignment.center,
+        mainAxisAlignment:
+            _items![index].tabBarAlign ?? widget.tabBarAlign ?? MainAxisAlignment.center,
         children: [Flexible(child: _getText(index)), _getIcon(index)],
       ),
     );
@@ -214,10 +217,10 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
       return widget.labelBuilder!(context, label, _isOpened[index], index);
     }
     var textColor = _disabled(index)
-        ? TDTheme.of(context).fontGyColor4
+        ? TDTheme.of(context).textColorDisabled
         : _isOpened[index]
             ? TDTheme.of(context).brandColor7
-            : TDTheme.of(context).fontGyColor1;
+            : TDTheme.of(context).textColorPrimary;
     return TDText(
       label,
       font: TDTheme.of(context).fontBodyMedium,
@@ -230,14 +233,16 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
   Widget _getIcon(int index) {
     var arrowIcon = _items![index].arrowIcon ??
         widget.arrowIcon ??
-        (widget.direction == TDDropdownMenuDirection.up ? TDIcons.caret_up_small : TDIcons.caret_down_small);
+        (widget.direction == TDDropdownMenuDirection.up
+            ? TDIcons.caret_up_small
+            : TDIcons.caret_down_small);
     return RotationTransition(
       turns: _iconAnimations[index],
       child: Icon(
         arrowIcon,
         size: 24,
         color: _disabled(index)
-            ? TDTheme.of(context).fontGyColor4
+            ? TDTheme.of(context).textColorDisabled
             : _isOpened[index]
                 ? TDTheme.of(context).brandColor7
                 : null,
