@@ -4,7 +4,7 @@ title: 贡献指南
 spline: explain
 ---
 
-## 1.项目地址
+## 1. 项目地址
 https://github.com/Tencent/tdesign-flutter
 
 目录结构:
@@ -19,7 +19,8 @@ tdesign-site/       // tdesign flutter站点
 
 tdesign-adaptation/       // tdesign flutter 版本适配仓库
 ```
-## 2.如何运行
+
+## 2. 如何运行
 ### 2.1 Flutter基础知识
 - Flutter基础介绍：[https://book.flutterchina.club/chapter1/flutter_intro.html](https://book.flutterchina.club/chapter1/flutter_intro.html)
 - Dart语言介绍：[https://book.flutterchina.club/chapter1/dart.html](https://book.flutterchina.club/chapter1/dart.html)
@@ -41,7 +42,7 @@ git clone https://github.com/Tencent/tdesign-flutter.git
 ### 2.3 运行flutter项目
 下面是命令行运行方法，正常也可以不使用命令行，而在IDE直接运行，推荐使用Android Studio进行开发。运行时请选择Android设备和iOS模拟器，不要直接在浏览器运行。
 
-*注：首次开发请先运行tdesign-flutter/tdesign-component/init.sh脚本，它会根据当前flutter版本，选择适合的tdesign-adaptation依赖*
+*注：首次开发请先运行`tdesign-flutter/tdesign-component/init.sh`脚本，它会根据当前flutter版本，选择适合的tdesign-adaptation依赖*
 ```
 // 运行flutter组件项目
 cd tdesign-flutter/tdesign-component/
@@ -57,15 +58,15 @@ flutter run
 ```
 
 ### 2.4 Flutter多版本兼容
-在flutte 3.32版本，sdk代码变更较大，同一代码可能无法同时支持跨版本运行，因此抽离了tdesign-adaptation库，用于进行不同flutter版本之间的代码适配。
+在flutter`3.32`版本，sdk代码变更较大，同一代码可能无法同时支持跨版本运行，因此抽离了`tdesign-adaptation`库，用于进行不同flutter版本之间的代码适配。
 
 
 #### 2.4.1 版本切换
-首次运行，可以先将flutter sdk 切到3.16.9版本，执行tdesign-component/init.sh脚本，配置对应依赖。
+首次运行，可以先将flutter sdk 切到`3.16.9`版本，执行`tdesign-component/init.sh`脚本，配置对应依赖。
 
-开发完成，切换至最新稳定版尝试运行，如果有不兼容代码，需要在tdesign-adaptation库进行适配。
+开发完成，切换至最新稳定版尝试运行，如果有不兼容代码，需要在`tdesign-adaptation`库进行适配。
 
-其中，高于3.32版本的代码，请在feature/3.32_adaptation分支开发，低于3.32版本的代码，请在feature/3.16_adaptation分支开发。
+其中，高于`3.32`版本的代码，请在`feature/3.32_adaptation`分支开发，低于3.32版本的代码，请在feature/3.16_adaptation分支开发。
 
 本地开发tdesign-adaptation，可以修改tdesign-component/pubspec_overrides.yaml和tdesign-component/example/pubspec_overrides.yaml文件，使用本地依赖，内容如下：
 ```yaml
@@ -73,11 +74,8 @@ dependency_overrides:
   tdesign_adaptation:
     path: ../tdesign-adaptation  # 本地相对路径
 ```
-但是，提交git时，请不要将pubspec_overrides.yaml提交到仓库！！！
 
-#### 2.4.2 国际化适配
-由于3.32版本的国际化功能与3.16版本差异比较大，代码生成位置发生变更，无法跨版本兼容。因此，国际化资源代码改为手动依赖方式。如果需要修改字段内容，需要把生成的app_localizations(_en、_zh).dart文件拷贝到example/lib/localizations目录
-
+*但是，提交git时，请不要将pubspec_overrides.yaml提交到仓库！！！*
 
 ### 2.5 运行前端官网项目
 
@@ -100,7 +98,7 @@ npm run site:dev
 <br/>
 
 
-## 3.如何领取issue
+## 3. 如何领取issue
 ### 3.1 一个issue的完整流程：
 - 用户发现功能不满足，查看API文档确认不支持，然后提issue。[常见问题](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-site/FAQ.md)
 - 提了issue后，在群里发出issue链接，方便后续直接沟通，确认详细需求。然后将最终确认结果贴到github的issue上。
@@ -119,20 +117,20 @@ npm run site:dev
 - pre_x.x.x：预计某个版本发布
 - x.x.x: 某个版本已发布
 
-## 4.开发规范
+## 4. 开发规范
 - 组件命名规范：以TD为前缀，组件名称、API名称参考TDesign现有组件和API命名，可以根据flutter原生Widget的特点进行修改。组件API以满足设计要求和使用为准，可根据flutter特点做精简或定制。
 - 组件库用到的所有色值、圆角、字体字号等样式属性需全部定义在主题中。
 - 代码规范遵循腾讯Dart代码规范。
-- 对于系统原有组件，如Text,Image等，应兼容系统原组件功能，只能扩展，不能阉割，以免业务需要使用系统功能时，必须放弃TDesign控件。
+- 对于系统原有组件，如Text、Image等，应兼容系统原组件功能，只能扩展，不能阉割，以免业务需要使用系统功能时，必须放弃TDesign控件。
 - 示例页面尽量使用ExamplePage+ExampleModule+ExampleItem组合，按照示例稿的布局实现；页面写完后，在main.dart中修改exampleMap对应组件的isTodo属性即可。
 - 组件API和演示代码，请参考demo_tool/README.md文件。
-- 组件内部的固定文案,都应该抽离到TDResourceDelegate中统一管理,方便业务进行国际化适配
-- 如果使用的组件TD有封装，尽量使用TD已有组件，而非直接使用系统组件
+- 组件内部的固定文案，都应该抽离到TDResourceDelegate中统一管理，方便业务进行国际化适配。
+- 如果使用的组件TD有封装，尽量使用TD已有组件，而非直接使用系统组件。
 
 
-## 5.验收标准
+## 5. 验收标准
 ### 5.1 pr规则
-- pr目标分支为develop分支，请勿直接往main分支合并
+- pr目标分支为`develop`分支，**请勿直接往main分支合并！**
 - 标题格式：`组件类名`: 修改描述（示例：`TDUpload`: 新增Upload组件；`TDBottomTabBar`: 修复iconText模式，底部溢出2.5像素）
 - 勾选规则：
   > 1.只要有新增参数，就勾选”新特性提交“
@@ -140,7 +138,7 @@ npm run site:dev
   > 2.只修改内部bug，未新增参数，才勾选”日常 bug 修复“
   > 
   > 3.其他选项视具体改动判断
-- ”相关issue“处带上修复的issue链接
+- “相关issue”处带上修复的[issue链接](https://github.com/Tencent/tdesign-flutter/issues)
 - 其他内容视情况可选填
 
 
@@ -155,7 +153,7 @@ npm run site:dev
 - tdesign-component/demo_tool/all_build.sh文件中是否包含对应组件API的脚本，若未包含，请参考tdesign-component/demo_tool/README.md及其他组件示例添加脚本。请确保提交的all_build.sh中触发的是./bin/api_tool_linux，因为github自动打包的环境是linux系统
 - 检测组件属性的注释是否完善
 - 如果组件有对应的系统组件，检测是否有系统组件支持的参数TD组件不支持
-- 检测组件与https://tdesign.tencent.com/mobile-vue/overview 是否有含义相同但命名不同的组件，如果有，尽量保持命名一致。
+- 检测组件与 https://tdesign.tencent.com/mobile-vue/overview 是否有含义相同但命名不同的组件，如果有，尽量保持命名一致。
 - tdesign-component/demo_tool/all_build.sh中的名字与tdesign-component/example/lib/config.dart的名字需保持一致
 <br/>
 <img width="720" src="https://tdesign.tencent.com/flutter/assets/contributing_api_name.png" />
@@ -187,10 +185,10 @@ npm run site:dev
 
 #### 自测内容：
 - 组件改动后，整体是否有明显的布局溢出等展示异常
-- 新增功能是否在”单元测试“栏目下？（需把示例放在ExamplePage的test字段里）
+- 新增功能是否在“单元测试”栏目下？（需把示例放在ExamplePage的test字段里）
 - 验证功能是否符合预期
-- 点击右上角”i“图标，查看API文档是否正确。（若不正确，检测all_build.sh是否配置了对应组件的脚本）
-- 点击右上角"</>"图标，检测示例代码是否生成。（若未生成，参考其他有生成的模块修改）
+- 点击右上角“`i`”图标，查看API文档是否正确。（若不正确，检测all_build.sh是否配置了对应组件的脚本）
+- 点击右上角“`</>`”图标，检测示例代码是否生成。（若未生成，参考其他有生成的模块修改）
 - 如涉及视觉改动，请联系负责人拉取设计同学进行视觉走查
 - 英文环境、切换主题后是否展示正常
 
@@ -198,4 +196,4 @@ npm run site:dev
 pr打包完成后，通知负责人拉设计同学进群，将pr链接发到群里。设计同学根据“设计走查流水线地址”的链接，替换内网域名后，下载ipa包进行走查。
 
 ## 6.合并pr
-issue验收完成后，由负责人合并pr，并将issue的标签改为pre_x.x.x
+issue验收完成后，由负责人合并pr，并将issue的标签改为pre_x.x.x。
