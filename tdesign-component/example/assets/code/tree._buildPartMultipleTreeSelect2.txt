@@ -1,0 +1,25 @@
+
+  Widget _buildPartMultipleTreeSelect2(BuildContext context) {
+    var options = <TDSelectOption>[];
+
+    for (var i = 1; i <= 2; i++) {
+      options.add(TDSelectOption(
+          label: '${i == 1 ? '单选' : '多选'}', value: i, children: []));
+
+      for (var j = 1; j <= 10; j++) {
+        options[i - 1].children.add(TDSelectOption(
+            label: '选项$i.$j',
+            value: i * 10 + j,
+            children: [],
+            multiple: i == 2));
+      }
+    }
+
+    return TDTreeSelect(
+      options: options,
+      defaultValue: values1,
+      onChange: (val, level) {
+        print('$val, $level');
+      },
+    );
+  }
