@@ -96,7 +96,7 @@ class _TDIndexesListState extends State<TDIndexesList> {
                       (e) {
                         final isActive = value == e;
                         if (widget.builderIndex != null) {
-                          return widget.builderIndex!(context, e, isActive);
+                          return Container(key: _containerKeys[e], child: widget.builderIndex!(context, e, isActive),);
                         }
                         return Stack(
                           clipBehavior: Clip.none,
