@@ -15,6 +15,8 @@ import 'td_dropdown_popup.dart';
 typedef TDDropdownItemContentBuilder = Widget Function(
     BuildContext context, _TDDropdownItemState itemState, TDDropdownPopup? popupState);
 
+typedef TDDropdownItemOptionsCallback = void Function(List<TDDropdownItemOption>? options);
+
 List<TDDropdownItemOption?> _getSelected(List<TDDropdownItemOption>? options) {
   return options?.where((element) => element.selected == true).toList() ?? [];
 }
@@ -26,6 +28,27 @@ int _num(List list, int? n) {
     return val;
   }
   return list.length + list.length % val;
+}
+
+/// 下拉菜单控制器
+class TDDropdownItemController {
+  _TDDropdownItemState? _state;
+
+
+  void _bindState(_TDDropdownItemState _tdDropdownMenuState) {
+    _state = _tdDropdownMenuState;
+  }
+
+  /// 将所有选项重置为未选中状态
+  void reset() {
+    _state?.reset();
+  }
+
+  /// 更新选项内容。注意：增删内容可能导致高度展示异常，请谨慎操作
+  void updateOptions(TDDropdownItemOptionsCallback callback) {
+    _state?.updateOptions(callback);
+  }
+
 }
 
 /// 下拉菜单内容
@@ -47,6 +70,7 @@ class TDDropdownItem<T> extends StatefulWidget {
     this.tabBarWidth,
     this.tabBarAlign,
     this.tabBarFlex = 1,
+    this.controller,
   }) : super(key: key);
 
   /// 是否禁用
@@ -94,6 +118,9 @@ class TDDropdownItem<T> extends StatefulWidget {
   /// 该item在menu上的宽度占比，仅在[TDDropdownMenu.isScrollable]为false时有效
   final int? tabBarFlex;
 
+  /// 下来菜单控制器
+  final TDDropdownItemController? controller;
+
   static const double operateHeight = 73;
 
   double? get minContentHeight =>
@@ -119,6 +146,12 @@ class TDDropdownItem<T> extends StatefulWidget {
 class _TDDropdownItemState extends State<TDDropdownItem> {
   late TDDropdownPopup popupState;
   late ValueNotifier<TDDropdownMenuDirection> directionListenable;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller?._bindState(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -297,10 +330,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
             text: context.resource.reset,
             theme: TDButtonTheme.light,
             onTap: () {
-              widget.options?.forEach((element) {
-                element.selected = false;
-              });
-              setState(() {});
+              reset();
               widget.onReset?.call();
             },
           ),
@@ -367,6 +397,18 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
     }
     await Navigator.maybePop(context);
   }
+
+  void reset() {
+    widget.options?.forEach((element) {
+      element.selected = false;
+    });
+    setState(() {});
+  }
+
+  void updateOptions(TDDropdownItemOptionsCallback callback) {
+    callback(widget.options);
+    setState(() {});
+  }
 }
 
 /// 选项数据
@@ -382,19 +424,19 @@ class TDDropdownItemOption {
   });
 
   /// 选项值
-  final String value;
+  String value;
 
   /// 选项标题
   final String label;
 
   /// 是否禁用
-  final bool? disabled;
+  bool? disabled;
 
   /// 分组，相同的为一组
   final String? group;
 
   /// 是否选中
-  late bool? selected;
+  bool selected;
 
   /// 选中颜色
   final Color? selectedColor;
