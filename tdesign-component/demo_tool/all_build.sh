@@ -114,7 +114,7 @@
 # dialog
 ./bin/api_tool_linux generate --folder ../lib/src/components/dialog --name TDAlertDialog,TDConfirmDialog,TDDialogButtonOptions,TDDialogButtonStyle,TDDialogScaffold,TDDialogTitle,TDDialogContent,TDDialogInfoWidget,HorizontalNormalButtons,HorizontalTextButtons,TDDialogButton,TDDialogImagePosition,TDImageDialog,TDInputDialog --folder-name dialog --output ../example/assets/api/ --only-api
 # dropdown_menu
-./bin/api_tool_linux generate --folder ../lib/src/components/dropdown_menu --name TDDropdownMenu,TDDropdownMenuDirection,TDDropdownItem,TDDropdownItemOption --folder-name dropdown-menu --output ../example/assets/api/ --only-api --get-comments
+./bin/api_tool_linux generate --folder ../lib/src/components/dropdown_menu --name TDDropdownMenu,TDDropdownMenuDirection,TDDropdownItem,TDDropdownItemOption,TDDropdownItemController --folder-name dropdown-menu --output ../example/assets/api/ --only-api --get-comments
 # loading
 ./bin/api_tool_linux generate --file ../lib/src/components/loading/td_loading.dart --name TDLoading --folder-name loading --output ../example/assets/api/ --only-api
 # message
