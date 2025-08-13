@@ -298,4 +298,10 @@ class _TDSideBarState extends State<TDSideBar> {
                       );
                     }))));
   }
+
+  @override
+  void didUpdateWidget(covariant TDSideBar oldWidget) {
+    getDisplayChildren();
+    super.didUpdateWidget(oldWidget);
+  }
 }
