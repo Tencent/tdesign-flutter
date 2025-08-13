@@ -56,7 +56,7 @@ class TDDropdownMenu extends StatefulWidget {
   final List<TDDropdownItem>? items;
 
   /// 是否在点击遮罩层后关闭菜单
-  final bool? closeOnClickOverlay;
+  final bool closeOnClickOverlay;
 
   /// 菜单展开方向（down、up、auto）
   final TDDropdownMenuDirection? direction;
