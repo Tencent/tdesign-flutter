@@ -26,7 +26,7 @@ class TDDropdownPopup {
   final FutureCallback handleClose;
   final TDDropdownPopupDirection? direction;
   final bool? showOverlay;
-  final bool? closeOnClickOverlay;
+  final bool closeOnClickOverlay;
   final Duration? duration;
 
   /// _overlay1：下拉方向的
