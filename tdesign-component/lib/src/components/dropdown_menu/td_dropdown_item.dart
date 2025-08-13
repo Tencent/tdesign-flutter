@@ -118,7 +118,7 @@ class TDDropdownItem<T> extends StatefulWidget {
   /// 该item在menu上的宽度占比，仅在[TDDropdownMenu.isScrollable]为false时有效
   final int? tabBarFlex;
 
-  /// 下来菜单控制器
+  /// 下拉菜单控制器
   final TDDropdownItemController? controller;
 
   static const double operateHeight = 73;
