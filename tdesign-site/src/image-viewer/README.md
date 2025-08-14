@@ -73,17 +73,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDImageViewer
-
-#### 静态方法
-
-| 名称 | 返回类型 | 参数 | 说明 |
-| --- | --- | --- | --- |
-| showImageViewer |  |   required BuildContext context,  required List<dynamic> images,  List<String>? labels,  bool? closeBtn,  bool? deleteBtn,  bool? showIndex,  bool? loop,  bool? autoplay,  int? duration,  Color? bgColor,  Color? navBarBgColor,  Color? iconColor,  TextStyle? labelStyle,  TextStyle? indexStyle,  Color? modalBarrierColor,  bool? barrierDismissible,  int? defaultIndex,  double? width,  double? height,  OnIndexChange? onIndexChange,  OnClose? onClose,  OnDelete? onDelete,  bool? ignoreDeleteError,  OnImageTap? onTap,  OnLongPress? onLongPress,  LeftItemBuilder? leftItemBuilder,  RightItemBuilder? rightItemBuilder, | 显示图片预览 |
-
-```
-```
- ### TDImageViewerWidget
+### TDImageViewerWidget
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -113,6 +103,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onLongPress | OnLongPress? | - | 长按图片 |
 | leftItemBuilder | LeftItemBuilder? | - | 左侧自定义操作 |
 | rightItemBuilder | RightItemBuilder? | - | 右侧自定义操作 |
+
+```
+```
+ ### TDImageViewer
+
+#### 静态方法
+
+| 名称 | 返回类型 | 参数 | 说明 |
+| --- | --- | --- | --- |
+| showImageViewer |  |   required BuildContext context,  required List<dynamic> images,  List<String>? labels,  bool? closeBtn,  bool? deleteBtn,  bool? showIndex,  bool? loop,  bool? autoplay,  int? duration,  Color? bgColor,  Color? navBarBgColor,  Color? iconColor,  TextStyle? labelStyle,  TextStyle? indexStyle,  Color? modalBarrierColor,  bool? barrierDismissible,  int? defaultIndex,  double? width,  double? height,  OnIndexChange? onIndexChange,  OnClose? onClose,  OnDelete? onDelete,  bool? ignoreDeleteError,  OnImageTap? onTap,  OnLongPress? onLongPress,  LeftItemBuilder? leftItemBuilder,  RightItemBuilder? rightItemBuilder, | 显示图片预览 |
 
 
   
