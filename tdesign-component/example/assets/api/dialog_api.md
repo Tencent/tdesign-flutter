@@ -1,5 +1,29 @@
 ## API
-### TDAlertDialog
+### TDImageDialog
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key |  | - |  |
+| image | Image | - | 图片 |
+| imagePosition | TDDialogImagePosition? | TDDialogImagePosition.top | 图片位置 |
+| backgroundColor | Color | Colors.white | 背景颜色 |
+| radius | double | 12.0 | 圆角 |
+| title | String? | - | 标题 |
+| titleColor | Color | const Color(0xE6000000) | 标题颜色 |
+| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
+| contentWidget | Widget? | - | 内容Widget |
+| content | String? | - | 内容 |
+| contentColor | Color? | - | 内容颜色 |
+| leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
+| rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
+| showCloseButton | bool? | - | 显示右上角关闭按钮 |
+| padding | EdgeInsets? | - | 内容内边距 |
+| buttonWidget | Widget? | - | 自定义按钮 |
+
+```
+```
+ ### TDAlertDialog
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -34,14 +58,13 @@
 
 ```
 ```
- ### TDImageDialog
+ ### TDConfirmDialog
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | key |  | - |  |
-| image | Image | - | 图片 |
-| imagePosition | TDDialogImagePosition? | TDDialogImagePosition.top | 图片位置 |
+| action |  Function()? | - | 点击 |
 | backgroundColor | Color | Colors.white | 背景颜色 |
 | radius | double | 12.0 | 圆角 |
 | title | String? | - | 标题 |
@@ -50,36 +73,13 @@
 | contentWidget | Widget? | - | 内容Widget |
 | content | String? | - | 内容 |
 | contentColor | Color? | - | 内容颜色 |
-| leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
-| rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| padding | EdgeInsets? | - | 内容内边距 |
-| buttonWidget | Widget? | - | 自定义按钮 |
-
-```
-```
- ### TDInputDialog
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| textEditingController | TextEditingController | - | 输入controller |
-| backgroundColor | Color | Colors.white | 背景颜色 |
-| radius | double | 12.0 | 圆角 |
-| title | String? | - | 标题 |
-| titleColor | Color | const Color(0xE6000000) | 标题颜色 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| contentWidget | Widget? | - | 内容Widget |
-| content | String? | - | 内容 |
-| hintText | String? | '' | 输入提示 |
-| contentColor | Color? | - | 内容颜色 |
-| leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
-| rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
+| contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
+| buttonText | String? | - | 按钮文字 |
+| buttonTextColor | Color? | - | 按钮文字颜色 |
+| buttonStyle | TDDialogButtonStyle | TDDialogButtonStyle.normal | 按钮样式 |
+| showCloseButton | bool? | - | 右上角关闭按钮 |
 | padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
 | buttonWidget | Widget? | - | 自定义按钮 |
-| customInputWidget | Widget? | - | 自定义输入框 |
 
 ```
 ```
@@ -177,31 +177,6 @@
 
 ```
 ```
- ### TDConfirmDialog
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| action |  Function()? | - | 点击 |
-| backgroundColor | Color | Colors.white | 背景颜色 |
-| radius | double | 12.0 | 圆角 |
-| title | String? | - | 标题 |
-| titleColor | Color | const Color(0xE6000000) | 标题颜色 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| contentWidget | Widget? | - | 内容Widget |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
-| buttonText | String? | - | 按钮文字 |
-| buttonTextColor | Color? | - | 按钮文字颜色 |
-| buttonStyle | TDDialogButtonStyle | TDDialogButtonStyle.normal | 按钮样式 |
-| showCloseButton | bool? | - | 右上角关闭按钮 |
-| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
-| buttonWidget | Widget? | - | 自定义按钮 |
-
-```
-```
  ### TDDialogButtonOptions
 #### 默认构造方法
 
@@ -216,3 +191,28 @@
 | theme | TDButtonTheme? | - | 按钮类型 |
 | height | double? | - | 按钮高度 |
 | fontWeight | FontWeight? | - | 字体粗细 |
+
+```
+```
+ ### TDInputDialog
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key |  | - |  |
+| textEditingController | TextEditingController | - | 输入controller |
+| backgroundColor | Color | Colors.white | 背景颜色 |
+| radius | double | 12.0 | 圆角 |
+| title | String? | - | 标题 |
+| titleColor | Color | const Color(0xE6000000) | 标题颜色 |
+| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
+| contentWidget | Widget? | - | 内容Widget |
+| content | String? | - | 内容 |
+| hintText | String? | '' | 输入提示 |
+| contentColor | Color? | - | 内容颜色 |
+| leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
+| rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
+| showCloseButton | bool? | - | 显示右上角关闭按钮 |
+| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
+| buttonWidget | Widget? | - | 自定义按钮 |
+| customInputWidget | Widget? | - | 自定义输入框 |

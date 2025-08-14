@@ -21,3 +21,6 @@
 | type | TDUploadBoxType | TDUploadBoxType.roundedSquare | Box类型 |
 | disabled | bool? | false | 是否禁用 |
 | enabledReplaceType | bool? | false | 是否启用replace功能 |
+| wrapSpacing | double? | - | 多图布局时的 spacing |
+| wrapRunSpacing | double? | - | 多图布局时的 runSpacing |
+| wrapAlignment | WrapAlignment? | - | 多图对其方式 |

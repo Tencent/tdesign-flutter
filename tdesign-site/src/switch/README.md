@@ -31,15 +31,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       const TDSwitch(),
       title: '基础开关',
     );
-  }ged: (value) {
-          setState(() {
-            _formDisableState = value;
-          });
-          return false;
-        },
-      ),
-      title: '禁用态',
-    );
   }</pre>
 
 </td-code-block>
