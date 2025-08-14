@@ -6,6 +6,22 @@ docClass: timeline
 ---
 
 
+## 🌈 0.2.4 `2025-08-14` 
+### 🚀 Features
+- `TDUpload`: 支持设置多图间距和对其方式 @cyjaysong ([#677](https://github.com/Tencent/tdesign-flutter/pull/677))
+- `TDTreeSelect`: 新增自定义宽度和最大行数字段，修复第二级宽度固定，长文本溢出问题 @123dw-bot ([#694](https://github.com/Tencent/tdesign-flutter/pull/694))
+- `TDDropdownMenu`: 增加TDDropdownItemController，允许外部重置和更改下拉选项 @Luozf12345 ([#697](https://github.com/Tencent/tdesign-flutter/pull/697))
+- `TDStepper`:Stepper增加controller参数，可用于实时修改value @Luozf12345 ([#699](https://github.com/Tencent/tdesign-flutter/pull/699))
+
+### 🐞 Bug Fixes
+- `TDIndexes`: 修复自定义索引无法响应点击事件 @epoll-j ([#692](https://github.com/Tencent/tdesign-flutter/pull/692))
+- `TDPopup`: 修复close方法触发两次bug @epoll-j ([#690](https://github.com/Tencent/tdesign-flutter/pull/690))
+- `TDSideBar`:修复TDSideBar组件初始化后children无法更新的问题 @Luozf12345 ([#698](https://github.com/Tencent/tdesign-flutter/pull/698))
+
+### 🚧 Others
+- `其他`:恢复对flutter SDK 3.32版本的默认适配
+
+
 ## 🌈 0.2.3 `2025-07-09` 
 ### 🚀 Features
 - `TDPicker`: 支持切换时优先保持级联的选项值 @epoll-j ([#666](https://github.com/Tencent/tdesign-flutter/pull/666))
