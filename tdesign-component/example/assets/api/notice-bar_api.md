@@ -1,5 +1,28 @@
 ## API
-### TDNoticeBar
+### TDNoticeBarStyle
+#### 简介
+公告栏样式
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext? | - | 上下文 |
+| backgroundColor | Color? | - | 公告栏背景色 |
+| textStyle | TextStyle? | - | 公告栏内容样式 |
+| leftIconColor | Color? | - | 公告栏左侧图标颜色 |
+| rightIconColor | Color? | - | 公告栏右侧图标颜色 |
+| padding | EdgeInsetsGeometry? | - | 公告栏内边距 |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TDNoticeBarStyle.generateTheme  | 根据主题生成样式 |
+
+```
+```
+ ### TDNoticeBar
 #### 简介
 
 #### 默认构造方法
@@ -21,26 +44,3 @@
 | onTap | ValueChanged? | - | 点击事件 |
 | height | double | 22 | 文字高度 (当使用prefixIcon或suffixIcon时，icon大小值等于该属性） |
 | maxLines | int? | 1 | 文本行数（仅静态有效） |
-
-```
-```
- ### TDNoticeBarStyle
-#### 简介
-公告栏样式
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext? | - | 上下文 |
-| backgroundColor | Color? | - | 公告栏背景色 |
-| textStyle | TextStyle? | - | 公告栏内容样式 |
-| leftIconColor | Color? | - | 公告栏左侧图标颜色 |
-| rightIconColor | Color? | - | 公告栏右侧图标颜色 |
-| padding | EdgeInsetsGeometry? | - | 公告栏内边距 |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TDNoticeBarStyle.generateTheme  | 根据主题生成样式 |
