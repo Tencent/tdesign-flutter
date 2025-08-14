@@ -1,3 +1,20 @@
+## 🌈 0.2.4 `2025-08-14`
+### 🚀 Features
+- `TDUpload`: Support setting image spacing and alignment @cyjaysong ([#677](https://github.com/Tencent/tdesign-flutter/pull/677))
+- `TDTreeSelect`: Added custom width and max lines fields, fixed fixed width for second level and long text overflow issues @123dw-bot ([#694](https://github.com/Tencent/tdesign-flutter/pull/694))
+- `TDDropdownMenu`: Added TDDropdownItemController to allow external reset and change of dropdown options @Luozf12345 ([#697](https://github.com/Tencent/tdesign-flutter/pull/697))
+- `TDStepper`: Added controller parameter to Stepper for real-time value modification @Luozf12345 ([#699](https://github.com/Tencent/tdesign-flutter/pull/699))
+
+### 🐞 Bug Fixes
+- `TDIndexes`: Fixed issue where custom indexes could not respond to click events @epoll-j ([#692](https://github.com/Tencent/tdesign-flutter/pull/692))
+- `TDPopup`: Fixed bug where close method was triggered twice @epoll-j ([#690](https://github.com/Tencent/tdesign-flutter/pull/690))
+- `TDSideBar`: Fixed issue where children of TDSideBar component could not be updated after initialization @Luozf12345 ([#698](https://github.com/Tencent/tdesign-flutter/pull/698))
+
+### 🚧 Others
+- `Misc`: Restored default adaptation for flutter SDK version 3.32
+
+
+
 ## 🌈 0.2.3 `2025-07-09`
 ### 🚀 Features
 - `TDPicker`: Supports prioritizing the retention of cascaded option values when switching @epoll-j ([#666](https://github.com/Tencent/tdesign-flutter/pull/666))
