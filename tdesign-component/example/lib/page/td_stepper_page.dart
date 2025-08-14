@@ -122,14 +122,18 @@ class _TDStepperPageState extends State<TDStepperPage> {
   var controller = TDStepperController()..value = 1;
   @Demo(group: 'stepper')
   Widget _customStepperValue(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        TDStepper(theme: TDStepperTheme.filled, controller: controller,),
-        TDButton(text: 'value * 2', onTap: (){
-          controller.value *= 2;
-        },)
-      ],
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          TDStepper(theme: TDStepperTheme.filled, controller: controller,),
+          TDButton(text: 'value * 2', onTap: (){
+            controller.value *= 2;
+          },)
+        ],
+      ),
     );
   }
 }
