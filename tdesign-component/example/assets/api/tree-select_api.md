@@ -8,6 +8,8 @@
 | value | int | - | 值 |
 | children | List<TDSelectOption> | const [] | 子选项 |
 | multiple | bool | false | 当前子项支持多选 |
+| maxLines | int | 1 | 最大显示行数 |
+| columnWidth | double? | - | 自定义宽度，允许用户指定每个选项的宽度 |
 
 ```
 ```
