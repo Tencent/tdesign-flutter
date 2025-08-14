@@ -161,9 +161,9 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
 ## 组件规划
 
-- 开发中组件: Form
-
-- 其他事项: API优化,单元测试,多端适配,深色模式
+- 新增规划中组件: 瀑布流
+- 开发中功能：深色模式
+- 其他事项: API优化,单元测试,多端适配,文本居中优化
 
 ## 基础库版本
 

@@ -127,6 +127,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onBlur | VoidCallback? | - | 输入框失去焦点时触发 |
 | onChange | ValueChanged<int>? | - | 数值发生变更时触发 |
 | onOverlimit | TDStepperOverlimitFunction? | - | 数值超出限制时触发 |
+| controller | TDStepperController? | - | Stepper控制器 |
 
 
   

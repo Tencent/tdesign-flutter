@@ -1,35 +1,5 @@
 ## API
-### TDFormItem
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| type | TDFormItemType | - | 表格单元需要使用的组件类型 |
-| child | Widget? | - | 表单子组件 |
-| formItemNotifier |  | - |  |
-| label | String? | - | 表单项标签左侧展示的内容 |
-| labelWidget | Widget? | - | 自定义标签 |
-| help | String? | - | TDInput 默认显示文字 |
-| name | String? | - | 表单字段名称 |
-| labelAlign | TextAlign? | - | TODO: item 标签对齐方式 |
-| contentAlign | TextAlign? | - | 表单显示内容对齐方式： |
-| labelWidth | double? | - | 标签宽度，如果提供则覆盖Form的labelWidth |
-| tipAlign | TextAlign? | - | 组件提示内容对齐方式 |
-| requiredMark | bool? | true | 是否显示必填标记（*） |
-| formRules | List<TDFormValidation>? | - | 整个表单的校验规则 |
-| itemRule | List? | - | 表单项验证规则 |
-| showErrorMessage | bool | true | 是否显示错误信息 |
-| indicator | bool? | - | TDTextarea 的属性，指示器 |
-| additionInfo | String? | - | TDInput的辅助信息 |
-| select | String | '' | 选择器 适用于日期选择器等 |
-| selectFn | Function? | - | 选择器方法 适用于日期选择器等 |
-| hintText | null | '' | 提示内容 |
-| radios |  | - |  |
-| key |  | - |  |
-
-```
-```
- ### TDFormValidation
+### TDFormValidation
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -65,3 +35,33 @@
 | onReset | Function? | - | 表单重置时触发 |
 | formController | FormController? | - | 表单控制器 |
 | btnGroup | List<Widget>? | - | 表单按钮组 |
+
+```
+```
+ ### TDFormItem
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| type | TDFormItemType | - | 表格单元需要使用的组件类型 |
+| child | Widget? | - | 表单子组件 |
+| formItemNotifier |  | - |  |
+| label | String? | - | 表单项标签左侧展示的内容 |
+| labelWidget | Widget? | - | 自定义标签 |
+| help | String? | - | TDInput 默认显示文字 |
+| name | String? | - | 表单字段名称 |
+| labelAlign | TextAlign? | - | TODO: item 标签对齐方式 |
+| contentAlign | TextAlign? | - | 表单显示内容对齐方式： |
+| labelWidth | double? | - | 标签宽度，如果提供则覆盖Form的labelWidth |
+| tipAlign | TextAlign? | - | 组件提示内容对齐方式 |
+| requiredMark | bool? | true | 是否显示必填标记（*） |
+| formRules | List<TDFormValidation>? | - | 整个表单的校验规则 |
+| itemRule | List? | - | 表单项验证规则 |
+| showErrorMessage | bool | true | 是否显示错误信息 |
+| indicator | bool? | - | TDTextarea 的属性，指示器 |
+| additionInfo | String? | - | TDInput的辅助信息 |
+| select | String | '' | 选择器 适用于日期选择器等 |
+| selectFn | Function? | - | 选择器方法 适用于日期选择器等 |
+| hintText | null | '' | 提示内容 |
+| radios |  | - |  |
+| key |  | - |  |

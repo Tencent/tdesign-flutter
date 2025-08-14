@@ -267,7 +267,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDTableCol
+### TDTableEmpty
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| assetUrl | String? | - | 空状态图片 |
+| text | String? | - | 空状态文字 |
+
+```
+```
+ ### TDTableCol
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -284,16 +294,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | selection | bool? | - | 行是否显示复选框，自定义列时无效 |
 | selectable | SelectableFunc? | - | 当前行CheckBox是否可选，仅selection：true有效 |
 | checked | RowCheckFunc? | - | 当前行是否选中 |
-
-```
-```
- ### TDTableEmpty
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| assetUrl | String? | - | 空状态图片 |
-| text | String? | - | 空状态文字 |
 
 ```
 ```
