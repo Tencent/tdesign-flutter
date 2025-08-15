@@ -29,6 +29,7 @@ class TDFormItem extends StatefulWidget {
     this.select = '',
     this.selectFn,
     this.hintText = '',
+    this.padding = const EdgeInsets.all(16),
     Map<String, String>? radios,
     Key? key,
   }) : super(key: key);
@@ -94,6 +95,10 @@ class TDFormItem extends StatefulWidget {
 
   ///提示内容
   final hintText;
+
+  /// 表单项的内边距
+  final EdgeInsets padding;
+
   @override
   _TDFormItemState createState() => _TDFormItemState();
 }
@@ -304,7 +309,7 @@ class _TDFormItemState extends State<TDFormItem> {
               color: TDTheme.of(context).whiteColor1,
             ),
             child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: widget.padding,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -328,7 +333,7 @@ class _TDFormItemState extends State<TDFormItem> {
               color: TDTheme.of(context).whiteColor1,
             ),
             child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: widget.padding,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -355,7 +360,7 @@ class _TDFormItemState extends State<TDFormItem> {
             color: theme.whiteColor1,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: widget.padding,
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Visibility(
                 visible: FormIsHorizontal,
@@ -378,7 +383,7 @@ class _TDFormItemState extends State<TDFormItem> {
               color: TDTheme.of(context).whiteColor1,
             ),
             child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: widget.padding,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -411,7 +416,7 @@ class _TDFormItemState extends State<TDFormItem> {
         return Container(
           decoration: BoxDecoration(color: theme.whiteColor1),
           child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: widget.padding,
               child: Column(
                 children: [
                   Visibility(
@@ -493,7 +498,7 @@ class _TDFormItemState extends State<TDFormItem> {
       },
       child: Container(
         color: TDTheme.of(context).whiteColor1,
-        padding: const EdgeInsets.all(16),
+        padding: widget.padding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

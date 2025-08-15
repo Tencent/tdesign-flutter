@@ -278,10 +278,9 @@ class _TDFormPageState extends State<TDFormPage> {
             help: '请输入用户名',
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['name'],
-
-            /// 控制单个 item 是否展示错误提醒
             showErrorMessage: true,
             requiredMark: true,
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: TDInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
@@ -309,6 +308,7 @@ class _TDFormPageState extends State<TDFormPage> {
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['password'],
             showErrorMessage: true,
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: TDInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
@@ -337,6 +337,7 @@ class _TDFormPageState extends State<TDFormPage> {
             labelWidth: 82.0,
             showErrorMessage: true,
             formItemNotifier: _formItemNotifier['gender'],
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: TDRadioGroup(
               spacing: 0,
               direction: Axis.horizontal,
@@ -371,6 +372,7 @@ class _TDFormPageState extends State<TDFormPage> {
             formItemNotifier: _formItemNotifier['birth'],
             hintText:'请输入内容',
             select: _selected_1,
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             selectFn: (BuildContext context) {
               if (_formDisableState) {
                 return;
@@ -395,6 +397,7 @@ class _TDFormPageState extends State<TDFormPage> {
             hintText:'请输入内容',
             select: _selected_2,
             formItemNotifier: _formItemNotifier['place'],
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             selectFn: (BuildContext context) {
               if (_formDisableState) {
                 return;
@@ -420,23 +423,24 @@ class _TDFormPageState extends State<TDFormPage> {
             },
           ),
           TDFormItem(
-              label: '年限',
-              name: 'age',
-              labelWidth: 82.0,
-              type: TDFormItemType.stepper,
-              formItemNotifier: _formItemNotifier['age'],
-              child: Padding(
-                padding: EdgeInsets.only( right: 18),
-                child: TDStepper(
-                  theme: TDStepperTheme.filled,
-                  disabled: _formDisableState,
-                  eventController: _stepController!,
-                  value:int.parse(_formData['age']),
-                  onChange: (value) {
-                    _formItemNotifier['age']?.upDataForm('${value}');
-                  },
-                ),
-              )),
+            label: '年限',
+            name: 'age',
+            labelWidth: 82.0,
+            type: TDFormItemType.stepper,
+            formItemNotifier: _formItemNotifier['age'],
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Padding(
+              padding: EdgeInsets.only( right: 18),
+              child: TDStepper(
+                theme: TDStepperTheme.filled,
+                disabled: _formDisableState,
+                eventController: _stepController!,
+                value:int.parse(_formData['age']),
+                onChange: (value) {
+                  _formItemNotifier['age']?.upDataForm('${value}');
+                },
+              ),
+            )),
           TDFormItem(
             label: '自我评价',
             name: 'description',
@@ -444,6 +448,7 @@ class _TDFormPageState extends State<TDFormPage> {
             type: TDFormItemType.rate,
             labelWidth: 82.0,
             formItemNotifier: _formItemNotifier['description'],
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -463,55 +468,58 @@ class _TDFormPageState extends State<TDFormPage> {
             ),
           ),
           TDFormItem(
-              label: '个人简介',
-              labelWidth: 82.0,
-              name: 'resume',
-              type: TDFormItemType.textarea,
-              formItemNotifier: _formItemNotifier['resume'],
-              child: Padding(
-                padding: EdgeInsets.only(top: _isFormHorizontal?0:8,bottom: 4),
-                child: TDTextarea(
-                  backgroundColor: Colors.red,
-                  padding: EdgeInsets.all(0),
-                  hintText: '请输入个人简介',
-                  maxLength: 500,
-                  indicator: true,
-                  readOnly: _formDisableState,
-                  layout: TDTextareaLayout.vertical,
-                  controller: _controller[2],
-                  showBottomDivider: false,
-                  onChanged: (value) {
-                    _formItemNotifier['resume']?.upDataForm(value);
-                  },
-                ),
-              )),
+            label: '个人简介',
+            labelWidth: 82.0,
+            name: 'resume',
+            type: TDFormItemType.textarea,
+            formItemNotifier: _formItemNotifier['resume'],
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Padding(
+              padding: EdgeInsets.only(top: _isFormHorizontal?0:8,bottom: 4),
+              child: TDTextarea(
+                backgroundColor: Colors.red,
+                padding: EdgeInsets.all(0),
+                hintText: '请输入个人简介',
+                maxLength: 500,
+                indicator: true,
+                readOnly: _formDisableState,
+                layout: TDTextareaLayout.vertical,
+                controller: _controller[2],
+                showBottomDivider: false,
+                onChanged: (value) {
+                  _formItemNotifier['resume']?.upDataForm(value);
+                },
+              ),
+            )),
+
           TDFormItem(
-              label: '上传图片',
-              name: 'photo',
-              labelWidth: 82.0,
-              type: TDFormItemType.upLoadImg,
-              formItemNotifier: _formItemNotifier['photo'],
-              child: Padding(
-                padding: EdgeInsets.only(top:4,bottom: 4),
-                child: TDUpload(
-                  files: files,
-                  multiple: true,
-                  max: 6,
-                  onError: print,
-                  onValidate: print,
-                  disabled: _formDisableState,
-                  onChange: ((imgList, type) {
-                    if (_formDisableState) {
-                      return;
-                    }
-                    files = _onValueChanged(files ?? [], imgList, type);
-                    List imgs = files.map((e) => e.remotePath ?? e.assetPath).toList();
-                    setState(() {
-                      _formItemNotifier['photo'].upDataForm(imgs.join(','));
-                    });
-                  }),
-                ),
-              ))
+            label: '上传图片',
+            name: 'photo',
+            labelWidth: 82.0,
+            type: TDFormItemType.upLoadImg,
+            formItemNotifier: _formItemNotifier['photo'],
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Padding(
+              padding: EdgeInsets.only(top:4,bottom: 4),
+              child: TDUpload(
+                files: files,
+                multiple: true,
+                max: 6,
+                onError: print,
+                onValidate: print,
+                disabled: _formDisableState,
+                onChange: ((imgList, type) {
+                  if (_formDisableState) {
+                    return;
+                  }
+                  files = _onValueChanged(files ?? [], imgList, type);
+                  List imgs = files.map((e) => e.remotePath ?? e.assetPath).toList();
+                  setState(() {
+                    _formItemNotifier['photo'].upDataForm(imgs.join(','));
+                  });
+                }),
+              ),
+            ))
         ],
         btnGroup: [
           Container(
