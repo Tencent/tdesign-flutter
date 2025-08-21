@@ -14,6 +14,9 @@
   <a href="https://pub.dev/packages/tdesign_flutter/score">
     <img src="https://img.shields.io/pub/dm/tdesign_flutter" alt="Downloads">
   </a>
+  <a href="https://deepwiki.com/Tencent/tdesign-flutter">
+    <img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki">
+  </a>
 </p>
 
 English | [简体中文](README_zh_CN.md)
