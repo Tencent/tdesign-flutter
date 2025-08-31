@@ -16,12 +16,18 @@ iOS请运行项目预览 ↓
 <br/>
 [https://github.com/Tencent/tdesign-flutter/tree/main/tdesign-component](https://github.com/Tencent/tdesign-flutter/tree/main/tdesign-component)
 
-## 使用方法
-- 在pubbspec.yaml引入依赖。
-```yaml
-  dependencies:
-    tdesign_flutter: ^0.1.0
+
+## 安装
+
+```bash
+# 安装当前最新版本
+$ flutter pub add tdesign_flutter
+
+# 安装指定版本
+$ flutter pub add tdesign_flutter:^0.2.4
 ```
+
+## 使用方法
     
 - 在文件头部引入：`import 'package:tdesign_flutter/tdesign_flutter.dart'; // 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类`
 - 可通过json文件配置颜色/字体尺寸/字体样式/圆角/阴影等主题样式。通过`TDTheme.of(context)或者TDTheme.defaultData()`获取主题数据。建议组件都使用`TDTheme.of(context)`的，不需要跟随局部主题的组件，才可以使用`TDTheme.defaultData()`。
