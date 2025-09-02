@@ -102,7 +102,7 @@ Contributing is welcome. Read [guidelines for contributing](CONTRIBUTING.md) bef
 
 Create your [Github issues](https://github.com/Tencent/tdesign-flutter/issues) or scan the QR code below to join our user groups
 
-<img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/components/src/images/groups/vue3-group.png" width="200" />
+<img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/site-components/src/images/groups/flutter-group.png" width="200" />
 
 # License
 
