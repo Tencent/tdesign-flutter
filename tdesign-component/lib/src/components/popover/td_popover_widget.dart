@@ -78,6 +78,7 @@ class TDPopoverWidget extends StatefulWidget {
     this.height,
     this.onTap,
     this.onLongTap,
+    this.radius
   });
 
   /// 上下文
@@ -118,6 +119,9 @@ class TDPopoverWidget extends StatefulWidget {
 
   /// 长按事件
   final OnLongTap? onLongTap;
+
+  /// 圆角
+  final BorderRadius? radius;
 
   @override
   State<TDPopoverWidget> createState() => _TDPopoverWidgetState();
@@ -350,7 +354,7 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
         height: widget.height,
         padding: widget.padding ?? const EdgeInsets.all(12),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: widget.radius ?? BorderRadius.circular(6),
             color: _backgroundColor,
             boxShadow: const [
               BoxShadow(color: Color(0x0d000000), offset: Offset(0, 6), blurRadius: 30, spreadRadius: 5),
