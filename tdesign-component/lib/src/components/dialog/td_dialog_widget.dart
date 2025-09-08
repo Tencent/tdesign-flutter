@@ -15,6 +15,7 @@ class TDDialogScaffold extends StatelessWidget {
     required this.body,
     this.showCloseButton,
     this.backgroundColor = Colors.white,
+    this.width,
     this.radius = 12.0,
   }) : super(key: key);
 
@@ -30,13 +31,16 @@ class TDDialogScaffold extends StatelessWidget {
   /// 圆角
   final double radius;
 
+  /// 弹窗宽度
+  final double? width;
+
   @override
   Widget build(BuildContext context) {
     return Center(
         child: Material(
           type: MaterialType.transparency,
           child: Container(
-            width: 311,
+            width: width ?? 311,
             decoration: BoxDecoration(
               color: backgroundColor, // 底色
               borderRadius: BorderRadius.all(Radius.circular(radius)),

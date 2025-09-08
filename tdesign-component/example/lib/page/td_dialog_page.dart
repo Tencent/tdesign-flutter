@@ -68,7 +68,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       ExampleItem(builder: _customConfirmNormal),
       ExampleItem(builder: _customConfirmVertical),
       ExampleItem(builder: _customImageTop),
-      ExampleItem(desc: '自定义边距和按钮', builder: _customContentAndBtn)
+      ExampleItem(desc: '自定义边距和按钮', builder: _customContentAndBtn),
+      ExampleItem(desc: '自定义宽度弹窗', builder: _customWidthDialog)
     ],);
   }
 
@@ -764,6 +765,40 @@ class _TDDialogPageState extends State<TDDialogPage> {
                 ),
               );
             }
+          );
+        }
+    );
+  }
+
+  @Demo(group: 'dialog')
+  Widget _customWidthDialog(BuildContext context) {
+    return TDButton(
+        text: '自定义弹窗宽度',
+        size: TDButtonSize.large,
+        type: TDButtonType.outline,
+        theme: TDButtonTheme.primary,
+        onTap: () {
+          showGeneralDialog(
+              context: context,
+              pageBuilder: (BuildContext buildContext, Animation<double> animation,
+                  Animation<double> secondaryAnimation) {
+                return TDConfirmDialog(
+                  width: 500,
+                  title: _dialogTitle,
+                  content: _commonContent,
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  buttonWidget: Container(
+                    padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                    child: TDButton(
+                      text: '自定义按钮',
+                      theme: TDButtonTheme.primary,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                );
+              }
           );
         }
     );
