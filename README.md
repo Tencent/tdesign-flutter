@@ -23,7 +23,6 @@ English | [简体中文](README_zh_CN.md)
 
 Tencent TDesign UI component library of Flutter, suitable for use in mobile projects.
 
-
 # 🎉 Features
 
 - Provides Flutter UI component library in TDesign design style
@@ -32,9 +31,10 @@ Tencent TDesign UI component library of Flutter, suitable for use in mobile proj
 - Define color groups according to the TDesign specification, which can be viewed in TDColors to facilitate the adaptation of components to the TDesign specification.
 - The color value declaration class can add default colors and view the default display effect of color values in real time.
 
-
 # 🔨 Usage
+
 - SDK dependency version
+
 ```yaml
 dart: ">=2.19.0 <4.0.0"
 flutter: ">=3.7.0"
@@ -100,9 +100,9 @@ Contributing is welcome. Read [guidelines for contributing](CONTRIBUTING.md) bef
 
 # Feedback
 
-Create your [Github issues](https://github.com/Tencent/tdesign-flutter/issues) or scan the QR code below to join our user groups
+Create your [Github issues](https://github.com/Tencent/tdesign-flutter/issues) or scan the QR code below to join our user groups.
 
-<img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/components/src/images/groups/vue3-group.png" width="200" />
+<img src="https://tdesign.tencent.com/flutter/assets/qrcode/feedback.png" width="200" />
 
 # License
 
