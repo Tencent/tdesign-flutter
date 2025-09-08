@@ -29,9 +29,10 @@
 - 根据 TDesign 规范定义颜色组，可在 TDColors 中查看，方便适配 TDesign 规范的组件。
 - 色值声明类可以添加默认颜色，实时查看色值默认显示效果。
 
-
 # 🔨 使用
+
 - SDK 版本依赖
+
 ```yaml
 dart: ">=2.19.0 <4.0.0"
 flutter: ">=3.7.0"
@@ -95,7 +96,7 @@ Contributing is welcome. Read [guidelines for contributing](CONTRIBUTING.md) bef
 
 有任何问题，建议通过 [Github issues](https://github.com/Tencent/tdesign-flutter/issues) 反馈或扫码加入用户微信群。
 
-<img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/components/src/images/groups/vue3-group.png" width="200" />
+<img src="https://tdesign.tencent.com/flutter/assets/qrcode/feedback.png" width="200" />
 
 # 开源协议
 
