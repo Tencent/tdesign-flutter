@@ -158,7 +158,7 @@ class _TDFormState extends State<TDForm> {
   @override
   Widget build(BuildContext context) {
     _formItems = widget.items.expand((item) => [item, SizedBox(height: 1)]).toList();
-    if (widget.btnGroup!.isNotEmpty) {
+    if (widget.btnGroup?.isNotEmpty ?? false) {
       _formItems.addAll(widget.btnGroup ?? []);
     }
     return TDFormInherited(

@@ -824,74 +824,7 @@ class _TDFormPageState extends State<TDFormPage> {
                 ),
               ))
         ],
-        btnGroup: [
-          Container(
-            decoration: BoxDecoration(
-              color: TDTheme.of(context).brandNormalColor,
-            ),
-            child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: TDButton(
-                          text: '重置',
-                          size: TDButtonSize.large,
-                          type: TDButtonType.fill,
-                          theme: TDButtonTheme.light,
-                          shape: TDButtonShape.rectangle,
-                          disabled: _formDisableState,
-                          onTap: () {
-                            //用户名称
-                            _controller[0].clear();
-                            //密码
-                            _controller[1].clear();
-                            // 性别
-                            _genderCheckboxGroupController.toggle('', false);
-                            //个人简介
-                            _controller[2].clear();
-                            //生日
-                            _selected_1 = '';
-                            //籍贯
-                            _selected_2 = '';
-                            //年限
-                            _stepController.add(TDStepperEventType.cleanValue);
-                            //上传图片
-                            files.clear();
-                            _formData = {
-                              "name": '',
-                              "password": '',
-                              "gender": '',
-                              "birth": '',
-                              "place": '',
-                              "age": "0",
-                              "description": "2",
-                              "resume": '',
-                              "photo": ''
-                            };
-                            _formData.forEach((key, value) {
-                              _formItemNotifier[key].upDataForm(value);
-                            });
-                            _formController.reset(_formData);
-                            setState(() {});
-                          },
-                        )),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Expanded(
-                        child: TDButton(
-                            text: '提交',
-                            size: TDButtonSize.large,
-                            type: TDButtonType.fill,
-                            theme: TDButtonTheme.primary,
-                            shape: TDButtonShape.rectangle,
-                            onTap: _onSubmit,
-                            disabled: _formDisableState)),
-                  ],
-                )),
-          )
-        ]);
+        btnGroup: null);
   }
 
   List<TDUploadFile> _onValueChanged(List<TDUploadFile> fileList, List<TDUploadFile> value, TDUploadType event) {
