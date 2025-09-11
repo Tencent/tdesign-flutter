@@ -1,0 +1,47 @@
+name: PREVIEW_BUILD
+
+on:
+  pull_request:
+    branches: [develop, main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  tdesign-flutter-site:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.event.number }} > pr-id.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pr-id
+          path: pr-id.txt
+          retention-days: 5
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+            flutter-version: 3.32.0
+            channel: stable
+      - run: |
+            flutter --version
+            cd ${{ env.FLUTTER_ROOT }}
+            curl https://github.com/TDesignOteam/tdesign-flutter-aop-registry/blob/main/patch_flutter/3.35~infinity.patch | git apply
+            git status
+
+            rm bin/cache/flutter_tools.stamp
+
+            cd tdesign-component/example
+            flutter pub get
+
+      - name: make  web md
+        run: |
+          cd /tdesign-component/demo_tool/
+          sh add_build.sh
+      
+      - name: Build Flutter Web
+        run: |
+          cd /tdesign-component/example
+          flutter build web -t ./lib/main.dart --base-href /flutter/example/ --source-maps
