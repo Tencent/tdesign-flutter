@@ -32,7 +32,8 @@ class TDConfirmDialog extends StatelessWidget {
     this.showCloseButton,
     this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
     this.buttonWidget,
-    this.width
+    this.width,
+    this.buttonStyleCustom,
   }) : super(key: key);
 
   /// 标题
@@ -83,6 +84,9 @@ class TDConfirmDialog extends StatelessWidget {
   /// 自定义按钮
   final Widget? buttonWidget;
 
+  /// 按钮自定义样式属性，背景色、边框...
+  final TDButtonStyle? buttonStyleCustom;
+
   final double? width;
 
   Widget _buildButton(BuildContext context) {
@@ -101,6 +105,7 @@ class TDConfirmDialog extends StatelessWidget {
             buttonType: TDButtonType.text,
             buttonTheme: TDButtonTheme.primary,
             height: 56,
+            buttonStyle: buttonStyleCustom,
             onPressed: () {
               if (action != null) {
                 action!();
@@ -118,6 +123,7 @@ class TDConfirmDialog extends StatelessWidget {
           buttonText: buttonText ?? context.resource.knew,
           buttonTextColor: buttonTextColor,
           buttonTheme: TDButtonTheme.primary,
+          buttonStyle: buttonStyleCustom,
           onPressed: () {
             if (action != null) {
               action!();
