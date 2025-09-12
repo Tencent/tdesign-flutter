@@ -83,29 +83,29 @@ class TDMultiPicker extends StatelessWidget {
 
   const TDMultiPicker(
       {required this.title,
-      required this.onConfirm,
-      this.onCancel,
-      required this.data,
-      required this.pickerHeight,
-      required this.pickerItemCount,
-      this.initialIndexes,
-      this.rightText,
-      this.leftText,
-      this.leftTextStyle,
-      this.rightTextStyle,
-      this.centerTextStyle,
-      this.titleHeight,
-      this.topPadding,
-      this.leftPadding,
-      this.rightPadding,
-      this.titleDividerColor,
-      this.backgroundColor,
-      this.topRadius,
-      this.padding,
-      this.itemDistanceCalculator,
-      this.customSelectWidget,
-      this.itemBuilder,
-      Key? key})
+        required this.onConfirm,
+        this.onCancel,
+        required this.data,
+        required this.pickerHeight,
+        required this.pickerItemCount,
+        this.initialIndexes,
+        this.rightText,
+        this.leftText,
+        this.leftTextStyle,
+        this.rightTextStyle,
+        this.centerTextStyle,
+        this.titleHeight,
+        this.topPadding,
+        this.leftPadding,
+        this.rightPadding,
+        this.titleDividerColor,
+        this.backgroundColor,
+        this.topRadius,
+        this.padding,
+        this.itemDistanceCalculator,
+        this.customSelectWidget,
+        this.itemBuilder,
+        Key? key})
       : super(key: key);
 
   @override
@@ -146,17 +146,17 @@ class TDMultiPicker extends StatelessWidget {
               ),
               // 列表
               Container(
-                padding: const EdgeInsets.only(left: 32, right: 32),
-                height: pickerHeight,
-                width: maxWidth,
-                child: Row(
-                  children: [
-                    for (var i = 0; i < data.length; i++)
-                      Expanded(
-                        child: buildList(context, i, controllers),
-                      )
-                  ],
-                )),
+                  padding: const EdgeInsets.only(left: 32, right: 32),
+                  height: pickerHeight,
+                  width: maxWidth,
+                  child: Row(
+                    children: [
+                      for (var i = 0; i < data.length; i++)
+                        Expanded(
+                          child: buildList(context, i, controllers),
+                        )
+                    ],
+                  )),
               // 蒙层
               Positioned(
                 top: 0,
@@ -208,10 +208,10 @@ class TDMultiPicker extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(
-            width: 0.5,
-            color: titleDividerColor ?? Colors.transparent,
-          )
+            bottom: BorderSide(
+              width: 0.5,
+              color: titleDividerColor ?? Colors.transparent,
+            )
         ),
       ),
       height: getTitleHeight(),
@@ -234,8 +234,8 @@ class TDMultiPicker extends StatelessWidget {
               child: TDText(
                 leftText ?? context.resource.cancel,
                 style: leftTextStyle?? TextStyle(
-                  fontSize: TDTheme.of(context).fontBodyLarge!.size,
-                  color: TDTheme.of(context).fontGyColor2
+                    fontSize: TDTheme.of(context).fontBodyLarge!.size,
+                    color: TDTheme.of(context).fontGyColor2
                 ),
               )),
 
@@ -244,15 +244,15 @@ class TDMultiPicker extends StatelessWidget {
             child: title == null
                 ? Container()
                 : Center(
-                    child: TDText(
-                      title,
-                      style: centerTextStyle ?? TextStyle(
-                        fontSize: TDTheme.of(context).fontTitleLarge!.size,
-                        fontWeight: FontWeight.w600,
-                        color: TDTheme.of(context).fontGyColor1
-                      ),
-                    ),
-                  ),
+              child: TDText(
+                title,
+                style: centerTextStyle ?? TextStyle(
+                    fontSize: TDTheme.of(context).fontTitleLarge!.size,
+                    fontWeight: FontWeight.w600,
+                    color: TDTheme.of(context).fontGyColor1
+                ),
+              ),
+            ),
           ),
 
           // 右边按钮
@@ -439,7 +439,11 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
     super.initState();
     pickerHeight = widget.pickerHeight;
     model = MultiLinkedPickerModel(
-        data: widget.data, columnNum: widget.columnNum, initialData: widget.selectedData, keepSameSelection: widget.keepSameSelection);
+      data: widget.data,
+      columnNum: widget.columnNum,
+      initialData: widget.selectedData,
+      keepSameSelection: widget.keepSameSelection,
+    );
   }
 
   @override
@@ -464,7 +468,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Padding(
+                Padding(//选项
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: widget.customSelectWidget ?? Container(
                     height: 40,
@@ -532,32 +536,63 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
   }
 
   Widget buildList(context, int position) {
-    // position参数表示这个第几列
     var maxWidth = MediaQuery.of(context).size.width;
+
     return MediaQuery.removePadding(
-        context: context,
-        removeTop: true,
-        child: ScrollConfiguration(
-          behavior: NoWaveBehavior(),
+      context: context,
+      removeTop: true,
+      child: ScrollConfiguration(
+        behavior: NoWaveBehavior(),
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification notification) {
+            // 滚动到底部加载更多
+            if (notification is ScrollEndNotification) {
+              final metrics = notification.metrics;
+              if (metrics.pixels >= metrics.maxScrollExtent - 10) {
+                if (model.loadMoreData(position)) {
+                  setState(() {});
+                }
+              }
+            }
+            return false;
+          },
           child: ListWheelScrollView.useDelegate(
               itemExtent: pickerHeight / widget.pickerItemCount,
               diameterRatio: 100,
               controller: model.controllers[position],
               physics: const FixedExtentScrollPhysics(),
               onSelectedItemChanged: (index) {
-                setState(() {
-                  // 刷新此列右边的所有数据
-                  model.refreshPresentDataAndController(position, index, false);
-
-                  // 使用动态高度，强制列表组件的state刷新，以展现更新的数据，详见下方链接
-                  // FIX:https://github.com/flutter/flutter/issues/22999
-                  pickerHeight =
-                      pickerHeight - Random().nextDouble() / 100000000;
-                });
+                if (index >= 0 && index < model.presentData[position].length) {
+                  setState(() {
+                    model.refreshPresentDataAndController(position, index, false);
+                    if (index >= model.presentData[position].length - 5 &&
+                        model.hasMoreData[position]) {
+                      if (model.loadMoreData(position)) {
+                        // 延迟一下再刷新，避免连续setState
+                        Future.delayed(Duration(milliseconds: 50), () {
+                          if (mounted) setState(() {});
+                        });
+                      }
+                    }
+                    pickerHeight = pickerHeight - Random().nextDouble() / 100000000;
+                  });
+                }
               },
               childDelegate: ListWheelChildBuilderDelegate(
-                  childCount: model.presentData[position].length,
+                  childCount: model.presentData[position].length +
+                      (model.hasMoreData[position] ? 1 : 0),
                   builder: (context, index) {
+                    if (index >= model.presentData[position].length) {
+                      // 加载更多指示器
+                      return Container(
+                        alignment: Alignment.center,
+                        height: pickerHeight / widget.pickerItemCount,
+                        child: Text('加载中...', style: TextStyle(color: Colors.grey)),
+                      );
+                    }
+                    if (index < 0 || index >= model.presentData[position].length) {
+                      return Container();
+                    }
                     return Container(
                         alignment: Alignment.center,
                         height: pickerHeight / widget.pickerItemCount,
@@ -566,15 +601,17 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                           colIndex: position,
                           index: index,
                           itemHeight: pickerHeight / widget.pickerItemCount,
-                          content:
-                              model.presentData[position][index].toString(),
-                          fixedExtentScrollController:
-                              model.controllers[position],
+                          content: model.presentData[position][index].toString(),
+                          fixedExtentScrollController: model.controllers[position],
                           itemDistanceCalculator: widget.itemDistanceCalculator,
                           itemBuilder: widget.itemBuilder,
                         ));
-                  })),
-        ));
+                  }
+              )
+          ),
+        ),
+      ),
+    );
   }
 
   Widget buildTitle(BuildContext context) {
@@ -585,12 +622,12 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
         top: widget.topPadding ?? 16,
       ),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            width: 0.5,
-            color: widget.titleDividerColor ?? Colors.transparent,
+          border: Border(
+              bottom: BorderSide(
+                width: 0.5,
+                color: widget.titleDividerColor ?? Colors.transparent,
+              )
           )
-        )
       ),
       height: getTitleHeight() - 0.5,
       child: Row(
@@ -613,23 +650,21 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                   color: TDTheme.of(context).fontGyColor2,
                 ),
               )),
-
           // 中间title
           Expanded(
             child: widget.title == null
                 ? Container()
                 : Center(
-                    child: TDText(
-                      widget.title,
-                      style: widget.centerTextStyle ?? TextStyle(
-                        fontSize: TDTheme.of(context).fontTitleLarge!.size,
-                        fontWeight: FontWeight.w700,
-                        color: TDTheme.of(context).fontGyColor1
-                      ),
-                    ),
-                  ),
+              child: TDText(
+                widget.title,
+                style: widget.centerTextStyle ?? TextStyle(
+                    fontSize: TDTheme.of(context).fontTitleLarge!.size,
+                    fontWeight: FontWeight.w700,
+                    color: TDTheme.of(context).fontGyColor1
+                ),
+              ),
+            ),
           ),
-
           // 右边按钮
           GestureDetector(
             onTap: () {
@@ -678,6 +713,15 @@ class MultiLinkedPickerModel {
   /// 是否保留相同选项
   bool keepSameSelection = false;
 
+  // 添加一个常量定义每页加载数量
+  static const int pageSize = 10;
+  // 每列的当前页码
+  late List<int> currentPages;
+  // 每列是否还有更多数据
+  late List<bool> hasMoreData;
+  // 每列的总数据量
+  late List<int> totalCounts;
+
   MultiLinkedPickerModel({
     required this.data,
     required this.columnNum,
@@ -686,6 +730,9 @@ class MultiLinkedPickerModel {
   }) {
     selectedData = [];
     selectedIndexes = [];
+    currentPages = List.generate(columnNum, (_) => 0);
+    hasMoreData = List.generate(columnNum, (_) => true);
+    totalCounts = List.generate(columnNum, (_) => 0);
     for (var i = 0; i < columnNum; ++i) {
       if (i >= initialData.length) {
         selectedData.add('');
@@ -698,136 +745,126 @@ class MultiLinkedPickerModel {
   }
 
   void _init(List initialData) {
-    int pIndex;
     controllers.clear();
     presentData.clear();
     for (var i = 0; i < columnNum; ++i) {
-      pIndex = 0;
-      if (i == 0) {
-        // 第一列
-        pIndex = data.keys.toList().indexOf(selectedData[i]);
-        if (pIndex < 0) {
-          selectedData[i] = data.keys.first;
-          pIndex = 0;
-        }
-        selectedIndexes[i] = pIndex;
-        presentData.add(data.keys.toList());
-      } else {
-        // 其他列
-        dynamic date = findNextData(i);
-        if (date is Map) {
-          pIndex = date.keys.toList().indexOf(selectedData[i]);
-          if (pIndex < 0) {
-            selectedData[i] = date.keys.first;
-            pIndex = 0;
-          }
-          presentData.add(date.keys.toList());
-        } else if (date is List) {
-          pIndex = date.indexOf(selectedData[i]);
-          if (pIndex < 0) {
-            selectedData[i] = date.first;
-            pIndex = 0;
-          }
-          presentData.add(date);
-        } else {
-          selectedData[i] = date;
-          pIndex = 0;
-          presentData.add([date]);
-        }
-        selectedIndexes[i] = pIndex;
+      if (i >= presentData.length) {
+        presentData.add([placeData]);
       }
-      controllers.add(FixedExtentScrollController(initialItem: pIndex));
+      List currentLevelData;
+      if (i == 0) {
+        currentLevelData = _getNextLevelDataPaginated(0,0);
+        if (currentLevelData.isEmpty) {
+          currentLevelData = [placeData];
+        }
+      } else {
+        currentLevelData = _getNextLevelDataPaginated(i, 0);
+      }
+      // 处理选中项
+      int selectedIndex = currentLevelData.indexOf(selectedData[i]);
+      if (selectedIndex < 0) {
+        selectedData[i] = currentLevelData.isNotEmpty ? currentLevelData.first : placeData;
+        selectedIndex = 0;
+      }
+      selectedIndexes[i] = selectedIndex;
+      presentData[i] = currentLevelData;
+      // 创建控制器
+      controllers.add(FixedExtentScrollController(
+          initialItem: selectedIndex.clamp(0, currentLevelData.length - 1)
+      ));
     }
   }
-  /// 对应位置的下一列数据
-  dynamic findNextData(int position) {
-    dynamic nextData;
-    for (var i = 0; i < position; i++) {
-      if (i == 0) {
-        nextData = data[selectedData[0]];
-      } else {
-        dynamic data = nextData[selectedData[i]];
-        if (data is Map) {
-          nextData = data;
-        } else if (data is List) {
-          nextData = data;
+
+  List _getNextLevelDataPaginated(int level, int page) {
+    try {
+      dynamic currentData = data;
+      for (int i = 0; i < level; i++) {
+        if (currentData is Map && currentData.containsKey(selectedData[i])) {
+          currentData = currentData[selectedData[i]];
         } else {
-          nextData = [data];
+          return [placeData];
         }
       }
-      if (!(nextData is Map) && (i < position - 1)) {
-        return [placeData];
+      List allData;
+      if (currentData is Map) {
+        allData = currentData.keys.toList();
+      } else if (currentData is List) {
+        allData = currentData;
+      } else {
+        allData = [currentData?.toString() ?? placeData];
       }
+      totalCounts[level] = allData.length;
+      int start = page * pageSize;
+      int end = start + pageSize;
+      if (start >= allData.length) return [];
+      if (end > allData.length) end = allData.length;
+      hasMoreData[level] = end < allData.length;
+      return allData.sublist(start, end);
+    } catch (e) {
+      return [placeData];
     }
-    return nextData;
+  }
+
+  bool loadMoreData(int columnIndex) {
+    if (columnIndex >= columnNum || !hasMoreData[columnIndex]) return false;
+    List newData;
+    int nextPage = currentPages[columnIndex] + 1;
+    if (columnIndex == 0) {
+      newData = _getNextLevelDataPaginated(0,nextPage);
+    } else {
+      newData = _getNextLevelDataPaginated(columnIndex, nextPage);
+    }
+    if (newData.isNotEmpty) {
+      presentData[columnIndex].addAll(newData);
+      currentPages[columnIndex] = nextPage;
+      return true;
+    } else {
+      hasMoreData[columnIndex] = false;
+    }
+    return false;
   }
 
   /// [position] 变动的列
   /// [selectedIndex] 对应选中的index
   /// [jump] 是否需要jumpToItem
   void refreshPresentDataAndController(int position, int selectedIndex, bool jump) {
-    // 新选中的数据
+    // 严格的边界检查
+    if (position >= presentData.length ||
+        selectedIndex >= presentData[position].length ||
+        position >= controllers.length) {
+      return;
+    }
+    selectedIndex = selectedIndex.clamp(0, presentData[position].length - 1);
     var selectValue = presentData[position][selectedIndex];
-    // 更新选中的数据
     selectedData[position] = selectValue;
     selectedIndexes[position] = selectedIndex;
     if (jump) {
       controllers[position].jumpToItem(selectedIndex);
     }
-    // 如果不是最后一列 数据的变动都会造成剩下列的更新
+    // 检查是否需要预加载更多数据
+    if (selectedIndex >= presentData[position].length - 5 && hasMoreData[position]) {
+      loadMoreData(position);
+    }
     if (position < columnNum - 1) {
+      List nextColumnData;
       if (presentData[position].length == 1 && presentData[position].first == placeData) {
-        presentData[position + 1] = [placeData];
+        nextColumnData = [placeData];
       } else {
-        presentData[position + 1] = findColumnData(position + 1);
+        nextColumnData = _getNextLevelDataPaginated(position + 1, 0);
+        currentPages[position + 1] = 0;
+        hasMoreData[position + 1] = true;
       }
-
-      // 新增保留相同选项逻辑
-      if (keepSameSelection && position + 1 < selectedData.length) {
-        var nextPosition = position + 1;
-        var oldSelected = selectedData[nextPosition];
-        var newDataList = presentData[nextPosition];
-
-        // 查找旧值是否存在于新数据列表中
-        var index = newDataList.indexOf(oldSelected);
-        if (index != -1) {
-          // 存在相同值则保留原选择
-          refreshPresentDataAndController(nextPosition, index, true);
-          return;
-        }
+      if (nextColumnData.isEmpty) {
+        nextColumnData = [placeData];
       }
-
+      while (presentData.length <= position + 1) {
+        presentData.add([placeData]);
+      }
+      presentData[position + 1] = nextColumnData;
+      while (controllers.length <= position + 1) {
+        controllers.add(FixedExtentScrollController(initialItem: 0));
+      }
       refreshPresentDataAndController(position + 1, 0, true);
     }
   }
-
-  /// 寻找对应位置数据
-  List findColumnData(int position) {
-    dynamic nextData;
-    for (var i = 0; i < position; i++) {
-      if (i == 0) {
-        nextData = data[selectedData[0]];
-      } else {
-        dynamic data = nextData[selectedData[i]];
-        if (data is Map) {
-          nextData = data;
-        } else if (data is List) {
-          nextData = data;
-        } else {
-          nextData = [data];
-        }
-      }
-      // 如果是map并且是最后一列 返回对应key
-      if ((nextData is Map) && (i == position - 1)) {
-        return nextData.keys.toList();
-      }
-
-      // 如果数据还没有到最后就已经不是Map
-      if (!(nextData is Map) && (i < position - 1)) {
-        return [placeData];
-      }
-    }
-    return nextData;
-  }
-
 }
