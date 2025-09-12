@@ -252,6 +252,13 @@ class _TDFormPageState extends State<TDFormPage> {
           // ExampleItem(ignoreCode: true, desc: '', builder: (_) => CodeWrapper(builder: _buildCombinationButtons)),
         ]),
       ],
+      test: [
+        ExampleItem(ignoreCode: true,desc: '自定义背景表单', builder: _buildArrangementSwitch),
+        ExampleItem(ignoreCode: true,desc: '', builder: _buildSwitchWithBase),
+        ExampleItem(ignoreCode: true, builder: (BuildContext context) {
+          return CodeWrapper(builder: _buildCustomForm);
+        }),
+      ],
     );
   }
 
@@ -581,6 +588,243 @@ class _TDFormPageState extends State<TDFormPage> {
                 )),
           )
         ]);
+  }
+
+  @Demo(group: 'form')
+  Widget _buildCustomForm(BuildContext context) {
+    final theme = TDTheme.of(context);
+    return TDForm(
+        formController: _formController,
+        disabled: _formDisableState,
+        data: _formData,
+        isHorizontal: _isFormHorizontal,
+        rules: _validationRules,
+        formContentAlign: TextAlign.left,
+        requiredMark: true,
+
+        /// 确定整个表单是否展示提示信息
+        formShowErrorMessage: true,
+        onSubmit: onSubmit,
+        items: [
+          TDFormItem(
+            backgroundColor: TDTheme.of(context).brandNormalColor,
+            label: '用户名',
+            name: 'name',
+            type: TDFormItemType.input,
+            help: '请输入用户名',
+            labelWidth: 82.0,
+            formItemNotifier: _formItemNotifier['name'],
+
+            /// 控制单个 item 是否展示错误提醒
+            showErrorMessage: true,
+            requiredMark: true,
+            child: TDInput(
+                leftContentSpace: 0,
+                inputDecoration: InputDecoration(
+                    hintText: "请输入用户名",
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(0),
+                    hintStyle: TextStyle(color: TDTheme.of(context).fontGyColor3.withOpacity(0.4))),
+                controller: _controller[0],
+                backgroundColor: TDTheme.of(context).brandNormalColor,
+                additionInfoColor: TDTheme.of(context).errorColor6,
+                showBottomDivider: false,
+                readOnly: _formDisableState,
+                onChanged: (val) {
+                  _formItemNotifier['name']?.upDataForm(val);
+                },
+                onClearTap: () {
+                  _controller[0].clear();
+                  _formItemNotifier['name']?.upDataForm("");
+                }),
+          ),
+          TDFormItem(
+            label: '密码',
+            backgroundColor: TDTheme.of(context).brandNormalColor,
+            name: 'password',
+            type: TDFormItemType.input,
+            labelWidth: 82.0,
+            formItemNotifier: _formItemNotifier['password'],
+            showErrorMessage: true,
+            child: TDInput(
+                leftContentSpace: 0,
+                inputDecoration: InputDecoration(
+                    hintText: '请输入密码',
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(color: TDTheme.of(context).fontGyColor3.withOpacity(0.4))),
+                type: TDInputType.normal,
+                controller: _controller[1],
+                obscureText: !browseOn,
+                backgroundColor: TDTheme.of(context).brandNormalColor,
+                needClear: false,
+                readOnly: _formDisableState,
+                showBottomDivider: false,
+                onChanged: (val) {
+                  _formItemNotifier['password']?.upDataForm(val);
+                },
+                onClearTap: () {
+                  _controller[1].clear();
+                  _formItemNotifier['password']?.upDataForm("");
+                }),
+          ),
+          TDFormItem(
+            label: '性别',
+            name: 'gender',
+            backgroundColor: TDTheme.of(context).brandNormalColor,
+            type: TDFormItemType.radios,
+            labelWidth: 82.0,
+            showErrorMessage: true,
+            formItemNotifier: _formItemNotifier['gender'],
+            child: TDRadioGroup(
+              spacing: 0,
+              direction: Axis.horizontal,
+              controller: _genderCheckboxGroupController,
+              directionalTdRadios: _radios.entries.map((entry) {
+                return TDRadio(
+                  id: entry.key,
+                  title: entry.value,
+                  backgroundColor: TDTheme.of(context).brandNormalColor,
+                  selectColor: TDTheme.of(context).brandFocusColor,
+                  radioStyle: TDRadioStyle.circle,
+                  showDivider: false,
+                  spacing: 4,
+                  checkBoxLeftSpace: 0,
+                  customSpace: EdgeInsets.all(0),
+                  enable: !_formDisableState,
+                );
+              }).toList(),
+              onRadioGroupChange: (ids) {
+                if (ids == null) {
+                  return;
+                }
+                _formItemNotifier['gender']?.upDataForm(ids);
+              },
+            ),
+          ),
+          TDFormItem(
+            label: '生日',
+            name: 'birth',
+            backgroundColor: TDTheme.of(context).brandNormalColor,
+            labelWidth: 82.0,
+            type: TDFormItemType.dateTimePicker,
+            contentAlign: TextAlign.left,
+            tipAlign: TextAlign.left,
+            formItemNotifier: _formItemNotifier['birth'],
+            hintText:'请输入内容',
+            select: _selected_1,
+            selectFn: (BuildContext context) {
+              if (_formDisableState) {
+                return;
+              }
+              TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+                setState(() {
+                  _selected_1 =
+                  '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
+                  _formItemNotifier['birth']?.upDataForm(_selected_1);
+                });
+                Navigator.of(context).pop();
+              }, dateStart: [1999, 01, 01], dateEnd: [2050, 12, 31], initialDate: [2012, 1, 1]);
+            },
+          ),
+          TDFormItem(
+              label: '年限',
+              name: 'age',
+              labelWidth: 82.0,
+              backgroundColor: TDTheme.of(context).brandNormalColor,
+              type: TDFormItemType.stepper,
+              formItemNotifier: _formItemNotifier['age'],
+              child: Padding(
+                padding: EdgeInsets.only( right: 18),
+                child: TDStepper(
+                  theme: TDStepperTheme.filled,
+                  disabled: _formDisableState,
+                  eventController: _stepController!,
+                  value:int.parse(_formData['age']),
+                  onChange: (value) {
+                    _formItemNotifier['age']?.upDataForm('${value}');
+                  },
+                ),
+              )),
+          TDFormItem(
+            label: '自我评价',
+            name: 'description',
+            tipAlign: TextAlign.left,
+            type: TDFormItemType.rate,
+            labelWidth: 82.0,
+            backgroundColor: TDTheme.of(context).brandNormalColor,
+            formItemNotifier: _formItemNotifier['description'],
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                  padding: EdgeInsets.only(right: 18),
+                  child: TDRate(
+                    count: 5,
+                    value: double.parse(_formData['description']),
+                    allowHalf: false,
+                    disabled: _formDisableState,
+                    onChange: (value) {
+                      setState(() {
+                        _formData['description'] = '${value}';
+                      });
+                      _formItemNotifier['description']?.upDataForm('${value}');
+                    },
+                  )),
+            ),
+          ),
+          TDFormItem(
+              label: '个人简介',
+              labelWidth: 82.0,
+              name: 'resume',
+              type: TDFormItemType.textarea,
+              backgroundColor: TDTheme.of(context).brandNormalColor,
+              formItemNotifier: _formItemNotifier['resume'],
+              child: Padding(
+                padding: EdgeInsets.only(top: _isFormHorizontal?0:8,bottom: 4),
+                child: TDTextarea(
+                  backgroundColor: Colors.red,
+                  padding: EdgeInsets.all(0),
+                  hintText: '请输入个人简介',
+                  maxLength: 500,
+                  indicator: true,
+                  readOnly: _formDisableState,
+                  layout: TDTextareaLayout.vertical,
+                  controller: _controller[2],
+                  showBottomDivider: false,
+                  onChanged: (value) {
+                    _formItemNotifier['resume']?.upDataForm(value);
+                  },
+                ),
+              )),
+          TDFormItem(
+              label: '上传图片',
+              name: 'photo',
+              labelWidth: 82.0,
+              backgroundColor: TDTheme.of(context).brandNormalColor,
+              type: TDFormItemType.upLoadImg,
+              formItemNotifier: _formItemNotifier['photo'],
+              child: Padding(
+                padding: EdgeInsets.only(top:4,bottom: 4),
+                child: TDUpload(
+                  files: files,
+                  multiple: true,
+                  max: 6,
+                  onError: print,
+                  onValidate: print,
+                  disabled: _formDisableState,
+                  onChange: ((imgList, type) {
+                    if (_formDisableState) {
+                      return;
+                    }
+                    files = _onValueChanged(files ?? [], imgList, type);
+                    List imgs = files.map((e) => e.remotePath ?? e.assetPath).toList();
+                    setState(() {
+                      _formItemNotifier['photo'].upDataForm(imgs.join(','));
+                    });
+                  }),
+                ),
+              ))
+        ],
+        btnGroup: null);
   }
 
   List<TDUploadFile> _onValueChanged(List<TDUploadFile> fileList, List<TDUploadFile> value, TDUploadType event) {

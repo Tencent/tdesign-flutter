@@ -29,6 +29,7 @@ class TDFormItem extends StatefulWidget {
     this.select = '',
     this.selectFn,
     this.hintText = '',
+    this.backgroundColor,
     Map<String, String>? radios,
     Key? key,
   }) : super(key: key);
@@ -94,6 +95,9 @@ class TDFormItem extends StatefulWidget {
 
   ///提示内容
   final hintText;
+  
+  /// 背景色
+  final Color? backgroundColor;
   @override
   _TDFormItemState createState() => _TDFormItemState();
 }
@@ -301,7 +305,7 @@ class _TDFormItemState extends State<TDFormItem> {
       case TDFormItemType.rate:
         return Container(
             decoration: BoxDecoration(
-              color: TDTheme.of(context).whiteColor1,
+              color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
             ),
             child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -325,7 +329,7 @@ class _TDFormItemState extends State<TDFormItem> {
       case TDFormItemType.radios:
         return Container(
             decoration: BoxDecoration(
-              color: TDTheme.of(context).whiteColor1,
+              color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
             ),
             child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -352,7 +356,7 @@ class _TDFormItemState extends State<TDFormItem> {
       case TDFormItemType.stepper:
         return Container(
           decoration: BoxDecoration(
-            color: theme.whiteColor1,
+            color: widget.backgroundColor ?? theme.whiteColor1,
           ),
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -375,7 +379,7 @@ class _TDFormItemState extends State<TDFormItem> {
       case TDFormItemType.textarea:
         return Container(
             decoration: BoxDecoration(
-              color: TDTheme.of(context).whiteColor1,
+              color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
             ),
             child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -409,7 +413,7 @@ class _TDFormItemState extends State<TDFormItem> {
                 )));
       case TDFormItemType.upLoadImg:
         return Container(
-          decoration: BoxDecoration(color: theme.whiteColor1),
+          decoration: BoxDecoration(color: widget.backgroundColor ?? theme.whiteColor1),
           child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -492,7 +496,7 @@ class _TDFormItemState extends State<TDFormItem> {
         }
       },
       child: Container(
-        color: TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
