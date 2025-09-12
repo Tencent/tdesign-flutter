@@ -45,6 +45,7 @@ class TDSideBar extends StatefulWidget {
     this.loadingWidget,
     this.selectedBgColor,
     this.unSelectedBgColor,
+    this.unSelectedColor,
   }) : super(key: key);
 
   /// 选项值
@@ -64,6 +65,9 @@ class TDSideBar extends StatefulWidget {
 
   /// 选中值后颜色
   final Color? selectedColor;
+
+  /// 未选中颜色
+  final Color? unSelectedColor;
 
   /// 选中样式
   final TextStyle? selectedTextStyle;
@@ -282,6 +286,7 @@ class _TDSideBarState extends State<TDSideBar> {
                         textStyle: ele.textStyle,
                         selected: currentIndex == ele.index,
                         selectedColor:widget.selectedColor,
+                        unSelectedColor: widget.unSelectedColor,
                         selectedTextStyle:widget.selectedTextStyle,
                         contentPadding:widget.contentPadding,
                         topAdjacent: currentIndex != null &&
