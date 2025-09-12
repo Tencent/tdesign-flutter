@@ -20,6 +20,7 @@ class TDPopover {
     Color? overlayColor = Colors.transparent,
     OnTap? onTap,
     OnLongTap? onLongTap,
+    BorderRadius? radius,
   }) {
     return showDialog(
       barrierDismissible: closeOnClickOutside,
@@ -40,6 +41,7 @@ class TDPopover {
         height: height,
         onTap: onTap,
         onLongTap: onLongTap,
+        radius: radius,
       ),
     );
   }
