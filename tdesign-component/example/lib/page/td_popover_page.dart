@@ -194,6 +194,10 @@ class _TDPopoverPage extends State<TDPopoverPage> {
         ExampleItem(
           desc: '显示多行内容',
           builder: _buildMultiLinePopover,
+        ),
+        ExampleItem(
+          desc: '自定义圆角',
+          builder: _buildCustomRadiusPopover,
         )
       ],
     );
@@ -770,6 +774,33 @@ class _TDPopoverPage extends State<TDPopoverPage> {
               TDPopover.showPopover(
                 context: _,
                 width: 200,
+                content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  @Demo(group: 'popover')
+  Widget _buildCustomRadiusPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '自定义圆角',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                width: 200,
+                radius: BorderRadius.circular(16),
                 content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
               );
             },
