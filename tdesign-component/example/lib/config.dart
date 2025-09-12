@@ -8,6 +8,7 @@ import 'page/sidebar/td_sidebar_page_icon.dart';
 import 'page/sidebar/td_sidebar_page_loading.dart';
 import 'page/sidebar/td_sidebar_page_outline.dart';
 import 'page/sidebar/td_sidebar_page_pagination.dart';
+import 'page/sidebar/td_sidebar_page_unselected_color.dart';
 import 'page/td_action_sheet_page.dart';
 import 'page/td_avatar_page.dart';
 import 'page/td_backtop_page.dart';
@@ -296,5 +297,10 @@ List<ExamplePageModel> sideBarExamplePage = [
       text: 'SideBar 延迟加载',
       name: 'SideBarLoading',
       isTodo: false,
-      pageBuilder: _wrapInheritedTheme((context) => const TDSideBarLoadingPage()))
+      pageBuilder: _wrapInheritedTheme((context) => const TDSideBarLoadingPage())),
+  ExamplePageModel(
+      text: 'SideBar 自定义未选中颜色',
+      name: 'SideBarUnselectedColor',
+      isTodo: false,
+      pageBuilder: _wrapInheritedTheme((context) => const TDSideBarUnSelectedColorPage()))
 ];

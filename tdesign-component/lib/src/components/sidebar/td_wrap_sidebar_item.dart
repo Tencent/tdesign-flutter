@@ -23,6 +23,7 @@ class TDWrapSideBarItem extends StatelessWidget {
     this.onTap,
     this.selectedBgColor,
     this.unSelectedBgColor,
+    this.unSelectedColor,
     required this.style,
   }) : super(key: key);
 
@@ -37,6 +38,7 @@ class TDWrapSideBarItem extends StatelessWidget {
   final bool selected;
   final Color? selectedColor;
   final Color? selectedBgColor;
+  final Color? unSelectedColor;
   final Color? unSelectedBgColor;
   final bool topAdjacent;
   final bool bottomAdjacent;
@@ -151,7 +153,7 @@ class TDWrapSideBarItem extends StatelessWidget {
                     ? selectedTextStyle != null
                         ? selectedTextStyle?.color
                         : (selectedColor ?? TDTheme.of(context).brandNormalColor)
-                    : Colors.black,
+                    : unSelectedColor ?? Colors.black,
           ),
         ));
   }
@@ -169,7 +171,7 @@ class TDWrapSideBarItem extends StatelessWidget {
                     ? TDTheme.of(context).fontGyColor4
                     : selected
                     ? selectedColor ?? TDTheme.of(context).brandNormalColor
-                    : Colors.black,
+                    : unSelectedColor ?? Colors.black,
                 // forceVerticalCenter: true,
               )),
           if(label.length<4)

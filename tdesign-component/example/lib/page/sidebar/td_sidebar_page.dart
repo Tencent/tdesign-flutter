@@ -48,6 +48,8 @@ class TDSideBarPageState extends State<TDSideBarPage> {
         test: [
           ExampleItem(
               desc: '延迟加载', ignoreCode: true, builder: _loadingSideBar),
+          ExampleItem(
+              desc: '自定义未选中颜色', ignoreCode: true, builder: _unSelectedColorSideBar),
         ],
     );
   }
@@ -114,6 +116,20 @@ class TDSideBarPageState extends State<TDSideBarPage> {
               builder: (_) =>
                   getCustomButton(context, '延迟加载', 'SideBarLoading'),
               methodName: '_buildLoadingSideBar',
+            ),
+          ],
+        ));
+  }
+
+  Widget _unSelectedColorSideBar(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            CodeWrapper(
+              builder: (_) =>
+                  getCustomButton(context, '未选中颜色自定义', 'SideBarUnselectedColor'),
+              methodName: '_buildUnselectedColorSideBar',
             ),
           ],
         ));
