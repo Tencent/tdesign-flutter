@@ -20,6 +20,7 @@
 | height | double? | - | 内容高度（包含padding，实际高度：height - paddingTop - paddingBottom） |
 | onTap | OnTap? | - | 点击事件 |
 | onLongTap | OnLongTap? | - | 长按事件 |
+| radius | BorderRadius? | - | 圆角 |
 
 ```
 ```
@@ -31,4 +32,4 @@
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| showPopover |  |   required BuildContext context,  String? content,  Widget? contentWidget,  double offset,  TDPopoverTheme? theme,  bool closeOnClickOutside,  TDPopoverPlacement? placement,  bool? showArrow,  double arrowSize,  EdgeInsetsGeometry? padding,  double? width,  double? height,  Color? overlayColor,  OnTap? onTap,  OnLongTap? onLongTap, |  |
+| showPopover |  |   required BuildContext context,  String? content,  Widget? contentWidget,  double offset,  TDPopoverTheme? theme,  bool closeOnClickOutside,  TDPopoverPlacement? placement,  bool? showArrow,  double arrowSize,  EdgeInsetsGeometry? padding,  double? width,  double? height,  Color? overlayColor,  OnTap? onTap,  OnLongTap? onLongTap,  BorderRadius? radius, |  |

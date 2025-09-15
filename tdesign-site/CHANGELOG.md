@@ -6,6 +6,17 @@ docClass: timeline
 ---
 
 
+## 🌈 0.2.5 `2025-09-12` 
+### 🐞 Bug Fixes
+- `TDPopover`: 添加圆角属性自定义 @jflin19990707 ([#727](https://github.com/Tencent/tdesign-flutter/pull/727))
+- `TDForm`: 增加表单自定义背景颜色属性，按钮部分可为空 @jflin19990707 ([#730](https://github.com/Tencent/tdesign-flutter/pull/730))
+- `TDConfirmDialog`: 弹窗支持自定义宽度，按钮增加自定义样式属性 @jflin19990707 ([#724](https://github.com/Tencent/tdesign-flutter/pull/724))
+- `TDPicker`: 支持初始化和后续动态加载适量数据，修复卡顿问题@123dw-bot([#728](https://github.com/Tencent/tdesign-flutter/pull/728))
+-  `TDSideBar`增加自定义未选中颜色 @jflin19990707 ([#723](https://github.com/Tencent/tdesign-flutter/pull/723))
+### 🚧 Others
+- docs: 优化仓库大小 @RSS1102
+
+
 ## 🌈 0.2.4 `2025-08-14` 
 ### 🚀 Features
 - `TDUpload`: 支持设置多图间距和对其方式 @cyjaysong ([#677](https://github.com/Tencent/tdesign-flutter/pull/677))
