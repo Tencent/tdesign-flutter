@@ -662,7 +662,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDSideBar
+### TDSideBarItem
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key |  | - |  |
+| badge | TDBadge? | - | 徽标 |
+| disabled | bool | false | 是否禁用 |
+| icon | IconData? | - | 图标 |
+| textStyle | TextStyle? | - | 标签样式 |
+| label | String | '' | 标签 |
+| value | int | -1 | 值 |
+
+```
+```
+ ### TDSideBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -683,21 +698,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | loadingWidget | Widget? | - | 自定义加载动画 |
 | selectedBgColor | Color? | - | 选择的背景颜色 |
 | unSelectedBgColor | Color? | - | 未选择的背景颜色 |
-
-```
-```
- ### TDSideBarItem
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| badge | TDBadge? | - | 徽标 |
-| disabled | bool | false | 是否禁用 |
-| icon | IconData? | - | 图标 |
-| textStyle | TextStyle? | - | 标签样式 |
-| label | String | '' | 标签 |
-| value | int | -1 | 值 |
+| unSelectedColor | Color? | - | 未选中颜色 |
 
 
   

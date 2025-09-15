@@ -1,5 +1,22 @@
 ## API
-### TDActionSheet
+### TDActionSheetItem
+#### 简介
+动作面板项目
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| label | String | - | 标提 |
+| textStyle | TextStyle? | - | 标题样式 |
+| icon | Widget? | - | 图标 |
+| badge | TDBadge? | - | 角标 |
+| disabled | bool | false | 是否禁用 |
+| iconSize | double? | - | 图标大小 |
+| group | String? | - | 分组，用于带描述多行滚动宫格 |
+
+```
+```
+ ### TDActionSheet
 #### 简介
 动作面板
 #### 默认构造方法
@@ -35,20 +52,3 @@
 | showListActionSheet |  |   required BuildContext context,  required List<TDActionSheetItem> items,  TDActionSheetAlign align,  String cancelText,  bool showCancel,  VoidCallback? onCancel,  TDActionSheetItemCallback? onSelected,  bool showOverlay,  bool closeOnOverlayClick,  VoidCallback? onClose,  bool useSafeArea, | 显示列表类型面板 |
 | showGridActionSheet |  |   required BuildContext context,  required List<TDActionSheetItem> items,  TDActionSheetAlign align,  String cancelText,  bool showCancel,  TDActionSheetItemCallback? onSelected,  bool showOverlay,  bool closeOnOverlayClick,  int count,  int rows,  double itemHeight,  double itemMinWidth,  bool scrollable,  bool showPagination,  VoidCallback? onCancel,  String? description,  VoidCallback? onClose,  bool useSafeArea, | 显示宫格类型面板 |
 | showGroupActionSheet |  |   required BuildContext context,  required List<TDActionSheetItem> items,  TDActionSheetAlign align,  String cancelText,  bool showCancel,  TDActionSheetItemCallback? onSelected,  bool showOverlay,  bool closeOnOverlayClick,  double itemHeight,  double itemMinWidth,  VoidCallback? onCancel,  VoidCallback? onClose,  bool useSafeArea, | 显示分组类型面板 |
-
-```
-```
- ### TDActionSheetItem
-#### 简介
-动作面板项目
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| label | String | - | 标提 |
-| textStyle | TextStyle? | - | 标题样式 |
-| icon | Widget? | - | 图标 |
-| badge | TDBadge? | - | 角标 |
-| disabled | bool | false | 是否禁用 |
-| iconSize | double? | - | 图标大小 |
-| group | String? | - | 分组，用于带描述多行滚动宫格 |
