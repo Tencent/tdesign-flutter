@@ -1,16 +1,5 @@
 ## API
-### TDFormValidation
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| validate | String? Function(dynamic) | - | 校验方法 |
-| errorMessage | String | - | 错误提示信息 |
-| type | TDFormItemType | - | 校验对象的类型 |
-
-```
-```
- ### TDForm
+### TDForm
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -35,6 +24,17 @@
 | onReset | Function? | - | 表单重置时触发 |
 | formController | FormController? | - | 表单控制器 |
 | btnGroup | List<Widget>? | - | 表单按钮组 |
+
+```
+```
+ ### TDFormValidation
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| validate | String? Function(dynamic) | - | 校验方法 |
+| errorMessage | String | - | 错误提示信息 |
+| type | TDFormItemType | - | 校验对象的类型 |
 
 ```
 ```
@@ -63,5 +63,6 @@
 | select | String | '' | 选择器 适用于日期选择器等 |
 | selectFn | Function? | - | 选择器方法 适用于日期选择器等 |
 | hintText | null | '' | 提示内容 |
+| backgroundColor | Color? | - | 背景色 |
 | radios |  | - |  |
 | key |  | - |  |
