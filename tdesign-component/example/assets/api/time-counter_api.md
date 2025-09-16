@@ -1,5 +1,10 @@
 ## API
-### TDTimeCounterStyle
+### TDTimeCounterController
+#### 简介
+倒计时组件控制器，可控制开始(`start()`)/暂停(`pause()`)/继续(`resume()`)/重置(`reset([int? time])`)
+```
+```
+ ### TDTimeCounterStyle
 #### 简介
 计时组件样式
 #### 默认构造方法
@@ -29,11 +34,6 @@
 | --- |  --- |
 | TDTimeCounterStyle.generateStyle  | 生成默认样式 |
 
-```
-```
- ### TDTimeCounterController
-#### 简介
-倒计时组件控制器，可控制开始(`start()`)/暂停(`pause()`)/继续(`resume()`)/重置(`reset([int? time])`)
 ```
 ```
  ### TDTimeCounter
