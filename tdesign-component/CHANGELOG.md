@@ -1,3 +1,13 @@
+## 🌈 0.2.5 `2025-09-12`
+### 🐞 Bug Fixes
+- `TDPopover`: Added custom corner radius property @jflin19990707 ([#727](https://github.com/Tencent/tdesign-flutter/pull/727))
+- `TDForm`: Added custom background color property for form, button part can be optional @jflin19990707 ([#730](https://github.com/Tencent/tdesign-flutter/pull/730))
+- `TDConfirmDialog`: Dialog supports custom width, buttons added custom style properties @jflin19990707 ([#724](https://github.com/Tencent/tdesign-flutter/pull/724))
+- `TDPicker`: Supports initialization and subsequent dynamic loading of appropriate data, fixes stuttering issues @123dw-bot ([#728](https://github.com/Tencent/tdesign-flutter/pull/728))
+- `TDSideBar`: Added custom unselected color property @jflin19990707 ([#723](https://github.com/Tencent/tdesign-flutter/pull/723))
+### 🚧 Others
+- docs: Optimized repository size @RSS1102
+
 ## 🌈 0.2.4 `2025-08-14`
 ### 🚀 Features
 - `TDUpload`: Support setting image spacing and alignment @cyjaysong ([#677](https://github.com/Tencent/tdesign-flutter/pull/677))
