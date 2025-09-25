@@ -293,9 +293,14 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.major_version }}.${{ steps.version.outputs.minor_version }}.${{ steps.version.outputs.fix_version }}"
           BUILD="${{ github.run_number }}"
+          # 直接在构建输出目录重命名APK
+          cd ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/
+          mv app-release.apk tdesign-flutter-${VERSION}-${BUILD}.apk
+          echo "APK renamed to: tdesign-flutter-${VERSION}-${BUILD}.apk"
+          ls -la tdesign-flutter-${VERSION}-${BUILD}.apk
+          # 创建artifacts目录并复制重命名后的APK
           mkdir -p ${{ github.workspace }}/artifacts
-          cp ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/app-release.apk \
-             ${{ github.workspace }}/artifacts/tdesign-flutter-${VERSION}-${BUILD}.apk
+          cp tdesign-flutter-${VERSION}-${BUILD}.apk ${{ github.workspace }}/artifacts/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
