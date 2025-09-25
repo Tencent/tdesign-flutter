@@ -1,0 +1,369 @@
+name: PREVIEW_BUILD
+
+on:
+  pull_request:
+    branches: [develop, main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  tdesign-flutter-site:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.event.number }} > pr-id.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pr-id
+          path: pr-id.txt
+          retention-days: 5
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      
+      - name: Set Node version
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: tdesign-site/package-lock.json
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: "jetbrains"
+          java-version: "17"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: "12"
+        env:
+          SKIP_JDK_VERSION_CHECK: true
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.32.0
+          channel: stable
+      - run: |
+          flutter --version
+          cd ${{ env.FLUTTER_ROOT }}
+          curl -L https://raw.githubusercontent.com/TDesignOteam/tdesign-flutter-aop-registry/main/patch_flutter/3.24~3.32.patch | git apply --allow-empty
+          git status
+
+          rm bin/cache/flutter_tools.stamp
+
+      - name: Extract version from pubspec.yaml and set env
+        id: version
+        run: |
+          # 从pubspec.yaml中提取版本号
+          VERSION=$(grep "version:" tdesign-component/pubspec.yaml | sed 's/version: //g' | xargs)
+          echo "Version from pubspec.yaml: $VERSION"
+
+          # 分解版本号为主版本号、特性版本号和修正版本号
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          MINOR=$(echo $VERSION | cut -d. -f2)
+          FIX=$(echo $VERSION | cut -d. -f3)
+
+          # 输出变量以便后续步骤使用
+          echo "major_version=$MAJOR" >> $GITHUB_OUTPUT
+          echo "minor_version=$MINOR" >> $GITHUB_OUTPUT
+          echo "fix_version=$FIX" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Get tdesign-flutter-generator
+        uses: actions/checkout@v4
+        with:
+          repository: TDesignOteam/tdesign-flutter-generator
+          path: ./example/tdesign-flutter-generator
+
+      - name: 重写脚本
+        run: |
+          #  AOPMarket.enable = true 
+          yq e '.AOPMarket.enable = true' -i tdesign-component/example/pubspec.yaml
+
+          # 更新 tdesign-component/example/android/app/build.gradle
+          cd $GITHUB_WORKSPACE/tdesign-component/example/android/app
+          
+          # 使用 sed 更新 build.gradle 文件
+          # 1. 添加 namespace 如果不存在
+          if ! grep -q "namespace" build.gradle; then
+            sed -i '/^android {$/a\\    namespace '\''com.tdesign.tdesign_flutter_example'\''' build.gradle
+          fi
+          
+          # 2. 更新 compileSdkVersion 从 34 到 35
+          sed -i 's/compileSdkVersion 34/compileSdkVersion 35/g' build.gradle
+          
+          # 3. 更新 minSdkVersion 从 21 到 23
+          sed -i 's/minSdkVersion 21/minSdkVersion 23/g' build.gradle
+          
+          # 4. 更新 targetSdkVersion 从 31 到 35
+          sed -i 's/targetSdkVersion 31/targetSdkVersion 35/g' build.gradle
+          
+          # 5. 将双引号改为单引号 (applicationId)
+          sed -i 's/applicationId "com.tdesign.tdesign_flutter_example"/applicationId '\''com.tdesign.tdesign_flutter_example'\''/g' build.gradle
+          
+          # 6. 添加 compileOptions 和 kotlinOptions 如果不存在
+          if ! grep -q "compileOptions" build.gradle; then
+            # 在 buildTypes 块之后添加 compileOptions 和 kotlinOptions
+            awk '
+            BEGIN { in_android = 0; buildtypes_done = 0 }
+            /^android \{/ { in_android = 1; print; next }
+            /^    buildTypes \{/ && in_android { print; in_buildtypes = 1; next }
+            /^    \}/ && in_buildtypes && in_android { 
+              print
+              print ""
+              print "    compileOptions {"
+              print "        sourceCompatibility JavaVersion.VERSION_11"
+              print "        targetCompatibility JavaVersion.VERSION_11"
+              print "    }"
+              print ""
+              print "    kotlinOptions {"
+              print "        jvmTarget = '\''11'\''"
+              print "    }"
+              in_buildtypes = 0
+              buildtypes_done = 1
+              next
+            }
+            /^}/ && in_android && buildtypes_done { in_android = 0 }
+            { print }
+            ' build.gradle > build.gradle.tmp && mv build.gradle.tmp build.gradle
+          fi
+          
+          echo "=== build.gradle 更新完成 ==="
+          echo "=== 显示更新后的 android 块 ==="
+          sed -n '/^android {/,/^}/p' build.gradle
+
+          # 重写 tdesign-component/example/android/build.gradle
+          cd $GITHUB_WORKSPACE/tdesign-component/example/android
+          
+          # 删除原文件并创建新文件
+          rm -f build.gradle
+          
+          # 创建新的 build.gradle 文件内容
+          echo "buildscript {" > build.gradle
+          echo "    ext.kotlin_version = '1.7.10'" >> build.gradle
+          echo "" >> build.gradle
+          echo "    ext {" >> build.gradle
+          echo "        config = [" >> build.gradle
+          echo "                // 蓝盾自带变量" >> build.gradle
+          echo "                isCI           : System.getenv(\"isCI\") ?: \"false\"          // 是否在RMD的持续集成构建环境中" >> build.gradle
+          echo "                , VersionCode  : System.getenv(\"VersionCode\") ?: \"1\"   // VersionCode，每次发版本+2" >> build.gradle
+          echo "                , devopsUUID   : System.getenv(\"uuid\") ?: \"local\"          // 蓝盾构建UUID" >> build.gradle
+          echo "                , MajorVersion : System.getenv(\"MajorVersion\") ?: \"1\"  // 主版本号" >> build.gradle
+          echo "                , MinorVersion : System.getenv(\"MinorVersion\") ?: \"0\"  // 特性版本号" >> build.gradle
+          echo "                , FixVersion   : System.getenv(\"FixVersion\") ?: \"0\"    // 修正版本号" >> build.gradle
+          echo "                , BuildNo      : System.getenv(\"BuildNo\") ?: \"0\"       // 构建号" >> build.gradle
+          echo "                , isPublish    : System.getenv(\"isPublish\") ?: \"false\"     // 是否是外发版本，用来控制调试入口等" >> build.gradle
+          echo "                , isBeta       : System.getenv(\"isBeta\") ?: \"false\"        // 是否是灰度版本" >> build.gradle
+          echo "                , gitVersion   : System.getenv(\"gitVersion\") ?: \"local\"    // git提交hash" >> build.gradle
+          echo "                , keyAlias     : System.getenv(\"keyAlias\") ?: \"debug\"     // 签名信息" >> build.gradle
+          echo "                , storePassword: System.getenv(\"storePassword\") ?: \"debug\"        // storePassword" >> build.gradle
+          echo "                , abi_filters  : System.getenv(\"abi_filters\") ?: \"armeabi-v7a,arm64-v8a,x86,x86_64\"        // abi类型配置" >> build.gradle
+          echo "        ]" >> build.gradle
+          echo "" >> build.gradle
+          echo "        def dir = System.getProperty(\"user.dir\")" >> build.gradle
+          echo "        def file = new File(dir, 'local.properties')" >> build.gradle
+          echo "        Properties properties = new Properties()" >> build.gradle
+          echo "        if (file.exists()) {" >> build.gradle
+          echo "            properties.load(file.newDataInputStream())" >> build.gradle
+          echo "        }" >> build.gradle
+          echo "        enableWatchman = Boolean.valueOf(properties.getProperty('enableWatchman', \"\"))" >> build.gradle
+          echo "    }" >> build.gradle
+          echo "" >> build.gradle
+          echo "    repositories {" >> build.gradle
+          echo "        google()" >> build.gradle
+          echo "        mavenCentral()" >> build.gradle
+          echo "    }" >> build.gradle
+          echo "" >> build.gradle
+          echo "    dependencies {" >> build.gradle
+          echo "        classpath 'com.android.tools.build:gradle:7.0.1'" >> build.gradle
+          echo "        classpath \"org.jetbrains.kotlin:kotlin-gradle-plugin:\$kotlin_version\"" >> build.gradle
+          echo "    }" >> build.gradle
+          echo "}" >> build.gradle
+          echo "" >> build.gradle
+          echo "allprojects {" >> build.gradle
+          echo "    repositories {" >> build.gradle
+          echo "        google()" >> build.gradle
+          echo "        mavenCentral()" >> build.gradle
+          echo "    }" >> build.gradle
+          echo "}" >> build.gradle
+          echo "rootProject.buildDir = '../build'" >> build.gradle
+          echo "subprojects {" >> build.gradle
+          echo "    project.buildDir = \"\${rootProject.buildDir}/\${project.name}\"" >> build.gradle
+          echo "}" >> build.gradle
+          echo "subprojects {" >> build.gradle
+          echo "    project.evaluationDependsOn(':app')" >> build.gradle
+          echo "}" >> build.gradle
+          echo "tasks.register(\"clean\", Delete) {" >> build.gradle
+          echo "    delete rootProject.buildDir" >> build.gradle
+          echo "}" >> build.gradle
+          
+          echo "=== android/build.gradle 重写完成 ==="
+          echo "=== 显示新的 android/build.gradle 内容 ==="
+          cat build.gradle
+
+          # 更新 tdesign-component/example/android/gradle/wrapper/gradle-wrapper.properties
+          cd $GITHUB_WORKSPACE/tdesign-component/example/android/gradle/wrapper
+          
+          # 更新 Gradle 版本从 7.6 到 8.4
+          sed -i 's|distributionUrl=https\\://services.gradle.org/distributions/gradle-7.6-all.zip|distributionUrl=https\\://services.gradle.org/distributions/gradle-8.4-all.zip|g' gradle-wrapper.properties
+          
+          echo "=== gradle-wrapper.properties 更新完成 ==="
+          echo "=== 显示更新后的 gradle-wrapper.properties 内容 ==="
+          cat gradle-wrapper.properties
+
+          # 更新 tdesign-component/example/android/settings.gradle
+          cd $GITHUB_WORKSPACE/tdesign-component/example/android
+          
+          # 更新 Android Gradle Plugin 版本从 7.3.0 到 8.3.0
+          sed -i 's|id "com.android.application" version "7.3.0" apply false|id "com.android.application" version "8.3.0" apply false|g' settings.gradle
+          
+          echo "=== settings.gradle 更新完成 ==="
+          echo "=== 显示更新后的 settings.gradle 内容 ==="
+          cat settings.gradle
+
+      - name: Build Flutter apk
+        run: |
+          cd $GITHUB_WORKSPACE/tdesign-component/example
+
+          flutter clean
+
+          flutter doctor -v
+          flutter devices
+
+          flutter pub get --verbose
+
+                    # Generate keystore for signing
+          cd ${{ github.workspace }}/tdesign-component/example/android/app
+          
+          # Use simple fixed passwords instead of random ones
+          STORE_PASSWORD="tdesign123456"
+          KEY_PASSWORD="tdesign123456"
+
+          keytool -genkeypair \
+            -alias tdesign_flutter_debug_key \
+            -keypass "$KEY_PASSWORD" \
+            -keystore keystore.jks \
+            -storepass "$STORE_PASSWORD" \
+            -dname "CN=TDesign Flutter Test,O=TDesign,C=CN" \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 365
+            
+          # Ensure the keystore file has the correct permissions
+          chmod 644 keystore.jks
+
+          # Create key.properties in android directory (where build.gradle expects it)
+          cd ${{ github.workspace }}/tdesign-component/example/android
+          echo "storePassword=$STORE_PASSWORD" > key.properties
+          echo "keyPassword=$KEY_PASSWORD" >> key.properties
+          echo "keyAlias=tdesign_flutter_debug_key" >> key.properties
+          echo "storeFile=keystore.jks" >> key.properties
+          
+          # Verify keystore file existence and properties file
+          echo "Verifying keystore setup:"
+          ls -la ${{ github.workspace }}/tdesign-component/example/android/app/keystore.jks || echo "Keystore file not found!"
+          echo "Key.properties content (without passwords):"
+          cat key.properties | grep -v "Password"
+
+          cat android/local.properties || echo "File not found"
+
+          echo "使用以下环境变量构建:"
+          echo "MajorVersion: ${{ steps.version.outputs.major_version }}"
+          echo "MinorVersion: ${{ steps.version.outputs.minor_version }}"
+          echo "FixVersion: ${{ steps.version.outputs.fix_version }}"
+          echo "BuildNo: ${{ github.run_number }}"
+          echo "devopsUUID: ${{ github.run_id }}"
+          echo "gitVersion: ${{ github.sha }}"
+
+          # 使用环境变量构建
+          flutter build apk --release \
+            --dart-define=isCI=true \
+            --dart-define=VersionCode=${{ github.run_number }} \
+            --dart-define=devopsUUID=${{ github.run_id }} \
+            --dart-define=MajorVersion=${{ steps.version.outputs.major_version }} \
+            --dart-define=MinorVersion=${{ steps.version.outputs.minor_version }} \
+            --dart-define=FixVersion=${{ steps.version.outputs.fix_version }} \
+            --dart-define=BuildNo=${{ github.run_number }} \
+            --dart-define=isPublish=false \
+            --dart-define=isBeta=false \
+            --dart-define=gitVersion=${{ github.sha }}
+
+      - name: Rename APK with version
+        run: |
+          VERSION="${{ steps.version.outputs.major_version }}.${{ steps.version.outputs.minor_version }}.${{ steps.version.outputs.fix_version }}"
+          BUILD="${{ github.run_number }}"
+          # 直接在构建输出目录重命名APK
+          cd ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/
+          mv app-release.apk tdesign-flutter-${VERSION}-${BUILD}.apk
+          echo "APK renamed to: tdesign-flutter-${VERSION}-${BUILD}.apk"
+          ls -la tdesign-flutter-${VERSION}-${BUILD}.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tdesign-flutter-apk
+          path: ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/tdesign-flutter-*.apk
+          compression-level: 0
+
+      - name: demo tools build api md
+        run: |
+          cd $GITHUB_WORKSPACE/tdesign-component/demo_tool
+          sh all_build.sh
+      
+      - name: Build site
+        working-directory: ./tdesign-site
+        run: |
+          npm install --unsafe-perm
+          npm run site:intranet
+      
+      - name: Build site Demo
+        working-directory: ./tdesign-component/example
+        run: |
+          flutter build web -t ./lib/main.dart --base-href /flutter/example/ --source-maps
+
+          echo "=== Files in tdesign-site ==="
+          ls -la tdesign-site/ || echo "Directory not found"
+
+          echo "=== Files in tdesign-component ==="
+          ls -la tdesign-component/ || echo "Directory not found"
+
+          # Ensure output directory exists at workspace root and copy built artifacts
+          cd $GITHUB_WORKSPACE
+          mkdir -p tdesign-flutter-web/flutter/example/
+
+          cp -r tdesign-site/_site/* tdesign-flutter-web/ || echo "tdesign-site/_site/ not found or empty"
+          rm -rf tdesign-flutter-web/assets || echo "tdesign-site/_site/assets not found or empty"
+
+          # 重写 index.html 内容: 插入 <base href="/">（如果不存在），并把资源引用从绝对路径 /flutter/... 改为相对路径 flutter/...
+          for f in \
+            "$GITHUB_WORKSPACE/tdesign-flutter-web/index.html"; do
+            if [ -f "$f" ]; then
+              echo "Rewriting $f"
+              # 如果没有 base 标签，则在 X-UA-Compatible 后面插入
+              if ! grep -q '<base href="/">' "$f"; then
+                sed -i 's|<meta http-equiv="X-UA-Compatible" content="ie=edge">|<meta http-equiv="X-UA-Compatible" content="ie=edge">\n  <base href="/">|' "$f" || true
+              fi
+              # 把 src="/flutter/..." 和 href="/flutter/..." 改为不带前导斜杠
+              sed -i "s|src=\"/flutter/|src=\"flutter/|g; s|href=\"/flutter/|href=\"flutter/|g; s|src='/flutter/|src='flutter/|g; s|href='/flutter/|href='flutter/|g" "$f" || true
+            else
+              echo "$f not found, skipping"
+            fi
+          done
+
+          cp -v tdesign-site/_site/index.html tdesign-flutter-web/404.html || echo "tdesign-site/_site/index.html not found or empty"
+          cp -v tdesign-site/_site/index.html tdesign-flutter-web/200.html || echo "tdesign-site/_site/index.html not found or empty"
+
+          cp -r tdesign-site/_site/assets tdesign-flutter-web/flutter/assets || echo "tdesign-site/_site not found or empty"
+          cp -r tdesign-component/example/build/web/* tdesign-flutter-web/flutter/example/ || echo "example build web output not found"
+
+          # 在仓库根写入 CNAME，用于静态托管重写规则
+          echo '/* /index.html 200' > "$GITHUB_WORKSPACE/CNAME" || true
+          echo "Wrote $GITHUB_WORKSPACE/CNAME"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tdesign-flutter-web
+          path: ${{ github.workspace }}/tdesign-flutter-web
+          retention-days: 5

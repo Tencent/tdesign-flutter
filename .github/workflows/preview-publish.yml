@@ -1,0 +1,94 @@
+# 文件名建议统一为 preview-publish
+# 应用 preview.yml 的 demo
+name: PREVIEW_PUBLISH
+
+on:
+  workflow_run:
+    workflows: ["PREVIEW_BUILD"]
+    types:
+      - completed
+
+jobs:
+  preview-success-web:
+    runs-on: ubuntu-latest
+    if: >
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: download pr artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: pr-id
+      - name: save PR id
+        id: pr
+        run: echo "id=$(<pr-id.txt)" >> $GITHUB_OUTPUT
+      
+      - name: Get APK artifact URL
+        id: apk_url
+        run: |
+          # 构造 APK 下载页面链接
+          APK_DOWNLOAD_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}"
+          echo "apk_url=$APK_DOWNLOAD_URL" >> $GITHUB_OUTPUT
+          echo "APK下载页面: $APK_DOWNLOAD_URL"
+      
+      - name: download tdesign-flutter-web artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: tdesign-flutter-web
+          path: tdesign-flutter-web
+ 
+
+      - name: update status comment
+        uses: actions-cool/maintain-one-comment@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            <a href="${{steps.deploy.outputs.url}}"><img height="96" alt="完成" src="https://user-images.githubusercontent.com/15634204/150816437-9f5bb788-cd67-4cbc-9897-b82d74e9aa65.png" /></a>
+            
+            ## 📱 体验 APK 下载【下载 tdesign-flutter-apk.zip】
+            [tdesign-flutter-apk](${{ steps.apk_url.outputs.apk_url }})
+            
+            <!-- [工作流地址](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}) -->
+            <!-- AUTO_PREVIEW_HOOK -->
+          number: ${{ steps.pr.outputs.id }}
+          body-include: "<!-- AUTO_PREVIEW_HOOK -->"
+
+      - name: The job failed
+        if: ${{ failure() }}
+        uses: actions-cool/maintain-one-comment@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
+            <!-- AUTO_PREVIEW_HOOK -->
+          number: ${{ steps.pr.outputs.id }}
+          body-include: "<!-- AUTO_PREVIEW_HOOK -->"
+
+  preview-failed:
+    runs-on: ubuntu-latest
+    if: >
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'failure'
+    steps:
+      - name: download pr artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: pr-id
+      - name: save PR id
+        id: pr
+        run: echo "id=$(<pr-id.txt)" >> $GITHUB_OUTPUT
+      - name: The job failed
+        uses: actions-cool/maintain-one-comment@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
+            <!-- AUTO_PREVIEW_HOOK -->
+          number: ${{ steps.pr.outputs.id }}
+          body-include: "<!-- AUTO_PREVIEW_HOOK -->"
