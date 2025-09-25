@@ -20,11 +20,12 @@ jobs:
         with:
           submodules: recursive
 
+      
       - name: Set Node version
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: '20'
+          cache: 'npm'
           cache-dependency-path: tdesign-site/package-lock.json
 
       - uses: actions/setup-java@v5
@@ -83,25 +84,25 @@ jobs:
 
           # 更新 tdesign-component/example/android/app/build.gradle
           cd $GITHUB_WORKSPACE/tdesign-component/example/android/app
-
+          
           # 使用 sed 更新 build.gradle 文件
           # 1. 添加 namespace 如果不存在
           if ! grep -q "namespace" build.gradle; then
             sed -i '/^android {$/a\\    namespace '\''com.tdesign.tdesign_flutter_example'\''' build.gradle
           fi
-
+          
           # 2. 更新 compileSdkVersion 从 34 到 35
           sed -i 's/compileSdkVersion 34/compileSdkVersion 35/g' build.gradle
-
+          
           # 3. 更新 minSdkVersion 从 21 到 23
           sed -i 's/minSdkVersion 21/minSdkVersion 23/g' build.gradle
-
+          
           # 4. 更新 targetSdkVersion 从 31 到 35
           sed -i 's/targetSdkVersion 31/targetSdkVersion 35/g' build.gradle
-
+          
           # 5. 将双引号改为单引号 (applicationId)
           sed -i 's/applicationId "com.tdesign.tdesign_flutter_example"/applicationId '\''com.tdesign.tdesign_flutter_example'\''/g' build.gradle
-
+          
           # 6. 添加 compileOptions 和 kotlinOptions 如果不存在
           if ! grep -q "compileOptions" build.gradle; then
             # 在 buildTypes 块之后添加 compileOptions 和 kotlinOptions
@@ -128,17 +129,17 @@ jobs:
             { print }
             ' build.gradle > build.gradle.tmp && mv build.gradle.tmp build.gradle
           fi
-
+          
           echo "=== build.gradle 更新完成 ==="
           echo "=== 显示更新后的 android 块 ==="
           sed -n '/^android {/,/^}/p' build.gradle
 
           # 重写 tdesign-component/example/android/build.gradle
           cd $GITHUB_WORKSPACE/tdesign-component/example/android
-
+          
           # 删除原文件并创建新文件
           rm -f build.gradle
-
+          
           # 创建新的 build.gradle 文件内容
           echo "buildscript {" > build.gradle
           echo "    ext.kotlin_version = '1.7.10'" >> build.gradle
@@ -197,27 +198,27 @@ jobs:
           echo "tasks.register(\"clean\", Delete) {" >> build.gradle
           echo "    delete rootProject.buildDir" >> build.gradle
           echo "}" >> build.gradle
-
+          
           echo "=== android/build.gradle 重写完成 ==="
           echo "=== 显示新的 android/build.gradle 内容 ==="
           cat build.gradle
 
           # 更新 tdesign-component/example/android/gradle/wrapper/gradle-wrapper.properties
           cd $GITHUB_WORKSPACE/tdesign-component/example/android/gradle/wrapper
-
+          
           # 更新 Gradle 版本从 7.6 到 8.4
           sed -i 's|distributionUrl=https\\://services.gradle.org/distributions/gradle-7.6-all.zip|distributionUrl=https\\://services.gradle.org/distributions/gradle-8.4-all.zip|g' gradle-wrapper.properties
-
+          
           echo "=== gradle-wrapper.properties 更新完成 ==="
           echo "=== 显示更新后的 gradle-wrapper.properties 内容 ==="
           cat gradle-wrapper.properties
 
           # 更新 tdesign-component/example/android/settings.gradle
           cd $GITHUB_WORKSPACE/tdesign-component/example/android
-
+          
           # 更新 Android Gradle Plugin 版本从 7.3.0 到 8.3.0
           sed -i 's|id "com.android.application" version "7.3.0" apply false|id "com.android.application" version "8.3.0" apply false|g' settings.gradle
-
+          
           echo "=== settings.gradle 更新完成 ==="
           echo "=== 显示更新后的 settings.gradle 内容 ==="
           cat settings.gradle
@@ -235,7 +236,7 @@ jobs:
 
                     # Generate keystore for signing
           cd ${{ github.workspace }}/tdesign-component/example/android/app
-
+          
           # Use simple fixed passwords instead of random ones
           STORE_PASSWORD="tdesign123456"
           KEY_PASSWORD="tdesign123456"
@@ -259,7 +260,7 @@ jobs:
           echo "keyPassword=$KEY_PASSWORD" >> key.properties
           echo "keyAlias=tdesign_flutter_debug_key" >> key.properties
           echo "storeFile=keystore.jks" >> key.properties
-
+          
           # Verify keystore file existence and properties file
           echo "Verifying keystore setup:"
           ls -la ${{ github.workspace }}/tdesign-component/example/android/app/keystore.jks || echo "Keystore file not found!"
@@ -298,28 +299,25 @@ jobs:
           mv app-release.apk tdesign-flutter-${VERSION}-${BUILD}.apk
           echo "APK renamed to: tdesign-flutter-${VERSION}-${BUILD}.apk"
           ls -la tdesign-flutter-${VERSION}-${BUILD}.apk
-          # 创建artifacts目录并复制重命名后的APK
-          mkdir -p ${{ github.workspace }}/artifacts
-          cp tdesign-flutter-${VERSION}-${BUILD}.apk ${{ github.workspace }}/artifacts/
 
-      - name: Upload artifacts
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: tdesign-flutter-builds
-          path: |
-            ${{ github.workspace }}/artifacts/tdesign-flutter-*.apk
+          name: tdesign-flutter-apk
+          path: ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/tdesign-flutter-*.apk
+          compression-level: 0
 
       - name: demo tools build api md
         run: |
           cd $GITHUB_WORKSPACE/tdesign-component/demo_tool
           sh all_build.sh
-
+      
       - name: Build site
         working-directory: ./tdesign-site
         run: |
           npm install --unsafe-perm
           npm run site:intranet
-
+      
       - name: Build site Demo
         working-directory: ./tdesign-component/example
         run: |

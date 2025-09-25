@@ -9,7 +9,7 @@ on:
       - completed
 
 jobs:
-  preview-success:
+  preview-success-web:
     runs-on: ubuntu-latest
     if: >
       github.event.workflow_run.event == 'pull_request' &&
@@ -24,6 +24,15 @@ jobs:
       - name: save PR id
         id: pr
         run: echo "id=$(<pr-id.txt)" >> $GITHUB_OUTPUT
+      
+      - name: Get APK artifact URL
+        id: apk_url
+        run: |
+          # 构造 APK 下载页面链接
+          APK_DOWNLOAD_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}"
+          echo "apk_url=$APK_DOWNLOAD_URL" >> $GITHUB_OUTPUT
+          echo "APK下载页面: $APK_DOWNLOAD_URL"
+      
       - name: download tdesign-flutter-web artifact
         uses: dawidd6/action-download-artifact@v6
         with:
@@ -31,27 +40,18 @@ jobs:
           run_id: ${{ github.event.workflow_run.id }}
           name: tdesign-flutter-web
           path: tdesign-flutter-web
-      # - run: |
-      #     unzip tdesign-flutter-web.zip
+ 
 
-      - name: Upload surge service and generate preview URL
-        id: deploy
-        run: |
-
-          echo "=== Files in tdesign-flutter-web ==="
-          ls -la tdesign-flutter-web/ || echo "Directory not found"
-          repository=${{github.repository}}
-          project_name=${repository#*/}
-          export DEPLOY_DOMAIN=https://preview-pr-${{ steps.pr.outputs.id }}-$project_name.surge.sh
-          npx surge --project ./tdesign-flutter-web --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
-          echo the preview URL is $DEPLOY_DOMAIN
-          echo "url=$DEPLOY_DOMAIN" >> $GITHUB_OUTPUT
       - name: update status comment
         uses: actions-cool/maintain-one-comment@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             <a href="${{steps.deploy.outputs.url}}"><img height="96" alt="完成" src="https://user-images.githubusercontent.com/15634204/150816437-9f5bb788-cd67-4cbc-9897-b82d74e9aa65.png" /></a>
+            
+            ## 📱 体验 APK 下载【下载 tdesign-flutter-apk.zip】
+            [tdesign-flutter-apk](${{ steps.apk_url.outputs.apk_url }})
+            
             <!-- [工作流地址](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}) -->
             <!-- AUTO_PREVIEW_HOOK -->
           number: ${{ steps.pr.outputs.id }}
