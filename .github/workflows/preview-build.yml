@@ -9,18 +9,12 @@ jobs:
   tdesign-flutter-site:
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ github.event.number }} > pr-id.txt
-      - uses: actions/upload-artifact@v4
-        with:
-          name: pr-id
-          path: pr-id.txt
-          retention-days: 5
 
       - uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      
+
       - name: Set Node version
         uses: actions/setup-node@v4
         with:
@@ -50,27 +44,46 @@ jobs:
           cd ${{ env.FLUTTER_ROOT }}
           curl -L https://raw.githubusercontent.com/TDesignOteam/tdesign-flutter-aop-registry/main/patch_flutter/3.24~3.32.patch | git apply --allow-empty
           git status
-
           rm bin/cache/flutter_tools.stamp
-
       - name: Extract version from pubspec.yaml and set env
         id: version
         run: |
           # 从pubspec.yaml中提取版本号
           VERSION=$(grep "version:" tdesign-component/pubspec.yaml | sed 's/version: //g' | xargs)
           echo "Version from pubspec.yaml: $VERSION"
-
           # 分解版本号为主版本号、特性版本号和修正版本号
           MAJOR=$(echo $VERSION | cut -d. -f1)
           MINOR=$(echo $VERSION | cut -d. -f2)
           FIX=$(echo $VERSION | cut -d. -f3)
-
           # 输出变量以便后续步骤使用
           echo "major_version=$MAJOR" >> $GITHUB_OUTPUT
           echo "minor_version=$MINOR" >> $GITHUB_OUTPUT
           echo "fix_version=$FIX" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Create build environment file
+        run: |
+          # 创建包含所有构建环境变量的文件
+          cat > build-env.txt << EOF
+          MAJOR_VERSION=${{ steps.version.outputs.major_version }}
+          MINOR_VERSION=${{ steps.version.outputs.minor_version }}
+          FIX_VERSION=${{ steps.version.outputs.fix_version }}
+          VERSION=${{ steps.version.outputs.version }}
+          BUILD_NUMBER=${{ github.run_number }}
+          DEVOPS_UUID=${{ github.run_id }}
+          GIT_VERSION=${{ github.sha }}
+          PR_NUMBER=${{ github.event.number }}
+          SHA=${{ github.sha }}
+          EOF
+          echo "=== Build environment file created ==="
+          cat build-env.txt
+
+      - name: Upload build environment
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-env
+          path: build-env.txt
+          retention-days: 5
       - name: Get tdesign-flutter-generator
         uses: actions/checkout@v4
         with:
@@ -81,7 +94,6 @@ jobs:
         run: |
           #  AOPMarket.enable = true 
           yq e '.AOPMarket.enable = true' -i tdesign-component/example/pubspec.yaml
-
           # 更新 tdesign-component/example/android/app/build.gradle
           cd $GITHUB_WORKSPACE/tdesign-component/example/android/app
           
@@ -114,12 +126,12 @@ jobs:
               print
               print ""
               print "    compileOptions {"
-              print "        sourceCompatibility JavaVersion.VERSION_11"
-              print "        targetCompatibility JavaVersion.VERSION_11"
+              print "        sourceCompatibility JavaVersion.VERSION_17"
+              print "        targetCompatibility JavaVersion.VERSION_17"
               print "    }"
               print ""
               print "    kotlinOptions {"
-              print "        jvmTarget = '\''11'\''"
+              print "        jvmTarget = '\''17'\''"
               print "    }"
               in_buildtypes = 0
               buildtypes_done = 1
@@ -133,7 +145,6 @@ jobs:
           echo "=== build.gradle 更新完成 ==="
           echo "=== 显示更新后的 android 块 ==="
           sed -n '/^android {/,/^}/p' build.gradle
-
           # 重写 tdesign-component/example/android/build.gradle
           cd $GITHUB_WORKSPACE/tdesign-component/example/android
           
@@ -202,7 +213,6 @@ jobs:
           echo "=== android/build.gradle 重写完成 ==="
           echo "=== 显示新的 android/build.gradle 内容 ==="
           cat build.gradle
-
           # 更新 tdesign-component/example/android/gradle/wrapper/gradle-wrapper.properties
           cd $GITHUB_WORKSPACE/tdesign-component/example/android/gradle/wrapper
           
@@ -212,7 +222,6 @@ jobs:
           echo "=== gradle-wrapper.properties 更新完成 ==="
           echo "=== 显示更新后的 gradle-wrapper.properties 内容 ==="
           cat gradle-wrapper.properties
-
           # 更新 tdesign-component/example/android/settings.gradle
           cd $GITHUB_WORKSPACE/tdesign-component/example/android
           
@@ -222,25 +231,19 @@ jobs:
           echo "=== settings.gradle 更新完成 ==="
           echo "=== 显示更新后的 settings.gradle 内容 ==="
           cat settings.gradle
-
       - name: Build Flutter apk
         run: |
           cd $GITHUB_WORKSPACE/tdesign-component/example
-
           flutter clean
-
           flutter doctor -v
           flutter devices
-
           flutter pub get --verbose
-
                     # Generate keystore for signing
           cd ${{ github.workspace }}/tdesign-component/example/android/app
           
           # Use simple fixed passwords instead of random ones
           STORE_PASSWORD="tdesign123456"
           KEY_PASSWORD="tdesign123456"
-
           keytool -genkeypair \
             -alias tdesign_flutter_debug_key \
             -keypass "$KEY_PASSWORD" \
@@ -253,7 +256,6 @@ jobs:
             
           # Ensure the keystore file has the correct permissions
           chmod 644 keystore.jks
-
           # Create key.properties in android directory (where build.gradle expects it)
           cd ${{ github.workspace }}/tdesign-component/example/android
           echo "storePassword=$STORE_PASSWORD" > key.properties
@@ -266,9 +268,7 @@ jobs:
           ls -la ${{ github.workspace }}/tdesign-component/example/android/app/keystore.jks || echo "Keystore file not found!"
           echo "Key.properties content (without passwords):"
           cat key.properties | grep -v "Password"
-
           cat android/local.properties || echo "File not found"
-
           echo "使用以下环境变量构建:"
           echo "MajorVersion: ${{ steps.version.outputs.major_version }}"
           echo "MinorVersion: ${{ steps.version.outputs.minor_version }}"
@@ -276,7 +276,6 @@ jobs:
           echo "BuildNo: ${{ github.run_number }}"
           echo "devopsUUID: ${{ github.run_id }}"
           echo "gitVersion: ${{ github.sha }}"
-
           # 使用环境变量构建
           flutter build apk --release \
             --dart-define=isCI=true \
@@ -289,7 +288,6 @@ jobs:
             --dart-define=isPublish=false \
             --dart-define=isBeta=false \
             --dart-define=gitVersion=${{ github.sha }}
-
       - name: Rename APK with version
         run: |
           VERSION="${{ steps.version.outputs.major_version }}.${{ steps.version.outputs.minor_version }}.${{ steps.version.outputs.fix_version }}"
@@ -299,7 +297,6 @@ jobs:
           mv app-release.apk tdesign-flutter-${VERSION}-${BUILD}.apk
           echo "APK renamed to: tdesign-flutter-${VERSION}-${BUILD}.apk"
           ls -la tdesign-flutter-${VERSION}-${BUILD}.apk
-
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
@@ -322,20 +319,15 @@ jobs:
         working-directory: ./tdesign-component/example
         run: |
           flutter build web -t ./lib/main.dart --base-href /flutter/example/ --source-maps
-
           echo "=== Files in tdesign-site ==="
           ls -la tdesign-site/ || echo "Directory not found"
-
           echo "=== Files in tdesign-component ==="
           ls -la tdesign-component/ || echo "Directory not found"
-
           # Ensure output directory exists at workspace root and copy built artifacts
           cd $GITHUB_WORKSPACE
           mkdir -p tdesign-flutter-web/flutter/example/
-
           cp -r tdesign-site/_site/* tdesign-flutter-web/ || echo "tdesign-site/_site/ not found or empty"
           rm -rf tdesign-flutter-web/assets || echo "tdesign-site/_site/assets not found or empty"
-
           # 重写 index.html 内容: 插入 <base href="/">（如果不存在），并把资源引用从绝对路径 /flutter/... 改为相对路径 flutter/...
           for f in \
             "$GITHUB_WORKSPACE/tdesign-flutter-web/index.html"; do
@@ -351,17 +343,13 @@ jobs:
               echo "$f not found, skipping"
             fi
           done
-
           cp -v tdesign-site/_site/index.html tdesign-flutter-web/404.html || echo "tdesign-site/_site/index.html not found or empty"
           cp -v tdesign-site/_site/index.html tdesign-flutter-web/200.html || echo "tdesign-site/_site/index.html not found or empty"
-
           cp -r tdesign-site/_site/assets tdesign-flutter-web/flutter/assets || echo "tdesign-site/_site not found or empty"
           cp -r tdesign-component/example/build/web/* tdesign-flutter-web/flutter/example/ || echo "example build web output not found"
-
           # 在仓库根写入 CNAME，用于静态托管重写规则
           echo '/* /index.html 200' > "$GITHUB_WORKSPACE/CNAME" || true
           echo "Wrote $GITHUB_WORKSPACE/CNAME"
-
       - uses: actions/upload-artifact@v4
         with:
           name: tdesign-flutter-web
