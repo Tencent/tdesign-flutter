@@ -15,24 +15,30 @@ jobs:
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
     steps:
-      - name: download pr artifact
+      - name: download build artifacts
         uses: dawidd6/action-download-artifact@v6
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
-          name: pr-id
-      - name: save PR id
-        id: pr
-        run: echo "id=$(<pr-id.txt)" >> $GITHUB_OUTPUT
-      
-      - name: Get APK artifact URL
-        id: apk_url
+          name: build-env
+
+      - name: load build env variables
+        id: build_env
         run: |
-          # 构造 APK 下载页面链接
-          APK_DOWNLOAD_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}"
-          echo "apk_url=$APK_DOWNLOAD_URL" >> $GITHUB_OUTPUT
-          echo "APK下载页面: $APK_DOWNLOAD_URL"
-      
+          # 从文件中读取环境变量并设置为输出
+          while IFS='=' read -r key value; do
+            echo "$key=$value" >> $GITHUB_OUTPUT
+            echo "Loaded: $key=$value"
+          done < build-env.txt
+
+      - name: download tdesign-flutter-apk artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: tdesign-flutter-apk
+          path: tdesign-flutter-apk
+
       - name: download tdesign-flutter-web artifact
         uses: dawidd6/action-download-artifact@v6
         with:
@@ -41,15 +47,31 @@ jobs:
           name: tdesign-flutter-web
           path: tdesign-flutter-web
 
+      - name: Move APK to web directory
+        run: |
+          # 将 APK 文件移动到 web 目录以便通过 surge 访问
+          mv tdesign-flutter-apk/*.apk tdesign-flutter-web/ || echo "No APK file found"
+          ls -la tdesign-flutter-web/*.apk || echo "*.apk not found"
+
       - name: Upload surge service and generate preview URL
         id: deploy
         run: |
           repository=${{github.repository}}
           project_name=${repository#*/}
-          export DEPLOY_DOMAIN=https://preview-pr-${{ steps.pr.outputs.id }}-$project_name.surge.sh
+          export DEPLOY_DOMAIN=https://preview-pr-${{ steps.build_env.outputs.PR_NUMBER }}-$project_name.surge.sh
           npx surge --project ./tdesign-flutter-web --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
           echo the preview URL is $DEPLOY_DOMAIN
           echo "url=$DEPLOY_DOMAIN" >> $GITHUB_OUTPUT
+
+      - name: generate APK download URL
+        id: apk_url
+        run: |
+          # 使用环境变量构建APK文件名和下载链接
+          APK_FILENAME="tdesign-flutter-${{ steps.build_env.outputs.VERSION }}-${{ steps.build_env.outputs.BUILD_NUMBER }}.apk"
+          APK_URL="${{ steps.deploy.outputs.url }}/$APK_FILENAME"
+          echo "apk_filename=$APK_FILENAME" >> $GITHUB_OUTPUT
+          echo "apk_url=$APK_URL" >> $GITHUB_OUTPUT
+          echo "APK download URL: $APK_URL"
 
       - name: update status comment
         uses: actions-cool/maintain-one-comment@v3
@@ -57,13 +79,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             <a href="${{steps.deploy.outputs.url}}"><img height="96" alt="完成" src="https://user-images.githubusercontent.com/15634204/150816437-9f5bb788-cd67-4cbc-9897-b82d74e9aa65.png" /></a>
-            
-            ## 📱 体验 APK 下载【下载 tdesign-flutter-apk.zip】
-            [tdesign-flutter-apk](${{ steps.apk_url.outputs.apk_url }})
-            
-            <!-- [工作流地址](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}) -->
+
+            ## 📱 APK 下载
+             [${{ steps.apk_url.outputs.apk_filename }}](${{ steps.apk_url.outputs.apk_url }})
+
+
             <!-- AUTO_PREVIEW_HOOK -->
-          number: ${{ steps.pr.outputs.id }}
+          number: ${{ steps.build_env.outputs.PR_NUMBER }}
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"
 
       - name: The job failed
@@ -74,7 +96,7 @@ jobs:
           body: |
             [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
             <!-- AUTO_PREVIEW_HOOK -->
-          number: ${{ steps.pr.outputs.id }}
+          number: ${{ steps.build_env.outputs.PR_NUMBER }}
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"
 
   preview-failed:
@@ -83,15 +105,22 @@ jobs:
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'failure'
     steps:
-      - name: download pr artifact
+      - name: download build artifacts
         uses: dawidd6/action-download-artifact@v6
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
-          name: pr-id
-      - name: save PR id
-        id: pr
-        run: echo "id=$(<pr-id.txt)" >> $GITHUB_OUTPUT
+          name: build-env
+
+      - name: load build env variables
+        id: build_env
+        run: |
+          # 从文件中读取环境变量并设置为输出
+          while IFS='=' read -r key value; do
+            echo "$key=$value" >> $GITHUB_OUTPUT
+            echo "Loaded: $key=$value"
+          done < build-env.txt
+
       - name: The job failed
         uses: actions-cool/maintain-one-comment@v3
         with:
@@ -99,5 +128,5 @@ jobs:
           body: |
             [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
             <!-- AUTO_PREVIEW_HOOK -->
-          number: ${{ steps.pr.outputs.id }}
+          number: ${{ steps.build_env.outputs.PR_NUMBER }}
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"
