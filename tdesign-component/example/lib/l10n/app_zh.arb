@@ -4,6 +4,7 @@
   "defaultTheme": "默认主题",
   "greenTheme": "绿色主题",
   "redTheme": "红色主题",
+  "darkTheme": "暗黑模式",
   "cancel": "取消",
   "confirm": "确认",
   "switchClose": "关",
