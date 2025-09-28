@@ -26,13 +26,13 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tdTitle(),
-      backgroundColor: TDTheme.of(context).whiteColor1,
       exampleCodeGroup: 'loading',
       desc: '用于表示页面或操作的加载状态，给予用户反馈的同时减缓等待的焦虑感，由一个或一组反馈动效组成。',
       children: [
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '纯图标', builder: _buildPureIconLoading),
-          ExampleItem(desc: '图标加文字横向', builder: _buildTextIconHorizontalLoading),
+          ExampleItem(
+              desc: '图标加文字横向', builder: _buildTextIconHorizontalLoading),
           ExampleItem(desc: '图标加文字竖向', builder: _buildTextIconVerticalLoading),
           ExampleItem(desc: '纯文字', builder: _buildPureTextLoading),
         ]),
@@ -119,7 +119,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
                           (previousValue, element) => [
                                 ...previousValue,
                                 Container(
-                                  color: TDTheme.of(context).grayColor6,
+                                  color: TDTheme.of(context).bgColorContainer,
                                   child: element,
                                 ),
                                 rowSpace
@@ -137,14 +137,20 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
                     TDLoadingController.show(context);
                   },
                 ),
-                const SizedBox(width: 24,),
+                const SizedBox(
+                  width: 24,
+                ),
                 const TDButton(
                   text: '隐藏Loading',
                   theme: TDButtonTheme.primary,
                   onTap: TDLoadingController.dismiss,
                 ),
               ];
-              return Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Row(children: list, ));
+              return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: list,
+                  ));
             })
       ],
     );
@@ -156,7 +162,12 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(children: list.fold([], (previousValue, element) => [...previousValue, element, rowSpace])),));
+          child: Row(
+              children: list.fold(
+                  [],
+                  (previousValue, element) =>
+                      [...previousValue, element, rowSpace])),
+        ));
   }
 
   /// 纯图标
@@ -228,7 +239,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
       TDLoading(
         size: TDLoadingSize.small,
         text: '加载失败',
-        textColor: TDTheme.of(context).fontGyColor3,
+        textColor: TDTheme.of(context).textColorPlaceholder,
       ),
       TDLoading(
         size: TDLoadingSize.small,
@@ -305,7 +316,8 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
             text: '加载中…',
             duration: _currentSliderValue.round(),
           ),
-          TDSlider(value: _currentSliderValue,
+          TDSlider(
+            value: _currentSliderValue,
             sliderThemeData: TDSliderThemeData(
               context: context,
               max: 2000,
@@ -318,7 +330,8 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
               setState(() {
                 _currentSliderValue = value;
               });
-            },)
+            },
+          )
         ],
       ),
     );
