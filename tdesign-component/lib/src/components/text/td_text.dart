@@ -43,10 +43,10 @@ class TDText extends StatelessWidget {
     this.font,
     this.fontWeight,
     this.fontFamily,
-    this.textColor = Colors.black,
+    this.textColor,
     this.backgroundColor,
     this.isTextThrough = false,
-    this.lineThroughColor = Colors.white,
+    this.lineThroughColor,
     this.package,
     this.style,
     this.strutStyle,
@@ -73,10 +73,10 @@ class TDText extends StatelessWidget {
     this.font,
     this.fontWeight,
     this.fontFamily,
-    this.textColor = Colors.black,
+    this.textColor,
     this.backgroundColor,
     this.isTextThrough = false,
-    this.lineThroughColor = Colors.white,
+    this.lineThroughColor,
     this.package,
     Key? key,
     this.style,
@@ -107,7 +107,7 @@ class TDText extends StatelessWidget {
   final FontFamily? fontFamily;
 
   /// 文本颜色
-  final Color textColor;
+  final Color? textColor;
 
   /// 背景颜色
   final Color? backgroundColor;
@@ -173,7 +173,9 @@ class TDText extends StatelessWidget {
       var config = getConfiguration(context);
       var paddingConfig = config?.paddingConfig;
 
-      var textFont = font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
+      var textFont = font ??
+          TDTheme.of(context).fontBodyLarge ??
+          Font(size: 16, lineHeight: 24);
       var fontSize = style?.fontSize ?? textFont.size;
       var height = style?.height ?? textFont.height;
 
@@ -183,7 +185,9 @@ class TDText extends StatelessWidget {
         color: style?.backgroundColor ?? backgroundColor,
         height: fontSize * height,
         padding: paddingConfig.getPadding(data, fontSize, height),
-        child: _getRawText(context: context, textStyle: getTextStyle(context, height: showHeight)),
+        child: _getRawText(
+            context: context,
+            textStyle: getTextStyle(context, height: showHeight)),
       );
     }
     var bgColor = style?.backgroundColor ?? backgroundColor;
@@ -201,8 +205,11 @@ class TDText extends StatelessWidget {
     return context.dependOnInheritedWidgetOfExactType<TDTextConfiguration>();
   }
 
-  TextStyle? getTextStyle(BuildContext context, {double? height, Color? backgroundColor}) {
-    var textFont = font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
+  TextStyle? getTextStyle(BuildContext context,
+      {double? height, Color? backgroundColor}) {
+    var textFont = font ??
+        TDTheme.of(context).fontBodyLarge ??
+        Font(size: 16, lineHeight: 24);
 
     var stylePackage = package ?? fontFamily?.package;
     var styleFontFamily = style?.fontFamily ?? fontFamily?.fontFamily;
@@ -220,9 +227,11 @@ class TDText extends StatelessWidget {
       stylePackage = null;
       styleFontFamily = 'PingFang SC';
     }
+    var color =
+        style?.color ?? textColor ?? TDTheme.of(context).textColorPrimary;
     return TextStyle(
       inherit: style?.inherit ?? true,
-      color: style?.color ?? textColor,
+      color: color,
 
       /// 不使用系统本身的背景色，因为系统属性存在中英文是，会导致颜色出现阶梯状
       backgroundColor: backgroundColor,
@@ -239,8 +248,9 @@ class TDText extends StatelessWidget {
       background: style?.background,
       shadows: style?.shadows,
       fontFeatures: style?.fontFeatures,
-      decoration: style?.decoration ?? (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
-      decorationColor: style?.decorationColor ?? lineThroughColor,
+      decoration: style?.decoration ??
+          (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
+      decorationColor: style?.decorationColor ?? lineThroughColor ?? color,
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
@@ -257,12 +267,16 @@ class TDText extends StatelessWidget {
     return _getRawText(context: context, backgroundColor: backgroundColor);
   }
 
-  Text _getRawText({required BuildContext context, TextStyle? textStyle, Color? backgroundColor}) {
+  Text _getRawText(
+      {required BuildContext context,
+      TextStyle? textStyle,
+      Color? backgroundColor}) {
     return textSpan == null
         ? Text(
             data,
             key: key,
-            style: textStyle ?? getTextStyle(context, backgroundColor: backgroundColor),
+            style: textStyle ??
+                getTextStyle(context, backgroundColor: backgroundColor),
             strutStyle: strutStyle,
             textAlign: textAlign,
             textDirection: textDirection,
@@ -277,7 +291,8 @@ class TDText extends StatelessWidget {
           )
         : Text.rich(
             textSpan!,
-            style: textStyle ?? getTextStyle(context, backgroundColor: backgroundColor),
+            style: textStyle ??
+                getTextStyle(context, backgroundColor: backgroundColor),
             strutStyle: strutStyle,
             textAlign: textAlign,
             textDirection: textDirection,
@@ -297,13 +312,14 @@ class TDText extends StatelessWidget {
 class TDTextSpan extends TextSpan {
   /// 构造参数，扩展参数释义可参考[TDText]中字段注释
   TDTextSpan({
-    BuildContext? context, // 如果未设置font，且不想使用默认的fontBodyLarge尺寸时，需设置context，否则可省略
+    BuildContext?
+        context, // 如果未设置font，且不想使用默认的fontBodyLarge尺寸时，需设置context，否则可省略
     Font? font,
     FontWeight? fontWeight,
     FontFamily? fontFamily,
-    Color textColor = Colors.black,
+    Color? textColor,
     bool? isTextThrough = false,
-    Color? lineThroughColor = Colors.white,
+    Color? lineThroughColor,
     String? package,
     String? text,
     List<InlineSpan>? children,
@@ -316,8 +332,8 @@ class TDTextSpan extends TextSpan {
   }) : super(
           text: text,
           children: children,
-          style: _getTextStyle(
-              context, style, font, fontWeight, fontFamily, textColor, isTextThrough, lineThroughColor, package),
+          style: _getTextStyle(context, style, font, fontWeight, fontFamily,
+              textColor, isTextThrough, lineThroughColor, package),
           recognizer: recognizer,
           mouseCursor: mouseCursor,
           onEnter: onEnter,
@@ -331,15 +347,19 @@ class TDTextSpan extends TextSpan {
     Font? font,
     FontWeight? fontWeight,
     FontFamily? fontFamily,
-    Color textColor,
+    Color? textColor,
     bool? isTextThrough,
     Color? lineThroughColor,
     String? package,
   ) {
-    var textFont = font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
+    var textFont = font ??
+        TDTheme.of(context).fontBodyLarge ??
+        Font(size: 16, lineHeight: 24);
+    var color =
+        style?.color ?? textColor ?? TDTheme.of(context).textColorPrimary;
     return TextStyle(
       inherit: style?.inherit ?? true,
-      color: style?.color ?? textColor,
+      color: color,
       backgroundColor: style?.backgroundColor,
       fontSize: style?.fontSize ?? textFont.size,
       fontWeight: style?.fontWeight ?? fontWeight ?? textFont.fontWeight,
@@ -354,8 +374,9 @@ class TDTextSpan extends TextSpan {
       background: style?.background,
       shadows: style?.shadows,
       fontFeatures: style?.fontFeatures,
-      decoration: style?.decoration ?? (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
-      decorationColor: style?.decorationColor ?? lineThroughColor,
+      decoration: style?.decoration ??
+          (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
+      decorationColor: style?.decorationColor ?? lineThroughColor ?? color,
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
@@ -374,7 +395,11 @@ class TDTextConfiguration extends InheritedWidget {
   /// 全局字体,kTextNeedGlobalFontFamily=true时生效
   final FontFamily? globalFontFamily;
 
-  const TDTextConfiguration({Key? key, required Widget child, this.paddingConfig, this.globalFontFamily})
+  const TDTextConfiguration(
+      {Key? key,
+      required Widget child,
+      this.paddingConfig,
+      this.globalFontFamily})
       : super(key: key, child: child);
 
   @override
@@ -436,8 +461,8 @@ class TDTextPaddingConfig {
           : PlatformUtil.isAndroid
               ? -20 / 128
               : PlatformUtil.isOhos
-                ? 43 / 128
-                : -10 / 128;
+                  ? 43 / 128
+                  : -10 / 128;
     }
     return PlatformUtil.isWeb
         ? 3 / 8
