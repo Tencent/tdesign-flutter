@@ -15,7 +15,6 @@ class _TDStepsPageState extends State<TDStepsPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      backgroundColor: TDTheme.of(context).whiteColor1,
       title: tdTitle(),
       exampleCodeGroup: 'steps',
       desc: 'Steps步骤条',
