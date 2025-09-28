@@ -28,7 +28,7 @@ class TDSkeleton extends StatefulWidget {
     TDSkeletonTheme theme = TDSkeletonTheme.text,
   }) {
     assert(delay >= 0);
-    
+
     // 根据风格创建骨架图
     switch (theme) {
       case TDSkeletonTheme.avatar:
@@ -95,7 +95,7 @@ class TDSkeleton extends StatefulWidget {
     this.animation,
     this.delay = 0,
     required this.rowCol,
-  }): assert(delay >= 0);
+  }) : assert(delay >= 0);
 
   /// 动画效果
   final TDSkeletonAnimation? animation;
@@ -132,7 +132,7 @@ class _TDSkeletonState extends State<TDSkeleton>
       LinearGradient(
         colors: [
           Colors.transparent,
-          TDTheme.of(context).grayColor4,
+          TDTheme.of(context).bgColorSecondaryContainerActive,
           Colors.transparent,
         ],
         // 15 deg
@@ -160,7 +160,8 @@ class _TDSkeletonState extends State<TDSkeleton>
           duration: const Duration(seconds: 1),
           vsync: this,
         )..repeat(reverse: true);
-        _animation = Tween<double>(begin: 1, end: _animationFlashed).animate(_controller!)
+        _animation = Tween<double>(begin: 1, end: _animationFlashed)
+            .animate(_controller!)
           ..addListener(() => setState(() {}));
         break;
       default:
@@ -192,7 +193,8 @@ class _TDSkeletonState extends State<TDSkeleton>
           case TDSkeletonAnimation.gradient:
             skeletonObj = ShaderMask(
               blendMode: BlendMode.srcATop,
-              shaderCallback: (bounds) => _animationGradient(context).createShader(
+              shaderCallback: (bounds) =>
+                  _animationGradient(context).createShader(
                 Rect.fromLTWH(
                   bounds.width * _animation!.value,
                   0,

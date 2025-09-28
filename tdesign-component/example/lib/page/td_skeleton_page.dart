@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/demo.dart';
@@ -19,7 +18,6 @@ class _TDSkeletonPageState extends State<TDSkeletonPage> {
         title: tdTitle(),
         desc: '当网络较慢时，在页面真实数据加载之前，给用户展示出页面的大致结构。',
         exampleCodeGroup: 'skeleton',
-        backgroundColor: TDTheme.of(context).whiteColor1,
         children: [
           ExampleModule(
             title: '类型',
@@ -180,16 +178,18 @@ class _TDSkeletonPageState extends State<TDSkeletonPage> {
                       objects: [
                         [
                           TDSkeletonRowColObj(
-                              width: constraints.maxWidth*0.96,
+                              width: constraints.maxWidth * 0.96,
                               height: constraints.maxWidth,
                               flex: null,
                               style: TDSkeletonRowColObjStyle(
                                   borderRadius: (context) =>
                                       TDTheme.of(context).radiusExtraLarge))
                         ],
-                        [TDSkeletonRowColObj.text(
-                          width: constraints.maxWidth*0.96,
-                        )],
+                        [
+                          TDSkeletonRowColObj.text(
+                            width: constraints.maxWidth * 0.96,
+                          )
+                        ],
                         const [
                           TDSkeletonRowColObj.text(),
                           TDSkeletonRowColObj.spacer(flex: 1),
