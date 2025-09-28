@@ -4,7 +4,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-
 class TDBackTopPage extends StatefulWidget {
   const TDBackTopPage({Key? key}) : super(key: key);
 
@@ -16,11 +15,20 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
   ScrollController controller = ScrollController();
   bool showBackTop = false;
   TDBackTopStyle style = TDBackTopStyle.circle;
+  TDBackTopTheme theme = TDBackTopTheme.light;
 
   @override
   void initState() {
     super.initState();
     controller.addListener(listenCallback);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        theme = Theme.of(context).brightness == Brightness.dark
+            ? TDBackTopTheme.light
+            : TDBackTopTheme.dark;
+      });
+    });
   }
 
   @override
@@ -63,16 +71,16 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
                         bottom: 10,
                         child: TDBackTop(
                           controller: controller,
-                          theme: TDBackTopTheme.dark,
+                          theme: theme,
                           showText: true,
                           style: style,
                         ))
                     : TDBackTop(
                         controller: controller,
-                        theme: TDBackTopTheme.dark,
+                        theme: theme,
                         showText: true,
                         style: style,
-                      ))
+                      )),
           ],
         ),
         children: [
@@ -151,7 +159,9 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
           width: 163,
           height: 163,
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(12)),
+              color: TDTheme.of(context).bgColorContainer,
+              borderRadius:
+                  BorderRadius.circular(TDTheme.of(context).radiusExtraLarge)),
         ),
         const SizedBox(
           height: 10,
@@ -160,7 +170,9 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
           width: 163,
           height: 16,
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(3)),
+              color: TDTheme.of(context).bgColorContainer,
+              borderRadius:
+                  BorderRadius.circular(TDTheme.of(context).radiusSmall)),
         ),
         const SizedBox(
           height: 10,
@@ -169,7 +181,9 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
             width: 100,
             height: 16,
             decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(3))),
+                color: TDTheme.of(context).bgColorContainer,
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusSmall))),
       ],
     );
   }
