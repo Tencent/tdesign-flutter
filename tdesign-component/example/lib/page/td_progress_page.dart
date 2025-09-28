@@ -32,7 +32,6 @@ class _TDProgressPageState extends State<TDProgressPage> {
         title: tdTitle(),
         desc: '用于展示任务当前的进度',
         exampleCodeGroup: 'progress',
-        backgroundColor: TDTheme.of().whiteColor1,
         padding: const EdgeInsets.symmetric(vertical: 8),
         children: [
           ExampleModule(title: '组件类型', children: [
@@ -151,11 +150,11 @@ class _TDProgressPageState extends State<TDProgressPage> {
   @Demo(group: 'progress')
   Widget _buildWarning(BuildContext context) {
     return TDProgress(
-        type: TDProgressType.linear,
-        progressStatus: TDProgressStatus.warning,
-        value: 0.8,
-        strokeWidth: 6,
-        progressLabelPosition: TDProgressLabelPosition.right,
+      type: TDProgressType.linear,
+      progressStatus: TDProgressStatus.warning,
+      value: 0.8,
+      strokeWidth: 6,
+      progressLabelPosition: TDProgressLabelPosition.right,
     );
   }
 
