@@ -100,7 +100,8 @@ class _TDToastPageState extends State<TDToastPage> {
   Widget _horizontalIconToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showIconText('带横向图标', icon: TDIcons.check_circle, context: context);
+        TDToast.showIconText('带横向图标',
+            icon: TDIcons.check_circle, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -115,7 +116,9 @@ class _TDToastPageState extends State<TDToastPage> {
     return TDButton(
       onTap: () {
         TDToast.showIconText('带竖向图标',
-            icon: TDIcons.check_circle, direction: IconTextDirection.vertical, context: context);
+            icon: TDIcons.check_circle,
+            direction: IconTextDirection.vertical,
+            context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -143,12 +146,14 @@ class _TDToastPageState extends State<TDToastPage> {
   Widget _loadingCustomToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showLoading(context: context, customWidget: Container(
-          width: 50,
-          height: 20,
-          child: const TDText('自定义加载'),
-          color: TDTheme.of(context).brandColor1,
-        ));
+        TDToast.showLoading(
+            context: context,
+            customWidget: Container(
+              width: 50,
+              height: 20,
+              child: const TDText('自定义加载'),
+              color: TDTheme.of(context).brandColor1,
+            ));
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -202,7 +207,8 @@ class _TDToastPageState extends State<TDToastPage> {
   Widget _successVerticalToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showSuccess('成功文案', direction: IconTextDirection.vertical, context: context);
+        TDToast.showSuccess('成功文案',
+            direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -216,7 +222,8 @@ class _TDToastPageState extends State<TDToastPage> {
   Widget _warningToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showWarning('警告文案', direction: IconTextDirection.horizontal, context: context);
+        TDToast.showWarning('警告文案',
+            direction: IconTextDirection.horizontal, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -230,7 +237,8 @@ class _TDToastPageState extends State<TDToastPage> {
   Widget _warningVerticalToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showWarning('警告文案', direction: IconTextDirection.vertical, context: context);
+        TDToast.showWarning('警告文案',
+            direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -244,7 +252,8 @@ class _TDToastPageState extends State<TDToastPage> {
   Widget _failToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showFail('失败文案', direction: IconTextDirection.horizontal, context: context);
+        TDToast.showFail('失败文案',
+            direction: IconTextDirection.horizontal, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -258,7 +267,8 @@ class _TDToastPageState extends State<TDToastPage> {
   Widget _failVerticalToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showFail('失败文案', direction: IconTextDirection.vertical, context: context);
+        TDToast.showFail('失败文案',
+            direction: IconTextDirection.vertical, context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -272,7 +282,10 @@ class _TDToastPageState extends State<TDToastPage> {
   Widget _preventTapToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showText('轻提示文字内容', context: context, preventTap: true, backgroundColor: Colors.black.withOpacity(0.7));
+        TDToast.showText('轻提示文字内容',
+            context: context,
+            preventTap: true,
+            backgroundColor: Colors.black.withOpacity(0.7));
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
