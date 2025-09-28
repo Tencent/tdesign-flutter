@@ -114,12 +114,12 @@ class TDTagStyle {
         break;
       case TDTagTheme.defaultTheme:
       default:
-        textColor = TDTheme.of(context).fontGyColor1;
+        textColor = TDTheme.of(context).textColorPrimary;
         backgroundColor = light
-            ? TDTheme.of(context).grayColor1
-            : TDTheme.of(context).grayColor3;
+            ? TDTheme.of(context).bgColorSecondaryContainer
+            : TDTheme.of(context).bgColorComponent;
     }
-    switch(shape){
+    switch (shape) {
       case TDTagShape.square:
         borderRadius = BorderRadius.circular(TDTheme.of(context).radiusSmall);
         break;
@@ -127,7 +127,9 @@ class TDTagStyle {
         borderRadius = BorderRadius.circular(TDTheme.of(context).radiusRound);
         break;
       case TDTagShape.mark:
-        borderRadius = BorderRadius.only(topRight:Radius.circular(TDTheme.of(context).radiusRound),bottomRight: Radius.circular(TDTheme.of(context).radiusRound));
+        borderRadius = BorderRadius.only(
+            topRight: Radius.circular(TDTheme.of(context).radiusRound),
+            bottomRight: Radius.circular(TDTheme.of(context).radiusRound));
         break;
     }
     borderColor = backgroundColor;
@@ -141,40 +143,36 @@ class TDTagStyle {
       case TDTagTheme.primary:
         borderColor = TDTheme.of(context).brandNormalColor;
         textColor = TDTheme.of(context).brandNormalColor;
-        backgroundColor = light
-            ? TDTheme.of(context).brandLightColor
-            : TDTheme.of(context).whiteColor1;
+        backgroundColor =
+            light ? TDTheme.of(context).brandLightColor : Colors.transparent;
         break;
       case TDTagTheme.warning:
         borderColor = TDTheme.of(context).warningNormalColor;
         textColor = TDTheme.of(context).warningNormalColor;
-        backgroundColor = light
-            ? TDTheme.of(context).warningLightColor
-            : TDTheme.of(context).whiteColor1;
+        backgroundColor =
+            light ? TDTheme.of(context).warningLightColor : Colors.transparent;
         break;
       case TDTagTheme.danger:
         borderColor = TDTheme.of(context).errorNormalColor;
         textColor = TDTheme.of(context).errorNormalColor;
-        backgroundColor = light
-            ? TDTheme.of(context).errorLightColor
-            : TDTheme.of(context).whiteColor1;
+        backgroundColor =
+            light ? TDTheme.of(context).errorLightColor : Colors.transparent;
         break;
       case TDTagTheme.success:
         borderColor = TDTheme.of(context).successNormalColor;
         textColor = TDTheme.of(context).successNormalColor;
-        backgroundColor = light
-            ? TDTheme.of(context).successLightColor
-            : TDTheme.of(context).whiteColor1;
+        backgroundColor =
+            light ? TDTheme.of(context).successLightColor : Colors.transparent;
         break;
       case TDTagTheme.defaultTheme:
       default:
-        borderColor = TDTheme.of(context).fontGyColor4;
-        textColor = TDTheme.of(context).fontGyColor1;
+        borderColor = TDTheme.of(context).componentBorderColor;
+        textColor = TDTheme.of(context).textColorPrimary;
         backgroundColor = light
-            ? TDTheme.of(context).grayColor1
-            : TDTheme.of(context).whiteColor1;
+            ? TDTheme.of(context).bgColorSecondaryContainer
+            : Colors.transparent;
     }
-    switch(shape){
+    switch (shape) {
       case TDTagShape.square:
         borderRadius = BorderRadius.circular(TDTheme.of(context).radiusSmall);
         break;
@@ -182,7 +180,9 @@ class TDTagStyle {
         borderRadius = BorderRadius.circular(TDTheme.of(context).radiusRound);
         break;
       case TDTagShape.mark:
-        borderRadius = BorderRadius.only(topRight:Radius.circular(TDTheme.of(context).radiusRound),bottomRight: Radius.circular(TDTheme.of(context).radiusRound));
+        borderRadius = BorderRadius.only(
+            topRight: Radius.circular(TDTheme.of(context).radiusRound),
+            bottomRight: Radius.circular(TDTheme.of(context).radiusRound));
         break;
     }
     border = 1;
@@ -190,12 +190,13 @@ class TDTagStyle {
 
   /// 根据主题生成禁用Tag样式
   TDTagStyle.generateDisableSelectStyle(
-      BuildContext context, bool isOutline , TDTagShape shape) {
-
-    borderColor = TDTheme.of(context).grayColor4;
-    textColor = TDTheme.of(context).fontGyColor4;
-    backgroundColor = TDTheme.of(context).grayColor2;
-    switch(shape){
+      BuildContext context, bool isLight, bool isOutline, TDTagShape shape) {
+    borderColor = TDTheme.of(context).componentBorderColor;
+    textColor = TDTheme.of(context).textColorDisabled;
+    backgroundColor = isOutline && !isLight
+        ? Colors.transparent
+        : TDTheme.of(context).bgColorComponentDisabled;
+    switch (shape) {
       case TDTagShape.square:
         borderRadius = BorderRadius.circular(TDTheme.of(context).radiusSmall);
         break;
@@ -203,7 +204,9 @@ class TDTagStyle {
         borderRadius = BorderRadius.circular(TDTheme.of(context).radiusRound);
         break;
       case TDTagShape.mark:
-        borderRadius = BorderRadius.only(topRight:Radius.circular(TDTheme.of(context).radiusRound),bottomRight: Radius.circular(TDTheme.of(context).radiusRound));
+        borderRadius = BorderRadius.only(
+            topRight: Radius.circular(TDTheme.of(context).radiusRound),
+            bottomRight: Radius.circular(TDTheme.of(context).radiusRound));
         break;
     }
     border = isOutline ? 1 : 0;

@@ -120,7 +120,9 @@ class TDTag extends StatelessWidget {
             margin: const EdgeInsets.only(left: 4),
             child: Icon(
               TDIcons.close,
-              color: TDTheme.of(context).fontGyColor3,
+
+              /// @todo
+              color: TDTheme.of(context).textColorPlaceholder,
               size: 14,
             ),
           ),
@@ -138,8 +140,7 @@ class TDTag extends StatelessWidget {
       decoration: BoxDecoration(
           color: backgroundColor ?? innerStyle.getBackgroundColor,
           border: Border.all(
-              width: innerStyle.border,
-              color: innerStyle.getBorderColor),
+              width: innerStyle.border, color: innerStyle.getBorderColor),
           borderRadius: innerStyle.getBorderRadius),
       child: Align(
         widthFactor: 1,
@@ -148,19 +149,18 @@ class TDTag extends StatelessWidget {
     );
   }
 
-  Widget? getIcon(TDTagStyle innerStyle){
-    if(iconWidget != null){
+  Widget? getIcon(TDTagStyle innerStyle) {
+    if (iconWidget != null) {
       return iconWidget;
     }
-    if(icon != null){
+    if (icon != null) {
       return RichText(
         overflow: TextOverflow.visible,
         text: TextSpan(
           text: String.fromCharCode(icon!.codePoint),
           style: TextStyle(
             inherit: false,
-            color:
-            innerStyle.textColor,
+            color: innerStyle.textColor,
             height: 1,
             fontSize: _getIconSize(),
             fontFamily: icon!.fontFamily,
@@ -176,14 +176,13 @@ class TDTag extends StatelessWidget {
     if (style != null) {
       return style!;
     }
-    if(disable){
-      return TDTagStyle.generateDisableSelectStyle(context, isOutline, shape);
+    if (disable) {
+      return TDTagStyle.generateDisableSelectStyle(
+          context, isLight, isOutline, shape);
     }
     return isOutline
-        ? TDTagStyle.generateOutlineStyleByTheme(
-            context, theme, isLight, shape)
-        : TDTagStyle.generateFillStyleByTheme(
-            context, theme, isLight, shape);
+        ? TDTagStyle.generateOutlineStyleByTheme(context, theme, isLight, shape)
+        : TDTagStyle.generateFillStyleByTheme(context, theme, isLight, shape);
   }
 
   Font? _getFont(BuildContext context) {
@@ -233,7 +232,8 @@ class TDTag extends StatelessWidget {
     } else {
       vPadding = 0;
     }
-    return EdgeInsets.only(left: hPadding, right: hPadding, top: vPadding, bottom: vPadding);
+    return EdgeInsets.only(
+        left: hPadding, right: hPadding, top: vPadding, bottom: vPadding);
   }
 
   double _getIconSize() {
@@ -251,4 +251,3 @@ class TDTag extends StatelessWidget {
     }
   }
 }
-
