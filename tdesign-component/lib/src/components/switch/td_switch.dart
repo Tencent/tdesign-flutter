@@ -96,13 +96,15 @@ class TDSwitchState extends State<TDSwitch> {
     final theme = TDTheme.of(context);
     final switchEnable = widget.enable && widget.type != TDSwitchType.loading;
     final trackOnColor = widget.trackOnColor ?? theme.brandColor7;
-    final trackOffColor = widget.trackOffColor ?? theme.grayColor4;
+    final trackOffColor = widget.trackOffColor ?? theme.textColorDisabled;
     final thumbContentOnColor =
         widget.thumbContentOnColor ?? theme.brandNormalColor;
     final thumbContentOffColor =
-        widget.thumbContentOffColor ?? theme.fontGyColor4;
-    final thumbContentOnFont = widget.thumbContentOnFont ?? const TextStyle(fontSize: 14);
-    final thumbContentOffFont = widget.thumbContentOffFont ?? const TextStyle(fontSize: 14);
+        widget.thumbContentOffColor ?? theme.textColorDisabled;
+    final thumbContentOnFont =
+        widget.thumbContentOnFont ?? const TextStyle(fontSize: 14);
+    final thumbContentOffFont =
+        widget.thumbContentOffFont ?? const TextStyle(fontSize: 14);
     Widget current = TDCupertinoSwitch(
       value: isOn,
       activeColor: trackOnColor,
@@ -115,7 +117,8 @@ class TDSwitchState extends State<TDSwitch> {
           setState(() {});
         }
       },
-      thumbView: _getThumbView(thumbContentOnColor, thumbContentOffColor,thumbContentOnFont, thumbContentOffFont),
+      thumbView: _getThumbView(thumbContentOnColor, thumbContentOffColor,
+          thumbContentOnFont, thumbContentOffFont),
     );
     if (!switchEnable) {
       current = Opacity(
@@ -162,7 +165,8 @@ class TDSwitchState extends State<TDSwitch> {
     }
   }
 
-  Widget? _getThumbView(Color thumbContentOnColor, Color thumbContentOffColor, TextStyle thumbContentOnFont, TextStyle thumbContentOffFont) {
+  Widget? _getThumbView(Color thumbContentOnColor, Color thumbContentOffColor,
+      TextStyle thumbContentOnFont, TextStyle thumbContentOffFont) {
     switch (widget.type) {
       case TDSwitchType.text:
         return Stack(
