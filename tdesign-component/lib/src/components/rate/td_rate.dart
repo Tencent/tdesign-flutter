@@ -148,10 +148,13 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _activeValue = widget.value ?? 0;
-    _globalKeys = List.generate((widget.count ?? 5) * 2, (index) => index / 2 + 0.5)
-        .asMap()
-        .map((index, e) => MapEntry(e, GlobalKey()));
-    _overlay = TDRateOverlay(context: context, builder: (context) => _buildOverlay())..show();
+    _globalKeys =
+        List.generate((widget.count ?? 5) * 2, (index) => index / 2 + 0.5)
+            .asMap()
+            .map((index, e) => MapEntry(e, GlobalKey()));
+    _overlay =
+        TDRateOverlay(context: context, builder: (context) => _buildOverlay())
+          ..show();
     _tipSize = Size(widget.allowHalf == true ? 76 : 40, 52);
     _controller = List.generate(
         widget.count ?? 5,
@@ -159,8 +162,10 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
               duration: const Duration(milliseconds: 300),
               vsync: this,
             )));
-    _animation =
-        List.generate(widget.count ?? 5, ((index) => Tween<double>(begin: 1.0, end: 1.33).animate(_controller[index])));
+    _animation = List.generate(
+        widget.count ?? 5,
+        ((index) =>
+            Tween<double>(begin: 1.0, end: 1.33).animate(_controller[index])));
   }
 
   @override
@@ -170,9 +175,10 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
       _activeValue = widget.value ?? 0;
     }
     if (widget.count != oldWidget.count) {
-      _globalKeys = List.generate((widget.count ?? 5) * 2, (index) => index / 2 + 0.5)
-          .asMap()
-          .map((index, e) => MapEntry(e, GlobalKey()));
+      _globalKeys =
+          List.generate((widget.count ?? 5) * 2, (index) => index / 2 + 0.5)
+              .asMap()
+              .map((index, e) => MapEntry(e, GlobalKey()));
     }
     if (widget.allowHalf != oldWidget.allowHalf) {
       _tipSize = Size(widget.allowHalf == true ? 76 : 40, 52);
@@ -192,7 +198,8 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
     return Flex(
       direction: widget.direction ?? Axis.horizontal,
       mainAxisAlignment: widget.mainAxisAlignment ?? MainAxisAlignment.start,
-      crossAxisAlignment: widget.crossAxisAlignment ?? CrossAxisAlignment.center,
+      crossAxisAlignment:
+          widget.crossAxisAlignment ?? CrossAxisAlignment.center,
       mainAxisSize: widget.mainAxisSize ?? MainAxisSize.min,
       children: [
         GestureDetector(
@@ -227,7 +234,9 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
             children: List.generate(widget.count ?? 5, (index) {
               final isLast = index == (widget.count ?? 5) - 1;
               return Padding(
-                padding: EdgeInsets.only(right: isLast ? 0 : widget.gap ?? TDTheme.of(context).spacer8),
+                padding: EdgeInsets.only(
+                    right:
+                        isLast ? 0 : widget.gap ?? TDTheme.of(context).spacer8),
                 child: AnimatedBuilder(
                   animation: _animation[index],
                   builder: (context, child) {
@@ -269,7 +278,8 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
             }),
           ),
         ),
-        if (widget.showText ?? false) widget.builderText?.call(context, _activeValue) ?? _getDefText()
+        if (widget.showText ?? false)
+          widget.builderText?.call(context, _activeValue) ?? _getDefText()
       ],
     );
   }
@@ -317,14 +327,19 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
       return 0;
     }
     for (var entry in _globalKeys.entries) {
-      final renderBox = entry.value.currentContext?.findRenderObject() as RenderBox?;
+      final renderBox =
+          entry.value.currentContext?.findRenderObject() as RenderBox?;
       if (renderBox != null) {
         final localPosition = renderBox.globalToLocal(globalPosition);
-        final isIn = renderBox.hitTest(BoxHitTestResult(), position: localPosition);
+        final isIn =
+            renderBox.hitTest(BoxHitTestResult(), position: localPosition);
         if (isIn) {
-          var value = widget.allowHalf == true ? entry.key : entry.key.ceil().toDouble();
+          var value = widget.allowHalf == true
+              ? entry.key
+              : entry.key.ceil().toDouble();
           var index = _index(value);
-          if (!_rateSize.containsKey(index) || !_rateOffset.containsKey(index)) {
+          if (!_rateSize.containsKey(index) ||
+              !_rateOffset.containsKey(index)) {
             final parentRenderBox = renderBox.parent as RenderBox;
             _rateSize[index] = parentRenderBox.size;
             _rateOffset[index] = parentRenderBox.localToGlobal(Offset.zero);
@@ -339,7 +354,8 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
   void _hideTip() {
     _hideTipTimer?.cancel();
     _hideTipTimer = Timer(
-      Duration(milliseconds: _isClick && widget.allowHalf == true ? 3000 : 1000),
+      Duration(
+          milliseconds: _isClick && widget.allowHalf == true ? 3000 : 1000),
       () {
         _showTip = false;
         _isClick = true;
@@ -351,36 +367,51 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
 
   Widget _getDefText() {
     final notRated = _activeValue == 0;
-    final textIndex = (widget.allowHalf == true ? _activeValue * 2 : _activeValue) - 1;
+    final textIndex =
+        (widget.allowHalf == true ? _activeValue * 2 : _activeValue) - 1;
     return Padding(
       padding: widget.direction == Axis.horizontal
-          ? EdgeInsets.only(left: widget.iconTextGap ?? TDTheme.of(context).spacer16)
-          : EdgeInsets.only(top: widget.iconTextGap ?? TDTheme.of(context).spacer8),
+          ? EdgeInsets.only(
+              left: widget.iconTextGap ?? TDTheme.of(context).spacer16)
+          : EdgeInsets.only(
+              top: widget.iconTextGap ?? TDTheme.of(context).spacer8),
       child: SizedBox(
         width: widget.textWidth ?? 50,
         child: TDText(
-          notRated ? context.resource.notRated : widget.texts?.getOrNull(textIndex.toInt()) ?? '$_activeValue',
-          font: notRated ? TDTheme.of(context).fontBodyLarge : TDTheme.of(context).fontTitleMedium,
-          textColor: notRated ? TDTheme.of(context).fontGyColor4 : TDTheme.of(context).fontGyColor1,
+          notRated
+              ? context.resource.notRated
+              : widget.texts?.getOrNull(textIndex.toInt()) ?? '$_activeValue',
+          font: notRated
+              ? TDTheme.of(context).fontBodyLarge
+              : TDTheme.of(context).fontTitleMedium,
+          textColor: notRated
+              ? TDTheme.of(context).textColorDisabled
+              : TDTheme.of(context).textColorPrimary,
         ),
       ),
     );
   }
 
   Color _getIconColor({double? value, bool? isActive}) {
-    return (value != null && _activeValue >= value) || (isActive != null && isActive)
+    return (value != null && _activeValue >= value) ||
+            (isActive != null && isActive)
         ? widget.color?.getOrNull(0) ?? TDTheme.of(context).warningColor5
-        : widget.color?.getOrNull(1) ?? TDTheme.of(context).grayColor4;
+        : widget.color?.getOrNull(1) ?? TDTheme.of(context).bgColorComponent;
   }
 
   IconData _getIcon({double? value, bool? isActive}) {
     final selectIcon = widget.icon?.getOrNull(0) ?? TDIcons.star_filled;
     final icon = [selectIcon, widget.icon?.getOrNull(1) ?? selectIcon];
-    return (value != null && _activeValue >= value) || (isActive != null && isActive) ? icon[0] : icon[1];
+    return (value != null && _activeValue >= value) ||
+            (isActive != null && isActive)
+        ? icon[0]
+        : icon[1];
   }
 
   Widget _buildOverlay() {
-    if (widget.placement == PlacementEnum.none || !_showTip || _activeValue == 0) {
+    if (widget.placement == PlacementEnum.none ||
+        !_showTip ||
+        _activeValue == 0) {
       return const SizedBox.shrink();
     }
     var index = _index();
