@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() async {
-  runApp(TagTestApp());
+  runApp(const TagTestApp());
 }
 
 class TagTestApp extends StatelessWidget {
+  const TagTestApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,17 +15,19 @@ class TagTestApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: TestPage(),
+      home: const TestPage(),
     );
   }
 }
 
 class TestPage extends StatelessWidget {
+  const TestPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TDText('TDTag 宽度测试'),
+        title: const TDText('TDTag 宽度测试'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -40,15 +44,15 @@ class TestPage extends StatelessWidget {
   }
 
   Widget _buildSection(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TDText('不带宽度测试', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Wrap(
           spacing: 12,
           runSpacing: 12,
-          children: const [
+          children: [
             TDTag('1',
               theme: TDTagTheme.primary,
               size: TDTagSize.medium,
@@ -61,21 +65,21 @@ class TestPage extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
       ],
     );
   }
 
   Widget _buildFixedWidthSection(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TDText('基础固定宽度测试', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Wrap(
           spacing: 12,
           runSpacing: 12,
-          children: const [
+          children: [
             TDTag('1',
               fixedWidth: 80,
               theme: TDTagTheme.primary,
@@ -91,7 +95,7 @@ class TestPage extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
       ],
     );
   }
@@ -100,7 +104,7 @@ class TestPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TDText('边界情况测试', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        const TDText('边界情况测试', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         const SizedBox(height: 12),
         const TDTag('超长文本测试超长文本测试超长文本测试超长文本测试',
           fixedWidth: 100,
