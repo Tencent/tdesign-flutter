@@ -4,6 +4,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
+List<TDActionSheetItem> actionSheetItems = [
+  TDActionSheetItem(label: '保存图片', icon: const Icon(TDIcons.save)),
+  TDActionSheetItem(label: '删除图片', icon: const Icon(TDIcons.delete)),
+];
+
 class TDImageViewerPage extends StatefulWidget {
   const TDImageViewerPage({Key? key}) : super(key: key);
 
@@ -15,7 +20,6 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      backgroundColor: const Color(0xFFF0F2F5),
       title: tdTitle(),
       desc: '用于图片内容的缩略展示与查看。',
       exampleCodeGroup: 'image_viewer',
@@ -91,10 +95,11 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
           deleteBtn: true,
           showIndex: true,
           onLongPress: (index) {
-            Navigator.of(context).push(TDSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: _getSheetItem,
-            ));
+            TDActionSheet(
+              context,
+              visible: true,
+              items: actionSheetItems,
+            );
           },
         );
       },
@@ -116,10 +121,11 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
           showIndex: true,
           height: 140,
           onLongPress: (index) {
-            Navigator.of(context).push(TDSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: _getSheetItem,
-            ));
+            TDActionSheet(
+              context,
+              visible: true,
+              items: actionSheetItems,
+            );
           },
         );
       },
@@ -141,10 +147,11 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
           showIndex: true,
           width: 180,
           onLongPress: (index) {
-            Navigator.of(context).push(TDSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: _getSheetItem,
-            ));
+            TDActionSheet(
+              context,
+              visible: true,
+              items: actionSheetItems,
+            );
           },
         );
       },
@@ -171,38 +178,6 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
           labels: labels,
         );
       },
-    );
-  }
-
-  Widget _getSheetItem(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 120,
-      color: Colors.white,
-      child: Column(
-        children: [
-          const SizedBox(height: 16),
-          Text(
-            '保存图片',
-            style: TextStyle(
-              color: TDTheme.of(context).fontGyColor1,
-              decoration: TextDecoration.none,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          const TDDivider(margin: EdgeInsets.symmetric(vertical: 10),),
-          Text(
-            '删除图片',
-            style: TextStyle(
-              color: TDTheme.of(context).fontGyColor1,
-              decoration: TextDecoration.none,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
