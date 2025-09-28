@@ -33,7 +33,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
     _unSelectedIcon = Icon(
       TDIcons.app,
       size: 20,
-      color: TDTheme.of(context).brandNormalColor,
+      color: TDTheme.of(context).textColorPrimary,
     );
     return ExamplePage(
       title: tdTitle(),
@@ -218,7 +218,8 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
     var _currentIndex = 0;
     void _onTapTab(BuildContext context, String tabName, int currentIndex,
         int currentSelectIndex) {
-          print('点击了 $tabName, 当前index: $currentIndex, 当前选择index: $currentSelectIndex');
+      print(
+          '点击了 $tabName, 当前index: $currentIndex, 当前选择index: $currentSelectIndex');
       if (currentIndex == currentSelectIndex) {
         TDToast.showText('$tabName 已经被选中了', context: context);
         return;
@@ -495,7 +496,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
     );
     final unSelectedIcon = Icon(
       TDIcons.app,
-      color: TDTheme.of(context).brandNormalColor,
+      color: TDTheme.of(context).textColorPrimary,
     );
     return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
         useVerticalDivider: false,
@@ -685,7 +686,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
                             child: Text(
                               e,
                               style: TextStyle(
-                                  color: TDTheme.of(context).fontGyColor1,
+                                  color: TDTheme.of(context).textColorPrimary,
                                   fontSize: 16),
                             ),
                           ),
@@ -945,7 +946,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
     return TDBottomTabBar(TDBottomTabBarBasicType.iconText,
         useVerticalDivider: false,
         selectedBgColor: TDTheme.of(context).errorColor3,
-        unselectedBgColor: TDTheme.of(context).grayColor3,
+        unselectedBgColor: TDTheme.of(context).bgColorSecondaryContainer,
         navigationTabs: [
           TDBottomTabBarTabConfig(
             tabText: '标签',
@@ -1007,7 +1008,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
           TDBottomTabBarTabConfig(
             tabText: '标签',
             unselectTabTextStyle:
-                TextStyle(color: TDTheme.of(context).fontGyColor1),
+                TextStyle(color: TDTheme.of(context).textColorPrimary),
             onTap: () {
               onTapTab(context, '标签1');
             },
@@ -1016,6 +1017,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
   }
 
   var currentIndex = 0;
+
   @Demo(group: 'bottomTabBar')
   Widget _setCurrentIndexToTabBar(BuildContext context) {
     return SizedBox(
@@ -1066,21 +1068,23 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
 
   @Demo(group: 'bottomTabBar')
   Widget _allowMultipleTaps(BuildContext context) {
-    return TDBottomTabBar(TDBottomTabBarBasicType.text, useVerticalDivider: false, navigationTabs: [
-      TDBottomTabBarTabConfig(
-        allowMultipleTaps: true,
-        tabText: '支持重复点击',
-        onTap: () {
-          onTapTab(context, '标签1');
-        },
-      ),
-      TDBottomTabBarTabConfig(
-        tabText: '不支持重复点击',
-        onTap: () {
-          onTapTab(context, '标签2');
-        },
-      ),
-    ]);
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        useVerticalDivider: false,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            allowMultipleTaps: true,
+            tabText: '支持重复点击',
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '不支持重复点击',
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+        ]);
   }
 
   @Demo(group: 'bottomTabBar')
