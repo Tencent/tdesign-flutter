@@ -14,140 +14,148 @@ class TDSwiperPage extends StatelessWidget {
       title: tdTitle(context),
       exampleCodeGroup: 'swiper',
       children: [
-      ExampleModule(title: '组件类型',
-      children: [
-        ExampleItem(
-            desc: '点状(dots)',
-            ignoreCode: true,
-            builder: (_) {
-              return Container(
-                height: 193,
-                margin: const EdgeInsets.only(left: 16,right: 16),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
-                child: CodeWrapper(
-                  builder: _buildDotsSwiper,
-                ),
-              );
-            }),
-        ExampleItem(
-            desc: '点条状(dots-bar)',
-            ignoreCode: true,
-            builder: (_) {
-              return Container(
-                height: 193,
-                margin: const EdgeInsets.only(left: 16,right: 16),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
-                child: CodeWrapper(
-                  builder: _buildDotsBarSwiper,
-                ),
-              );
-            }),
-        ExampleItem(
-            desc: '分式(fraction)',
-            ignoreCode: true,
-            builder: (_) {
-              return Container(
-                height: 193,
-                margin: const EdgeInsets.only(left: 16,right: 16),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
-                child: CodeWrapper(
-                  builder: _buildFractionSwiper,
-                ),
-              );
-            }),
-        ExampleItem(
-            desc: '切换按钮(controls)',
-            ignoreCode: true,
-            builder: (_) {
-              return Container(
-                height: 193,
-                margin: const EdgeInsets.only(left: 16,right: 16),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
-                child: CodeWrapper(
-                  builder: _buildControlsSwiper,
-                ),
-              );
-            }),
-        ExampleItem(
-            desc: '卡片式(cards)',
-            ignoreCode: true,
-            builder: (_) {
-              return Container(
-                height: 193,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
-                child: CodeWrapper(
-                  builder: _buildCardsSwiper,
-                ),
-              );
-            }),
-        ExampleItem(
-            desc: '卡片式(cards)-scale:0.8',
-            ignoreCode: true,
-            builder: (_) {
-              return Container(
-                height: 193,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
-                child: CodeWrapper(
-                  builder: _buildScaleCardsSwiper,
-                ),
-              );
-            }),
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(
+                desc: '点状(dots)',
+                ignoreCode: true,
+                builder: (_) {
+                  return Container(
+                    height: 193,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            TDTheme.of(context).radiusLarge)),
+                    child: CodeWrapper(
+                      builder: _buildDotsSwiper,
+                    ),
+                  );
+                }),
+            ExampleItem(
+                desc: '点条状(dots-bar)',
+                ignoreCode: true,
+                builder: (_) {
+                  return Container(
+                    height: 193,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            TDTheme.of(context).radiusLarge)),
+                    child: CodeWrapper(
+                      builder: _buildDotsBarSwiper,
+                    ),
+                  );
+                }),
+            ExampleItem(
+                desc: '分式(fraction)',
+                ignoreCode: true,
+                builder: (_) {
+                  return Container(
+                    height: 193,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            TDTheme.of(context).radiusLarge)),
+                    child: CodeWrapper(
+                      builder: _buildFractionSwiper,
+                    ),
+                  );
+                }),
+            ExampleItem(
+                desc: '切换按钮(controls)',
+                ignoreCode: true,
+                builder: (_) {
+                  return Container(
+                    height: 193,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            TDTheme.of(context).radiusLarge)),
+                    child: CodeWrapper(
+                      builder: _buildControlsSwiper,
+                    ),
+                  );
+                }),
+            ExampleItem(
+                desc: '卡片式(cards)',
+                ignoreCode: true,
+                builder: (_) {
+                  return Container(
+                    height: 193,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            TDTheme.of(context).radiusLarge)),
+                    child: CodeWrapper(
+                      builder: _buildCardsSwiper,
+                    ),
+                  );
+                }),
+            ExampleItem(
+                desc: '卡片式(cards)-scale:0.8',
+                ignoreCode: true,
+                builder: (_) {
+                  return Container(
+                    height: 193,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            TDTheme.of(context).radiusLarge)),
+                    child: CodeWrapper(
+                      builder: _buildScaleCardsSwiper,
+                    ),
+                  );
+                }),
+          ],
+        ),
+        ExampleModule(title: '组件样式', children: [
+          ExampleItem(
+              desc: '内部',
+              ignoreCode: true,
+              builder: (_) {
+                return Container(
+                  height: 193,
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                          TDTheme.of(context).radiusLarge)),
+                  child: CodeWrapper(
+                    builder: _buildDotsSwiper,
+                  ),
+                );
+              }),
+          ExampleItem(
+              desc: '外部',
+              ignoreCode: true,
+              builder: (_) {
+                return Container(
+                  height: 193,
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                          TDTheme.of(context).radiusLarge)),
+                  child: CodeWrapper(
+                    builder: _buildOuterDotsSwiper,
+                  ),
+                );
+              }),
+          ExampleItem(
+              desc: '右边(竖向)',
+              ignoreCode: true,
+              builder: (_) {
+                return Container(
+                  height: 193,
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                          TDTheme.of(context).radiusLarge)),
+                  child: CodeWrapper(
+                    builder: _buildRightDotsSwiper,
+                  ),
+                );
+              }),
+        ])
       ],
-    ),
-      ExampleModule(title: '组件样式', children: [
-        ExampleItem(
-            desc: '内部',
-            ignoreCode: true,
-            builder: (_) {
-              return Container(
-                height: 193,
-                margin: const EdgeInsets.only(left: 16,right: 16),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
-                child: CodeWrapper(
-                  builder: _buildDotsSwiper,
-                ),
-              );
-            }),
-        ExampleItem(
-            desc: '外部',
-            ignoreCode: true,
-            builder: (_) {
-              return Container(
-                height: 193,
-                margin: const EdgeInsets.only(left: 16,right: 16),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
-                child: CodeWrapper(
-                  builder: _buildOuterDotsSwiper,
-                ),
-              );
-            }),
-        ExampleItem(
-            desc: '右边(竖向)',
-            ignoreCode: true,
-            builder: (_) {
-              return Container(
-                height: 193,
-                margin: const EdgeInsets.only(left: 16,right: 16),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
-                child: CodeWrapper(
-                  builder: _buildRightDotsSwiper,
-                ),
-              );
-            }),
-      ])
-      ],
-
       test: [
-
         ExampleItem(
             desc: '卡片式(cards),只有两张不轮播',
             ignoreCode: true,
@@ -155,22 +163,24 @@ class TDSwiperPage extends StatelessWidget {
               return Container(
                 height: 193,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+                    borderRadius:
+                        BorderRadius.circular(TDTheme.of(context).radiusLarge)),
                 child: CodeWrapper(
                   builder: _buildNotLoopCardsSwiper,
                 ),
               );
             }),
         ExampleItem(
-          // outer样式不支持竖向布局
+            // outer样式不支持竖向布局
             desc: '点条状outer样式',
             ignoreCode: true,
             builder: (_) {
               return Container(
                 height: 193,
-                margin: const EdgeInsets.only(left: 16,right: 16),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+                    borderRadius:
+                        BorderRadius.circular(TDTheme.of(context).radiusLarge)),
                 child: CodeWrapper(
                   builder: _buildOuterDotsBarSwiper,
                 ),
@@ -182,9 +192,10 @@ class TDSwiperPage extends StatelessWidget {
             builder: (_) {
               return Container(
                 height: 193,
-                margin: const EdgeInsets.only(left: 16,right: 16),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+                    borderRadius:
+                        BorderRadius.circular(TDTheme.of(context).radiusLarge)),
                 child: CodeWrapper(
                   builder: _buildFractionBarSwiper,
                 ),
@@ -196,9 +207,10 @@ class TDSwiperPage extends StatelessWidget {
             builder: (_) {
               return Container(
                 height: 193,
-                margin: const EdgeInsets.only(left: 16,right: 16),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+                    borderRadius:
+                        BorderRadius.circular(TDTheme.of(context).radiusLarge)),
                 child: CodeWrapper(
                   builder: _buildVerticalDotsBarSwiper,
                 ),
@@ -215,10 +227,11 @@ class TDSwiperPage extends StatelessWidget {
       itemCount: 6,
       loop: true,
       pagination: const SwiperPagination(
-          alignment: Alignment.bottomCenter,
-          builder: TDSwiperPagination.dots),
+          alignment: Alignment.bottomCenter, builder: TDSwiperPagination.dots),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }
@@ -233,7 +246,9 @@ class TDSwiperPage extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           builder: TDSwiperPagination.dotsBar),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }
@@ -248,7 +263,9 @@ class TDSwiperPage extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           builder: TDSwiperPagination.fraction),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }
@@ -260,10 +277,11 @@ class TDSwiperPage extends StatelessWidget {
       itemCount: 6,
       loop: true,
       pagination: const SwiperPagination(
-          alignment: Alignment.center,
-          builder: TDSwiperPagination.controls),
+          alignment: Alignment.center, builder: TDSwiperPagination.controls),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }
@@ -278,10 +296,11 @@ class TDSwiperPage extends StatelessWidget {
       loop: true,
       transformer: TDPageTransformer.margin(),
       pagination: const SwiperPagination(
-          alignment: Alignment.center,
-          builder: TDSwiperPagination.dots),
+          alignment: Alignment.center, builder: TDSwiperPagination.dots),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }
@@ -296,10 +315,11 @@ class TDSwiperPage extends StatelessWidget {
       loop: true,
       transformer: TDPageTransformer.scaleAndFade(),
       pagination: const SwiperPagination(
-          alignment: Alignment.center,
-          builder: TDSwiperPagination.dots),
+          alignment: Alignment.center, builder: TDSwiperPagination.dots),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }
@@ -312,10 +332,11 @@ class TDSwiperPage extends StatelessWidget {
       loop: true,
       outer: true,
       pagination: const SwiperPagination(
-          alignment: Alignment.bottomCenter,
-          builder: TDSwiperPagination.dots),
+          alignment: Alignment.bottomCenter, builder: TDSwiperPagination.dots),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }
@@ -328,10 +349,11 @@ class TDSwiperPage extends StatelessWidget {
       loop: true,
       scrollDirection: Axis.vertical,
       pagination: const SwiperPagination(
-          alignment: Alignment.centerRight,
-          builder: TDSwiperPagination.dots),
+          alignment: Alignment.centerRight, builder: TDSwiperPagination.dots),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }
@@ -346,10 +368,11 @@ class TDSwiperPage extends StatelessWidget {
       itemCount: 2,
       loop: false,
       pagination: const SwiperPagination(
-          alignment: Alignment.center,
-          builder: TDSwiperPagination.dots),
+          alignment: Alignment.center, builder: TDSwiperPagination.dots),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }
@@ -362,10 +385,11 @@ class TDSwiperPage extends StatelessWidget {
       itemCount: 6,
       loop: true,
       pagination: const SwiperPagination(
-          alignment: Alignment.topLeft,
-          builder: TDSwiperPagination.dotsBar),
+          alignment: Alignment.topLeft, builder: TDSwiperPagination.dotsBar),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }
@@ -380,7 +404,9 @@ class TDSwiperPage extends StatelessWidget {
           alignment: Alignment.bottomRight,
           builder: TDSwiperPagination.fraction),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }
@@ -391,14 +417,15 @@ class TDSwiperPage extends StatelessWidget {
       autoplay: true,
       itemCount: 6,
       loop: true,
-      scrollDirection:Axis.vertical,
+      scrollDirection: Axis.vertical,
       pagination: const SwiperPagination(
           alignment: Alignment.bottomRight,
           builder: TDSwiperPagination.dotsBar),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }
 }
-

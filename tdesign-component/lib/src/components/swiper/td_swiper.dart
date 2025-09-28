@@ -107,8 +107,8 @@ class TDSwiperDotsPagination extends SwiperPlugin {
             : TDTheme.of(context).whiteColor1);
     var color = this.color ??
         (config.outer
-            ? TDTheme.of(context).grayColor3
-            : TDTheme.of(context).whiteColor1.withOpacity(0.55));
+            ? TDTheme.of(context).bgColorComponentHover
+            : TDTheme.of(context).fontWhColor2);
 
     if (config.indicatorLayout != PageIndicatorLayout.NONE &&
         config.layout == SwiperLayout.DEFAULT) {
@@ -146,8 +146,12 @@ class TDSwiperDotsPagination extends SwiperPlugin {
         child: AnimatedContainer(
           duration:
               Duration(milliseconds: animationDuration ?? _kAminatedDuration),
-          width: config.scrollDirection == Axis.horizontal ? scalableLen : fixedLen,
-          height: config.scrollDirection == Axis.horizontal ? fixedLen : scalableLen,
+          width: config.scrollDirection == Axis.horizontal
+              ? scalableLen
+              : fixedLen,
+          height: config.scrollDirection == Axis.horizontal
+              ? fixedLen
+              : scalableLen,
           decoration: BoxDecoration(
               color: active ? activeColor : color,
               borderRadius: BorderRadius.circular(activeSize / 2)),
@@ -201,6 +205,7 @@ class TDFractionPagination extends SwiperPlugin {
     this.height,
     this.borderRadius,
     this.backgroundColor,
+    // todo
     this.color = Colors.white,
     this.textStyle = const TextStyle(fontSize: 12.0, color: Colors.white),
     this.activeTextStyle = const TextStyle(fontSize: 12.0, color: Colors.white),
@@ -294,7 +299,7 @@ class TDSwiperArrowPagination extends SwiperPlugin {
           child: CircleAvatar(
             radius: radius ?? 10.0,
             backgroundColor:
-                backgroundColor ?? TDTheme.of(context).fontGyColor3,
+                backgroundColor ?? TDTheme.of(context).textColorPlaceholder,
             child: backArrow ??
                 const Icon(
                   Icons.arrow_back_ios_outlined,
@@ -315,7 +320,7 @@ class TDSwiperArrowPagination extends SwiperPlugin {
           child: CircleAvatar(
             radius: radius ?? 10.0,
             backgroundColor:
-                backgroundColor ?? TDTheme.of(context).fontGyColor3,
+                backgroundColor ?? TDTheme.of(context).textColorPlaceholder,
             child: forwardArrow ??
                 const Icon(
                   Icons.arrow_forward_ios_outlined,
