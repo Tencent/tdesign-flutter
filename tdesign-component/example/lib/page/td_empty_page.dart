@@ -14,14 +14,18 @@ class TDEmptyPage extends StatefulWidget {
 class _TDEmptyPageState extends State<TDEmptyPage> {
   @override
   Widget build(BuildContext context) {
-    return ExamplePage(title: tdTitle(), exampleCodeGroup: 'empty', desc: '用于空状态时的占位提示。', children: [
-      ExampleModule(title: '组件类型', children: [
-        ExampleItem(desc: '图标空状态', builder: _iconEmpty),
-        ExampleItem(desc: '自定义图片空状态', builder: _imageEmpty),
-        ExampleItem(desc: '带操作空状态', builder: _operationEmpty),
-        ExampleItem(desc: '自定义带操作空状态', builder: _operationCustomEmpty),
-      ]),
-    ]);
+    return ExamplePage(
+        title: tdTitle(),
+        exampleCodeGroup: 'empty',
+        desc: '用于空状态时的占位提示。',
+        children: [
+          ExampleModule(title: '组件类型', children: [
+            ExampleItem(desc: '图标空状态', builder: _iconEmpty),
+            ExampleItem(desc: '自定义图片空状态', builder: _imageEmpty),
+            ExampleItem(desc: '带操作空状态', builder: _operationEmpty),
+            ExampleItem(desc: '自定义带操作空状态', builder: _operationCustomEmpty),
+          ]),
+        ]);
   }
 
   @Demo(group: 'empty')
@@ -41,8 +45,10 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
         width: 120,
         height: 120,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
-            image: const DecorationImage(image: AssetImage('assets/img/empty.png'))),
+            borderRadius:
+                BorderRadius.circular(TDTheme.of(context).radiusDefault),
+            image: const DecorationImage(
+                image: AssetImage('assets/img/empty.png'))),
       ),
     );
   }
