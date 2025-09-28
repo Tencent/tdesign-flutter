@@ -14,17 +14,20 @@ class TDResult extends StatelessWidget {
     this.title = '', // 默认标题为空字符串
   }) : super(key: key);
 
-/// 描述文本，用于提供额外信息
+  /// 描述文本，用于提供额外信息
   final String? description;
-/// 图标组件，用于在结果中显示一个图标
-  final Widget? icon;
-/// 自定义字体样式，用于设置标题文本的样式
-  final TextStyle? titleStyle;
-/// 主题样式，定义了结果组件的视觉风格
-  final TDResultTheme theme;
-/// 标题文本，显示结果的主要信息
-  final String title;
 
+  /// 图标组件，用于在结果中显示一个图标
+  final Widget? icon;
+
+  /// 自定义字体样式，用于设置标题文本的样式
+  final TextStyle? titleStyle;
+
+  /// 主题样式，定义了结果组件的视觉风格
+  final TDResultTheme theme;
+
+  /// 标题文本，显示结果的主要信息
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,7 @@ class TDResult extends StatelessWidget {
               padding: const EdgeInsets.only(top: 17),
               child: TDText(
                 title,
-                textColor: TDTheme.of(context).fontGyColor1,
+                textColor: TDTheme.of(context).textColorPrimary,
                 font: TDTheme.of(context).fontTitleExtraLarge,
                 style: titleStyle,
               )),
@@ -52,7 +55,7 @@ class TDResult extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: TDText(description!,
-                textColor: TDTheme.of(context).fontGyColor2,
+                textColor: TDTheme.of(context).textColorSecondary,
                 font: TDTheme.of(context).fontTitleSmall),
           ),
       ],
