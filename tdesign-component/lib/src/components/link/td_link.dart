@@ -138,7 +138,7 @@ class TDLink extends StatelessWidget {
           case TDLinkStyle.success:
             return TDTheme.of(context).successColor5;
           case TDLinkStyle.defaultStyle:
-            return TDTheme.of(context).fontGyColor1;
+            return TDTheme.of(context).textColorPrimary;
         }
 
       case TDLinkState.active:
@@ -165,7 +165,7 @@ class TDLink extends StatelessWidget {
           case TDLinkStyle.success:
             return TDTheme.of(context).successDisabledColor;
           case TDLinkStyle.defaultStyle:
-            return TDTheme.of(context).fontGyColor4;
+            return TDTheme.of(context).textColorDisabled;
         }
     }
   }
