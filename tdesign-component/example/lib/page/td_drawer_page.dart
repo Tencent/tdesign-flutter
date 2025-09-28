@@ -207,7 +207,7 @@ Widget _buildColorSimple(BuildContext context) {
         visible: true,
         drawerTop: renderBox?.size.height,
         title: '标题',
-        backgroundColor: TDTheme.of(context).grayColor1,
+        backgroundColor: TDTheme.of(context).bgColorSecondaryContainer,
         placement: TDDrawerPlacement.right,
         items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
       );
