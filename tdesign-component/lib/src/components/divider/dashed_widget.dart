@@ -2,19 +2,21 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../../../tdesign_flutter.dart';
+
 /// 虚线控件
 class DashedWidget extends StatelessWidget {
   const DashedWidget({
     Key? key,
-    this.color = Colors.black,
+    this.color,
     this.gap = 2,
     this.solidLength = 2,
     this.width,
-    this.height,
+    this.height = 0.5,
     this.direction = Axis.horizontal,
   }) : super(key: key);
 
-  final Color color;
+  final Color? color;
   final double gap;
   final double solidLength;
   final double? width;
@@ -29,7 +31,7 @@ class DashedWidget extends StatelessWidget {
         height: height,
         child: CustomPaint(
           painter: DashedPainter(
-              color: color,
+              color: color ?? TDTheme.of(context).componentStrokeColor,
               strokeWidth: height ?? 1,
               direction: direction),
         ),
@@ -40,7 +42,9 @@ class DashedWidget extends StatelessWidget {
         height: height ?? MediaQuery.of(context).size.height,
         child: CustomPaint(
           painter: DashedPainter(
-              color: color, strokeWidth: width ?? 1, direction: direction),
+              color: color ?? TDTheme.of(context).componentStrokeColor,
+              strokeWidth: width ?? 1,
+              direction: direction),
         ),
       );
     }
@@ -50,7 +54,7 @@ class DashedWidget extends StatelessWidget {
 /// 绘制虚线自定义控件
 class DashedPainter extends CustomPainter {
   DashedPainter(
-      {this.color = Colors.black,
+      {required this.color,
       this.strokeWidth = 1,
       this.gap = 2,
       this.solidLength = 2,

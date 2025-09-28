@@ -13,7 +13,6 @@ class TDDividerPage extends StatelessWidget {
         title: tdTitle(context),
         desc: '用于分割、组织、细化有一定逻辑的组织元素内容和页面结构。',
         exampleCodeGroup: 'divider',
-        // padding: const EdgeInsets.only(top: 16, bottom: 16),
         children: [
           ExampleModule(title: '组件类型', children: [
             ExampleItem(desc: '水平分割线', builder: _verticalDivider),
@@ -39,8 +38,8 @@ class TDDividerPage extends StatelessWidget {
 
   @Demo(group: 'divider')
   Widget _verticalTextDivider(BuildContext context) {
-    return Column(
-      children: const [
+    return const Column(
+      children: [
         TDDivider(
           text: '文字信息',
           alignment: TextAlignment.left,
@@ -76,24 +75,22 @@ class TDDividerPage extends StatelessWidget {
           ),
           TDText(
             '文字信息',
-            textColor: TDTheme.of(context).fontGyColor1.withOpacity(0.9),
+            textColor: TDTheme.of(context).textColorPlaceholder,
           ),
           const TDDivider(
             width: 0.5,
             height: 12,
-            margin: EdgeInsets.only(left: 16, right: 16),
+            margin: EdgeInsets.symmetric(horizontal: 16),
           ),
-          TDText('文字信息',
-              textColor: TDTheme.of(context).fontGyColor1.withOpacity(0.9)),
+          TDText('文字信息', textColor: TDTheme.of(context).textColorPlaceholder),
           const TDDivider(
             width: 0.5,
             height: 12,
-            margin: EdgeInsets.only(left: 16, right: 16),
+            margin: EdgeInsets.symmetric(horizontal: 16),
             isDashed: true,
             direction: Axis.vertical,
           ),
-          TDText('文字信息',
-              textColor: TDTheme.of(context).fontGyColor1.withOpacity(0.9)),
+          TDText('文字信息', textColor: TDTheme.of(context).textColorPlaceholder),
         ],
       ),
     );
@@ -101,8 +98,8 @@ class TDDividerPage extends StatelessWidget {
 
   @Demo(group: 'divider')
   Widget _dashedDivider(BuildContext context) {
-    return Column(
-      children: const [
+    return const Column(
+      children: [
         SizedBox(
           height: 20,
         ),
