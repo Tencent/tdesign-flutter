@@ -85,7 +85,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDConfirmDialog(
               title: _dialogTitle,
               content: _commonContent,
@@ -106,7 +107,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDConfirmDialog(
               content: _commonContent,
             );
@@ -126,7 +128,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDConfirmDialog(
               title: _dialogTitle,
             );
@@ -146,7 +149,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDConfirmDialog(
               title: _dialogTitle,
               content: _longContent,
@@ -169,7 +173,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDAlertDialog(
               title: _dialogTitle,
               content: _commonContent,
@@ -190,7 +195,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDAlertDialog(
               content: _commonContent,
             );
@@ -210,7 +216,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDAlertDialog(
               title: _dialogTitle,
             );
@@ -231,7 +238,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDInputDialog(
               textEditingController: TextEditingController(),
               title: _dialogTitle,
@@ -254,7 +262,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDInputDialog(
               textEditingController: TextEditingController(),
               title: _dialogTitle,
@@ -277,7 +286,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDImageDialog(
               image: _demoImage,
               title: _dialogTitle,
@@ -299,7 +309,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDImageDialog(
               image: _demoImage,
               content: _commonContent,
@@ -320,7 +331,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDImageDialog(
               image: _demoImage,
               title: _dialogTitle,
@@ -341,7 +353,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDImageDialog(
               image: _demoImage,
               title: _dialogTitle,
@@ -364,7 +377,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDImageDialog(
               image: _demoImage,
               title: _dialogTitle,
@@ -386,7 +400,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDImageDialog(
               image: _demoImage,
               imagePosition: TDDialogImagePosition.middle,
@@ -408,7 +423,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDConfirmDialog(
               title: _dialogTitle,
               content: _commonContent,
@@ -430,7 +446,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDAlertDialog(
               title: _dialogTitle,
               content: _commonContent,
@@ -453,7 +470,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDConfirmDialog(
               title: _dialogTitle,
               content: _commonContent,
@@ -474,7 +492,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDAlertDialog(
               title: _dialogTitle,
               content: _commonContent,
@@ -496,22 +515,26 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
-            return TDAlertDialog.vertical(title: _dialogTitle, content: _commonContent, buttons: [
-              TDDialogButtonOptions(
-                  title: '主要按钮',
-                  action: () {
-                    Navigator.pop(context);
-                  },
-                  theme: TDButtonTheme.primary),
-              TDDialogButtonOptions(
-                  title: '次要按钮',
-                  titleColor: TDTheme.of(context).brandColor7,
-                  action: () {
-                    Navigator.pop(context);
-                  },
-                  theme: TDButtonTheme.light),
-            ]);
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDAlertDialog.vertical(
+                title: _dialogTitle,
+                content: _commonContent,
+                buttons: [
+                  TDDialogButtonOptions(
+                      title: '主要按钮',
+                      action: () {
+                        Navigator.pop(context);
+                      },
+                      theme: TDButtonTheme.primary),
+                  TDDialogButtonOptions(
+                      title: '次要按钮',
+                      titleColor: TDTheme.of(context).brandColor7,
+                      action: () {
+                        Navigator.pop(context);
+                      },
+                      theme: TDButtonTheme.light),
+                ]);
           },
         );
       },
@@ -528,29 +551,33 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
-            return TDAlertDialog.vertical(title: _dialogTitle, content: _commonContent, buttons: [
-              TDDialogButtonOptions(
-                  title: '主要按钮',
-                  action: () {
-                    Navigator.pop(context);
-                  },
-                  theme: TDButtonTheme.primary),
-              TDDialogButtonOptions(
-                  title: '次要按钮',
-                  titleColor: TDTheme.of(context).brandColor7,
-                  action: () {
-                    Navigator.pop(context);
-                  },
-                  theme: TDButtonTheme.light),
-              TDDialogButtonOptions(
-                  title: '次要按钮',
-                  titleColor: TDTheme.of(context).brandColor7,
-                  action: () {
-                    Navigator.pop(context);
-                  },
-                  theme: TDButtonTheme.light),
-            ]);
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return TDAlertDialog.vertical(
+                title: _dialogTitle,
+                content: _commonContent,
+                buttons: [
+                  TDDialogButtonOptions(
+                      title: '主要按钮',
+                      action: () {
+                        Navigator.pop(context);
+                      },
+                      theme: TDButtonTheme.primary),
+                  TDDialogButtonOptions(
+                      title: '次要按钮',
+                      titleColor: TDTheme.of(context).brandColor7,
+                      action: () {
+                        Navigator.pop(context);
+                      },
+                      theme: TDButtonTheme.light),
+                  TDDialogButtonOptions(
+                      title: '次要按钮',
+                      titleColor: TDTheme.of(context).brandColor7,
+                      action: () {
+                        Navigator.pop(context);
+                      },
+                      theme: TDButtonTheme.light),
+                ]);
           },
         );
       },
@@ -567,7 +594,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDConfirmDialog(
               title: _dialogTitle,
               content: _commonContent,
@@ -590,7 +618,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDConfirmDialog(
               title: _dialogTitle,
               titleAlignment: Alignment.centerLeft,
@@ -615,7 +644,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDAlertDialog(
               title: _dialogTitle,
               titleAlignment: Alignment.centerRight,
@@ -640,7 +670,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDAlertDialog.vertical(
                 title: _dialogTitle,
                 contentWidget: TDText.rich(TDTextSpan(children: [
@@ -678,7 +709,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
       onTap: () {
         showGeneralDialog(
           context: context,
-          pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext buildContext, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return TDImageDialog(
               image: _demoImage,
               title: _dialogTitle,
@@ -706,8 +738,9 @@ class _TDDialogPageState extends State<TDDialogPage> {
         onTap: () {
           showGeneralDialog(
               context: context,
-              pageBuilder:
-                  (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+              pageBuilder: (BuildContext buildContext,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation) {
                 return TDConfirmDialog(
                   title: _dialogTitle,
                   content: _commonContent,
@@ -737,8 +770,9 @@ class _TDDialogPageState extends State<TDDialogPage> {
         onTap: () {
           showGeneralDialog(
               context: context,
-              pageBuilder:
-                  (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+              pageBuilder: (BuildContext buildContext,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation) {
                 return TDConfirmDialog(
                   width: 500,
                   title: _dialogTitle,
@@ -769,8 +803,9 @@ class _TDDialogPageState extends State<TDDialogPage> {
         onTap: () {
           showGeneralDialog(
               context: context,
-              pageBuilder:
-                  (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+              pageBuilder: (BuildContext buildContext,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation) {
                 return TDConfirmDialog(
                   title: _dialogTitle,
                   content: _commonContent,
