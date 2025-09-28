@@ -39,15 +39,19 @@ class TDActionSheetGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     final borderRadius = Radius.circular(TDTheme.of(context).radiusExtraLarge);
     final groupItems = items.groupBy((item) => item.group);
-    final groupKeys = groupItems.keys.where((k) => k != null && groupItems[k]?.isNotEmpty == true);
+    final groupKeys = groupItems.keys
+        .where((k) => k != null && groupItems[k]?.isNotEmpty == true);
 
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
-        color: TDTheme.of(context).whiteColor1,
+        borderRadius:
+            BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
+        color: TDTheme.of(context).bgColorContainer,
       ),
       clipBehavior: Clip.antiAlias,
-      padding: useSafeArea ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom) : EdgeInsets.zero,
+      padding: useSafeArea
+          ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom)
+          : EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -69,7 +73,7 @@ class TDActionSheetGroup extends StatelessWidget {
                       TDText(
                         k!,
                         font: TDTheme.of(context).fontBodyMedium,
-                        textColor: TDTheme.of(context).fontGyColor3,
+                        textColor: TDTheme.of(context).textColorPlaceholder,
                       ),
                     ],
                   ),
@@ -98,7 +102,7 @@ class TDActionSheetGroup extends StatelessWidget {
                       color: TDTheme.of(context).fontWhColor1,
                       border: Border(
                         top: BorderSide(
-                          color: TDTheme.of(context).grayColor3,
+                          color: TDTheme.of(context).componentStrokeColor,
                           width: 0.5,
                         ),
                       ),
@@ -107,7 +111,8 @@ class TDActionSheetGroup extends StatelessWidget {
               ],
             );
           }),
-          if (showCancel) buildCancelButton(context, false, cancelText, onCancel),
+          if (showCancel)
+            buildCancelButton(context, false, cancelText, onCancel),
         ],
       ),
     );

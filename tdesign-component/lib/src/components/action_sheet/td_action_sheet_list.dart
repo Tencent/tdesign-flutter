@@ -36,11 +36,14 @@ class TDActionSheetList extends StatelessWidget {
     final borderRadius = Radius.circular(TDTheme.of(context).radiusExtraLarge);
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
-        color: TDTheme.of(context).grayColor1,
+        borderRadius:
+            BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
+        color: TDTheme.of(context).bgColorPage,
       ),
       clipBehavior: Clip.antiAlias,
-      padding: useSafeArea ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom) : EdgeInsets.zero,
+      padding: useSafeArea
+          ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom)
+          : EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -60,10 +63,10 @@ class TDActionSheetList extends StatelessWidget {
         vertical: TDTheme.of(context).spacer12,
       ),
       decoration: BoxDecoration(
-        color: TDTheme.of(context).fontWhColor1,
+        color: TDTheme.of(context).bgColorContainer,
         border: Border(
           bottom: BorderSide(
-            color: TDTheme.of(context).grayColor1,
+            color: TDTheme.of(context).componentStrokeColor,
             width: 0.5,
           ),
         ),
@@ -74,7 +77,7 @@ class TDActionSheetList extends StatelessWidget {
           TDText(
             description!,
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor3,
+            textColor: TDTheme.of(context).textColorSecondary,
           ),
         ],
       ),
@@ -84,7 +87,7 @@ class TDActionSheetList extends StatelessWidget {
   /// 构建选项列表
   Widget _buildOptionsList(BuildContext context) {
     return Container(
-      color: TDTheme.of(context).fontWhColor1,
+      color: TDTheme.of(context).bgColorContainer,
       child: ListView.builder(
         shrinkWrap: true,
         itemCount: items.length,
@@ -100,11 +103,12 @@ class TDActionSheetList extends StatelessWidget {
                   },
             child: Container(
               height: 56,
-              padding: EdgeInsets.symmetric(horizontal: TDTheme.of(context).spacer16),
+              padding: EdgeInsets.symmetric(
+                  horizontal: TDTheme.of(context).spacer16),
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: TDTheme.of(context).grayColor1,
+                    color: TDTheme.of(context).componentStrokeColor,
                     width: 0.5,
                   ),
                 ),
@@ -116,8 +120,11 @@ class TDActionSheetList extends StatelessWidget {
                     IconTheme(
                       data: IconThemeData(
                         color: item.disabled
-                            ? TDTheme.of(context).fontGyColor4 // 禁用状态下的图标颜色
-                            : (item.textStyle?.color ?? TDTheme.of(context).fontGyColor1), // 正常状态下的图标颜色
+                            ? TDTheme.of(context)
+                                .textColorDisabled // 禁用状态下的图标颜色
+                            : (item.textStyle?.color ??
+                                TDTheme.of(context)
+                                    .textColorPrimary), // 正常状态下的图标颜色
                         size: item.textStyle?.fontSize,
                       ),
                       child: SizedBox(
@@ -132,8 +139,8 @@ class TDActionSheetList extends StatelessWidget {
                     item.label,
                     font: TDTheme.of(context).fontBodyLarge,
                     textColor: item.disabled
-                        ? TDTheme.of(context).fontGyColor4 // 禁用状态下的文本颜色
-                        : TDTheme.of(context).fontGyColor1, // 正常状态下的文本颜色
+                        ? TDTheme.of(context).textColorDisabled // 禁用状态下的文本颜色
+                        : TDTheme.of(context).textColorPrimary, // 正常状态下的文本颜色
                     style: item.textStyle,
                   ),
                   if (item.badge != null) ...[
@@ -160,13 +167,13 @@ class TDActionSheetList extends StatelessWidget {
             Navigator.maybePop(context);
           },
           child: Container(
-            color: TDTheme.of(context).fontWhColor1,
+            color: TDTheme.of(context).bgColorContainer,
             height: 48,
             child: Center(
               child: TDText(
                 cancelText,
                 font: TDTheme.of(context).fontBodyLarge,
-                textColor: TDTheme.of(context).fontGyColor1,
+                textColor: TDTheme.of(context).textColorPrimary,
               ),
             ),
           ),

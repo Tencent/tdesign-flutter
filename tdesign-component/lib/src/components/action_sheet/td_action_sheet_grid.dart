@@ -34,6 +34,7 @@ class TDActionSheetGrid extends StatefulWidget {
     this.align = TDActionSheetAlign.center,
     this.count = 8,
     this.rows = 2,
+    // @todo
     this.cancelText = '取消',
     this.showCancel = true,
     this.showPagination = false,
@@ -57,11 +58,14 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
     final borderRadius = Radius.circular(TDTheme.of(context).radiusExtraLarge);
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
-        color: TDTheme.of(context).whiteColor1,
+        borderRadius:
+            BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
+        color: TDTheme.of(context).bgColorContainer,
       ),
       clipBehavior: Clip.antiAlias,
-      padding: widget.useSafeArea ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom) : EdgeInsets.zero,
+      padding: widget.useSafeArea
+          ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom)
+          : EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -78,7 +82,9 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
           else
             _buildGrid(context),
           // 如果显示取消按钮，则显示取消按钮
-          if (widget.showCancel) buildCancelButton(context, widget.showPagination, widget.cancelText, widget.onCancel),
+          if (widget.showCancel)
+            buildCancelButton(context, widget.showPagination, widget.cancelText,
+                widget.onCancel),
         ],
       ),
     );
@@ -97,7 +103,7 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
           TDText(
             widget.description!,
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor3,
+            textColor: TDTheme.of(context).textColorPlaceholder,
           ),
         ],
       ),
@@ -125,7 +131,10 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
             : null,
         itemBuilder: (context, pageIndex) {
           // 获取当前页面的项目
-          final pageItems = widget.items.skip(pageIndex * widget.count).take(widget.count).toList();
+          final pageItems = widget.items
+              .skip(pageIndex * widget.count)
+              .take(widget.count)
+              .toList();
           return _buildGrid(context, items: pageItems, pageIndex: pageIndex);
         },
       ),
@@ -133,7 +142,8 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
   }
 
   Widget _buildScrollGrid(BuildContext context) {
-    final chunks = widget.items.chunk((widget.items.length / widget.rows).ceil());
+    final chunks =
+        widget.items.chunk((widget.items.length / widget.rows).ceil());
     final itemCount = chunks[0].length;
     return _gridWrap(
       ListView.builder(
@@ -195,14 +205,17 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
   Widget _buildPaginationDots(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate((widget.items.length / widget.count).ceil(), (index) {
+      children:
+          List.generate((widget.items.length / widget.count).ceil(), (index) {
         return Container(
           margin: EdgeInsets.symmetric(horizontal: TDTheme.of(context).spacer4),
           width: 8.0,
           height: 8.0,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: currentPage == index ? TDTheme.of(context).brandColor7 : TDTheme.of(context).grayColor4,
+            color: currentPage == index
+                ? TDTheme.of(context).brandColor7
+                : TDTheme.of(context).bgColorSecondaryContainerActive,
           ),
         );
       }),

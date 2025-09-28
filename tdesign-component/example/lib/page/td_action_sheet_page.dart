@@ -17,7 +17,7 @@ class IconWithBackground extends StatelessWidget {
       width: 40.0,
       height: 40.0,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).grayColor1,
+        color: TDTheme.of(context).bgColorSecondaryContainer,
         borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
       ),
       child: Center(
@@ -32,14 +32,38 @@ class IconWithBackground extends StatelessWidget {
 
 const _nums = ['一', '二', '三', '四'];
 List<TDActionSheetItem> _gridItems = [
-  TDActionSheetItem(label: '微信', icon: Image.asset('assets/img/td_action_sheet_1.png'), group: '分享至'),
-  TDActionSheetItem(label: '朋友圈', icon: Image.asset('assets/img/td_action_sheet_2.png'), group: '分享至'),
-  TDActionSheetItem(label: 'QQ', icon: Image.asset('assets/img/td_action_sheet_3.png'), group: '分享至'),
-  TDActionSheetItem(label: '企业微信', icon: Image.asset('assets/img/td_action_sheet_4.png'), group: '分享至'),
-  TDActionSheetItem(label: '收藏', icon: const IconWithBackground(icon: TDIcons.star), group: '分享至'),
-  TDActionSheetItem(label: '刷新', icon: const IconWithBackground(icon: TDIcons.refresh), group: '分享至'),
-  TDActionSheetItem(label: '下载', icon: const IconWithBackground(icon: TDIcons.download), group: '分享至'),
-  TDActionSheetItem(label: '复制', icon: const IconWithBackground(icon: TDIcons.queue), group: '分享至'),
+  TDActionSheetItem(
+      label: '微信',
+      icon: Image.asset('assets/img/td_action_sheet_1.png'),
+      group: '分享至'),
+  TDActionSheetItem(
+      label: '朋友圈',
+      icon: Image.asset('assets/img/td_action_sheet_2.png'),
+      group: '分享至'),
+  TDActionSheetItem(
+      label: 'QQ',
+      icon: Image.asset('assets/img/td_action_sheet_3.png'),
+      group: '分享至'),
+  TDActionSheetItem(
+      label: '企业微信',
+      icon: Image.asset('assets/img/td_action_sheet_4.png'),
+      group: '分享至'),
+  TDActionSheetItem(
+      label: '收藏',
+      icon: const IconWithBackground(icon: TDIcons.star),
+      group: '分享至'),
+  TDActionSheetItem(
+      label: '刷新',
+      icon: const IconWithBackground(icon: TDIcons.refresh),
+      group: '分享至'),
+  TDActionSheetItem(
+      label: '下载',
+      icon: const IconWithBackground(icon: TDIcons.download),
+      group: '分享至'),
+  TDActionSheetItem(
+      label: '复制',
+      icon: const IconWithBackground(icon: TDIcons.queue),
+      group: '分享至'),
 ];
 
 class TDActionSheetPage extends StatelessWidget {
@@ -47,89 +71,87 @@ class TDActionSheetPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: TDTheme.of(context).grayColor2,
-        child: ExamplePage(
-          title: tdTitle(context),
-          desc: '从底部弹出的模态框，提供和当前场景相关的操作动作，也支持提供信息输入和描述。',
-          exampleCodeGroup: 'action_sheet',
-          children: [
-            ExampleModule(title: '组件类型', children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '列表型动作面板',
-                builder: (BuildContext context) {
-                  return const Column(
-                    children: [
-                      CodeWrapper(builder: _buildBaseListActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildDescListActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildIconListActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildBadgeListActionSheet),
-                    ],
-                  );
-                },
-              ),
-              ExampleItem(
-                ignoreCode: true,
-                desc: '宫格型动作面板',
-                builder: (BuildContext context) {
-                  return const Column(
-                    children: [
-                      CodeWrapper(builder: _buildBaseGridActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildDescGridActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildPaginationGridActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildScrollGridActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildMultiScrollGridActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildBadgeGridActionSheet),
-                    ],
-                  );
-                },
-              ),
-            ]),
-            ExampleModule(title: '组件状态', children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '列表型选项状态',
-                builder: (BuildContext context) {
-                  return const Column(
-                    children: [
-                      CodeWrapper(builder: _buildBaseListStateActionSheet),
-                      SizedBox(height: 16),
-                      CodeWrapper(builder: _buildIconListStateActionSheet),
-                    ],
-                  );
-                },
-              )
-            ]),
-            ExampleModule(title: '组件样式', children: [
-              ExampleItem(
-                  ignoreCode: true,
-                  desc: '列表型对齐方式',
-                  builder: (BuildContext context) {
-                    return const Column(
-                      children: [
-                        CodeWrapper(builder: _buildBadgeListCenterActionSheet),
-                        SizedBox(height: 16),
-                        CodeWrapper(builder: _buildIconListCenterActionSheet),
-                        SizedBox(height: 16),
-                        CodeWrapper(builder: _buildBadgeListLeftActionSheet),
-                        SizedBox(height: 16),
-                        CodeWrapper(builder: _buildIconListLeftActionSheet),
-                      ],
-                    );
-                  })
-            ])
-          ],
-          test: const [],
-        ));
+    return ExamplePage(
+      title: tdTitle(context),
+      desc: '从底部弹出的模态框，提供和当前场景相关的操作动作，也支持提供信息输入和描述。',
+      exampleCodeGroup: 'action_sheet',
+      children: [
+        ExampleModule(title: '组件类型', children: [
+          ExampleItem(
+            ignoreCode: true,
+            desc: '列表型动作面板',
+            builder: (BuildContext context) {
+              return const Column(
+                children: [
+                  CodeWrapper(builder: _buildBaseListActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildDescListActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildIconListActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildBadgeListActionSheet),
+                ],
+              );
+            },
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            desc: '宫格型动作面板',
+            builder: (BuildContext context) {
+              return const Column(
+                children: [
+                  CodeWrapper(builder: _buildBaseGridActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildDescGridActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildPaginationGridActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildScrollGridActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildMultiScrollGridActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildBadgeGridActionSheet),
+                ],
+              );
+            },
+          ),
+        ]),
+        ExampleModule(title: '组件状态', children: [
+          ExampleItem(
+            ignoreCode: true,
+            desc: '列表型选项状态',
+            builder: (BuildContext context) {
+              return const Column(
+                children: [
+                  CodeWrapper(builder: _buildBaseListStateActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildIconListStateActionSheet),
+                ],
+              );
+            },
+          )
+        ]),
+        ExampleModule(title: '组件样式', children: [
+          ExampleItem(
+              ignoreCode: true,
+              desc: '列表型对齐方式',
+              builder: (BuildContext context) {
+                return const Column(
+                  children: [
+                    CodeWrapper(builder: _buildBadgeListCenterActionSheet),
+                    SizedBox(height: 16),
+                    CodeWrapper(builder: _buildIconListCenterActionSheet),
+                    SizedBox(height: 16),
+                    CodeWrapper(builder: _buildBadgeListLeftActionSheet),
+                    SizedBox(height: 16),
+                    CodeWrapper(builder: _buildIconListLeftActionSheet),
+                  ],
+                );
+              })
+        ])
+      ],
+      test: const [],
+    );
   }
 }
 
@@ -407,14 +429,30 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
     size: TDButtonSize.large,
     onTap: () {
       TDActionSheet.showGridActionSheet(context, items: [
-        TDActionSheetItem(label: '微信', icon: Image.asset('assets/img/td_action_sheet_1.png'), badge: const TDBadge(TDBadgeType.message, count: 'NEW')),
-        TDActionSheetItem(label: '朋友圈', icon: Image.asset('assets/img/td_action_sheet_2.png')),
-        TDActionSheetItem(label: 'QQ', icon: Image.asset('assets/img/td_action_sheet_3.png')),
-        TDActionSheetItem(label: '企业微信', icon: Image.asset('assets/img/td_action_sheet_4.png')),
-        TDActionSheetItem(label: '收藏', icon: const IconWithBackground(icon: TDIcons.star), badge: const TDBadge(TDBadgeType.redPoint)),
-        TDActionSheetItem(label: '刷新', icon: const IconWithBackground(icon: TDIcons.refresh)),
-        TDActionSheetItem(label: '下载', icon: const IconWithBackground(icon: TDIcons.download), badge: const TDBadge(TDBadgeType.message, count: '8')),
-        TDActionSheetItem(label: '复制', icon: const IconWithBackground(icon: TDIcons.queue)),
+        TDActionSheetItem(
+            label: '微信',
+            icon: Image.asset('assets/img/td_action_sheet_1.png'),
+            badge: const TDBadge(TDBadgeType.message, count: 'NEW')),
+        TDActionSheetItem(
+            label: '朋友圈',
+            icon: Image.asset('assets/img/td_action_sheet_2.png')),
+        TDActionSheetItem(
+            label: 'QQ', icon: Image.asset('assets/img/td_action_sheet_3.png')),
+        TDActionSheetItem(
+            label: '企业微信',
+            icon: Image.asset('assets/img/td_action_sheet_4.png')),
+        TDActionSheetItem(
+            label: '收藏',
+            icon: const IconWithBackground(icon: TDIcons.star),
+            badge: const TDBadge(TDBadgeType.redPoint)),
+        TDActionSheetItem(
+            label: '刷新', icon: const IconWithBackground(icon: TDIcons.refresh)),
+        TDActionSheetItem(
+            label: '下载',
+            icon: const IconWithBackground(icon: TDIcons.download),
+            badge: const TDBadge(TDBadgeType.message, count: '8')),
+        TDActionSheetItem(
+            label: '复制', icon: const IconWithBackground(icon: TDIcons.queue)),
       ]);
     },
   );
@@ -526,11 +564,17 @@ Widget _buildBadgeListCenterActionSheet(BuildContext context) {
           ),
           TDActionSheetItem(
             label: '选项二',
-            badge: const TDBadge(TDBadgeType.message, count: '8',),
+            badge: const TDBadge(
+              TDBadgeType.message,
+              count: '8',
+            ),
           ),
           TDActionSheetItem(
             label: '选项三',
-            badge: const TDBadge(TDBadgeType.message, count: '99',),
+            badge: const TDBadge(
+              TDBadgeType.message,
+              count: '99',
+            ),
           ),
         ],
       );
