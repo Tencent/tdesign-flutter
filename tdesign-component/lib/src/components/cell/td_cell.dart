@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
-import '../../theme/td_spacers.dart';
-import '../../theme/td_theme.dart';
-import '../icon/td_icons.dart';
-import '../swipe_cell/td_swipe_cell_inherited.dart';
-import '../text/td_text.dart';
 import 'td_cell_inherited.dart';
-import 'td_cell_style.dart';
 
 typedef TDCellClick = void Function(TDCell cell);
 
@@ -128,12 +122,20 @@ class _TDCellState extends State<TDCell> {
 
   @override
   Widget build(BuildContext context) {
-    var style = widget.style ?? TDCellInherited.of(context)?.style ?? TDCellStyle.cellStyle(context);
+    var style = widget.style ??
+        TDCellInherited.of(context)?.style ??
+        TDCellStyle.cellStyle(context);
     var crossAxisAlignment = _getAlign();
-    var color = _status == 'default' ? style.backgroundColor : style.clickBackgroundColor;
+    var color = _status == 'default'
+        ? style.backgroundColor
+        : style.clickBackgroundColor;
     var border;
-    if(widget.showBottomBorder!) {
-      border = Border(bottom: BorderSide(width: 1, color: style.borderedColor ?? TDTheme.of(context).grayColor3));
+    if (widget.showBottomBorder!) {
+      border = Border(
+          bottom: BorderSide(
+              width: 0.5,
+              color: style.borderedColor ??
+                  TDTheme.of(context).componentStrokeColor));
     }
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -143,11 +145,13 @@ class _TDCellState extends State<TDCell> {
         }
         TDSwipeCellInherited.of(context)?.cellClick();
       },
-      onLongPress: widget.onLongPress != null ? () {
-        if (!(widget.disabled ?? false)) {
-          widget.onLongPress!(widget);
-        }
-      } : null,
+      onLongPress: widget.onLongPress != null
+          ? () {
+              if (!(widget.disabled ?? false)) {
+                widget.onLongPress!(widget);
+              }
+            }
+          : null,
       onTapDown: (details) {
         _setStatus('active', 0);
       },
@@ -169,8 +173,11 @@ class _TDCellState extends State<TDCell> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (widget.leftIcon != null || widget.leftIconWidget != null) ...[
-                    widget.leftIconWidget ?? Icon(widget.leftIcon, size: 24, color: style.leftIconColor),
+                  if (widget.leftIcon != null ||
+                      widget.leftIconWidget != null) ...[
+                    widget.leftIconWidget ??
+                        Icon(widget.leftIcon,
+                            size: 24, color: style.leftIconColor),
                     SizedBox(width: TDTheme.of(context).spacer12),
                   ],
                   Expanded(
@@ -182,17 +189,23 @@ class _TDCellState extends State<TDCell> {
                             if (widget.titleWidget != null)
                               Flexible(child: widget.titleWidget!)
                             else if (widget.title?.isNotEmpty == true)
-                              Flexible(child: TDText(widget.title!, style: style.titleStyle)),
-                            if (widget.required ?? false) TDText(' *', style: style.requiredStyle),
+                              Flexible(
+                                  child: TDText(widget.title!,
+                                      style: style.titleStyle)),
+                            if (widget.required ?? false)
+                              TDText(' *', style: style.requiredStyle),
                           ],
                         ),
-                        if ((widget.titleWidget != null || widget.title != null) &&
-                            (widget.descriptionWidget != null || widget.description?.isNotEmpty == true))
+                        if ((widget.titleWidget != null ||
+                                widget.title != null) &&
+                            (widget.descriptionWidget != null ||
+                                widget.description?.isNotEmpty == true))
                           SizedBox(height: TDTheme.of(context).spacer4),
                         if (widget.descriptionWidget != null)
                           widget.descriptionWidget!
                         else if (widget.description?.isNotEmpty == true)
-                          TDText(widget.description!, style: style.descriptionStyle),
+                          TDText(widget.description!,
+                              style: style.descriptionStyle),
                       ],
                     ),
                   ),
@@ -211,7 +224,9 @@ class _TDCellState extends State<TDCell> {
                   widget.rightIconWidget!
                 else if (widget.rightIcon != null)
                   Icon(widget.rightIcon, size: 24, color: style.rightIconColor),
-                if (widget.arrow ?? false) Icon(TDIcons.chevron_right, size: 24, color: style.arrowColor),
+                if (widget.arrow ?? false)
+                  Icon(TDIcons.chevron_right,
+                      size: 24, color: style.arrowColor),
               ],
             ),
           ],
@@ -256,15 +271,15 @@ class _TDCellState extends State<TDCell> {
     if (widget.imageWidget != null) {
       list.add(widget.imageWidget!);
     } else if (widget.image != null) {
-        list.add(ClipRRect(
-          borderRadius: BorderRadius.circular(widget.imageCircle ?? 50),
-          child: Image(
-            image: widget.image!,
-            width: imageSize,
-            height: imageSize,
-            fit: BoxFit.cover,
-          ),
-        ));
+      list.add(ClipRRect(
+        borderRadius: BorderRadius.circular(widget.imageCircle ?? 50),
+        child: Image(
+          image: widget.image!,
+          width: imageSize,
+          height: imageSize,
+          fit: BoxFit.cover,
+        ),
+      ));
     }
     if (list.isEmpty) {
       return list;

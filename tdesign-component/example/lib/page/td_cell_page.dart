@@ -67,11 +67,19 @@ Widget _buildSimple(BuildContext context) {
     cells: [
       // 可单独修改样式
       TDCell(arrow: true, title: '单行标题', style: TDCellStyle.cellStyle(context)),
-      TDCell(arrow: true, title: '单行标题', required: true, onClick: (cell) {
+      TDCell(
+          arrow: true,
+          title: '单行标题',
+          required: true,
+          onClick: (cell) {
             print('单行标题');
           }),
-      const TDCell(arrow: true, title: '单行标题', noteWidget: TDBadge(TDBadgeType.message, count: '8')),
-      const TDCell(arrow: false, title: '单行标题', rightIconWidget: TDSwitch(isOn: true)),
+      const TDCell(
+          arrow: true,
+          title: '单行标题',
+          noteWidget: TDBadge(TDBadgeType.message, count: '8')),
+      const TDCell(
+          arrow: false, title: '单行标题', rightIconWidget: TDSwitch(isOn: true)),
       const TDCell(arrow: true, title: '单行标题', note: '辅助信息'),
       const TDCell(arrow: true, title: '单行标题', leftIcon: TDIcons.lock_on),
       const TDCell(arrow: false, title: '单行标题'),
@@ -162,31 +170,3 @@ Widget _buildPadding(BuildContext context) {
     ],
   );
 }
-
-// @Demo(group: 'cell')
-// Widget _buildBorder(BuildContext context) {
-//   return const TDCellGroup(
-//     theme: TDCellGroupTheme.cardTheme,
-//     bordered: true,
-//     cells: [
-//       TDCell(arrow: true, title: '单行标题'),
-//       TDCell(arrow: true, title: '单行标题', required: true),
-//       TDCell(arrow: true, title: '单行标题'),
-//     ],
-//   );
-// }
-
-// @Demo(group: 'cell')
-// Widget _buildTitle(BuildContext context) {
-//   var style = TDCellStyle.cellStyle(context);
-//   style.leftIconColor = TDTheme.of(context).fontGyColor1;
-//   return TDCellGroup(
-//     title: '标题',
-//     style: style,
-//     cells: const [
-//       TDCell(title: 'item', leftIcon: TDIcons.app),
-//       TDCell(title: 'item', leftIcon: TDIcons.app),
-//       TDCell(title: 'item', leftIcon: TDIcons.app),
-//     ],
-//   );
-// }
