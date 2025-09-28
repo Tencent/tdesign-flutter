@@ -25,7 +25,7 @@ class ExamplePage extends StatefulWidget {
     this.desc = '',
     this.children = const [],
     this.padding,
-    this.backgroundColor,
+    @deprecated this.backgroundColor,
     required this.exampleCodeGroup,
     this.test = const [],
     this.showSingleChild = false,
@@ -101,8 +101,6 @@ class _ExamplePageState extends State<ExamplePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: widget.floatingActionButton,
-        backgroundColor:
-            widget.backgroundColor ?? TDTheme.of(context).grayColor1,
         body: ScrollbarTheme(
             data: ScrollbarThemeData(
                 trackVisibility: MaterialStateProperty.all(true)),
@@ -114,63 +112,72 @@ class _ExamplePageState extends State<ExamplePage> {
                     child: widget.showSingleChild && widget.singleChild != null
                         ? _singleChild()
                         : MediaQuery(
-                      // 去掉底部安全区域,保证示例展示正常
-                      data: MediaQuery.of(context).copyWith(padding: EdgeInsets.zero),
-                      child: ListView.builder(
-                        controller: widget.scrollController,
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.only(top: 24, bottom: 24),
-                        itemCount: widget.children.length + 3,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return _buildHeader(context);
-                          }
-                          if (index == widget.children.length + 2) {
-                            return WebMdTool.needGenerateWebMd
-                                ? Container(
-                              margin: const EdgeInsets.only(top: 24),
-                              child: Column(
-                                children: [
-                                  TDButton(
-                                    text: '生成Web使用md',
-                                    type: TDButtonType.fill,
-                                    onTap: () => WebMdTool.generateWebMd(
-                                        model: model,
-                                        description: widget.desc,
-                                        exampleCodeGroup:
-                                        widget.exampleCodeGroup,
-                                        exampleModuleList:
-                                        widget.children,
-                                        testList: widget.test,
-                                        singleChild:
-                                        widget.showSingleChild
-                                            ? widget.singleChild
-                                            : null),
-                                  ),
-                                  TDButton(
-                                    text: '返回首页',
-                                    type: TDButtonType.fill,
-                                    onTap: () => Navigator.of(context).maybePop(),
-                                  ),
-                                ],
-                              ),
-                            )
-                                : Container();
-                          }
-                          ExampleModule data;
-                          if (index <= widget.children.length) {
-                            data = widget.children[index - 1];
-                          } else {
-                            data = ExampleModule(title: '单元测试', children: [
-                              _buildTestExampleItem(),
-                              ...widget.test
-                            ]);
-                          }
-                          return _buildModule(index, data, context);
-                        },
-                      ),
-                    )),
+                            // 去掉底部安全区域,保证示例展示正常
+                            data: MediaQuery.of(context)
+                                .copyWith(padding: EdgeInsets.zero),
+                            child: ListView.builder(
+                              controller: widget.scrollController,
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              padding:
+                                  const EdgeInsets.only(top: 24, bottom: 24),
+                              itemCount: widget.children.length + 3,
+                              itemBuilder: (context, index) {
+                                if (index == 0) {
+                                  return _buildHeader(context);
+                                }
+                                if (index == widget.children.length + 2) {
+                                  return WebMdTool.needGenerateWebMd
+                                      ? Container(
+                                          margin:
+                                              const EdgeInsets.only(top: 24),
+                                          child: Column(
+                                            children: [
+                                              TDButton(
+                                                text: '生成Web使用md',
+                                                type: TDButtonType.fill,
+                                                onTap: () =>
+                                                    WebMdTool.generateWebMd(
+                                                        model: model,
+                                                        description:
+                                                            widget.desc,
+                                                        exampleCodeGroup: widget
+                                                            .exampleCodeGroup,
+                                                        exampleModuleList:
+                                                            widget.children,
+                                                        testList: widget.test,
+                                                        singleChild: widget
+                                                                .showSingleChild
+                                                            ? widget.singleChild
+                                                            : null),
+                                              ),
+                                              TDButton(
+                                                text: '返回首页',
+                                                type: TDButtonType.fill,
+                                                onTap: () =>
+                                                    Navigator.of(context)
+                                                        .maybePop(),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Container();
+                                }
+                                ExampleModule data;
+                                if (index <= widget.children.length) {
+                                  data = widget.children[index - 1];
+                                } else {
+                                  data = ExampleModule(
+                                      title: '单元测试',
+                                      children: [
+                                        _buildTestExampleItem(),
+                                        ...widget.test
+                                      ]);
+                                }
+                                return _buildModule(index, data, context);
+                              },
+                            ),
+                          )),
               ],
             )));
   }
@@ -199,7 +206,7 @@ class _ExamplePageState extends State<ExamplePage> {
                         exampleModuleList: widget.children,
                         testList: widget.test,
                         singleChild:
-                        widget.showSingleChild ? widget.singleChild : null),
+                            widget.showSingleChild ? widget.singleChild : null),
                   ),
                   TDButton(
                     text: '返回首页',
@@ -267,11 +274,11 @@ class _ExamplePageState extends State<ExamplePage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if(WebMdTool.needGenerateWebMd) const TDText('WebGenTag'),
+          if (WebMdTool.needGenerateWebMd) const TDText('WebGenTag'),
           TDText(
             widget.title,
             font: TDTheme.of(context).fontHeadlineSmall,
-            textColor: TDTheme.of(context).fontGyColor1,
+            textColor: TDTheme.of(context).textColorPrimary,
           ),
           Container(
             margin: const EdgeInsets.only(
@@ -280,7 +287,7 @@ class _ExamplePageState extends State<ExamplePage> {
             child: TDText(
               widget.desc,
               font: TDTheme.of(context).fontBodyMedium,
-              textColor: TDTheme.of(context).fontGyColor2,
+              textColor: TDTheme.of(context).textColorSecondary,
             ),
           ),
           // Expanded(child: ),
@@ -299,7 +306,7 @@ class _ExamplePageState extends State<ExamplePage> {
           child: TDText(
             '${index < 10 ? "0$index" : index} ${data.title}',
             font: TDTheme.of(context).fontTitleLarge,
-            textColor: TDTheme.of(context).fontGyColor1,
+            textColor: TDTheme.of(context).textColorPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -431,7 +438,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
                 child: TDText(
                   widget.data.desc,
                   font: TDTheme.of(context).fontBodyMedium,
-                  textColor: TDTheme.of(context).fontGyColor2,
+                  textColor: TDTheme.of(context).textColorSecondary,
                 ),
               ),
         child
@@ -473,6 +480,8 @@ class _CodeWrapperState extends State<CodeWrapper> {
 
   String? codeString;
 
+  Brightness brightness = Brightness.light;
+
   @override
   void initState() {
     super.initState();
@@ -490,6 +499,7 @@ class _CodeWrapperState extends State<CodeWrapper> {
             .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
         exampleCodeGroup = modelTheme?.model.codePath ?? '';
         apiVisible = modelTheme?.model.apiVisible ?? false;
+        brightness = Theme.of(context).brightness;
       });
 
       if (WebMdTool.needGenerateWebMd && !widget.isFromItem) {
@@ -577,7 +587,7 @@ class _CodeWrapperState extends State<CodeWrapper> {
             return Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: TDTheme.of(context).grayColor1,
+                  color: TDTheme.of(context).bgColorSecondaryContainer,
                   borderRadius: BorderRadius.vertical(
                       top: Radius.circular(TDTheme.of(context).radiusDefault))),
               height: 500,
@@ -595,10 +605,15 @@ class _CodeWrapperState extends State<CodeWrapper> {
 ${codeString}
 ```
                   ''';
+
+          var syntaxHighlighterStyle = brightness == Brightness.light
+              ? SyntaxHighlighterStyle.lightThemeStyle()
+              : SyntaxHighlighterStyle.darkThemeStyle();
+
           return Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: TDTheme.of(context).grayColor1,
+                color: TDTheme.of(context).bgColorSecondaryContainer,
                 borderRadius: BorderRadius.vertical(
                     top: Radius.circular(TDTheme.of(context).radiusDefault))),
             height: height,
@@ -607,7 +622,7 @@ ${codeString}
               padding: EdgeInsets.zero,
               selectable: false,
               shrinkWrap: true,
-              syntaxHighlighter: DartSyntaxHighlighter(),
+              syntaxHighlighter: DartSyntaxHighlighter(syntaxHighlighterStyle),
               data: mdText,
               extensionSet: md.ExtensionSet(
                 md.ExtensionSet.gitHubWeb.blockSyntaxes,
