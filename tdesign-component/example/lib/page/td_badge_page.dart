@@ -40,7 +40,6 @@ class _TDBadgePageState extends State<TDBadgePage> {
                     ],
                   );
                 }),
-
             ExampleItem(
                 desc: '数字徽标',
                 ignoreCode: true,
@@ -132,8 +131,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @Demo(group: 'badge')
   Widget _buildRedPointMessageBadge(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
-        margin: const EdgeInsets.only(left: 16, right: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
         child: SizedBox(
           width: 40,
           height: 24,
@@ -157,9 +155,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @Demo(group: 'badge')
   Widget _buildRedPointIconBadge(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
-        margin: const EdgeInsets.only(left: 16, right: 16),
-        child: SizedBox(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        child: const SizedBox(
           width: 27,
           height: 27,
           child: Stack(
@@ -179,9 +176,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @Demo(group: 'badge')
   Widget _buildRedPointButtonBadge(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
-        margin: const EdgeInsets.only(left: 16, right: 16),
-        child: SizedBox(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        child: const SizedBox(
           width: 83,
           height: 48,
           child: Stack(
@@ -207,7 +203,6 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @Demo(group: 'badge')
   Widget _buildMessageNumberBadge(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
         margin: const EdgeInsets.only(left: 16),
         child: SizedBox(
           width: 54,
@@ -235,9 +230,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @Demo(group: 'badge')
   Widget _buildIconNumberBadge(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
         margin: const EdgeInsets.only(left: 16),
-        child: SizedBox(
+        child: const SizedBox(
           width: 42,
           height: 36,
           child: Stack(
@@ -260,9 +254,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @Demo(group: 'badge')
   Widget _buildButtonNumberBadge(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
         margin: const EdgeInsets.only(left: 16),
-        child: SizedBox(
+        child: const SizedBox(
           width: 86,
           height: 54,
           child: Stack(
@@ -290,8 +283,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @Demo(group: 'badge')
   Widget _buildCustomBadgeShowingNumberEight(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
-        margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: SizedBox(
           width: 64,
           height: 56,
@@ -301,7 +293,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
               Container(
                 child: const Icon(TDIcons.notification),
                 decoration: BoxDecoration(
-                    color: TDTheme.of(context).grayColor2,
+                    color: TDTheme.of(context).bgColorComponent,
                     borderRadius: BorderRadius.circular(
                         TDTheme.of(context).radiusDefault)),
                 height: 48,
@@ -323,8 +315,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @Demo(group: 'badge')
   Widget _buildCustomBadgeShowingNumberZero(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
-        margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: SizedBox(
           width: 64,
           height: 56,
@@ -334,7 +325,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
               Container(
                 child: const Icon(TDIcons.notification),
                 decoration: BoxDecoration(
-                    color: TDTheme.of(context).grayColor2,
+                    color: TDTheme.of(context).bgColorComponent,
                     borderRadius: BorderRadius.circular(
                         TDTheme.of(context).radiusDefault)),
                 height: 48,
@@ -356,8 +347,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @Demo(group: 'badge')
   Widget _buildCustomBadgeWithoutShowingNumberZero(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
-        margin: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: SizedBox(
           width: 64,
           height: 56,
@@ -367,7 +357,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
               Container(
                 child: const Icon(TDIcons.notification),
                 decoration: BoxDecoration(
-                    color: TDTheme.of(context).grayColor2,
+                    color: TDTheme.of(context).bgColorComponent,
                     borderRadius: BorderRadius.circular(
                         TDTheme.of(context).radiusDefault)),
                 height: 48,
@@ -389,7 +379,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
 
   @Demo(group: 'badge')
   Widget _buildCircleBadge(BuildContext context) {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
@@ -418,7 +408,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
 
   @Demo(group: 'badge')
   Widget _buildSquareBadge(BuildContext context) {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
@@ -461,7 +451,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 Container(
                   child: const Icon(TDIcons.shop),
                   decoration: BoxDecoration(
-                      color: TDTheme.of(context).grayColor2,
+                      color: TDTheme.of(context).bgColorComponent,
                       borderRadius: BorderRadius.circular(
                           TDTheme.of(context).radiusDefault)),
                   height: 48,
@@ -485,22 +475,11 @@ class _TDBadgePageState extends State<TDBadgePage> {
 
   @Demo(group: 'badge')
   Widget _buildSubscriptBadge(BuildContext context) {
-    return Stack(
+    return const Stack(
       alignment: Alignment.topRight,
       children: [
-        Container(
-          padding: const EdgeInsets.only(left: 16),
-          alignment: Alignment.centerLeft,
-          child: TDText(
-            '单行标题',
-            textColor: TDTheme.of(context).fontGyColor1,
-            font: TDTheme.of(context).fontBodyLarge,
-          ),
-          color: Colors.white,
-          height: 48,
-          width: MediaQuery.of(context).size.width,
-        ),
-        const TDBadge(
+        TDCell(title: '单行标题'),
+        TDBadge(
           TDBadgeType.subscript,
           message: 'NEW',
         ),
@@ -510,7 +489,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
 
   @Demo(group: 'badge')
   Widget _buildLargeBadge(BuildContext context) {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
@@ -545,7 +524,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
   Widget _buildMediumBadge(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 16),
-      child: Row(
+      child: const Row(
         children: [
           SizedBox(
             width: 120,
@@ -576,9 +555,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @Demo(group: 'badge')
   Widget _buildLessThanMaxCountBadge(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
         margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-        child: SizedBox(
+        child: const SizedBox(
           width: 60,
           height: 50,
           child: Stack(
@@ -607,9 +585,8 @@ class _TDBadgePageState extends State<TDBadgePage> {
   @Demo(group: 'badge')
   Widget _buildMoreThanMaxCountBadge(BuildContext context) {
     return Container(
-        alignment: Alignment.bottomLeft,
         margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-        child: SizedBox(
+        child: const SizedBox(
           width: 60,
           height: 50,
           child: Stack(
