@@ -45,26 +45,28 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
               height: 171,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: TDTheme.of(context).grayColor1,
-                  borderRadius: BorderRadius.all(Radius.circular(TDTheme.of(context).radiusLarge))),
+                  color: TDTheme.of(context).bgColorContainer,
+                  borderRadius: BorderRadius.all(
+                      Radius.circular(TDTheme.of(context).radiusLarge))),
               margin: const EdgeInsets.only(left: 16, right: 16),
               child: TDText(
                 PlatformUtil.isWeb ? 'Web暂不支持下拉，请下载安装apk体验' : '拖拽该区域演示 顶部下拉刷新',
                 font: TDTheme.of(context).fontBodyLarge,
-                textColor: TDTheme.of(context).fontGyColor4,
+                textColor: TDTheme.of(context).textColorPlaceholder,
               ),
             ),
             Container(
               height: 70,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: TDTheme.of(context).grayColor1,
-                  borderRadius: BorderRadius.all(Radius.circular(TDTheme.of(context).radiusLarge))),
+                  color: TDTheme.of(context).bgColorContainer,
+                  borderRadius: BorderRadius.all(
+                      Radius.circular(TDTheme.of(context).radiusLarge))),
               margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
               child: TDText(
                 '下拉刷新次数：${count}',
                 font: TDTheme.of(context).fontBodyLarge,
-                textColor: TDTheme.of(context).fontGyColor4,
+                textColor: TDTheme.of(context).textColorPlaceholder,
               ),
             ),
             const SizedBox(height: 500),
