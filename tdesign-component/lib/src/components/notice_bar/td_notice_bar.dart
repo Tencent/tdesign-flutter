@@ -384,9 +384,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     _size = MediaQuery.of(context).size;
     return Container(
       padding: _style!.getPadding,
-      decoration: BoxDecoration(
-        color: _backgroundColor,
-      ),
+      color: _backgroundColor,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,

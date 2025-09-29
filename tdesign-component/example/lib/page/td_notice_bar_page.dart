@@ -19,8 +19,7 @@ class TDNoticeBarPage extends StatelessWidget {
       title: tdTitle(context),
       exampleCodeGroup: 'noticeBar',
       desc: '在导航栏下方，用于给用户显示提示消息。',
-      backgroundColor: Colors.white,
-      children: [
+      children: const [
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '纯文字的公告栏', builder: _textNoticeBar),
           ExampleItem(desc: '可滚动的公告栏', builder: _scrollNoticeBar),
@@ -41,7 +40,7 @@ class TDNoticeBarPage extends StatelessWidget {
           ExampleItem(desc: '卡片顶部', builder: _cardNoticeBar),
         ])
       ],
-      test: [
+      test: const [
         ExampleItem(desc: '带点击事件的公告栏', builder: _tapNoticeBar),
         ExampleItem(desc: '自定义左侧内容的公告栏', builder: _leftNoticeBar),
         ExampleItem(desc: '垂直滚动的公告栏', builder: _stepNoticeBar),
@@ -128,7 +127,8 @@ Widget _customNoticeBar(BuildContext context) {
     context: '这是一条普通的通知信息',
     prefixIcon: TDIcons.notification,
     suffixIcon: TDIcons.chevron_right,
-    style: TDNoticeBarStyle(backgroundColor: TDTheme.of(context).grayColor3),
+    style:
+        TDNoticeBarStyle(backgroundColor: TDTheme.of(context).bgColorComponent),
   );
 }
 
@@ -213,9 +213,9 @@ Widget _cardNoticeBar(BuildContext context) {
         ),
         Container(
           height: 150,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(12)),
+          decoration: BoxDecoration(
+            color: TDTheme.of(context).bgColorContainer,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
         )
       ],

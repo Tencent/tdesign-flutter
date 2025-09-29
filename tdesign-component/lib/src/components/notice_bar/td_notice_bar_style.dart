@@ -64,11 +64,12 @@ class TDNoticeBarStyle {
       padding ??
       const EdgeInsets.only(top: 13, bottom: 13, left: 16, right: 12);
 
+  /// @todo
   /// 公告栏内容样式，用于获取默认值
   TextStyle get getTextStyle =>
       textStyle ??
       TextStyle(
-        color: TDTheme.of(context).fontGyColor1,
+        color: TDTheme.of(context).textColorPrimary,
         fontSize: 14,
         height: 1,
         fontWeight: FontWeight.normal,
@@ -78,7 +79,7 @@ class TDNoticeBarStyle {
   /// 根据主题生成样式
   TDNoticeBarStyle.generateTheme(BuildContext context,
       {TDNoticeBarTheme? theme = TDNoticeBarTheme.info}) {
-    rightIconColor = TDTheme.of(context).grayColor7;
+    rightIconColor = TDTheme.of(context).textColorPlaceholder;
     switch (theme) {
       case TDNoticeBarTheme.warning:
         leftIconColor = TDTheme.of(context).warningNormalColor;
