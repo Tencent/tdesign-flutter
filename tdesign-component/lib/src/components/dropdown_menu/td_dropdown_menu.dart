@@ -23,10 +23,12 @@ enum TDDropdownMenuDirection {
 }
 
 /// 下拉菜单构建器
-typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(BuildContext context);
+typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(
+    BuildContext context);
 
 /// 自定义标签内容
-typedef LabelBuilder = Widget Function(BuildContext context, String label, bool isOpened, int index);
+typedef LabelBuilder = Widget Function(
+    BuildContext context, String label, bool isOpened, int index);
 
 /// 下拉菜单
 class TDDropdownMenu extends StatefulWidget {
@@ -56,7 +58,7 @@ class TDDropdownMenu extends StatefulWidget {
   final List<TDDropdownItem>? items;
 
   /// 是否在点击遮罩层后关闭菜单
-  final bool closeOnClickOverlay;
+  final bool? closeOnClickOverlay;
 
   /// 菜单展开方向（down、up、auto）
   final TDDropdownMenuDirection? direction;
@@ -98,7 +100,8 @@ class TDDropdownMenu extends StatefulWidget {
   _TDDropdownMenuState createState() => _TDDropdownMenuState();
 }
 
-class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStateMixin {
+class _TDDropdownMenuState extends State<TDDropdownMenu>
+    with TickerProviderStateMixin {
   List<TDDropdownItem>? _items;
   List<AnimationController>? _iconControllers;
   late List<Animation<double>> _iconAnimations;
@@ -122,7 +125,8 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
   @override
   void didUpdateWidget(TDDropdownMenu oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.builder != oldWidget.builder || widget.items != oldWidget.items) {
+    if (widget.builder != oldWidget.builder ||
+        widget.items != oldWidget.items) {
       _init();
     }
   }
@@ -159,11 +163,11 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
       width: widget.width ?? double.infinity,
       decoration: widget.decoration ??
           BoxDecoration(
-            color: TDTheme.of(context).whiteColor1,
+            color: TDTheme.of(context).bgColorContainer,
             border: Border(
               bottom: BorderSide(
-                color: TDTheme.of(context).grayColor3,
-                width: 1,
+                color: TDTheme.of(context).componentStrokeColor,
+                width: 0.5,
               ),
             ),
           ),
@@ -185,10 +189,14 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
     _iconControllers = List.generate(
         _items?.length ?? 0,
         (index) => AnimationController(
-              duration: Duration(milliseconds: (widget.duration ?? 200).toInt()),
+              duration:
+                  Duration(milliseconds: (widget.duration ?? 200).toInt()),
               vsync: this,
             ));
-    _iconAnimations = _iconControllers?.map((e) => Tween<double>(begin: 0, end: 0.5).animate(e)).toList() ?? [];
+    _iconAnimations = _iconControllers
+            ?.map((e) => Tween<double>(begin: 0, end: 0.5).animate(e))
+            .toList() ??
+        [];
   }
 
   Widget _tabBarContent(int index) {
@@ -202,7 +210,9 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
       },
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: _items![index].tabBarAlign ?? widget.tabBarAlign ?? MainAxisAlignment.center,
+        mainAxisAlignment: _items![index].tabBarAlign ??
+            widget.tabBarAlign ??
+            MainAxisAlignment.center,
         children: [Flexible(child: _getText(index)), _getIcon(index)],
       ),
     );
@@ -214,10 +224,10 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
       return widget.labelBuilder!(context, label, _isOpened[index], index);
     }
     var textColor = _disabled(index)
-        ? TDTheme.of(context).fontGyColor4
+        ? TDTheme.of(context).textColorDisabled
         : _isOpened[index]
             ? TDTheme.of(context).brandColor7
-            : TDTheme.of(context).fontGyColor1;
+            : TDTheme.of(context).textColorPrimary;
     return TDText(
       label,
       font: TDTheme.of(context).fontBodyMedium,
@@ -230,14 +240,16 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
   Widget _getIcon(int index) {
     var arrowIcon = _items![index].arrowIcon ??
         widget.arrowIcon ??
-        (widget.direction == TDDropdownMenuDirection.up ? TDIcons.caret_up_small : TDIcons.caret_down_small);
+        (widget.direction == TDDropdownMenuDirection.up
+            ? TDIcons.caret_up_small
+            : TDIcons.caret_down_small);
     return RotationTransition(
       turns: _iconAnimations[index],
       child: Icon(
         arrowIcon,
         size: 24,
         color: _disabled(index)
-            ? TDTheme.of(context).fontGyColor4
+            ? TDTheme.of(context).textColorDisabled
             : _isOpened[index]
                 ? TDTheme.of(context).brandColor7
                 : null,
@@ -258,7 +270,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
   }
 
   /// 打开菜单
-  Future<void>  _openMenu(int index) async {
+  Future<void> _openMenu(int index) async {
     /// 如果已经打开了，则关闭
     if (_isOpened.contains(true)) {
       await Navigator.maybePop(context);
