@@ -81,7 +81,7 @@ class _MyAppState extends State<MyApp> {
           color: _themeData.brandNormalColor,
         ),
       ),
-      themeMode: _themeMode,
+      themeMode: PlatformUtil.isWeb ? ThemeMode.system : _themeMode,
       home: PlatformUtil.isWeb
           ? null
           : Builder(
