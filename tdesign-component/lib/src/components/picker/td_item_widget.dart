@@ -4,14 +4,19 @@ import '../../../tdesign_flutter.dart';
 typedef ItemBuilderType = Widget? Function(
   /// 上下文
   BuildContext context,
+
   /// 文字内容
   String content,
+
   /// 列号
   int colIndex,
+
   /// 行号
   int index,
+
   /// 根据距离计算字体颜色、透明度、粗细
   ItemDistanceCalculator itemDistanceCalculator,
+
   /// 子项此时离中心的距离
   double distance,
 );
@@ -61,7 +66,11 @@ class _TDItemWidgetState extends State<TDItemWidget> {
     /// 子项此时离中心的距离
     /// 不要使用widget.fixedExtentScrollController.selectedItem
     /// 其中selectedItem会报错，原因是一开始minScrollExtent为空
-    var distance = (widget.fixedExtentScrollController.offset / widget.itemHeight - widget.index).abs().toDouble();
+    var distance =
+        (widget.fixedExtentScrollController.offset / widget.itemHeight -
+                widget.index)
+            .abs()
+            .toDouble();
     _itemDistanceCalculator ??= ItemDistanceCalculator();
     return widget.itemBuilder?.call(
           context,
@@ -76,7 +85,8 @@ class _TDItemWidgetState extends State<TDItemWidget> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            fontWeight: _itemDistanceCalculator!.calculateFontWeight(context, distance),
+            fontWeight:
+                _itemDistanceCalculator!.calculateFontWeight(context, distance),
             fontSize: _itemDistanceCalculator!.calculateFont(context, distance),
             color: _itemDistanceCalculator!.calculateColor(context, distance),
           ),
@@ -92,15 +102,14 @@ class _TDItemWidgetState extends State<TDItemWidget> {
 }
 
 class ItemDistanceCalculator {
-
   ItemDistanceCalculator();
 
   Color calculateColor(BuildContext context, double distance) {
     /// 线性插值
     if (distance < 0.5) {
-      return TDTheme.of(context).fontGyColor1;
+      return TDTheme.of(context).textColorPrimary;
     } else {
-      return TDTheme.of(context).fontGyColor4;
+      return TDTheme.of(context).textColorDisabled;
     }
   }
 
