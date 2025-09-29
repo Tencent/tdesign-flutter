@@ -63,23 +63,22 @@ typedef OnTap = Function(String? content);
 typedef OnLongTap = Function(String? content);
 
 class TDPopoverWidget extends StatefulWidget {
-  const TDPopoverWidget({
-    super.key,
-    required this.context,
-    this.content,
-    this.contentWidget,
-    this.offset = 4,
-    this.theme,
-    this.placement,
-    this.showArrow = true,
-    this.arrowSize = 8,
-    this.padding,
-    this.width,
-    this.height,
-    this.onTap,
-    this.onLongTap,
-    this.radius
-  });
+  const TDPopoverWidget(
+      {super.key,
+      required this.context,
+      this.content,
+      this.contentWidget,
+      this.offset = 4,
+      this.theme,
+      this.placement,
+      this.showArrow = true,
+      this.arrowSize = 8,
+      this.padding,
+      this.width,
+      this.height,
+      this.onTap,
+      this.onLongTap,
+      this.radius});
 
   /// 上下文
   final BuildContext context;
@@ -136,12 +135,14 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
   void initState() {
     super.initState();
     _initTheme();
-    if(widget.contentWidget != null) {
-      if(widget.width == null) {
-        throw FlutterError('width must not be null when contentWidget is not null');
+    if (widget.contentWidget != null) {
+      if (widget.width == null) {
+        throw FlutterError(
+            'width must not be null when contentWidget is not null');
       }
-      if(widget.height == null) {
-        throw FlutterError('height must not be null when contentWidget is not null');
+      if (widget.height == null) {
+        throw FlutterError(
+            'height must not be null when contentWidget is not null');
       }
     }
   }
@@ -149,28 +150,66 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
   /// 绘制箭头
   Widget _drawArrow() {
     var border = Border(
-        right: BorderSide(width: widget.arrowSize, color: Colors.transparent, style: BorderStyle.solid),
-        bottom: BorderSide(width: widget.arrowSize, color: _backgroundColor, style: BorderStyle.solid),
-        left: BorderSide(width: widget.arrowSize, color: Colors.transparent, style: BorderStyle.solid)
-    );
-    if(widget.placement == TDPopoverPlacement.bottom || widget.placement == TDPopoverPlacement.bottomLeft || widget.placement == TDPopoverPlacement.bottomRight) {
+        right: BorderSide(
+            width: widget.arrowSize,
+            color: Colors.transparent,
+            style: BorderStyle.solid),
+        bottom: BorderSide(
+            width: widget.arrowSize,
+            color: _backgroundColor,
+            style: BorderStyle.solid),
+        left: BorderSide(
+            width: widget.arrowSize,
+            color: Colors.transparent,
+            style: BorderStyle.solid));
+    if (widget.placement == TDPopoverPlacement.bottom ||
+        widget.placement == TDPopoverPlacement.bottomLeft ||
+        widget.placement == TDPopoverPlacement.bottomRight) {
       border = Border(
-          top: BorderSide(width: widget.arrowSize, color: _backgroundColor, style: BorderStyle.solid),
-          right: BorderSide(width: widget.arrowSize, color: Colors.transparent, style: BorderStyle.solid),
-          left: BorderSide(width: widget.arrowSize, color: Colors.transparent, style: BorderStyle.solid)
-      );
-    } else if(widget.placement == TDPopoverPlacement.left || widget.placement == TDPopoverPlacement.leftTop || widget.placement == TDPopoverPlacement.leftBottom) {
+          top: BorderSide(
+              width: widget.arrowSize,
+              color: _backgroundColor,
+              style: BorderStyle.solid),
+          right: BorderSide(
+              width: widget.arrowSize,
+              color: Colors.transparent,
+              style: BorderStyle.solid),
+          left: BorderSide(
+              width: widget.arrowSize,
+              color: Colors.transparent,
+              style: BorderStyle.solid));
+    } else if (widget.placement == TDPopoverPlacement.left ||
+        widget.placement == TDPopoverPlacement.leftTop ||
+        widget.placement == TDPopoverPlacement.leftBottom) {
       border = Border(
-          top: BorderSide(width: widget.arrowSize, color: Colors.transparent, style: BorderStyle.solid),
-          bottom: BorderSide(width: widget.arrowSize, color: Colors.transparent, style: BorderStyle.solid),
-          right: BorderSide(width: widget.arrowSize, color: _backgroundColor, style: BorderStyle.solid)
-      );
-    } else if(widget.placement == TDPopoverPlacement.right || widget.placement == TDPopoverPlacement.rightTop || widget.placement == TDPopoverPlacement.rightBottom) {
+          top: BorderSide(
+              width: widget.arrowSize,
+              color: Colors.transparent,
+              style: BorderStyle.solid),
+          bottom: BorderSide(
+              width: widget.arrowSize,
+              color: Colors.transparent,
+              style: BorderStyle.solid),
+          right: BorderSide(
+              width: widget.arrowSize,
+              color: _backgroundColor,
+              style: BorderStyle.solid));
+    } else if (widget.placement == TDPopoverPlacement.right ||
+        widget.placement == TDPopoverPlacement.rightTop ||
+        widget.placement == TDPopoverPlacement.rightBottom) {
       border = Border(
-          top: BorderSide(width: widget.arrowSize, color: Colors.transparent, style: BorderStyle.solid),
-          bottom: BorderSide(width: widget.arrowSize, color: Colors.transparent, style: BorderStyle.solid),
-          left: BorderSide(width: widget.arrowSize, color: _backgroundColor, style: BorderStyle.solid)
-      );
+          top: BorderSide(
+              width: widget.arrowSize,
+              color: Colors.transparent,
+              style: BorderStyle.solid),
+          bottom: BorderSide(
+              width: widget.arrowSize,
+              color: Colors.transparent,
+              style: BorderStyle.solid),
+          left: BorderSide(
+              width: widget.arrowSize,
+              color: _backgroundColor,
+              style: BorderStyle.solid));
     }
     return Container(
       width: 0,
@@ -202,7 +241,7 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
         _color = TDTheme.of(widget.context).grayColor14;
         _backgroundColor = TDTheme.of(widget.context).whiteColor1;
         break;
-      default :
+      default:
         _color = TDTheme.of(widget.context).whiteColor1;
         _backgroundColor = TDTheme.of(widget.context).grayColor14;
         break;
@@ -227,7 +266,9 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
     var dy = widgetLocalToGlobal?.dy ?? 0;
     var arrowSize = widget.showArrow ?? false ? widget.arrowSize : 0;
     var contentSize = _getContentSize();
-    var popoverHeight = widget.height ?? (widget.padding != null ? widget.padding!.vertical : 24) + (widget.height ?? contentSize.height);
+    var popoverHeight = widget.height ??
+        (widget.padding != null ? widget.padding!.vertical : 24) +
+            (widget.height ?? contentSize.height);
     switch (widget.placement) {
       case TDPopoverPlacement.bottomLeft:
       case TDPopoverPlacement.bottom:
@@ -252,7 +293,9 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
     var widgetBounds = _getWidgetBounds(widget.context);
     var widgetWidth = widgetBounds?.width ?? 0;
     var contentSize = _getContentSize();
-    var popoverWidth = widget.width ?? (widget.padding != null ? widget.padding!.horizontal : 24) + contentSize.width;
+    var popoverWidth = widget.width ??
+        (widget.padding != null ? widget.padding!.horizontal : 24) +
+            contentSize.width;
     var dx = widgetLocalToGlobal?.dx ?? 0;
     switch (widget.placement) {
       case TDPopoverPlacement.topLeft:
@@ -260,16 +303,16 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
         return dx;
       case TDPopoverPlacement.topRight:
       case TDPopoverPlacement.bottomRight:
-          return dx + widgetWidth - popoverWidth;
+        return dx + widgetWidth - popoverWidth;
       case TDPopoverPlacement.rightTop:
       case TDPopoverPlacement.right:
       case TDPopoverPlacement.rightBottom:
-        return dx + widgetWidth + widget.offset + 8;
+        return dx + widgetWidth + widget.offset;
       case TDPopoverPlacement.leftTop:
       case TDPopoverPlacement.left:
       case TDPopoverPlacement.leftBottom:
-        return dx - popoverWidth - widget.arrowSize - widget.offset - 8;
-      default :
+        return dx - popoverWidth - widget.arrowSize - widget.offset;
+      default:
         return dx - (popoverWidth - widgetWidth) / 2;
     }
   }
@@ -279,39 +322,47 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
     var margin = EdgeInsets.only(top: widget.arrowSize);
     switch (widget.placement) {
       case TDPopoverPlacement.topLeft:
-       margin = EdgeInsets.only(top: widget.arrowSize, left: widget.arrowSize + 12);
-       break;
+        margin =
+            EdgeInsets.only(top: widget.arrowSize, left: widget.arrowSize + 12);
+        break;
       case TDPopoverPlacement.topRight:
-       margin = EdgeInsets.only(top: widget.arrowSize, right: widget.arrowSize + 12);
-       break;
+        margin = EdgeInsets.only(
+            top: widget.arrowSize, right: widget.arrowSize + 12);
+        break;
       case TDPopoverPlacement.bottomLeft:
-       margin = EdgeInsets.only(bottom: widget.arrowSize, left: widget.arrowSize + 12);
-       break;
+        margin = EdgeInsets.only(
+            bottom: widget.arrowSize, left: widget.arrowSize + 12);
+        break;
       case TDPopoverPlacement.bottom:
-       margin = EdgeInsets.only(bottom: widget.arrowSize);
-       break;
+        margin = EdgeInsets.only(bottom: widget.arrowSize);
+        break;
       case TDPopoverPlacement.bottomRight:
-       margin = EdgeInsets.only(bottom: widget.arrowSize, right: widget.arrowSize + 12);
-       break;
+        margin = EdgeInsets.only(
+            bottom: widget.arrowSize, right: widget.arrowSize + 12);
+        break;
       case TDPopoverPlacement.rightTop:
-        margin = EdgeInsets.only(top: widget.arrowSize + 6, right: widget.arrowSize);
+        margin =
+            EdgeInsets.only(top: widget.arrowSize + 6, right: widget.arrowSize);
         break;
       case TDPopoverPlacement.right:
-       margin = EdgeInsets.only(right: widget.arrowSize);
-       break;
+        margin = EdgeInsets.only(right: widget.arrowSize);
+        break;
       case TDPopoverPlacement.rightBottom:
-       margin = EdgeInsets.only(bottom: widget.arrowSize + 6, right: widget.arrowSize);
-       break;
+        margin = EdgeInsets.only(
+            bottom: widget.arrowSize + 6, right: widget.arrowSize);
+        break;
       case TDPopoverPlacement.leftTop:
-        margin = EdgeInsets.only(top: widget.arrowSize + 6, left: widget.arrowSize);
+        margin =
+            EdgeInsets.only(top: widget.arrowSize + 6, left: widget.arrowSize);
         break;
       case TDPopoverPlacement.left:
         margin = EdgeInsets.only(left: widget.arrowSize);
         break;
       case TDPopoverPlacement.leftBottom:
-        margin = EdgeInsets.only(bottom: widget.arrowSize + 6, left: widget.arrowSize);
+        margin = EdgeInsets.only(
+            bottom: widget.arrowSize + 6, left: widget.arrowSize);
         break;
-      default :
+      default:
         margin = EdgeInsets.only(top: widget.arrowSize);
     }
     return Container(
@@ -322,7 +373,7 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
 
   /// 获取弹出内容大小
   Size _getContentSize() {
-    if(widget.contentWidget != null) {
+    if (widget.contentWidget != null) {
       return Size(widget.width!, widget.height!);
     }
     return _getTextSize();
@@ -342,36 +393,54 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
       ),
       locale: Localizations.localeOf(context),
       textDirection: TextDirection.ltr,
-    )..layout(maxWidth: (widget.width ?? 300) - (widget.padding != null ? widget.padding!.horizontal : 24));
+    )..layout(
+        maxWidth: (widget.width ?? 300) -
+            (widget.padding != null ? widget.padding!.horizontal : 24));
     return textPainter.size;
+  }
+
+  Widget _getContainerWidget() {
+    return Container(
+      width: widget.width,
+      height: widget.height,
+      padding: widget.padding ?? const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+          borderRadius: widget.radius ??
+              BorderRadius.circular(TDTheme.of(context).radiusDefault),
+          color: _backgroundColor,
+          boxShadow: const [
+            BoxShadow(
+                color: Color(0x0d000000),
+                offset: Offset(0, 6),
+                blurRadius: 30,
+                spreadRadius: 5),
+            BoxShadow(
+                color: Color(0x0a000000),
+                offset: Offset(0, 16),
+                blurRadius: 24,
+                spreadRadius: 2),
+            BoxShadow(
+                color: Color(0x14000000),
+                offset: Offset(0, 8),
+                blurRadius: 10,
+                spreadRadius: -5),
+          ]),
+      child: widget.contentWidget != null
+          ? widget.contentWidget!
+          : TDText(widget.content,
+              style: TextStyle(
+                color: _color,
+                letterSpacing: 0,
+                fontSize: 16,
+                height: 1.5,
+              )),
+    );
   }
 
   /// 获取子Widget
   Widget _getChild() {
     var children = [
-      Container(
-        width: widget.width,
-        height: widget.height,
-        padding: widget.padding ?? const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-            borderRadius: widget.radius ?? BorderRadius.circular(6),
-            color: _backgroundColor,
-            boxShadow: const [
-              BoxShadow(color: Color(0x0d000000), offset: Offset(0, 6), blurRadius: 30, spreadRadius: 5),
-              BoxShadow(color: Color(0x0a000000), offset: Offset(0, 16), blurRadius: 24, spreadRadius: 2),
-              BoxShadow(color: Color(0x14000000), offset: Offset(0, 8), blurRadius: 10, spreadRadius: -5),
-            ]
-        ),
-        child: widget.contentWidget != null ? widget.contentWidget! : TDText(
-            widget.content,
-            style: TextStyle(
-              color: _color,
-              letterSpacing: 0,
-              fontSize: 16,
-              height: 1.5,
-            )
-        ),
-      ),
+      _getContainerWidget(),
       Visibility(
         visible: widget.showArrow ?? false,
         child: _getArrowWidget(),
@@ -390,37 +459,17 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
       case TDPopoverPlacement.right:
       case TDPopoverPlacement.rightTop:
       case TDPopoverPlacement.rightBottom:
+
         /// 反转内容和箭头
         children = [
           Visibility(
             visible: widget.showArrow ?? false,
-            child: Container(
-              child: _getArrowWidget(),
-            ),
+            child: _getArrowWidget(),
           ),
-          Container(
-            padding: widget.padding ?? const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: _backgroundColor,
-              boxShadow: [
-                BoxShadow(color: TDTheme.of(context).grayColor7, offset: const Offset(6, 3), blurRadius: 6)
-              ]
-            ),
-            child: widget.contentWidget != null ? widget.contentWidget! : TDText(
-              widget.content,
-              style: TextStyle(
-                color: _color,
-                letterSpacing: 0,
-                fontSize: 16,
-                height: 1.5,
-                overflow: TextOverflow.ellipsis,
-              )
-            ),
-          ),
+          _getContainerWidget(),
         ];
         break;
-      default :
+      default:
         direction = VerticalDirection.down;
         break;
     }
@@ -433,7 +482,7 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
         break;
       case TDPopoverPlacement.topRight:
       case TDPopoverPlacement.bottomRight:
-        axis =  CrossAxisAlignment.end;
+        axis = CrossAxisAlignment.end;
         break;
       case TDPopoverPlacement.rightTop:
       case TDPopoverPlacement.leftTop:
@@ -443,22 +492,23 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
       case TDPopoverPlacement.leftBottom:
         axis = CrossAxisAlignment.end;
         break;
-      default :
+      default:
         axis = CrossAxisAlignment.center;
     }
 
     /// 横向布局
-    if(widget.placement == TDPopoverPlacement.right ||
-      widget.placement == TDPopoverPlacement.rightTop ||
-      widget.placement == TDPopoverPlacement.rightBottom ||
-      widget.placement == TDPopoverPlacement.left ||
-      widget.placement == TDPopoverPlacement.leftBottom ||
-      widget.placement == TDPopoverPlacement.leftTop) {
+    if (widget.placement == TDPopoverPlacement.right ||
+        widget.placement == TDPopoverPlacement.rightTop ||
+        widget.placement == TDPopoverPlacement.rightBottom ||
+        widget.placement == TDPopoverPlacement.left ||
+        widget.placement == TDPopoverPlacement.leftBottom ||
+        widget.placement == TDPopoverPlacement.leftTop) {
       return Row(
         crossAxisAlignment: axis,
         children: children,
       );
     }
+
     /// 纵向布局
     return Column(
       crossAxisAlignment: axis,

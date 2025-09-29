@@ -12,13 +12,26 @@ class TDPopoverPage extends StatefulWidget {
 }
 
 class _TDPopoverPage extends State<TDPopoverPage> {
+  TDPopoverTheme theme = TDPopoverTheme.light;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        theme = Theme.of(context).brightness == Brightness.dark
+            ? TDPopoverTheme.light
+            : TDPopoverTheme.dark;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tdTitle(),
       desc: '用于文字提示的气泡框。',
       exampleCodeGroup: 'popover',
-      backgroundColor: TDTheme.of(context).whiteColor1,
       children: [
         ExampleModule(
           title: '组件类型',
@@ -214,9 +227,9 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '带箭头',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
-              TDPopover.showPopover(context: _, content: '弹出气泡内容');
+              TDPopover.showPopover(
+                  context: _, content: '弹出气泡内容', theme: theme);
             },
           );
         },
@@ -233,35 +246,37 @@ class _TDPopoverPage extends State<TDPopoverPage> {
           text: '不带箭头',
           type: TDButtonType.outline,
           theme: TDButtonTheme.primary,
-             
           onTap: () {
             TDPopover.showPopover(
-                context: _, content: '弹出气泡内容', showArrow: false);
+                context: _, content: '弹出气泡内容', showArrow: false, theme: theme);
           },
         );
       },
     );
   }
 
+  // @todo
   Widget _buildPopoverList(BuildContext context) {
+    var textStyle = TextStyle(
+        color: theme == TDPopoverTheme.light
+            ? TDTheme.of(context).fontGyColor1
+            : TDTheme.of(context).fontWhColor1);
+
     return Column(
       children: [
         Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-          child: TDText('选项1',
-              style: TextStyle(color: TDTheme.of(context).whiteColor1)),
+          child: TDText('选项1', style: textStyle),
         ),
-        TDDivider(color: TDTheme.of(context).whiteColor1, height: 0.5),
+        const TDDivider(height: 0.5),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-          child: TDText('选项2',
-              style: TextStyle(color: TDTheme.of(context).whiteColor1)),
+          child: TDText('选项2', style: textStyle),
         ),
-        TDDivider(color: TDTheme.of(context).whiteColor1, height: 0.5),
+        const TDDivider(height: 0.5),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-          child: TDText('选项3',
-              style: TextStyle(color: TDTheme.of(context).whiteColor1)),
+          child: TDText('选项3', style: textStyle),
         ),
       ],
     );
@@ -275,11 +290,11 @@ class _TDPopoverPage extends State<TDPopoverPage> {
           text: '自定义内容',
           type: TDButtonType.outline,
           theme: TDButtonTheme.primary,
-             
           onTap: () {
             TDPopover.showPopover(
               context: _,
               padding: const EdgeInsets.all(0),
+              theme: theme,
               width: 108,
               height: 148,
               contentWidget: _buildPopoverList(context),
@@ -302,7 +317,6 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '深色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -327,7 +341,6 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '浅色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -353,7 +366,6 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '品牌色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -379,7 +391,6 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '成功色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -405,7 +416,6 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '警告色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -431,7 +441,6 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '错误色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -457,12 +466,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '顶部左',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.topLeft,
+                theme: theme,
               );
             },
           );
@@ -483,12 +492,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '顶部中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.top,
+                theme: theme,
               );
             },
           );
@@ -509,12 +518,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '顶部右',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.topRight,
+                theme: theme,
               );
             },
           );
@@ -535,12 +544,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '底部左',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.bottomLeft,
+                theme: theme,
               );
             },
           );
@@ -561,12 +570,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '底部中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.bottom,
+                theme: theme,
               );
             },
           );
@@ -587,12 +596,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '底部右',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.bottomRight,
+                theme: theme,
               );
             },
           );
@@ -613,12 +622,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '右侧上',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.rightTop,
+                theme: theme,
               );
             },
           );
@@ -639,12 +648,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '右侧中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.right,
+                theme: theme,
               );
             },
           );
@@ -665,12 +674,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '右侧下',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.rightBottom,
+                theme: theme,
               );
             },
           );
@@ -691,12 +700,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '左侧上',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.leftTop,
+                theme: theme,
               );
             },
           );
@@ -717,12 +726,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '左侧中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.left,
+                theme: theme,
               );
             },
           );
@@ -743,12 +752,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '左侧下',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.leftBottom,
+                theme: theme,
               );
             },
           );
@@ -769,12 +778,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '多行内容',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 width: 200,
                 content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
+                theme: theme,
               );
             },
           );
@@ -795,12 +804,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             text: '自定义圆角',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 width: 200,
                 radius: BorderRadius.circular(16),
+                theme: theme,
                 content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
               );
             },
