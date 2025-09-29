@@ -95,7 +95,8 @@ class TDCalendar extends StatefulWidget {
   final void Function(int value, DateSelectType type, TDate tdate)? onCellClick;
 
   /// 长安日期时触发
-  final void Function(int value, DateSelectType type, TDate tdate)? onCellLongPress;
+  final void Function(int value, DateSelectType type, TDate tdate)?
+      onCellLongPress;
 
   /// 点击周时触发
   final void Function(int index, String week)? onHeaderClick;
@@ -110,7 +111,8 @@ class TDCalendar extends StatefulWidget {
   final double? monthTitleHeight;
 
   /// 月标题构建器
-  final Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder;
+  final Widget Function(BuildContext context, DateTime monthDate)?
+      monthTitleBuilder;
 
   /// 时间选择器List的视窗高度
   final double? pickerHeight;
@@ -125,7 +127,8 @@ class TDCalendar extends StatefulWidget {
   final bool? animateTo;
 
   /// 自定义日期单元格组件
-  final Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? cellWidget;
+  final Widget? Function(
+      BuildContext context, TDate tdate, DateSelectType selectType)? cellWidget;
 
   List<DateTime>? get _value => value?.map((e) {
         final date = DateTime.fromMillisecondsSinceEpoch(e);
@@ -248,7 +251,8 @@ class _TDCalendarState extends State<TDCalendar> {
           if (inherited?.usePopup == true)
             inherited?.confirmBtn ??
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: TDTheme.of(context).spacer16),
+                  padding: EdgeInsets.symmetric(
+                      vertical: TDTheme.of(context).spacer16),
                   child: TDButton(
                     theme: TDButtonTheme.primary,
                     text: context.resource.confirm,
@@ -268,7 +272,7 @@ class _TDCalendarState extends State<TDCalendar> {
     final valueTime = widget._valueTime;
     return Container(
       decoration: BoxDecoration(
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.04),
@@ -335,9 +339,15 @@ class _TDCalendarState extends State<TDCalendar> {
       return dateValue;
     }
     final milliseconds = timePickerModelList.map((model) {
-      final hour = model.useHour ? model.hourFixedExtentScrollController.selectedItem : 0;
-      final minute = model.useMinute ? model.minuteFixedExtentScrollController.selectedItem : 0;
-      final second = model.useSecond ? model.secondFixedExtentScrollController.selectedItem : 0;
+      final hour = model.useHour
+          ? model.hourFixedExtentScrollController.selectedItem
+          : 0;
+      final minute = model.useMinute
+          ? model.minuteFixedExtentScrollController.selectedItem
+          : 0;
+      final second = model.useSecond
+          ? model.secondFixedExtentScrollController.selectedItem
+          : 0;
       return (hour * 60 * 60 + minute * 60 + second) * 1000;
     }).toList();
     if (widget.type == CalendarType.range && dateValue.length == 1) {
