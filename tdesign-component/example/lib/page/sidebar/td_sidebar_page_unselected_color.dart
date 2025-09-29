@@ -16,7 +16,8 @@ class TDSideBarUnSelectedColorPage extends StatefulWidget {
   }
 }
 
-class TDSideBarUnSelectedColorPageState extends State<TDSideBarUnSelectedColorPage> {
+class TDSideBarUnSelectedColorPageState
+    extends State<TDSideBarUnSelectedColorPage> {
   var currentValue = 1;
   var itemHeight = 278.5;
   var titleBarHeight = 44;
@@ -52,7 +53,7 @@ class TDSideBarUnSelectedColorPageState extends State<TDSideBarUnSelectedColorPa
     for (var i = 0; i < 20; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项$i',
         value: i,
       ));
       pages.add(getAnchorDemo(i));
@@ -81,7 +82,7 @@ class TDSideBarUnSelectedColorPageState extends State<TDSideBarUnSelectedColorPa
   }
 
   void onChanged(int value) {
-    if(mounted){
+    if (mounted) {
       setState(() {
         currentValue = value;
       });
@@ -109,33 +110,33 @@ class TDSideBarUnSelectedColorPageState extends State<TDSideBarUnSelectedColorPa
   Widget _buildUnselectedColorSideBar(BuildContext context) {
     var demoHeight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
-        titleBarHeight - testButtonHeight;
+        titleBarHeight -
+        testButtonHeight;
     pages.add(Container(
       height: demoHeight - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
     ));
     return Column(
       children: [
         Container(
           height: testButtonHeight,
           padding: const EdgeInsets.all(16),
-          child: TDButton(text: '更新children',
+          child: TDButton(
+            text: '更新children',
             onTap: () {
               setState(() {
                 var children = list
                     .map((e) => SideItemProps(
-                    index: e.index,
-                    label: '变更',
-                    badge: e.badge,
-                    value: e.value,
-                    icon: e.icon))
+                        index: e.index,
+                        label: '变更${e.index}',
+                        badge: e.badge,
+                        value: e.value,
+                        icon: e.icon))
                     .toList();
                 _sideBarController.children = children;
-                setState(() {
-
-                });
+                setState(() {});
               });
-            },),
+            },
+          ),
         ),
         Row(
           children: [
@@ -153,14 +154,14 @@ class TDSideBarUnSelectedColorPageState extends State<TDSideBarUnSelectedColorPa
             ),
             Expanded(
                 child: SizedBox(
-                  height: demoHeight,
-                  child: SingleChildScrollView(
-                    controller: _demoScroller,
-                    child: Column(
-                      children: pages,
-                    ),
-                  ),
-                ))
+              height: demoHeight,
+              child: SingleChildScrollView(
+                controller: _demoScroller,
+                child: Column(
+                  children: pages,
+                ),
+              ),
+            ))
           ],
         )
       ],
@@ -168,24 +169,21 @@ class TDSideBarUnSelectedColorPageState extends State<TDSideBarUnSelectedColorPa
   }
 
   Widget getAnchorDemo(int index) {
-    return Container(
-      decoration: const BoxDecoration(color: Colors.white),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: TDText('标题$index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: displayImageList(),
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
+          child: TDText('标题$index',
+              style: const TextStyle(
+                fontSize: 14,
+              )),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: displayImageList(),
+        ),
+      ],
     );
   }
 
@@ -203,11 +201,11 @@ class TDSideBarUnSelectedColorPageState extends State<TDSideBarUnSelectedColorPa
   }
 
   Widget displayImageItem() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: const [
+        children: [
           TDImage(
             assetUrl: 'assets/img/empty.png',
             type: TDImageType.roundedSquare,

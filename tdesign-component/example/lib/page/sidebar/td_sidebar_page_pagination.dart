@@ -103,7 +103,7 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
 
   Widget getPageDemo(int index) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -123,7 +123,7 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
 
   Widget getAnchorDemo(int index) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

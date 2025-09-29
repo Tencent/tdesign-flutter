@@ -52,7 +52,7 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
     for (var i = 0; i < 20; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项$i',
         value: i,
       ));
       pages.add(getAnchorDemo(i));
@@ -112,7 +112,6 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
         titleBarHeight - testButtonHeight;
     pages.add(Container(
       height: demoHeight - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
     ));
     return Column(
       children: [
@@ -167,24 +166,21 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
   }
 
   Widget getAnchorDemo(int index) {
-    return Container(
-      decoration: const BoxDecoration(color: Colors.white),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: TDText('标题$index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: displayImageList(),
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
+          child: TDText('标题$index',
+              style: const TextStyle(
+                fontSize: 14,
+              )),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: displayImageList(),
+        ),
+      ],
     );
   }
 
@@ -202,11 +198,11 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
   }
 
   Widget displayImageItem() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: const [
+        children: [
           TDImage(
             assetUrl: 'assets/img/empty.png',
             type: TDImageType.roundedSquare,

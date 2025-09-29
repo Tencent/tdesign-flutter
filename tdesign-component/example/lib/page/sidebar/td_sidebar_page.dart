@@ -26,31 +26,32 @@ class TDSideBarPageState extends State<TDSideBarPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
-        exampleCodeGroup: 'sideBar',
-        desc: '用于内容分类后的展示切换。',
-        children: [
-          ExampleModule(title: '组件类型', children: [
-            ExampleItem(
-                desc: '侧边导航用法',
-                ignoreCode: true,
-                builder: _buildNavigatorSideBar),
-            ExampleItem(
-                desc: '图标侧边导航',
-                builder: _buildIconSideBar,
-                methodName: '_buildIconSideBar')
-          ]),
-          ExampleModule(title: '组件样式', children: [
-            ExampleItem(
-                desc: '侧边导航样式', ignoreCode: true, builder: _buildStyleSideBar),
-          ])
-        ],
-        test: [
+      title: tdTitle(),
+      exampleCodeGroup: 'sideBar',
+      desc: '用于内容分类后的展示切换。',
+      children: [
+        ExampleModule(title: '组件类型', children: [
           ExampleItem(
-              desc: '延迟加载', ignoreCode: true, builder: _loadingSideBar),
+              desc: '侧边导航用法',
+              ignoreCode: true,
+              builder: _buildNavigatorSideBar),
           ExampleItem(
-              desc: '自定义未选中颜色', ignoreCode: true, builder: _unSelectedColorSideBar),
-        ],
+              desc: '图标侧边导航',
+              builder: _buildIconSideBar,
+              methodName: '_buildIconSideBar')
+        ]),
+        ExampleModule(title: '组件样式', children: [
+          ExampleItem(
+              desc: '侧边导航样式', ignoreCode: true, builder: _buildStyleSideBar),
+        ])
+      ],
+      test: [
+        ExampleItem(desc: '延迟加载', ignoreCode: true, builder: _loadingSideBar),
+        ExampleItem(
+            desc: '自定义未选中颜色',
+            ignoreCode: true,
+            builder: _unSelectedColorSideBar),
+      ],
     );
   }
 
@@ -127,8 +128,8 @@ class TDSideBarPageState extends State<TDSideBarPage> {
         child: Column(
           children: [
             CodeWrapper(
-              builder: (_) =>
-                  getCustomButton(context, '未选中颜色自定义', 'SideBarUnselectedColor'),
+              builder: (_) => getCustomButton(
+                  context, '未选中颜色自定义', 'SideBarUnselectedColor'),
               methodName: '_buildUnselectedColorSideBar',
             ),
           ],
@@ -145,7 +146,8 @@ class TDSideBarPageState extends State<TDSideBarPage> {
       shape: TDButtonShape.rectangle,
       theme: TDButtonTheme.primary,
       onTap: () {
-        Navigator.pushNamed(context, PlatformUtil.isWeb ? routeName : '$routeName');
+        Navigator.pushNamed(
+            context, PlatformUtil.isWeb ? routeName : '$routeName');
       },
     );
   }
