@@ -15,6 +15,7 @@ import '../../../tdesign_flutter.dart';
 const double _kTabHeight = 46.0;
 const double _kTextAndIconTabHeight = 72.0;
 const double _kStartOffset = 52.0;
+
 class _TabStyle extends AnimatedWidget {
   const _TabStyle({
     Key? key,
@@ -59,12 +60,14 @@ class _TabStyle extends AnimatedWidget {
         ? TextStyle.lerp(defaultStyle, defaultUnselectedStyle, animation.value)!
         : TextStyle.lerp(defaultUnselectedStyle, defaultStyle, animation.value)!;
 
-    final selectedColor =
-        labelColor ?? tabBarTheme.labelColor ?? labelStyle?.color ?? TDTheme.of(context).brandNormalColor;
+    final selectedColor = labelColor ??
+        tabBarTheme.labelColor ??
+        labelStyle?.color ??
+        TDTheme.of(context).brandNormalColor;
     final unselectedColor = unselectedLabelColor ??
         tabBarTheme.unselectedLabelColor ??
         unselectedLabelStyle?.color ??
-        TDTheme.of(context).fontGyColor2; // selectedColor.withAlpha(0xB2) // 70% alpha ??
+        TDTheme.of(context).textColorPrimary;
 
     final color = selected
         ? Color.lerp(selectedColor, unselectedColor, animation.value)!
@@ -98,35 +101,35 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   ///
   /// If [indicator] is not null or provided from [TabBarTheme],
   /// then [indicatorWeight], [indicatorPadding], and [indicatorColor] are ignored.
-  const TDHorizontalTabBar({
-    Key? key,
-    required this.tabs,
-    this.controller,
-    this.isScrollable = false,
-    this.padding,
-    this.indicatorColor,
-    this.automaticIndicatorColorAdjustment = true,
-    this.indicatorWeight = 2.0,
-    this.indicatorPadding = EdgeInsets.zero,
-    this.indicator,
-    this.indicatorSize,
-    this.labelColor,
-    this.labelStyle,
-    this.labelPadding,
-    this.unselectedLabelColor,
-    this.unselectedLabelStyle,
-    this.dragStartBehavior = DragStartBehavior.start,
-    this.overlayColor,
-    this.mouseCursor,
-    this.enableFeedback,
-    this.onTap,
-    this.physics,
-    this.outlineType,
-    this.backgroundColor,
-    this.selectedBgColor,
-    this.unSelectedBgColor,
-    this.tabAlignment
-  })  : assert(indicator != null || (indicatorWeight > 0.0)),
+  const TDHorizontalTabBar(
+      {Key? key,
+      required this.tabs,
+      this.controller,
+      this.isScrollable = false,
+      this.padding,
+      this.indicatorColor,
+      this.automaticIndicatorColorAdjustment = true,
+      this.indicatorWeight = 2.0,
+      this.indicatorPadding = EdgeInsets.zero,
+      this.indicator,
+      this.indicatorSize,
+      this.labelColor,
+      this.labelStyle,
+      this.labelPadding,
+      this.unselectedLabelColor,
+      this.unselectedLabelStyle,
+      this.dragStartBehavior = DragStartBehavior.start,
+      this.overlayColor,
+      this.mouseCursor,
+      this.enableFeedback,
+      this.onTap,
+      this.physics,
+      this.outlineType,
+      this.backgroundColor,
+      this.selectedBgColor,
+      this.unSelectedBgColor,
+      this.tabAlignment})
+      : assert(indicator != null || (indicatorWeight > 0.0)),
         super(key: key);
 
   /// Typically a list of two or more [Tab] widgets.
@@ -323,6 +326,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   final Color? unSelectedBgColor;
 
   final TabAlignment? tabAlignment;
+
   /// A size whose height depends on if the tabs have both icons and text.
   ///
   /// [AppBar] uses this size to compute its own preferred size.
@@ -564,7 +568,8 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
     // TODO(xu-baolin): Remove automatic adjustment to white color indicator
     // with a better long-term solution.
     // https://github.com/flutter/flutter/pull/68171#pullrequestreview-517753917
-    if (widget.automaticIndicatorColorAdjustment && color.value == Material.of(context)?.color?.value) {
+    if (widget.automaticIndicatorColorAdjustment &&
+        color.value == Material.of(context)?.color?.value) {
       color = Colors.white;
     }
 
@@ -676,7 +681,8 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
 
   double _tabCenteredScrollOffset(int index) {
     final position = _scrollController!.position;
-    return _tabScrollOffset(index, position.viewportDimension, position.minScrollExtent, position.maxScrollExtent);
+    return _tabScrollOffset(
+        index, position.viewportDimension, position.minScrollExtent, position.maxScrollExtent);
   }
 
   double _initialScrollOffset(double viewportWidth, double minExtent, double maxExtent) {
@@ -689,9 +695,11 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 
   void _scrollToControllerValue() {
-    final leadingPosition = _currentIndex! > 0 ? _tabCenteredScrollOffset(_currentIndex! - 1) : null;
+    final leadingPosition =
+        _currentIndex! > 0 ? _tabCenteredScrollOffset(_currentIndex! - 1) : null;
     final middlePosition = _tabCenteredScrollOffset(_currentIndex!);
-    final trailingPosition = _currentIndex! < maxTabIndex ? _tabCenteredScrollOffset(_currentIndex! + 1) : null;
+    final trailingPosition =
+        _currentIndex! < maxTabIndex ? _tabCenteredScrollOffset(_currentIndex! + 1) : null;
 
     final index = _controller!.index.toDouble();
     final value = _controller!.animation!.value;
@@ -703,9 +711,13 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
     } else if (value == index) {
       offset = middlePosition;
     } else if (value < index) {
-      offset = leadingPosition == null ? middlePosition : lerpDouble(middlePosition, leadingPosition, index - value)!;
+      offset = leadingPosition == null
+          ? middlePosition
+          : lerpDouble(middlePosition, leadingPosition, index - value)!;
     } else {
-      offset = trailingPosition == null ? middlePosition : lerpDouble(middlePosition, trailingPosition, value - index)!;
+      offset = trailingPosition == null
+          ? middlePosition
+          : lerpDouble(middlePosition, trailingPosition, value - index)!;
     }
 
     _scrollController!.jumpTo(offset);
@@ -753,7 +765,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
       unselectedLabelColor: widget.unselectedLabelColor,
       labelStyle: widget.labelStyle,
       unselectedLabelStyle: widget.unselectedLabelStyle,
-      child:child,
+      child: child,
     );
   }
 
@@ -771,21 +783,24 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   BoxDecoration? _getContentDecorateOuter(int index) {
     if (widget.outlineType == TDTabBarOutlineType.capsule) {
       return BoxDecoration(
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
       );
     } else if (widget.outlineType == TDTabBarOutlineType.card) {
       if (index == _currentIndex) {
         return BoxDecoration(
-            color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+            color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(index + 1 < widget.tabs.length ? 9 : 0),
-                topLeft: Radius.circular(index > 0 ? 9 : 0)));
+                topRight: Radius.circular(
+                    index + 1 < widget.tabs.length ? TDTheme.of(context).radiusLarge : 0),
+                topLeft: Radius.circular(index > 0 ? TDTheme.of(context).radiusLarge : 0)));
       } else {
         return BoxDecoration(
-          color: TDTheme.of(context).grayColor1,
+          color: TDTheme.of(context).bgColorSecondaryContainer,
           borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(index - 1 == _currentIndex ? 9 : 0),
-            bottomRight: Radius.circular(index + 1 == _currentIndex ? 9 : 0),
+            bottomLeft:
+                Radius.circular(index - 1 == _currentIndex ? TDTheme.of(context).radiusLarge : 0),
+            bottomRight:
+                Radius.circular(index + 1 == _currentIndex ? TDTheme.of(context).radiusLarge : 0),
           ),
         );
       }
@@ -796,14 +811,16 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   Color? _getBackgroundColor(int index) {
     if (widget.outlineType == TDTabBarOutlineType.card) {
       if (index == _currentIndex) {
-        return TDTheme.of(context).grayColor1;
+        return TDTheme.of(context).bgColorSecondaryContainer;
       }
     }
     return null;
   }
+
   TabAlignment get _defaults {
     return widget.isScrollable ? TabAlignment.start : TabAlignment.fill;
   }
+
   bool _debugTabAlignmentIsValid(TabAlignment tabAlignment) {
     assert(() {
       if (widget.isScrollable && tabAlignment == TabAlignment.fill) {
@@ -811,9 +828,8 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
           '$tabAlignment is only valid for non-scrollable tab bars.',
         );
       }
-      if (!widget.isScrollable
-          && (tabAlignment == TabAlignment.start
-              || tabAlignment == TabAlignment.startOffset)) {
+      if (!widget.isScrollable &&
+          (tabAlignment == TabAlignment.start || tabAlignment == TabAlignment.startOffset)) {
         throw FlutterError(
           '$tabAlignment is only valid for scrollable tab bars.',
         );
@@ -822,10 +838,12 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
     }());
     return true;
   }
+
   @override
   Widget build(BuildContext context) {
     final tabBarTheme = TabBarTheme.of(context);
-    final TabAlignment effectiveTabAlignment = widget.tabAlignment ?? tabBarTheme.tabAlignment ?? _defaults;
+    final TabAlignment effectiveTabAlignment =
+        widget.tabAlignment ?? tabBarTheme.tabAlignment ?? _defaults;
     assert(_debugTabAlignmentIsValid(effectiveTabAlignment));
     assert(debugCheckHasMaterialLocalizations(context));
     assert(() {
@@ -844,8 +862,6 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
       );
     }
 
-
-
     final wrappedTabs = List<Widget>.generate(widget.tabs.length, (int index) {
       const verticalAdjustment = (_kTextAndIconTabHeight - _kTabHeight) / 2.0;
       EdgeInsetsGeometry? adjustedPadding;
@@ -856,7 +872,8 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
           adjustedPadding = (widget.labelPadding ?? tabBarTheme.labelPadding!)
               .add(const EdgeInsets.symmetric(vertical: verticalAdjustment));
         } else {
-          adjustedPadding = const EdgeInsets.symmetric(vertical: verticalAdjustment, horizontal: 16.0);
+          adjustedPadding =
+              const EdgeInsets.symmetric(vertical: verticalAdjustment, horizontal: 16.0);
         }
       }
       // tab.size=20;
@@ -908,12 +925,14 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
         wrappedTabs[tabIndex] = _buildStyledTab(wrappedTabs[tabIndex], true, centerAnimation);
         if (_currentIndex! > 0) {
           final tabIndex = _currentIndex! - 1;
-          final Animation<double> previousAnimation = ReverseAnimation(_DragAnimation(_controller!, tabIndex));
+          final Animation<double> previousAnimation =
+              ReverseAnimation(_DragAnimation(_controller!, tabIndex));
           wrappedTabs[tabIndex] = _buildStyledTab(wrappedTabs[tabIndex], false, previousAnimation);
         }
         if (_currentIndex! < widget.tabs.length - 1) {
           final tabIndex = _currentIndex! + 1;
-          final Animation<double> nextAnimation = ReverseAnimation(_DragAnimation(_controller!, tabIndex));
+          final Animation<double> nextAnimation =
+              ReverseAnimation(_DragAnimation(_controller!, tabIndex));
           wrappedTabs[tabIndex] = _buildStyledTab(wrappedTabs[tabIndex], false, nextAnimation);
         }
       }
@@ -968,7 +987,8 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
         unselectedLabelStyle: widget.unselectedLabelStyle,
         child: _TabLabelBar(
           onPerformLayout: _saveTabOffsets,
-          mainAxisSize: effectiveTabAlignment == TabAlignment.fill ? MainAxisSize.max : MainAxisSize.min,
+          mainAxisSize:
+              effectiveTabAlignment == TabAlignment.fill ? MainAxisSize.max : MainAxisSize.min,
           children: wrappedTabs,
         ),
       ),
@@ -976,7 +996,9 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
 
     if (widget.isScrollable) {
       final EdgeInsetsGeometry? effectivePadding = effectiveTabAlignment == TabAlignment.startOffset
-          ? const EdgeInsetsDirectional.only(start: _kStartOffset).add(widget.padding ?? EdgeInsets.zero): widget.padding;
+          ? const EdgeInsetsDirectional.only(start: _kStartOffset)
+              .add(widget.padding ?? EdgeInsets.zero)
+          : widget.padding;
       _scrollController ??= _TabBarScrollController(this);
       tdHorizontalTabBar = SingleChildScrollView(
         dragStartBehavior: widget.dragStartBehavior,
@@ -997,7 +1019,8 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 }
 
-typedef _LayoutCallback = void Function(List<double> xOffsets, TextDirection textDirection, double width);
+typedef _LayoutCallback = void Function(
+    List<double> xOffsets, TextDirection textDirection, double width);
 
 // This class, and TabBarScrollPosition, only exist to handle the case
 // where a scrollable TabBar has a non-zero initialIndex.
@@ -1007,7 +1030,8 @@ class _TabBarScrollController extends ScrollController {
   final _TDHorizontalTabBarState tabBar;
 
   @override
-  ScrollPosition createScrollPosition(ScrollPhysics physics, ScrollContext context, ScrollPosition? oldPosition) {
+  ScrollPosition createScrollPosition(
+      ScrollPhysics physics, ScrollContext context, ScrollPosition? oldPosition) {
     return _TabBarScrollPosition(
       physics: physics,
       context: context,
@@ -1050,7 +1074,8 @@ class _TabBarScrollPosition extends ScrollPositionWithSingleContext {
       // effect without this guard because the super call below would starts a
       // ballistic scroll activity.
       _initialViewportDimensionWasZero = viewportDimension != 0.0;
-      correctPixels(tabBar._initialScrollOffset(viewportDimension, minScrollExtent, maxScrollExtent));
+      correctPixels(
+          tabBar._initialScrollOffset(viewportDimension, minScrollExtent, maxScrollExtent));
       result = false;
     }
     return super.applyContentDimensions(minScrollExtent, maxScrollExtent) && result;
@@ -1560,11 +1585,13 @@ class TabPageSelector extends StatelessWidget {
       animation: animation,
       builder: (BuildContext context, Widget? child) {
         return Semantics(
-          label: localizations.tabLabel(tabIndex: tabController.index + 1, tabCount: tabController.length),
+          label: localizations.tabLabel(
+              tabIndex: tabController.index + 1, tabCount: tabController.length),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: List<Widget>.generate(tabController.length, (int tabIndex) {
-              return _buildTabIndicator(tabIndex, tabController, selectedColorTween, previousColorTween);
+              return _buildTabIndicator(
+                  tabIndex, tabController, selectedColorTween, previousColorTween);
             }).toList(),
           ),
         );

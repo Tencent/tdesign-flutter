@@ -11,8 +11,7 @@ class TDTabsPage extends StatefulWidget {
   State<StatefulWidget> createState() => _TDTabsPageState();
 }
 
-class _TDTabsPageState extends State<TDTabsPage>
-    with TickerProviderStateMixin {
+class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   TabController? _tabController1;
   TabController? _tabController2;
   TabController? _tabController3;
@@ -97,39 +96,50 @@ class _TDTabsPageState extends State<TDTabsPage>
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
-        desc: '用于内容分类后的展示切换。',
-        exampleCodeGroup: 'tabs',
-        children: [
-          ExampleModule(
-            title: '组件类型',
-            children: [
-              ExampleItem(desc: '均分选项卡', builder: _buildItemWithSplit1),
-              ExampleItem(builder: _buildItemWithSplit2, padding: const EdgeInsets.only(top: 16)),
-              ExampleItem(builder: _buildItemWithSplit3, padding: const EdgeInsets.only(top: 16)),
-              ExampleItem(builder: _buildItemWithSplit4, padding: const EdgeInsets.only(top: 16)),
-              ExampleItem(desc: '等距选项卡', builder: _buildItemWithSpace),
-              ExampleItem(desc: '带图标选项卡', builder: _buildItemWithIcon),
-              ExampleItem(desc: '带微标选项卡', builder: _buildItemWithLogo),
-              ExampleItem(desc: '带内容区选项卡', builder: _buildItemWithContent),
-            ],
-          ),
-          ExampleModule(title: '组件状态', children: [
-            ExampleItem(desc: '选项卡状态', builder: _buildItemWithStatus),
-          ]),
-          ExampleModule(title: '组件样式', children: [
-            ExampleItem(desc: '选项卡尺寸', builder: _buildItemWithSizeSmall),
-            ExampleItem(builder: _buildItemWithSizeBig, padding: const EdgeInsets.only(top: 16)),
-            ExampleItem(desc: '选项卡样式', builder: _buildItemWithOutlineNormal),
-            ExampleItem(builder: _buildItemWithOutlineCard, padding: const EdgeInsets.only(top: 16)),
-          ]),
-        ],
-    test: [
-      ExampleItem(desc: '自定义下标属性', builder: _customIndicatorStyle),
-      ExampleItem(desc: '自定义下划线样式', builder: _customDividerStyle),
-      ExampleItem(desc: '不展示下划线-高度为0', builder: _hideBottomDivider),
-      ExampleItem(desc: 'capsule类型可修改背景色', builder: _capsuleBackgroundColor),
-    ],);
+      title: tdTitle(),
+      desc: '用于内容分类后的展示切换。',
+      exampleCodeGroup: 'tabs',
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(desc: '均分选项卡', builder: _buildItemWithSplit1),
+            ExampleItem(
+                builder: _buildItemWithSplit2,
+                padding: const EdgeInsets.only(top: 16)),
+            ExampleItem(
+                builder: _buildItemWithSplit3,
+                padding: const EdgeInsets.only(top: 16)),
+            ExampleItem(
+                builder: _buildItemWithSplit4,
+                padding: const EdgeInsets.only(top: 16)),
+            ExampleItem(desc: '等距选项卡', builder: _buildItemWithSpace),
+            ExampleItem(desc: '带图标选项卡', builder: _buildItemWithIcon),
+            ExampleItem(desc: '带微标选项卡', builder: _buildItemWithLogo),
+            ExampleItem(desc: '带内容区选项卡', builder: _buildItemWithContent),
+          ],
+        ),
+        ExampleModule(title: '组件状态', children: [
+          ExampleItem(desc: '选项卡状态', builder: _buildItemWithStatus),
+        ]),
+        ExampleModule(title: '组件样式', children: [
+          ExampleItem(desc: '选项卡尺寸', builder: _buildItemWithSizeSmall),
+          ExampleItem(
+              builder: _buildItemWithSizeBig,
+              padding: const EdgeInsets.only(top: 16)),
+          ExampleItem(desc: '选项卡样式', builder: _buildItemWithOutlineNormal),
+          ExampleItem(
+              builder: _buildItemWithOutlineCard,
+              padding: const EdgeInsets.only(top: 16)),
+        ]),
+      ],
+      test: [
+        ExampleItem(desc: '自定义下标属性', builder: _customIndicatorStyle),
+        ExampleItem(desc: '自定义下划线样式', builder: _customDividerStyle),
+        ExampleItem(desc: '不展示下划线-高度为0', builder: _hideBottomDivider),
+        ExampleItem(desc: 'capsule类型可修改背景色', builder: _capsuleBackgroundColor),
+      ],
+    );
   }
 
   @Demo(group: 'tabs')
@@ -137,7 +147,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(2),
       controller: _tabController1,
-      backgroundColor: Colors.white,
       showIndicator: true,
     );
   }
@@ -147,7 +156,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(3),
       controller: _tabController2,
-      backgroundColor: Colors.white,
       showIndicator: true,
     );
   }
@@ -157,7 +165,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(4),
       controller: _tabController3,
-      backgroundColor: Colors.white,
       showIndicator: true,
     );
   }
@@ -167,7 +174,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(5),
       controller: _tabController4,
-      backgroundColor: Colors.white,
       showIndicator: true,
     );
   }
@@ -177,7 +183,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(16),
       controller: TabController(length: 16, vsync: this),
-      backgroundColor: Colors.white,
       labelPadding: const EdgeInsets.all(10),
       showIndicator: true,
       isScrollable: true,
@@ -212,7 +217,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
         tabs: tabs,
         controller: TabController(length: 3, vsync: this),
-        backgroundColor: Colors.white,
         showIndicator: true);
   }
 
@@ -246,7 +250,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
         tabs: tabs,
         controller: TabController(length: 3, vsync: this),
-        backgroundColor: Colors.white,
         showIndicator: true);
   }
 
@@ -258,14 +261,14 @@ class _TDTabsPageState extends State<TDTabsPage>
       child: Column(
         children: [
           TDTabBar(
-              tabs: subList(3),
-              controller: tabController,
-              showIndicator: true,
-              backgroundColor: Colors.white,
-              isScrollable: false,),
+            tabs: subList(3),
+            controller: tabController,
+            showIndicator: true,
+            isScrollable: false,
+          ),
           Container(
             height: 120,
-            color: Colors.white,
+            color: TDTheme.of(context).bgColorContainer,
             child: TDTabBarView(
               children: _getTabViews(),
               controller: tabController,
@@ -293,7 +296,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
         tabs: tabs,
         controller: TabController(length: 3, vsync: this),
-        backgroundColor: Colors.white,
         showIndicator: true);
   }
 
@@ -316,7 +318,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
         tabs: tabs,
         controller: TabController(length: 4, vsync: this),
-        backgroundColor: Colors.white,
         showIndicator: true);
   }
 
@@ -343,7 +344,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
         tabs: tabs,
         controller: TabController(length: 4, vsync: this),
-        backgroundColor: Colors.white,
         showIndicator: true);
   }
 
@@ -367,7 +367,6 @@ class _TDTabsPageState extends State<TDTabsPage>
         tabs: tabs,
         outlineType: TDTabBarOutlineType.capsule,
         controller: TabController(length: 4, vsync: this),
-        backgroundColor: Colors.white,
         showIndicator: false);
   }
 
@@ -391,7 +390,6 @@ class _TDTabsPageState extends State<TDTabsPage>
         tabs: tabs,
         outlineType: TDTabBarOutlineType.card,
         controller: TabController(length: 4, vsync: this),
-        backgroundColor: Colors.white,
         showIndicator: false);
   }
 
@@ -400,7 +398,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(2),
       controller: _tabController1,
-      backgroundColor: Colors.white,
       showIndicator: true,
       indicatorColor: Colors.red,
       indicatorHeight: 20,
@@ -414,7 +411,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(2),
       controller: _tabController1,
-      backgroundColor: Colors.white,
       showIndicator: true,
       dividerColor: Colors.red,
       dividerHeight: 5,
@@ -426,7 +422,6 @@ class _TDTabsPageState extends State<TDTabsPage>
     return TDTabBar(
       tabs: subList(2),
       controller: _tabController1,
-      backgroundColor: Colors.white,
       showIndicator: true,
       dividerColor: Colors.red,
       dividerHeight: 0,
