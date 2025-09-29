@@ -82,7 +82,6 @@ class TDStepper extends StatefulWidget {
   final TDStepperTheme theme;
 
   /// 值
-  @Deprecated('与defaultValue 功能重复,请使用defaultValue或者valueController')
   final int? value;
 
   /// 默认值
@@ -185,10 +184,10 @@ class _TDStepperState extends State<TDStepper> {
     switch (widget.theme) {
       case TDStepperTheme.filled:
         return widget.disabled
-            ? TDTheme.of(context).grayColor2
-            : TDTheme.of(context).grayColor1;
+            ? TDTheme.of(context).bgColorComponentDisabled
+            : TDTheme.of(context).bgColorSecondaryContainer;
       case TDStepperTheme.outline:
-        return TDTheme.of(context).whiteColor1;
+        return null;
       case TDStepperTheme.normal:
       default:
         return null;
@@ -296,10 +295,10 @@ class _TDStepperState extends State<TDStepper> {
               border: widget.theme == TDStepperTheme.outline
                   ? Border(
                       top: BorderSide(
-                        color: TDTheme.of(context).grayColor4,
+                        color: TDTheme.of(context).componentBorderColor,
                       ),
                       bottom: BorderSide(
-                        color: TDTheme.of(context).grayColor4,
+                        color: TDTheme.of(context).componentBorderColor,
                       ))
                   : null),
           child: Padding(
@@ -324,12 +323,12 @@ class _TDStepperState extends State<TDStepper> {
                       style: TextStyle(
                           fontSize: _getFontSize(),
                           color: widget.disabled
-                              ? TDTheme.of(context).fontGyColor4
-                              : TDTheme.of(context).fontGyColor1),
+                              ? TDTheme.of(context).textColorDisabled
+                              : TDTheme.of(context).textColorPrimary),
                       textAlign: TextAlign.center,
                       textAlignVertical: TextAlignVertical.center,
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         isDense: true,
                         contentPadding: EdgeInsets.zero,
@@ -457,18 +456,18 @@ class TDStepperIconButton extends StatelessWidget {
     return Icon(iconType,
         size: _getIconSize(),
         color: disabled
-            ? TDTheme.of(context).fontGyColor4
-            : TDTheme.of(context).fontGyColor1);
+            ? TDTheme.of(context).textColorDisabled
+            : TDTheme.of(context).textColorPrimary);
   }
 
   Color? _getBackgroundColor(BuildContext context) {
     switch (theme) {
       case TDStepperTheme.filled:
         return disabled
-            ? TDTheme.of(context).grayColor2
-            : TDTheme.of(context).grayColor1;
+            ? TDTheme.of(context).bgColorComponentDisabled
+            : TDTheme.of(context).bgColorSecondaryContainer;
       case TDStepperTheme.outline:
-        return disabled ? TDTheme.of(context).grayColor2 : null;
+        return disabled ? TDTheme.of(context).bgColorComponentDisabled : null;
       case TDStepperTheme.normal:
       default:
         return null;
@@ -490,7 +489,7 @@ class TDStepperIconButton extends StatelessWidget {
   BoxBorder? _getBoxBorder(BuildContext context) {
     if (theme == TDStepperTheme.outline) {
       return Border.all(
-        color: TDTheme.of(context).grayColor4,
+        color: TDTheme.of(context).componentBorderColor,
       );
     }
 
