@@ -18,6 +18,7 @@ class DisplayRangeData {
   final Position currentPosition;
   final double currentTapValue;
   final Offset? tapOffset;
+
   DisplayRangeData({
     required this.currentPosition,
     required this.currentTapValue,
@@ -37,10 +38,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
           ExampleModule(title: '组件类型', children: [
             ExampleItem(desc: '单游标滑块', builder: _buildSingleHandle),
             ExampleItem(desc: '双游标滑块', builder: _buildDoubleHandle),
-            ExampleItem(
-                desc: '带数值单游标滑块 ', builder: _buildSingleHandleWithNumber),
-            ExampleItem(
-                desc: '带数值双游标滑块', builder: _buildDoubleHandleWithNumber),
+            ExampleItem(desc: '带数值单游标滑块 ', builder: _buildSingleHandleWithNumber),
+            ExampleItem(desc: '带数值双游标滑块', builder: _buildDoubleHandleWithNumber),
             ExampleItem(desc: '带刻度单游标滑块', builder: _buildSingleHandleWithScale),
             ExampleItem(desc: '带刻度双游标滑块', builder: _buildDoubleHandleWithScale),
           ]),
@@ -52,20 +51,17 @@ class _TDSliderPageState extends State<TDSliderPage> {
           ExampleModule(title: '组件事件', children: [
             ExampleItem(desc: 'onTap', builder: _buildOnTapSingleHandle),
             ExampleItem(builder: _buildOnTapDoubleHandle),
-            ExampleItem(
-                desc: 'onThumbTextTap',
-                builder: _buildOnThumbTextTapSingleHandle),
+            ExampleItem(desc: 'onThumbTextTap', builder: _buildOnThumbTextTapSingleHandle),
             ExampleItem(builder: _buildOnThumbTextTapDoubleHandle),
           ]),
           ExampleModule(title: '特殊样式', children: [
-            ExampleItem(
-                desc: '胶囊型滑块', builder: _buildCapsuleSingleHandleWithNumber),
+            ExampleItem(desc: '胶囊型滑块', builder: _buildCapsuleSingleHandleWithNumber),
             ExampleItem(builder: _buildCapsuleDoubleHandle),
             ExampleItem(builder: _buildCapsuleSingleHandle),
             ExampleItem(builder: _buildCapsuleDoubleHandleWithNumber),
             ExampleItem(builder: _buildCapsuleSingleHandleWithScale),
             ExampleItem(builder: _buildCapsuleDoubleHandleWithScale),
-            ExampleItem(desc: '胶囊型滑块', builder: _buildCapsule),
+            ExampleItem(desc: '胶囊型滑块 - 禁用状态', builder: _buildCapsule),
             ExampleItem(desc: '自定义盒子样式', builder: _buildCustomDecoration),
             ExampleItem(desc: '自定义滑轨颜色', builder: _buildCustomActiveColor),
           ]),
@@ -229,8 +225,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
               ],
             ),
             TDSlider(
-              sliderThemeData: TDSliderThemeData(
-                  context: context, min: 0, max: 100, showThumbValue: true),
+              sliderThemeData:
+                  TDSliderThemeData(context: context, min: 0, max: 100, showThumbValue: true),
               leftLabel: '0',
               rightLabel: '100',
               value: currentValue,
@@ -281,8 +277,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         const SizedBox(height: 10),
         TDRangeSlider(
-          sliderThemeData: TDSliderThemeData(
-              context: context, min: 0, max: 100, showThumbValue: true),
+          sliderThemeData:
+              TDSliderThemeData(context: context, min: 0, max: 100, showThumbValue: true),
           leftLabel: '0',
           rightLabel: '100',
           value: const RangeValues(10, 60),
@@ -377,8 +373,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
         ),
         const SizedBox(height: 10),
         TDRangeSlider(
-          sliderThemeData: TDSliderThemeData(
-              context: context, min: 0, max: 100, showThumbValue: true),
+          sliderThemeData:
+              TDSliderThemeData(context: context, min: 0, max: 100, showThumbValue: true),
           leftLabel: '0',
           rightLabel: '100',
           value: const RangeValues(10, 60),
@@ -469,8 +465,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
       )..updateSliderThemeData((data) => data.copyWith(
-            activeTickMarkColor: const Color(0xFFE7E7E7),
-            inactiveTickMarkColor: const Color(0xFFE7E7E7),
+            activeTickMarkColor: TDTheme.of(context).componentStrokeColor,
+            inactiveTickMarkColor: TDTheme.of(context).componentStrokeColor,
           )),
       value: 60,
       onChanged: (value) {},
@@ -552,8 +548,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           )..updateSliderThemeData((data) => data.copyWith(
-                activeTickMarkColor: const Color(0xFFE7E7E7),
-                inactiveTickMarkColor: const Color(0xFFE7E7E7),
+                activeTickMarkColor: TDTheme.of(context).componentStrokeColor,
+                inactiveTickMarkColor: TDTheme.of(context).componentStrokeColor,
               )),
           value: 60,
           // divisions: 5,
