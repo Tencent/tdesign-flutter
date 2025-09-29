@@ -236,7 +236,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
           alignment: Alignment.centerLeft,
           child: Text(
             widget.content ?? '',
-            style: const TextStyle(color: Colors.black),
+            style: TextStyle(color: TDTheme.of(context).textColorPrimary),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -245,7 +245,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
         final textPainter = TextPainter(
           text: TextSpan(
               text: widget.content ?? '',
-              style: const TextStyle(color: Colors.black)),
+              style: TextStyle(color: TDTheme.of(context).textColorPrimary)),
           maxLines: 1,
           textDirection: TextDirection.ltr,
         )..layout(minWidth: 0, maxWidth: double.infinity);
@@ -289,7 +289,8 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                         child: SizedBox(
                           child: Text(
                             widget.content ?? '',
-                            style: const TextStyle(color: Colors.black),
+                            style: TextStyle(
+                                color: TDTheme.of(context).textColorPrimary),
                             maxLines: 1,
                           ),
                         ),
@@ -339,9 +340,9 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       } else if (widget.closeBtn == true) {
         return GestureDetector(
           onTap: clickCloseButton,
-          child: const Icon(
+          child: Icon(
             TDIcons.close,
-            color: Color.fromRGBO(0, 0, 0, 0.4),
+            color: TDTheme.of(context).textColorPlaceholder,
           ),
         );
       } else if (widget.closeBtn is String) {
@@ -366,7 +367,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
               label: widget.link.name,
               style: TDLinkStyle.primary,
               type: TDLinkType.basic,
-              uri: widget.link.uri ?? Uri.parse('https://example.com'),
+              uri: widget.link.uri,
               size: TDLinkSize.medium,
               color: widget.link.color ?? TDTheme.of(context).brandColor7,
               linkClick: (link) => clickLink(),
@@ -404,8 +405,9 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                 height: 48,
                 padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(6),
+                    color: TDTheme.of(context).bgColorContainer,
+                    borderRadius: BorderRadius.circular(
+                        TDTheme.of(context).radiusDefault),
                     boxShadow: TDTheme.of(context).shadowsMiddle),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -460,7 +462,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
   }
 
   double calculateTextWidth() {
-    double width = totalWidth - 32;
+    var width = totalWidth - 32;
     if (widget.icon != null && widget.icon != false) {
       width -= 30;
     }
