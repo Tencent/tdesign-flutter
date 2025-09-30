@@ -26,7 +26,6 @@
     "format": "prettier {src,example,script}/**/*.{js,ts,wxss,less,wxml,html,json,md,wxs} --write",
     "site": "cd site && vite build",
     "site:dev": "cd site && vite",
-    "site:intranet": "cd site && vite build --mode intranet",
     "site:prerender": "node script/prerender.mjs",
     "cover": "jest --coverage",
     "test": "jest && jest -c jest.virtualHost.config.js && jest -c jest.e2e.config.js",
