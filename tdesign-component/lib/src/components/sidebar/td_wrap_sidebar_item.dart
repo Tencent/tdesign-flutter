@@ -46,25 +46,27 @@ class TDWrapSideBarItem extends StatelessWidget {
   final TDSideBarStyle style;
 
   static const preLineWidth = 3.0;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: style == TDSideBarStyle.normal ? renderNormalItem(context) : renderOutlineItem(context),
+      child: style == TDSideBarStyle.normal
+          ? renderNormalItem(context)
+          : renderOutlineItem(context),
     );
   }
 
   Widget renderNormalItem(BuildContext context) {
-    /// todo
     return Container(
       decoration: BoxDecoration(
-        color: selectedBgColor ?? Colors.white,
+        color: selectedBgColor ?? TDTheme.of(context).bgColorContainer,
       ),
       child: Container(
         decoration: BoxDecoration(
             color: selected
-                ? (selectedBgColor ?? Colors.white)
-                : (unSelectedBgColor ?? const Color.fromRGBO(243, 243, 243, 1)),
+                ? selectedBgColor ?? TDTheme.of(context).bgColorContainer
+                : unSelectedBgColor ?? TDTheme.of(context).bgColorSecondaryContainer,
             borderRadius: bottomAdjacent || topAdjacent
                 ? bottomAdjacent
                     ? const BorderRadius.only(bottomRight: Radius.circular(9))
@@ -72,15 +74,14 @@ class TDWrapSideBarItem extends StatelessWidget {
                 : null),
         child: Row(
           children: [
-              renderPreLine(context),
-              Expanded(
-                  child: Padding(
-                padding: contentPadding ?? const EdgeInsets.all(16),
-                child:  renderMainContent(context)
-              ))
-            ],
-          ),
+            renderPreLine(context),
+            Expanded(
+                child: Padding(
+                    padding: contentPadding ?? const EdgeInsets.all(16),
+                    child: renderMainContent(context)))
+          ],
         ),
+      ),
     );
   }
 
@@ -89,11 +90,15 @@ class TDWrapSideBarItem extends StatelessWidget {
         constraints: const BoxConstraints(minHeight: 56),
         child: Container(
           // height: 86,
-          decoration: BoxDecoration(color: TDTheme.of(context).bgColorSecondaryContainer),
+          decoration: BoxDecoration(
+              color: TDTheme.of(context).bgColorSecondaryContainer),
           padding: const EdgeInsets.all(8),
           child: Container(
             decoration: BoxDecoration(
-                color: selected && !disabled ? TDTheme.of(context).bgColorContainer : null, borderRadius: BorderRadius.circular(6)),
+                color: selected && !disabled
+                    ? TDTheme.of(context).bgColorContainer
+                    : null,
+                borderRadius: BorderRadius.circular(6)),
             padding: const EdgeInsets.all(8),
             child: renderMainContent(context),
           ),
@@ -101,15 +106,12 @@ class TDWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderMainContent(BuildContext context) {
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         renderIcon(context),
-        Expanded(
-            child: renderLabel(context)),
-        if(label.length>4)
-        renderBadge(context),
+        Expanded(child: renderLabel(context)),
+        if (label.length > 4) renderBadge(context),
         // SizedBox(
         //   width: !disabled && selected ? 0 : preLineWidth,
         // )
@@ -153,38 +155,46 @@ class TDWrapSideBarItem extends StatelessWidget {
                 : selected
                     ? selectedTextStyle != null
                         ? selectedTextStyle?.color
-                        : (selectedColor ?? TDTheme.of(context).brandNormalColor)
+                        : (selectedColor ??
+                            TDTheme.of(context).brandNormalColor)
                     : TDTheme.of(context).textColorPrimary,
           ),
         ));
   }
 
   Widget renderLabel(BuildContext context) {
-     return TDText.rich(
+    return TDText.rich(
       TextSpan(
         children: [
           WidgetSpan(
               child: TDText(
-                label,
-                style: selected ? (selectedTextStyle ?? TextStyle(color: selectedColor)) : textStyle,
-                fontWeight: selected && !disabled ? FontWeight.w600 : FontWeight.w400,
-                textColor: disabled
-                    ? TDTheme.of(context).textColorDisabled
-                    : selected
+            label,
+            style: selected
+                ? (selectedTextStyle ?? TextStyle(color: selectedColor))
+                : textStyle,
+            fontWeight:
+                selected && !disabled ? FontWeight.w600 : FontWeight.w400,
+            textColor: disabled
+                ? TDTheme.of(context).textColorDisabled
+                : selected
                     ? selectedColor ?? TDTheme.of(context).brandNormalColor
                     : TDTheme.of(context).textColorPrimary,
-                // forceVerticalCenter: true,
-              )),
-          if(label.length<4)
-          WidgetSpan(
-              child: SizedBox(
-            width: 1,
-            height: 16,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [badge != null ? Positioned(top: -6, child: badge!) : Container()],
-            ),
-          ))
+            // forceVerticalCenter: true,
+          )),
+          if (label.length < 4)
+            WidgetSpan(
+                child: SizedBox(
+              width: 1,
+              height: 16,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  badge != null
+                      ? Positioned(top: -6, child: badge!)
+                      : Container()
+                ],
+              ),
+            ))
         ],
       ),
       softWrap: true,
@@ -195,10 +205,12 @@ class TDWrapSideBarItem extends StatelessWidget {
   Widget renderBadge(BuildContext context) {
     return SizedBox(
       width: 1,
-      height:40,
+      height: 40,
       child: Stack(
         clipBehavior: Clip.none,
-        children: [badge != null ? Positioned(top: -6, child: badge!) : Container()],
+        children: [
+          badge != null ? Positioned(top: -6, child: badge!) : Container()
+        ],
       ),
     );
   }
