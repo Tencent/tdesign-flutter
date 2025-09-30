@@ -14,13 +14,15 @@ class DashedWidget extends StatelessWidget {
     this.width,
     this.height = 0.5,
     this.direction = Axis.horizontal,
-  }) : super(key: key);
+  })  : assert(gap > 0, 'gap 必须大于 0'),
+        assert(solidLength > 0, 'solidLength 必须大于 0'),
+        super(key: key);
 
   final Color? color;
   final double gap;
   final double solidLength;
   final double? width;
-  final double? height;
+  final double height;
   final Axis direction;
 
   @override
@@ -32,33 +34,34 @@ class DashedWidget extends StatelessWidget {
         child: CustomPaint(
           painter: DashedPainter(
               color: color ?? TDTheme.of(context).componentStrokeColor,
-              strokeWidth: height ?? 1,
-              direction: direction),
-        ),
-      );
-    } else {
-      return SizedBox(
-        width: width,
-        height: height ?? MediaQuery.of(context).size.height,
-        child: CustomPaint(
-          painter: DashedPainter(
-              color: color ?? TDTheme.of(context).componentStrokeColor,
-              strokeWidth: width ?? 1,
+              strokeWidth: height,
               direction: direction),
         ),
       );
     }
+
+    return SizedBox(
+      width: width,
+      height: height ?? MediaQuery.of(context).size.height,
+      child: CustomPaint(
+        painter: DashedPainter(
+            color: color ?? TDTheme.of(context).componentStrokeColor,
+            strokeWidth: width ?? 1,
+            direction: direction),
+      ),
+    );
   }
 }
 
 /// 绘制虚线自定义控件
 class DashedPainter extends CustomPainter {
-  DashedPainter(
-      {required this.color,
-      this.strokeWidth = 1,
-      this.gap = 2,
-      this.solidLength = 2,
-      this.direction = Axis.horizontal});
+  DashedPainter({
+    required this.color,
+    this.strokeWidth = 1,
+    this.gap = 2,
+    this.solidLength = 2,
+    this.direction = Axis.horizontal,
+  });
 
   final Color color;
   final double strokeWidth;
@@ -72,67 +75,43 @@ class DashedPainter extends CustomPainter {
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth;
-    var start = const Offset(0, 0);
-    Offset end;
-    if (direction == Axis.horizontal) {
-      end = Offset(size.width, 0);
-    } else {
-      // 不能为0，防止除0错误
-      end = Offset(0.00001, size.height);
-    }
-    var path = getDashedPath(start, end);
 
-    canvas.drawPath(path, paint);
+    _drawDashedLine(canvas, paint, size);
   }
 
-  Path getDashedPath(Offset start, Offset end) {
-    var size = Size(end.dx - start.dx, end.dy - start.dy);
-    var path = Path();
-    path.moveTo(start.dx, start.dy);
-    var shouldDraw = true;
-    var currentOffset = Offset(start.dx, start.dy);
+  void _drawDashedLine(Canvas canvas, Paint paint, Size size) {
+    final isHorizontal = direction == Axis.horizontal;
+    final lineLength = isHorizontal ? size.width : size.height;
+    final fixedCoordinate = (isHorizontal ? size.height : size.width) / 2;
 
-    var radians = atan(size.height / size.width);
+    double currentPosition = 0;
+    var drawSolid = true;
 
-    var gapDx =
-        cos(radians) * gap < 0 ? cos(radians) * gap * -1 : cos(radians) * gap;
+    while (currentPosition < lineLength) {
+      final segmentLength = drawSolid ? solidLength : gap;
+      final nextPosition = min(currentPosition + segmentLength, lineLength);
 
-    var gapDy =
-        sin(radians) * gap < 0 ? sin(radians) * gap * -1 : sin(radians) * gap;
+      if (drawSolid) {
+        final start = isHorizontal
+            ? Offset(currentPosition, fixedCoordinate)
+            : Offset(fixedCoordinate, currentPosition);
+        final end = isHorizontal
+            ? Offset(nextPosition, fixedCoordinate)
+            : Offset(fixedCoordinate, nextPosition);
+        canvas.drawLine(start, end, paint);
+      }
 
-    var solidDx = cos(radians) * solidLength < 0
-        ? cos(radians) * solidLength * -1
-        : cos(radians) * solidLength;
-
-    var solidDy = sin(radians) * solidLength < 0
-        ? sin(radians) * solidLength * -1
-        : sin(radians) * solidLength;
-
-    double _getDx() {
-      return shouldDraw ? solidDx : gapDx;
+      currentPosition = nextPosition;
+      drawSolid = !drawSolid;
     }
-
-    double _getDy() {
-      return shouldDraw ? solidDy : gapDy;
-    }
-
-    while (currentOffset.dx <= end.dx && currentOffset.dy <= end.dy) {
-      shouldDraw
-          ? path.lineTo(
-              currentOffset.dx.toDouble(), currentOffset.dy.toDouble())
-          : path.moveTo(
-              currentOffset.dx.toDouble(), currentOffset.dy.toDouble());
-      currentOffset = Offset(
-        currentOffset.dx + _getDx(),
-        currentOffset.dy + _getDy(),
-      );
-      shouldDraw = !shouldDraw;
-    }
-    return path;
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return oldDelegate != this;
+  bool shouldRepaint(DashedPainter oldDelegate) {
+    return color != oldDelegate.color ||
+        strokeWidth != oldDelegate.strokeWidth ||
+        gap != oldDelegate.gap ||
+        solidLength != oldDelegate.solidLength ||
+        direction != oldDelegate.direction;
   }
 }

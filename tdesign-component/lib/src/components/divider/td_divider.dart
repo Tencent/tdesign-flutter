@@ -14,7 +14,7 @@ class TDDivider extends StatelessWidget {
     this.color,
     this.margin,
     this.width,
-    this.height,
+    this.height = 0.5,
     this.text,
     this.textStyle,
     this.widget,
@@ -41,7 +41,7 @@ class TDDivider extends StatelessWidget {
   final double? width;
 
   /// 高度，横向线条使用
-  final double? height;
+  final double height;
 
   /// 文本字符串，使用默认样式
   final String? text;
@@ -58,15 +58,14 @@ class TDDivider extends StatelessWidget {
   /// 是否为虚线
   final bool isDashed;
 
-  /// 方向,竖直虚线必须传
+  /// 方向，竖直虚线必须传
   final Axis direction;
 
   @override
   Widget build(BuildContext context) {
     // 普通直线
     if (widget == null && text == null) {
-      return _buildLine(context,
-          width: width, height: height, margin: margin, color: color);
+      return _buildLine(context, width: width, margin: margin);
     }
 
     // 隐藏线条，纯文本分割
@@ -79,124 +78,67 @@ class TDDivider extends StatelessWidget {
       );
     }
 
-    // 文本+线条
+    // 文本 + 线条
     return _buildDivider(context, alignment);
   }
 
   Widget _buildDivider(BuildContext context, TextAlignment alignment) {
+    final middleWidget = Padding(
+        padding: gapPadding ?? const EdgeInsets.symmetric(horizontal: 8),
+        child: _buildMiddleWidget(context));
+
+    final line = Expanded(child: Center(child: _buildLine(context)));
+
+    final lineWithWidth = _buildLine(context, width: 16);
+
+    List<Widget> children;
+
     switch (alignment) {
       case TextAlignment.left:
-        return Container(
-          width: width,
-          margin: margin,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _buildLine(
-                context,
-                width: 16,
-                height: height,
-                color: color,
-              ),
-              Padding(
-                  padding:
-                      gapPadding ?? const EdgeInsets.symmetric(horizontal: 8),
-                  child: _buildMiddleWidget(context)),
-              Expanded(
-                  child: Center(
-                      child: _buildLine(
-                context,
-                height: height,
-                color: color,
-              ))),
-            ],
-          ),
-        );
+        children = [lineWithWidth, middleWidget, line];
+        break;
       case TextAlignment.center:
-        return Container(
-          width: width,
-          margin: margin,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                  child: Center(
-                child: _buildLine(
-                  context,
-                  height: height,
-                  color: color,
-                ),
-              )),
-              Padding(
-                  padding:
-                      gapPadding ?? const EdgeInsets.symmetric(horizontal: 8),
-                  child: _buildMiddleWidget(context)),
-              Expanded(
-                  child: Center(
-                      child: _buildLine(
-                context,
-                height: height,
-                color: color,
-              ))),
-            ],
-          ),
-        );
+        children = [line, middleWidget, line];
+        break;
       case TextAlignment.right:
-        return Container(
-          width: width,
-          margin: margin,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                  child: Center(
-                child: _buildLine(
-                  context,
-                  height: height,
-                  color: color,
-                ),
-              )),
-              Padding(
-                  padding:
-                      gapPadding ?? const EdgeInsets.symmetric(horizontal: 8),
-                  child: _buildMiddleWidget(context)),
-              _buildLine(
-                context,
-                width: 16,
-                height: height,
-                color: color,
-              ),
-            ],
-          ),
-        );
+        children = [line, middleWidget, lineWithWidth];
+        break;
     }
+
+    return Container(
+      width: width,
+      margin: margin,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: children,
+      ),
+    );
   }
 
   /// 绘制线条
   Container _buildLine(BuildContext context,
-      {double? width,
-      double? height = 0.5,
-      EdgeInsetsGeometry? margin,
-      Color? color}) {
+      {double? width, EdgeInsetsGeometry? margin}) {
+    final lineColor = color ?? TDTheme.of(context).componentStrokeColor;
+
     if (isDashed) {
       return Container(
         width: width,
         margin: margin,
         child: DashedWidget(
           width: width,
-          height: height ?? 0.5,
-          color: color ?? TDTheme.of(context).componentStrokeColor,
+          height: height,
+          color: lineColor,
           direction: direction,
         ),
       );
-    } else {
-      return Container(
-        width: width,
-        height: height ?? 0.5,
-        margin: margin,
-        color: color ?? TDTheme.of(context).componentStrokeColor,
-      );
     }
+
+    return Container(
+      width: width,
+      height: height,
+      margin: margin,
+      color: lineColor,
+    );
   }
 
   /// 构建中间控件
