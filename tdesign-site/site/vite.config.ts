@@ -7,8 +7,7 @@ import createTDesignPlugin from './plugin-tdoc';
 
 const publicPathMap: Record<string, string> = {
   preview: '/',
-  intranet: '/flutter/',
-  production: 'https://static.tdesign.tencent.com/flutter/',
+  production: '/flutter/',
 };
 
 // https://vitejs.dev/config/
