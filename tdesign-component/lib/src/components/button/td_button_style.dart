@@ -27,11 +27,11 @@ class TDButtonStyle {
       BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
     switch (theme) {
       case TDButtonTheme.primary:
-        textColor = TDTheme.of(context).fontWhColor1;
+        textColor = TDTheme.of(context).textColorAnti;
         backgroundColor = _getBrandColor(context, status);
         break;
       case TDButtonTheme.danger:
-        textColor = TDTheme.of(context).fontWhColor1;
+        textColor = TDTheme.of(context).textColorAnti;
         backgroundColor = _getErrorColor(context, status);
         break;
       case TDButtonTheme.light:
