@@ -65,7 +65,7 @@ class BadgeConfig {
   /// 是否展示消息
   final bool showBadge;
 
-  /// 消息样式(未设置但showBadge为true，则默认使用红点)
+  /// 消息样式（未设置但 showBadge 为 true，则默认使用红点）
   final TDBadge? tdBadge;
 
   /// 消息顶部偏移量
@@ -75,7 +75,7 @@ class BadgeConfig {
   final double? badgeRightOffset;
 }
 
-/// 单个tab配置
+/// 单个 tab 配置
 class TDBottomTabBarTabConfig {
   TDBottomTabBarTabConfig(
       {required this.onTap,
@@ -104,7 +104,7 @@ class TDBottomTabBarTabConfig {
   /// 未选中时图标
   final Widget? unselectedIcon;
 
-  /// tab文本
+  /// tab 文本
   final String? tabText;
 
   /// 文本已选择样式 basicType为text时必填
@@ -122,7 +122,7 @@ class TDBottomTabBarTabConfig {
   /// 弹窗配置
   final TDBottomTabBarPopUpBtnConfig? popUpButtonConfig;
 
-  /// onTap方法允许点击多次
+  /// onTap 方法允许点击多次
   final bool allowMultipleTaps;
 
   /// 长按事件
@@ -206,7 +206,7 @@ class TDBottomTabBar extends StatefulWidget {
   /// tab高度
   final double? barHeight;
 
-  /// 是否使用竖线分隔(如果选项样式为label则强制为false)
+  /// 是否使用竖线分隔（如果选项样式为 label，则强制为 false）
   final bool? useVerticalDivider;
 
   /// 分割线高度（可选）
@@ -218,7 +218,7 @@ class TDBottomTabBar extends StatefulWidget {
   /// 分割线颜色（可选）
   final Color? dividerColor;
 
-  /// 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值,非胶囊型才生效）
+  /// 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效）
   final bool? showTopBorder;
 
   /// 上边线样式
@@ -289,8 +289,9 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
             decoration: BoxDecoration(
                 color: widget.backgroundColor ??
                     TDTheme.of(context).bgColorContainer,
-                borderRadius:
-                    isCapsuleOutlineType ? BorderRadius.circular(56) : null,
+                borderRadius: isCapsuleOutlineType
+                    ? BorderRadius.circular(TDTheme.of(context).radiusCircle)
+                    : null,
                 border: widget.showTopBorder! && !isCapsuleOutlineType
                     ? Border(
                         top: widget.topBorder ??
@@ -341,7 +342,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
             bottom:
                 widget.basicType == TDBottomTabBarBasicType.iconText ? 5 : 7),
         child: TDBottomTabBarItemWithBadge(
-          basiceType: widget.basicType,
+          basicType: widget.basicType,
           componentType:
               widget.componentType ?? TDBottomTabBarComponentType.label,
           outlineType: widget.outlineType ?? TDBottomTabBarOutlineType.filled,
@@ -364,7 +365,6 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
   }
 
   Widget _verticalDivider() {
-    if (widget.componentType == TDBottomTabBarComponentType.label) {}
     return Visibility(
       visible: widget.componentType != TDBottomTabBarComponentType.label &&
           (widget.useVerticalDivider ?? false),
@@ -387,26 +387,26 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
 }
 
 class TDBottomTabBarItemWithBadge extends StatelessWidget {
-  const TDBottomTabBarItemWithBadge(
-      {Key? key,
-      required this.basiceType,
-      required this.componentType,
-      required this.outlineType,
-      required this.itemConfig,
-      required this.isSelected,
-      required this.itemHeight,
-      required this.itemWidth,
-      required this.onTap,
-      required this.tabsLength,
-      required this.selectedBgColor,
-      required this.unselectedBgColor,
-      required this.centerDistance,
-      this.onLongPress,
-      this.needInkWell = false})
-      : super(key: key);
+  const TDBottomTabBarItemWithBadge({
+    Key? key,
+    required this.basicType,
+    required this.componentType,
+    required this.outlineType,
+    required this.itemConfig,
+    required this.isSelected,
+    required this.itemHeight,
+    required this.itemWidth,
+    required this.onTap,
+    required this.tabsLength,
+    required this.selectedBgColor,
+    required this.unselectedBgColor,
+    required this.centerDistance,
+    this.onLongPress,
+    this.needInkWell = false,
+  }) : super(key: key);
 
   /// tab基本类型
-  final TDBottomTabBarBasicType basiceType;
+  final TDBottomTabBarBasicType basicType;
 
   /// tab选中背景类型
   final TDBottomTabBarComponentType componentType;
@@ -468,8 +468,8 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
                 child: Container(
                   /// 设计稿上 tab个数大于3时，左右边距为8，小于等于3时，左右边距为12
                   width: itemWidth - (tabsLength > 3 ? 16 : 24),
-                  height: basiceType == TDBottomTabBarBasicType.text ||
-                          basiceType == TDBottomTabBarBasicType.expansionPanel
+                  height: basicType == TDBottomTabBarBasicType.text ||
+                          basicType == TDBottomTabBarBasicType.expansionPanel
                       ? 32
                       : null,
                   decoration: BoxDecoration(
@@ -499,11 +499,11 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
   Widget _constructItem(
       BuildContext context, BadgeConfig? badgeConfig, bool isInOrOutCapsule) {
     Widget child = Container();
-    if (basiceType == TDBottomTabBarBasicType.text) {
+    if (basicType == TDBottomTabBarBasicType.text) {
       child = _textItem(context, itemConfig, isSelected,
           TDTheme.of(context).fontTitleMedium!);
     }
-    if (basiceType == TDBottomTabBarBasicType.expansionPanel) {
+    if (basicType == TDBottomTabBarBasicType.expansionPanel) {
       if (itemConfig.popUpButtonConfig != null) {
         child = Row(
           mainAxisSize: MainAxisSize.min,
@@ -525,13 +525,13 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
             TDTheme.of(context).fontTitleMedium!);
       }
     }
-    if (basiceType == TDBottomTabBarBasicType.icon) {
+    if (basicType == TDBottomTabBarBasicType.icon) {
       var selectedIcon = itemConfig.selectedIcon;
       var unSelectedIcon = itemConfig.unselectedIcon;
       child = isSelected ? selectedIcon! : unSelectedIcon!;
     }
 
-    if (basiceType == TDBottomTabBarBasicType.iconText) {
+    if (basicType == TDBottomTabBarBasicType.iconText) {
       var selectedIcon = itemConfig.selectedIcon;
       var unSelectedIcon = itemConfig.unselectedIcon;
       child = Column(
@@ -594,7 +594,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
       padding: EdgeInsets.only(
         top: isInOrOutCapsule ? 3.0 : 2.0,
         bottom: isInOrOutCapsule
-            ? (basiceType == TDBottomTabBarBasicType.iconText ? 0.0 : 1.0)
+            ? (basicType == TDBottomTabBarBasicType.iconText ? 0.0 : 1.0)
             : 0.0,
       ),
       color: Colors.transparent,
@@ -610,8 +610,8 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
       child: InkWell(
         borderRadius: isInOrOutCapsule ? BorderRadius.circular(24) : null,
         splashFactory: InkRipple.splashFactory,
-        splashColor: selectedBgColor ?? TDTheme.of(context).brandColor1,
-        highlightColor: selectedBgColor ?? TDTheme.of(context).brandColor1,
+        splashColor: selectedBgColor ?? TDTheme.of(context).brandLightColor,
+        highlightColor: selectedBgColor ?? TDTheme.of(context).brandLightColor,
         onTap: () => handleTap(context),
         child: child,
       ),
