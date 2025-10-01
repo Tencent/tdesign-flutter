@@ -11,9 +11,7 @@ class TDTextPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // debugPaintBaselinesEnabled = true;
     return ExamplePage(
-      padding: const EdgeInsets.all(8),
       title: tdTitle(context),
       exampleCodeGroup: 'text',
       children: [
