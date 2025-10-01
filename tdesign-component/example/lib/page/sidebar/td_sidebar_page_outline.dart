@@ -89,7 +89,7 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
     for (var i = 0; i < 20; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项${i}',
         value: i,
       ));
       pages.add(getAnchorDemo(i));
@@ -106,14 +106,11 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
       count: '8',
     );
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.outline,
             value: currentValue,
             controller: _sideBarController,
@@ -129,15 +126,13 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: SingleChildScrollView(
             controller: _demoScroller,
             child: Column(
               children: pages,
             ),
           ),
-        ))
+        )
       ],
     );
   }
@@ -150,7 +145,7 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: TDText('标题$index',
+            child: TDText('标题 $index',
                 style: const TextStyle(
                   fontSize: 14,
                 )),
@@ -181,6 +176,7 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
     return const Padding(
       padding: EdgeInsets.symmetric(vertical: 16),
       child: Row(
+        spacing: 16,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TDImage(
@@ -188,9 +184,6 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
             type: TDImageType.roundedSquare,
             width: 48,
             height: 48,
-          ),
-          SizedBox(
-            width: 16,
           ),
           TDText(
             '标题',

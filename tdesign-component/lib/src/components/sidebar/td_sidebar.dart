@@ -17,14 +17,15 @@ class SideItemProps {
   TDBadge? badge;
   TextStyle? textStyle;
 
-  SideItemProps(
-      {required this.value,
-      required this.index,
-      this.disabled,
-      this.icon,
-      this.label,
-      this.badge,
-      this.textStyle});
+  SideItemProps({
+    required this.value,
+    required this.index,
+    this.disabled,
+    this.icon,
+    this.label,
+    this.badge,
+    this.textStyle,
+  });
 }
 
 class TDSideBar extends StatefulWidget {

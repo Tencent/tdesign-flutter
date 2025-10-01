@@ -56,91 +56,76 @@ class TDSideBarPageState extends State<TDSideBarPage> {
   }
 
   Widget _buildNavigatorSideBar(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            CodeWrapper(
-              builder: (_) => getCustomButton(context, '锚点用法', 'SideBarAnchor'),
-              methodName: '_buildAnchorSideBar',
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            CodeWrapper(
-              builder: (_) =>
-                  getCustomButton(context, '切页用法', 'SideBarPagination'),
-              methodName: '_buildPaginationSideBar',
-            ),
-          ],
-        ));
+    return Column(
+      spacing: 16,
+      children: [
+        CodeWrapper(
+          builder: (_) => getCustomButton(context, '锚点用法', 'SideBarAnchor'),
+          methodName: '_buildAnchorSideBar',
+        ),
+        CodeWrapper(
+          builder: (_) => getCustomButton(context, '切页用法', 'SideBarPagination'),
+          methodName: '_buildPaginationSideBar',
+        ),
+      ],
+    );
   }
 
   Widget _buildIconSideBar(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            getCustomButton(context, '带图标侧边导航', 'SideBarIcon'),
-          ],
-        ));
+    return Column(
+      spacing: 16,
+      children: [
+        getCustomButton(context, '带图标侧边导航', 'SideBarIcon'),
+      ],
+    );
   }
 
   Widget _buildStyleSideBar(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            CodeWrapper(
-              builder: (_) =>
-                  getCustomButton(context, '非通栏选项样式', 'SideBarOutline'),
-              methodName: '_buildOutlineSideBar',
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            CodeWrapper(
-              builder: (_) =>
-                  getCustomButton(context, '自定义样式', 'SideBarCustom'),
-              methodName: '_buildCustomSideBar',
-            ),
-          ],
-        ));
+    return Column(
+      spacing: 16,
+      children: [
+        CodeWrapper(
+          builder: (_) => getCustomButton(context, '非通栏选项样式', 'SideBarOutline'),
+          methodName: '_buildOutlineSideBar',
+        ),
+        CodeWrapper(
+          builder: (_) => getCustomButton(context, '自定义样式', 'SideBarCustom'),
+          methodName: '_buildCustomSideBar',
+        ),
+      ],
+    );
   }
 
   Widget _loadingSideBar(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            CodeWrapper(
-              builder: (_) =>
-                  getCustomButton(context, '延迟加载', 'SideBarLoading'),
-              methodName: '_buildLoadingSideBar',
-            ),
-          ],
-        ));
+    return Column(
+      spacing: 16,
+      children: [
+        CodeWrapper(
+          builder: (_) => getCustomButton(context, '延迟加载', 'SideBarLoading'),
+          methodName: '_buildLoadingSideBar',
+        ),
+      ],
+    );
   }
 
   Widget _unSelectedColorSideBar(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            CodeWrapper(
-              builder: (_) => getCustomButton(
-                  context, '未选中颜色自定义', 'SideBarUnselectedColor'),
-              methodName: '_buildUnselectedColorSideBar',
-            ),
-          ],
-        ));
+    return Column(
+      spacing: 16,
+      children: [
+        CodeWrapper(
+          builder: (_) =>
+              getCustomButton(context, '未选中颜色自定义', 'SideBarUnselectedColor'),
+          methodName: '_buildUnselectedColorSideBar',
+        ),
+      ],
+    );
   }
 
   TDButton getCustomButton(
       BuildContext context, String text, String routeName) {
     return TDButton(
       text: text,
-      width: MediaQuery.of(context).size.width - 16 * 2,
+      isBlock: true,
       size: TDButtonSize.large,
       type: TDButtonType.outline,
       shape: TDButtonShape.rectangle,

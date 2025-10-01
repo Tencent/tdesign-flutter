@@ -47,7 +47,7 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
     for (var i = 0; i < 100; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项 ${i}',
         value: i,
       ));
       pages.add(getPageDemo(i));
@@ -66,14 +66,11 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
       }
     }
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
@@ -88,15 +85,13 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: PageView(
             controller: _pageController,
             scrollDirection: Axis.vertical,
             children: pages,
             physics: const NeverScrollableScrollPhysics(),
           ),
-        ))
+        )
       ],
     );
   }
@@ -106,35 +101,15 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
       decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 16,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: TDText('标题$index',
+            child: TDText('标题 $index',
                 style: const TextStyle(
                   fontSize: 14,
                 )),
           ),
-          const SizedBox(height: 16),
-          displayImageList()
-        ],
-      ),
-    );
-  }
-
-  Widget getAnchorDemo(int index) {
-    return Container(
-      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: TDText('标题$index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
-          ),
-          const SizedBox(height: 16),
           displayImageList()
         ],
       ),
@@ -142,38 +117,24 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
   }
 
   Widget displayImageList() {
-    return Column(
-      children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          displayImageItem('标题文字'),
-          displayImageItem('标题文字'),
-          displayImageItem('最多六个文字'),
-        ]),
-        const SizedBox(height: 18),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            displayImageItem('标题文字'),
-            displayImageItem('标题文字'),
-            displayImageItem('最多六个文字'),
-          ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 18),
+      width: double.infinity,
+      child: Wrap(
+        spacing: 18,
+        runSpacing: 18,
+        alignment: WrapAlignment.spaceEvenly,
+        children: List.generate(
+          12,
+          (index) => displayImageItem('${index}最多六个字'),
         ),
-        const SizedBox(height: 18),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            displayImageItem('标题文字'),
-            displayImageItem('标题文字'),
-            displayImageItem('最多六个文字'),
-          ],
-        )
-      ],
+      ),
     );
   }
 
   Widget displayImageItem(String title) {
-    return Expanded(
-        child: Column(
+    return Column(
+      spacing: 8,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const TDImage(
@@ -182,12 +143,11 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
           width: 48,
           height: 48,
         ),
-        const SizedBox(height: 8),
         TDText(
           '$title',
           style: const TextStyle(fontSize: 12),
         )
       ],
-    ));
+    );
   }
 }

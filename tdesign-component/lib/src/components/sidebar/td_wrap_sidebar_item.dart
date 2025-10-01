@@ -66,7 +66,8 @@ class TDWrapSideBarItem extends StatelessWidget {
         decoration: BoxDecoration(
             color: selected
                 ? selectedBgColor ?? TDTheme.of(context).bgColorContainer
-                : unSelectedBgColor ?? TDTheme.of(context).bgColorSecondaryContainer,
+                : unSelectedBgColor ??
+                    TDTheme.of(context).bgColorSecondaryContainer,
             borderRadius: bottomAdjacent || topAdjacent
                 ? bottomAdjacent
                     ? const BorderRadius.only(bottomRight: Radius.circular(9))
@@ -143,23 +144,26 @@ class TDWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderIcon(BuildContext context) {
+    final iconColor = () {
+      if (disabled) {
+        return TDTheme.of(context).textColorDisabled;
+      }
+      if (!selected) {
+        return unSelectedColor ??  TDTheme.of(context).textColorPrimary;
+      }
+      if (selectedTextStyle?.color != null) {
+        return selectedTextStyle!.color!;
+      }
+      return selectedColor ?? TDTheme.of(context).brandNormalColor;
+    }();
+
     return Visibility(
-        visible: icon != null,
-        child: Padding(
-          padding: const EdgeInsets.only(right: 2),
-          child: Icon(
-            icon,
-            size: 20,
-            color: disabled
-                ? TDTheme.of(context).textColorDisabled
-                : selected
-                    ? selectedTextStyle != null
-                        ? selectedTextStyle?.color
-                        : (selectedColor ??
-                            TDTheme.of(context).brandNormalColor)
-                    : TDTheme.of(context).textColorPrimary,
-          ),
-        ));
+      visible: icon != null,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 2),
+        child: Icon(icon, size: 20, color: iconColor),
+      ),
+    );
   }
 
   Widget renderLabel(BuildContext context) {
@@ -178,10 +182,13 @@ class TDWrapSideBarItem extends StatelessWidget {
                 ? TDTheme.of(context).textColorDisabled
                 : selected
                     ? selectedColor ?? TDTheme.of(context).brandNormalColor
-                    : TDTheme.of(context).textColorPrimary,
+                    :  unSelectedColor ??  TDTheme.of(context).textColorPrimary,
             // forceVerticalCenter: true,
           )),
-          if (label.length < 4)
+
+          /// todo label.length 长度小于则不展示，为什么？？？
+          /// 应再判断有无icon，无icon时位置够，可以展示 badge
+          if (label.length <= 4 || icon == null)
             WidgetSpan(
                 child: SizedBox(
               width: 1,

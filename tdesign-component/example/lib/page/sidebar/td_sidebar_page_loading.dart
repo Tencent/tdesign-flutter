@@ -91,7 +91,7 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
     for (var i = 0; i < 20; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项 $i',
         value: i,
       ));
       pages.add(getLoadingDemo(i));
@@ -121,14 +121,12 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
     // 延迟加载
     Future.delayed(const Duration(seconds: 3), _initData);
     var size = MediaQuery.of(context).size;
-    var demoHeight = size.height;
 
     return Row(
       children: [
         SizedBox(
           width: list.isEmpty ? size.width : 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
@@ -145,15 +143,13 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: SingleChildScrollView(
             controller: _demoScroller,
             child: Column(
               children: pages,
             ),
           ),
-        ))
+        )
       ],
     );
   }
@@ -197,6 +193,7 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
     return const Padding(
       padding: EdgeInsets.symmetric(vertical: 16),
       child: Row(
+        spacing: 16,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TDImage(
@@ -204,9 +201,6 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
             type: TDImageType.roundedSquare,
             width: 48,
             height: 48,
-          ),
-          SizedBox(
-            width: 16,
           ),
           TDText(
             '标题',

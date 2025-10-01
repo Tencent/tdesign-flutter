@@ -86,8 +86,12 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
     final pages = <Widget>[];
 
     for (var i = 0; i < 20; i++) {
-      list.add(
-          SideItemProps(index: i, label: '选项', value: i, icon: TDIcons.app));
+      list.add(SideItemProps(
+        index: i,
+        label: '选项${i}',
+        value: i,
+        icon: TDIcons.app,
+      ));
       pages.add(getAnchorDemo(i));
     }
 
@@ -102,14 +106,11 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
       count: '8',
     );
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
@@ -125,15 +126,13 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: SingleChildScrollView(
             controller: _demoScroller,
             child: Column(
               children: pages,
             ),
           ),
-        ))
+        )
       ],
     );
   }
@@ -178,15 +177,13 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
       padding: EdgeInsets.symmetric(vertical: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
+        spacing: 16,
         children: [
           TDImage(
             assetUrl: 'assets/img/empty.png',
             type: TDImageType.roundedSquare,
             width: 48,
             height: 48,
-          ),
-          SizedBox(
-            width: 16,
           ),
           TDText(
             '标题',

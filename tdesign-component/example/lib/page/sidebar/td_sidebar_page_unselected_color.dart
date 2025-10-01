@@ -55,6 +55,7 @@ class TDSideBarUnSelectedColorPageState
         index: i,
         label: '选项$i',
         value: i,
+        icon: TDIcons.app,
       ));
       pages.add(getAnchorDemo(i));
     }
@@ -112,9 +113,7 @@ class TDSideBarUnSelectedColorPageState
         MediaQuery.of(context).padding.top -
         titleBarHeight -
         testButtonHeight;
-    pages.add(Container(
-      height: demoHeight - itemHeight,
-    ));
+
     return Column(
       children: [
         Container(
@@ -138,12 +137,12 @@ class TDSideBarUnSelectedColorPageState
             },
           ),
         ),
-        Row(
+        Expanded(
+            child: Row(
           children: [
             SizedBox(
               width: 110,
               child: TDSideBar(
-                height: demoHeight,
                 unSelectedColor: Colors.red,
                 style: TDSideBarStyle.normal,
                 value: currentValue,
@@ -153,17 +152,18 @@ class TDSideBarUnSelectedColorPageState
               ),
             ),
             Expanded(
-                child: SizedBox(
-              height: demoHeight,
               child: SingleChildScrollView(
                 controller: _demoScroller,
                 child: Column(
-                  children: pages,
+                  children: [
+                    ...pages,
+                    Container(height: demoHeight - itemHeight)
+                  ],
                 ),
               ),
-            ))
+            )
           ],
-        )
+        ))
       ],
     );
   }
@@ -204,6 +204,7 @@ class TDSideBarUnSelectedColorPageState
     return const Padding(
       padding: EdgeInsets.symmetric(vertical: 16),
       child: Row(
+        spacing: 16,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TDImage(
@@ -211,9 +212,6 @@ class TDSideBarUnSelectedColorPageState
             type: TDImageType.roundedSquare,
             width: 48,
             height: 48,
-          ),
-          SizedBox(
-            width: 16,
           ),
           TDText(
             '标题',
