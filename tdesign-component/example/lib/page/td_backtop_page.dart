@@ -38,18 +38,11 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
   }
 
   void listenCallback() {
-    if (controller.offset >= 100) {
-      if (!showBackTop) {
-        setState(() {
-          showBackTop = true;
-        });
-      }
-    } else {
-      if (showBackTop) {
-        setState(() {
-          showBackTop = false;
-        });
-      }
+    final shouldShow = controller.offset >= 100;
+    if (shouldShow != showBackTop) {
+      setState(() {
+        showBackTop = shouldShow;
+      });
     }
   }
 
@@ -122,14 +115,7 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
           child: Wrap(
             spacing: 16,
             runSpacing: 24,
-            children: [
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-            ],
+            children: List.generate(6, (_) => getDemoBox(context)),
           ),
         )
       ],
@@ -138,20 +124,19 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
 
   Widget getCustomButton(
       BuildContext context, String text, void Function() onTap) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: TDButton(
-          text: text,
-          width: MediaQuery.of(context).size.width - 16 * 2,
-          size: TDButtonSize.large,
-          type: TDButtonType.outline,
-          shape: TDButtonShape.rectangle,
-          theme: TDButtonTheme.primary,
-          onTap: onTap,
-        ));
+    return TDButton(
+      text: text,
+      isBlock: true,
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+      onTap: onTap,
+    );
   }
 
   Widget getDemoBox(BuildContext context) {
+    final theme = TDTheme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -159,31 +144,27 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
           width: 163,
           height: 163,
           decoration: BoxDecoration(
-              color: TDTheme.of(context).bgColorContainer,
+              color: theme.bgColorContainer,
               borderRadius:
-                  BorderRadius.circular(TDTheme.of(context).radiusExtraLarge)),
+                  BorderRadius.circular(theme.radiusExtraLarge)),
         ),
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: 10),
         Container(
           width: 163,
           height: 16,
           decoration: BoxDecoration(
-              color: TDTheme.of(context).bgColorContainer,
+              color: theme.bgColorContainer,
               borderRadius:
-                  BorderRadius.circular(TDTheme.of(context).radiusSmall)),
+                  BorderRadius.circular(theme.radiusSmall)),
         ),
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: 10),
         Container(
             width: 100,
             height: 16,
             decoration: BoxDecoration(
-                color: TDTheme.of(context).bgColorContainer,
+                color: theme.bgColorContainer,
                 borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusSmall))),
+                    BorderRadius.circular(theme.radiusSmall))),
       ],
     );
   }

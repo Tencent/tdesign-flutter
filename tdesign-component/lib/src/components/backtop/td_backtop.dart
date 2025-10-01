@@ -43,39 +43,68 @@ class TDBackTop extends StatefulWidget {
 }
 
 class _TDBackTopState extends State<TDBackTop> {
-  late final Color _bgColor = _getColorByTheme(
-      lightColor: TDTheme.of(context).grayColor1, darkColor: TDTheme.of(context).grayColor13);
-  late final Color _borderColor = _getColorByTheme(
-      lightColor: TDTheme.of(context).grayColor4, darkColor: TDTheme.of(context).grayColor9);
-  late final Color _fontColor = _getColorByTheme(
-      lightColor: TDTheme.of(context).fontGyColor1, darkColor: TDTheme.of(context).fontWhColor1);
+  bool _isAnimating = false;
 
-  Color _getColorByTheme({required Color lightColor, required Color darkColor}) {
-    return widget.theme == TDBackTopTheme.light ? lightColor : darkColor;
-  }
+  late final Color _bgColor;
+  late final Color _borderColor;
+  late final Color _fontColor;
 
   @override
   void initState() {
     super.initState();
+    _initColors();
+  }
+
+  void _initColors() {
+    final theme = TDTheme.of(context);
+    _bgColor = _getColorByTheme(
+      lightColor: theme.grayColor1,
+      darkColor: theme.grayColor13,
+    );
+    _borderColor = _getColorByTheme(
+      lightColor: theme.grayColor4,
+      darkColor: theme.grayColor9,
+    );
+    _fontColor = _getColorByTheme(
+      lightColor: theme.textColorPrimary,
+      darkColor: theme.textColorAnti,
+    );
+  }
+
+  Color _getColorByTheme({
+    required Color lightColor,
+    required Color darkColor,
+  }) {
+    return widget.theme == TDBackTopTheme.light ? lightColor : darkColor;
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        if (widget.controller != null && widget.controller!.hasClients) {
-          widget.controller!
-              .animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
-        }
-
-        if (widget.onClick != null) {
-          widget.onClick!();
-        }
-      },
+      onTap: _handleTap,
       child: widget.style == TDBackTopStyle.circle
           ? _buildCircleWidget(context)
           : _buildHalfCircleWidget(context),
     );
+  }
+
+  Future<void> _handleTap() async {
+    /// 防抖处理，防止短时间内重复触发
+    if (_isAnimating) {
+      return;
+    }
+
+    if (widget.controller != null && widget.controller!.hasClients) {
+      _isAnimating = true;
+      await widget.controller!.animateTo(
+        0,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
+      _isAnimating = false;
+    }
+
+    widget.onClick?.call();
   }
 
   Widget _buildCircleWidget(BuildContext context) {
@@ -101,7 +130,8 @@ class _TDBackTopState extends State<TDBackTop> {
               context.resource.top,
               maxLines: 1,
               overflow: TextOverflow.visible,
-              style: TextStyle(fontSize: 10, color: _fontColor, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                  fontSize: 10, color: _fontColor, fontWeight: FontWeight.w600),
             ),
           )
         ],
@@ -119,7 +149,8 @@ class _TDBackTopState extends State<TDBackTop> {
               color: _bgColor,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(TDTheme.of(context).radiusCircle),
-                  bottomLeft: Radius.circular(TDTheme.of(context).radiusCircle)),
+                  bottomLeft:
+                      Radius.circular(TDTheme.of(context).radiusCircle)),
               border: Border.all(color: _borderColor, width: 0.5)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -138,9 +169,10 @@ class _TDBackTopState extends State<TDBackTop> {
                 child: SizedBox(
                     height: 32,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        /// todo 将 “返回”、“顶部” 两个文本拆分开组合，中文语境下可以，但对于其他语言未必可行
                         TDText(
                           context.resource.back,
                           style: TextStyle(
