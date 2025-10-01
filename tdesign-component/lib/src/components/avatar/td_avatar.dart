@@ -60,7 +60,7 @@ class TDAvatar extends StatelessWidget {
   /// 带操作展示的头像列表
   final List<String>? avatarDisplayList;
 
-  /// 带操作展示的头像列表 (本地资源)
+  /// 带操作展示的头像列表（本地资源）
   final List<String>? avatarDisplayListAsset;
 
   /// 带操作展示的头像描边宽度
@@ -151,13 +151,15 @@ class TDAvatar extends StatelessWidget {
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-              color: backgroundColor ?? TDTheme.of(context).brandColor2,
+              color: backgroundColor ?? TDTheme.of(context).brandFocusColor,
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
             ),
             child: Center(
-                child: Icon(icon ?? TDIcons.user,
-                    size: _getIconWidth(),
-                    color: TDTheme.of(context).brandNormalColor)),
+                child: Icon(
+              icon ?? TDIcons.user,
+              size: _getIconWidth(),
+              color: TDTheme.of(context).brandNormalColor,
+            )),
           ),
           onTap: onTap,
         );
@@ -167,7 +169,7 @@ class TDAvatar extends StatelessWidget {
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-                color: backgroundColor ?? TDTheme.of(context).brandColor2,
+                color: backgroundColor ?? TDTheme.of(context).brandFocusColor,
                 borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
                 image: avatarUrl != null
                     ? DecorationImage(image: NetworkImage(avatarUrl!))
@@ -238,11 +240,7 @@ class TDAvatar extends StatelessWidget {
           list.add(Positioned(
               left: left,
               child: GestureDetector(
-                onTap: () {
-                  if (onTap != null) {
-                    onTap!();
-                  }
-                },
+                onTap: onTap,
                 child: Container(
                     child: Center(
                       child: Icon(TDIcons.user_add,
@@ -253,7 +251,7 @@ class TDAvatar extends StatelessWidget {
                     height: _getAvatarWidth(),
                     clipBehavior: Clip.hardEdge,
                     decoration: ShapeDecoration(
-                      color: TDTheme.of(context).brandColor2,
+                      color: TDTheme.of(context).brandFocusColor,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
                               _getAvatarWidth() - _getDisplayPadding()),
@@ -289,11 +287,7 @@ class TDAvatar extends StatelessWidget {
           list.add(Positioned(
               left: left,
               child: GestureDetector(
-                onTap: () {
-                  if (onTap != null) {
-                    onTap!();
-                  }
-                },
+                onTap: onTap,
                 child: Container(
                     child: Center(
                       child: avatarDisplayWidget ??
@@ -305,7 +299,7 @@ class TDAvatar extends StatelessWidget {
                     height: _getAvatarWidth(),
                     clipBehavior: Clip.hardEdge,
                     decoration: ShapeDecoration(
-                      color: TDTheme.of(context).brandColor2,
+                      color: TDTheme.of(context).brandFocusColor,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
                               _getAvatarWidth() - _getDisplayPadding()),
@@ -373,7 +367,7 @@ class TDAvatar extends StatelessWidget {
                   height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
-                    color: TDTheme.of(context).brandColor2,
+                    color: TDTheme.of(context).brandFocusColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                             _getAvatarWidth() - _getDisplayPadding()),
@@ -422,7 +416,7 @@ class TDAvatar extends StatelessWidget {
                   height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
-                    color: TDTheme.of(context).brandColor2,
+                    color: TDTheme.of(context).brandFocusColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                             _getAvatarWidth() - _getDisplayPadding()),
