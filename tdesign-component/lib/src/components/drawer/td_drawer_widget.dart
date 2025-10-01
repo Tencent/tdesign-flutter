@@ -11,7 +11,7 @@ import 'td_drawer.dart';
 typedef TDDrawerItemClickCallback = void Function(int index, TDDrawerItem item);
 
 /// 抽屉内容组件
-/// 可用于Scaffold中的drawer属性
+/// 可用于 Scaffold 中的 drawer 属性
 class TDDrawerWidget extends StatelessWidget {
   const TDDrawerWidget({
     super.key,
@@ -72,7 +72,7 @@ class TDDrawerWidget extends StatelessWidget {
       var cellStyle = style;
       if (cellStyle == null) {
         cellStyle = TDCellStyle.cellStyle(context);
-        cellStyle.leftIconColor = TDTheme.of(context).fontGyColor1;
+        cellStyle.leftIconColor = TDTheme.of(context).brandNormalColor;
       }
       var cells = items
           ?.asMap()
@@ -116,6 +116,7 @@ class TDDrawerWidget extends StatelessWidget {
         ],
       );
     }
+
     return Container(
       color: backgroundColor ?? TDTheme.of(context).bgColorContainer,
       width: width ?? 280,
@@ -123,7 +124,6 @@ class TDDrawerWidget extends StatelessWidget {
       child: content,
     );
   }
-
 }
 
 /// 抽屉里的列表项

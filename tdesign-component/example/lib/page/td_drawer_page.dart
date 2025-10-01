@@ -3,38 +3,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-const _nums = [
-  '一',
-  '二',
-  '三',
-  '四',
-  '五',
-  '六',
-  '七',
-  '八',
-  '九',
-  '十',
-  '十一',
-  '十二',
-  '十三',
-  '十四',
-  '十五',
-  '十六',
-  '十七',
-  '十八',
-  '十九',
-  '二十',
-  '二一',
-  '二二',
-  '二三',
-  '二四',
-  '二五',
-  '二六',
-  '二七',
-  '二八',
-  '二九',
-  '三十',
-];
+const drawerItemLength = 30;
 
 class TDDrawerPage extends StatelessWidget {
   const TDDrawerPage({super.key});
@@ -110,7 +79,8 @@ Widget _buildBaseSimple(BuildContext context) {
         context,
         visible: true,
         drawerTop: renderBox?.size.height,
-        items: List.generate(30, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
+        items: List.generate(
+            drawerItemLength, (index) => TDDrawerItem(title: '菜单${index + 1}')),
         onItemClick: (index, item) {
           print('drawer item被点击，index：$index，title：${item.title}');
         },
@@ -134,7 +104,10 @@ Widget _buildIconSimple(BuildContext context) {
         context,
         visible: true,
         drawerTop: renderBox?.size.height,
-        items: List.generate(30, (index) => TDDrawerItem(title: '菜单${_nums[index]}', icon: const Icon(TDIcons.app))).toList(),
+        items: List.generate(
+            drawerItemLength,
+            (index) => TDDrawerItem(
+                title: '菜单${index + 1}', icon: const Icon(TDIcons.app))),
       );
     },
   );
@@ -157,7 +130,8 @@ Widget _buildTitleSimple(BuildContext context) {
         drawerTop: renderBox?.size.height,
         title: '标题',
         placement: TDDrawerPlacement.left,
-        items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
+        items: List.generate(
+            drawerItemLength, (index) => TDDrawerItem(title: '菜单${index + 1}')),
       );
     },
   );
@@ -180,7 +154,8 @@ Widget _buildBottomSimple(BuildContext context) {
         drawerTop: renderBox?.size.height,
         title: '标题',
         placement: TDDrawerPlacement.left,
-        items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
+        items: List.generate(
+            drawerItemLength, (index) => TDDrawerItem(title: '菜单${index + 1}')),
         footer: const TDButton(
           text: '操作',
           type: TDButtonType.outline,
@@ -195,6 +170,10 @@ Widget _buildBottomSimple(BuildContext context) {
 @Demo(group: 'drawer')
 Widget _buildColorSimple(BuildContext context) {
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
+
+  var tdCellStyle = TDCellStyle(context: context);
+  tdCellStyle.backgroundColor = TDTheme.of(context).brandNormalColor;
+
   return TDButton(
     text: '自定义背景色',
     isBlock: true,
@@ -208,8 +187,10 @@ Widget _buildColorSimple(BuildContext context) {
         drawerTop: renderBox?.size.height,
         title: '标题',
         backgroundColor: TDTheme.of(context).bgColorSecondaryContainer,
+        style: tdCellStyle,
         placement: TDDrawerPlacement.right,
-        items: List.generate(10, (index) => TDDrawerItem(title: '菜单${_nums[index]}')).toList(),
+        items: List.generate(
+            drawerItemLength, (index) => TDDrawerItem(title: '菜单${index + 1}')),
       );
     },
   );
