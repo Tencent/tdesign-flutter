@@ -313,8 +313,7 @@ jobs:
         working-directory: ./tdesign-site
         run: |
           npm install --unsafe-perm
-          npm run site:intranet
-      
+
       - name: Build site Demo
         working-directory: ./tdesign-component/example
         run: |
