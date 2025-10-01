@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/components/steps/td_steps_vertical_item.dart';
+
 import '../../../tdesign_flutter.dart';
+import 'td_steps_vertical_item.dart';
 
 /// Steps步骤条，垂直步骤
 class TDStepsVertical extends StatelessWidget {
@@ -10,6 +11,7 @@ class TDStepsVertical extends StatelessWidget {
   final bool simple;
   final bool readOnly;
   final bool verticalSelect;
+
   const TDStepsVertical({
     super.key,
     required this.steps,
@@ -23,7 +25,7 @@ class TDStepsVertical extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stepsCount = steps.length;
-    List<Widget> stepsVerticalItem = steps.asMap().entries.map((item){
+    List<Widget> stepsVerticalItem = steps.asMap().entries.map((item) {
       return TDStepsVerticalItem(
         index: item.key,
         data: item.value,
@@ -41,6 +43,4 @@ class TDStepsVertical extends StatelessWidget {
       children: stepsVerticalItem,
     );
   }
-
 }
-

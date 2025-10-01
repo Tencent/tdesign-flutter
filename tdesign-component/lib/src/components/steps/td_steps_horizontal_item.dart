@@ -24,52 +24,46 @@ class TDStepsHorizontalItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = TDTheme.of(context);
+
     /// 步骤条数字背景色
-    var stepsNumberBgColor = TDTheme.of(context).brandNormalColor;
+    var stepsNumberBgColor = theme.brandNormalColor;
 
     /// 步骤条数字颜色
-    var stepsNumberTextColor = TDTheme.of(context).whiteColor1;
+    var stepsNumberTextColor = theme.textColorAnti;
 
     /// 步骤条标题颜色
-    var stepsTitleColor = TDTheme.of(context).brandColor7;
+    var stepsTitleColor = theme.brandNormalColor;
 
     /// 步骤条icon颜色
-    var stepsIconColor = TDTheme.of(context).brandColor7;
+    var stepsIconColor = theme.brandNormalColor;
 
     /// 简略步骤条icon颜色
-    var simpleStepsIconColor = TDTheme.of(context).brandColor7;
+    var simpleStepsIconColor = theme.brandNormalColor;
 
     /// 是否要设置步骤图标widget的Decoration
-    bool shouldSetIconWidgetDecoration = true;
+    var shouldSetIconWidgetDecoration = true;
 
     Widget? completeIconWidget;
 
-    /// 错误icon图标显示
-    Widget errorIconWidget = Icon(
-      TDIcons.close,
-      color: TDTheme.of(context).errorColor6,
-      size: 16,
-    );
-
-    /// 激活索引大于当前索引
+    /// 已完成步骤条
     if (activeIndex > index) {
-      stepsNumberBgColor = TDTheme.of(context).brandColor1;
-      stepsNumberTextColor = TDTheme.of(context).brandColor7;
-      stepsTitleColor = TDTheme.of(context).textColorPrimary;
+      stepsNumberBgColor = theme.brandLightColor;
+      stepsNumberTextColor = theme.brandNormalColor;
+      stepsTitleColor = theme.textColorPrimary;
 
-      /// 已完成的用icon图标显示
       completeIconWidget = Icon(
         TDIcons.check,
-        color: TDTheme.of(context).brandColor7,
+        color: theme.brandNormalColor,
         size: 16,
       );
     } else if (activeIndex < index) {
-      /// 激活索引小于当前索引
-      stepsNumberBgColor = TDTheme.of(context).bgColorSecondaryContainer;
-      stepsNumberTextColor = TDTheme.of(context).textColorPlaceholder;
-      stepsTitleColor = TDTheme.of(context).textColorPlaceholder;
-      stepsIconColor = TDTheme.of(context).textColorPlaceholder;
-      simpleStepsIconColor = TDTheme.of(context).componentBorderColor;
+      /// 未完成步骤条
+      stepsNumberBgColor = theme.bgColorComponent;
+      stepsNumberTextColor = theme.textColorPlaceholder;
+      stepsTitleColor = theme.textColorPlaceholder;
+      stepsIconColor = theme.textColorPlaceholder;
+      simpleStepsIconColor = theme.componentBorderColor;
     }
 
     /// 步骤条icon图标组件，默认为索引文字
@@ -99,35 +93,27 @@ class TDStepsHorizontalItem extends StatelessWidget {
       shouldSetIconWidgetDecoration = false;
     }
 
-    /// 状态是错误状态，激活索引是当前索引，只有当前激活索引才需要显示
+    /// 错误状态处理
+    /// 激活索引是当前索引，只有当前激活索引才需要显示
     if (status == TDStepsStatus.error && activeIndex == index) {
-      /// 显示错误颜色
-      stepsNumberBgColor = TDTheme.of(context).errorColor1;
-      stepsTitleColor = TDTheme.of(context).errorColor6;
+      stepsNumberBgColor = theme.errorLightColor;
+      stepsTitleColor = theme.errorNormalColor;
 
-      /// 显示错误图标
-      stepsIconWidget = errorIconWidget;
-      if (data.errorIcon != null) {
-        stepsIconWidget = Icon(
-          data.errorIcon,
-          color: TDTheme.of(context).errorColor6,
-          size: 22,
-        );
-      }
-
-      /// 传了图标则不用设置背景色等Decoration
-      shouldSetIconWidgetDecoration = data.errorIcon == null;
       if (simple) {
-        simpleStepsIconColor = TDTheme.of(context).errorColor6;
+        simpleStepsIconColor = theme.errorNormalColor;
+      } else {
+        shouldSetIconWidgetDecoration = data.errorIcon == null;
+        stepsIconWidget = Icon(
+          data.errorIcon ?? TDIcons.close,
+          color: theme.errorNormalColor,
+          size: shouldSetIconWidgetDecoration ? 16 : 22,
+        );
       }
     }
 
     /// 步骤条icon图标背景和形状
-    BoxDecoration? iconWidgetDecoration = shouldSetIconWidgetDecoration
-        ? BoxDecoration(
-            color: stepsNumberBgColor,
-            shape: BoxShape.circle,
-          )
+    var iconWidgetDecoration = shouldSetIconWidgetDecoration
+        ? BoxDecoration(color: stepsNumberBgColor, shape: BoxShape.circle)
         : null;
 
     /// icon组件容器大小
@@ -137,8 +123,8 @@ class TDStepsHorizontalItem extends StatelessWidget {
     if (simple || readOnly) {
       /// readOnly纯展示
       if (readOnly) {
-        simpleStepsIconColor = TDTheme.of(context).brandColor7;
-        stepsTitleColor = TDTheme.of(context).textColorPrimary;
+        simpleStepsIconColor = theme.brandNormalColor;
+        stepsTitleColor = theme.textColorPrimary;
       }
       iconContainerSize = 8;
       stepsIconWidget = null;
@@ -161,6 +147,13 @@ class TDStepsHorizontalItem extends StatelessWidget {
       iconWidgetDecoration = simpleDecoration;
     }
 
+    var leftLineColor = (activeIndex >= index || readOnly)
+        ? theme.brandNormalColor
+        : theme.componentBorderColor;
+    var rightLineColor = (activeIndex > index || readOnly)
+        ? theme.brandNormalColor
+        : theme.componentBorderColor;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -168,18 +161,8 @@ class TDStepsHorizontalItem extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              flex: 1,
-              child: Opacity(
-                opacity: index == 0 ? 0 : 1,
-                child: Container(
-                    width: double.infinity,
-                    height: 1,
-                    color: (activeIndex >= index || readOnly)
-                        ? TDTheme.of(context).brandColor7
-                        : TDTheme.of(context).componentBorderColor),
-              ),
-            ),
+            _buildLineWidget(context,
+                visible: index != 0, color: leftLineColor),
             Container(
               width: iconContainerSize,
               height: iconContainerSize,
@@ -188,52 +171,72 @@ class TDStepsHorizontalItem extends StatelessWidget {
               decoration: iconWidgetDecoration,
               child: stepsIconWidget,
             ),
-            Expanded(
-              flex: 1,
-              child: Opacity(
-                opacity: index == stepsCount - 1 ? 0 : 1,
-                child: Container(
-                  width: double.infinity,
-                  height: 1,
-                  color: (activeIndex > index || readOnly)
-                      ? TDTheme.of(context).brandColor7
-                      : TDTheme.of(context).componentBorderColor,
-                ),
-              ),
-            ),
+            _buildLineWidget(context,
+                visible: index != stepsCount - 1, color: rightLineColor),
           ],
         ),
-        if (data.customTitle != null)
-          data.customTitle!
-        else if (data.title != null && data.title!.isNotEmpty)
-          Container(
-            margin: const EdgeInsets.only(top: 8),
-            alignment: Alignment.center,
-            child: TDText(
-              data.title!,
-              style: TextStyle(
-                fontWeight: (activeIndex == index && !readOnly)
-                    ? FontWeight.w600
-                    : FontWeight.w400,
-                color: stepsTitleColor,
-                fontSize: 14,
-              ),
+        _buildTitleWidget(context, stepsTitleColor),
+        _buildContentWidget(context)
+      ],
+    );
+  }
+
+  /// 构建步骤条横线组件
+  Widget _buildLineWidget(
+    BuildContext context, {
+    required bool visible,
+    required Color color,
+  }) {
+    return Expanded(
+      flex: 1,
+      child: Visibility(
+        visible: visible,
+        child: Container(width: double.infinity, height: 1, color: color),
+      ),
+    );
+  }
+
+  /// 构建标题组件
+  Widget _buildTitleWidget(BuildContext context, Color stepsTitleColor) {
+    if (data.customTitle != null) {
+      return data.customTitle!;
+    }
+
+    final title = data.title ?? '';
+    if (title.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(top: 8),
+      alignment: Alignment.center,
+      child: TDText(
+        title,
+        style: TextStyle(
+          fontWeight: (activeIndex == index && !readOnly)
+              ? FontWeight.w600
+              : FontWeight.w400,
+          color: stepsTitleColor,
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
+
+  /// 构建内容组件
+  Widget _buildContentWidget(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 4),
+      alignment: Alignment.center,
+      child: data.customContent ??
+          TDText(
+            data.content ?? '',
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              color: TDTheme.of(context).textColorPlaceholder,
+              fontSize: 12,
             ),
           ),
-        Container(
-          margin: const EdgeInsets.only(top: 4),
-          alignment: Alignment.center,
-          child: data.customContent ??
-              TDText(
-                data.content ?? '',
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: TDTheme.of(context).textColorPlaceholder,
-                  fontSize: 12,
-                ),
-              ),
-        ),
-      ],
     );
   }
 }

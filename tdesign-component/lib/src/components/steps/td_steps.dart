@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/src/components/steps/td_steps_horizontal.dart';
-import 'package:tdesign_flutter/src/components/steps/td_steps_vertical.dart';
-import '../../../tdesign_flutter.dart';
+
+import 'td_steps_horizontal.dart';
+import 'td_steps_vertical.dart';
 
 /// Steps步骤条数据类型
 class TDStepsItemData {
-  TDStepsItemData(
-      {this.title,
-      this.content,
-      this.successIcon,
-      this.errorIcon,
-      this.customContent,
-      this.customTitle}) {
-    _validate();
-  }
+  TDStepsItemData({
+    this.title,
+    this.content,
+    this.successIcon,
+    this.errorIcon,
+    this.customContent,
+    this.customTitle,
+  }) : assert(
+          title != null ||
+              customTitle != null ||
+              content != null ||
+              customContent != null,
+          'title, content, customContent needs at least one non-empty value',
+        );
 
   /// 标题
   final String? title;
@@ -32,17 +37,6 @@ class TDStepsItemData {
 
   /// 自定义标题
   final Widget? customTitle;
-
-  /// 校验参数
-  void _validate() {
-    if (title == null &&
-        customTitle == null &&
-        content == null &&
-        customContent == null) {
-      throw ArgumentError(
-          'title, content, customContent needs at least one non-empty value');
-    }
-  }
 }
 
 /// Steps步骤条方向
@@ -96,14 +90,24 @@ class TDSteps extends StatefulWidget {
 }
 
 class _TDStepsState extends State<TDSteps> {
+  int _clampActiveIndex(int index, int length) {
+    if (index < 0) {
+      return 0;
+    }
+    if (index >= length) {
+      return length > 0 ? length - 1 : 0;
+    }
+    return index;
+  }
+
   @override
   Widget build(BuildContext context) {
     /// 当前激活的step索引
-    final currentActiveIndex = widget.activeIndex < 0
-        ? 0
-        : (widget.activeIndex >= widget.steps.length
-            ? widget.steps.length - 1
-            : widget.activeIndex);
+    final currentActiveIndex = _clampActiveIndex(
+      widget.activeIndex,
+      widget.steps.length,
+    );
+
     return widget.direction == TDStepsDirection.horizontal
         ? TDStepsHorizontal(
             steps: widget.steps,
