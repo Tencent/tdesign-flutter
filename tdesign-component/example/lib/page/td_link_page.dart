@@ -108,6 +108,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
 
   Column _buildLinkWithStyles(TDLinkState state) {
     return Column(
+      spacing: 16,
       children: [
         Container(
             height: 48,
@@ -120,7 +121,6 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
                 _buildLinkWithTypeAndState(TDLinkStyle.danger, state),
               ],
             )),
-        const SizedBox(height: 16),
         Container(
             height: 48,
             color: TDTheme.of(context).bgColorContainer,

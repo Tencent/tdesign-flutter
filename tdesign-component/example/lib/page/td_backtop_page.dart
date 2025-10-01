@@ -139,6 +139,7 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
     final theme = TDTheme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 10,
       children: [
         Container(
           width: 163,
@@ -148,7 +149,6 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
               borderRadius:
                   BorderRadius.circular(theme.radiusExtraLarge)),
         ),
-        const SizedBox(height: 10),
         Container(
           width: 163,
           height: 16,
@@ -157,7 +157,6 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
               borderRadius:
                   BorderRadius.circular(theme.radiusSmall)),
         ),
-        const SizedBox(height: 10),
         Container(
             width: 100,
             height: 16,

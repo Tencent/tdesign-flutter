@@ -204,14 +204,12 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 padding: const EdgeInsets.only(top: 16, bottom: 16),
                 child: const Column(
                   mainAxisSize: MainAxisSize.min,
+                  spacing: 16,
                   children: [
                     TDButton(
                       isBlock: true,
                       text: '填充block按钮',
                       theme: TDButtonTheme.primary,
-                    ),
-                    SizedBox(
-                      height: 16,
                     ),
                     TDButton(
                       isBlock: true,
@@ -219,17 +217,11 @@ class _TDButtonPageState extends State<TDButtonPage> {
                       type: TDButtonType.outline,
                       theme: TDButtonTheme.primary,
                     ),
-                    SizedBox(
-                      height: 16,
-                    ),
                     TDButton(
                       isBlock: true,
                       text: '文字block按钮',
                       type: TDButtonType.text,
                       theme: TDButtonTheme.primary,
-                    ),
-                    SizedBox(
-                      height: 16,
                     ),
                     TDButton(
                       isBlock: true,
@@ -626,35 +618,29 @@ class _TDButtonPageState extends State<TDButtonPage> {
 
   @Demo(group: 'button')
   Widget _buildCombinationButtons(BuildContext context) {
-    return const Row(
-      children: [
-        SizedBox(
-          width: 16,
-        ),
-        Expanded(
-            child: TDButton(
-          text: '填充按钮',
-          size: TDButtonSize.large,
-          type: TDButtonType.fill,
-          shape: TDButtonShape.rectangle,
-          theme: TDButtonTheme.light,
-        )),
-        SizedBox(
-          width: 16,
-        ),
-        Expanded(
-            child: TDButton(
-          text: '填充按钮',
-          size: TDButtonSize.large,
-          type: TDButtonType.fill,
-          shape: TDButtonShape.rectangle,
-          theme: TDButtonTheme.primary,
-        )),
-        SizedBox(
-          width: 16,
-        ),
-      ],
-    );
+    return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          spacing: 16,
+          children: [
+            Expanded(
+                child: TDButton(
+              text: '填充按钮',
+              size: TDButtonSize.large,
+              type: TDButtonType.fill,
+              shape: TDButtonShape.rectangle,
+              theme: TDButtonTheme.light,
+            )),
+            Expanded(
+                child: TDButton(
+              text: '填充按钮',
+              size: TDButtonSize.large,
+              type: TDButtonType.fill,
+              shape: TDButtonShape.rectangle,
+              theme: TDButtonTheme.primary,
+            )),
+          ],
+        ));
   }
 
   @Demo(group: 'button')

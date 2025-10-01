@@ -109,6 +109,7 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
       decoration: const BoxDecoration(color: Colors.blue),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 16,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
@@ -117,7 +118,6 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
                   fontSize: 14,
                 )),
           ),
-          const SizedBox(height: 16),
           displayImageList()
         ],
       ),
