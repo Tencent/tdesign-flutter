@@ -19,7 +19,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.backgroundColor,
     this.titleMargin = 16,
     this.padding,
-    this.height = 44,
+    this.height = 48,
     this.screenAdaptation = true,
     this.useDefaultBack = true,
     this.onBack,
@@ -36,7 +36,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
   /// 右边操作项
   final List<TDNavBarItem>? rightBarItems;
 
-  /// 标题控件，优先级高于title文案
+  /// 标题控件，优先级高于 title 文案
   final Widget? titleWidget;
 
   /// 标题文案
@@ -72,7 +72,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
   /// 高度
   final double height;
 
-  /// 是否进行屏幕适配，默认true
+  /// 是否进行屏幕适配，默认 true
   final bool screenAdaptation;
 
   /// 是否使用默认的返回
@@ -87,7 +87,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
   /// 边框
   final TDNavBarItemBorder? border;
 
-  /// belowTitleWidget navbar 下方的widget
+  /// belowTitleWidget navbar 下方的 widget
   final Widget? belowTitleWidget;
 
   /// 底部阴影
@@ -106,7 +106,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
 class _TDNavBarState extends State<TDNavBar> {
   Widget _addBorder(List<Widget> items) {
     var border = widget.border ?? TDNavBarItemBorder();
-    var borderColor = border.color ?? TDTheme.of(context).grayColor3;
+    var borderColor = border.color ?? TDTheme.of(context).componentStrokeColor;
     var children = <Widget>[];
     for (var i = 0; i < items.length; i++) {
       children.add(items[i]);
@@ -127,7 +127,6 @@ class _TDNavBarState extends State<TDNavBar> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(border.radius),
-        // color: TDTheme.of(context).bgColorContainer,
         border: Border.all(
           color: borderColor,
           width: border.width,
@@ -141,7 +140,8 @@ class _TDNavBarState extends State<TDNavBar> {
 
   Widget get backButton {
     return TDNavBarItem(
-      icon: Icons.chevron_left,
+      icon: TDIcons.chevron_left,
+      iconSize: 28.0,
       action: () {
         widget.onBack?.call();
         Navigator.maybePop(context);
@@ -224,9 +224,10 @@ class _TDNavBarState extends State<TDNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    var bcc = widget.backgroundColor ?? TDTheme.of(context).bgColorContainer;
-    if (bcc != Colors.transparent) {
-      bcc = bcc.withOpacity(widget.opacity);
+    var _backgroundColor =
+        widget.backgroundColor ?? TDTheme.of(context).bgColorContainer;
+    if (_backgroundColor != Colors.transparent) {
+      _backgroundColor = _backgroundColor.withOpacity(widget.opacity);
     }
 
     var paddingTop =
@@ -240,7 +241,7 @@ class _TDNavBarState extends State<TDNavBar> {
         height: widget.height + paddingTop,
         padding: padding.add(EdgeInsets.only(top: paddingTop)),
         decoration: BoxDecoration(
-          color: bcc,
+          color: _backgroundColor,
           boxShadow: widget.boxShadow,
         ),
         child: _getNavbarChild());
@@ -274,7 +275,7 @@ class TDNavBarItem {
   /// 内部填充
   EdgeInsetsGeometry? padding;
 
-  /// 图标组件，优先级高与icon
+  /// 图标组件，优先级高于 icon
   Widget? iconWidget;
 
   TDNavBarItem({
