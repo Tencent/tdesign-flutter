@@ -30,7 +30,7 @@ class TDIndexes extends StatefulWidget {
   /// 索引字符列表。不传默认 A-Z
   final List<String>? indexList;
 
-  /// 索引列表最大高度（父容器高度的百分比，默认0.8）
+  /// 索引列表最大高度（父容器高度的百分比，默认 0.8）
   final double? indexListMaxHeight;
 
   /// 锚点是否吸顶
@@ -58,10 +58,12 @@ class TDIndexes extends StatefulWidget {
   final Widget? Function(BuildContext context, String index) builderContent;
 
   /// 锚点自定义构建
-  final Widget? Function(BuildContext context, String index, bool isPinnedToTop)? builderAnchor;
+  final Widget? Function(
+      BuildContext context, String index, bool isPinnedToTop)? builderAnchor;
 
   /// 索引文本自定义构建，包括索引激活左侧提示
-  final Widget Function(BuildContext context, String index, bool isActive)? builderIndex;
+  final Widget Function(BuildContext context, String index, bool isActive)?
+      builderIndex;
 
   @override
   _TDIndexesState createState() => _TDIndexesState();
@@ -75,10 +77,16 @@ class _TDIndexesState extends State<TDIndexes> {
   final _contentKeys = <String, BuildContext>{};
   var _isAnimating = false;
 
+  /// A-Z 字母字符列表
+  static final List<String> _defaultAZList = List.generate(
+    26,
+        (index) => String.fromCharCode(65 + index),
+  );
+
   @override
   void initState() {
     super.initState();
-    _indexList = widget.indexList ?? _azList();
+    _indexList = widget.indexList ?? _defaultAZList;
     _activeIndex = ValueNotifier(_indexList.getOrNull(0) ?? '');
     _scrollController = widget.scrollController ?? ScrollController();
   }
@@ -87,7 +95,7 @@ class _TDIndexesState extends State<TDIndexes> {
   void didUpdateWidget(TDIndexes oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.indexList != oldWidget.indexList) {
-      _indexList = widget.indexList ?? _azList();
+      _indexList = widget.indexList ?? _defaultAZList;
       _activeIndex = ValueNotifier(_indexList.getOrNull(0) ?? '');
     }
     if (widget.scrollController != oldWidget.scrollController) {
@@ -138,7 +146,9 @@ class _TDIndexesState extends State<TDIndexes> {
       final isPinnedOffset = capsuleTheme && _activeIndex.value == e;
       return SliverStickyHeader.builder(
         sticky: widget.sticky ?? true,
-        pinnedOffset: isPinnedOffset ? TDTheme.of(context).spacer8 + stickyOffset : stickyOffset,
+        pinnedOffset: isPinnedOffset
+            ? TDTheme.of(context).spacer8 + stickyOffset
+            : stickyOffset,
         builder: (context, state) {
           _anchorKeys[e] = context;
           if (state.isPinned && _activeIndex.value != e && !_isAnimating) {
@@ -160,7 +170,9 @@ class _TDIndexesState extends State<TDIndexes> {
             builder: (context) {
               _contentKeys[e] = context;
               return Padding(
-                padding: isPinnedOffset ? EdgeInsets.only(top: TDTheme.of(context).spacer8) : EdgeInsets.zero,
+                padding: isPinnedOffset
+                    ? EdgeInsets.only(top: TDTheme.of(context).spacer8)
+                    : EdgeInsets.zero,
                 child: widget.builderContent(context, e),
               );
             },
@@ -170,14 +182,6 @@ class _TDIndexesState extends State<TDIndexes> {
     }).toList();
   }
 
-  List<String> _azList() {
-    final azList = <String>[];
-    for (var i = 65; i <= 90; i++) {
-      azList.add(String.fromCharCode(i));
-    }
-    return azList;
-  }
-
   void _scrollToTarget(String newIndex, String oldIndex) {
     _isAnimating = true;
 
@@ -185,12 +189,14 @@ class _TDIndexesState extends State<TDIndexes> {
     final isUp = _indexList.indexOf(newIndex) > _indexList.indexOf(oldIndex);
     if (isUp) {
       var index = oldIndex;
-      final contentRenderBox = _contentKeys[index]?.findRenderObject() as RenderBox?;
+      final contentRenderBox =
+          _contentKeys[index]?.findRenderObject() as RenderBox?;
       if (contentRenderBox != null) {
         final contentHeight = contentRenderBox.size.height;
         final maxScrollExtent = _scrollController.position.maxScrollExtent;
-        final targetOffset =
-            contentRenderBox.localToGlobal(Offset(0, contentHeight), ancestor: context.findRenderObject());
+        final targetOffset = contentRenderBox.localToGlobal(
+            Offset(0, contentHeight),
+            ancestor: context.findRenderObject());
         final scrollOffset = targetOffset.dy + _scrollController.offset;
         _scrollController.jumpTo(min(maxScrollExtent, scrollOffset));
       }

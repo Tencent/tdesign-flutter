@@ -55,10 +55,10 @@ class TDIndexesAnchor extends StatelessWidget {
                 border: isPinned
                     ? capsuleTheme
                         ? Border.all(
-                            color: TDTheme.of(context).componentBorderColor)
+                            color: TDTheme.of(context).componentStrokeColor)
                         : Border(
                             bottom: BorderSide(
-                                color: TDTheme.of(context).componentBorderColor,
+                                color: TDTheme.of(context).componentStrokeColor,
                                 width: 0.5))
                     : null,
               ),
@@ -69,7 +69,7 @@ class TDIndexesAnchor extends StatelessWidget {
                     ? TDTheme.of(context).fontMarkMedium
                     : TDTheme.of(context).fontTitleSmall,
                 textColor: isPinned
-                    ? TDTheme.of(context).brandColor7
+                    ? TDTheme.of(context).brandNormalColor
                     : TDTheme.of(context).textColorPrimary,
               ),
             );
