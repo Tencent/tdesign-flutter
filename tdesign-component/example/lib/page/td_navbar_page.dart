@@ -18,47 +18,23 @@ class TDNavBarPage extends StatelessWidget {
         ExampleModule(
           title: '组件类型',
           children: [
-            ExampleItem(
-              desc: '基础H5导航栏',
-              builder: _baseH5Navbar,
-            ),
+            ExampleItem(desc: '基础H5导航栏', builder: _baseH5Navbar),
             ExampleItem(builder: _leftMultiAction),
-            ExampleItem(
-              builder: _rightMultiAction,
-            ),
-            ExampleItem(
-              desc: '带搜索导航栏',
-              builder: _searchNavbar,
-            ),
+            ExampleItem(builder: _rightMultiAction),
+            ExampleItem(desc: '带搜索导航栏', builder: _searchNavbar),
             ExampleItem(desc: '带图片导航栏', builder: _logoNavbar),
           ],
         ),
         ExampleModule(title: '组件样式', children: [
-          ExampleItem(
-            desc: '标题对齐',
-            builder: _titleCenterNavbar,
-          ),
-          ExampleItem(
-            builder: _titleLeftNavbar,
-          ),
-          ExampleItem(
-            desc: '标题尺寸',
-            builder: _titleNormalNavbar,
-          ),
-          ExampleItem(
-            builder: _titleBelowNavbar,
-          ),
-          ExampleItem(
-            desc: '自定义颜色',
-            builder: _setBgColorNavbar,
-          ),
+          ExampleItem(desc: '标题对齐', builder: _titleCenterNavbar),
+          ExampleItem(builder: _titleLeftNavbar),
+          ExampleItem(desc: '标题尺寸', builder: _titleNormalNavbar),
+          ExampleItem(builder: _titleBelowNavbar),
+          ExampleItem(desc: '自定义颜色', builder: _setBgColorNavbar),
         ])
       ],
       test: [
-        ExampleItem(
-          desc: '底部阴影',
-          builder: _shadowNavbar,
-        ),
+        ExampleItem(desc: '底部阴影', builder: _shadowNavbar),
       ],
     );
   }

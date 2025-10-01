@@ -72,8 +72,7 @@ class TDButton extends StatefulWidget {
   /// 主题
   final TDButtonTheme? theme;
 
-  /// 自定义样式，有则优先用它，没有则根据 type 和 theme 选取。
-  /// 如果设置了 style，则 activeStyle 和 disableStyle 也应该设置
+  /// 自定义样式，有则优先用它，没有则根据 type 和 theme 选取。如果设置了 style，则 activeStyle 和 disableStyle 也应该设置
   final TDButtonStyle? style;
 
   /// 自定义点击样式，有则优先用它，没有则根据 type 和 theme 选取
