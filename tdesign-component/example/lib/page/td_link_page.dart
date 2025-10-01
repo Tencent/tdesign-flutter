@@ -16,7 +16,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
         title: tdTitle(),
-        desc: '当功能使用图标即可表意清楚时，可使用纯图标悬浮按钮，例如：添加、发布。',
+        desc: '文字超链接用于跳转一个新页面，如当前项目跳转，友情链接等。',
         exampleCodeGroup: 'link',
         children: [
           ExampleModule(title: '组件类型', children: [
@@ -38,9 +38,10 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   @Demo(group: 'link')
   Widget _basicTypeBasic(BuildContext context) {
     return Container(
+        height: 48,
         color: TDTheme.of(context).bgColorContainer,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: _buildLinksWithType(TDLinkType.basic),
         ));
   }
@@ -53,18 +54,11 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
         type: type,
         size: TDLinkSize.small,
       ),
-      const SizedBox(
-        height: 48,
-        width: 80,
-      ),
       TDLink(
         label: '跳转链接',
         style: TDLinkStyle.defaultStyle,
         type: type,
         size: TDLinkSize.small,
-      ),
-      const SizedBox(
-        height: 16,
       ),
     ];
   }
@@ -72,9 +66,10 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   @Demo(group: 'link')
   Widget _withUnderline(BuildContext context) {
     return Container(
+        height: 48,
         color: TDTheme.of(context).bgColorContainer,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: _buildLinksWithType(TDLinkType.withUnderline),
         ));
   }
@@ -82,9 +77,10 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   @Demo(group: 'link')
   Widget _withSuffixIcon(BuildContext context) {
     return Container(
+        height: 48,
         color: TDTheme.of(context).bgColorContainer,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: _buildLinksWithType(TDLinkType.withSuffixIcon),
         ));
   }
@@ -92,9 +88,10 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   @Demo(group: 'link')
   Widget _withPrefixIcon(BuildContext context) {
     return Container(
+        height: 48,
         color: TDTheme.of(context).bgColorContainer,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: _buildLinksWithType(TDLinkType.withPrefixIcon),
         ));
   }
@@ -113,25 +110,24 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
     return Column(
       children: [
         Container(
+            height: 48,
             color: TDTheme.of(context).bgColorContainer,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildLinkWithTypeAndState(TDLinkStyle.primary, state),
-                const SizedBox(height: 48, width: 50),
                 _buildLinkWithTypeAndState(TDLinkStyle.defaultStyle, state),
-                const SizedBox(height: 48, width: 50),
                 _buildLinkWithTypeAndState(TDLinkStyle.danger, state),
               ],
             )),
         const SizedBox(height: 16),
         Container(
+            height: 48,
             color: TDTheme.of(context).bgColorContainer,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildLinkWithTypeAndState(TDLinkStyle.warning, state),
-                const SizedBox(height: 48, width: 50),
                 _buildLinkWithTypeAndState(TDLinkStyle.success, state),
               ],
             )),
@@ -152,14 +148,13 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
   @Demo(group: 'link')
   Widget _buildLinkSizes(BuildContext context) {
     return Container(
+        height: 48,
         color: TDTheme.of(context).bgColorContainer,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.small),
-            const SizedBox(height: 48, width: 40),
             _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.medium),
-            const SizedBox(height: 48, width: 40),
             _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.large),
           ],
         ));

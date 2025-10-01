@@ -125,49 +125,33 @@ class TDLink extends StatelessWidget {
     if (color != null) {
       return color!;
     }
-    // to refactor: use map instead of multi level switch
-    switch (state) {
-      case TDLinkState.normal:
-        switch (style) {
-          case TDLinkStyle.primary:
-            return TDTheme.of(context).brandNormalColor;
-          case TDLinkStyle.danger:
-            return TDTheme.of(context).errorColor6;
-          case TDLinkStyle.warning:
-            return TDTheme.of(context).warningColor5;
-          case TDLinkStyle.success:
-            return TDTheme.of(context).successColor5;
-          case TDLinkStyle.defaultStyle:
-            return TDTheme.of(context).textColorPrimary;
-        }
 
-      case TDLinkState.active:
-        switch (style) {
-          case TDLinkStyle.primary:
-            return TDTheme.of(context).brandClickColor;
-          case TDLinkStyle.danger:
-            return TDTheme.of(context).errorColor7;
-          case TDLinkStyle.warning:
-            return TDTheme.of(context).warningColor6;
-          case TDLinkStyle.success:
-            return TDTheme.of(context).successColor6;
-          case TDLinkStyle.defaultStyle:
-            return TDTheme.of(context).brandClickColor;
-        }
-      case TDLinkState.disabled:
-        switch (style) {
-          case TDLinkStyle.primary:
-            return TDTheme.of(context).brandDisabledColor;
-          case TDLinkStyle.danger:
-            return TDTheme.of(context).errorDisabledColor;
-          case TDLinkStyle.warning:
-            return TDTheme.of(context).warningDisabledColor;
-          case TDLinkStyle.success:
-            return TDTheme.of(context).successDisabledColor;
-          case TDLinkStyle.defaultStyle:
-            return TDTheme.of(context).textColorDisabled;
-        }
-    }
+    final theme = TDTheme.of(context);
+    final colorMap = <TDLinkState, Map<TDLinkStyle, Color>>{
+      TDLinkState.normal: {
+        TDLinkStyle.primary: theme.brandNormalColor,
+        TDLinkStyle.danger: theme.errorNormalColor,
+        TDLinkStyle.warning: theme.warningNormalColor,
+        TDLinkStyle.success: theme.successNormalColor,
+        TDLinkStyle.defaultStyle: theme.textColorPrimary,
+      },
+      TDLinkState.active: {
+        TDLinkStyle.primary: theme.brandClickColor,
+        TDLinkStyle.danger: theme.errorClickColor,
+        TDLinkStyle.warning: theme.warningClickColor,
+        TDLinkStyle.success: theme.successClickColor,
+        TDLinkStyle.defaultStyle: theme.brandClickColor,
+      },
+      TDLinkState.disabled: {
+        TDLinkStyle.primary: theme.brandDisabledColor,
+        TDLinkStyle.danger: theme.errorDisabledColor,
+        TDLinkStyle.warning: theme.warningDisabledColor,
+        TDLinkStyle.success: theme.successDisabledColor,
+        TDLinkStyle.defaultStyle: theme.textColorDisabled,
+      },
+    };
+
+    return colorMap[state]?[style] ?? theme.textColorPrimary;
   }
 
   Widget _getDefaultIcon(BuildContext context) {
@@ -242,7 +226,7 @@ class TDLink extends StatelessWidget {
     }
     switch (size) {
       case TDLinkSize.large:
-        return 14.64;
+        return 8;
       case TDLinkSize.small:
         return 6.05;
       case TDLinkSize.medium:
@@ -256,7 +240,7 @@ class TDLink extends StatelessWidget {
     }
     switch (size) {
       case TDLinkSize.large:
-        return 15.37;
+        return 8;
       case TDLinkSize.small:
         return 6.63;
       case TDLinkSize.medium:
