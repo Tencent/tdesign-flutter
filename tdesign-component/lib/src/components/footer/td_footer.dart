@@ -49,38 +49,29 @@ class TDFooter extends StatefulWidget {
 class _TDFooterState extends State<TDFooter> {
   @override
   Widget build(BuildContext context) {
+    var children = <Widget>[];
+
     switch (widget.type) {
       case TDFooterType.text:
-        return Container(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _renderText(),
-            ],
-          ),
-        );
+        children = [_renderText()];
+        break;
       case TDFooterType.link:
-        return Container(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (widget.links.isNotEmpty) _renderLinks() else _renderText(),
-            ],
-          ),
-        );
+        children = [
+          if (widget.links.isNotEmpty) _renderLinks() else _renderText()
+        ];
+        break;
       case TDFooterType.brand:
-        return Container(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (widget.logo != null) _renderLogo() else _renderText(),
-            ],
-          ),
-        );
+        children = [if (widget.logo != null) _renderLogo() else _renderText()];
+        break;
     }
+
+    return Container(
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: children,
+      ),
+    );
   }
 
   Widget _renderLogo() {
