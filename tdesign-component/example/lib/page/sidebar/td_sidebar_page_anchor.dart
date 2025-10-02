@@ -155,14 +155,16 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  controller: _demoScroller,
-                  child: Column(
-                    children: [
-                      ...pages,
-                      Container(height: demoHeight - itemHeight)
-                    ],
-                  ),
-                ),
+                    controller: _demoScroller,
+                    child: Container(
+                      color: TDTheme.of(context).bgColorContainer,
+                      child: Column(
+                        children: [
+                          ...pages,
+                          Container(height: demoHeight - itemHeight)
+                        ],
+                      ),
+                    )),
               )
             ],
           ),
