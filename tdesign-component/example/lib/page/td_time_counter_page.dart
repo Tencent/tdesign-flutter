@@ -12,286 +12,141 @@ class TDTimeCounterPage extends StatelessWidget {
       title: tdTitle(context),
       desc: '用于实时展示计时数值。',
       exampleCodeGroup: 'timeCounter',
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
       children: [
-        ExampleModule(title: '组件类型', children: [
-          ExampleItem(
-            ignoreCode: true,
-            desc: '时分秒',
-            center: false,
-            builder: (BuildContext context) {
-              return const CodeWrapper(builder: _buildSimple);
-            },
-          ),
-          ExampleItem(
-            ignoreCode: true,
-            desc: '带毫秒',
-            center: false,
-            builder: (BuildContext context) {
-              return const CodeWrapper(builder: _buildMillisecondSimple);
-            },
-          ),
-          ExampleItem(
-            ignoreCode: true,
-            desc: '正向计时',
-            center: false,
-            builder: (BuildContext context) {
-              return const CodeWrapper(builder: _buildUpSimple);
-            },
-          ),
-          ExampleItem(
-            ignoreCode: true,
-            desc: '带方形底',
-            center: false,
-            builder: (BuildContext context) {
-              return const CodeWrapper(builder: _buildSquareSimple);
-            },
-          ),
-          ExampleItem(
-            ignoreCode: true,
-            desc: '带圆形底',
-            center: false,
-            builder: (BuildContext context) {
-              return const CodeWrapper(builder: _buildRoundSimple);
-            },
-          ),
-          ExampleItem(
-            ignoreCode: true,
-            desc: '带单位',
-            center: false,
-            builder: (BuildContext context) {
-              return const CodeWrapper(builder: _buildUnitSimple);
-            },
-          ),
-          ExampleItem(
-            ignoreCode: true,
-            desc: '无底色带单位',
-            center: false,
-            builder: (BuildContext context) {
-              return const CodeWrapper(builder: _buildCustomUnitSimple);
-            },
-          ),
+        const ExampleModule(title: '组件类型', children: [
+          ExampleItem(desc: '时分秒', builder: _buildSimple),
+          ExampleItem(desc: '带毫秒', builder: _buildMillisecondSimple),
+          ExampleItem(desc: '正向计时', builder: _buildUpSimple),
+          ExampleItem(desc: '带方形底', builder: _buildSquareSimple),
+          ExampleItem(desc: '带圆形底', builder: _buildRoundSimple),
+          ExampleItem(desc: '带单位', builder: _buildUnitSimple),
+          ExampleItem(desc: '无底色带单位', builder: _buildCustomUnitSimple),
         ]),
         ExampleModule(title: '组件尺寸', children: [
           ExampleItem(
             ignoreCode: true,
             desc: '纯数字',
-            center: false,
             builder: (BuildContext context) {
-              return Container(
-                alignment: Alignment.topLeft,
-                child:
-                    const Wrap(spacing: 8, direction: Axis.vertical, children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('小'),
-                      ),
-                      CodeWrapper(builder: _buildSmallSize),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('中'),
-                      ),
-                      CodeWrapper(builder: _buildMediumSize),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('大'),
-                      ),
-                      CodeWrapper(builder: _buildLargeSize),
-                    ],
-                  ),
-                ]),
+              return const Wrap(
+                direction: Axis.vertical,
+                spacing: 16,
+                children: [
+                  Row(spacing: 40, children: [
+                    Text('小'),
+                    CodeWrapper(builder: _buildSmallSize),
+                  ]),
+                  Row(spacing: 40, children: [
+                    Text('中'),
+                    CodeWrapper(builder: _buildMediumSize)
+                  ]),
+                  Row(spacing: 40, children: [
+                    Text('大'),
+                    CodeWrapper(builder: _buildLargeSize),
+                  ]),
+                ],
               );
             },
           ),
           ExampleItem(
             ignoreCode: true,
             desc: '带方形底',
-            center: false,
             builder: (BuildContext context) {
-              return Container(
-                alignment: Alignment.topLeft,
-                child:
-                    const Wrap(spacing: 8, direction: Axis.vertical, children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('小'),
-                      ),
+              return const Wrap(
+                  direction: Axis.vertical,
+                  spacing: 16,
+                  children: [
+                    Row(spacing: 40, children: [
+                      Text('小'),
                       CodeWrapper(builder: _buildSquareSmallSize),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('中'),
-                      ),
+                    ]),
+                    Row(spacing: 40, children: [
+                      Text('中'),
                       CodeWrapper(builder: _buildSquareMediumSize),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('大'),
-                      ),
+                    ]),
+                    Row(spacing: 40, children: [
+                      Text('大'),
                       CodeWrapper(builder: _buildSquareLargeSize),
-                    ],
-                  ),
-                ]),
-              );
+                    ]),
+                  ]);
             },
           ),
           ExampleItem(
             ignoreCode: true,
             desc: '带圆形底',
-            center: false,
             builder: (BuildContext context) {
-              return Container(
-                alignment: Alignment.topLeft,
-                child:
-                    const Wrap(spacing: 8, direction: Axis.vertical, children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('小'),
-                      ),
+              return const Wrap(
+                  direction: Axis.vertical,
+                  spacing: 16,
+                  children: [
+                    Row(spacing: 40, children: [
+                      Text('小'),
                       CodeWrapper(builder: _buildRoundSmallSize),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('中'),
-                      ),
-                      CodeWrapper(builder: _buildRoundMediumSize),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('大'),
-                      ),
+                    ]),
+                    Row(
+                      spacing: 40,
+                      children: [
+                        Text('中'),
+                        CodeWrapper(builder: _buildRoundMediumSize),
+                      ],
+                    ),
+                    Row(spacing: 40, children: [
+                      Text('大'),
                       CodeWrapper(builder: _buildRoundLargeSize),
-                    ],
-                  ),
-                ]),
-              );
+                    ]),
+                  ]);
             },
           ),
           ExampleItem(
             ignoreCode: true,
             desc: '带单位',
-            center: false,
             builder: (BuildContext context) {
-              return Container(
-                alignment: Alignment.topLeft,
-                child:
-                    const Wrap(spacing: 8, direction: Axis.vertical, children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('小'),
-                      ),
+              return const Wrap(
+                  direction: Axis.vertical,
+                  spacing: 16,
+                  children: [
+                    Row(spacing: 40, children: [
+                      Text('小'),
                       CodeWrapper(builder: _buildUnitSmallSize),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('中'),
-                      ),
+                    ]),
+                    Row(spacing: 40, children: [
+                      Text('中'),
                       CodeWrapper(builder: _buildUnitMediumSize),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('大'),
-                      ),
+                    ]),
+                    Row(spacing: 40, children: [
+                      Text('大'),
                       CodeWrapper(builder: _buildUnitLargeSize),
-                    ],
-                  ),
-                ]),
-              );
+                    ]),
+                  ]);
             },
           ),
           ExampleItem(
             ignoreCode: true,
             desc: '无底色带单位',
-            center: false,
             builder: (BuildContext context) {
-              return Container(
-                alignment: Alignment.topLeft,
-                child:
-                    const Wrap(spacing: 8, direction: Axis.vertical, children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('小'),
-                      ),
+              return const Wrap(
+                  spacing: 8,
+                  direction: Axis.vertical,
+                  children: [
+                    Row(spacing: 40, children: [
+                      Text('小'),
                       CodeWrapper(builder: _buildCustomUnitSmallSize),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('中'),
-                      ),
+                    ]),
+                    Row(spacing: 40, children: [
+                      Text('中'),
                       CodeWrapper(builder: _buildCustomUnitMediumSize),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: Text('大'),
-                      ),
+                    ]),
+                    Row(spacing: 40, children: [
+                      Text('大'),
                       CodeWrapper(builder: _buildCustomUnitLargeSize),
-                    ],
-                  ),
-                ]),
-              );
+                    ]),
+                  ]);
             },
           ),
         ]),
       ],
-      test: [
-        ExampleItem(
-          ignoreCode: true,
-          desc: '控制倒计时',
-          center: false,
-          builder: (BuildContext context) {
-            return const CodeWrapper(builder: _buildControl);
-          },
-        ),
-        ExampleItem(
-          ignoreCode: true,
-          desc: '自定义显示位数',
-          center: false,
-          builder: (BuildContext context) {
-            return const CodeWrapper(builder: _buildCustomNum);
-          },
-        ),
+      test: const [
+        ExampleItem(desc: '控制倒计时', builder: _buildControl),
+        ExampleItem(desc: '自定义显示位数', builder: _buildCustomNum),
       ],
     );
   }
@@ -304,7 +159,10 @@ TDTimeCounter _buildSimple(BuildContext context) {
 
 @Demo(group: 'timeCounter')
 TDTimeCounter _buildMillisecondSimple(BuildContext context) {
-  return const TDTimeCounter(time: 60 * 60 * 1000, millisecond: true);
+  return const TDTimeCounter(
+    time: 60 * 60 * 1000,
+    millisecond: true,
+  );
 }
 
 @Demo(group: 'timeCounter')
@@ -319,28 +177,37 @@ TDTimeCounter _buildUpSimple(BuildContext context) {
 @Demo(group: 'timeCounter')
 TDTimeCounter _buildSquareSimple(BuildContext context) {
   return const TDTimeCounter(
-      time: 60 * 60 * 1000, theme: TDTimeCounterTheme.square);
+    time: 60 * 60 * 1000,
+    theme: TDTimeCounterTheme.square,
+  );
 }
 
 @Demo(group: 'timeCounter')
 TDTimeCounter _buildRoundSimple(BuildContext context) {
   return const TDTimeCounter(
-      time: 60 * 60 * 1000, theme: TDTimeCounterTheme.round);
+    time: 60 * 60 * 1000,
+    theme: TDTimeCounterTheme.round,
+  );
 }
 
 @Demo(group: 'timeCounter')
 TDTimeCounter _buildUnitSimple(BuildContext context) {
   return const TDTimeCounter(
-      time: 60 * 60 * 1000,
-      theme: TDTimeCounterTheme.square,
-      splitWithUnit: true);
+    time: 60 * 60 * 1000,
+    theme: TDTimeCounterTheme.square,
+    splitWithUnit: true,
+  );
 }
 
 @Demo(group: 'timeCounter')
 TDTimeCounter _buildCustomUnitSimple(BuildContext context) {
   var style = TDTimeCounterStyle.generateStyle(context);
-  style.timeColor = TDTheme.of(context).errorColor6;
-  return TDTimeCounter(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
+  style.timeColor = TDTheme.of(context).errorNormalColor;
+  return TDTimeCounter(
+    time: 60 * 60 * 1000,
+    splitWithUnit: true,
+    style: style,
+  );
 }
 
 @Demo(group: 'timeCounter')
@@ -455,7 +322,7 @@ TDTimeCounter _buildUnitLargeSize(BuildContext context) {
 TDTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
   var style =
       TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.small);
-  style.timeColor = TDTheme.of(context).errorColor6;
+  style.timeColor = TDTheme.of(context).errorNormalColor;
   return TDTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
@@ -467,7 +334,7 @@ TDTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
 TDTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
   var style =
       TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.medium);
-  style.timeColor = TDTheme.of(context).errorColor6;
+  style.timeColor = TDTheme.of(context).errorNormalColor;
   return TDTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
@@ -479,7 +346,7 @@ TDTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
 TDTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
   var style =
       TDTimeCounterStyle.generateStyle(context, size: TDTimeCounterSize.large);
-  style.timeColor = TDTheme.of(context).errorColor6;
+  style.timeColor = TDTheme.of(context).errorNormalColor;
   return TDTimeCounter(
     time: 60 * 60 * 1000,
     splitWithUnit: true,
@@ -492,58 +359,44 @@ Widget _buildControl(BuildContext context) {
   var controller = TDTimeCounterController();
   return Wrap(
     direction: Axis.vertical,
+    crossAxisAlignment: WrapCrossAlignment.center,
     spacing: 8,
     children: [
-      Wrap(
-        spacing: 8,
-        children: [
-          TDButton(
-            text: '开始',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
-            onTap: () {
-              controller.start();
-            },
-          ),
-          TDButton(
-            text: '结束',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
-            onTap: () {
-              controller.reset(0);
-            },
-          ),
-          TDButton(
-            text: '重置',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
-            onTap: () {
-              controller.reset();
-            },
-          ),
-          TDButton(
-            text: '暂停',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
-            onTap: () {
-              controller.pause();
-            },
-          ),
-          TDButton(
-            text: '继续',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
-            onTap: () {
-              controller.resume();
-            },
-          ),
-        ],
-      ),
       TDTimeCounter(
         time: 60 * 60 * 1000,
         controller: controller,
         // autoStart: false,
       ),
+      Wrap(
+        spacing: 8,
+        children: [
+          TDButton(
+            text: '开始',
+            theme: TDButtonTheme.primary,
+            onTap: () => controller.start(),
+          ),
+          TDButton(
+            text: '结束',
+            theme: TDButtonTheme.primary,
+            onTap: () => controller.reset(0),
+          ),
+          TDButton(
+            text: '重置',
+            theme: TDButtonTheme.primary,
+            onTap: () => controller.reset(),
+          ),
+          TDButton(
+            text: '暂停',
+            theme: TDButtonTheme.primary,
+            onTap: () => controller.pause(),
+          ),
+          TDButton(
+            text: '继续',
+            theme: TDButtonTheme.primary,
+            onTap: () => controller.resume(),
+          ),
+        ],
+      )
     ],
   );
 }

@@ -159,19 +159,19 @@ class TDTimeCounterStyle {
       case TDTimeCounterTheme.round:
         timeBox = BoxDecoration(
           shape: BoxShape.circle,
-          color: TDTheme.of(context).errorColor6,
+          color: TDTheme.of(context).errorNormalColor,
         );
-        timeColor = TDTheme.of(context).fontWhColor1;
-        splitColor = TDTheme.of(context).errorColor6;
+        timeColor = TDTheme.of(context).textColorAnti;
+        splitColor = TDTheme.of(context).errorNormalColor;
         break;
       case TDTimeCounterTheme.square:
         timeBox = BoxDecoration(
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(TDTheme.of(context).radiusSmall),
-          color: TDTheme.of(context).errorColor6,
+          color: TDTheme.of(context).errorNormalColor,
         );
-        timeColor = TDTheme.of(context).fontWhColor1;
-        splitColor = TDTheme.of(context).errorColor6;
+        timeColor = TDTheme.of(context).textColorAnti;
+        splitColor = TDTheme.of(context).errorNormalColor;
         break;
       case TDTimeCounterTheme.defaultTheme:
         timeBox = null;
