@@ -14,13 +14,20 @@ abstract class TDLabelWidget extends Widget {
 }
 
 class TDTextLabel extends Text implements TDLabelWidget {
-  const TDTextLabel(String data, {Key? key, TextStyle? style})
-      : super(data, key: key, style: style);
+  const TDTextLabel(
+    String data, {
+    Key? key,
+    TextStyle? style,
+  }) : super(data, key: key, style: style);
 }
 
 class TDIconLabel extends Icon implements TDLabelWidget {
-  const TDIconLabel(IconData icon, {Key? key, double? size, Color? color})
-      : super(icon, key: key, size: size, color: color);
+  const TDIconLabel(
+    IconData icon, {
+    Key? key,
+    double? size,
+    Color? color,
+  }) : super(icon, key: key, size: size, color: color);
 }
 
 class TDProgress extends StatelessWidget {
@@ -52,7 +59,7 @@ class TDProgress extends StatelessWidget {
   /// 进度条类型
   final TDProgressType type;
 
-  /// 进度值 (0.0 到 1.0 之间的正数)
+  /// 进度值（0.0 到 1.0 之间的正数）
   final double? value;
 
   /// 进度条标签
@@ -64,7 +71,7 @@ class TDProgress extends StatelessWidget {
   /// 标签显示位置
   final TDProgressLabelPosition progressLabelPosition;
 
-  /// 进度条粗细 (正数)
+  /// 进度条粗细（正数）
   final double? strokeWidth;
 
   /// 进度条颜色
@@ -76,7 +83,7 @@ class TDProgress extends StatelessWidget {
   /// 条形进度条末端形状
   final BorderRadiusGeometry? linearBorderRadius;
 
-  /// 环形进度条半径 (正数)
+  /// 环形进度条半径（正数）
   final double? circleRadius;
 
   /// 是否显示标签
@@ -97,7 +104,7 @@ class TDProgress extends StatelessWidget {
   /// 长按事件
   final VoidCallback? onLongPress;
 
-  /// 动画持续时间 (正整数，单位为毫秒)
+  /// 动画持续时间（正整数，单位为毫秒）
   final int? animationDuration;
 
   static double? _validateProgress(double? value) =>
@@ -458,7 +465,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
               alignment: Alignment.centerRight,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: _buildLabelWidget(TDTheme.of(context).fontWhColor1),
+                child: _buildLabelWidget(TDTheme.of(context).textColorAnti),
               ),
             )
           : null,
