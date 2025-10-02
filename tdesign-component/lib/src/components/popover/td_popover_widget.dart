@@ -63,22 +63,23 @@ typedef OnTap = Function(String? content);
 typedef OnLongTap = Function(String? content);
 
 class TDPopoverWidget extends StatefulWidget {
-  const TDPopoverWidget(
-      {super.key,
-      required this.context,
-      this.content,
-      this.contentWidget,
-      this.offset = 4,
-      this.theme,
-      this.placement,
-      this.showArrow = true,
-      this.arrowSize = 8,
-      this.padding,
-      this.width,
-      this.height,
-      this.onTap,
-      this.onLongTap,
-      this.radius});
+  const TDPopoverWidget({
+    super.key,
+    required this.context,
+    this.content,
+    this.contentWidget,
+    this.offset = 4,
+    this.theme,
+    this.placement,
+    this.showArrow = true,
+    this.arrowSize = 8,
+    this.padding,
+    this.width,
+    this.height,
+    this.onTap,
+    this.onLongTap,
+    this.radius,
+  });
 
   /// 上下文
   final BuildContext context;
@@ -151,65 +152,77 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
   Widget _drawArrow() {
     var border = Border(
         right: BorderSide(
-            width: widget.arrowSize,
-            color: Colors.transparent,
-            style: BorderStyle.solid),
+          width: widget.arrowSize,
+          color: Colors.transparent,
+          style: BorderStyle.solid,
+        ),
         bottom: BorderSide(
-            width: widget.arrowSize,
-            color: _backgroundColor,
-            style: BorderStyle.solid),
+          width: widget.arrowSize,
+          color: _backgroundColor,
+          style: BorderStyle.solid,
+        ),
         left: BorderSide(
-            width: widget.arrowSize,
-            color: Colors.transparent,
-            style: BorderStyle.solid));
+          width: widget.arrowSize,
+          color: Colors.transparent,
+          style: BorderStyle.solid,
+        ));
     if (widget.placement == TDPopoverPlacement.bottom ||
         widget.placement == TDPopoverPlacement.bottomLeft ||
         widget.placement == TDPopoverPlacement.bottomRight) {
       border = Border(
           top: BorderSide(
-              width: widget.arrowSize,
-              color: _backgroundColor,
-              style: BorderStyle.solid),
+            width: widget.arrowSize,
+            color: _backgroundColor,
+            style: BorderStyle.solid,
+          ),
           right: BorderSide(
-              width: widget.arrowSize,
-              color: Colors.transparent,
-              style: BorderStyle.solid),
+            width: widget.arrowSize,
+            color: Colors.transparent,
+            style: BorderStyle.solid,
+          ),
           left: BorderSide(
-              width: widget.arrowSize,
-              color: Colors.transparent,
-              style: BorderStyle.solid));
+            width: widget.arrowSize,
+            color: Colors.transparent,
+            style: BorderStyle.solid,
+          ));
     } else if (widget.placement == TDPopoverPlacement.left ||
         widget.placement == TDPopoverPlacement.leftTop ||
         widget.placement == TDPopoverPlacement.leftBottom) {
       border = Border(
           top: BorderSide(
-              width: widget.arrowSize,
-              color: Colors.transparent,
-              style: BorderStyle.solid),
+            width: widget.arrowSize,
+            color: Colors.transparent,
+            style: BorderStyle.solid,
+          ),
           bottom: BorderSide(
-              width: widget.arrowSize,
-              color: Colors.transparent,
-              style: BorderStyle.solid),
+            width: widget.arrowSize,
+            color: Colors.transparent,
+            style: BorderStyle.solid,
+          ),
           right: BorderSide(
-              width: widget.arrowSize,
-              color: _backgroundColor,
-              style: BorderStyle.solid));
+            width: widget.arrowSize,
+            color: _backgroundColor,
+            style: BorderStyle.solid,
+          ));
     } else if (widget.placement == TDPopoverPlacement.right ||
         widget.placement == TDPopoverPlacement.rightTop ||
         widget.placement == TDPopoverPlacement.rightBottom) {
       border = Border(
           top: BorderSide(
-              width: widget.arrowSize,
-              color: Colors.transparent,
-              style: BorderStyle.solid),
+            width: widget.arrowSize,
+            color: Colors.transparent,
+            style: BorderStyle.solid,
+          ),
           bottom: BorderSide(
-              width: widget.arrowSize,
-              color: Colors.transparent,
-              style: BorderStyle.solid),
+            width: widget.arrowSize,
+            color: Colors.transparent,
+            style: BorderStyle.solid,
+          ),
           left: BorderSide(
-              width: widget.arrowSize,
-              color: _backgroundColor,
-              style: BorderStyle.solid));
+            width: widget.arrowSize,
+            color: _backgroundColor,
+            style: BorderStyle.solid,
+          ));
     }
     return Container(
       width: 0,
@@ -318,6 +331,7 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
   }
 
   /// 获取箭头Widget
+  /// todo 通过 CustomPainter 绘制箭头进行优化
   Widget _getArrowWidget() {
     var margin = EdgeInsets.only(top: widget.arrowSize);
     switch (widget.placement) {
