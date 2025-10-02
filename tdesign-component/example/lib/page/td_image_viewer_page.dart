@@ -4,9 +4,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-List<TDActionSheetItem> actionSheetItems = [
+final List<TDActionSheetItem> actionSheetItems = [
   TDActionSheetItem(label: '保存图片', icon: const Icon(TDIcons.save)),
   TDActionSheetItem(label: '删除图片', icon: const Icon(TDIcons.delete)),
+];
+
+final List<String> images = [
+  'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
+  'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
 ];
 
 class TDImageViewerPage extends StatefulWidget {
@@ -38,11 +43,6 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
     );
   }
 
-  var images = [
-    'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
-    'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
-  ];
-
   @Demo(group: 'image_viewer')
   Widget _basicImageViewer(BuildContext context) {
     return TDButton(
@@ -59,10 +59,6 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
 
   @Demo(group: 'image_viewer')
   Widget _actionImageViewer(BuildContext context) {
-    var delImages = [
-      'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
-      'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
-    ];
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -72,7 +68,7 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
       onTap: () {
         TDImageViewer.showImageViewer(
           context: context,
-          images: delImages,
+          images: images,
           showIndex: true,
           deleteBtn: true,
         );
@@ -160,11 +156,6 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
 
   @Demo(group: 'image_viewer')
   Widget _descImageViewer(BuildContext context) {
-    var delImages = [
-      'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
-      'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
-    ];
-    var labels = ['图片标题1', '图片标题2'];
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -174,8 +165,8 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
       onTap: () {
         TDImageViewer.showImageViewer(
           context: context,
-          images: delImages,
-          labels: labels,
+          images: images,
+          labels: ['图片标题1', '图片标题2'],
         );
       },
     );
