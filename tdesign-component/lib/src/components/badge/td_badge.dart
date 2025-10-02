@@ -40,20 +40,21 @@ enum TDBadgeSize {
 }
 
 class TDBadge extends StatefulWidget {
-  const TDBadge(this.type,
-      {Key? key,
-      this.count,
-      this.maxCount = '99',
-      this.border = TDBadgeBorder.large,
-      this.size = TDBadgeSize.small,
-      this.color,
-      this.textColor,
-      this.message,
-      this.widthLarge = 32,
-      this.widthSmall = 12,
-      this.padding,
-      this.showZero = true})
-      : super(key: key);
+  const TDBadge(
+    this.type, {
+    Key? key,
+    this.count,
+    this.maxCount = '99',
+    this.border = TDBadgeBorder.large,
+    this.size = TDBadgeSize.small,
+    this.color,
+    this.textColor,
+    this.message,
+    this.widthLarge = 32,
+    this.widthSmall = 12,
+    this.padding,
+    this.showZero = true,
+  }) : super(key: key);
 
   /// 红点数量
   final String? count;
@@ -132,26 +133,33 @@ class _TDBadgeState extends State<TDBadge> {
     }
   }
 
-  bool isVisible() {
-    var value = getValue();
-    try {
-      return widget.showZero || double.parse(value) != 0;
-    } catch (e) {
-      return true;
-    }
+  bool get visible {
+    final parsedValue = double.tryParse(value);
+    return widget.showZero ||
+        (parsedValue != null && parsedValue != 0) ||
+        parsedValue == null;
   }
 
-  String getValue() {
-    return ((widget.message ?? '').isNotEmpty
-        ? widget.message
-        : (widget.count ?? '').isNotEmpty
-            ? widget.count
-            : context.resource.badgeZero) as String;
+  String get value {
+    return widget.message ?? widget.count ?? context.resource.badgeZero;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    updateBadgeNum(widget.count);
+  }
+
+  @override
+  void didUpdateWidget(covariant TDBadge oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.count != widget.count) {
+      updateBadgeNum(widget.count);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    updateBadgeNum(widget.count);
     switch (widget.type) {
       case TDBadgeType.redPoint:
         return Container(
@@ -164,13 +172,14 @@ class _TDBadgeState extends State<TDBadge> {
         );
       case TDBadgeType.message:
         return Visibility(
-            visible: isVisible(),
+            visible: visible,
             child: badgeNum.length == 1
                 ? Container(
                     height: getBadgeSize(),
                     width: getBadgeSize(),
                     decoration: BoxDecoration(
-                      color: widget.color ?? TDTheme.of(context).errorNormalColor,
+                      color:
+                          widget.color ?? TDTheme.of(context).errorNormalColor,
                       borderRadius: BorderRadius.circular(getBadgeSize() / 2),
                     ),
                     child: Center(
@@ -188,7 +197,8 @@ class _TDBadgeState extends State<TDBadge> {
                     height: getBadgeSize(),
                     padding: const EdgeInsets.only(left: 5, right: 5),
                     decoration: BoxDecoration(
-                      color: widget.color ?? TDTheme.of(context).errorNormalColor,
+                      color:
+                          widget.color ?? TDTheme.of(context).errorNormalColor,
                       borderRadius: BorderRadius.circular(getBadgeSize() / 2),
                     ),
                     child: Center(
@@ -229,7 +239,7 @@ class _TDBadgeState extends State<TDBadge> {
         );
       case TDBadgeType.bubble:
         return Visibility(
-            visible: isVisible(),
+            visible: visible,
             child: Container(
               height: 16,
               padding: const EdgeInsets.only(left: 4, right: 4),
@@ -255,7 +265,7 @@ class _TDBadgeState extends State<TDBadge> {
             ));
       case TDBadgeType.square:
         return Visibility(
-            visible: isVisible(),
+            visible: visible,
             child: IntrinsicWidth(
                 child: Container(
               height: getBadgeSize(),
@@ -296,6 +306,7 @@ class TrapezoidPath extends CustomClipper<Path> {
     path.lineTo(widthLarge, widthSmall);
     path.lineTo(widthLarge, widthLarge);
     path.lineTo(0, 0);
+    path.close();
     return path;
   }
 
