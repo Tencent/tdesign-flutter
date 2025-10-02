@@ -421,7 +421,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   Widget _buildVBasicSteps(BuildContext context) {
     return TDSteps(
       steps: [
-        TDStepsItemData(title: 'Filish', content: 'Customize content'),
+        TDStepsItemData(title: 'Finish', content: 'Customize content'),
         TDStepsItemData(title: 'Process', content: 'Customize content'),
         TDStepsItemData(title: 'Default', content: 'Customize content'),
         TDStepsItemData(title: 'Default', content: 'Customize content'),
@@ -438,7 +438,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
     return TDSteps(
       steps: [
         TDStepsItemData(
-          title: 'Filish',
+          title: 'Finish',
           content: 'Customize content',
           successIcon: TDIcons.cart,
         ),
@@ -470,7 +470,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
     return TDSteps(
       steps: [
         TDStepsItemData(
-          title: 'Filish',
+          title: 'Finish',
           content: 'Customize content',
           successIcon: TDIcons.cart,
         ),
@@ -502,7 +502,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   Widget _buildVErrorBasicSteps(BuildContext context) {
     return TDSteps(
       steps: [
-        TDStepsItemData(title: 'Filish', content: 'Customize content'),
+        TDStepsItemData(title: 'Finish', content: 'Customize content'),
         TDStepsItemData(title: 'Process', content: 'Customize content'),
         TDStepsItemData(title: 'Default', content: 'Customize content'),
         TDStepsItemData(title: 'Default', content: 'Customize content'),
@@ -521,7 +521,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
     return TDSteps(
       steps: [
         TDStepsItemData(
-          title: 'Filish',
+          title: 'Finish',
           content: 'Customize content',
           successIcon: TDIcons.cart,
         ),
@@ -556,7 +556,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
     return TDSteps(
       steps: [
         TDStepsItemData(
-          title: 'Filish',
+          title: 'Finish',
           content: 'Customize content',
           successIcon: TDIcons.cart,
         ),
@@ -591,18 +591,15 @@ class _TDStepsPageState extends State<TDStepsPage> {
   Widget _buildVCustomTitleBaseSteps(BuildContext context) {
     return TDSteps(
       steps: [
-        TDStepsItemData(title: 'Filish', content: 'Customize content'),
+        TDStepsItemData(title: 'Finish', content: 'Customize content'),
         TDStepsItemData(
           title: 'Process',
           content: 'Customize content',
-          customTitle: Container(
-            margin: const EdgeInsets.only(bottom: 16, top: 4),
-            child: const Text(
-              '这是一个很长很长的自定义标题，可以自动换行的一个标题内容',
-              softWrap: true,
-              maxLines: 2,
-              overflow: TextOverflow.visible,
-            ),
+          customTitle: const TDText(
+            '这是一个很长很长的自定义标题，可以自动换行的一个标题内容',
+            softWrap: true,
+            maxLines: 2,
+            overflow: TextOverflow.visible,
           ),
         ),
         TDStepsItemData(title: 'Default', content: 'Customize content'),
@@ -619,18 +616,15 @@ class _TDStepsPageState extends State<TDStepsPage> {
   Widget _buildVCustomContentBaseSteps(BuildContext context) {
     return TDSteps(
       steps: [
-        TDStepsItemData(title: 'Filish', content: 'Customize content'),
+        TDStepsItemData(title: 'Finish', content: 'Customize content'),
         TDStepsItemData(
           title: '这是一个很长很长很长很长的文字，他是用来展示这个步骤的标题',
           content: 'Customize content',
           customContent: Container(
             margin: const EdgeInsets.only(bottom: 16, top: 4),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: const TDImage(
-                assetUrl: 'assets/img/image.png',
-                type: TDImageType.square,
-              ),
+            child: const TDImage(
+              assetUrl: 'assets/img/image.png',
+              type: TDImageType.roundedSquare,
             ),
           ),
         ),
@@ -648,7 +642,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   Widget _buildHReadOnlySteps(BuildContext context) {
     return TDSteps(
       steps: [
-        TDStepsItemData(title: 'Filish', content: 'content'),
+        TDStepsItemData(title: 'Finish', content: 'content'),
         TDStepsItemData(title: 'Process', content: 'content'),
         TDStepsItemData(title: 'Default', content: 'content'),
         TDStepsItemData(title: 'Default', content: 'content'),
@@ -663,7 +657,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   Widget _buildVReadOnlySteps(BuildContext context) {
     return TDSteps(
       steps: [
-        TDStepsItemData(title: 'Filish', content: 'Customize content'),
+        TDStepsItemData(title: 'Finish', content: 'Customize content'),
         TDStepsItemData(title: 'Process', content: 'Customize content'),
         TDStepsItemData(title: 'Default', content: 'Customize content'),
         TDStepsItemData(title: 'Default', content: 'Customize content'),
