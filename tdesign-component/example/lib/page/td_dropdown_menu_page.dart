@@ -12,76 +12,22 @@ class TDDropdownMenuPage extends StatelessWidget {
       title: tdTitle(context),
       desc: '菜单呈现数个并列的选项类目，用于整个页面的内容筛选，由菜单面板和菜单选项组成。',
       exampleCodeGroup: 'dropdownMenu',
-      children: [
+      children: const [
         ExampleModule(title: '组件类型', children: [
-          ExampleItem(
-            ignoreCode: true,
-            desc: '单选下拉菜单',
-            builder: (BuildContext context) {
-              return const CodeWrapper(builder: _buildDownSimple);
-            },
-          ),
-          ExampleItem(
-            ignoreCode: true,
-            desc: '分栏下拉菜单',
-            builder: (BuildContext context) {
-              return const CodeWrapper(builder: _buildDownChunk);
-            },
-          ),
-          ExampleItem(
-            ignoreCode: true,
-            desc: '向上展开',
-            builder: (BuildContext context) {
-              return const CodeWrapper(builder: _buildUp);
-            },
-          ),
+          ExampleItem(desc: '单选下拉菜单', builder: _buildDownSimple),
+          ExampleItem(desc: '分栏下拉菜单', builder: _buildDownChunk),
+          ExampleItem(desc: '向上展开', builder: _buildUp),
         ]),
         ExampleModule(title: '组件状态', children: [
-          ExampleItem(
-            ignoreCode: true,
-            desc: '禁用状态',
-            builder: (BuildContext context) {
-              return const CodeWrapper(builder: _buildDisabled);
-            },
-          ),
-          ExampleItem(
-            ignoreCode: true,
-            desc: '分组菜单',
-            builder: (BuildContext context) {
-              return const CodeWrapper(builder: _buildGroup);
-            },
-          ),
+          ExampleItem(desc: '禁用状态', builder: _buildDisabled),
+          ExampleItem(desc: '分组菜单', builder: _buildGroup),
         ]),
       ],
-      test: [
-        ExampleItem(
-          ignoreCode: true,
-          desc: '自动弹出方向',
-          builder: (BuildContext context) {
-            return const CodeWrapper(builder: _buildHidden);
-          },
-        ),
-        ExampleItem(
-          ignoreCode: true,
-          desc: '最大高度限制',
-          builder: (BuildContext context) {
-            return const CodeWrapper(builder: _buildHeight);
-          },
-        ),
-        ExampleItem(
-          ignoreCode: true,
-          desc: '可横向滚动菜单',
-          builder: (BuildContext context) {
-            return const CodeWrapper(builder: _buildOverflow);
-          },
-        ),
-        ExampleItem(
-          ignoreCode: true,
-          desc: '可横向滚动菜单（自定义禁用、选中颜色）',
-          builder: (BuildContext context) {
-            return const CodeWrapper(builder: _buildCustomOverflow);
-          },
-        ),
+      test: const [
+        ExampleItem(desc: '自动弹出方向', builder: _buildHidden),
+        ExampleItem(desc: '最大高度限制', builder: _buildHeight),
+        ExampleItem(desc: '可横向滚动菜单', builder: _buildOverflow),
+        ExampleItem(desc: '可横向滚动菜单（自定义禁用、选中颜色）', builder: _buildCustomOverflow),
       ],
     );
   }
@@ -400,7 +346,7 @@ TDDropdownMenu _buildOverflow(BuildContext context) {
           label: '最大高度限制',
           multiple: true,
           maxHeight: 200,
-          tabBarWidth: 200,
+          tabBarWidth: 150,
           options: [
             TDDropdownItemOption(label: '选项1', value: '1', selected: true),
             TDDropdownItemOption(label: '选项2', value: '2', selected: true),

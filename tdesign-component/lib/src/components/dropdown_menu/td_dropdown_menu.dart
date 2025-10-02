@@ -200,6 +200,12 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
   }
 
   Widget _tabBarContent(int index) {
+    final color = _disabled(index)
+        ? TDTheme.of(context).textColorDisabled
+        : _isOpened[index]
+            ? TDTheme.of(context).brandNormalColor
+            : TDTheme.of(context).textColorPrimary;
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () async {
@@ -213,31 +219,29 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
         mainAxisAlignment: _items![index].tabBarAlign ??
             widget.tabBarAlign ??
             MainAxisAlignment.center,
-        children: [Flexible(child: _getText(index)), _getIcon(index)],
+        children: [
+          Flexible(child: _getText(index, color)),
+          _getIcon(index, color)
+        ],
       ),
     );
   }
 
-  Widget _getText(int index) {
+  Widget _getText(int index, Color color) {
     final label = _items![index].getLabel();
     if (widget.labelBuilder != null) {
       return widget.labelBuilder!(context, label, _isOpened[index], index);
     }
-    var textColor = _disabled(index)
-        ? TDTheme.of(context).textColorDisabled
-        : _isOpened[index]
-            ? TDTheme.of(context).brandColor7
-            : TDTheme.of(context).textColorPrimary;
     return TDText(
       label,
       font: TDTheme.of(context).fontBodyMedium,
-      textColor: textColor,
+      textColor: color,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
   }
 
-  Widget _getIcon(int index) {
+  Widget _getIcon(int index, Color color) {
     var arrowIcon = _items![index].arrowIcon ??
         widget.arrowIcon ??
         (widget.direction == TDDropdownMenuDirection.up
@@ -245,15 +249,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
             : TDIcons.caret_down_small);
     return RotationTransition(
       turns: _iconAnimations[index],
-      child: Icon(
-        arrowIcon,
-        size: 24,
-        color: _disabled(index)
-            ? TDTheme.of(context).textColorDisabled
-            : _isOpened[index]
-                ? TDTheme.of(context).brandColor7
-                : null,
-      ),
+      child: Icon(arrowIcon, size: 24, color: color),
     );
   }
 

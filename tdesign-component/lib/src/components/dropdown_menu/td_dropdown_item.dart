@@ -265,6 +265,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
             title: widget.options![index].label,
             selectColor: widget.options![index].selectedColor,
             enable: !(widget.options![index].disabled ?? false),
+            contentDirection: TDContentDirection.left,
           ),
         ),
       ),
@@ -342,30 +343,33 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
               : BorderSide.none,
         ),
       ),
-      child: Row(children: [
-        Expanded(
-          child: TDButton(
-            text: context.resource.reset,
-            theme: TDButtonTheme.light,
-            onTap: () {
-              reset();
-              widget.onReset?.call();
-            },
+      child: Row(
+        spacing: TDTheme.of(context).spacer16,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: TDButton(
+              text: context.resource.reset,
+              theme: TDButtonTheme.light,
+              onTap: () {
+                reset();
+                widget.onReset?.call();
+              },
+            ),
           ),
-        ),
-        SizedBox(width: TDTheme.of(context).spacer16),
-        Expanded(
-          child: TDButton(
-            text: context.resource.confirm,
-            theme: TDButtonTheme.primary,
-            onTap: () {
-              _handleClose();
-              widget.onConfirm?.call(
-                  _getSelected(widget.options).map((e) => e!.value).toList());
-            },
+          Expanded(
+            child: TDButton(
+              text: context.resource.confirm,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                _handleClose();
+                widget.onConfirm?.call(
+                    _getSelected(widget.options).map((e) => e!.value).toList());
+              },
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 
@@ -437,14 +441,15 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
 
 /// 选项数据
 class TDDropdownItemOption {
-  TDDropdownItemOption(
-      {required this.value,
-      required this.label,
-      this.disabled = false,
-      this.group,
-      this.selected = false,
-      this.selectedColor,
-      this.disabledColor});
+  TDDropdownItemOption({
+    required this.value,
+    required this.label,
+    this.disabled = false,
+    this.group,
+    this.selected = false,
+    this.selectedColor,
+    this.disabledColor,
+  });
 
   /// 选项值
   String value;
