@@ -73,7 +73,7 @@ class TDActionSheetPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tdTitle(context),
-      desc: '从底部弹出的模态框，提供和当前场景相关的操作动作，也支持提供信息输入和描述。',
+      desc: '由用户操作后触发的一种特定的模态弹出框 ，呈现一组与当前情境相关的两个或多个选项。',
       exampleCodeGroup: 'action_sheet',
       children: [
         ExampleModule(title: '组件类型', children: [
@@ -82,13 +82,11 @@ class TDActionSheetPage extends StatelessWidget {
             desc: '列表型动作面板',
             builder: (BuildContext context) {
               return const Column(
+                spacing: 16,
                 children: [
                   CodeWrapper(builder: _buildBaseListActionSheet),
-                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildDescListActionSheet),
-                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildIconListActionSheet),
-                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildBadgeListActionSheet),
                 ],
               );
@@ -99,17 +97,13 @@ class TDActionSheetPage extends StatelessWidget {
             desc: '宫格型动作面板',
             builder: (BuildContext context) {
               return const Column(
+                spacing: 16,
                 children: [
                   CodeWrapper(builder: _buildBaseGridActionSheet),
-                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildDescGridActionSheet),
-                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildPaginationGridActionSheet),
-                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildScrollGridActionSheet),
-                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildMultiScrollGridActionSheet),
-                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildBadgeGridActionSheet),
                 ],
               );
@@ -122,9 +116,9 @@ class TDActionSheetPage extends StatelessWidget {
             desc: '列表型选项状态',
             builder: (BuildContext context) {
               return const Column(
+                spacing: 16,
                 children: [
                   CodeWrapper(builder: _buildBaseListStateActionSheet),
-                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildIconListStateActionSheet),
                 ],
               );
@@ -137,13 +131,11 @@ class TDActionSheetPage extends StatelessWidget {
               desc: '列表型对齐方式',
               builder: (BuildContext context) {
                 return const Column(
+                  spacing: 16,
                   children: [
                     CodeWrapper(builder: _buildBadgeListCenterActionSheet),
-                    SizedBox(height: 16),
                     CodeWrapper(builder: _buildIconListCenterActionSheet),
-                    SizedBox(height: 16),
                     CodeWrapper(builder: _buildBadgeListLeftActionSheet),
-                    SizedBox(height: 16),
                     CodeWrapper(builder: _buildIconListLeftActionSheet),
                   ],
                 );
@@ -364,8 +356,8 @@ Widget _buildScrollGridActionSheet(BuildContext context) {
             icon: const IconWithBackground(icon: TDIcons.logo_github),
           ),
           TDActionSheetItem(
-            label: 'Github',
-            icon: const IconWithBackground(icon: TDIcons.logo_github),
+            label: 'Twitter',
+            icon: const IconWithBackground(icon: TDIcons.logo_twitter),
           ),
         ],
       );

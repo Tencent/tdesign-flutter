@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../util/context_extension.dart';
 import '../popup/td_popup_route.dart';
 import 'td_action_sheet.dart';
 import 'td_action_sheet_grid.dart';
@@ -19,7 +20,7 @@ class TDActionSheet {
   TDActionSheet(
     this.context, {
     this.align = TDActionSheetAlign.center,
-    this.cancelText = '取消',
+    this.cancelText,
     this.count = 8,
     this.rows = 2,
     this.itemHeight = 96.0,
@@ -50,7 +51,7 @@ class TDActionSheet {
   final TDActionSheetAlign align;
 
   /// 取消按钮的文本
-  final String cancelText;
+  final String? cancelText;
 
   /// 每页显示的项目数
   /// 当[theme]等于[TDActionSheetTheme.grid]且[showPagination]为true时有效
@@ -118,7 +119,7 @@ class TDActionSheet {
     BuildContext context, {
     required List<TDActionSheetItem> items,
     TDActionSheetAlign align = TDActionSheetAlign.center,
-    String cancelText = '取消',
+    String? cancelText,
     bool showCancel = true,
     VoidCallback? onCancel,
     TDActionSheetItemCallback? onSelected,
@@ -148,7 +149,7 @@ class TDActionSheet {
     BuildContext context, {
     required List<TDActionSheetItem> items,
     TDActionSheetAlign align = TDActionSheetAlign.center,
-    String cancelText = '取消',
+    String? cancelText,
     bool showCancel = true,
     TDActionSheetItemCallback? onSelected,
     bool showOverlay = true,
@@ -192,7 +193,7 @@ class TDActionSheet {
     BuildContext context, {
     required List<TDActionSheetItem> items,
     TDActionSheetAlign align = TDActionSheetAlign.left,
-    String cancelText = '取消',
+    String? cancelText,
     bool showCancel = true,
     TDActionSheetItemCallback? onSelected,
     bool showOverlay = true,
@@ -263,7 +264,7 @@ class TDActionSheet {
     required TDActionSheetTheme theme,
     required List<TDActionSheetItem> items,
     TDActionSheetAlign align = TDActionSheetAlign.center,
-    String cancelText = '取消',
+    String? cancelText,
     bool showCancel = true,
     TDActionSheetItemCallback? onSelected,
     bool showOverlay = true,
@@ -282,6 +283,9 @@ class TDActionSheet {
     if (_actionSheetRoute != null) {
       return;
     }
+
+    cancelText = cancelText ?? context.resource.cancel;
+
     _actionSheetRoute = TDSlidePopupRoute(
       slideTransitionFrom: SlideTransitionFrom.bottom,
       isDismissible: showOverlay ? closeOnOverlayClick : false,

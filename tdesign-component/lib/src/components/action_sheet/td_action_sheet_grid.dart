@@ -17,7 +17,7 @@ class TDActionSheetGrid extends StatefulWidget {
   final TDActionSheetAlign align;
   final int count;
   final int rows;
-  final String cancelText;
+  final String? cancelText;
   final bool showCancel;
   final bool showPagination;
   final bool scrollable;
@@ -34,8 +34,7 @@ class TDActionSheetGrid extends StatefulWidget {
     this.align = TDActionSheetAlign.center,
     this.count = 8,
     this.rows = 2,
-    // @todo
-    this.cancelText = '取消',
+    this.cancelText,
     this.showCancel = true,
     this.showPagination = false,
     this.scrollable = false,
@@ -70,9 +69,7 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(height: TDTheme.of(context).spacer8),
-          // 如果有描述，则显示描述
           if (widget.description != null) _buildDescription(context),
-          // 如果显示分页，则显示分页点
           if (widget.showPagination) ...[
             _buildPaginationGrid(context),
             _buildPaginationDots(context),
@@ -81,10 +78,13 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
             _buildScrollGrid(context)
           else
             _buildGrid(context),
-          // 如果显示取消按钮，则显示取消按钮
           if (widget.showCancel)
-            buildCancelButton(context, widget.showPagination, widget.cancelText,
-                widget.onCancel),
+            buildCancelButton(
+              context,
+              widget.showPagination,
+              widget.cancelText,
+              widget.onCancel,
+            ),
         ],
       ),
     );
@@ -214,7 +214,7 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: currentPage == index
-                ? TDTheme.of(context).brandColor7
+                ? TDTheme.of(context).brandNormalColor
                 : TDTheme.of(context).bgColorSecondaryContainerActive,
           ),
         );

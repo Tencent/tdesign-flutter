@@ -14,7 +14,7 @@ import 'td_action_sheet_item_widget.dart';
 class TDActionSheetGroup extends StatelessWidget {
   final List<TDActionSheetItem> items;
   final TDActionSheetAlign align;
-  final String cancelText;
+  final String? cancelText;
   final bool showCancel;
   final VoidCallback? onCancel;
   final TDActionSheetItemCallback? onSelected;
@@ -26,7 +26,7 @@ class TDActionSheetGroup extends StatelessWidget {
     super.key,
     required this.items,
     this.align = TDActionSheetAlign.left,
-    this.cancelText = '取消',
+    this.cancelText,
     this.showCancel = true,
     this.onCancel,
     this.onSelected,

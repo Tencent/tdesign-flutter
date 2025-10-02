@@ -3,6 +3,7 @@ import '../../theme/td_colors.dart';
 import '../../theme/td_fonts.dart';
 import '../../theme/td_spacers.dart';
 import '../../theme/td_theme.dart';
+import '../../util/context_extension.dart';
 import '../badge/td_badge.dart';
 import '../text/td_text.dart';
 import 'td_action_sheet.dart';
@@ -108,8 +109,12 @@ MainAxisAlignment getMainAxisAlignment(TDActionSheetAlign align) {
   }
 }
 
-Widget buildCancelButton(BuildContext context, bool showPagination,
-    String cancelText, VoidCallback? onCancel) {
+Widget buildCancelButton(
+  BuildContext context,
+  bool showPagination,
+  String? cancelText,
+  VoidCallback? onCancel,
+) {
   return Padding(
     padding: EdgeInsets.only(
         top: showPagination
@@ -133,7 +138,7 @@ Widget buildCancelButton(BuildContext context, bool showPagination,
         height: 48,
         child: Center(
           child: TDText(
-            cancelText,
+            cancelText ?? context.resource.cancel,
             font: TDTheme.of(context).fontBodyLarge,
             textColor: TDTheme.of(context).textColorPrimary,
           ),
