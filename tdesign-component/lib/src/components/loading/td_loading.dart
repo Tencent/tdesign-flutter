@@ -12,15 +12,25 @@ import 'td_point_indicator.dart';
 
 /// Loading 尺寸
 enum TDLoadingSize {
+  /// 小尺寸
   small,
+
+  /// 中尺寸
   medium,
+
+  /// 大尺寸
   large,
 }
 
-/// Loading的图标
+/// Loading图标
 enum TDLoadingIcon {
+  /// 圆形
   circle,
+
+  /// 点状
   point,
+
+  /// 菊花状
   activity,
 }
 
@@ -112,23 +122,17 @@ class TDLoading extends StatelessWidget {
 
       if (text == null) {
         return indicator;
-      } else if (axis == Axis.vertical) {
-        return Column(mainAxisSize: MainAxisSize.min, children: [
-          indicator,
-          SizedBox(
-            height: _getPaddingWidth(),
-          ),
-          textWidget(context),
-        ]);
-      } else {
-        return Row(mainAxisSize: MainAxisSize.min, children: [
-          indicator,
-          SizedBox(
-            width: _getPaddingWidth(),
-          ),
-          textWidget(context)
-        ]);
       }
+
+      return Flex(
+        spacing: _getPaddingWidth(),
+        mainAxisSize: MainAxisSize.min,
+        direction: axis,
+        children: [
+          indicator,
+          textWidget(context),
+        ],
+      );
     }
   }
 
@@ -151,7 +155,7 @@ class TDLoading extends StatelessWidget {
       case TDLoadingSize.small:
         return TDCircleIndicator(
           color: iconColor,
-          size: 18, // 设计稿框位24，图形宽位19.5,推导lineWidth为3时，size位18
+          size: 18, // 设计稿框为24，图形宽为19.5，推导lineWidth为3时，size为18
           lineWidth: 3,
           duration: _innerDuration,
         );
@@ -190,12 +194,10 @@ class TDLoading extends StatelessWidget {
     );
     if (refreshWidget != null) {
       result = Row(
+        spacing: 8,
         mainAxisSize: MainAxisSize.min,
         children: [
           result,
-          const SizedBox(
-            width: 8,
-          ),
           refreshWidget!,
         ],
       );

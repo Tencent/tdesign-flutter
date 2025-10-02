@@ -18,9 +18,6 @@ class TDLoadingPage extends StatefulWidget {
 }
 
 class _TDLoadingPageState extends State<TDLoadingPage> {
-  var rowSpace = const SizedBox(
-    width: 52,
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -97,204 +94,182 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
             desc: '验证居中问题',
             ignoreCode: true,
             builder: (_) {
-              var list = const [
-                TDLoading(
-                  size: TDLoadingSize.large,
-                  icon: TDLoadingIcon.circle,
-                  text: '加载中…',
-                  axis: Axis.vertical,
-                ),
-                TDLoading(
-                  size: TDLoadingSize.large,
-                  icon: TDLoadingIcon.activity,
-                  text: '加载中…',
-                  axis: Axis.vertical,
-                ),
-              ];
-              return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                      children: list.fold(
-                          [],
-                          (previousValue, element) => [
-                                ...previousValue,
-                                Container(
-                                  color: TDTheme.of(context).bgColorContainer,
-                                  child: element,
-                                ),
-                                rowSpace
-                              ])));
+              return const Row(
+                  spacing: 36,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TDLoading(
+                      size: TDLoadingSize.large,
+                      icon: TDLoadingIcon.circle,
+                      text: '加载中…',
+                      axis: Axis.vertical,
+                    ),
+                    TDLoading(
+                      size: TDLoadingSize.large,
+                      icon: TDLoadingIcon.activity,
+                      text: '加载中…',
+                      axis: Axis.vertical,
+                    ),
+                  ]);
             }),
         ExampleItem(
             desc: '展示/隐藏Loading',
             ignoreCode: true,
             builder: (_) {
-              var list = [
-                TDButton(
-                  text: '展示Loading',
-                  theme: TDButtonTheme.primary,
-                  onTap: () {
-                    TDLoadingController.show(context);
-                  },
-                ),
-                const SizedBox(
-                  width: 24,
-                ),
-                const TDButton(
-                  text: '隐藏Loading',
-                  theme: TDButtonTheme.primary,
-                  onTap: TDLoadingController.dismiss,
-                ),
-              ];
-              return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: list,
-                  ));
+              return Row(
+                spacing: 36,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TDButton(
+                    text: '展示Loading',
+                    theme: TDButtonTheme.primary,
+                    onTap: () {
+                      TDLoadingController.show(context);
+                    },
+                  ),
+                  const TDButton(
+                    text: '隐藏Loading',
+                    theme: TDButtonTheme.primary,
+                    onTap: TDLoadingController.dismiss,
+                  ),
+                ],
+              );
             })
       ],
     );
   }
 
-  @Demo(group: 'loading')
-  Widget _buildRow(List<Widget> list) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-              children: list.fold(
-                  [],
-                  (previousValue, element) =>
-                      [...previousValue, element, rowSpace])),
-        ));
-  }
-
   /// 纯图标
   @Demo(group: 'loading')
   Widget _buildPureIconLoading(BuildContext context) {
-    return _buildRow([
-      const TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.circle,
-      ),
-      const TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.activity,
-      ),
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.point,
-        iconColor: TDTheme.of(context).brandNormalColor,
-      ),
-    ]);
+    return Row(
+        spacing: 36,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const TDLoading(
+            size: TDLoadingSize.small,
+            icon: TDLoadingIcon.circle,
+          ),
+          const TDLoading(
+            size: TDLoadingSize.small,
+            icon: TDLoadingIcon.activity,
+          ),
+          TDLoading(
+            size: TDLoadingSize.small,
+            icon: TDLoadingIcon.point,
+            iconColor: TDTheme.of(context).brandNormalColor,
+          ),
+        ]);
   }
 
   /// 图标加文字横向
   @Demo(group: 'loading')
   Widget _buildTextIconHorizontalLoading(BuildContext context) {
-    return _buildRow(const [
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.circle,
-        text: '加载中…',
-        axis: Axis.horizontal,
-      ),
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.activity,
-        text: '加载中…',
-        axis: Axis.horizontal,
-      ),
-    ]);
+    return const Row(
+        spacing: 36,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TDLoading(
+            size: TDLoadingSize.small,
+            icon: TDLoadingIcon.circle,
+            text: '加载中…',
+            axis: Axis.horizontal,
+          ),
+          TDLoading(
+            size: TDLoadingSize.small,
+            icon: TDLoadingIcon.activity,
+            text: '加载中…',
+            axis: Axis.horizontal,
+          ),
+        ]);
   }
 
   /// 图标加文字竖向
   @Demo(group: 'loading')
   Widget _buildTextIconVerticalLoading(BuildContext context) {
-    return _buildRow(const [
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.circle,
-        text: '加载中…',
-        axis: Axis.vertical,
-      ),
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.activity,
-        text: '加载中…',
-        axis: Axis.vertical,
-      ),
-    ]);
+    return const Row(
+        spacing: 36,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TDLoading(
+            size: TDLoadingSize.small,
+            icon: TDLoadingIcon.circle,
+            text: '加载中…',
+            axis: Axis.vertical,
+          ),
+          TDLoading(
+            size: TDLoadingSize.small,
+            icon: TDLoadingIcon.activity,
+            text: '加载中…',
+            axis: Axis.vertical,
+          ),
+        ]);
   }
 
   /// 纯文字
   @Demo(group: 'loading')
   Widget _buildPureTextLoading(BuildContext context) {
-    return _buildRow([
-      const TDLoading(
-        size: TDLoadingSize.small,
-        text: '加载中…',
-      ),
-      TDLoading(
-        size: TDLoadingSize.small,
-        text: '加载失败',
-        textColor: TDTheme.of(context).textColorPlaceholder,
-      ),
-      TDLoading(
-        size: TDLoadingSize.small,
-        text: '加载失败',
-        refreshWidget: GestureDetector(
-          child: TDText(
-            '刷新',
-            font: TDTheme.of(context).fontBodySmall,
-            textColor: TDTheme.of(context).brandNormalColor,
+    return Row(
+        spacing: 36,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const TDLoading(
+            size: TDLoadingSize.small,
+            text: '加载中…',
           ),
-          onTap: () {
-            TDToast.showText('刷新', context: context);
-          },
-        ),
-      ),
-    ]);
+          TDLoading(
+            size: TDLoadingSize.small,
+            text: '加载失败',
+            textColor: TDTheme.of(context).textColorPlaceholder,
+          ),
+          TDLoading(
+            size: TDLoadingSize.small,
+            text: '加载失败',
+            refreshWidget: GestureDetector(
+              child: TDText(
+                '刷新',
+                font: TDTheme.of(context).fontBodySmall,
+                textColor: TDTheme.of(context).brandNormalColor,
+              ),
+              onTap: () {
+                TDToast.showText('刷新', context: context);
+              },
+            ),
+          ),
+        ]);
   }
 
   /// 大尺寸
   @Demo(group: 'loading')
   Widget _buildLargeLoading(BuildContext context) {
-    return _buildRow([
-      const TDLoading(
-        size: TDLoadingSize.large,
-        icon: TDLoadingIcon.circle,
-        text: '加载中…',
-        axis: Axis.horizontal,
-      ),
-    ]);
+    return const TDLoading(
+      size: TDLoadingSize.large,
+      icon: TDLoadingIcon.circle,
+      text: '加载中…',
+      axis: Axis.horizontal,
+    );
   }
 
   /// 中尺寸
   @Demo(group: 'loading')
   Widget _buildMediumLoading(BuildContext context) {
-    return _buildRow([
-      const TDLoading(
-        size: TDLoadingSize.medium,
-        icon: TDLoadingIcon.circle,
-        text: '加载中…',
-        axis: Axis.horizontal,
-      ),
-    ]);
+    return const TDLoading(
+      size: TDLoadingSize.medium,
+      icon: TDLoadingIcon.circle,
+      text: '加载中…',
+      axis: Axis.horizontal,
+    );
   }
 
   /// 小尺寸
   @Demo(group: 'loading')
   Widget _buildSmallLoading(BuildContext context) {
-    return _buildRow([
-      const TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.circle,
-        text: '加载中…',
-        axis: Axis.horizontal,
-      ),
-    ]);
+    return const TDLoading(
+      size: TDLoadingSize.small,
+      icon: TDLoadingIcon.circle,
+      text: '加载中…',
+      axis: Axis.horizontal,
+    );
   }
 
   double _currentSliderValue = 1000;
@@ -302,38 +277,34 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
   /// 自定义尺寸
   @Demo(group: 'loading')
   Widget _buildCustomSpeedLoading(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TDLoading(
-            size: TDLoadingSize.small,
-            icon: TDLoadingIcon.circle,
-            axis: Axis.horizontal,
-            text: '加载中…',
-            duration: _currentSliderValue.round(),
+    return Column(
+      spacing: 16,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.circle,
+          axis: Axis.horizontal,
+          text: '加载中…',
+          duration: _currentSliderValue.round(),
+        ),
+        TDSlider(
+          value: _currentSliderValue,
+          sliderThemeData: TDSliderThemeData(
+            context: context,
+            max: 2000,
+            min: -20,
+            divisions: 100,
+            showThumbValue: true,
+            scaleFormatter: (value) => value.toInt().toString(),
           ),
-          TDSlider(
-            value: _currentSliderValue,
-            sliderThemeData: TDSliderThemeData(
-              context: context,
-              max: 2000,
-              min: -20,
-              divisions: 100,
-              showThumbValue: true,
-              scaleFormatter: (value) => value.toInt().toString(),
-            ),
-            onChanged: (double value) {
-              setState(() {
-                _currentSliderValue = value;
-              });
-            },
-          )
-        ],
-      ),
+          onChanged: (double value) {
+            setState(() {
+              _currentSliderValue = value;
+            });
+          },
+        )
+      ],
     );
   }
 }
