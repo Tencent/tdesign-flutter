@@ -39,7 +39,10 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
       // 下拉样式
       header: TDRefreshHeader(),
       child: SingleChildScrollView(
+          child: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
+          spacing: 16,
           children: [
             Container(
               height: 171,
@@ -48,7 +51,6 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
                   color: TDTheme.of(context).bgColorContainer,
                   borderRadius: BorderRadius.all(
                       Radius.circular(TDTheme.of(context).radiusLarge))),
-              margin: const EdgeInsets.only(left: 16, right: 16),
               child: TDText(
                 PlatformUtil.isWeb ? 'Web暂不支持下拉，请下载安装apk体验' : '拖拽该区域演示 顶部下拉刷新',
                 font: TDTheme.of(context).fontBodyLarge,
@@ -62,7 +64,6 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
                   color: TDTheme.of(context).bgColorContainer,
                   borderRadius: BorderRadius.all(
                       Radius.circular(TDTheme.of(context).radiusLarge))),
-              margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
               child: TDText(
                 '下拉刷新次数：${count}',
                 font: TDTheme.of(context).fontBodyLarge,
@@ -72,7 +73,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
             const SizedBox(height: 500),
           ],
         ),
-      ),
+      )),
       // 下拉刷新回调
       onRefresh: () {
         Future.delayed(const Duration(seconds: 2), () {
