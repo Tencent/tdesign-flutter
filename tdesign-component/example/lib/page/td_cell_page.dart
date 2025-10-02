@@ -8,53 +8,23 @@ class TDCellPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: TDTheme.of(context).grayColor2,
-        child: ExamplePage(
-          title: tdTitle(context),
-          desc: '一行内容/功能的垂直排列方式。一行项目左侧为主要内容展示区域，右侧可增加更多操作内容。',
-          exampleCodeGroup: 'cell',
-          children: [
-            ExampleModule(title: '组件类型', children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '单行单元格',
-                center: false,
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildSimple);
-                },
-              ),
-              ExampleItem(
-                ignoreCode: true,
-                desc: '多行单元格',
-                center: false,
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildDesSimple);
-                },
-              ),
-            ]),
-            ExampleModule(title: '组件样式', children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '卡片单元格',
-                center: false,
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildCard);
-                },
-              ),
-            ]),
-          ],
-          test: [
-            ExampleItem(
-              ignoreCode: true,
-              desc: '自定义内边距-padding',
-              center: false,
-              builder: (BuildContext context) {
-                return const CodeWrapper(builder: _buildPadding);
-              },
-            ),
-          ],
-        ));
+    return ExamplePage(
+      title: tdTitle(context),
+      desc: '一行内容/功能的垂直排列方式。一行项目左侧为主要内容展示区域，右侧可增加更多操作内容。',
+      exampleCodeGroup: 'cell',
+      children: const [
+        ExampleModule(title: '组件类型', children: [
+          ExampleItem(desc: '单行单元格', builder: _buildSimple),
+          ExampleItem(desc: '多行单元格', builder: _buildDesSimple),
+        ]),
+        ExampleModule(title: '组件样式', children: [
+          ExampleItem(desc: '卡片单元格', builder: _buildCard),
+        ]),
+      ],
+      test: const [
+        ExampleItem(desc: '自定义内边距-padding', builder: _buildPadding),
+      ],
+    );
   }
 }
 
@@ -66,22 +36,39 @@ Widget _buildSimple(BuildContext context) {
     style: style,
     cells: [
       // 可单独修改样式
-      TDCell(arrow: true, title: '单行标题', style: TDCellStyle.cellStyle(context)),
       TDCell(
-          arrow: true,
-          title: '单行标题',
-          required: true,
-          onClick: (cell) {
-            print('单行标题');
-          }),
+        arrow: true,
+        title: '单行标题',
+        style: TDCellStyle.cellStyle(context),
+      ),
+      TDCell(
+        arrow: true,
+        title: '单行标题',
+        required: true,
+        onClick: (cell) {
+          print('单行标题');
+        },
+      ),
       const TDCell(
-          arrow: true,
-          title: '单行标题',
-          noteWidget: TDBadge(TDBadgeType.message, count: '8')),
+        arrow: true,
+        title: '单行标题',
+        noteWidget: TDBadge(TDBadgeType.message, count: '8'),
+      ),
       const TDCell(
-          arrow: false, title: '单行标题', rightIconWidget: TDSwitch(isOn: true)),
-      const TDCell(arrow: true, title: '单行标题', note: '辅助信息'),
-      const TDCell(arrow: true, title: '单行标题', leftIcon: TDIcons.lock_on),
+        arrow: false,
+        title: '单行标题',
+        rightIconWidget: TDSwitch(isOn: true),
+      ),
+      const TDCell(
+        arrow: true,
+        title: '单行标题',
+        note: '辅助信息',
+      ),
+      const TDCell(
+        arrow: true,
+        title: '单行标题',
+        leftIcon: TDIcons.lock_on,
+      ),
       const TDCell(arrow: false, title: '单行标题'),
     ],
   );
