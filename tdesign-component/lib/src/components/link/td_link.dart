@@ -96,27 +96,33 @@ class TDLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (type == TDLinkType.withPrefixIcon) {
-      return Row(children: [
-        prefixIcon == null ? _getDefaultIcon(context) : prefixIcon!,
-        SizedBox(
-          width: _getLeftGapSize(context),
-        ),
-        _buildLink(context),
-      ]);
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          prefixIcon == null ? _getDefaultIcon(context) : prefixIcon!,
+          SizedBox(
+            width: _getLeftGapSize(context),
+          ),
+          _buildLink(context),
+        ],
+      );
     } else if (type == TDLinkType.withSuffixIcon) {
-      return Row(children: [
-        _buildLink(context),
-        SizedBox(
-          width: _getRightGapSize(context),
-        ),
-        suffixIcon == null ? _getDefaultIcon(context) : suffixIcon!,
-      ]);
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildLink(context),
+          SizedBox(
+            width: _getRightGapSize(context),
+          ),
+          suffixIcon == null ? _getDefaultIcon(context) : suffixIcon!,
+        ],
+      );
     }
 
     return _buildLink(context);
   }
 
-  /// 提取成方法，允许业务定义自己的TDLinkConfiguration
+  /// 提取成方法，允许业务定义自己的 TDLinkConfiguration
   TDLinkConfiguration? getConfiguration(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<TDLinkConfiguration>();
   }
