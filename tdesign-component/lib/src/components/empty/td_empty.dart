@@ -7,21 +7,25 @@ typedef TDTapEvent = void Function();
 enum TDEmptyType { plain, operation }
 
 class TDEmpty extends StatelessWidget {
-  const TDEmpty(
-      {this.type = TDEmptyType.plain,
-      this.image,
-      this.emptyText,
-      this.operationText,
-      this.operationTheme,
-      this.onTapEvent,
-      this.emptyTextColor,
-      this.emptyTextFont,
-      this.customOperationWidget,
-      Key? key})
-      : super(key: key);
+  const TDEmpty({
+    this.type = TDEmptyType.plain,
+    this.icon = TDIcons.info_circle_filled,
+    this.image,
+    this.emptyText,
+    this.operationText,
+    this.operationTheme,
+    this.onTapEvent,
+    this.emptyTextColor,
+    this.emptyTextFont,
+    this.customOperationWidget,
+    Key? key,
+  }) : super(key: key);
 
   /// 点击事件
   final TDTapEvent? onTapEvent;
+
+  /// 图标
+  final IconData? icon;
 
   /// 展示图片
   final Widget? image;
@@ -56,7 +60,7 @@ class TDEmpty extends StatelessWidget {
         children: [
           image ??
               Icon(
-                TDIcons.info_circle_filled,
+                icon ?? TDIcons.info_circle_filled,
                 size: 96,
                 color: TDTheme.of(context).textColorPlaceholder,
               ),
