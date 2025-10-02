@@ -28,10 +28,10 @@ class TDShadowsPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).bgColorContainer,
-          boxShadow: TDTheme.of(context).shadowsBase,
-          borderRadius:
-              BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+        color: TDTheme.of(context).bgColorContainer,
+        boxShadow: TDTheme.of(context).shadowsBase,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+      ),
     );
   }
 
@@ -41,10 +41,10 @@ class TDShadowsPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).bgColorContainer,
-          boxShadow: TDTheme.of(context).shadowsMiddle,
-          borderRadius:
-              BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+        color: TDTheme.of(context).bgColorContainer,
+        boxShadow: TDTheme.of(context).shadowsMiddle,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+      ),
     );
   }
 
@@ -54,10 +54,10 @@ class TDShadowsPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).bgColorContainer,
-          boxShadow: TDTheme.of(context).shadowsTop,
-          borderRadius:
-              BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+        color: TDTheme.of(context).bgColorContainer,
+        boxShadow: TDTheme.of(context).shadowsTop,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+      ),
     );
   }
 }

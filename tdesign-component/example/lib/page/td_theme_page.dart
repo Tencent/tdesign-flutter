@@ -94,12 +94,12 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
   Widget _buildDefaultTheme(BuildContext context) {
     // 通过TDTheme.of(context).xxx使用公共主题属性
     return Container(
-      margin: EdgeInsets.all(TDTheme.of(context).spacer8), // 间隔
+      margin: EdgeInsets.all(TDTheme.of(context).spacer8),
+      padding: EdgeInsets.all(TDTheme.of(context).spacer8),
       decoration: BoxDecoration(
-        color: TDTheme.of(context).grayColor1, // 颜色
-        borderRadius:
-            BorderRadius.circular(TDTheme.of(context).radiusDefault), // 圆角
-        boxShadow: TDTheme.of(context).shadowsBase, // 阴影
+        color: TDTheme.of(context).bgColorSecondaryContainer,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+        boxShadow: TDTheme.of(context).shadowsBase,
       ),
       child: TDText(
         '使用外层默认主题',
@@ -123,7 +123,7 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
         }, colorMap: {
           'brandNormalColor': Colors.red
         }),
-        // 不能直接在此处使用context，这里虽然被包裹在TGTheme中，但是context未更新，因此阿不到最新数据
+        // 不能直接在此处使用context，这里虽然被包裹在TGTheme中，但是context未更新，因此读不到最新数据
         child: const TestWidget());
   }
 
