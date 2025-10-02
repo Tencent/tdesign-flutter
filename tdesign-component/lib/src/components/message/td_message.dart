@@ -3,7 +3,7 @@ import 'package:flutter/src/scheduler/binding.dart';
 
 import '../../../tdesign_flutter.dart';
 
-//链接设置
+/// 链接设置
 class MessageLink {
   MessageLink({
     required this.name,
@@ -21,7 +21,7 @@ class MessageLink {
   final Color? color;
 }
 
-// 跑马灯配置
+/// 跑马灯配置
 class MessageMarquee {
   MessageMarquee({this.speed, this.loop, this.delay});
 
@@ -35,7 +35,7 @@ class MessageMarquee {
   final int? delay;
 }
 
-// 定义消息主题枚举
+/// 定义消息主题枚举
 enum MessageTheme {
   /// 普通通知
   info,
@@ -50,7 +50,7 @@ enum MessageTheme {
   error
 }
 
-// TDMessage 组件
+/// TDMessage 组件
 class TDMessage extends StatefulWidget {
   const TDMessage({
     Key? key,
@@ -309,17 +309,25 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       } else {
         switch (widget.theme) {
           case MessageTheme.info:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).brandColor7);
+            return Icon(
+              TDIcons.error_circle_filled,
+              color: TDTheme.of(context).brandNormalColor,
+            );
           case MessageTheme.success:
-            return Icon(TDIcons.check_circle_filled,
-                color: TDTheme.of(context).successColor5);
+            return Icon(
+              TDIcons.check_circle_filled,
+              color: TDTheme.of(context).successNormalColor,
+            );
           case MessageTheme.warning:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).warningColor5);
+            return Icon(
+              TDIcons.error_circle_filled,
+              color: TDTheme.of(context).warningNormalColor,
+            );
           case MessageTheme.error:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).errorColor6);
+            return Icon(
+              TDIcons.error_circle_filled,
+              color: TDTheme.of(context).errorNormalColor,
+            );
           case null:
             return const SizedBox.shrink();
         }
@@ -369,7 +377,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
               type: TDLinkType.basic,
               uri: widget.link.uri,
               size: TDLinkSize.medium,
-              color: widget.link.color ?? TDTheme.of(context).brandColor7,
+              color: widget.link.color ?? TDTheme.of(context).brandNormalColor,
               linkClick: (link) => clickLink(),
             ));
       } else if (widget.link is String) {
@@ -380,7 +388,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
               child: Text(
                 widget.link ?? '',
                 style: TextStyle(
-                  color: TDTheme.of(context).brandColor7,
+                  color: TDTheme.of(context).brandNormalColor,
                   fontSize: 14,
                 ),
                 maxLines: 1,
@@ -439,15 +447,12 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                                 height: 22,
                                 child: getLink(context)),
                           if (widget.closeBtn != null)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 12),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: SizedBox(
-                                  width: 22,
-                                  height: 22,
-                                  child: getCloseBtn(context),
-                                ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: getCloseBtn(context),
                               ),
                             ),
                         ],

@@ -3,21 +3,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDMessagePage extends StatefulWidget {
-  const TDMessagePage({Key? key}) : super(key: key);
+class TDMessagePage extends StatelessWidget {
+  const TDMessagePage({super.key});
 
-  @override
-  State<StatefulWidget> createState() => _TDMessagePageState();
-}
-
-class _TDMessagePageState extends State<TDMessagePage> {
   final _commonContent = '这是一条普通的通知信息';
   final longContent = '这是一条普通的通知信息看，这是一条普通的通知信息，这是一条普通的通知信息';
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
+        title: tdTitle(context),
         desc: '用于轻量级反馈或提示，不会打断用户操作。',
         exampleCodeGroup: 'message',
         children: [
@@ -44,7 +39,6 @@ class _TDMessagePageState extends State<TDMessagePage> {
       text: '纯文字的通知',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
-      width: 450,
       theme: TDButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
@@ -69,7 +63,6 @@ class _TDMessagePageState extends State<TDMessagePage> {
         text: '带图标的通知',
         size: TDButtonSize.large,
         type: TDButtonType.outline,
-        width: 450,
         theme: TDButtonTheme.primary,
         onTap: () {
           TDMessage.showMessage(
@@ -90,7 +83,6 @@ class _TDMessagePageState extends State<TDMessagePage> {
         text: '带关闭的通知',
         size: TDButtonSize.large,
         type: TDButtonType.outline,
-        width: 450,
         theme: TDButtonTheme.primary,
         onTap: () {
           TDMessage.showMessage(
@@ -116,7 +108,6 @@ class _TDMessagePageState extends State<TDMessagePage> {
         text: '可滚动的通知',
         size: TDButtonSize.large,
         type: TDButtonType.outline,
-        width: 450,
         theme: TDButtonTheme.primary,
         onTap: () {
           TDMessage.showMessage(
@@ -140,7 +131,6 @@ class _TDMessagePageState extends State<TDMessagePage> {
         text: '带按钮的通知',
         size: TDButtonSize.large,
         type: TDButtonType.outline,
-        width: 450,
         theme: TDButtonTheme.primary,
         onTap: () {
           TDMessage.showMessage(
@@ -154,7 +144,6 @@ class _TDMessagePageState extends State<TDMessagePage> {
                 name: '按钮',
                 uri: Uri.parse('https://tdesign.tencent.com/'),
               ),
-              // link: '按钮',
               onLinkClick: () {
                 print('link clicked!');
               });
@@ -168,7 +157,6 @@ class _TDMessagePageState extends State<TDMessagePage> {
       text: '普通通知',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
-      width: 450,
       theme: TDButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
@@ -190,7 +178,6 @@ class _TDMessagePageState extends State<TDMessagePage> {
       text: '成功通知',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
-      width: 450,
       theme: TDButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
@@ -212,7 +199,6 @@ class _TDMessagePageState extends State<TDMessagePage> {
         text: '警示通知',
         size: TDButtonSize.large,
         type: TDButtonType.outline,
-        width: 450,
         theme: TDButtonTheme.primary,
         onTap: () {
           TDMessage.showMessage(
@@ -233,7 +219,6 @@ class _TDMessagePageState extends State<TDMessagePage> {
         text: '错误通知',
         size: TDButtonSize.large,
         type: TDButtonType.outline,
-        width: 450,
         theme: TDButtonTheme.primary,
         onTap: () {
           TDMessage.showMessage(
