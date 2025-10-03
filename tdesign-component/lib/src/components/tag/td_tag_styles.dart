@@ -27,15 +27,16 @@ enum TDTagShape { square, round, mark }
 
 /// 标签样式
 class TDTagStyle {
-  TDTagStyle(
-      {this.context,
-      this.textColor,
-      this.backgroundColor,
-      this.font,
-      this.fontWeight,
-      this.border = 0,
-      this.borderColor,
-      this.borderRadius});
+  TDTagStyle({
+    this.context,
+    this.textColor,
+    this.backgroundColor,
+    this.font,
+    this.fontWeight,
+    this.border = 0,
+    this.borderColor,
+    this.borderRadius,
+  });
 
   /// 上下文，方便获取主题内容
   BuildContext? context;
@@ -48,6 +49,9 @@ class TDTagStyle {
 
   /// 边框颜色
   Color? borderColor;
+
+  /// 关闭图标颜色
+  Color? closeIconColor;
 
   /// 圆角
   BorderRadiusGeometry? borderRadius;
@@ -77,13 +81,17 @@ class TDTagStyle {
 
   /// 根据主题生成填充Tag样式
   TDTagStyle.generateFillStyleByTheme(
-      BuildContext context, TDTagTheme? theme, bool light, TDTagShape shape) {
+    BuildContext context,
+    TDTagTheme? theme,
+    bool light,
+    TDTagShape shape,
+  ) {
     this.context = context;
     switch (theme) {
       case TDTagTheme.primary:
         textColor = light
             ? TDTheme.of(context).brandNormalColor
-            : TDTheme.of(context).whiteColor1;
+            : TDTheme.of(context).textColorAnti;
         backgroundColor = light
             ? TDTheme.of(context).brandLightColor
             : TDTheme.of(context).brandNormalColor;
@@ -91,7 +99,7 @@ class TDTagStyle {
       case TDTagTheme.warning:
         textColor = light
             ? TDTheme.of(context).warningNormalColor
-            : TDTheme.of(context).whiteColor1;
+            : TDTheme.of(context).textColorAnti;
         backgroundColor = light
             ? TDTheme.of(context).warningLightColor
             : TDTheme.of(context).warningNormalColor;
@@ -99,7 +107,7 @@ class TDTagStyle {
       case TDTagTheme.danger:
         textColor = light
             ? TDTheme.of(context).errorNormalColor
-            : TDTheme.of(context).whiteColor1;
+            : TDTheme.of(context).textColorAnti;
         backgroundColor = light
             ? TDTheme.of(context).errorLightColor
             : TDTheme.of(context).errorNormalColor;
@@ -107,7 +115,7 @@ class TDTagStyle {
       case TDTagTheme.success:
         textColor = light
             ? TDTheme.of(context).successNormalColor
-            : TDTheme.of(context).whiteColor1;
+            : TDTheme.of(context).textColorAnti;
         backgroundColor = light
             ? TDTheme.of(context).successLightColor
             : TDTheme.of(context).successNormalColor;
@@ -128,16 +136,22 @@ class TDTagStyle {
         break;
       case TDTagShape.mark:
         borderRadius = BorderRadius.only(
-            topRight: Radius.circular(TDTheme.of(context).radiusRound),
-            bottomRight: Radius.circular(TDTheme.of(context).radiusRound));
+          topRight: Radius.circular(TDTheme.of(context).radiusRound),
+          bottomRight: Radius.circular(TDTheme.of(context).radiusRound),
+        );
         break;
     }
+    closeIconColor = textColor;
     borderColor = backgroundColor;
   }
 
   /// 根据主题生成描边Tag样式
   TDTagStyle.generateOutlineStyleByTheme(
-      BuildContext context, TDTagTheme? theme, bool light, TDTagShape shape) {
+    BuildContext context,
+    TDTagTheme? theme,
+    bool light,
+    TDTagShape shape,
+  ) {
     this.context = context;
     switch (theme) {
       case TDTagTheme.primary:
@@ -186,11 +200,16 @@ class TDTagStyle {
         break;
     }
     border = 1;
+    closeIconColor = textColor;
   }
 
   /// 根据主题生成禁用Tag样式
   TDTagStyle.generateDisableSelectStyle(
-      BuildContext context, bool isLight, bool isOutline, TDTagShape shape) {
+    BuildContext context,
+    bool isLight,
+    bool isOutline,
+    TDTagShape shape,
+  ) {
     borderColor = TDTheme.of(context).componentBorderColor;
     textColor = TDTheme.of(context).textColorDisabled;
     backgroundColor = isOutline && !isLight

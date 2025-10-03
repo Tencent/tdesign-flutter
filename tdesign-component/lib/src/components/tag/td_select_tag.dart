@@ -5,27 +5,28 @@ import '../../../tdesign_flutter.dart';
 /// 点击型标签组件，点击时内部更改自身状态
 /// 支持样式：方形/圆角/半圆/带关闭图标
 class TDSelectTag extends StatefulWidget {
-  const TDSelectTag(this.text,
-      {this.theme,
-      this.icon,
-      this.iconWidget,
-      this.selectStyle,
-      this.unSelectStyle,
-      this.disableSelectStyle,
-      this.onSelectChanged,
-      this.isSelected = false,
-      this.disableSelect = false,
-      this.size = TDTagSize.medium,
-      this.padding,
-      this.forceVerticalCenter = true,
-      this.isOutline = false,
-      this.shape = TDTagShape.square,
-      this.isLight = false,
-      this.needCloseIcon = false,
-      this.onCloseTap,
-      this.fixedWidth,
-      Key? key})
-      : super(key: key);
+  const TDSelectTag(
+    this.text, {
+    this.theme,
+    this.icon,
+    this.iconWidget,
+    this.selectStyle,
+    this.unSelectStyle,
+    this.disableSelectStyle,
+    this.onSelectChanged,
+    this.isSelected = false,
+    this.disableSelect = false,
+    this.size = TDTagSize.medium,
+    this.padding,
+    this.forceVerticalCenter = true,
+    this.isOutline = false,
+    this.shape = TDTagShape.square,
+    this.isLight = false,
+    this.needCloseIcon = false,
+    this.onCloseTap,
+    this.fixedWidth,
+    Key? key,
+  }) : super(key: key);
 
   /// 标签内容
   final String text;

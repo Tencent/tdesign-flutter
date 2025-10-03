@@ -3,30 +3,30 @@ import '../../../tdesign_flutter.dart';
 
 /// 展示型标签组件，仅展示，内部不可更改自身状态
 /// 支持样式：方形/圆角/半圆/带关闭图标
-///
 class TDTag extends StatelessWidget {
-  const TDTag(this.text,
-      {this.theme,
-      this.icon,
-      this.iconWidget,
-      this.textColor,
-      this.backgroundColor,
-      this.font,
-      this.fontWeight,
-      this.style,
-      this.size = TDTagSize.medium,
-      this.padding,
-      this.forceVerticalCenter = true,
-      this.isOutline = false,
-      this.shape = TDTagShape.square,
-      this.isLight = false,
-      this.disable = false,
-      this.needCloseIcon = false,
-      this.onCloseTap,
-      this.overflow,
-      this.fixedWidth,
-      Key? key})
-      : super(key: key);
+  const TDTag(
+    this.text, {
+    this.theme,
+    this.icon,
+    this.iconWidget,
+    this.textColor,
+    this.backgroundColor,
+    this.font,
+    this.fontWeight,
+    this.style,
+    this.size = TDTagSize.medium,
+    this.padding,
+    this.forceVerticalCenter = true,
+    this.isOutline = false,
+    this.shape = TDTagShape.square,
+    this.isLight = false,
+    this.disable = false,
+    this.needCloseIcon = false,
+    this.onCloseTap,
+    this.overflow,
+    this.fixedWidth,
+    Key? key,
+  }) : super(key: key);
 
   /// 标签内容
   final String text;
@@ -40,16 +40,16 @@ class TDTag extends StatelessWidget {
   /// 自定义图标内容，需自处理颜色
   final Widget? iconWidget;
 
-  /// 文字颜色, 优先级高于style的textColor
+  /// 文字颜色，优先级高于style的textColor
   final Color? textColor;
 
-  /// 背景颜色, 优先级高于style的backgroundColor
+  /// 背景颜色，优先级高于style的backgroundColor
   final Color? backgroundColor;
 
-  /// 字体尺寸, 优先级高于style的font
+  /// 字体尺寸，优先级高于style的font
   final Font? font;
 
-  /// 字体粗细, 优先级高于style的fontWeight
+  /// 字体粗细，优先级高于style的fontWeight
   final FontWeight? fontWeight;
 
   /// 标签样式
@@ -105,8 +105,7 @@ class TDTag extends StatelessWidget {
     if (innerIcon != null || needCloseIcon) {
       var children = <Widget>[];
       if (innerIcon != null) {
-        children.add(Container(
-          margin: const EdgeInsets.only(right: 4),
+        children.add(SizedBox(
           width: 14,
           height: 14,
           child: innerIcon,
@@ -116,19 +115,16 @@ class TDTag extends StatelessWidget {
       if (needCloseIcon) {
         children.add(GestureDetector(
           onTap: onCloseTap,
-          child: Container(
-            margin: const EdgeInsets.only(left: 4),
-            child: Icon(
-              TDIcons.close,
-
-              /// @todo
-              color: TDTheme.of(context).textColorPlaceholder,
-              size: 14,
-            ),
+          child: Icon(
+            TDIcons.close,
+            color:
+                innerStyle.closeIconColor ?? TDTheme.of(context).textColorAnti,
+            size: 14,
           ),
         ));
       }
       child = Row(
+        spacing: TDTheme.of(context).spacer4,
         mainAxisSize: MainAxisSize.min,
         children: children,
       );
