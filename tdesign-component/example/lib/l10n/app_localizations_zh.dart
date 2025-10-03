@@ -172,4 +172,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get top => '顶部';
+
+  @override
+  String get emptyData => '暂无数据';
 }

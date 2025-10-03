@@ -55,7 +55,8 @@
   "yearLabel": "year",
   "monthLabel": "month",
   "dateLabel": "date",
-  "weeks":"weeks",
-  "back":"BACK",
-  "top":"TOP"
+  "weeks": "weeks",
+  "back": "BACK",
+  "top": "TOP",
+  "emptyData": "No Data"
 }

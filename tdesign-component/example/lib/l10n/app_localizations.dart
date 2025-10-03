@@ -427,6 +427,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'TOP'**
   String get top;
+
+  /// No description provided for @emptyData.
+  ///
+  /// In en, this message translates to:
+  /// **'No Data'**
+  String get emptyData;
 }
 
 class _AppLocalizationsDelegate

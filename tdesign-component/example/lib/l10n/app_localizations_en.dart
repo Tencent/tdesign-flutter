@@ -172,4 +172,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get top => 'TOP';
+
+  @override
+  String get emptyData => 'No Data';
 }
