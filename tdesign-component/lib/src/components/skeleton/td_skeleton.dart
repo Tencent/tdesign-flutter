@@ -2,22 +2,28 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-///
 /// 骨架图动画
-///
 enum TDSkeletonAnimation {
-  gradient, // 渐变
-  flashed, // 闪烁
+  /// 渐变
+  gradient,
+
+  /// 闪烁
+  flashed,
 }
 
-///
 /// 骨架图风格
-///
 enum TDSkeletonTheme {
-  avatar, // 头像
-  image, // 图片
-  text, // 文本
-  paragraph, // 段落
+  /// 头像
+  avatar,
+
+  /// 图片
+  image,
+
+  /// 文本
+  text,
+
+  /// 段落
+  paragraph,
 }
 
 class TDSkeleton extends StatefulWidget {
@@ -29,64 +35,53 @@ class TDSkeleton extends StatefulWidget {
   }) {
     assert(delay >= 0);
 
+    var objects = <List<TDSkeletonRowColObj>>[];
+
     // 根据风格创建骨架图
     switch (theme) {
       case TDSkeletonTheme.avatar:
-        return TDSkeleton.fromRowCol(
-          key: key,
-          animation: animation,
-          delay: delay,
-          rowCol: TDSkeletonRowCol(
-            objects: const [
-              [TDSkeletonRowColObj.circle()]
-            ],
-          ),
-        );
+        objects = const [
+          [TDSkeletonRowColObj.circle()]
+        ];
+        break;
       case TDSkeletonTheme.image:
-        return TDSkeleton.fromRowCol(
-          key: key,
-          animation: animation,
-          delay: delay,
-          rowCol: TDSkeletonRowCol(
-            objects: const [
-              [
-                TDSkeletonRowColObj.rect(
-                  width: 72,
-                  height: 72,
-                  flex: null,
-                )
-              ]
-            ],
-          ),
-        );
+        objects = const [
+          [
+            TDSkeletonRowColObj.rect(
+              width: 72,
+              height: 72,
+              flex: null,
+            )
+          ]
+        ];
+        break;
       case TDSkeletonTheme.text:
-        return TDSkeleton.fromRowCol(
-          key: key,
-          animation: animation,
-          delay: delay,
-          rowCol: TDSkeletonRowCol(objects: const [
-            [
-              TDSkeletonRowColObj.text(flex: 24),
-              TDSkeletonRowColObj.spacer(width: 16),
-              TDSkeletonRowColObj.text(flex: 76),
-            ],
-            [TDSkeletonRowColObj.text()],
-          ]),
-        );
+        objects = const [
+          [
+            TDSkeletonRowColObj.text(flex: 24),
+            TDSkeletonRowColObj.spacer(width: 16),
+            TDSkeletonRowColObj.text(flex: 76),
+          ],
+          [TDSkeletonRowColObj.text()],
+        ];
+        break;
       case TDSkeletonTheme.paragraph:
-        return TDSkeleton.fromRowCol(
-          key: key,
-          animation: animation,
-          delay: delay,
-          rowCol: TDSkeletonRowCol(objects: [
-            for (int i = 0; i < 3; i++) [const TDSkeletonRowColObj.text()],
-            const [
-              TDSkeletonRowColObj.text(flex: 55),
-              TDSkeletonRowColObj.spacer(flex: 45),
-            ],
-          ]),
-        );
+        objects = [
+          for (int i = 0; i < 3; i++) [const TDSkeletonRowColObj.text()],
+          const [
+            TDSkeletonRowColObj.text(flex: 55),
+            TDSkeletonRowColObj.spacer(flex: 45),
+          ],
+        ];
+        break;
     }
+
+    return TDSkeleton.fromRowCol(
+      key: key,
+      animation: animation,
+      delay: delay,
+      rowCol: TDSkeletonRowCol(objects: objects),
+    );
   }
 
   /// 从行列框架创建骨架屏
@@ -243,23 +238,24 @@ class _TDSkeletonState extends State<TDSkeleton>
     List<Widget> skeletonRows = widget.rowCol.objects
         .map((row) => Row(children: row.map(_buildObj(context)).toList()))
         .toList();
-    if (widget.rowCol.style.rowSpacing(context) > 0) {
-      skeletonRows = skeletonRows
-          .expand((row) =>
-              [row, SizedBox(height: widget.rowCol.style.rowSpacing(context))])
-          .toList()
-        ..removeLast();
-    } // 添加行间距
-    var skeletonRowCol = Column(children: skeletonRows); // 行列布局
+
+    // 行列布局
+    var skeletonRowCol = Column(
+      // 添加行间距
+      spacing: widget.rowCol.style.rowSpacing(context),
+      children: skeletonRows,
+    );
 
     return widget.rowCol.objects
             .any((row) => row.any((obj) => obj.flex != null))
         // 添加弹性布局
         ? Flexible(
             child: Container(
-                constraints: BoxConstraints(
-                    maxHeight: widget.rowCol.visualHeight(context)), // 限制最大高度
-                child: skeletonRowCol))
+              constraints: BoxConstraints(
+                  maxHeight: widget.rowCol.visualHeight(context)), // 限制最大高度
+              child: skeletonRowCol,
+            ),
+          )
         : skeletonRowCol;
   }
 

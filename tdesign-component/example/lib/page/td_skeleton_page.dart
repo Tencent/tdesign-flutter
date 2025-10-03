@@ -4,18 +4,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
-class TDSkeletonPage extends StatefulWidget {
-  const TDSkeletonPage({Key? key}) : super(key: key);
+class TDSkeletonPage extends StatelessWidget {
+  const TDSkeletonPage({super.key});
 
-  @override
-  State<StatefulWidget> createState() => _TDSkeletonPageState();
-}
-
-class _TDSkeletonPageState extends State<TDSkeletonPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
+        title: tdTitle(context),
         desc: '当网络较慢时，在页面真实数据加载之前，给用户展示出页面的大致结构。',
         exampleCodeGroup: 'skeleton',
         children: [
@@ -116,13 +111,13 @@ class _TDSkeletonPageState extends State<TDSkeletonPage> {
 
   @Demo(group: 'skeleton')
   Widget _buildCellSkeleton(BuildContext context) {
-    var rowColsAvatar = TDSkeleton(theme: TDSkeletonTheme.avatar);
-    var rowColsImage = TDSkeleton.fromRowCol(
+    final rowColsAvatar = TDSkeleton(theme: TDSkeletonTheme.avatar);
+    final rowColsImage = TDSkeleton.fromRowCol(
       rowCol: TDSkeletonRowCol(objects: const [
-        [TDSkeletonRowColObj.rect(width: 48, height: 48, flex: null)]
+        [TDSkeletonRowColObj.rect(width: 48, height: 48)]
       ]),
     );
-    var rowColsContent = TDSkeleton.fromRowCol(
+    final rowColsContent = TDSkeleton.fromRowCol(
       rowCol: TDSkeletonRowCol(
         objects: const [
           [TDSkeletonRowColObj(), TDSkeletonRowColObj.spacer(flex: 1)],
@@ -132,22 +127,10 @@ class _TDSkeletonPageState extends State<TDSkeletonPage> {
     );
 
     return Column(
+      spacing: 16,
       children: [
-        Row(
-          children: [
-            rowColsAvatar,
-            const SizedBox(width: 12),
-            rowColsContent,
-          ],
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            rowColsImage,
-            const SizedBox(width: 12),
-            rowColsContent,
-          ],
-        ),
+        Row(spacing: 12, children: [rowColsAvatar, rowColsContent]),
+        Row(spacing: 12, children: [rowColsImage, rowColsContent]),
       ],
     );
   }
@@ -155,22 +138,22 @@ class _TDSkeletonPageState extends State<TDSkeletonPage> {
   @Demo(group: 'skeleton')
   Widget _buildGridSkeleton(BuildContext context) {
     return Row(
+      spacing: 16,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        for (var i = 0; i < 5; i++)
-          TDSkeleton.fromRowCol(
-            rowCol: TDSkeletonRowCol(objects: const [
-              [TDSkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
-              [TDSkeletonRowColObj.text(width: 48, flex: null)],
-            ]),
-          ),
-      ],
+      children: List.generate(5, (index) {
+        return TDSkeleton.fromRowCol(
+          rowCol: TDSkeletonRowCol(objects: const [
+            [TDSkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
+            [TDSkeletonRowColObj.text(width: 48, flex: null)],
+          ]),
+        );
+      }),
     );
   }
 
   @Demo(group: 'skeleton')
   Widget _buildCombineSkeleton(BuildContext context) {
-    var rowCols = Flexible(
+    final rowCols = Flexible(
         child: LayoutBuilder(
             builder: (context, constraints) => Row(children: [
                   TDSkeleton.fromRowCol(
@@ -178,18 +161,14 @@ class _TDSkeletonPageState extends State<TDSkeletonPage> {
                       objects: [
                         [
                           TDSkeletonRowColObj(
-                              width: constraints.maxWidth * 0.96,
+                              width: constraints.maxWidth,
                               height: constraints.maxWidth,
                               flex: null,
                               style: TDSkeletonRowColObjStyle(
                                   borderRadius: (context) =>
                                       TDTheme.of(context).radiusExtraLarge))
                         ],
-                        [
-                          TDSkeletonRowColObj.text(
-                            width: constraints.maxWidth * 0.96,
-                          )
-                        ],
+                        [TDSkeletonRowColObj.text(width: constraints.maxWidth)],
                         const [
                           TDSkeletonRowColObj.text(),
                           TDSkeletonRowColObj.spacer(flex: 1),
@@ -200,9 +179,9 @@ class _TDSkeletonPageState extends State<TDSkeletonPage> {
                 ])));
 
     return Row(
+      spacing: TDTheme.of(context).spacer16,
       children: [
         rowCols,
-        SizedBox(width: TDTheme.of(context).spacer4),
         rowCols,
       ],
     );
