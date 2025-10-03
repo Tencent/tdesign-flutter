@@ -24,7 +24,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
   double microProgressValue = 0.3;
   Timer? _microTimer;
 
-  double value = 0.6;
+  double value = 0.1;
 
   bool isPlusOperation = true;
 
@@ -49,6 +49,10 @@ class _TDProgressPageState extends State<TDProgressPage> {
           ExampleItem(builder: _buildWarning),
           ExampleItem(builder: _buildDanger),
           ExampleItem(builder: _buildSuccess),
+          ExampleItem(builder: _buildPrimaryInside),
+          ExampleItem(builder: _buildWarningInside),
+          ExampleItem(builder: _buildDangerInside),
+          ExampleItem(builder: _buildSuccessInside),
           ExampleItem(desc: '环形进度条', builder: _buildCirclePrimary),
           ExampleItem(builder: _buildCircleWarning),
           ExampleItem(builder: _buildCircleDanger),
@@ -165,6 +169,46 @@ class _TDProgressPageState extends State<TDProgressPage> {
       value: 1,
       strokeWidth: 6,
       progressLabelPosition: TDProgressLabelPosition.right,
+    );
+  }
+
+  @Demo(group: 'progress')
+  Widget _buildPrimaryInside(BuildContext context) {
+    return TDProgress(
+      type: TDProgressType.linear,
+      progressStatus: TDProgressStatus.primary,
+      value: value,
+      progressLabelPosition: TDProgressLabelPosition.inside,
+    );
+  }
+
+  @Demo(group: 'progress')
+  Widget _buildWarningInside(BuildContext context) {
+    return TDProgress(
+      type: TDProgressType.linear,
+      progressStatus: TDProgressStatus.warning,
+      value: value,
+      progressLabelPosition: TDProgressLabelPosition.inside,
+    );
+  }
+
+  @Demo(group: 'progress')
+  Widget _buildDangerInside(BuildContext context) {
+    return TDProgress(
+      type: TDProgressType.linear,
+      progressStatus: TDProgressStatus.danger,
+      value: value,
+      progressLabelPosition: TDProgressLabelPosition.inside,
+    );
+  }
+
+  @Demo(group: 'progress')
+  Widget _buildSuccessInside(BuildContext context) {
+    return TDProgress(
+      type: TDProgressType.linear,
+      progressStatus: TDProgressStatus.success,
+      value: 1,
+      progressLabelPosition: TDProgressLabelPosition.inside,
     );
   }
 

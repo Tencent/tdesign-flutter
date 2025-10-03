@@ -368,9 +368,8 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
         if (widget.value != null &&
             widget.progressLabelPosition == TDProgressLabelPosition.inside) {
           return _buildInsideLabel(maxWidth);
-        } else {
-          return _buildOutsideLabel(maxWidth);
         }
+        return _buildOutsideLabel(maxWidth);
       },
     );
   }
@@ -380,15 +379,18 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
       animation: _animation,
       builder: (context, child) {
         final progressWidth = _animation.value * maxWidth;
-        return Stack(
-          children: [
-            _buildBackgroundContainer(),
-            if (widget.value! > 0.1)
-              _buildProgressContainerWithLabel(progressWidth)
-            else
-              _buildProgressContainerWithLabelOutside(progressWidth),
-          ],
-        );
+        return ClipRRect(
+            borderRadius:
+                BorderRadius.circular(TDTheme.of(context).radiusRound),
+            child: Stack(
+              children: [
+                _buildBackgroundContainer(),
+                if (widget.value! > 0.1)
+                  _buildProgressContainerWithLabel(progressWidth)
+                else
+                  _buildProgressContainerWithLabelOutside(progressWidth),
+              ],
+            ));
       },
     );
   }
@@ -397,47 +399,47 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
-        final progressWidth = _animation.value * maxWidth;
         return Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          spacing: TDTheme.of(context).spacer8,
+          textDirection:
+              widget.progressLabelPosition == TDProgressLabelPosition.right
+                  ? TextDirection.rtl
+                  : TextDirection.ltr,
           children: [
-            if (widget.progressLabelPosition == TDProgressLabelPosition.left)
-              Container(
-                padding: const EdgeInsets.only(right: 8.0),
-                alignment: widget.labelWidgetAlignment ?? Alignment.centerRight,
-                constraints: BoxConstraints(
-                  minWidth: widget.labelWidgetWidth ??
-                      (maxWidth * 0.1 > 70 ? maxWidth * 0.04 : maxWidth * 0.1),
-                ),
-                child: widget.customProgressLabel ??
-                    _buildLabelWidget(TDTheme.of(context).textColorPrimary),
-              ),
+            Container(
+              alignment: widget.labelWidgetAlignment ??
+                  (widget.progressLabelPosition == TDProgressLabelPosition.left
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft),
+              constraints:
+                  BoxConstraints(minWidth: widget.labelWidgetWidth ?? 0),
+              child: widget.customProgressLabel ??
+                  _buildLabelWidget(TDTheme.of(context).textColorPrimary),
+            ),
             Expanded(
-                child: Stack(
-              children: [
-                _buildBackgroundContainer(),
-                Container(
-                  height: widget.strokeWidth,
-                  width: progressWidth,
-                  decoration: BoxDecoration(
-                    color: _effectiveColor,
-                    borderRadius: widget.linearBorderRadius,
-                  ),
-                )
-              ],
-            )),
-            if (widget.progressLabelPosition == TDProgressLabelPosition.right)
-              Container(
-                padding: const EdgeInsets.only(left: 8.0),
-                alignment: widget.labelWidgetAlignment ?? Alignment.centerLeft,
-                constraints: BoxConstraints(
-                  minWidth: widget.labelWidgetWidth ??
-                      (maxWidth * 0.1 > 70 ? maxWidth * 0.04 : maxWidth * 0.1),
-                ),
-                child: widget.customProgressLabel ??
-                    _buildLabelWidget(TDTheme.of(context).textColorPrimary),
-              )
+              child: ClipRRect(
+                  borderRadius:
+                      BorderRadius.circular(TDTheme.of(context).radiusRound),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Stack(
+                        children: [
+                          _buildBackgroundContainer(),
+                          Container(
+                            height: widget.strokeWidth,
+                            width: constraints.maxWidth * _animation.value,
+                            decoration: BoxDecoration(
+                              color: _effectiveColor,
+                              borderRadius: widget.linearBorderRadius,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  )),
+            ),
           ],
         );
       },
@@ -466,7 +468,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
           ? Align(
               alignment: Alignment.centerRight,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: _buildLabelWidget(TDTheme.of(context).textColorAnti),
               ),
             )
@@ -490,15 +492,13 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
                   .resolve(TextDirection.ltr)
                   .bottomLeft,
               topRight: Radius.circular(widget.linearBorderRadius
-                      .resolve(TextDirection.ltr)
-                      .topRight
-                      .x /
-                  2),
+                  .resolve(TextDirection.ltr)
+                  .topRight
+                  .x),
               bottomRight: Radius.circular(widget.linearBorderRadius
-                      .resolve(TextDirection.ltr)
-                      .bottomRight
-                      .x /
-                  2),
+                  .resolve(TextDirection.ltr)
+                  .bottomRight
+                  .x),
             ),
           ),
         ),
@@ -525,8 +525,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
           fontSize = widget.strokeWidth * 0.6;
           iconSize = widget.strokeWidth;
         }
-        fontWeight =
-            _animation.value <= 0.1 ? FontWeight.bold : FontWeight.normal;
+        fontWeight = FontWeight.normal;
         break;
       case TDProgressType.circular:
         iconSize = widget.circleRadius * 0.4;
