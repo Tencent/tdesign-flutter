@@ -162,4 +162,8 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
   @override
   String get top => AppLocalizations.of(context)!.top;
+
+  @override
+  String get emptyData => AppLocalizations.of(context)!.emptyData;
+
 }
