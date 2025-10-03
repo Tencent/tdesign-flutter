@@ -8,51 +8,48 @@ class TDCalendarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: TDTheme.of(context).grayColor2,
-      child: ExamplePage(
-        title: tdTitle(context),
-        desc: '按照日历形式展示数据或日期的容器。',
-        exampleCodeGroup: 'calendar',
-        children: [
-          ExampleModule(title: '组件类型', children: [
-            ExampleItem(
-              ignoreCode: true,
-              center: false,
-              builder: (BuildContext context) {
-                return const CodeWrapper(builder: _buildSimple);
-              },
-            ),
-          ]),
-          ExampleModule(title: '组件样式', children: [
-            ExampleItem(
-              desc: '可以自由定义想要的风格',
-              ignoreCode: true,
-              center: false,
-              builder: (BuildContext context) {
-                return const CodeWrapper(builder: _buildStyle);
-              },
-            ),
-            ExampleItem(
-              desc: '自定义日期单元格',
-              ignoreCode: true,
-              center: false,
-              builder: (BuildContext context) {
-                return const CodeWrapper(builder: _buildCustomCell);
-              },
-            ),
-            ExampleItem(
-              desc: '不使用Popup',
-              ignoreCode: true,
-              center: false,
-              builder: (BuildContext context) {
-                return const CodeWrapper(builder: _buildBlock);
-              },
-            ),
-          ]),
-        ],
-        test: const [],
-      ),
+    return ExamplePage(
+      title: tdTitle(context),
+      desc: '按照日历形式展示数据或日期的容器。',
+      exampleCodeGroup: 'calendar',
+      children: [
+        ExampleModule(title: '组件类型', children: [
+          ExampleItem(
+            ignoreCode: true,
+            center: false,
+            builder: (BuildContext context) {
+              return const CodeWrapper(builder: _buildSimple);
+            },
+          ),
+        ]),
+        ExampleModule(title: '组件样式', children: [
+          ExampleItem(
+            desc: '可以自由定义想要的风格',
+            ignoreCode: true,
+            center: false,
+            builder: (BuildContext context) {
+              return const CodeWrapper(builder: _buildStyle);
+            },
+          ),
+          ExampleItem(
+            desc: '自定义日期单元格',
+            ignoreCode: true,
+            center: false,
+            builder: (BuildContext context) {
+              return const CodeWrapper(builder: _buildCustomCell);
+            },
+          ),
+          ExampleItem(
+            desc: '不使用Popup',
+            ignoreCode: true,
+            center: false,
+            builder: (BuildContext context) {
+              return const CodeWrapper(builder: _buildBlock);
+            },
+          ),
+        ]),
+      ],
+      test: const [],
     );
   }
 }
@@ -60,7 +57,8 @@ class TDCalendarPage extends StatelessWidget {
 @Demo(group: 'calendar')
 Widget _buildSimple(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+  final selected = ValueNotifier<List<int>>(
+      [DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
   return ValueListenableBuilder(
     valueListenable: selected,
     builder: (context, value, child) {
@@ -76,7 +74,7 @@ Widget _buildSimple(BuildContext context) {
                 context,
                 visible: true,
                 onConfirm: (value) {
-                  print('onConfirm:$value');
+                  print('onConfirm：$value');
                   selected.value = value;
                 },
                 onClose: () {
@@ -87,16 +85,16 @@ Widget _buildSimple(BuildContext context) {
                   value: value,
                   height: size.height * 0.6 + 176,
                   onCellClick: (value, type, tdate) {
-                    print('onCellClick:$value');
+                    print('onCellClick: $value');
                   },
                   onCellLongPress: (value, type, tdate) {
-                    print('onCellLongPress:$value');
+                    print('onCellLongPress: $value');
                   },
                   onHeaderClick: (index, week) {
-                    print('onHeaderClick:$week');
+                    print('onHeaderClick: $week');
                   },
                   onChange: (value) {
-                    print('onChange:$value');
+                    print('onChange: $value');
                   },
                 ),
               );
@@ -130,7 +128,9 @@ Widget _buildSimple(BuildContext context) {
                   type: CalendarType.range,
                   value: [
                     DateTime.now().millisecondsSinceEpoch,
-                    DateTime.now().add(const Duration(days: 6)).millisecondsSinceEpoch,
+                    DateTime.now()
+                        .add(const Duration(days: 6))
+                        .millisecondsSinceEpoch,
                   ],
                   height: size.height * 0.6 + 176,
                 ),
@@ -140,7 +140,8 @@ Widget _buildSimple(BuildContext context) {
           TDCell(
             title: '单个选择日历和时间',
             arrow: true,
-            note: '${date.year}-${date.month}-${date.day} ${date.hour}:${date.minute}',
+            note:
+                '${date.year}-${date.month}-${date.day} ${date.hour}:${date.minute}',
             onClick: (cell) {
               TDCalendarPopup(
                 context,
@@ -160,16 +161,16 @@ Widget _buildSimple(BuildContext context) {
                   // pickerHeight: 100,
                   // pickerItemCount: 2,
                   onCellClick: (value, type, tdate) {
-                    print('onCellClick:$value');
+                    print('onCellClick: $value');
                   },
                   onCellLongPress: (value, type, tdate) {
-                    print('onCellLongPress:$value');
+                    print('onCellLongPress: $value');
                   },
                   onHeaderClick: (index, week) {
-                    print('onHeaderClick:$week');
+                    print('onHeaderClick: $week');
                   },
                   onChange: (value) {
-                    print('onChange:$value');
+                    print('onChange: $value');
                   },
                 ),
               );
@@ -183,7 +184,7 @@ Widget _buildSimple(BuildContext context) {
                 context,
                 visible: true,
                 onConfirm: (value) {
-                  print('onConfirm:$value');
+                  print('onConfirm: $value');
                 },
                 onClose: () {
                   print('onClose');
@@ -194,20 +195,22 @@ Widget _buildSimple(BuildContext context) {
                   type: CalendarType.range,
                   value: [
                     DateTime.now().millisecondsSinceEpoch,
-                    DateTime.now().add(const Duration(days: 3)).millisecondsSinceEpoch,
+                    DateTime.now()
+                        .add(const Duration(days: 3))
+                        .millisecondsSinceEpoch,
                   ],
                   useTimePicker: true,
                   onCellClick: (value, type, tdate) {
-                    print('onCellClick:$value');
+                    print('onCellClick: $value');
                   },
                   onCellLongPress: (value, type, tdate) {
-                    print('onCellLongPress:$value');
+                    print('onCellLongPress: $value');
                   },
                   onHeaderClick: (index, week) {
-                    print('onHeaderClick:$week');
+                    print('onHeaderClick: $week');
                   },
                   onChange: (value) {
-                    print('onChange:$value');
+                    print('onChange: $value');
                   },
                 ),
               );
@@ -252,11 +255,13 @@ Widget _buildStyle(BuildContext context) {
                     day?.style = TextStyle(
                       fontSize: TDTheme.of(context).fontTitleMedium?.size,
                       height: TDTheme.of(context).fontTitleMedium?.height,
-                      fontWeight: TDTheme.of(context).fontTitleMedium?.fontWeight,
+                      fontWeight:
+                          TDTheme.of(context).fontTitleMedium?.fontWeight,
                       color: TDTheme.of(context).errorColor6,
                     );
                     if (day?.typeNotifier.value == DateSelectType.selected) {
-                      day?.style = day.style?.copyWith(color: TDTheme.of(context).fontWhColor1);
+                      day?.style = day.style
+                          ?.copyWith(color: TDTheme.of(context).fontWhColor1);
                     }
                   }
                 }
@@ -275,7 +280,8 @@ Widget _buildStyle(BuildContext context) {
             context,
             visible: true,
             confirmBtn: Padding(
-              padding: EdgeInsets.symmetric(vertical: TDTheme.of(context).spacer16),
+              padding:
+                  EdgeInsets.symmetric(vertical: TDTheme.of(context).spacer16),
               child: TDButton(
                 theme: TDButtonTheme.danger,
                 shape: TDButtonShape.round,
@@ -320,31 +326,30 @@ Widget _buildStyle(BuildContext context) {
 @Demo(group: 'calendar')
 Widget _buildBlock(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+  final selected = ValueNotifier<List<int>>(
+      [DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
   return Column(
+    spacing: TDTheme.of(context).spacer16,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Row(
+        spacing: TDTheme.of(context).spacer16,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(width: TDTheme.of(context).spacer16),
           TDButton(
               text: '加一个月',
-              size: TDButtonSize.small,
               theme: TDButtonTheme.primary,
               onTap: () {
                 selected.value = [selected.value[0] + 30 * 24 * 60 * 60 * 1000];
               }),
-          SizedBox(width: TDTheme.of(context).spacer16),
           TDButton(
               text: '减一个月',
-              size: TDButtonSize.small,
               theme: TDButtonTheme.primary,
               onTap: () {
                 selected.value = [selected.value[0] - 30 * 24 * 60 * 60 * 1000];
               }),
         ],
       ),
-      SizedBox(height: TDTheme.of(context).spacer16),
       ValueListenableBuilder(
         valueListenable: selected,
         builder: (context, value, child) {
@@ -353,6 +358,8 @@ Widget _buildBlock(BuildContext context) {
             value: value,
             height: size.height * 0.6 + 176,
             animateTo: true,
+            // 不使用popup时，useSafeArea无效
+            useSafeArea: true,
           );
         },
       ),
@@ -363,7 +370,8 @@ Widget _buildBlock(BuildContext context) {
 @Demo(group: 'calendar')
 Widget _buildCustomCell(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+  final selected = ValueNotifier<List<int>>(
+      [DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
   return ValueListenableBuilder(
     valueListenable: selected,
     builder: (context, value, child) {
@@ -386,42 +394,51 @@ Widget _buildCustomCell(BuildContext context) {
                   print('onClose');
                 },
                 child: TDCalendar(
-                  title: '请选择日期',
-                  value: value,
-                  height: size.height * 0.6 + 176,
-                  onCellClick: (value, type, tdate) {
-                    print('onCellClick:$value');
-                  },
-                  onCellLongPress: (value, type, tdate) {
-                    print('onCellLongPress:$value');
-                  },
-                  onHeaderClick: (index, week) {
-                    print('onHeaderClick:$week');
-                  },
-                  onChange: (value) {
-                    print('onChange:$value');
-                  },
-                  cellWidget: (context, tdate, selectType) {
-                    if (selectType == DateSelectType.selected) {
+                    title: '请选择日期',
+                    value: value,
+                    height: size.height * 0.6 + 176,
+                    onCellClick: (value, type, tdate) {
+                      print('onCellClick: $value');
+                    },
+                    onCellLongPress: (value, type, tdate) {
+                      print('onCellLongPress: $value');
+                    },
+                    onHeaderClick: (index, week) {
+                      print('onHeaderClick: $week');
+                    },
+                    onChange: (value) {
+                      print('onChange: $value');
+                    },
+                    cellWidget: (context, tdate, selectType) {
+                      if (selectType == DateSelectType.selected) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('${tdate.date.day}',
+                                style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)),
+                            const Text('文案文案',
+                                style: TextStyle(
+                                    fontSize: 6, color: Colors.white)),
+                            const Text('自定义',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white)),
+                          ],
+                        );
+                      }
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('${tdate.date.day}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
-                          Text('文案文案', style: TextStyle(fontSize: 6, color: Colors.white)),
-                          Text('自定义', style: TextStyle(fontSize: 12, color: Colors.white)),
+                          Text('${tdate.date.day}',
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          const Text('文案文案', style: TextStyle(fontSize: 8)),
+                          const Text('自定义', style: TextStyle(fontSize: 8)),
                         ],
                       );
-                    }
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('${tdate.date.day}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text('文案文案', style: TextStyle(fontSize: 8)),
-                        Text('自定义', style: TextStyle(fontSize: 8)),
-                      ],
-                    );
-                  }
-                ),
+                    }),
               );
             },
           ),

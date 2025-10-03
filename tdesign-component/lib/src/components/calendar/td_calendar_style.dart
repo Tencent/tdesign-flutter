@@ -99,14 +99,14 @@ class TDCalendarStyle {
       height: TDTheme.of(context).fontBodyExtraSmall?.height,
       fontWeight: FontWeight.w400,
     );
-    centreColor = TDTheme.of(context).brandColor1;
+    centreColor = TDTheme.of(context).brandLightColor;
     switch (type) {
       case DateSelectType.empty:
         cellStyle =
             defStyle.copyWith(color: TDTheme.of(context).textColorPrimary);
-        todayStyle = defStyle.copyWith(color: TDTheme.of(context).brandColor7);
+        todayStyle = defStyle.copyWith(color: TDTheme.of(context).brandNormalColor);
         cellPrefixStyle =
-            prefixStyle.copyWith(color: TDTheme.of(context).errorColor6);
+            prefixStyle.copyWith(color: TDTheme.of(context).errorNormalColor);
         cellSuffixStyle = prefixStyle.copyWith(
             color: TDTheme.of(context).textColorPlaceholder);
         cellDecoration = null;
@@ -114,29 +114,29 @@ class TDCalendarStyle {
       case DateSelectType.disabled:
         cellStyle =
             defStyle.copyWith(color: TDTheme.of(context).textColorDisabled);
-        todayStyle = defStyle.copyWith(color: TDTheme.of(context).brandColor3);
+        todayStyle = defStyle.copyWith(color: TDTheme.of(context).brandDisabledColor);
         cellPrefixStyle =
-            prefixStyle.copyWith(color: TDTheme.of(context).errorColor3);
+            prefixStyle.copyWith(color: TDTheme.of(context).errorDisabledColor);
         cellSuffixStyle =
             prefixStyle.copyWith(color: TDTheme.of(context).textColorDisabled);
         cellDecoration = null;
         break;
       case DateSelectType.selected:
-        cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+        cellStyle = defStyle.copyWith(color: TDTheme.of(context).textColorAnti);
         cellPrefixStyle =
-            prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+            prefixStyle.copyWith(color: TDTheme.of(context).textColorAnti);
         cellSuffixStyle =
-            prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+            prefixStyle.copyWith(color: TDTheme.of(context).textColorAnti);
         cellDecoration = BoxDecoration(
           borderRadius: BorderRadius.circular(radius6),
-          color: TDTheme.of(context).brandColor7,
+          color: TDTheme.of(context).brandNormalColor,
         );
         break;
       case DateSelectType.centre:
         cellStyle =
             defStyle.copyWith(color: TDTheme.of(context).textColorPrimary);
         cellPrefixStyle =
-            prefixStyle.copyWith(color: TDTheme.of(context).errorColor6);
+            prefixStyle.copyWith(color: TDTheme.of(context).errorNormalColor);
         cellSuffixStyle = prefixStyle.copyWith(
             color: TDTheme.of(context).textColorPlaceholder);
         cellDecoration = BoxDecoration(
@@ -144,24 +144,24 @@ class TDCalendarStyle {
         );
         break;
       case DateSelectType.start:
-        cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+        cellStyle = defStyle.copyWith(color: TDTheme.of(context).textColorAnti);
         cellPrefixStyle =
-            prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+            prefixStyle.copyWith(color: TDTheme.of(context).textColorAnti);
         cellSuffixStyle =
-            prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+            prefixStyle.copyWith(color: TDTheme.of(context).textColorAnti);
         cellDecoration = BoxDecoration(
-          color: TDTheme.of(context).brandColor7,
+          color: TDTheme.of(context).brandNormalColor,
           borderRadius: BorderRadius.horizontal(left: Radius.circular(radius6)),
         );
         break;
       case DateSelectType.end:
-        cellStyle = defStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+        cellStyle = defStyle.copyWith(color: TDTheme.of(context).textColorAnti);
         cellPrefixStyle =
-            prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+            prefixStyle.copyWith(color: TDTheme.of(context).textColorAnti);
         cellSuffixStyle =
-            prefixStyle.copyWith(color: TDTheme.of(context).fontWhColor1);
+            prefixStyle.copyWith(color: TDTheme.of(context).textColorAnti);
         cellDecoration = BoxDecoration(
-          color: TDTheme.of(context).brandColor7,
+          color: TDTheme.of(context).brandNormalColor,
           borderRadius:
               BorderRadius.horizontal(right: Radius.circular(radius6)),
         );
