@@ -227,7 +227,9 @@ class TDSwiperPage extends StatelessWidget {
       itemCount: 6,
       loop: true,
       pagination: const SwiperPagination(
-          alignment: Alignment.bottomCenter, builder: TDSwiperPagination.dots),
+        alignment: Alignment.bottomCenter,
+        builder: TDSwiperPagination.dots,
+      ),
       itemBuilder: (BuildContext context, int index) {
         return const TDImage(
           assetUrl: 'assets/img/image.png',
@@ -243,8 +245,9 @@ class TDSwiperPage extends StatelessWidget {
       itemCount: 6,
       loop: true,
       pagination: const SwiperPagination(
-          alignment: Alignment.bottomCenter,
-          builder: TDSwiperPagination.dotsBar),
+        alignment: Alignment.bottomCenter,
+        builder: TDSwiperPagination.dotsBar,
+      ),
       itemBuilder: (BuildContext context, int index) {
         return const TDImage(
           assetUrl: 'assets/img/image.png',
@@ -259,9 +262,11 @@ class TDSwiperPage extends StatelessWidget {
       autoplay: true,
       itemCount: 6,
       loop: true,
+      scrollDirection: Axis.vertical,
       pagination: const SwiperPagination(
-          alignment: Alignment.bottomCenter,
-          builder: TDSwiperPagination.fraction),
+        alignment: Alignment.bottomCenter,
+        builder: TDSwiperPagination.fraction,
+      ),
       itemBuilder: (BuildContext context, int index) {
         return const TDImage(
           assetUrl: 'assets/img/image.png',
@@ -275,9 +280,11 @@ class TDSwiperPage extends StatelessWidget {
     return Swiper(
       // autoplay: true,
       itemCount: 6,
-      loop: true,
+      loop: false,
       pagination: const SwiperPagination(
-          alignment: Alignment.center, builder: TDSwiperPagination.controls),
+        alignment: Alignment.center,
+        builder: TDSwiperPagination.controls,
+      ),
       itemBuilder: (BuildContext context, int index) {
         return const TDImage(
           assetUrl: 'assets/img/image.png',
@@ -296,7 +303,9 @@ class TDSwiperPage extends StatelessWidget {
       loop: true,
       transformer: TDPageTransformer.margin(),
       pagination: const SwiperPagination(
-          alignment: Alignment.center, builder: TDSwiperPagination.dots),
+        alignment: Alignment.center,
+        builder: TDSwiperPagination.dots,
+      ),
       itemBuilder: (BuildContext context, int index) {
         return const TDImage(
           assetUrl: 'assets/img/image.png',
@@ -315,7 +324,9 @@ class TDSwiperPage extends StatelessWidget {
       loop: true,
       transformer: TDPageTransformer.scaleAndFade(),
       pagination: const SwiperPagination(
-          alignment: Alignment.center, builder: TDSwiperPagination.dots),
+        alignment: Alignment.center,
+        builder: TDSwiperPagination.dots,
+      ),
       itemBuilder: (BuildContext context, int index) {
         return const TDImage(
           assetUrl: 'assets/img/image.png',
@@ -332,7 +343,9 @@ class TDSwiperPage extends StatelessWidget {
       loop: true,
       outer: true,
       pagination: const SwiperPagination(
-          alignment: Alignment.bottomCenter, builder: TDSwiperPagination.dots),
+        alignment: Alignment.bottomCenter,
+        builder: TDSwiperPagination.dots,
+      ),
       itemBuilder: (BuildContext context, int index) {
         return const TDImage(
           assetUrl: 'assets/img/image.png',
@@ -349,7 +362,9 @@ class TDSwiperPage extends StatelessWidget {
       loop: true,
       scrollDirection: Axis.vertical,
       pagination: const SwiperPagination(
-          alignment: Alignment.centerRight, builder: TDSwiperPagination.dots),
+        alignment: Alignment.centerRight,
+        builder: TDSwiperPagination.dots,
+      ),
       itemBuilder: (BuildContext context, int index) {
         return const TDImage(
           assetUrl: 'assets/img/image.png',
@@ -368,7 +383,9 @@ class TDSwiperPage extends StatelessWidget {
       itemCount: 2,
       loop: false,
       pagination: const SwiperPagination(
-          alignment: Alignment.center, builder: TDSwiperPagination.dots),
+        alignment: Alignment.center,
+        builder: TDSwiperPagination.dots,
+      ),
       itemBuilder: (BuildContext context, int index) {
         return const TDImage(
           assetUrl: 'assets/img/image.png',
@@ -385,7 +402,9 @@ class TDSwiperPage extends StatelessWidget {
       itemCount: 6,
       loop: true,
       pagination: const SwiperPagination(
-          alignment: Alignment.topLeft, builder: TDSwiperPagination.dotsBar),
+        alignment: Alignment.topLeft,
+        builder: TDSwiperPagination.dotsBar,
+      ),
       itemBuilder: (BuildContext context, int index) {
         return const TDImage(
           assetUrl: 'assets/img/image.png',
@@ -401,8 +420,9 @@ class TDSwiperPage extends StatelessWidget {
       itemCount: 6,
       loop: true,
       pagination: const SwiperPagination(
-          alignment: Alignment.bottomRight,
-          builder: TDSwiperPagination.fraction),
+        alignment: Alignment.bottomRight,
+        builder: TDSwiperPagination.fraction,
+      ),
       itemBuilder: (BuildContext context, int index) {
         return const TDImage(
           assetUrl: 'assets/img/image.png',
@@ -419,8 +439,9 @@ class TDSwiperPage extends StatelessWidget {
       loop: true,
       scrollDirection: Axis.vertical,
       pagination: const SwiperPagination(
-          alignment: Alignment.bottomRight,
-          builder: TDSwiperPagination.dotsBar),
+        alignment: Alignment.bottomRight,
+        builder: TDSwiperPagination.dotsBar,
+      ),
       itemBuilder: (BuildContext context, int index) {
         return const TDImage(
           assetUrl: 'assets/img/image.png',
