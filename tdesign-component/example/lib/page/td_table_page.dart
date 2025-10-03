@@ -30,21 +30,19 @@ class TDTablePage extends StatelessWidget {
   }
 
   List<dynamic> _getData2() {
-    var data = <dynamic>[];
-    for (var i = 0; i < 10; i++) {
-      if (i == 0) {
-        data.add({
-          'title1': '横向平铺内容不省略',
-          'title2': '横向平铺内容不省略',
-          'title3': '横向平铺内容不省略',
-        });
-      } else {
-        data.add({
-          'title1': '内容',
-          'title2': '内容',
-          'title3': '内容',
-        });
+    var data = <dynamic>[
+      {
+        'title1': '横向平铺内容不省略',
+        'title2': '横向平铺内容不省略',
+        'title3': '横向平铺内容不省略',
       }
+    ];
+    for (var i = 0; i < 10; i++) {
+      data.add({
+        'title1': '内容',
+        'title2': '内容',
+        'title3': '内容',
+      });
     }
     return data;
   }
@@ -131,18 +129,14 @@ class TDTablePage extends StatelessWidget {
                 TDText(
                   '修改',
                   style: TextStyle(
-                    color: TDTheme.of(context).brandNormalColor,
-                    fontSize: 14,
-                    height: 1,
-                  ),
+                      color: TDTheme.of(context).brandNormalColor,
+                      fontSize: 14),
                 ),
                 TDText(
                   '通过',
                   style: TextStyle(
-                    color: TDTheme.of(context).brandNormalColor,
-                    fontSize: 14,
-                    height: 1,
-                  ),
+                      color: TDTheme.of(context).brandNormalColor,
+                      fontSize: 14),
                 ),
               ],
             );
