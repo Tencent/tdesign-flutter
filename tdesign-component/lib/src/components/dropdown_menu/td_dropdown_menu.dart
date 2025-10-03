@@ -249,7 +249,7 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
             : TDIcons.caret_down_small);
     return RotationTransition(
       turns: _iconAnimations[index],
-      child: Icon(arrowIcon, size: 24, color: color),
+      child: Icon(arrowIcon, size: 20, color: color),
     );
   }
 
