@@ -261,6 +261,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
       _updateAnimation(oldWidgetValue: oldWidget.value);
+      _updateEffectiveLabel();
     }
     if (oldWidget.color != widget.color ||
         oldWidget.progressStatus != widget.progressStatus) {
@@ -399,6 +400,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
         final progressWidth = _animation.value * maxWidth;
         return Row(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (widget.progressLabelPosition == TDProgressLabelPosition.left)
               Container(

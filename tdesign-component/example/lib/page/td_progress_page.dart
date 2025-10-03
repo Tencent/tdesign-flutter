@@ -24,40 +24,62 @@ class _TDProgressPageState extends State<TDProgressPage> {
   double microProgressValue = 0.3;
   Timer? _microTimer;
 
+  double value = 0.6;
+
+  bool isPlusOperation = true;
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
-        desc: '用于展示任务当前的进度',
-        exampleCodeGroup: 'progress',
-        padding: const EdgeInsets.all(16),
-        children: [
-          ExampleModule(title: '组件类型', children: [
-            ExampleItem(desc: '线性进度条', builder: _buildRightLabelLinear),
-            ExampleItem(desc: '百分比内显', builder: _buildInsideLabelLinear),
-            ExampleItem(desc: '环形进度条', builder: _buildCircle),
-            ExampleItem(desc: '微型环形进度条', builder: _buildMicro),
-            ExampleItem(desc: '按钮进度条', builder: _buildButton),
-            ExampleItem(desc: '微型按钮进度条', builder: _buildMicroButton),
-          ]),
-          ExampleModule(title: '组件状态', children: [
-            ExampleItem(desc: '线性进度条', builder: _buildPrimary),
-            ExampleItem(builder: _buildWarning),
-            ExampleItem(builder: _buildDanger),
-            ExampleItem(builder: _buildSuccess),
-            ExampleItem(desc: '环形进度条', builder: _buildCirclePrimary),
-            ExampleItem(builder: _buildCircleWarning),
-            ExampleItem(builder: _buildCircleDanger),
-            ExampleItem(builder: _buildCircleSuccess),
-          ])
-        ]);
+      title: tdTitle(),
+      desc: '用于展示任务当前的进度',
+      exampleCodeGroup: 'progress',
+      padding: const EdgeInsets.all(16),
+      children: [
+        ExampleModule(title: '组件类型', children: [
+          ExampleItem(desc: '线性进度条', builder: _buildRightLabelLinear),
+          ExampleItem(desc: '百分比内显', builder: _buildInsideLabelLinear),
+          ExampleItem(desc: '环形进度条', builder: _buildCircle),
+          ExampleItem(desc: '微型环形进度条', builder: _buildMicro),
+          ExampleItem(desc: '按钮进度条', builder: _buildButton),
+          ExampleItem(desc: '微型按钮进度条', builder: _buildMicroButton),
+        ]),
+        ExampleModule(title: '组件状态', children: [
+          ExampleItem(desc: '线性进度条', builder: _buildPrimary),
+          ExampleItem(builder: _buildWarning),
+          ExampleItem(builder: _buildDanger),
+          ExampleItem(builder: _buildSuccess),
+          ExampleItem(desc: '环形进度条', builder: _buildCirclePrimary),
+          ExampleItem(builder: _buildCircleWarning),
+          ExampleItem(builder: _buildCircleDanger),
+          ExampleItem(builder: _buildCircleSuccess),
+        ])
+      ],
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          isPlusOperation ? TDIcons.plus : TDIcons.minus,
+        ),
+        onPressed: () {
+          setState(() {
+            // 加到1时为减，减到0时为加
+            value += isPlusOperation ? 0.05 : -0.05;
+            if (value >= 1) {
+              isPlusOperation = false;
+            }
+            if (value <= 0) {
+              isPlusOperation = true;
+            }
+          });
+        },
+      ),
+    );
   }
 
   @Demo(group: 'progress')
   Widget _buildRightLabelLinear(BuildContext context) {
     return TDProgress(
       type: TDProgressType.linear,
-      value: 0.8,
+      value: value,
       strokeWidth: 6,
       progressLabelPosition: TDProgressLabelPosition.right,
     );
@@ -65,17 +87,17 @@ class _TDProgressPageState extends State<TDProgressPage> {
 
   @Demo(group: 'progress')
   Widget _buildInsideLabelLinear(BuildContext context) {
-    return TDProgress(type: TDProgressType.linear, value: 0.8);
+    return TDProgress(type: TDProgressType.linear, value: value);
   }
 
   @Demo(group: 'progress')
   Widget _buildCircle(BuildContext context) {
-    return TDProgress(type: TDProgressType.circular, value: 0.3);
+    return TDProgress(type: TDProgressType.circular, value: value);
   }
 
   @Demo(group: 'progress')
   Widget _buildMicro(BuildContext context) {
-    return TDProgress(type: TDProgressType.micro, value: 0.75);
+    return TDProgress(type: TDProgressType.micro, value: value);
   }
 
   @Demo(group: 'progress')
@@ -107,7 +129,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
     return TDProgress(
       type: TDProgressType.linear,
       progressStatus: TDProgressStatus.primary,
-      value: 0.8,
+      value: value,
       strokeWidth: 6,
       progressLabelPosition: TDProgressLabelPosition.right,
     );
@@ -118,7 +140,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
     return TDProgress(
       type: TDProgressType.linear,
       progressStatus: TDProgressStatus.warning,
-      value: 0.8,
+      value: value,
       strokeWidth: 6,
       progressLabelPosition: TDProgressLabelPosition.right,
     );
@@ -129,7 +151,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
     return TDProgress(
       type: TDProgressType.linear,
       progressStatus: TDProgressStatus.danger,
-      value: 0.8,
+      value: value,
       strokeWidth: 6,
       progressLabelPosition: TDProgressLabelPosition.right,
     );
@@ -140,7 +162,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
     return TDProgress(
       type: TDProgressType.linear,
       progressStatus: TDProgressStatus.success,
-      value: 0.8,
+      value: 1,
       strokeWidth: 6,
       progressLabelPosition: TDProgressLabelPosition.right,
     );
@@ -151,7 +173,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
     return TDProgress(
       type: TDProgressType.circular,
       progressStatus: TDProgressStatus.primary,
-      value: 0.3,
+      value: value,
     );
   }
 
@@ -160,7 +182,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
     return TDProgress(
       type: TDProgressType.circular,
       progressStatus: TDProgressStatus.warning,
-      value: 0.3,
+      value: value,
     );
   }
 
@@ -169,7 +191,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
     return TDProgress(
       type: TDProgressType.circular,
       progressStatus: TDProgressStatus.danger,
-      value: 0.3,
+      value: value,
     );
   }
 
