@@ -293,6 +293,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
           ExampleItem(desc: '测试使用次标题', builder: _buildVerticalSubTitleCascader),
           ExampleItem(desc: '垂直级联选择器-部门', builder: _buildTestVerticalCompanyCascader),
           ExampleItem(desc: '选择任意项', builder: _buildSelectAnyItemCascader),
+          ExampleItem(desc: '使用initialIndexes设置默认值', builder: _buildWithInitialIndexes),
         ],
       ),
     );
@@ -579,6 +580,29 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
           )
         ],
       ),
+    );
+  }
+
+  @Demo(group: 'cascader')
+  Widget _buildWithInitialIndexes(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        TDCascader.showMultiCascader(context, title: '选择地址', data: _data, initialIndexes: [0, 0, 1], theme: 'step',
+            onChange: (List<MultiCascaderListModel> selectData) {
+          setState(() {
+            var result = [];
+            var len = selectData.length;
+            _initData = selectData[len - 1].value!;
+            selectData.forEach((element) {
+              result.add(element.label);
+            });
+            _selected_1 = result.join('/');
+          });
+        }, onClose: () {
+          Navigator.of(context).pop();
+        });
+      },
+      child: _buildSelectRow(context, _selected_1, '选择地区'),
     );
   }
 }
