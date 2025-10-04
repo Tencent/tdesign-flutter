@@ -13,41 +13,43 @@ enum DateTypeKey { year, month, weekDay, day, hour, minute, second }
 /// 时间选择器
 class TDDatePicker extends StatefulWidget {
   const TDDatePicker({
-    required this.title,
-    required this.onConfirm,
-    this.rightText,
-    this.leftText,
-    this.onCancel,
-    this.backgroundColor,
-    this.titleDividerColor,
-    this.topRadius,
+    this.title,
     this.titleHeight,
+    this.titleDividerColor,
+    this.onConfirm,
+    this.onCancel,
+    this.onChange,
+    this.onSelectedItemChanged,
+    this.leftText,
+    this.rightText,
+    this.leftTextStyle,
+    this.centerTextStyle,
+    this.rightTextStyle,
     this.padding,
     this.leftPadding,
+    this.topPadding,
     this.rightPadding,
-    this.leftTextStyle,
-    this.rightTextStyle,
-    this.centerTextStyle,
+    this.topRadius,
+    this.backgroundColor,
     this.customSelectWidget,
+    this.header = true,
     this.itemDistanceCalculator,
     required this.model,
-    this.showTitle = true,
     this.pickerHeight = 200,
-    required this.pickerItemCount,
+    this.pickerItemCount = 5,
     this.isTimeUnit,
-    this.onSelectedItemChanged,
     this.itemBuilder,
     Key? key,
   }) : super(key: key);
 
   /// 选择器标题
-  final String title;
+  final String? title;
 
-  /// 右侧按钮文案
-  final String? rightText;
+  /// 标题高度
+  final double? titleHeight;
 
-  /// 左侧按钮文案
-  final String? leftText;
+  /// 标题分割线颜色
+  final Color? titleDividerColor;
 
   /// 选择器确认按钮回调
   final DatePickerCallback? onConfirm;
@@ -55,17 +57,32 @@ class TDDatePicker extends StatefulWidget {
   /// 选择器取消按钮回调
   final DatePickerCallback? onCancel;
 
-  /// 背景颜色
-  final Color? backgroundColor;
+  /// 选择器值改变回调
+  final DatePickerCallback? onChange;
 
-  /// 标题分割线颜色
-  final Color? titleDividerColor;
+  /// 选择器选中项改变回调
+  final void Function(int wheelIndex, int index)? onSelectedItemChanged;
 
-  /// 顶部圆角
-  final double? topRadius;
+  /// 左侧按钮文案
+  final String? leftText;
 
-  /// 标题高度
-  final double? titleHeight;
+  /// 右侧按钮文案
+  final String? rightText;
+
+  /// 自定义左侧文案样式
+  final TextStyle? leftTextStyle;
+
+  /// 自定义中间文案样式
+  final TextStyle? centerTextStyle;
+
+  /// 自定义右侧文案样式
+  final TextStyle? rightTextStyle;
+
+  /// 适配padding
+  final EdgeInsets? padding;
+
+  /// 顶部填充
+  final double? topPadding;
 
   /// 左边填充
   final double? leftPadding;
@@ -73,41 +90,32 @@ class TDDatePicker extends StatefulWidget {
   /// 右边填充
   final double? rightPadding;
 
+  /// 顶部圆角
+  final double? topRadius;
+
+  /// 背景颜色
+  final Color? backgroundColor;
+
   /// 根据距离计算字体颜色、透明度、粗细
   final ItemDistanceCalculator? itemDistanceCalculator;
+
+  /// 是否显示头部内容
+  final bool header;
 
   /// 选择器List的视窗高度，默认200
   final double pickerHeight;
 
-  /// 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
+  /// 选择器List视窗中item个数，pickerHeight / pickerItemCount，即item高度
   final int pickerItemCount;
 
   /// 自定义选择框样式
   final Widget? customSelectWidget;
-
-  /// 自定义左侧文案样式
-  final TextStyle? leftTextStyle;
-
-  /// 自定义右侧文案样式
-  final TextStyle? rightTextStyle;
-
-  /// 自定义中间文案样式
-  final TextStyle? centerTextStyle;
-
-  /// 适配padding
-  final EdgeInsets? padding;
-
-  /// 是否展示标题
-  final bool showTitle;
 
   /// 数据模型
   final DatePickerModel model;
 
   /// 是否时间显示
   final bool? isTimeUnit;
-
-  /// 选择器选中项改变回调
-  final void Function(int wheelIndex, int index)? onSelectedItemChanged;
 
   /// 自定义item构建
   final ItemBuilderType? itemBuilder;
@@ -133,15 +141,12 @@ class _TDDatePickerState extends State<TDDatePicker> {
   }
 
   bool useAll() {
-    if (widget.model.useYear &&
+    return widget.model.useYear &&
         widget.model.useMonth &&
         widget.model.useDay &&
         widget.model.useHour &&
         widget.model.useMinute &&
-        widget.model.useSecond) {
-      return true;
-    }
-    return false;
+        widget.model.useSecond;
   }
 
   selectListItem(String ev) {
@@ -179,13 +184,15 @@ class _TDDatePickerState extends State<TDDatePicker> {
       widget.onCancel!(selected);
     } else if (ev == 'onConfirm' && widget.onConfirm != null) {
       widget.onConfirm!(selected);
+    } else if (ev == 'onChange' && widget.onChange != null) {
+      widget.onChange!(selected);
     } else {
       Navigator.of(context).pop();
     }
   }
 
   int selectItemValue(List items, int itemIndex) {
-    ///选择列表索引对应的项的值
+    /// 选择列表索引对应的项的值
     return items[itemIndex];
   }
 
@@ -198,20 +205,15 @@ class _TDDatePickerState extends State<TDDatePicker> {
           EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
         color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(
-              widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
-          topRight: Radius.circular(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(
               widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
         ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Visibility(
-            child: buildTitle(context),
-            visible: widget.showTitle == true,
-          ),
+          if (widget.header) _buildHeader(context),
           SizedBox(
             height: pickerHeight,
             child: Stack(
@@ -363,6 +365,9 @@ class _TDDatePickerState extends State<TDDatePicker> {
                         pickerHeight - Random().nextDouble() / 100000000;
                   });
                 }
+                if (widget.onChange != null) {
+                  selectListItem('onChange');
+                }
                 widget.onSelectedItemChanged?.call(whichLine, index);
               },
               childDelegate: ListWheelChildBuilderDelegate(
@@ -390,17 +395,23 @@ class _TDDatePickerState extends State<TDDatePicker> {
         ));
   }
 
-  Widget buildTitle(BuildContext context) {
+  Widget _buildHeader(BuildContext context) {
+    final padding = TDTheme.of(context).spacer16;
+
     return Container(
       padding: EdgeInsets.only(
-          left: widget.leftPadding ?? 16, right: widget.rightPadding ?? 16),
+        left: widget.leftPadding ?? padding,
+        right: widget.rightPadding ?? padding,
+        top: widget.topPadding ?? padding,
+      ),
       decoration: BoxDecoration(
-          border: Border(
-        bottom: BorderSide(
-          width: 1,
-          color: widget.titleDividerColor ?? Colors.transparent,
+        border: Border(
+          bottom: BorderSide(
+            width: 0.5,
+            color: widget.titleDividerColor ?? Colors.transparent,
+          ),
         ),
-      )),
+      ),
 
       /// 减去分割线的空间
       height: getTitleHeight() - 0.5,
@@ -409,24 +420,27 @@ class _TDDatePickerState extends State<TDDatePicker> {
         children: [
           /// 左边按钮
           GestureDetector(
-              onTap: () {
-                selectListItem('onCancel');
-              },
-              behavior: HitTestBehavior.opaque,
-              child: TDText(widget.leftText ?? context.resource.cancel,
-                  style: widget.leftTextStyle ??
-                      TextStyle(
-                          fontSize: TDTheme.of(context).fontBodyLarge!.size,
-                          color: TDTheme.of(context).textColorSecondary))),
+            onTap: () {
+              selectListItem('onCancel');
+            },
+            behavior: HitTestBehavior.opaque,
+            child: TDText(
+              widget.leftText ?? context.resource.cancel,
+              style: widget.leftTextStyle ??
+                  TextStyle(
+                      fontSize: TDTheme.of(context).fontBodyLarge!.size,
+                      color: TDTheme.of(context).textColorSecondary),
+            ),
+          ),
 
           /// 中间title
           Expanded(
             child: Center(
               child: TDText(
-                widget.title,
+                widget.title ?? '',
                 style: widget.centerTextStyle ??
                     TextStyle(
-                      fontSize: 18,
+                      fontSize: TDTheme.of(context).fontBodyLarge!.size,
                       fontWeight: FontWeight.w600,
                       color: TDTheme.of(context).textColorPrimary,
                     ),
@@ -538,8 +552,8 @@ class DatePickerModel {
     required this.useDay,
     required this.useHour,
     required this.useMinute,
-    required this.useWeekDay,
     required this.useSecond,
+    required this.useWeekDay,
     required this.dateStart,
     required this.dateEnd,
     this.dateInitial,
@@ -551,8 +565,8 @@ class DatePickerModel {
     setInitialYearData();
     setInitialMonthData();
     setInitialDayData();
-    setInitialWeekDayData();
     setInitialTimeData();
+    setInitialWeekDayData();
     setControllers();
     addListener();
   }

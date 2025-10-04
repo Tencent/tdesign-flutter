@@ -6,9 +6,29 @@ class TDPicker {
   /// 显示时间选择器
   static void showDatePicker(
     context, {
-    required String title,
+    String? title,
+    double? titleHeight,
+    Color? titleDividerColor,
     required DatePickerCallback? onConfirm,
     DatePickerCallback? onCancel,
+    DatePickerCallback? onChange,
+    Function(int wheelIndex, int index)? onSelectedItemChanged,
+    String? leftText,
+    TextStyle? leftTextStyle,
+    TextStyle? centerTextStyle,
+    String? rightText,
+    TextStyle? rightTextStyle,
+    EdgeInsets? padding,
+    double? leftPadding,
+    double? topPadding,
+    double? rightPadding,
+    double? topRadius,
+    Color? backgroundColor,
+    Widget? customSelectWidget,
+    // 通过弹窗方式打开必须展示header
+    // bool header = true,
+    // ItemDistanceCalculator? itemDistanceCalculator,
+    /// DatePickerModel参数
     bool useYear = true,
     bool useMonth = true,
     bool useDay = true,
@@ -16,27 +36,21 @@ class TDPicker {
     bool useMinute = false,
     bool useSecond = false,
     bool useWeekDay = false,
-    Color? barrierColor,
     List<int> dateStart = const [1970, 1, 1],
     List<int>? dateEnd,
     List<int>? initialDate,
-    String? rightText,
-    String? leftText,
-    TextStyle? leftTextStyle,
-    TextStyle? centerTextStyle,
-    TextStyle? rightTextStyle,
-    Color? titleDividerColor,
-    Widget? customSelectWidget,
-    Duration duration = const Duration(milliseconds: 100),
-    double pickerHeight = 200,
-    bool isTimeUnit = true,
-    Function(int wheelIndex, int index)? onSelectedItemChanged,
-    int pickerItemCount = 5,
     List<int> Function(DateTypeKey key, List<int> nums)? filterItems,
+    double pickerHeight = 200,
+    int pickerItemCount = 5,
+    bool isTimeUnit = true,
     ItemBuilderType? itemBuilder,
+    Color? barrierColor,
+
+    /// todo 未传参
+    Duration duration = const Duration(milliseconds: 100),
   }) {
     if (dateEnd == null || initialDate == null) {
-      var now = DateTime.now();
+      final now = DateTime.now();
       // 如果未指定结束时间，则取当前时间
       dateEnd ??= [now.year, now.month, now.day];
       initialDate ??= [now.year, now.month, now.day];
@@ -49,24 +63,33 @@ class TDPicker {
       builder: (context) {
         return TDDatePicker(
           title: title,
+          titleHeight: titleHeight,
+          titleDividerColor: titleDividerColor,
           onConfirm: onConfirm,
           onCancel: onCancel,
-          rightText: rightText,
+          onChange: onChange,
+          onSelectedItemChanged: onSelectedItemChanged,
           leftText: leftText,
           leftTextStyle: leftTextStyle,
           centerTextStyle: centerTextStyle,
+          rightText: rightText,
           rightTextStyle: rightTextStyle,
-          titleDividerColor: titleDividerColor,
-          isTimeUnit: isTimeUnit,
+          padding: padding,
+          leftPadding: leftPadding,
+          topPadding: topPadding,
+          rightPadding: rightPadding,
+          topRadius: topRadius,
+          backgroundColor: backgroundColor,
           customSelectWidget: customSelectWidget,
+          // header: header,
           model: DatePickerModel(
             useYear: useYear,
             useMonth: useMonth,
             useDay: useDay,
-            useWeekDay: useWeekDay,
             useHour: useHour,
             useMinute: useMinute,
             useSecond: useSecond,
+            useWeekDay: useWeekDay,
             dateStart: dateStart,
             dateEnd: dateEnd!,
             dateInitial: initialDate,
@@ -74,7 +97,7 @@ class TDPicker {
           ),
           pickerHeight: pickerHeight,
           pickerItemCount: pickerItemCount,
-          onSelectedItemChanged: onSelectedItemChanged,
+          isTimeUnit: isTimeUnit,
           itemBuilder: itemBuilder,
         );
       },

@@ -22,7 +22,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
   String selected_8 = '';
   String selected_9 = '';
 
-  var weekDayList = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+  final weekDayList = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
   @override
   void initState() {
@@ -52,6 +52,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
           children: [
             ExampleItem(desc: '是否带标题', builder: buildWithTitle),
             ExampleItem(desc: '不带标题', builder: buildWithoutTitle),
+            ExampleItem(desc: '不使用弹窗、不带顶部内容', builder: buildWithoutHeader),
           ],
         )
       ],
@@ -69,16 +70,24 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
   Widget buildYearMonthDay(BuildContext context) {
     return TDCell(
       title: '选择时间',
-      note: selected_1,
+      note: selected_1.isEmpty ? '请选择' : selected_1,
       arrow: true,
       onClick: (click) {
-        TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
-          setState(() {
-            selected_1 =
-                '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
-          });
-          Navigator.of(context).pop();
-        }, dateStart: [1999, 01, 01], dateEnd: [2023, 12, 31], initialDate: [2012, 1, 1]);
+        TDPicker.showDatePicker(
+          context,
+          title: '选择时间',
+          onConfirm: (selected) {
+            setState(() {
+              selected_1 = '${selected['year'].toString().padLeft(4, '0')}'
+                  '-${selected['month'].toString().padLeft(2, '0')}'
+                  '-${selected['day'].toString().padLeft(2, '0')}';
+            });
+            Navigator.of(context).pop();
+          },
+          dateStart: [1999, 01, 01],
+          dateEnd: [2023, 12, 31],
+          initialDate: [2012, 1, 1],
+        );
       },
     );
   }
@@ -86,53 +95,66 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
   @Demo(group: 'datetimePicker')
   Widget buildYearMonth(BuildContext context) {
     return TDCell(
-        title: '选择时间',
-        note: selected_2,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+      title: '选择时间',
+      note: selected_2.isEmpty ? '请选择' : selected_2,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showDatePicker(
+          context,
+          title: '选择时间',
+          onConfirm: (selected) {
             setState(() {
               selected_2 = '${selected['year'].toString().padLeft(4, '0')}-'
                   '${selected['month'].toString().padLeft(2, '0')}';
             });
             Navigator.of(context).pop();
           },
-              useDay: false,
-              dateStart: [1999, 01, 01],
-              dateEnd: [2023, 12, 31],
-              initialDate: [2012, 1, 1]);
-        });
+          useDay: false,
+          dateStart: [1999, 01, 01],
+          dateEnd: [2023, 12, 31],
+          initialDate: [2012, 1, 1],
+        );
+      },
+    );
   }
 
   @Demo(group: 'datetimePicker')
   Widget buildMonthDay(BuildContext context) {
     return TDCell(
-        title: '选择时间',
-        note: selected_3,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+      title: '选择时间',
+      note: selected_3.isEmpty ? '请选择' : selected_3,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showDatePicker(
+          context,
+          title: '选择时间',
+          onConfirm: (selected) {
             setState(() {
               selected_3 = '${selected['month'].toString().padLeft(2, '0')}-'
                   '${selected['day'].toString().padLeft(2, '0')}';
             });
             Navigator.of(context).pop();
           },
-              useYear: false,
-              dateStart: [1999, 01, 01],
-              dateEnd: [2023, 12, 31],
-              initialDate: [2012, 1, 1]);
-        });
+          useYear: false,
+          dateStart: [1999, 01, 01],
+          dateEnd: [2023, 12, 31],
+          initialDate: [2012, 1, 1],
+        );
+      },
+    );
   }
 
   @Demo(group: 'datetimePicker')
   Widget buildHourMinuteSecond(BuildContext context) {
     return TDCell(
-        title: '选择时间',
-        note: selected_4,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+      title: '选择时间',
+      note: selected_4.isEmpty ? '请选择' : selected_4,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showDatePicker(
+          context,
+          title: '选择时间',
+          onConfirm: (selected) {
             setState(() {
               selected_4 = '${selected['hour'].toString().padLeft(2, '0')}:'
                   '${selected['minute'].toString().padLeft(2, '0')}:'
@@ -140,26 +162,31 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             });
             Navigator.of(context).pop();
           },
-              useYear: false,
-              useMonth: false,
-              useDay: false,
-              useHour: true,
-              useMinute: true,
-              useSecond: true,
-              dateStart: [1999, 01, 01],
-              dateEnd: [2023, 12, 31, 4, 12, 20],
-              initialDate: [2023, 12, 31]);
-        });
+          useYear: false,
+          useMonth: false,
+          useDay: false,
+          useHour: true,
+          useMinute: true,
+          useSecond: true,
+          dateStart: [1999, 01, 01],
+          dateEnd: [2023, 12, 31, 4, 12, 20],
+          initialDate: [2023, 12, 31],
+        );
+      },
+    );
   }
 
   @Demo(group: 'datetimePicker')
   Widget buildAll(BuildContext context) {
     return TDCell(
-        title: '选择时间',
-        note: selected_5,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+      title: '选择时间',
+      note: selected_5.isEmpty ? '请选择' : selected_5,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showDatePicker(
+          context,
+          title: '选择时间',
+          onConfirm: (selected) {
             setState(() {
               selected_5 = '${selected['year'].toString().padLeft(4, '0')}-'
                   '${selected['month'].toString().padLeft(2, '0')}-'
@@ -170,23 +197,28 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             });
             Navigator.of(context).pop();
           },
-              useHour: true,
-              useMinute: true,
-              useSecond: true,
-              dateStart: [1999, 01, 01],
-              dateEnd: [2023, 12, 31],
-              initialDate: [2012, 1, 1]);
-        });
+          useHour: true,
+          useMinute: true,
+          useSecond: true,
+          dateStart: [1999, 01, 01],
+          dateEnd: [2023, 12, 31],
+          initialDate: [2012, 1, 1],
+        );
+      },
+    );
   }
 
   @Demo(group: 'datetimePicker')
   Widget buildWeekDay(BuildContext context) {
     return TDCell(
-        title: '选择时间',
-        note: selected_6,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+      title: '选择时间',
+      note: selected_6.isEmpty ? '请选择' : selected_6,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showDatePicker(
+          context,
+          title: '选择时间',
+          onConfirm: (selected) {
             setState(() {
               selected_6 = '${selected['year'].toString().padLeft(4, '0')}-'
                   '${selected['month'].toString().padLeft(2, '0')}-'
@@ -195,57 +227,101 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             });
             Navigator.of(context).pop();
           },
-              useWeekDay: true,
-              dateStart: [1999, 01, 01],
-              dateEnd: [2023, 12, 31],
-              initialDate: [2012, 1, 1]);
-        });
+          useWeekDay: true,
+          dateStart: [1999, 01, 01],
+          dateEnd: [2023, 12, 31],
+          initialDate: [2012, 1, 1],
+        );
+      },
+    );
   }
 
   @Demo(group: 'datetimePicker')
   Widget buildWithTitle(BuildContext context) {
     return TDCell(
-        title: '选择时间',
-        note: selected_7,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+      title: '选择时间',
+      note: selected_7.isEmpty ? '请选择' : selected_7,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showDatePicker(
+          context,
+          title: '选择时间',
+          onConfirm: (selected) {
             setState(() {
               selected_7 = '${selected['year'].toString().padLeft(4, '0')}-'
                   '${selected['month'].toString().padLeft(2, '0')}-'
                   '${selected['day'].toString().padLeft(2, '0')}';
             });
             Navigator.of(context).pop();
-          }, dateStart: [1999, 01, 01], dateEnd: [2023, 12, 31], initialDate: [2012, 1, 1]);
-        });
+          },
+          dateStart: [1999, 01, 01],
+          dateEnd: [2023, 12, 31],
+          initialDate: [2012, 1, 1],
+        );
+      },
+    );
   }
 
   @Demo(group: 'datetimePicker')
   Widget buildWithoutTitle(BuildContext context) {
     return TDCell(
-        title: '选择时间',
-        note: selected_8,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showDatePicker(context, title: '', onConfirm: (selected) {
+      title: '选择时间',
+      note: selected_8.isEmpty ? '请选择' : selected_8,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showDatePicker(
+          context,
+          // 不传或传空字符串、null，则不显示标题
+          // title: '',
+          onConfirm: (selected) {
             setState(() {
               selected_8 = '${selected['year'].toString().padLeft(4, '0')}-'
                   '${selected['month'].toString().padLeft(2, '0')}-'
                   '${selected['day'].toString().padLeft(2, '0')}';
             });
             Navigator.of(context).pop();
-          }, dateStart: [1999, 01, 01], dateEnd: [2023, 12, 31], initialDate: [2012, 1, 1]);
-        });
+          },
+          dateStart: [1999, 01, 01],
+          dateEnd: [2023, 12, 31],
+          initialDate: [2012, 1, 1],
+        );
+      },
+    );
+  }
+
+  @Demo(group: 'datetimePicker')
+  Widget buildWithoutHeader(BuildContext context) {
+    return TDDatePicker(
+      header: false,
+      model: DatePickerModel(
+        useYear: true,
+        useMonth: true,
+        useDay: true,
+        useHour: true,
+        useMinute: true,
+        useSecond: true,
+        useWeekDay: false,
+        dateStart: [1999, 01, 01],
+        dateEnd: [2023, 12, 31],
+        dateInitial: [2012, 1, 1],
+      ),
+      onChange: (selected) {
+        print('onChange ${selected}');
+      },
+    );
   }
 
   @Demo(group: 'datetimePicker')
   Widget _customStartTime(BuildContext context) {
     return TDCell(
-        title: '选择时间',
-        note: selected_5,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+      title: '选择时间',
+      note: selected_5.isEmpty ? '请选择' : selected_5,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showDatePicker(
+          context,
+          title: '选择时间',
+          onConfirm: (selected) {
             setState(() {
               selected_5 = '${selected['year'].toString().padLeft(4, '0')}-'
                   '${selected['month'].toString().padLeft(2, '0')}-'
@@ -256,26 +332,31 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             });
             Navigator.of(context).pop();
           },
-              useYear: true,
-              useMonth: true,
-              useDay: true,
-              useHour: true,
-              useMinute: true,
-              useSecond: true,
-              dateStart: [2012, 1, 15, 12, 28, 11],
-              dateEnd: [2012, 6, 15, 12, 48, 32],
-              initialDate: [2012, 1, 15, 13, 20]);
-        });
+          useYear: true,
+          useMonth: true,
+          useDay: true,
+          useHour: true,
+          useMinute: true,
+          useSecond: true,
+          dateStart: [2012, 1, 15, 12, 28, 11],
+          dateEnd: [2012, 6, 15, 12, 48, 32],
+          initialDate: [2012, 1, 15, 13, 20],
+        );
+      },
+    );
   }
 
   @Demo(group: 'datetimePicker')
   Widget _customLimitTime(BuildContext context) {
     return TDCell(
-        title: '选择时间',
-        note: selected_4,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+      title: '选择时间',
+      note: selected_4.isEmpty ? '请选择' : selected_4,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showDatePicker(
+          context,
+          title: '选择时间',
+          onConfirm: (selected) {
             setState(() {
               selected_4 = '${selected['hour'].toString().padLeft(2, '0')}:'
                   '${selected['minute'].toString().padLeft(2, '0')}:'
@@ -283,105 +364,31 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             });
             Navigator.of(context).pop();
           },
-              useYear: false,
-              useMonth: false,
-              useDay: false,
-              useHour: true,
-              useMinute: true,
-              useSecond: true,
-              dateStart: [2023, 12, 31],
-              dateEnd: [2023, 12, 31, 4, 12, 20],
-              initialDate: [2023, 12, 31, 3, 02, 03]);
-        });
+          useYear: false,
+          useMonth: false,
+          useDay: false,
+          useHour: true,
+          useMinute: true,
+          useSecond: true,
+          dateStart: [2023, 12, 31],
+          dateEnd: [2023, 12, 31, 4, 12, 20],
+          initialDate: [2023, 12, 31, 3, 02, 03],
+        );
+      },
+    );
   }
 
   @Demo(group: 'datetimePicker')
   Widget _customItems(BuildContext context) {
     return TDCell(
-        title: '选择时间',
-        note: selected_9,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showDatePicker(
-            context,
-            title: '选择时间',
-            onConfirm: (selected) {
-              setState(() {
-                selected_9 = '${selected['year'].toString().padLeft(4, '0')}-'
-                    '${selected['month'].toString().padLeft(2, '0')}-'
-                    '${selected['day'].toString().padLeft(2, '0')} '
-                    '${selected['hour'].toString().padLeft(2, '0')}:'
-                    '${selected['minute'].toString().padLeft(2, '0')}:'
-                    '${selected['second'].toString().padLeft(2, '0')}';
-              });
-              Navigator.of(context).pop();
-            },
-            useHour: true,
-            useMinute: true,
-            useSecond: true,
-            dateStart: [1999, 01, 01],
-            dateEnd: [2023, 12, 31],
-            initialDate: [2012, 1, 1],
-            filterItems: (key, nums) {
-              if (key == DateTypeKey.minute) {
-                return [0, 15, 30];
-              }
-              return nums;
-            },
-            itemBuilder: (context, content, colIndex, index, itemDistanceCalculator, distance) {
-              return colIndex == 5
-                  ? TDText(
-                      content,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontWeight: itemDistanceCalculator.calculateFontWeight(context, distance),
-                        fontSize: index % 2 == 0 ? 20 : 10,
-                        color: index % 2 == 1
-                            ? TDTheme.of(context).textColorPrimary
-                            : TDTheme.of(context).successColor6,
-                      ),
-                    )
-                  : null;
-            },
-          );
-        });
-  }
-
-  @Demo(group: 'datetimePicker')
-  Widget _customItemsOnlyHour(BuildContext context) {
-    return TDCell(
-        title: '选择时间',
-        note: selected_9,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showDatePicker(
-            context,
-            title: '只有时分',
-            onConfirm: (selected) {
-              Navigator.of(context).pop();
-            },
-            useYear: false,
-            useMonth: false,
-            useDay: false,
-            useSecond: false,
-            useHour: true,
-            useMinute: true,
-            dateStart: [2025, 1, 1, 20, 0, 0],
-            dateEnd: [2025, 1, 1, 23, 59, 0],
-            initialDate: [2025, 1, 1, 22, 46, 0],
-          );
-        });
-  }
-
-  @Demo(group: 'datetimePicker')
-  Widget _customSelectWidget(BuildContext context) {
-    return TDCell(
-        title: '选择时间',
-        note: selected_9,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+      title: '选择时间',
+      note: selected_9.isEmpty ? '请选择' : selected_9,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showDatePicker(
+          context,
+          title: '选择时间',
+          onConfirm: (selected) {
             setState(() {
               selected_9 = '${selected['year'].toString().padLeft(4, '0')}-'
                   '${selected['month'].toString().padLeft(2, '0')}-'
@@ -392,17 +399,104 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             });
             Navigator.of(context).pop();
           },
-              useHour: true,
-              useMinute: true,
-              useSecond: true,
-              dateStart: [1999, 01, 01],
-              dateEnd: [2023, 12, 31],
-              initialDate: [2012, 1, 1],
-              customSelectWidget: Container(
-                height: 40,
-                decoration: const BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.all(Radius.circular(6))),
-              ));
-        });
+          useHour: true,
+          useMinute: true,
+          useSecond: true,
+          dateStart: [1999, 01, 01],
+          dateEnd: [2023, 12, 31],
+          initialDate: [2012, 1, 1],
+          filterItems: (key, nums) {
+            if (key == DateTypeKey.minute) {
+              return [0, 15, 30];
+            }
+            return nums;
+          },
+          itemBuilder: (context, content, colIndex, index,
+              itemDistanceCalculator, distance) {
+            return colIndex == 5
+                ? TDText(
+                    content,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: itemDistanceCalculator.calculateFontWeight(
+                          context, distance),
+                      fontSize: index % 2 == 0 ? 20 : 10,
+                      color: index % 2 == 1
+                          ? TDTheme.of(context).textColorPrimary
+                          : TDTheme.of(context).successColor6,
+                    ),
+                  )
+                : null;
+          },
+        );
+      },
+    );
+  }
+
+  @Demo(group: 'datetimePicker')
+  Widget _customItemsOnlyHour(BuildContext context) {
+    return TDCell(
+      title: '选择时间',
+      note: selected_9.isEmpty ? '请选择' : selected_9,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showDatePicker(
+          context,
+          title: '只有时分',
+          onConfirm: (selected) {
+            Navigator.of(context).pop();
+          },
+          useYear: false,
+          useMonth: false,
+          useDay: false,
+          useSecond: false,
+          useHour: true,
+          useMinute: true,
+          dateStart: [2025, 1, 1, 20, 0, 0],
+          dateEnd: [2025, 1, 1, 23, 59, 0],
+          initialDate: [2025, 1, 1, 22, 46, 0],
+        );
+      },
+    );
+  }
+
+  @Demo(group: 'datetimePicker')
+  Widget _customSelectWidget(BuildContext context) {
+    return TDCell(
+      title: '选择时间',
+      note: selected_9,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showDatePicker(
+          context,
+          title: '选择时间',
+          onConfirm: (selected) {
+            setState(() {
+              selected_9 = '${selected['year'].toString().padLeft(4, '0')}-'
+                  '${selected['month'].toString().padLeft(2, '0')}-'
+                  '${selected['day'].toString().padLeft(2, '0')} '
+                  '${selected['hour'].toString().padLeft(2, '0')}:'
+                  '${selected['minute'].toString().padLeft(2, '0')}:'
+                  '${selected['second'].toString().padLeft(2, '0')}';
+            });
+            Navigator.of(context).pop();
+          },
+          useHour: true,
+          useMinute: true,
+          useSecond: true,
+          dateStart: [1999, 01, 01],
+          dateEnd: [2023, 12, 31],
+          initialDate: [2012, 1, 1],
+          customSelectWidget: Container(
+            height: 40,
+            decoration: const BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.all(Radius.circular(6)),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
