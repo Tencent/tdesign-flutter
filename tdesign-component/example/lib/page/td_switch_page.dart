@@ -65,7 +65,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
   Widget _buildSwitchWithText(BuildContext context) {
     return const TDCell(
       title: '带文字开关',
-      noteWidget: TDSwitch(isOn: true, type: TDSwitchType.text),
+      noteWidget: TDSwitch(
+        isOn: true,
+        type: TDSwitchType.text,
+      ),
     );
   }
 
@@ -73,7 +76,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
   Widget _buildSwitchWithIcon(BuildContext context) {
     return const TDCell(
       title: '带图标开关',
-      noteWidget: TDSwitch(isOn: true, type: TDSwitchType.icon),
+      noteWidget: TDSwitch(
+        isOn: true,
+        type: TDSwitchType.icon,
+      ),
     );
   }
 
@@ -81,7 +87,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
   Widget _buildSwitchWithColor(BuildContext context) {
     return const TDCell(
       title: '自定义颜色开关',
-      noteWidget: TDSwitch(isOn: true, trackOnColor: Colors.green),
+      noteWidget: TDSwitch(
+        isOn: true,
+        trackOnColor: Colors.green,
+      ),
     );
   }
 
@@ -89,7 +98,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
   Widget _buildSwitchWithLoadingOff(BuildContext context) {
     return const TDCell(
       title: '加载状态',
-      noteWidget: TDSwitch(isOn: false, type: TDSwitchType.loading),
+      noteWidget: TDSwitch(
+        isOn: false,
+        type: TDSwitchType.loading,
+      ),
     );
   }
 
@@ -97,7 +109,10 @@ class TDSwitchPageState extends State<TDSwitchPage> {
   Widget _buildSwitchWithLoadingOn(BuildContext context) {
     return const TDCell(
       title: '加载状态',
-      noteWidget: TDSwitch(isOn: true, type: TDSwitchType.loading),
+      noteWidget: TDSwitch(
+        isOn: true,
+        type: TDSwitchType.loading,
+      ),
     );
   }
 

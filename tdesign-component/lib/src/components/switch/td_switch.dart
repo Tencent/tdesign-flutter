@@ -95,7 +95,7 @@ class TDSwitchState extends State<TDSwitch> {
   Widget build(BuildContext context) {
     final theme = TDTheme.of(context);
     final switchEnable = widget.enable && widget.type != TDSwitchType.loading;
-    final trackOnColor = widget.trackOnColor ?? theme.brandColor7;
+    final trackOnColor = widget.trackOnColor ?? theme.brandNormalColor;
     final trackOffColor = widget.trackOffColor ?? theme.textColorDisabled;
     final thumbContentOnColor =
         widget.thumbContentOnColor ?? theme.brandNormalColor;
@@ -111,14 +111,18 @@ class TDSwitchState extends State<TDSwitch> {
       trackColor: trackOffColor,
       onChanged: (value) {
         var process = widget.onChanged?.call(value) ?? false;
-        // 如果外部未处理,才需要自定刷新开关,如果已处理则不需要刷新
+        // 如果外部未处理，才需要自定刷新开关，如果已处理则不需要刷新
         if (!process) {
           isOn = value;
           setState(() {});
         }
       },
-      thumbView: _getThumbView(thumbContentOnColor, thumbContentOffColor,
-          thumbContentOnFont, thumbContentOffFont),
+      thumbView: _getThumbView(
+        thumbContentOnColor,
+        thumbContentOffColor,
+        thumbContentOnFont,
+        thumbContentOffFont,
+      ),
     );
     if (!switchEnable) {
       current = Opacity(
@@ -165,8 +169,12 @@ class TDSwitchState extends State<TDSwitch> {
     }
   }
 
-  Widget? _getThumbView(Color thumbContentOnColor, Color thumbContentOffColor,
-      TextStyle thumbContentOnFont, TextStyle thumbContentOffFont) {
+  Widget? _getThumbView(
+    Color thumbContentOnColor,
+    Color thumbContentOffColor,
+    TextStyle thumbContentOnFont,
+    TextStyle thumbContentOffFont,
+  ) {
     switch (widget.type) {
       case TDSwitchType.text:
         return Stack(
@@ -198,9 +206,11 @@ class TDSwitchState extends State<TDSwitch> {
       case TDSwitchType.icon:
         return Container(
           alignment: Alignment.centerLeft,
-          child: Icon(isOn ? TDIcons.check : TDIcons.close,
-              size: 16,
-              color: isOn ? thumbContentOnColor : thumbContentOffColor),
+          child: Icon(
+            isOn ? TDIcons.check : TDIcons.close,
+            size: 16,
+            color: isOn ? thumbContentOnColor : thumbContentOffColor,
+          ),
         );
       case TDSwitchType.fill:
       default:
