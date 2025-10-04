@@ -585,24 +585,33 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
 
   @Demo(group: 'cascader')
   Widget _buildWithInitialIndexes(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        TDCascader.showMultiCascader(context, title: '选择地址', data: _data, initialIndexes: [0, 0, 1], theme: 'step',
-            onChange: (List<MultiCascaderListModel> selectData) {
-          setState(() {
-            var result = [];
-            var len = selectData.length;
-            _initData = selectData[len - 1].value!;
-            selectData.forEach((element) {
-              result.add(element.label);
+    return TDCell(
+      title: '选择地区',
+      note: _selected_1.isEmpty ? '请选择' : _selected_1,
+      arrow: true,
+      onClick: (click) {
+        TDCascader.showMultiCascader(
+          context,
+          title: '选择地址',
+          data: _data,
+          initialIndexes: [0, 0, 1],
+          theme: 'step',
+          onChange: (List<MultiCascaderListModel> selectData) {
+            setState(() {
+              var result = [];
+              var len = selectData.length;
+              _initData = selectData[len - 1].value!;
+              selectData.forEach((element) {
+                result.add(element.label);
+              });
+              _selected_1 = result.join('/');
             });
-            _selected_1 = result.join('/');
-          });
-        }, onClose: () {
-          Navigator.of(context).pop();
-        });
+          },
+          onClose: () {
+            Navigator.of(context).pop();
+          },
+        );
       },
-      child: _buildSelectRow(context, _selected_1, '选择地区'),
     );
   }
 }
