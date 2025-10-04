@@ -124,6 +124,8 @@ class _TDCellState extends State<TDCell> {
     return widget.disabled ?? false;
   }
 
+  /// todo 像素溢出问题待优化
+  /// @see https://github.com/Tencent/tdesign-flutter/issues/751
   @override
   Widget build(BuildContext context) {
     final theme = TDTheme.of(context);
@@ -151,12 +153,8 @@ class _TDCellState extends State<TDCell> {
         }
         TDSwipeCellInherited.of(context)?.cellClick();
       },
-      onLongPress: widget.onLongPress != null
-          ? () {
-              if (!disabled) {
-                widget.onLongPress!(widget);
-              }
-            }
+      onLongPress: widget.onLongPress != null && !disabled
+          ? () => widget.onLongPress!(widget)
           : null,
       onTapDown: (_) => _setStatus('active', 0),
       onTapUp: (_) => _setStatus('default', 100),
@@ -167,6 +165,7 @@ class _TDCellState extends State<TDCell> {
         decoration: BoxDecoration(color: color, border: border),
         child: Row(
           crossAxisAlignment: crossAxisAlignment,
+          // spacing: TDTheme.of(context).spacer12,
           children: [
             ..._buildImage(),
             Expanded(
@@ -183,6 +182,7 @@ class _TDCellState extends State<TDCell> {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: theme.spacer4,
                       children: [
                         Row(
                           children: [
@@ -193,17 +193,12 @@ class _TDCellState extends State<TDCell> {
                                   child: TDText(widget.title!,
                                       style: style.titleStyle)),
                             if (widget.required ?? false)
-                              TDText('*', style: style.requiredStyle),
+                              TDText(' *', style: style.requiredStyle),
                           ],
                         ),
-                        if ((widget.titleWidget != null ||
-                                widget.title != null) &&
-                            (widget.descriptionWidget != null ||
-                                widget.description?.isNotEmpty == true))
-                          SizedBox(height: theme.spacer4),
                         if (widget.descriptionWidget != null)
                           widget.descriptionWidget!
-                        else if (widget.description?.isNotEmpty == true)
+                        else if (widget.description?.isNotEmpty ?? false)
                           TDText(widget.description!,
                               style: style.descriptionStyle),
                       ],
@@ -212,13 +207,13 @@ class _TDCellState extends State<TDCell> {
                 ],
               ),
             ),
-            Wrap(
+            Row(
               spacing: theme.spacer4,
-              crossAxisAlignment: WrapCrossAlignment.center,
+              // crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 if (widget.noteWidget != null)
                   widget.noteWidget!
-                else if (widget.note?.isNotEmpty == true)
+                else if (widget.note?.isNotEmpty ?? false)
                   TDText(widget.note!, style: style.noteStyle),
                 if (widget.rightIconWidget != null)
                   widget.rightIconWidget!
