@@ -110,20 +110,28 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     if (widget.isLetterSort) {
       _listDataSegmenter();
     }
+    
+    // 优先使用 initialIndexes，如果没有则使用 initialData
+    String? initValue;
+    if (widget.initialIndexes != null && widget.initialIndexes!.isNotEmpty) {
+      initValue = _initLocationByIndexes(widget.initialIndexes!);
+    } else {
       _initLocation(widget.initialData??'');
-      _currentTabIndex = _tabListData.length - 1;
-      _level = _currentTabIndex>0?_currentTabIndex:0;
-      if(_currentTabIndex>=0){
-        _tabListData = _tabListData.reversed.toList();
-        _selectTabValue = widget.initialData;
-        _selectListData =
-            _listData.where((element) => element.parentValue == _tabListData[_currentTabIndex].parentValue).toList();
-      }else{
-        _selectListData = _listData.where((element) => element.level == 0).toList();
-        _tabListData.add(MultiCascaderListModel(
-          labelFun: ()=>context.resource.cascadeLabel,
-        ));
-      }
+    }
+    
+    _currentTabIndex = _tabListData.length - 1;
+    _level = _currentTabIndex>0?_currentTabIndex:0;
+    if(_currentTabIndex>=0){
+      _tabListData = _tabListData.reversed.toList();
+      _selectTabValue = initValue ?? widget.initialData;
+      _selectListData =
+          _listData.where((element) => element.parentValue == _tabListData[_currentTabIndex].parentValue).toList();
+    }else{
+      _selectListData = _listData.where((element) => element.level == 0).toList();
+      _tabListData.add(MultiCascaderListModel(
+        labelFun: ()=>context.resource.cascadeLabel,
+      ));
+    }
   }
 
   @override
@@ -173,6 +181,52 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
         _initLocation(list[0].parentValue!);
       }
     }
+  }
+
+  /// 根据索引列表初始化选中位置
+  String? _initLocationByIndexes(List<int> indexes) {
+    if (indexes.isEmpty) return null;
+    
+    String? lastValue = _getValueByIndexes(indexes);
+    
+    if (lastValue != null) {
+      _initLocation(lastValue);
+    }
+
+    return lastValue;
+  }
+  
+  /// 根据索引列表获取对应的值
+  String? _getValueByIndexes(List<int> indexes) {
+    // 确保索引列表不为空
+    if (indexes.isEmpty) return null;
+    
+    List<dynamic> currentLevel = widget.data;
+    String? value;
+    
+    // 遍历索引列表，逐级查找
+    for (int i = 0; i < indexes.length; i++) {
+      int index = indexes[i];
+      
+      // 检查索引是否有效
+      if (index >= 0 && index < currentLevel.length) {
+        Map item = currentLevel[index];
+        value = item['value'];
+        
+        // 如果还有下一级且索引未遍历完，则继续
+        if (i < indexes.length - 1 && item.containsKey('children') && item['children'] is List && item['children'].isNotEmpty) {
+          currentLevel = item['children'];
+        } else {
+          // 已到达最后一级或没有更多子级
+          break;
+        }
+      } else {
+        // 索引无效
+        return null;
+      }
+    }
+    
+    return value;
   }
 
   void _listDataSegmenter() {
