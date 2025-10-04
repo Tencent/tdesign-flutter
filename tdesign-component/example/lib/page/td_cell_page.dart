@@ -23,6 +23,7 @@ class TDCellPage extends StatelessWidget {
       ],
       test: const [
         ExampleItem(desc: '自定义内边距-padding', builder: _buildPadding),
+        ExampleItem(desc: '长标题、内容', builder: _buildTestContent),
       ],
     );
   }
@@ -47,6 +48,9 @@ Widget _buildSimple(BuildContext context) {
         required: true,
         onClick: (cell) {
           print('单行标题');
+        },
+        onLongPress: (cell) {
+          print('onLongPress 单行标题');
         },
       ),
       const TDCell(
@@ -112,7 +116,7 @@ Widget _buildDesSimple(BuildContext context) {
       TDCell(
         arrow: true,
         title: '多行带头像',
-        description: '一段很长很长的内容文字',
+        description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内容',
         image: AssetImage('assets/img/td_avatar_1.png'),
       ),
       // NetworkImage('https://tdesign.gtimg.com/mobile/demos/avatar1.png')),
@@ -155,5 +159,14 @@ Widget _buildPadding(BuildContext context) {
         },
       ),
     ],
+  );
+}
+
+@Demo(group: 'cell')
+Widget _buildTestContent(BuildContext context) {
+  return const TDCell(
+    title: '这是标题，非常长的标题',
+    note: '这是一个很长很长的note字段，测试长内容，你说这内容长不长！',
+    arrow: true,
   );
 }
