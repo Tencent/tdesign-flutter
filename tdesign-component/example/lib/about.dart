@@ -37,25 +37,15 @@ class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: TDText(
-          '关于我们',
-          textColor: TDTheme.of(context).textColorPrimary,
-        ),
-      ),
+      appBar: AppBar(title: const Text('关于我们')),
       body: TDCellGroup(
-          title: 'TDesign Flutter',
-          theme: TDCellGroupTheme.cardTheme,
-          cells: [
-            TDCell(
-              title: '版本号',
-              note: version,
-            ),
-            TDCell(
-              title: '发版日期',
-              note: publishTime,
-            ),
-          ]),
+        title: 'TDesign Flutter',
+        theme: TDCellGroupTheme.cardTheme,
+        cells: [
+          TDCell(title: '版本号', note: version),
+          TDCell(title: '发版日期', note: publishTime),
+        ],
+      ),
     );
   }
 }
