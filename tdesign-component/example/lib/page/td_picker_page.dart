@@ -18,6 +18,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
   String selected_3 = '';
   List<List<String>> data_2 = [];
   String selected_4 = '';
+  String selected_5 = '';
   Map data_3 = {
     '广东省': {
       '深圳市': ['南山区南山区南山区南山区南山区', '宝安区', '罗湖区', '福田区'],
@@ -40,7 +41,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
     },
   };
 
-  Map data_test = {
+  Map dataTest = {
     '广东省': {
       '深圳市': ['南山区', '宝安区', '罗湖区', '福田区'],
       '广州市': ['天河区', '越秀区', '白云区', '花都区'],
@@ -175,8 +176,6 @@ class _TDPickerPageState extends State<TDPickerPage> {
     }
   };
 
-  String selected_5 = '';
-
   @override
   void initState() {
     var list = <String>[];
@@ -223,89 +222,117 @@ class _TDPickerPageState extends State<TDPickerPage> {
   Widget buildArea(BuildContext context) {
     const title = '选择地区';
     return TDCell(
-        title: title,
-        note: selected_1,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showMultiPicker(context, title: title,
-              onConfirm: (selected) {
+      title: title,
+      note: selected_1.isEmpty ? '请选择' : selected_1,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showMultiPicker(
+          context,
+          title: title,
+          onConfirm: (selected) {
             setState(() {
               selected_1 = '${data_1[selected[0]]}';
             });
             Navigator.of(context).pop();
-          }, data: [data_1]);
-        });
+          },
+          data: [data_1],
+        );
+      },
+    );
   }
 
   @Demo(group: 'picker')
   Widget buildTime(BuildContext context) {
     const title = '选择时间';
     return TDCell(
-        title: title,
-        note: selected_2,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showMultiPicker(context, title: title,
-              onConfirm: (selected) {
+      title: title,
+      note: selected_2.isEmpty ? '请选择' : selected_2,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showMultiPicker(
+          context,
+          title: title,
+          onConfirm: (selected) {
+            print('selected ${selected}');
             setState(() {
               selected_2 =
                   '${data_2[0][selected[0]]} ${data_2[1][selected[1]]}';
             });
             Navigator.of(context).pop();
-          }, data: data_2);
-        });
+          },
+          data: data_2,
+        );
+      },
+    );
   }
 
   @Demo(group: 'picker')
   Widget buildMultiArea(BuildContext context) {
     const title = '选择地区';
     return TDCell(
-        title: title,
-        note: selected_3,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showMultiLinkedPicker(context, title: title,
-              onConfirm: (selected) {
+      title: title,
+      note: selected_3.isEmpty ? '请选择' : selected_3,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showMultiLinkedPicker(
+          context,
+          title: title,
+          onConfirm: (selected) {
             setState(() {
               selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
             });
             Navigator.of(context).pop();
-          }, data: data_test, columnNum: 3, initialData: ['浙江省', '杭州市', '西湖区']);
-        });
+          },
+          data: dataTest,
+          columnNum: 3,
+          initialData: ['浙江省', '杭州市', '西湖区'],
+        );
+      },
+    );
   }
 
   @Demo(group: 'picker')
   Widget buildAreaWithTitle(BuildContext context) {
     const title = '选择地区';
     return TDCell(
-        title: title,
-        note: selected_4,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showMultiPicker(context, title: '带标题选择器',
-              onConfirm: (selected) {
+      title: title,
+      note: selected_4.isEmpty ? '请选择' : selected_4,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showMultiPicker(
+          context,
+          title: '带标题选择器',
+          onConfirm: (selected) {
             setState(() {
               selected_4 = '${data_1[selected[0]]}';
             });
             Navigator.of(context).pop();
-          }, data: [data_1]);
-        });
+          },
+          data: [data_1],
+        );
+      },
+    );
   }
 
   @Demo(group: 'picker')
   Widget buildAreaWithoutTitle(BuildContext context) {
     return TDCell(
-        title: '选择地区',
-        note: selected_5,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showMultiPicker(context, title: '', onConfirm: (selected) {
+      title: '选择地区',
+      note: selected_5.isEmpty ? '请选择' : selected_5,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showMultiPicker(
+          context,
+          onConfirm: (selected) {
             setState(() {
               selected_5 = '${data_1[selected[0]]}';
             });
             Navigator.of(context).pop();
-          }, data: [data_1]);
-        });
+          },
+          data: [data_1],
+        );
+      },
+    );
   }
 
   @Demo(group: 'picker')
@@ -313,38 +340,47 @@ class _TDPickerPageState extends State<TDPickerPage> {
     return TDCellGroup(
       cells: [
         TDCell(
-            title: '基础选择器',
-            note: selected_5,
-            arrow: true,
-            onClick: (click) {
-              TDPicker.showMultiPicker(context,
-                  leftText: '自定义取消',
-                  rightText: '自定义确认',
-                  title: '基础选择器', onConfirm: (selected) {
+          title: '基础选择器',
+          note: selected_5.isEmpty ? '请选择' : selected_5,
+          arrow: true,
+          onClick: (click) {
+            TDPicker.showMultiPicker(
+              context,
+              leftText: '自定义取消',
+              rightText: '自定义确认',
+              title: '基础选择器',
+              onConfirm: (selected) {
                 setState(() {
                   selected_5 = '${data_1[selected[0]]}';
                 });
                 Navigator.of(context).pop();
-              }, data: [data_1]);
-            }),
+              },
+              data: [data_1],
+            );
+          },
+        ),
         TDCell(
-            title: '联动选择器',
-            note: selected_3,
-            arrow: true,
-            onClick: (click) {
-              TDPicker.showMultiLinkedPicker(context,
-                  leftText: '自定义取消',
-                  rightText: '自定义确认',
-                  title: '联动选择器', onConfirm: (selected) {
+          title: '联动选择器',
+          note: selected_3.isEmpty ? '请选择' : selected_3,
+          arrow: true,
+          onClick: (click) {
+            TDPicker.showMultiLinkedPicker(
+              context,
+              leftText: '自定义取消',
+              rightText: '自定义确认',
+              title: '联动选择器',
+              onConfirm: (selected) {
                 setState(() {
                   selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
                 });
                 Navigator.of(context).pop();
               },
-                  data: data_3,
-                  columnNum: 3,
-                  initialData: ['浙江省', '杭州市', '西湖区']);
-            })
+              data: data_3,
+              columnNum: 3,
+              initialData: ['浙江省', '杭州市', '西湖区'],
+            );
+          },
+        )
       ],
     );
   }
@@ -352,21 +388,25 @@ class _TDPickerPageState extends State<TDPickerPage> {
   @Demo(group: 'picker')
   Widget buildKeepMultiArea(BuildContext context) {
     return TDCell(
-        title: '选择地区',
-        note: selected_3,
-        arrow: true,
-        onClick: (click) {
-          TDPicker.showMultiLinkedPicker(context, title: '选择地区',
-              onConfirm: (selected) {
+      title: '选择地区',
+      note: selected_3.isEmpty ? '请选择' : selected_3,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showMultiLinkedPicker(
+          context,
+          title: '选择地区',
+          onConfirm: (selected) {
             setState(() {
               selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
             });
             Navigator.of(context).pop();
           },
-              data: data_3,
-              columnNum: 3,
-              keepSameSelection: true,
-              initialData: ['广东省', '深圳市', '罗湖区']);
-        });
+          data: data_3,
+          columnNum: 3,
+          keepSameSelection: true,
+          initialData: ['广东省', '深圳市', '罗湖区'],
+        );
+      },
+    );
   }
 }

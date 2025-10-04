@@ -12,33 +12,33 @@ enum DateTypeKey { year, month, weekDay, day, hour, minute, second }
 
 /// 时间选择器
 class TDDatePicker extends StatefulWidget {
-  const TDDatePicker(
-      {required this.title,
-      required this.onConfirm,
-      this.rightText,
-      this.leftText,
-      this.onCancel,
-      this.backgroundColor,
-      this.titleDividerColor,
-      this.topRadius,
-      this.titleHeight,
-      this.padding,
-      this.leftPadding,
-      this.rightPadding,
-      this.leftTextStyle,
-      this.rightTextStyle,
-      this.centerTextStyle,
-      this.customSelectWidget,
-      this.itemDistanceCalculator,
-      required this.model,
-      this.showTitle = true,
-      this.pickerHeight = 200,
-      required this.pickerItemCount,
-      this.isTimeUnit,
-      this.onSelectedItemChanged,
-      this.itemBuilder,
-      Key? key})
-      : super(key: key);
+  const TDDatePicker({
+    required this.title,
+    required this.onConfirm,
+    this.rightText,
+    this.leftText,
+    this.onCancel,
+    this.backgroundColor,
+    this.titleDividerColor,
+    this.topRadius,
+    this.titleHeight,
+    this.padding,
+    this.leftPadding,
+    this.rightPadding,
+    this.leftTextStyle,
+    this.rightTextStyle,
+    this.centerTextStyle,
+    this.customSelectWidget,
+    this.itemDistanceCalculator,
+    required this.model,
+    this.showTitle = true,
+    this.pickerHeight = 200,
+    required this.pickerItemCount,
+    this.isTimeUnit,
+    this.onSelectedItemChanged,
+    this.itemBuilder,
+    Key? key,
+  }) : super(key: key);
 
   /// 选择器标题
   final String title;

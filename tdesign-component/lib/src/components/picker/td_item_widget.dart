@@ -31,16 +31,16 @@ class TDItemWidget extends StatefulWidget {
   final ItemDistanceCalculator? itemDistanceCalculator;
   final ItemBuilderType? itemBuilder;
 
-  const TDItemWidget(
-      {required this.fixedExtentScrollController,
-      required this.colIndex,
-      required this.index,
-      required this.content,
-      required this.itemHeight,
-      this.itemDistanceCalculator,
-      this.itemBuilder,
-      Key? key})
-      : super(key: key);
+  const TDItemWidget({
+    required this.fixedExtentScrollController,
+    required this.colIndex,
+    required this.index,
+    required this.content,
+    required this.itemHeight,
+    this.itemDistanceCalculator,
+    this.itemBuilder,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _TDItemWidgetState createState() => _TDItemWidgetState();
