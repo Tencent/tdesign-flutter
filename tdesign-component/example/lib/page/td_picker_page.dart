@@ -207,6 +207,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
           children: [
             ExampleItem(desc: '带标题选择器', builder: buildAreaWithTitle),
             ExampleItem(desc: '无标题选择器', builder: buildAreaWithoutTitle),
+            ExampleItem(desc: '不使用弹窗、不带顶部内容', builder: buildWithoutHeader),
           ],
         )
       ],
@@ -323,6 +324,8 @@ class _TDPickerPageState extends State<TDPickerPage> {
       onClick: (click) {
         TDPicker.showMultiPicker(
           context,
+          // 不传或传空字符串、null，则不显示标题
+          // title: '',
           onConfirm: (selected) {
             setState(() {
               selected_5 = '${data_1[selected[0]]}';
@@ -332,6 +335,22 @@ class _TDPickerPageState extends State<TDPickerPage> {
           data: [data_1],
         );
       },
+    );
+  }
+
+  @Demo(group: 'picker')
+  Widget buildWithoutHeader(BuildContext context) {
+    return TDMultiPicker(
+      /// 不显示header内容
+      header: false,
+      /// todo onChange
+      onConfirm: (selected) {
+        setState(() {
+          selected_5 = '${data_1[selected[0]]}';
+        });
+        Navigator.of(context).pop();
+      },
+      data: [data_1],
     );
   }
 

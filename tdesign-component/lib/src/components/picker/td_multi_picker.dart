@@ -19,6 +19,9 @@ class TDMultiPicker extends StatelessWidget {
   /// 选择器取消按钮回调
   final MultiPickerCallback? onCancel;
 
+  /// todo 选择器数据改变时回调
+  final MultiPickerCallback? onChange;
+
   /// 选择器的数据源
   final List<List<String>> data;
 
@@ -79,15 +82,19 @@ class TDMultiPicker extends StatelessWidget {
   /// 自定义item构建
   final ItemBuilderType? itemBuilder;
 
+  /// 是否显示头部内容
+  final bool header;
+
   static const _pickerTitleHeight = 56.0;
 
   const TDMultiPicker({
-    required this.title,
+    this.title,
     required this.onConfirm,
     this.onCancel,
+    this.onChange,
     required this.data,
-    required this.pickerHeight,
-    required this.pickerItemCount,
+    this.pickerHeight = 200,
+    this.pickerItemCount = 5,
     this.initialIndexes,
     this.rightText,
     this.leftText,
@@ -105,6 +112,7 @@ class TDMultiPicker extends StatelessWidget {
     this.itemDistanceCalculator,
     this.customSelectWidget,
     this.itemBuilder,
+    this.header = true,
     Key? key,
   }) : super(key: key);
 
@@ -135,7 +143,7 @@ class TDMultiPicker extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildTitle(context, controllers),
+          if (header) _buildHeader(context, controllers),
           Stack(
             alignment: Alignment.center,
             children: [
@@ -211,7 +219,7 @@ class TDMultiPicker extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle(
+  Widget _buildHeader(
     BuildContext context,
     List<FixedExtentScrollController> controllers,
   ) {
@@ -235,7 +243,7 @@ class TDMultiPicker extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 左边按钮
+          /// 左边按钮
           GestureDetector(
               onTap: () {
                 if (onCancel != null) {
@@ -255,21 +263,18 @@ class TDMultiPicker extends StatelessWidget {
                         color: TDTheme.of(context).textColorSecondary),
               )),
 
-          // 中间title
+          /// 中间title
           Expanded(
-            child: title == null
-                ? Container()
-                : Center(
-                    child: TDText(
-                      title,
-                      style: centerTextStyle ??
-                          TextStyle(
-                              fontSize:
-                                  TDTheme.of(context).fontTitleLarge!.size,
-                              fontWeight: FontWeight.w600,
-                              color: TDTheme.of(context).textColorPrimary),
-                    ),
-                  ),
+            child: Center(
+              child: TDText(
+                title ?? '',
+                style: centerTextStyle ??
+                    TextStyle(
+                        fontSize: TDTheme.of(context).fontTitleLarge!.size,
+                        fontWeight: FontWeight.w600,
+                        color: TDTheme.of(context).textColorPrimary),
+              ),
+            ),
           ),
 
           // 右边按钮
@@ -347,6 +352,9 @@ class TDMultiLinkedPicker extends StatefulWidget {
   /// 选择器取消按钮回调
   final MultiPickerCallback? onCancel;
 
+  /// todo 选择器数据改变时回调
+  final MultiPickerCallback? onChange;
+
   /// 选中数据
   final List selectedData;
 
@@ -413,10 +421,14 @@ class TDMultiLinkedPicker extends StatefulWidget {
   /// 是否保留相同选项
   final bool keepSameSelection;
 
+  /// 是否显示头部内容
+  final bool header;
+
   const TDMultiLinkedPicker({
     this.title,
     required this.onConfirm,
     this.onCancel,
+    this.onChange,
     required this.selectedData,
     required this.data,
     required this.columnNum,
@@ -439,6 +451,7 @@ class TDMultiLinkedPicker extends StatefulWidget {
     this.itemDistanceCalculator,
     this.itemBuilder,
     this.keepSameSelection = false,
+    this.header = true,
     Key? key,
   }) : super(key: key);
 
@@ -482,7 +495,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildTitle(context),
+          if (widget.header) _buildHeader(context),
           Stack(
             alignment: Alignment.center,
             children: [
@@ -604,6 +617,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                     }
 
                     /// todo 通过随机数改变高度来触发UI刷新，这是hack式的解决方案！有待优化！
+                    /// fix https://github.com/flutter/flutter/issues/22999
                     pickerHeight =
                         pickerHeight - Random().nextDouble() / 100000000;
                   });
@@ -651,7 +665,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
     );
   }
 
-  Widget _buildTitle(BuildContext context) {
+  Widget _buildHeader(BuildContext context) {
     final padding = TDTheme.of(context).spacer16;
 
     return Container(
@@ -672,7 +686,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 左边按钮
+          /// 左边按钮
           GestureDetector(
               onTap: () {
                 if (widget.onCancel != null) {
@@ -691,24 +705,22 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                     ),
               )),
 
-          // 中间title
+          /// 中间title
           Expanded(
-              child: widget.title == null
-                  ? Container()
-                  : Center(
-                      child: TDText(
-                        widget.title,
-                        style: widget.centerTextStyle ??
-                            TextStyle(
-                              fontSize:
-                                  TDTheme.of(context).fontTitleLarge!.size,
-                              fontWeight: FontWeight.w700,
-                              color: TDTheme.of(context).textColorPrimary,
-                            ),
-                      ),
-                    )),
+            child: Center(
+              child: TDText(
+                widget.title ?? '',
+                style: widget.centerTextStyle ??
+                    TextStyle(
+                      fontSize: TDTheme.of(context).fontTitleLarge!.size,
+                      fontWeight: FontWeight.w700,
+                      color: TDTheme.of(context).textColorPrimary,
+                    ),
+              ),
+            ),
+          ),
 
-          // 右边按钮
+          /// 右边按钮
           GestureDetector(
             onTap: () {
               if (widget.onConfirm != null) {
