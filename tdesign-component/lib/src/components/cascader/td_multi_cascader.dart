@@ -198,30 +198,24 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   
   /// 根据索引列表获取对应的值
   String? _getValueByIndexes(List<int> indexes) {
-    // 确保索引列表不为空
     if (indexes.isEmpty) return null;
     
     List<dynamic> currentLevel = widget.data;
     String? value;
     
-    // 遍历索引列表，逐级查找
     for (int i = 0; i < indexes.length; i++) {
       int index = indexes[i];
       
-      // 检查索引是否有效
       if (index >= 0 && index < currentLevel.length) {
         Map item = currentLevel[index];
         value = item['value'];
         
-        // 如果还有下一级且索引未遍历完，则继续
         if (i < indexes.length - 1 && item.containsKey('children') && item['children'] is List && item['children'].isNotEmpty) {
           currentLevel = item['children'];
         } else {
-          // 已到达最后一级或没有更多子级
           break;
         }
       } else {
-        // 索引无效
         return null;
       }
     }
