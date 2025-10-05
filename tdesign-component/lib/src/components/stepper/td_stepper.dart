@@ -22,6 +22,7 @@ class TDStepperController {
   _TDStepperState? _state;
 
   int _value = 0;
+
   int get value => _value;
 
   set value(int value) {
@@ -29,11 +30,9 @@ class TDStepperController {
     _state?.updateUI();
   }
 
-
   void _bindState(_TDStepperState _tdStepperState) {
     _state = _tdStepperState;
   }
-
 }
 
 /// 步进器
@@ -101,6 +100,7 @@ class TDStepper extends StatefulWidget {
 
   /// Stepper控制器
   final TDStepperController? controller;
+
   @override
   State<TDStepper> createState() => _TDStepperState();
 }
@@ -120,14 +120,15 @@ class _TDStepperState extends State<TDStepper> {
         ..value = widget.value ?? widget.defaultValue ?? 0;
     }
     _controller._bindState(this);
-    if(widget.eventController!=null){
-      widget.eventController?.stream.listen((TDStepperEventType event){
-          if(event == TDStepperEventType.cleanValue){
-            cleanValue();
-          }
+    if (widget.eventController != null) {
+      widget.eventController?.stream.listen((TDStepperEventType event) {
+        if (event == TDStepperEventType.cleanValue) {
+          cleanValue();
+        }
       });
     }
-    _textController = TextEditingController(text: _controller._value.toString());
+    _textController =
+        TextEditingController(text: _controller._value.toString());
 
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
@@ -255,8 +256,9 @@ class _TDStepperState extends State<TDStepper> {
     });
     renderNumber();
   }
-  cleanValue(){
-    _controller._value=0;
+
+  cleanValue() {
+    _controller._value = 0;
     _textController.value = TextEditingValue(
         text: _controller._value.toString(),
         selection: TextSelection.fromPosition(TextPosition(
@@ -265,6 +267,7 @@ class _TDStepperState extends State<TDStepper> {
         )));
     _focusNode.unfocus();
   }
+
   void renderNumber() {
     _textController.value = TextEditingValue(
         text: _controller._value.toString(),
@@ -350,7 +353,9 @@ class _TDStepperState extends State<TDStepper> {
                               return newValue.copyWith(
                                   text: _controller._value.toString(),
                                   selection: TextSelection.collapsed(
-                                      offset: _controller._value.toString().length));
+                                      offset: _controller._value
+                                          .toString()
+                                          .length));
                             }
 
                             final newNum = int.parse(newValue.text);
@@ -379,7 +384,8 @@ class _TDStepperState extends State<TDStepper> {
                             return newValue.copyWith(
                                 text: _controller._value.toString(),
                                 selection: TextSelection.collapsed(
-                                    offset: _controller._value.toString().length));
+                                    offset:
+                                        _controller._value.toString().length));
                           } catch (e) {
                             return oldValue;
                           }
@@ -408,28 +414,28 @@ class _TDStepperState extends State<TDStepper> {
   }
 
   void updateUI() {
-   if(mounted){
-     _textController.value = TextEditingValue(
-         text: _controller._value.toString(),
-         selection: TextSelection.fromPosition(TextPosition(
-           affinity: TextAffinity.downstream,
-           offset: _controller._value.toString().length,
-         )));
-   }
+    if (mounted) {
+      _textController.value = TextEditingValue(
+          text: _controller._value.toString(),
+          selection: TextSelection.fromPosition(TextPosition(
+            affinity: TextAffinity.downstream,
+            offset: _controller._value.toString().length,
+          )));
+    }
   }
 }
 
 typedef TDTapFunction = void Function();
 
 class TDStepperIconButton extends StatelessWidget {
-  const TDStepperIconButton(
-      {Key? key,
-      this.onTap,
-      this.size = TDStepperSize.medium,
-      this.disabled = false,
-      this.theme = TDStepperTheme.normal,
-      required this.type})
-      : super(key: key);
+  const TDStepperIconButton({
+    Key? key,
+    this.onTap,
+    this.size = TDStepperSize.medium,
+    this.disabled = false,
+    this.theme = TDStepperTheme.normal,
+    required this.type,
+  }) : super(key: key);
 
   final TDTapFunction? onTap;
   final TDStepperSize size;
@@ -513,4 +519,3 @@ class TDStepperIconButton extends StatelessWidget {
         ));
   }
 }
-
