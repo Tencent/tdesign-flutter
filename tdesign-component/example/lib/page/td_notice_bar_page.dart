@@ -23,11 +23,13 @@ class TDNoticeBarPage extends StatelessWidget {
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '纯文字的公告栏', builder: _textNoticeBar),
           ExampleItem(desc: '可滚动的公告栏', builder: _scrollNoticeBar),
-          ExampleItem(builder: _scrollIconNoticeBar),
+          ExampleItem(
+              padding: EdgeInsets.only(top: 16), builder: _scrollIconNoticeBar),
           ExampleItem(desc: '带图标的公告栏', builder: _iconNoticeBar),
           ExampleItem(desc: '带关闭的公告栏', builder: _closeNoticeBar),
           ExampleItem(desc: '带入口的公告栏', builder: _entranceNoticeBar1),
-          ExampleItem(builder: _entranceNoticeBar2),
+          ExampleItem(
+              padding: EdgeInsets.only(top: 16), builder: _entranceNoticeBar2),
           ExampleItem(desc: '自定义样式的公告栏', builder: _customNoticeBar),
         ]),
         ExampleModule(title: '组件状态', children: [
@@ -51,13 +53,15 @@ class TDNoticeBarPage extends StatelessWidget {
 
 @Demo(group: 'noticeBar')
 Widget _textNoticeBar(BuildContext context) {
-  return const TDNoticeBar(context: '这是一条普通的通知信息');
+  return const TDNoticeBar(
+    content: '这是一条普通的通知信息',
+  );
 }
 
 @Demo(group: 'noticeBar')
 Widget _scrollNoticeBar(BuildContext context) {
   return const TDNoticeBar(
-    context: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',
+    content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',
     marquee: true,
     speed: 50,
   );
@@ -65,21 +69,18 @@ Widget _scrollNoticeBar(BuildContext context) {
 
 @Demo(group: 'noticeBar')
 Widget _scrollIconNoticeBar(BuildContext context) {
-  return const Padding(
-    padding: EdgeInsets.only(top: 16),
-    child: TDNoticeBar(
-      context: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',
-      speed: 50,
-      prefixIcon: TDIcons.sound,
-      marquee: true,
-    ),
+  return const TDNoticeBar(
+    content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',
+    speed: 50,
+    prefixIcon: TDIcons.sound,
+    marquee: true,
   );
 }
 
 @Demo(group: 'noticeBar')
 Widget _iconNoticeBar(BuildContext context) {
   return const TDNoticeBar(
-    context: '这是一条普通的通知信息',
+    content: '这是一条普通的通知信息',
     prefixIcon: TDIcons.error_circle_filled,
   );
 }
@@ -87,7 +88,7 @@ Widget _iconNoticeBar(BuildContext context) {
 @Demo(group: 'noticeBar')
 Widget _closeNoticeBar(BuildContext context) {
   return const TDNoticeBar(
-    context: '这是一条普通的通知信息',
+    content: '这是一条普通的通知信息',
     prefixIcon: TDIcons.error_circle_filled,
     suffixIcon: TDIcons.close,
   );
@@ -96,7 +97,7 @@ Widget _closeNoticeBar(BuildContext context) {
 @Demo(group: 'noticeBar')
 Widget _entranceNoticeBar1(BuildContext context) {
   return const TDNoticeBar(
-    context: '这是一条普通的通知信息',
+    content: '这是一条普通的通知信息',
     prefixIcon: TDIcons.error_circle_filled,
     right: TDButton(
       text: '文字按钮',
@@ -111,20 +112,17 @@ Widget _entranceNoticeBar1(BuildContext context) {
 
 @Demo(group: 'noticeBar')
 Widget _entranceNoticeBar2(BuildContext context) {
-  return const Padding(
-    padding: EdgeInsets.only(top: 16),
-    child: TDNoticeBar(
-      context: '这是一条普通的通知信息',
-      prefixIcon: TDIcons.error_circle_filled,
-      suffixIcon: TDIcons.chevron_right,
-    ),
+  return const TDNoticeBar(
+    content: '这是一条普通的通知信息',
+    prefixIcon: TDIcons.error_circle_filled,
+    suffixIcon: TDIcons.chevron_right,
   );
 }
 
 @Demo(group: 'noticeBar')
 Widget _customNoticeBar(BuildContext context) {
   return TDNoticeBar(
-    context: '这是一条普通的通知信息',
+    content: '这是一条普通的通知信息',
     prefixIcon: TDIcons.notification,
     suffixIcon: TDIcons.chevron_right,
     style:
@@ -135,7 +133,7 @@ Widget _customNoticeBar(BuildContext context) {
 @Demo(group: 'noticeBar')
 Widget _normalNoticeBar(BuildContext context) {
   return const TDNoticeBar(
-    context: '这是一条普通的通知信息',
+    content: '这是一条普通的通知信息',
     prefixIcon: TDIcons.error_circle_filled,
     theme: TDNoticeBarTheme.info,
   );
@@ -144,8 +142,8 @@ Widget _normalNoticeBar(BuildContext context) {
 @Demo(group: 'noticeBar')
 Widget _successNoticeBar(BuildContext context) {
   return const TDNoticeBar(
-    context: '这是一条普通的通知信息',
-    prefixIcon: TDIcons.error_circle_filled,
+    content: '这是一条成功的通知信息',
+    prefixIcon: TDIcons.check_circle_filled,
     theme: TDNoticeBarTheme.success,
   );
 }
@@ -153,7 +151,7 @@ Widget _successNoticeBar(BuildContext context) {
 @Demo(group: 'noticeBar')
 Widget _warningNoticeBar(BuildContext context) {
   return const TDNoticeBar(
-    context: '这是一条普通的通知信息',
+    content: '这是一条警示的通知信息',
     prefixIcon: TDIcons.error_circle_filled,
     theme: TDNoticeBarTheme.warning,
   );
@@ -162,7 +160,7 @@ Widget _warningNoticeBar(BuildContext context) {
 @Demo(group: 'noticeBar')
 Widget _errorNoticeBar(BuildContext context) {
   return const TDNoticeBar(
-    context: '这是一条普通的通知信息',
+    content: '这是一条错误的通知信息',
     prefixIcon: TDIcons.error_circle_filled,
     theme: TDNoticeBarTheme.error,
   );
@@ -175,7 +173,7 @@ Widget _cardNoticeBar(BuildContext context) {
     margin: const EdgeInsets.symmetric(horizontal: 16),
     decoration: BoxDecoration(
       color: TDNoticeBarStyle.generateTheme(context).backgroundColor,
-      borderRadius: const BorderRadius.all(Radius.circular(9)),
+      borderRadius: const BorderRadius.all(Radius.circular(12)),
       boxShadow: const [
         BoxShadow(
           color: Color(0x0d000000),
@@ -206,7 +204,7 @@ Widget _cardNoticeBar(BuildContext context) {
           ),
           clipBehavior: Clip.hardEdge,
           child: const TDNoticeBar(
-            context: '这是一条普通的通知信息',
+            content: '这是一条普通的通知信息',
             prefixIcon: TDIcons.error_circle_filled,
             suffixIcon: TDIcons.chevron_right,
           ),
@@ -226,7 +224,7 @@ Widget _cardNoticeBar(BuildContext context) {
 @Demo(group: 'noticeBar')
 Widget _tapNoticeBar(BuildContext context) {
   return TDNoticeBar(
-    context: '这是一条普通的通知信息',
+    content: '这是一条普通的通知信息',
     prefixIcon: TDIcons.error_circle_filled,
     suffixIcon: TDIcons.chevron_right,
     onTap: (trigger) {
@@ -238,7 +236,7 @@ Widget _tapNoticeBar(BuildContext context) {
 @Demo(group: 'noticeBar')
 Widget _leftNoticeBar(BuildContext context) {
   return const TDNoticeBar(
-    context: '这是一条普通的通知信息',
+    content: '这是一条普通的通知信息',
     suffixIcon: TDIcons.chevron_right,
     left: TDButton(
       text: '文本',
@@ -254,7 +252,12 @@ Widget _leftNoticeBar(BuildContext context) {
 @Demo(group: 'noticeBar')
 Widget _stepNoticeBar(BuildContext context) {
   return const TDNoticeBar(
-    context: ['君不见黄河之水天上来', '奔流到海不复回', '君不见'],
+    context: [
+      '君不见黄河之水天上来',
+      '奔流到海不复回',
+      '君不见',
+      '这是一条很长很长的消息提醒内容测试这是一条很长很长的消息提醒内容测试'
+    ],
     direction: Axis.vertical,
     prefixIcon: TDIcons.sound,
     marquee: true,

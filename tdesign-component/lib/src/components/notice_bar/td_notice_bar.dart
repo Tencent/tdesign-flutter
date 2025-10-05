@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -11,6 +12,7 @@ import '../../../tdesign_flutter.dart';
 class TDNoticeBar extends StatefulWidget {
   const TDNoticeBar({
     super.key,
+    this.content,
     this.context,
     this.style,
     this.left,
@@ -25,12 +27,20 @@ class TDNoticeBar extends StatefulWidget {
     this.onTap,
     this.height = 22,
     this.maxLines = 1,
-  });
+  })  : assert(content == null || content is String || content is List<String>,
+            'content must be String or List<String>'),
+        assert(speed == null || speed >= 0, 'speed must not be less than 0'),
+        assert(interval == null || interval >= 0,
+            'interval must not be less than 0');
 
-  /// 文本内容
+  /// 文本内容（请使用content属性）
+  @deprecated
   final dynamic context;
 
-  /// 公告栏样式
+  /// 文本内容（字符串或字符串数组等）
+  final dynamic content;
+
+  /// 公告栏样式 [TDNoticeBarStyle]
   final TDNoticeBarStyle? style;
 
   /// 左侧内容（自定义左侧内容，优先级高于prefixIcon）
@@ -76,23 +86,22 @@ class TDNoticeBar extends StatefulWidget {
 class _TDNoticeBarState extends State<TDNoticeBar> {
   ScrollController? _scrollController;
   Timer? _timer;
+
   Size? _size;
   TDNoticeBarStyle? _style;
   Color? _backgroundColor;
-  Widget? _left;
-  Widget? _right;
+
   final GlobalKey _key = GlobalKey();
-  final GlobalKey _contextKey = GlobalKey();
+  final GlobalKey _contentKey = GlobalKey();
+
+  dynamic _content;
 
   @override
   void initState() {
+    /// todo 初始化内容数据，兼用旧版本，后续版本待移除
+    _content = widget.content ?? widget.context;
+
     super.initState();
-    if (widget.speed! < 0) {
-      throw Exception('speed must not be less than 0');
-    }
-    if (widget.interval! <= 0) {
-      throw Exception('interval must not be less than 0');
-    }
     _scrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((time) {
       if (widget.marquee == true) {
@@ -101,22 +110,21 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _timer?.cancel();
-    _scrollController?.dispose();
-  }
-
   void _init() {
+    // 初始化样式及左右widget
     if (widget.style != null) {
       _style = widget.style;
     } else {
       _style = TDNoticeBarStyle.generateTheme(context, theme: widget.theme);
     }
     _backgroundColor = _style!.backgroundColor;
-    _setLeftWidget();
-    _setRightWidget();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer?.cancel();
+    _scrollController?.dispose();
   }
 
   void _startTimer() {
@@ -166,7 +174,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     var offset = 0.0;
     _timer = Timer.periodic(Duration(milliseconds: widget.interval!), (timer) {
       var time = (widget.height / widget.speed! * 1000).round();
-      if (step >= widget.context.length) {
+      if (step >= _content.length) {
         step = 0;
         offset = 0;
         _scrollController!.jumpTo(0);
@@ -181,48 +189,20 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
 
   /// 获取文本内容尺寸消息
   Size _getFontSize() {
-    var text = widget.context;
-    if (widget.context is List<String>) {
-      text = widget.context[0];
+    var text = _content;
+    if (_content is List<String>) {
+      text = _content[0];
     }
     final textPainter = TextPainter(
       text: TextSpan(
         text: text,
-        style: _style!.getTextStyle,
+        style: _style!.textStyle,
       ),
       locale: Localizations.localeOf(context),
       textDirection: TextDirection.ltr,
       maxLines: widget.marquee! ? 1 : widget.maxLines,
     )..layout(maxWidth: _size!.width);
     return textPainter.size;
-  }
-
-  /// 设置左侧内容
-  void _setLeftWidget() {
-    if (widget.prefixIcon != null) {
-      _left = Icon(
-        widget.prefixIcon,
-        color: _style!.leftIconColor,
-        size: widget.height,
-      );
-    }
-    if (widget.left != null) {
-      _left = widget.left;
-    }
-  }
-
-  /// 设置右侧内容
-  void _setRightWidget() {
-    if (widget.suffixIcon != null) {
-      _right = Icon(
-        widget.suffixIcon,
-        color: _style!.rightIconColor,
-        size: widget.height,
-      );
-    }
-    if (widget.right != null) {
-      _right = widget.right;
-    }
   }
 
   /// 获取文本内容宽度
@@ -237,7 +217,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
 
   /// 获取滚动区域宽度
   double _getEmptyWidth() {
-    return _contextKey.currentContext
+    return _contentKey.currentContext
             ?.findRenderObject()
             ?.paintBounds
             .size
@@ -251,54 +231,45 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
   }
 
   /// 内容区域
-  Widget _contextWidget() {
-    var valid = false;
+  Widget _contentWidget() {
     Widget? textWidget;
-    if (widget.context is String) {
-      valid = true;
+
+    String? displayText;
+    if (_content is String) {
+      displayText = _content as String;
+    } else if (_content is List<String> && _content.isNotEmpty) {
+      displayText = _content[0];
+    }
+
+    if (displayText != null) {
       textWidget = SizedBox(
         height: _getTextHeight(),
         child: Align(
           alignment: Alignment.centerLeft,
-          child: SizedBox(
-            height: _getTextHeight(),
-            child: TDText(
-              widget.context,
-              style: _style?.getTextStyle,
-              maxLines: widget.marquee! ? 1 : widget.maxLines,
-              forceVerticalCenter: true,
-            ),
+          child: TDText(
+            displayText,
+            style: _style?.textStyle,
+            maxLines: widget.marquee == true ? 1 : widget.maxLines,
+            forceVerticalCenter: true,
           ),
         ),
       );
+    } else {
+      // 如果 content 类型不支持或为空，返回空容器
+      textWidget = const SizedBox.shrink();
     }
-    if (widget.context is List<String>) {
-      valid = true;
-      textWidget = SizedBox(
-        height: _getTextHeight(),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: SizedBox(
-            height: _getTextHeight(),
-            child: TDText(
-              widget.context[0],
-              style: _style?.getTextStyle,
-              maxLines: 1,
-              forceVerticalCenter: true,
-            ),
-          ),
-        ),
-      );
-    }
-    if (!valid) {
-      throw Exception('context must be String or List<String>');
-    }
+
     if (widget.marquee == false) {
-      return textWidget!;
+      return textWidget;
     }
+
     Widget? child;
     switch (widget.direction) {
       case Axis.horizontal:
+        final emptyWidth = _getEmptyWidth();
+        final textHeight = _getTextHeight();
+        final contextWidth = _getContextWidth();
+
         child = SingleChildScrollView(
           controller: _scrollController,
           scrollDirection: Axis.horizontal,
@@ -307,15 +278,13 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
             children: [
               SizedBox(
                 key: _key,
-                height: _getTextHeight(),
+                height: textHeight,
                 child: textWidget,
               ),
-              SizedBox(width: _getEmptyWidth()),
+              SizedBox(width: emptyWidth),
               SizedBox(
-                width: _getEmptyWidth() > _getContextWidth()
-                    ? _getEmptyWidth()
-                    : _getContextWidth(),
-                height: _getTextHeight(),
+                width: math.max(emptyWidth, contextWidth),
+                height: textHeight,
                 child: textWidget,
               )
             ],
@@ -323,7 +292,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
         );
         break;
       case Axis.vertical:
-        var contexts = widget.context as List<String>;
+        var content = _content as List<String>;
         child = SizedBox(
           height: widget.height,
           child: SingleChildScrollView(
@@ -334,14 +303,14 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  for (int i = 0; i < contexts.length; i++)
+                  for (int i = 0; i < content.length; i++)
                     SizedBox(
                       height: widget.height,
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: TDText(
-                          contexts[i],
-                          style: _style!.getTextStyle,
+                          content[i],
+                          style: _style!.textStyle,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -353,8 +322,8 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: TDText(
-                        contexts[0],
-                        style: _style?.getTextStyle,
+                        content[0],
+                        style: _style?.textStyle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -368,7 +337,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
         child = textWidget;
         break;
     }
-    return child!;
+    return child;
   }
 
   void _onTap(trigger) {
@@ -379,7 +348,6 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
 
   @override
   Widget build(BuildContext context) {
-    // 初始化样式及左右widget
     _init();
     _size = MediaQuery.of(context).size;
     return Container(
@@ -388,31 +356,42 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
+        spacing: 8,
         children: [
-          Visibility(
-            visible: _left != null,
-            child: GestureDetector(
+          /// 左侧widget
+          if (widget.left != null)
+            widget.left!
+          else if (widget.prefixIcon != null)
+            GestureDetector(
               onTap: () => _onTap('prefix-icon'),
-              child: Container(
-                margin: const EdgeInsets.only(right: 8),
-                child: _left,
+              child: Icon(
+                widget.prefixIcon,
+                color: _style?.leftIconColor,
+                size: widget.height,
               ),
             ),
-          ),
+
+          /// 中间内容
           Expanded(
-            key: _contextKey,
+            key: _contentKey,
             child: GestureDetector(
               onTap: () => _onTap('context'),
-              child: _contextWidget(),
+              child: _contentWidget(),
             ),
           ),
-          Visibility(
-            visible: _right != null,
-            child: GestureDetector(
+
+          /// 左侧widget
+          if (widget.right != null)
+            widget.right!
+          else if (widget.suffixIcon != null)
+            GestureDetector(
               onTap: () => _onTap('suffix-icon'),
-              child: _right,
+              child: Icon(
+                widget.suffixIcon,
+                color: _style?.rightIconColor,
+                size: widget.height,
+              ),
             ),
-          ),
         ],
       ),
     );
