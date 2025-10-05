@@ -64,15 +64,17 @@ class TDWrapSideBarItem extends StatelessWidget {
       ),
       child: Container(
         decoration: BoxDecoration(
-            color: selected
-                ? selectedBgColor ?? TDTheme.of(context).bgColorContainer
-                : unSelectedBgColor ??
-                    TDTheme.of(context).bgColorSecondaryContainer,
-            borderRadius: bottomAdjacent || topAdjacent
-                ? bottomAdjacent
-                    ? const BorderRadius.only(bottomRight: Radius.circular(9))
-                    : const BorderRadius.only(topRight: Radius.circular(9))
-                : null),
+          color: selected
+              ? selectedBgColor ?? TDTheme.of(context).bgColorContainer
+              : unSelectedBgColor ??
+                  TDTheme.of(context).bgColorSecondaryContainer,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(
+                topAdjacent ? TDTheme.of(context).radiusLarge : 0),
+            bottomRight: Radius.circular(
+                bottomAdjacent ? TDTheme.of(context).radiusLarge : 0),
+          ),
+        ),
         child: Row(
           children: [
             renderPreLine(context),
@@ -99,7 +101,8 @@ class TDWrapSideBarItem extends StatelessWidget {
                 color: selected && !disabled
                     ? TDTheme.of(context).bgColorContainer
                     : null,
-                borderRadius: BorderRadius.circular(6)),
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             padding: const EdgeInsets.all(8),
             child: renderMainContent(context),
           ),
@@ -149,7 +152,7 @@ class TDWrapSideBarItem extends StatelessWidget {
         return TDTheme.of(context).textColorDisabled;
       }
       if (!selected) {
-        return unSelectedColor ??  TDTheme.of(context).textColorPrimary;
+        return unSelectedColor ?? TDTheme.of(context).textColorPrimary;
       }
       if (selectedTextStyle?.color != null) {
         return selectedTextStyle!.color!;
@@ -182,7 +185,7 @@ class TDWrapSideBarItem extends StatelessWidget {
                 ? TDTheme.of(context).textColorDisabled
                 : selected
                     ? selectedColor ?? TDTheme.of(context).brandNormalColor
-                    :  unSelectedColor ??  TDTheme.of(context).textColorPrimary,
+                    : unSelectedColor ?? TDTheme.of(context).textColorPrimary,
             // forceVerticalCenter: true,
           )),
 
