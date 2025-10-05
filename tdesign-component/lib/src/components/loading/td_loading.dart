@@ -173,23 +173,21 @@ class TDLoading extends StatelessWidget {
     }
   }
 
-  Font fitFont() {
-    switch (size) {
-      case TDLoadingSize.large:
-        return TDTheme.of().fontBodyLarge ?? Font(size: 16, lineHeight: 24);
-      case TDLoadingSize.medium:
-        return TDTheme.of().fontBodyMedium ?? Font(size: 14, lineHeight: 22);
-      case TDLoadingSize.small:
-        return TDTheme.of().fontBodySmall ?? Font(size: 12, lineHeight: 20);
-    }
-  }
-
   Widget textWidget(BuildContext context) {
+    final font = switch (size) {
+      TDLoadingSize.large =>
+        TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24),
+      TDLoadingSize.medium =>
+        TDTheme.of(context).fontBodyMedium ?? Font(size: 14, lineHeight: 22),
+      TDLoadingSize.small =>
+        TDTheme.of(context).fontBodySmall ?? Font(size: 12, lineHeight: 20),
+    };
+
     Widget result = TDText(
       text,
       textColor: textColor ?? TDTheme.of(context).textColorPrimary,
       fontWeight: FontWeight.w400,
-      font: fitFont(),
+      font: font,
       textAlign: TextAlign.center,
     );
     if (refreshWidget != null) {
