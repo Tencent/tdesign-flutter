@@ -62,7 +62,7 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.tdesign.tdesign_flutter_example"
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 31
+        targetSdkVersion flutter.targetSdkVersion
         versionCode createVersionCode()
         versionName createVersionName()
     }
