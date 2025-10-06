@@ -310,11 +310,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'loading',
         pageBuilder: _wrapInheritedTheme((context) => const TDLoadingPage())),
     ExamplePageModel(
-        text: 'Message 全局提示',
+        text: 'Message 消息通知',
         name: 'message',
         pageBuilder: _wrapInheritedTheme((context) => const TDMessagePage())),
     ExamplePageModel(
-        text: 'NoticeBar 消息提醒',
+        text: 'NoticeBar 公告栏',
         name: 'notice-bar',
         pageBuilder: _wrapInheritedTheme((context) => const TDNoticeBarPage())),
     ExamplePageModel(
