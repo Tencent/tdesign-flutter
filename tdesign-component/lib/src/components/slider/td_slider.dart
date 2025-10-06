@@ -161,8 +161,6 @@ class TDSliderState extends State<TDSlider> {
                       value: value,
                       min: tdSliderThemeData.min,
                       max: tdSliderThemeData.max,
-                      secondaryActiveColor: Colors.greenAccent,
-                      
                       divisions: tdSliderThemeData.divisions,
                       onChangeStart: widget.onChangeStart,
                       onChangeEnd: widget.onChangeEnd,
