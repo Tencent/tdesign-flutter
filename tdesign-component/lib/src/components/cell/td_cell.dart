@@ -165,7 +165,6 @@ class _TDCellState extends State<TDCell> {
         decoration: BoxDecoration(color: color, border: border),
         child: Row(
           crossAxisAlignment: crossAxisAlignment,
-          // spacing: TDTheme.of(context).spacer12,
           children: [
             ..._buildImage(),
             Expanded(
@@ -182,7 +181,7 @@ class _TDCellState extends State<TDCell> {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: theme.spacer4,
+                      // spacing: theme.spacer4,
                       children: [
                         Row(
                           children: [
@@ -196,6 +195,9 @@ class _TDCellState extends State<TDCell> {
                               TDText(' *', style: style.requiredStyle),
                           ],
                         ),
+                        if ((widget.titleWidget != null || widget.title != null) &&
+                            (widget.descriptionWidget != null || widget.description?.isNotEmpty == true))
+                          SizedBox(height: TDTheme.of(context).spacer4),
                         if (widget.descriptionWidget != null)
                           widget.descriptionWidget!
                         else if (widget.description?.isNotEmpty ?? false)
@@ -207,7 +209,7 @@ class _TDCellState extends State<TDCell> {
                 ],
               ),
             ),
-            Row(
+            Wrap(
               spacing: theme.spacer4,
               // crossAxisAlignment: WrapCrossAlignment.center,
               children: [

@@ -82,11 +82,14 @@ class TDActionSheetPage extends StatelessWidget {
             desc: '列表型动作面板',
             builder: (BuildContext context) {
               return const Column(
-                spacing: 16,
+                // spacing: 16,
                 children: [
                   CodeWrapper(builder: _buildBaseListActionSheet),
+                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildDescListActionSheet),
+                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildIconListActionSheet),
+                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildBadgeListActionSheet),
                 ],
               );
@@ -97,13 +100,18 @@ class TDActionSheetPage extends StatelessWidget {
             desc: '宫格型动作面板',
             builder: (BuildContext context) {
               return const Column(
-                spacing: 16,
+                // spacing: 16,
                 children: [
                   CodeWrapper(builder: _buildBaseGridActionSheet),
+                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildDescGridActionSheet),
+                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildPaginationGridActionSheet),
+                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildScrollGridActionSheet),
+                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildMultiScrollGridActionSheet),
+                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildBadgeGridActionSheet),
                 ],
               );
@@ -116,9 +124,10 @@ class TDActionSheetPage extends StatelessWidget {
             desc: '列表型选项状态',
             builder: (BuildContext context) {
               return const Column(
-                spacing: 16,
+                // spacing: 16,
                 children: [
                   CodeWrapper(builder: _buildBaseListStateActionSheet),
+                  SizedBox(height: 16),
                   CodeWrapper(builder: _buildIconListStateActionSheet),
                 ],
               );
@@ -131,11 +140,14 @@ class TDActionSheetPage extends StatelessWidget {
               desc: '列表型对齐方式',
               builder: (BuildContext context) {
                 return const Column(
-                  spacing: 16,
+                  // spacing: 16,
                   children: [
                     CodeWrapper(builder: _buildBadgeListCenterActionSheet),
+                    SizedBox(height: 16),
                     CodeWrapper(builder: _buildIconListCenterActionSheet),
+                    SizedBox(height: 16),
                     CodeWrapper(builder: _buildBadgeListLeftActionSheet),
+                    SizedBox(height: 16),
                     CodeWrapper(builder: _buildIconListLeftActionSheet),
                   ],
                 );

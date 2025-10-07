@@ -55,13 +55,14 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
   @Demo(group: 'avatar')
   Widget _buildImageAvatar(BuildContext context) {
     return const Row(
-      spacing: 32,
+      // spacing: 32,
       children: [
         TDAvatar(
           size: TDAvatarSize.medium,
           type: TDAvatarType.normal,
           defaultUrl: 'assets/img/td_avatar_1.png',
         ),
+        SizedBox(width: 32),
         TDAvatar(
           size: TDAvatarSize.medium,
           type: TDAvatarType.normal,
@@ -76,17 +77,20 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
   @Demo(group: 'avatar')
   Widget _buildTextAvatar(BuildContext context) {
     return const Row(
-      spacing: 32,
+      // spacing: 32,
       children: [
         TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.customText,
-            text: 'A'),
+          size: TDAvatarSize.medium,
+          type: TDAvatarType.customText,
+          text: 'A',
+        ),
+        SizedBox(width: 32),
         TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.customText,
-            shape: TDAvatarShape.square,
-            text: 'A'),
+          size: TDAvatarSize.medium,
+          type: TDAvatarType.customText,
+          shape: TDAvatarShape.square,
+          text: 'A',
+        ),
       ],
     );
   }
@@ -95,12 +99,13 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
   @Demo(group: 'avatar')
   Widget _buildIconAvatar(BuildContext context) {
     return const Row(
-      spacing: 32,
+      // spacing: 32,
       children: [
         TDAvatar(
           size: TDAvatarSize.medium,
           type: TDAvatarType.icon,
         ),
+        SizedBox(width: 32),
         TDAvatar(
           size: TDAvatarSize.medium,
           type: TDAvatarType.icon,
@@ -114,7 +119,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
   @Demo(group: 'avatar')
   Widget _buildBadgeAvatar(BuildContext context) {
     return const Row(
-      spacing: 32,
+      // spacing: 32,
       children: [
         SizedBox(
           height: 51,
@@ -131,6 +136,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
             ],
           ),
         ),
+        SizedBox(width: 32),
         SizedBox(
           height: 51,
           width: 51,
@@ -150,6 +156,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
             ],
           ),
         ),
+        SizedBox(width: 32),
         SizedBox(
           width: 51,
           height: 51,
@@ -203,15 +210,20 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
   @Demo(group: 'avatar')
   Widget _buildLargeAvatar(BuildContext context) {
     return const Row(
-      spacing: 32,
+      // spacing: 32,
       children: [
         TDAvatar(
           size: TDAvatarSize.large,
           type: TDAvatarType.normal,
           defaultUrl: 'assets/img/td_avatar_1.png',
         ),
+        SizedBox(width: 32),
         TDAvatar(
-            size: TDAvatarSize.large, type: TDAvatarType.customText, text: 'A'),
+          size: TDAvatarSize.large,
+          type: TDAvatarType.customText,
+          text: 'A',
+        ),
+        SizedBox(width: 32),
         TDAvatar(
           size: TDAvatarSize.large,
           type: TDAvatarType.icon,
@@ -224,17 +236,20 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
   @Demo(group: 'avatar')
   Widget _buildMediumAvatar(BuildContext context) {
     return const Row(
-      spacing: 48,
+      // spacing: 48,
       children: [
         TDAvatar(
           size: TDAvatarSize.medium,
           type: TDAvatarType.normal,
           defaultUrl: 'assets/img/td_avatar_1.png',
         ),
+        SizedBox(width: 48),
         TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.customText,
-            text: 'A'),
+          size: TDAvatarSize.medium,
+          type: TDAvatarType.customText,
+          text: 'A',
+        ),
+        SizedBox(width: 48),
         TDAvatar(
           size: TDAvatarSize.medium,
           type: TDAvatarType.icon,
@@ -247,15 +262,20 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
   @Demo(group: 'avatar')
   Widget _buildSmallAvatar(BuildContext context) {
     return const Row(
-      spacing: 56,
+      // spacing: 56,
       children: [
         TDAvatar(
           size: TDAvatarSize.small,
           type: TDAvatarType.normal,
           defaultUrl: 'assets/img/td_avatar_1.png',
         ),
+        SizedBox(width: 56),
         TDAvatar(
-            size: TDAvatarSize.small, type: TDAvatarType.customText, text: 'A'),
+          size: TDAvatarSize.small,
+          type: TDAvatarType.customText,
+          text: 'A',
+        ),
+        SizedBox(width: 56),
         TDAvatar(
           size: TDAvatarSize.small,
           type: TDAvatarType.icon,

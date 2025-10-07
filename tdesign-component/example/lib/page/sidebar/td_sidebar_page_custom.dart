@@ -109,15 +109,12 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
       decoration: const BoxDecoration(color: Colors.blue),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 16,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: TDText('标题 $index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
+            child: TDText('标题 $index', style: const TextStyle(fontSize: 14)),
           ),
+          const SizedBox(height: 16),
           displayImageList()
         ],
       ),
@@ -127,15 +124,13 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
   Widget getAnchorDemo(int index) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 16,
+      // spacing: 16,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-          child: TDText('标题$index',
-              style: const TextStyle(
-                fontSize: 14,
-              )),
+          child: TDText('标题$index', style: const TextStyle(fontSize: 14)),
         ),
+        const SizedBox(height: 16),
         displayImageList()
       ],
     );
@@ -159,21 +154,20 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
 
   Widget displayImageItem(String title) {
     return Expanded(
-        child: Column(
-      spacing: 8,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const TDImage(
-          assetUrl: 'assets/img/empty.png',
-          type: TDImageType.roundedSquare,
-          width: 48,
-          height: 48,
-        ),
-        TDText(
-          '$title',
-          style: const TextStyle(fontSize: 12),
-        )
-      ],
-    ));
+      child: Column(
+        // spacing: 8,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const TDImage(
+            assetUrl: 'assets/img/empty.png',
+            type: TDImageType.roundedSquare,
+            width: 48,
+            height: 48,
+          ),
+          const SizedBox(height: 4),
+          TDText('$title', style: const TextStyle(fontSize: 12))
+        ],
+      ),
+    );
   }
 }

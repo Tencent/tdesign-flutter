@@ -58,21 +58,24 @@ class TDFontPage extends StatelessWidget {
             ignoreCode: true,
             builder: (context) {
               return Column(
-                spacing: 16,
+                // spacing: 16,
                 children: [
                   TDText(
                     '使用主题字体：fontBodySmall',
                     font: TDTheme.of(context).fontBodySmall,
                   ),
+                  const SizedBox(height: 16),
                   TDText(
                     '使用主题字体：fontBodyLarge',
                     font: TDTheme.of(context).fontBodyLarge,
                   ),
+                  const SizedBox(height: 16),
                   TDText(
                     '不使用数字字体：1234567890abcd',
                     font: TDTheme.defaultData().fontTitleSmall,
                     textColor: TDTheme.of(context).brandNormalColor,
                   ),
+                  const SizedBox(height: 16),
                   TDText(
                     '使用数字字体：1234567890abcd',
                     font: TDTheme.defaultData().fontTitleSmall,
@@ -88,34 +91,40 @@ class TDFontPage extends StatelessWidget {
             ignoreCode: true,
             builder: (context) {
               return Column(
-                spacing: 16,
+                // spacing: 16,
                 children: [
                   TDText(
                     '延14字号',
                     style: const TextStyle(fontSize: 14),
                     font: TDTheme.of(context).fontMarkLarge,
                   ),
+                  const SizedBox(height: 16),
                   TDText(
                     '延15字号',
                     style: const TextStyle(fontSize: 15),
                     font: TDTheme.of(context).fontMarkLarge,
                   ),
+                  const SizedBox(height: 16),
                   TDText(
                     '延16字号',
                     style: const TextStyle(fontSize: 16),
                     font: TDTheme.of(context).fontMarkLarge,
                   ),
+                  const SizedBox(height: 16),
                   TDText(
                     '延17字号',
                     style: const TextStyle(fontSize: 17),
                     font: TDTheme.of(context).fontMarkLarge,
                   ),
+                  const SizedBox(height: 16),
                   TDText(
                     '延18字号',
                     style: const TextStyle(fontSize: 18),
                     font: TDTheme.of(context).fontMarkLarge,
                   ),
+                  const SizedBox(height: 16),
                   const Text('延-系统字体16字号', style: TextStyle(fontSize: 18)),
+                  const SizedBox(height: 16),
                   const Text('延-系统字体18字号', style: TextStyle(fontSize: 18))
                 ],
               );

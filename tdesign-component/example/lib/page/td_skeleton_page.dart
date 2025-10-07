@@ -127,10 +127,25 @@ class TDSkeletonPage extends StatelessWidget {
     );
 
     return Column(
-      spacing: 16,
+      // spacing: 16,
       children: [
-        Row(spacing: 12, children: [rowColsAvatar, rowColsContent]),
-        Row(spacing: 12, children: [rowColsImage, rowColsContent]),
+        Row(
+          // spacing: 12,
+          children: [
+            rowColsAvatar,
+            const SizedBox(width: 12),
+            rowColsContent,
+          ],
+        ),
+        const SizedBox(height: 16),
+        Row(
+          // spacing: 12,
+          children: [
+            rowColsImage,
+            const SizedBox(width: 12),
+            rowColsContent,
+          ],
+        ),
       ],
     );
   }
@@ -138,7 +153,7 @@ class TDSkeletonPage extends StatelessWidget {
   @Demo(group: 'skeleton')
   Widget _buildGridSkeleton(BuildContext context) {
     return Row(
-      spacing: 16,
+      // spacing: 16,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(5, (index) {
         return TDSkeleton.fromRowCol(
@@ -179,9 +194,10 @@ class TDSkeletonPage extends StatelessWidget {
                 ])));
 
     return Row(
-      spacing: TDTheme.of(context).spacer16,
+      // spacing: TDTheme.of(context).spacer16,
       children: [
         rowCols,
+        SizedBox(width: TDTheme.of(context).spacer16),
         rowCols,
       ],
     );

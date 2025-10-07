@@ -327,29 +327,34 @@ Widget _buildStyle(BuildContext context) {
 Widget _buildBlock(BuildContext context) {
   final size = MediaQuery.of(context).size;
   final selected = ValueNotifier<List<int>>(
-      [DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+    [DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000],
+  );
   return Column(
-    spacing: TDTheme.of(context).spacer16,
+    // spacing: TDTheme.of(context).spacer16,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Row(
-        spacing: TDTheme.of(context).spacer16,
+        // spacing: TDTheme.of(context).spacer16,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TDButton(
-              text: '加一个月',
-              theme: TDButtonTheme.primary,
-              onTap: () {
-                selected.value = [selected.value[0] + 30 * 24 * 60 * 60 * 1000];
-              }),
+            text: '加一个月',
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              selected.value = [selected.value[0] + 30 * 24 * 60 * 60 * 1000];
+            },
+          ),
+          const SizedBox(width: 16),
           TDButton(
-              text: '减一个月',
-              theme: TDButtonTheme.primary,
-              onTap: () {
-                selected.value = [selected.value[0] - 30 * 24 * 60 * 60 * 1000];
-              }),
+            text: '减一个月',
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              selected.value = [selected.value[0] - 30 * 24 * 60 * 60 * 1000];
+            },
+          ),
         ],
       ),
+      const SizedBox(height: 16),
       ValueListenableBuilder(
         valueListenable: selected,
         builder: (context, value, child) {

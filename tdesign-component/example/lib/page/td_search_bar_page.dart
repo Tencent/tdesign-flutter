@@ -67,7 +67,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
   @Demo(group: 'search')
   Widget _buildSearchBarWithShape(BuildContext context) {
     return Column(
-      spacing: 16,
+      // spacing: 16,
       children: [
         TDSearchBar(
           placeHolder: '搜索预设文案',
@@ -79,6 +79,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
             });
           },
         ),
+        const SizedBox(height: 16),
         TDSearchBar(
           placeHolder: '搜索预设文案',
           // 圆形
@@ -109,7 +110,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
   @Demo(group: 'search')
   Widget _buildSearchBarWithAction(BuildContext context) {
     return Column(
-      spacing: 16,
+      // spacing: 16,
       children: [
         TDSearchBar(
           placeHolder: '搜索预设文案',
@@ -126,6 +127,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
             });
           },
         ),
+        const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.only(left: 15),
           alignment: Alignment.centerLeft,

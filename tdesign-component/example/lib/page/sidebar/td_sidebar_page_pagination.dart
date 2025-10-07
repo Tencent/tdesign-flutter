@@ -101,15 +101,13 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
       decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 16,
+        // spacing: 16,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: TDText('标题 $index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
+            child: TDText('标题 $index', style: const TextStyle(fontSize: 14)),
           ),
+          const SizedBox(height: 16),
           displayImageList()
         ],
       ),
@@ -134,7 +132,7 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
 
   Widget displayImageItem(String title) {
     return Column(
-      spacing: 8,
+      // spacing: 8,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const TDImage(
@@ -143,10 +141,8 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
           width: 48,
           height: 48,
         ),
-        TDText(
-          '$title',
-          style: const TextStyle(fontSize: 12),
-        )
+        const SizedBox(height: 8),
+        TDText('$title', style: const TextStyle(fontSize: 12))
       ],
     );
   }

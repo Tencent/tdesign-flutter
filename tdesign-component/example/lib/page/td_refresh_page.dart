@@ -42,7 +42,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
           child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          spacing: 16,
+          // spacing: 16,
           children: [
             Container(
               height: 171,
@@ -57,6 +57,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
                 textColor: TDTheme.of(context).textColorPlaceholder,
               ),
             ),
+            const SizedBox(height: 16),
             Container(
               height: 70,
               alignment: Alignment.center,

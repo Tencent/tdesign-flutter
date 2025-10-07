@@ -45,35 +45,65 @@ class _TDPopoverPage extends State<TDPopoverPage> {
           ExampleItem(
             ignoreCode: true,
             builder: (context) {
-              return Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Wrap(runSpacing: 16, children: [
-                    Row(spacing: 16, children: [
-                      Expanded(child: CodeWrapper(builder: _buildDarkPopover)),
-                      Expanded(child: CodeWrapper(builder: _buildLightPopover)),
-                      Expanded(child: CodeWrapper(builder: _buildInfoPopover))
-                    ]),
-                    Row(spacing: 16, children: [
-                      Expanded(
-                          child: CodeWrapper(builder: _buildSuccessPopover)),
-                      Expanded(
-                          child: CodeWrapper(builder: _buildWarningPopover)),
-                      Expanded(child: CodeWrapper(builder: _buildErrorPopover))
-                    ])
-                  ]));
+              return Container(
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  children: [
+                    Flex(
+                      direction: Axis.horizontal,
+                      children: [
+                        Expanded(
+                          child: CodeWrapper(builder: _buildDarkPopover),
+                        ),
+                        Expanded(
+                          child: CodeWrapper(builder: _buildLightPopover),
+                        ),
+                        Expanded(
+                          child: CodeWrapper(builder: _buildInfoPopover),
+                        ),
+                      ],
+                    ),
+                    Flex(
+                      direction: Axis.horizontal,
+                      children: [
+                        Expanded(
+                          child: CodeWrapper(builder: _buildSuccessPopover),
+                        ),
+                        Expanded(
+                          child: CodeWrapper(builder: _buildWarningPopover),
+                        ),
+                        Expanded(
+                          child: CodeWrapper(builder: _buildErrorPopover),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              );
             },
           ),
           ExampleItem(
             desc: '顶部弹出气泡',
             ignoreCode: true,
             builder: (context) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(spacing: 16, children: [
-                  Expanded(child: CodeWrapper(builder: _buildTopLeftPopover)),
-                  Expanded(child: CodeWrapper(builder: _buildTopPopover)),
-                  Expanded(child: CodeWrapper(builder: _buildTopRightPopover)),
-                ]),
+              return Container(
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Flex(
+                  direction: Axis.horizontal,
+                  children: [
+                    Expanded(
+                      child: CodeWrapper(builder: _buildTopLeftPopover),
+                    ),
+                    Expanded(
+                      child: CodeWrapper(builder: _buildTopPopover),
+                    ),
+                    Expanded(
+                      child: CodeWrapper(builder: _buildTopRightPopover),
+                    ),
+                  ],
+                ),
               );
             },
           ),
@@ -81,31 +111,46 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             desc: '底部弹出气泡',
             ignoreCode: true,
             builder: (context) {
-              return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(spacing: 16, children: [
+              return Container(
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Flex(
+                  direction: Axis.horizontal,
+                  children: [
                     Expanded(
-                        child: CodeWrapper(builder: _buildBottomLeftPopover)),
-                    Expanded(child: CodeWrapper(builder: _buildBottomPopover)),
+                      child: CodeWrapper(builder: _buildBottomLeftPopover),
+                    ),
                     Expanded(
-                        child: CodeWrapper(builder: _buildBottomRightPopover)),
-                  ]));
+                      child: CodeWrapper(builder: _buildBottomPopover),
+                    ),
+                    Expanded(
+                      child: CodeWrapper(builder: _buildBottomRightPopover),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
           ExampleItem(
             desc: '右侧弹出气泡',
             ignoreCode: true,
-            center: false,
             builder: (context) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  spacing: 16,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              return Container(
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Flex(
+                  direction: Axis.horizontal,
                   children: [
-                    CodeWrapper(builder: _buildRightTopPopover),
-                    CodeWrapper(builder: _buildRightPopover),
-                    CodeWrapper(builder: _buildRightBottomPopover),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          CodeWrapper(builder: _buildRightTopPopover),
+                          CodeWrapper(builder: _buildRightPopover),
+                          CodeWrapper(builder: _buildRightBottomPopover),
+                        ],
+                      ),
+                    ),
+                    const Expanded(child: SizedBox()),
                   ],
                 ),
               );
@@ -114,18 +159,23 @@ class _TDPopoverPage extends State<TDPopoverPage> {
           ExampleItem(
             desc: '左侧弹出气泡',
             ignoreCode: true,
-            center: false,
             builder: (context) {
               return Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  spacing: 16,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Flex(
+                  direction: Axis.horizontal,
                   children: [
-                    CodeWrapper(builder: _buildLeftTopPopover),
-                    CodeWrapper(builder: _buildLeftPopover),
-                    CodeWrapper(builder: _buildLeftBottomPopover),
+                    const Expanded(child: SizedBox()),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          CodeWrapper(builder: _buildLeftTopPopover),
+                          CodeWrapper(builder: _buildLeftPopover),
+                          CodeWrapper(builder: _buildLeftBottomPopover),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               );
@@ -134,26 +184,36 @@ class _TDPopoverPage extends State<TDPopoverPage> {
         ])
       ],
       test: [
-        ExampleItem(desc: '显示多行内容', builder: _buildMultiLinePopover),
-        ExampleItem(desc: '自定义圆角', builder: _buildCustomRadiusPopover)
+        ExampleItem(
+          desc: '显示多行内容',
+          builder: _buildMultiLinePopover,
+        ),
+        ExampleItem(
+          desc: '自定义圆角',
+          builder: _buildCustomRadiusPopover,
+        )
       ],
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildPopover(BuildContext context) {
-    return TDButton(
-      size: TDButtonSize.medium,
-      text: '带箭头',
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
-      onTap: () {
-        TDPopover.showPopover(
-          context: context,
-          content: '弹出气泡内容',
-          theme: theme,
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '带箭头',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                  context: _, content: '弹出气泡内容', theme: theme);
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -168,11 +228,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
           theme: TDButtonTheme.primary,
           onTap: () {
             TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              showArrow: false,
-              theme: theme,
-            );
+                context: _, content: '弹出气泡内容', showArrow: false, theme: theme);
           },
         );
       },
@@ -231,435 +287,515 @@ class _TDPopoverPage extends State<TDPopoverPage> {
 
   @Demo(group: 'popover')
   Widget _buildDarkPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '深色',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '深色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildLightPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '浅色',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              theme: TDPopoverTheme.light,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '浅色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.light,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildInfoPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '品牌色',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              theme: TDPopoverTheme.info,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '品牌色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.info,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildSuccessPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '成功色',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              theme: TDPopoverTheme.success,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '成功色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.success,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildWarningPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '警告色',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              theme: TDPopoverTheme.warning,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '警告色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.warning,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildErrorPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '错误色',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              theme: TDPopoverTheme.error,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '错误色',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                theme: TDPopoverTheme.error,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildTopLeftPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '顶部左',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              placement: TDPopoverPlacement.topLeft,
-              theme: theme,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '顶部左',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TDPopoverPlacement.topLeft,
+                theme: theme,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildTopPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '顶部中',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              placement: TDPopoverPlacement.top,
-              theme: theme,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '顶部中',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TDPopoverPlacement.top,
+                theme: theme,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildTopRightPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '顶部右',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              placement: TDPopoverPlacement.topRight,
-              theme: theme,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '顶部右',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TDPopoverPlacement.topRight,
+                theme: theme,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildBottomLeftPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '底部左',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              placement: TDPopoverPlacement.bottomLeft,
-              theme: theme,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '底部左',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TDPopoverPlacement.bottomLeft,
+                theme: theme,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildBottomPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '底部中',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              placement: TDPopoverPlacement.bottom,
-              theme: theme,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '底部中',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TDPopoverPlacement.bottom,
+                theme: theme,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildBottomRightPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '底部右',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              placement: TDPopoverPlacement.bottomRight,
-              theme: theme,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '底部右',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TDPopoverPlacement.bottomRight,
+                theme: theme,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildRightTopPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '右侧上',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              placement: TDPopoverPlacement.rightTop,
-              theme: theme,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '右侧上',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TDPopoverPlacement.rightTop,
+                theme: theme,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildRightPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '右侧中',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              placement: TDPopoverPlacement.right,
-              theme: theme,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '右侧中',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TDPopoverPlacement.right,
+                theme: theme,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildRightBottomPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '右侧下',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              placement: TDPopoverPlacement.rightBottom,
-              theme: theme,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '右侧下',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TDPopoverPlacement.rightBottom,
+                theme: theme,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildLeftTopPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '左侧上',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              placement: TDPopoverPlacement.leftTop,
-              theme: theme,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '左侧上',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TDPopoverPlacement.leftTop,
+                theme: theme,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildLeftPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '左侧中',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              placement: TDPopoverPlacement.left,
-              theme: theme,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '左侧中',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TDPopoverPlacement.left,
+                theme: theme,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildLeftBottomPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '左侧下',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              content: '弹出气泡内容',
-              placement: TDPopoverPlacement.leftBottom,
-              theme: theme,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '左侧下',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                content: '弹出气泡内容',
+                placement: TDPopoverPlacement.leftBottom,
+                theme: theme,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildMultiLinePopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '多行内容',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              width: 200,
-              content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
-              theme: theme,
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '多行内容',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                width: 200,
+                content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
+                theme: theme,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
   @Demo(group: 'popover')
   Widget _buildCustomRadiusPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return TDButton(
-          size: TDButtonSize.medium,
-          text: '自定义圆角',
-          type: TDButtonType.outline,
-          theme: TDButtonTheme.primary,
-          onTap: () {
-            TDPopover.showPopover(
-              context: _,
-              width: 200,
-              radius: BorderRadius.circular(16),
-              theme: theme,
-              content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
-            );
-          },
-        );
-      },
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return TDButton(
+            size: TDButtonSize.medium,
+            text: '自定义圆角',
+            type: TDButtonType.outline,
+            theme: TDButtonTheme.primary,
+            onTap: () {
+              TDPopover.showPopover(
+                context: _,
+                width: 200,
+                radius: BorderRadius.circular(16),
+                theme: theme,
+                content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

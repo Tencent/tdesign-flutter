@@ -57,12 +57,13 @@ class TDSideBarPageState extends State<TDSideBarPage> {
 
   Widget _buildNavigatorSideBar(BuildContext context) {
     return Column(
-      spacing: 16,
+      // spacing: 16,
       children: [
         CodeWrapper(
           builder: (_) => getCustomButton(context, '锚点用法', 'SideBarAnchor'),
           methodName: '_buildAnchorSideBar',
         ),
+        const SizedBox(height: 16),
         CodeWrapper(
           builder: (_) => getCustomButton(context, '切页用法', 'SideBarPagination'),
           methodName: '_buildPaginationSideBar',
@@ -72,22 +73,17 @@ class TDSideBarPageState extends State<TDSideBarPage> {
   }
 
   Widget _buildIconSideBar(BuildContext context) {
-    return Column(
-      spacing: 16,
-      children: [
-        getCustomButton(context, '带图标侧边导航', 'SideBarIcon'),
-      ],
-    );
+    return getCustomButton(context, '带图标侧边导航', 'SideBarIcon');
   }
 
   Widget _buildStyleSideBar(BuildContext context) {
     return Column(
-      spacing: 16,
       children: [
         CodeWrapper(
           builder: (_) => getCustomButton(context, '非通栏选项样式', 'SideBarOutline'),
           methodName: '_buildOutlineSideBar',
         ),
+        const SizedBox(height: 16),
         CodeWrapper(
           builder: (_) => getCustomButton(context, '自定义样式', 'SideBarCustom'),
           methodName: '_buildCustomSideBar',
@@ -97,27 +93,17 @@ class TDSideBarPageState extends State<TDSideBarPage> {
   }
 
   Widget _loadingSideBar(BuildContext context) {
-    return Column(
-      spacing: 16,
-      children: [
-        CodeWrapper(
-          builder: (_) => getCustomButton(context, '延迟加载', 'SideBarLoading'),
-          methodName: '_buildLoadingSideBar',
-        ),
-      ],
+    return CodeWrapper(
+      builder: (_) => getCustomButton(context, '延迟加载', 'SideBarLoading'),
+      methodName: '_buildLoadingSideBar',
     );
   }
 
   Widget _unSelectedColorSideBar(BuildContext context) {
-    return Column(
-      spacing: 16,
-      children: [
-        CodeWrapper(
-          builder: (_) =>
-              getCustomButton(context, '未选中颜色自定义', 'SideBarUnselectedColor'),
-          methodName: '_buildUnselectedColorSideBar',
-        ),
-      ],
+    return CodeWrapper(
+      builder: (_) =>
+          getCustomButton(context, '未选中颜色自定义', 'SideBarUnselectedColor'),
+      methodName: '_buildUnselectedColorSideBar',
     );
   }
 
@@ -132,7 +118,9 @@ class TDSideBarPageState extends State<TDSideBarPage> {
       theme: TDButtonTheme.primary,
       onTap: () {
         Navigator.pushNamed(
-            context, PlatformUtil.isWeb ? routeName : '$routeName');
+          context,
+          PlatformUtil.isWeb ? routeName : '$routeName',
+        );
       },
     );
   }

@@ -141,9 +141,10 @@ class TDSwiperDotsPagination extends SwiperPlugin {
           : (active ? activeSize : size);
       fixedLen = active ? activeSize : size;
 
-      list.add(
-        AnimatedContainer(
-          key: Key('pagination_$i'),
+      list.add(Container(
+        key: Key('pagination_$i'),
+        margin: EdgeInsets.all(space),
+        child: AnimatedContainer(
           duration:
               Duration(milliseconds: animationDuration ?? _kAminatedDuration),
           width: config.scrollDirection == Axis.horizontal
@@ -156,12 +157,12 @@ class TDSwiperDotsPagination extends SwiperPlugin {
               color: active ? activeColor : color,
               borderRadius: BorderRadius.circular(activeSize / 2)),
         ),
-      );
+      ));
     }
 
     return Flex(
       direction: config.scrollDirection,
-      spacing: space,
+      // spacing: space,
       key: key,
       mainAxisSize: MainAxisSize.min,
       children: list,

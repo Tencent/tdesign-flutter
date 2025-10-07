@@ -344,7 +344,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
         ),
       ),
       child: Row(
-        spacing: TDTheme.of(context).spacer16,
+        // spacing: TDTheme.of(context).spacer16,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
@@ -357,6 +357,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
               },
             ),
           ),
+          SizedBox(width: TDTheme.of(context).spacer16),
           Expanded(
             child: TDButton(
               text: context.resource.confirm,

@@ -55,23 +55,23 @@ class TDPopupPage extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     TDSlidePopupRoute(
-                        slideTransitionFrom: SlideTransitionFrom.bottom,
-                        builder: (context) {
-                          return TDPopupBottomConfirmPanel(
-                            title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
-                            leftText: '点这里确认!',
-                            leftTextColor: TDTheme.of(context).brandNormalColor,
-                            leftClick: () {
-                              TDToast.showText('确认', context: context);
-                              Navigator.maybePop(context);
-                            },
-                            rightText: '关闭',
-                            rightTextColor:
-                                TDTheme.of(context).errorNormalColor,
-                            rightClick: () => Navigator.maybePop(context),
-                            child: Container(height: 200),
-                          );
-                        }),
+                      slideTransitionFrom: SlideTransitionFrom.bottom,
+                      builder: (context) {
+                        return TDPopupBottomConfirmPanel(
+                          title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                          leftText: '点这里确认!',
+                          leftTextColor: TDTheme.of(context).brandNormalColor,
+                          leftClick: () {
+                            TDToast.showText('确认', context: context);
+                            Navigator.maybePop(context);
+                          },
+                          rightText: '关闭',
+                          rightTextColor: TDTheme.of(context).errorNormalColor,
+                          rightClick: () => Navigator.maybePop(context),
+                          child: Container(height: 200),
+                        );
+                      },
+                    ),
                   );
                 },
               );
@@ -105,7 +105,7 @@ class TDPopupPage extends StatelessWidget {
             desc: '修改圆角',
             builder: (_) {
               return Column(
-                spacing: 16,
+                // spacing: 16,
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -132,6 +132,7 @@ class TDPopupPage extends StatelessWidget {
                       );
                     },
                   ),
+                  const SizedBox(height: 16),
                   TDButton(
                     text: '底部弹出层-修改圆角',
                     isBlock: true,
@@ -163,6 +164,7 @@ class TDPopupPage extends StatelessWidget {
                       );
                     },
                   ),
+                  const SizedBox(height: 16),
                   TDButton(
                     text: '居中弹出层-修改圆角',
                     isBlock: true,
@@ -187,6 +189,7 @@ class TDPopupPage extends StatelessWidget {
                       );
                     },
                   ),
+                  const SizedBox(height: 16),
                   TDButton(
                     text: '居中弹出层-底部关闭-修改圆角',
                     isBlock: true,
@@ -247,7 +250,7 @@ class TDPopupPage extends StatelessWidget {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                spacing: 16,
+                // spacing: 16,
                 children: [
                   TDButton(
                     text: '底部弹出层-键盘弹默认遮挡',
@@ -283,6 +286,7 @@ class TDPopupPage extends StatelessWidget {
                       );
                     },
                   ),
+                  const SizedBox(height: 16),
                   TDButton(
                     text: '底部弹出层-键盘弹出不遮挡',
                     isBlock: true,
@@ -320,6 +324,7 @@ class TDPopupPage extends StatelessWidget {
                       );
                     },
                   ),
+                  const SizedBox(height: 16),
                   TDButton(
                     text: '居中弹出层-键盘弹出不遮挡',
                     isBlock: true,
@@ -397,7 +402,7 @@ class TDPopupPage extends StatelessWidget {
             return Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                spacing: 16,
+                // spacing: 16,
                 children: [
                   TDButton(
                     text: '可拖动全屏',
@@ -424,6 +429,7 @@ class TDPopupPage extends StatelessWidget {
                       );
                     },
                   ),
+                  const SizedBox(height: 16),
                   TDButton(
                     text: '可拖动全屏-带标题及操作',
                     isBlock: true,

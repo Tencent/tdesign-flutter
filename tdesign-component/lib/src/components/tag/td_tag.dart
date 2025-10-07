@@ -105,7 +105,8 @@ class TDTag extends StatelessWidget {
     if (innerIcon != null || needCloseIcon) {
       var children = <Widget>[];
       if (innerIcon != null) {
-        children.add(SizedBox(
+        children.add(Container(
+          margin: const EdgeInsets.only(right: 4),
           width: 14,
           height: 14,
           child: innerIcon,
@@ -113,18 +114,23 @@ class TDTag extends StatelessWidget {
       }
       children.add(child);
       if (needCloseIcon) {
-        children.add(GestureDetector(
-          onTap: onCloseTap,
-          child: Icon(
-            TDIcons.close,
-            color:
-                innerStyle.closeIconColor ?? TDTheme.of(context).textColorAnti,
-            size: 14,
+        children.add(
+          GestureDetector(
+            onTap: onCloseTap,
+            child: Container(
+              margin: const EdgeInsets.only(left: 4),
+              child: Icon(
+                TDIcons.close,
+                color: innerStyle.closeIconColor ??
+                    TDTheme.of(context).textColorAnti,
+                size: 14,
+              ),
+            ),
           ),
-        ));
+        );
       }
       child = Row(
-        spacing: TDTheme.of(context).spacer4,
+        // spacing: TDTheme.of(context).spacer4,
         mainAxisSize: MainAxisSize.min,
         children: children,
       );
@@ -229,7 +235,11 @@ class TDTag extends StatelessWidget {
       vPadding = 0;
     }
     return EdgeInsets.only(
-        left: hPadding, right: hPadding, top: vPadding, bottom: vPadding);
+      left: hPadding,
+      right: hPadding,
+      top: vPadding,
+      bottom: vPadding,
+    );
   }
 
   double _getIconSize() {

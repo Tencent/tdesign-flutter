@@ -30,11 +30,14 @@ class TDResultPage extends StatelessWidget {
 
   Widget _buildBasicResult(BuildContext context) {
     return Column(
-      spacing: 32,
+      // spacing: 32,
       children: [
         CodeWrapper(builder: _buildBasicResultSuccess),
+        const SizedBox(height: 32),
         CodeWrapper(builder: _buildBasicResultError),
+        const SizedBox(height: 32),
         CodeWrapper(builder: _buildBasicResultWarning),
+        const SizedBox(height: 32),
         CodeWrapper(builder: _buildBasicResultDefault),
       ],
     );
@@ -42,11 +45,14 @@ class TDResultPage extends StatelessWidget {
 
   Widget _buildResultWithDescription(BuildContext context) {
     return Column(
-      spacing: 32,
+      // spacing: 32,
       children: [
         CodeWrapper(builder: _buildResultWithDescriptionSuccess),
+        const SizedBox(height: 32),
         CodeWrapper(builder: _buildResultWithDescriptionError),
+        const SizedBox(height: 32),
         CodeWrapper(builder: _buildResultWithDescriptionWarning),
+        const SizedBox(height: 32),
         CodeWrapper(builder: _buildResultWithDescriptionDefault),
       ],
     );
@@ -67,7 +73,7 @@ class TDResultPage extends StatelessWidget {
                 title: const Text('Result 结果'),
               ),
               body: Column(
-                spacing: 48,
+                // spacing: 48,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   const TDResult(
@@ -75,6 +81,7 @@ class TDResultPage extends StatelessWidget {
                     theme: TDResultTheme.success,
                     description: '描述文字',
                   ),
+                  const SizedBox(height: 48),
                   TDButton(
                     text: '返回',
                     theme: TDButtonTheme.primary,

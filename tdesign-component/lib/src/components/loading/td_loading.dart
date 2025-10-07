@@ -125,11 +125,14 @@ class TDLoading extends StatelessWidget {
       }
 
       return Flex(
-        spacing: _getPaddingWidth(),
+        // spacing: _getPaddingSize(),
         mainAxisSize: MainAxisSize.min,
         direction: axis,
         children: [
           indicator,
+          axis == Axis.vertical
+              ? SizedBox(height: _getPaddingSize())
+              : SizedBox(width: _getPaddingSize()),
           textWidget(context),
         ],
       );
@@ -162,7 +165,7 @@ class TDLoading extends StatelessWidget {
     }
   }
 
-  double _getPaddingWidth() {
+  double _getPaddingSize() {
     switch (size) {
       case TDLoadingSize.large:
         return 10;
@@ -192,10 +195,11 @@ class TDLoading extends StatelessWidget {
     );
     if (refreshWidget != null) {
       result = Row(
-        spacing: 8,
+        // spacing: 8,
         mainAxisSize: MainAxisSize.min,
         children: [
           result,
+          const SizedBox(width: 8),
           refreshWidget!,
         ],
       );

@@ -235,10 +235,11 @@ class _TDSliderPageState extends State<TDSliderPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
-              spacing: 10,
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Value: ${currentValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
                 if (tapOffset != null)
                   Text(
                       'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})'),
@@ -277,17 +278,19 @@ class _TDSliderPageState extends State<TDSliderPage> {
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-      spacing: 10,
+      // spacing: 10,
       children: [
         ValueListenableBuilder<DisplayRangeData>(
           valueListenable: displayRangeDataNotifier,
           builder: (context, data, child) {
             return Row(
-              spacing: 10,
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Position: ${data.currentPosition}'),
+                const SizedBox(width: 10),
                 Text('Value: ${data.currentTapValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
                 if (data.tapOffset != null)
                   Text(
                       'Tap at (${data.tapOffset!.dx.toStringAsFixed(0)}, ${data.tapOffset!.dy.toStringAsFixed(0)})'),
@@ -295,6 +298,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
             );
           },
         ),
+        const SizedBox(height: 10),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData(
               context: context, min: 0, max: 100, showThumbValue: true),
@@ -324,18 +328,20 @@ class _TDSliderPageState extends State<TDSliderPage> {
       builder: (context, setState) {
         return Column(
           mainAxisSize: MainAxisSize.min,
-          spacing: 10,
+          // spacing: 10,
           children: [
             Row(
-              spacing: 10,
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Value: ${currentValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
                 if (tapOffset != null)
                   Text(
                       'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})'),
               ],
             ),
+            const SizedBox(height: 10),
             TDSlider(
               sliderThemeData: TDSliderThemeData(
                 context: context,
@@ -373,17 +379,19 @@ class _TDSliderPageState extends State<TDSliderPage> {
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-      spacing: 10,
+      // spacing: 10,
       children: [
         ValueListenableBuilder<DisplayRangeData>(
           valueListenable: displayRangeDataNotifier,
           builder: (context, data, child) {
             return Row(
-              spacing: 10,
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Position: ${data.currentPosition}'),
+                const SizedBox(width: 10),
                 Text('Value: ${data.currentTapValue.toStringAsFixed(1)}'),
+                const SizedBox(width: 10),
                 if (data.tapOffset != null)
                   Text(
                       'Tap at (${data.tapOffset!.dx.toStringAsFixed(0)}, ${data.tapOffset!.dy.toStringAsFixed(0)})'),
@@ -391,6 +399,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
             );
           },
         ),
+        const SizedBox(height: 10),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData(
             context: context,
@@ -488,8 +497,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
       )..updateSliderThemeData((data) => data.copyWith(
-            // activeTickMarkColor: TDTheme.of(context).componentBorderColor,
-            // inactiveTickMarkColor: TDTheme.of(context).componentStrokeColor,
+          // activeTickMarkColor: TDTheme.of(context).componentBorderColor,
+          // inactiveTickMarkColor: TDTheme.of(context).componentStrokeColor,
           )),
       value: 60,
       onChanged: (value) {},
@@ -499,7 +508,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   @Demo(group: 'slider')
   Widget _buildCapsule(BuildContext context) {
     return Column(
-      spacing: 16,
+      // spacing: 16,
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
@@ -511,6 +520,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           ),
           value: 40,
         ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -520,6 +530,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           ),
           value: const RangeValues(20, 60),
         ),
+        const SizedBox(height: 16),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -531,6 +542,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           rightLabel: '100',
           value: 40,
         ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -543,6 +555,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           leftLabel: '0',
           rightLabel: '100',
         ),
+        const SizedBox(height: 16),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -557,6 +570,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
               )),
           value: 60,
         ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -578,7 +592,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   @Demo(group: 'slider')
   Widget _buildCustomDecoration(BuildContext context) {
     return Column(
-      spacing: 16,
+      // spacing: 16,
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
@@ -591,6 +605,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           // divisions: 5,
           onChanged: (value) {},
         ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -617,8 +632,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
       )..updateSliderThemeData((data) => data.copyWith(
-            // activeTickMarkColor: TDTheme.of(context).bgColorComponent,
-            // inactiveTickMarkColor: TDTheme.of(context).bgColorComponent,
+          // activeTickMarkColor: TDTheme.of(context).bgColorComponent,
+          // inactiveTickMarkColor: TDTheme.of(context).bgColorComponent,
           )),
       value: const RangeValues(20, 60),
       onChanged: (value) {},
@@ -628,7 +643,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   @Demo(group: 'slider')
   Widget _buildCustomActiveColor(BuildContext context) {
     return Column(
-      spacing: 16,
+      // spacing: 16,
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
@@ -642,6 +657,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           // divisions: 5,
           onChanged: (value) {},
         ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             activeTrackColor: Colors.green,

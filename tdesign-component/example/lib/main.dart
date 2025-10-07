@@ -13,11 +13,11 @@ void main() {
   Log.setCustomLogPrinter((level, tag, msg) => print('[$level] $tag ==> $msg'));
   runApp(const MyApp());
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  /*SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
     systemNavigationBarDividerColor: Colors.transparent,
-  ));
+  ));*/
 
   exampleMap.forEach((key, value) {
     value.forEach((model) {
@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
   late TDThemeData _themeData;
   Locale? locale = const Locale('zh');
 
-  ThemeMode _themeMode = ThemeMode.light;
+  ThemeMode _themeMode = ThemeMode.dark;
 
   @override
   void initState() {
@@ -81,7 +81,8 @@ class _MyAppState extends State<MyApp> {
           color: _themeData.brandNormalColor,
         ),
       ),
-      themeMode: PlatformUtil.isWeb ? ThemeMode.system : _themeMode,
+      // themeMode: PlatformUtil.isWeb ? ThemeMode.dark : _themeMode,
+      themeMode: _themeMode,
       home: PlatformUtil.isWeb
           ? null
           : Builder(

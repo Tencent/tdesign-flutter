@@ -160,14 +160,13 @@ class _TDFabPageState extends State<TDFabPage> {
                 padding: const EdgeInsets.only(right: 30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  spacing: 24,
+                  // spacing: 24,
                   children: [
                     SizedBox(
                       height: 48,
-                      child: Column(
-                        children: [fab['component']],
-                      ),
+                      child: Column(children: [fab['component']]),
                     ),
+                    const SizedBox(height: 24),
                     TDText(
                       fab['desc'],
                       style: const TextStyle(fontSize: 14),

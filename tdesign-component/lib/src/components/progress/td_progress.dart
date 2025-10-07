@@ -402,7 +402,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
         return Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          spacing: TDTheme.of(context).spacer8,
+          // spacing: TDTheme.of(context).spacer8,
           textDirection:
               widget.progressLabelPosition == TDProgressLabelPosition.right
                   ? TextDirection.rtl
@@ -418,6 +418,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
               child: widget.customProgressLabel ??
                   _buildLabelWidget(TDTheme.of(context).textColorPrimary),
             ),
+            SizedBox(width: TDTheme.of(context).spacer8),
             Expanded(
               child: ClipRRect(
                   borderRadius:

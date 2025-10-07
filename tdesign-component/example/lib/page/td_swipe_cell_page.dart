@@ -199,7 +199,7 @@ class TDSwipeCellPage extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
-      spacing: 16,
+      // spacing: 16,
       children: [
         TDSwipeCell(
           groupTag: 'test',
@@ -220,6 +220,7 @@ class TDSwipeCellPage extends StatelessWidget {
           ),
           cell: const TDCell(title: '左滑操作', note: '图标+文字（横向）'),
         ),
+        const SizedBox(height: 16),
         TDSwipeCell(
           groupTag: 'test',
           right: TDSwipeCellPanel(
@@ -237,6 +238,7 @@ class TDSwipeCellPage extends StatelessWidget {
           ),
           cell: const TDCell(title: '左滑操作', note: '仅图标'),
         ),
+        const SizedBox(height: 16),
         TDSwipeCell(
           groupTag: 'test',
           right: TDSwipeCellPanel(

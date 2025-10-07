@@ -204,25 +204,28 @@ class _TDButtonPageState extends State<TDButtonPage> {
                 padding: const EdgeInsets.only(top: 16, bottom: 16),
                 child: const Column(
                   mainAxisSize: MainAxisSize.min,
-                  spacing: 16,
+                  // spacing: 16,
                   children: [
                     TDButton(
                       isBlock: true,
                       text: '填充block按钮',
                       theme: TDButtonTheme.primary,
                     ),
+                    SizedBox(height: 16),
                     TDButton(
                       isBlock: true,
                       text: '描边block按钮',
                       type: TDButtonType.outline,
                       theme: TDButtonTheme.primary,
                     ),
+                    SizedBox(height: 16),
                     TDButton(
                       isBlock: true,
                       text: '文字block按钮',
                       type: TDButtonType.text,
                       theme: TDButtonTheme.primary,
                     ),
+                    SizedBox(height: 16),
                     TDButton(
                       isBlock: true,
                       text: '幽灵block按钮',
@@ -621,24 +624,27 @@ class _TDButtonPageState extends State<TDButtonPage> {
     return const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: Row(
-          spacing: 16,
+          // spacing: 16,
           children: [
             Expanded(
-                child: TDButton(
-              text: '填充按钮',
-              size: TDButtonSize.large,
-              type: TDButtonType.fill,
-              shape: TDButtonShape.rectangle,
-              theme: TDButtonTheme.light,
-            )),
+              child: TDButton(
+                text: '填充按钮',
+                size: TDButtonSize.large,
+                type: TDButtonType.fill,
+                shape: TDButtonShape.rectangle,
+                theme: TDButtonTheme.light,
+              ),
+            ),
+            SizedBox(width: 16),
             Expanded(
-                child: TDButton(
-              text: '填充按钮',
-              size: TDButtonSize.large,
-              type: TDButtonType.fill,
-              shape: TDButtonShape.rectangle,
-              theme: TDButtonTheme.primary,
-            )),
+              child: TDButton(
+                text: '填充按钮',
+                size: TDButtonSize.large,
+                type: TDButtonType.fill,
+                shape: TDButtonShape.rectangle,
+                theme: TDButtonTheme.primary,
+              ),
+            ),
           ],
         ));
   }

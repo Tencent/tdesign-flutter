@@ -31,11 +31,13 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 padding: padding,
                 builder: (context) {
                   return Row(
-                    spacing: 32,
+                    // spacing: 32,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CodeWrapper(builder: _buildRedPointMessageBadge),
+                      const SizedBox(width: 32),
                       CodeWrapper(builder: _buildRedPointIconBadge),
+                      const SizedBox(width: 32),
                       CodeWrapper(builder: _buildRedPointButtonBadge),
                     ],
                   );
@@ -46,11 +48,13 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 padding: padding,
                 builder: (context) {
                   return Row(
-                    spacing: 32,
+                    // spacing: 32,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CodeWrapper(builder: _buildMessageNumberBadge),
+                      const SizedBox(width: 32),
                       CodeWrapper(builder: _buildIconNumberBadge),
+                      const SizedBox(width: 32),
                       CodeWrapper(builder: _buildButtonNumberBadge),
                     ],
                   );
@@ -62,10 +66,12 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 builder: (context) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    spacing: 32,
+                    // spacing: 32,
                     children: [
                       CodeWrapper(builder: _buildCustomBadgeShowingNumber),
+                      const SizedBox(width: 32),
                       CodeWrapper(builder: _buildCustomBadgeShowingNumberZero),
+                      const SizedBox(width: 32),
                       CodeWrapper(
                           builder: _buildCustomBadgeWithoutShowingNumberZero),
                     ],

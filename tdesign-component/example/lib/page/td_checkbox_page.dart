@@ -4,9 +4,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-///
 /// TDCheckbox演示
-///
 class TDCheckboxPage extends StatefulWidget {
   const TDCheckboxPage({Key? key}) : super(key: key);
 

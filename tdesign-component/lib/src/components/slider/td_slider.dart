@@ -135,9 +135,10 @@ class TDSliderState extends State<TDSlider> {
           decoration: widget.boxDecoration ??
               BoxDecoration(color: TDTheme.of(context).bgColorContainer),
           child: Row(
-            spacing: TDTheme.of(context).spacer8,
+            // spacing: TDTheme.of(context).spacer8,
             children: [
               leftLabel,
+              const SizedBox(width: 8),
               Expanded(
                 child: Listener(
                   onPointerDown: (event) {
@@ -176,6 +177,7 @@ class TDSliderState extends State<TDSlider> {
                   ),
                 ),
               ),
+              const SizedBox(width: 8),
               rightLabel
             ],
           ),
@@ -326,9 +328,10 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
               color: TDTheme.of(context).bgColorContainer,
             ),
         child: Row(
-          spacing: 8,
+          // spacing: 8,
           children: [
             leftLabel,
+            const SizedBox(width: 8),
             Expanded(
               child: Listener(
                 onPointerDown: (PointerDownEvent event) {
@@ -417,6 +420,7 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
                 ),
               ),
             ),
+            const SizedBox(width: 8),
             rightLabel,
           ],
         ),

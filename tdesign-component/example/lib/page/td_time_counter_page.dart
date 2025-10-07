@@ -31,18 +31,30 @@ class TDTimeCounterPage extends StatelessWidget {
                 direction: Axis.vertical,
                 spacing: 16,
                 children: [
-                  Row(spacing: 40, children: [
-                    Text('小'),
-                    CodeWrapper(builder: _buildSmallSize),
-                  ]),
-                  Row(spacing: 40, children: [
-                    Text('中'),
-                    CodeWrapper(builder: _buildMediumSize)
-                  ]),
-                  Row(spacing: 40, children: [
-                    Text('大'),
-                    CodeWrapper(builder: _buildLargeSize),
-                  ]),
+                  Row(
+                    // spacing: 40,
+                    children: [
+                      Text('小'),
+                      SizedBox(width: 40),
+                      CodeWrapper(builder: _buildSmallSize),
+                    ],
+                  ),
+                  Row(
+                    // spacing: 40,
+                    children: [
+                      Text('中'),
+                      SizedBox(width: 40),
+                      CodeWrapper(builder: _buildMediumSize)
+                    ],
+                  ),
+                  Row(
+                    // spacing: 40,
+                    children: [
+                      Text('大'),
+                      SizedBox(width: 40),
+                      CodeWrapper(builder: _buildLargeSize),
+                    ],
+                  ),
                 ],
               );
             },
@@ -55,18 +67,30 @@ class TDTimeCounterPage extends StatelessWidget {
                   direction: Axis.vertical,
                   spacing: 16,
                   children: [
-                    Row(spacing: 40, children: [
-                      Text('小'),
-                      CodeWrapper(builder: _buildSquareSmallSize),
-                    ]),
-                    Row(spacing: 40, children: [
-                      Text('中'),
-                      CodeWrapper(builder: _buildSquareMediumSize),
-                    ]),
-                    Row(spacing: 40, children: [
-                      Text('大'),
-                      CodeWrapper(builder: _buildSquareLargeSize),
-                    ]),
+                    Row(
+                      // spacing: 40,
+                      children: [
+                        Text('小'),
+                        SizedBox(width: 40),
+                        CodeWrapper(builder: _buildSquareSmallSize),
+                      ],
+                    ),
+                    Row(
+                      // spacing: 40,
+                      children: [
+                        Text('中'),
+                        SizedBox(width: 40),
+                        CodeWrapper(builder: _buildSquareMediumSize),
+                      ],
+                    ),
+                    Row(
+                      // spacing: 40,
+                      children: [
+                        Text('大'),
+                        SizedBox(width: 40),
+                        CodeWrapper(builder: _buildSquareLargeSize),
+                      ],
+                    ),
                   ]);
             },
           ),
@@ -78,21 +102,30 @@ class TDTimeCounterPage extends StatelessWidget {
                   direction: Axis.vertical,
                   spacing: 16,
                   children: [
-                    Row(spacing: 40, children: [
-                      Text('小'),
-                      CodeWrapper(builder: _buildRoundSmallSize),
-                    ]),
                     Row(
-                      spacing: 40,
+                      // spacing: 40,
+                      children: [
+                        Text('小'),
+                        SizedBox(width: 40),
+                        CodeWrapper(builder: _buildRoundSmallSize),
+                      ],
+                    ),
+                    Row(
+                      // spacing: 40,
                       children: [
                         Text('中'),
+                        SizedBox(width: 40),
                         CodeWrapper(builder: _buildRoundMediumSize),
                       ],
                     ),
-                    Row(spacing: 40, children: [
-                      Text('大'),
-                      CodeWrapper(builder: _buildRoundLargeSize),
-                    ]),
+                    Row(
+                      // spacing: 40,
+                      children: [
+                        Text('大'),
+                        SizedBox(width: 40),
+                        CodeWrapper(builder: _buildRoundLargeSize),
+                      ],
+                    ),
                   ]);
             },
           ),
@@ -104,18 +137,30 @@ class TDTimeCounterPage extends StatelessWidget {
                   direction: Axis.vertical,
                   spacing: 16,
                   children: [
-                    Row(spacing: 40, children: [
-                      Text('小'),
-                      CodeWrapper(builder: _buildUnitSmallSize),
-                    ]),
-                    Row(spacing: 40, children: [
-                      Text('中'),
-                      CodeWrapper(builder: _buildUnitMediumSize),
-                    ]),
-                    Row(spacing: 40, children: [
-                      Text('大'),
-                      CodeWrapper(builder: _buildUnitLargeSize),
-                    ]),
+                    Row(
+                      // spacing: 40,
+                      children: [
+                        Text('小'),
+                        SizedBox(width: 40),
+                        CodeWrapper(builder: _buildUnitSmallSize),
+                      ],
+                    ),
+                    Row(
+                      // spacing: 40,
+                      children: [
+                        Text('中'),
+                        SizedBox(width: 40),
+                        CodeWrapper(builder: _buildUnitMediumSize),
+                      ],
+                    ),
+                    Row(
+                      // spacing: 40,
+                      children: [
+                        Text('大'),
+                        SizedBox(width: 40),
+                        CodeWrapper(builder: _buildUnitLargeSize),
+                      ],
+                    ),
                   ]);
             },
           ),
@@ -127,18 +172,30 @@ class TDTimeCounterPage extends StatelessWidget {
                   spacing: 8,
                   direction: Axis.vertical,
                   children: [
-                    Row(spacing: 40, children: [
-                      Text('小'),
-                      CodeWrapper(builder: _buildCustomUnitSmallSize),
-                    ]),
-                    Row(spacing: 40, children: [
-                      Text('中'),
-                      CodeWrapper(builder: _buildCustomUnitMediumSize),
-                    ]),
-                    Row(spacing: 40, children: [
-                      Text('大'),
-                      CodeWrapper(builder: _buildCustomUnitLargeSize),
-                    ]),
+                    Row(
+                      // spacing: 40,
+                      children: [
+                        Text('小'),
+                        SizedBox(width: 40),
+                        CodeWrapper(builder: _buildCustomUnitSmallSize),
+                      ],
+                    ),
+                    Row(
+                      // spacing: 40,
+                      children: [
+                        Text('中'),
+                        SizedBox(width: 40),
+                        CodeWrapper(builder: _buildCustomUnitMediumSize),
+                      ],
+                    ),
+                    Row(
+                      // spacing: 40,
+                      children: [
+                        Text('大'),
+                        SizedBox(width: 40),
+                        CodeWrapper(builder: _buildCustomUnitLargeSize),
+                      ],
+                    ),
                   ]);
             },
           ),

@@ -193,7 +193,7 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
     return const Padding(
       padding: EdgeInsets.symmetric(vertical: 16),
       child: Row(
-        spacing: 16,
+        // spacing: 16,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TDImage(
@@ -202,12 +202,8 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
             width: 48,
             height: 48,
           ),
-          TDText(
-            '标题',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          )
+          SizedBox(width: 16),
+          TDText('标题', style: TextStyle(fontSize: 16))
         ],
       ),
     );

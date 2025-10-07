@@ -356,7 +356,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
-        spacing: 8,
+        // spacing: 8,
         children: [
           /// 左侧widget
           if (widget.left != null)
@@ -364,10 +364,13 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
           else if (widget.prefixIcon != null)
             GestureDetector(
               onTap: () => _onTap('prefix-icon'),
-              child: Icon(
-                widget.prefixIcon,
-                color: _style?.leftIconColor,
-                size: widget.height,
+              child: Container(
+                margin: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  widget.prefixIcon,
+                  color: _style?.leftIconColor,
+                  size: widget.height,
+                ),
               ),
             ),
 
@@ -385,13 +388,15 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
             widget.right!
           else if (widget.suffixIcon != null)
             GestureDetector(
-              onTap: () => _onTap('suffix-icon'),
-              child: Icon(
-                widget.suffixIcon,
-                color: _style?.rightIconColor,
-                size: widget.height,
-              ),
-            ),
+                onTap: () => _onTap('suffix-icon'),
+                child: Container(
+                  margin: const EdgeInsets.only(left: 8),
+                  child: Icon(
+                    widget.suffixIcon,
+                    color: _style?.rightIconColor,
+                    size: widget.height,
+                  ),
+                )),
         ],
       ),
     );

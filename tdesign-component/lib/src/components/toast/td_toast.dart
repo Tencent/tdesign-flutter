@@ -293,13 +293,13 @@ class _TDIconTextToast extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 8,
             children: [
               Icon(
                 iconData,
                 size: 24,
                 color: TDTheme.of(context).whiteColor1,
               ),
+              const SizedBox(width: 8),
               TDText(
                 text ?? '',
                 font: TDTheme.of(context).fontBodyMedium,
@@ -326,13 +326,14 @@ class _TDIconTextToast extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
-          spacing: 8,
+          // spacing: 8,
           children: [
             Icon(
               iconData,
               size: 32,
               color: TDTheme.of(context).whiteColor1,
             ),
+            const SizedBox(height: 8),
             TDText(
               text ?? '',
               font: TDTheme.of(context).fontBodyMedium,
@@ -379,13 +380,14 @@ class _TDToastLoading extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
-          spacing: 8,
+          // spacing: 8,
           children: [
             TDCircleIndicator(
               color: TDTheme.of(context).whiteColor1,
               size: 32,
               lineWidth: 4,
             ),
+            const SizedBox(height: 8),
             customWidget ??
                 TDText(
                   text ?? context.resource.loadingWithPoint,

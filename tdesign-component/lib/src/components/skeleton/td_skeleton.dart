@@ -238,13 +238,16 @@ class _TDSkeletonState extends State<TDSkeleton>
     List<Widget> skeletonRows = widget.rowCol.objects
         .map((row) => Row(children: row.map(_buildObj(context)).toList()))
         .toList();
-
-    // 行列布局
-    var skeletonRowCol = Column(
-      // 添加行间距
-      spacing: widget.rowCol.style.rowSpacing(context),
-      children: skeletonRows,
-    );
+    final rowSpacing = widget.rowCol.style.rowSpacing(context);
+    if (rowSpacing > 0) {
+      skeletonRows = skeletonRows
+          .expand((row) => [row, SizedBox(height: rowSpacing)])
+          .toList();
+      if (skeletonRows.isNotEmpty) {
+        skeletonRows.removeLast();
+      }
+    } // 添加行间距
+    var skeletonRowCol = Column(children: skeletonRows); // 行列布局
 
     return widget.rowCol.objects
             .any((row) => row.any((obj) => obj.flex != null))
@@ -252,7 +255,8 @@ class _TDSkeletonState extends State<TDSkeleton>
         ? Flexible(
             child: Container(
               constraints: BoxConstraints(
-                  maxHeight: widget.rowCol.visualHeight(context)), // 限制最大高度
+                maxHeight: widget.rowCol.visualHeight(context),
+              ), // 限制最大高度
               child: skeletonRowCol,
             ),
           )

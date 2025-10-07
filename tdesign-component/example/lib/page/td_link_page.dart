@@ -108,29 +108,32 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
 
   Column _buildLinkWithStyles(TDLinkState state) {
     return Column(
-      spacing: 16,
+      // spacing: 16,
       children: [
         Container(
-            height: 48,
-            color: TDTheme.of(context).bgColorContainer,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildLinkWithTypeAndState(TDLinkStyle.primary, state),
-                _buildLinkWithTypeAndState(TDLinkStyle.defaultStyle, state),
-                _buildLinkWithTypeAndState(TDLinkStyle.danger, state),
-              ],
-            )),
+          height: 48,
+          color: TDTheme.of(context).bgColorContainer,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildLinkWithTypeAndState(TDLinkStyle.primary, state),
+              _buildLinkWithTypeAndState(TDLinkStyle.defaultStyle, state),
+              _buildLinkWithTypeAndState(TDLinkStyle.danger, state),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
         Container(
-            height: 48,
-            color: TDTheme.of(context).bgColorContainer,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildLinkWithTypeAndState(TDLinkStyle.warning, state),
-                _buildLinkWithTypeAndState(TDLinkStyle.success, state),
-              ],
-            )),
+          height: 48,
+          color: TDTheme.of(context).bgColorContainer,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildLinkWithTypeAndState(TDLinkStyle.warning, state),
+              _buildLinkWithTypeAndState(TDLinkStyle.success, state),
+            ],
+          ),
+        ),
       ],
     );
   }

@@ -340,14 +340,15 @@ class ExampleModule {
 
 /// 示例样例数据
 class ExampleItem {
-  const ExampleItem(
-      {Key? key,
-      this.desc = '',
-      required this.builder,
-      this.methodName,
-      this.center = true,
-      this.ignoreCode = false,
-      this.padding});
+  const ExampleItem({
+    Key? key,
+    this.desc = '',
+    required this.builder,
+    this.methodName,
+    this.center = true,
+    this.ignoreCode = false,
+    this.padding,
+  });
 
   final String desc;
 

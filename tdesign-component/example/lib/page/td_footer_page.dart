@@ -56,32 +56,27 @@ class TDFooterPage extends StatelessWidget {
 
   @Demo(group: 'footer')
   Widget _buildLinksFooter(BuildContext context) {
-    return Column(
-      spacing: 12,
-      children: [
-        TDFooter(
-          TDFooterType.link,
-          links: [
-            TDLink(
-              label: '底部链接1',
-              style: TDLinkStyle.primary,
-              uri: Uri.parse('https://example.com'),
-              linkClick: (link) {
-                print('点击了链接1 $link');
-              },
-            ),
-            TDLink(
-              label: '底部链接2',
-              style: TDLinkStyle.primary,
-              uri: Uri.parse('https://example.com'),
-              linkClick: (link) {
-                print('点击了链接2 $link');
-              },
-            ),
-          ],
-          text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
-        )
+    return TDFooter(
+      TDFooterType.link,
+      links: [
+        TDLink(
+          label: '底部链接1',
+          style: TDLinkStyle.primary,
+          uri: Uri.parse('https://example.com'),
+          linkClick: (link) {
+            print('点击了链接1 $link');
+          },
+        ),
+        TDLink(
+          label: '底部链接2',
+          style: TDLinkStyle.primary,
+          uri: Uri.parse('https://example.com'),
+          linkClick: (link) {
+            print('点击了链接2 $link');
+          },
+        ),
       ],
+      text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
   }
 

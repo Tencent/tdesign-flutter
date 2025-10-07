@@ -139,31 +139,34 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
     final theme = TDTheme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 10,
+      // spacing: 10,
       children: [
         Container(
           width: 163,
           height: 163,
           decoration: BoxDecoration(
-              color: theme.bgColorContainer,
-              borderRadius:
-                  BorderRadius.circular(theme.radiusExtraLarge)),
+            color: theme.bgColorContainer,
+            borderRadius: BorderRadius.circular(theme.radiusExtraLarge),
+          ),
         ),
+        const SizedBox(height: 10),
         Container(
           width: 163,
           height: 16,
           decoration: BoxDecoration(
-              color: theme.bgColorContainer,
-              borderRadius:
-                  BorderRadius.circular(theme.radiusSmall)),
+            color: theme.bgColorContainer,
+            borderRadius: BorderRadius.circular(theme.radiusSmall),
+          ),
         ),
+        const SizedBox(height: 10),
         Container(
-            width: 100,
-            height: 16,
-            decoration: BoxDecoration(
-                color: theme.bgColorContainer,
-                borderRadius:
-                    BorderRadius.circular(theme.radiusSmall))),
+          width: 100,
+          height: 16,
+          decoration: BoxDecoration(
+            color: theme.bgColorContainer,
+            borderRadius: BorderRadius.circular(theme.radiusSmall),
+          ),
+        ),
       ],
     );
   }
