@@ -4,7 +4,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
-
 class TDBackTopPage extends StatefulWidget {
   const TDBackTopPage({Key? key}) : super(key: key);
 
@@ -16,11 +15,20 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
   ScrollController controller = ScrollController();
   bool showBackTop = false;
   TDBackTopStyle style = TDBackTopStyle.circle;
+  TDBackTopTheme theme = TDBackTopTheme.light;
 
   @override
   void initState() {
     super.initState();
     controller.addListener(listenCallback);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        theme = Theme.of(context).brightness == Brightness.dark
+            ? TDBackTopTheme.light
+            : TDBackTopTheme.dark;
+      });
+    });
   }
 
   @override
@@ -30,18 +38,11 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
   }
 
   void listenCallback() {
-    if (controller.offset >= 100) {
-      if (!showBackTop) {
-        setState(() {
-          showBackTop = true;
-        });
-      }
-    } else {
-      if (showBackTop) {
-        setState(() {
-          showBackTop = false;
-        });
-      }
+    final shouldShow = controller.offset >= 100;
+    if (shouldShow != showBackTop) {
+      setState(() {
+        showBackTop = shouldShow;
+      });
     }
   }
 
@@ -63,16 +64,16 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
                         bottom: 10,
                         child: TDBackTop(
                           controller: controller,
-                          theme: TDBackTopTheme.dark,
+                          theme: theme,
                           showText: true,
                           style: style,
                         ))
                     : TDBackTop(
                         controller: controller,
-                        theme: TDBackTopTheme.dark,
+                        theme: theme,
                         showText: true,
                         style: style,
-                      ))
+                      )),
           ],
         ),
         children: [
@@ -114,14 +115,7 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
           child: Wrap(
             spacing: 16,
             runSpacing: 24,
-            children: [
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-            ],
+            children: List.generate(6, (_) => getDemoBox(context)),
           ),
         )
       ],
@@ -130,46 +124,49 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
 
   Widget getCustomButton(
       BuildContext context, String text, void Function() onTap) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: TDButton(
-          text: text,
-          width: MediaQuery.of(context).size.width - 16 * 2,
-          size: TDButtonSize.large,
-          type: TDButtonType.outline,
-          shape: TDButtonShape.rectangle,
-          theme: TDButtonTheme.primary,
-          onTap: onTap,
-        ));
+    return TDButton(
+      text: text,
+      isBlock: true,
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      shape: TDButtonShape.rectangle,
+      theme: TDButtonTheme.primary,
+      onTap: onTap,
+    );
   }
 
   Widget getDemoBox(BuildContext context) {
+    final theme = TDTheme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      // spacing: 10,
       children: [
         Container(
           width: 163,
           height: 163,
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(12)),
+            color: theme.bgColorContainer,
+            borderRadius: BorderRadius.circular(theme.radiusExtraLarge),
+          ),
         ),
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: 10),
         Container(
           width: 163,
           height: 16,
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(3)),
+            color: theme.bgColorContainer,
+            borderRadius: BorderRadius.circular(theme.radiusSmall),
+          ),
         ),
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: 10),
         Container(
-            width: 100,
-            height: 16,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(3))),
+          width: 100,
+          height: 16,
+          decoration: BoxDecoration(
+            color: theme.bgColorContainer,
+            borderRadius: BorderRadius.circular(theme.radiusSmall),
+          ),
+        ),
       ],
     );
   }

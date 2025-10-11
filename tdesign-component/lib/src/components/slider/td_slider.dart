@@ -2,6 +2,9 @@
 ///  Created by arvinwli@tencent.com on 4/24/23.
 ///
 import 'package:flutter/material.dart';
+import '../../theme/td_colors.dart';
+import '../../theme/td_spacers.dart';
+import '../../theme/td_theme.dart';
 import 'td_slider_theme.dart';
 
 enum Position {
@@ -41,19 +44,19 @@ class TDSlider extends StatefulWidget {
   ///  Thumb 点击浮标文字 坐标、当前值
   final Function(Offset offset, double value)? onThumbTextTap;
 
-  const TDSlider(
-      {Key? key,
-      required this.value,
-      this.boxDecoration,
-      this.onChanged,
-      this.sliderThemeData,
-      this.leftLabel,
-      this.rightLabel,
-      this.onChangeStart,
-      this.onChangeEnd,
-      this.onTap,
-      this.onThumbTextTap})
-      : super(key: key);
+  const TDSlider({
+    Key? key,
+    required this.value,
+    this.boxDecoration,
+    this.onChanged,
+    this.sliderThemeData,
+    this.leftLabel,
+    this.rightLabel,
+    this.onChangeStart,
+    this.onChangeEnd,
+    this.onTap,
+    this.onThumbTextTap,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -64,6 +67,7 @@ class TDSlider extends StatefulWidget {
 class TDSliderState extends State<TDSlider> {
   final GlobalKey _sliderKey = GlobalKey();
   double value = 0;
+
   @override
   void initState() {
     super.initState();
@@ -76,11 +80,13 @@ class TDSliderState extends State<TDSlider> {
     value = widget.value;
   }
 
-  bool get enabled => widget.onChanged != null;
+  bool get _enabled => widget.onChanged != null;
 
   TextStyle get labelTextStyle => TextStyle(
       fontSize: 16,
-      color: enabled ? const Color(0xE6000000) : const Color(0x42000000));
+      color: _enabled
+          ? TDTheme.of(context).textColorPrimary
+          : TDTheme.of(context).textColorDisabled);
 
   Widget get leftLabel => widget.leftLabel?.isNotEmpty == true
       ? Padding(
@@ -99,6 +105,10 @@ class TDSliderState extends State<TDSlider> {
   @override
   Widget build(BuildContext context) {
     var tdSliderThemeData = widget.sliderThemeData ?? TDSliderThemeData();
+
+    final showValue =
+        tdSliderThemeData.showScaleValue || tdSliderThemeData.showThumbValue;
+
     return Listener(
         onPointerDown: (event) {
           final sliderBox =
@@ -119,25 +129,20 @@ class TDSliderState extends State<TDSlider> {
         },
         child: Container(
           padding: EdgeInsets.only(
-            top: (tdSliderThemeData.showScaleValue ||
-                        tdSliderThemeData.showThumbValue
-                    ? 16
-                    : 0) +
-                8,
+            top: (showValue ? 16 : 0) + 8,
             bottom: 8,
           ),
           decoration: widget.boxDecoration ??
-              const BoxDecoration(
-                color: Colors.white,
-              ),
+              BoxDecoration(color: TDTheme.of(context).bgColorContainer),
           child: Row(
+            // spacing: TDTheme.of(context).spacer8,
             children: [
               leftLabel,
               const SizedBox(width: 8),
               Expanded(
                 child: Listener(
                   onPointerDown: (event) {
-                    if (!enabled || widget.onTap == null) {
+                    if (!_enabled || widget.onTap == null) {
                       return;
                     }
 
@@ -160,7 +165,7 @@ class TDSliderState extends State<TDSlider> {
                       divisions: tdSliderThemeData.divisions,
                       onChangeStart: widget.onChangeStart,
                       onChangeEnd: widget.onChangeEnd,
-                      onChanged: enabled
+                      onChanged: _enabled
                           ? (slideValue) {
                               setState(() {
                                 value = slideValue;
@@ -208,26 +213,33 @@ class TDRangeSlider extends StatefulWidget {
   /// 样式
   final TDSliderThemeData? sliderThemeData;
 
-  //  Thumb 点击事件 位置、坐标、当前值
-  final Function(Position position, Offset offset, double value)? onTap;
+  /// Thumb 点击事件 位置、坐标、当前值
+  final Function(
+    Position position,
+    Offset offset,
+    double value,
+  )? onTap;
 
-  ///  Thumb 点击浮标文字 位置、坐标、当前值
-  final Function(Position position, Offset offset, double value)?
-      onThumbTextTap;
+  /// Thumb 点击浮标文字 位置、坐标、当前值
+  final Function(
+    Position position,
+    Offset offset,
+    double value,
+  )? onThumbTextTap;
 
-  const TDRangeSlider(
-      {Key? key,
-      required this.value,
-      this.boxDecoration,
-      this.onChanged,
-      this.sliderThemeData,
-      this.leftLabel,
-      this.rightLabel,
-      this.onChangeStart,
-      this.onChangeEnd,
-      this.onTap,
-      this.onThumbTextTap})
-      : super(key: key);
+  const TDRangeSlider({
+    Key? key,
+    required this.value,
+    this.boxDecoration,
+    this.onChanged,
+    this.sliderThemeData,
+    this.leftLabel,
+    this.rightLabel,
+    this.onChangeStart,
+    this.onChangeEnd,
+    this.onTap,
+    this.onThumbTextTap,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -251,11 +263,13 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
     rangeValues = widget.value;
   }
 
-  bool get enabled => widget.onChanged != null;
+  bool get _enabled => widget.onChanged != null;
 
   TextStyle get labelTextStyle => TextStyle(
       fontSize: 16,
-      color: enabled ? const Color(0xE6000000) : const Color(0x42000000));
+      color: _enabled
+          ? TDTheme.of(context).textColorPrimary
+          : TDTheme.of(context).textColorDisabled);
 
   Widget get leftLabel => widget.leftLabel?.isNotEmpty == true
       ? Padding(
@@ -274,6 +288,8 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
   @override
   Widget build(BuildContext context) {
     var tdSliderThemeData = widget.sliderThemeData ?? TDSliderThemeData();
+    final showValue =
+        tdSliderThemeData.showScaleValue || tdSliderThemeData.showThumbValue;
 
     return Listener(
       onPointerDown: (event) {
@@ -294,33 +310,32 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
         final endTextRect = themeData.sliderMeasureData.endRangeThumbTextRect;
 
         if (startTextRect?.contains(localOffset) ?? false) {
-          widget.onThumbTextTap?.call(Position.start, localOffset, rangeValues.start);
+          widget.onThumbTextTap
+              ?.call(Position.start, localOffset, rangeValues.start);
         }
         if (endTextRect?.contains(localOffset) ?? false) {
-          widget.onThumbTextTap?.call(Position.end, localOffset, rangeValues.end);
+          widget.onThumbTextTap
+              ?.call(Position.end, localOffset, rangeValues.end);
         }
       },
       child: Container(
         padding: EdgeInsets.only(
-          top: (tdSliderThemeData.showScaleValue ||
-                      tdSliderThemeData.showThumbValue
-                  ? 16
-                  : 0) +
-              8,
+          top: (showValue ? 16 : 0) + 8,
           bottom: 8,
         ),
         decoration: widget.boxDecoration ??
-            const BoxDecoration(
-              color: Colors.white,
+            BoxDecoration(
+              color: TDTheme.of(context).bgColorContainer,
             ),
         child: Row(
+          // spacing: 8,
           children: [
             leftLabel,
             const SizedBox(width: 8),
             Expanded(
               child: Listener(
                 onPointerDown: (PointerDownEvent event) {
-                  if (!enabled || widget.onTap == null) {
+                  if (!_enabled || widget.onTap == null) {
                     return;
                   }
 
@@ -336,7 +351,7 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
                   final sliderTheme = SliderTheme.of(context);
                   final thumbShape = sliderTheme.rangeThumbShape;
                   final thumbSize = thumbShape?.getPreferredSize(
-                        enabled,
+                        _enabled,
                         widget.sliderThemeData?.divisions != null,
                       ) ??
                       const Size(20, 20);

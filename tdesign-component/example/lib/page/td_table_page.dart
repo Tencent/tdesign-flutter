@@ -30,21 +30,19 @@ class TDTablePage extends StatelessWidget {
   }
 
   List<dynamic> _getData2() {
-    var data = <dynamic>[];
-    for (var i = 0; i < 10; i++) {
-      if (i == 0) {
-        data.add({
-          'title1': '横向平铺内容不省略',
-          'title2': '横向平铺内容不省略',
-          'title3': '横向平铺内容不省略',
-        });
-      } else {
-        data.add({
-          'title1': '内容',
-          'title2': '内容',
-          'title3': '内容',
-        });
+    var data = <dynamic>[
+      {
+        'title1': '横向平铺内容不省略',
+        'title2': '横向平铺内容不省略',
+        'title3': '横向平铺内容不省略',
       }
+    ];
+    for (var i = 0; i < 10; i++) {
+      data.add({
+        'title1': '内容',
+        'title2': '内容',
+        'title3': '内容',
+      });
     }
     return data;
   }
@@ -53,7 +51,8 @@ class TDTablePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tdTitle(context),
-      desc: '表格常用于展示同类结构下的多种数据，易于组织、对比和分析等，并可对数据进行搜索、筛选、排序等操作。一般包括表头、数据行和表尾三部分。',
+      desc:
+          '表格常用于展示同类结构下的多种数据，易于组织、对比和分析等，并可对数据进行搜索、筛选、排序等操作。一般包括表头、数据行和表尾三部分。',
       exampleCodeGroup: 'table',
       children: [
         ExampleModule(
@@ -62,7 +61,9 @@ class TDTablePage extends StatelessWidget {
             ExampleItem(desc: '基础表格', builder: _basicTable),
             ExampleItem(desc: '可排序表格', builder: _sortableTable),
             ExampleItem(desc: '带操作或按钮表格', builder: _operationBtnTable),
-            ExampleItem(builder: _operationIconTable, padding: const EdgeInsets.only(top: 16)),
+            ExampleItem(
+                builder: _operationIconTable,
+                padding: const EdgeInsets.only(top: 16)),
             ExampleItem(desc: '可固定首列表格', builder: _fixedFirstColTable),
             ExampleItem(desc: '可固定尾列表格', builder: _fixedEndColTable),
             ExampleItem(desc: '横向平铺可滚动表格', builder: _horizontalScrollTable),
@@ -101,7 +102,8 @@ class TDTablePage extends StatelessWidget {
   Widget _sortableTable(BuildContext context) {
     return TDTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true, sortable: true),
+        TDTableCol(
+            title: '标题', colKey: 'title1', ellipsis: true, sortable: true),
         TDTableCol(title: '标题', colKey: 'title2', sortable: true),
         TDTableCol(title: '标题', colKey: 'title3', sortable: true),
         TDTableCol(title: '标题', colKey: 'title4', sortable: true)
@@ -127,18 +129,14 @@ class TDTablePage extends StatelessWidget {
                 TDText(
                   '修改',
                   style: TextStyle(
-                    color: TDTheme.of(context).brandNormalColor,
-                    fontSize: 14,
-                    height: 1,
-                  ),
+                      color: TDTheme.of(context).brandNormalColor,
+                      fontSize: 14),
                 ),
                 TDText(
                   '通过',
                   style: TextStyle(
-                    color: TDTheme.of(context).brandNormalColor,
-                    fontSize: 14,
-                    height: 1,
-                  ),
+                      color: TDTheme.of(context).brandNormalColor,
+                      fontSize: 14),
                 ),
               ],
             );
@@ -163,8 +161,10 @@ class TDTablePage extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(TDIcons.upload, color: TDTheme.of(context).brandNormalColor, size: 16),
-                Icon(TDIcons.delete, color: TDTheme.of(context).brandNormalColor, size: 16),
+                Icon(TDIcons.upload,
+                    color: TDTheme.of(context).brandNormalColor, size: 16),
+                Icon(TDIcons.delete,
+                    color: TDTheme.of(context).brandNormalColor, size: 16),
               ],
             );
           },
@@ -322,9 +322,12 @@ class TDTablePage extends StatelessWidget {
   Widget _centerTable(BuildContext context) {
     return TDTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', align: TDTableColAlign.center),
-        TDTableCol(title: '标题', colKey: 'title2', align: TDTableColAlign.center),
-        TDTableCol(title: '标题', colKey: 'title3', align: TDTableColAlign.center),
+        TDTableCol(
+            title: '标题', colKey: 'title1', align: TDTableColAlign.center),
+        TDTableCol(
+            title: '标题', colKey: 'title2', align: TDTableColAlign.center),
+        TDTableCol(
+            title: '标题', colKey: 'title3', align: TDTableColAlign.center),
         TDTableCol(title: '标题', colKey: 'title4', align: TDTableColAlign.center)
       ],
       data: _getData(10),
@@ -361,11 +364,15 @@ class TDTablePage extends StatelessWidget {
     return TDTable(
       data: _getData(10),
       columns: [
-        TDTableCol(selection: true, checked: (index, row) {
-          return index == 0;
-        }, width: 50, selectable: (index, row) {
-          return index % 2 == 0;
-        }),
+        TDTableCol(
+            selection: true,
+            checked: (index, row) {
+              return index == 0;
+            },
+            width: 50,
+            selectable: (index, row) {
+              return index % 2 == 0;
+            }),
         TDTableCol(title: '标题', colKey: 'title1'),
         TDTableCol(title: '标题', colKey: 'title2'),
         TDTableCol(title: '标题', colKey: 'title3'),

@@ -18,32 +18,32 @@ typedef TDButtonEvent = void Function();
 
 /// TD常规按钮
 class TDButton extends StatefulWidget {
-  const TDButton(
-      {Key? key,
-      this.text,
-      this.size = TDButtonSize.medium,
-      this.type = TDButtonType.fill,
-      this.shape = TDButtonShape.rectangle,
-      this.theme,
-      this.child,
-      this.disabled = false,
-      this.isBlock = false,
-      this.style,
-      this.activeStyle,
-      this.disableStyle,
-      this.textStyle,
-      this.disableTextStyle,
-      this.width,
-      this.height,
-      this.onTap,
-      this.icon,
-      this.iconWidget,
-      this.iconTextSpacing,
-      this.onLongPress,
-      this.margin,
-      this.padding,
-      this.iconPosition = TDButtonIconPosition.left})
-      : super(key: key);
+  const TDButton({
+    Key? key,
+    this.text,
+    this.size = TDButtonSize.medium,
+    this.type = TDButtonType.fill,
+    this.shape = TDButtonShape.rectangle,
+    this.theme,
+    this.child,
+    this.disabled = false,
+    this.isBlock = false,
+    this.style,
+    this.activeStyle,
+    this.disableStyle,
+    this.textStyle,
+    this.disableTextStyle,
+    this.width,
+    this.height,
+    this.onTap,
+    this.icon,
+    this.iconWidget,
+    this.iconTextSpacing,
+    this.onLongPress,
+    this.margin,
+    this.padding,
+    this.iconPosition = TDButtonIconPosition.left,
+  }) : super(key: key);
 
   /// 自控件
   final Widget? child;
@@ -72,13 +72,13 @@ class TDButton extends StatefulWidget {
   /// 主题
   final TDButtonTheme? theme;
 
-  /// 自定义样式，有则优先用它，没有则根据type和theme选取.如果设置了style,则activeStyle和disableStyle也应该设置
+  /// 自定义样式，有则优先用它，没有则根据 type 和 theme 选取。如果设置了 style，则 activeStyle 和 disableStyle 也应该设置
   final TDButtonStyle? style;
 
-  /// 自定义点击样式，有则优先用它，没有则根据type和theme选取
+  /// 自定义点击样式，有则优先用它，没有则根据 type 和 theme 选取
   final TDButtonStyle? activeStyle;
 
-  /// 自定义禁用样式，有则优先用它，没有则根据type和theme选取
+  /// 自定义禁用样式，有则优先用它，没有则根据 type 和 theme 选取
   final TDButtonStyle? disableStyle;
 
   /// 自定义可点击状态文本样式
@@ -96,19 +96,19 @@ class TDButton extends StatefulWidget {
   /// 图标icon
   final IconData? icon;
 
-  /// 自定义图标icon控件
+  /// 自定义图标 icon 控件
   final Widget? iconWidget;
 
- /// 自定义图标与文本之间距离
+  /// 自定义图标与文本之间距离
   final double? iconTextSpacing;
 
   /// 图标位置
   final TDButtonIconPosition? iconPosition;
 
-  /// 自定义padding
+  /// 自定义 padding
   final EdgeInsetsGeometry? padding;
 
-  /// 自定义margin
+  /// 自定义 margin
   final EdgeInsetsGeometry? margin;
 
   /// 是否为通栏按钮
@@ -130,7 +130,7 @@ class _TDButtonState extends State<TDButton> {
   TextStyle? _textStyle;
   double? _iconSize;
 
-  _updateParams() async {
+  _updateParams() {
     _buttonStatus =
         widget.disabled ? TDButtonStatus.disable : TDButtonStatus.defaultState;
     _innerDefaultStyle = widget.style;
@@ -221,7 +221,7 @@ class _TDButtonState extends State<TDButton> {
   Border? _getBorder(BuildContext context) {
     if (style.frameWidth != null && style.frameWidth != 0) {
       return Border.all(
-        color: style.frameColor ?? TDTheme.of(context).grayColor3,
+        color: style.frameColor ?? TDTheme.of(context).componentStrokeColor,
         width: style.frameWidth!,
       );
     }
@@ -229,7 +229,7 @@ class _TDButtonState extends State<TDButton> {
   }
 
   Widget _getChild() {
-    var icon = getIcon();
+    var icon = _getIcon();
     if (widget.text == null && icon == null) {
       return Container();
     }
@@ -242,7 +242,7 @@ class _TDButtonState extends State<TDButton> {
       var text = TDText(
         widget.text!,
         font: _getTextFont(),
-        textColor: style.textColor ?? TDTheme.of(context).fontGyColor1,
+        textColor: style.textColor ?? TDTheme.of(context).textColorPrimary,
         style: _textStyle,
         forceVerticalCenter: true,
       );
@@ -255,9 +255,7 @@ class _TDButtonState extends State<TDButton> {
     if (children.length == 2) {
       children.insert(
         1,
-        SizedBox(
-          width:widget.iconTextSpacing??8,
-        ),
+        SizedBox(width: widget.iconTextSpacing ?? 8),
       );
     }
     return Row(
@@ -267,11 +265,16 @@ class _TDButtonState extends State<TDButton> {
     );
   }
 
-  Widget? getIcon() {
+  Widget? _getIcon() {
     if (widget.iconWidget != null) {
       return widget.iconWidget;
     }
     if (widget.icon != null) {
+      return Icon(
+        widget.icon,
+        size: _iconSize,
+        color: style.textColor,
+      );
       return RichText(
         overflow: TextOverflow.visible,
         text: TextSpan(
@@ -287,6 +290,7 @@ class _TDButtonState extends State<TDButton> {
         ),
       );
     }
+
     return null;
   }
 
@@ -361,7 +365,7 @@ class _TDButtonState extends State<TDButton> {
     if (widget.margin != null) {
       return widget.margin;
     }
-    return widget.isBlock ? const EdgeInsets.only(left: 16, right: 16) : null;
+    return widget.isBlock ? const EdgeInsets.symmetric(horizontal: 16) : null;
   }
 
   EdgeInsetsGeometry? _getPadding() {

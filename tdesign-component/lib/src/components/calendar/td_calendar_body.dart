@@ -32,12 +32,20 @@ class TDCalendarBody extends StatelessWidget {
   final List<DateTime>? value;
   final int firstDayOfWeek;
   final Widget Function(
-      TDate? date, List<TDate?> dateList, Map<DateTime, List<TDate?>> data, int rowIndex, int colIndex) builder;
+    TDate? date,
+    List<TDate?> dateList,
+    Map<DateTime, List<TDate?>> data,
+    int rowIndex,
+    int colIndex,
+  ) builder;
   final double bodyPadding;
   final String displayFormat;
   final List<String> monthNames;
   final TextStyle? monthTitleStyle;
-  final Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder;
+  final Widget Function(
+    BuildContext context,
+    DateTime monthDate,
+  )? monthTitleBuilder;
   final double monthTitleHeight;
   final double verticalGap;
   final double cellHeight;
@@ -56,12 +64,15 @@ class TDCalendarBody extends StatelessWidget {
       padding: EdgeInsets.all(bodyPadding),
       controller: scrollController,
       itemCount: months.length,
-      itemExtentBuilder: (index, dimensions) => _getMonthHeight(months, index, monthHeight),
+      itemExtentBuilder: (index, dimensions) =>
+          _getMonthHeight(months, index, monthHeight),
       itemBuilder: (context, index) {
         final monthDate = months[index];
         final monthYear = monthDate.year.toString() + context.resource.year;
         final monthMonth = monthNames[monthDate.month - 1];
-        final monthDateText = displayFormat.replaceFirst('year', monthYear).replaceFirst('month', monthMonth);
+        final monthDateText = displayFormat
+            .replaceFirst('year', monthYear)
+            .replaceFirst('month', monthMonth);
         late List<TDate?> monthData;
         if (data.containsKey(monthDate)) {
           monthData = data[monthDate]!;
@@ -82,28 +93,30 @@ class TDCalendarBody extends StatelessWidget {
           children: [
             SizedBox(
               height: monthTitleHeight,
-              child: monthTitleBuilder?.call(context, monthDate) ?? TDText(monthDateText, style: monthTitleStyle),
+              child: monthTitleBuilder?.call(context, monthDate) ??
+                  TDText(monthDateText, style: monthTitleStyle),
             ),
             ...List.generate(
               (monthData.length / 7).ceil(),
               (rowIndex) => [
                 SizedBox(height: verticalGap),
                 Row(
-                  children: List.generate(
-                    7,
-                    (colIndex) => [
+                  children: [
+                    for (int colIndex = 0; colIndex < 7; colIndex++) ...[
                       if (colIndex != 0) SizedBox(width: verticalGap / 2),
                       Expanded(
                         child: builder(
-                          monthData[rowIndex * 7 + colIndex],
+                          (rowIndex * 7 + colIndex < monthData.length)
+                              ? monthData[rowIndex * 7 + colIndex]
+                              : null,
                           monthData,
                           data,
                           rowIndex,
                           colIndex,
                         ),
                       ),
-                    ],
-                  ).expand((element) => element).toList(),
+                    ]
+                  ],
                 ),
               ],
             ).expand((element) => element).toList(),
@@ -114,7 +127,8 @@ class TDCalendarBody extends StatelessWidget {
     );
   }
 
-  void _scrollToItem(ScrollController scrollController, List<DateTime> months, Map<int, double> monthHeight) {
+  void _scrollToItem(ScrollController scrollController, List<DateTime> months,
+      Map<int, double> monthHeight) {
     if (value == null || value!.isEmpty) {
       return;
     }
@@ -149,7 +163,9 @@ class TDCalendarBody extends StatelessWidget {
   }
 
   DateTime _getDefDate(int? date, [int? addMonth]) {
-    final now = date == null ? DateTime.now() : DateTime.fromMillisecondsSinceEpoch(date);
+    final now = date == null
+        ? DateTime.now()
+        : DateTime.fromMillisecondsSinceEpoch(date);
     if (addMonth == null) {
       return DateTime(now.year, now.month, now.day);
     }
@@ -168,8 +184,10 @@ class TDCalendarBody extends StatelessWidget {
   }
 
   List<TDate?> _getDaysInMonth(DateTime curDate, DateTime min, DateTime max) {
-    final daysInMonth = List<TDate?>.generate(_getPreOffset(curDate), (index) => null);
-    final daysInMonthCount = DateTime(curDate.year, curDate.month + 1, 0).day; // 获取下个月的第一天的前一天，即当前月的最后一天
+    final daysInMonth =
+        List<TDate?>.generate(_getPreOffset(curDate), (index) => null);
+    final daysInMonthCount = DateTime(curDate.year, curDate.month + 1, 0)
+        .day; // 获取下个月的第一天的前一天，即当前月的最后一天
     for (var day = 1; day <= daysInMonthCount; day++) {
       final date = DateTime(curDate.year, curDate.month, day);
       var selectType = DateSelectType.empty;
@@ -220,7 +238,8 @@ class TDCalendarBody extends StatelessWidget {
   }
 
   /// 获取月份高度，带缓存
-  double _getMonthHeight(List<DateTime> months, int index, Map<int, double> monthHeight) {
+  double _getMonthHeight(
+      List<DateTime> months, int index, Map<int, double> monthHeight) {
     if (months.getOrNull(index) == null) {
       return 1;
     }
@@ -232,8 +251,9 @@ class TDCalendarBody extends StatelessWidget {
     final preOffset = _getPreOffset(item);
     final daysInMonthCount = DateTime(item.year, item.month + 1, 0).day;
     final daysInMonth = preOffset + daysInMonthCount;
-    final height =
-        monthTitleHeight + (daysInMonth / 7).ceil() * (verticalGap + cellHeight) + (isLast ? 0 : bodyPadding);
+    final height = monthTitleHeight +
+        (daysInMonth / 7).ceil() * (verticalGap + cellHeight) +
+        (isLast ? 0 : bodyPadding);
     monthHeight[index] = height;
     return height;
   }

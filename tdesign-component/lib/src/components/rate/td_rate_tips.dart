@@ -31,13 +31,14 @@ class TDRateTips extends StatelessWidget {
   Widget build(BuildContext context) {
     final _tipKey = GlobalKey();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final renderBox = _tipKey.currentContext?.findRenderObject() as RenderBox?;
+      final renderBox =
+          _tipKey.currentContext?.findRenderObject() as RenderBox?;
       sizeCall(renderBox?.size ?? Size.zero);
     });
     return Container(
       key: _tipKey,
       decoration: BoxDecoration(
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.12),
@@ -71,12 +72,16 @@ class TDRateTips extends StatelessWidget {
             },
             child: Container(
               decoration: BoxDecoration(
-                color: allowHalf == true && index + 0.5 == activeValue && isClick
-                    ? TDTheme.of(context).grayColor3
-                    : TDTheme.of(context).whiteColor1,
-                borderRadius: BorderRadius.circular(TDTheme.of(context).radiusSmall),
+                color:
+                    allowHalf == true && index + 0.5 == activeValue && isClick
+                        ? TDTheme.of(context).bgColorComponent
+                        : Colors.transparent,
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusSmall),
               ),
-              padding: EdgeInsets.only(left: TDTheme.of(context).spacer4, right: TDTheme.of(context).spacer4),
+              padding: EdgeInsets.only(
+                  left: TDTheme.of(context).spacer4,
+                  right: TDTheme.of(context).spacer4),
               child: Column(
                 children: [
                   Row(
@@ -100,7 +105,9 @@ class TDRateTips extends StatelessWidget {
                             icon,
                             size: size ?? 24,
                             color: allowHalf == true
-                                ? (isClick ? getIconColor(isActive: false) : getIconColor(value: index + 1))
+                                ? (isClick
+                                    ? getIconColor(isActive: false)
+                                    : getIconColor(value: index + 1))
                                 : getIconColor(isActive: true),
                           ),
                         ),
@@ -109,16 +116,19 @@ class TDRateTips extends StatelessWidget {
                   ),
                   Center(
                     child: TDText(
-                      allowHalf == true ? (isClick ? '${index + 0.5}' : '${activeValue}') : '${index + 1}',
+                      allowHalf == true
+                          ? (isClick ? '${index + 0.5}' : '${activeValue}')
+                          : '${index + 1}',
                       font: TDTheme.of(context).fontBodySmall,
-                      textColor: TDTheme.of(context).fontGyColor1,
+                      textColor: TDTheme.of(context).textColorPrimary,
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          if (allowHalf == true && isClick) SizedBox(width: TDTheme.of(context).spacer4),
+          if (allowHalf == true && isClick)
+            SizedBox(width: TDTheme.of(context).spacer4),
           if (allowHalf == true && isClick)
             GestureDetector(
               onTap: () {
@@ -128,10 +138,15 @@ class TDRateTips extends StatelessWidget {
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: index + 1 != activeValue ? TDTheme.of(context).whiteColor1 : TDTheme.of(context).grayColor3,
-                  borderRadius: BorderRadius.circular(TDTheme.of(context).radiusSmall),
+                  color: index + 1 != activeValue
+                      ? Colors.transparent
+                      : TDTheme.of(context).bgColorComponent,
+                  borderRadius:
+                      BorderRadius.circular(TDTheme.of(context).radiusSmall),
                 ),
-                padding: EdgeInsets.only(left: TDTheme.of(context).spacer4, right: TDTheme.of(context).spacer4),
+                padding: EdgeInsets.only(
+                    left: TDTheme.of(context).spacer4,
+                    right: TDTheme.of(context).spacer4),
                 child: Column(
                   children: [
                     Icon(
@@ -143,7 +158,7 @@ class TDRateTips extends StatelessWidget {
                       child: TDText(
                         '${index + 1}',
                         font: TDTheme.of(context).fontBodySmall,
-                        textColor: TDTheme.of(context).fontGyColor1,
+                        textColor: TDTheme.of(context).textColorPrimary,
                       ),
                     ),
                   ],

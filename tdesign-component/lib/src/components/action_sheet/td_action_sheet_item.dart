@@ -15,7 +15,7 @@ class TDActionSheetItem {
     this.group,
   });
 
-  /// 标提
+  /// 标题
   final String label;
 
   /// 标题样式

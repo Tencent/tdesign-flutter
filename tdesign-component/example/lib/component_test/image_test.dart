@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() async {
-  runApp(ImageTestApp());
+  runApp(const ImageTestApp());
 }
 
 class ImageTestApp extends StatelessWidget {
+  const ImageTestApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,12 +23,14 @@ class ImageTestApp extends StatelessWidget {
 class TestPage extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  TestPage({super.key});
+
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: AppBar(
-        title: TDText('TDImage Test Page'),
+        title: const TDText('TDImage Test Page'),
       ),
       body: Form(
         key: _formKey,
@@ -38,9 +42,9 @@ class TestPage extends StatelessWidget {
               width: 335,
               fit: BoxFit.fitWidth,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-            TDImage(
+            const TDImage(
               imgUrl: 'assets/img/image.png',
               type: TDImageType.fitHeight,
               height: 144,

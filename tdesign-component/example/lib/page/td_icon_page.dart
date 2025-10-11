@@ -14,7 +14,7 @@ class TDIconPage extends StatefulWidget {
 class _TDIconPageState extends State<TDIconPage> {
   bool showBorder = false;
 
-  dynamic iconList = [];
+  Iterable iconList = [];
 
   var isLoading = false;
 
@@ -33,24 +33,31 @@ class _TDIconPageState extends State<TDIconPage> {
         exampleCodeGroup: 'icon',
         children: [
           ExampleModule(
-              title: 'icon示例', children: [ExampleItem(desc: 'icon数量: ${iconList.length}', builder: _showAllIcons)])
+            title: 'icon示例',
+            children: [
+              ExampleItem(
+                desc: 'icon数量: ${iconList.length}',
+                builder: _showAllIcons,
+              )
+            ],
+          )
         ]);
   }
 
   @Demo(group: 'icon')
   Widget _showAllIcons(BuildContext context) {
     return Container(
-      color: Colors.white,
       alignment: Alignment.center,
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.only(left: 16),
+            padding: const EdgeInsets.all(16),
             alignment: Alignment.topLeft,
             child: const Wrap(
               children: [
                 TDText('筛选Icon请前往TDesign官网(长按网址可复制):'),
-                SelectableText('https://tdesign.tencent.com/vue/components/icon')
+                SelectableText(
+                    'https://tdesign.tencent.com/vue/components/icon')
               ],
             ),
           ),
@@ -80,71 +87,57 @@ class _TDIconPageState extends State<TDIconPage> {
               });
             },
           ),
-          Container(
-            child: TDButton(
-              text: showBorder ? '隐藏边框' : '显示边框',
-              shape: TDButtonShape.filled,
-              onTap: () {
+          TDCell(
+            title: '显示边框',
+            noteWidget: TDSwitch(
+              isOn: showBorder,
+              onChanged: (value) {
                 setState(() {
-                  showBorder = !showBorder;
+                  showBorder = value;
                 });
+                return value;
               },
             ),
-            margin: const EdgeInsets.only(bottom: 16),
           ),
           Builder(builder: (context) {
             if (iconList.isEmpty) {
               return Container(
                 height: 300,
                 alignment: Alignment.center,
-                child: isLoading ? const TDText('加载中...') : const TDText('暂无内容'),
+                child:
+                    isLoading ? const TDText('加载中...') : const TDText('暂无内容'),
               );
             }
+
+            var width = MediaQuery.of(context).size.width * 0.4;
+
             return SizedBox(
-              height: MediaQuery.of(context).size.height - 150,
-              child: ListView.builder(
-                  itemCount: (iconList.length + 1) ~/ 2,
-                  itemBuilder: (context,index){
-                    var index1 = index ~/ 2;
-                    var index2 = index1 + 1;
-                    var iconData1 =  iconList.elementAt(index1);
-                    var iconData2;
-                    if(iconList.length > index2){
-                      iconData2 =  iconList.elementAt(index2);
-                    }
-                    return Row(
-                      children: [
-                        SizedBox(
-                          height: 100,
-                          width: 175,
+                height: MediaQuery.of(context).size.height * 0.7,
+                child: SingleChildScrollView(
+                  child: Wrap(
+                      spacing: 16,
+                      runSpacing: 18,
+                      children: iconList.map((item) {
+                        return SizedBox(
+                          width: width,
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                color: showBorder ? TDTheme.of(context).brandDisabledColor : Colors.transparent,
-                                child: Icon(iconData1),
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: showBorder
+                                      ? TDTheme.of(context).brandDisabledColor
+                                      : Colors.transparent,
+                                ),
+                                child: Icon(item, size: 32),
                               ),
-                              TDText(iconData1.name)
+                              TDText(item.name)
                             ],
                           ),
-                        ),
-                        if (iconData2 != null)
-                          SizedBox(
-                            height: 100,
-                            width: 175,
-                            child: Column(
-                              children: [
-                                Container(
-                                  color: showBorder ? TDTheme.of(context).brandDisabledColor : Colors.transparent,
-                                  child: Icon(iconData2),
-                                ),
-                                TDText(iconData2.name)
-                              ],
-                            ),
-                          )
-                      ],
-                    );
-                  }),
-            );
+                        );
+                      }).toList()),
+                ));
           })
         ],
       ),

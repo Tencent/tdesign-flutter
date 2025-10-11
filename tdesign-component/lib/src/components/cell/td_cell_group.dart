@@ -4,7 +4,10 @@ import '../../../tdesign_flutter.dart';
 import 'td_cell_inherited.dart';
 
 typedef CellBuilder = Widget Function(
-    BuildContext context, TDCell cell, int index);
+  BuildContext context,
+  TDCell cell,
+  int index,
+);
 
 enum TDCellGroupTheme { defaultTheme, cardTheme }
 
@@ -69,9 +72,9 @@ class _TDCellGroupState extends State<TDCellGroup> {
           if (widget.title != null || widget.titleWidget != null)
             Container(
               width: double.infinity,
-              color: style.titleBackgroundColor,
               padding: style.titlePadding,
-              child: widget.titleWidget ?? TDText(widget.title!, style: style.groupTitleStyle),
+              child: widget.titleWidget ??
+                  TDText(widget.title!, style: style.groupTitleStyle),
             ),
           Flexible(
             child: Container(
@@ -84,10 +87,12 @@ class _TDCellGroupState extends State<TDCellGroup> {
                 borderRadius: radius,
                 child: ListView.separated(
                   padding: EdgeInsets.zero,
-                  shrinkWrap: widget.scrollable == false, // 设置为true以避免无限制地增长
+                  shrinkWrap: widget.scrollable == false,
+                  // 设置为true以避免无限制地增长
                   physics: widget.scrollable == false
                       ? const NeverScrollableScrollPhysics()
-                      : null, // 禁用ListView的滚动
+                      : null,
+                  // 禁用ListView的滚动
                   itemCount: itemCount,
                   itemBuilder: (context, index) {
                     final item = widget.cells[index];
@@ -119,7 +124,8 @@ class _TDCellGroupState extends State<TDCellGroup> {
     if (!(widget.bordered ?? false)) {
       return null;
     }
-    var color = style.groupBorderedColor ?? TDTheme.of(context).grayColor3;
+    var color =
+        style.groupBorderedColor ?? TDTheme.of(context).componentStrokeColor;
     return Border.all(
       color: color,
       width: 1,
@@ -143,7 +149,8 @@ class _TDCellGroupState extends State<TDCellGroup> {
         Expanded(
           child: Container(
               height: 0.5,
-              color: style.borderedColor ?? TDTheme.of(context).grayColor3),
+              color: style.borderedColor ??
+                  TDTheme.of(context).componentStrokeColor),
         ),
       ],
     );

@@ -38,6 +38,7 @@ class TDCalendar extends StatefulWidget {
     this.onCellClick,
     this.onCellLongPress,
     this.onHeaderClick,
+    this.useSafeArea = true,
     this.useTimePicker = false,
     this.timePickerModel,
     this.monthTitleHeight = 22,
@@ -55,10 +56,10 @@ class TDCalendar extends StatefulWidget {
   /// 用于格式化日期的函数，可定义日期前后的显示内容和日期样式
   final CalendarFormat? format;
 
-  /// 最大可选的日期(fromMillisecondsSinceEpoch)，不传则默认半年后
+  /// 最大可选的日期（fromMillisecondsSinceEpoch），不传则默认半年后
   final int? maxDate;
 
-  /// 最小可选的日期(fromMillisecondsSinceEpoch)，不传则默认今天
+  /// 最小可选的日期（fromMillisecondsSinceEpoch），不传则默认今天
   final int? minDate;
 
   /// 标题
@@ -67,10 +68,10 @@ class TDCalendar extends StatefulWidget {
   /// 标题组件
   final Widget? titleWidget;
 
-  /// 日历的选择类型，single = 单选；multiple = 多选; range = 区间选择
+  /// 日历的选择类型，single = 单选；multiple = 多选；range = 区间选择
   final CalendarType? type;
 
-  /// 当前选择的日期(fromMillisecondsSinceEpoch)，不传则默认今天，当 type = single 时数组长度为1
+  /// 当前选择的日期（fromMillisecondsSinceEpoch），不传则默认今天，当 type = single 时数组长度为1
   final List<int>? value;
 
   /// 年月显示格式，`year`表示年，`month`表示月，如`year month`表示年在前、月在后、中间隔一个空格
@@ -92,13 +93,27 @@ class TDCalendar extends StatefulWidget {
   final void Function(List<int> value)? onChange;
 
   /// 点击日期时触发
-  final void Function(int value, DateSelectType type, TDate tdate)? onCellClick;
+  final void Function(
+    int value,
+    DateSelectType type,
+    TDate tdate,
+  )? onCellClick;
 
   /// 长安日期时触发
-  final void Function(int value, DateSelectType type, TDate tdate)? onCellLongPress;
+  final void Function(
+    int value,
+    DateSelectType type,
+    TDate tdate,
+  )? onCellLongPress;
 
   /// 点击周时触发
-  final void Function(int index, String week)? onHeaderClick;
+  final void Function(
+    int index,
+    String week,
+  )? onHeaderClick;
+
+  /// 是否使用安全区域，默认true
+  final bool? useSafeArea;
 
   /// 是否显示时间选择器
   final bool? useTimePicker;
@@ -110,7 +125,10 @@ class TDCalendar extends StatefulWidget {
   final double? monthTitleHeight;
 
   /// 月标题构建器
-  final Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder;
+  final Widget Function(
+    BuildContext context,
+    DateTime monthDate,
+  )? monthTitleBuilder;
 
   /// 时间选择器List的视窗高度
   final double? pickerHeight;
@@ -125,7 +143,11 @@ class TDCalendar extends StatefulWidget {
   final bool? animateTo;
 
   /// 自定义日期单元格组件
-  final Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? cellWidget;
+  final Widget? Function(
+    BuildContext context,
+    TDate tdate,
+    DateSelectType selectType,
+  )? cellWidget;
 
   List<DateTime>? get _value => value?.map((e) {
         final date = DateTime.fromMillisecondsSinceEpoch(e);
@@ -248,7 +270,10 @@ class _TDCalendarState extends State<TDCalendar> {
           if (inherited?.usePopup == true)
             inherited?.confirmBtn ??
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: TDTheme.of(context).spacer16),
+                  padding: widget.useSafeArea == true
+                      ? EdgeInsets.only(top: TDTheme.of(context).spacer16)
+                      : EdgeInsets.symmetric(
+                          vertical: TDTheme.of(context).spacer16),
                   child: TDButton(
                     theme: TDButtonTheme.primary,
                     text: context.resource.confirm,
@@ -257,6 +282,8 @@ class _TDCalendarState extends State<TDCalendar> {
                     onTap: inherited?.onConfirm,
                   ),
                 ),
+          if (widget.useSafeArea == true)
+            SizedBox(height: MediaQuery.of(context).padding.bottom)
         ],
       ),
     );
@@ -268,7 +295,7 @@ class _TDCalendarState extends State<TDCalendar> {
     final valueTime = widget._valueTime;
     return Container(
       decoration: BoxDecoration(
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.04),
@@ -335,9 +362,15 @@ class _TDCalendarState extends State<TDCalendar> {
       return dateValue;
     }
     final milliseconds = timePickerModelList.map((model) {
-      final hour = model.useHour ? model.hourFixedExtentScrollController.selectedItem : 0;
-      final minute = model.useMinute ? model.minuteFixedExtentScrollController.selectedItem : 0;
-      final second = model.useSecond ? model.secondFixedExtentScrollController.selectedItem : 0;
+      final hour = model.useHour
+          ? model.hourFixedExtentScrollController.selectedItem
+          : 0;
+      final minute = model.useMinute
+          ? model.minuteFixedExtentScrollController.selectedItem
+          : 0;
+      final second = model.useSecond
+          ? model.secondFixedExtentScrollController.selectedItem
+          : 0;
       return (hour * 60 * 60 + minute * 60 + second) * 1000;
     }).toList();
     if (widget.type == CalendarType.range && dateValue.length == 1) {

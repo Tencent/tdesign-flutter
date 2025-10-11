@@ -4,6 +4,7 @@ import '../../theme/td_fonts.dart';
 import '../../theme/td_radius.dart';
 import '../../theme/td_spacers.dart';
 import '../../theme/td_theme.dart';
+import '../../util/context_extension.dart';
 import '../badge/td_badge.dart';
 import '../text/td_text.dart';
 import 'td_action_sheet.dart';
@@ -12,7 +13,7 @@ import 'td_action_sheet_item_widget.dart';
 class TDActionSheetList extends StatelessWidget {
   final List<TDActionSheetItem> items;
   final TDActionSheetAlign align;
-  final String cancelText;
+  final String? cancelText;
   final String? description;
   final bool showCancel;
   final VoidCallback? onCancel;
@@ -23,7 +24,7 @@ class TDActionSheetList extends StatelessWidget {
     super.key,
     required this.items,
     this.align = TDActionSheetAlign.center,
-    this.cancelText = '取消',
+    this.cancelText,
     this.description,
     this.showCancel = true,
     this.onCancel,
@@ -36,11 +37,11 @@ class TDActionSheetList extends StatelessWidget {
     final borderRadius = Radius.circular(TDTheme.of(context).radiusExtraLarge);
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
-        color: TDTheme.of(context).grayColor1,
+        borderRadius:
+            BorderRadius.only(topLeft: borderRadius, topRight: borderRadius),
+        color: TDTheme.of(context).bgColorPage,
       ),
       clipBehavior: Clip.antiAlias,
-      padding: useSafeArea ? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom) : EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -60,10 +61,10 @@ class TDActionSheetList extends StatelessWidget {
         vertical: TDTheme.of(context).spacer12,
       ),
       decoration: BoxDecoration(
-        color: TDTheme.of(context).fontWhColor1,
+        color: TDTheme.of(context).bgColorContainer,
         border: Border(
           bottom: BorderSide(
-            color: TDTheme.of(context).grayColor1,
+            color: TDTheme.of(context).componentStrokeColor,
             width: 0.5,
           ),
         ),
@@ -74,7 +75,7 @@ class TDActionSheetList extends StatelessWidget {
           TDText(
             description!,
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor3,
+            textColor: TDTheme.of(context).textColorSecondary,
           ),
         ],
       ),
@@ -84,9 +85,11 @@ class TDActionSheetList extends StatelessWidget {
   /// 构建选项列表
   Widget _buildOptionsList(BuildContext context) {
     return Container(
-      color: TDTheme.of(context).fontWhColor1,
+      color: TDTheme.of(context).bgColorContainer,
       child: ListView.builder(
         shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        // 禁用滚动
         itemCount: items.length,
         padding: EdgeInsets.zero,
         itemBuilder: (context, index) {
@@ -100,11 +103,12 @@ class TDActionSheetList extends StatelessWidget {
                   },
             child: Container(
               height: 56,
-              padding: EdgeInsets.symmetric(horizontal: TDTheme.of(context).spacer16),
+              padding: EdgeInsets.symmetric(
+                  horizontal: TDTheme.of(context).spacer16),
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: TDTheme.of(context).grayColor1,
+                    color: TDTheme.of(context).componentStrokeColor,
                     width: 0.5,
                   ),
                 ),
@@ -116,8 +120,11 @@ class TDActionSheetList extends StatelessWidget {
                     IconTheme(
                       data: IconThemeData(
                         color: item.disabled
-                            ? TDTheme.of(context).fontGyColor4 // 禁用状态下的图标颜色
-                            : (item.textStyle?.color ?? TDTheme.of(context).fontGyColor1), // 正常状态下的图标颜色
+                            // 禁用状态下的图标颜色
+                            ? TDTheme.of(context).textColorDisabled
+                            : (item.textStyle?.color ??
+                                // 正常状态下的图标颜色
+                                TDTheme.of(context).textColorPrimary),
                         size: item.textStyle?.fontSize,
                       ),
                       child: SizedBox(
@@ -132,10 +139,12 @@ class TDActionSheetList extends StatelessWidget {
                     item.label,
                     font: TDTheme.of(context).fontBodyLarge,
                     textColor: item.disabled
-                        ? TDTheme.of(context).fontGyColor4 // 禁用状态下的文本颜色
-                        : TDTheme.of(context).fontGyColor1, // 正常状态下的文本颜色
+                        ? TDTheme.of(context).textColorDisabled // 禁用状态下的文本颜色
+                        : TDTheme.of(context).textColorPrimary, // 正常状态下的文本颜色
                     style: item.textStyle,
                   ),
+
+                  /// todo 徽标应位于右上角，而不是右边紧挨着，请参考宫格徽标实现
                   if (item.badge != null) ...[
                     SizedBox(width: TDTheme.of(context).spacer8),
                     item.badge!,
@@ -151,27 +160,32 @@ class TDActionSheetList extends StatelessWidget {
 
   /// 构建取消按钮
   Widget _buildCancelButton(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: TDTheme.of(context).spacer8),
-        GestureDetector(
-          onTap: () {
-            onCancel?.call();
-            Navigator.maybePop(context);
-          },
-          child: Container(
-            color: TDTheme.of(context).fontWhColor1,
-            height: 48,
-            child: Center(
-              child: TDText(
-                cancelText,
-                font: TDTheme.of(context).fontBodyLarge,
-                textColor: TDTheme.of(context).fontGyColor1,
+    return GestureDetector(
+        onTap: () {
+          onCancel?.call();
+          Navigator.maybePop(context);
+        },
+        child: Column(
+          children: [
+            Container(
+              color: TDTheme.of(context).bgColorContainer,
+              height: 48,
+              margin: EdgeInsets.only(top: TDTheme.of(context).spacer8),
+              child: Center(
+                child: TDText(
+                  cancelText ?? context.resource.cancel,
+                  font: TDTheme.of(context).fontBodyLarge,
+                  textColor: TDTheme.of(context).textColorPrimary,
+                ),
               ),
             ),
-          ),
-        ),
-      ],
-    );
+            useSafeArea
+                ? Container(
+                    color: TDTheme.of(context).bgColorContainer,
+                    height: MediaQuery.of(context).padding.bottom,
+                  )
+                : const SizedBox.shrink(),
+          ],
+        ));
   }
 }

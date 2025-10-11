@@ -46,40 +46,45 @@ class TDWrapSideBarItem extends StatelessWidget {
   final TDSideBarStyle style;
 
   static const preLineWidth = 3.0;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: style == TDSideBarStyle.normal ? renderNormalItem(context) : renderOutlineItem(context),
+      child: style == TDSideBarStyle.normal
+          ? renderNormalItem(context)
+          : renderOutlineItem(context),
     );
   }
 
   Widget renderNormalItem(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: selectedBgColor ?? Colors.white,
+        color: selectedBgColor ?? TDTheme.of(context).bgColorContainer,
       ),
       child: Container(
         decoration: BoxDecoration(
-            color: selected
-                ? (selectedBgColor ?? Colors.white)
-                : (unSelectedBgColor ?? const Color.fromRGBO(243, 243, 243, 1)),
-            borderRadius: bottomAdjacent || topAdjacent
-                ? bottomAdjacent
-                    ? const BorderRadius.only(bottomRight: Radius.circular(9))
-                    : const BorderRadius.only(topRight: Radius.circular(9))
-                : null),
-        child: Row(
-          children: [
-              renderPreLine(context),
-              Expanded(
-                  child: Padding(
-                padding: contentPadding ?? const EdgeInsets.all(16),
-                child:  renderMainContent(context)
-              ))
-            ],
+          color: selected
+              ? selectedBgColor ?? TDTheme.of(context).bgColorContainer
+              : unSelectedBgColor ??
+                  TDTheme.of(context).bgColorSecondaryContainer,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(
+                topAdjacent ? TDTheme.of(context).radiusLarge : 0),
+            bottomRight: Radius.circular(
+                bottomAdjacent ? TDTheme.of(context).radiusLarge : 0),
           ),
         ),
+        child: Row(
+          children: [
+            renderPreLine(context),
+            Expanded(
+                child: Padding(
+                    padding: contentPadding ?? const EdgeInsets.all(16),
+                    child: renderMainContent(context)))
+          ],
+        ),
+      ),
     );
   }
 
@@ -88,11 +93,16 @@ class TDWrapSideBarItem extends StatelessWidget {
         constraints: const BoxConstraints(minHeight: 56),
         child: Container(
           // height: 86,
-          decoration: const BoxDecoration(color: Color.fromRGBO(246, 246, 246, 1)),
+          decoration: BoxDecoration(
+              color: TDTheme.of(context).bgColorSecondaryContainer),
           padding: const EdgeInsets.all(8),
           child: Container(
             decoration: BoxDecoration(
-                color: selected && !disabled ? Colors.white : null, borderRadius: BorderRadius.circular(6)),
+                color: selected && !disabled
+                    ? TDTheme.of(context).bgColorContainer
+                    : null,
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             padding: const EdgeInsets.all(8),
             child: renderMainContent(context),
           ),
@@ -100,15 +110,12 @@ class TDWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderMainContent(BuildContext context) {
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         renderIcon(context),
-        Expanded(
-            child: renderLabel(context)),
-        if(label.length>4)
-        renderBadge(context),
+        Expanded(child: renderLabel(context)),
+        if (label.length > 4) renderBadge(context),
         // SizedBox(
         //   width: !disabled && selected ? 0 : preLineWidth,
         // )
@@ -140,50 +147,64 @@ class TDWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderIcon(BuildContext context) {
+    final iconColor = () {
+      if (disabled) {
+        return TDTheme.of(context).textColorDisabled;
+      }
+      if (!selected) {
+        return unSelectedColor ?? TDTheme.of(context).textColorPrimary;
+      }
+      if (selectedTextStyle?.color != null) {
+        return selectedTextStyle!.color!;
+      }
+      return selectedColor ?? TDTheme.of(context).brandNormalColor;
+    }();
+
     return Visibility(
-        visible: icon != null,
-        child: Padding(
-          padding: const EdgeInsets.only(right: 2),
-          child: Icon(
-            icon,
-            size: 20,
-            color: disabled
-                ? TDTheme.of(context).fontGyColor4
-                : selected
-                    ? selectedTextStyle != null
-                        ? selectedTextStyle?.color
-                        : (selectedColor ?? TDTheme.of(context).brandNormalColor)
-                    : unSelectedColor ?? Colors.black,
-          ),
-        ));
+      visible: icon != null,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 2),
+        child: Icon(icon, size: 20, color: iconColor),
+      ),
+    );
   }
 
   Widget renderLabel(BuildContext context) {
-     return TDText.rich(
+    return TDText.rich(
       TextSpan(
         children: [
           WidgetSpan(
               child: TDText(
-                label,
-                style: selected ? (selectedTextStyle ?? TextStyle(color: selectedColor)) : textStyle,
-                fontWeight: selected && !disabled ? FontWeight.w600 : FontWeight.w400,
-                textColor: disabled
-                    ? TDTheme.of(context).fontGyColor4
-                    : selected
+            label,
+            style: selected
+                ? (selectedTextStyle ?? TextStyle(color: selectedColor))
+                : textStyle,
+            fontWeight:
+                selected && !disabled ? FontWeight.w600 : FontWeight.w400,
+            textColor: disabled
+                ? TDTheme.of(context).textColorDisabled
+                : selected
                     ? selectedColor ?? TDTheme.of(context).brandNormalColor
-                    : unSelectedColor ?? Colors.black,
-                // forceVerticalCenter: true,
-              )),
-          if(label.length<4)
-          WidgetSpan(
-              child: SizedBox(
-            width: 1,
-            height: 16,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [badge != null ? Positioned(top: -6, child: badge!) : Container()],
-            ),
-          ))
+                    : unSelectedColor ?? TDTheme.of(context).textColorPrimary,
+            // forceVerticalCenter: true,
+          )),
+
+          /// todo label.length 长度小于则不展示，为什么？？？
+          /// 应再判断有无icon，无icon时位置够，可以展示 badge
+          if (label.length <= 4 || icon == null)
+            WidgetSpan(
+                child: SizedBox(
+              width: 1,
+              height: 16,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  badge != null
+                      ? Positioned(top: -6, child: badge!)
+                      : Container()
+                ],
+              ),
+            ))
         ],
       ),
       softWrap: true,
@@ -194,10 +215,12 @@ class TDWrapSideBarItem extends StatelessWidget {
   Widget renderBadge(BuildContext context) {
     return SizedBox(
       width: 1,
-      height:40,
+      height: 40,
       child: Stack(
         clipBehavior: Clip.none,
-        children: [badge != null ? Positioned(top: -6, child: badge!) : Container()],
+        children: [
+          badge != null ? Positioned(top: -6, child: badge!) : Container()
+        ],
       ),
     );
   }

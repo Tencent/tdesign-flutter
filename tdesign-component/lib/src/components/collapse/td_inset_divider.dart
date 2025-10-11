@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-
 class TDInsetDivider extends StatelessWidget {
   const TDInsetDivider({Key? key}) : super(key: key);
 
@@ -14,7 +13,7 @@ class TDInsetDivider extends StatelessWidget {
     return SizedBox(
         height: 1,
         child: Divider(
-          color: TDTheme.of(context).grayColor3,
+          color: TDTheme.of(context).componentStrokeColor,
           indent: TDTheme.of(context).spacer16,
           endIndent: 0.0,
           height: 1,

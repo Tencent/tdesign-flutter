@@ -128,6 +128,12 @@ abstract class AppLocalizations {
   /// **'redTheme'**
   String get redTheme;
 
+  /// No description provided for @darkTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get darkTheme;
+
   /// No description provided for @cancel.
   ///
   /// In en, this message translates to:
@@ -421,6 +427,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'TOP'**
   String get top;
+
+  /// No description provided for @emptyData.
+  ///
+  /// In en, this message translates to:
+  /// **'No Data'**
+  String get emptyData;
 }
 
 class _AppLocalizationsDelegate

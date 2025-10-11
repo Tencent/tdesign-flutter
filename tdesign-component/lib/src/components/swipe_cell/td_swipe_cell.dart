@@ -80,7 +80,8 @@ class TDSwipeCell extends StatefulWidget {
 
   static final Map<Object, List<SlidableController>> _controllers = {};
 
-  static void _pushController(SlidableController controller, Object? tag, {bool del = false}) {
+  static void _pushController(SlidableController controller, Object? tag,
+      {bool del = false}) {
     if (tag == null) {
       return;
     }
@@ -100,7 +101,7 @@ class TDSwipeCell extends StatefulWidget {
   }
 
   /// 根据[groupTag]关闭[TDSwipeCell]
-  /// 
+  ///
   /// current：保留当前不关闭
   static void close(Object? tag, {SlidableController? current}) {
     if (tag == null || !_controllers.keys.contains(tag)) {
@@ -120,10 +121,10 @@ class TDSwipeCell extends StatefulWidget {
 
   @override
   _TDSwipeCellState createState() => _TDSwipeCellState();
-
 }
 
-class _TDSwipeCellState extends State<TDSwipeCell> with TickerProviderStateMixin {
+class _TDSwipeCellState extends State<TDSwipeCell>
+    with TickerProviderStateMixin {
   late final SlidableController controller;
   final confirmListenable = ValueNotifier<TDSwipeCellAction?>(null);
   TDSwipeDirection? openDirection;
@@ -196,7 +197,8 @@ class _TDSwipeCellState extends State<TDSwipeCell> with TickerProviderStateMixin
         final isLeft = openDirection == TDSwipeDirection.left;
         final panel = isLeft ? widget.left! : widget.right!;
         final index = panel.children.indexOf(action);
-        final confirm = panel.confirms?.find((element) => element.confirmIndex?.contains(index) == true);
+        final confirm = panel.confirms
+            ?.find((element) => element.confirmIndex?.contains(index) == true);
         confirmListenable.value = confirm;
         return confirm != null;
       },

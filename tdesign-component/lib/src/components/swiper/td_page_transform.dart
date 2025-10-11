@@ -3,11 +3,12 @@ import 'package:flutter_swiper_null_safety/src/transformer_page_view/transformer
 
 /// TD默认PageTransformer
 class TDPageTransformer extends PageTransformer {
-
   /// 缩放比例
   final double? scale;
+
   /// 淡化比例
   final double? fade;
+
   /// 左右间隔
   final double? margin;
 

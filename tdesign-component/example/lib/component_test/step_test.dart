@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() async {
-  runApp(StepTestApp());
+  runApp(const StepTestApp());
 }
 
 class StepTestApp extends StatelessWidget {
+  const StepTestApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,6 +22,8 @@ class StepTestApp extends StatelessWidget {
 
 class TestPage extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  TestPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +60,7 @@ class TestPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: TDText('TDSteps Test Page'),
+        title: const TDText('TDSteps Test Page'),
       ),
       body: Form(
         key: _formKey,

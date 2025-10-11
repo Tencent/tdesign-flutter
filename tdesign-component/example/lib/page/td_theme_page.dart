@@ -49,9 +49,7 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
     _initData();
   }
 
-  void _initData() async{
-
-
+  void _initData() async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       TDTheme.of(context).colorMap.forEach((key, value) {
         if (key.startsWith('brand')) {
@@ -71,7 +69,7 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
 
       TDTheme.of(context).refMap.forEach((key, value) {
         var color = TDTheme.of(context).colorMap[key];
-        if(color == null){
+        if (color == null) {
           return;
         }
         if (key.startsWith('brand')) {
@@ -88,9 +86,7 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
           grayMap[key] = color;
         }
       });
-      setState(() {
-
-      });
+      setState(() {});
     });
   }
 
@@ -98,12 +94,12 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
   Widget _buildDefaultTheme(BuildContext context) {
     // 通过TDTheme.of(context).xxx使用公共主题属性
     return Container(
-      margin: EdgeInsets.all(TDTheme.of(context).spacer8), // 间隔
+      margin: EdgeInsets.all(TDTheme.of(context).spacer8),
+      padding: EdgeInsets.all(TDTheme.of(context).spacer8),
       decoration: BoxDecoration(
-        color: TDTheme.of(context).grayColor1, // 颜色
-        borderRadius:
-            BorderRadius.circular(TDTheme.of(context).radiusDefault), // 圆角
-        boxShadow: TDTheme.of(context).shadowsBase, // 阴影
+        color: TDTheme.of(context).bgColorSecondaryContainer,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+        boxShadow: TDTheme.of(context).shadowsBase,
       ),
       child: TDText(
         '使用外层默认主题',
@@ -118,6 +114,7 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
   Widget _buildCustomTheme(BuildContext context) {
     /// 开启多主题
     TDTheme.needMultiTheme(true);
+
     /// 此处替换主题
     return TDTheme(
         // 替换fonts和colors，其他主题从父类拷贝
@@ -126,42 +123,8 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
         }, colorMap: {
           'brandNormalColor': Colors.red
         }),
-        // 不能直接在此处使用context，这里虽然被包裹在TGTheme中，但是context未更新，因此阿不到最新数据
+        // 不能直接在此处使用context，这里虽然被包裹在TGTheme中，但是context未更新，因此读不到最新数据
         child: const TestWidget());
-
-    // /// 测试控件
-// class TestWidget extends StatelessWidget {
-//   const TestWidget({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       alignment: Alignment.center,
-//       child: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           TDText(
-//             '使用内层赋值主题',
-//             font: TDTheme.of(context).fontBodyLarge, //明确使用内层主题，必须传context
-//             textColor:
-//                 TDTheme.of(context).brandNormalColor, // 明确使用内层主题，必须传context
-//           ),
-//           TDText(
-//             '使用内层不赋值主题',
-//             font: TDTheme.of(context).fontTitleExtraLarge, //明确使用内层主题，必须传context
-//             textColor:
-//                 TDTheme.of(context).successNormalColor, // 明确使用内层主题，必须传context
-//           ),
-//           TDText(
-//             '使用默认主题',
-//             font: TDTheme.defaultData().fontBodyLarge, //不传context，使用默认主题，此处是外层的主题
-//             textColor: TDTheme.defaultData().brandNormalColor,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
   }
 
   Widget _buildFunctionColor(BuildContext context) {
@@ -185,13 +148,13 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
             index = index % brandMap.length;
             var function = functionList[type];
             var map = {};
-            if(type == 0){
+            if (type == 0) {
               map = brandMap;
-            } else if(type == 1){
+            } else if (type == 1) {
               map = errorMap;
-            } else if (type == 2){
+            } else if (type == 2) {
               map = warningMap;
-            } else if(type == 3){
+            } else if (type == 3) {
               map = successMap;
             }
             if (index < 10) {
@@ -251,7 +214,7 @@ class _TDThemeColorsPageState extends State<TDThemeColorsPage> {
           var light = index < 6;
           if (index == 0) {
             return Container(
-              color: TDTheme.of(context).colorMap['whiteColor1'],
+              color: TDTheme.of(context).bgColorContainer,
               child: const TDText('whiteColor1'),
             );
           } else {
@@ -291,7 +254,7 @@ class TestWidget extends StatelessWidget {
                 TDTheme.of(context).successNormalColor, // 明确使用内层主题，必须传context
           ),
           const TDButton(
-            text:  '使用内层赋值主题',
+            text: '使用内层赋值主题',
             theme: TDButtonTheme.primary,
           ),
           TDText(

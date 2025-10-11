@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
-import 'td_table_col.dart';
+import '../../util/context_extension.dart';
 
 typedef OnCellTap = void Function(int rowIndex, dynamic row, TDTableCol col);
 typedef OnScroll = void Function(ScrollController controller);
@@ -172,7 +172,7 @@ class TDTableState extends State<TDTable> {
       );
     }
     if (widget.data == null || widget.data!.isEmpty) {
-      return _getEmpty('暂无数据');
+      return _buildEmpty();
     }
     var cells = <Widget>[];
     var fixedLeftCol = _getCol(TDTableColFixed.left);
@@ -199,8 +199,8 @@ class TDTableState extends State<TDTable> {
       }
       cells.add(Container(
         color: (widget.stripe ?? false) && i % 2 == 0
-            ? const Color(0xffF3F3F3)
-            : Colors.white,
+            ? TDTheme.of(context).bgColorSecondaryContainer
+            : TDTheme.of(context).bgColorContainer,
         child: Row(children: row),
       ));
     }
@@ -217,8 +217,10 @@ class TDTableState extends State<TDTable> {
     var sortable = col.sortable ?? false;
 
     // 单元格边框
-    var halfBorder = const BorderSide(width: 0.5, color: Color(0xffE7E7E7));
-    var doubleBorder = const BorderSide(width: 2, color: Color(0xffE7E7E7));
+    var halfBorder =
+        BorderSide(width: 0.5, color: TDTheme.of(context).componentStrokeColor);
+    var doubleBorder =
+        BorderSide(width: 1, color: TDTheme.of(context).componentStrokeColor);
     var topBorder = BorderSide.none,
         rightBorder = BorderSide.none,
         leftBorder = BorderSide.none;
@@ -236,37 +238,38 @@ class TDTableState extends State<TDTable> {
     // 单元格内容
     var text = _getCellText(col, title, ellipsis, isHeader, sortable, index);
     var content = text;
-    if((col.selection ?? false) && col.cellBuilder == null) {
+    if ((col.selection ?? false) && col.cellBuilder == null) {
       var checkBox;
       // 行选择框
-      if(_notEmptyData()) {
+      if (_notEmptyData()) {
         var enable = col.selectable?.call(index, widget.data?[index]) ?? true;
         checkBox = TDCheckbox(
           id: 'index:$index',
           checked: _checkedList[index],
           enable: enable,
           customIconBuilder: (context, checked) {
-            if(checked) {
-              return Icon(TDIcons.check_rectangle_filled, size: 16,
-                  color: TDTheme.of(context).brandNormalColor);
+            if (checked) {
+              return Icon(TDIcons.check_rectangle_filled,
+                  size: 16, color: TDTheme.of(context).brandNormalColor);
             }
-            return Icon(TDIcons.rectangle, size: 16,
-                color: enable ?
-                TDTheme.of(context).fontGyColor1 :
-                TDTheme.of(context).fontGyColor3);
+            return Icon(TDIcons.rectangle,
+                size: 16,
+                color: enable
+                    ? TDTheme.of(context).textColorPrimary
+                    : TDTheme.of(context).textColorPlaceholder);
           },
           onCheckBoxChanged: (checked) {
             setState(() {
               _checkedList[index] = checked;
-              if(checked) {
+              if (checked) {
                 _hasChecked += 1;
               } else {
                 _hasChecked -= 1;
               }
               _checkAll = _hasChecked == _totalSelectable;
               var selectList = [];
-              for(var i = 0; i < _checkedList.length; i++) {
-                if(_checkedList[i]) {
+              for (var i = 0; i < _checkedList.length; i++) {
+                if (_checkedList[i]) {
                   selectList.add(widget.data![i]);
                 }
               }
@@ -278,28 +281,33 @@ class TDTableState extends State<TDTable> {
       }
 
       // 表头选择框
-      if(isHeader) {
+      if (isHeader) {
         checkBox = TDCheckbox(
           id: 'header',
           checked: _checkAll,
           customIconBuilder: (context, checked) {
-            if(_hasChecked == 0 || _totalSelectable == 0) {
-              return Icon(TDIcons.rectangle, size: 16, color: TDTheme.of(context).fontGyColor3);
+            if (_hasChecked == 0) {
+              return Icon(
+                TDIcons.rectangle,
+                size: 16,
+                color: TDTheme.of(context).textColorPlaceholder,
+              );
             }
             var allCheck = _hasChecked >= _totalSelectable;
-            var halfSelected = _hasChecked > 0 && _hasChecked < _totalSelectable;
+            var halfSelected =
+                _hasChecked > 0 && _hasChecked < _totalSelectable;
             return getAllIcon(allCheck, halfSelected);
           },
           onCheckBoxChanged: (checked) {
             setState(() {
-              if(!_notEmptyData() && checked) {
+              if (!_notEmptyData() && checked) {
                 _hasChecked = _totalSelectable = 1;
               }
               _checkAll = checked;
               _hasChecked = checked ? _totalSelectable : 0;
-              for  (var i = 0; i < widget.data!.length; i++) {
+              for (var i = 0; i < widget.data!.length; i++) {
                 // 不选中selectable == false的行
-                if(_selectableCol.selectable!(i, widget.data![i])) {
+                if (_selectableCol.selectable!(i, widget.data![i])) {
                   _checkedList[i] = checked;
                 }
               }
@@ -356,8 +364,8 @@ class TDTableState extends State<TDTable> {
         overflow: overflow,
         style: TextStyle(
           color: isHeader
-              ? TDTheme.of(context).fontGyColor3
-              : TDTheme.of(context).fontGyColor1,
+              ? TDTheme.of(context).textColorPlaceholder
+              : TDTheme.of(context).textColorPrimary,
           fontSize: 14,
           height: 1,
           letterSpacing: 0,
@@ -366,7 +374,7 @@ class TDTableState extends State<TDTable> {
     // 表头（需考虑排序模式）
     if (isHeader) {
       var selectColor = TDTheme.of(context).brandNormalColor;
-      var unSelectColor = TDTheme.of(context).fontGyColor3;
+      var unSelectColor = TDTheme.of(context).textColorPlaceholder;
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -457,19 +465,19 @@ class TDTableState extends State<TDTable> {
     _hasChecked = 0;
     _checkedList = List.generate((widget.data?.length ?? 0), (index) => false);
     var cols = widget.columns.where((col) => col.selection ?? false);
-    if(cols.length > 1) {
+    if (cols.length > 1) {
       throw FlutterError('selectable column must be only one');
     }
-    if(widget.data != null && cols.isNotEmpty) {
+    if (widget.data != null && cols.isNotEmpty) {
       _selectableCol = cols.first;
       var data = widget.data!;
-      for(var i = 0; i < data.length; i++) {
+      for (var i = 0; i < data.length; i++) {
         var check = _selectableCol.checked?.call(i, data[i]) ?? false;
         _checkedList[i] = check;
-        if(check) {
+        if (check) {
           _hasChecked++;
         }
-        if(_selectableCol.selectable?.call(i, data[i]) ?? false) {
+        if (_selectableCol.selectable?.call(i, data[i]) ?? false) {
           _totalSelectable++;
         }
       }
@@ -503,8 +511,9 @@ class TDTableState extends State<TDTable> {
 
     // 固定列宽度
     var fixedCellsWidth = 0.0;
-    for(var tableCol in widget.columns) {
-      if(tableCol.fixed == TDTableColFixed.left || tableCol.fixed == TDTableColFixed.right) {
+    for (var tableCol in widget.columns) {
+      if (tableCol.fixed == TDTableColFixed.left ||
+          tableCol.fixed == TDTableColFixed.right) {
         fixedCellsWidth += (tableCol.width ?? cellWidth);
       }
     }
@@ -518,7 +527,7 @@ class TDTableState extends State<TDTable> {
 
     // 非固定列宽度超过剩余宽度 需要开启滚动
     if ((width - fixedCellsWidth) < fixedNonCellsWidth) {
-      var content = [Row(children: fixedNonCols), _getEmpty('暂无数据')];
+      var content = [Row(children: fixedNonCols), _buildEmpty()];
       if (widget.loading ?? false) {
         content = [
           Row(children: fixedNonCols),
@@ -534,7 +543,7 @@ class TDTableState extends State<TDTable> {
       }
       return Container(
         width: width,
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -557,7 +566,7 @@ class TDTableState extends State<TDTable> {
     }
     var child = Container(
       width: width,
-      color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+      color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
       child: Row(
         children: [
           ...fixedLeftCols,
@@ -566,7 +575,7 @@ class TDTableState extends State<TDTable> {
         ],
       ),
     );
-    var placeholder = _getEmpty('暂无数据');
+    var placeholder = _buildEmpty();
     if (widget.loading ?? false) {
       placeholder = Align(
         alignment: Alignment.center,
@@ -578,13 +587,13 @@ class TDTableState extends State<TDTable> {
       );
     }
     return Container(
-      color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+      color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
       child: Column(children: [child, placeholder]),
     );
   }
 
   /// 空数据内容
-  Widget _getEmpty(String defaultText) {
+  Widget _buildEmpty() {
     return Visibility(
       visible: widget.data == null || widget.data!.isEmpty,
       child: Align(
@@ -594,16 +603,16 @@ class TDTableState extends State<TDTable> {
           child: TDEmpty(
             image: Visibility(
               visible: widget.empty?.assetUrl != null,
-              child: _getEmptyImage(),
+              child: _buildEmptyImage(),
             ),
-            emptyText: widget.empty?.text ?? defaultText,
+            emptyText: widget.empty?.text ?? context.resource.emptyData,
           ),
         ),
       ),
     );
   }
 
-  TDImage _getEmptyImage() {
+  TDImage _buildEmptyImage() {
     var url = widget.empty?.assetUrl ?? '';
     if (url.startsWith('http')) {
       return TDImage(imgUrl: url);
@@ -650,10 +659,15 @@ class TDTableState extends State<TDTable> {
   /// 半选图标
   Widget getAllIcon(bool checked, bool halfSelected) {
     return Icon(
-        checked ? TDIcons.check_rectangle_filled : halfSelected ? TDIcons.minus_rectangle_filled : TDIcons.check_rectangle,
+        checked
+            ? TDIcons.check_rectangle_filled
+            : halfSelected
+                ? TDIcons.minus_rectangle_filled
+                : TDIcons.check_rectangle,
         size: 16,
-        color: (checked || halfSelected) ? TDTheme.of(context).brandNormalColor : TDTheme.of(context).grayColor4
-    );
+        color: (checked || halfSelected)
+            ? TDTheme.of(context).brandNormalColor
+            : TDTheme.of(context).textColorDisabled);
   }
 
   @override
@@ -677,7 +691,7 @@ class TDTableState extends State<TDTable> {
     if (width < _getColsWidth()) {
       return Container(
         width: width,
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           physics: const ClampingScrollPhysics(),
@@ -702,7 +716,7 @@ class TDTableState extends State<TDTable> {
     }
     return Container(
       width: width,
-      color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+      color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
       child: Column(
         children: [
           Visibility(
@@ -729,10 +743,10 @@ class ChevronPainter extends CustomPainter {
     required this.downColor,
   });
 
-  /// 线条颜色(向上)
+  /// 线条颜色（向上）
   final Color upColor;
 
-  /// 线条颜色(向下)
+  /// 线条颜色（向下）
   final Color downColor;
 
   @override
@@ -753,6 +767,7 @@ class ChevronPainter extends CustomPainter {
     upPath.moveTo(3.6, centerY - 1.8);
     upPath.lineTo(centerX, 2);
     upPath.lineTo(clientX - 3.6, centerY - 1.8);
+    upPath.close();
 
     // 向下箭头
     final downPaint = Paint()
@@ -764,6 +779,7 @@ class ChevronPainter extends CustomPainter {
     downPath.moveTo(3.6, centerY + 1.8);
     downPath.lineTo(centerX, clientY - 2);
     downPath.lineTo(clientX - 3.6, centerY + 1.8);
+    downPath.close();
 
     canvas.drawPath(upPath, upPaint);
     canvas.drawPath(downPath, downPaint);

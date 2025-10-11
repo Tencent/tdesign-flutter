@@ -16,11 +16,10 @@ class TDLoadingController {
       Color? iconColor,
       String? text,
       Widget? refreshWidget,
-      Color textColor = Colors.black,
+      Color? textColor,
       Axis axis = Axis.vertical,
       Widget? customIcon,
       int duration = 2000}) {
-
     if (_isShowing) {
       print('warn: TDLoading is showing!');
       return;
@@ -55,10 +54,10 @@ class TDLoadingController {
   // 消失
   static void dismiss() {
     if (_isShowing) {
-     if (_overlayEntry != null) {
-       _overlayEntry?.remove();
-       _overlayEntry = null;
-     }
+      if (_overlayEntry != null) {
+        _overlayEntry?.remove();
+        _overlayEntry = null;
+      }
       _isShowing = false;
     }
   }

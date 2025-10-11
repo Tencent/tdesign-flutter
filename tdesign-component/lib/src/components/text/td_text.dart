@@ -16,19 +16,19 @@ var kTextNeedGlobalFontFamily = true;
 
 /// 文本控件
 /// 设计原则：
-/// 1.为了使用更方便，所以对系统组件进行的扩展，需兼容系统控件所有功能，不能让用户使用TDesign时，因不能满足系统功能而弃用。
-/// 2.非系统已有属性，尽量添加注释
+/// 1. 为了使用更方便，所以对系统组件进行的扩展，需兼容系统控件所有功能，不能让用户使用 TDesign 时，因不能满足系统功能而弃用。
+/// 2. 非系统已有属性，尽量添加注释
 ///
-/// 需求：把一部分在TextStyle中的属性扁平化，放到外层。
-/// 1.暴露系统的所有属性，支持系统所有操作
-/// 2.约束使用主题配置的几种字体
-/// 3.提供转换为系统Text的方法，以使某些系统组件指定接收系统Text时可使用。（Image组件同理）
-/// 4.支持自定义TextStyle
-/// 5.兼容TextSpan形式
+/// 需求：把一部分在 TextStyle 中的属性扁平化，放到外层。
+/// 1. 暴露系统的所有属性，支持系统所有操作
+/// 2. 约束使用主题配置的几种字体
+/// 3. 提供转换为系统 Text 的方法，以使某些系统组件指定接收系统 Text 时可使用。（Image 组件同理）
+/// 4. 支持自定义 TextStyle
+/// 5. 兼容 TextSpan 形式
 ///
 /// 技巧：
 /// 命名参数替换属性的正则：
-/// 第一步，把Text中的可选参数拷贝过来，变成如下格式：
+/// 第一步，把 Text 中的可选参数拷贝过来，变成如下格式：
 /// Text(data,
 /// this.style,
 /// this.strutStyle,
@@ -43,10 +43,10 @@ class TDText extends StatelessWidget {
     this.font,
     this.fontWeight,
     this.fontFamily,
-    this.textColor = Colors.black,
+    this.textColor,
     this.backgroundColor,
     this.isTextThrough = false,
-    this.lineThroughColor = Colors.white,
+    this.lineThroughColor,
     this.package,
     this.style,
     this.strutStyle,
@@ -73,10 +73,10 @@ class TDText extends StatelessWidget {
     this.font,
     this.fontWeight,
     this.fontFamily,
-    this.textColor = Colors.black,
+    this.textColor,
     this.backgroundColor,
     this.isTextThrough = false,
-    this.lineThroughColor = Colors.white,
+    this.lineThroughColor,
     this.package,
     Key? key,
     this.style,
@@ -97,7 +97,7 @@ class TDText extends StatelessWidget {
   })  : data = null,
         super(key: key);
 
-  /// 字体尺寸，包含大小size和行高height
+  /// 字体尺寸，包含 大小size 和 行高height
   final Font? font;
 
   /// 字体粗细
@@ -107,7 +107,7 @@ class TDText extends StatelessWidget {
   final FontFamily? fontFamily;
 
   /// 文本颜色
-  final Color textColor;
+  final Color? textColor;
 
   /// 背景颜色
   final Color? backgroundColor;
@@ -115,16 +115,16 @@ class TDText extends StatelessWidget {
   /// 字体包名
   final String? package;
 
-  /// 是否是横线穿过样式(删除线)
+  /// 是否是横线穿过样式（删除线）
   final bool? isTextThrough;
 
-  /// 删除线颜色，对应TestStyle的decorationColor
+  /// 删除线颜色，对应 TestStyle 的 decorationColor
   final Color? lineThroughColor;
 
-  /// 自定义的TextStyle，其中指定的属性，将覆盖扩展的外层属性
+  /// 自定义的 TextStyle，其中指定的属性，将覆盖扩展的外层属性
   final TextStyle? style;
 
-  /// 以下系统text属性，释义请参考系统[Text]中注释
+  /// 以下系统 text 属性，释义请参考系统 [Text] 中注释
   final data;
 
   final StrutStyle? strutStyle;
@@ -154,16 +154,16 @@ class TDText extends StatelessWidget {
   /// 是否强制居中
   final bool forceVerticalCenter;
 
-  /// 是否在FontLoader中使用
+  /// 是否在 FontLoader 中使用
   final bool isInFontLoader;
 
-  /// 是否禁用懒加载FontFamily的能力
+  /// 是否禁用懒加载 FontFamily 的能力
   final String? fontFamilyUrl;
 
   @override
   Widget build(BuildContext context) {
     if (fontFamilyUrl?.isNotEmpty ?? false) {
-      // 如果设置了Url,则使用TGFontLoader
+      // 如果设置了 Url，则使用 TGFontLoader
       return TDFontLoaderWidget(
         textWidget: this,
         fontFamilyUrl: fontFamilyUrl!,
@@ -173,7 +173,9 @@ class TDText extends StatelessWidget {
       var config = getConfiguration(context);
       var paddingConfig = config?.paddingConfig;
 
-      var textFont = font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
+      var textFont = font ??
+          TDTheme.of(context).fontBodyLarge ??
+          Font(size: 16, lineHeight: 24);
       var fontSize = style?.fontSize ?? textFont.size;
       var height = style?.height ?? textFont.height;
 
@@ -183,7 +185,9 @@ class TDText extends StatelessWidget {
         color: style?.backgroundColor ?? backgroundColor,
         height: fontSize * height,
         padding: paddingConfig.getPadding(data, fontSize, height),
-        child: _getRawText(context: context, textStyle: getTextStyle(context, height: showHeight)),
+        child: _getRawText(
+            context: context,
+            textStyle: getTextStyle(context, height: showHeight)),
       );
     }
     var bgColor = style?.backgroundColor ?? backgroundColor;
@@ -196,13 +200,16 @@ class TDText extends StatelessWidget {
     );
   }
 
-  /// 提取成方法，允许业务定义自己的TDTextConfiguration
+  /// 提取成方法，允许业务定义自己的 TDTextConfiguration
   TDTextConfiguration? getConfiguration(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<TDTextConfiguration>();
   }
 
-  TextStyle? getTextStyle(BuildContext context, {double? height, Color? backgroundColor}) {
-    var textFont = font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
+  TextStyle? getTextStyle(BuildContext context,
+      {double? height, Color? backgroundColor}) {
+    var textFont = font ??
+        TDTheme.of(context).fontBodyLarge ??
+        Font(size: 16, lineHeight: 24);
 
     var stylePackage = package ?? fontFamily?.package;
     var styleFontFamily = style?.fontFamily ?? fontFamily?.fontFamily;
@@ -212,7 +219,7 @@ class TDText extends StatelessWidget {
       stylePackage ??= globalFontFamily?.package;
     }
     var realFontWeight = style?.fontWeight ?? fontWeight;
-    // Flutter 3.0之后，iOS w500之下字体不生效，需要替换字体
+    // Flutter 3.0 之后，iOS w500 之下字体不生效，需要替换字体
     if (PlatformUtil.isIOS &&
         (styleFontFamily == null || styleFontFamily.isEmpty) &&
         realFontWeight != null &&
@@ -220,11 +227,13 @@ class TDText extends StatelessWidget {
       stylePackage = null;
       styleFontFamily = 'PingFang SC';
     }
+    var color =
+        style?.color ?? textColor ?? TDTheme.of(context).textColorPrimary;
     return TextStyle(
       inherit: style?.inherit ?? true,
-      color: style?.color ?? textColor,
+      color: color,
 
-      /// 不使用系统本身的背景色，因为系统属性存在中英文是，会导致颜色出现阶梯状
+      /// 不使用系统本身的背景色，因为系统属性存在中英文时，会导致颜色出现阶梯状
       backgroundColor: backgroundColor,
       fontSize: style?.fontSize ?? textFont.size,
       fontWeight: style?.fontWeight ?? fontWeight ?? textFont.fontWeight,
@@ -239,30 +248,35 @@ class TDText extends StatelessWidget {
       background: style?.background,
       shadows: style?.shadows,
       fontFeatures: style?.fontFeatures,
-      decoration: style?.decoration ?? (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
-      decorationColor: style?.decorationColor ?? lineThroughColor,
+      decoration: style?.decoration ??
+          (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
+      decorationColor: style?.decorationColor ?? lineThroughColor ?? color,
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
-      // 如果需要字体懒加载,则清空fontFamily
+      // 如果需要字体懒加载，则清空 fontFamily
       fontFamily: styleFontFamily,
       fontFamilyFallback: style?.fontFamilyFallback,
       package: isInFontLoader ? null : stylePackage,
     );
   }
 
-  /// 获取系统原始Text，以便使用到只能接收系统Text组件的地方
-  /// 转化为系统原始Text后，将失去padding和background属性
+  /// 获取系统原始 [Text]，以便使用到只能接收系统 [Text] 组件的地方
+  /// 转化为系统原始 [Text] 后，将失去 padding 和 background 属性
   Text getRawText({required BuildContext context}) {
     return _getRawText(context: context, backgroundColor: backgroundColor);
   }
 
-  Text _getRawText({required BuildContext context, TextStyle? textStyle, Color? backgroundColor}) {
+  Text _getRawText(
+      {required BuildContext context,
+      TextStyle? textStyle,
+      Color? backgroundColor}) {
     return textSpan == null
         ? Text(
             data,
             key: key,
-            style: textStyle ?? getTextStyle(context, backgroundColor: backgroundColor),
+            style: textStyle ??
+                getTextStyle(context, backgroundColor: backgroundColor),
             strutStyle: strutStyle,
             textAlign: textAlign,
             textDirection: textDirection,
@@ -277,7 +291,8 @@ class TDText extends StatelessWidget {
           )
         : Text.rich(
             textSpan!,
-            style: textStyle ?? getTextStyle(context, backgroundColor: backgroundColor),
+            style: textStyle ??
+                getTextStyle(context, backgroundColor: backgroundColor),
             strutStyle: strutStyle,
             textAlign: textAlign,
             textDirection: textDirection,
@@ -293,17 +308,18 @@ class TDText extends StatelessWidget {
   }
 }
 
-/// TextSpan的TDesign扩展，将部分TextStyle中的参数扁平化。
+/// TextSpan 的 TDesign 扩展，将部分 TextStyle 中的参数扁平化。
 class TDTextSpan extends TextSpan {
   /// 构造参数，扩展参数释义可参考[TDText]中字段注释
   TDTextSpan({
-    BuildContext? context, // 如果未设置font，且不想使用默认的fontBodyLarge尺寸时，需设置context，否则可省略
+    BuildContext?
+        context, // 如果未设置font，且不想使用默认的 fontBodyLarge 尺寸时，需设置context，否则可省略
     Font? font,
     FontWeight? fontWeight,
     FontFamily? fontFamily,
-    Color textColor = Colors.black,
+    Color? textColor,
     bool? isTextThrough = false,
-    Color? lineThroughColor = Colors.white,
+    Color? lineThroughColor,
     String? package,
     String? text,
     List<InlineSpan>? children,
@@ -316,8 +332,8 @@ class TDTextSpan extends TextSpan {
   }) : super(
           text: text,
           children: children,
-          style: _getTextStyle(
-              context, style, font, fontWeight, fontFamily, textColor, isTextThrough, lineThroughColor, package),
+          style: _getTextStyle(context, style, font, fontWeight, fontFamily,
+              textColor, isTextThrough, lineThroughColor, package),
           recognizer: recognizer,
           mouseCursor: mouseCursor,
           onEnter: onEnter,
@@ -331,15 +347,19 @@ class TDTextSpan extends TextSpan {
     Font? font,
     FontWeight? fontWeight,
     FontFamily? fontFamily,
-    Color textColor,
+    Color? textColor,
     bool? isTextThrough,
     Color? lineThroughColor,
     String? package,
   ) {
-    var textFont = font ?? TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24);
+    var textFont = font ??
+        TDTheme.of(context).fontBodyLarge ??
+        Font(size: 16, lineHeight: 24);
+    var color =
+        style?.color ?? textColor ?? TDTheme.of(context).textColorPrimary;
     return TextStyle(
       inherit: style?.inherit ?? true,
-      color: style?.color ?? textColor,
+      color: color,
       backgroundColor: style?.backgroundColor,
       fontSize: style?.fontSize ?? textFont.size,
       fontWeight: style?.fontWeight ?? fontWeight ?? textFont.fontWeight,
@@ -354,8 +374,9 @@ class TDTextSpan extends TextSpan {
       background: style?.background,
       shadows: style?.shadows,
       fontFeatures: style?.fontFeatures,
-      decoration: style?.decoration ?? (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
-      decorationColor: style?.decorationColor ?? lineThroughColor,
+      decoration: style?.decoration ??
+          (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
+      decorationColor: style?.decorationColor ?? lineThroughColor ?? color,
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
@@ -366,15 +387,19 @@ class TDTextSpan extends TextSpan {
   }
 }
 
-/// 存储可以自定义TDText居中算法数据的内部控件
+/// 存储可以自定义 TDText 居中算法数据的内部控件
 class TDTextConfiguration extends InheritedWidget {
-  /// forceVerticalCenter=true时，内置padding配置
+  /// forceVerticalCenter=true 时，内置 padding 配置
   final TDTextPaddingConfig? paddingConfig;
 
-  /// 全局字体,kTextNeedGlobalFontFamily=true时生效
+  /// 全局字体，kTextNeedGlobalFontFamily=true 时生效
   final FontFamily? globalFontFamily;
 
-  const TDTextConfiguration({Key? key, required Widget child, this.paddingConfig, this.globalFontFamily})
+  const TDTextConfiguration(
+      {Key? key,
+      required Widget child,
+      this.paddingConfig,
+      this.globalFontFamily})
       : super(key: key, child: child);
 
   @override
@@ -383,10 +408,10 @@ class TDTextConfiguration extends InheritedWidget {
   }
 }
 
-/// 通过Padding自定义TDText居中算法
+/// 通过 Padding 自定义 TDText 居中算法
 class TDTextPaddingConfig {
   static TDTextPaddingConfig? _defaultConfig;
-  static final Map _cacheMap = {};
+  static final Map<double, Map<double, EdgeInsetsGeometry>> _cacheMap = {};
 
   /// 获取默认配置
   static TDTextPaddingConfig getDefaultConfig() {
@@ -394,7 +419,7 @@ class TDTextPaddingConfig {
     return _defaultConfig!;
   }
 
-  /// 获取padding
+  /// 获取 padding
   EdgeInsetsGeometry getPadding(String? data, double fontSize, double height) {
     var cache = _cacheMap[fontSize]?[height];
     if (cache != null) {
@@ -427,17 +452,18 @@ class TDTextPaddingConfig {
     return padding;
   }
 
-  /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
+  /// todo 【待优化】在 web 中，顶部会有内边距（如24号字体有大小为6的内边距）
+  /// 以多个汉字测量计算的平均值，Android为Pixel 4 模拟器，iOS 为 iphone 8 plus 模拟器
   double get paddingRate {
     if (VersionUtil.isAfterThen('3.2.0')) {
-      // Dart 3.2.0之后,文字渲染高度有改变.
+      // Dart 3.2.0 之后，文字渲染高度有改变。
       return PlatformUtil.isWeb
           ? 29 / 128
           : PlatformUtil.isAndroid
               ? -20 / 128
               : PlatformUtil.isOhos
-                ? 43 / 128
-                : -10 / 128;
+                  ? 43 / 128
+                  : -10 / 128;
     }
     return PlatformUtil.isWeb
         ? 3 / 8
@@ -448,9 +474,9 @@ class TDTextPaddingConfig {
                 : 0;
   }
 
-  /// 以多个汉字测量计算的平均值,Android为Pixel 4模拟器，iOS为iphone 8 plus 模拟器
+  /// 以多个汉字测量计算的平均值，Android 为 Pixel 4 模拟器，iOS 为 iphone 8 plus 模拟器
   double get paddingExtraRate => PlatformUtil.isAndroid ? 115 / 256 : 97 / 240;
 
-  /// height比率，因为设置1时，Android文字可能显示不全，默认为1.1
+  /// height比 率，因为设置 1 时，Android 文字可能显示不全，默认为 1.1
   double get heightRate => PlatformUtil.isAndroid ? 1.1 : 1;
 }
