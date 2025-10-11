@@ -37,7 +37,8 @@ class TDSwipeCellPanel {
           confirms == null ||
               confirms.every((item) =>
                   item.confirmIndex != null &&
-                  item.confirmIndex!.every((index) => index >= 0 && index < children.length)),
+                  item.confirmIndex!
+                      .every((index) => index >= 0 && index < children.length)),
           'Confirms must have a confirmIndex, '
           'and each confirmIndex in confirms must be within the range of children indices.',
         );
@@ -81,9 +82,11 @@ class TDSwipeCellPanel {
   /// 移除后回调。dragDismissible为true才有效
   final void Function(BuildContext context)? onDismissed;
 
-  Duration get _dismissalDuration => dismissalDuration ?? const Duration(milliseconds: 300);
+  Duration get _dismissalDuration =>
+      dismissalDuration ?? const Duration(milliseconds: 300);
 
-  Duration get _resizeDuration => resizeDuration ?? const Duration(milliseconds: 300);
+  Duration get _resizeDuration =>
+      resizeDuration ?? const Duration(milliseconds: 300);
 
   bool get _dragDismissible => dragDismissible ?? false;
 

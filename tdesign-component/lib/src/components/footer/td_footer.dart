@@ -49,38 +49,29 @@ class TDFooter extends StatefulWidget {
 class _TDFooterState extends State<TDFooter> {
   @override
   Widget build(BuildContext context) {
+    var children = <Widget>[];
+
     switch (widget.type) {
       case TDFooterType.text:
-        return Container(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _renderText(),
-            ],
-          ),
-        );
+        children = [_renderText()];
+        break;
       case TDFooterType.link:
-        return Container(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (widget.links.isNotEmpty) _renderLinks() else _renderText(),
-            ],
-          ),
-        );
+        children = [
+          if (widget.links.isNotEmpty) _renderLinks() else _renderText()
+        ];
+        break;
       case TDFooterType.brand:
-        return Container(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (widget.logo != null) _renderLogo() else _renderText(),
-            ],
-          ),
-        );
+        children = [if (widget.logo != null) _renderLogo() else _renderText()];
+        break;
     }
+
+    return Container(
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: children,
+      ),
+    );
   }
 
   Widget _renderLogo() {
@@ -112,7 +103,8 @@ class _TDFooterState extends State<TDFooter> {
                     ? BoxDecoration(
                         border: Border(
                             right: BorderSide(
-                                color: TDTheme.of(context).grayColor3)))
+                                color:
+                                    TDTheme.of(context).textColorPlaceholder)))
                     : null,
                 padding: const EdgeInsets.symmetric(horizontal: 6),
                 child: link,
@@ -136,7 +128,7 @@ class _TDFooterState extends State<TDFooter> {
       textAlign: TextAlign.center,
       style: TextStyle(
         fontSize: 12,
-        color: TDTheme.of(context).fontGyColor3,
+        color: TDTheme.of(context).textColorPlaceholder,
       ),
     );
   }

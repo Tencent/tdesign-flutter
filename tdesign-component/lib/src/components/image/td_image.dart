@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../../../tdesign_flutter.dart';
-import '../../util/string_util.dart';
-import 'dart:io';
 
 enum TDImageType {
   /// 裁剪
@@ -126,6 +127,7 @@ class TDImage extends StatefulWidget {
 }
 
 class _TDImageState extends State<TDImage> {
+  /// @todo 重复代码，需简化
   @override
   Widget build(BuildContext context) {
     switch (widget.type) {
@@ -279,7 +281,9 @@ class _TDImageState extends State<TDImage> {
         return widget.imageFile == null
             ? (widget.assetUrl == null
                 ? ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: widget.height ?? 72, maxWidth: widget.width ?? 72),
+                    constraints: BoxConstraints(
+                        maxHeight: widget.height ?? 72,
+                        maxWidth: widget.width ?? 72),
                     child: ImageWidget.network(
                       widget.imgUrl,
                       height: widget.height ?? 72,
@@ -307,7 +311,9 @@ class _TDImageState extends State<TDImage> {
                     ),
                   )
                 : ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: widget.height ?? 72, maxWidth: widget.width ?? 72),
+                    constraints: BoxConstraints(
+                        maxHeight: widget.height ?? 72,
+                        maxWidth: widget.width ?? 72),
                     child: ImageWidget.asset(
                       widget.assetUrl!,
                       width: widget.width ?? 72,
@@ -432,7 +438,9 @@ class _TDImageState extends State<TDImage> {
             height: widget.height ?? 72,
             width: widget.width ?? 72,
             clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+            decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             child: widget.imageFile == null
                 ? (widget.assetUrl == null
                     ? ImageWidget.network(

@@ -29,7 +29,6 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
       title: tdTitle(),
       desc: '适用于选择树形的数据结构',
       exampleCodeGroup: 'tree',
-      backgroundColor: TDTheme.of(context).grayColor2,
       children: [
         ExampleModule(
           title: '组件类型',
@@ -47,7 +46,7 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
       ],
       test: [
         ExampleItem(desc: '局部多选', builder: _buildPartMultipleTreeSelect),
-        ExampleItem(desc: '局部多选', builder: _buildPartMultipleTreeSelect),
+        ExampleItem(desc: '局部多选', builder: _buildPartMultipleTreeSelect2),
       ],
     );
   }
@@ -100,7 +99,6 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
     );
   }
 
-
   @Demo(group: 'tree')
   Widget _buildThirdTreeSelect(BuildContext context) {
     var options = <TDSelectOption>[];
@@ -115,20 +113,21 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
 
       for (var j = 1; j <= 3; j++) {
         options[i - 1].children.add(TDSelectOption(
-          label: '${j == 1 ? '特别长的二级选项特别长的二级选项特别长的二级选项' : '选项$i.$j'}',
-          value: i * 10 + j,
-          maxLines: 2,
-          columnWidth: j == 1 ?  180: null,
-          children: [],
-        ));
+              label: '${j == 1 ? '特别长的二级选项特别长的二级选项特别长的二级选项' : '选项$i.$j'}',
+              value: i * 10 + j,
+              maxLines: 2,
+              columnWidth: j == 1 ? 180 : null,
+              children: [],
+            ));
 
         for (var k = 1; k <= 3; k++) {
           options[i - 1].children[j - 1].children.add(TDSelectOption(
-            label: '${k == 1 ? '非常长的三级选项名称非常长的三级选项名称非常长的三级选项名称' : '选项$i.$j.$k'}',
-            value: i * 100 + j * 10 + k,
-            maxLines: 2,
-            //columnWidth: k == 1 ? 102 : null,
-          ));
+                label:
+                    '${k == 1 ? '非常长的三级选项名称非常长的三级选项名称非常长的三级选项名称' : '选项$i.$j.$k'}',
+                value: i * 100 + j * 10 + k,
+                maxLines: 2,
+                //columnWidth: k == 1 ? 102 : null,
+              ));
         }
       }
     }
@@ -187,6 +186,7 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
     return TDTreeSelect(
       options: options,
       defaultValue: values1,
+      style: TDTreeSelectStyle.outline,
       onChange: (val, level) {
         print('$val, $level');
       },

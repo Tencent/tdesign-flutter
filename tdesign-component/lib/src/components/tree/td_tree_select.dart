@@ -7,8 +7,14 @@ import '../../../tdesign_flutter.dart';
 typedef TDTreeSelectChangeEvent = void Function(List<dynamic>, int level);
 
 class TDSelectOption {
-  TDSelectOption(
-      {required this.label, required this.value, this.children = const [], this.multiple = false,this.maxLines = 1,this.columnWidth,});
+  TDSelectOption({
+    required this.label,
+    required this.value,
+    this.children = const [],
+    this.multiple = false,
+    this.maxLines = 1,
+    this.columnWidth,
+  }) : assert(maxLines > 0, 'maxLines must be greater than 0');
 
   /// 标签
   final String label;
@@ -35,15 +41,15 @@ enum TDTreeSelectStyle {
 }
 
 class TDTreeSelect extends StatefulWidget {
-  const TDTreeSelect(
-      {Key? key,
-        this.options = const [],
-        this.defaultValue = const [],
-        this.onChange,
-        this.multiple = false,
-        this.style = TDTreeSelectStyle.normal,
-        this.height = 336})
-      : super(key: key);
+  const TDTreeSelect({
+    Key? key,
+    this.options = const [],
+    this.defaultValue = const [],
+    this.onChange,
+    this.multiple = false,
+    this.style = TDTreeSelectStyle.normal,
+    this.height = 336,
+  }) : super(key: key);
 
   /// 展示的选项列表
   final List<TDSelectOption> options;
@@ -72,24 +78,30 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
   ScrollController controller3 = ScrollController();
 
   List<dynamic> values = [];
+
   int get currentLevel => values.length + 1;
+
   int? get firstValue => values.isNotEmpty ? values[0] : null;
+
   dynamic get secondValue => values.length >= 2 ? values[1] : null;
+
   dynamic get thirdValue => values.length >= 3 ? values[2] : null;
 
   List<TDSelectOption> get firstOptions => widget.options;
+
   List<TDSelectOption> get secondOptions => maxLevel() <= 1 || values.isEmpty
       ? []
       : firstOptions
-      .firstWhere((opt) => opt.value == firstValue,
-      orElse: () => TDSelectOption(value: -1, label: '', children: []))
-      .children;
+          .firstWhere((opt) => opt.value == firstValue,
+              orElse: () => TDSelectOption(value: -1, label: '', children: []))
+          .children;
+
   List<TDSelectOption> get thirdOptions => maxLevel() <= 2 || currentLevel < 3
       ? []
       : secondOptions
-      .firstWhere((opt) => opt.value == secondValue,
-      orElse: () => TDSelectOption(value: -1, label: '', children: []))
-      .children;
+          .firstWhere((opt) => opt.value == secondValue,
+              orElse: () => TDSelectOption(value: -1, label: '', children: []))
+          .children;
 
   @override
   void initState() {
@@ -98,8 +110,16 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
     values = List.from(widget.defaultValue);
     if (values.isEmpty && widget.options.isNotEmpty) {
       final option = widget.options[0];
-      values.add((widget.multiple || option.multiple) ? [option.value] : option.value);
+      values.add(
+          (widget.multiple || option.multiple) ? [option.value] : option.value);
     }
+  }
+
+  @override
+  void dispose() {
+    controller2.dispose();
+    controller3.dispose();
+    super.dispose();
   }
 
   int maxLevel() {
@@ -122,106 +142,116 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: _getLevelWidth(widget.options, 1) ?? 106,
-          height: widget.height,
-          decoration: BoxDecoration(
-            color: widget.style == TDTreeSelectStyle.outline
-                ? Colors.white
-                : const Color(0xFFF6F6F6),
-            border: widget.style == TDTreeSelectStyle.outline
-                ? Border(right: BorderSide(color: Colors.grey.shade200))
-                : null,
-          ),
-          child: ListView.builder(
-            itemCount: widget.options.length,
-            itemBuilder: (context, index) {
-              final option = widget.options[index];
-              final isSelected = firstValue == option.value;
+    return Container(
+        color: TDTheme.of(context).bgColorContainer,
+        height: widget.height,
+        child: Row(
+          children: [
+            /// 一级菜单
+            Container(
+              width: _getLevelWidth(widget.options, 1) ?? 106,
+              color: TDTheme.of(context).bgColorSecondaryContainer,
+              child: ListView.builder(
+                itemCount: widget.options.length,
+                itemBuilder: (context, index) {
+                  final option = widget.options[index];
+                  final isSelected = firstValue == option.value;
 
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    if (values.isEmpty) {
-                      values.add(option.value);
-                    } else {
-                      values = [option.value];
-                      if (controller2.hasClients) controller2.jumpTo(0);
-                    }
-                    widget.onChange?.call(values, 1);
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  decoration: BoxDecoration(
-                    color: isSelected ? Colors.white : null,
-                    border: isSelected && widget.style == TDTreeSelectStyle.outline
-                        ? Border(
-                      left: BorderSide(
-                        color: TDTheme.of(context).brandNormalColor,
-                        width: 3,
+                  return GestureDetector(
+                    onTap: () {
+                      // todo 点击一级菜单时直接重置整个 values 数组可能导致二级或三级选择的数据丢失
+                      setState(() {
+                        if (values.isEmpty) {
+                          values.add(option.value);
+                        } else {
+                          values = [option.value];
+                          if (controller2.hasClients) {
+                            controller2.jumpTo(0);
+                          }
+                        }
+                        widget.onChange?.call(values, 1);
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? TDTheme.of(context).bgColorContainer
+                            : null,
+                        border: isSelected &&
+                                widget.style == TDTreeSelectStyle.outline
+                            ? Border(
+                                left: BorderSide(
+                                  color: TDTheme.of(context).brandNormalColor,
+                                  width: 3,
+                                ),
+                              )
+                            : null,
+
+                        /// todo 上下 borderRadius
+                        borderRadius: BorderRadius.only(
+
+                            /// 选中的上一个
+                            /*topRight: Radius.circular(
+                              topAdjacent ? TDTheme.of(context).radiusLarge : 0),*/
+
+                            /// 选中的下一个
+                            /* bottomRight: Radius.circular(
+                              bottomAdjacent ? TDTheme.of(context).radiusLarge : 0),*/
+                            ),
                       ),
-                    )
-                        : null,
-                  ),
-                  child: Text(
-                    option.label,
-                    maxLines: option.maxLines,
-                    overflow: option.maxLines == 1
-                        ? TextOverflow.ellipsis
-                        : TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: isSelected
-                          ? TDTheme.of(context).brandNormalColor
-                          : const Color(0xFF333333),
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      child: Text(
+                        option.label,
+                        maxLines: option.maxLines,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize:
+                              TDTheme.of(context).fontBodyLarge?.size ?? 16,
+                          color: isSelected
+                              ? TDTheme.of(context).brandNormalColor
+                              : TDTheme.of(context).textColorPrimary,
+                          fontWeight:
+                              isSelected ? FontWeight.w600 : FontWeight.normal,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        Expanded(
-          child: Container(
-            height: widget.height,
-            decoration: const BoxDecoration(color: Colors.white),
-            child: _buildRightParts(context),
-          ),
-        ),
-      ],
-    );
+                  );
+                },
+              ),
+            ),
+
+            /// 右侧 二、三级菜单
+            Expanded(child: _buildRightParts(context))
+          ],
+        ));
   }
 
   Widget _buildRightParts(BuildContext context) {
     // 判断是否应该显示三级菜单
     final showThirdLevel = values.length >= 2 &&
-        secondOptions.any((opt) => opt.value == secondValue && opt.children.isNotEmpty);
+        secondOptions
+            .any((opt) => opt.value == secondValue && opt.children.isNotEmpty);
 
     return Row(
       children: [
         showThirdLevel
             ? SizedBox(
-          width: _getLevelWidth(secondOptions, 2) ?? 103,
-          child: _buildNextColumn(context, level: 2, lastColumn: false),
-        )
+                width: _getLevelWidth(secondOptions, 2) ?? 103,
+                child: _buildNextColumn(context, level: 2, lastColumn: false),
+              )
             : Expanded(
-          child: _buildNextColumn(context, level: 2),
-        ),
-
+                child: _buildNextColumn(context, level: 2),
+              ),
         if (showThirdLevel)
-        // 三级菜单
+          // 三级菜单
           _getLevelWidth(thirdOptions, 3) != null
               ? SizedBox(
-            width: _getLevelWidth(thirdOptions, 3),
-            child: _buildNextColumn(context, level: 3),
-          )
+                  width: _getLevelWidth(thirdOptions, 3),
+                  child: _buildNextColumn(context, level: 3),
+                )
               : Expanded(
-            child: _buildNextColumn(context, level: 3),
-          ),
+                  child: _buildNextColumn(context, level: 3),
+                ),
       ],
     );
   }
@@ -235,7 +265,8 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
     return null;
   }
 
-  Widget _buildNextColumn(BuildContext context, {int level = 2, bool lastColumn = true}) {
+  Widget _buildNextColumn(BuildContext context,
+      {int level = 2, bool lastColumn = true}) {
     var displayOptions = level == 2 ? secondOptions : thirdOptions;
 
     return LayoutBuilder(
@@ -249,7 +280,9 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
             itemCount: displayOptions.length,
             itemBuilder: (BuildContext ctx, int index) {
               var currentValue = displayOptions[index].value;
-              final isMultiple = widget.multiple ? widget.multiple : displayOptions[index].multiple;
+              final isMultiple = widget.multiple
+                  ? widget.multiple
+                  : displayOptions[index].multiple;
               final maxLines = displayOptions[index].maxLines;
               var selected = false;
               if (isMultiple) {
@@ -267,7 +300,8 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                       : false;
                 }
               } else {
-                selected = (level == 2 ? secondValue : thirdValue) == currentValue;
+                selected =
+                    (level == 2 ? secondValue : thirdValue) == currentValue;
               }
 
               return Container(
@@ -278,15 +312,18 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
+                    /// todo 逻辑过于冗余，待优化
                     setState(() {
                       if (level == 2) {
                         switch (values.length) {
                           case 1:
-                            values.add(isMultiple ? [currentValue] : currentValue);
+                            values.add(
+                                isMultiple ? [currentValue] : currentValue);
                             break;
                           case 2:
                             if (isMultiple) {
-                              var hasContains = (values[1] as List<int>).contains(currentValue);
+                              var hasContains = (values[1] as List<int>)
+                                  .contains(currentValue);
                               if (hasContains) {
                                 (values[1] as List<int>).remove(currentValue);
                               } else {
@@ -295,22 +332,28 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                             } else {
                               values[1] = currentValue;
                             }
-                            if (controller3.hasClients) controller3.jumpTo(0);
+                            if (controller3.hasClients) {
+                              controller3.jumpTo(0);
+                            }
                             break;
                           default:
                             values[1] = currentValue;
                             values.removeLast();
-                            if (controller3.hasClients) controller3.jumpTo(0);
+                            if (controller3.hasClients) {
+                              controller3.jumpTo(0);
+                            }
                         }
                       } else {
                         switch (values.length) {
                           case 1:
                           case 2:
-                            values.add(isMultiple ? [currentValue] : currentValue);
+                            values.add(
+                                isMultiple ? [currentValue] : currentValue);
                             break;
                           default:
                             if (isMultiple) {
-                              var hasContains = (values[2] as List<int>).contains(currentValue);
+                              var hasContains = (values[2] as List<int>)
+                                  .contains(currentValue);
                               if (hasContains) {
                                 (values[2] as List<int>).remove(currentValue);
                               } else {
@@ -333,18 +376,17 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                       children: [
                         Flexible(
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 16, left: 16, bottom: 16),
+                            padding: const EdgeInsets.only(
+                                top: 16, left: 16, bottom: 16),
                             child: Text(
                               displayOptions[index].label,
                               maxLines: maxLines,
-                              overflow: maxLines == 1
-                                  ? TextOverflow.ellipsis
-                                  : TextOverflow.ellipsis,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 16,
                                 color: (!lastColumn && selected)
                                     ? TDTheme.of(context).brandNormalColor
-                                    : const Color.fromRGBO(0, 0, 0, 0.9),
+                                    : TDTheme.of(context).textColorPrimary,
                                 fontWeight: (!lastColumn && selected)
                                     ? FontWeight.w600
                                     : FontWeight.w400,
@@ -377,5 +419,4 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
       },
     );
   }
-
 }

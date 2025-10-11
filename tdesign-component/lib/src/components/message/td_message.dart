@@ -3,7 +3,7 @@ import 'package:flutter/src/scheduler/binding.dart';
 
 import '../../../tdesign_flutter.dart';
 
-//链接设置
+/// 链接设置
 class MessageLink {
   MessageLink({
     required this.name,
@@ -21,7 +21,7 @@ class MessageLink {
   final Color? color;
 }
 
-// 跑马灯配置
+/// 跑马灯配置
 class MessageMarquee {
   MessageMarquee({this.speed, this.loop, this.delay});
 
@@ -35,7 +35,7 @@ class MessageMarquee {
   final int? delay;
 }
 
-// 定义消息主题枚举
+/// 定义消息主题枚举
 enum MessageTheme {
   /// 普通通知
   info,
@@ -50,7 +50,7 @@ enum MessageTheme {
   error
 }
 
-// TDMessage 组件
+/// TDMessage 组件
 class TDMessage extends StatefulWidget {
   const TDMessage({
     Key? key,
@@ -236,7 +236,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
           alignment: Alignment.centerLeft,
           child: Text(
             widget.content ?? '',
-            style: const TextStyle(color: Colors.black),
+            style: TextStyle(color: TDTheme.of(context).textColorPrimary),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -245,7 +245,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
         final textPainter = TextPainter(
           text: TextSpan(
               text: widget.content ?? '',
-              style: const TextStyle(color: Colors.black)),
+              style: TextStyle(color: TDTheme.of(context).textColorPrimary)),
           maxLines: 1,
           textDirection: TextDirection.ltr,
         )..layout(minWidth: 0, maxWidth: double.infinity);
@@ -289,7 +289,8 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                         child: SizedBox(
                           child: Text(
                             widget.content ?? '',
-                            style: const TextStyle(color: Colors.black),
+                            style: TextStyle(
+                                color: TDTheme.of(context).textColorPrimary),
                             maxLines: 1,
                           ),
                         ),
@@ -308,17 +309,25 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       } else {
         switch (widget.theme) {
           case MessageTheme.info:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).brandColor7);
+            return Icon(
+              TDIcons.error_circle_filled,
+              color: TDTheme.of(context).brandNormalColor,
+            );
           case MessageTheme.success:
-            return Icon(TDIcons.check_circle_filled,
-                color: TDTheme.of(context).successColor5);
+            return Icon(
+              TDIcons.check_circle_filled,
+              color: TDTheme.of(context).successNormalColor,
+            );
           case MessageTheme.warning:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).warningColor5);
+            return Icon(
+              TDIcons.error_circle_filled,
+              color: TDTheme.of(context).warningNormalColor,
+            );
           case MessageTheme.error:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).errorColor6);
+            return Icon(
+              TDIcons.error_circle_filled,
+              color: TDTheme.of(context).errorNormalColor,
+            );
           case null:
             return const SizedBox.shrink();
         }
@@ -339,9 +348,9 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       } else if (widget.closeBtn == true) {
         return GestureDetector(
           onTap: clickCloseButton,
-          child: const Icon(
+          child: Icon(
             TDIcons.close,
-            color: Color.fromRGBO(0, 0, 0, 0.4),
+            color: TDTheme.of(context).textColorPlaceholder,
           ),
         );
       } else if (widget.closeBtn is String) {
@@ -366,9 +375,9 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
               label: widget.link.name,
               style: TDLinkStyle.primary,
               type: TDLinkType.basic,
-              uri: widget.link.uri ?? Uri.parse('https://example.com'),
+              uri: widget.link.uri,
               size: TDLinkSize.medium,
-              color: widget.link.color ?? TDTheme.of(context).brandColor7,
+              color: widget.link.color ?? TDTheme.of(context).brandNormalColor,
               linkClick: (link) => clickLink(),
             ));
       } else if (widget.link is String) {
@@ -379,7 +388,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
               child: Text(
                 widget.link ?? '',
                 style: TextStyle(
-                  color: TDTheme.of(context).brandColor7,
+                  color: TDTheme.of(context).brandNormalColor,
                   fontSize: 14,
                 ),
                 maxLines: 1,
@@ -404,8 +413,9 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                 height: 48,
                 padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(6),
+                    color: TDTheme.of(context).bgColorContainer,
+                    borderRadius: BorderRadius.circular(
+                        TDTheme.of(context).radiusDefault),
                     boxShadow: TDTheme.of(context).shadowsMiddle),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -437,15 +447,12 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                                 height: 22,
                                 child: getLink(context)),
                           if (widget.closeBtn != null)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 12),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: SizedBox(
-                                  width: 22,
-                                  height: 22,
-                                  child: getCloseBtn(context),
-                                ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: getCloseBtn(context),
                               ),
                             ),
                         ],
@@ -460,7 +467,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
   }
 
   double calculateTextWidth() {
-    double width = totalWidth - 32;
+    var width = totalWidth - 32;
     if (widget.icon != null && widget.icon != false) {
       width -= 30;
     }

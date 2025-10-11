@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 import '../../util/context_extension.dart';
 
-typedef MultiCascaderCallback = void Function(List<MultiCascaderListModel> selected);
+typedef MultiCascaderCallback = void Function(
+    List<MultiCascaderListModel> selected);
 
 class TDMultiCascader extends StatefulWidget {
   /// 选择器标题
@@ -49,6 +50,7 @@ class TDMultiCascader extends StatefulWidget {
 
   /// 值发生变更时触发
   final MultiCascaderCallback onChange;
+
   const TDMultiCascader(
       {super.key,
       this.title,
@@ -71,7 +73,8 @@ class TDMultiCascader extends StatefulWidget {
   State<TDMultiCascader> createState() => _TDMultiCascaderState();
 }
 
-class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderStateMixin {
+class _TDMultiCascaderState extends State<TDMultiCascader>
+    with TickerProviderStateMixin {
   List<MultiCascaderListModel> _tabListData = [];
 
   /// 当前tab选中的值
@@ -96,34 +99,39 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     super.initState();
     List.generate(widget.data.length, (index) {
       MultiCascaderListModel item = MultiCascaderListModel(
-        labelFun: ()=>widget.data[index]['label'],
+        labelFun: () => widget.data[index]['label'],
         value: widget.data[index]['value'],
         segmentValue: widget.data[index]['segmentValue'],
         level: 0,
       );
       _listData.add(item);
 
-      if (widget.data[index]['children'] != null && widget.data[index]['children'].length > 0) {
-        _buildRecursiveList(1, widget.data[index]['value'], widget.data[index]['children']);
+      if (widget.data[index]['children'] != null &&
+          widget.data[index]['children'].length > 0) {
+        _buildRecursiveList(
+            1, widget.data[index]['value'], widget.data[index]['children']);
       }
     });
     if (widget.isLetterSort) {
       _listDataSegmenter();
     }
-      _initLocation(widget.initialData??'');
-      _currentTabIndex = _tabListData.length - 1;
-      _level = _currentTabIndex>0?_currentTabIndex:0;
-      if(_currentTabIndex>=0){
-        _tabListData = _tabListData.reversed.toList();
-        _selectTabValue = widget.initialData;
-        _selectListData =
-            _listData.where((element) => element.parentValue == _tabListData[_currentTabIndex].parentValue).toList();
-      }else{
-        _selectListData = _listData.where((element) => element.level == 0).toList();
-        _tabListData.add(MultiCascaderListModel(
-          labelFun: ()=>context.resource.cascadeLabel,
-        ));
-      }
+    _initLocation(widget.initialData ?? '');
+    _currentTabIndex = _tabListData.length - 1;
+    _level = _currentTabIndex > 0 ? _currentTabIndex : 0;
+    if (_currentTabIndex >= 0) {
+      _tabListData = _tabListData.reversed.toList();
+      _selectTabValue = widget.initialData;
+      _selectListData = _listData
+          .where((element) =>
+              element.parentValue == _tabListData[_currentTabIndex].parentValue)
+          .toList();
+    } else {
+      _selectListData =
+          _listData.where((element) => element.level == 0).toList();
+      _tabListData.add(MultiCascaderListModel(
+        labelFun: () => context.resource.cascadeLabel,
+      ));
+    }
   }
 
   @override
@@ -133,15 +141,21 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     return Container(
       width: maxWidth,
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
-          topRight: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
+          topLeft: Radius.circular(
+              widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
+          topRight: Radius.circular(
+              widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
         ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [_buildTitle(context), _buildTabThemeBox(context), Expanded(child: _buildContentBox(context))],
+        children: [
+          _buildTitle(context),
+          _buildTabThemeBox(context),
+          Expanded(child: _buildContentBox(context))
+        ],
       ),
     );
   }
@@ -150,7 +164,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   void didChangeDependencies() {
     /// 该方法在开始处必须调用父类的方法
     super.didChangeDependencies();
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       List.generate(_selectListData.length, (index) {
         if (_selectListData[index].value == _selectTabValue) {
           _scrollToListIndex(index);
@@ -166,7 +180,8 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   }
 
   void _initLocation(String value) {
-    List<MultiCascaderListModel> list = _listData.where((element) => element.value == value).toList();
+    List<MultiCascaderListModel> list =
+        _listData.where((element) => element.value == value).toList();
     if (list.isNotEmpty) {
       _tabListData.add(list[0]);
       if (list[0].parentValue != null) {
@@ -180,7 +195,9 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
       if (a.segmentValue == null || b.segmentValue == null) {
         return 0;
       } else {
-        return a.segmentValue!.toLowerCase().compareTo(b.segmentValue!.toLowerCase());
+        return a.segmentValue!
+            .toLowerCase()
+            .compareTo(b.segmentValue!.toLowerCase());
       }
     });
   }
@@ -188,21 +205,23 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   void _buildRecursiveList(int depth, String parentValue, List<Map> data) {
     List.generate(data.length, (index) {
       MultiCascaderListModel item = MultiCascaderListModel(
-        labelFun: ()=>data[index]['label'],
+        labelFun: () => data[index]['label'],
         value: data[index]['value'],
         parentValue: parentValue,
         segmentValue: data[index]['segmentValue'],
         level: depth,
       );
       _listData.add(item);
-      if (data[index]['children'] != null && data[index]['children'].length > 0) {
-        _buildRecursiveList(depth + 1, data[index]['value'], data[index]['children']);
+      if (data[index]['children'] != null &&
+          data[index]['children'].length > 0) {
+        _buildRecursiveList(
+            depth + 1, data[index]['value'], data[index]['children']);
       }
     });
   }
 
   Widget _buildTitle(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 58,
       child: Stack(
         children: [
@@ -215,7 +234,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                         TextStyle(
                             fontSize: TDTheme.of(context).fontTitleLarge!.size,
                             fontWeight: FontWeight.w700,
-                            color: TDTheme.of(context).fontGyColor1),
+                            color: TDTheme.of(context).textColorPrimary),
                   ),
                 ),
           Positioned(
@@ -223,10 +242,13 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
               top: 0,
               child: GestureDetector(
                   onTap: () {
-                    if(widget.action != null){
-                      var result = _tabListData.where((element) => element.label != context.resource.cascadeLabel).toList();
+                    if (widget.action != null) {
+                      var result = _tabListData
+                          .where((element) =>
+                              element.label != context.resource.cascadeLabel)
+                          .toList();
                       widget.action?.onConfirm(result);
-                      if(result.isNotEmpty){
+                      if (result.isNotEmpty) {
                         // 返回数据不空，才会自己关闭。如果数据是空的，有业务在回调中自己选择是否关闭
                         Navigator.of(context).pop();
                       }
@@ -243,7 +265,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                           (widget.closeText == null
                               ? Icon(
                                   TDIcons.close,
-                                  color: TDTheme.of(context).fontGyColor1,
+                                  color: TDTheme.of(context).textColorPrimary,
                                 )
                               : TDText(
                                   widget.closeText,
@@ -251,7 +273,8 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                                       fontSize: TDTheme.of(context)
                                           .fontTitleMedium!
                                           .size,
-                                      color: TDTheme.of(context).fontGyColor1),
+                                      color:
+                                          TDTheme.of(context).textColorPrimary),
                                 )),
                     ),
                   ))),
@@ -268,8 +291,11 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   Widget _buildStepBox(BuildContext context) {
     var maxWidth = MediaQuery.of(context).size.width;
     return Container(
-        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.1), width: 0.5))),
-        padding: EdgeInsets.only(bottom: 11),
+        decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(
+                    color: TDTheme.of(context).componentStrokeColor,
+                    width: 0.5))),
         width: maxWidth,
         child: ListView(
             shrinkWrap: true,
@@ -279,17 +305,20 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                   onTap: () {
                     _tabListChange(index);
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: 38,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
+                        SizedBox(
                           // 圆和线
                           height: 8,
                           child: LeftLineWidget(
-                            isCircleFill: tabItem.value == null && tabItem.value != _selectTabValue ? false : true,
+                            isCircleFill: tabItem.value == null &&
+                                    tabItem.value != _selectTabValue
+                                ? false
+                                : true,
                             isShowTopLine: index == 0 ? false : true,
                           ),
                         ),
@@ -298,15 +327,19 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                             '${_tabListData[index].label}',
                             style: TextStyle(
                                 fontSize: 14,
-                                color: _currentTabIndex == index ? TDTheme.of(context).brandNormalColor : Colors.black),
-                            fontWeight: _currentTabIndex == index ? FontWeight.w600 : FontWeight.w400,
+                                color: _currentTabIndex == index
+                                    ? TDTheme.of(context).brandNormalColor
+                                    : TDTheme.of(context).textColorPrimary),
+                            fontWeight: _currentTabIndex == index
+                                ? FontWeight.w600
+                                : FontWeight.w400,
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 2, right: 16),
                           child: Icon(
                             TDIcons.chevron_right,
-                            color: TDTheme.of(context).fontGyColor3.withOpacity(0.4),
+                            color: TDTheme.of(context).textColorPrimary,
                           ),
                         ),
                       ],
@@ -319,16 +352,18 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     var maxWidth = MediaQuery.of(context).size.width;
     return Container(
       height: 48,
-      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Color.fromRGBO(0, 0, 0, 0.1), width: 0.5))),
+      decoration: BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  color: TDTheme.of(context).componentStrokeColor,
+                  width: 0.5))),
       width: maxWidth,
       child: TDCustomTab(
         tabs: List.generate(_tabListData.length, (index) {
           return _tabListData[index].label ?? '';
         }),
         initialIndex: _currentTabIndex,
-        onTap: (int index) {
-          _tabListChange(index);
-        },
+        onTap: _tabListChange,
       ),
     );
   }
@@ -337,19 +372,20 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
     var maxWidth = MediaQuery.of(context).size.width;
     return Container(
         width: maxWidth,
-        padding: EdgeInsets.only(left: 16, right: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (widget.subTitles != null)
               Container(
                   height: 50,
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     top: 20,
                   ),
                   child: TDText(
                     widget.subTitles![_level],
-                    style: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.4)),
+                    style: TextStyle(
+                        color: TDTheme.of(context).textColorPlaceholder),
                     font: TDTheme.of(context).fontTitleSmall,
                   ) //,
                   ),
@@ -364,24 +400,29 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                   itemCount: _selectListData.length,
                   itemBuilder: (context, index) {
                     MultiCascaderListModel item = _selectListData[index];
-                    MultiCascaderListModel preItem = index == 0 ? MultiCascaderListModel() : _selectListData[index - 1];
+                    MultiCascaderListModel preItem = index == 0
+                        ? MultiCascaderListModel()
+                        : _selectListData[index - 1];
                     return GestureDetector(
                       onTap: () {
                         int level = 0;
-                        if (item.level ==0 && _currentTabIndex == 0) {
+                        if (item.level == 0 && _currentTabIndex == 0) {
                           _tabListData.clear();
                           _tabListData.add(MultiCascaderListModel(
-                            labelFun: ()=>context.resource.cascadeLabel,
+                            labelFun: () => context.resource.cascadeLabel,
                           ));
                         }
                         if (item.level != null) {
                           level = item.level!;
                         }
 
-                        if (widget.subTitles != null && widget.subTitles!.length - 1 > _level) {
+                        if (widget.subTitles != null &&
+                            widget.subTitles!.length - 1 > _level) {
                           _level = level + 1;
                         }
-                        List isList = _tabListData.where((element) => element.level == item.level).toList();
+                        List isList = _tabListData
+                            .where((element) => element.level == item.level)
+                            .toList();
                         if (isList.isNotEmpty) {
                           _tabListData.removeAt(level);
                         }
@@ -394,31 +435,32 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
                       },
                       child: Container(
                           height: 56,
-                          decoration: BoxDecoration(border: Border.all(color: Colors.transparent)),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.transparent)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    if (item.segmentValue != null)
-                                      SizedBox(
-                                        width: 32,
-                                        child: item.segmentValue != preItem.segmentValue
-                                            ? TDText(
-                                                '${item.segmentValue}',
-                                                font: Font(size: 16, lineHeight: 24),
-                                              )
-                                            : null,
-                                      ),
-                                    TDText(
-                                      '${item.label}',
-                                      font: Font(size: 16, lineHeight: 24),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  if (item.segmentValue != null)
+                                    SizedBox(
+                                      width: 32,
+                                      child: item.segmentValue !=
+                                              preItem.segmentValue
+                                          ? TDText(
+                                              '${item.segmentValue}',
+                                              font: Font(
+                                                  size: 16, lineHeight: 24),
+                                            )
+                                          : null,
                                     ),
-                                  ],
-                                ),
+                                  TDText(
+                                    '${item.label}',
+                                    font: Font(size: 16, lineHeight: 24),
+                                  ),
+                                ],
                               ),
                               if (_selectTabValue == item.value)
                                 Icon(
@@ -454,32 +496,44 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
 
   void _getChildrenListData(int level, String value) {
     //查询层级数据
-    var selectLevelData = _listData.where((element) => element.level == (level)&&element.parentValue==value).toList();
+    var selectLevelData = _listData
+        .where((element) =>
+            element.level == (level) && element.parentValue == value)
+        .toList();
     //判断下级是否存在
     if (selectLevelData.isNotEmpty) {
       //获取下级数据
-      var childList = selectLevelData.where((element) => element.parentValue == value).toList();
+      var childList = selectLevelData
+          .where((element) => element.parentValue == value)
+          .toList();
       _selectListData = childList;
       _currentTabIndex += 1;
     } else {
-      var result = _tabListData.where((element) => element.label != context.resource.cascadeLabel).toList();
+      var result = _tabListData
+          .where((element) => element.label != context.resource.cascadeLabel)
+          .toList();
       widget.onChange(result);
       Navigator.of(context).pop();
     }
   }
 
   /// 查询列表数据
-  void _getFindListData({required int level, String? parentValue, String? value}) {
+  void _getFindListData(
+      {required int level, String? parentValue, String? value}) {
     List<MultiCascaderListModel> list = [];
     //查询层级数据
-    List<MultiCascaderListModel> selectLevelData = _listData.where((element) => element.level == (level)).toList();
+    List<MultiCascaderListModel> selectLevelData =
+        _listData.where((element) => element.level == (level)).toList();
     if (selectLevelData.isNotEmpty) {
       if (level == 0) {
         list = selectLevelData;
       } else if (value != null) {
-        list = selectLevelData.where((element) => element.value == value).toList();
+        list =
+            selectLevelData.where((element) => element.value == value).toList();
       } else {
-        list = selectLevelData.where((element) => element.parentValue == parentValue).toList();
+        list = selectLevelData
+            .where((element) => element.parentValue == parentValue)
+            .toList();
       }
       _selectListData = list;
     }
@@ -489,9 +543,9 @@ class _TDMultiCascaderState extends State<TDMultiCascader> with TickerProviderSt
   void _scrollToListIndex(int index) async {
     // 计算列表中特定索引的位置
     double scrollTo = index * 56.0; // 每个列表项的高度是56.0
-    _scrollListController.animateTo(
+    await _scrollListController.animateTo(
       scrollTo,
-      duration: Duration(milliseconds: 1),
+      duration: const Duration(milliseconds: 1),
       curve: Curves.ease,
     );
   }
@@ -507,15 +561,22 @@ class LeftLineWidget extends StatelessWidget {
   /// 是否显示圆圈上方线条
   final bool isShowTopLine;
 
-  const LeftLineWidget({this.isShowTopLine = false, this.topLineColor, this.isCircleFill = false});
+  const LeftLineWidget(
+      {super.key,
+      this.isShowTopLine = false,
+      this.topLineColor,
+      this.isCircleFill = false});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       width: 16,
       child: CustomPaint(
-        painter: LeftLinePainter(isShowTopLine: isShowTopLine, topLineColor: topLineColor ?? TDTheme.of(context).brandNormalColor, isCircleFill: isCircleFill),
+        painter: LeftLinePainter(
+            isShowTopLine: isShowTopLine,
+            topLineColor: topLineColor ?? TDTheme.of(context).brandNormalColor,
+            isCircleFill: isCircleFill),
       ),
     );
   }
@@ -535,7 +596,10 @@ class LeftLinePainter extends CustomPainter {
   /// 是否显示圆圈上方线条
   final bool isShowTopLine;
 
-  const LeftLinePainter({required this.topLineColor, required this.isShowTopLine, required this.isCircleFill});
+  const LeftLinePainter(
+      {required this.topLineColor,
+      required this.isShowTopLine,
+      required this.isCircleFill});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -550,9 +614,11 @@ class LeftLinePainter extends CustomPainter {
     Paint circlePaint = Paint();
     circlePaint.color = topLineColor;
     circlePaint.strokeWidth = 1;
-    circlePaint.style = isCircleFill ? PaintingStyle.fill : PaintingStyle.stroke;
+    circlePaint.style =
+        isCircleFill ? PaintingStyle.fill : PaintingStyle.stroke;
     linePain.color = isShowTopLine ? (topLineColor) : Colors.transparent;
-    canvas.drawLine(Offset(centerX, -size.height), Offset(centerX, -size.height - _topHeight), linePain);
+    canvas.drawLine(Offset(centerX, -size.height),
+        Offset(centerX, -size.height - _topHeight), linePain);
     canvas.drawCircle(Offset(centerX, topHeight), centerX * 0.5, circlePaint);
   }
 
@@ -564,6 +630,7 @@ class LeftLinePainter extends CustomPainter {
 
 class MultiCascaderListModel {
   String? Function()? labelFun;
+
   String? get label => labelFun?.call();
 
   String? value;
@@ -575,5 +642,11 @@ class MultiCascaderListModel {
   String? segmentValue;
 
   int? level;
-  MultiCascaderListModel({this.labelFun, this.value, this.parentValue, this.level, this.segmentValue});
+
+  MultiCascaderListModel(
+      {this.labelFun,
+      this.value,
+      this.parentValue,
+      this.level,
+      this.segmentValue});
 }

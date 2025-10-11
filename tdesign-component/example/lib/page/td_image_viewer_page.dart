@@ -4,6 +4,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
+final List<TDActionSheetItem> actionSheetItems = [
+  TDActionSheetItem(label: '保存图片', icon: const Icon(TDIcons.save)),
+  TDActionSheetItem(label: '删除图片', icon: const Icon(TDIcons.delete)),
+];
+
+final List<String> images = [
+  'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
+  'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
+];
+
 class TDImageViewerPage extends StatefulWidget {
   const TDImageViewerPage({Key? key}) : super(key: key);
 
@@ -15,7 +25,6 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      backgroundColor: const Color(0xFFF0F2F5),
       title: tdTitle(),
       desc: '用于图片内容的缩略展示与查看。',
       exampleCodeGroup: 'image_viewer',
@@ -34,11 +43,6 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
     );
   }
 
-  var images = [
-    'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
-    'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
-  ];
-
   @Demo(group: 'image_viewer')
   Widget _basicImageViewer(BuildContext context) {
     return TDButton(
@@ -55,10 +59,6 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
 
   @Demo(group: 'image_viewer')
   Widget _actionImageViewer(BuildContext context) {
-    var delImages = [
-      'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
-      'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
-    ];
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -68,7 +68,7 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
       onTap: () {
         TDImageViewer.showImageViewer(
           context: context,
-          images: delImages,
+          images: images,
           showIndex: true,
           deleteBtn: true,
         );
@@ -91,10 +91,11 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
           deleteBtn: true,
           showIndex: true,
           onLongPress: (index) {
-            Navigator.of(context).push(TDSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: _getSheetItem,
-            ));
+            TDActionSheet(
+              context,
+              visible: true,
+              items: actionSheetItems,
+            );
           },
         );
       },
@@ -116,10 +117,11 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
           showIndex: true,
           height: 140,
           onLongPress: (index) {
-            Navigator.of(context).push(TDSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: _getSheetItem,
-            ));
+            TDActionSheet(
+              context,
+              visible: true,
+              items: actionSheetItems,
+            );
           },
         );
       },
@@ -141,10 +143,11 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
           showIndex: true,
           width: 180,
           onLongPress: (index) {
-            Navigator.of(context).push(TDSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: _getSheetItem,
-            ));
+            TDActionSheet(
+              context,
+              visible: true,
+              items: actionSheetItems,
+            );
           },
         );
       },
@@ -153,11 +156,6 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
 
   @Demo(group: 'image_viewer')
   Widget _descImageViewer(BuildContext context) {
-    var delImages = [
-      'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
-      'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
-    ];
-    var labels = ['图片标题1', '图片标题2'];
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -167,42 +165,10 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
       onTap: () {
         TDImageViewer.showImageViewer(
           context: context,
-          images: delImages,
-          labels: labels,
+          images: images,
+          labels: ['图片标题1', '图片标题2'],
         );
       },
-    );
-  }
-
-  Widget _getSheetItem(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 120,
-      color: Colors.white,
-      child: Column(
-        children: [
-          const SizedBox(height: 16),
-          Text(
-            '保存图片',
-            style: TextStyle(
-              color: TDTheme.of(context).fontGyColor1,
-              decoration: TextDecoration.none,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          const TDDivider(margin: EdgeInsets.symmetric(vertical: 10),),
-          Text(
-            '删除图片',
-            style: TextStyle(
-              color: TDTheme.of(context).fontGyColor1,
-              decoration: TextDecoration.none,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

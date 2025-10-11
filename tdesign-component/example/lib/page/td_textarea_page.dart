@@ -33,7 +33,6 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      backgroundColor: const Color(0xFFF0F2F5),
       title: tdTitle(),
       desc: '用于多行文本信息输入。',
       exampleCodeGroup: 'textarea',
@@ -97,8 +96,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       hintText: '请输入文字',
       maxLines: 4,
       minLines: 4,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }
 
@@ -108,8 +106,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       controller: controller[2],
       hintText: '请输入文字',
       minLines: 1,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }
 
@@ -123,8 +120,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       minLines: 4,
       maxLength: 500,
       indicator: true,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }
 
@@ -137,9 +133,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       maxLines: 4,
       minLines: 4,
       readOnly: true,
-      onChanged: (value) {
-
-      },
+      onChanged: (value) {},
     );
   }
 
@@ -154,8 +148,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       maxLength: 500,
       indicator: true,
       layout: TDTextareaLayout.vertical,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }
 
@@ -170,12 +163,14 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       maxLength: 500,
       indicator: true,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
+        color: TDTheme.of(context).bgColorContainer,
+        borderRadius:
+            BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
       ),
-      margin: EdgeInsets.only(right: TDTheme.of(context).spacer16, left: TDTheme.of(context).spacer16),
-      onChanged: (value) {
-      },
+      margin: EdgeInsets.only(
+          right: TDTheme.of(context).spacer16,
+          left: TDTheme.of(context).spacer16),
+      onChanged: (value) {},
     );
   }
 
@@ -191,8 +186,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       indicator: true,
       layout: TDTextareaLayout.vertical,
       bordered: true,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }
 
@@ -207,8 +201,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       maxLength: 500,
       indicator: true,
       width: 200,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }
 
@@ -221,15 +214,14 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       labelIcon: Icon(
         TDIcons.location,
         size: 20,
-        color: TDTheme.of(context).fontGyColor1,
+        color: TDTheme.of(context).textColorPrimary,
       ),
       hintText: '请输入文字',
       maxLines: 4,
       minLines: 4,
       maxLength: 500,
       indicator: true,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }
 
@@ -246,8 +238,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       layout: TDTextareaLayout.vertical,
       required: true,
       additionInfo: '辅助说明',
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }
 
@@ -263,8 +254,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
       indicator: true,
       layout: TDTextareaLayout.vertical,
       size: TDInputSize.small,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }
 }

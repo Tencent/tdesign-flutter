@@ -40,7 +40,19 @@ if (keystorePropertiesFile.exists()) {
 
 android {
 
-    compileSdkVersion 34
+    // AGP 8.0+ 需要设置包命名空间
+    namespace 'com.tdesign.tdesign_flutter_example'
+
+    compileSdkVersion flutter.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -49,8 +61,8 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.tdesign.tdesign_flutter_example"
-        minSdkVersion 21
-        targetSdkVersion 31
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion flutter.targetSdkVersion
         versionCode createVersionCode()
         versionName createVersionName()
     }

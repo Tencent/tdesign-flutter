@@ -1,3 +1,8 @@
+# 详见 https://docs.flutter.dev/release/breaking-changes/flutter-generate-i10n-source
+# 新版可注释掉synthetic-package，使用旧版则保留
+# 也可参考上述文档执行 flutter config --explicit-package-dependencies
+synthetic-package: false
 arb-dir: lib/l10n
 template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
+#output-dir: lib/l10n

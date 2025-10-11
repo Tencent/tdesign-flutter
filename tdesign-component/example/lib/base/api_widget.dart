@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -16,22 +15,22 @@ class ApiPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: TDText('${model?.text} API', textColor: TDTheme.of(context).whiteColor1,),),
+      appBar: AppBar(title: Text('${model?.text} API')),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: ApiWidget(apiName: model?.name, visible: true,),
+          child: ApiWidget(apiName: model?.name),
         ),
       ),
     );
   }
 }
 
-
 class ApiWidget extends StatefulWidget {
-  const ApiWidget({Key? key, required this.apiName, this.visible = false}) : super(key: key);
-
-  final bool visible;
+  const ApiWidget({
+    Key? key,
+    required this.apiName,
+  }) : super(key: key);
 
   final String? apiName;
 
@@ -40,21 +39,18 @@ class ApiWidget extends StatefulWidget {
 }
 
 class _ApiWidgetState extends State<ApiWidget> {
-
   String? result;
   String? lastApiName;
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-        visible: widget.visible,
-        child: FutureBuilder(
+    return FutureBuilder(
       future: getApiData(),
       builder: (context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return Container(
             margin: const EdgeInsets.only(bottom: 64),
-            child:  Markdown(
+            child: Markdown(
               padding: EdgeInsets.zero,
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -67,13 +63,17 @@ class _ApiWidgetState extends State<ApiWidget> {
             ),
           );
         } else {
-          return  Container(
-            alignment: Alignment.topLeft,
-            child: const TDText('加载中…'),
+          return const Center(
+            child: TDLoading(
+              size: TDLoadingSize.large,
+              icon: TDLoadingIcon.circle,
+              text: '加载中…',
+              axis: Axis.horizontal,
+            ),
           );
         }
       },
-    ));
+    );
   }
 
   Future<String> getApiData() async {
@@ -82,12 +82,14 @@ class _ApiWidgetState extends State<ApiWidget> {
 
 暂无对应api
     ''';
-    if(widget.apiName == lastApiName && result != null && result != defaultResult){
+    if (widget.apiName == lastApiName &&
+        result != null &&
+        result != defaultResult) {
       return result!;
     }
     try {
       var apiName = widget.apiName ?? 'default';
-      result =  await rootBundle.loadString('assets/api/${apiName}_api.md');
+      result = await rootBundle.loadString('assets/api/${apiName}_api.md');
       lastApiName = widget.apiName;
     } catch (e) {
       print('getApiData error: $e');

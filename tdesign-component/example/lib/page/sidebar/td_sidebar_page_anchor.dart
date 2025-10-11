@@ -47,12 +47,10 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
       }
     });
 
-    // 锚点用法
-
     for (var i = 0; i < 20; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项$i',
         value: i,
       ));
       pages.add(getAnchorDemo(i));
@@ -68,20 +66,24 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
   }
 
   Future<void> onSelected(int value) async {
-    if (currentValue != value) {
-      setState(() {
-        currentValue = value;
-      });
-
-      lock = true;
-      await _demoScroller.animateTo(value.toDouble() * itemHeight,
-          duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
-      lock = false;
+    if (currentValue == value) {
+      return;
     }
+    setState(() {
+      currentValue = value;
+    });
+
+    lock = true;
+    await _demoScroller.animateTo(
+      value.toDouble() * itemHeight,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeIn,
+    );
+    lock = false;
   }
 
   void onChanged(int value) {
-    if(mounted){
+    if (mounted) {
       setState(() {
         currentValue = value;
       });
@@ -89,102 +91,104 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var current = buildWidget(context);
-    return current;
+  void dispose() {
+    _demoScroller.dispose();
+    _sideBarController.dispose();
+    super.dispose();
   }
 
-  Widget buildWidget(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return ExamplePage(
-        title: 'SideBar 锚点用法',
-        exampleCodeGroup: 'sideBar',
-        showSingleChild: true,
-        singleChild: CodeWrapper(
-          isCenter: false,
-          builder: _buildAnchorSideBar,
-        ));
+      title: 'SideBar 锚点用法',
+      exampleCodeGroup: 'sideBar',
+      showSingleChild: true,
+      singleChild: CodeWrapper(
+        isCenter: false,
+        builder: _buildAnchorSideBar,
+      ),
+    );
   }
 
   @Demo(group: 'sideBar')
   Widget _buildAnchorSideBar(BuildContext context) {
     var demoHeight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
-        titleBarHeight - testButtonHeight;
-    pages.add(Container(
-      height: demoHeight - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
-    ));
+        titleBarHeight -
+        testButtonHeight;
+
     return Column(
       children: [
         Container(
           height: testButtonHeight,
           padding: const EdgeInsets.all(16),
-          child: TDButton(text: '更新children',
+          child: TDButton(
+            text: '更新children',
             onTap: () {
               setState(() {
                 var children = list
                     .map((e) => SideItemProps(
-                    index: e.index,
-                    label: '变更',
-                    badge: e.badge,
-                    value: e.value,
-                    icon: e.icon))
+                        index: e.index,
+                        label: '变更${e.index}',
+                        badge: e.badge,
+                        value: e.value,
+                        icon: e.icon))
                     .toList();
                 _sideBarController.children = children;
-                setState(() {
-
-                });
+                setState(() {});
               });
-            },),
+            },
+          ),
         ),
-        Row(
-          children: [
-            SizedBox(
-              width: 110,
-              child: TDSideBar(
-                height: demoHeight,
-                style: TDSideBarStyle.normal,
-                value: currentValue,
-                controller: _sideBarController,
-                onChanged: onChanged,
-                onSelected: onSelected,
+        Expanded(
+          child: Row(
+            children: [
+              SizedBox(
+                width: 110,
+                child: TDSideBar(
+                  style: TDSideBarStyle.normal,
+                  value: currentValue,
+                  controller: _sideBarController,
+                  onChanged: onChanged,
+                  onSelected: onSelected,
+                ),
               ),
-            ),
-            Expanded(
-                child: SizedBox(
-                  height: demoHeight,
-                  child: SingleChildScrollView(
+              Expanded(
+                child: SingleChildScrollView(
                     controller: _demoScroller,
-                    child: Column(
-                      children: pages,
-                    ),
-                  ),
-                ))
-          ],
+                    child: Container(
+                      color: TDTheme.of(context).bgColorContainer,
+                      child: Column(
+                        children: [
+                          ...pages,
+                          Container(height: demoHeight - itemHeight)
+                        ],
+                      ),
+                    )),
+              )
+            ],
+          ),
         )
       ],
     );
   }
 
   Widget getAnchorDemo(int index) {
-    return Container(
-      decoration: const BoxDecoration(color: Colors.white),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: TDText('标题$index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: displayImageList(),
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
+          child: TDText('标题$index',
+              style: const TextStyle(
+                fontSize: 14,
+              )),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: displayImageList(),
+        ),
+      ],
     );
   }
 
@@ -202,26 +206,20 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
   }
 
   Widget displayImageItem() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: const [
+        // spacing: 16,
+        children: [
           TDImage(
             assetUrl: 'assets/img/empty.png',
             type: TDImageType.roundedSquare,
             width: 48,
             height: 48,
           ),
-          SizedBox(
-            width: 16,
-          ),
-          TDText(
-            '标题',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          )
+          SizedBox(width: 16),
+          TDText('标题', style: TextStyle(fontSize: 16))
         ],
       ),
     );

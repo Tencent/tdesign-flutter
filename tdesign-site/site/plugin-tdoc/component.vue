@@ -11,7 +11,7 @@
             frameborder="0"
             width="100%"
             height="100%"
-            style="box-sizing: border-box; border-radius: 0 0 6px 6px; overflow: hidden; border-top: 8px solid #f8f8f8"
+            style="box-sizing: border-box; border-radius: 0 0 6px 6px; overflow: hidden;"
           ></iframe>
           <div>注：web示例仅供参考，预览实际效果请阅读<a href="/flutter/getting-started">快速开始</a></div>
         </td-doc-phone>

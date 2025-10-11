@@ -24,6 +24,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get redTheme => 'redTheme';
 
   @override
+  String get darkTheme => 'Dark Mode';
+
+  @override
   String get cancel => 'Cancel';
 
   @override
@@ -169,4 +172,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get top => 'TOP';
+
+  @override
+  String get emptyData => 'No Data';
 }

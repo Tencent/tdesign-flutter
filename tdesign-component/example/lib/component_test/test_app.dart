@@ -48,7 +48,7 @@ Padding body(BuildContext context) {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
 
-                    TDButton(text: "ixanshi ",onTap: (){
+                    TDButton(text: 'ixanshi ',onTap: (){
                       TDLoadingController.show(context);
 
                       TDLoadingController.dismiss();
@@ -175,7 +175,7 @@ TDBottomTabBar _buildBottomTabBar() {
       ),
       TDBottomTabBarTabConfig(
         selectedIcon: Icon(TDIcons.user, size: iconSize, color: Colors.red),
-        unselectedIcon: Icon(TDIcons.user, size: iconSize, color: Color(0xFF383838)),
+        unselectedIcon: Icon(TDIcons.user, size: iconSize, color: const Color(0xFF383838)),
         tabText: '我的',
         selectTabTextStyle: TextStyle(fontSize: textSize, color: Colors.red),
         unselectTabTextStyle: TextStyle(fontSize: textSize, color: Colors.black),

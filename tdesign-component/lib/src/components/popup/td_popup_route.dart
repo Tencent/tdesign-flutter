@@ -177,7 +177,6 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
 
   @override
   void dispose() {
-    // close?.call();
     stopFocusListener(navigator!.context);
     super.dispose();
   }

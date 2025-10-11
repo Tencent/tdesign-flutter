@@ -18,7 +18,7 @@ enum TDNoticeBarType {
 
 /// 公告栏主题
 enum TDNoticeBarTheme {
-  /// 默认
+  /// 信息（默认）
   info,
 
   /// 成功
@@ -33,13 +33,14 @@ enum TDNoticeBarTheme {
 
 /// 公告栏样式
 class TDNoticeBarStyle {
-  TDNoticeBarStyle(
-      {this.context,
-      this.backgroundColor,
-      this.textStyle,
-      this.leftIconColor,
-      this.rightIconColor,
-      this.padding});
+  TDNoticeBarStyle({
+    this.context,
+    this.backgroundColor,
+    this.textStyle,
+    this.leftIconColor,
+    this.rightIconColor,
+    this.padding,
+  });
 
   /// 上下文
   BuildContext? context;
@@ -64,21 +65,20 @@ class TDNoticeBarStyle {
       padding ??
       const EdgeInsets.only(top: 13, bottom: 13, left: 16, right: 12);
 
-  /// 公告栏内容样式，用于获取默认值
-  TextStyle get getTextStyle =>
-      textStyle ??
-      TextStyle(
-        color: TDTheme.of(context).fontGyColor1,
-        fontSize: 14,
-        height: 1,
-        fontWeight: FontWeight.normal,
-        fontStyle: FontStyle.normal,
-      );
-
   /// 根据主题生成样式
-  TDNoticeBarStyle.generateTheme(BuildContext context,
-      {TDNoticeBarTheme? theme = TDNoticeBarTheme.info}) {
-    rightIconColor = TDTheme.of(context).grayColor7;
+  TDNoticeBarStyle.generateTheme(
+    BuildContext context, {
+    TDNoticeBarTheme? theme = TDNoticeBarTheme.info,
+  }) {
+    rightIconColor = TDTheme.of(context).textColorPlaceholder;
+    textStyle = textStyle ??
+        TextStyle(
+          color: TDTheme.of(context).textColorPrimary,
+          fontSize: 14,
+          height: 1,
+          fontWeight: FontWeight.normal,
+          fontStyle: FontStyle.normal,
+        );
     switch (theme) {
       case TDNoticeBarTheme.warning:
         leftIconColor = TDTheme.of(context).warningNormalColor;

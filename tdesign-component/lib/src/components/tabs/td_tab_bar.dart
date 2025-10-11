@@ -6,11 +6,13 @@ import '../../../tdesign_flutter.dart';
 import 'td_horizontal_tab_bar.dart';
 
 enum TDTabBarOutlineType {
-  // 填充样式
+  /// 填充样式
   filled,
-  // 胶囊样式
+
+  /// 胶囊样式
   capsule,
-  // 卡片
+
+  /// 卡片
   card
 }
 
@@ -44,14 +46,14 @@ class TDTabBar extends StatefulWidget {
     this.unSelectedBgColor,
     this.tabAlignment,
   })  : assert(
-  backgroundColor == null || decoration == null,
-  'Cannot provide both a backgroundColor and a decoration\n'
-      'To provide both, use "decoration: BoxDecoration(color: color)".',
-  ),
+          backgroundColor == null || decoration == null,
+          'Cannot provide both a backgroundColor and a decoration\n'
+          'To provide both, use "decoration: BoxDecoration(color: color)".',
+        ),
         super(key: key);
 
   /// tab数组
-  final List<TDTab> tabs; //
+  final List<TDTab> tabs;
 
   /// tab控制器
   final TabController? controller;
@@ -126,6 +128,7 @@ class TDTabBar extends StatefulWidget {
   final Color? unSelectedBgColor;
 
   final TabAlignment? tabAlignment;
+
   @override
   State<StatefulWidget> createState() => _TDTabBarState();
 }
@@ -141,33 +144,39 @@ class _TDTabBarState extends State<TDTabBar> {
       height: widget.height ?? _defaultHeight,
       decoration: widget.decoration ??
           (widget.outlineType == TDTabBarOutlineType.card
-              ? BoxDecoration(color: widget.backgroundColor)
+              ? BoxDecoration(
+                  color: widget.backgroundColor ??
+                      TDTheme.of(context).bgColorContainer)
               : BoxDecoration(
-              color: widget.backgroundColor,
-              border: widget.dividerHeight <= 0
-                  ? null
-                  : Border(
-                  bottom: BorderSide(
-                      color: widget.dividerColor ?? TDTheme.of(context).grayColor3,
-                      width: widget.dividerHeight)))),
+                  color: widget.backgroundColor ??
+                      TDTheme.of(context).bgColorContainer,
+                  border: widget.dividerHeight <= 0
+                      ? null
+                      : Border(
+                          bottom: BorderSide(
+                              color: widget.dividerColor ??
+                                  TDTheme.of(context).componentStrokeColor,
+                              width: widget.dividerHeight)))),
       child: TDHorizontalTabBar(
         physics: widget.physics,
         isScrollable: widget.isScrollable,
-        indicator: widget.indicator ?? _getIndicator(context),
+        indicator: widget.indicator ?? _getIndicator(),
         indicatorColor: widget.indicatorColor,
         unselectedLabelColor: widget.unselectedLabelColor,
-        labelColor: widget.labelColor,
-        labelStyle: widget.labelStyle ?? _getLabelStyle(context),
+        labelColor: widget.labelColor ?? TDTheme.of(context).brandNormalColor,
+        labelStyle: widget.labelStyle ?? _getLabelStyle(),
         labelPadding: widget.labelPadding ?? const EdgeInsets.all(8),
-        unselectedLabelStyle:widget.unselectedLabelStyle ?? _getUnSelectLabelStyle(context),
+        unselectedLabelStyle:
+            widget.unselectedLabelStyle ?? _getUnSelectLabelStyle(),
         tabs: widget.tabs,
         indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
         outlineType: widget.outlineType,
         controller: widget.controller,
         backgroundColor: widget.backgroundColor,
         selectedBgColor: widget.selectedBgColor,
-        unSelectedBgColor: widget.unSelectedBgColor,
-        tabAlignment:widget.tabAlignment,
+        unSelectedBgColor: widget.unSelectedBgColor ??
+            TDTheme.of(context).bgColorSecondaryContainer,
+        tabAlignment: widget.tabAlignment,
         onTap: (index) {
           widget.onTap?.call(index);
         },
@@ -175,27 +184,26 @@ class _TDTabBarState extends State<TDTabBar> {
     );
   }
 
-  TextStyle _getUnSelectLabelStyle(BuildContext context) {
+  TextStyle _getUnSelectLabelStyle() {
     return TextStyle(
         fontWeight: FontWeight.w400,
-        // fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14,
-        color: TDTheme.of(context).fontGyColor2);
+        color: TDTheme.of(context).textColorPrimary);
   }
 
-  TextStyle _getLabelStyle(BuildContext context) {
+  TextStyle _getLabelStyle() {
     return TextStyle(
         fontWeight: FontWeight.w600,
-        // fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14,
-        color: TDTheme.of(context).fontGyColor2);
+        color: TDTheme.of(context).textColorPrimary);
   }
 
-  Decoration _getIndicator(BuildContext context) {
+  Decoration _getIndicator() {
     return widget.showIndicator
         ? TDTabBarIndicator(
-        context: context,
-        indicatorHeight: widget.indicatorHeight,
-        indicatorWidth: widget.indicatorWidth,
-        indicatorColor: widget.indicatorColor)
+            context: context,
+            indicatorHeight: widget.indicatorHeight,
+            indicatorWidth: widget.indicatorWidth,
+            indicatorColor: widget.indicatorColor,
+          )
         : TDNoneIndicator();
   }
 }
@@ -207,10 +215,16 @@ class TDTabBarIndicator extends Decoration {
   final double? indicatorHeight;
   final Color? indicatorColor;
 
-  const TDTabBarIndicator({this.context, this.indicatorWidth, this.indicatorHeight, this.indicatorColor});
+  const TDTabBarIndicator({
+    this.context,
+    this.indicatorWidth,
+    this.indicatorHeight,
+    this.indicatorColor,
+  });
 
   @override
-  BoxPainter createBoxPainter([VoidCallback? onChanged]) => _TDTabBarIndicatorPainter(this, onChanged!);
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
+      _TDTabBarIndicatorPainter(this, onChanged!);
 }
 
 class _TDTabBarIndicatorPainter extends BoxPainter {
@@ -226,7 +240,8 @@ class _TDTabBarIndicatorPainter extends BoxPainter {
 
   _TDTabBarIndicatorPainter(this.decoration, VoidCallback onChanged) {
     /// 下标颜色
-    _paint.color = decoration.indicatorColor ?? TDTheme.of(decoration.context).brandNormalColor;
+    _paint.color = decoration.indicatorColor ??
+        TDTheme.of(decoration.context).brandNormalColor;
     _paint.strokeCap = StrokeCap.round;
   }
 
@@ -240,9 +255,11 @@ class _TDTabBarIndicatorPainter extends BoxPainter {
         _paint..strokeWidth = _indicatorHeight());
   }
 
-  double _indicatorHeight() => decoration.indicatorHeight ?? _defaultIndicatorHeight;
+  double _indicatorHeight() =>
+      decoration.indicatorHeight ?? _defaultIndicatorHeight;
 
-  double _indicatorWidth() => decoration.indicatorWidth ?? _defaultIndicatorWidth;
+  double _indicatorWidth() =>
+      decoration.indicatorWidth ?? _defaultIndicatorWidth;
 }
 
 /// TDesign自定义下标 竖向
@@ -251,10 +268,15 @@ class TDTabBarVerticalIndicator extends Decoration {
   final double? indicatorWidth;
   final double? indicatorHeight;
 
-  const TDTabBarVerticalIndicator({this.context, this.indicatorWidth, this.indicatorHeight});
+  const TDTabBarVerticalIndicator({
+    this.context,
+    this.indicatorWidth,
+    this.indicatorHeight,
+  });
 
   @override
-  BoxPainter createBoxPainter([VoidCallback? onChanged]) => _TDTabBarVerticalIndicatorPainter(this, onChanged!);
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
+      _TDTabBarVerticalIndicatorPainter(this, onChanged!);
 }
 
 class _TDTabBarVerticalIndicatorPainter extends BoxPainter {
@@ -288,15 +310,18 @@ class _TDTabBarVerticalIndicatorPainter extends BoxPainter {
         _paint..strokeWidth = _indicatorWidth());
   }
 
-  double _indicatorHeight() => decoration.indicatorHeight ?? _defaultIndicatorHeight;
+  double _indicatorHeight() =>
+      decoration.indicatorHeight ?? _defaultIndicatorHeight;
 
-  double _indicatorWidth() => decoration.indicatorWidth ?? _defaultIndicatorWidth;
+  double _indicatorWidth() =>
+      decoration.indicatorWidth ?? _defaultIndicatorWidth;
 }
 
 /// TDesign不展示下标
 class TDNoneIndicator extends Decoration {
   @override
-  BoxPainter createBoxPainter([VoidCallback? onChanged]) => _TDNoneIndicatorPainter();
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
+      _TDNoneIndicatorPainter();
 }
 
 class _TDNoneIndicatorPainter extends BoxPainter {

@@ -8,7 +8,9 @@ class TDCustomTab extends StatefulWidget {
   final List<String> tabs;
   final TapCallback? onTap;
   final int? initialIndex;
-  const TDCustomTab({super.key, required this.tabs, this.onTap,this.initialIndex});
+
+  const TDCustomTab(
+      {super.key, required this.tabs, this.onTap, this.initialIndex});
 
   @override
   State<TDCustomTab> createState() => _TDCustomTabState();
@@ -17,20 +19,22 @@ class TDCustomTab extends StatefulWidget {
 class _TDCustomTabState extends State<TDCustomTab> {
   ScrollController _scrollController = ScrollController();
   int _currentTabIndex = 0;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _currentTabIndex=widget.initialIndex??0;
+    _currentTabIndex = widget.initialIndex ?? 0;
   }
 
   @override
   void didUpdateWidget(TDCustomTab oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(widget.initialIndex!=oldWidget.initialIndex){
-      _currentTabIndex=widget.initialIndex!;
+    if (widget.initialIndex != oldWidget.initialIndex) {
+      _currentTabIndex = widget.initialIndex!;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -40,10 +44,10 @@ class _TDCustomTabState extends State<TDCustomTab> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: List.generate(widget.tabs.length, (index) {
             return GestureDetector(
-                onTap:(){
+                onTap: () {
                   _onChangeTab(index);
                 },
-                child: Container(
+                child: SizedBox(
                     width: 96,
                     height: 52,
                     child: Stack(
@@ -53,8 +57,12 @@ class _TDCustomTabState extends State<TDCustomTab> {
                             widget.tabs[index],
                             style: TextStyle(
                                 fontSize: 16,
-                                color: _currentTabIndex == index ? TDTheme.of(context).brandNormalColor : Colors.black),
-                                fontWeight: _currentTabIndex == index ?FontWeight.w600:FontWeight.w400,
+                                color: _currentTabIndex == index
+                                    ? TDTheme.of(context).brandNormalColor
+                                    : TDTheme.of(context).textColorPrimary),
+                            fontWeight: _currentTabIndex == index
+                                ? FontWeight.w600
+                                : FontWeight.w400,
                           ),
                         ),
                         if (_currentTabIndex == index)
@@ -70,15 +78,14 @@ class _TDCustomTabState extends State<TDCustomTab> {
                             ),
                           ),
                       ],
-                    ))
-            );
+                    )));
           })),
     );
   }
 
   void _onChangeTab(int index) {
     if (widget.onTap != null) {
-       widget.onTap!(index);
+      widget.onTap!(index);
     }
   }
 }

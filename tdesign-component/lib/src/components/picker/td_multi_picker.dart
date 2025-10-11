@@ -19,13 +19,16 @@ class TDMultiPicker extends StatelessWidget {
   /// 选择器取消按钮回调
   final MultiPickerCallback? onCancel;
 
+  /// todo 选择器数据改变时回调
+  final MultiPickerCallback? onChange;
+
   /// 选择器的数据源
   final List<List<String>> data;
 
   /// 选择器List的视窗高度，默认200
   final double pickerHeight;
 
-  /// 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
+  /// 选择器List视窗中item个数，pickerHeight / pickerItemCount，即item高度
   final int pickerItemCount;
 
   /// 自定义选择框样式
@@ -79,84 +82,95 @@ class TDMultiPicker extends StatelessWidget {
   /// 自定义item构建
   final ItemBuilderType? itemBuilder;
 
+  /// 是否显示头部内容
+  final bool header;
+
   static const _pickerTitleHeight = 56.0;
 
-  const TDMultiPicker(
-      {required this.title,
-        required this.onConfirm,
-        this.onCancel,
-        required this.data,
-        required this.pickerHeight,
-        required this.pickerItemCount,
-        this.initialIndexes,
-        this.rightText,
-        this.leftText,
-        this.leftTextStyle,
-        this.rightTextStyle,
-        this.centerTextStyle,
-        this.titleHeight,
-        this.topPadding,
-        this.leftPadding,
-        this.rightPadding,
-        this.titleDividerColor,
-        this.backgroundColor,
-        this.topRadius,
-        this.padding,
-        this.itemDistanceCalculator,
-        this.customSelectWidget,
-        this.itemBuilder,
-        Key? key})
-      : super(key: key);
+  const TDMultiPicker({
+    this.title,
+    required this.onConfirm,
+    this.onCancel,
+    this.onChange,
+    required this.data,
+    this.pickerHeight = 200,
+    this.pickerItemCount = 5,
+    this.initialIndexes,
+    this.rightText,
+    this.leftText,
+    this.leftTextStyle,
+    this.rightTextStyle,
+    this.centerTextStyle,
+    this.titleHeight,
+    this.topPadding,
+    this.leftPadding,
+    this.rightPadding,
+    this.titleDividerColor,
+    this.backgroundColor,
+    this.topRadius,
+    this.padding,
+    this.itemDistanceCalculator,
+    this.customSelectWidget,
+    this.itemBuilder,
+    this.header = true,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var lines = data.length;
-    var indexes = initialIndexes ?? [for (var i = 0; i < lines; i++) 0];
-    var controllers = <FixedExtentScrollController>[
-      for (var i = 0; i < lines; i++)
-        FixedExtentScrollController(initialItem: indexes[i])
-    ];
-    var maxWidth = MediaQuery.of(context).size.width;
+    final dataLength = data.length;
+
+    var indexes = initialIndexes ?? List.generate(dataLength, (i) => 0);
+
+    var controllers = List.generate(
+      dataLength,
+      (i) => FixedExtentScrollController(initialItem: indexes[i]),
+    );
+
+    final maxWidth = MediaQuery.of(context).size.width;
+
     return Container(
       width: maxWidth,
-      padding: padding ?? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+      padding: padding ??
+          EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
-        color: backgroundColor ?? TDTheme.of(context).whiteColor1,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(topRadius ?? TDTheme.of(context).radiusExtraLarge),
-          topRight: Radius.circular(topRadius ?? TDTheme.of(context).radiusExtraLarge),
+        color: backgroundColor ?? TDTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(
+              topRadius ?? TDTheme.of(context).radiusExtraLarge),
         ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          buildTitle(context, controllers),
+          if (header) _buildHeader(context, controllers),
           Stack(
             alignment: Alignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: customSelectWidget ?? Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                      color: TDTheme.of(context).grayColor1,
-                      borderRadius: BorderRadius.all(Radius.circular(TDTheme.of(context).radiusDefault))
-                  ),
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: customSelectWidget ??
+                    Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: TDTheme.of(context).bgColorSecondaryContainer,
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(TDTheme.of(context).radiusDefault)),
+                      ),
+                    ),
               ),
               // 列表
               Container(
-                  padding: const EdgeInsets.only(left: 32, right: 32),
-                  height: pickerHeight,
-                  width: maxWidth,
-                  child: Row(
-                    children: [
-                      for (var i = 0; i < data.length; i++)
-                        Expanded(
-                          child: buildList(context, i, controllers),
-                        )
-                    ],
-                  )),
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                height: pickerHeight,
+                width: maxWidth,
+                child: Row(
+                  children: List.generate(
+                    dataLength,
+                    (i) => Expanded(child: _buildList(context, i, controllers)),
+                  ),
+                ),
+              ),
               // 蒙层
               Positioned(
                 top: 0,
@@ -166,11 +180,14 @@ class TDMultiPicker extends StatelessWidget {
                     height: _pickerTitleHeight,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [TDTheme.of(context).whiteColor1, TDTheme.of(context).whiteColor1.withOpacity(0)]
-                        )
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          TDTheme.of(context).bgColorContainer,
+                          TDTheme.of(context).bgColorContainer.withOpacity(0)
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -183,11 +200,14 @@ class TDMultiPicker extends StatelessWidget {
                     height: _pickerTitleHeight,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [TDTheme.of(context).whiteColor1, TDTheme.of(context).whiteColor1.withOpacity(0)]
-                        )
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          TDTheme.of(context).bgColorContainer,
+                          TDTheme.of(context).bgColorContainer.withOpacity(0)
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -199,33 +219,37 @@ class TDMultiPicker extends StatelessWidget {
     );
   }
 
-  Widget buildTitle(BuildContext context, List<FixedExtentScrollController> controllers) {
+  Widget _buildHeader(
+    BuildContext context,
+    List<FixedExtentScrollController> controllers,
+  ) {
+    final padding = TDTheme.of(context).spacer16;
+
     return Container(
       padding: EdgeInsets.only(
-        left: leftPadding ?? 16,
-        right: rightPadding ?? 16,
-        top: topPadding ?? 16,
+        left: leftPadding ?? padding,
+        right: rightPadding ?? padding,
+        top: topPadding ?? padding,
       ),
       decoration: BoxDecoration(
         border: Border(
-            bottom: BorderSide(
-              width: 0.5,
-              color: titleDividerColor ?? Colors.transparent,
-            )
+          bottom: BorderSide(
+            width: 0.5,
+            color: titleDividerColor ?? Colors.transparent,
+          ),
         ),
       ),
       height: getTitleHeight(),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 左边按钮
+          /// 左边按钮
           GestureDetector(
               onTap: () {
                 if (onCancel != null) {
-                  onCancel!([
-                    for (var i = 0; i < controllers.length; i++)
-                      controllers[i].selectedItem
-                  ]);
+                  onCancel!(controllers
+                      .map((controller) => controller.selectedItem)
+                      .toList());
                 } else {
                   Navigator.of(context).pop();
                 }
@@ -233,24 +257,22 @@ class TDMultiPicker extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               child: TDText(
                 leftText ?? context.resource.cancel,
-                style: leftTextStyle?? TextStyle(
-                    fontSize: TDTheme.of(context).fontBodyLarge!.size,
-                    color: TDTheme.of(context).fontGyColor2
-                ),
+                style: leftTextStyle ??
+                    TextStyle(
+                        fontSize: TDTheme.of(context).fontBodyLarge!.size,
+                        color: TDTheme.of(context).textColorSecondary),
               )),
 
-          // 中间title
+          /// 中间title
           Expanded(
-            child: title == null
-                ? Container()
-                : Center(
+            child: Center(
               child: TDText(
-                title,
-                style: centerTextStyle ?? TextStyle(
-                    fontSize: TDTheme.of(context).fontTitleLarge!.size,
-                    fontWeight: FontWeight.w600,
-                    color: TDTheme.of(context).fontGyColor1
-                ),
+                title ?? '',
+                style: centerTextStyle ??
+                    TextStyle(
+                        fontSize: TDTheme.of(context).fontTitleLarge!.size,
+                        fontWeight: FontWeight.w600,
+                        color: TDTheme.of(context).textColorPrimary),
               ),
             ),
           ),
@@ -259,19 +281,18 @@ class TDMultiPicker extends StatelessWidget {
           GestureDetector(
             onTap: () {
               if (onConfirm != null) {
-                onConfirm!([
-                  for (var i = 0; i < controllers.length; i++)
-                    controllers[i].selectedItem
-                ]);
+                onConfirm!(controllers
+                    .map((controller) => controller.selectedItem)
+                    .toList());
               }
             },
             behavior: HitTestBehavior.opaque,
             child: TDText(
               rightText ?? context.resource.confirm,
-              style: rightTextStyle?? TextStyle(
-                  fontSize: TDTheme.of(context).fontBodyLarge!.size,
-                  color: TDTheme.of(context).brandNormalColor
-              ),
+              style: rightTextStyle ??
+                  TextStyle(
+                      fontSize: TDTheme.of(context).fontBodyLarge!.size,
+                      color: TDTheme.of(context).brandNormalColor),
             ),
           ),
         ],
@@ -281,7 +302,11 @@ class TDMultiPicker extends StatelessWidget {
 
   double getTitleHeight() => titleHeight ?? _pickerTitleHeight;
 
-  Widget buildList(context, int position, List<FixedExtentScrollController> controllers) {
+  Widget _buildList(
+    context,
+    int position,
+    List<FixedExtentScrollController> controllers,
+  ) {
     var maxWidth = MediaQuery.of(context).size.width;
     return MediaQuery.removePadding(
         context: context,
@@ -310,8 +335,7 @@ class TDMultiPicker extends StatelessWidget {
                           itemDistanceCalculator: itemDistanceCalculator,
                           fixedExtentScrollController: controllers[position],
                           itemBuilder: itemBuilder,
-                        )
-                    );
+                        ));
                   })),
         ));
   }
@@ -328,6 +352,9 @@ class TDMultiLinkedPicker extends StatefulWidget {
   /// 选择器取消按钮回调
   final MultiPickerCallback? onCancel;
 
+  /// todo 选择器数据改变时回调
+  final MultiPickerCallback? onChange;
+
   /// 选中数据
   final List selectedData;
 
@@ -340,7 +367,7 @@ class TDMultiLinkedPicker extends StatefulWidget {
   /// 选择器List的视窗高度
   final double pickerHeight;
 
-  /// 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度
+  /// 选择器List视窗中item个数，pickerHeight / pickerItemCount，即item高度
   final int pickerItemCount;
 
   /// 自定义选择框样式
@@ -394,10 +421,14 @@ class TDMultiLinkedPicker extends StatefulWidget {
   /// 是否保留相同选项
   final bool keepSameSelection;
 
+  /// 是否显示头部内容
+  final bool header;
+
   const TDMultiLinkedPicker({
     this.title,
     required this.onConfirm,
     this.onCancel,
+    this.onChange,
     required this.selectedData,
     required this.data,
     required this.columnNum,
@@ -420,6 +451,7 @@ class TDMultiLinkedPicker extends StatefulWidget {
     this.itemDistanceCalculator,
     this.itemBuilder,
     this.keepSameSelection = false,
+    this.header = true,
     Key? key,
   }) : super(key: key);
 
@@ -448,96 +480,99 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
 
   @override
   Widget build(BuildContext context) {
-    var maxWidth = MediaQuery.of(context).size.width;
+    final maxWidth = MediaQuery.of(context).size.width;
     return Container(
       width: maxWidth,
-      padding: widget.padding ?? EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+      padding: widget.padding ??
+          EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
-          topRight: Radius.circular(widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
+        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(
+              widget.topRadius ?? TDTheme.of(context).radiusExtraLarge),
         ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          buildTitle(context),
-          SizedBox(
-            height: widget.pickerHeight,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Padding(//选项
-                  padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: widget.customSelectWidget ?? Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                        color: TDTheme.of(context).grayColor1,
-                        borderRadius: BorderRadius.all(Radius.circular(TDTheme.of(context).radiusDefault))
+          if (widget.header) _buildHeader(context),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: widget.customSelectWidget ??
+                    Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                          color: TDTheme.of(context).bgColorSecondaryContainer,
+                          borderRadius: BorderRadius.all(Radius.circular(
+                              TDTheme.of(context).radiusDefault))),
                     ),
-                  ),
-                ),
+              ),
 
-                // 列表
-                Container(
-                    padding: const EdgeInsets.only(left: 32, right: 32),
-                    height: pickerHeight,
-                    width: maxWidth,
-                    child: Row(
-                      children: [
-                        for (var i = 0; i < widget.columnNum; i++)
-                          Expanded(
-                            child: buildList(context, i),
-                          )
-                      ],
-                    )),
-                // 蒙层
-                Positioned(
-                  top: 0,
-                  child: IgnorePointer(
-                    ignoring: true,
-                    child: Container(
-                      height: _pickerTitleHeight,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [TDTheme.of(context).whiteColor1, TDTheme.of(context).whiteColor1.withOpacity(0)]
-                          )
+              // 列表
+              Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  height: pickerHeight,
+                  width: maxWidth,
+                  child: Row(
+                    children: List.generate(
+                      widget.columnNum,
+                      (i) => Expanded(child: buildList(context, i)),
+                    ),
+                  )),
+              // 蒙层
+              Positioned(
+                top: 0,
+                child: IgnorePointer(
+                  ignoring: true,
+                  child: Container(
+                    height: _pickerTitleHeight,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          TDTheme.of(context).bgColorContainer,
+                          TDTheme.of(context).bgColorContainer.withOpacity(0)
+                        ],
                       ),
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: 0,
-                  child: IgnorePointer(
-                    ignoring: true,
-                    child: Container(
-                      height: _pickerTitleHeight,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [TDTheme.of(context).whiteColor1, TDTheme.of(context).whiteColor1.withOpacity(0)]
-                          )
+              ),
+              Positioned(
+                bottom: 0,
+                child: IgnorePointer(
+                  ignoring: true,
+                  child: Container(
+                    height: _pickerTitleHeight,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          TDTheme.of(context).bgColorContainer,
+                          TDTheme.of(context).bgColorContainer.withOpacity(0)
+                        ],
                       ),
                     ),
                   ),
-                )
-              ],
-            ),
-          )
+                ),
+              )
+            ],
+          ),
         ],
       ),
     );
   }
 
   Widget buildList(context, int position) {
+    // position参数表示这个第几列
     var maxWidth = MediaQuery.of(context).size.width;
-
     return MediaQuery.removePadding(
       context: context,
       removeTop: true,
@@ -564,17 +599,27 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               onSelectedItemChanged: (index) {
                 if (index >= 0 && index < model.presentData[position].length) {
                   setState(() {
-                    model.refreshPresentDataAndController(position, index, false);
+                    model.refreshPresentDataAndController(
+                      position,
+                      index,
+                      false,
+                    );
                     if (index >= model.presentData[position].length - 5 &&
                         model.hasMoreData[position]) {
                       if (model.loadMoreData(position)) {
                         // 延迟一下再刷新，避免连续setState
-                        Future.delayed(Duration(milliseconds: 50), () {
-                          if (mounted) setState(() {});
+                        Future.delayed(const Duration(milliseconds: 50), () {
+                          if (mounted) {
+                            setState(() {});
+                          }
                         });
                       }
                     }
-                    pickerHeight = pickerHeight - Random().nextDouble() / 100000000;
+
+                    /// todo 通过随机数改变高度来触发UI刷新，这是hack式的解决方案！有待优化！
+                    /// fix https://github.com/flutter/flutter/issues/22999
+                    pickerHeight =
+                        pickerHeight - Random().nextDouble() / 100000000;
                   });
                 }
               },
@@ -587,10 +632,16 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                       return Container(
                         alignment: Alignment.center,
                         height: pickerHeight / widget.pickerItemCount,
-                        child: Text('加载中...', style: TextStyle(color: Colors.grey)),
+                        child: Text(
+                          context.resource.loadingWithPoint,
+                          style: TextStyle(
+                            color: TDTheme.of(context).textColorPlaceholder,
+                          ),
+                        ),
                       );
                     }
-                    if (index < 0 || index >= model.presentData[position].length) {
+                    if (index < 0 ||
+                        index >= model.presentData[position].length) {
                       return Container();
                     }
                     return Container(
@@ -601,39 +652,41 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                           colIndex: position,
                           index: index,
                           itemHeight: pickerHeight / widget.pickerItemCount,
-                          content: model.presentData[position][index].toString(),
-                          fixedExtentScrollController: model.controllers[position],
+                          content:
+                              model.presentData[position][index].toString(),
+                          fixedExtentScrollController:
+                              model.controllers[position],
                           itemDistanceCalculator: widget.itemDistanceCalculator,
                           itemBuilder: widget.itemBuilder,
                         ));
-                  }
-              )
-          ),
+                  })),
         ),
       ),
     );
   }
 
-  Widget buildTitle(BuildContext context) {
+  Widget _buildHeader(BuildContext context) {
+    final padding = TDTheme.of(context).spacer16;
+
     return Container(
       padding: EdgeInsets.only(
-        left: widget.leftPadding ?? 16,
-        right: widget.rightPadding ?? 16,
-        top: widget.topPadding ?? 16,
+        left: widget.leftPadding ?? padding,
+        right: widget.rightPadding ?? padding,
+        top: widget.topPadding ?? padding,
       ),
       decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                width: 0.5,
-                color: widget.titleDividerColor ?? Colors.transparent,
-              )
-          )
+        border: Border(
+          bottom: BorderSide(
+            width: 0.5,
+            color: widget.titleDividerColor ?? Colors.transparent,
+          ),
+        ),
       ),
       height: getTitleHeight() - 0.5,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 左边按钮
+          /// 左边按钮
           GestureDetector(
               onTap: () {
                 if (widget.onCancel != null) {
@@ -645,27 +698,29 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               behavior: HitTestBehavior.opaque,
               child: TDText(
                 widget.leftText ?? context.resource.cancel,
-                style: widget.leftTextStyle ?? TextStyle(
-                  fontSize: TDTheme.of(context).fontBodyLarge!.size,
-                  color: TDTheme.of(context).fontGyColor2,
-                ),
+                style: widget.leftTextStyle ??
+                    TextStyle(
+                      fontSize: TDTheme.of(context).fontBodyLarge!.size,
+                      color: TDTheme.of(context).textColorSecondary,
+                    ),
               )),
-          // 中间title
+
+          /// 中间title
           Expanded(
-            child: widget.title == null
-                ? Container()
-                : Center(
+            child: Center(
               child: TDText(
-                widget.title,
-                style: widget.centerTextStyle ?? TextStyle(
-                    fontSize: TDTheme.of(context).fontTitleLarge!.size,
-                    fontWeight: FontWeight.w700,
-                    color: TDTheme.of(context).fontGyColor1
-                ),
+                widget.title ?? '',
+                style: widget.centerTextStyle ??
+                    TextStyle(
+                      fontSize: TDTheme.of(context).fontTitleLarge!.size,
+                      fontWeight: FontWeight.w700,
+                      color: TDTheme.of(context).textColorPrimary,
+                    ),
               ),
             ),
           ),
-          // 右边按钮
+
+          /// 右边按钮
           GestureDetector(
             onTap: () {
               if (widget.onConfirm != null) {
@@ -675,10 +730,11 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
             behavior: HitTestBehavior.opaque,
             child: TDText(
               widget.rightText ?? context.resource.confirm,
-              style: widget.rightTextStyle ?? TextStyle(
-                fontSize: TDTheme.of(context).fontBodyLarge!.size,
-                color: TDTheme.of(context).brandNormalColor,
-              ),
+              style: widget.rightTextStyle ??
+                  TextStyle(
+                    fontSize: TDTheme.of(context).fontBodyLarge!.size,
+                    color: TDTheme.of(context).brandNormalColor,
+                  ),
             ),
           ),
         ],
@@ -713,13 +769,16 @@ class MultiLinkedPickerModel {
   /// 是否保留相同选项
   bool keepSameSelection = false;
 
-  // 添加一个常量定义每页加载数量
+  /// 添加一个常量定义每页加载数量
   static const int pageSize = 10;
-  // 每列的当前页码
+
+  /// 每列的当前页码
   late List<int> currentPages;
-  // 每列是否还有更多数据
+
+  /// 每列是否还有更多数据
   late List<bool> hasMoreData;
-  // 每列的总数据量
+
+  /// 每列的总数据量
   late List<int> totalCounts;
 
   MultiLinkedPickerModel({
@@ -737,7 +796,7 @@ class MultiLinkedPickerModel {
       if (i >= initialData.length) {
         selectedData.add('');
       } else {
-        selectedData.add(initialData[i]);
+        selectedData.add(initialData[i]?.toString() ?? '');
       }
       selectedIndexes.add(0);
     }
@@ -753,7 +812,7 @@ class MultiLinkedPickerModel {
       }
       List currentLevelData;
       if (i == 0) {
-        currentLevelData = _getNextLevelDataPaginated(0,0);
+        currentLevelData = _getNextLevelDataPaginated(0, 0);
         if (currentLevelData.isEmpty) {
           currentLevelData = [placeData];
         }
@@ -761,24 +820,24 @@ class MultiLinkedPickerModel {
         currentLevelData = _getNextLevelDataPaginated(i, 0);
       }
       // 处理选中项
-      int selectedIndex = currentLevelData.indexOf(selectedData[i]);
+      var selectedIndex = currentLevelData.indexOf(selectedData[i]);
       if (selectedIndex < 0) {
-        selectedData[i] = currentLevelData.isNotEmpty ? currentLevelData.first : placeData;
+        selectedData[i] =
+            currentLevelData.isNotEmpty ? currentLevelData.first : placeData;
         selectedIndex = 0;
       }
       selectedIndexes[i] = selectedIndex;
       presentData[i] = currentLevelData;
       // 创建控制器
       controllers.add(FixedExtentScrollController(
-          initialItem: selectedIndex.clamp(0, currentLevelData.length - 1)
-      ));
+          initialItem: selectedIndex.clamp(0, currentLevelData.length - 1)));
     }
   }
 
   List _getNextLevelDataPaginated(int level, int page) {
     try {
       dynamic currentData = data;
-      for (int i = 0; i < level; i++) {
+      for (var i = 0; i < level; i++) {
         if (currentData is Map && currentData.containsKey(selectedData[i])) {
           currentData = currentData[selectedData[i]];
         } else {
@@ -796,8 +855,12 @@ class MultiLinkedPickerModel {
       totalCounts[level] = allData.length;
       int start = page * pageSize;
       int end = start + pageSize;
-      if (start >= allData.length) return [];
-      if (end > allData.length) end = allData.length;
+      if (start >= allData.length) {
+        return [];
+      }
+      if (end > allData.length) {
+        end = allData.length;
+      }
       hasMoreData[level] = end < allData.length;
       return allData.sublist(start, end);
     } catch (e) {
@@ -806,11 +869,13 @@ class MultiLinkedPickerModel {
   }
 
   bool loadMoreData(int columnIndex) {
-    if (columnIndex >= columnNum || !hasMoreData[columnIndex]) return false;
+    if (columnIndex >= columnNum || !hasMoreData[columnIndex]) {
+      return false;
+    }
     List newData;
     int nextPage = currentPages[columnIndex] + 1;
     if (columnIndex == 0) {
-      newData = _getNextLevelDataPaginated(0,nextPage);
+      newData = _getNextLevelDataPaginated(0, nextPage);
     } else {
       newData = _getNextLevelDataPaginated(columnIndex, nextPage);
     }
@@ -827,7 +892,11 @@ class MultiLinkedPickerModel {
   /// [position] 变动的列
   /// [selectedIndex] 对应选中的index
   /// [jump] 是否需要jumpToItem
-  void refreshPresentDataAndController(int position, int selectedIndex, bool jump) {
+  void refreshPresentDataAndController(
+    int position,
+    int selectedIndex,
+    bool jump,
+  ) {
     // 严格的边界检查
     if (position >= presentData.length ||
         selectedIndex >= presentData[position].length ||
@@ -836,18 +905,21 @@ class MultiLinkedPickerModel {
     }
     selectedIndex = selectedIndex.clamp(0, presentData[position].length - 1);
     var selectValue = presentData[position][selectedIndex];
+    // 更新选中的数据
     selectedData[position] = selectValue;
     selectedIndexes[position] = selectedIndex;
     if (jump) {
       controllers[position].jumpToItem(selectedIndex);
     }
     // 检查是否需要预加载更多数据
-    if (selectedIndex >= presentData[position].length - 5 && hasMoreData[position]) {
+    if (selectedIndex >= presentData[position].length - 5 &&
+        hasMoreData[position]) {
       loadMoreData(position);
     }
     if (position < columnNum - 1) {
       List nextColumnData;
-      if (presentData[position].length == 1 && presentData[position].first == placeData) {
+      if (presentData[position].length == 1 &&
+          presentData[position].first == placeData) {
         nextColumnData = [placeData];
       } else {
         nextColumnData = _getNextLevelDataPaginated(position + 1, 0);

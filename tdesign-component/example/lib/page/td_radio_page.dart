@@ -27,7 +27,6 @@ class TDRadioPageState extends State<TDRadioPage> {
     return ExamplePage(
       title: tdTitle(),
       exampleCodeGroup: 'radio',
-      backgroundColor: const Color(0xfff6f6f6),
       children: [
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '纵向单选框', builder: _verticalRadios),
@@ -50,7 +49,8 @@ class TDRadioPageState extends State<TDRadioPage> {
         ExampleItem(desc: '横向单选框-显示下划线', builder: _showBottomLine),
         ExampleItem(desc: '横向单选框-自定义下划线', builder: _customBottomLine),
         ExampleItem(desc: '横向单选框-自定义颜色和字体尺寸', builder: _customColorAndFont),
-        ExampleItem(desc: '横向单选框-自定义禁用字体颜色', builder: _customDisableColorAndFont),
+        ExampleItem(
+            desc: '横向单选框-自定义禁用字体颜色', builder: _customDisableColorAndFont),
         ExampleItem(desc: '横向单选框-自定义选框左侧间距', builder: _customRadioLeftSpace),
       ],
     );
@@ -65,11 +65,12 @@ class TDRadioPageState extends State<TDRadioPage> {
       descriptionWidget: TDRadioGroup(
         selectId: '0',
         direction: Axis.horizontal,
-        directionalTdRadios: const [TDRadio(
-          id: '0',
-          title: '单选标题0',
-          showDivider: false,
-        ),
+        directionalTdRadios: const [
+          TDRadio(
+            id: '0',
+            title: '单选标题0',
+            showDivider: false,
+          ),
           TDRadio(
             id: '1',
             title: '单选标题1',
@@ -434,7 +435,7 @@ class TDRadioPageState extends State<TDRadioPage> {
             subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
             radioStyle: TDRadioStyle.circle,
             enable: false,
-            disableColor: TDTheme.of(context).errorColor1,
+            disableColor: TDTheme.of(context).errorDisabledColor,
             titleFont: TDTheme.of(context).fontBodySmall,
             subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
           ),
@@ -443,7 +444,7 @@ class TDRadioPageState extends State<TDRadioPage> {
             title: '选项禁用-默认',
             radioStyle: TDRadioStyle.circle,
             enable: false,
-            disableColor: TDTheme.of(context).errorColor1,
+            disableColor: TDTheme.of(context).errorDisabledColor,
             titleFont: TDTheme.of(context).fontBodySmall,
             subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
           ),
@@ -454,15 +455,15 @@ class TDRadioPageState extends State<TDRadioPage> {
 
   @Demo(group: '')
   Widget _customRadioLeftSpace(BuildContext context) {
-    return  TDRadio(
-        id: '0',
-        title: '选项禁用-已选',
-        subTitle: '描述信息',
-        radioStyle: TDRadioStyle.circle,
-        checkBoxLeftSpace: 0,
-        disableColor: TDTheme.of(context).errorColor1,
-        titleFont: TDTheme.of(context).fontBodySmall,
-        subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
+    return TDRadio(
+      id: '0',
+      title: '选项禁用-已选',
+      subTitle: '描述信息',
+      radioStyle: TDRadioStyle.circle,
+      checkBoxLeftSpace: 0,
+      disableColor: TDTheme.of(context).errorDisabledColor,
+      titleFont: TDTheme.of(context).fontBodySmall,
+      subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
     );
   }
 }

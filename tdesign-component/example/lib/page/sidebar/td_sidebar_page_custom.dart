@@ -47,8 +47,9 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
     for (var i = 0; i < 100; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项 $i',
         value: i,
+        textStyle: TextStyle(color: TDTheme.of(context).brandLightColor),
       ));
       pages.add(getPageDemo(i));
     }
@@ -67,14 +68,11 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
       }
     }
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
@@ -86,39 +84,35 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
                     textStyle: ele.textStyle,
                     icon: ele.icon))
                 .toList(),
-            selectedTextStyle:TextStyle(color: Colors.red),
+            selectedTextStyle: const TextStyle(color: Colors.red),
             onSelected: setCurrentValue,
-            contentPadding:EdgeInsets.only(left: 16, top: 16,bottom: 16),
+            contentPadding:
+                const EdgeInsets.only(left: 16, top: 16, bottom: 16),
             selectedBgColor: Colors.blue,
             unSelectedBgColor: Colors.yellow,
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: PageView(
             controller: _pageController,
             scrollDirection: Axis.vertical,
             children: pages,
             physics: const NeverScrollableScrollPhysics(),
           ),
-        ))
+        )
       ],
     );
   }
 
   Widget getPageDemo(int index) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: const BoxDecoration(color: Colors.blue),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: TDText('标题$index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
+            child: TDText('标题 $index', style: const TextStyle(fontSize: 14)),
           ),
           const SizedBox(height: 16),
           displayImageList()
@@ -128,72 +122,52 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
   }
 
   Widget getAnchorDemo(int index) {
-    return Container(
-      decoration: const BoxDecoration(color: Colors.white),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: TDText('标题$index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
-          ),
-          const SizedBox(height: 16),
-          displayImageList()
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      // spacing: 16,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
+          child: TDText('标题$index', style: const TextStyle(fontSize: 14)),
+        ),
+        const SizedBox(height: 16),
+        displayImageList()
+      ],
     );
   }
 
   Widget displayImageList() {
-    return Column(
-      children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          displayImageItem('标题文字'),
-          displayImageItem('标题文字'),
-          displayImageItem('最多六个文字'),
-        ]),
-        const SizedBox(height: 18),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            displayImageItem('标题文字'),
-            displayImageItem('标题文字'),
-            displayImageItem('最多六个文字'),
-          ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 18),
+      width: double.infinity,
+      child: Wrap(
+        spacing: 18,
+        runSpacing: 18,
+        alignment: WrapAlignment.spaceEvenly,
+        children: List.generate(
+          12,
+          (index) => displayImageItem('${index}最多六个字'),
         ),
-        const SizedBox(height: 18),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            displayImageItem('标题文字'),
-            displayImageItem('标题文字'),
-            displayImageItem('最多六个文字'),
-          ],
-        )
-      ],
+      ),
     );
   }
 
   Widget displayImageItem(String title) {
     return Expanded(
-        child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const TDImage(
-          assetUrl: 'assets/img/empty.png',
-          type: TDImageType.roundedSquare,
-          width: 48,
-          height: 48,
-        ),
-        const SizedBox(height: 8),
-        TDText(
-          '$title',
-          style: const TextStyle(fontSize: 12),
-        )
-      ],
-    ));
+      child: Column(
+        // spacing: 8,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const TDImage(
+            assetUrl: 'assets/img/empty.png',
+            type: TDImageType.roundedSquare,
+            width: 48,
+            height: 48,
+          ),
+          const SizedBox(height: 4),
+          TDText('$title', style: const TextStyle(fontSize: 12))
+        ],
+      ),
+    );
   }
 }

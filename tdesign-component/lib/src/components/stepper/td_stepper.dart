@@ -22,6 +22,7 @@ class TDStepperController {
   _TDStepperState? _state;
 
   int _value = 0;
+
   int get value => _value;
 
   set value(int value) {
@@ -29,11 +30,9 @@ class TDStepperController {
     _state?.updateUI();
   }
 
-
   void _bindState(_TDStepperState _tdStepperState) {
     _state = _tdStepperState;
   }
-
 }
 
 /// 步进器
@@ -82,7 +81,6 @@ class TDStepper extends StatefulWidget {
   final TDStepperTheme theme;
 
   /// 值
-  @Deprecated('与defaultValue 功能重复,请使用defaultValue或者valueController')
   final int? value;
 
   /// 默认值
@@ -102,6 +100,7 @@ class TDStepper extends StatefulWidget {
 
   /// Stepper控制器
   final TDStepperController? controller;
+
   @override
   State<TDStepper> createState() => _TDStepperState();
 }
@@ -121,14 +120,15 @@ class _TDStepperState extends State<TDStepper> {
         ..value = widget.value ?? widget.defaultValue ?? 0;
     }
     _controller._bindState(this);
-    if(widget.eventController!=null){
-      widget.eventController?.stream.listen((TDStepperEventType event){
-          if(event == TDStepperEventType.cleanValue){
-            cleanValue();
-          }
+    if (widget.eventController != null) {
+      widget.eventController?.stream.listen((TDStepperEventType event) {
+        if (event == TDStepperEventType.cleanValue) {
+          cleanValue();
+        }
       });
     }
-    _textController = TextEditingController(text: _controller._value.toString());
+    _textController =
+        TextEditingController(text: _controller._value.toString());
 
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
@@ -185,10 +185,10 @@ class _TDStepperState extends State<TDStepper> {
     switch (widget.theme) {
       case TDStepperTheme.filled:
         return widget.disabled
-            ? TDTheme.of(context).grayColor2
-            : TDTheme.of(context).grayColor1;
+            ? TDTheme.of(context).bgColorComponentDisabled
+            : TDTheme.of(context).bgColorSecondaryContainer;
       case TDStepperTheme.outline:
-        return TDTheme.of(context).whiteColor1;
+        return null;
       case TDStepperTheme.normal:
       default:
         return null;
@@ -256,8 +256,9 @@ class _TDStepperState extends State<TDStepper> {
     });
     renderNumber();
   }
-  cleanValue(){
-    _controller._value=0;
+
+  cleanValue() {
+    _controller._value = 0;
     _textController.value = TextEditingValue(
         text: _controller._value.toString(),
         selection: TextSelection.fromPosition(TextPosition(
@@ -266,6 +267,7 @@ class _TDStepperState extends State<TDStepper> {
         )));
     _focusNode.unfocus();
   }
+
   void renderNumber() {
     _textController.value = TextEditingValue(
         text: _controller._value.toString(),
@@ -296,10 +298,10 @@ class _TDStepperState extends State<TDStepper> {
               border: widget.theme == TDStepperTheme.outline
                   ? Border(
                       top: BorderSide(
-                        color: TDTheme.of(context).grayColor4,
+                        color: TDTheme.of(context).componentBorderColor,
                       ),
                       bottom: BorderSide(
-                        color: TDTheme.of(context).grayColor4,
+                        color: TDTheme.of(context).componentBorderColor,
                       ))
                   : null),
           child: Padding(
@@ -324,12 +326,12 @@ class _TDStepperState extends State<TDStepper> {
                       style: TextStyle(
                           fontSize: _getFontSize(),
                           color: widget.disabled
-                              ? TDTheme.of(context).fontGyColor4
-                              : TDTheme.of(context).fontGyColor1),
+                              ? TDTheme.of(context).textColorDisabled
+                              : TDTheme.of(context).textColorPrimary),
                       textAlign: TextAlign.center,
                       textAlignVertical: TextAlignVertical.center,
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         isDense: true,
                         contentPadding: EdgeInsets.zero,
@@ -351,7 +353,9 @@ class _TDStepperState extends State<TDStepper> {
                               return newValue.copyWith(
                                   text: _controller._value.toString(),
                                   selection: TextSelection.collapsed(
-                                      offset: _controller._value.toString().length));
+                                      offset: _controller._value
+                                          .toString()
+                                          .length));
                             }
 
                             final newNum = int.parse(newValue.text);
@@ -380,7 +384,8 @@ class _TDStepperState extends State<TDStepper> {
                             return newValue.copyWith(
                                 text: _controller._value.toString(),
                                 selection: TextSelection.collapsed(
-                                    offset: _controller._value.toString().length));
+                                    offset:
+                                        _controller._value.toString().length));
                           } catch (e) {
                             return oldValue;
                           }
@@ -409,28 +414,28 @@ class _TDStepperState extends State<TDStepper> {
   }
 
   void updateUI() {
-   if(mounted){
-     _textController.value = TextEditingValue(
-         text: _controller._value.toString(),
-         selection: TextSelection.fromPosition(TextPosition(
-           affinity: TextAffinity.downstream,
-           offset: _controller._value.toString().length,
-         )));
-   }
+    if (mounted) {
+      _textController.value = TextEditingValue(
+          text: _controller._value.toString(),
+          selection: TextSelection.fromPosition(TextPosition(
+            affinity: TextAffinity.downstream,
+            offset: _controller._value.toString().length,
+          )));
+    }
   }
 }
 
 typedef TDTapFunction = void Function();
 
 class TDStepperIconButton extends StatelessWidget {
-  const TDStepperIconButton(
-      {Key? key,
-      this.onTap,
-      this.size = TDStepperSize.medium,
-      this.disabled = false,
-      this.theme = TDStepperTheme.normal,
-      required this.type})
-      : super(key: key);
+  const TDStepperIconButton({
+    Key? key,
+    this.onTap,
+    this.size = TDStepperSize.medium,
+    this.disabled = false,
+    this.theme = TDStepperTheme.normal,
+    required this.type,
+  }) : super(key: key);
 
   final TDTapFunction? onTap;
   final TDStepperSize size;
@@ -457,18 +462,18 @@ class TDStepperIconButton extends StatelessWidget {
     return Icon(iconType,
         size: _getIconSize(),
         color: disabled
-            ? TDTheme.of(context).fontGyColor4
-            : TDTheme.of(context).fontGyColor1);
+            ? TDTheme.of(context).textColorDisabled
+            : TDTheme.of(context).textColorPrimary);
   }
 
   Color? _getBackgroundColor(BuildContext context) {
     switch (theme) {
       case TDStepperTheme.filled:
         return disabled
-            ? TDTheme.of(context).grayColor2
-            : TDTheme.of(context).grayColor1;
+            ? TDTheme.of(context).bgColorComponentDisabled
+            : TDTheme.of(context).bgColorSecondaryContainer;
       case TDStepperTheme.outline:
-        return disabled ? TDTheme.of(context).grayColor2 : null;
+        return disabled ? TDTheme.of(context).bgColorComponentDisabled : null;
       case TDStepperTheme.normal:
       default:
         return null;
@@ -490,7 +495,7 @@ class TDStepperIconButton extends StatelessWidget {
   BoxBorder? _getBoxBorder(BuildContext context) {
     if (theme == TDStepperTheme.outline) {
       return Border.all(
-        color: TDTheme.of(context).grayColor4,
+        color: TDTheme.of(context).componentBorderColor,
       );
     }
 
@@ -514,4 +519,3 @@ class TDStepperIconButton extends StatelessWidget {
         ));
   }
 }
-

@@ -24,6 +24,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get redTheme => '红色主题';
 
   @override
+  String get darkTheme => '暗黑模式';
+
+  @override
   String get cancel => '取消';
 
   @override
@@ -169,4 +172,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get top => '顶部';
+
+  @override
+  String get emptyData => '暂无数据';
 }

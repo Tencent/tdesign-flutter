@@ -88,9 +88,13 @@ TDesign Flutter 依赖以下组件库，感谢作者的开源贡献：
 - [flutter_slidable](https://pub-web.flutter-io.cn/packages/flutter_slidable)
 - [image_picker](https://pub-web.flutter-io.cn/packages/image_picker)
 
-# Contributing
+# 贡献
 
-Contributing is welcome. Read [guidelines for contributing](CONTRIBUTING.md) before submitting your [Pull Request](https://github.com/Tencent/tdesign-flutter/pulls).
+欢迎贡献代码。在提交 [Pull Request](https://github.com/Tencent/tdesign-flutter/pulls) 之前，请先阅读[贡献指南]((CONTRIBUTING.md))。
+
+<a href="https://github.com/Tencent/tdesign-flutter/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Tencent/tdesign-flutter" />
+</a>
 
 # 反馈
 

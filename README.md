@@ -98,6 +98,10 @@ TDesign Flutter depends on the following component libraries. We appreciate the 
 
 Contributing is welcome. Read [guidelines for contributing](CONTRIBUTING.md) before submitting your [Pull Request](https://github.com/Tencent/tdesign-flutter/pulls).
 
+<a href="https://github.com/Tencent/tdesign-flutter/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Tencent/tdesign-flutter" />
+</a>
+
 # Feedback
 
 Create your [Github issues](https://github.com/Tencent/tdesign-flutter/issues) or scan the QR code below to join our user groups.

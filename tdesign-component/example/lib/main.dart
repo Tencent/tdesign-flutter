@@ -7,17 +7,17 @@ import 'base/example_route.dart';
 import 'base/intl_resource_delegate.dart';
 import 'config.dart';
 import 'home.dart';
-import 'localizations/app_localizations.dart';
+import 'l10n/app_localizations.dart';
 
 void main() {
   Log.setCustomLogPrinter((level, tag, msg) => print('[$level] $tag ==> $msg'));
   runApp(const MyApp());
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  /*SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
     systemNavigationBarDividerColor: Colors.transparent,
-  ));
+  ));*/
 
   exampleMap.forEach((key, value) {
     value.forEach((model) {
@@ -38,6 +38,8 @@ class _MyAppState extends State<MyApp> {
   late TDThemeData _themeData;
   Locale? locale = const Locale('zh');
 
+  ThemeMode _themeMode = ThemeMode.dark;
+
   @override
   void initState() {
     super.initState();
@@ -53,27 +55,59 @@ class _MyAppState extends State<MyApp> {
     var delegate = IntlResourceDelegate(context);
     return MaterialApp(
       title: 'TDesign Flutter Example',
-      theme: ThemeData(extensions: [_themeData], colorScheme: ColorScheme.light(primary: _themeData.brandNormalColor)),
-      home: PlatformUtil.isWeb ? null : Builder(
-        builder: (context) {
-          // 设置文案代理,国际化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
-          TDTheme.setResourceBuilder((context) => delegate..updateContext(context), needAlwaysBuild: true);
-          return MyHomePage(
-            title: AppLocalizations.of(context)?.components ?? '',
-            locale: locale,
-            onLocaleChange: (locale){
-              setState(() {
-                this.locale = locale;
-              });
-            },
-            onThemeChange: (themeData) {
-              setState(() {
-                _themeData = themeData;
-              });
-            },
-          );
-        },
+      theme: ThemeData(
+        extensions: [_themeData],
+        colorScheme: ColorScheme.light(
+          primary: _themeData.brandNormalColor,
+        ),
+        scaffoldBackgroundColor: _themeData.bgColorPage,
+        iconTheme: const IconThemeData().copyWith(
+          color: _themeData.brandNormalColor,
+        ),
       ),
+      darkTheme: ThemeData(
+        extensions: [_themeData],
+        colorScheme: ColorScheme.dark(
+          primary: _themeData.brandNormalColor,
+          secondary: _themeData.brandNormalColor,
+        ),
+        scaffoldBackgroundColor: _themeData.bgColorPage,
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData()
+            .copyWith(backgroundColor: _themeData.grayColor14),
+        appBarTheme: const AppBarTheme().copyWith(
+          backgroundColor: _themeData.grayColor13,
+        ),
+        iconTheme: const IconThemeData().copyWith(
+          color: _themeData.brandNormalColor,
+        ),
+      ),
+      // themeMode: PlatformUtil.isWeb ? ThemeMode.dark : _themeMode,
+      themeMode: _themeMode,
+      home: PlatformUtil.isWeb
+          ? null
+          : Builder(
+              builder: (context) {
+                // 设置文案代理,国际化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
+                TDTheme.setResourceBuilder(
+                    (context) => delegate..updateContext(context),
+                    needAlwaysBuild: true);
+                return MyHomePage(
+                  title: AppLocalizations.of(context)?.components ?? '',
+                  locale: locale,
+                  onLocaleChange: (locale) {
+                    setState(() {
+                      this.locale = locale;
+                    });
+                  },
+                  onThemeChange: (themeData, isDark) {
+                    setState(() {
+                      _themeData = themeData;
+                      _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+                    });
+                  },
+                );
+              },
+            ),
       // 设置国际化处理
       locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -85,8 +119,11 @@ class _MyAppState extends State<MyApp> {
 
   Map<String, WidgetBuilder> _getRoutes() {
     if (PlatformUtil.isWeb) {
-      return {for (var model in examplePageList) model.name: (context) => model.pageBuilder.call(context, model)}
-        ..putIfAbsent('/', () => (context) => const MyHomePage(title: 'TDesign Flutter 组件库'));
+      return {
+        for (var model in examplePageList)
+          model.name: (context) => model.pageBuilder.call(context, model)
+      }..putIfAbsent('/',
+          () => (context) => const MyHomePage(title: 'TDesign Flutter 组件库'));
     } else {
       return const {};
     }
