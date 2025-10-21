@@ -235,7 +235,7 @@ class TDRadioGroup extends TDCheckboxGroup {
                     'because there left no room for it');
               }
             });
-            var maxWordCount = 2;
+            var maxWordCount = 14;
             var tips =
                 '[TDRadioGroup] radio title please not exceed $maxWordCount words.\n'
                 '2tabs: 7words maximum\n'
