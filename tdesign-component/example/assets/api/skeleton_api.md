@@ -4,9 +4,9 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
 | animation | TDSkeletonAnimation? | - | 动画效果 |
 | delay | int | 0 | 延迟显示加载时间 |
+| key |  | - |  |
 | theme |  | TDSkeletonTheme.text |  |
 
 
@@ -52,8 +52,8 @@
 | --- |  --- |
 | TDSkeletonRowColObjStyle.circle  | 圆形 |
 | TDSkeletonRowColObjStyle.rect  | 矩形 |
-| TDSkeletonRowColObjStyle.text  | 文本 |
 | TDSkeletonRowColObjStyle.spacer  | 空白占位符 |
+| TDSkeletonRowColObjStyle.text  | 文本 |
 
 ```
 ```
@@ -62,11 +62,11 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| width | double? | - | 宽度 |
-| height | double? | 16 | 高度 |
 | flex | int? | 1 | 弹性因子 |
+| height | double? | 16 | 高度 |
 | margin | EdgeInsets | EdgeInsets.zero | 间距 |
 | style | TDSkeletonRowColObjStyle | const TDSkeletonRowColObjStyle() | 样式 |
+| width | double? | - | 宽度 |
 
 
 #### 工厂构造方法
@@ -75,5 +75,5 @@
 | --- |  --- |
 | TDSkeletonRowColObj.circle  | 圆形 |
 | TDSkeletonRowColObj.rect  | 矩形 |
-| TDSkeletonRowColObj.text  | 文本 |
 | TDSkeletonRowColObj.spacer  | 空白占位符 |
+| TDSkeletonRowColObj.text  | 文本 |

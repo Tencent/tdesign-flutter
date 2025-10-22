@@ -4,10 +4,10 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| type | TDFooterType | type | 样式 |
+| height | double? | - | 自定义图片高 |
 | key |  | - |  |
+| links | List<TDLink> | const [] | 链接 |
 | logo | String? | - | 品牌图片 |
 | text | String | '' | 文字 |
-| links | List<TDLink> | const [] | 链接 |
+| type | TDFooterType | type | 样式 |
 | width | double? | - | 自定义图片宽 |
-| height | double? | - | 自定义图片高 |

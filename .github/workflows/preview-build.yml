@@ -10,9 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      - name: Configure Git to not use symlinks
+        run: git config --global core.symlinks false
+
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+          lfs: true
 
 
       - name: Set Node version
@@ -166,6 +170,13 @@ jobs:
       - name: demo tools build api md
         run: |
           cd $GITHUB_WORKSPACE/tdesign-component/demo_tool
+          # Make sure binary files are not symlinks
+          if [ -L ./bin/api_tool_linux ]; then
+            echo "Error: api_tool_linux is a symlink. This may be a Git configuration issue."
+            echo "Please check if Git LFS is properly configured or if the file should be a regular file."
+            exit 1
+          fi
+          chmod +x ./bin/api_tool_linux
           sh all_build.sh
       
       - name: Build site
