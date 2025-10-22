@@ -166,6 +166,7 @@ jobs:
       - name: demo tools build api md
         run: |
           cd $GITHUB_WORKSPACE/tdesign-component/demo_tool
+          chmod +x ./bin/api_tool_linux
           sh all_build.sh
       
       - name: Build site
