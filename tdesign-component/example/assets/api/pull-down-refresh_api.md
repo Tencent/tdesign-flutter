@@ -7,39 +7,39 @@ TDesign刷新头部
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key | Key? | - | Key |
-| extent | double? | 48.0 | Header容器高度 |
-| triggerOffset |  | - |  |
-| triggerDistance | double | 48.0 | 触发刷新任务的偏移量，同[triggerOffset] |
-| clamping |  | - |  |
-| float | bool | false | 是否悬浮 |
-| processedDuration |  | - |  |
-| completeDuration | Duration? | - | 完成延时 |
-| hapticFeedback |  | - |  |
-| enableHapticFeedback | bool | true | 开启震动反馈 |
-| infiniteOffset | double? | - | 无限刷新偏移量 |
-| enableInfiniteRefresh | bool | false | 是否开启无限刷新 |
-| infiniteHitOver |  | - |  |
-| overScroll | bool | true | 越界滚动([enableInfiniteRefresh]为true或[infiniteOffset]有值时生效) |
-| loadingIcon | TDLoadingIcon | TDLoadingIcon.circle | loading样式 |
 | backgroundColor | Color? | - | 背景颜色 |
-| spring |  | - |  |
-| horizontalSpring |  | - |  |
-| readySpringBuilder |  | - |  |
-| horizontalReadySpringBuilder |  | - |  |
-| springRebound |  | - |  |
+| clamping |  | - |  |
+| completeDuration | Duration? | - | 完成延时 |
+| enableHapticFeedback | bool | true | 开启震动反馈 |
+| enableInfiniteRefresh | bool | false | 是否开启无限刷新 |
+| extent | double? | 48.0 | Header容器高度 |
+| float | bool | false | 是否悬浮 |
 | frictionFactor |  | - |  |
-| horizontalFrictionFactor |  | - |  |
-| safeArea |  | false |  |
+| hapticFeedback |  | - |  |
 | hitOver |  | - |  |
+| horizontalFrictionFactor |  | - |  |
+| horizontalReadySpringBuilder |  | - |  |
+| horizontalSpring |  | - |  |
+| infiniteHitOver |  | - |  |
+| infiniteOffset | double? | - | 无限刷新偏移量 |
+| key | Key? | - | Key |
+| listenable |  | - |  |
+| loadingIcon | TDLoadingIcon | TDLoadingIcon.circle | loading样式 |
+| maxOverOffset |  | - |  |
+| notifyWhenInvisible |  | - |  |
+| overScroll | bool | true | 越界滚动([enableInfiniteRefresh]为true或[infiniteOffset]有值时生效) |
 | position |  | - |  |
+| processedDuration |  | - |  |
+| readySpringBuilder |  | - |  |
+| safeArea |  | false |  |
+| secondaryCloseTriggerOffset |  | - |  |
+| secondaryDimension |  | - |  |
 | secondaryTriggerOffset |  | - |  |
 | secondaryVelocity |  | - |  |
-| secondaryDimension |  | - |  |
-| secondaryCloseTriggerOffset |  | - |  |
-| notifyWhenInvisible |  | - |  |
-| listenable |  | - |  |
+| spring |  | - |  |
+| springRebound |  | - |  |
+| triggerDistance | double | 48.0 | 触发刷新任务的偏移量，同[triggerOffset] |
+| triggerOffset |  | - |  |
 | triggerWhenReach |  | - |  |
 | triggerWhenRelease |  | - |  |
 | triggerWhenReleaseNoWait |  | - |  |
-| maxOverOffset |  | - |  |
