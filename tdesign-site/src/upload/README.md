@@ -179,7 +179,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | enabledReplaceType | bool? | false | 是否启用replace功能 |
 | wrapSpacing | double? | - | 多图布局时的 spacing |
 | wrapRunSpacing | double? | - | 多图布局时的 runSpacing |
-| wrapAlignment | WrapAlignment? | - | 多图对其方式 |
+| wrapAlignment | WrapAlignment? | - | 多图对齐方式 |
 
 
   

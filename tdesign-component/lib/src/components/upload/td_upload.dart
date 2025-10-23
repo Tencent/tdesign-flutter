@@ -143,7 +143,7 @@ class TDUpload extends StatefulWidget {
   /// 多图布局时的 runSpacing
   final double? wrapRunSpacing;
 
-  /// 多图对其方式
+  /// 多图对齐方式
   final WrapAlignment? wrapAlignment;
 
   @override
