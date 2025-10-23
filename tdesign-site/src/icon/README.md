@@ -37,7 +37,7 @@ icon数量: 2114
             child: const Wrap(
               children: [
                 TDText('筛选Icon请前往TDesign官网(长按网址可复制):'),
-                SelectableText('https://tdesign.tencent.com/vue/components/icon')
+                SelectableText('https://tdesign.tencent.com/icons')
               ],
             ),
           ),

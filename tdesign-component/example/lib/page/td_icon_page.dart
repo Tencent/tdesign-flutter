@@ -57,7 +57,7 @@ class _TDIconPageState extends State<TDIconPage> {
               children: [
                 TDText('筛选Icon请前往TDesign官网(长按网址可复制):'),
                 SelectableText(
-                    'https://tdesign.tencent.com/vue/components/icon')
+                    'https://tdesign.tencent.com/icons')
               ],
             ),
           ),
