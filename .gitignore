@@ -74,7 +74,9 @@ build/
 !**/ios/**/default.mode2v3
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
-/.fvm/
+
+.fvm/
+
 /tdesign-component/local_dependency_override.yaml
 /tdesign-component/pubspec_overrides.yaml
 /tdesign-component/example/pubspec_overrides.yaml
