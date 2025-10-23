@@ -5,11 +5,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
-import 'td_collapse_panel.dart';
 import 'td_collapse_salted_key.dart';
 import 'td_inset_divider.dart';
 import 'td_nonanimated_expand_icon.dart';
-
 
 /// 折叠面板的组件样式
 enum TDCollapseStyle {
@@ -137,7 +135,8 @@ class _TDCollapseState extends State<TDCollapse> {
       items.add(
         MaterialSlice(
             key: TDCollapseSaltedKey<BuildContext, int>(context, index * 2),
-            color: child.backgroundColor,
+            color:
+                child.backgroundColor ?? TDTheme.of(context).bgColorContainer,
             child: Column(
               // to prevent collapse state change when parent rebuild
               key: TDCollapseSaltedKey<BuildContext, int>(context, index * 2),
@@ -312,7 +311,7 @@ class _TDCollapseState extends State<TDCollapse> {
           Text(child.expandIconTextBuilder!(context, _isChildExpanded(index)),
               textAlign: TextAlign.right,
               style: TextStyle(
-                color: Colors.black.withOpacity(0.4),
+                color: TDTheme.of(context).textColorPlaceholder,
               )),
         expandedIcon,
       ],

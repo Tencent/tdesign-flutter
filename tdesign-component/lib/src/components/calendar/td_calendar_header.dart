@@ -51,12 +51,12 @@ class TDCalendarHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final list = _getWeeks(context);
     return Container(
-      padding: EdgeInsets.fromLTRB(padding, 0, padding, 0),
+      padding: EdgeInsets.symmetric(horizontal: padding),
       child: Column(
         children: [
           if (title?.isNotEmpty == true || titleWidget != null || closeBtn)
             Container(
-              padding: EdgeInsets.fromLTRB(0, padding, 0, padding),
+              padding: EdgeInsets.symmetric(vertical: padding),
               child: Row(
                 children: [
                   if (closeBtn) const SizedBox(width: 24),
@@ -85,8 +85,8 @@ class TDCalendarHeader extends StatelessWidget {
               ),
             ),
           Row(
-            children: List.generate(list.length, (index) {
-              return [
+            children: [
+              for (int index = 0; index < list.length; index++) ...[
                 if (index != 0) SizedBox(width: weekdayGap),
                 Expanded(
                   child: GestureDetector(
@@ -104,8 +104,8 @@ class TDCalendarHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-              ];
-            }).expand((element) => element).toList(),
+              ]
+            ],
           ),
         ],
       ),

@@ -104,10 +104,16 @@ class TDDrawer {
     if (_drawerRoute != null) {
       return; // 如果抽屉已经显示了，就不要再显示
     }
+
+    final overlayEnabled = showOverlay ?? true;
+    final dismissible = overlayEnabled && (closeOnOverlayClick ?? true);
+
     _drawerRoute = TDSlidePopupRoute(
-      slideTransitionFrom: placement == TDDrawerPlacement.right ? SlideTransitionFrom.right : SlideTransitionFrom.left,
-      isDismissible: (showOverlay ?? true) ? (closeOnOverlayClick ?? true) : false,
-      modalBarrierColor: (showOverlay ?? true) ? null : Colors.transparent,
+      slideTransitionFrom: placement == TDDrawerPlacement.right
+          ? SlideTransitionFrom.right
+          : SlideTransitionFrom.left,
+      isDismissible: dismissible,
+      modalBarrierColor: overlayEnabled ? null : Colors.transparent,
       modalTop: drawerTop,
       builder: (context) {
         return TDDrawerWidget(
@@ -126,6 +132,7 @@ class TDDrawer {
         );
       },
     );
+
     Navigator.of(context).push(_drawerRoute!).then((_) {
       // 当抽屉关闭时，将_drawerRoute置为null
       _deleteRouter();

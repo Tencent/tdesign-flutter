@@ -12,15 +12,25 @@ import 'td_point_indicator.dart';
 
 /// Loading 尺寸
 enum TDLoadingSize {
+  /// 小尺寸
   small,
+
+  /// 中尺寸
   medium,
+
+  /// 大尺寸
   large,
 }
 
-/// Loading的图标
+/// Loading图标
 enum TDLoadingIcon {
+  /// 圆形
   circle,
+
+  /// 点状
   point,
+
+  /// 菊花状
   activity,
 }
 
@@ -34,26 +44,34 @@ class TDLoading extends StatelessWidget {
     this.text,
     this.refreshWidget,
     this.customIcon,
-    this.textColor = Colors.black,
+    this.textColor,
     this.duration = 2000,
   }) : super(key: key);
 
   /// 尺寸
   final TDLoadingSize size;
+
   /// 图标，支持圆形、点状、菊花状
   final TDLoadingIcon? icon;
+
   /// 图标颜色
   final Color? iconColor;
+
   /// 文案
   final String? text;
+
   /// 失败刷新组件
   final Widget? refreshWidget;
+
   /// 文案颜色
-  final Color textColor;
+  final Color? textColor;
+
   /// 文案和图标相对方向
   final Axis axis;
+
   /// 自定义图标，优先级高于icon
   final Widget? customIcon;
+
   /// 一次刷新的时间，控制动画速度
   final int duration;
 
@@ -62,13 +80,13 @@ class TDLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      children: [_contentWidget()],
+      children: [_contentWidget(context)],
     );
   }
 
-  Widget _contentWidget() {
+  Widget _contentWidget(BuildContext context) {
     if (icon == null) {
-      return textWidget();
+      return textWidget(context);
     } else {
       Widget? indicator;
       if (customIcon != null) {
@@ -104,27 +122,20 @@ class TDLoading extends StatelessWidget {
 
       if (text == null) {
         return indicator;
-      } else if (axis == Axis.vertical) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-            children: [
-          indicator,
-          SizedBox(
-            height: _getPaddingWidth(),
-          ),
-          textWidget(),
-        ]);
-      } else {
-        return Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-          indicator,
-          SizedBox(
-            width: _getPaddingWidth(),
-          ),
-          textWidget()
-        ]);
       }
+
+      return Flex(
+        // spacing: _getPaddingSize(),
+        mainAxisSize: MainAxisSize.min,
+        direction: axis,
+        children: [
+          indicator,
+          axis == Axis.vertical
+              ? SizedBox(height: _getPaddingSize())
+              : SizedBox(width: _getPaddingSize()),
+          textWidget(context),
+        ],
+      );
     }
   }
 
@@ -147,14 +158,14 @@ class TDLoading extends StatelessWidget {
       case TDLoadingSize.small:
         return TDCircleIndicator(
           color: iconColor,
-          size: 18, // 设计稿框位24，图形宽位19.5,推导lineWidth为3时，size位18
+          size: 18, // 设计稿框为24，图形宽为19.5，推导lineWidth为3时，size为18
           lineWidth: 3,
           duration: _innerDuration,
         );
     }
   }
 
-  double _getPaddingWidth() {
+  double _getPaddingSize() {
     switch (size) {
       case TDLoadingSize.large:
         return 10;
@@ -165,31 +176,30 @@ class TDLoading extends StatelessWidget {
     }
   }
 
-  Font fitFont() {
-    switch (size) {
-      case TDLoadingSize.large:
-        return TDTheme.of().fontBodyLarge ?? Font(size: 16, lineHeight: 24);
-      case TDLoadingSize.medium:
-        return TDTheme.of().fontBodyMedium ?? Font(size: 14, lineHeight: 22);
-      case TDLoadingSize.small:
-        return TDTheme.of().fontBodySmall ?? Font(size: 12, lineHeight: 20);
-    }
-  }
+  Widget textWidget(BuildContext context) {
+    final font = switch (size) {
+      TDLoadingSize.large =>
+        TDTheme.of(context).fontBodyLarge ?? Font(size: 16, lineHeight: 24),
+      TDLoadingSize.medium =>
+        TDTheme.of(context).fontBodyMedium ?? Font(size: 14, lineHeight: 22),
+      TDLoadingSize.small =>
+        TDTheme.of(context).fontBodySmall ?? Font(size: 12, lineHeight: 20),
+    };
 
-  Widget textWidget() {
-    Widget result =  TDText(
+    Widget result = TDText(
       text,
-      textColor: textColor,
+      textColor: textColor ?? TDTheme.of(context).textColorPrimary,
       fontWeight: FontWeight.w400,
-      font: fitFont(),
+      font: font,
       textAlign: TextAlign.center,
     );
-    if(refreshWidget != null){
+    if (refreshWidget != null) {
       result = Row(
+        // spacing: 8,
         mainAxisSize: MainAxisSize.min,
         children: [
           result,
-          const SizedBox(width: 8,),
+          const SizedBox(width: 8),
           refreshWidget!,
         ],
       );

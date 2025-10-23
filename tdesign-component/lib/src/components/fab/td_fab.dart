@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
-
 
 enum TDFabTheme { primary, defaultTheme, light, danger }
 
@@ -19,15 +17,15 @@ enum TDFabSize {
 }
 
 class TDFab extends StatelessWidget {
-  const TDFab(
-      {Key? key,
-      this.theme = TDFabTheme.defaultTheme,
-      this.shape = TDFabShape.circle,
-      this.size = TDFabSize.large,
-      this.text,
-      this.onClick,
-      this.icon})
-      : super(key: key);
+  const TDFab({
+    Key? key,
+    this.theme = TDFabTheme.defaultTheme,
+    this.shape = TDFabShape.circle,
+    this.size = TDFabSize.large,
+    this.text,
+    this.onClick,
+    this.icon,
+  }) : super(key: key);
 
   /// 主题
   final TDFabTheme theme;
@@ -47,7 +45,7 @@ class TDFab extends StatelessWidget {
   /// 点击事件
   final VoidCallback? onClick;
 
-  bool get showText => text != null && text != '';
+  bool get showText => text?.isNotEmpty ?? false;
 
   EdgeInsets getPadding() {
     switch (size) {
@@ -67,10 +65,6 @@ class TDFab extends StatelessWidget {
         return showText
             ? const EdgeInsets.symmetric(horizontal: 8, vertical: 3)
             : const EdgeInsets.all(5);
-      default:
-        return showText
-            ? const EdgeInsets.symmetric(horizontal: 20, vertical: 12)
-            : const EdgeInsets.all(12);
     }
   }
 
@@ -84,8 +78,6 @@ class TDFab extends StatelessWidget {
         return 32.0;
       case TDFabSize.extraSmall:
         return 28.0;
-      default:
-        return 48.0;
     }
   }
 
@@ -99,8 +91,6 @@ class TDFab extends StatelessWidget {
         return TDTheme.of(context).brandColor1;
       case TDFabTheme.danger:
         return TDTheme.of(context).errorColor6;
-      default:
-        return TDTheme.of(context).grayColor3;
     }
   }
 
@@ -109,13 +99,11 @@ class TDFab extends StatelessWidget {
       case TDFabTheme.primary:
         return Colors.white;
       case TDFabTheme.defaultTheme:
-        return TDTheme.of(context).fontGyColor1.withOpacity(0.9);
+        return TDTheme.of(context).fontGyColor1;
       case TDFabTheme.light:
-        return TDTheme.of(context).brandColor7;
+        return TDTheme.of(context).brandNormalColor;
       case TDFabTheme.danger:
         return Colors.white;
-      default:
-        return TDTheme.of(context).fontGyColor1.withOpacity(0.9);
     }
   }
 
@@ -129,8 +117,6 @@ class TDFab extends StatelessWidget {
         return 18.0;
       case TDFabSize.extraSmall:
         return 18.0;
-      default:
-        return 24.0;
     }
   }
 
@@ -144,73 +130,61 @@ class TDFab extends StatelessWidget {
         return 14.0;
       case TDFabSize.extraSmall:
         return 14.0;
-      default:
-        return 16.0;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (onClick != null) {
-          onClick!();
-        }
-      },
-      child: InkWell(
-        child: Container(
-          padding: getPadding(),
-          decoration: BoxDecoration(
-              color: getBackgroundColor(context),
-              boxShadow: [
-                BoxShadow(
-                    offset: const Offset(0, 5),
-                    blurRadius: 2.5,
-                    spreadRadius:-1.5,
-                    color: Colors.black.withOpacity(0.1)),
-                BoxShadow(
-                    offset: const Offset(0, 8),
-                    blurRadius: 5,
-                    spreadRadius:0.5,
-                    color: Colors.black.withOpacity(0.06)),
-                BoxShadow(
-                    offset: const Offset(0, 3),
-                    blurRadius: 7,
-                    spreadRadius:1,
-                    color: Colors.black.withOpacity(0.05))
-              ],
-              borderRadius: shape == TDFabShape.circle
-                  ? BorderRadius.circular(24)
-                  : BorderRadius.circular(6)),
-          height: getMinWidthOrHeight(),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              icon ??
-                  Icon(
-                    TDIcons.add,
-                    size: getIconSize(),
-                    color: getIconColor(context),
-                  ),
-              Visibility(
-                  visible: showText,
-                  child: const SizedBox(
-                    width: 4,
-                  )),
-              Visibility(
-                  visible: showText,
-                  child: TDText(
-                    text ?? '',
-                    style: TextStyle(
-                        height: 1.5,
-                        fontWeight: FontWeight.w600,
-                        fontSize: getFontSize(),
-                        color: getIconColor(context),
-                        leadingDistribution: TextLeadingDistribution.even),
-                  ))
+    return InkWell(
+      onTap: onClick,
+      child: Container(
+        padding: getPadding(),
+        decoration: BoxDecoration(
+            color: getBackgroundColor(context),
+            boxShadow: [
+              BoxShadow(
+                  offset: const Offset(0, 5),
+                  blurRadius: 2.5,
+                  spreadRadius: -1.5,
+                  color: Colors.black.withOpacity(0.1)),
+              BoxShadow(
+                  offset: const Offset(0, 8),
+                  blurRadius: 5,
+                  spreadRadius: 0.5,
+                  color: Colors.black.withOpacity(0.06)),
+              BoxShadow(
+                  offset: const Offset(0, 3),
+                  blurRadius: 7,
+                  spreadRadius: 1,
+                  color: Colors.black.withOpacity(0.05))
             ],
-          ),
+            borderRadius: shape == TDFabShape.circle
+                ? BorderRadius.circular(TDTheme.of(context).radiusCircle)
+                : BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+        height: getMinWidthOrHeight(),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            icon ??
+                Icon(
+                  TDIcons.add,
+                  size: getIconSize(),
+                  color: getIconColor(context),
+                ),
+            if (showText) const SizedBox(width: 4),
+            if (showText)
+              TDText(
+                text ?? '',
+                style: TextStyle(
+                  height: 1.5,
+                  fontWeight: FontWeight.w600,
+                  fontSize: getFontSize(),
+                  color: getIconColor(context),
+                  leadingDistribution: TextLeadingDistribution.even,
+                ),
+              ),
+          ],
         ),
       ),
     );

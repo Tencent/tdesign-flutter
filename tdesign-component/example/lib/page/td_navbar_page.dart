@@ -18,56 +18,23 @@ class TDNavBarPage extends StatelessWidget {
         ExampleModule(
           title: '组件类型',
           children: [
-            ExampleItem(
-              desc: '基础H5导航栏',
-              builder: _baseH5Navbar,
-            ),
-            ExampleItem(
-              builder: _leftMultiAction
-            ),
-            ExampleItem(
-              builder: _rightMultiAction,
-            ),
-            ExampleItem(
-              desc: '带搜索导航栏',
-              builder: _searchNavbar,
-            ),
-            ExampleItem(
-              desc: '带图片导航栏',
-              builder: _logoNavbar
-            ),
+            ExampleItem(desc: '基础H5导航栏', builder: _baseH5Navbar),
+            ExampleItem(builder: _leftMultiAction),
+            ExampleItem(builder: _rightMultiAction),
+            ExampleItem(desc: '带搜索导航栏', builder: _searchNavbar),
+            ExampleItem(desc: '带图片导航栏', builder: _logoNavbar),
           ],
         ),
-        ExampleModule(
-          title: '组件样式',
-          children: [
-            ExampleItem(
-              desc: '标题对齐',
-              builder: _titleCenterNavbar,
-            ),
-            ExampleItem(
-              builder: _titleLeftNavbar,
-            ),
-
-            ExampleItem(
-              desc: '标题尺寸',
-              builder: _titleNormalNavbar,
-            ),
-            ExampleItem(
-              builder: _titleBelowNavbar,
-            ),
-            ExampleItem(
-              desc: '自定义颜色',
-              builder: _setBgColorNavbar,
-            ),
-          ]
-        )
+        ExampleModule(title: '组件样式', children: [
+          ExampleItem(desc: '标题对齐', builder: _titleCenterNavbar),
+          ExampleItem(builder: _titleLeftNavbar),
+          ExampleItem(desc: '标题尺寸', builder: _titleNormalNavbar),
+          ExampleItem(builder: _titleBelowNavbar),
+          ExampleItem(desc: '自定义颜色', builder: _setBgColorNavbar),
+        ])
       ],
       test: [
-        ExampleItem(
-          desc: '底部阴影',
-          builder: _shadowNavbar,
-        ),
+        ExampleItem(desc: '底部阴影', builder: _shadowNavbar),
       ],
     );
   }
@@ -75,11 +42,11 @@ class TDNavBarPage extends StatelessWidget {
   @Demo(group: 'navbar')
   Widget _baseH5Navbar(BuildContext context) {
     return const TDNavBar(
-        height: 48,
-        titleFontWeight: FontWeight.w600,
-        title: titleText,
-        screenAdaptation: false,
-        useDefaultBack: true,
+      height: 48,
+      titleFontWeight: FontWeight.w600,
+      title: titleText,
+      screenAdaptation: false,
+      useDefaultBack: true,
     );
   }
 
@@ -98,71 +65,73 @@ class TDNavBarPage extends StatelessWidget {
           ],
           rightBarItems: [
             TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
-          ]
-      ),
+          ]),
     );
   }
 
   @Demo(group: 'navbar')
   Widget _rightMultiAction(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: TDNavBar(
-            height: 48,
-            title: titleText,
-            titleFontWeight: FontWeight.w600,
-            screenAdaptation: false,
-            useDefaultBack: true,
-            rightBarItems: [
-              TDNavBarItem(icon: TDIcons.home, iconSize: 24, ),
-              TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24,)
-            ]
-        ),
+      padding: const EdgeInsets.only(top: 16),
+      child: TDNavBar(
+          height: 48,
+          title: titleText,
+          titleFontWeight: FontWeight.w600,
+          screenAdaptation: false,
+          useDefaultBack: true,
+          rightBarItems: [
+            TDNavBarItem(
+              icon: TDIcons.home,
+              iconSize: 24,
+            ),
+            TDNavBarItem(
+              icon: TDIcons.ellipsis,
+              iconSize: 24,
+            )
+          ]),
     );
   }
 
   @Demo(group: 'navbar')
-  Widget _searchNavbar(BuildContext context){
-    return TDNavBar(
-      useDefaultBack: false,
-      screenAdaptation: false,
-      centerTitle: false,
-      titleMargin: 0,
-      titleWidget:  TDSearchBar(
-        needCancel: false,
-        autoHeight: true,
-        padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
-        placeHolder: '搜索预设文案',
-        mediumStyle: true,
-        style: TDSearchStyle.round,
-        onTextChanged: (String text) {
-          print('input：$text');
-        },
-      ),
-      rightBarItems: [
-        TDNavBarItem(icon: TDIcons.home,iconSize: 24),
-        TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
-      ]
-    );
-  }
-
-  @Demo(group: 'navbar')
-  Widget _logoNavbar(BuildContext context){
+  Widget _searchNavbar(BuildContext context) {
     return TDNavBar(
         useDefaultBack: false,
         screenAdaptation: false,
         centerTitle: false,
         titleMargin: 0,
-        titleWidget:  const TDImage(
+        titleWidget: TDSearchBar(
+          needCancel: false,
+          autoHeight: true,
+          padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
+          placeHolder: '搜索预设文案',
+          mediumStyle: true,
+          style: TDSearchStyle.round,
+          onTextChanged: (String text) {
+            print('input：$text');
+          },
+        ),
+        rightBarItems: [
+          TDNavBarItem(icon: TDIcons.home, iconSize: 24),
+          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+        ]);
+  }
+
+  @Demo(group: 'navbar')
+  Widget _logoNavbar(BuildContext context) {
+    return TDNavBar(
+        useDefaultBack: false,
+        screenAdaptation: false,
+        centerTitle: false,
+        titleMargin: 0,
+        titleWidget: const TDImage(
           assetUrl: 'assets/img/td_brand.png',
           width: 102,
           height: 24,
         ),
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home,iconSize: 24),
-          TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
-        ]
-    );
+          TDNavBarItem(icon: TDIcons.home, iconSize: 24),
+          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+        ]);
   }
 
   @Demo(group: 'navbar')
@@ -174,10 +143,9 @@ class TDNavBarPage extends StatelessWidget {
         screenAdaptation: false,
         useDefaultBack: true,
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home,iconSize: 24),
-          TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
-        ]
-    );
+          TDNavBarItem(icon: TDIcons.home, iconSize: 24),
+          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+        ]);
   }
 
   @Demo(group: 'navbar')
@@ -193,10 +161,9 @@ class TDNavBarPage extends StatelessWidget {
           screenAdaptation: false,
           useDefaultBack: true,
           rightBarItems: [
-            TDNavBarItem(icon: TDIcons.home,iconSize: 24),
-            TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
-          ]
-      ),
+            TDNavBarItem(icon: TDIcons.home, iconSize: 24),
+            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+          ]),
     );
   }
 
@@ -209,23 +176,26 @@ class TDNavBarPage extends StatelessWidget {
         screenAdaptation: false,
         useDefaultBack: true,
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home,iconSize: 24),
-          TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
-        ]
-    );
+          TDNavBarItem(icon: TDIcons.home, iconSize: 24),
+          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+        ]);
   }
 
   @Demo(group: 'navbar')
   Widget _titleBelowNavbar(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: TDNavBar(
+      padding: const EdgeInsets.only(top: 16),
+      child: TDNavBar(
           height: 104,
           title: '返回',
-          titleColor: const Color.fromRGBO(0, 0, 0, 0.9),
+          titleColor: TDTheme.of(context).textColorPrimary,
           belowTitleWidget: SizedBox(
             height: 56,
-            child: TDText(titleText, font: Font(size: 28, lineHeight: 52), fontWeight: FontWeight.w600,),
+            child: TDText(
+              titleText,
+              font: Font(size: 28, lineHeight: 52),
+              fontWeight: FontWeight.w600,
+            ),
           ),
           titleFont: Font(size: 16, lineHeight: 24),
           centerTitle: false,
@@ -233,13 +203,12 @@ class TDNavBarPage extends StatelessWidget {
           screenAdaptation: false,
           useDefaultBack: false,
           leftBarItems: [
-            TDNavBarItem(icon: TDIcons.chevron_left,iconSize: 24),
+            TDNavBarItem(icon: TDIcons.chevron_left, iconSize: 24),
           ],
           rightBarItems: [
-            TDNavBarItem(icon: TDIcons.home,iconSize: 24),
-            TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
-          ]
-      ),
+            TDNavBarItem(icon: TDIcons.home, iconSize: 24),
+            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+          ]),
     );
   }
 
@@ -254,13 +223,17 @@ class TDNavBarPage extends StatelessWidget {
         useDefaultBack: false,
         screenAdaptation: false,
         leftBarItems: [
-          TDNavBarItem(icon: TDIcons.chevron_left, iconSize: 24, iconColor: Colors.white),
+          TDNavBarItem(
+              icon: TDIcons.chevron_left,
+              iconSize: 24,
+              iconColor: Colors.white),
         ],
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home, iconSize: 24, iconColor: Colors.white),
-          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24, iconColor: Colors.white)
-        ]
-    );
+          TDNavBarItem(
+              icon: TDIcons.home, iconSize: 24, iconColor: Colors.white),
+          TDNavBarItem(
+              icon: TDIcons.ellipsis, iconSize: 24, iconColor: Colors.white)
+        ]);
   }
 
   @Demo(group: 'navbar')
@@ -275,7 +248,7 @@ class TDNavBarPage extends StatelessWidget {
         BoxShadow(
           blurRadius: 4,
           offset: const Offset(0, 4),
-          color: TDTheme.of(context).grayColor5,
+          color: TDTheme.of(context).componentBorderColor,
         )
       ],
     );

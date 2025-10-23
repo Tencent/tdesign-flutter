@@ -33,7 +33,8 @@ class TDIndexesList extends StatefulWidget {
   final void Function(String newIndex, String oldIndex) onSelect;
 
   /// 索引文本自定义构建，包括索引激活左侧提示
-  final Widget Function(BuildContext context, String index, bool isActive)? builderIndex;
+  final Widget Function(BuildContext context, String index, bool isActive)?
+      builderIndex;
 
   @override
   State<TDIndexesList> createState() => _TDIndexesListState();
@@ -48,14 +49,19 @@ class _TDIndexesListState extends State<TDIndexesList> {
   @override
   void initState() {
     super.initState();
-    _containerKeys = widget.indexList.asMap().map((index, e) => MapEntry(e, GlobalKey()));
+    _initContainerKeys();
+  }
+
+  void _initContainerKeys() {
+    _containerKeys =
+        widget.indexList.asMap().map((index, e) => MapEntry(e, GlobalKey()));
   }
 
   @override
   void didUpdateWidget(TDIndexesList oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.indexList != oldWidget.indexList) {
-      _containerKeys = widget.indexList.asMap().map((index, e) => MapEntry(e, GlobalKey()));
+      _initContainerKeys();
     }
   }
 
@@ -96,52 +102,64 @@ class _TDIndexesListState extends State<TDIndexesList> {
                       (e) {
                         final isActive = value == e;
                         if (widget.builderIndex != null) {
-                          return Container(key: _containerKeys[e], child: widget.builderIndex!(context, e, isActive),);
+                          return Container(
+                            key: _containerKeys[e],
+                            child: widget.builderIndex!(context, e, isActive),
+                          );
                         }
                         return Stack(
                           clipBehavior: Clip.none,
                           children: [
                             if (_showTip && value == e)
                               Positioned(
-                                top: -TDTheme.of(context).spacer48 / 2 + _indexSize / 2,
+                                top: -TDTheme.of(context).spacer48 / 2 +
+                                    _indexSize / 2,
                                 left: -TDTheme.of(context).spacer48,
                                 child: Container(
                                   height: TDTheme.of(context).spacer48,
                                   width: TDTheme.of(context).spacer48,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
-                                    color: TDTheme.of(context).brandColor1,
+                                    borderRadius: BorderRadius.circular(
+                                        TDTheme.of(context).radiusCircle),
+                                    color: TDTheme.of(context).brandLightColor,
                                   ),
                                   child: Center(
                                     child: TDText(
                                       e,
                                       forceVerticalCenter: true,
-                                      font: TDTheme.of(context).fontTitleExtraLarge,
-                                      textColor: TDTheme.of(context).brandColor7,
+                                      font: TDTheme.of(context)
+                                          .fontTitleExtraLarge,
+                                      textColor:
+                                          TDTheme.of(context).brandNormalColor,
                                     ),
                                   ),
                                 ),
                               ),
                             Container(
                               key: _containerKeys[e],
-                              padding: EdgeInsets.only(left: TDTheme.of(context).spacer8),
-                              color: Colors.transparent,
+                              padding: EdgeInsets.only(
+                                  left: TDTheme.of(context).spacer8),
                               child: Container(
                                 width: _indexSize,
                                 height: _indexSize,
                                 decoration: isActive
                                     ? BoxDecoration(
-                                        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
-                                        color: TDTheme.of(context).brandColor7,
+                                        borderRadius: BorderRadius.circular(
+                                            TDTheme.of(context).radiusCircle),
+                                        color: TDTheme.of(context)
+                                            .brandNormalColor,
                                       )
                                     : null,
                                 child: Center(
                                   child: TDText(
                                     e,
                                     forceVerticalCenter: true,
-                                    font: isActive ?  TDTheme.of(context).fontMarkSmall : TDTheme.of(context).fontLinkSmall,
-                                    textColor:
-                                        isActive ? TDTheme.of(context).fontWhColor1 : TDTheme.of(context).fontGyColor1,
+                                    font: isActive
+                                        ? TDTheme.of(context).fontMarkSmall
+                                        : TDTheme.of(context).fontLinkSmall,
+                                    textColor: isActive
+                                        ? TDTheme.of(context).textColorAnti
+                                        : TDTheme.of(context).textColorPrimary,
                                   ),
                                 ),
                               ),
@@ -172,10 +190,12 @@ class _TDIndexesListState extends State<TDIndexesList> {
 
   String? _fingerInsideContainer(Offset globalPosition) {
     for (var entry in _containerKeys.entries) {
-      final renderBox = entry.value.currentContext?.findRenderObject() as RenderBox?;
+      final renderBox =
+          entry.value.currentContext?.findRenderObject() as RenderBox?;
       if (renderBox != null) {
         final localPosition = renderBox.globalToLocal(globalPosition);
-        final isIn = renderBox.hitTest(BoxHitTestResult(), position: localPosition);
+        final isIn =
+            renderBox.hitTest(BoxHitTestResult(), position: localPosition);
         if (isIn) {
           return entry.key;
         }

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
-import '../../theme/td_colors.dart';
-import '../../theme/td_theme.dart';
+import '../../../tdesign_flutter.dart';
 
 const _kAminatedDuration = 100;
 
 /// TDesign风格的Swiper指示器样式，与flutter_swiper的Swiper结合使用
 class TDSwiperPagination extends SwiperPlugin {
-  const TDSwiperPagination(
-      {this.alignment,
-      this.key,
-      this.margin = const EdgeInsets.all(10.0),
-      this.builder = TDSwiperPagination.dots});
+  const TDSwiperPagination({
+    this.alignment,
+    this.key,
+    this.margin = const EdgeInsets.all(10.0),
+    this.builder = TDSwiperPagination.dots,
+  });
 
   /// 圆点样式
   static const SwiperPlugin dots = TDSwiperDotsPagination();
@@ -60,6 +60,7 @@ class TDSwiperPagination extends SwiperPlugin {
   }
 }
 
+/// 圆点指示器
 class TDSwiperDotsPagination extends SwiperPlugin {
   /// 当前展示的索引，如果未设置，则为Theme.of(context).primaryColor
   final Color? activeColor;
@@ -79,7 +80,7 @@ class TDSwiperDotsPagination extends SwiperPlugin {
   /// 圆角矩形宽度（高度仍为activeSize）
   final double? roundedRectangleWidth;
 
-  // 动画效果 默认100ms，设置为0则无动画
+  /// 动画效果 默认100ms，设置为 0 则无动画
   final int? animationDuration;
 
   final Key? key;
@@ -90,7 +91,7 @@ class TDSwiperDotsPagination extends SwiperPlugin {
     this.key,
     this.size = 6.0,
     this.activeSize = 6.0,
-    this.space = 4.0,
+    this.space = 8.0,
     this.roundedRectangleWidth,
     this.animationDuration,
   });
@@ -107,8 +108,8 @@ class TDSwiperDotsPagination extends SwiperPlugin {
             : TDTheme.of(context).whiteColor1);
     var color = this.color ??
         (config.outer
-            ? TDTheme.of(context).grayColor3
-            : TDTheme.of(context).whiteColor1.withOpacity(0.55));
+            ? TDTheme.of(context).bgColorComponentHover
+            : TDTheme.of(context).fontWhColor2);
 
     if (config.indicatorLayout != PageIndicatorLayout.NONE &&
         config.layout == SwiperLayout.DEFAULT) {
@@ -130,12 +131,12 @@ class TDSwiperDotsPagination extends SwiperPlugin {
 
     for (var i = 0; i < itemCount; ++i) {
       var active = i == activeIndex;
-      var isActiviRectangle =
+      var isActivityRectangle =
           roundedRectangleWidth != null && roundedRectangleWidth! > 0 && active;
       double? scalableLen;
       double? fixedLen;
 
-      scalableLen = isActiviRectangle
+      scalableLen = isActivityRectangle
           ? roundedRectangleWidth
           : (active ? activeSize : size);
       fixedLen = active ? activeSize : size;
@@ -146,8 +147,12 @@ class TDSwiperDotsPagination extends SwiperPlugin {
         child: AnimatedContainer(
           duration:
               Duration(milliseconds: animationDuration ?? _kAminatedDuration),
-          width: config.scrollDirection == Axis.horizontal ? scalableLen : fixedLen,
-          height: config.scrollDirection == Axis.horizontal ? fixedLen : scalableLen,
+          width: config.scrollDirection == Axis.horizontal
+              ? scalableLen
+              : fixedLen,
+          height: config.scrollDirection == Axis.horizontal
+              ? fixedLen
+              : scalableLen,
           decoration: BoxDecoration(
               color: active ? activeColor : color,
               borderRadius: BorderRadius.circular(activeSize / 2)),
@@ -155,33 +160,28 @@ class TDSwiperDotsPagination extends SwiperPlugin {
       ));
     }
 
-    if (config.scrollDirection == Axis.vertical) {
-      return Column(
-        key: key,
-        mainAxisSize: MainAxisSize.min,
-        children: list,
-      );
-    } else {
-      return Row(
-        key: key,
-        mainAxisSize: MainAxisSize.min,
-        children: list,
-      );
-    }
+    return Flex(
+      direction: config.scrollDirection,
+      // spacing: space,
+      key: key,
+      mainAxisSize: MainAxisSize.min,
+      children: list,
+    );
   }
 }
 
+/// 数字指示器
 class TDFractionPagination extends SwiperPlugin {
-  // container宽度
+  /// container宽度
   final double? width;
 
-  // container高度
+  /// container高度
   final double? height;
 
-  // 圆角角度
+  /// 圆角角度
   final double? borderRadius;
 
-  // 背景色
+  /// 背景色
   final Color? backgroundColor;
 
   /// 如果未设置，则为 Theme.of(context).scaffoldBackgroundColor
@@ -210,76 +210,51 @@ class TDFractionPagination extends SwiperPlugin {
 
   @override
   Widget build(BuildContext context, SwiperPluginConfig config) {
-    Widget child;
-    if (Axis.vertical == config.scrollDirection) {
-      child = Column(
-        key: key,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            '${config.activeIndex + 1}',
-            style: activeTextStyle,
-          ),
-          Text(
-            '/',
-            style: textStyle,
-          ),
-          Text(
-            '${config.itemCount}',
-            style: textStyle,
-          )
-        ],
-      );
-    } else {
-      child = Row(
-        key: key,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            '${config.activeIndex + 1}',
-            style: activeTextStyle,
-          ),
-          Text(
-            '/${config.itemCount}',
-            style: textStyle,
-          )
-        ],
-      );
-    }
     return Container(
       width: width ?? 37,
-      height: height ?? 20,
+      height: height ?? 24,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-          color: backgroundColor ?? const Color(0x66000000),
-          borderRadius: BorderRadius.circular(borderRadius ?? 10)),
-      child: child,
+        color: backgroundColor ?? TDTheme.of(context).textColorPlaceholder,
+        borderRadius: BorderRadius.circular(
+            borderRadius ?? TDTheme.of(context).radiusRound),
+      ),
+      child: Row(
+        key: key,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text('${config.activeIndex + 1}', style: activeTextStyle),
+          Text('/${config.itemCount}', style: textStyle)
+        ],
+      ),
     );
   }
 }
 
+/// 箭头指示器
 class TDSwiperArrowPagination extends SwiperPlugin {
-  // 当设置 loop = false时，滑动到边界是否自动隐藏边界箭头
+  /// 当设置 loop = false 时，滑动到边界是否自动隐藏边界箭头
   final bool? autoHideWhenAtBoundary;
 
-  // 左箭头widget
+  /// 左箭头widget
   final Widget? backArrow;
 
-  // 右箭头widget
+  /// 右箭头widget
   final Widget? forwardArrow;
 
-  // 背景圆形半径
+  /// 背景圆形半径
   final double? radius;
 
-  // 背景圆形颜色
+  /// 背景圆形颜色
   final Color? backgroundColor;
 
-  const TDSwiperArrowPagination(
-      {this.radius,
-      this.backgroundColor,
-      this.backArrow,
-      this.forwardArrow,
-      this.autoHideWhenAtBoundary = true});
+  const TDSwiperArrowPagination({
+    this.radius,
+    this.backgroundColor,
+    this.backArrow,
+    this.forwardArrow,
+    this.autoHideWhenAtBoundary = true,
+  });
 
   @override
   Widget build(BuildContext context, SwiperPluginConfig config) {
@@ -287,47 +262,44 @@ class TDSwiperArrowPagination extends SwiperPlugin {
     var activeIndex = config.activeIndex;
 
     return Row(children: [
-      Visibility(
+      _buildIcon(
+        context,
         visible: config.loop ||
             ((autoHideWhenAtBoundary ?? false) && activeIndex != 0),
-        child: GestureDetector(
-          child: CircleAvatar(
-            radius: radius ?? 10.0,
-            backgroundColor:
-                backgroundColor ?? TDTheme.of(context).fontGyColor3,
-            child: backArrow ??
-                const Icon(
-                  Icons.arrow_back_ios_outlined,
-                  color: Colors.white,
-                  size: 9,
-                ),
-          ),
-          onTap: () {
-            config.controller.previous();
-          },
-        ),
+        arrowWidget: backArrow,
+        icon: Icons.arrow_back_ios_outlined,
+        onTap: config.controller.previous,
       ),
       const Spacer(),
-      Visibility(
+      _buildIcon(
+        context,
         visible: config.loop ||
             ((autoHideWhenAtBoundary ?? false) && activeIndex != itemCount - 1),
-        child: GestureDetector(
-          child: CircleAvatar(
-            radius: radius ?? 10.0,
-            backgroundColor:
-                backgroundColor ?? TDTheme.of(context).fontGyColor3,
-            child: forwardArrow ??
-                const Icon(
-                  Icons.arrow_forward_ios_outlined,
-                  color: Colors.white,
-                  size: 9,
-                ),
-          ),
-          onTap: () {
-            config.controller.next();
-          },
-        ),
+        arrowWidget: forwardArrow,
+        icon: Icons.arrow_forward_ios_outlined,
+        onTap: config.controller.next,
       ),
     ]);
+  }
+
+  Widget _buildIcon(
+    BuildContext context, {
+    Widget? arrowWidget,
+    required IconData icon,
+    required bool visible,
+    required Function() onTap,
+  }) {
+    return Visibility(
+      visible: visible,
+      child: GestureDetector(
+        child: CircleAvatar(
+          radius: radius ?? 10.0,
+          backgroundColor:
+              backgroundColor ?? TDTheme.of(context).textColorPlaceholder,
+          child: arrowWidget ?? Icon(icon, color: Colors.white, size: 10.0),
+        ),
+        onTap: onTap,
+      ),
+    );
   }
 }

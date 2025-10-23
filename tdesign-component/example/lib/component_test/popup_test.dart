@@ -34,16 +34,16 @@ class _TestPageState extends State<TestPage> {
         slideTransitionFrom: SlideTransitionFrom.bottom,
         builder: (context) {
           return TDPopupBottomDisplayPanel(
-            title: "title",
+            title: 'title',
             radius: 20,
-            backgroundColor: Color(0xFFFAFFFC),
+            backgroundColor: const Color(0xFFFAFFFC),
             closeClick: () {
               Navigator.maybePop(context);
             },
             child: Container(
-              padding: EdgeInsets.only(left: 20, right: 20, bottom: 33),
-              decoration: BoxDecoration(color: Colors.white),
-              child: Column(
+              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 33),
+              decoration: const BoxDecoration(color: Colors.white),
+              child: const Column(
                 children: [
                   Center(
                     child: Text("立即拨打"),

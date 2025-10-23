@@ -2,22 +2,28 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-///
 /// 骨架图动画
-///
 enum TDSkeletonAnimation {
-  gradient, // 渐变
-  flashed, // 闪烁
+  /// 渐变
+  gradient,
+
+  /// 闪烁
+  flashed,
 }
 
-///
 /// 骨架图风格
-///
 enum TDSkeletonTheme {
-  avatar, // 头像
-  image, // 图片
-  text, // 文本
-  paragraph, // 段落
+  /// 头像
+  avatar,
+
+  /// 图片
+  image,
+
+  /// 文本
+  text,
+
+  /// 段落
+  paragraph,
 }
 
 class TDSkeleton extends StatefulWidget {
@@ -28,65 +34,54 @@ class TDSkeleton extends StatefulWidget {
     TDSkeletonTheme theme = TDSkeletonTheme.text,
   }) {
     assert(delay >= 0);
-    
+
+    var objects = <List<TDSkeletonRowColObj>>[];
+
     // 根据风格创建骨架图
     switch (theme) {
       case TDSkeletonTheme.avatar:
-        return TDSkeleton.fromRowCol(
-          key: key,
-          animation: animation,
-          delay: delay,
-          rowCol: TDSkeletonRowCol(
-            objects: const [
-              [TDSkeletonRowColObj.circle()]
-            ],
-          ),
-        );
+        objects = const [
+          [TDSkeletonRowColObj.circle()]
+        ];
+        break;
       case TDSkeletonTheme.image:
-        return TDSkeleton.fromRowCol(
-          key: key,
-          animation: animation,
-          delay: delay,
-          rowCol: TDSkeletonRowCol(
-            objects: const [
-              [
-                TDSkeletonRowColObj.rect(
-                  width: 72,
-                  height: 72,
-                  flex: null,
-                )
-              ]
-            ],
-          ),
-        );
+        objects = const [
+          [
+            TDSkeletonRowColObj.rect(
+              width: 72,
+              height: 72,
+              flex: null,
+            )
+          ]
+        ];
+        break;
       case TDSkeletonTheme.text:
-        return TDSkeleton.fromRowCol(
-          key: key,
-          animation: animation,
-          delay: delay,
-          rowCol: TDSkeletonRowCol(objects: const [
-            [
-              TDSkeletonRowColObj.text(flex: 24),
-              TDSkeletonRowColObj.spacer(width: 16),
-              TDSkeletonRowColObj.text(flex: 76),
-            ],
-            [TDSkeletonRowColObj.text()],
-          ]),
-        );
+        objects = const [
+          [
+            TDSkeletonRowColObj.text(flex: 24),
+            TDSkeletonRowColObj.spacer(width: 16),
+            TDSkeletonRowColObj.text(flex: 76),
+          ],
+          [TDSkeletonRowColObj.text()],
+        ];
+        break;
       case TDSkeletonTheme.paragraph:
-        return TDSkeleton.fromRowCol(
-          key: key,
-          animation: animation,
-          delay: delay,
-          rowCol: TDSkeletonRowCol(objects: [
-            for (int i = 0; i < 3; i++) [const TDSkeletonRowColObj.text()],
-            const [
-              TDSkeletonRowColObj.text(flex: 55),
-              TDSkeletonRowColObj.spacer(flex: 45),
-            ],
-          ]),
-        );
+        objects = [
+          for (int i = 0; i < 3; i++) [const TDSkeletonRowColObj.text()],
+          const [
+            TDSkeletonRowColObj.text(flex: 55),
+            TDSkeletonRowColObj.spacer(flex: 45),
+          ],
+        ];
+        break;
     }
+
+    return TDSkeleton.fromRowCol(
+      key: key,
+      animation: animation,
+      delay: delay,
+      rowCol: TDSkeletonRowCol(objects: objects),
+    );
   }
 
   /// 从行列框架创建骨架屏
@@ -95,7 +90,7 @@ class TDSkeleton extends StatefulWidget {
     this.animation,
     this.delay = 0,
     required this.rowCol,
-  }): assert(delay >= 0);
+  }) : assert(delay >= 0);
 
   /// 动画效果
   final TDSkeletonAnimation? animation;
@@ -132,7 +127,7 @@ class _TDSkeletonState extends State<TDSkeleton>
       LinearGradient(
         colors: [
           Colors.transparent,
-          TDTheme.of(context).grayColor4,
+          TDTheme.of(context).bgColorSecondaryContainerActive,
           Colors.transparent,
         ],
         // 15 deg
@@ -160,7 +155,8 @@ class _TDSkeletonState extends State<TDSkeleton>
           duration: const Duration(seconds: 1),
           vsync: this,
         )..repeat(reverse: true);
-        _animation = Tween<double>(begin: 1, end: _animationFlashed).animate(_controller!)
+        _animation = Tween<double>(begin: 1, end: _animationFlashed)
+            .animate(_controller!)
           ..addListener(() => setState(() {}));
         break;
       default:
@@ -192,7 +188,8 @@ class _TDSkeletonState extends State<TDSkeleton>
           case TDSkeletonAnimation.gradient:
             skeletonObj = ShaderMask(
               blendMode: BlendMode.srcATop,
-              shaderCallback: (bounds) => _animationGradient(context).createShader(
+              shaderCallback: (bounds) =>
+                  _animationGradient(context).createShader(
                 Rect.fromLTWH(
                   bounds.width * _animation!.value,
                   0,
@@ -241,12 +238,14 @@ class _TDSkeletonState extends State<TDSkeleton>
     List<Widget> skeletonRows = widget.rowCol.objects
         .map((row) => Row(children: row.map(_buildObj(context)).toList()))
         .toList();
-    if (widget.rowCol.style.rowSpacing(context) > 0) {
+    final rowSpacing = widget.rowCol.style.rowSpacing(context);
+    if (rowSpacing > 0) {
       skeletonRows = skeletonRows
-          .expand((row) =>
-              [row, SizedBox(height: widget.rowCol.style.rowSpacing(context))])
-          .toList()
-        ..removeLast();
+          .expand((row) => [row, SizedBox(height: rowSpacing)])
+          .toList();
+      if (skeletonRows.isNotEmpty) {
+        skeletonRows.removeLast();
+      }
     } // 添加行间距
     var skeletonRowCol = Column(children: skeletonRows); // 行列布局
 
@@ -255,9 +254,12 @@ class _TDSkeletonState extends State<TDSkeleton>
         // 添加弹性布局
         ? Flexible(
             child: Container(
-                constraints: BoxConstraints(
-                    maxHeight: widget.rowCol.visualHeight(context)), // 限制最大高度
-                child: skeletonRowCol))
+              constraints: BoxConstraints(
+                maxHeight: widget.rowCol.visualHeight(context),
+              ), // 限制最大高度
+              child: skeletonRowCol,
+            ),
+          )
         : skeletonRowCol;
   }
 

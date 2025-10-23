@@ -1,19 +1,20 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../tdesign_flutter.dart';
 
 /// 线上字体加载工具
-class TDFontLoader{
-
-  /// 缓存字体FontLoader,防止重复加载
-  static final _record = <String,bool>{};
+class TDFontLoader {
+  /// 缓存字体 FontLoader，防止重复加载
+  static final _record = <String, bool>{};
 
   /// 加载字体资源
-  static Future<bool> load({required String name, required String fontFamilyUrl}) async {
+  static Future<bool> load({
+    required String name,
+    required String fontFamilyUrl,
+  }) async {
     try {
-      if(!(_record[name] ?? false)) {
+      if (!(_record[name] ?? false)) {
         var fontLoader = FontLoader(name);
 
         fontLoader.addFont(Future(() async {
@@ -27,19 +28,24 @@ class TDFontLoader{
       }
       return true;
     } catch (e) {
-      print('TDFontLoader load error, name: ${name}, fontFamilyUrl: $fontFamilyUrl}, e: $e');
+      print(
+          'TDFontLoader load error, name: ${name}, fontFamilyUrl: $fontFamilyUrl}, e: $e');
     }
     return false;
   }
 }
 
-/// 懒加载FontWidget
+/// 懒加载 FontWidget
 class TDFontLoaderWidget extends StatefulWidget {
-  const TDFontLoaderWidget({Key? key, required this.textWidget, required this.fontFamilyUrl}) : super(key: key);
+  const TDFontLoaderWidget({
+    Key? key,
+    required this.textWidget,
+    required this.fontFamilyUrl,
+  }) : super(key: key);
 
   final TDText textWidget;
 
-  /// FontFamily的下载地址
+  /// FontFamily 的下载地址
   final String fontFamilyUrl;
 
   @override
@@ -48,6 +54,7 @@ class TDFontLoaderWidget extends StatefulWidget {
 
 class _TDFontLoaderWidgetState extends State<TDFontLoaderWidget> {
   bool fontFamilyLoaded = false;
+
   @override
   void initState() {
     super.initState();
@@ -55,14 +62,17 @@ class _TDFontLoaderWidgetState extends State<TDFontLoaderWidget> {
   }
 
   void loadFont() async {
-    if ((widget.textWidget.fontFamily?.fontFamily.isNotEmpty ?? false)
-        && widget.fontFamilyUrl.isNotEmpty) {
+    if ((widget.textWidget.fontFamily?.fontFamily.isNotEmpty ?? false) &&
+        widget.fontFamilyUrl.isNotEmpty) {
       try {
-        if(await TDFontLoader.load(name: widget.textWidget.fontFamily!.fontFamily, fontFamilyUrl: widget.fontFamilyUrl)){
+        if (await TDFontLoader.load(
+            name: widget.textWidget.fontFamily!.fontFamily,
+            fontFamilyUrl: widget.fontFamilyUrl)) {
           setState(() {});
         }
       } catch (e) {
-        print('TDFontLoader loadFont error, data: ${widget.textWidget.data}, fontFamily: ${widget.textWidget.fontFamilyUrl}, e: $e');
+        print(
+            'TDFontLoader loadFont error, data: ${widget.textWidget.data}, fontFamily: ${widget.textWidget.fontFamilyUrl}, e: $e');
       }
     }
 
@@ -71,28 +81,31 @@ class _TDFontLoaderWidgetState extends State<TDFontLoaderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return TDText(widget.textWidget.data,
-      font:widget.textWidget.font,
-      fontWeight:widget.textWidget.fontWeight ?? FontWeight.w400,
-      fontFamily:widget.textWidget.fontFamily,
-      textColor:widget.textWidget.textColor,
-      backgroundColor:widget.textWidget.backgroundColor,
-      isTextThrough:widget.textWidget.isTextThrough ,
-      lineThroughColor:widget.textWidget.lineThroughColor,
-      package : widget.textWidget.package,
-      forceVerticalCenter :widget.textWidget.forceVerticalCenter,
-      style:widget.textWidget.style,
-      strutStyle:widget.textWidget.strutStyle,
-      textAlign:widget.textWidget.textAlign,
-      textDirection:widget.textWidget.textDirection,
-      locale:widget.textWidget.locale,
-      softWrap:widget.textWidget.softWrap,
-      overflow:widget.textWidget.overflow,
-      textScaleFactor:widget.textWidget.textScaleFactor,
-      maxLines:widget.textWidget.maxLines,
-      semanticsLabel:widget.textWidget.semanticsLabel,
-      textWidthBasis:widget.textWidget.textWidthBasis,
-      textHeightBehavior:widget.textWidget.textHeightBehavior,
+    final textWidget = widget.textWidget;
+
+    return TDText(
+      textWidget.data,
+      font: textWidget.font,
+      fontWeight: textWidget.fontWeight ?? FontWeight.w400,
+      fontFamily: textWidget.fontFamily,
+      textColor: textWidget.textColor,
+      backgroundColor: textWidget.backgroundColor,
+      isTextThrough: textWidget.isTextThrough,
+      lineThroughColor: textWidget.lineThroughColor,
+      package: textWidget.package,
+      forceVerticalCenter: textWidget.forceVerticalCenter,
+      style: textWidget.style,
+      strutStyle: textWidget.strutStyle,
+      textAlign: textWidget.textAlign,
+      textDirection: textWidget.textDirection,
+      locale: textWidget.locale,
+      softWrap: textWidget.softWrap,
+      overflow: textWidget.overflow,
+      textScaleFactor: textWidget.textScaleFactor,
+      maxLines: textWidget.maxLines,
+      semanticsLabel: textWidget.semanticsLabel,
+      textWidthBasis: textWidget.textWidthBasis,
+      textHeightBehavior: textWidget.textHeightBehavior,
       isInFontLoader: true,
     );
   }

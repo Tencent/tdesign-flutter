@@ -83,7 +83,19 @@ const _list = [
   },
   {
     'index': 'J',
-    'children': ['揭阳', '吉林', '晋江', '吉安', '胶州', '嘉兴', '济南', '鸡西', '荆州', '江门', '基隆'],
+    'children': [
+      '揭阳',
+      '吉林',
+      '晋江',
+      '吉安',
+      '胶州',
+      '嘉兴',
+      '济南',
+      '鸡西',
+      '荆州',
+      '江门',
+      '基隆'
+    ],
   },
   {
     'index': 'K',
@@ -150,21 +162,20 @@ Widget _buildSimple(BuildContext context) {
           slideTransitionFrom: SlideTransitionFrom.right,
           modalTop: renderBox?.size.height,
           builder: (context) {
-            return Container(
-              color: Colors.white,
-              child: TDIndexes(
-                indexList: indexList,
-                builderContent: (context, index) {
-                  final list = _list.firstWhere((element) => element['index'] == index)['children'] as List<String>;
-                  return TDCellGroup(
-                    cells: list
-                        .map((e) => TDCell(
-                              title: e,
-                            ))
-                        .toList(),
-                  );
-                },
-              ),
+            return TDIndexes(
+              indexList: indexList,
+              builderContent: (context, index) {
+                final list = _list.firstWhere(
+                        (element) => element['index'] == index)['children']
+                    as List<String>;
+                return TDCellGroup(
+                  cells: list
+                      .map((e) => TDCell(
+                            title: e,
+                          ))
+                      .toList(),
+                );
+              },
             );
           },
         ),
@@ -189,22 +200,21 @@ Widget _buildOther(BuildContext context) {
           slideTransitionFrom: SlideTransitionFrom.right,
           modalTop: renderBox?.size.height,
           builder: (context) {
-            return Container(
-              color: Colors.white,
-              child: TDIndexes(
-                indexList: indexList,
-                capsuleTheme: true,
-                builderContent: (context, index) {
-                  final list = _list.firstWhere((element) => element['index'] == index)['children'] as List<String>;
-                  return TDCellGroup(
-                    cells: list
-                        .map((e) => TDCell(
-                              title: e,
-                            ))
-                        .toList(),
-                  );
-                },
-              ),
+            return TDIndexes(
+              indexList: indexList,
+              capsuleTheme: true,
+              builderContent: (context, index) {
+                final list = _list.firstWhere(
+                        (element) => element['index'] == index)['children']
+                    as List<String>;
+                return TDCellGroup(
+                  cells: list
+                      .map((e) => TDCell(
+                            title: e,
+                          ))
+                      .toList(),
+                );
+              },
             );
           },
         ),
@@ -229,24 +239,28 @@ Widget _buildCustomIndexes(BuildContext context) {
           slideTransitionFrom: SlideTransitionFrom.right,
           modalTop: renderBox?.size.height,
           builder: (context) {
-            return Container(
-              color: Colors.white,
-              child: TDIndexes(
-                indexList: indexList,
-                builderIndex: (context, index, isActive) {
-                  return Text('自定义 ${index}', style: TextStyle(color: isActive ? Colors.red : Colors.black),);
-                },
-                builderContent: (context, index) {
-                  final list = _list.firstWhere((element) => element['index'] == index)['children'] as List<String>;
-                  return TDCellGroup(
-                    cells: list
-                        .map((e) => TDCell(
-                      title: e,
-                    ))
-                        .toList(),
-                  );
-                },
-              ),
+            return TDIndexes(
+              indexList: indexList,
+              builderIndex: (context, index, isActive) {
+                return TDText(
+                  '自定义 ${index}',
+                  textColor: isActive
+                      ? TDTheme.of(context).brandNormalColor
+                      : TDTheme.of(context).textColorPrimary,
+                );
+              },
+              builderContent: (context, index) {
+                final list = _list.firstWhere(
+                        (element) => element['index'] == index)['children']
+                    as List<String>;
+                return TDCellGroup(
+                  cells: list
+                      .map((e) => TDCell(
+                            title: e,
+                          ))
+                      .toList(),
+                );
+              },
             );
           },
         ),

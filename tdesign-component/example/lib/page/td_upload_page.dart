@@ -14,9 +14,18 @@ class TDUploadPage extends StatefulWidget {
 class TDUploadState extends State<TDUploadPage> {
   final List<TDUploadFile> files1 = [];
   final List<TDUploadFile> files2 = [
-    TDUploadFile(key: 1, remotePath: 'https://tdesign.gtimg.com/demo/images/example1.png'),
-    TDUploadFile(key: 2, remotePath: 'https://tdesign.gtimg.com/demo/images/example2.png'),
-    TDUploadFile(key: 3, remotePath: 'https://tdesign.gtimg.com/demo/images/example3.png'),
+    TDUploadFile(
+        key: 1,
+        remotePath: 'https://tdesign.gtimg.com/demo/images/example1.png'),
+    TDUploadFile(
+        key: 2,
+        remotePath: 'https://tdesign.gtimg.com/demo/images/example2.png'),
+    TDUploadFile(
+        key: 3,
+        remotePath: 'https://tdesign.gtimg.com/demo/images/example3.png'),
+    TDUploadFile(
+        key: 4,
+        remotePath: 'https://tdesign.gtimg.com/demo/images/example4.png'),
   ];
   final List<TDUploadFile> files3 = [
     TDUploadFile(
@@ -46,7 +55,8 @@ class TDUploadState extends State<TDUploadPage> {
   ];
   final List<TDUploadFile> files6 = [];
 
-  void onValueChanged(List<TDUploadFile> fileList, List<TDUploadFile> value, TDUploadType event) {
+  void onValueChanged(List<TDUploadFile> fileList, List<TDUploadFile> value,
+      TDUploadType event) {
     switch (event) {
       case TDUploadType.add:
         setState(() {
@@ -61,7 +71,8 @@ class TDUploadState extends State<TDUploadPage> {
       case TDUploadType.replace:
         setState(() {
           final firstReplaceFile = value.first;
-          final index = fileList.indexWhere((file) => file.key == firstReplaceFile.key);
+          final index =
+              fileList.indexWhere((file) => file.key == firstReplaceFile.key);
           if (index != -1) {
             fileList[index] = firstReplaceFile;
           }
@@ -83,7 +94,8 @@ class TDUploadState extends State<TDUploadPage> {
     return ExamplePage(
       title: tdTitle(),
       exampleCodeGroup: 'upload',
-      desc: '用于相册读取或拉起拍照的图片上传功能。${PlatformUtil.isWeb ? "Web端不支持读取本地图片,请前往移动端体验。" : ""}',
+      desc:
+          '用于相册读取或拉起拍照的图片上传功能。${PlatformUtil.isWeb ? "Web端不支持读取本地图片,请前往移动端体验。" : ""}',
       children: [
         ExampleModule(
           title: '组件类型',
@@ -103,8 +115,12 @@ class TDUploadState extends State<TDUploadPage> {
         ),
       ],
       test: [
-        ExampleItem(ignoreCode: true, desc: '单选快速替换, 大小和图形测试', builder: _uploadSingleWithReplace),
-        ExampleItem(ignoreCode: true, desc: '上传文件大小限制，10KB', builder: _uploadSizeLimit),
+        ExampleItem(
+            ignoreCode: true,
+            desc: '单选快速替换, 大小和图形测试',
+            builder: _uploadSingleWithReplace),
+        ExampleItem(
+            ignoreCode: true, desc: '上传文件大小限制，10KB', builder: _uploadSizeLimit),
       ],
     );
   }
@@ -112,7 +128,7 @@ class TDUploadState extends State<TDUploadPage> {
   Widget wrapDemoContainer(String title, {required Widget child}) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(color: Colors.white),
+      color: TDTheme.of(context).bgColorContainer,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

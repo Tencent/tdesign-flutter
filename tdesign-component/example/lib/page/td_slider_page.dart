@@ -7,22 +7,23 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDSliderPage extends StatefulWidget {
-  const TDSliderPage({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _TDSliderPageState();
-}
-
 class DisplayRangeData {
   final Position currentPosition;
   final double currentTapValue;
   final Offset? tapOffset;
+
   DisplayRangeData({
     required this.currentPosition,
     required this.currentTapValue,
     this.tapOffset,
   });
+}
+
+class TDSliderPage extends StatefulWidget {
+  const TDSliderPage({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _TDSliderPageState();
 }
 
 class _TDSliderPageState extends State<TDSliderPage> {
@@ -34,54 +35,69 @@ class _TDSliderPageState extends State<TDSliderPage> {
         exampleCodeGroup: 'slider',
         padding: const EdgeInsets.only(top: 8, bottom: 8),
         children: [
-          ExampleModule(title: '组件类型', children: [
-            ExampleItem(desc: '单游标滑块', builder: _buildSingleHandle),
-            ExampleItem(desc: '双游标滑块', builder: _buildDoubleHandle),
-            ExampleItem(
-                desc: '带数值单游标滑块 ', builder: _buildSingleHandleWithNumber),
-            ExampleItem(
-                desc: '带数值双游标滑块', builder: _buildDoubleHandleWithNumber),
-            ExampleItem(desc: '带刻度单游标滑块', builder: _buildSingleHandleWithScale),
-            ExampleItem(desc: '带刻度双游标滑块', builder: _buildDoubleHandleWithScale),
-          ]),
-          ExampleModule(title: '组件状态', children: [
-            ExampleItem(desc: '禁用状态', builder: _buildDisableSingleHandle),
-            ExampleItem(builder: _buildDisableDoubleHandleWithNumber),
-            ExampleItem(builder: _buildDisableDoubleHandleWithScale),
-          ]),
-          ExampleModule(title: '组件事件', children: [
-            ExampleItem(desc: 'onTap', builder: _buildOnTapSingleHandle),
-            ExampleItem(builder: _buildOnTapDoubleHandle),
-            ExampleItem(
-                desc: 'onThumbTextTap',
-                builder: _buildOnThumbTextTapSingleHandle),
-            ExampleItem(builder: _buildOnThumbTextTapDoubleHandle),
-          ]),
-          ExampleModule(title: '特殊样式', children: [
-            ExampleItem(
-                desc: '胶囊型滑块', builder: _buildCapsuleSingleHandleWithNumber),
-            ExampleItem(builder: _buildCapsuleDoubleHandle),
-            ExampleItem(builder: _buildCapsuleSingleHandle),
-            ExampleItem(builder: _buildCapsuleDoubleHandleWithNumber),
-            ExampleItem(builder: _buildCapsuleSingleHandleWithScale),
-            ExampleItem(builder: _buildCapsuleDoubleHandleWithScale),
-            ExampleItem(desc: '胶囊型滑块', builder: _buildCapsule),
-            ExampleItem(desc: '自定义盒子样式', builder: _buildCustomDecoration),
-            ExampleItem(desc: '自定义滑轨颜色', builder: _buildCustomActiveColor),
-          ]),
+          ExampleModule(
+            title: '组件类型',
+            children: [
+              ExampleItem(desc: '单游标滑块', builder: _buildSingleHandle),
+              ExampleItem(desc: '双游标滑块', builder: _buildDoubleHandle),
+              ExampleItem(
+                  desc: '带数值单游标滑块 ', builder: _buildSingleHandleWithNumber),
+              ExampleItem(
+                  desc: '带数值双游标滑块', builder: _buildDoubleHandleWithNumber),
+              ExampleItem(
+                  desc: '带刻度单游标滑块', builder: _buildSingleHandleWithScale),
+              ExampleItem(
+                  desc: '带刻度双游标滑块', builder: _buildDoubleHandleWithScale),
+            ],
+          ),
+          ExampleModule(
+            title: '组件状态',
+            children: [
+              ExampleItem(desc: '禁用状态', builder: _buildDisableSingleHandle),
+              ExampleItem(builder: _buildDisableDoubleHandleWithNumber),
+              ExampleItem(builder: _buildDisableDoubleHandleWithScale),
+            ],
+          ),
+          ExampleModule(
+            title: '组件事件',
+            children: [
+              ExampleItem(desc: 'onTap', builder: _buildOnTapSingleHandle),
+              ExampleItem(builder: _buildOnTapDoubleHandle),
+              ExampleItem(
+                  desc: 'onThumbTextTap',
+                  builder: _buildOnThumbTextTapSingleHandle),
+              ExampleItem(builder: _buildOnThumbTextTapDoubleHandle),
+            ],
+          ),
+          ExampleModule(
+            title: '特殊样式',
+            children: [
+              ExampleItem(
+                  desc: '胶囊型滑块', builder: _buildCapsuleSingleHandleWithNumber),
+              ExampleItem(builder: _buildCapsuleDoubleHandle),
+              ExampleItem(builder: _buildCapsuleSingleHandle),
+              ExampleItem(builder: _buildCapsuleDoubleHandleWithNumber),
+              ExampleItem(builder: _buildCapsuleSingleHandleWithScale),
+              ExampleItem(builder: _buildCapsuleDoubleHandleWithScale),
+              ExampleItem(desc: '胶囊型滑块 - 禁用状态', builder: _buildCapsule),
+              ExampleItem(desc: '自定义盒子样式', builder: _buildCustomDecoration),
+              ExampleItem(desc: '自定义滑轨颜色', builder: _buildCustomActiveColor),
+            ],
+          ),
         ]);
   }
 
   @Demo(group: 'slider')
   Widget _buildSingleHandle(BuildContext context) {
     return TDSlider(
-        sliderThemeData: TDSliderThemeData(
-          context: context,
-          min: 0,
-          max: 100,
-        ),
-        value: 10,
-        onChanged: (value) {});
+      sliderThemeData: TDSliderThemeData(
+        context: context,
+        min: 0,
+        max: 100,
+      ),
+      value: 10,
+      onChanged: (value) {},
+    );
   }
 
   @Demo(group: 'slider')
@@ -219,6 +235,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Value: ${currentValue.toStringAsFixed(1)}'),
@@ -261,11 +278,13 @@ class _TDSliderPageState extends State<TDSliderPage> {
 
     return Column(
       mainAxisSize: MainAxisSize.min,
+      // spacing: 10,
       children: [
         ValueListenableBuilder<DisplayRangeData>(
           valueListenable: displayRangeDataNotifier,
           builder: (context, data, child) {
             return Row(
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Position: ${data.currentPosition}'),
@@ -309,8 +328,10 @@ class _TDSliderPageState extends State<TDSliderPage> {
       builder: (context, setState) {
         return Column(
           mainAxisSize: MainAxisSize.min,
+          // spacing: 10,
           children: [
             Row(
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Value: ${currentValue.toStringAsFixed(1)}'),
@@ -320,6 +341,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
                       'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})'),
               ],
             ),
+            const SizedBox(height: 10),
             TDSlider(
               sliderThemeData: TDSliderThemeData(
                 context: context,
@@ -357,11 +379,13 @@ class _TDSliderPageState extends State<TDSliderPage> {
 
     return Column(
       mainAxisSize: MainAxisSize.min,
+      // spacing: 10,
       children: [
         ValueListenableBuilder<DisplayRangeData>(
           valueListenable: displayRangeDataNotifier,
           builder: (context, data, child) {
             return Row(
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Position: ${data.currentPosition}'),
@@ -378,7 +402,11 @@ class _TDSliderPageState extends State<TDSliderPage> {
         const SizedBox(height: 10),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData(
-              context: context, min: 0, max: 100, showThumbValue: true),
+            context: context,
+            min: 0,
+            max: 100,
+            showThumbValue: true,
+          ),
           leftLabel: '0',
           rightLabel: '100',
           value: const RangeValues(10, 60),
@@ -469,8 +497,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
       )..updateSliderThemeData((data) => data.copyWith(
-            activeTickMarkColor: const Color(0xFFE7E7E7),
-            inactiveTickMarkColor: const Color(0xFFE7E7E7),
+          // activeTickMarkColor: TDTheme.of(context).componentBorderColor,
+          // inactiveTickMarkColor: TDTheme.of(context).componentStrokeColor,
           )),
       value: 60,
       onChanged: (value) {},
@@ -480,6 +508,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   @Demo(group: 'slider')
   Widget _buildCapsule(BuildContext context) {
     return Column(
+      // spacing: 16,
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
@@ -490,12 +519,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
             scaleFormatter: (value) => value.toInt().toString(),
           ),
           value: 40,
-          // divisions: 5,
-          onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -504,12 +529,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
             scaleFormatter: (value) => value.toInt().toString(),
           ),
           value: const RangeValues(20, 60),
-          // divisions: 5,
-          onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -520,12 +541,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
           leftLabel: '0',
           rightLabel: '100',
           value: 40,
-          // divisions: 5,
-          onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -537,12 +554,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
           value: const RangeValues(20, 60),
           leftLabel: '0',
           rightLabel: '100',
-          // divisions: 5,
-          onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -552,16 +565,12 @@ class _TDSliderPageState extends State<TDSliderPage> {
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           )..updateSliderThemeData((data) => data.copyWith(
-                activeTickMarkColor: const Color(0xFFE7E7E7),
-                inactiveTickMarkColor: const Color(0xFFE7E7E7),
+                activeTickMarkColor: TDTheme.of(context).componentStrokeColor,
+                inactiveTickMarkColor: TDTheme.of(context).componentStrokeColor,
               )),
           value: 60,
-          // divisions: 5,
-          onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -571,12 +580,10 @@ class _TDSliderPageState extends State<TDSliderPage> {
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           )..updateSliderThemeData((data) => data.copyWith(
-                activeTickMarkColor: const Color(0xFFE7E7E7),
-                inactiveTickMarkColor: const Color(0xFFE7E7E7),
+                activeTickMarkColor: TDTheme.of(context).bgColorComponentActive,
+                inactiveTickMarkColor: TDTheme.of(context).bgColorComponent,
               )),
           value: const RangeValues(20, 60),
-          // divisions: 5,
-          onChanged: (value) {},
         )
       ],
     );
@@ -585,6 +592,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   @Demo(group: 'slider')
   Widget _buildCustomDecoration(BuildContext context) {
     return Column(
+      // spacing: 16,
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
@@ -597,9 +605,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           // divisions: 5,
           onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -626,8 +632,8 @@ class _TDSliderPageState extends State<TDSliderPage> {
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
       )..updateSliderThemeData((data) => data.copyWith(
-            activeTickMarkColor: const Color(0xFFE7E7E7),
-            inactiveTickMarkColor: const Color(0xFFE7E7E7),
+          // activeTickMarkColor: TDTheme.of(context).bgColorComponent,
+          // inactiveTickMarkColor: TDTheme.of(context).bgColorComponent,
           )),
       value: const RangeValues(20, 60),
       onChanged: (value) {},
@@ -637,6 +643,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   @Demo(group: 'slider')
   Widget _buildCustomActiveColor(BuildContext context) {
     return Column(
+      // spacing: 16,
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
@@ -650,9 +657,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           // divisions: 5,
           onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             activeTrackColor: Colors.green,

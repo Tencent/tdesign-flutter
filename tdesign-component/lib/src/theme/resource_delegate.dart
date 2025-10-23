@@ -1,8 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../tdesign_flutter.dart';
 
-typedef TDTDResourceBuilder = TDResourceDelegate? Function(BuildContext context);
+typedef TDTDResourceBuilder = TDResourceDelegate? Function(
+  BuildContext context,
+);
 
 /// 资源管理器
 class TDResourceManager {
@@ -20,7 +22,7 @@ class TDResourceManager {
       return _defaultDelegate;
     }
     if (_needAlwaysBuild) {
-      // 每次都调用,适用于全局有多个TDResourceDelegate的情况
+      // 每次都调用，适用于全局有多个TDResourceDelegate的情况
       var delegate = _builder?.call(context);
       if (delegate != null) {
         return delegate;
@@ -48,7 +50,7 @@ class TDResourceManager {
   }
 }
 
-/// 资源管理器,允许外部重写,设计成抽象类,防止有新增字段时,用户没有感知
+/// 资源管理器，允许外部重写，设计成抽象类，防止有新增字段时，用户没有感知
 abstract class TDResourceDelegate {
   /// [TDSwitch]的打开状态文案
   String get open;
@@ -118,7 +120,7 @@ abstract class TDResourceDelegate {
 
   /// [TDDatePicker] 周
   String get weeksLabel;
-  
+
   /// [TDCalendarHeader] 星期日
   String get sunday;
 
@@ -200,9 +202,12 @@ abstract class TDResourceDelegate {
   /// [TDBackTop] 顶部
   String get top;
 
+  /// [TDTable] 空数据
+  String get emptyData;
 }
 
-/// 如果用户要重写,就应该全部重写,不开放只重新部分资源
+/// 如果用户要重写，就应该全部重写，不开放只重新部分资源
+/// todo 这里默认为中文，推荐使用 Material 本地化作为备用，如 MaterialLocalizations.of(context).cancelButtonLabel
 class _DefaultResourceDelegate extends TDResourceDelegate {
   @override
   String get open => '开';
@@ -268,11 +273,12 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
   String get monthLabel => '月';
 
   @override
-  String get dateLabel=>'日';
+  String get dateLabel => '日';
 
   @override
-  String get weeksLabel=>'周';
-  
+  String get weeksLabel => '周';
+
+  @override
   String get sunday => '日';
 
   @override
@@ -352,4 +358,7 @@ class _DefaultResourceDelegate extends TDResourceDelegate {
 
   @override
   String get top => '顶部';
+
+  @override
+  String get emptyData => '暂无数据';
 }

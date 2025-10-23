@@ -89,7 +89,7 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
     for (var i = 0; i < 20; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项${i}',
         value: i,
       ));
       pages.add(getAnchorDemo(i));
@@ -97,7 +97,7 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
     ));
 
     list[1].badge = const TDBadge(TDBadgeType.redPoint);
@@ -106,14 +106,11 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
       count: '8',
     );
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.outline,
             value: currentValue,
             controller: _sideBarController,
@@ -129,28 +126,26 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: SingleChildScrollView(
             controller: _demoScroller,
             child: Column(
               children: pages,
             ),
           ),
-        ))
+        )
       ],
     );
   }
 
   Widget getAnchorDemo(int index) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: TDText('标题$index',
+            child: TDText('标题 $index',
                 style: const TextStyle(
                   fontSize: 14,
                 )),
@@ -178,26 +173,20 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
   }
 
   Widget displayImageItem() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 16),
       child: Row(
+        // spacing: 16,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: const [
+        children: [
           TDImage(
             assetUrl: 'assets/img/empty.png',
             type: TDImageType.roundedSquare,
             width: 48,
             height: 48,
           ),
-          SizedBox(
-            width: 16,
-          ),
-          TDText(
-            '标题',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          )
+          SizedBox(width: 16),
+          TDText('标题', style: TextStyle(fontSize: 16))
         ],
       ),
     );

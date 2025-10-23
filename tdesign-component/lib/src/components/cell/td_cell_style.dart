@@ -22,7 +22,7 @@ class TDCellStyle {
     this.cardBorderRadius,
     this.cardPadding,
     this.titlePadding,
-    this.titleBackgroundColor,
+    @deprecated this.titleBackgroundColor,
   }) {
     if (context != null) {
       defaultStyle(context!);
@@ -89,38 +89,43 @@ class TDCellStyle {
   }
 
   defaultStyle(BuildContext context) {
-    backgroundColor = Colors.white;
-    clickBackgroundColor = TDTheme.of(context).grayColor1;
-    leftIconColor = TDTheme.of(context).brandColor7;
-    rightIconColor = TDTheme.of(context).brandColor7;
+    backgroundColor = TDTheme.of(context).bgColorContainer;
+    clickBackgroundColor = TDTheme.of(context).bgColorContainerHover;
+    leftIconColor = TDTheme.of(context).brandNormalColor;
+    rightIconColor = TDTheme.of(context).brandNormalColor;
     titleStyle = TextStyle(
-      color: TDTheme.of(context).fontGyColor1,
+      color: TDTheme.of(context).textColorPrimary,
       fontSize: TDTheme.of(context).fontBodyLarge?.size ?? 16,
       height: TDTheme.of(context).fontBodyLarge?.height ?? 24,
       fontWeight: FontWeight.w400,
     );
-    requiredStyle = titleStyle!.copyWith(color: TDTheme.of(context).errorColor6);
+    requiredStyle =
+        titleStyle!.copyWith(color: TDTheme.of(context).errorNormalColor);
     descriptionStyle = TextStyle(
-      color: TDTheme.of(context).fontGyColor2,
+      color: TDTheme.of(context).textColorSecondary,
       fontSize: TDTheme.of(context).fontBodyMedium?.size ?? 14,
       height: TDTheme.of(context).fontBodyMedium?.height ?? 22,
       fontWeight: FontWeight.w400,
     );
-    noteStyle = titleStyle!.copyWith(color: TDTheme.of(context).fontGyColor3);
-    arrowColor = TDTheme.of(context).fontGyColor3;
+    noteStyle =
+        titleStyle!.copyWith(color: TDTheme.of(context).textColorPlaceholder);
+    arrowColor = TDTheme.of(context).textColorPlaceholder;
 
-    groupBorderedColor = TDTheme.of(context).grayColor3;
-    borderedColor = TDTheme.of(context).grayColor3;
+    groupBorderedColor = TDTheme.of(context).componentStrokeColor;
+    borderedColor = TDTheme.of(context).componentStrokeColor;
     groupTitleStyle = TextStyle(
-      color: TDTheme.of(context).fontGyColor1,
+      color: TDTheme.of(context).textColorPrimary,
       fontSize: TDTheme.of(context).fontTitleLarge?.size ?? 18,
       height: TDTheme.of(context).fontTitleLarge?.height ?? 26,
-      fontWeight: TDTheme.of(context).fontTitleLarge?.fontWeight ?? FontWeight.w600,
+      fontWeight:
+          TDTheme.of(context).fontTitleLarge?.fontWeight ?? FontWeight.w600,
     );
 
     padding = EdgeInsets.all(TDTheme.of(context).spacer16);
-    cardBorderRadius = BorderRadius.all(Radius.circular(TDTheme.of(context).radiusLarge));
-    cardPadding = EdgeInsets.only(left: TDTheme.of(context).spacer16, right: TDTheme.of(context).spacer16);
+    cardBorderRadius =
+        BorderRadius.all(Radius.circular(TDTheme.of(context).radiusLarge));
+    cardPadding =
+        EdgeInsets.symmetric(horizontal: TDTheme.of(context).spacer16);
     titlePadding = EdgeInsets.only(
       left: TDTheme.of(context).spacer16,
       right: TDTheme.of(context).spacer16,

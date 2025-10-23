@@ -3,6 +3,7 @@ import '../../theme/td_colors.dart';
 import '../../theme/td_fonts.dart';
 import '../../theme/td_spacers.dart';
 import '../../theme/td_theme.dart';
+import '../../util/context_extension.dart';
 import '../badge/td_badge.dart';
 import '../text/td_text.dart';
 import 'td_action_sheet.dart';
@@ -72,7 +73,7 @@ class TDActionSheetItemWidget extends StatelessWidget {
           TDText(
             item!.label,
             font: TDTheme.of(context).fontBodySmall,
-            textColor: TDTheme.of(context).fontGyColor1,
+            textColor: TDTheme.of(context).textColorPrimary,
             style: item!.textStyle,
           ),
         ],
@@ -80,9 +81,11 @@ class TDActionSheetItemWidget extends StatelessWidget {
     );
   }
 
-  void _setOffsetValue(GlobalKey<State<StatefulWidget>> offsetKey, ValueNotifier<List<double>> offsetValue) {
+  void _setOffsetValue(GlobalKey<State<StatefulWidget>> offsetKey,
+      ValueNotifier<List<double>> offsetValue) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final renderBox = offsetKey.currentContext?.findRenderObject() as RenderBox;
+      final renderBox =
+          offsetKey.currentContext?.findRenderObject() as RenderBox;
       final size = renderBox.size;
       final right = -size.width / 2;
       final top = -size.height / 2;
@@ -106,9 +109,17 @@ MainAxisAlignment getMainAxisAlignment(TDActionSheetAlign align) {
   }
 }
 
-Widget buildCancelButton(BuildContext context, bool showPagination, String cancelText, VoidCallback? onCancel) {
+Widget buildCancelButton(
+  BuildContext context,
+  bool showPagination,
+  String? cancelText,
+  VoidCallback? onCancel,
+) {
   return Padding(
-    padding: EdgeInsets.only(top: showPagination ? TDTheme.of(context).spacer16 : TDTheme.of(context).spacer8),
+    padding: EdgeInsets.only(
+        top: showPagination
+            ? TDTheme.of(context).spacer16
+            : TDTheme.of(context).spacer8),
     child: GestureDetector(
       onTap: () {
         onCancel?.call();
@@ -116,10 +127,10 @@ Widget buildCancelButton(BuildContext context, bool showPagination, String cance
       },
       child: Container(
         decoration: BoxDecoration(
-          color: TDTheme.of(context).fontWhColor1,
+          color: TDTheme.of(context).bgColorContainer,
           border: Border(
             top: BorderSide(
-              color: TDTheme.of(context).grayColor3,
+              color: TDTheme.of(context).componentStrokeColor,
               width: 0.5,
             ),
           ),
@@ -127,9 +138,9 @@ Widget buildCancelButton(BuildContext context, bool showPagination, String cance
         height: 48,
         child: Center(
           child: TDText(
-            cancelText,
+            cancelText ?? context.resource.cancel,
             font: TDTheme.of(context).fontBodyLarge,
-            textColor: TDTheme.of(context).fontGyColor1,
+            textColor: TDTheme.of(context).textColorPrimary,
           ),
         ),
       ),

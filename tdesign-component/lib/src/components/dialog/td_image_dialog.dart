@@ -21,10 +21,10 @@ class TDImageDialog extends StatelessWidget {
     Key? key,
     required this.image,
     this.imagePosition = TDDialogImagePosition.top,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor,
     this.radius = 12.0,
     this.title,
-    this.titleColor = const Color(0xE6000000),
+    this.titleColor,
     this.titleAlignment,
     this.contentWidget,
     this.content,
@@ -37,7 +37,7 @@ class TDImageDialog extends StatelessWidget {
   }) : super(key: key);
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// 圆角
   final double radius;
@@ -46,7 +46,7 @@ class TDImageDialog extends StatelessWidget {
   final String? title;
 
   /// 标题颜色
-  final Color titleColor;
+  final Color? titleColor;
 
   /// 标题对齐模式
   final AlignmentGeometry? titleAlignment;
@@ -174,10 +174,14 @@ class TDImageDialog extends StatelessWidget {
     }
     final left = leftBtn ??
         TDDialogButtonOptions(
-            title: context.resource.cancel, theme: TDButtonTheme.light, action: null);
+            title: context.resource.cancel,
+            theme: TDButtonTheme.light,
+            action: null);
     final right = rightBtn ??
         TDDialogButtonOptions(
-            title: context.resource.confirm, theme: TDButtonTheme.primary, action: null);
+            title: context.resource.confirm,
+            theme: TDButtonTheme.primary,
+            action: null);
     return HorizontalNormalButtons(
       leftBtn: left,
       rightBtn: right,

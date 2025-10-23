@@ -4,6 +4,7 @@
   "defaultTheme": "defaultTheme",
   "greenTheme": "greenTheme",
   "redTheme": "redTheme",
+  "darkTheme": "Dark Mode",
   "cancel": "Cancel",
   "confirm": "Confirm",
   "switchClose": "C",
@@ -54,7 +55,8 @@
   "yearLabel": "year",
   "monthLabel": "month",
   "dateLabel": "date",
-  "weeks":"weeks",
-  "back":"BACK",
-  "top":"TOP"
+  "weeks": "weeks",
+  "back": "BACK",
+  "top": "TOP",
+  "emptyData": "No Data"
 }

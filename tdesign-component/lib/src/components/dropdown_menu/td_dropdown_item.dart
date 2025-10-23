@@ -12,10 +12,11 @@ import '../tag/td_tag_styles.dart';
 import 'td_dropdown_inherited.dart';
 import 'td_dropdown_popup.dart';
 
-typedef TDDropdownItemContentBuilder = Widget Function(
-    BuildContext context, _TDDropdownItemState itemState, TDDropdownPopup? popupState);
+typedef TDDropdownItemContentBuilder = Widget Function(BuildContext context,
+    _TDDropdownItemState itemState, TDDropdownPopup? popupState);
 
-typedef TDDropdownItemOptionsCallback = void Function(List<TDDropdownItemOption>? options);
+typedef TDDropdownItemOptionsCallback = void Function(
+    List<TDDropdownItemOption>? options);
 
 List<TDDropdownItemOption?> _getSelected(List<TDDropdownItemOption>? options) {
   return options?.where((element) => element.selected == true).toList() ?? [];
@@ -34,7 +35,6 @@ int _num(List list, int? n) {
 class TDDropdownItemController {
   _TDDropdownItemState? _state;
 
-
   void _bindState(_TDDropdownItemState _tdDropdownMenuState) {
     _state = _tdDropdownMenuState;
   }
@@ -48,7 +48,6 @@ class TDDropdownItemController {
   void updateOptions(TDDropdownItemOptionsCallback callback) {
     _state?.updateOptions(callback);
   }
-
 }
 
 /// 下拉菜单内容
@@ -123,10 +122,13 @@ class TDDropdownItem<T> extends StatefulWidget {
 
   static const double operateHeight = 73;
 
-  double? get minContentHeight =>
-      multiple == true ? (minHeight != null ? minHeight! + TDDropdownItem.operateHeight : null) : minHeight;
-  double? get maxContentHeight =>
-      multiple == true ? (maxHeight != null ? maxHeight! + TDDropdownItem.operateHeight : null) : maxHeight;
+  double? get minContentHeight => multiple == true
+      ? (minHeight != null ? minHeight! + TDDropdownItem.operateHeight : null)
+      : minHeight;
+
+  double? get maxContentHeight => multiple == true
+      ? (maxHeight != null ? maxHeight! + TDDropdownItem.operateHeight : null)
+      : maxHeight;
 
   @override
   _TDDropdownItemState createState() => _TDDropdownItemState();
@@ -160,7 +162,9 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
     if (widget.builder != null) {
       return widget.builder!(context, this, popupState);
     }
-    return widget.multiple == true || (widget.optionsColumns ?? 1) > 1 ? _getCheckboxList() : _getRadioList();
+    return widget.multiple == true || (widget.optionsColumns ?? 1) > 1
+        ? _getCheckboxList()
+        : _getRadioList();
   }
 
   Widget _getCheckboxList() {
@@ -171,32 +175,42 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
         ? widget.maxContentHeight!
         : directionListenable.value == TDDropdownMenuDirection.auto
             ? double.infinity
-            : max<double>(popupState.maxContentHeight - TDDropdownItem.operateHeight, 0);
+            : max<double>(
+                popupState.maxContentHeight - TDDropdownItem.operateHeight, 0);
     return Column(
       children: [
         Container(
-          color: TDTheme.of(context).whiteColor1,
+          color: TDTheme.of(context).bgColorContainer,
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: widget.minContentHeight ?? 0.0, maxHeight: maxContentHeight),
+            constraints: BoxConstraints(
+                minHeight: widget.minContentHeight ?? 0.0,
+                maxHeight: maxContentHeight),
             child: SingleChildScrollView(
               child: Column(
                 children: List.generate(groupChunk.length, (index) {
                   var entry = groupChunk.entries.elementAt(index);
                   var chunks = entry.value;
-                  var selectIds = _getSelected(widget.options).map((e) => e!.value).toList();
+                  var selectIds = _getSelected(widget.options)
+                      .map((e) => e!.value)
+                      .toList();
                   return Column(
                     children: [
                       groupChunk.length == 1 && entry.key == '__default__'
                           ? const SizedBox.shrink()
                           : Container(
                               width: double.infinity,
-                              padding: EdgeInsets.only(left: paddingNum, top: paddingNum, right: paddingNum),
-                              color: TDTheme.of(context).whiteColor1,
-                              child: TDText(entry.key == '__default__' ? context.resource.other : entry.key),
+                              padding: EdgeInsets.only(
+                                  left: paddingNum,
+                                  top: paddingNum,
+                                  right: paddingNum),
+                              color: TDTheme.of(context).bgColorContainer,
+                              child: TDText(entry.key == '__default__'
+                                  ? context.resource.other
+                                  : entry.key),
                             ),
                       Container(
                         padding: EdgeInsets.all(paddingNum),
-                        color: TDTheme.of(context).whiteColor1,
+                        color: TDTheme.of(context).bgColorContainer,
                         child: TDCheckboxGroupContainer(
                           selectIds: isMultiple
                               ? selectIds
@@ -208,7 +222,8 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
                             children: List.generate(chunks.length, (ri) {
                               var num = _num(chunks[ri], widget.optionsColumns);
                               return Padding(
-                                padding: _getPadding(chunks.length, ri, 'bottom'),
+                                padding:
+                                    _getPadding(chunks.length, ri, 'bottom'),
                                 child: Row(
                                   children: List.generate(num, (ci) {
                                     return Expanded(
@@ -250,17 +265,21 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
             title: widget.options![index].label,
             selectColor: widget.options![index].selectedColor,
             enable: !(widget.options![index].disabled ?? false),
+            contentDirection: TDContentDirection.left,
           ),
         ),
       ),
     );
     return widget.minContentHeight != null || widget.maxContentHeight != null
         ? Container(
-            color: TDTheme.of(context).whiteColor1,
+            color: TDTheme.of(context).bgColorContainer,
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                  minHeight: widget.minContentHeight ?? 0.0, maxHeight: widget.maxContentHeight ?? double.infinity),
-              child: widget.maxContentHeight != null ? SingleChildScrollView(child: radios) : radios,
+                  minHeight: widget.minContentHeight ?? 0.0,
+                  maxHeight: widget.maxContentHeight ?? double.infinity),
+              child: widget.maxContentHeight != null
+                  ? SingleChildScrollView(child: radios)
+                  : radios,
             ),
           )
         : radios;
@@ -285,8 +304,8 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
           color: enable
               ? checked
                   ? TDTheme.of(context).brandLightColor
-                  : TDTheme.of(context).grayColor1
-              : TDTheme.of(context).grayColor2,
+                  : TDTheme.of(context).bgColorSecondaryContainer
+              : TDTheme.of(context).bgColorSecondaryContainerHover,
           borderRadius: BorderRadius.all(
             Radius.circular(TDTheme.of(context).radiusDefault),
           ),
@@ -297,8 +316,8 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
             textColor: enable
                 ? checked
                     ? TDTheme.of(context).brandColor7
-                    : TDTheme.of(context).fontGyColor1
-                : TDTheme.of(context).fontGyColor4,
+                    : TDTheme.of(context).textColorPrimary
+                : TDTheme.of(context).textColorDisabled,
           ),
         ),
       ),
@@ -310,43 +329,48 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
       height: TDDropdownItem.operateHeight,
       padding: EdgeInsets.all(TDTheme.of(context).spacer16),
       decoration: BoxDecoration(
-        color: TDTheme.of(context).whiteColor1,
+        color: TDTheme.of(context).bgColorContainer,
         border: Border(
           top: BorderSide(
-            color: TDTheme.of(context).grayColor3,
-            width: 1,
+            color: TDTheme.of(context).componentStrokeColor,
+            width: 0.5,
           ),
           bottom: directionListenable.value == TDDropdownMenuDirection.up
               ? BorderSide(
-                  color: TDTheme.of(context).grayColor3,
-                  width: 1,
+                  color: TDTheme.of(context).componentStrokeColor,
+                  width: 0.5,
                 )
               : BorderSide.none,
         ),
       ),
-      child: Row(children: [
-        Expanded(
-          child: TDButton(
-            text: context.resource.reset,
-            theme: TDButtonTheme.light,
-            onTap: () {
-              reset();
-              widget.onReset?.call();
-            },
+      child: Row(
+        // spacing: TDTheme.of(context).spacer16,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: TDButton(
+              text: context.resource.reset,
+              theme: TDButtonTheme.light,
+              onTap: () {
+                reset();
+                widget.onReset?.call();
+              },
+            ),
           ),
-        ),
-        SizedBox(width: TDTheme.of(context).spacer16),
-        Expanded(
-          child: TDButton(
-            text: context.resource.confirm,
-            theme: TDButtonTheme.primary,
-            onTap: () {
-              _handleClose();
-              widget.onConfirm?.call(_getSelected(widget.options).map((e) => e!.value).toList());
-            },
+          SizedBox(width: TDTheme.of(context).spacer16),
+          Expanded(
+            child: TDButton(
+              text: context.resource.confirm,
+              theme: TDButtonTheme.primary,
+              onTap: () {
+                _handleClose();
+                widget.onConfirm?.call(
+                    _getSelected(widget.options).map((e) => e!.value).toList());
+              },
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 
@@ -362,7 +386,9 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
   }
 
   Map<String, List<List<TDDropdownItemOption>>> _groupChunkOptions() {
-    var groupedOptions = widget.options?.groupBy<String>((option) => option.group ?? '__default__') ?? {};
+    var groupedOptions = widget.options
+            ?.groupBy<String>((option) => option.group ?? '__default__') ??
+        {};
     var groupedChunkOptions = <String, List<List<TDDropdownItemOption>>>{};
     var def = groupedOptions.remove('__default__');
     if (def != null) {
@@ -380,12 +406,15 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
       selected = [selected.last];
     }
     widget.options?.forEach((element) {
-      element.selected = selected is List<String> ? selected.contains(element.value) : element.value == selected;
+      element.selected = selected is List<String>
+          ? selected.contains(element.value)
+          : element.value == selected;
     });
     if (isRadio) {
       setState(() {});
     }
-    widget.onChange?.call(_getSelected(widget.options).map((e) => e!.value).toList());
+    widget.onChange
+        ?.call(_getSelected(widget.options).map((e) => e!.value).toList());
     if (widget.multiple != true && selected.isNotEmpty) {
       _handleClose();
     }
@@ -420,7 +449,7 @@ class TDDropdownItemOption {
     this.group,
     this.selected = false,
     this.selectedColor,
-    this.disabledColor
+    this.disabledColor,
   });
 
   /// 选项值
