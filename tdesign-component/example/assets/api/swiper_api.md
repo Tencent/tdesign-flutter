@@ -7,8 +7,8 @@ TD默认PageTransformer
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | fade | double? | - | 淡化比例 |
-| scale | double? | - | 缩放比例 |
 | margin | double? | - | 左右间隔 |
+| scale | double? | - | 缩放比例 |
 
 
 #### 工厂构造方法
@@ -28,6 +28,6 @@ TDesign风格的Swiper指示器样式，与flutter_swiper的Swiper结合使用
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | alignment | Alignment? | - | 当 scrollDirection== Axis.horizontal 时，默认Alignment.bottomCenter |
+| builder | SwiperPlugin | TDSwiperPagination.dots | 具体样式 |
 | key | Key? | - |  |
 | margin | EdgeInsetsGeometry | const EdgeInsets.all(10.0) | 指示器和container之间的距离 |
-| builder | SwiperPlugin | TDSwiperPagination.dots | 具体样式 |
