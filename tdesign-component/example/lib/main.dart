@@ -9,7 +9,12 @@ import 'config.dart';
 import 'home.dart';
 import 'l10n/app_localizations.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 禁止横屏
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   Log.setCustomLogPrinter((level, tag, msg) => print('[$level] $tag ==> $msg'));
   runApp(const MyApp());
 
