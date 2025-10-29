@@ -215,55 +215,55 @@ abstract class AppLocalizations {
   /// No description provided for @days.
   ///
   /// In en, this message translates to:
-  /// **'days'**
+  /// **'d'**
   String get days;
 
   /// No description provided for @hours.
   ///
   /// In en, this message translates to:
-  /// **'hours'**
+  /// **'h'**
   String get hours;
 
   /// No description provided for @minutes.
   ///
   /// In en, this message translates to:
-  /// **'minutes'**
+  /// **'min'**
   String get minutes;
 
   /// No description provided for @seconds.
   ///
   /// In en, this message translates to:
-  /// **'seconds'**
+  /// **'s'**
   String get seconds;
 
   /// No description provided for @milliseconds.
   ///
   /// In en, this message translates to:
-  /// **'milliseconds'**
+  /// **'ms'**
   String get milliseconds;
 
   /// No description provided for @yearLabel.
   ///
   /// In en, this message translates to:
-  /// **'year'**
+  /// **'y'**
   String get yearLabel;
 
   /// No description provided for @monthLabel.
   ///
   /// In en, this message translates to:
-  /// **'month'**
+  /// **'m'**
   String get monthLabel;
 
   /// No description provided for @dateLabel.
   ///
   /// In en, this message translates to:
-  /// **'date'**
+  /// **'d'**
   String get dateLabel;
 
   /// No description provided for @weeks.
   ///
   /// In en, this message translates to:
-  /// **'weeks'**
+  /// **'w'**
   String get weeks;
 
   /// No description provided for @sunday.
