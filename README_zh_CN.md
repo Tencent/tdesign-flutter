@@ -20,7 +20,6 @@
 
 腾讯TDesign Flutter技术栈组件库，适合在移动端项目中使用。
 
-
 # 🎉 特性
 
 - 提供 TDesign 设计风格的 Flutter UI 组件库。
@@ -69,7 +68,6 @@ Icon(TDIcons.activity)
 
 - 有关更多使用示例，请参阅 [example/lib/page](tdesign-component/example/lib/page)
 
-
 # 其他技术栈实现
 
 - 桌面端 Vue 2.X 版本实现：[tdesign-vue](https://github.com/Tencent/tdesign-vue)
@@ -90,7 +88,7 @@ TDesign Flutter 依赖以下组件库，感谢作者的开源贡献：
 
 # 贡献
 
-欢迎贡献代码。在提交 [Pull Request](https://github.com/Tencent/tdesign-flutter/pulls) 之前，请先阅读[贡献指南]((CONTRIBUTING.md))。
+欢迎贡献代码。在提交 [Pull Request](https://github.com/Tencent/tdesign-flutter/pulls) 之前，请先阅读[贡献指南](CONTRIBUTING.md)。
 
 <a href="https://github.com/Tencent/tdesign-flutter/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Tencent/tdesign-flutter" />
