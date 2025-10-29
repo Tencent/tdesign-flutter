@@ -66,28 +66,29 @@ typedef TDUploadValueChangedEvent = void Function(
 typedef TDUploadValidatorEvent = void Function(TDUploadValidatorError e);
 
 class TDUpload extends StatefulWidget {
-  const TDUpload({
-    Key? key,
-    this.max = 0,
-    this.mediaType = const [TDUploadMediaType.image, TDUploadMediaType.video],
-    this.sizeLimit,
-    this.onCancel,
-    this.onError,
-    this.onValidate,
-    this.onClick,
-    this.onMaxLimitReached,
-    required this.files,
-    this.onChange,
-    this.multiple = false,
-    this.width = 80.0,
-    this.height = 80.0,
-    this.type = TDUploadBoxType.roundedSquare,
-    this.disabled = false,
-    this.enabledReplaceType = false,
-    this.wrapSpacing,
-    this.wrapRunSpacing,
-    this.wrapAlignment,
-  }) : super(key: key);
+  const TDUpload(
+      {Key? key,
+      this.max = 0,
+      this.mediaType = const [TDUploadMediaType.image, TDUploadMediaType.video],
+      this.sizeLimit,
+      this.onCancel,
+      this.onError,
+      this.onValidate,
+      this.onClick,
+      this.onMaxLimitReached,
+      required this.files,
+      this.onChange,
+      this.multiple = false,
+      this.width = 80.0,
+      this.height = 80.0,
+      this.type = TDUploadBoxType.roundedSquare,
+      this.disabled = false,
+      this.enabledReplaceType = false,
+      this.wrapSpacing,
+      this.wrapRunSpacing,
+      this.wrapAlignment,
+      this.onUploadTap})
+      : super(key: key);
 
   /// 控制展示的文件列表
   final List<TDUploadFile> files;
@@ -145,6 +146,9 @@ class TDUpload extends StatefulWidget {
 
   /// 多图对齐方式
   final WrapAlignment? wrapAlignment;
+
+  ///自定义upload按钮事件
+  final VoidCallback? onUploadTap;
 
   @override
   State<TDUpload> createState() => _TDUploadState();
@@ -331,8 +335,12 @@ class _TDUploadState extends State<TDUpload> {
           if (widget.disabled!) {
             return;
           }
-          final files = await getMediaFromPicker(widget.multiple);
-          extractImageList(files);
+          if (widget.onUploadTap != null) {
+            widget.onUploadTap!();
+          } else {
+            final files = await getMediaFromPicker(widget.multiple);
+            extractImageList(files);
+          }
         }),
       );
     }
