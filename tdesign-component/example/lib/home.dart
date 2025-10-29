@@ -11,7 +11,10 @@ import 'l10n/app_localizations.dart';
 var _kShowTodoComponent = false;
 
 /// 切换主题的回调
-typedef OnThemeChange = Function(TDThemeData themeData, bool isDark);
+typedef OnThemeChange = Function(
+  TDThemeData themeData,
+  TDThemeData darkThemeData,
+);
 
 /// 切换语言的回调
 typedef OnLocaleChange = Function(Locale locale);
@@ -130,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // 添加切换主题的按钮
     children.add(Padding(
-      padding: const EdgeInsets.only(top: 16),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Container(
@@ -139,65 +142,66 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8, right: 4),
-                child: TDTheme(
-                    data: TDThemeData.defaultData(),
-                    child: TDButton(
-                      text: AppLocalizations.of(context)?.defaultTheme,
-                      theme: TDButtonTheme.primary,
-                      onTap: () {
-                        widget.onThemeChange
-                            ?.call(TDTheme.defaultData(), false);
-                      },
-                    )),
+              TDTheme(
+                data: TDThemeData.defaultData(),
+                child: TDButton(
+                  text: AppLocalizations.of(context)?.defaultTheme,
+                  theme: TDButtonTheme.primary,
+                  onTap: () async {
+                    var jsonString =
+                        await rootBundle.loadString('assets/theme.json');
+                    var darkThemeData =
+                        TDThemeData.fromJson('dark', jsonString) ??
+                            TDThemeData.defaultData(name: 'dark');
+                    widget.onThemeChange
+                        ?.call(TDThemeData.defaultData(), darkThemeData);
+                  },
+                ),
               ),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: TDTheme(
-                      data: TDThemeData.fromJson('green', greenThemeConfig) ??
-                          TDThemeData.defaultData(),
-                      child: TDButton(
-                          text: AppLocalizations.of(context)?.greenTheme,
-                          theme: TDButtonTheme.primary,
-                          onTap: () async {
-                            var jsonString = await rootBundle
-                                .loadString('assets/theme.json');
-                            var newData =
-                                TDThemeData.fromJson('green', jsonString);
-                            widget.onThemeChange
-                                ?.call(newData ?? TDTheme.defaultData(), false);
-                          }))),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: TDTheme(
-                      data: TDThemeData.fromJson('red', greenThemeConfig) ??
-                          TDThemeData.defaultData(),
-                      child: TDButton(
-                          text: AppLocalizations.of(context)?.redTheme,
-                          theme: TDButtonTheme.danger,
-                          onTap: () async {
-                            var jsonString = await rootBundle
-                                .loadString('assets/theme.json');
-                            var newData =
-                                TDThemeData.fromJson('red', jsonString);
-                            widget.onThemeChange
-                                ?.call(newData ?? TDTheme.defaultData(), false);
-                          }))),
-              Padding(
-                  padding: const EdgeInsets.only(left: 4, right: 8),
-                  child: TDButton(
-                      text: AppLocalizations.of(context)?.darkTheme,
-                      style: TDButtonStyle(
-                          backgroundColor: Colors.black,
-                          textColor: Colors.white),
-                      onTap: () async {
-                        var jsonString =
-                            await rootBundle.loadString('assets/theme.json');
-                        var newData = TDThemeData.fromJson('dark', jsonString);
-                        widget.onThemeChange
-                            ?.call(newData ?? TDTheme.defaultData(), true);
-                      })),
+              TDTheme(
+                data: TDThemeData.fromJson('green', greenThemeConfig) ??
+                    TDThemeData.defaultData(),
+                child: TDButton(
+                  text: AppLocalizations.of(context)?.greenTheme,
+                  theme: TDButtonTheme.primary,
+                  onTap: () async {
+                    var jsonString =
+                        await rootBundle.loadString('assets/theme.json');
+                    var themeData =
+                        TDThemeData.fromJson('greenLight', jsonString) ??
+                            TDThemeData.defaultData();
+                    var darkThemeData =
+                        TDThemeData.fromJson('greenDark', jsonString) ??
+                            TDThemeData.defaultData(name: 'dark');
+                    widget.onThemeChange?.call(
+                      themeData,
+                      darkThemeData,
+                    );
+                  },
+                ),
+              ),
+              TDTheme(
+                data: TDThemeData.fromJson('red', greenThemeConfig) ??
+                    TDThemeData.defaultData(),
+                child: TDButton(
+                  text: AppLocalizations.of(context)?.redTheme,
+                  theme: TDButtonTheme.danger,
+                  onTap: () async {
+                    var jsonString =
+                        await rootBundle.loadString('assets/theme.json');
+                    var themeData =
+                        TDThemeData.fromJson('redLight', jsonString) ??
+                            TDThemeData.defaultData();
+                    var darkThemeData =
+                        TDThemeData.fromJson('redDark', jsonString) ??
+                            TDThemeData.defaultData(name: 'dark');
+                    widget.onThemeChange?.call(
+                      themeData,
+                      darkThemeData,
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),

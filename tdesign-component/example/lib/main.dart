@@ -41,14 +41,16 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late TDThemeData _themeData;
-  Locale? locale = const Locale('zh');
+  late TDThemeData _darkThemeData;
 
-  ThemeMode _themeMode = ThemeMode.dark;
+  Locale? locale = const Locale('zh');
 
   @override
   void initState() {
     super.initState();
     _themeData = TDThemeData.defaultData();
+    _darkThemeData = TDThemeData.defaultData(name: 'dark');
+    print('_darkThemeData ${_darkThemeData.refMap}');
   }
 
   @override
@@ -71,31 +73,31 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       darkTheme: ThemeData(
-        extensions: [_themeData],
+        extensions: [_darkThemeData],
         colorScheme: ColorScheme.dark(
-          primary: _themeData.brandNormalColor,
-          secondary: _themeData.brandNormalColor,
+          primary: _darkThemeData.brandNormalColor,
+          secondary: _darkThemeData.brandNormalColor,
         ),
-        scaffoldBackgroundColor: _themeData.bgColorPage,
+        scaffoldBackgroundColor: _darkThemeData.bgColorPage,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData()
-            .copyWith(backgroundColor: _themeData.grayColor14),
+            .copyWith(backgroundColor: _darkThemeData.grayColor14),
         appBarTheme: const AppBarTheme().copyWith(
-          backgroundColor: _themeData.grayColor13,
+          backgroundColor: _darkThemeData.grayColor13,
         ),
         iconTheme: const IconThemeData().copyWith(
-          color: _themeData.brandNormalColor,
+          color: _darkThemeData.brandNormalColor,
         ),
       ),
-      // themeMode: PlatformUtil.isWeb ? ThemeMode.dark : _themeMode,
-      themeMode: _themeMode,
+      themeMode: ThemeMode.system,
       home: PlatformUtil.isWeb
           ? null
           : Builder(
               builder: (context) {
                 // 设置文案代理,国际化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
                 TDTheme.setResourceBuilder(
-                    (context) => delegate..updateContext(context),
-                    needAlwaysBuild: true);
+                  (context) => delegate..updateContext(context),
+                  needAlwaysBuild: true,
+                );
                 return MyHomePage(
                   title: AppLocalizations.of(context)?.components ?? '',
                   locale: locale,
@@ -104,10 +106,10 @@ class _MyAppState extends State<MyApp> {
                       this.locale = locale;
                     });
                   },
-                  onThemeChange: (themeData, isDark) {
+                  onThemeChange: (themeData, darkThemeData) {
                     setState(() {
                       _themeData = themeData;
-                      _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+                      _darkThemeData = darkThemeData;
                     });
                   },
                 );
