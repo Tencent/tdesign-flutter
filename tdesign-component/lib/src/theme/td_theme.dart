@@ -143,7 +143,6 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
     TDExtraThemeData? extraThemeData,
     String? name,
   }) {
-    print('defaultData - name ${name ?? _defaultThemeName}');
     _defaultThemeData ??= fromJson(
           name ?? _defaultThemeName,
           TDDefaultTheme.defaultThemeConfig,
