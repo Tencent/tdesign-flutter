@@ -129,13 +129,9 @@ class _TDCellState extends State<TDCell> {
   @override
   Widget build(BuildContext context) {
     final theme = TDTheme.of(context);
-    final style = widget.style ??
-        TDCellInherited.of(context)?.style ??
-        TDCellStyle.cellStyle(context);
+    final style = widget.style ?? TDCellInherited.of(context)?.style ?? TDCellStyle.cellStyle(context);
     final crossAxisAlignment = _getAlign();
-    final color = _status == 'default'
-        ? style.backgroundColor
-        : style.clickBackgroundColor;
+    final color = _status == 'default' ? style.backgroundColor : style.clickBackgroundColor;
     final border = (widget.showBottomBorder ?? false)
         ? Border(
             bottom: BorderSide(
@@ -153,9 +149,7 @@ class _TDCellState extends State<TDCell> {
         }
         TDSwipeCellInherited.of(context)?.cellClick();
       },
-      onLongPress: widget.onLongPress != null && !disabled
-          ? () => widget.onLongPress!(widget)
-          : null,
+      onLongPress: widget.onLongPress != null && !disabled ? () => widget.onLongPress!(widget) : null,
       onTapDown: (_) => _setStatus('active', 0),
       onTapUp: (_) => _setStatus('default', 100),
       onTapCancel: () => _setStatus('default', 0),
@@ -165,25 +159,27 @@ class _TDCellState extends State<TDCell> {
         decoration: BoxDecoration(color: color, border: border),
         child: Row(
           crossAxisAlignment: crossAxisAlignment,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ..._buildImage(),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (widget.leftIcon != null ||
-                      widget.leftIconWidget != null) ...[
-                    widget.leftIconWidget ??
-                        Icon(widget.leftIcon,
-                            size: 24, color: style.leftIconColor),
-                    SizedBox(width: theme.spacer12),
-                  ],
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // spacing: theme.spacer4,
-                      children: [
-                        Row(
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (widget.leftIcon != null ||
+                    widget.leftIconWidget != null) ...[
+                  widget.leftIconWidget ??
+                      Icon(widget.leftIcon,
+                          size: 24, color: style.leftIconColor),
+                  SizedBox(width: theme.spacer12),
+                ],
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // spacing: theme.spacer4,
+                  children: [
+                    IntrinsicWidth(
+                      child: Container(
+                        child: Row(
                           children: [
                             if (widget.titleWidget != null)
                               Flexible(child: widget.titleWidget!)
@@ -195,37 +191,44 @@ class _TDCellState extends State<TDCell> {
                               TDText(' *', style: style.requiredStyle),
                           ],
                         ),
-                        if ((widget.titleWidget != null || widget.title != null) &&
-                            (widget.descriptionWidget != null || widget.description?.isNotEmpty == true))
-                          SizedBox(height: TDTheme.of(context).spacer4),
-                        if (widget.descriptionWidget != null)
-                          widget.descriptionWidget!
-                        else if (widget.description?.isNotEmpty ?? false)
-                          TDText(widget.description!,
-                              style: style.descriptionStyle),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Wrap(
-              spacing: theme.spacer4,
-              // crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                if (widget.noteWidget != null)
-                  widget.noteWidget!
-                else if (widget.note?.isNotEmpty ?? false)
-                  TDText(widget.note!, style: style.noteStyle),
-                if (widget.rightIconWidget != null)
-                  widget.rightIconWidget!
-                else if (widget.rightIcon != null)
-                  Icon(widget.rightIcon, size: 24, color: style.rightIconColor),
-                if (widget.arrow ?? false)
-                  Icon(TDIcons.chevron_right,
-                      size: 24, color: style.arrowColor),
+                    if ((widget.titleWidget != null || widget.title != null) &&
+                        (widget.descriptionWidget != null || widget.description?.isNotEmpty == true))
+                      SizedBox(height: TDTheme.of(context).spacer4),
+                    if (widget.descriptionWidget != null)
+                      widget.descriptionWidget!
+                    else if (widget.description?.isNotEmpty ?? false)
+                      TDText(widget.description!,
+                          style: style.descriptionStyle),
+                  ],
+                ),
               ],
             ),
+            SizedBox(width: theme.spacer8,),
+            Expanded(
+              child: Container(
+                alignment: Alignment.centerRight,
+                child: Builder(builder: (context) {
+                  if (widget.noteWidget != null) {
+                    return widget.noteWidget!;
+                  } else if (widget.note?.isNotEmpty ?? false) {
+                    return TDText(
+                      widget.note!,
+                      style: style.noteStyle,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    );
+                  }
+                  return Container();
+                }),
+              ),
+            ),
+            if (widget.rightIconWidget != null)
+              widget.rightIconWidget!
+            else if (widget.rightIcon != null)
+              Icon(widget.rightIcon, size: 24, color: style.rightIconColor),
+            if (widget.arrow ?? false) Icon(TDIcons.chevron_right, size: 24, color: style.arrowColor),
           ],
         ),
       ),
