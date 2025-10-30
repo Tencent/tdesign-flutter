@@ -21,7 +21,6 @@ class TDTable extends StatefulWidget {
     this.loading = false,
     this.loadingWidget,
     this.showHeader = true,
-    this.footerWidget,
     this.stripe = false,
     this.backgroundColor,
     this.width,
@@ -58,9 +57,6 @@ class TDTable extends StatefulWidget {
 
   /// 是否显示表头
   final bool? showHeader;
-
-  /// 自定义表尾
-  final Widget? footerWidget;
 
   /// 斑马纹
   final bool? stripe;
@@ -208,9 +204,6 @@ class TDTableState extends State<TDTable> {
         child: Row(children: row),
       ));
     }
-    if (widget.footerWidget != null){
-      cells.add(widget.footerWidget!);
-    }
     return Column(
       children: cells,
     );
@@ -225,9 +218,9 @@ class TDTableState extends State<TDTable> {
 
     // 单元格边框
     var halfBorder =
-        BorderSide(width: 0.5, color: TDTheme.of(context).componentStrokeColor);
+    BorderSide(width: 0.5, color: TDTheme.of(context).componentStrokeColor);
     var doubleBorder =
-        BorderSide(width: 1, color: TDTheme.of(context).componentStrokeColor);
+    BorderSide(width: 1, color: TDTheme.of(context).componentStrokeColor);
     var topBorder = BorderSide.none,
         rightBorder = BorderSide.none,
         leftBorder = BorderSide.none;
@@ -509,12 +502,12 @@ class TDTableState extends State<TDTable> {
 
     // 生成左侧固定列
     var fixedLeftCols =
-        _getVerticalCell(fixedLeftCol, fixedLeftTitle, cellWidth);
+    _getVerticalCell(fixedLeftCol, fixedLeftTitle, cellWidth);
     // 生成非固定列
     var fixedNonCols = _getVerticalCell(fixedNonCol, fixedNonTitle, cellWidth);
     // 生成右侧固定列
     var fixedRightCols =
-        _getVerticalCell(fixedRightCol, fixedRightTitle, cellWidth);
+    _getVerticalCell(fixedRightCol, fixedRightTitle, cellWidth);
 
     // 固定列宽度
     var fixedCellsWidth = 0.0;
@@ -669,8 +662,8 @@ class TDTableState extends State<TDTable> {
         checked
             ? TDIcons.check_rectangle_filled
             : halfSelected
-                ? TDIcons.minus_rectangle_filled
-                : TDIcons.check_rectangle,
+            ? TDIcons.minus_rectangle_filled
+            : TDIcons.check_rectangle,
         size: 16,
         color: (checked || halfSelected)
             ? TDTheme.of(context).brandNormalColor

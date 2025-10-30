@@ -52,7 +52,7 @@ class TDTablePage extends StatelessWidget {
     return ExamplePage(
       title: tdTitle(context),
       desc:
-          '表格常用于展示同类结构下的多种数据，易于组织、对比和分析等，并可对数据进行搜索、筛选、排序等操作。一般包括表头、数据行和表尾三部分。',
+      '表格常用于展示同类结构下的多种数据，易于组织、对比和分析等，并可对数据进行搜索、筛选、排序等操作。一般包括表头、数据行和表尾三部分。',
       exampleCodeGroup: 'table',
       children: [
         ExampleModule(
@@ -81,7 +81,6 @@ class TDTablePage extends StatelessWidget {
         ExampleItem(desc: '空数据表格', builder: _emptyTable),
         ExampleItem(desc: '加载动画表格', builder: _loadingTable),
         ExampleItem(desc: '可选表格+默认选中', builder: _selectTable),
-        ExampleItem(desc: '自定义表尾组件', builder: (context) => ShowFooterTable()),
       ],
     );
   }
@@ -380,76 +379,5 @@ class TDTablePage extends StatelessWidget {
         TDTableCol(title: '标题', colKey: 'title4')
       ],
     );
-  }
-}
-
-class ShowFooterTable extends StatefulWidget {
-  const ShowFooterTable({super.key});
-
-  @override
-  State<ShowFooterTable> createState() => _ShowFooterTableState();
-}
-
-class _ShowFooterTableState extends State<ShowFooterTable> {
-  var _hasMore = true;
-  var _data = [];
-  var _pageIndex = 1;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchData();
-  }
-
-  Future<void> _fetchData() async {
-    setState(() {
-      _hasMore = _pageIndex <= 2;
-    });
-    if (!_hasMore) {
-      return;
-    }
-    setState(() {
-      _data.addAll(_getData(10));
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _showFooterTable(context);
-  }
-
-  @Demo(group: 'table')
-  Widget _showFooterTable(BuildContext context) {
-    return TDTable(
-      height: 100,
-      footerWidget: _hasMore ? TDText('加载更多...') : TDText('没有更多数据了'),
-      onScroll: (controller) {
-        if (controller.position.pixels == controller.position.maxScrollExtent &&
-            _hasMore) {
-          _pageIndex += 1;
-          _fetchData();
-        }
-      },
-      data: _data,
-      columns: [
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4')
-      ],
-    );
-  }
-
-  List<dynamic> _getData(int index) {
-    var data = <dynamic>[];
-    for (var i = 0; i < 10; i++) {
-      data.add({
-        'title1': '内容',
-        'title2': '内容',
-        'title3': '内容',
-        'title4': '内容',
-      });
-    }
-    return data;
   }
 }
