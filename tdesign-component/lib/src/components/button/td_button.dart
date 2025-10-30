@@ -250,8 +250,9 @@ class _TDButtonState extends State<TDButton> {
         textColor: style.textColor ?? TDTheme.of(context).textColorPrimary,
         style: _textStyle,
         forceVerticalCenter: true,
+        overflow: TextOverflow.ellipsis,
       );
-      children.add(text);
+      children.add(Flexible(child: text));
     }
     if (icon != null && widget.iconPosition == TDButtonIconPosition.right) {
       children.add(icon);
