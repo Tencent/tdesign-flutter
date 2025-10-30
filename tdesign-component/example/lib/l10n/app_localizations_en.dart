@@ -66,31 +66,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reset => 'Reset';
 
   @override
-  String get days => 'days';
+  String get days => 'd';
 
   @override
-  String get hours => 'hours';
+  String get hours => 'h';
 
   @override
-  String get minutes => 'minutes';
+  String get minutes => 'min';
 
   @override
-  String get seconds => 'seconds';
+  String get seconds => 's';
 
   @override
-  String get milliseconds => 'milliseconds';
+  String get milliseconds => 'ms';
 
   @override
-  String get yearLabel => 'year';
+  String get yearLabel => 'y';
 
   @override
-  String get monthLabel => 'month';
+  String get monthLabel => 'm';
 
   @override
-  String get dateLabel => 'date';
+  String get dateLabel => 'd';
 
   @override
-  String get weeks => 'weeks';
+  String get weeks => 'w';
 
   @override
   String get sunday => 'SUN';
