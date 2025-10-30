@@ -43,6 +43,7 @@ class TDButton extends StatefulWidget {
     this.margin,
     this.padding,
     this.iconPosition = TDButtonIconPosition.left,
+    this.gradient,
   }) : super(key: key);
 
   /// 自控件
@@ -114,6 +115,9 @@ class TDButton extends StatefulWidget {
   /// 是否为通栏按钮
   final bool isBlock;
 
+  /// 渐变背景色，优先级高于backgroundColor
+  final Gradient? gradient;
+
   @override
   State<StatefulWidget> createState() => _TDButtonState();
 }
@@ -176,7 +180,8 @@ class _TDButtonState extends State<TDButton> {
       padding: _getPadding(),
       margin: _margin,
       decoration: BoxDecoration(
-        color: style.backgroundColor,
+        color: widget.gradient != null ? null : style.backgroundColor,
+        gradient: widget.gradient,
         border: _getBorder(context),
         borderRadius: style.radius ?? BorderRadius.all(_getRadius()),
       ),

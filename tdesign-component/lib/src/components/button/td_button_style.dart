@@ -19,8 +19,11 @@ class TDButtonStyle {
   /// 自定义圆角
   BorderRadiusGeometry? radius;
 
+  /// 渐变背景色
+  Gradient? gradient;
+
   TDButtonStyle(
-      {this.backgroundColor, this.frameColor, this.textColor, this.frameWidth, this.radius});
+      {this.backgroundColor, this.frameColor, this.textColor, this.frameWidth, this.radius, this.gradient});
 
   /// 生成不同主题的填充按钮样式
   TDButtonStyle.generateFillStyleByTheme(
