@@ -1,4 +1,7 @@
 
 TDTimeCounter _buildSquareSimple(BuildContext context) {
-  return const TDTimeCounter(time: 60 * 60 * 1000, theme: TDTimeCounterTheme.square);
+  return const TDTimeCounter(
+    time: 60 * 60 * 1000,
+    theme: TDTimeCounterTheme.square,
+  );
 }

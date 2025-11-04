@@ -1,6 +1,7 @@
 
   Widget _buildSearchBarWithAction(BuildContext context) {
     return Column(
+      // spacing: 16,
       children: [
         TDSearchBar(
           placeHolder: '搜索预设文案',
@@ -17,15 +18,11 @@
             });
           },
         ),
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.only(left: 15),
           alignment: Alignment.centerLeft,
-          child: TDText(
-            '搜索框输入的内容：${searchText ?? ''}',
-          ),
+          child: TDText('搜索框输入的内容：${searchText ?? ''}'),
         )
       ],
     );

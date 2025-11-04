@@ -36,7 +36,7 @@ Widget _buildDesSimple(BuildContext context) {
       TDCell(
         arrow: true,
         title: '多行带头像',
-        description: '一段很长很长的内容文字',
+        description: '一段很长很长的内容文字一段很长很长的内容文字一段很长很长的内容',
         image: AssetImage('assets/img/td_avatar_1.png'),
       ),
       // NetworkImage('https://tdesign.gtimg.com/mobile/demos/avatar1.png')),

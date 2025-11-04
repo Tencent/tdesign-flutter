@@ -11,9 +11,15 @@ TDDropdownMenu _buildCustomOverflow(BuildContext context) {
     items: [
       TDDropdownItem(
         options: [
-          TDDropdownItemOption(label: '全部产品', value: 'all', selected: true, selectedColor: Colors.red),
-          TDDropdownItemOption(label: '最新产品', value: 'new', selectedColor: Colors.blue),
-          TDDropdownItemOption(label: '最火产品', value: 'hot', selectedColor: Colors.green),
+          TDDropdownItemOption(
+              label: '全部产品',
+              value: 'all',
+              selected: true,
+              selectedColor: Colors.red),
+          TDDropdownItemOption(
+              label: '最新产品', value: 'new', selectedColor: Colors.blue),
+          TDDropdownItemOption(
+              label: '最火产品', value: 'hot', selectedColor: Colors.green),
         ],
         onChange: (value) {
           print('选择：$value');
@@ -22,9 +28,13 @@ TDDropdownMenu _buildCustomOverflow(BuildContext context) {
       TDDropdownItem(
         multiple: true,
         options: [
-          TDDropdownItemOption(label: '默认排序', value: 'default', selected: true, selectedColor: Colors.red),
-          TDDropdownItemOption(label: '价格从高到低', value: 'price', selectedColor: Colors.green),
-
+          TDDropdownItemOption(
+              label: '默认排序',
+              value: 'default',
+              selected: true,
+              selectedColor: Colors.red),
+          TDDropdownItemOption(
+              label: '价格从高到低', value: 'price', selectedColor: Colors.green),
         ],
       ),
     ],

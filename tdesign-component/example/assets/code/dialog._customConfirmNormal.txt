@@ -13,14 +13,10 @@
             return TDAlertDialog(
               title: _dialogTitle,
               titleAlignment: Alignment.centerRight,
-              contentWidget: TDText.rich(
-                  TDTextSpan(
-                      children: [
-                        TDTextSpan(text: '红色文字', textColor: Colors.red),
-                        TDTextSpan(text: '绿色文字', textColor: Colors.green),
-                      ]
-                  )
-              ),
+              contentWidget: TDText.rich(TDTextSpan(children: [
+                TDTextSpan(text: '红色文字', textColor: Colors.red),
+                TDTextSpan(text: '绿色文字', textColor: Colors.green),
+              ])),
             );
           },
         );

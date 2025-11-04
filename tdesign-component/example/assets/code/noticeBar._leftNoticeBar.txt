@@ -1,7 +1,7 @@
 
 Widget _leftNoticeBar(BuildContext context) {
   return const TDNoticeBar(
-    context: '这是一条普通的通知信息',
+    content: '这是一条普通的通知信息',
     suffixIcon: TDIcons.chevron_right,
     left: TDButton(
       text: '文本',

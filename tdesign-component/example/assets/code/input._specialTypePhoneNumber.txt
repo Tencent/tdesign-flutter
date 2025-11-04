@@ -7,7 +7,6 @@
           controller: controller[14],
           leftLabel: '手机号',
           hintText: '输入手机号',
-          backgroundColor: Colors.white,
           rightBtn: SizedBox(
             width: 98,
             child: Row(
@@ -18,15 +17,16 @@
                   child: Container(
                     width: 0.5,
                     height: 24,
-                    color: TDTheme.of(context).grayColor3,
+                    color: TDTheme.of(context).componentBorderColor,
                   ),
                 ),
                 _countdownTime > 0
                     ? TDText(
                         '${countDownText}(${_countdownTime}秒)',
-                        textColor: TDTheme.of(context).fontGyColor4,
+                        textColor: TDTheme.of(context).textColorDisabled,
                       )
-                    : TDText(confirmText, textColor: TDTheme.of(context).brandNormalColor),
+                    : TDText(confirmText,
+                        textColor: TDTheme.of(context).brandNormalColor),
               ],
             ),
           ),

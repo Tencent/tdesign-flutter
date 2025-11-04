@@ -1,19 +1,33 @@
 
   Widget _buildVErrorIconSteps(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: TDSteps(
-              steps: vErrorIconStepsListData,
-              direction: TDStepsDirection.vertical,
-              activeIndex: 1,
-              status: TDStepsStatus.error,
-            ),
-          )
-        ],
-      ),
+    return TDSteps(
+      steps: [
+        TDStepsItemData(
+          title: 'Finish',
+          content: 'Customize content',
+          successIcon: TDIcons.cart,
+        ),
+        TDStepsItemData(
+          title: 'Process',
+          content: 'Customize content',
+          successIcon: TDIcons.cart,
+          errorIcon: TDIcons.close_circle,
+        ),
+        TDStepsItemData(
+          title: 'Default',
+          content: 'Customize content',
+          successIcon: TDIcons.cart,
+        ),
+        TDStepsItemData(
+          title: 'Default',
+          content: 'Customize content',
+          successIcon: TDIcons.cart,
+        ),
+      ],
+      // 垂直方向
+      direction: TDStepsDirection.vertical,
+      activeIndex: 1,
+      // 错误状态
+      status: TDStepsStatus.error,
     );
   }

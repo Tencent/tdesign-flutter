@@ -13,7 +13,6 @@
           ],
           rightBarItems: [
             TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
-          ]
-      ),
+          ]),
     );
   }

@@ -7,8 +7,9 @@
     for (var i = 0; i < 100; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项 $i',
         value: i,
+        textStyle: TextStyle(color: TDTheme.of(context).brandLightColor),
       ));
       pages.add(getPageDemo(i));
     }
@@ -27,14 +28,11 @@
       }
     }
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
@@ -46,23 +44,22 @@
                     textStyle: ele.textStyle,
                     icon: ele.icon))
                 .toList(),
-            selectedTextStyle:TextStyle(color: Colors.red),
+            selectedTextStyle: const TextStyle(color: Colors.red),
             onSelected: setCurrentValue,
-            contentPadding:EdgeInsets.only(left: 16, top: 16,bottom: 16),
+            contentPadding:
+                const EdgeInsets.only(left: 16, top: 16, bottom: 16),
             selectedBgColor: Colors.blue,
             unSelectedBgColor: Colors.yellow,
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: PageView(
             controller: _pageController,
             scrollDirection: Axis.vertical,
             children: pages,
             physics: const NeverScrollableScrollPhysics(),
           ),
-        ))
+        )
       ],
     );
   }

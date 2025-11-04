@@ -1,8 +1,10 @@
 
   Widget _buildSwitchWithText(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(isOn: true, type: TDSwitchType.text),
+    return const TDCell(
       title: '带文字开关',
+      noteWidget: TDSwitch(
+        isOn: true,
+        type: TDSwitchType.text,
+      ),
     );
   }

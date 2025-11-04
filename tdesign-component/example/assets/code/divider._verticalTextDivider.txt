@@ -1,20 +1,15 @@
 
   Widget _verticalTextDivider(BuildContext context) {
-    return Column(
-      children: const [
+    return const Wrap(
+      runSpacing: 20,
+      children: [
         TDDivider(
           text: '文字信息',
           alignment: TextAlignment.left,
         ),
-        SizedBox(
-          height: 20,
-        ),
         TDDivider(
           text: '文字信息',
           alignment: TextAlignment.center,
-        ),
-        SizedBox(
-          height: 20,
         ),
         TDDivider(
           text: '文字信息',

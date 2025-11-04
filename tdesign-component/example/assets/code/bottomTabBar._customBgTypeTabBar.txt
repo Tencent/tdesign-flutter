@@ -1,23 +1,23 @@
 
   Widget _customBgTypeTabBar(BuildContext context) {
     return TDBottomTabBar(TDBottomTabBarBasicType.text,
-        backgroundColor: TDTheme.of(context).successColor6,
-        selectedBgColor: TDTheme.of(context).errorColor1,
-        unselectedBgColor: TDTheme.of(context).brandColor1,
+        backgroundColor: TDTheme.of(context).successNormalColor,
+        selectedBgColor: TDTheme.of(context).errorLightColor,
+        unselectedBgColor: TDTheme.of(context).brandLightColor,
         useVerticalDivider: false,
         navigationTabs: [
           TDBottomTabBarTabConfig(
-            tabText: '标签',
+            tabText: '标签1',
             onTap: () {
               onTapTab(context, '标签1');
             },
           ),
           TDBottomTabBarTabConfig(
-            tabText: '标签',
+            tabText: '标签2',
             unselectTabTextStyle:
-                TextStyle(color: TDTheme.of(context).fontGyColor1),
+                TextStyle(color: TDTheme.of(context).textColorBrand),
             onTap: () {
-              onTapTab(context, '标签1');
+              onTapTab(context, '标签2');
             },
           ),
         ]);

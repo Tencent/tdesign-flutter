@@ -1,18 +1,14 @@
 
   Widget _buildBasicHSteps3(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: TDSteps(
-              steps: basicHStepsListData3,
-              direction: TDStepsDirection.horizontal,
-              activeIndex: 1,
-            ),
-          )
-        ],
-      ),
+    return TDSteps(
+      steps: [
+        TDStepsItemData(title: 'Steps1', content: 'Content1'),
+        TDStepsItemData(title: 'Steps2', content: 'Content2'),
+        TDStepsItemData(title: 'Steps3', content: 'Content3'),
+        TDStepsItemData(title: 'Steps4', content: 'Content4'),
+      ],
+      // 水平方向
+      direction: TDStepsDirection.horizontal,
+      activeIndex: 1,
     );
   }

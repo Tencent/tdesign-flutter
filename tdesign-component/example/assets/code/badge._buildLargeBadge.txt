@@ -1,31 +1,18 @@
 
   Widget _buildLargeBadge(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 16),
-      child: Row(
+    return SizedBox(
+      width: 80,
+      height: 68,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
         children: [
-          SizedBox(
-            width: 68,
-            height: 70,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                TDAvatar(
-                  size: TDAvatarSize.large,
-                  type: TDAvatarType.icon,
-                ),
-                Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    size: TDBadgeSize.large,
-                    count: '8',
-                  ),
-                  left: 48,
-                  bottom: 48,
-                )
-              ],
-            ),
-          ),
+          const TDAvatar(size: TDAvatarSize.large, type: TDAvatarType.icon),
+          Positioned(
+            child: TDBadge(TDBadgeType.message,
+                size: TDBadgeSize.large, count: num.toString()),
+            left: 48,
+            bottom: 48,
+          )
         ],
       ),
     );

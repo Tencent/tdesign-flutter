@@ -13,7 +13,10 @@ Widget _buildIconSimple(BuildContext context) {
         context,
         visible: true,
         drawerTop: renderBox?.size.height,
-        items: List.generate(30, (index) => TDDrawerItem(title: '菜单${_nums[index]}', icon: const Icon(TDIcons.app))).toList(),
+        items: List.generate(
+            drawerItemLength,
+            (index) => TDDrawerItem(
+                title: '菜单${index + 1}', icon: const Icon(TDIcons.app))),
       );
     },
   );

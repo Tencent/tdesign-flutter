@@ -12,14 +12,10 @@
               Animation<double> secondaryAnimation) {
             return TDAlertDialog.vertical(
                 title: _dialogTitle,
-                contentWidget: TDText.rich(
-                    TDTextSpan(
-                        children: [
-                          TDTextSpan(text: '红色文字', textColor: Colors.red),
-                          TDTextSpan(text: '绿色文字', textColor: Colors.green),
-                        ]
-                    )
-                ),
+                contentWidget: TDText.rich(TDTextSpan(children: [
+                  TDTextSpan(text: '红色文字', textColor: Colors.red),
+                  TDTextSpan(text: '绿色文字', textColor: Colors.green),
+                ])),
                 buttons: [
                   TDDialogButtonOptions(
                       title: '主要按钮',

@@ -1,18 +1,20 @@
 
   Widget _buildHIconSteps1(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: TDSteps(
-              steps: hIconStepsListData1,
-              direction: TDStepsDirection.horizontal,
-              activeIndex: 0,
-            ),
-          )
-        ],
-      ),
+    return TDSteps(
+      steps: [
+        TDStepsItemData(
+          title: 'Steps1',
+          content: 'Content1',
+          successIcon: TDIcons.cart,
+        ),
+        TDStepsItemData(
+          title: 'Steps2',
+          content: 'Content2',
+          successIcon: TDIcons.cart,
+        ),
+      ],
+      // 水平方向
+      direction: TDStepsDirection.horizontal,
+      activeIndex: 0,
     );
   }

@@ -5,7 +5,6 @@
       text: '纯文字的通知',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
-      width: 450,
       theme: TDButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
