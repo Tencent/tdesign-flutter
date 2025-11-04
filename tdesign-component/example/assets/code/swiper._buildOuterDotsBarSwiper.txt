@@ -6,10 +6,13 @@
       itemCount: 6,
       loop: true,
       pagination: const SwiperPagination(
-          alignment: Alignment.topLeft,
-          builder: TDSwiperPagination.dotsBar),
+        alignment: Alignment.topLeft,
+        builder: TDSwiperPagination.dotsBar,
+      ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }

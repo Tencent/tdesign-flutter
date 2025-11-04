@@ -8,14 +8,13 @@
           controller: controller[13],
           leftLabel: '验证码',
           hintText: '输入验证码',
-          backgroundColor: Colors.white,
           rightBtn: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 width: 0.5,
                 height: 24,
-                color: TDTheme.of(context).grayColor3,
+                color: TDTheme.of(context).componentBorderColor,
               ),
               const SizedBox(
                 width: 16,

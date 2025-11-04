@@ -7,8 +7,7 @@
         screenAdaptation: false,
         useDefaultBack: true,
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home,iconSize: 24),
-          TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
-        ]
-    );
+          TDNavBarItem(icon: TDIcons.home, iconSize: 24),
+          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+        ]);
   }

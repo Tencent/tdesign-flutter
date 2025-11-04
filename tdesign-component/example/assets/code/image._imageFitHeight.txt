@@ -8,13 +8,12 @@
           child: TDText(
             '适应高',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 89,
           height: 72,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitHeight,

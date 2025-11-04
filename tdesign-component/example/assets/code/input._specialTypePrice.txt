@@ -7,9 +7,9 @@
           controller: controller[15],
           leftLabel: '价格',
           hintText: '0.00',
-          backgroundColor: Colors.white,
           textAlign: TextAlign.end,
-          rightWidget: TDText('元', textColor: TDTheme.of(context).fontGyColor1),
+          rightWidget:
+              TDText('元', textColor: TDTheme.of(context).textColorPrimary),
         ),
         const SizedBox(
           height: 16,

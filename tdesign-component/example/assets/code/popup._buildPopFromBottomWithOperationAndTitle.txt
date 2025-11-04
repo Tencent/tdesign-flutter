@@ -7,8 +7,8 @@
       type: TDButtonType.outline,
       size: TDButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(TDSlidePopupRoute(
-            modalBarrierColor: TDTheme.of(context).fontGyColor2,
+        Navigator.of(context).push(
+          TDSlidePopupRoute(
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
               return TDPopupBottomConfirmPanel(
@@ -20,11 +20,11 @@
                   TDToast.showText('确定', context: context);
                   Navigator.maybePop(context);
                 },
-                child: Container(
-                  height: 200,
-                ),
+                child: Container(height: 200),
               );
-            }));
+            },
+          ),
+        );
       },
     );
   }

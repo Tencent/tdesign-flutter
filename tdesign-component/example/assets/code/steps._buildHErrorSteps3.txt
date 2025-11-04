@@ -1,20 +1,35 @@
 
   Widget _buildHErrorSteps3(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: TDSteps(
-              steps: hErrorStepsListData3,
-              direction: TDStepsDirection.horizontal,
-              activeIndex: 1,
-              status: TDStepsStatus.error,
-              simple: true,
-            ),
-          )
-        ],
-      ),
+    return TDSteps(
+      steps: [
+        TDStepsItemData(
+          title: 'Steps1',
+          content: 'Content1',
+          successIcon: TDIcons.cart,
+        ),
+        TDStepsItemData(
+          title: 'Error',
+          content: 'Content2',
+          successIcon: TDIcons.cart,
+          errorIcon: TDIcons.close_circle,
+        ),
+        TDStepsItemData(
+          title: 'Steps3',
+          content: 'Content3',
+          successIcon: TDIcons.cart,
+        ),
+        TDStepsItemData(
+          title: 'Steps4',
+          content: 'Content4',
+          successIcon: TDIcons.cart,
+        ),
+      ],
+      // 水平方向
+      direction: TDStepsDirection.horizontal,
+      activeIndex: 1,
+      // 错误状态
+      status: TDStepsStatus.error,
+      // 简略模式
+      simple: true,
     );
   }

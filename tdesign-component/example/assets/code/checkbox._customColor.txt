@@ -4,7 +4,7 @@
       contentDirection: TDContentDirection.right,
       selectIds: const ['0'],
       child: Column(
-        children:  [
+        children: [
           TDCheckbox(
             selectColor: TDTheme.of(context).errorColor3,
             disableColor: TDTheme.of(context).errorColor1,
@@ -20,7 +20,6 @@
             title: '选项禁用-默认',
             style: TDCheckboxStyle.circle,
           ),
-
           TDCheckbox(
             selectColor: TDTheme.of(context).errorColor3,
             disableColor: TDTheme.of(context).errorColor1,
@@ -31,7 +30,6 @@
             subTitleMaxLine: 2,
             cardMode: true,
           ),
-
           TDCheckbox(
             selectColor: TDTheme.of(context).errorColor3,
             id: 'index:1',
