@@ -117,12 +117,12 @@ flutter:
     - assets/publish_time
 
 # 生成演示代码
-AOPMarket:
+AOPRegistry:
   enable: false
   compileTarget: frontend_server, dart2js
   versions:
     negativeInfinity~3.0.0:
       unsupportedTips: 请在Flutter 3.+ 运行心悦工程
     3.0.0~infinity:
-      path: ./tdesign_flutter_generator
+      path: ./tdesign-flutter-generator
   saveDartDependencies: true
