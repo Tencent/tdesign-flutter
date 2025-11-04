@@ -1,0 +1,91 @@
+---
+alwaysApply: true
+---
+
+## tdesign-flutter 项目索引与实现规则
+
+> 本文基于当前仓库目录结构，提供项目索引与落地实现规则，适用于 `tdesign-component`、`tdesign-adaptation`、`tdesign-site` 三个子工程。
+
+### 项目索引（Directories Index）
+
+- 根目录
+  - `tdesign-component`: Flutter 组件库源码与示例应用
+  - `tdesign-adaptation`: 适配层与通用工具
+  - `tdesign-site`: 文档与站点工程（Vue/Vite）
+  - `README*.md`/`CONTRIBUTING.md`/`CODE_OF_CONDUCT.md`/`LICENSE`: 仓库说明、贡献规范与协议
+
+- tdesign-component
+  - `lib/src/components/`: 组件实现（每个组件一个子目录/文件）
+  - `lib/src/theme/`: 主题与设计 Token
+  - `lib/src/util/`: 工具与基础能力
+  - `lib/tdesign_flutter.dart`: 统一对外导出入口
+  - `assets/tdesign/`: 字体与图标（如 `td_icons.ttf`）
+  - `example/`: 示例工程（Android/iOS/Web/ohos、页面演示、资源）
+  - `test/`: 组件测试
+  - `demo_tool/`: 图标与演示相关工具脚本
+
+- tdesign-adaptation
+  - `lib/components/indexes/`: 适配性组件与能力
+  - `lib/tdesign_adaptation.dart`: 导出入口
+  - `test/`: 单元测试
+
+- tdesign-site
+  - `src/`: 站点文档、组件说明、样式与脚手架资源
+  - `site/`: 站点应用（Vue3 + Vite）与公共资源
+  - `script/`: 构建脚本与工具（如图标更新、预渲染）
+
+
+### 实现规则（Implementation Rules）
+
+#### 分支与提交
+- 分支命名：`feat/*` 新功能、`fix/*` 修复、`chore/*`/`docs/*`/`refactor/*` 其他改动；`main` 为稳定分支。
+- 提交信息：`type(scope): subject`（如：`feat(toast): support multiple stacking toasts`）。
+- PR 说明需包含变更动机、影响范围与关联 Issue。
+
+#### Dart/Flutter 代码规范（tdesign-component / tdesign-adaptation / example）
+- 遵循各包下 `analysis_options.yaml`，提交前确保零警告零错误。
+- 命名：类/Widget 用 `PascalCase`；方法/变量用 `lowerCamelCase`；常量按现有风格保持一致性。
+- 结构：
+  - 组件文件建议按需拆分：`<component>.dart`、`<component>_theme.dart`、`<component>_controller.dart`、`<component>_utils.dart`。
+  - 公共类型/枚举/配置独立文件，内部实现细节不导出。
+- 主题与样式：通过 `theme`/token 驱动，避免硬编码颜色/尺寸，兼容明暗主题。
+- API 设计：参数语义清晰、默认值安全，与 TDesign 多端 API/交互保持一致。
+- 性能：尽可能使用 `const`、拆分子树、避免不必要 rebuild/relayout，长列表用 `*.builder`。
+- A11y：合理使用 `Semantics`，保证可聚焦与读屏友好。
+- i18n：示例与展示文案使用 `l10n`/`arb` 管理，避免硬编码。
+- 销毁与资源释放：监听/流/控制器在 `dispose` 中释放，避免内存泄漏。
+- 测试：
+  - 单测覆盖组件公开行为、边界条件与回调；工具与主题计算需覆盖。
+  - 示例仅用于手动验证，不替代测试。
+
+#### 组件目录与导出（Flutter）
+- 组件源码放在 `lib/src/components/<component_name>/` 或与现有结构保持一致。
+- 统一在 `lib/tdesign_flutter.dart` 进行对外导出，内部实现文件不直接暴露。
+- 组件需提供：主题适配、尺寸/状态变体、插槽式自定义能力（如图标/文案）。
+
+#### 资源与图标
+- 图标源文件位于 `example/shell/Icons/*.svg`（或当前脚本约定位置），通过 `demo_tool/svg2ttf.sh` 生成 `assets/tdesign/td_icons.ttf`。
+- `pubspec.yaml` 中声明使用到的 `assets`；避免提交中间产物（除非被工程消费）。
+
+#### tdesign-site（TypeScript/Vue）
+- TypeScript 严格模式，无隐式 `any`。文档位于 `src/*/<component>/README.md`。
+- 站点应用在 `site/*`（Vue3+Vite），新增组件文档需更新导航与示例资源。
+- 构建脚本在 `script/*`，统一通过 `npm scripts` 调用；不引入未声明依赖。
+
+#### 版本与发布
+- 采用 SemVer：`MAJOR.MINOR.PATCH`。
+- 变更需更新对应包的 `CHANGELOG.md` 与 `pubspec.yaml`（如涉及版本）。
+- 发布前确保：lint 通过、测试通过、关键示例在至少一端可运行（Android/iOS/Web/OHOS）。
+
+#### PR 自检清单
+- 通过 `analysis_options.yaml` 检查，无 lint/warn。
+- API 与交互对齐 TDesign 设计规范；主题/暗色/A11y/i18n 覆盖。
+- 新增或修改功能具备相应测试用例与示例验证。
+- `CHANGELOG.md`/`pubspec.yaml`（如需）已更新；资产与脚本按约定位置维护。
+- 文档/站点同步更新，可在站点导航中访问对应页面。
+
+
+---
+最后更新：基于当前工作副本目录结构自动整理。
+
+
