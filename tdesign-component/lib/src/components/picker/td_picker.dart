@@ -25,6 +25,8 @@ class TDPicker {
     double? topRadius,
     Color? backgroundColor,
     Widget? customSelectWidget,
+    DateTime? initialScrollDate,
+    bool animateInitialScroll = true,
     // 通过弹窗方式打开必须展示header
     // bool header = true,
     // ItemDistanceCalculator? itemDistanceCalculator,
@@ -99,6 +101,8 @@ class TDPicker {
           pickerItemCount: pickerItemCount,
           isTimeUnit: isTimeUnit,
           itemBuilder: itemBuilder,
+          initialScrollDate: initialScrollDate,
+          animateInitialScroll: animateInitialScroll,
         );
       },
     );

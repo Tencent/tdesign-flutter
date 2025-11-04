@@ -54,7 +54,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
             ExampleItem(desc: '不带标题', builder: buildWithoutTitle),
             ExampleItem(desc: '不使用弹窗、不带顶部内容', builder: buildWithoutHeader),
           ],
-        )
+        ),
       ],
       test: [
         ExampleItem(desc: '指定开始时间', builder: _customStartTime),
@@ -62,6 +62,7 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
         ExampleItem(desc: '自定义时间选项', builder: _customItems),
         ExampleItem(desc: '自定义选中选项', builder: _customSelectWidget),
         ExampleItem(desc: '只有时分限制时间', builder: _customItemsOnlyHour),
+        ExampleItem(desc: '未选择时自动滚动到指定日期', builder: buildInitialScrollOnly),
       ],
     );
   }
@@ -307,6 +308,33 @@ class _TDDatePickerPageState extends State<TDDatePickerPage> {
       ),
       onChange: (selected) {
         print('onChange ${selected}');
+      },
+    );
+  }
+
+  @Demo(group: 'datetimePicker')
+  Widget buildInitialScrollOnly(BuildContext context) {
+    return TDCell(
+      title: '选择时间',
+      note: '打开后滚动到 2024-11-04',
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showDatePicker(
+          context,
+          title: '仅滚动到指定日期（不改变已选值）',
+          onConfirm: (selected) {
+            Navigator.of(context).pop();
+          },
+          useYear: true,
+          useMonth: true,
+          useDay: true,
+          dateStart: [2020, 1, 1],
+          dateEnd: [2030, 12, 31],
+          initialDate: [2022, 1, 1],
+          // 新增能力：不改变选中值，仅在首帧滚动到目标日期
+          initialScrollDate: DateTime(2024, 11, 4),
+          animateInitialScroll: true,
+        );
       },
     );
   }

@@ -39,6 +39,8 @@ class TDDatePicker extends StatefulWidget {
     this.pickerItemCount = 5,
     this.isTimeUnit,
     this.itemBuilder,
+    this.initialScrollDate,
+    this.animateInitialScroll = true,
     Key? key,
   }) : super(key: key);
 
@@ -120,6 +122,12 @@ class TDDatePicker extends StatefulWidget {
   /// 自定义item构建
   final ItemBuilderType? itemBuilder;
 
+  /// 仅滚动到指定日期但不改变 model 的选中值
+  final DateTime? initialScrollDate;
+
+  /// 初次滚动是否使用动画
+  final bool animateInitialScroll;
+
   @override
   State<StatefulWidget> createState() => _TDDatePickerState();
 }
@@ -132,6 +140,12 @@ class _TDDatePickerState extends State<TDDatePicker> {
   void initState() {
     super.initState();
     pickerHeight = widget.pickerHeight;
+    if (widget.initialScrollDate != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToInitialDate(widget.initialScrollDate!,
+            animated: widget.animateInitialScroll);
+      });
+    }
   }
 
   @override
@@ -500,6 +514,35 @@ class _TDDatePickerState extends State<TDDatePicker> {
   }
 
   double getTitleHeight() => widget.titleHeight ?? _pickerTitleHeight;
+
+
+  Future<void> _scrollToInitialDate(DateTime target, {bool animated = true}) async {
+    // 依次滚动：年 -> 月 -> 日 -> 时 -> 分 -> 秒，避免联动引发的数据重建导致错位
+    Future<void> scrollColumn(int column, int value) async {
+      final list = widget.model.data[column];
+      if (list.isEmpty) return;
+      final idx = list.indexOf(value);
+      if (idx < 0) return;
+      final controller = widget.model.controllers[column] as FixedExtentScrollController;
+      if (animated) {
+        controller.animateToItem(idx,
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeOut);
+        // 等待一小段时间以触发 onSelectedItemChanged 及联动刷新
+        await Future.delayed(const Duration(milliseconds: 260));
+      } else {
+        controller.jumpToItem(idx);
+      }
+    }
+
+    if (widget.model.useYear) await scrollColumn(0, target.year);
+    if (widget.model.useMonth) await scrollColumn(1, target.month);
+    if (widget.model.useDay) await scrollColumn(2, target.day);
+    if (widget.model.useWeekDay) await scrollColumn(3, target.weekday);
+    if (widget.model.useHour) await scrollColumn(4, target.hour);
+    if (widget.model.useMinute) await scrollColumn(5, target.minute);
+    if (widget.model.useSecond) await scrollColumn(6, target.second);
+  }
 }
 
 // 时间选择器的数据类
