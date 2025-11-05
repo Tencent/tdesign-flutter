@@ -26,17 +26,24 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildArea(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        TDPicker.showMultiPicker(context, title: '选择地区',
-            onConfirm: (selected) {
-              setState(() {
-                selected_1 = '${data_1[selected[0]]}';
-              });
-              Navigator.of(context).pop();
-            }, data: [data_1]);
+    const title = '选择地区';
+    return TDCell(
+      title: title,
+      note: selected_1.isEmpty ? '请选择' : selected_1,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showMultiPicker(
+          context,
+          title: title,
+          onConfirm: (selected) {
+            setState(() {
+              selected_1 = '${data_1[selected[0]]}';
+            });
+            Navigator.of(context).pop();
+          },
+          data: [data_1],
+        );
       },
-      child: buildSelectRow(context, selected_1, '选择地区'),
     );
   }</pre>
 
@@ -49,17 +56,26 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildTime(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        TDPicker.showMultiPicker(context, title: '选择时间',
-            onConfirm: (selected) {
-              setState(() {
-                selected_2 = '${data_2[0][selected[0]]} ${data_2[1][selected[1]]}';
-              });
-              Navigator.of(context).pop();
-            }, data: data_2);
+    const title = '选择时间';
+    return TDCell(
+      title: title,
+      note: selected_2.isEmpty ? '请选择' : selected_2,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showMultiPicker(
+          context,
+          title: title,
+          onConfirm: (selected) {
+            print('selected ${selected}');
+            setState(() {
+              selected_2 =
+                  '${data_2[0][selected[0]]} ${data_2[1][selected[1]]}';
+            });
+            Navigator.of(context).pop();
+          },
+          data: data_2,
+        );
       },
-      child: buildSelectRow(context, selected_2, '选择时间'),
     );
   }</pre>
 
@@ -72,20 +88,26 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildMultiArea(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        TDPicker.showMultiLinkedPicker(context, title: '选择地区',
-            onConfirm: (selected) {
-              setState(() {
-                selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
-              });
-              Navigator.of(context).pop();
-            },
-            data: data_3,
-            columnNum: 3,
-            initialData: ['浙江省', '杭州市', '西湖区']);
+    const title = '选择地区';
+    return TDCell(
+      title: title,
+      note: selected_3.isEmpty ? '请选择' : selected_3,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showMultiLinkedPicker(
+          context,
+          title: title,
+          onConfirm: (selected) {
+            setState(() {
+              selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
+            });
+            Navigator.of(context).pop();
+          },
+          data: dataTest,
+          columnNum: 3,
+          initialData: ['浙江省', '杭州市', '西湖区'],
+        );
       },
-      child: buildSelectRow(context, selected_3, '选择地区'),
     );
   }</pre>
 
@@ -99,17 +121,24 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildAreaWithTitle(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        TDPicker.showMultiPicker(context, title: '选择地区',
-            onConfirm: (selected) {
-              setState(() {
-                selected_4 = '${data_1[selected[0]]}';
-              });
-              Navigator.of(context).pop();
-            }, data: [data_1]);
+    const title = '选择地区';
+    return TDCell(
+      title: title,
+      note: selected_4.isEmpty ? '请选择' : selected_4,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showMultiPicker(
+          context,
+          title: '带标题选择器',
+          onConfirm: (selected) {
+            setState(() {
+              selected_4 = '${data_1[selected[0]]}';
+            });
+            Navigator.of(context).pop();
+          },
+          data: [data_1],
+        );
       },
-      child: buildSelectRow(context, selected_4, '带标题选择器'),
     );
   }</pre>
 
@@ -122,17 +151,47 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget buildAreaWithoutTitle(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        TDPicker.showMultiPicker(context, title: '',
-            onConfirm: (selected) {
-              setState(() {
-                selected_5 = '${data_1[selected[0]]}';
-              });
-              Navigator.of(context).pop();
-            }, data: [data_1]);
+    return TDCell(
+      title: '选择地区',
+      note: selected_5.isEmpty ? '请选择' : selected_5,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showMultiPicker(
+          context,
+          // 不传或传空字符串、null，则不显示标题
+          // title: '',
+          onConfirm: (selected) {
+            setState(() {
+              selected_5 = '${data_1[selected[0]]}';
+            });
+            Navigator.of(context).pop();
+          },
+          data: [data_1],
+        );
       },
-      child: buildSelectRow(context, selected_5, '无标题选择器'),
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+不使用弹窗、不带顶部内容
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget buildWithoutHeader(BuildContext context) {
+    return TDMultiPicker(
+      /// 不显示header内容
+      header: false,
+      /// todo onChange
+      onConfirm: (selected) {
+        setState(() {
+          selected_5 = '${data_1[selected[0]]}';
+        });
+        Navigator.of(context).pop();
+      },
+      data: [data_1],
     );
   }</pre>
 
@@ -141,47 +200,37 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDPicker
-
-#### 静态方法
-
-| 名称 | 返回类型 | 参数 | 说明 |
-| --- | --- | --- | --- |
-| showDatePicker |  |   required null context,  required String title,  required DatePickerCallback? onConfirm,  DatePickerCallback? onCancel,  bool useYear,  bool useMonth,  bool useDay,  bool useHour,  bool useMinute,  bool useSecond,  bool useWeekDay,  Color? barrierColor,  List<int> dateStart,  List<int>? dateEnd,  List<int>? initialDate,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  Color? titleDividerColor,  Widget? customSelectWidget,  Duration duration,  double pickerHeight,  bool isTimeUnit,   Function(int wheelIndex, int index)? onSelectedItemChanged,  int pickerItemCount,  List<int> Function(DateTypeKey key, List<int> nums)? filterItems,  ItemBuilderType? itemBuilder, | 显示时间选择器 |
-| showMultiPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List<List<String>> data,  List<int>? initialIndexes,  Duration duration,  Color? barrierColor,  double pickerHeight,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  Color? titleDividerColor,  double? topPadding,  int pickerItemCount,  Widget? customSelectWidget,  ItemBuilderType? itemBuilder, | 显示多级选择器 |
-| showMultiLinkedPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required Map data,  required int columnNum,  required List initialData,  Duration duration,  Color? barrierColor,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double pickerHeight,  Color? titleDividerColor,  Widget? customSelectWidget,  double? topPadding,  bool keepSameSelection,  int pickerItemCount, | 显示多级联动选择器 |
-
-```
-```
- ### TDMultiPicker
+### TDMultiPicker
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| title | String? | - | 选择器标题 |
-| onConfirm | MultiPickerCallback? | - | 选择器确认按钮回调 |
-| onCancel | MultiPickerCallback? | - | 选择器取消按钮回调 |
+| backgroundColor | Color? | - | 背景颜色 |
+| centerTextStyle | TextStyle? | - | 自定义中间文案样式 |
+| customSelectWidget | Widget? | - | 自定义选择框样式 |
 | data | Map | - | 总的数据 |
-| pickerHeight | double | - |  |
-| pickerItemCount | int | - | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
+| header | bool | true | 是否显示头部内容 |
 | initialIndexes | List<int>? | - | 若为null表示全部从零开始 |
-| rightText | String? | - | 右侧按钮文案 |
+| itemBuilder | ItemBuilderType? | - | 自定义item构建 |
+| itemDistanceCalculator | ItemDistanceCalculator? | - | 不同距离自选项计算策略 |
+| key |  | - |  |
+| leftPadding | double? | - | 左边填充 |
 | leftText | String? | - | 左侧按钮文案 |
 | leftTextStyle | TextStyle? | - | 自定义左侧文案样式 |
+| onCancel | MultiPickerCallback? | - | 选择器取消按钮回调 |
+| onChange | MultiPickerCallback? | - | todo 选择器数据改变时回调 |
+| onConfirm | MultiPickerCallback? | - | 选择器确认按钮回调 |
+| padding | EdgeInsets? | - | 适配padding |
+| pickerHeight | double | 200 |  |
+| pickerItemCount | int | 5 | 选择器List视窗中item个数，pickerHeight / pickerItemCount，即item高度 |
+| rightPadding | double? | - | 右边填充 |
+| rightText | String? | - | 右侧按钮文案 |
 | rightTextStyle | TextStyle? | - | 自定义右侧文案样式 |
-| centerTextStyle | TextStyle? | - | 自定义中间文案样式 |
+| title | String? | - | 选择器标题 |
+| titleDividerColor | Color? | - | 标题分割线颜色 |
 | titleHeight | double? | - | 标题高度 |
 | topPadding | double? | - | 顶部填充 |
-| leftPadding | double? | - | 左边填充 |
-| rightPadding | double? | - | 右边填充 |
-| titleDividerColor | Color? | - | 标题分割线颜色 |
-| backgroundColor | Color? | - | 背景颜色 |
 | topRadius | double? | - | 顶部圆角 |
-| padding | EdgeInsets? | - | 适配padding |
-| itemDistanceCalculator | ItemDistanceCalculator? | - | 不同距离自选项计算策略 |
-| customSelectWidget | Widget? | - | 自定义选择框样式 |
-| itemBuilder | ItemBuilderType? | - | 自定义item构建 |
-| key |  | - |  |
 
 ```
 ```
@@ -190,32 +239,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| title | String? | - | 选择器标题 |
-| onConfirm | MultiPickerCallback? | - | 选择器确认按钮回调 |
-| onCancel | MultiPickerCallback? | - | 选择器取消按钮回调 |
-| selectedData | List | - | 选中数据 |
-| data | Map | - | 总的数据 |
-| columnNum | int | - | 总列数 |
-| pickerHeight | double | 200 |  |
-| pickerItemCount | int | 5 | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
-| customSelectWidget | Widget? | - | 自定义选择框样式 |
-| rightText | String? | - | 右侧按钮文案 |
-| leftText | String? | - | 左侧按钮文案 |
-| leftTextStyle | TextStyle? | - | 自定义左侧文案样式 |
-| rightTextStyle | TextStyle? | - | 自定义右侧文案样式 |
-| centerTextStyle | TextStyle? | - | 自定义中间文案样式 |
-| titleHeight | double? | - | 标题高度 |
-| topPadding | double? | - | 顶部填充 |
-| leftPadding | double? | - | 左边填充 |
-| rightPadding | double? | - | 右边填充 |
-| titleDividerColor | Color? | - | 标题分割线颜色 |
 | backgroundColor | Color? | - | 背景颜色 |
-| topRadius | double? | - | 顶部圆角 |
-| padding | EdgeInsets? | - | 适配padding |
-| itemDistanceCalculator | ItemDistanceCalculator? | - | 不同距离自选项计算策略 |
+| centerTextStyle | TextStyle? | - | 自定义中间文案样式 |
+| columnNum | int | - | 总列数 |
+| customSelectWidget | Widget? | - | 自定义选择框样式 |
+| data | Map | - | 总的数据 |
+| header | bool | true | 是否显示头部内容 |
 | itemBuilder | ItemBuilderType? | - | 自定义item构建 |
+| itemDistanceCalculator | ItemDistanceCalculator? | - | 不同距离自选项计算策略 |
 | keepSameSelection | bool | false | 是否保留相同选项 |
 | key |  | - |  |
+| leftPadding | double? | - | 左边填充 |
+| leftText | String? | - | 左侧按钮文案 |
+| leftTextStyle | TextStyle? | - | 自定义左侧文案样式 |
+| onCancel | MultiPickerCallback? | - | 选择器取消按钮回调 |
+| onChange | MultiPickerCallback? | - | todo 选择器数据改变时回调 |
+| onConfirm | MultiPickerCallback? | - | 选择器确认按钮回调 |
+| padding | EdgeInsets? | - | 适配padding |
+| pickerHeight | double | 200 |  |
+| pickerItemCount | int | 5 | 选择器List视窗中item个数，pickerHeight / pickerItemCount，即item高度 |
+| rightPadding | double? | - | 右边填充 |
+| rightText | String? | - | 右侧按钮文案 |
+| rightTextStyle | TextStyle? | - | 自定义右侧文案样式 |
+| selectedData | List | - | 选中数据 |
+| title | String? | - | 选择器标题 |
+| titleDividerColor | Color? | - | 标题分割线颜色 |
+| titleHeight | double? | - | 标题高度 |
+| topPadding | double? | - | 顶部填充 |
+| topRadius | double? | - | 顶部圆角 |
 
 ```
 ```
@@ -224,10 +275,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| data | Map | - | 总的数据 |
 | columnNum | int | - | 总列数 |
+| data | Map | - | 总的数据 |
 | initialData |  | - |  |
 | keepSameSelection | bool | false | 是否保留相同选项 |
+
+```
+```
+ ### TDPicker
+
+#### 静态方法
+
+| 名称 | 返回类型 | 参数 | 说明 |
+| --- | --- | --- | --- |
+| showDatePicker |  |   required null context,  String? title,  double? titleHeight,  Color? titleDividerColor,  required DatePickerCallback? onConfirm,  DatePickerCallback? onCancel,  DatePickerCallback? onChange,   Function(int wheelIndex, int index)? onSelectedItemChanged,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  String? rightText,  TextStyle? rightTextStyle,  EdgeInsets? padding,  double? leftPadding,  double? topPadding,  double? rightPadding,  double? topRadius,  Color? backgroundColor,  Widget? customSelectWidget,  bool useYear,  bool useMonth,  bool useDay,  bool useHour,  bool useMinute,  bool useSecond,  bool useWeekDay,  List<int> dateStart,  List<int>? dateEnd,  List<int>? initialDate,  List<int> Function(DateTypeKey key, List<int> nums)? filterItems,  double pickerHeight,  int pickerItemCount,  bool isTimeUnit,  ItemBuilderType? itemBuilder,  Color? barrierColor,  Duration duration, | 显示时间选择器 |
+| showMultiLinkedPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List initialData,  required Map data,  required int columnNum,  double pickerHeight,  int pickerItemCount,  Widget? customSelectWidget,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double? titleHeight,  double? topPadding,  double? leftPadding,  double? rightPadding,  Color? titleDividerColor,  Color? backgroundColor,  double? topRadius,  EdgeInsets? padding,  ItemBuilderType? itemBuilder,  bool keepSameSelection,  Color? barrierColor,  Duration duration, | 显示多级联动选择器 |
+| showMultiPicker |  |   required null context,  String? title,  required MultiPickerCallback? onConfirm,  MultiPickerCallback? onCancel,  required List<List<String>> data,  double pickerHeight,  int pickerItemCount,  List<int>? initialIndexes,  String? rightText,  String? leftText,  TextStyle? leftTextStyle,  TextStyle? centerTextStyle,  TextStyle? rightTextStyle,  double? titleHeight,  double? topPadding,  double? leftPadding,  double? rightPadding,  Color? titleDividerColor,  Color? backgroundColor,  double? topRadius,  EdgeInsets? padding,  Widget? customSelectWidget,  ItemBuilderType? itemBuilder,  Duration duration,  Color? barrierColor, | 显示多级选择器 |
 
 
   
