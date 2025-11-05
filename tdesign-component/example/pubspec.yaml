@@ -118,7 +118,7 @@ flutter:
 
 # 生成演示代码
 AOPRegistry:
-  enable: false
+  enable: true
   compileTarget: frontend_server, dart2js
   versions:
     negativeInfinity~3.0.0:
