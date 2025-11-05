@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/src/util/log.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -8,6 +9,7 @@ import 'base/intl_resource_delegate.dart';
 import 'config.dart';
 import 'home.dart';
 import 'l10n/app_localizations.dart';
+import 'provider/theme_mode_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,67 +62,86 @@ class _MyAppState extends State<MyApp> {
     // 适配3.16的字体居中前,先禁用字体居中功能
     // kTextForceVerticalCenterEnable = false;
     var delegate = IntlResourceDelegate(context);
-    return MaterialApp(
-      title: 'TDesign Flutter Example',
-      theme: ThemeData(
-        extensions: [_themeData],
-        colorScheme: ColorScheme.light(
-          primary: _themeData.brandNormalColor,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) {
+            final provider = ThemeModeProvider();
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              if (provider.themeMode == ThemeMode.system) {
+                await provider.initThemeMode();
+              }
+            });
+            return provider;
+          },
         ),
-        scaffoldBackgroundColor: _themeData.bgColorPage,
-        iconTheme: const IconThemeData().copyWith(
-          color: _themeData.brandNormalColor,
-        ),
-      ),
-      darkTheme: ThemeData(
-        extensions: [_darkThemeData],
-        colorScheme: ColorScheme.dark(
-          primary: _darkThemeData.brandNormalColor,
-          secondary: _darkThemeData.brandNormalColor,
-        ),
-        scaffoldBackgroundColor: _darkThemeData.bgColorPage,
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData()
-            .copyWith(backgroundColor: _darkThemeData.grayColor14),
-        appBarTheme: const AppBarTheme().copyWith(
-          backgroundColor: _darkThemeData.grayColor13,
-        ),
-        iconTheme: const IconThemeData().copyWith(
-          color: _darkThemeData.brandNormalColor,
-        ),
-      ),
-      themeMode: ThemeMode.system,
-      home: PlatformUtil.isWeb
-          ? null
-          : Builder(
-              builder: (context) {
-                // 设置文案代理,国际化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
-                TDTheme.setResourceBuilder(
-                  (context) => delegate..updateContext(context),
-                  needAlwaysBuild: true,
-                );
-                return MyHomePage(
-                  title: AppLocalizations.of(context)?.components ?? '',
-                  locale: locale,
-                  onLocaleChange: (locale) {
-                    setState(() {
-                      this.locale = locale;
-                    });
-                  },
-                  onThemeChange: (themeData, darkThemeData) {
-                    setState(() {
-                      _themeData = themeData;
-                      _darkThemeData = darkThemeData;
-                    });
-                  },
-                );
-              },
+      ],
+      child: Consumer<ThemeModeProvider>(
+        builder: (context, themeModeProvider, child) {
+          return MaterialApp(
+            title: 'TDesign Flutter Example',
+            theme: ThemeData(
+              extensions: [_themeData],
+              colorScheme: ColorScheme.light(
+                primary: _themeData.brandNormalColor,
+              ),
+              scaffoldBackgroundColor: _themeData.bgColorPage,
+              iconTheme: const IconThemeData().copyWith(
+                color: _themeData.brandNormalColor,
+              ),
             ),
-      // 设置国际化处理
-      locale: locale,
-      supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      onGenerateRoute: TDExampleRoute.onGenerateRoute,
-      routes: _getRoutes(),
+            darkTheme: ThemeData(
+              extensions: [_darkThemeData],
+              colorScheme: ColorScheme.dark(
+                primary: _darkThemeData.brandNormalColor,
+                secondary: _darkThemeData.brandNormalColor,
+              ),
+              scaffoldBackgroundColor: _darkThemeData.bgColorPage,
+              bottomNavigationBarTheme: const BottomNavigationBarThemeData()
+                  .copyWith(backgroundColor: _darkThemeData.grayColor14),
+              appBarTheme: const AppBarTheme().copyWith(
+                backgroundColor: _darkThemeData.grayColor13,
+              ),
+              iconTheme: const IconThemeData().copyWith(
+                color: _darkThemeData.brandNormalColor,
+              ),
+            ),
+            themeMode: themeModeProvider.themeMode,
+            home: PlatformUtil.isWeb
+                ? null
+                : Builder(
+                    builder: (context) {
+                      // 设置文案代理,国际化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
+                      TDTheme.setResourceBuilder(
+                        (context) => delegate..updateContext(context),
+                        needAlwaysBuild: true,
+                      );
+                      return MyHomePage(
+                        title: AppLocalizations.of(context)?.components ?? '',
+                        locale: locale,
+                        onLocaleChange: (locale) {
+                          setState(() {
+                            this.locale = locale;
+                          });
+                        },
+                        onThemeChange: (themeData, darkThemeData) {
+                          setState(() {
+                            _themeData = themeData;
+                            _darkThemeData = darkThemeData;
+                          });
+                        },
+                      );
+                    },
+                  ),
+            // 设置国际化处理
+            locale: locale,
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            onGenerateRoute: TDExampleRoute.onGenerateRoute,
+            routes: _getRoutes(),
+          );
+        },
+      ),
     );
   }
 

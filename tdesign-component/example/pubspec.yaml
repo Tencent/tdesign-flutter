@@ -30,7 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  web: ^0.3.0
+  web: any
 
   #轮播图组件
   flutter_swiper_null_safety: ^1.0.2
@@ -47,6 +47,9 @@ dependencies:
 #  path_provider: 2.1.5
   extended_nested_scroll_view: any
   flutter_screenutil: any
+  provider: ^6.1.5+1
+  shared_preferences: ^2.5.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
