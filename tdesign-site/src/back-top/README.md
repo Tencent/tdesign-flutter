@@ -62,14 +62,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: Wrap(
             spacing: 16,
             runSpacing: 24,
-            children: [
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-            ],
+            children: List.generate(6, (_) => getDemoBox(context)),
           ),
         )
       ],
@@ -86,12 +79,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
 | controller | ScrollController? | - | 页面滚动的控制器 |
-| theme | TDBackTopTheme | TDBackTopTheme.light | 主题 |
-| style | TDBackTopStyle | TDBackTopStyle.circle | 样式，圆形和半圆 |
-| showText | bool | false | 是否展示文字 |
+| key |  | - |  |
 | onClick | VoidCallback? | - | 按钮点击事件 |
+| showText | bool | false | 是否展示文字 |
+| style | TDBackTopStyle | TDBackTopStyle.circle | 样式，圆形和半圆 |
+| theme | TDBackTopTheme | TDBackTopTheme.light | 主题 |
 
 
   

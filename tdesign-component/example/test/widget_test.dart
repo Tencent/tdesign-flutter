@@ -44,7 +44,7 @@ void main() async {
 
 }
 
-var changeList = ['BackTop 返回顶部','Steps 步骤条','Calendar 日历','Picker 选择器','Stepper 步进器','Upload 上传','Collapse 折叠面板','Progress 进度条','Tag 标签','Loading 加载', 'PullDownRefresh 下拉刷新'];
+var changeList = ['BackTop 返回顶部','Steps 步骤条','Calendar 日历','Input 输入框','Stepper 步进器','Upload 上传','Collapse 折叠面板','Progress 进度条','Tag 标签','Loading 加载', 'PullDownRefresh 下拉刷新'];
 Finder? lastFinder;
 
 int count = 0;
