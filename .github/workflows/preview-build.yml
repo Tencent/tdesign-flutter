@@ -92,7 +92,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: TDesignOteam/tdesign-flutter-generator
-          path: ./example/tdesign-flutter-generator
+          path: ./tdesign-component/example/tdesign-flutter-generator
 
       - name: Build Flutter apk
         run: |
