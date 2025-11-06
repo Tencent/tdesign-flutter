@@ -7,34 +7,23 @@ pluginManagement {
     }
     settings.ext.flutterSdkPath = flutterSdkPath()
 
-    // 引入 Flutter 插件加载机制
-    includeBuild("${settings.ext.flutterSdkPath}/packages/flutter_tools/gradle")
-
-    apply from: "${rootDir}/app/version.gradle" // 加载 version.gradle 脚本
-    
     repositories {
         google()
         mavenCentral()
         gradlePluginPortal()
-        // 如果需要本地 Maven 仓库，取消下面的注释
-        // mavenLocal()
+        // 明确不添加 mavenLocal()，避免与 PREFER_SETTINGS 冲突
     }
+
+    // 引入 Flutter 插件加载机制（在 repositories 之后）
+    includeBuild("${settings.ext.flutterSdkPath}/packages/flutter_tools/gradle")
+
+    apply from: "${rootDir}/app/version.gradle" // 加载 version.gradle 脚本
 }
 
 plugins {
     id "dev.flutter.flutter-plugin-loader" version "1.0.0" // 声明式加载插件
     id "com.android.application" version "8.6.0" apply false // 根据实际 AGP 版本调整
     id "org.jetbrains.kotlin.android" version "2.1.0" apply false // Kotlin 版本需兼容 AGP
-}
-
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
-    repositories {
-        google()
-        mavenCentral()
-        // 注意：如果需要 MavenLocal，必须在这里声明，并且与 pluginManagement 保持一致
-        // mavenLocal()
-    }
 }
 
 include ":app"
