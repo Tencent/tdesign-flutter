@@ -4,6 +4,13 @@ description: 组件库提供了深色模式支持，可以点击官网右上角�
 spline: explain
 ---
 
+<div style="background: #ecf2fe; display: flex; align-items: center; line-height: 20px; padding: 14px 24px; border-radius: 3px; color: #555a65">
+  <svg fill="none" viewBox="0 0 16 16" width="16px" height="16px" style="margin-right: 5px">
+    <path fill="#0052d9" d="M8 15A7 7 0 108 1a7 7 0 000 14zM7.4 4h1.2v1.2H7.4V4zm.1 2.5h1V12h-1V6.5z" fillopacity="0.9"></path>
+  </svg>
+ 该特性于 0.2.6 上线，请留意版本。
+</div>
+
 ## 使用之前
 
 使用之前，请先阅读 flutter 官方文档：[使用 Themes 统一颜色和字体风格](https://docs.flutter.cn/cookbook/design/themes)。
