@@ -15,8 +15,17 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        mavenLocal()  // 如果确实需要本地Maven仓库，请确保在此处声明
     }
 }
+
+//dependencyResolutionManagement {
+//    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)  // 修改为PREFER_SETTINGS
+//    repositories {
+//        google()
+//        mavenCentral()
+//    }
+//}
 
 plugins {
     id "dev.flutter.flutter-plugin-loader" version "1.0.0" // 声明式加载插件
