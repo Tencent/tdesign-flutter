@@ -13,18 +13,18 @@ late TDThemeData darkThemeData;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 顶部状态栏
+  /// 顶部状态栏
   // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-  // 禁止横屏
+  /// 禁止横屏
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   var themeJsonString = await rootBundle.loadString('assets/theme.json');
-  // 开启多套主题功能
+  /// 开启多套主题功能
   TDTheme.needMultiTheme(true);
-  // 默认浅色主题
+  /// 默认浅色主题
   themeData = TDThemeData.fromJson('redLight', themeJsonString) ??
       TDTheme.defaultData();
-  // 深色模式
+  /// 深色模式
   darkThemeData = TDThemeData.fromJson('dark', themeJsonString) ??
       TDThemeData.defaultData(name: 'dark');
 
@@ -54,11 +54,11 @@ class App extends StatelessWidget {
         builder: (context, themeModeProvider, child) {
           return MaterialApp(
             title: '深色模式切换测试',
-            // 默认浅色模式
+            /// 默认浅色模式
             theme: ThemeData(
-              // 添加 TD 自定义主题配置
+              /// 添加 TD 自定义主题配置
               extensions: [themeData],
-              // 根据自己的需求用 TD 颜色覆盖 Material/Cupertino 的颜色
+              /// 根据自己的需求用 TD 颜色覆盖 Material/Cupertino 的颜色
               colorScheme: ColorScheme.light(
                 primary: themeData.brandNormalColor,
               ),
@@ -71,12 +71,13 @@ class App extends StatelessWidget {
                   alpha: 0.5,
                 ),
               ),
+              /// ... 更多重载主题
             ),
-            // 深色模式
+            /// 深色模式
             darkTheme: ThemeData(
-              // 添加 TD 自定义主题配置
+              /// 添加 TD 自定义主题配置
               extensions: [darkThemeData],
-              // 根据自己的需求用 TD 颜色覆盖 Material/Cupertino 的颜色
+              /// 根据自己的需求用 TD 颜色覆盖 Material/Cupertino 的颜色
               colorScheme: ColorScheme.dark(
                 primary: darkThemeData.brandNormalColor,
                 secondary: darkThemeData.brandNormalColor,
@@ -95,6 +96,7 @@ class App extends StatelessWidget {
                   alpha: 0.5,
                 ),
               ),
+              /// ... 更多重载主题
             ),
             themeMode: themeModeProvider.themeMode,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -123,7 +125,7 @@ class _ThemeModeSettingsPageState extends State<ThemeModeSettingsPage> {
   Widget build(BuildContext context) {
     var themeModeProvider = Provider.of<ThemeModeProvider>(context);
 
-    // 获取系统主题
+    /// 获取系统主题
     Brightness systemBrightness = MediaQuery.platformBrightnessOf(context);
 
     enabledModeCheckIcon(ThemeMode mode) {
