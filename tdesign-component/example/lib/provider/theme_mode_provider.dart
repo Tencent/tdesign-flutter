@@ -12,12 +12,12 @@ class ThemeModeProvider extends ChangeNotifier {
   set themeMode(ThemeMode themeMode) {
     if (_themeMode != themeMode) {
       _themeMode = themeMode;
-      notifyListeners(); // 通知监听者语言已改变
+      notifyListeners();
       asyncPrefs.setInt('setting:theme_mode', _themeMode.index);
     }
   }
 
-  // 初始化主题模式
+  /// 初始化主题模式
   Future<void> initThemeMode() async {
     final themeModeIndex = await asyncPrefs.getInt('setting:theme_mode');
     if (themeModeIndex != null) {

@@ -56,6 +56,7 @@ class App extends StatelessWidget {
             title: '深色模式切换测试',
             // 默认浅色模式
             theme: ThemeData(
+              // 添加 TD 自定义主题配置
               extensions: [themeData],
               // 根据自己的需求用 TD 颜色覆盖 Material/Cupertino 的颜色
               colorScheme: ColorScheme.light(
@@ -73,6 +74,7 @@ class App extends StatelessWidget {
             ),
             // 深色模式
             darkTheme: ThemeData(
+              // 添加 TD 自定义主题配置
               extensions: [darkThemeData],
               // 根据自己的需求用 TD 颜色覆盖 Material/Cupertino 的颜色
               colorScheme: ColorScheme.dark(
