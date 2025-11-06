@@ -21,9 +21,18 @@ pluginManagement {
 }
 
 plugins {
-    id "dev.flutter.flutter-plugin-loader" version "1.0.0" // 声明式加载插件
     id "com.android.application" version "8.6.0" apply false // 根据实际 AGP 版本调整
     id "org.jetbrains.kotlin.android" version "2.1.0" apply false // Kotlin 版本需兼容 AGP
+}
+
+// 显式配置依赖解析，避免 MavenLocal 冲突
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
+    repositories {
+        google()
+        mavenCentral()
+        // 不添加 mavenLocal()，避免与 PREFER_SETTINGS 冲突
+    }
 }
 
 include ":app"
