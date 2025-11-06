@@ -21,7 +21,7 @@ pluginManagement {
 }
 
 plugins {
-    id "com.android.application" version "8.6.0" apply false // 根据实际 AGP 版本调整
+    id "com.android.application" version "8.1.4" apply false
     id "org.jetbrains.kotlin.android" version "2.1.0" apply false // Kotlin 版本需兼容 AGP
 }
 
