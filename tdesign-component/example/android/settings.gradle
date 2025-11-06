@@ -15,7 +15,9 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-        mavenLocal()  // 如果确实需要本地Maven仓库，请确保在此处声明
+//        mavenLocal()  // 如果确实需要本地Maven仓库，请确保在此处声明
+
+
     }
 }
 
