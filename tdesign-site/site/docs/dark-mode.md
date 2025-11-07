@@ -23,8 +23,81 @@ TDFlutter 的深色模式是基于上述 flutter 官方文档对 [ThemeData](htt
 
 本示例中我们要配置两套主题，浅色和深色。（你也可以根据自己的业务需求，配置更多主题）
 
-
 具体请参考 [自定义主题](./getting-started#自定义主题)。
+
+### 深色主题配置
+
+```jsonc
+{
+  "darkTheme": {
+    // 重点在于 ref 配置
+    "ref": {
+      "brandLightColor": "brandColor1",
+      "brandFocusColor": "brandColor1",
+      "brandDisabledColor": "brandColor3",
+      "brandHoverColor": "brandColor5",
+      "brandNormalColor": "brandColor8",
+      "brandActiveColor": "brandColor2",
+      "warningNormalColor": "warningColor5",
+      "warningHoverColor": "warningColor4",
+      "warningFocusColor": "warningColor2",
+      "warningActiveColor": "warningColor6",
+      "warningDisabledColor": "warningColor3",
+      "warningLightColor": "warningColor1",
+      "errorNormalColor": "errorColor6",
+      "errorHoverColor": "errorColor5",
+      "errorFocusColor": "errorColor2",
+      "errorActiveColor": "errorColor7",
+      "errorDisabledColor": "errorColor3",
+      "errorLightColor": "errorColor1",
+      "successNormalColor": "successColor5",
+      "successHoverColor": "successColor4",
+      "successFocusColor": "successColor2",
+      "successActiveColor": "successColor6",
+      "successDisabledColor": "successColor3",
+      "successLightColor": "successColor1",
+      "brandColorLightHover": "brandColor2",
+      "warningColorLightHover": "warningColor2",
+      "errorColorLightHover": "errorColor2",
+      "successColorLightHover": "successColor2",
+      "bgColorPage": "grayColor14",
+      "bgColorContainer": "grayColor13",
+      "bgColorContainerHover": "grayColor12",
+      "bgColorContainerActive": "grayColor10",
+      "bgColorContainerSelect": "grayColor9",
+      "bgColorSecondaryContainer": "grayColor12",
+      "bgColorSecondaryContainerHover": "grayColor11",
+      "bgColorSecondaryContainerActive": "grayColor9",
+      "bgColorComponent": "grayColor11",
+      "bgColorComponentHover": "grayColor10",
+      "bgColorComponentActive": "grayColor9",
+      "bgColorComponentDisabled": "grayColor12",
+      "componentStrokeColor": "grayColor11",
+      "componentBorderColor": "grayColor9",
+      "textColorPrimary": "fontWhColor1",
+      "textColorSecondary": "fontWhColor2",
+      "textColorPlaceholder": "fontWhColor3",
+      "textColorDisabled": "fontWhColor4",
+      "textColorAnti": "fontWhColor1",
+      "textColorBrand": "brandColor8",
+      "textColorLink": "brandColor8"
+    },
+    // 自己定义的颜色配置
+    "color": {
+      "brandColor1": "#20d3a15c",
+      "brandColor2": "#4a2d00",
+      "brandColor3": "#6b4606",
+      "brandColor4": "#8e6425",
+      "brandColor5": "#b78846",
+      "brandColor6": "#d3a15c",
+      "brandColor7": "#efba73",
+      "brandColor8": "#ffd192",
+      "brandColor9": "#ffe6c7",
+      "brandColor10": "#fff5ea"
+    }
+  }
+}
+```
 
 ## 主题应用和重载
 
