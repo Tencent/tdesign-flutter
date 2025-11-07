@@ -1,7 +1,0 @@
-
-  Widget _buildGradientSkeleton(BuildContext context) {
-    return TDSkeleton(
-      animation: TDSkeletonAnimation.gradient,
-      theme: TDSkeletonTheme.paragraph,
-    );
-  }

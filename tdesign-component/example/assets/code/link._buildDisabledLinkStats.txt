@@ -1,4 +1,0 @@
-
-  Widget _buildDisabledLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(TDLinkState.disabled);
-  }

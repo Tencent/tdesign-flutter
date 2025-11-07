@@ -1,4 +1,0 @@
-
-  Widget _buildAvatarSkeleton(BuildContext context) {
-    return TDSkeleton(theme: TDSkeletonTheme.avatar);
-  }

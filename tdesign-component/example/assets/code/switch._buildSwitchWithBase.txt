@@ -1,7 +1,0 @@
-
-  Widget _buildSwitchWithBase(BuildContext context) {
-    return const TDCell(
-      title: '基础开关',
-      noteWidget: TDSwitch(),
-    );
-  }

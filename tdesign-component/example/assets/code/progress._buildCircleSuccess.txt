@@ -1,8 +1,0 @@
-
-  Widget _buildCircleSuccess(BuildContext context) {
-    return TDProgress(
-      type: TDProgressType.circular,
-      progressStatus: TDProgressStatus.success,
-      value: 1,
-    );
-  }

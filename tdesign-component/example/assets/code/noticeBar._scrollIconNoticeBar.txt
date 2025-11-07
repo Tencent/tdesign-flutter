@@ -1,9 +1,0 @@
-
-Widget _scrollIconNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
-    content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',
-    speed: 50,
-    prefixIcon: TDIcons.sound,
-    marquee: true,
-  );
-}

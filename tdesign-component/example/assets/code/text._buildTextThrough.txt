@@ -1,4 +1,0 @@
-
-  Widget _buildTextThrough(BuildContext context) {
-    return TDText(exampleTxt, isTextThrough: true);
-  }

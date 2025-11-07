@@ -1,4 +1,0 @@
-
-  Widget _buildParagraphSkeleton(BuildContext context) {
-    return TDSkeleton(theme: TDSkeletonTheme.paragraph);
-  }

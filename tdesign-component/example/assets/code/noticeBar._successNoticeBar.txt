@@ -1,8 +1,0 @@
-
-Widget _successNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
-    content: '这是一条成功的通知信息',
-    prefixIcon: TDIcons.check_circle_filled,
-    theme: TDNoticeBarTheme.success,
-  );
-}

@@ -1,9 +1,0 @@
-
-  Widget _buildVerticalCenterText(BuildContext context) {
-    return TDText(
-      '中华人民共和国腾讯科技',
-      // font: Font(size: 100, lineHeight: 100),
-      forceVerticalCenter: true,
-      backgroundColor: TDTheme.of(context).brandFocusColor,
-    );
-  }

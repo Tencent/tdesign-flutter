@@ -1,9 +1,0 @@
-
-  Widget _buildDRate(BuildContext context) {
-    return const TDCellGroup(cells: [
-      TDCell(title: '顶部显示', noteWidget: TDRate(placement: PlacementEnum.top)),
-      TDCell(title: '不显示', noteWidget: TDRate(placement: PlacementEnum.none)),
-      TDCell(
-          title: '底部显示', noteWidget: TDRate(placement: PlacementEnum.bottom)),
-    ]);
-  }

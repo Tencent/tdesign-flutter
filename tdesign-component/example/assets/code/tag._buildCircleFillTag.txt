@@ -1,7 +1,0 @@
-
-  Widget _buildCircleFillTag(BuildContext context) {
-    return const TDTag(
-      '标签文字',
-      shape: TDTagShape.round,
-    );
-  }

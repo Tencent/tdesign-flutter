@@ -1,4 +1,0 @@
-
-  TDTag _buildSimpleFillTag(BuildContext context) {
-    return const TDTag('标签文字');
-  }

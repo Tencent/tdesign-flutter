@@ -1,8 +1,0 @@
-
-Widget _warningNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
-    content: '这是一条警示的通知信息',
-    prefixIcon: TDIcons.error_circle_filled,
-    theme: TDNoticeBarTheme.warning,
-  );
-}

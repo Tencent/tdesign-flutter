@@ -1,9 +1,0 @@
-
-  Widget _buildSmallLoading(BuildContext context) {
-    return const TDLoading(
-      size: TDLoadingSize.small,
-      icon: TDLoadingIcon.circle,
-      text: '加载中…',
-      axis: Axis.horizontal,
-    );
-  }

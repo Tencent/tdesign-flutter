@@ -1,8 +1,0 @@
-
-  Widget _buildMarkOutlineTag(BuildContext context) {
-    return const TDTag(
-      '标签文字',
-      shape: TDTagShape.mark,
-      isOutline: true,
-    );
-  }

@@ -1,8 +1,0 @@
-
-  Widget _iconEmptyCustom(BuildContext context) {
-    return const TDEmpty(
-      type: TDEmptyType.plain,
-      icon: Icons.hourglass_empty_sharp,
-      emptyText: '描述文字',
-    );
-  }

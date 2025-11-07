@@ -1,8 +1,0 @@
-
-  Widget _verticalDivider(BuildContext context) {
-    return Container(
-      height: 20,
-      alignment: Alignment.center,
-      child: const TDDivider(),
-    );
-  }

@@ -1,7 +1,0 @@
-
-  TDResult _buildBasicResultSuccess(BuildContext context) {
-    return const TDResult(
-      title: '成功状态',
-      theme: TDResultTheme.success,
-    );
-  }
