@@ -39,6 +39,11 @@ android {
     }
 }
 
+repositories {
+    google()
+    mavenCentral()
+}
+
 flutter {
     source = "../.."
 }
