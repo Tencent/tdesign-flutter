@@ -52,7 +52,7 @@ jobs:
       - run: |
           flutter --version
           cd ${{ env.FLUTTER_ROOT }}
-          BRANCH=rss1102/fix/git-clone
+          BRANCH=copilot/fix-compile-errors-flutter-patch
           V=$(flutter --version | grep -oE '[0-9]+\.[0-9]+' | head -1)
           M=$(echo $V | cut -d. -f1); N=$(echo $V | cut -d. -f2); VN=$(echo "$M*100+$N" | bc)
           [ $VN -ge 335 ] && P="3.35~infinity.patch" || [ $VN -ge 324 ] && P="3.24~3.32.patch" || [ $VN -ge 319 ] && P="3.19~3.22.patch" || [ $VN -ge 313 ] && P="3.13~3.16.patch" || P="2.2~3.10.patch"
