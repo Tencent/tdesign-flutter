@@ -22,4 +22,24 @@ plugins {
     id("org.jetbrains.kotlin.android") version "2.1.0" apply false
 }
 
+dependencyResolutionManagement {
+    // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        // 添加国内镜像源
+        maven { url = uri("https://maven.aliyun.com/repository/public") }
+        maven { url = uri("https://maven.aliyun.com/repository/google") }
+        maven { url = uri("https://repo.huaweicloud.com/repository/maven") } // 华为云
+        maven { url = uri("https://mirrors.tencent.com/nexus/repository/maven-public") } // 腾讯云
+
+        // 后面报错会用到
+        maven { url = uri("https://storage.flutter-io.cn/download.flutter.io")}
+        maven { url = uri("https://maven.aliyun.com/repository/jcenter")}
+
+        // 保留默认仓库（镜像源缺失时回退）
+        google()
+        mavenCentral()
+    }
+}
+
 include(":app")
