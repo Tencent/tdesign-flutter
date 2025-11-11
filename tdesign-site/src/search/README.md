@@ -26,16 +26,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildDefaultSearchBar(BuildContext context) {
-    return _buildColumnWidgets(
-        context,
-        TDSearchBar(
-          placeHolder: '搜索预设文案',
-          onTextChanged: (String text) {
-            setState(() {
-              inputText = text;
-            });
-          },
-        ));
+    return TDSearchBar(
+      placeHolder: '搜索预设文案',
+      onTextChanged: (String text) {
+        setState(() {
+          inputText = text;
+        });
+      },
+    );
   }</pre>
 
 </td-code-block>
@@ -65,30 +63,28 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildSearchBarWithShape(BuildContext context) {
     return Column(
+      // spacing: 16,
       children: [
-        _buildColumnWidgets(
-          context,
-          TDSearchBar(
-            placeHolder: '搜索预设文案',
-            style: TDSearchStyle.square,
-            onTextChanged: (String text) {
-              setState(() {
-                inputText = text;
-              });
-            },
-          ),
+        TDSearchBar(
+          placeHolder: '搜索预设文案',
+          // 方形
+          style: TDSearchStyle.square,
+          onTextChanged: (String text) {
+            setState(() {
+              inputText = text;
+            });
+          },
         ),
-        _buildColumnWidgets(
-          context,
-          TDSearchBar(
-            placeHolder: '搜索预设文案',
-            style: TDSearchStyle.round,
-            onTextChanged: (String text) {
-              setState(() {
-                inputText = text;
-              });
-            },
-          ),
+        const SizedBox(height: 16),
+        TDSearchBar(
+          placeHolder: '搜索预设文案',
+          // 圆形
+          style: TDSearchStyle.round,
+          onTextChanged: (String text) {
+            setState(() {
+              inputText = text;
+            });
+          },
         ),
       ],
     );
@@ -124,30 +120,30 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
-| placeHolder | String? | - | 预设文案 |
-| style | TDSearchStyle? | TDSearchStyle.square | 样式 |
-| alignment | TDSearchAlignment? | TDSearchAlignment.left | 对齐方式，居中或这头部对齐 |
-| onTextChanged | TDSearchBarEvent? | - | 文字改变回调 |
-| onSubmitted | TDSearchBarEvent? | - | 提交回调 |
-| onEditComplete | TDSearchBarCallBack? | - | 编辑完成回调 |
-| onTapOutside |  | - |  |
-| onInputClick | GestureTapCallback? | - | 输入框点击事件 |
-| autoHeight | bool | false | 是否自动计算高度 |
-| padding | EdgeInsets | const EdgeInsets.fromLTRB(16, 8, 16, 8) | 内部填充 |
-| autoFocus | bool | false | 是否自动获取焦点 |
-| mediumStyle | bool | false | 是否在导航栏中的样式 |
-| cursorHeight | double? | - | 光标的高 |
-| needCancel | bool | false | 是否需要取消按钮 |
-| controller | TextEditingController? | - | 控制器 |
-| backgroundColor | Color? | Colors.white | 背景颜色 |
 | action | String | '' | 自定义操作文字 |
-| onActionClick | TDSearchBarEvent? | - | 自定义操作回调 |
-| onClearClick | TDSearchBarClearEvent? | - | 自定义操作回调 |
+| alignment | TDSearchAlignment? | TDSearchAlignment.left | 对齐方式，居中或这头部对齐 |
+| autoFocus | bool | false | 是否自动获取焦点 |
+| autoHeight | bool | false | 是否自动计算高度 |
+| backgroundColor | Color? | - | 背景颜色 |
+| controller | TextEditingController? | - | 控制器 |
+| cursorHeight | double? | - | 光标的高 |
+| enabled | bool? | - | 是否禁用 |
 | focusNode | FocusNode? | - | 自定义焦点 |
 | inputAction | TextInputAction? | - | 键盘动作类型 |
-| enabled | bool? | - | 是否禁用 |
+| key |  | - |  |
+| mediumStyle | bool | false | 是否在导航栏中的样式 |
+| needCancel | bool | false | 是否需要取消按钮 |
+| onActionClick | TDSearchBarEvent? | - | 自定义操作回调 |
+| onClearClick | TDSearchBarClearEvent? | - | 自定义操作回调 |
+| onEditComplete | TDSearchBarCallBack? | - | 编辑完成回调 |
+| onInputClick | GestureTapCallback? | - | 输入框点击事件 |
+| onSubmitted | TDSearchBarEvent? | - | 提交回调 |
+| onTapOutside |  | - |  |
+| onTextChanged | TDSearchBarEvent? | - | 文字改变回调 |
+| padding | EdgeInsets | const EdgeInsets.fromLTRB(16, 8, 16, 8) | 内部填充 |
+| placeHolder | String? | - | 预设文案 |
 | readOnly | bool? | - | 是否只读 |
+| style | TDSearchStyle? | TDSearchStyle.square | 样式 |
 
 
   

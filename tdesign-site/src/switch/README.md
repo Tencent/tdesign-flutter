@@ -26,10 +26,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSwitchWithBase(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(),
+    return const TDCell(
       title: '基础开关',
+      noteWidget: TDSwitch(),
     );
   }</pre>
 
@@ -42,10 +41,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSwitchWithText(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(isOn: true, type: TDSwitchType.text),
+    return const TDCell(
       title: '带文字开关',
+      noteWidget: TDSwitch(
+        isOn: true,
+        type: TDSwitchType.text,
+      ),
     );
   }</pre>
 
@@ -58,10 +59,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSwitchWithIcon(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(isOn: true, type: TDSwitchType.icon),
+    return const TDCell(
       title: '带图标开关',
+      noteWidget: TDSwitch(
+        isOn: true,
+        type: TDSwitchType.icon,
+      ),
     );
   }</pre>
 
@@ -74,10 +77,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSwitchWithColor(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(isOn: true, trackOnColor: Colors.green),
+    return const TDCell(
       title: '自定义颜色开关',
+      noteWidget: TDSwitch(
+        isOn: true,
+        trackOnColor: Colors.green,
+      ),
     );
   }</pre>
 
@@ -91,13 +96,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSwitchWithLoadingOff(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
+    return const TDCell(
+      title: '加载状态',
+      noteWidget: TDSwitch(
         isOn: false,
         type: TDSwitchType.loading,
       ),
-      title: '加载状态',
     );
   }</pre>
 
@@ -110,13 +114,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSwitchWithLoadingOn(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
+    return const TDCell(
+      title: '加载状态',
+      noteWidget: TDSwitch(
         isOn: true,
         type: TDSwitchType.loading,
       ),
-      title: '加载状态',
     );
   }</pre>
 
@@ -129,13 +132,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSwitchWithDisableOff(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
+    return const TDCell(
+      title: '禁用状态',
+      noteWidget: TDSwitch(
         enable: false,
         isOn: false,
       ),
-      title: '禁用状态',
     );
   }</pre>
 
@@ -148,13 +150,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSwitchWithDisableOn(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
+    return const TDCell(
+      title: '禁用状态',
+      noteWidget: TDSwitch(
         enable: false,
         isOn: true,
       ),
-      title: '禁用状态',
     );
   }</pre>
 
@@ -168,13 +169,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSwitchWithSizeLarge(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
-        isOn: true,
-        size: TDSwitchSize.large,
-      ),
+    return const TDCell(
       title: '大尺寸32',
+      noteWidget: TDSwitch(
+        size: TDSwitchSize.large,
+        isOn: true,
+      ),
     );
   }</pre>
 
@@ -187,13 +187,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSwitchWithSizeMed(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
-        isOn: true,
-        size: TDSwitchSize.medium,
-      ),
+    return const TDCell(
       title: '中尺寸28',
+      noteWidget: TDSwitch(
+        size: TDSwitchSize.medium,
+        isOn: true,
+      ),
     );
   }</pre>
 
@@ -206,13 +205,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSwitchWithSizeSmall(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
-        isOn: true,
-        size: TDSwitchSize.small,
-      ),
+    return const TDCell(
       title: '小尺寸24',
+      noteWidget: TDSwitch(
+        size: TDSwitchSize.small,
+        isOn: true,
+      ),
     );
   }</pre>
 
@@ -226,20 +224,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
+| closeText | String? | - | 关闭文案 |
 | enable | bool | true | 是否可点击 |
 | isOn | bool | false | 是否打开 |
-| size | TDSwitchSize? | TDSwitchSize.medium | 尺寸：大、中、小 |
-| type | TDSwitchType? | TDSwitchType.fill | 类型：填充、文本、加载 |
-| trackOnColor | Color? | - | 开启时轨道颜色 |
-| trackOffColor | Color? | - | 关闭时轨道颜色 |
-| thumbContentOnColor | Color? | - | 开启时ThumbView的颜色 |
-| thumbContentOffColor | Color? | - | 关闭时ThumbView的颜色 |
-| thumbContentOnFont | TextStyle? | - | 开启时ThumbView的字体样式 |
-| thumbContentOffFont | TextStyle? | - | 关闭时ThumbView的字体样式 |
+| key |  | - |  |
 | onChanged | OnSwitchChanged? | - | 改变事件 |
 | openText | String? | - | 打开文案 |
-| closeText | String? | - | 关闭文案 |
+| size | TDSwitchSize? | TDSwitchSize.medium | 尺寸：大、中、小 |
+| thumbContentOffColor | Color? | - | 关闭时ThumbView的颜色 |
+| thumbContentOffFont | TextStyle? | - | 关闭时ThumbView的字体样式 |
+| thumbContentOnColor | Color? | - | 开启时ThumbView的颜色 |
+| thumbContentOnFont | TextStyle? | - | 开启时ThumbView的字体样式 |
+| trackOffColor | Color? | - | 关闭时轨道颜色 |
+| trackOnColor | Color? | - | 开启时轨道颜色 |
+| type | TDSwitchType? | TDSwitchType.fill | 类型：填充、文本、加载 |
 
 
   

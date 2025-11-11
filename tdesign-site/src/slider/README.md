@@ -27,13 +27,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildSingleHandle(BuildContext context) {
     return TDSlider(
-        sliderThemeData: TDSliderThemeData(
-          context: context,
-          min: 0,
-          max: 100,
-        ),
-        value: 10,
-        onChanged: (value) {});
+      sliderThemeData: TDSliderThemeData(
+        context: context,
+        min: 0,
+        max: 100,
+      ),
+      value: 10,
+      onChanged: (value) {},
+    );
   }</pre>
 
 </td-code-block>
@@ -236,6 +237,7 @@ onTap
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Value: ${currentValue.toStringAsFixed(1)}'),
@@ -285,11 +287,13 @@ onTap
 
     return Column(
       mainAxisSize: MainAxisSize.min,
+      // spacing: 10,
       children: [
         ValueListenableBuilder<DisplayRangeData>(
           valueListenable: displayRangeDataNotifier,
           builder: (context, data, child) {
             return Row(
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Position: ${data.currentPosition}'),
@@ -340,8 +344,10 @@ onThumbTextTap
       builder: (context, setState) {
         return Column(
           mainAxisSize: MainAxisSize.min,
+          // spacing: 10,
           children: [
             Row(
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Value: ${currentValue.toStringAsFixed(1)}'),
@@ -351,6 +357,7 @@ onThumbTextTap
                       'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})'),
               ],
             ),
+            const SizedBox(height: 10),
             TDSlider(
               sliderThemeData: TDSliderThemeData(
                 context: context,
@@ -395,11 +402,13 @@ onThumbTextTap
 
     return Column(
       mainAxisSize: MainAxisSize.min,
+      // spacing: 10,
       children: [
         ValueListenableBuilder<DisplayRangeData>(
           valueListenable: displayRangeDataNotifier,
           builder: (context, data, child) {
             return Row(
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Position: ${data.currentPosition}'),
@@ -416,7 +425,11 @@ onThumbTextTap
         const SizedBox(height: 10),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData(
-              context: context, min: 0, max: 100, showThumbValue: true),
+            context: context,
+            min: 0,
+            max: 100,
+            showThumbValue: true,
+          ),
           leftLabel: '0',
           rightLabel: '100',
           value: const RangeValues(10, 60),
@@ -543,8 +556,8 @@ onThumbTextTap
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
       )..updateSliderThemeData((data) => data.copyWith(
-            activeTickMarkColor: const Color(0xFFE7E7E7),
-            inactiveTickMarkColor: const Color(0xFFE7E7E7),
+          // activeTickMarkColor: TDTheme.of(context).componentBorderColor,
+          // inactiveTickMarkColor: TDTheme.of(context).componentStrokeColor,
           )),
       value: 60,
       onChanged: (value) {},
@@ -569,8 +582,8 @@ onThumbTextTap
         max: 100,
         scaleFormatter: (value) => value.toInt().toString(),
       )..updateSliderThemeData((data) => data.copyWith(
-            activeTickMarkColor: const Color(0xFFE7E7E7),
-            inactiveTickMarkColor: const Color(0xFFE7E7E7),
+          // activeTickMarkColor: TDTheme.of(context).bgColorComponent,
+          // inactiveTickMarkColor: TDTheme.of(context).bgColorComponent,
           )),
       value: const RangeValues(20, 60),
       onChanged: (value) {},
@@ -580,13 +593,14 @@ onThumbTextTap
 </td-code-block>
                                   
 
-胶囊型滑块
+胶囊型滑块 - 禁用状态
             
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
   Widget _buildCapsule(BuildContext context) {
     return Column(
+      // spacing: 16,
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
@@ -597,12 +611,8 @@ onThumbTextTap
             scaleFormatter: (value) => value.toInt().toString(),
           ),
           value: 40,
-          // divisions: 5,
-          onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -611,12 +621,8 @@ onThumbTextTap
             scaleFormatter: (value) => value.toInt().toString(),
           ),
           value: const RangeValues(20, 60),
-          // divisions: 5,
-          onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -627,12 +633,8 @@ onThumbTextTap
           leftLabel: '0',
           rightLabel: '100',
           value: 40,
-          // divisions: 5,
-          onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -644,12 +646,8 @@ onThumbTextTap
           value: const RangeValues(20, 60),
           leftLabel: '0',
           rightLabel: '100',
-          // divisions: 5,
-          onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -659,16 +657,12 @@ onThumbTextTap
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           )..updateSliderThemeData((data) => data.copyWith(
-                activeTickMarkColor: const Color(0xFFE7E7E7),
-                inactiveTickMarkColor: const Color(0xFFE7E7E7),
+                activeTickMarkColor: TDTheme.of(context).componentStrokeColor,
+                inactiveTickMarkColor: TDTheme.of(context).componentStrokeColor,
               )),
           value: 60,
-          // divisions: 5,
-          onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -678,12 +672,10 @@ onThumbTextTap
             max: 100,
             scaleFormatter: (value) => value.toInt().toString(),
           )..updateSliderThemeData((data) => data.copyWith(
-                activeTickMarkColor: const Color(0xFFE7E7E7),
-                inactiveTickMarkColor: const Color(0xFFE7E7E7),
+                activeTickMarkColor: TDTheme.of(context).bgColorComponentActive,
+                inactiveTickMarkColor: TDTheme.of(context).bgColorComponent,
               )),
           value: const RangeValues(20, 60),
-          // divisions: 5,
-          onChanged: (value) {},
         )
       ],
     );
@@ -699,6 +691,7 @@ onThumbTextTap
   <pre slot="Dart" lang="javascript">
   Widget _buildCustomDecoration(BuildContext context) {
     return Column(
+      // spacing: 16,
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
@@ -711,9 +704,7 @@ onThumbTextTap
           // divisions: 5,
           onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
@@ -739,6 +730,7 @@ onThumbTextTap
   <pre slot="Dart" lang="javascript">
   Widget _buildCustomActiveColor(BuildContext context) {
     return Column(
+      // spacing: 16,
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
@@ -752,9 +744,7 @@ onThumbTextTap
           // divisions: 5,
           onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             activeTrackColor: Colors.green,
@@ -781,17 +771,17 @@ onThumbTextTap
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
-| value | RangeValues | - | 默认值 |
 | boxDecoration | Decoration? | - | 自定义盒子样式 |
-| onChanged | ValueChanged<RangeValues>? | - | 滑动变化监听 |
-| sliderThemeData | TDSliderThemeData? | - | 样式 |
+| key |  | - |  |
 | leftLabel | String? | - | 左侧标签 |
-| rightLabel | String? | - | 右侧标签 |
-| onChangeStart | ValueChanged<RangeValues>? | - | 滑动开始监听 |
+| onChanged | ValueChanged<RangeValues>? | - | 滑动变化监听 |
 | onChangeEnd | ValueChanged<RangeValues>? | - | 滑动结束监听 |
-| onTap |  Function(Position position, Offset offset, double value)? | - |  |
+| onChangeStart | ValueChanged<RangeValues>? | - | 滑动开始监听 |
+| onTap |  Function(Position position, Offset offset, double value)? | - | Thumb 点击事件 位置、坐标、当前值 |
 | onThumbTextTap |  Function(Position position, Offset offset, double value)? | - | Thumb 点击浮标文字 位置、坐标、当前值 |
+| rightLabel | String? | - | 右侧标签 |
+| sliderThemeData | TDSliderThemeData? | - | 样式 |
+| value | RangeValues | - | 默认值 |
 
 ```
 ```
@@ -800,17 +790,17 @@ onThumbTextTap
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
-| value | RangeValues | - | 默认值 |
 | boxDecoration | Decoration? | - | 自定义盒子样式 |
-| onChanged | ValueChanged<RangeValues>? | - | 滑动变化监听 |
-| sliderThemeData | TDSliderThemeData? | - | 样式 |
+| key |  | - |  |
 | leftLabel | String? | - | 左侧标签 |
-| rightLabel | String? | - | 右侧标签 |
-| onChangeStart | ValueChanged<RangeValues>? | - | 滑动开始监听 |
+| onChanged | ValueChanged<RangeValues>? | - | 滑动变化监听 |
 | onChangeEnd | ValueChanged<RangeValues>? | - | 滑动结束监听 |
-| onTap |  Function(Position position, Offset offset, double value)? | - |  |
+| onChangeStart | ValueChanged<RangeValues>? | - | 滑动开始监听 |
+| onTap |  Function(Position position, Offset offset, double value)? | - | Thumb 点击事件 位置、坐标、当前值 |
 | onThumbTextTap |  Function(Position position, Offset offset, double value)? | - | Thumb 点击浮标文字 位置、坐标、当前值 |
+| rightLabel | String? | - | 右侧标签 |
+| sliderThemeData | TDSliderThemeData? | - | 样式 |
+| value | RangeValues | - | 默认值 |
 
 
   

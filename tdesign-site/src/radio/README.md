@@ -33,11 +33,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       descriptionWidget: TDRadioGroup(
         selectId: '0',
         direction: Axis.horizontal,
-        directionalTdRadios: const [TDRadio(
-          id: '0',
-          title: '单选标题0',
-          showDivider: false,
-        ),
+        directionalTdRadios: const [
+          TDRadio(
+            id: '0',
+            title: '单选标题0',
+            showDivider: false,
+          ),
           TDRadio(
             id: '1',
             title: '单选标题1',
@@ -313,31 +314,31 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| id |  | - |  |
-| key |  | - |  |
-| title |  | - |  |
-| titleFont |  | - |  |
-| subTitle |  | - |  |
-| subTitleFont |  | - |  |
-| enable |  | true |  |
-| subTitleMaxLine |  | 1 |  |
-| titleMaxLine |  | 1 |  |
-| selectColor |  | - |  |
-| disableColor |  | - |  |
-| customContentBuilder |  | - |  |
-| spacing |  | - |  |
+| backgroundColor |  | - |  |
 | cardMode |  | - |  |
+| checkBoxLeftSpace |  | - |  |
+| contentDirection |  | TDContentDirection.right |  |
+| customContentBuilder |  | - |  |
+| customIconBuilder |  | - |  |
+| customSpace |  | - |  |
+| disableColor |  | - |  |
+| enable |  | true |  |
+| id |  | - |  |
+| insetSpacing |  | - |  |
+| key |  | - |  |
+| radioStyle | TDRadioStyle | TDRadioStyle.circle | 单选框按钮样式 |
+| selectColor |  | - |  |
 | showDivider | bool | - | 是否显示下划线 |
 | size |  | TDCheckBoxSize.small |  |
-| radioStyle | TDRadioStyle | TDRadioStyle.circle | 单选框按钮样式 |
-| contentDirection |  | TDContentDirection.right |  |
-| customIconBuilder |  | - |  |
-| titleColor |  | - |  |
+| spacing |  | - |  |
+| subTitle |  | - |  |
 | subTitleColor |  | - |  |
-| backgroundColor |  | - |  |
-| checkBoxLeftSpace |  | - |  |
-| insetSpacing |  | - |  |
-| customSpace |  | - |  |
+| subTitleFont |  | - |  |
+| subTitleMaxLine |  | 1 |  |
+| title |  | - |  |
+| titleColor |  | - |  |
+| titleFont |  | - |  |
+| titleMaxLine |  | 1 |  |
 
 ```
 ```
@@ -352,25 +353,25 @@ RadioGroup分组对象，继承自TDCheckboxGroup，字段含义与父类一致
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
+| cardMode |  | false |  |
 | child |  | - |  |
+| contentDirection |  | - |  |
+| controller |  | - |  |
+| customContentBuilder |  | - |  |
+| customIconBuilder |  | - |  |
 | direction |  | - |  |
 | directionalTdRadios |  | - |  |
-| selectId |  | - |  |
-| passThrough |  | - |  |
-| cardMode |  | false |  |
-| strictMode | bool | true | 严格模式下，用户不能取消勾选，只能切换选择项， |
-| radioCheckStyle | TDRadioStyle? | - | 勾选样式 |
-| titleMaxLine |  | - |  |
-| customIconBuilder |  | - |  |
-| customContentBuilder |  | - |  |
-| spacing |  | - |  |
-| rowCount | int | 1 | 每行几列 |
-| contentDirection |  | - |  |
-| onRadioGroupChange |  | - |  |
-| showDivider | bool | false | 是否显示下划线 |
 | divider | Widget? | - | 自定义下划线 |
-| controller |  | - |  |
+| key |  | - |  |
+| onRadioGroupChange |  | - |  |
+| passThrough |  | - |  |
+| radioCheckStyle | TDRadioStyle? | - | 勾选样式 |
+| rowCount | int | 1 | 每行几列 |
+| selectId |  | - |  |
+| showDivider | bool | false | 是否显示下划线 |
+| spacing |  | - |  |
+| strictMode | bool | true | 严格模式下，用户不能取消勾选，只能切换选择项， |
+| titleMaxLine |  | - |  |
 
 
   

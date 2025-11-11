@@ -26,21 +26,27 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPureIconLoading(BuildContext context) {
-    return _buildRow([
-      const TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.circle,
-      ),
-      const TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.activity,
-      ),
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.point,
-        iconColor: TDTheme.of(context).brandNormalColor,
-      ),
-    ]);
+    return Row(
+      // spacing: 36,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.circle,
+        ),
+        const SizedBox(width: 36),
+        const TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.activity,
+        ),
+        const SizedBox(width: 36),
+        TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.point,
+          iconColor: TDTheme.of(context).brandNormalColor,
+        ),
+      ],
+    );
   }</pre>
 
 </td-code-block>
@@ -52,20 +58,25 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildTextIconHorizontalLoading(BuildContext context) {
-    return _buildRow(const [
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.circle,
-        text: '加载中…',
-        axis: Axis.horizontal,
-      ),
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.activity,
-        text: '加载中…',
-        axis: Axis.horizontal,
-      ),
-    ]);
+    return const Row(
+      // spacing: 36,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.circle,
+          text: '加载中…',
+          axis: Axis.horizontal,
+        ),
+        const SizedBox(width: 36),
+        TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.activity,
+          text: '加载中…',
+          axis: Axis.horizontal,
+        ),
+      ],
+    );
   }</pre>
 
 </td-code-block>
@@ -77,20 +88,25 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildTextIconVerticalLoading(BuildContext context) {
-    return _buildRow(const [
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.circle,
-        text: '加载中…',
-        axis: Axis.vertical,
-      ),
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.activity,
-        text: '加载中…',
-        axis: Axis.vertical,
-      ),
-    ]);
+    return const Row(
+      // spacing: 36,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.circle,
+          text: '加载中…',
+          axis: Axis.vertical,
+        ),
+        SizedBox(width: 36),
+        TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.activity,
+          text: '加载中…',
+          axis: Axis.vertical,
+        ),
+      ],
+    );
   }</pre>
 
 </td-code-block>
@@ -102,31 +118,37 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildPureTextLoading(BuildContext context) {
-    return _buildRow([
-      const TDLoading(
-        size: TDLoadingSize.small,
-        text: '加载中…',
-      ),
-      TDLoading(
-        size: TDLoadingSize.small,
-        text: '加载失败',
-        textColor: TDTheme.of(context).fontGyColor3,
-      ),
-      TDLoading(
-        size: TDLoadingSize.small,
-        text: '加载失败',
-        refreshWidget: GestureDetector(
-          child: TDText(
-            '刷新',
-            font: TDTheme.of(context).fontBodySmall,
-            textColor: TDTheme.of(context).brandNormalColor,
-          ),
-          onTap: () {
-            TDToast.showText('刷新', context: context);
-          },
+    return Row(
+      // spacing: 36,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const TDLoading(
+          size: TDLoadingSize.small,
+          text: '加载中…',
         ),
-      ),
-    ]);
+        const SizedBox(width: 36),
+        TDLoading(
+          size: TDLoadingSize.small,
+          text: '加载失败',
+          textColor: TDTheme.of(context).textColorPlaceholder,
+        ),
+        const SizedBox(width: 36),
+        TDLoading(
+          size: TDLoadingSize.small,
+          text: '加载失败',
+          refreshWidget: GestureDetector(
+            child: TDText(
+              '刷新',
+              font: TDTheme.of(context).fontBodySmall,
+              textColor: TDTheme.of(context).brandNormalColor,
+            ),
+            onTap: () {
+              TDToast.showText('刷新', context: context);
+            },
+          ),
+        ),
+      ],
+    );
   }</pre>
 
 </td-code-block>
@@ -139,14 +161,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildLargeLoading(BuildContext context) {
-    return _buildRow([
-      const TDLoading(
-        size: TDLoadingSize.large,
-        icon: TDLoadingIcon.circle,
-        text: '加载中…',
-        axis: Axis.horizontal,
-      ),
-    ]);
+    return const TDLoading(
+      size: TDLoadingSize.large,
+      icon: TDLoadingIcon.circle,
+      text: '加载中…',
+      axis: Axis.horizontal,
+    );
   }</pre>
 
 </td-code-block>
@@ -158,14 +178,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildMediumLoading(BuildContext context) {
-    return _buildRow([
-      const TDLoading(
-        size: TDLoadingSize.medium,
-        icon: TDLoadingIcon.circle,
-        text: '加载中…',
-        axis: Axis.horizontal,
-      ),
-    ]);
+    return const TDLoading(
+      size: TDLoadingSize.medium,
+      icon: TDLoadingIcon.circle,
+      text: '加载中…',
+      axis: Axis.horizontal,
+    );
   }</pre>
 
 </td-code-block>
@@ -177,14 +195,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSmallLoading(BuildContext context) {
-    return _buildRow([
-      const TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.circle,
-        text: '加载中…',
-        axis: Axis.horizontal,
-      ),
-    ]);
+    return const TDLoading(
+      size: TDLoadingSize.small,
+      icon: TDLoadingIcon.circle,
+      text: '加载中…',
+      axis: Axis.horizontal,
+    );
   }</pre>
 
 </td-code-block>
@@ -197,36 +213,35 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildCustomSpeedLoading(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TDLoading(
-            size: TDLoadingSize.small,
-            icon: TDLoadingIcon.circle,
-            axis: Axis.horizontal,
-            text: '加载中…',
-            duration: _currentSliderValue.round(),
+    return Column(
+      // spacing: 16,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.circle,
+          axis: Axis.horizontal,
+          text: '加载中…',
+          duration: _currentSliderValue.round(),
+        ),
+        const SizedBox(height: 16),
+        TDSlider(
+          value: _currentSliderValue,
+          sliderThemeData: TDSliderThemeData(
+            context: context,
+            max: 2000,
+            min: -20,
+            divisions: 100,
+            showThumbValue: true,
+            scaleFormatter: (value) => value.toInt().toString(),
           ),
-          TDSlider(value: _currentSliderValue,
-            sliderThemeData: TDSliderThemeData(
-              context: context,
-              max: 2000,
-              min: -20,
-              divisions: 100,
-              showThumbValue: true,
-              scaleFormatter: (value) => value.toInt().toString(),
-            ),
-            onChanged: (double value) {
-              setState(() {
-                _currentSliderValue = value;
-              });
-            },)
-        ],
-      ),
+          onChanged: (double value) {
+            setState(() {
+              _currentSliderValue = value;
+            });
+          },
+        )
+      ],
     );
   }</pre>
 
@@ -240,16 +255,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
-| size | TDLoadingSize | - | 尺寸 |
+| axis | Axis | Axis.vertical | 文案和图标相对方向 |
+| customIcon | Widget? | - | 自定义图标，优先级高于icon |
+| duration | int | 2000 | 一次刷新的时间，控制动画速度 |
 | icon | TDLoadingIcon? | TDLoadingIcon.circle | 图标，支持圆形、点状、菊花状 |
 | iconColor | Color? | - | 图标颜色 |
-| axis | Axis | Axis.vertical | 文案和图标相对方向 |
-| text | String? | - | 文案 |
+| key |  | - |  |
 | refreshWidget | Widget? | - | 失败刷新组件 |
-| customIcon | Widget? | - | 自定义图标，优先级高于icon |
-| textColor | Color | Colors.black | 文案颜色 |
-| duration | int | 2000 | 一次刷新的时间，控制动画速度 |
+| size | TDLoadingSize | - | 尺寸 |
+| text | String? | - | 文案 |
+| textColor | Color? | - | 文案颜色 |
 
 
   
