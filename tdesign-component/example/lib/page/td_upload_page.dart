@@ -54,6 +54,16 @@ class TDUploadState extends State<TDUploadPage> {
         remotePath: 'https://tdesign.gtimg.com/demo/images/example4.png'),
   ];
   final List<TDUploadFile> files6 = [];
+  final List<TDUploadFile> files7 = [];
+
+  void onUploadTap() {
+    print('点击上传');
+    setState(() {
+      files7.add(TDUploadFile(
+          key: files7.length + 1,
+          remotePath: 'https://tdesign.gtimg.com/demo/images/example1.png'));
+    });
+  }
 
   void onValueChanged(List<TDUploadFile> fileList, List<TDUploadFile> value,
       TDUploadType event) {
@@ -103,6 +113,7 @@ class TDUploadState extends State<TDUploadPage> {
             ExampleItem(desc: '单选上传', builder: _uploadSingle),
             ExampleItem(desc: '单选上传(替换)', builder: _uploadSingleWithReplace),
             ExampleItem(desc: '多选上传', builder: _uploadMultiple),
+            ExampleItem(desc: '自定义upload按钮事件', builder: _uploadTap),
           ],
         ),
         ExampleModule(
@@ -187,6 +198,22 @@ class TDUploadState extends State<TDUploadPage> {
           onError: print,
           onValidate: print,
           onChange: ((files, type) => onValueChanged(files2, files, type)),
+        ));
+  }
+
+  @Demo(group: 'upload')
+  Widget _uploadTap(BuildContext context) {
+    return wrapDemoContainer('自定义upload按钮事件',
+        child: TDUpload(
+          files: files7,
+          multiple: true,
+          max: 9,
+          onUploadTap: onUploadTap,
+          onClick: onClick,
+          onCancel: onCancel,
+          onError: print,
+          onValidate: print,
+          onChange: ((files, type) => onValueChanged(files7, files, type)),
         ));
   }
 
