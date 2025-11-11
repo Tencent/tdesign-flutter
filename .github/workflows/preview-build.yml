@@ -43,7 +43,7 @@ jobs:
         with:
           flutter-version: 3.32.0
           channel: stable
-          apo-registry: true
+          aop-registry: true
 
       - name: Extract version from pubspec.yaml and set env
         id: version
