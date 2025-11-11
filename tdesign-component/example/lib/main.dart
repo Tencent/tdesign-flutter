@@ -43,7 +43,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late TDThemeData _themeData;
-  late TDThemeData _darkThemeData;
 
   Locale? locale = const Locale('zh');
 
@@ -51,16 +50,13 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _themeData = TDThemeData.defaultData();
-    _darkThemeData = TDThemeData.defaultDartThemeData();
-    print('_darkThemeData.bgColorPage： ${_darkThemeData.bgColorPage}，_themeData.bgColorPage: ${_themeData.bgColorPage}');
+    print('_darkThemeData.bgColorPage： ${_themeData.bgColorPage}，_themeData.dark?.bgColorPage: ${_themeData.dark?.bgColorPage}');
   }
 
   @override
   Widget build(BuildContext context) {
     // 使用多套主题
     TDTheme.needMultiTheme();
-    // 适配3.16的字体居中前,先禁用字体居中功能
-    // kTextForceVerticalCenterEnable = false;
     var delegate = IntlResourceDelegate(context);
     return MultiProvider(
       providers: [
@@ -80,32 +76,8 @@ class _MyAppState extends State<MyApp> {
         builder: (context, themeModeProvider, child) {
           return MaterialApp(
             title: 'TDesign Flutter Example',
-            theme: ThemeData(
-              extensions: [_themeData],
-              colorScheme: ColorScheme.light(
-                primary: _themeData.brandNormalColor,
-              ),
-              scaffoldBackgroundColor: _themeData.bgColorPage,
-              iconTheme: const IconThemeData().copyWith(
-                color: _themeData.brandNormalColor,
-              ),
-            ),
-            darkTheme: ThemeData(
-              extensions: [_darkThemeData],
-              colorScheme: ColorScheme.dark(
-                primary: _darkThemeData.brandNormalColor,
-                secondary: _darkThemeData.brandNormalColor,
-              ),
-              scaffoldBackgroundColor: _darkThemeData.bgColorPage,
-              bottomNavigationBarTheme: const BottomNavigationBarThemeData()
-                  .copyWith(backgroundColor: _darkThemeData.grayColor14),
-              appBarTheme: const AppBarTheme().copyWith(
-                backgroundColor: _darkThemeData.grayColor13,
-              ),
-              iconTheme: const IconThemeData().copyWith(
-                color: _darkThemeData.brandNormalColor,
-              ),
-            ),
+            theme: _themeData.systemThemeDataLight,
+            darkTheme: _themeData.systemThemeDataDark,
             themeMode: themeModeProvider.themeMode,
             home: PlatformUtil.isWeb
                 ? null
@@ -124,10 +96,9 @@ class _MyAppState extends State<MyApp> {
                             this.locale = locale;
                           });
                         },
-                        onThemeChange: (themeData, darkThemeData) {
+                        onThemeChange: (themeData) {
                           setState(() {
                             _themeData = themeData;
-                            _darkThemeData = darkThemeData;
                           });
                         },
                       );

@@ -12,8 +12,7 @@ var _kShowTodoComponent = false;
 
 /// 切换主题的回调
 typedef OnThemeChange = Function(
-  TDThemeData themeData,
-  TDThemeData darkThemeData,
+  TDThemeData themeData
 );
 
 /// 切换语言的回调
@@ -122,13 +121,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           text: AppLocalizations.of(context)?.defaultTheme,
                           theme: TDButtonTheme.primary,
                           onTap: () async {
-                            var jsonString = await rootBundle
-                                .loadString('assets/theme.json');
-                            var darkThemeData =
-                                TDThemeData.fromJson('dark', jsonString) ??
-                                    TDThemeData.defaultDartThemeData();
                             widget.onThemeChange?.call(
-                                TDThemeData.defaultData(), darkThemeData);
+                                TDThemeData.defaultData());
                           },
                         ),
                       ),
@@ -142,14 +136,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             var jsonString = await rootBundle
                                 .loadString('assets/theme.json');
                             var themeData = TDThemeData.fromJson(
-                                    'greenLight', jsonString) ??
+                                    'green', jsonString, darkName: 'greenDark') ??
                                 TDThemeData.defaultData();
-                            var darkThemeData =
-                                TDThemeData.fromJson('greenDark', jsonString) ??
-                                    TDThemeData.defaultDartThemeData();
                             widget.onThemeChange?.call(
                               themeData,
-                              darkThemeData,
                             );
                           },
                         ),
@@ -164,14 +154,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             var jsonString = await rootBundle
                                 .loadString('assets/theme.json');
                             var themeData =
-                                TDThemeData.fromJson('redLight', jsonString) ??
+                                TDThemeData.fromJson('red', jsonString, darkName: 'redDark') ??
                                     TDThemeData.defaultData();
-                            var darkThemeData =
-                                TDThemeData.fromJson('redDark', jsonString) ??
-                                    TDThemeData.defaultDartThemeData();
                             widget.onThemeChange?.call(
                               themeData,
-                              darkThemeData,
                             );
                           },
                         ),
