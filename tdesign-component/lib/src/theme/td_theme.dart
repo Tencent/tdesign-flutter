@@ -97,7 +97,9 @@ class TDTheme extends StatelessWidget {
 /// 主题数据
 class TDThemeData extends ThemeExtension<TDThemeData> {
   static const String _defaultThemeName = 'default';
+  static const String _defaultDartThemeName = 'dark';
   static TDThemeData? _defaultThemeData;
+  static TDThemeData? _defaultDartThemeData;
 
   /// 名称
   late String name;
@@ -140,17 +142,28 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
 
   /// 获取默认Data，一个App里只有一个，用于没有context的地方
   static TDThemeData defaultData({
-    TDExtraThemeData? extraThemeData,
-    String? name,
+    TDExtraThemeData? extraThemeData
   }) {
-    _defaultThemeData ??= fromJson(
-          name ?? _defaultThemeName,
+    _defaultThemeData ??= fromJson(_defaultThemeName,
           TDDefaultTheme.defaultThemeConfig,
           extraThemeData: extraThemeData,
         ) ??
-        _emptyData(name ?? _defaultThemeName, extraThemeData: extraThemeData);
+        _emptyData(_defaultThemeName, extraThemeData: extraThemeData);
 
     return _defaultThemeData!;
+  }
+
+  /// 获取默认Dark Data，一个App里只有一个，用于没有context的地方
+  static TDThemeData defaultDartThemeData({
+    TDExtraThemeData? extraThemeData
+  }) {
+    _defaultDartThemeData ??= fromJson(_defaultDartThemeName,
+          TDDefaultTheme.defaultThemeConfig,
+          extraThemeData: extraThemeData,
+        ) ??
+        _emptyData(_defaultDartThemeName, extraThemeData: extraThemeData);
+
+    return _defaultDartThemeData!;
   }
 
   /// 从父类拷贝

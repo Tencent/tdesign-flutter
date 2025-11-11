@@ -51,8 +51,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _themeData = TDThemeData.defaultData();
-    _darkThemeData = TDThemeData.defaultData(name: 'dark');
-    print('_darkThemeData ${_darkThemeData.refMap}');
+    _darkThemeData = TDThemeData.defaultDartThemeData();
+    print('_darkThemeData.bgColorPage： ${_darkThemeData.bgColorPage}，_themeData.bgColorPage: ${_themeData.bgColorPage}');
   }
 
   @override
