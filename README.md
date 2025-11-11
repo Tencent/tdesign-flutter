@@ -25,9 +25,9 @@ Tencent TDesign UI component library of Flutter, suitable for use in mobile proj
 
 # 🎉 Features
 
-- Provides Flutter UI component library in TDesign design style
-- Support customizing themes according to App design style
-- Provides commonly used Icon library and supports customized replacement
+- Provides Flutter UI component library in TDesign design style.
+- Support customizing themes according to App design style.
+- Provides commonly used Icon library and supports customized replacement.
 - Define color groups according to the TDesign specification, which can be viewed in TDColors to facilitate the adaptation of components to the TDesign specification.
 - The color value declaration class can add default colors and view the default display effect of color values in real time.
 
