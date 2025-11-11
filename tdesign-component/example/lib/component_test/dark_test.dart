@@ -26,7 +26,7 @@ Future<void> main() async {
       TDTheme.defaultData();
   /// 深色模式
   darkThemeData = TDThemeData.fromJson('dark', themeJsonString) ??
-      TDThemeData.defaultData(name: 'dark');
+      TDThemeData.defaultDartThemeData();
 
   runApp(const App());
 }

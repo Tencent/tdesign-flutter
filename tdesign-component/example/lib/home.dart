@@ -126,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 .loadString('assets/theme.json');
                             var darkThemeData =
                                 TDThemeData.fromJson('dark', jsonString) ??
-                                    TDThemeData.defaultData(name: 'dark');
+                                    TDThemeData.defaultDartThemeData();
                             widget.onThemeChange?.call(
                                 TDThemeData.defaultData(), darkThemeData);
                           },
@@ -146,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 TDThemeData.defaultData();
                             var darkThemeData =
                                 TDThemeData.fromJson('greenDark', jsonString) ??
-                                    TDThemeData.defaultData(name: 'dark');
+                                    TDThemeData.defaultDartThemeData();
                             widget.onThemeChange?.call(
                               themeData,
                               darkThemeData,
@@ -168,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     TDThemeData.defaultData();
                             var darkThemeData =
                                 TDThemeData.fromJson('redDark', jsonString) ??
-                                    TDThemeData.defaultData(name: 'dark');
+                                    TDThemeData.defaultDartThemeData();
                             widget.onThemeChange?.call(
                               themeData,
                               darkThemeData,
