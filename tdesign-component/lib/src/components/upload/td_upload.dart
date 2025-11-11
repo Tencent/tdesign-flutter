@@ -87,6 +87,7 @@ class TDUpload extends StatefulWidget {
     this.wrapSpacing,
     this.wrapRunSpacing,
     this.wrapAlignment,
+    this.onUploadTap
   }) : super(key: key);
 
   /// 控制展示的文件列表
@@ -145,6 +146,9 @@ class TDUpload extends StatefulWidget {
 
   /// 多图对齐方式
   final WrapAlignment? wrapAlignment;
+
+  ///自定义upload按钮事件
+  final VoidCallback? onUploadTap;
 
   @override
   State<TDUpload> createState() => _TDUploadState();
@@ -331,8 +335,12 @@ class _TDUploadState extends State<TDUpload> {
           if (widget.disabled!) {
             return;
           }
-          final files = await getMediaFromPicker(widget.multiple);
-          extractImageList(files);
+          if (widget.onUploadTap != null) {
+            widget.onUploadTap!();
+          } else {
+            final files = await getMediaFromPicker(widget.multiple);
+            extractImageList(files);
+          }
         }),
       );
     }
