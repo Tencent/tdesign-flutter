@@ -7,16 +7,22 @@ import '../../util/context_extension.dart';
 /// 搜索框的样式
 ///
 enum TDSearchStyle {
-  square, // 方形
-  round, // 圆形
+  /// 方形
+  square,
+
+  /// 圆形
+  round,
 }
 
 ///
 /// 搜索框对齐方式
 ///
 enum TDSearchAlignment {
-  left, // 默认头部对齐
-  center, // 居中
+  /// 默认头部对齐
+  left,
+
+  /// 居中
+  center,
 }
 
 typedef TDSearchBarEvent = void Function(String value);
@@ -35,7 +41,7 @@ class TDSearchBar extends StatefulWidget {
     this.onTapOutside,
     this.onInputClick,
     this.autoHeight = false,
-    this.padding = const EdgeInsets.fromLTRB(16, 8, 16, 8),
+    this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     this.autoFocus = false,
     this.mediumStyle = false,
     this.cursorHeight,
@@ -93,7 +99,7 @@ class TDSearchBar extends StatefulWidget {
   /// 编辑完成回调
   final TDSearchBarCallBack? onEditComplete;
 
-  // 点击输入框外部回调
+  /// 点击输入框外部回调
   final TapRegionCallback? onTapOutside;
 
   /// 自定义操作文字
@@ -243,7 +249,6 @@ class _TDSearchBarState extends State<TDSearchBar>
                           controller: widget.controller ?? controller,
                           autofocus: widget.autoFocus,
                           cursorColor: TDTheme.of(context).brandNormalColor,
-                          cursorWidth: 1,
                           cursorHeight: widget.cursorHeight,
                           textAlign:
                               widget.alignment == TDSearchAlignment.center

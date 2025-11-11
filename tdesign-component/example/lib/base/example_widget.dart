@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../page/td_theme_page.dart';
+import '../provider/theme_mode_provider.dart';
 import 'syntax_highlighter.dart';
 import 'api_widget.dart';
 import 'example_base.dart';
@@ -103,7 +105,8 @@ class _ExamplePageState extends State<ExamplePage> {
         floatingActionButton: widget.floatingActionButton,
         body: ScrollbarTheme(
             data: ScrollbarThemeData(
-                trackVisibility: MaterialStateProperty.all(true)),
+              trackVisibility: MaterialStateProperty.all(true),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -227,6 +230,7 @@ class _ExamplePageState extends State<ExamplePage> {
   2.参数为枚举，需测试所有枚举组合（示例已有的可不写）''', builder: (_) => const TDDivider());
 
   Widget _buildNavBar() {
+    var leftBarItems = <TDNavBarItem>[];
     var rightBarItems = <TDNavBarItem>[];
 
     // web端示例页不展示标题栏
@@ -254,9 +258,30 @@ class _ExamplePageState extends State<ExamplePage> {
             }));
       }
     }
+    if (!PlatformUtil.isWeb) {
+      var themeModeProvider = Provider.of<ThemeModeProvider>(context);
+      // 获取系统主题
+      // Brightness systemBrightness = MediaQuery.platformBrightnessOf(context);
+
+      leftBarItems.add(
+        TDNavBarItem(
+          icon: themeModeProvider.themeMode == ThemeMode.light
+              ? TDIcons.mode_light
+              : TDIcons.mode_dark,
+          action: () {
+            themeModeProvider.themeMode =
+                themeModeProvider.themeMode == ThemeMode.light
+                    ? ThemeMode.dark
+                    : ThemeMode.light;
+          },
+        ),
+      );
+    }
+
     return TDNavBar(
       key: widget.navBarKey,
       title: widget.title,
+      leftBarItems: leftBarItems,
       rightBarItems: rightBarItems,
     );
   }
