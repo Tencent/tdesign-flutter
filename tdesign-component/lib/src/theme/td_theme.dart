@@ -299,9 +299,29 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
         var theme = parseThemeData(name, themeConfig, extraThemeData);
         theme.light = theme;
         if (darkName?.isNotEmpty ?? false) {
+          // 解析暗色模式
           var darkTheme = parseThemeData(darkName!, themeConfig, extraThemeData);
           darkTheme.light = theme;
           theme.dark = darkTheme;
+          // 填充暗色模式缺失数据
+          theme.refMap.forEach((key, value) {
+            darkTheme.refMap.putIfAbsent(key, ()=> value);
+          });
+          // theme.fontMap.forEach((key, value) {
+          //   darkTheme.fontMap.putIfAbsent(key, ()=> value);
+          // });
+          // theme.radiusMap.forEach((key, value) {
+          //   darkTheme.radiusMap.putIfAbsent(key, ()=> value);
+          // });
+          // theme.fontFamilyMap.forEach((key, value) {
+          //   darkTheme.fontFamilyMap.putIfAbsent(key, ()=> value);
+          // });
+          // theme.shadowMap.forEach((key, value) {
+          //   darkTheme.shadowMap.putIfAbsent(key, ()=> value);
+          // });
+          // theme.spacerMap.forEach((key, value) {
+          //   darkTheme.spacerMap.putIfAbsent(key, ()=> value);
+          // });
         }
         if (recoverDefault) {
           _defaultThemeData = theme;
