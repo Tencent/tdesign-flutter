@@ -1,13 +1,7 @@
-
-
-
-
 ///
 /// 一些实用的迭代扩展函数
 ///
-///
 extension IterableExt<T> on Iterable<T> {
-
   ///
   /// 获取集合的前n个元素
   ///
@@ -54,13 +48,18 @@ extension IterableExt<T> on Iterable<T> {
   /// - prefix 前缀
   /// - suffix 后缀
   /// - convert 元素格式化成字符串
-  String join2({String divider = ', ', String? prefix, String? suffix , String Function(T element)? convert}){
+  String join2({
+    String divider = ', ',
+    String? prefix,
+    String? suffix,
+    String Function(T element)? convert,
+  }) {
     var sb = StringBuffer();
     if (prefix != null) {
       sb.write(prefix);
     }
 
-    for (var i=0; i<length; i++) {
+    for (var i = 0; i < length; i++) {
       final e = elementAt(i);
       sb.write(convert != null ? convert(e) : e.toString());
       if (i != length - 1) {
@@ -91,6 +90,4 @@ extension IterableExt<T> on Iterable<T> {
     }
     return elementAt(index);
   }
-
-
 }

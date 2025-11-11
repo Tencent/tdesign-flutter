@@ -34,9 +34,9 @@ tdesign-adaptation/ // TDesign Flutter 版本适配仓库
 
 ### 2.2 开发环境要求
 
-Flutter SDK 版本： >= 3.16.9
+Flutter SDK 版本： `>= 3.16.9`
 
-**注意：** TD 需要支持 3.16.9 ~ 最新稳定版本，因此最好在 3.16.9 版本开发完成后，使用最新稳定版本确认能否正常运行。如果版本无法兼容，请将不兼容文件移至 `tdesign-adaptation`，做兼容处理。
+**注意：** TD 需要支持 `3.16.9` ~ 最新稳定版本，因此最好在 `3.16.9` 版本开发完成后，使用最新稳定版本确认能否正常运行。如果版本无法兼容，请将不兼容文件移至 `tdesign-adaptation`，做兼容处理。
 
 ### 2.3 克隆项目
 
@@ -67,15 +67,15 @@ flutter run
 
 ### 2.5 Flutter 多版本兼容
 
-在 Flutter 3.32 版本，SDK 代码变更较大，同一代码可能无法同时支持跨版本运行，因此抽离了 `tdesign-adaptation` 库，用于进行不同 Flutter 版本之间的代码适配。
+在 Flutter `3.32` 版本，SDK 代码变更较大，同一代码可能无法同时支持跨版本运行，因此抽离了 `tdesign-adaptation` 库，用于进行不同 Flutter 版本之间的代码适配。
 
 #### 2.5.1 版本切换
 
-首次运行，可以先将 Flutter SDK 切到 3.16.9 版本，执行 `tdesign-component/init.sh` 脚本，配置对应依赖。
+首次运行，可以先将 Flutter SDK 切到 `3.16.9` 版本，执行 `tdesign-component/init.sh` 脚本，配置对应依赖。
 
 开发完成，切换至最新稳定版尝试运行，如果有不兼容代码，需要在 `tdesign-adaptation` 库进行适配。
 
-其中，高于 3.32 版本的代码，请在 `feature/3.32_adaptation` 分支开发，低于 3.32 版本的代码，请在 `feature/3.16_adaptation` 分支开发。
+其中，高于 `3.32` 版本的代码，请在 `feature/3.32_adaptation` 分支开发，低于 `3.32` 版本的代码，请在 `feature/3.16_adaptation` 分支开发。
 
 本地开发 `tdesign-adaptation`，可以修改 `tdesign-component/pubspec_overrides.yaml` 和 `tdesign-component/example/pubspec_overrides.yaml` 文件，使用本地依赖，内容如下：
 
@@ -85,11 +85,13 @@ dependency_overrides:
     path: ../tdesign-adaptation  # 本地相对路径
 ```
 
-但是，提交 Git 时，请不要将 `pubspec_overrides.yaml` 提交到仓库！！！
+但是，提交 Git 时，**请不要将 `pubspec_overrides.yaml` 提交到仓库！！！**
 
 #### 2.5.2 国际化适配
 
-由于 3.32 版本的国际化功能与 3.16 版本差异比较大，代码生成位置发生变更，无法跨版本兼容。因此，国际化资源代码改为手动依赖方式。如果需要修改字段内容，需要把生成的 `app_localizations(_en、_zh).dart` 文件拷贝到 `example/lib/localizations` 目录。
+对于 `3.32` 以下版本，请在 `l10n.yaml` 中设置 `synthetic-package: false`。
+
+更多信息请参阅flutter官方文档说明：https://docs.flutter.dev/release/breaking-changes/flutter-generate-i10n-source
 
 ### 2.6 运行前端官网项目
 
@@ -109,7 +111,7 @@ npm run site:dev
 
 **注意：** 本地运行项目，右侧 example 未展示对应组件示例，是正常现象，该示例正式部署才会展示。
 
-![贡献示例](https://tdesign.tencent.com/flutter/assets/contributing_example.png)
+![Web组件预览示例](https://tdesign.tencent.com/flutter/assets/contributing_example.png)
 
 ## 3. 如何领取 Issue
 
@@ -155,7 +157,7 @@ npm run site:dev
   > 2. 只修改内部 bug，未新增参数，才勾选"日常 bug 修复"。
   >
   > 3. 其他选项视具体改动判断。
-- "相关 Issue" 处带上修复的 Issue 链接。
+- “相关 Issue” 处带上修复的 Issue 链接。
 - 其他内容视情况可选填。
 
 ### 5.2 代码 Review 自检【欢迎大家补充】
@@ -180,8 +182,9 @@ npm run site:dev
 #### 5.3.2 新增组件
 
 - `tdesign-site/site/site.config.mjs`
-  > 菜单栏是否放开了注释？如果没有被注释组件，则参考其他组件添加。
-  > `name` 与 `tdesign-component/example/lib/config.dart` 的 `ExamplePageModel` 的 `name` 参数是否一致。
+
+> 菜单栏是否放开了注释？如果没有被注释组件，则参考其他组件添加。
+> `name` 与 `tdesign-component/example/lib/config.dart` 的 `ExamplePageModel` 的 `name` 参数是否一致。
 
 ![组件名称示例](https://tdesign.tencent.com/flutter/assets/contributing_component_name.png)
 
@@ -195,9 +198,9 @@ npm run site:dev
 
 ![APK 示例](https://tdesign.tencent.com/flutter/assets/contributing_apk.png)
 
-点击"体验 apk" 后面链接，即可跳转打包完成的 apk 下载地址，可以安装自测。
+点击 “体验 apk” 后面链接，即可跳转打包完成的 apk 下载地址，可以安装自测。
 
-**注意：** 该 demo 是基于 Flutter 3.16.9 打包的。请留意最新 Flutter 版本的包是否打包成功；如果评论打包失败，请检测失败原因。
+**注意：** 该 demo 是基于 Flutter `3.16.9` 打包的。请留意最新 Flutter 版本的包是否打包成功；如果评论打包失败，请检测失败原因。
 
 #### 自测内容
 
@@ -211,7 +214,7 @@ npm run site:dev
 
 ### 5.5 视觉走查
 
-PR 打包完成后，通知负责人拉设计同学进群，将 PR 链接发到群里。设计同学根据"设计走查流水线地址"的链接，替换内网域名后，下载 ipa 包进行走查。
+PR 打包完成后，通知负责人拉设计同学进群，将 PR 链接发到群里。设计同学根据“设计走查流水线地址”的链接，替换内网域名后，下载 ipa 包进行走查。
 
 ## 6. 合并 PR
 

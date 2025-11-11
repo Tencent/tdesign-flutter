@@ -469,16 +469,17 @@ class _TDDatePickerState extends State<TDDatePicker> {
 
   timeUnitMap(String name) {
     if (widget.isTimeUnit != null && widget.isTimeUnit == true) {
+      // 使用 widget.model.mapping 做为键
       var times = {
-        '年': context.resource.yearLabel,
-        '月': context.resource.monthLabel,
-        '日': context.resource.dateLabel,
-        '周': context.resource.weeksLabel,
-        '时': context.resource.hours,
-        '分': context.resource.minutes,
-        '秒': context.resource.seconds
+        widget.model.mapping[0]: context.resource.yearLabel,
+        widget.model.mapping[1]: context.resource.monthLabel,
+        widget.model.mapping[2]: context.resource.dateLabel,
+        widget.model.mapping[3]: context.resource.weeksLabel,
+        widget.model.mapping[4]: context.resource.hours,
+        widget.model.mapping[5]: context.resource.minutes,
+        widget.model.mapping[6]: context.resource.seconds
       };
-      return times[name];
+      return times[name] ?? '';
     } else {
       return '';
     }
@@ -515,8 +516,15 @@ class DatePickerModel {
   List<int> dateEnd;
   List<int>? dateInitial;
   List<int> Function(DateTypeKey key, List<int> nums)? filterItems;
-  final mapping = ['年', '月', '日', '周', '时', '分', '秒'];
-  final weekMap = ['一', '二', '三', '四', '五', '六', '日'];
+  final mapping = [
+    'year',
+    'month',
+    'date',
+    'weeks',
+    'hours',
+    'minutes',
+    'seconds'
+  ];
 
   late DateTime initialTime;
 
