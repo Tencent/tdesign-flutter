@@ -39,16 +39,12 @@ jobs:
           SKIP_JDK_VERSION_CHECK: true
 
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+        uses: TDesignOteam/workflows/setup-flutter@main
         with:
           flutter-version: 3.32.0
           channel: stable
-      - run: |
-          flutter --version
-          cd ${{ env.FLUTTER_ROOT }}
-          curl -L https://raw.githubusercontent.com/TDesignOteam/tdesign-flutter-aop-registry/main/patch_flutter/3.24~3.32.patch | git apply --allow-empty
-          git status
-          rm bin/cache/flutter_tools.stamp
+          aop-registry: true
+
       - name: Extract version from pubspec.yaml and set env
         id: version
         run: |
