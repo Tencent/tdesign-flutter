@@ -125,9 +125,10 @@ class _ExamplePageState extends State<ExamplePage> {
                               padding:
                                   const EdgeInsets.only(top: 24, bottom: 24),
                               itemCount: widget.children.length + 3,
-                              itemBuilder: (context, index) {
+                              itemBuilder: (_, index) {
                                 if (index == 0) {
-                                  return _buildHeader(context);
+                                  // 这里不能传ListView的context，否则暗色模式切换会延迟
+                                  return _buildHeader();
                                 }
                                 if (index == widget.children.length + 2) {
                                   return WebMdTool.needGenerateWebMd
@@ -286,7 +287,7 @@ class _ExamplePageState extends State<ExamplePage> {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader() {
     if (widget.showSingleChild) {
       return Container();
     }
@@ -303,8 +304,7 @@ class _ExamplePageState extends State<ExamplePage> {
           TDText(
             widget.title,
             font: TDTheme.of(context).fontHeadlineSmall,
-            // todo BuildContext
-            // textColor: TDTheme.of(context).textColorPrimary,
+            textColor: TDTheme.of(context).textColorPrimary,
           ),
           Container(
             margin: const EdgeInsets.only(
@@ -313,7 +313,6 @@ class _ExamplePageState extends State<ExamplePage> {
             child: TDText(
               widget.desc,
               font: TDTheme.of(context).fontBodyMedium,
-              // todo BuildContext
               textColor: TDTheme.of(context).textColorSecondary,
             ),
           ),
