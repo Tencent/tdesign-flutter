@@ -509,7 +509,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 _countdownTime > 0
                     ? TDText(
                         '${countDownText}(${_countdownTime}秒)',
-                        textColor: TDTheme.of(context).textColorDisabled,
+                        textColor: TDTheme.of(context).textDisabledColor,
                       )
                     : TDText(confirmText,
                         textColor: TDTheme.of(context).brandNormalColor),
