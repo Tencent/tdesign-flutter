@@ -175,23 +175,24 @@ class _TDCellState extends State<TDCell> {
           crossAxisAlignment: crossAxisAlignment,
           children: [
             ..._buildImage(),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (widget.leftIcon != null ||
-                      widget.leftIconWidget != null) ...[
-                    widget.leftIconWidget ??
-                        Icon(widget.leftIcon,
-                            size: 24, color: style.leftIconColor),
-                    SizedBox(width: theme.spacer12),
-                  ],
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // spacing: theme.spacer4,
-                      children: [
-                        Row(
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: crossAxisAlignment,
+              children: [
+                if (widget.leftIcon != null ||
+                    widget.leftIconWidget != null) ...[
+                  widget.leftIconWidget ??
+                      Icon(widget.leftIcon,
+                          size: 24, color: style.leftIconColor),
+                  SizedBox(width: theme.spacer12),
+                ],
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // spacing: theme.spacer4,
+                  children: [
+                    IntrinsicWidth(
+                      child: Container(
+                        child: Row(
                           children: [
                             if (widget.titleWidget != null)
                               Flexible(child: widget.titleWidget!)
