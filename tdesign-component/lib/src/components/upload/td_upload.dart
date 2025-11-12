@@ -423,10 +423,10 @@ class _TDUploadState extends State<TDUpload> {
                       decoration: widget.type == TDUploadBoxType.circle
                           ? BoxDecoration(
                               shape: BoxShape.circle,
-                              color: TDTheme.of(context).textColorDisabled,
+                              color: TDTheme.of(context).textDisabledColor,
                             )
                           : BoxDecoration(
-                              color: TDTheme.of(context).textColorDisabled,
+                              color: TDTheme.of(context).textDisabledColor,
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(
                                       TDTheme.of(context).radiusDefault),

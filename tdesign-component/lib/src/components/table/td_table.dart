@@ -674,7 +674,7 @@ class TDTableState extends State<TDTable> {
         size: 16,
         color: (checked || halfSelected)
             ? TDTheme.of(context).brandNormalColor
-            : TDTheme.of(context).textColorDisabled);
+            : TDTheme.of(context).textDisabledColor);
   }
 
   @override
