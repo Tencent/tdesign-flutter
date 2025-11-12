@@ -325,7 +325,7 @@ extension TDColors on TDThemeData {
 
   Color get textColorPlaceholder => colorMap['textColorPlaceholder'] ?? fontGyColor3;
 
-  Color get textColorDisabled => colorMap['textColorDisabled'] ?? fontGyColor4;
+  Color get textDisabledColor => colorMap['textDisabledColor'] ?? fontGyColor4;
 
   Color get textColorAnti => colorMap['textColorAnti'] ?? whiteColor1;
 

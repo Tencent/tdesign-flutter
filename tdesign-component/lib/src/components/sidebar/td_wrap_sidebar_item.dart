@@ -149,7 +149,7 @@ class TDWrapSideBarItem extends StatelessWidget {
   Widget renderIcon(BuildContext context) {
     final iconColor = () {
       if (disabled) {
-        return TDTheme.of(context).textColorDisabled;
+        return TDTheme.of(context).textDisabledColor;
       }
       if (!selected) {
         return unSelectedColor ?? TDTheme.of(context).textColorPrimary;
@@ -182,7 +182,7 @@ class TDWrapSideBarItem extends StatelessWidget {
             fontWeight:
                 selected && !disabled ? FontWeight.w600 : FontWeight.w400,
             textColor: disabled
-                ? TDTheme.of(context).textColorDisabled
+                ? TDTheme.of(context).textDisabledColor
                 : selected
                     ? selectedColor ?? TDTheme.of(context).brandNormalColor
                     : unSelectedColor ?? TDTheme.of(context).textColorPrimary,

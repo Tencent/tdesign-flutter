@@ -326,7 +326,7 @@ class _TDStepperState extends State<TDStepper> {
                       style: TextStyle(
                           fontSize: _getFontSize(),
                           color: widget.disabled
-                              ? TDTheme.of(context).textColorDisabled
+                              ? TDTheme.of(context).textDisabledColor
                               : TDTheme.of(context).textColorPrimary),
                       textAlign: TextAlign.center,
                       textAlignVertical: TextAlignVertical.center,
@@ -462,7 +462,7 @@ class TDStepperIconButton extends StatelessWidget {
     return Icon(iconType,
         size: _getIconSize(),
         color: disabled
-            ? TDTheme.of(context).textColorDisabled
+            ? TDTheme.of(context).textDisabledColor
             : TDTheme.of(context).textColorPrimary);
   }
 
