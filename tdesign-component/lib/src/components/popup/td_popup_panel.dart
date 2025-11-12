@@ -68,7 +68,10 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
     _controller = AnimationController(
       duration: const Duration(milliseconds: 400),
       vsync: this,
-    )..addListener(_updateHeight);
+    );
+    if (widget.draggable) {
+      _controller.addListener(_updateHeight);
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) => _measureChildHeight());
   }
 
@@ -107,11 +110,13 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
     // 初始化当前高度
     _currentHeight = baseHeight.clamp(_minHeight, _maxHeight);
     // 同步动画控制器
-    _controller.value = (_currentHeight - _minHeight) / (_maxHeight - _minHeight).clamp(0.1, 1.0);
+    _controller.value = (_currentHeight - _minHeight) /
+        (_maxHeight - _minHeight).clamp(0.1, 1.0);
   }
 
   void _updateHeight() => setState(() {
-        _currentHeight = _minHeight + (_maxHeight - _minHeight) * _controller.value;
+        _currentHeight =
+            _minHeight + (_maxHeight - _minHeight) * _controller.value;
       });
 
   void _toggleFullscreen(bool fullscreen) {
@@ -189,11 +194,13 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
         child: Container(
           height: _currentHeight,
           decoration: BoxDecoration(
-            color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+            color:
+                widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
             borderRadius: _isFullscreen
                 ? null
                 : BorderRadius.vertical(
-                    top: Radius.circular(widget.radius ?? TDTheme.of(context).radiusExtraLarge)),
+                    top: Radius.circular(
+                        widget.radius ?? TDTheme.of(context).radiusExtraLarge)),
           ),
           child: Column(children: [
             _buildDragHandle(),
@@ -211,7 +218,8 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
         onNotification: (notification) {
           if (notification is ScrollUpdateNotification) {
             final metrics = notification.metrics;
-            if ((metrics.pixels <= 0 || metrics.pixels >= metrics.maxScrollExtent) &&
+            if ((metrics.pixels <= 0 ||
+                    metrics.pixels >= metrics.maxScrollExtent) &&
                 notification.dragDetails != null) {
               _handleDragUpdate(notification.dragDetails!);
             }
@@ -235,11 +243,14 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
 
   void _baseHandleDragUpdate(DragUpdateDetails details) {
     _isDragging = true;
-    if (_isAnimating || !widget.draggable) return;
+    if (_isAnimating || !widget.draggable) {
+      return;
+    }
 
     final newHeight = _currentHeight - details.primaryDelta! * 1.2;
     _currentHeight = newHeight.clamp(_minHeight, _maxHeight);
-    _controller.value = (_currentHeight - _minHeight) / (_maxHeight - _minHeight);
+    _controller.value =
+        (_currentHeight - _minHeight) / (_maxHeight - _minHeight);
   }
 
   void _baseHandleDragEnd(DragEndDetails details) {
@@ -297,7 +308,8 @@ class TDPopupBottomDisplayPanel extends TDPopupBasePanel {
   State<TDPopupBasePanel> createState() => _TDPopupBottomDisplayPanelState();
 }
 
-class _TDPopupBottomDisplayPanelState extends _TDPopupBaseState<TDPopupBottomDisplayPanel> {
+class _TDPopupBottomDisplayPanelState
+    extends _TDPopupBaseState<TDPopupBottomDisplayPanel> {
   @override
   Widget buildHeader(BuildContext context) {
     Widget header = Container(
@@ -307,7 +319,8 @@ class _TDPopupBottomDisplayPanelState extends _TDPopupBaseState<TDPopupBottomDis
         widget.title ?? '',
         textColor: widget.titleColor ?? TDTheme.of(context).textColorPrimary,
         font: TDTheme.of(context).fontTitleLarge?.withSize(
-            widget.titleFontSize?.toInt() ?? TDTheme.of(context).fontTitleLarge!.size.toInt()),
+            widget.titleFontSize?.toInt() ??
+                TDTheme.of(context).fontTitleLarge!.size.toInt()),
         fontWeight: FontWeight.w700,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -319,7 +332,8 @@ class _TDPopupBottomDisplayPanelState extends _TDPopupBaseState<TDPopupBottomDis
         alignment: Alignment.centerLeft,
         children: [
           Padding(
-            padding: EdgeInsets.only(right: 40, left: widget.titleLeft ? 0 : 40),
+            padding:
+                EdgeInsets.only(right: 40, left: widget.titleLeft ? 0 : 40),
             child: header,
           ),
           Positioned(
@@ -339,7 +353,8 @@ class _TDPopupBottomDisplayPanelState extends _TDPopupBaseState<TDPopupBottomDis
 
     return SizedBox(
       height: widget.draggable
-          ? _TDPopupBaseState._headerHeight - _TDPopupBaseState._dragHandleHeight
+          ? _TDPopupBaseState._headerHeight -
+              _TDPopupBaseState._dragHandleHeight
           : _TDPopupBaseState._headerHeight,
       child: header,
     );
@@ -358,7 +373,8 @@ class _TDPopupBottomDisplayPanelState extends _TDPopupBaseState<TDPopupBottomDis
   }
 
   @override
-  void _handleDragEnd(DragEndDetails details) => super._baseHandleDragEnd(details);
+  void _handleDragEnd(DragEndDetails details) =>
+      super._baseHandleDragEnd(details);
 }
 
 /// 带确认的底部浮层面板
@@ -415,19 +431,22 @@ class TDPopupBottomConfirmPanel extends TDPopupBasePanel {
   State<TDPopupBasePanel> createState() => _TDPopupBottomConfirmPanelState();
 }
 
-class _TDPopupBottomConfirmPanelState extends _TDPopupBaseState<TDPopupBottomConfirmPanel> {
+class _TDPopupBottomConfirmPanelState
+    extends _TDPopupBaseState<TDPopupBottomConfirmPanel> {
   @override
   Widget buildHeader(BuildContext context) {
     return SizedBox(
       height: widget.draggable
-          ? _TDPopupBaseState._headerHeight - _TDPopupBaseState._dragHandleHeight
+          ? _TDPopupBaseState._headerHeight -
+              _TDPopupBaseState._dragHandleHeight
           : _TDPopupBaseState._headerHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _buildActionButton(
             text: widget.leftText ?? context.resource.cancel,
-            color: widget.leftTextColor ?? TDTheme.of(context).textColorSecondary,
+            color:
+                widget.leftTextColor ?? TDTheme.of(context).textColorSecondary,
             onTap: widget.leftClick,
             left: true,
           ),
@@ -435,9 +454,11 @@ class _TDPopupBottomConfirmPanelState extends _TDPopupBaseState<TDPopupBottomCon
             child: Center(
               child: TDText(
                 widget.title ?? '',
-                textColor: widget.titleColor ?? TDTheme.of(context).textColorPrimary,
-                font: TDTheme.of(context).fontTitleLarge?.withSize(widget.titleFontSize?.toInt() ??
-                    TDTheme.of(context).fontTitleLarge!.size.toInt()),
+                textColor:
+                    widget.titleColor ?? TDTheme.of(context).textColorPrimary,
+                font: TDTheme.of(context).fontTitleLarge?.withSize(
+                    widget.titleFontSize?.toInt() ??
+                        TDTheme.of(context).fontTitleLarge!.size.toInt()),
                 fontWeight: FontWeight.w700,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -446,7 +467,8 @@ class _TDPopupBottomConfirmPanelState extends _TDPopupBaseState<TDPopupBottomCon
           ),
           _buildActionButton(
             text: widget.rightText ?? context.resource.confirm,
-            color: widget.rightTextColor ?? TDTheme.of(context).brandNormalColor,
+            color:
+                widget.rightTextColor ?? TDTheme.of(context).brandNormalColor,
             onTap: widget.rightClick,
             left: false,
           ),
@@ -471,7 +493,9 @@ class _TDPopupBottomConfirmPanelState extends _TDPopupBaseState<TDPopupBottomCon
           child: TDText(
             text,
             textColor: color,
-            font: (left ? TDTheme.of(context).fontBodyLarge : TDTheme.of(context).fontTitleMedium)
+            font: (left
+                    ? TDTheme.of(context).fontBodyLarge
+                    : TDTheme.of(context).fontTitleMedium)
                 ?.withSize(left
                     ? widget.leftTextFontSize?.toInt() ??
                         TDTheme.of(context).fontBodyLarge!.size.toInt()
@@ -496,7 +520,8 @@ class _TDPopupBottomConfirmPanelState extends _TDPopupBaseState<TDPopupBottomCon
   }
 
   @override
-  void _handleDragEnd(DragEndDetails details) => super._baseHandleDragEnd(details);
+  void _handleDragEnd(DragEndDetails details) =>
+      super._baseHandleDragEnd(details);
 }
 
 /// 居中浮层面板
@@ -544,7 +569,8 @@ class TDPopupCenterPanel extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 24),
             decoration: BoxDecoration(
               color: backgroundColor ?? TDTheme.of(context).bgColorContainer,
-              borderRadius: BorderRadius.circular(radius ?? TDTheme.of(context).radiusExtraLarge),
+              borderRadius: BorderRadius.circular(
+                  radius ?? TDTheme.of(context).radiusExtraLarge),
             ),
             child: child,
           ),
@@ -563,7 +589,8 @@ class TDPopupCenterPanel extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: backgroundColor ?? TDTheme.of(context).bgColorContainer,
-        borderRadius: BorderRadius.circular(radius ?? TDTheme.of(context).radiusExtraLarge),
+        borderRadius: BorderRadius.circular(
+            radius ?? TDTheme.of(context).radiusExtraLarge),
       ),
       child: Stack(
         children: [

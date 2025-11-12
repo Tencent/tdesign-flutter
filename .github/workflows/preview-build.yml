@@ -45,7 +45,7 @@ jobs:
           git config --global core.compression 0
           
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+        uses: TDesignOteam/workflows/setup-flutter@main
         with:
           flutter-version: 3.32.0
           channel: stable
@@ -58,6 +58,7 @@ jobs:
           curl -fsSL $patchUrl | git apply --allow-empty
           git status
           rm -f bin/cache/flutter_tools.stamp
+
       - name: Extract version from pubspec.yaml and set env
         id: version
         run: |
