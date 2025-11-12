@@ -146,11 +146,11 @@ class _TDCellState extends State<TDCell> {
         : style.clickBackgroundColor;
     final border = (widget.showBottomBorder ?? false)
         ? Border(
-            bottom: BorderSide(
-              width: 0.5,
-              color: style.borderedColor ?? theme.componentStrokeColor,
-            ),
-          )
+      bottom: BorderSide(
+        width: 0.5,
+        color: style.borderedColor ?? theme.componentStrokeColor,
+      ),
+    )
         : null;
 
     return GestureDetector(
@@ -175,24 +175,23 @@ class _TDCellState extends State<TDCell> {
           crossAxisAlignment: crossAxisAlignment,
           children: [
             ..._buildImage(),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: crossAxisAlignment,
-              children: [
-                if (widget.leftIcon != null ||
-                    widget.leftIconWidget != null) ...[
-                  widget.leftIconWidget ??
-                      Icon(widget.leftIcon,
-                          size: 24, color: style.leftIconColor),
-                  SizedBox(width: theme.spacer12),
-                ],
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  // spacing: theme.spacer4,
-                  children: [
-                    IntrinsicWidth(
-                      child: Container(
-                        child: Row(
+            Expanded(
+              child: Row(
+                crossAxisAlignment: crossAxisAlignment,
+                children: [
+                  if (widget.leftIcon != null ||
+                      widget.leftIconWidget != null) ...[
+                    widget.leftIconWidget ??
+                        Icon(widget.leftIcon,
+                            size: 24, color: style.leftIconColor),
+                    SizedBox(width: theme.spacer12),
+                  ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      // spacing: theme.spacer4,
+                      children: [
+                        Row(
                           children: [
                             if (widget.titleWidget != null)
                               Flexible(child: widget.titleWidget!)
