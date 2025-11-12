@@ -24,6 +24,8 @@ class TDCell extends StatefulWidget {
     this.leftIconWidget,
     this.note,
     this.noteWidget,
+    this.noteMaxWidth,
+    this.noteMaxLine = 1,
     this.required = false,
     this.title,
     this.titleWidget,
@@ -79,6 +81,12 @@ class TDCell extends StatefulWidget {
 
   /// 说明文字组件
   final Widget? noteWidget;
+
+  /// 说明文字组件 最大宽度，超过部分显示省略号，防止文字溢出
+  final double? noteMaxWidth;
+
+  /// 说明文字组件 最大行数
+  final int noteMaxLine;
 
   /// 是否显示表单必填星号
   final bool? required;
@@ -211,12 +219,21 @@ class _TDCellState extends State<TDCell> {
             ),
             Wrap(
               spacing: theme.spacer4,
-              // crossAxisAlignment: WrapCrossAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 if (widget.noteWidget != null)
                   widget.noteWidget!
                 else if (widget.note?.isNotEmpty ?? false)
-                  TDText(widget.note!, style: style.noteStyle),
+                  ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxWidth: widget.noteMaxWidth ??
+                              MediaQuery.of(context).size.width - 84),
+                      child: TDText(
+                        widget.note!,
+                        style: style.noteStyle,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: widget.noteMaxLine,
+                      )),
                 if (widget.rightIconWidget != null)
                   widget.rightIconWidget!
                 else if (widget.rightIcon != null)
