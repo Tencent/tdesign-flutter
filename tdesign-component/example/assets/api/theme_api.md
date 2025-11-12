@@ -43,4 +43,5 @@
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
 | defaultData |  |   TDExtraThemeData? extraThemeData, | 获取默认Data，一个App里只有一个，用于没有context的地方 |
-| fromJson |  |   required String name,  required String themeJson,  null recoverDefault,  TDExtraThemeData? extraThemeData, | 解析配置的json文件为主题数据 |
+| fromJson |  |   required String name,  required String themeJson,  String? darkName,  null recoverDefault,  TDExtraThemeData? extraThemeData, | 解析配置的json文件为主题数据     [name] 主题名称，目前只支持一级键     [themeJson] 主题json字符串，要求json配置必须正确     [recoverDefault] 是否恢复为默认主题数据     [extraThemeData] 额外扩展的主题数据 |
+| parseThemeData |  |   required String name,  required null themeConfig,  required TDExtraThemeData? extraThemeData, |  |
