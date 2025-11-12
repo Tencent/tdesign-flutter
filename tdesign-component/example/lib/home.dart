@@ -24,17 +24,11 @@ class MyHomePage extends StatefulWidget {
     Key? key,
     required this.title,
     this.onThemeChange,
-    this.locale,
-    this.onLocaleChange,
   }) : super(key: key);
 
   final String title;
 
   final OnThemeChange? onThemeChange;
-
-  final OnLocaleChange? onLocaleChange;
-
-  final Locale? locale;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -71,29 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.only(
                       right: 16,
                     ),
-                    child: TDText(
-                      widget.locale?.languageCode == 'en' ? '中文' : 'English',
-                      textColor: TDTheme.of(context).whiteColor1,
-                    ),
-                  ),
-                  onTap: () {
-                    if (widget.locale?.languageCode == 'en') {
-                      widget.onLocaleChange?.call(const Locale('zh'));
-                    } else {
-                      widget.onLocaleChange?.call(const Locale('en'));
-                    }
-                  },
-                ),
-                GestureDetector(
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.only(
-                      right: 16,
-                    ),
-                    child: TDText(
-                      AppLocalizations.of(context)?.about,
-                      textColor: TDTheme.of(context).whiteColor1,
-                    ),
+                    child: Icon(TDIcons.setting, color: TDTheme.of(context).whiteColor1,),
                   ),
                   onTap: () {
                     focusNode.unfocus();
