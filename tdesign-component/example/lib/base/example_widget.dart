@@ -303,7 +303,8 @@ class _ExamplePageState extends State<ExamplePage> {
           TDText(
             widget.title,
             font: TDTheme.of(context).fontHeadlineSmall,
-            textColor: TDTheme.of(context).textColorPrimary,
+            // todo BuildContext
+            // textColor: TDTheme.of(context).textColorPrimary,
           ),
           Container(
             margin: const EdgeInsets.only(
@@ -312,6 +313,7 @@ class _ExamplePageState extends State<ExamplePage> {
             child: TDText(
               widget.desc,
               font: TDTheme.of(context).fontBodyMedium,
+              // todo BuildContext
               textColor: TDTheme.of(context).textColorSecondary,
             ),
           ),
@@ -331,7 +333,8 @@ class _ExamplePageState extends State<ExamplePage> {
           child: TDText(
             '${index < 10 ? "0$index" : index} ${data.title}',
             font: TDTheme.of(context).fontTitleLarge,
-            textColor: TDTheme.of(context).textColorPrimary,
+            // todo BuildContext
+            // textColor: TDTheme.of(context).textColorPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
