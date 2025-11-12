@@ -138,9 +138,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onEditComplete | TDSearchBarCallBack? | - | 编辑完成回调 |
 | onInputClick | GestureTapCallback? | - | 输入框点击事件 |
 | onSubmitted | TDSearchBarEvent? | - | 提交回调 |
-| onTapOutside |  | - |  |
+| onTapOutside | TapRegionCallback? | - | 点击输入框外部回调 |
 | onTextChanged | TDSearchBarEvent? | - | 文字改变回调 |
-| padding | EdgeInsets | const EdgeInsets.fromLTRB(16, 8, 16, 8) | 内部填充 |
+| padding | EdgeInsets | const EdgeInsets.symmetric(horizontal: 16, vertical: 8) | 内部填充 |
 | placeHolder | String? | - | 预设文案 |
 | readOnly | bool? | - | 是否只读 |
 | style | TDSearchStyle? | TDSearchStyle.square | 样式 |

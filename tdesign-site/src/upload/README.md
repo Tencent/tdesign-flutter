@@ -85,6 +85,29 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
+
+自定义upload按钮事件
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _uploadTap(BuildContext context) {
+    return wrapDemoContainer('自定义upload按钮事件',
+        child: TDUpload(
+          files: files7,
+          multiple: true,
+          max: 9,
+          onUploadTap: onUploadTap,
+          onClick: onClick,
+          onCancel: onCancel,
+          onError: print,
+          onValidate: print,
+          onChange: ((files, type) => onValueChanged(files7, files, type)),
+        ));
+  }</pre>
+
+</td-code-block>
+                                  
 ### 1 组件状态
 
 加载状态
@@ -173,6 +196,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onClick | TDUploadClickEvent? | - | 监听点击图片位 |
 | onError | TDUploadErrorEvent? | - | 监听获取资源错误 |
 | onMaxLimitReached | VoidCallback? | - | 监听文件超过最大数量 |
+| onUploadTap | VoidCallback? | - | 自定义upload按钮事件 |
 | onValidate | TDUploadValidatorEvent? | - | 监听文件校验出错 |
 | sizeLimit | double? | - | 图片大小限制，单位为KB |
 | type | TDUploadBoxType | TDUploadBoxType.roundedSquare | Box类型 |
