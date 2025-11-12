@@ -104,11 +104,29 @@ abstract class AppLocalizations {
   /// **'TD Flutter Components'**
   String get components;
 
+  /// No description provided for @setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Setting'**
+  String get setting;
+
   /// No description provided for @about.
   ///
   /// In en, this message translates to:
-  /// **'About'**
+  /// **'AboutUs'**
   String get about;
+
+  /// No description provided for @version.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get version;
+
+  /// No description provided for @publishDate.
+  ///
+  /// In en, this message translates to:
+  /// **'PublishDate'**
+  String get publishDate;
 
   /// No description provided for @defaultTheme.
   ///

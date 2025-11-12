@@ -9,6 +9,7 @@ import 'base/intl_resource_delegate.dart';
 import 'config.dart';
 import 'home.dart';
 import 'l10n/app_localizations.dart';
+import 'provider/locale_provider.dart';
 import 'provider/theme_mode_provider.dart';
 
 Future<void> main() async {
@@ -44,8 +45,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late TDThemeData _themeData;
 
-  Locale? locale = const Locale('zh');
-
   @override
   void initState() {
     super.initState();
@@ -71,9 +70,18 @@ class _MyAppState extends State<MyApp> {
             return provider;
           },
         ),
+        ChangeNotifierProvider(
+          create: (_) {
+            final provider = LocaleProvider();
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              await provider.initLocale();
+            });
+            return provider;
+          },
+        ),
       ],
-      child: Consumer<ThemeModeProvider>(
-        builder: (context, themeModeProvider, child) {
+      child: Consumer2<ThemeModeProvider, LocaleProvider>(
+        builder: (context, themeModeProvider, localeProvider, child) {
           return MaterialApp(
             title: 'TDesign Flutter Example',
             theme: _themeData.systemThemeDataLight,
@@ -90,12 +98,6 @@ class _MyAppState extends State<MyApp> {
                       );
                       return MyHomePage(
                         title: AppLocalizations.of(context)?.components ?? '',
-                        locale: locale,
-                        onLocaleChange: (locale) {
-                          setState(() {
-                            this.locale = locale;
-                          });
-                        },
                         onThemeChange: (themeData) {
                           setState(() {
                             _themeData = themeData;
@@ -105,7 +107,7 @@ class _MyAppState extends State<MyApp> {
                     },
                   ),
             // 设置国际化处理
-            locale: locale,
+            locale: localeProvider.locale,
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             onGenerateRoute: TDExampleRoute.onGenerateRoute,
