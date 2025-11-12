@@ -164,7 +164,7 @@ class _TDCellState extends State<TDCell> {
             ..._buildImage(),
             Row(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: crossAxisAlignment,
               children: [
                 if (widget.leftIcon != null ||
                     widget.leftIconWidget != null) ...[
