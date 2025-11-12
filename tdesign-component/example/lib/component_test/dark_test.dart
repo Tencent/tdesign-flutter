@@ -21,7 +21,7 @@ Future<void> main() async {
   /// 开启多套主题功能
   TDTheme.needMultiTheme(true);
   /// 默认浅色主题,dark为深色主题
-  themeData = TDThemeData.fromJson('redLight', themeJsonString, darkName: 'dark') ??
+  themeData = TDThemeData.fromJson('red', themeJsonString, darkName: 'redDark') ??
       TDTheme.defaultData();
 
   runApp(const App());
