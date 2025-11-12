@@ -53,21 +53,7 @@ jobs:
           flutter --version
           cd ${{ env.FLUTTER_ROOT }}
           BRANCH=copilot/fix-compile-errors-flutter-patch
-          V=$(flutter --version | grep -oE '[0-9]+\.[0-9]+' | head -1)
-          M=$(echo $V | cut -d. -f1); N=$(echo $V | cut -d. -f2); VN=$(echo "$M*100+$N" | bc)
-          echo "VN: $VN"
-          if [ $VN -ge 335 ]; then
-            P="3.35~infinity.patch"
-          elif [ $VN -ge 324 ]; then
-            P="3.24~3.32.patch"
-          elif [ $VN -ge 319 ]; then
-            P="3.19~3.22.patch"
-          elif [ $VN -ge 313 ]; then
-            P="3.13~3.16.patch"
-          else
-            P="2.2~3.10.patch"
-          fi
-          patchUrl="https://raw.githubusercontent.com/TDesignOteam/tdesign-flutter-aop-registry/$BRANCH/patch_flutter/$P"
+          patchUrl="https://raw.githubusercontent.com/TDesignOteam/tdesign-flutter-aop-registry/$BRANCH/patch_flutter/3.24~3.32.patch"
           echo "patch url: $patchUrl"
           curl -fsSL $patchUrl | git apply --allow-empty
           git status
