@@ -498,7 +498,7 @@ class _TDUploadState extends State<TDUpload> {
                     color: Colors.white,
                   )),
               Padding(
-                padding: const EdgeInsets.only(top: 4),
+                padding: const EdgeInsets.only(top: 2),
                 child: TDText(
                   displayText,
                   textColor: Colors.white,
