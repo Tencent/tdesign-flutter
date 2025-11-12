@@ -97,7 +97,7 @@ class TDTheme extends StatelessWidget {
 /// 主题数据
 class TDThemeData extends ThemeExtension<TDThemeData> {
   static const String _defaultThemeName = 'default';
-  static const String _defaultDartThemeName = 'dark';
+  static const String _defaultDartThemeName = 'defaultDark';
   static TDThemeData? _defaultThemeData;
 
   /// 暗色主题
