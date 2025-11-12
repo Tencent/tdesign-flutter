@@ -105,6 +105,24 @@ TDTheme.defaultData().fontBodyLarge
     );
 ```
 
+### 暗色模式
+通过“主题生成器”生成的主题配置文件，默认支持暗色模式相关色值。
+使用方法：
+```dart
+  // 开启多套主题功能
+  TDTheme.needMultiTheme();
+  ……
+  // MaterialApp中设置三个属性如下，如果有自定义主题属性，可以通过copyWith()方法修改。
+  // 注：主题切换需要业务自己试下，比如使用Provider,具体可参考tdesign-flutter/tdesign-component/example/lib/component_test/dark_test.dart
+  MaterialApp(
+  theme: _themeData.systemThemeDataLight,
+  darkTheme: _themeData.systemThemeDataDark,
+  themeMode: themeModeProvider.themeMode,
+  ……
+  )
+
+```
+
 ## 国际化
 
 TD组件库内部不内置国际化语言，但支持与flutter的国际化能力搭配使用。可以继承`TDResourceDelegate`类，该类抽离了组件内部所有文字资源，重新获取文字的方法，进行国际化处理，并通过 `TDTheme.setResourceBuilder` 注入。
@@ -165,7 +183,6 @@ class IntlResourceDelegate extends TDResourceDelegate {
 ## 组件规划
 
 - 新增规划中组件：瀑布流
-- 开发中功能：深色模式
 - 其他事项：API优化、单元测试、多端适配、文本居中优化
 
 ## 基础库版本

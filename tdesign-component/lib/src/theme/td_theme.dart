@@ -298,9 +298,10 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
       if (themeConfig.containsKey(name)) {
         var theme = parseThemeData(name, themeConfig, extraThemeData);
         theme.light = theme;
-        if (darkName?.isNotEmpty ?? false) {
+        darkName ??= '${name}Dark';
+        if (themeConfig[darkName] != null) {
           // 解析暗色模式
-          var darkTheme = parseThemeData(darkName!, themeConfig, extraThemeData);
+          var darkTheme = parseThemeData(darkName, themeConfig, extraThemeData);
           darkTheme.light = theme;
           theme.dark = darkTheme;
           // 填充暗色模式缺失数据
@@ -340,10 +341,13 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
 
   static TDThemeData parseThemeData(String name, themeConfig, TDExtraThemeData? extraThemeData) {
     var theme = _emptyData(name);
-    Map<String, dynamic> curThemeMap = themeConfig['$name'];
+    Map<String, dynamic>? curThemeMap = themeConfig['$name'];
+    if (curThemeMap?.isEmpty ?? true) {
+      return theme;
+    }
 
     /// 设置颜色
-    Map<String, dynamic>? colorsMap = curThemeMap['color'];
+    Map<String, dynamic>? colorsMap = curThemeMap?['color'];
     colorsMap?.forEach((key, value) {
       var color = toColor(value);
       if (color != null) {
@@ -352,31 +356,31 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
     });
 
     /// 设置颜色
-    Map<String, dynamic>? refMap = curThemeMap['ref'];
+    Map<String, dynamic>? refMap = curThemeMap?['ref'];
     refMap?.forEach((key, value) {
       theme.refMap[key] = value;
     });
 
     /// 设置字体尺寸
-    Map<String, dynamic>? fontsMap = curThemeMap['font'];
+    Map<String, dynamic>? fontsMap = curThemeMap?['font'];
     fontsMap?.forEach((key, value) {
       theme.fontMap[key] = Font.fromJson(value);
     });
 
     /// 设置圆角
-    Map<String, dynamic>? cornersMap = curThemeMap['radius'];
+    Map<String, dynamic>? cornersMap = curThemeMap?['radius'];
     cornersMap?.forEach((key, value) {
       theme.radiusMap[key] = value.toDouble();
     });
 
     /// 设置字体
-    Map<String, dynamic>? fontFamilyMap = curThemeMap['fontFamily'];
+    Map<String, dynamic>? fontFamilyMap = curThemeMap?['fontFamily'];
     fontFamilyMap?.forEach((key, value) {
       theme.fontFamilyMap[key] = FontFamily.fromJson(value);
     });
 
     /// 设置阴影
-    Map<String, dynamic>? shadowMap = curThemeMap['shadow'];
+    Map<String, dynamic>? shadowMap = curThemeMap?['shadow'];
     shadowMap?.forEach((key, value) {
       var list = <BoxShadow>[];
       (value as List).forEach((element) {
@@ -393,12 +397,12 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
     });
 
     /// 设置Margin
-    Map<String, dynamic>? marginsMap = curThemeMap['margin'];
+    Map<String, dynamic>? marginsMap = curThemeMap?['margin'];
     marginsMap?.forEach((key, value) {
       theme.spacerMap[key] = value.toDouble();
     });
 
-    if (extraThemeData != null) {
+    if (extraThemeData != null && curThemeMap != null) {
       extraThemeData.parse(name, curThemeMap);
       theme.extraThemeData = extraThemeData;
     }
