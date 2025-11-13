@@ -22,7 +22,8 @@ TDDropdownMenu _buildUp(BuildContext context) {
         ),
         TDDropdownItem(
           options: [
-            TDDropdownItemOption(label: '默认排序', value: 'default', selected: true),
+            TDDropdownItemOption(
+                label: '默认排序', value: 'default', selected: true),
             TDDropdownItemOption(label: '价格从高到低', value: 'price'),
           ],
         ),

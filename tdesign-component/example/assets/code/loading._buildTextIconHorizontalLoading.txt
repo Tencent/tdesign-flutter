@@ -1,17 +1,22 @@
 
   Widget _buildTextIconHorizontalLoading(BuildContext context) {
-    return _buildRow(const [
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.circle,
-        text: '加载中…',
-        axis: Axis.horizontal,
-      ),
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.activity,
-        text: '加载中…',
-        axis: Axis.horizontal,
-      ),
-    ]);
+    return const Row(
+      // spacing: 36,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.circle,
+          text: '加载中…',
+          axis: Axis.horizontal,
+        ),
+        const SizedBox(width: 36),
+        TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.activity,
+          text: '加载中…',
+          axis: Axis.horizontal,
+        ),
+      ],
+    );
   }

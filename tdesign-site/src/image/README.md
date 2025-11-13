@@ -35,7 +35,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '裁剪',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -62,14 +61,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '拉伸',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           width: 121,
           height: 72,
-          child: Stack(
+          child: const Stack(
             alignment: Alignment.center,
             children: [
               TDImage(
@@ -101,13 +99,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '适应高',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 89,
           height: 72,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitHeight,
@@ -133,13 +130,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '适应宽',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 72,
           height: 89,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitWidth,
@@ -165,7 +161,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -192,7 +187,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '圆角方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -221,7 +215,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '圆形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -250,7 +243,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '裁剪',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -277,14 +269,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '拉伸',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           width: 121,
           height: 72,
-          child: Stack(
+          child: const Stack(
             alignment: Alignment.center,
             children: [
               TDImage(
@@ -316,13 +307,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '适应高',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 89,
           height: 72,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitHeight,
@@ -348,13 +338,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '适应宽',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 72,
           height: 89,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitWidth,
@@ -380,7 +369,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -407,7 +395,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '圆角方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -436,7 +423,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '圆形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -467,7 +453,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '裁剪',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -494,14 +479,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '拉伸',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           width: 121,
           height: 72,
-          child: Stack(
+          child: const Stack(
             alignment: Alignment.center,
             children: [
               TDImage(
@@ -533,13 +517,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '适应高',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 89,
           height: 72,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitHeight,
@@ -565,13 +548,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '适应宽',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 72,
           height: 89,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitWidth,
@@ -597,7 +579,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -624,7 +605,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '圆角方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -653,7 +633,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '圆形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -682,7 +661,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '裁剪',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -709,14 +687,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '拉伸',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           width: 121,
           height: 72,
-          child: Stack(
+          child: const Stack(
             alignment: Alignment.center,
             children: [
               TDImage(
@@ -748,13 +725,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '适应高',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 89,
           height: 72,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitHeight,
@@ -780,13 +756,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '适应宽',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 72,
           height: 89,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitWidth,
@@ -812,7 +787,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -839,7 +813,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '圆角方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -868,7 +841,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '圆形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -899,7 +871,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '裁剪',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -926,14 +897,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '拉伸',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           width: 121,
           height: 72,
-          child: Stack(
+          child: const Stack(
             alignment: Alignment.center,
             children: [
               TDImage(
@@ -965,13 +935,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '适应高',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 89,
           height: 72,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitHeight,
@@ -997,13 +966,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '适应宽',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 72,
           height: 89,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitWidth,
@@ -1029,7 +997,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -1056,7 +1023,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '圆角方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -1085,7 +1051,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '圆形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -1114,7 +1079,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '裁剪',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -1141,14 +1105,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '拉伸',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           width: 121,
           height: 72,
-          child: Stack(
+          child: const Stack(
             alignment: Alignment.center,
             children: [
               TDImage(
@@ -1180,13 +1143,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '适应高',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 89,
           height: 72,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitHeight,
@@ -1212,13 +1174,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '适应宽',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
           width: 72,
           height: 89,
-          color: Colors.black,
+          color: TDTheme.of(context).bgColorContainerHover,
           child: const TDImage(
             assetUrl: 'assets/img/image.png',
             type: TDImageType.fitWidth,
@@ -1244,7 +1205,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -1271,7 +1231,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '圆角方形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -1300,7 +1259,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           child: TDText(
             '圆形',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -1325,14 +1283,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _loadingDefault(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载默认提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
@@ -1344,13 +1301,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
+                color: TDTheme.of(context).bgColorContainerHover,
                 child: Icon(
                   TDIcons.ellipsis,
                   size: 22,
-                  color: TDTheme.of(context).fontGyColor3,
+                  color: TDTheme.of(context).textColorPlaceholder,
                 ))),
-        // 实际组件写法如下：上面仅为加载展示
+
+        /// @tips 实际组件写法如下：上面仅为加载展示
         // const TDImage(
         //   imgUrl:
         //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
@@ -1369,14 +1327,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _loadingCustom(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载自定义提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
@@ -1388,7 +1345,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
+                color: TDTheme.of(context).bgColorContainerHover,
                 child: RotationTransition(
                     turns: animation,
                     alignment: Alignment.center,
@@ -1424,14 +1381,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _failDefault(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '失败默认提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -1451,14 +1407,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _failCustom(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '失败自定义提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         TDImage(
@@ -1467,8 +1422,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             '加载失败',
             forceVerticalCenter: true,
             font: TDTheme.of(context).fontBodyExtraSmall,
-            fontWeight: FontWeight.w500,
-            textColor: TDTheme.of(context).fontGyColor3,
           ),
           type: TDImageType.roundedSquare,
         ),
@@ -1485,14 +1438,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _loadingDefault(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载默认提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
@@ -1504,13 +1456,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
+                color: TDTheme.of(context).bgColorContainerHover,
                 child: Icon(
                   TDIcons.ellipsis,
                   size: 22,
-                  color: TDTheme.of(context).fontGyColor3,
+                  color: TDTheme.of(context).textColorPlaceholder,
                 ))),
-        // 实际组件写法如下：上面仅为加载展示
+
+        /// @tips 实际组件写法如下：上面仅为加载展示
         // const TDImage(
         //   imgUrl:
         //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
@@ -1529,14 +1482,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _loadingCustom(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载自定义提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
@@ -1548,7 +1500,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
+                color: TDTheme.of(context).bgColorContainerHover,
                 child: RotationTransition(
                     turns: animation,
                     alignment: Alignment.center,
@@ -1584,14 +1536,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _failDefault(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '失败默认提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -1611,14 +1562,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _failCustom(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '失败自定义提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         TDImage(
@@ -1627,8 +1577,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             '加载失败',
             forceVerticalCenter: true,
             font: TDTheme.of(context).fontBodyExtraSmall,
-            fontWeight: FontWeight.w500,
-            textColor: TDTheme.of(context).fontGyColor3,
           ),
           type: TDImageType.roundedSquare,
         ),
@@ -1647,14 +1595,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _loadingDefault(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载默认提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
@@ -1666,13 +1613,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
+                color: TDTheme.of(context).bgColorContainerHover,
                 child: Icon(
                   TDIcons.ellipsis,
                   size: 22,
-                  color: TDTheme.of(context).fontGyColor3,
+                  color: TDTheme.of(context).textColorPlaceholder,
                 ))),
-        // 实际组件写法如下：上面仅为加载展示
+
+        /// @tips 实际组件写法如下：上面仅为加载展示
         // const TDImage(
         //   imgUrl:
         //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
@@ -1691,14 +1639,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _loadingCustom(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载自定义提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
@@ -1710,7 +1657,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
+                color: TDTheme.of(context).bgColorContainerHover,
                 child: RotationTransition(
                     turns: animation,
                     alignment: Alignment.center,
@@ -1746,14 +1693,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _failDefault(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '失败默认提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -1773,14 +1719,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _failCustom(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '失败自定义提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         TDImage(
@@ -1789,8 +1734,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             '加载失败',
             forceVerticalCenter: true,
             font: TDTheme.of(context).fontBodyExtraSmall,
-            fontWeight: FontWeight.w500,
-            textColor: TDTheme.of(context).fontGyColor3,
           ),
           type: TDImageType.roundedSquare,
         ),
@@ -1807,14 +1750,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _loadingDefault(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载默认提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
@@ -1826,13 +1768,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
+                color: TDTheme.of(context).bgColorContainerHover,
                 child: Icon(
                   TDIcons.ellipsis,
                   size: 22,
-                  color: TDTheme.of(context).fontGyColor3,
+                  color: TDTheme.of(context).textColorPlaceholder,
                 ))),
-        // 实际组件写法如下：上面仅为加载展示
+
+        /// @tips 实际组件写法如下：上面仅为加载展示
         // const TDImage(
         //   imgUrl:
         //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
@@ -1851,14 +1794,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _loadingCustom(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载自定义提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
@@ -1870,7 +1812,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
+                color: TDTheme.of(context).bgColorContainerHover,
                 child: RotationTransition(
                     turns: animation,
                     alignment: Alignment.center,
@@ -1906,14 +1848,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _failDefault(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '失败默认提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         const TDImage(
@@ -1933,14 +1874,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _failCustom(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '失败自定义提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         TDImage(
@@ -1949,8 +1889,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             '加载失败',
             forceVerticalCenter: true,
             font: TDTheme.of(context).fontBodyExtraSmall,
-            fontWeight: FontWeight.w500,
-            textColor: TDTheme.of(context).fontGyColor3,
           ),
           type: TDImageType.roundedSquare,
         ),
@@ -1968,33 +1906,33 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| imgUrl | String? | - | 图片地址 |
-| key |  | - |  |
-| type | TDImageType | TDImageType.roundedSquare | 图片类型 |
-| errorWidget | Widget? | - | 失败自定义提示 |
-| loadingWidget | Widget? | - | 加载自定义提示 |
-| width | double? | - | 自定义宽 |
-| height | double? | - | 自定义高 |
-| fit | BoxFit? | - | 适配样式 |
-| frameBuilder | ImageFrameBuilder? | - | 以下系统Image属性，释义请参考系统[Image]中注释 |
-| loadingBuilder |  | - |  |
-| errorBuilder |  | - |  |
-| semanticLabel |  | - |  |
-| excludeFromSemantics |  | false |  |
-| color |  | - |  |
-| opacity |  | - |  |
-| colorBlendMode |  | - |  |
 | alignment |  | Alignment.center |  |
-| repeat |  | ImageRepeat.noRepeat |  |
-| centerSlice |  | - |  |
-| matchTextDirection |  | false |  |
-| gaplessPlayback |  | false |  |
-| isAntiAlias |  | false |  |
-| filterQuality |  | FilterQuality.low |  |
+| assetUrl | String? | - | 本地素材地址 |
 | cacheHeight |  | - |  |
 | cacheWidth |  | - |  |
-| assetUrl | String? | - | 本地素材地址 |
+| centerSlice |  | - |  |
+| color |  | - |  |
+| colorBlendMode |  | - |  |
+| errorBuilder |  | - |  |
+| errorWidget | Widget? | - | 失败自定义提示 |
+| excludeFromSemantics |  | false |  |
+| filterQuality |  | FilterQuality.low |  |
+| fit | BoxFit? | - | 适配样式 |
+| frameBuilder | ImageFrameBuilder? | - | 以下系统Image属性，释义请参考系统[Image]中注释 |
+| gaplessPlayback |  | false |  |
+| height | double? | - | 自定义高 |
 | imageFile | File? | - | 图片文件路径 |
+| imgUrl | String? | - | 图片地址 |
+| isAntiAlias |  | false |  |
+| key |  | - |  |
+| loadingBuilder |  | - |  |
+| loadingWidget | Widget? | - | 加载自定义提示 |
+| matchTextDirection |  | false |  |
+| opacity |  | - |  |
+| repeat |  | ImageRepeat.noRepeat |  |
+| semanticLabel |  | - |  |
+| type | TDImageType | TDImageType.roundedSquare | 图片类型 |
+| width | double? | - | 自定义宽 |
 
 
   

@@ -1,14 +1,13 @@
 
   Widget _loadingDefault(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载默认提示',
             font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
           ),
         ),
         Container(
@@ -20,13 +19,14 @@
                     BorderRadius.circular(TDTheme.of(context).radiusDefault)),
             child: Container(
                 alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
+                color: TDTheme.of(context).bgColorContainerHover,
                 child: Icon(
                   TDIcons.ellipsis,
                   size: 22,
-                  color: TDTheme.of(context).fontGyColor3,
+                  color: TDTheme.of(context).textColorPlaceholder,
                 ))),
-        // 实际组件写法如下：上面仅为加载展示
+
+        /// @tips 实际组件写法如下：上面仅为加载展示
         // const TDImage(
         //   imgUrl:
         //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',

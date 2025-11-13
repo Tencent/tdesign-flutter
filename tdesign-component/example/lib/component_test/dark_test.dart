@@ -8,7 +8,6 @@ import '../l10n/app_localizations.dart';
 import '../provider/theme_mode_provider.dart';
 
 late TDThemeData themeData;
-late TDThemeData darkThemeData;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,12 +20,9 @@ Future<void> main() async {
   var themeJsonString = await rootBundle.loadString('assets/theme.json');
   /// 开启多套主题功能
   TDTheme.needMultiTheme(true);
-  /// 默认浅色主题
-  themeData = TDThemeData.fromJson('redLight', themeJsonString) ??
+  /// 默认浅色主题,dark为深色主题
+  themeData = TDThemeData.fromJson('red', themeJsonString, darkName: 'redDark') ??
       TDTheme.defaultData();
-  /// 深色模式
-  darkThemeData = TDThemeData.fromJson('dark', themeJsonString) ??
-      TDThemeData.defaultData(name: 'dark');
 
   runApp(const App());
 }
@@ -54,18 +50,10 @@ class App extends StatelessWidget {
         builder: (context, themeModeProvider, child) {
           return MaterialApp(
             title: '深色模式切换测试',
+
             /// 默认浅色模式
-            theme: ThemeData(
-              /// 添加 TD 自定义主题配置
-              extensions: [themeData],
+            theme: themeData.systemThemeDataLight!.copyWith(
               /// 根据自己的需求用 TD 颜色覆盖 Material/Cupertino 的颜色
-              colorScheme: ColorScheme.light(
-                primary: themeData.brandNormalColor,
-              ),
-              scaffoldBackgroundColor: themeData.bgColorPage,
-              iconTheme: const IconThemeData().copyWith(
-                color: themeData.brandNormalColor,
-              ),
               cupertinoOverrideTheme: const CupertinoThemeData().copyWith(
                 barBackgroundColor: themeData.bgColorContainer.withValues(
                   alpha: 0.5,
@@ -73,29 +61,15 @@ class App extends StatelessWidget {
               ),
               /// ... 更多重载主题
             ),
+
             /// 深色模式
-            darkTheme: ThemeData(
-              /// 添加 TD 自定义主题配置
-              extensions: [darkThemeData],
-              /// 根据自己的需求用 TD 颜色覆盖 Material/Cupertino 的颜色
-              colorScheme: ColorScheme.dark(
-                primary: darkThemeData.brandNormalColor,
-                secondary: darkThemeData.brandNormalColor,
-              ),
-              scaffoldBackgroundColor: darkThemeData.bgColorPage,
-              bottomNavigationBarTheme: const BottomNavigationBarThemeData()
-                  .copyWith(backgroundColor: darkThemeData.grayColor13),
-              appBarTheme: const AppBarTheme().copyWith(
-                backgroundColor: darkThemeData.grayColor13,
-              ),
-              iconTheme: const IconThemeData().copyWith(
-                color: darkThemeData.brandNormalColor,
-              ),
+            darkTheme: themeData.systemThemeDataDark?.copyWith(
               cupertinoOverrideTheme: const CupertinoThemeData().copyWith(
-                barBackgroundColor: darkThemeData.grayColor13.withValues(
+                barBackgroundColor: themeData.dark?.grayColor13.withValues(
                   alpha: 0.5,
                 ),
               ),
+
               /// ... 更多重载主题
             ),
             themeMode: themeModeProvider.themeMode,

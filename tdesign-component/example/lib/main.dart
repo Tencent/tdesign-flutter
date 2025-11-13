@@ -9,6 +9,7 @@ import 'base/intl_resource_delegate.dart';
 import 'config.dart';
 import 'home.dart';
 import 'l10n/app_localizations.dart';
+import 'provider/locale_provider.dart';
 import 'provider/theme_mode_provider.dart';
 
 Future<void> main() async {
@@ -43,24 +44,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late TDThemeData _themeData;
-  late TDThemeData _darkThemeData;
-
-  Locale? locale = const Locale('zh');
 
   @override
   void initState() {
     super.initState();
     _themeData = TDThemeData.defaultData();
-    _darkThemeData = TDThemeData.defaultData(name: 'dark');
-    print('_darkThemeData ${_darkThemeData.refMap}');
+    print('_darkThemeData.bgColorPage： ${_themeData.bgColorPage}，_themeData.dark?.bgColorPage: ${_themeData.dark?.bgColorPage}');
   }
 
   @override
   Widget build(BuildContext context) {
     // 使用多套主题
     TDTheme.needMultiTheme();
-    // 适配3.16的字体居中前,先禁用字体居中功能
-    // kTextForceVerticalCenterEnable = false;
     var delegate = IntlResourceDelegate(context);
     return MultiProvider(
       providers: [
@@ -75,37 +70,22 @@ class _MyAppState extends State<MyApp> {
             return provider;
           },
         ),
+        ChangeNotifierProvider(
+          create: (_) {
+            final provider = LocaleProvider();
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              await provider.initLocale();
+            });
+            return provider;
+          },
+        ),
       ],
-      child: Consumer<ThemeModeProvider>(
-        builder: (context, themeModeProvider, child) {
+      child: Consumer2<ThemeModeProvider, LocaleProvider>(
+        builder: (context, themeModeProvider, localeProvider, child) {
           return MaterialApp(
             title: 'TDesign Flutter Example',
-            theme: ThemeData(
-              extensions: [_themeData],
-              colorScheme: ColorScheme.light(
-                primary: _themeData.brandNormalColor,
-              ),
-              scaffoldBackgroundColor: _themeData.bgColorPage,
-              iconTheme: const IconThemeData().copyWith(
-                color: _themeData.brandNormalColor,
-              ),
-            ),
-            darkTheme: ThemeData(
-              extensions: [_darkThemeData],
-              colorScheme: ColorScheme.dark(
-                primary: _darkThemeData.brandNormalColor,
-                secondary: _darkThemeData.brandNormalColor,
-              ),
-              scaffoldBackgroundColor: _darkThemeData.bgColorPage,
-              bottomNavigationBarTheme: const BottomNavigationBarThemeData()
-                  .copyWith(backgroundColor: _darkThemeData.grayColor14),
-              appBarTheme: const AppBarTheme().copyWith(
-                backgroundColor: _darkThemeData.grayColor13,
-              ),
-              iconTheme: const IconThemeData().copyWith(
-                color: _darkThemeData.brandNormalColor,
-              ),
-            ),
+            theme: _themeData.systemThemeDataLight,
+            darkTheme: _themeData.systemThemeDataDark,
             themeMode: themeModeProvider.themeMode,
             home: PlatformUtil.isWeb
                 ? null
@@ -118,23 +98,16 @@ class _MyAppState extends State<MyApp> {
                       );
                       return MyHomePage(
                         title: AppLocalizations.of(context)?.components ?? '',
-                        locale: locale,
-                        onLocaleChange: (locale) {
-                          setState(() {
-                            this.locale = locale;
-                          });
-                        },
-                        onThemeChange: (themeData, darkThemeData) {
+                        onThemeChange: (themeData) {
                           setState(() {
                             _themeData = themeData;
-                            _darkThemeData = darkThemeData;
                           });
                         },
                       );
                     },
                   ),
             // 设置国际化处理
-            locale: locale,
+            locale: localeProvider.locale,
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             onGenerateRoute: TDExampleRoute.onGenerateRoute,

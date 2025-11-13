@@ -235,35 +235,12 @@ class _TDPopoverPage extends State<TDPopoverPage> {
     );
   }
 
-  // @todo
-  Widget _buildPopoverList(BuildContext context) {
+  @Demo(group: 'popover')
+  Widget _buildNCustomPopover(BuildContext context) {
     var textStyle = TextStyle(
         color: theme == TDPopoverTheme.light
             ? TDTheme.of(context).fontGyColor1
             : TDTheme.of(context).fontWhColor1);
-
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-          child: TDText('选项1', style: textStyle),
-        ),
-        const TDDivider(height: 0.5),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-          child: TDText('选项2', style: textStyle),
-        ),
-        const TDDivider(height: 0.5),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-          child: TDText('选项3', style: textStyle),
-        ),
-      ],
-    );
-  }
-
-  @Demo(group: 'popover')
-  Widget _buildNCustomPopover(BuildContext context) {
     return LayoutBuilder(
       builder: (_, constrains) {
         return TDButton(
@@ -276,8 +253,25 @@ class _TDPopoverPage extends State<TDPopoverPage> {
               padding: const EdgeInsets.all(0),
               theme: theme,
               width: 108,
-              height: 148,
-              contentWidget: _buildPopoverList(context),
+              height: 152,
+              contentWidget: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    child: TDText('选项1', style: textStyle),
+                  ),
+                  const TDDivider(height: 0.5),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    child: TDText('选项2', style: textStyle),
+                  ),
+                  const TDDivider(height: 0.5),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    child: TDText('选项3', style: textStyle),
+                  ),
+                ],
+              ),
             );
           },
         );

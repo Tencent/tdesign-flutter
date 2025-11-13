@@ -10,6 +10,7 @@
 | data | List<dynamic>? | - | 数据源 |
 | defaultSort | String? | - | 默认排序 |
 | empty | TDTableEmpty? | - | 空表格呈现样式 |
+| footerWidget | Widget? | - | 自定义表尾 |
 | height | double? | - | 表格高度，超出后会出现滚动条 |
 | key |  | - |  |
 | loading | bool? | false | 加载中状态 |

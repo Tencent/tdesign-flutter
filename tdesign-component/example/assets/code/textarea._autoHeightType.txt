@@ -4,7 +4,6 @@
       controller: controller[2],
       hintText: '请输入文字',
       minLines: 1,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }

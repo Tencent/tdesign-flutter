@@ -31,7 +31,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDInput(
           leftLabel: 'Label Text',
           controller: controller[0],
-          backgroundColor: Colors.white,
           hintText: 'Please enter text',
           onChanged: (text) {
             setState(() {});
@@ -63,7 +62,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           leftLabel: '标签文字',
           required: true,
           controller: controller[1],
-          backgroundColor: Colors.white,
           hintText: '请输入文字',
           onChanged: (text) {
             setState(() {});
@@ -94,7 +92,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDInput(
           leftLabel: '标签文字',
           controller: controller[2],
-          backgroundColor: Colors.white,
           hintText: '请输入文字(选填)',
           onChanged: (text) {
             setState(() {});
@@ -124,7 +121,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       children: [
         TDInput(
           controller: controller[3],
-          backgroundColor: Colors.white,
           hintText: '请输入文字',
           onChanged: (text) {
             setState(() {});
@@ -156,7 +152,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       controller: controller[4],
       hintText: '请输入文字',
       additionInfo: '辅助说明',
-      backgroundColor: Colors.white,
       onChanged: (text) {
         setState(() {});
       },
@@ -185,7 +180,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           hintText: '请输入文字',
           maxLength: 10,
           additionInfo: '最大输入10个字符',
-          backgroundColor: Colors.white,
           onChanged: (text) {
             setState(() {});
           },
@@ -217,7 +211,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       hintText: '请输入文字',
       inputFormatters: [Chinese2Formatter(10)],
       additionInfo: '最大输入10个字符，汉字算两个',
-      backgroundColor: Colors.white,
       onChanged: (text) {
         setState(() {});
       },
@@ -242,11 +235,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDInput(
           leftLabel: '标签文字',
           controller: controller[7],
-          backgroundColor: Colors.white,
           hintText: '请输入文字',
           rightBtn: Icon(
             TDIcons.error_circle_filled,
-            color: TDTheme.of(context).fontGyColor3,
+            color: TDTheme.of(context).textColorPlaceholder,
           ),
           onBtnTap: () {
             TDToast.showText('点击右侧按钮', context: context);
@@ -280,7 +272,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDInput(
           leftLabel: '标签文字',
           controller: controller[8],
-          backgroundColor: Colors.white,
           hintText: '请输入文字',
           rightBtn: Container(
             alignment: Alignment.center,
@@ -320,11 +311,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return TDInput(
       leftLabel: '标签文字',
       controller: controller[9],
-      backgroundColor: Colors.white,
       hintText: '请输入文字',
       rightBtn: Icon(
         TDIcons.user_avatar,
-        color: TDTheme.of(context).fontGyColor3,
+        color: TDTheme.of(context).textColorPlaceholder,
       ),
       onBtnTap: () {
         TDToast.showText('点击操作按钮', context: context);
@@ -354,7 +344,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           leftIcon: const Icon(TDIcons.app),
           leftLabel: '标签文字',
           controller: controller[10],
-          backgroundColor: Colors.white,
           hintText: '请输入文字',
           onChanged: (text) {
             setState(() {});
@@ -385,7 +374,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDInput(
           leftIcon: const Icon(TDIcons.app),
           controller: controller[11],
-          backgroundColor: Colors.white,
           hintText: '请输入文字',
           onChanged: (text) {
             setState(() {});
@@ -419,15 +407,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           obscureText: !browseOn,
           leftLabel: '输入密码',
           hintText: '请输入密码',
-          backgroundColor: Colors.white,
           rightBtn: browseOn
               ? Icon(
                   TDIcons.browse,
-                  color: TDTheme.of(context).fontGyColor3,
+                  color: TDTheme.of(context).textColorPlaceholder,
                 )
               : Icon(
                   TDIcons.browse_off,
-                  color: TDTheme.of(context).fontGyColor3,
+                  color: TDTheme.of(context).textColorPlaceholder,
                 ),
           onBtnTap: () {
             setState(() {
@@ -460,14 +447,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           controller: controller[13],
           leftLabel: '验证码',
           hintText: '输入验证码',
-          backgroundColor: Colors.white,
           rightBtn: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 width: 0.5,
                 height: 24,
-                color: TDTheme.of(context).grayColor3,
+                color: TDTheme.of(context).componentBorderColor,
               ),
               const SizedBox(
                 width: 16,
@@ -507,7 +493,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           controller: controller[14],
           leftLabel: '手机号',
           hintText: '输入手机号',
-          backgroundColor: Colors.white,
           rightBtn: SizedBox(
             width: 98,
             child: Row(
@@ -518,15 +503,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                   child: Container(
                     width: 0.5,
                     height: 24,
-                    color: TDTheme.of(context).grayColor3,
+                    color: TDTheme.of(context).componentBorderColor,
                   ),
                 ),
                 _countdownTime > 0
                     ? TDText(
                         '${countDownText}(${_countdownTime}秒)',
-                        textColor: TDTheme.of(context).fontGyColor4,
+                        textColor: TDTheme.of(context).textDisabledColor,
                       )
-                    : TDText(confirmText, textColor: TDTheme.of(context).brandNormalColor),
+                    : TDText(confirmText,
+                        textColor: TDTheme.of(context).brandNormalColor),
               ],
             ),
           ),
@@ -564,9 +550,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           controller: controller[15],
           leftLabel: '价格',
           hintText: '0.00',
-          backgroundColor: Colors.white,
           textAlign: TextAlign.end,
-          rightWidget: TDText('元', textColor: TDTheme.of(context).fontGyColor1),
+          rightWidget:
+              TDText('元', textColor: TDTheme.of(context).textColorPrimary),
         ),
         const SizedBox(
           height: 16,
@@ -589,9 +575,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       controller: controller[16],
       leftLabel: '数量',
       hintText: '填写个数',
-      backgroundColor: Colors.white,
       textAlign: TextAlign.end,
-      rightWidget: TDText('个', textColor: TDTheme.of(context).fontGyColor1),
+      rightWidget: TDText('个', textColor: TDTheme.of(context).textColorPrimary),
     );
   }</pre>
 
@@ -619,7 +604,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDInput(
           leftLabel: '标签文字',
           controller: controller[17],
-          backgroundColor: Colors.white,
           hintText: '请输入文字',
           additionInfo: '错误提示说明',
           additionInfoColor: TDTheme.of(context).errorColor6,
@@ -651,7 +635,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       leftLabel: '标签文字',
       readOnly: true,
       // 不可编辑文字 则不必带入controller
-      backgroundColor: Colors.white,
       hintText: '不可编辑文字',
     );
   }</pre>
@@ -672,7 +655,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           spacer: TDInputSpacer(iconLabelSpace: 4),
           leftLabel: '标签超长时最多十个字',
           controller: controller[18],
-          backgroundColor: Colors.white,
           hintText: '请输入文字',
           onChanged: (text) {
             setState(() {});
@@ -702,10 +684,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       type: TDInputType.normal,
       leftLabel: '标签文字',
       controller: controller[19],
-      backgroundColor: Colors.white,
       hintText: '输入文字超长不超过两行输入文字超长不超过两行',
       hintTextStyle: TextStyle(
-        color: TDTheme.of(context).fontGyColor1,
+        color: TDTheme.of(context).textColorPrimary,
       ),
       maxLines: 2,
     );
@@ -726,7 +707,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDInput(
           leftLabel: '左对齐',
           controller: controller[23],
-          backgroundColor: Colors.white,
           hintText: '请输入文字',
           onChanged: (text) {
             setState(() {});
@@ -757,7 +737,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDInput(
           leftLabel: '居中',
           controller: controller[24],
-          backgroundColor: Colors.white,
           contentAlignment: TextAlign.center,
           hintText: '请输入文字',
           onChanged: (text) {
@@ -789,7 +768,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         TDInput(
           leftLabel: '右对齐',
           controller: controller[25],
-          backgroundColor: Colors.white,
           contentAlignment: TextAlign.end,
           hintText: '请输入文字',
           onChanged: (text) {
@@ -822,10 +800,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       leftLabel: '标签文字',
       controller: controller[20],
       hintText: '请输入文字',
-      backgroundColor: Colors.white,
       rightBtn: Icon(
         TDIcons.error_circle_filled,
-        color: TDTheme.of(context).fontGyColor3,
+        color: TDTheme.of(context).textColorPlaceholder,
       ),
       onBtnTap: () {
         TDToast.showText('点击右侧按钮', context: context);
@@ -855,7 +832,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       leftLabel: '标签文字',
       controller: controller[21],
       hintText: '请输入文字',
-      backgroundColor: Colors.white,
       onChanged: (text) {
         setState(() {});
       },
@@ -879,7 +855,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       alignment: Alignment.center,
       padding: const EdgeInsets.only(top: 16, bottom: 24),
       width: MediaQuery.of(context).size.width,
-      color: Colors.white,
       child: TDInput(
         type: TDInputType.cardStyle,
         cardStyle: TDCardStyle.topText,
@@ -889,7 +864,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         hintText: '请输入文字',
         rightBtn: Icon(
           TDIcons.error_circle_filled,
-          color: TDTheme.of(context).fontGyColor3,
+          color: TDTheme.of(context).textColorPlaceholder,
         ),
         onBtnTap: () {
           TDToast.showText('点击右侧按钮', context: context);
@@ -943,57 +918,57 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
-| width | double? | - | 输入框宽度(TDCardStyle时必须设置该参数) |
-| textStyle | TextStyle? | - | 文本颜色 |
-| backgroundColor | Color? | - | 输入框背景色 |
-| decoration | Decoration? | - | 输入框样式 |
-| leftIcon | Widget? | - | 带图标的输入框 |
-| leftLabel | String? | - | 输入框左侧文案 |
-| leftLabelStyle | TextStyle? | - | 左侧标签样式 设置该值是若出现像素溢出，请设置letterSpacing: 0 |
-| leftLabelSpace | double? | - | 输入框左侧文案间距 |
-| required | bool? | - | 是否必填标志（红色*） |
-| readOnly | bool | false | 是否只读 |
-| autofocus | bool | false | 是否自动获取焦点 |
-| obscureText | bool | false | 是否隐藏输入的文字，一般用在密码输入框中 |
-| onEditingComplete | VoidCallback? | - | 点击键盘完成按钮时触发的回调 |
-| onSubmitted | ValueChanged<String>? | - | 点击键盘完成按钮时触发的回调, 参数值为输入的内容 |
-| hintText | String? | - | 提示文案 |
-| inputType | TextInputType? | - | 键盘类型，数字、字母 |
-| onChanged | ValueChanged<String>? | - | 输入文本变化时回调 |
-| inputFormatters | List<TextInputFormatter>? | - | 显示输入内容，如限制长度(LengthLimitingTextInputFormatter(6)) |
-| inputDecoration | InputDecoration? | - | 自定义输入框样式，默认圆角 |
-| maxLines | int | 1 | 最大输入行数 |
-| focusNode | FocusNode? | - | 获取或者取消焦点使用 |
-| controller | TextEditingController? | - | controller 用户获取或者赋值输入内容 |
-| cursorColor | Color? | - | 游标颜色 |
-| rightBtn | Widget? | - | 右侧按钮 |
-| hintTextStyle | TextStyle? | - | 提示文本颜色，默认为文本颜色 |
-| onBtnTap | GestureTapCallback? | - | 右侧按钮点击 |
-| labelWidget | Widget? | - | leftLabel右侧组件，支持自定义 |
-| leftInfoWidth | double? | - | 输入框左侧的宽度（输入框有16dp的左侧padding，因而左侧部分不用考虑这16dp） |
-| leftContentSpace | double? | - | 输入框内容左侧间距 |
-| textInputBackgroundColor | Color? | - | 文本框背景色 |
-| contentPadding | EdgeInsetsGeometry? | - | textInput内边距 |
-| type | TDInputType | TDInputType.normal | 输入框类型 |
-| size | TDInputSize | TDInputSize.large | 输入框规格 |
-| maxLength | int? | 500 | 最大字数限制 |
 | additionInfo | String? | '' | 错误提示信息 |
 | additionInfoColor | Color? | - | 错误提示颜色 |
-| textAlign | TextAlign? | - | 文字对齐方向 |
-| clearIconSize | double? | - | 清除按钮图标大小 |
-| onClearTap | GestureTapCallback? | - | 右侧删除点击 |
-| needClear | bool | true | 是否需要右侧按钮变为删除 |
+| autofocus | bool | false | 是否自动获取焦点 |
+| backgroundColor | Color? | - | 输入框背景色 |
+| cardStyle | TDCardStyle? | - | 卡片默认样式 |
+| cardStyleBottomText | String? | - | 卡片模式下方文字 |
+| cardStyleTopText | String? | - | 卡片模式上方文字 |
 | clearBtnColor | Color? | - | 右侧删除按钮颜色 |
+| clearIconSize | double? | - | 清除按钮图标大小 |
 | contentAlignment | TextAlign | TextAlign.start | 内容对齐方向 |
+| contentPadding | EdgeInsetsGeometry? | - | textInput内边距 |
+| controller | TextEditingController? | - | controller 用户获取或者赋值输入内容 |
+| cursorColor | Color? | - | 游标颜色 |
+| decoration | Decoration? | - | 输入框样式 |
+| focusNode | FocusNode? | - | 获取或者取消焦点使用 |
+| hintText | String? | - | 提示文案 |
+| hintTextStyle | TextStyle? | - | 提示文本颜色，默认为文本颜色 |
+| inputAction | TextInputAction? | - | 键盘动作类型 |
+| inputDecoration | InputDecoration? | - | 自定义输入框样式，默认圆角 |
+| inputFormatters | List<TextInputFormatter>? | - | 显示输入内容，如限制长度(LengthLimitingTextInputFormatter(6)) |
+| inputType | TextInputType? | - | 键盘类型，数字、字母 |
+| key |  | - |  |
+| labelWidget | Widget? | - | leftLabel右侧组件，支持自定义 |
+| leftContentSpace | double? | - | 输入框内容左侧间距 |
+| leftIcon | Widget? | - | 带图标的输入框 |
+| leftInfoWidth | double? | - | 输入框左侧的宽度（输入框有16dp的左侧padding，因而左侧部分不用考虑这16dp） |
+| leftLabel | String? | - | 输入框左侧文案 |
+| leftLabelSpace | double? | - | 输入框左侧文案间距 |
+| leftLabelStyle | TextStyle? | - | 左侧标签样式 设置该值是若出现像素溢出，请设置letterSpacing: 0 |
+| maxLength | int? | 500 | 最大字数限制 |
+| maxLines | int | 1 | 最大输入行数 |
+| needClear | bool | true | 是否需要右侧按钮变为删除 |
+| obscureText | bool | false | 是否隐藏输入的文字，一般用在密码输入框中 |
+| onBtnTap | GestureTapCallback? | - | 右侧按钮点击 |
+| onChanged | ValueChanged<String>? | - | 输入文本变化时回调 |
+| onClearTap | GestureTapCallback? | - | 右侧删除点击 |
+| onEditingComplete | VoidCallback? | - | 点击键盘完成按钮时触发的回调 |
+| onSubmitted | ValueChanged<String>? | - | 点击键盘完成按钮时触发的回调, 参数值为输入的内容 |
+| onTapOutside | TapRegionCallback? | - | 点击输入框外部区域回调 |
+| readOnly | bool | false | 是否只读 |
+| required | bool? | - | 是否必填标志（红色*） |
+| rightBtn | Widget? | - | 右侧按钮 |
 | rightWidget | Widget? | - | 右侧自定义组件 特殊类型时生效 |
 | showBottomDivider | bool | true | 是否展示底部分割线 |
-| cardStyle | TDCardStyle? | - | 卡片默认样式 |
-| cardStyleTopText | String? | - | 卡片模式上方文字 |
-| inputAction | TextInputAction? | - | 键盘动作类型 |
+| size | TDInputSize | TDInputSize.large | 输入框规格 |
 | spacer | TDInputSpacer | - | 组件各模块间间距 |
-| cardStyleBottomText | String? | - | 卡片模式下方文字 |
-| onTapOutside | TapRegionCallback? | - | 点击输入框外部区域回调 |
+| textAlign | TextAlign? | - | 文字对齐方向 |
+| textInputBackgroundColor | Color? | - | 文本框背景色 |
+| textStyle | TextStyle? | - | 文本颜色 |
+| type | TDInputType | TDInputType.normal | 输入框类型 |
+| width | double? | - | 输入框宽度(TDCardStyle时必须设置该参数) |
 
 
   

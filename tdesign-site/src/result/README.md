@@ -257,8 +257,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 
 
 自定义结果
-
-          
+            
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -271,22 +270,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   }</pre>
 
 </td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TDResult _buildCustomResultContent(BuildContext context) {
-    return TDResult(
-      title: '自定义结果',
-      icon: Image.asset('assets/img/illustration.png'),
-      description: '描述文字',
-    );
-  }</pre>
-
-</td-code-block>
-                
+                                  
 
 页面示例
       
@@ -304,12 +288,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
 | description | String? | - | 描述文本，用于提供额外信息 |
 | icon | Widget? | - | 图标组件，用于在结果中显示一个图标 |
+| key |  | - |  |
+| theme | TDResultTheme | TDResultTheme.defaultTheme | 主题样式，默认主题样式为defaultTheme |
+| title | String | '' | 标题文本，显示结果的主要信息，默认标题为空字符串 |
 | titleStyle | TextStyle? | - | 自定义字体样式，用于设置标题文本的样式 |
-| theme | TDResultTheme | TDResultTheme.defaultTheme | 主题样式，定义了结果组件的视觉风格 |
-| title | String | '' | 标题文本，显示结果的主要信息 |
 
 
   

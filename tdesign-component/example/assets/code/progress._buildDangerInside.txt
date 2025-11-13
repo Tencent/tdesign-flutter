@@ -1,0 +1,9 @@
+
+  Widget _buildDangerInside(BuildContext context) {
+    return TDProgress(
+      type: TDProgressType.linear,
+      progressStatus: TDProgressStatus.danger,
+      value: value,
+      progressLabelPosition: TDProgressLabelPosition.inside,
+    );
+  }

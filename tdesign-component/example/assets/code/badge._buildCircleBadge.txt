@@ -1,27 +1,17 @@
 
   Widget _buildCircleBadge(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 16),
-      child: Row(
+    return SizedBox(
+      width: 48,
+      height: 34,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
         children: [
-          SizedBox(
-            width: 48,
-            height: 34,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                Icon(TDIcons.notification),
-                Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '16',
-                  ),
-                  left: 18,
-                  bottom: 18,
-                )
-              ],
-            ),
-          ),
+          const Icon(TDIcons.notification),
+          Positioned(
+            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            left: 18,
+            bottom: 18,
+          )
         ],
       ),
     );

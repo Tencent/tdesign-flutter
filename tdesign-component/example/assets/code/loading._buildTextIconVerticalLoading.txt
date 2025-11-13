@@ -1,17 +1,22 @@
 
   Widget _buildTextIconVerticalLoading(BuildContext context) {
-    return _buildRow(const [
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.circle,
-        text: '加载中…',
-        axis: Axis.vertical,
-      ),
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.activity,
-        text: '加载中…',
-        axis: Axis.vertical,
-      ),
-    ]);
+    return const Row(
+      // spacing: 36,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.circle,
+          text: '加载中…',
+          axis: Axis.vertical,
+        ),
+        SizedBox(width: 36),
+        TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.activity,
+          text: '加载中…',
+          axis: Axis.vertical,
+        ),
+      ],
+    );
   }

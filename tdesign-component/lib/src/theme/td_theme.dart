@@ -97,7 +97,14 @@ class TDTheme extends StatelessWidget {
 /// 主题数据
 class TDThemeData extends ThemeExtension<TDThemeData> {
   static const String _defaultThemeName = 'default';
+  static const String _defaultDartThemeName = 'defaultDark';
   static TDThemeData? _defaultThemeData;
+
+  /// 暗色主题
+  TDThemeData? dark;
+
+  /// 亮色主题
+  late TDThemeData light;
 
   /// 名称
   late String name;
@@ -140,15 +147,18 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
 
   /// 获取默认Data，一个App里只有一个，用于没有context的地方
   static TDThemeData defaultData({
-    TDExtraThemeData? extraThemeData,
-    String? name,
+    TDExtraThemeData? extraThemeData
   }) {
-    _defaultThemeData ??= fromJson(
-          name ?? _defaultThemeName,
+    _defaultThemeData ??= fromJson(_defaultThemeName,
           TDDefaultTheme.defaultThemeConfig,
+          darkName: _defaultDartThemeName,
           extraThemeData: extraThemeData,
-        ) ??
-        _emptyData(name ?? _defaultThemeName, extraThemeData: extraThemeData);
+        );
+    if(_defaultThemeData == null){
+      var emptyData = _emptyData(_defaultThemeName, extraThemeData: extraThemeData);
+      emptyData.light = emptyData;
+      _defaultThemeData = emptyData;
+    }
 
     return _defaultThemeData!;
   }
@@ -175,6 +185,36 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
       extraThemeData: extraThemeData,
     ) as TDThemeData;
   }
+
+  /// 系统主题-亮色模式
+  ThemeData? get systemThemeDataLight => ThemeData(
+    extensions: [light],
+    colorScheme: ColorScheme.light(
+      primary: light.brandNormalColor,
+    ),
+    scaffoldBackgroundColor: light.bgColorPage,
+    iconTheme: const IconThemeData().copyWith(
+      color: light.brandNormalColor,
+    ),
+  );
+
+  /// 系统主题-暗色模式
+  ThemeData? get systemThemeDataDark=> dark != null ? ThemeData(
+    extensions: [dark!],
+    colorScheme: ColorScheme.dark(
+      primary: dark!.brandNormalColor,
+      secondary: dark!.brandNormalColor,
+    ),
+    scaffoldBackgroundColor: dark!.bgColorPage,
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData()
+        .copyWith(backgroundColor: dark!.grayColor14),
+    appBarTheme: const AppBarTheme().copyWith(
+      backgroundColor: dark!.grayColor13,
+    ),
+    iconTheme: const IconThemeData().copyWith(
+      color: dark!.brandNormalColor,
+    ),
+  ) : null;
 
   @override
   ThemeExtension<TDThemeData> copyWith({
@@ -244,6 +284,7 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
   static TDThemeData? fromJson(
     String name,
     String themeJson, {
+    String? darkName,
     var recoverDefault = false,
     TDExtraThemeData? extraThemeData,
   }) {
@@ -255,68 +296,33 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
       /// 要求json配置必须正确
       final themeConfig = json.decode(themeJson);
       if (themeConfig.containsKey(name)) {
-        var theme = _emptyData(name);
-        Map<String, dynamic> curThemeMap = themeConfig['$name'];
-
-        /// 设置颜色
-        Map<String, dynamic>? colorsMap = curThemeMap['color'];
-        colorsMap?.forEach((key, value) {
-          var color = toColor(value);
-          if (color != null) {
-            theme.colorMap[key] = color;
-          }
-        });
-
-        /// 设置颜色
-        Map<String, dynamic>? refMap = curThemeMap['ref'];
-        refMap?.forEach((key, value) {
-          theme.refMap[key] = value;
-        });
-
-        /// 设置字体尺寸
-        Map<String, dynamic>? fontsMap = curThemeMap['font'];
-        fontsMap?.forEach((key, value) {
-          theme.fontMap[key] = Font.fromJson(value);
-        });
-
-        /// 设置圆角
-        Map<String, dynamic>? cornersMap = curThemeMap['radius'];
-        cornersMap?.forEach((key, value) {
-          theme.radiusMap[key] = value.toDouble();
-        });
-
-        /// 设置字体
-        Map<String, dynamic>? fontFamilyMap = curThemeMap['fontFamily'];
-        fontFamilyMap?.forEach((key, value) {
-          theme.fontFamilyMap[key] = FontFamily.fromJson(value);
-        });
-
-        /// 设置阴影
-        Map<String, dynamic>? shadowMap = curThemeMap['shadow'];
-        shadowMap?.forEach((key, value) {
-          var list = <BoxShadow>[];
-          (value as List).forEach((element) {
-            list.add(BoxShadow(
-              color: toColor(element['color']) ?? Colors.black,
-              blurRadius: element['blurRadius'].toDouble(),
-              spreadRadius: element['spreadRadius'].toDouble(),
-              offset: Offset(element['offset']?['x'].toDouble() ?? 0,
-                  element['offset']?['y'].toDouble() ?? 0),
-            ));
+        var theme = parseThemeData(name, themeConfig, extraThemeData);
+        theme.light = theme;
+        darkName ??= '${name}Dark';
+        if (themeConfig[darkName] != null) {
+          // 解析暗色模式
+          var darkTheme = parseThemeData(darkName, themeConfig, extraThemeData);
+          darkTheme.light = theme;
+          theme.dark = darkTheme;
+          // 填充暗色模式缺失数据
+          theme.refMap.forEach((key, value) {
+            darkTheme.refMap.putIfAbsent(key, ()=> value);
           });
-
-          theme.shadowMap[key] = list;
-        });
-
-        /// 设置Margin
-        Map<String, dynamic>? marginsMap = curThemeMap['margin'];
-        marginsMap?.forEach((key, value) {
-          theme.spacerMap[key] = value.toDouble();
-        });
-
-        if (extraThemeData != null) {
-          extraThemeData.parse(name, curThemeMap);
-          theme.extraThemeData = extraThemeData;
+          // theme.fontMap.forEach((key, value) {
+          //   darkTheme.fontMap.putIfAbsent(key, ()=> value);
+          // });
+          // theme.radiusMap.forEach((key, value) {
+          //   darkTheme.radiusMap.putIfAbsent(key, ()=> value);
+          // });
+          // theme.fontFamilyMap.forEach((key, value) {
+          //   darkTheme.fontFamilyMap.putIfAbsent(key, ()=> value);
+          // });
+          // theme.shadowMap.forEach((key, value) {
+          //   darkTheme.shadowMap.putIfAbsent(key, ()=> value);
+          // });
+          // theme.spacerMap.forEach((key, value) {
+          //   darkTheme.spacerMap.putIfAbsent(key, ()=> value);
+          // });
         }
         if (recoverDefault) {
           _defaultThemeData = theme;
@@ -331,6 +337,76 @@ class TDThemeData extends ThemeExtension<TDThemeData> {
       Log.e('TDTheme', 'parse theme data error:${e}');
       return null;
     }
+  }
+
+  static TDThemeData parseThemeData(String name, themeConfig, TDExtraThemeData? extraThemeData) {
+    var theme = _emptyData(name);
+    Map<String, dynamic>? curThemeMap = themeConfig['$name'];
+    if (curThemeMap?.isEmpty ?? true) {
+      return theme;
+    }
+
+    /// 设置颜色
+    Map<String, dynamic>? colorsMap = curThemeMap?['color'];
+    colorsMap?.forEach((key, value) {
+      var color = toColor(value);
+      if (color != null) {
+        theme.colorMap[key] = color;
+      }
+    });
+
+    /// 设置颜色
+    Map<String, dynamic>? refMap = curThemeMap?['ref'];
+    refMap?.forEach((key, value) {
+      theme.refMap[key] = value;
+    });
+
+    /// 设置字体尺寸
+    Map<String, dynamic>? fontsMap = curThemeMap?['font'];
+    fontsMap?.forEach((key, value) {
+      theme.fontMap[key] = Font.fromJson(value);
+    });
+
+    /// 设置圆角
+    Map<String, dynamic>? cornersMap = curThemeMap?['radius'];
+    cornersMap?.forEach((key, value) {
+      theme.radiusMap[key] = value.toDouble();
+    });
+
+    /// 设置字体
+    Map<String, dynamic>? fontFamilyMap = curThemeMap?['fontFamily'];
+    fontFamilyMap?.forEach((key, value) {
+      theme.fontFamilyMap[key] = FontFamily.fromJson(value);
+    });
+
+    /// 设置阴影
+    Map<String, dynamic>? shadowMap = curThemeMap?['shadow'];
+    shadowMap?.forEach((key, value) {
+      var list = <BoxShadow>[];
+      (value as List).forEach((element) {
+        list.add(BoxShadow(
+          color: toColor(element['color']) ?? Colors.black,
+          blurRadius: element['blurRadius'].toDouble(),
+          spreadRadius: element['spreadRadius'].toDouble(),
+          offset: Offset(element['offset']?['x'].toDouble() ?? 0,
+              element['offset']?['y'].toDouble() ?? 0),
+        ));
+      });
+
+      theme.shadowMap[key] = list;
+    });
+
+    /// 设置Margin
+    Map<String, dynamic>? marginsMap = curThemeMap?['margin'];
+    marginsMap?.forEach((key, value) {
+      theme.spacerMap[key] = value.toDouble();
+    });
+
+    if (extraThemeData != null && curThemeMap != null) {
+      extraThemeData.parse(name, curThemeMap);
+      theme.extraThemeData = extraThemeData;
+    }
+    return theme;
   }
 
   Color? ofColor(String? key) {

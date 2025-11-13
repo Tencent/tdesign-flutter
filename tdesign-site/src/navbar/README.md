@@ -27,11 +27,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _baseH5Navbar(BuildContext context) {
     return const TDNavBar(
-        height: 48,
-        titleFontWeight: FontWeight.w600,
-        title: titleText,
-        screenAdaptation: false,
-        useDefaultBack: true,
+      height: 48,
+      titleFontWeight: FontWeight.w600,
+      title: titleText,
+      screenAdaptation: false,
+      useDefaultBack: true,
     );
   }</pre>
 
@@ -57,8 +57,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           ],
           rightBarItems: [
             TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
-          ]
-      ),
+          ]),
     );
   }</pre>
 
@@ -72,18 +71,23 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _rightMultiAction(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: TDNavBar(
-            height: 48,
-            title: titleText,
-            titleFontWeight: FontWeight.w600,
-            screenAdaptation: false,
-            useDefaultBack: true,
-            rightBarItems: [
-              TDNavBarItem(icon: TDIcons.home, iconSize: 24, ),
-              TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24,)
-            ]
-        ),
+      padding: const EdgeInsets.only(top: 16),
+      child: TDNavBar(
+          height: 48,
+          title: titleText,
+          titleFontWeight: FontWeight.w600,
+          screenAdaptation: false,
+          useDefaultBack: true,
+          rightBarItems: [
+            TDNavBarItem(
+              icon: TDIcons.home,
+              iconSize: 24,
+            ),
+            TDNavBarItem(
+              icon: TDIcons.ellipsis,
+              iconSize: 24,
+            )
+          ]),
     );
   }</pre>
 
@@ -95,28 +99,27 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _searchNavbar(BuildContext context){
+  Widget _searchNavbar(BuildContext context) {
     return TDNavBar(
-      useDefaultBack: false,
-      screenAdaptation: false,
-      centerTitle: false,
-      titleMargin: 0,
-      titleWidget:  TDSearchBar(
-        needCancel: false,
-        autoHeight: true,
-        padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
-        placeHolder: '搜索预设文案',
-        mediumStyle: true,
-        style: TDSearchStyle.round,
-        onTextChanged: (String text) {
-          print('input：$text');
-        },
-      ),
-      rightBarItems: [
-        TDNavBarItem(icon: TDIcons.home,iconSize: 24),
-        TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
-      ]
-    );
+        useDefaultBack: false,
+        screenAdaptation: false,
+        centerTitle: false,
+        titleMargin: 0,
+        titleWidget: TDSearchBar(
+          needCancel: false,
+          autoHeight: true,
+          padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
+          placeHolder: '搜索预设文案',
+          mediumStyle: true,
+          style: TDSearchStyle.round,
+          onTextChanged: (String text) {
+            print('input：$text');
+          },
+        ),
+        rightBarItems: [
+          TDNavBarItem(icon: TDIcons.home, iconSize: 24),
+          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+        ]);
   }</pre>
 
 </td-code-block>
@@ -127,22 +130,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _logoNavbar(BuildContext context){
+  Widget _logoNavbar(BuildContext context) {
     return TDNavBar(
         useDefaultBack: false,
         screenAdaptation: false,
         centerTitle: false,
         titleMargin: 0,
-        titleWidget:  const TDImage(
+        titleWidget: const TDImage(
           assetUrl: 'assets/img/td_brand.png',
           width: 102,
           height: 24,
         ),
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home,iconSize: 24),
-          TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
-        ]
-    );
+          TDNavBarItem(icon: TDIcons.home, iconSize: 24),
+          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+        ]);
   }</pre>
 
 </td-code-block>
@@ -162,10 +164,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         screenAdaptation: false,
         useDefaultBack: true,
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home,iconSize: 24),
-          TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
-        ]
-    );
+          TDNavBarItem(icon: TDIcons.home, iconSize: 24),
+          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+        ]);
   }</pre>
 
 </td-code-block>
@@ -188,10 +189,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           screenAdaptation: false,
           useDefaultBack: true,
           rightBarItems: [
-            TDNavBarItem(icon: TDIcons.home,iconSize: 24),
-            TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
-          ]
-      ),
+            TDNavBarItem(icon: TDIcons.home, iconSize: 24),
+            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+          ]),
     );
   }</pre>
 
@@ -211,10 +211,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         screenAdaptation: false,
         useDefaultBack: true,
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home,iconSize: 24),
-          TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
-        ]
-    );
+          TDNavBarItem(icon: TDIcons.home, iconSize: 24),
+          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+        ]);
   }</pre>
 
 </td-code-block>
@@ -227,14 +226,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _titleBelowNavbar(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: TDNavBar(
+      padding: const EdgeInsets.only(top: 16),
+      child: TDNavBar(
           height: 104,
           title: '返回',
-          titleColor: const Color.fromRGBO(0, 0, 0, 0.9),
+          titleColor: TDTheme.of(context).textColorPrimary,
           belowTitleWidget: SizedBox(
             height: 56,
-            child: TDText(titleText, font: Font(size: 28, lineHeight: 52), fontWeight: FontWeight.w600,),
+            child: TDText(
+              titleText,
+              font: Font(size: 28, lineHeight: 52),
+              fontWeight: FontWeight.w600,
+            ),
           ),
           titleFont: Font(size: 16, lineHeight: 24),
           centerTitle: false,
@@ -242,13 +245,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           screenAdaptation: false,
           useDefaultBack: false,
           leftBarItems: [
-            TDNavBarItem(icon: TDIcons.chevron_left,iconSize: 24),
+            TDNavBarItem(icon: TDIcons.chevron_left, iconSize: 24),
           ],
           rightBarItems: [
-            TDNavBarItem(icon: TDIcons.home,iconSize: 24),
-            TDNavBarItem(icon: TDIcons.ellipsis,iconSize: 24)
-          ]
-      ),
+            TDNavBarItem(icon: TDIcons.home, iconSize: 24),
+            TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24)
+          ]),
     );
   }</pre>
 
@@ -270,13 +272,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         useDefaultBack: false,
         screenAdaptation: false,
         leftBarItems: [
-          TDNavBarItem(icon: TDIcons.chevron_left, iconSize: 24, iconColor: Colors.white),
+          TDNavBarItem(
+              icon: TDIcons.chevron_left,
+              iconSize: 24,
+              iconColor: Colors.white),
         ],
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home, iconSize: 24, iconColor: Colors.white),
-          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24, iconColor: Colors.white)
-        ]
-    );
+          TDNavBarItem(
+              icon: TDIcons.home, iconSize: 24, iconColor: Colors.white),
+          TDNavBarItem(
+              icon: TDIcons.ellipsis, iconSize: 24, iconColor: Colors.white)
+        ]);
   }</pre>
 
 </td-code-block>
@@ -289,29 +295,29 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景颜色 |
+| belowTitleWidget | Widget? | - | belowTitleWidget navbar 下方的 widget |
+| border | TDNavBarItemBorder? | - | 边框 |
+| boxShadow | List<BoxShadow>? | - | 底部阴影 |
+| centerTitle | bool | true | 标题是否居中 |
+| flexibleSpace | Widget? | - | 固定背景 |
+| height | double | 48 | 高度 |
 | key |  | - |  |
 | leftBarItems | List<TDNavBarItem>? | - | 左边操作项 |
+| onBack | VoidCallback? | - | 返回事件 |
+| opacity | double | 1.0 | 透明度 |
+| padding | EdgeInsetsGeometry? | - | 内部填充 |
 | rightBarItems | List<TDNavBarItem>? | - | 右边操作项 |
-| titleWidget | Widget? | - | 标题控件，优先级高于title文案 |
+| screenAdaptation | bool | true | 是否进行屏幕适配，默认 true |
 | title | String? | - | 标题文案 |
 | titleColor | Color? | - | 标题颜色 |
 | titleFont | Font? | - | 标题字体尺寸 |
 | titleFontFamily | FontFamily? | - | 标题字体样式 |
 | titleFontWeight | FontWeight? | FontWeight.w500 | 标题字体粗细 |
-| centerTitle | bool | true | 标题是否居中 |
-| opacity | double | 1.0 | 透明度 |
-| backgroundColor | Color? | - | 背景颜色 |
 | titleMargin | double | 16 | 中间文案左右两边间距 |
-| padding | EdgeInsetsGeometry? | - | 内部填充 |
-| height | double | 44 | 高度 |
-| screenAdaptation | bool | true | 是否进行屏幕适配，默认true |
-| useDefaultBack | bool | true | 是否使用默认的返回 |
-| onBack | VoidCallback? | - | 返回事件 |
+| titleWidget | Widget? | - | 标题控件，优先级高于 title 文案 |
 | useBorderStyle | bool | false | 是否使用边框模式 |
-| border | TDNavBarItemBorder? | - | 边框 |
-| belowTitleWidget | Widget? | - | belowTitleWidget navbar 下方的widget |
-| boxShadow | List<BoxShadow>? | - | 底部阴影 |
-| flexibleSpace | Widget? | - | 固定背景 |
+| useDefaultBack | bool | true | 是否使用默认的返回 |
 
 ```
 ```
@@ -320,12 +326,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| action | TDBarItemAction? | - | 操作回调 |
 | icon | IconData? | - | 图标 |
 | iconColor | Color? | - | 图标颜色 |
-| action | TDBarItemAction? | - | 操作回调 |
 | iconSize | double? | 24.0 | 图标尺寸 |
+| iconWidget | Widget? | - | 图标组件，优先级高于 icon |
 | padding | EdgeInsetsGeometry? | - |  |
-| iconWidget | Widget? | - | 图标组件，优先级高与icon |
 
 
   

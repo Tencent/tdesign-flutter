@@ -18,11 +18,17 @@ Widget _buildBadgeListCenterActionSheet(BuildContext context) {
           ),
           TDActionSheetItem(
             label: '选项二',
-            badge: const TDBadge(TDBadgeType.message, count: '8',),
+            badge: const TDBadge(
+              TDBadgeType.message,
+              count: '8',
+            ),
           ),
           TDActionSheetItem(
             label: '选项三',
-            badge: const TDBadge(TDBadgeType.message, count: '99',),
+            badge: const TDBadge(
+              TDBadgeType.message,
+              count: '99',
+            ),
           ),
         ],
       );

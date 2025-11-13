@@ -31,11 +31,13 @@ Widget _buildStyle(BuildContext context) {
                     day?.style = TextStyle(
                       fontSize: TDTheme.of(context).fontTitleMedium?.size,
                       height: TDTheme.of(context).fontTitleMedium?.height,
-                      fontWeight: TDTheme.of(context).fontTitleMedium?.fontWeight,
+                      fontWeight:
+                          TDTheme.of(context).fontTitleMedium?.fontWeight,
                       color: TDTheme.of(context).errorColor6,
                     );
                     if (day?.typeNotifier.value == DateSelectType.selected) {
-                      day?.style = day.style?.copyWith(color: TDTheme.of(context).fontWhColor1);
+                      day?.style = day.style
+                          ?.copyWith(color: TDTheme.of(context).fontWhColor1);
                     }
                   }
                 }
@@ -54,7 +56,8 @@ Widget _buildStyle(BuildContext context) {
             context,
             visible: true,
             confirmBtn: Padding(
-              padding: EdgeInsets.symmetric(vertical: TDTheme.of(context).spacer16),
+              padding:
+                  EdgeInsets.symmetric(vertical: TDTheme.of(context).spacer16),
               child: TDButton(
                 theme: TDButtonTheme.danger,
                 shape: TDButtonShape.round,

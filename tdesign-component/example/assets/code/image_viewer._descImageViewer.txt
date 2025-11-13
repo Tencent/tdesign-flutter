@@ -1,10 +1,5 @@
 
   Widget _descImageViewer(BuildContext context) {
-    var delImages = [
-      'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
-      'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
-    ];
-    var labels = ['图片标题1', '图片标题2'];
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -14,8 +9,8 @@
       onTap: () {
         TDImageViewer.showImageViewer(
           context: context,
-          images: delImages,
-          labels: labels,
+          images: images,
+          labels: ['图片标题1', '图片标题2'],
         );
       },
     );

@@ -1,21 +1,18 @@
 
   Widget _buildSingleLinkFooter(BuildContext context) {
-    // 示例链接列表
-    final singleLink = <TDLink>[
-      TDLink(
-        label: '底部链接',
-        style: TDLinkStyle.primary,
-        // type: TDLinkType.withSuffixIcon,
-        uri: Uri.parse('https://example.com'),
-        linkClick: (link) {
-          print('点击了链接 $link');
-        },
-      ),
-    ];
-
     return TDFooter(
       TDFooterType.link,
-      links: singleLink,
+      links: [
+        TDLink(
+          label: '底部链接',
+          style: TDLinkStyle.primary,
+          type: TDLinkType.withSuffixIcon,
+          uri: Uri.parse('https://example.com'),
+          linkClick: (link) {
+            print('点击了链接 $link');
+          },
+        ),
+      ],
       text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
   }

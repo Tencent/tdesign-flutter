@@ -12,8 +12,10 @@
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(TDIcons.upload, color: TDTheme.of(context).brandNormalColor, size: 16),
-                Icon(TDIcons.delete, color: TDTheme.of(context).brandNormalColor, size: 16),
+                Icon(TDIcons.upload,
+                    color: TDTheme.of(context).brandNormalColor, size: 16),
+                Icon(TDIcons.delete,
+                    color: TDTheme.of(context).brandNormalColor, size: 16),
               ],
             );
           },

@@ -1,30 +1,17 @@
 
   Widget _buildMediumBadge(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
+    return SizedBox(
+      width: 72,
+      height: 54,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
         children: [
-          SizedBox(
-            width: 120,
-            height: 54,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                TDAvatar(
-                  size: TDAvatarSize.medium,
-                  type: TDAvatarType.icon,
-                ),
-                Positioned(
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    count: '8',
-                  ),
-                  left: 36,
-                  bottom: 36,
-                )
-              ],
-            ),
-          ),
+          const TDAvatar(size: TDAvatarSize.medium, type: TDAvatarType.icon),
+          Positioned(
+            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            left: 36,
+            bottom: 36,
+          )
         ],
       ),
     );

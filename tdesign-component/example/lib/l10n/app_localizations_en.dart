@@ -12,7 +12,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get components => 'TD Flutter Components';
 
   @override
-  String get about => 'About';
+  String get setting => 'Setting';
+
+  @override
+  String get about => 'AboutUs';
+
+  @override
+  String get version => 'Version';
+
+  @override
+  String get publishDate => 'PublishDate';
 
   @override
   String get defaultTheme => 'defaultTheme';

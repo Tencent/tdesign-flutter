@@ -35,9 +35,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '带箭头',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
-              TDPopover.showPopover(context: _, content: '弹出气泡内容');
+              TDPopover.showPopover(
+                  context: _, content: '弹出气泡内容', theme: theme);
             },
           );
         },
@@ -61,10 +61,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           text: '不带箭头',
           type: TDButtonType.outline,
           theme: TDButtonTheme.primary,
-             
           onTap: () {
             TDPopover.showPopover(
-                context: _, content: '弹出气泡内容', showArrow: false);
+                context: _, content: '弹出气泡内容', showArrow: false, theme: theme);
           },
         );
       },
@@ -80,20 +79,41 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildNCustomPopover(BuildContext context) {
+    var textStyle = TextStyle(
+        color: theme == TDPopoverTheme.light
+            ? TDTheme.of(context).fontGyColor1
+            : TDTheme.of(context).fontWhColor1);
     return LayoutBuilder(
       builder: (_, constrains) {
         return TDButton(
           text: '自定义内容',
           type: TDButtonType.outline,
           theme: TDButtonTheme.primary,
-             
           onTap: () {
             TDPopover.showPopover(
               context: _,
               padding: const EdgeInsets.all(0),
+              theme: theme,
               width: 108,
-              height: 148,
-              contentWidget: _buildPopoverList(context),
+              height: 152,
+              contentWidget: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    child: TDText('选项1', style: textStyle),
+                  ),
+                  const TDDivider(height: 0.5),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    child: TDText('选项2', style: textStyle),
+                  ),
+                  const TDDivider(height: 0.5),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    child: TDText('选项3', style: textStyle),
+                  ),
+                ],
+              ),
             );
           },
         );
@@ -122,7 +142,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '深色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -153,7 +172,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '浅色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -185,7 +203,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '品牌色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -217,7 +234,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '成功色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -249,7 +265,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '警告色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -281,7 +296,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '错误色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -313,7 +327,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '深色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -344,7 +357,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '浅色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -376,7 +388,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '品牌色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -408,7 +419,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '成功色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -440,7 +450,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '警告色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -472,7 +481,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '错误色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
@@ -506,12 +514,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '顶部左',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.topLeft,
+                theme: theme,
               );
             },
           );
@@ -538,12 +546,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '顶部中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.top,
+                theme: theme,
               );
             },
           );
@@ -570,12 +578,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '顶部右',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.topRight,
+                theme: theme,
               );
             },
           );
@@ -602,12 +610,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '顶部左',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.topLeft,
+                theme: theme,
               );
             },
           );
@@ -634,12 +642,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '顶部中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.top,
+                theme: theme,
               );
             },
           );
@@ -666,12 +674,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '顶部右',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.topRight,
+                theme: theme,
               );
             },
           );
@@ -700,12 +708,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '底部左',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.bottomLeft,
+                theme: theme,
               );
             },
           );
@@ -732,12 +740,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '底部中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.bottom,
+                theme: theme,
               );
             },
           );
@@ -764,12 +772,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '底部右',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.bottomRight,
+                theme: theme,
               );
             },
           );
@@ -796,12 +804,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '底部左',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.bottomLeft,
+                theme: theme,
               );
             },
           );
@@ -828,12 +836,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '底部中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.bottom,
+                theme: theme,
               );
             },
           );
@@ -860,12 +868,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '底部右',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.bottomRight,
+                theme: theme,
               );
             },
           );
@@ -894,12 +902,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '右侧上',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.rightTop,
+                theme: theme,
               );
             },
           );
@@ -926,12 +934,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '右侧中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.right,
+                theme: theme,
               );
             },
           );
@@ -958,12 +966,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '右侧下',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.rightBottom,
+                theme: theme,
               );
             },
           );
@@ -990,12 +998,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '右侧上',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.rightTop,
+                theme: theme,
               );
             },
           );
@@ -1022,12 +1030,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '右侧中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.right,
+                theme: theme,
               );
             },
           );
@@ -1054,12 +1062,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '右侧下',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.rightBottom,
+                theme: theme,
               );
             },
           );
@@ -1088,12 +1096,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '左侧上',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.leftTop,
+                theme: theme,
               );
             },
           );
@@ -1120,12 +1128,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '左侧中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.left,
+                theme: theme,
               );
             },
           );
@@ -1152,12 +1160,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '左侧下',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.leftBottom,
+                theme: theme,
               );
             },
           );
@@ -1184,12 +1192,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '左侧上',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.leftTop,
+                theme: theme,
               );
             },
           );
@@ -1216,12 +1224,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '左侧中',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.left,
+                theme: theme,
               );
             },
           );
@@ -1248,12 +1256,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
             text: '左侧下',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,
                 content: '弹出气泡内容',
                 placement: TDPopoverPlacement.leftBottom,
+                theme: theme,
               );
             },
           );
@@ -1286,21 +1294,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
-| context | BuildContext | - | 上下文 |
+| arrowSize | double | 8 | 箭头大小 |
 | content | String? | - | 显示内容 |
 | contentWidget | Widget? | - | 自定义内容 |
-| offset | double | 4 | 偏移 |
-| theme | TDPopoverTheme? | - | 弹出气泡主题 |
-| placement | TDPopoverPlacement? | - | 浮层出现位置 |
-| showArrow | bool? | true | 是否显示浮层箭头 |
-| arrowSize | double | 8 | 箭头大小 |
-| padding | EdgeInsetsGeometry? | - | 内容内边距 |
-| width | double? | - | 内容宽度（包含padding，实际高度：height - paddingLeft - paddingRight） |
+| context | BuildContext | - | 上下文 |
 | height | double? | - | 内容高度（包含padding，实际高度：height - paddingTop - paddingBottom） |
-| onTap | OnTap? | - | 点击事件 |
+| key |  | - |  |
+| offset | double | 4 | 偏移 |
 | onLongTap | OnLongTap? | - | 长按事件 |
+| onTap | OnTap? | - | 点击事件 |
+| padding | EdgeInsetsGeometry? | - | 内容内边距 |
+| placement | TDPopoverPlacement? | - | 浮层出现位置 |
 | radius | BorderRadius? | - | 圆角 |
+| showArrow | bool? | true | 是否显示浮层箭头 |
+| theme | TDPopoverTheme? | - | 弹出气泡主题 |
+| width | double? | - | 内容宽度（包含padding，实际高度：height - paddingLeft - paddingRight） |
 
 
   

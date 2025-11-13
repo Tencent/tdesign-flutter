@@ -19,6 +19,7 @@
         TDBottomTabBarTabConfig(
             tabText: '展开项',
             onTap: () {
+              // 不触发点击事件
               onTapTab(context, '展开项');
             },
             popUpButtonConfig: TDBottomTabBarPopUpBtnConfig(
@@ -27,22 +28,15 @@
                   arrowWidth: 16,
                   arrowHeight: 8,
                 ),
-                items: [
-                  '展开项一',
-                  '展开项二',
-                  '展开项三',
-                ]
+                items: ['展开项一', '展开项二', '展开项三']
                     .reversed
                     .map((e) => PopUpMenuItem(
                           value: e,
-                          itemWidget: SizedBox(
-                            //height: 30,
-                            child: Text(
-                              e,
-                              style: TextStyle(
-                                  color: TDTheme.of(context).fontGyColor1,
-                                  fontSize: 16),
-                            ),
+                          itemWidget: Text(
+                            e,
+                            style: TextStyle(
+                                color: TDTheme.of(context).textColorPrimary,
+                                fontSize: 16),
                           ),
                         ))
                     .toList(),

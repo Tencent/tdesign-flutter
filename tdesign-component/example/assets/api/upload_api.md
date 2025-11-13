@@ -17,10 +17,11 @@
 | onClick | TDUploadClickEvent? | - | 监听点击图片位 |
 | onError | TDUploadErrorEvent? | - | 监听获取资源错误 |
 | onMaxLimitReached | VoidCallback? | - | 监听文件超过最大数量 |
+| onUploadTap | VoidCallback? | - | 自定义upload按钮事件 |
 | onValidate | TDUploadValidatorEvent? | - | 监听文件校验出错 |
 | sizeLimit | double? | - | 图片大小限制，单位为KB |
 | type | TDUploadBoxType | TDUploadBoxType.roundedSquare | Box类型 |
 | width | double? | 80.0 | 图片宽度 |
-| wrapAlignment | WrapAlignment? | - | 多图对其方式 |
+| wrapAlignment | WrapAlignment? | - | 多图对齐方式 |
 | wrapRunSpacing | double? | - | 多图布局时的 runSpacing |
 | wrapSpacing | double? | - | 多图布局时的 spacing |

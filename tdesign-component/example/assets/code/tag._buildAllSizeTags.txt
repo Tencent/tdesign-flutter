@@ -1,6 +1,6 @@
 
   Widget _buildAllSizeTags(BuildContext context) {
-    return Wrap(spacing: 8, children: const [
+    return const Wrap(spacing: 8, children: [
       TDTag(
         '加大尺寸',
         size: TDTagSize.extraLarge,
