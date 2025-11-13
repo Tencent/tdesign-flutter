@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,9 @@ import 'home.dart';
 import 'l10n/app_localizations.dart';
 import 'provider/locale_provider.dart';
 import 'provider/theme_mode_provider.dart';
+
+// 仅在 Web 平台导入
+import 'dart:html' as html if (dart.library.html) 'dart:html';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,6 +86,13 @@ class _MyAppState extends State<MyApp> {
       ],
       child: Consumer2<ThemeModeProvider, LocaleProvider>(
         builder: (context, themeModeProvider, localeProvider, child) {
+          // 在 Web 平台设置 postMessage 监听
+          if (PlatformUtil.isWeb) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _setupThemeModeListener(context, themeModeProvider);
+            });
+          }
+
           return MaterialApp(
             title: 'TDesign Flutter Example',
             theme: _themeData.systemThemeDataLight,
@@ -127,6 +138,35 @@ class _MyAppState extends State<MyApp> {
           () => (context) => const MyHomePage(title: 'TDesign Flutter 组件库'));
     } else {
       return const {};
+    }
+  }
+
+  static bool _listenerSetup = false;
+
+  void _setupThemeModeListener(
+      BuildContext context, ThemeModeProvider themeModeProvider) {
+    // 只设置一次监听器
+    if (_listenerSetup) return;
+    _listenerSetup = true;
+
+    // 仅在 Web 平台执行
+    if (!PlatformUtil.isWeb) return;
+
+    // ignore: undefined_prefixed_name, avoid_web_libraries_in_flutter
+    if (kIsWeb) {
+      html.window.onMessage.listen((event) {
+        if (event.data is Map) {
+          final data = event.data as Map;
+          if (data['type'] == 'theme-mode-change') {
+            final themeMode = data['themeMode'] as String?;
+            if (themeMode == 'dark') {
+              themeModeProvider.themeMode = ThemeMode.dark;
+            } else if (themeMode == 'light') {
+              themeModeProvider.themeMode = ThemeMode.light;
+            }
+          }
+        }
+      });
     }
   }
 }
