@@ -7,8 +7,10 @@
       builder: (context, setState) {
         return Column(
           mainAxisSize: MainAxisSize.min,
+          // spacing: 10,
           children: [
             Row(
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Value: ${currentValue.toStringAsFixed(1)}'),
@@ -18,6 +20,7 @@
                       'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})'),
               ],
             ),
+            const SizedBox(height: 10),
             TDSlider(
               sliderThemeData: TDSliderThemeData(
                 context: context,

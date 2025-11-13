@@ -7,16 +7,21 @@
       type: TDButtonType.outline,
       size: TDButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(TDSlidePopupRoute(
-            modalBarrierColor: TDTheme.of(context).fontGyColor2,
-            slideTransitionFrom: SlideTransitionFrom.center,
-            builder: (context) {
-              return Container(
-                color: Colors.white,
-                width: 240,
-                height: 240,
-              );
-            }));
+        Navigator.of(context).push(
+          TDSlidePopupRoute(
+              slideTransitionFrom: SlideTransitionFrom.center,
+              builder: (context) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: TDTheme.of(context).bgColorContainer,
+                    borderRadius:
+                        BorderRadius.circular(TDTheme.of(context).radiusLarge),
+                  ),
+                  width: 240,
+                  height: 240,
+                );
+              }),
+        );
       },
     );
   }

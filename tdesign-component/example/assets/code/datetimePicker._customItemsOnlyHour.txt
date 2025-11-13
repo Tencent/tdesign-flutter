@@ -1,7 +1,10 @@
 
   Widget _customItemsOnlyHour(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
+    return TDCell(
+      title: '选择时间',
+      note: selected_9.isEmpty ? '请选择' : selected_9,
+      arrow: true,
+      onClick: (click) {
         TDPicker.showDatePicker(
           context,
           title: '只有时分',
@@ -19,6 +22,5 @@
           initialDate: [2025, 1, 1, 22, 46, 0],
         );
       },
-      child: buildSelectRow(context, selected_9, '选择时间'),
     );
   }

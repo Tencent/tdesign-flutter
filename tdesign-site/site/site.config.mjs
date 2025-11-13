@@ -56,6 +56,19 @@ export default {
       ],
     },
     {
+      title: '全局配置',
+      type: 'document', // 普通文档
+      children: [
+        {
+          title: '深色模式',
+          name: 'dark-mode',
+          meta: { docType: 'explain' },
+          path: '/flutter/dark-mode',
+          component: () => import('@docs/dark-mode.md'),
+        },
+      ],
+    },
+    {
       title: '基础',
       type: 'component', // 组件文档
       children: [

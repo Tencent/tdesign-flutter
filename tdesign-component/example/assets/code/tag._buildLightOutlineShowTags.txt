@@ -1,8 +1,8 @@
 
   Widget _buildLightOutlineShowTags(BuildContext context) {
-    return Wrap(
+    return const Wrap(
       spacing: 8,
-      children: const [
+      children: [
         TDTag('默认', isOutline: true, isLight: true),
         TDTag(
           '主要',

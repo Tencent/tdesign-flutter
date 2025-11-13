@@ -10,7 +10,6 @@
       indicator: true,
       layout: TDTextareaLayout.vertical,
       size: TDInputSize.small,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }

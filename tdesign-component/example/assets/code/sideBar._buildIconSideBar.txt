@@ -4,14 +4,18 @@
     final pages = <Widget>[];
 
     for (var i = 0; i < 20; i++) {
-      list.add(
-          SideItemProps(index: i, label: '选项', value: i, icon: TDIcons.app));
+      list.add(SideItemProps(
+        index: i,
+        label: '选项${i}',
+        value: i,
+        icon: TDIcons.app,
+      ));
       pages.add(getAnchorDemo(i));
     }
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
     ));
 
     list[1].badge = const TDBadge(TDBadgeType.redPoint);
@@ -20,14 +24,11 @@
       count: '8',
     );
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
@@ -43,15 +44,13 @@
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: SingleChildScrollView(
             controller: _demoScroller,
             child: Column(
               children: pages,
             ),
           ),
-        ))
+        )
       ],
     );
   }

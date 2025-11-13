@@ -1,6 +1,9 @@
 {
   "components": "TD Flutter Components",
-  "about": "About",
+  "setting": "Setting",
+  "about": "AboutUs",
+  "version": "Version",
+  "publishDate": "PublishDate",
   "defaultTheme": "defaultTheme",
   "greenTheme": "greenTheme",
   "redTheme": "redTheme",

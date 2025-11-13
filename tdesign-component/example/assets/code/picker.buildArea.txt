@@ -1,15 +1,22 @@
 
   Widget buildArea(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        TDPicker.showMultiPicker(context, title: '选择地区',
-            onConfirm: (selected) {
-              setState(() {
-                selected_1 = '${data_1[selected[0]]}';
-              });
-              Navigator.of(context).pop();
-            }, data: [data_1]);
+    const title = '选择地区';
+    return TDCell(
+      title: title,
+      note: selected_1.isEmpty ? '请选择' : selected_1,
+      arrow: true,
+      onClick: (click) {
+        TDPicker.showMultiPicker(
+          context,
+          title: title,
+          onConfirm: (selected) {
+            setState(() {
+              selected_1 = '${data_1[selected[0]]}';
+            });
+            Navigator.of(context).pop();
+          },
+          data: [data_1],
+        );
       },
-      child: buildSelectRow(context, selected_1, '选择地区'),
     );
   }

@@ -190,7 +190,7 @@ class TDButtonStyle {
       case TDButtonStatus.active:
         return TDTheme.of(context).textColorPrimary;
       case TDButtonStatus.disable:
-        return TDTheme.of(context).textColorDisabled;
+        return TDTheme.of(context).textDisabledColor;
     }
   }
 

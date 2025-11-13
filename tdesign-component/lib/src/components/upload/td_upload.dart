@@ -87,6 +87,7 @@ class TDUpload extends StatefulWidget {
     this.wrapSpacing,
     this.wrapRunSpacing,
     this.wrapAlignment,
+    this.onUploadTap
   }) : super(key: key);
 
   /// 控制展示的文件列表
@@ -145,6 +146,9 @@ class TDUpload extends StatefulWidget {
 
   /// 多图对齐方式
   final WrapAlignment? wrapAlignment;
+
+  ///自定义upload按钮事件
+  final VoidCallback? onUploadTap;
 
   @override
   State<TDUpload> createState() => _TDUploadState();
@@ -331,8 +335,12 @@ class _TDUploadState extends State<TDUpload> {
           if (widget.disabled!) {
             return;
           }
-          final files = await getMediaFromPicker(widget.multiple);
-          extractImageList(files);
+          if (widget.onUploadTap != null) {
+            widget.onUploadTap!();
+          } else {
+            final files = await getMediaFromPicker(widget.multiple);
+            extractImageList(files);
+          }
         }),
       );
     }
@@ -415,10 +423,10 @@ class _TDUploadState extends State<TDUpload> {
                       decoration: widget.type == TDUploadBoxType.circle
                           ? BoxDecoration(
                               shape: BoxShape.circle,
-                              color: TDTheme.of(context).textColorDisabled,
+                              color: TDTheme.of(context).textDisabledColor,
                             )
                           : BoxDecoration(
-                              color: TDTheme.of(context).textColorDisabled,
+                              color: TDTheme.of(context).textDisabledColor,
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(
                                       TDTheme.of(context).radiusDefault),
@@ -490,7 +498,7 @@ class _TDUploadState extends State<TDUpload> {
                     color: Colors.white,
                   )),
               Padding(
-                padding: const EdgeInsets.only(top: 4),
+                padding: const EdgeInsets.only(top: 2),
                 child: TDText(
                   displayText,
                   textColor: Colors.white,

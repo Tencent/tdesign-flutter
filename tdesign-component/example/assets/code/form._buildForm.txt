@@ -28,12 +28,13 @@
             child: TDInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
-                    hintText: "请输入用户名",
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(0),
-                    hintStyle: TextStyle(color: TDTheme.of(context).fontGyColor3.withOpacity(0.4))),
+                  hintText: '请输入用户名',
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(
+                    color: TDTheme.of(context).textColorPlaceholder,
+                  ),
+                ),
                 controller: _controller[0],
-                backgroundColor: Colors.white,
                 additionInfoColor: TDTheme.of(context).errorColor6,
                 showBottomDivider: false,
                 readOnly: _formDisableState,
@@ -42,7 +43,7 @@
                 },
                 onClearTap: () {
                   _controller[0].clear();
-                  _formItemNotifier['name']?.upDataForm("");
+                  _formItemNotifier['name']?.upDataForm('');
                 }),
           ),
           TDFormItem(
@@ -55,13 +56,15 @@
             child: TDInput(
                 leftContentSpace: 0,
                 inputDecoration: InputDecoration(
-                    hintText: '请输入密码',
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(color: TDTheme.of(context).fontGyColor3.withOpacity(0.4))),
+                  hintText: '请输入密码',
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(
+                    color: TDTheme.of(context).textColorPlaceholder,
+                  ),
+                ),
                 type: TDInputType.normal,
                 controller: _controller[1],
                 obscureText: !browseOn,
-                backgroundColor: Colors.white,
                 needClear: false,
                 readOnly: _formDisableState,
                 showBottomDivider: false,
@@ -70,7 +73,7 @@
                 },
                 onClearTap: () {
                   _controller[1].clear();
-                  _formItemNotifier['password']?.upDataForm("");
+                  _formItemNotifier['password']?.upDataForm('');
                 }),
           ),
           TDFormItem(
@@ -112,20 +115,24 @@
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             formItemNotifier: _formItemNotifier['birth'],
-            hintText:'请输入内容',
+            hintText: '请输入内容',
             select: _selected_1,
             selectFn: (BuildContext context) {
               if (_formDisableState) {
                 return;
               }
-              TDPicker.showDatePicker(context, title: '选择时间', onConfirm: (selected) {
+              TDPicker.showDatePicker(context, title: '选择时间',
+                  onConfirm: (selected) {
                 setState(() {
                   _selected_1 =
                       '${selected['year'].toString().padLeft(4, '0')}-${selected['month'].toString().padLeft(2, '0')}-${selected['day'].toString().padLeft(2, '0')}';
                   _formItemNotifier['birth']?.upDataForm(_selected_1);
                 });
                 Navigator.of(context).pop();
-              }, dateStart: [1999, 01, 01], dateEnd: [2050, 12, 31], initialDate: [2012, 1, 1]);
+              },
+                  dateStart: [1999, 01, 01],
+                  dateEnd: [2050, 12, 31],
+                  initialDate: [2012, 1, 1]);
             },
           ),
           TDFormItem(
@@ -135,7 +142,7 @@
             contentAlign: TextAlign.left,
             tipAlign: TextAlign.left,
             labelWidth: 82.0,
-            hintText:'请输入内容',
+            hintText: '请输入内容',
             select: _selected_2,
             formItemNotifier: _formItemNotifier['place'],
             selectFn: (BuildContext context) {
@@ -146,7 +153,8 @@
                   title: '选择地址',
                   data: _data,
                   initialData: _initLocalData,
-                  theme: 'step', onChange: (List<MultiCascaderListModel> selectData) {
+                  theme: 'step',
+                  onChange: (List<MultiCascaderListModel> selectData) {
                 setState(() {
                   var result = [];
                   var len = selectData.length;
@@ -169,12 +177,12 @@
               type: TDFormItemType.stepper,
               formItemNotifier: _formItemNotifier['age'],
               child: Padding(
-                padding: EdgeInsets.only( right: 18),
+                padding: const EdgeInsets.only(right: 18),
                 child: TDStepper(
                   theme: TDStepperTheme.filled,
                   disabled: _formDisableState,
                   eventController: _stepController!,
-                  value:int.parse(_formData['age']),
+                  value: int.parse(_formData['age']),
                   onChange: (value) {
                     _formItemNotifier['age']?.upDataForm('${value}');
                   },
@@ -190,7 +198,7 @@
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                  padding: EdgeInsets.only(right: 18),
+                  padding: const EdgeInsets.only(right: 18),
                   child: TDRate(
                     count: 5,
                     value: double.parse(_formData['description']),
@@ -212,10 +220,10 @@
               type: TDFormItemType.textarea,
               formItemNotifier: _formItemNotifier['resume'],
               child: Padding(
-                padding: EdgeInsets.only(top: _isFormHorizontal?0:8,bottom: 4),
+                padding:
+                    EdgeInsets.only(top: _isFormHorizontal ? 0 : 8, bottom: 4),
                 child: TDTextarea(
                   backgroundColor: Colors.red,
-                  padding: EdgeInsets.all(0),
                   hintText: '请输入个人简介',
                   maxLength: 500,
                   indicator: true,
@@ -235,7 +243,7 @@
               type: TDFormItemType.upLoadImg,
               formItemNotifier: _formItemNotifier['photo'],
               child: Padding(
-                padding: EdgeInsets.only(top:4,bottom: 4),
+                padding: EdgeInsets.only(top: 4, bottom: 4),
                 child: TDUpload(
                   files: files,
                   multiple: true,
@@ -248,7 +256,8 @@
                       return;
                     }
                     files = _onValueChanged(files ?? [], imgList, type);
-                    List imgs = files.map((e) => e.remotePath ?? e.assetPath).toList();
+                    List imgs =
+                        files.map((e) => e.remotePath ?? e.assetPath).toList();
                     setState(() {
                       _formItemNotifier['photo'].upDataForm(imgs.join(','));
                     });
@@ -257,71 +266,66 @@
               ))
         ],
         btnGroup: [
-          Container(
-            decoration: BoxDecoration(
-              color: theme.whiteColor1,
-            ),
-            child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: TDButton(
-                      text: '重置',
-                      size: TDButtonSize.large,
-                      type: TDButtonType.fill,
-                      theme: TDButtonTheme.light,
-                      shape: TDButtonShape.rectangle,
-                      disabled: _formDisableState,
-                      onTap: () {
-                        //用户名称
-                        _controller[0].clear();
-                        //密码
-                        _controller[1].clear();
-                        // 性别
-                        _genderCheckboxGroupController.toggle('', false);
-                        //个人简介
-                        _controller[2].clear();
-                        //生日
-                        _selected_1 = '';
-                        //籍贯
-                        _selected_2 = '';
-                        //年限
-                        _stepController.add(TDStepperEventType.cleanValue);
-                        //上传图片
-                        files.clear();
-                        _formData = {
-                          "name": '',
-                          "password": '',
-                          "gender": '',
-                          "birth": '',
-                          "place": '',
-                          "age": "0",
-                          "description": "2",
-                          "resume": '',
-                          "photo": ''
-                        };
-                        _formData.forEach((key, value) {
-                          _formItemNotifier[key].upDataForm(value);
-                        });
-                        _formController.reset(_formData);
-                        setState(() {});
-                      },
-                    )),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Expanded(
-                        child: TDButton(
-                            text: '提交',
-                            size: TDButtonSize.large,
-                            type: TDButtonType.fill,
-                            theme: TDButtonTheme.primary,
-                            shape: TDButtonShape.rectangle,
-                            onTap: _onSubmit,
-                            disabled: _formDisableState)),
-                  ],
-                )),
-          )
+          Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: TDButton(
+                    text: '重置',
+                    size: TDButtonSize.large,
+                    type: TDButtonType.fill,
+                    theme: TDButtonTheme.light,
+                    shape: TDButtonShape.rectangle,
+                    disabled: _formDisableState,
+                    onTap: () {
+                      //用户名称
+                      _controller[0].clear();
+                      //密码
+                      _controller[1].clear();
+                      // 性别
+                      _genderCheckboxGroupController.toggle('', false);
+                      //个人简介
+                      _controller[2].clear();
+                      //生日
+                      _selected_1 = '';
+                      //籍贯
+                      _selected_2 = '';
+                      //年限
+                      _stepController.add(TDStepperEventType.cleanValue);
+                      //上传图片
+                      files.clear();
+                      _formData = {
+                        'name': '',
+                        'password': '',
+                        'gender': '',
+                        'birth': '',
+                        'place': '',
+                        'age': '0',
+                        'description': '2',
+                        'resume': '',
+                        'photo': ''
+                      };
+                      _formData.forEach((key, value) {
+                        _formItemNotifier[key].upDataForm(value);
+                      });
+                      _formController.reset(_formData);
+                      setState(() {});
+                    },
+                  )),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                      child: TDButton(
+                          text: '提交',
+                          size: TDButtonSize.large,
+                          type: TDButtonType.fill,
+                          theme: TDButtonTheme.primary,
+                          shape: TDButtonShape.rectangle,
+                          onTap: _onSubmit,
+                          disabled: _formDisableState)),
+                ],
+              ))
         ]);
   }

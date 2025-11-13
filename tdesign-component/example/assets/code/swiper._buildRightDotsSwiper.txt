@@ -6,10 +6,13 @@
       loop: true,
       scrollDirection: Axis.vertical,
       pagination: const SwiperPagination(
-          alignment: Alignment.centerRight,
-          builder: TDSwiperPagination.dots),
+        alignment: Alignment.centerRight,
+        builder: TDSwiperPagination.dots,
+      ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }

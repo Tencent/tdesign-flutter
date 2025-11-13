@@ -9,11 +9,15 @@
         useDefaultBack: false,
         screenAdaptation: false,
         leftBarItems: [
-          TDNavBarItem(icon: TDIcons.chevron_left, iconSize: 24, iconColor: Colors.white),
+          TDNavBarItem(
+              icon: TDIcons.chevron_left,
+              iconSize: 24,
+              iconColor: Colors.white),
         ],
         rightBarItems: [
-          TDNavBarItem(icon: TDIcons.home, iconSize: 24, iconColor: Colors.white),
-          TDNavBarItem(icon: TDIcons.ellipsis, iconSize: 24, iconColor: Colors.white)
-        ]
-    );
+          TDNavBarItem(
+              icon: TDIcons.home, iconSize: 24, iconColor: Colors.white),
+          TDNavBarItem(
+              icon: TDIcons.ellipsis, iconSize: 24, iconColor: Colors.white)
+        ]);
   }

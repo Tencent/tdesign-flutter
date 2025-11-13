@@ -2,8 +2,9 @@
   Widget _buildChildTestButton(BuildContext context) {
     return TDButton(
       child: Container(
-        height: 24,
-        width: 24,
+        // 高度被按钮约束了
+        height: 48,
+        width: 48,
         color: Colors.red,
       ),
     );

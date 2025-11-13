@@ -21,6 +21,7 @@ class TDTable extends StatefulWidget {
     this.loading = false,
     this.loadingWidget,
     this.showHeader = true,
+    this.footerWidget,
     this.stripe = false,
     this.backgroundColor,
     this.width,
@@ -57,6 +58,9 @@ class TDTable extends StatefulWidget {
 
   /// 是否显示表头
   final bool? showHeader;
+
+  /// 自定义表尾
+  final Widget? footerWidget;
 
   /// 斑马纹
   final bool? stripe;
@@ -203,6 +207,9 @@ class TDTableState extends State<TDTable> {
             : TDTheme.of(context).bgColorContainer,
         child: Row(children: row),
       ));
+    }
+    if (widget.footerWidget != null){
+      cells.add(widget.footerWidget!);
     }
     return Column(
       children: cells,
@@ -667,7 +674,7 @@ class TDTableState extends State<TDTable> {
         size: 16,
         color: (checked || halfSelected)
             ? TDTheme.of(context).brandNormalColor
-            : TDTheme.of(context).textColorDisabled);
+            : TDTheme.of(context).textDisabledColor);
   }
 
   @override

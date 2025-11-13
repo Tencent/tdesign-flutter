@@ -211,7 +211,7 @@ class TDTagStyle {
     TDTagShape shape,
   ) {
     borderColor = TDTheme.of(context).componentBorderColor;
-    textColor = TDTheme.of(context).textColorDisabled;
+    textColor = TDTheme.of(context).textDisabledColor;
     backgroundColor = isOutline && !isLight
         ? Colors.transparent
         : TDTheme.of(context).bgColorComponentDisabled;

@@ -7,21 +7,20 @@
       type: TDButtonType.outline,
       size: TDButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(TDSlidePopupRoute(
-            modalBarrierColor: TDTheme.of(context).fontGyColor2,
-            slideTransitionFrom: SlideTransitionFrom.bottom,
-            builder: (context) {
-              return TDPopupBottomDisplayPanel(
-                title: '标题文字',
-                titleLeft: true,
-                closeClick: () {
-                  Navigator.maybePop(context);
-                },
-                child: Container(
-                  height: 200,
-                ),
-              );
-            }));
+        Navigator.of(context).push(
+          TDSlidePopupRoute(
+              slideTransitionFrom: SlideTransitionFrom.bottom,
+              builder: (context) {
+                return TDPopupBottomDisplayPanel(
+                  title: '标题文字',
+                  titleLeft: true,
+                  closeClick: () {
+                    Navigator.maybePop(context);
+                  },
+                  child: Container(height: 200),
+                );
+              }),
+        );
       },
     );
   }

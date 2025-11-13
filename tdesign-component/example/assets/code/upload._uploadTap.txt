@@ -1,0 +1,15 @@
+
+  Widget _uploadTap(BuildContext context) {
+    return wrapDemoContainer('自定义upload按钮事件',
+        child: TDUpload(
+          files: files7,
+          multiple: true,
+          max: 9,
+          onUploadTap: onUploadTap,
+          onClick: onClick,
+          onCancel: onCancel,
+          onError: print,
+          onValidate: print,
+          onChange: ((files, type) => onValueChanged(files7, files, type)),
+        ));
+  }

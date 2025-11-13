@@ -9,7 +9,6 @@
       maxLength: 500,
       indicator: true,
       layout: TDTextareaLayout.vertical,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }

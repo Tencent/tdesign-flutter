@@ -7,14 +7,13 @@
       labelIcon: Icon(
         TDIcons.location,
         size: 20,
-        color: TDTheme.of(context).fontGyColor1,
+        color: TDTheme.of(context).textColorPrimary,
       ),
       hintText: '请输入文字',
       maxLines: 4,
       minLines: 4,
       maxLength: 500,
       indicator: true,
-      onChanged: (value) {
-      },
+      onChanged: (value) {},
     );
   }
