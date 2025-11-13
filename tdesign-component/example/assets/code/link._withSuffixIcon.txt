@@ -1,9 +1,10 @@
 
   Widget _withSuffixIcon(BuildContext context) {
     return Container(
-        color: TDTheme.of(context).whiteColor1,
+        height: 48,
+        color: TDTheme.of(context).bgColorContainer,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: _buildLinksWithType(TDLinkType.withSuffixIcon),
         ));
   }

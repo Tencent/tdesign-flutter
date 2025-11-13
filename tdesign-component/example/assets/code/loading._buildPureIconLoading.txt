@@ -1,18 +1,24 @@
 
   Widget _buildPureIconLoading(BuildContext context) {
-    return _buildRow([
-      const TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.circle,
-      ),
-      const TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.activity,
-      ),
-      TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.point,
-        iconColor: TDTheme.of(context).brandNormalColor,
-      ),
-    ]);
+    return Row(
+      // spacing: 36,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.circle,
+        ),
+        const SizedBox(width: 36),
+        const TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.activity,
+        ),
+        const SizedBox(width: 36),
+        TDLoading(
+          size: TDLoadingSize.small,
+          icon: TDLoadingIcon.point,
+          iconColor: TDTheme.of(context).brandNormalColor,
+        ),
+      ],
+    );
   }

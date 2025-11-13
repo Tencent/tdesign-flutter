@@ -385,7 +385,7 @@ class _TDRateState extends State<TDRate> with TickerProviderStateMixin {
               ? TDTheme.of(context).fontBodyLarge
               : TDTheme.of(context).fontTitleMedium,
           textColor: notRated
-              ? TDTheme.of(context).textColorDisabled
+              ? TDTheme.of(context).textDisabledColor
               : TDTheme.of(context).textColorPrimary,
         ),
       ),

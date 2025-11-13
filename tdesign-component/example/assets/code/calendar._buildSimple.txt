@@ -1,7 +1,8 @@
 
 Widget _buildSimple(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  final selected = ValueNotifier<List<int>>([DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
+  final selected = ValueNotifier<List<int>>(
+      [DateTime.now().millisecondsSinceEpoch + 30 * 24 * 60 * 60 * 1000]);
   return ValueListenableBuilder(
     valueListenable: selected,
     builder: (context, value, child) {
@@ -17,7 +18,7 @@ Widget _buildSimple(BuildContext context) {
                 context,
                 visible: true,
                 onConfirm: (value) {
-                  print('onConfirm:$value');
+                  print('onConfirm：$value');
                   selected.value = value;
                 },
                 onClose: () {
@@ -28,16 +29,16 @@ Widget _buildSimple(BuildContext context) {
                   value: value,
                   height: size.height * 0.6 + 176,
                   onCellClick: (value, type, tdate) {
-                    print('onCellClick:$value');
+                    print('onCellClick: $value');
                   },
                   onCellLongPress: (value, type, tdate) {
-                    print('onCellLongPress:$value');
+                    print('onCellLongPress: $value');
                   },
                   onHeaderClick: (index, week) {
-                    print('onHeaderClick:$week');
+                    print('onHeaderClick: $week');
                   },
                   onChange: (value) {
-                    print('onChange:$value');
+                    print('onChange: $value');
                   },
                 ),
               );
@@ -71,7 +72,9 @@ Widget _buildSimple(BuildContext context) {
                   type: CalendarType.range,
                   value: [
                     DateTime.now().millisecondsSinceEpoch,
-                    DateTime.now().add(const Duration(days: 6)).millisecondsSinceEpoch,
+                    DateTime.now()
+                        .add(const Duration(days: 6))
+                        .millisecondsSinceEpoch,
                   ],
                   height: size.height * 0.6 + 176,
                 ),
@@ -81,7 +84,8 @@ Widget _buildSimple(BuildContext context) {
           TDCell(
             title: '单个选择日历和时间',
             arrow: true,
-            note: '${date.year}-${date.month}-${date.day} ${date.hour}:${date.minute}',
+            note:
+                '${date.year}-${date.month}-${date.day} ${date.hour}:${date.minute}',
             onClick: (cell) {
               TDCalendarPopup(
                 context,
@@ -101,16 +105,16 @@ Widget _buildSimple(BuildContext context) {
                   // pickerHeight: 100,
                   // pickerItemCount: 2,
                   onCellClick: (value, type, tdate) {
-                    print('onCellClick:$value');
+                    print('onCellClick: $value');
                   },
                   onCellLongPress: (value, type, tdate) {
-                    print('onCellLongPress:$value');
+                    print('onCellLongPress: $value');
                   },
                   onHeaderClick: (index, week) {
-                    print('onHeaderClick:$week');
+                    print('onHeaderClick: $week');
                   },
                   onChange: (value) {
-                    print('onChange:$value');
+                    print('onChange: $value');
                   },
                 ),
               );
@@ -124,7 +128,7 @@ Widget _buildSimple(BuildContext context) {
                 context,
                 visible: true,
                 onConfirm: (value) {
-                  print('onConfirm:$value');
+                  print('onConfirm: $value');
                 },
                 onClose: () {
                   print('onClose');
@@ -135,20 +139,22 @@ Widget _buildSimple(BuildContext context) {
                   type: CalendarType.range,
                   value: [
                     DateTime.now().millisecondsSinceEpoch,
-                    DateTime.now().add(const Duration(days: 3)).millisecondsSinceEpoch,
+                    DateTime.now()
+                        .add(const Duration(days: 3))
+                        .millisecondsSinceEpoch,
                   ],
                   useTimePicker: true,
                   onCellClick: (value, type, tdate) {
-                    print('onCellClick:$value');
+                    print('onCellClick: $value');
                   },
                   onCellLongPress: (value, type, tdate) {
-                    print('onCellLongPress:$value');
+                    print('onCellLongPress: $value');
                   },
                   onHeaderClick: (index, week) {
-                    print('onHeaderClick:$week');
+                    print('onHeaderClick: $week');
                   },
                   onChange: (value) {
-                    print('onChange:$value');
+                    print('onChange: $value');
                   },
                 ),
               );

@@ -1,31 +1,25 @@
 
   Widget _buildLinksFooter(BuildContext context) {
-    final links = <TDLink>[
-      TDLink(
-        label: '底部链接1',
-        style: TDLinkStyle.primary,
-        uri: Uri.parse('https://example.com'),
-        linkClick: (link) {
-          print('点击了链接1 $link');
-        },
-      ),
-      TDLink(
-        label: '底部链接2',
-        style: TDLinkStyle.primary,
-        uri: Uri.parse('https://example.com'),
-        linkClick: (link) {
-          print('点击了链接2 $link');
-        },
-      ),
-    ];
-    return Column(
-      children: [
-        const SizedBox(height: 12),
-        TDFooter(
-          TDFooterType.link,
-          links: links,
-          text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
-        )
+    return TDFooter(
+      TDFooterType.link,
+      links: [
+        TDLink(
+          label: '底部链接1',
+          style: TDLinkStyle.primary,
+          uri: Uri.parse('https://example.com'),
+          linkClick: (link) {
+            print('点击了链接1 $link');
+          },
+        ),
+        TDLink(
+          label: '底部链接2',
+          style: TDLinkStyle.primary,
+          uri: Uri.parse('https://example.com'),
+          linkClick: (link) {
+            print('点击了链接2 $link');
+          },
+        ),
       ],
+      text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
   }

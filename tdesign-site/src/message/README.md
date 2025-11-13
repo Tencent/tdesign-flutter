@@ -1,5 +1,5 @@
 ---
-title: Message 全局提示
+title: Message 消息通知
 description: 用于轻量级反馈或提示，不会打断用户操作。
 spline: base
 isComponent: true
@@ -31,7 +31,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       text: '纯文字的通知',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
-      width: 450,
       theme: TDButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
@@ -63,7 +62,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         text: '带图标的通知',
         size: TDButtonSize.large,
         type: TDButtonType.outline,
-        width: 450,
         theme: TDButtonTheme.primary,
         onTap: () {
           TDMessage.showMessage(
@@ -91,7 +89,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         text: '带关闭的通知',
         size: TDButtonSize.large,
         type: TDButtonType.outline,
-        width: 450,
         theme: TDButtonTheme.primary,
         onTap: () {
           TDMessage.showMessage(
@@ -124,7 +121,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         text: '可滚动的通知',
         size: TDButtonSize.large,
         type: TDButtonType.outline,
-        width: 450,
         theme: TDButtonTheme.primary,
         onTap: () {
           TDMessage.showMessage(
@@ -155,7 +151,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         text: '带按钮的通知',
         size: TDButtonSize.large,
         type: TDButtonType.outline,
-        width: 450,
         theme: TDButtonTheme.primary,
         onTap: () {
           TDMessage.showMessage(
@@ -169,7 +164,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                 name: '按钮',
                 uri: Uri.parse('https://tdesign.tencent.com/'),
               ),
-              // link: '按钮',
               onLinkClick: () {
                 print('link clicked!');
               });
@@ -191,7 +185,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       text: '普通通知',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
-      width: 450,
       theme: TDButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
@@ -220,7 +213,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       text: '成功通知',
       size: TDButtonSize.large,
       type: TDButtonType.outline,
-      width: 450,
       theme: TDButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
@@ -249,7 +241,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         text: '警示通知',
         size: TDButtonSize.large,
         type: TDButtonType.outline,
-        width: 450,
         theme: TDButtonTheme.primary,
         onTap: () {
           TDMessage.showMessage(
@@ -277,7 +268,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
         text: '错误通知',
         size: TDButtonSize.large,
         type: TDButtonType.outline,
-        width: 450,
         theme: TDButtonTheme.primary,
         onTap: () {
           TDMessage.showMessage(
@@ -301,9 +291,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| color | Color? | - | 颜色 |
 | name | String | - | 名称 |
 | uri | Uri? | - | 资源链接 |
-| color | Color? | - | 颜色 |
 
 ```
 ```
@@ -312,9 +302,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| speed | int? | - | 速度 |
-| loop | int? | - | 循环次数 |
 | delay | int? | - | 延迟时间(毫秒) |
+| loop | int? | - | 循环次数 |
+| speed | int? | - | 速度 |
 
 ```
 ```
@@ -323,19 +313,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
 | closeBtn | dynamic | - | 关闭按钮 |
 | content | String? | - | 通知内容 |
 | duration | int? | 3000 | 消息内置计时器 |
 | icon | dynamic | true | 自定义消息前面的图标 |
+| key |  | - |  |
 | link | dynamic | - | 链接名称 |
 | marquee | MessageMarquee? | - | 跑马灯效果 |
 | offset | List<double>? | - | 相对于 placement 的偏移量 |
-| theme | MessageTheme? | MessageTheme.info | 消息组件风格 info/success/warning/error |
-| visible | bool? | true | 是否显示 |
 | onCloseBtnClick | VoidCallback? | - | 点击关闭按钮触发 |
 | onDurationEnd | VoidCallback? | - | 计时结束后触发 |
 | onLinkClick | VoidCallback? | - | 点击链接文本时触发 |
+| theme | MessageTheme? | MessageTheme.info | 消息组件风格 info/success/warning/error |
+| visible | bool? | true | 是否显示 |
 
 
 #### 静态方法

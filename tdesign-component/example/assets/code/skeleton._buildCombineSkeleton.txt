@@ -1,6 +1,6 @@
 
   Widget _buildCombineSkeleton(BuildContext context) {
-    var rowCols = Flexible(
+    final rowCols = Flexible(
         child: LayoutBuilder(
             builder: (context, constraints) => Row(children: [
                   TDSkeleton.fromRowCol(
@@ -8,16 +8,14 @@
                       objects: [
                         [
                           TDSkeletonRowColObj(
-                              width: constraints.maxWidth*0.96,
+                              width: constraints.maxWidth,
                               height: constraints.maxWidth,
                               flex: null,
                               style: TDSkeletonRowColObjStyle(
                                   borderRadius: (context) =>
                                       TDTheme.of(context).radiusExtraLarge))
                         ],
-                        [TDSkeletonRowColObj.text(
-                          width: constraints.maxWidth*0.96,
-                        )],
+                        [TDSkeletonRowColObj.text(width: constraints.maxWidth)],
                         const [
                           TDSkeletonRowColObj.text(),
                           TDSkeletonRowColObj.spacer(flex: 1),
@@ -28,9 +26,10 @@
                 ])));
 
     return Row(
+      // spacing: TDTheme.of(context).spacer16,
       children: [
         rowCols,
-        SizedBox(width: TDTheme.of(context).spacer4),
+        SizedBox(width: TDTheme.of(context).spacer16),
         rowCols,
       ],
     );

@@ -7,6 +7,7 @@
 | backgroundColor | Color? | - | 背景颜色 |
 | frameColor | Color? | - | 边框颜色 |
 | frameWidth | double? | - | 边框宽度 |
+| gradient | Gradient? | - | 渐变背景色 |
 | radius | BorderRadiusGeometry? | - | 自定义圆角 |
 | textColor | Color? | - | 文字颜色 |
 
@@ -32,6 +33,7 @@
 | disabled | bool | false | 禁止点击 |
 | disableStyle | TDButtonStyle? | - | 自定义禁用样式，有则优先用它，没有则根据 type 和 theme 选取 |
 | disableTextStyle | TextStyle? | - | 自定义不可点击状态文本样式 |
+| gradient | Gradient? | - | 渐变背景色，优先级高于backgroundColor |
 | height | double? | - | 自定义高度 |
 | icon | IconData? | - | 图标icon |
 | iconPosition | TDButtonIconPosition? | TDButtonIconPosition.left | 图标位置 |

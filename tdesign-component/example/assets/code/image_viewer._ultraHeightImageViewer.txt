@@ -13,10 +13,11 @@
           showIndex: true,
           width: 180,
           onLongPress: (index) {
-            Navigator.of(context).push(TDSlidePopupRoute(
-              slideTransitionFrom: SlideTransitionFrom.bottom,
-              builder: _getSheetItem,
-            ));
+            TDActionSheet(
+              context,
+              visible: true,
+              items: actionSheetItems,
+            );
           },
         );
       },

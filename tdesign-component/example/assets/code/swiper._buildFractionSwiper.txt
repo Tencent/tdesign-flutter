@@ -4,11 +4,15 @@
       autoplay: true,
       itemCount: 6,
       loop: true,
+      scrollDirection: Axis.vertical,
       pagination: const SwiperPagination(
-          alignment: Alignment.bottomCenter,
-          builder: TDSwiperPagination.fraction),
+        alignment: Alignment.bottomCenter,
+        builder: TDSwiperPagination.fraction,
+      ),
       itemBuilder: (BuildContext context, int index) {
-        return const TDImage(assetUrl: 'assets/img/image.png',);
+        return const TDImage(
+          assetUrl: 'assets/img/image.png',
+        );
       },
     );
   }

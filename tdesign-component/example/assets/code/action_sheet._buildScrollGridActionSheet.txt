@@ -32,8 +32,8 @@ Widget _buildScrollGridActionSheet(BuildContext context) {
             icon: const IconWithBackground(icon: TDIcons.logo_github),
           ),
           TDActionSheetItem(
-            label: 'Github',
-            icon: const IconWithBackground(icon: TDIcons.logo_github),
+            label: 'Twitter',
+            icon: const IconWithBackground(icon: TDIcons.logo_twitter),
           ),
         ],
       );

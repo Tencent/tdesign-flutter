@@ -1,0 +1,15 @@
+
+  Widget buildWithoutHeader(BuildContext context) {
+    return TDMultiPicker(
+      /// 不显示header内容
+      header: false,
+      /// todo onChange
+      onConfirm: (selected) {
+        setState(() {
+          selected_5 = '${data_1[selected[0]]}';
+        });
+        Navigator.of(context).pop();
+      },
+      data: [data_1],
+    );
+  }

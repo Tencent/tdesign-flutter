@@ -15,18 +15,14 @@
                 TDText(
                   '修改',
                   style: TextStyle(
-                    color: TDTheme.of(context).brandNormalColor,
-                    fontSize: 14,
-                    height: 1,
-                  ),
+                      color: TDTheme.of(context).brandNormalColor,
+                      fontSize: 14),
                 ),
                 TDText(
                   '通过',
                   style: TextStyle(
-                    color: TDTheme.of(context).brandNormalColor,
-                    fontSize: 14,
-                    height: 1,
-                  ),
+                      color: TDTheme.of(context).brandNormalColor,
+                      fontSize: 14),
                 ),
               ],
             );

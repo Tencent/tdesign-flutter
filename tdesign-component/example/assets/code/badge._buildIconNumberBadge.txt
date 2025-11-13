@@ -1,24 +1,18 @@
 
   Widget _buildIconNumberBadge(BuildContext context) {
-    return Container(
+    return SizedBox(
+      width: 46,
+      height: 36,
+      child: Stack(
         alignment: Alignment.bottomLeft,
-        margin: const EdgeInsets.only(left: 16),
-        child: SizedBox(
-          width: 42,
-          height: 36,
-          child: Stack(
-            alignment: Alignment.bottomLeft,
-            children: [
-              Icon(TDIcons.notification),
-              Positioned(
-                child: TDBadge(
-                  TDBadgeType.message,
-                  count: '8',
-                ),
-                left: 18,
-                bottom: 18,
-              )
-            ],
-          ),
-        ));
+        children: [
+          const Icon(TDIcons.notification),
+          Positioned(
+            child: TDBadge(TDBadgeType.message, count: num.toString()),
+            left: 18,
+            bottom: 18,
+          )
+        ],
+      ),
+    );
   }
