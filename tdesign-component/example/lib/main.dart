@@ -1,3 +1,6 @@
+// 仅在 Web 平台导入
+import 'dart:html' as html if (dart.library.html) 'dart:html';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,9 +15,6 @@ import 'home.dart';
 import 'l10n/app_localizations.dart';
 import 'provider/locale_provider.dart';
 import 'provider/theme_mode_provider.dart';
-
-// 仅在 Web 平台导入
-import 'dart:html' as html if (dart.library.html) 'dart:html';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
