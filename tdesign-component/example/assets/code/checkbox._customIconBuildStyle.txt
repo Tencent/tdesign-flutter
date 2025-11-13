@@ -4,7 +4,7 @@
       selectIds: const ['index:1'],
       cardMode: true,
       direction: Axis.vertical,
-      directionalTdCheckboxes:  [
+      directionalTdCheckboxes: [
         TDCheckbox(
           id: 'index:0',
           title: '多选',
@@ -12,8 +12,11 @@
           titleMaxLine: 2,
           subTitleMaxLine: 2,
           cardMode: true,
-          customIconBuilder: (context, checked){
-            return const Icon(TDIcons.app, size: 12,);
+          customIconBuilder: (context, checked) {
+            return const Icon(
+              TDIcons.app,
+              size: 12,
+            );
           },
         ),
       ],

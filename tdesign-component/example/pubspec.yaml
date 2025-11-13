@@ -48,7 +48,7 @@ dependencies:
   extended_nested_scroll_view: any
   flutter_screenutil: any
   provider: ^6.1.5+1
-  shared_preferences: ^2.5.3
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
@@ -120,12 +120,12 @@ flutter:
     - assets/publish_time
 
 # 生成演示代码
-AOPMarket:
-  enable: false
+AOPRegistry:
+  enable: true
   compileTarget: frontend_server, dart2js
   versions:
     negativeInfinity~3.0.0:
       unsupportedTips: 请在Flutter 3.+ 运行心悦工程
     3.0.0~infinity:
-      path: ./tdesign_flutter_generator
+      path: ./tdesign-flutter-generator
   saveDartDependencies: true

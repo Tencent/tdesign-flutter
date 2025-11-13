@@ -1,7 +1,10 @@
 
   Widget _customItems(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
+    return TDCell(
+      title: '选择时间',
+      note: selected_9.isEmpty ? '请选择' : selected_9,
+      arrow: true,
+      onClick: (click) {
         TDPicker.showDatePicker(
           context,
           title: '选择时间',
@@ -40,7 +43,7 @@
                           context, distance),
                       fontSize: index % 2 == 0 ? 20 : 10,
                       color: index % 2 == 1
-                          ? TDTheme.of(context).fontGyColor1
+                          ? TDTheme.of(context).textColorPrimary
                           : TDTheme.of(context).successColor6,
                     ),
                   )
@@ -48,6 +51,5 @@
           },
         );
       },
-      child: buildSelectRow(context, selected_9, '选择时间'),
     );
   }

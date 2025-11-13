@@ -8,16 +8,11 @@
           Expanded(
               child: PageView(
             children: const [
-              Center(
-                child: TDText('页面1,手指左滑查看页面2'),
-              ),
-              Center(
-                child: TDText('页面2,手指右滑查看页面1'),
-              ),
+              Center(child: TDText('页面1，手指左滑查看页面2')),
+              Center(child: TDText('页面2，手指右滑查看页面1')),
             ],
             onPageChanged: (index) {
               setState(() {
-                // 修改选择index
                 currentIndex = index;
               });
             },
@@ -27,20 +22,15 @@
               currentIndex: currentIndex,
               TDBottomTabBarBasicType.icon,
               useVerticalDivider: true,
-              navigationTabs: [
-                TDBottomTabBarTabConfig(
+              navigationTabs: List.generate(2, (index) {
+                final label = '标签${index + 1}';
+                return TDBottomTabBarTabConfig(
                     selectedIcon: _selectedIcon,
                     unselectedIcon: _unSelectedIcon,
                     onTap: () {
-                      onTapTab(context, '标签1');
-                    }),
-                TDBottomTabBarTabConfig(
-                    selectedIcon: _selectedIcon,
-                    unselectedIcon: _unSelectedIcon,
-                    onTap: () {
-                      onTapTab(context, '标签2');
-                    })
-              ])
+                      onTapTab(context, label);
+                    });
+              }))
         ],
       ),
     );

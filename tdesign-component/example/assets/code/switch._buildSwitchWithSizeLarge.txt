@@ -1,11 +1,10 @@
 
   Widget _buildSwitchWithSizeLarge(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
-        isOn: true,
-        size: TDSwitchSize.large,
-      ),
+    return const TDCell(
       title: '大尺寸32',
+      noteWidget: TDSwitch(
+        size: TDSwitchSize.large,
+        isOn: true,
+      ),
     );
   }

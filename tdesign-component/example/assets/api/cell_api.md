@@ -57,6 +57,8 @@
 | leftIcon | IconData? | - | 左侧图标，出现在单元格标题的左侧 |
 | leftIconWidget | Widget? | - | 左侧图标组件 |
 | note | String? | - | 和标题同行的说明文字 |
+| noteMaxLine | int | 1 | 说明文字组件 最大行数 |
+| noteMaxWidth | double? | - | 说明文字组件 最大宽度，超过部分显示省略号，防止文字溢出 |
 | noteWidget | Widget? | - | 说明文字组件 |
 | onClick | TDCellClick? | - | 点击事件 |
 | onLongPress | TDCellClick? | - | 长按事件 |

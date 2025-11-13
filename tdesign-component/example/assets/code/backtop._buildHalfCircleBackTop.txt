@@ -16,14 +16,7 @@
           child: Wrap(
             spacing: 16,
             runSpacing: 24,
-            children: [
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-              getDemoBox(context),
-            ],
+            children: List.generate(6, (_) => getDemoBox(context)),
           ),
         )
       ],

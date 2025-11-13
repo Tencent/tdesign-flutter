@@ -1,11 +1,9 @@
 
   Widget _buildMediumLoading(BuildContext context) {
-    return _buildRow([
-      const TDLoading(
-        size: TDLoadingSize.medium,
-        icon: TDLoadingIcon.circle,
-        text: '加载中…',
-        axis: Axis.horizontal,
-      ),
-    ]);
+    return const TDLoading(
+      size: TDLoadingSize.medium,
+      icon: TDLoadingIcon.circle,
+      text: '加载中…',
+      axis: Axis.horizontal,
+    );
   }

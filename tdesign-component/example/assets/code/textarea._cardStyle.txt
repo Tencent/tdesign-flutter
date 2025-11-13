@@ -9,11 +9,13 @@
       maxLength: 500,
       indicator: true,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
+        color: TDTheme.of(context).bgColorContainer,
+        borderRadius:
+            BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
       ),
-      margin: EdgeInsets.only(right: TDTheme.of(context).spacer16, left: TDTheme.of(context).spacer16),
-      onChanged: (value) {
-      },
+      margin: EdgeInsets.only(
+          right: TDTheme.of(context).spacer16,
+          left: TDTheme.of(context).spacer16),
+      onChanged: (value) {},
     );
   }

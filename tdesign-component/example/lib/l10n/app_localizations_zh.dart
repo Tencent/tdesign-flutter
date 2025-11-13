@@ -12,7 +12,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get components => 'TDesign Flutter 组件库';
 
   @override
-  String get about => '关于';
+  String get setting => '设置';
+
+  @override
+  String get about => '关于我们';
+
+  @override
+  String get version => '版本号';
+
+  @override
+  String get publishDate => '发版日期';
 
   @override
   String get defaultTheme => '默认主题';

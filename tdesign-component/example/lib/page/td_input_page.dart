@@ -513,7 +513,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
                 _countdownTime > 0
                     ? TDText(
                         '${countDownText}(${_countdownTime}秒)',
-                        textColor: TDTheme.of(context).textColorDisabled,
+                        textColor: TDTheme.of(context).textDisabledColor,
                       )
                     : TDText(confirmText,
                         textColor: TDTheme.of(context).brandNormalColor),

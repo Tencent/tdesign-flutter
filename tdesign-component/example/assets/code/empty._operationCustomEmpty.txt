@@ -4,13 +4,14 @@
       type: TDEmptyType.operation,
       emptyText: '描述文字',
       customOperationWidget: Padding(
-          padding: const EdgeInsets.only(top: 32),
-          child: TDButton(
-            text: '自定义操作按钮',
-            size: TDButtonSize.medium,
-            theme: TDButtonTheme.danger,
-            width: 160,
-            onTap: () {},
-          )),
+        padding: const EdgeInsets.only(top: 32),
+        child: TDButton(
+          text: '自定义操作按钮',
+          size: TDButtonSize.medium,
+          theme: TDButtonTheme.danger,
+          width: 160,
+          onTap: () {},
+        ),
+      ),
     );
   }

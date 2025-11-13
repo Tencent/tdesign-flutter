@@ -332,7 +332,7 @@ class _TDTextareaState extends State<TDTextarea> {
           hintTextStyle: widget.hintTextStyle ??
               TextStyle(
                   color: widget.readOnly == true
-                      ? TDTheme.of(context).textColorDisabled
+                      ? TDTheme.of(context).textDisabledColor
                       : TDTheme.of(context).textColorPlaceholder),
           cursorColor: widget.cursorColor,
           textInputBackgroundColor: widget.textInputBackgroundColor,

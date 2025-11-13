@@ -1,6 +1,7 @@
 
   Widget _buildCustomDecoration(BuildContext context) {
     return Column(
+      // spacing: 16,
       children: [
         TDSlider(
           sliderThemeData: TDSliderThemeData(
@@ -13,9 +14,7 @@
           // divisions: 5,
           onChanged: (value) {},
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,

@@ -6,7 +6,6 @@
           leftLabel: '标签文字',
           required: true,
           controller: controller[1],
-          backgroundColor: Colors.white,
           hintText: '请输入文字',
           onChanged: (text) {
             setState(() {});

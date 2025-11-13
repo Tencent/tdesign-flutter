@@ -1,17 +1,13 @@
 
   Widget _buildHReadOnlySteps(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: TDSteps(
-              steps: hReadOnlyStepsListData,
-              readOnly: true,
-            ),
-          )
-        ],
-      ),
+    return TDSteps(
+      steps: [
+        TDStepsItemData(title: 'Finish', content: 'content'),
+        TDStepsItemData(title: 'Process', content: 'content'),
+        TDStepsItemData(title: 'Default', content: 'content'),
+        TDStepsItemData(title: 'Default', content: 'content'),
+      ],
+      // 只读模式
+      readOnly: true,
     );
   }

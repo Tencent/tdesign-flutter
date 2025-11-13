@@ -1,6 +1,6 @@
 ---
 title: Avatar 头像
-description: 用于告知用户，该区域的状态变化或者待处理任务的数量。
+description: 用于展示用户头像信息，除了纯展示也可点击进入个人详情等操作。
 spline: base
 isComponent: true
 ---
@@ -25,23 +25,23 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildImageAvatar(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
-        children: const [
-          TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.normal,
-            defaultUrl: 'assets/img/td_avatar_1.png',),
-          SizedBox(width: 32,),
-          TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.normal,
-            shape: TDAvatarShape.square,
-            defaultUrl: 'assets/img/td_avatar_1.png',),
-        ],
-      ),
+  Widget _buildImageAvatar(BuildContext context) {
+    return const Row(
+      // spacing: 32,
+      children: [
+        TDAvatar(
+          size: TDAvatarSize.medium,
+          type: TDAvatarType.normal,
+          defaultUrl: 'assets/img/td_avatar_1.png',
+        ),
+        SizedBox(width: 32),
+        TDAvatar(
+          size: TDAvatarSize.medium,
+          type: TDAvatarType.normal,
+          shape: TDAvatarShape.square,
+          defaultUrl: 'assets/img/td_avatar_1.png',
+        ),
+      ],
     );
   }</pre>
 
@@ -53,23 +53,23 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildTextAvatar(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
-        children: const [
-          TDAvatar(
-              size: TDAvatarSize.medium,
-              type: TDAvatarType.customText,
-              text: 'A'),
-          SizedBox(width: 32,),
-          TDAvatar(
-              size: TDAvatarSize.medium,
-              type: TDAvatarType.customText,
-              shape: TDAvatarShape.square,
-              text: 'A'),
-        ],
-      ),
+  Widget _buildTextAvatar(BuildContext context) {
+    return const Row(
+      // spacing: 32,
+      children: [
+        TDAvatar(
+          size: TDAvatarSize.medium,
+          type: TDAvatarType.customText,
+          text: 'A',
+        ),
+        SizedBox(width: 32),
+        TDAvatar(
+          size: TDAvatarSize.medium,
+          type: TDAvatarType.customText,
+          shape: TDAvatarShape.square,
+          text: 'A',
+        ),
+      ],
     );
   }</pre>
 
@@ -81,22 +81,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildIconAvatar(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
-        children: const [
-          TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.icon,),
-          SizedBox(width: 32,),
-          TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.icon,
-            shape: TDAvatarShape.square,
-          ),
-        ],
-      ),
+  Widget _buildIconAvatar(BuildContext context) {
+    return const Row(
+      // spacing: 32,
+      children: [
+        TDAvatar(
+          size: TDAvatarSize.medium,
+          type: TDAvatarType.icon,
+        ),
+        SizedBox(width: 32),
+        TDAvatar(
+          size: TDAvatarSize.medium,
+          type: TDAvatarType.icon,
+          shape: TDAvatarShape.square,
+        ),
+      ],
     );
   }</pre>
 
@@ -108,56 +107,62 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildBadgeAvatar(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
-        children: [
-          SizedBox(
-            height: 51,
-            width: 51,
-            child: Stack(
-              alignment:Alignment.bottomLeft,
-              children: const [
-                TDAvatar(
-                  size: TDAvatarSize.medium,
-                  type: TDAvatarType.normal,
-                  defaultUrl: 'assets/img/td_avatar_1.png',),
-                Positioned(child: TDBadge(TDBadgeType.redPoint), right: 0, top: 0)
-              ],
-            ),
+  Widget _buildBadgeAvatar(BuildContext context) {
+    return const Row(
+      // spacing: 32,
+      children: [
+        SizedBox(
+          height: 51,
+          width: 51,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              TDAvatar(
+                size: TDAvatarSize.medium,
+                type: TDAvatarType.normal,
+                defaultUrl: 'assets/img/td_avatar_1.png',
+              ),
+              Positioned(child: TDBadge(TDBadgeType.redPoint), right: 0, top: 0)
+            ],
           ),
-          const SizedBox(width: 32,),
-          SizedBox(
-            height: 51,
-            width: 51,
-            child: Stack(
-              alignment:Alignment.bottomLeft,
-              children: const [
-                TDAvatar(
-                    size: TDAvatarSize.medium,
-                    type: TDAvatarType.customText,
-                    text: 'A'),
-                Positioned(child: TDBadge(TDBadgeType.message,count: '8',), right: 0, top: 0)
-              ],
-            ),
+        ),
+        SizedBox(width: 32),
+        SizedBox(
+          height: 51,
+          width: 51,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              TDAvatar(
+                size: TDAvatarSize.medium,
+                type: TDAvatarType.customText,
+                text: 'A',
+              ),
+              Positioned(
+                child: TDBadge(TDBadgeType.message, count: '8'),
+                right: 0,
+                top: 0,
+              )
+            ],
           ),
-          const SizedBox(width: 32,),
-          SizedBox(
-            width: 51,
-            height: 51,
-            child: Stack(
-              alignment:Alignment.bottomLeft,
-              children: const [
-                TDAvatar(
-                  size: TDAvatarSize.medium,
-                  type: TDAvatarType.icon,),
-                Positioned(child: TDBadge(TDBadgeType.message,count: '12',), right: 0, top: 0,)
-              ],
-            ),
+        ),
+        SizedBox(width: 32),
+        SizedBox(
+          width: 51,
+          height: 51,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              TDAvatar(size: TDAvatarSize.medium, type: TDAvatarType.icon),
+              Positioned(
+                child: TDBadge(TDBadgeType.message, count: '12'),
+                right: 0,
+                top: 0,
+              )
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }</pre>
 
@@ -170,18 +175,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildDisplayAvatar(BuildContext context){
+  Widget _buildDisplayAvatar(BuildContext context) {
     var assetUrl = 'assets/img/td_avatar_1.png';
     var assetUrl2 = 'assets/img/td_avatar_2.png';
     var avatarList = [assetUrl, assetUrl2, assetUrl, assetUrl2, assetUrl];
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: const EdgeInsets.only(left: 16),
-      child: TDAvatar(
-        size: TDAvatarSize.medium,
-        type: TDAvatarType.display,
-        displayText: '+5',
-        avatarDisplayListAsset: avatarList,),
+    return TDAvatar(
+      size: TDAvatarSize.medium,
+      type: TDAvatarType.display,
+      displayText: '+5',
+      avatarDisplayListAsset: avatarList,
     );
   }</pre>
 
@@ -193,20 +195,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildOperationAvatar(BuildContext context){
+  Widget _buildOperationAvatar(BuildContext context) {
     var assetUrl = 'assets/img/td_avatar_1.png';
     var assetUrl2 = 'assets/img/td_avatar_2.png';
     var avatarList = [assetUrl, assetUrl2, assetUrl, assetUrl2, assetUrl];
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: const EdgeInsets.only(left: 16),
-      child: TDAvatar(
-          size: TDAvatarSize.medium,
-          type: TDAvatarType.operation,
-          avatarDisplayListAsset: avatarList,
-          onTap: () {
-            TDToast.showText('点击了操作', context: context);
-          }),
+    return TDAvatar(
+      size: TDAvatarSize.medium,
+      type: TDAvatarType.operation,
+      avatarDisplayListAsset: avatarList,
+      onTap: () {
+        TDToast.showText('点击了操作', context: context);
+      },
     );
   }</pre>
 
@@ -214,93 +213,96 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                                   
 ### 1 组件尺寸
 
-大尺寸 :64px
+大尺寸：64px
             
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildLargeAvatar(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
-        children: const [
-          TDAvatar(
-            size: TDAvatarSize.large,
-            type: TDAvatarType.normal,
-            defaultUrl: 'assets/img/td_avatar_1.png',),
-          SizedBox(width: 32,),
-          TDAvatar(
-              size: TDAvatarSize.large,
-              type: TDAvatarType.customText,
-              text: 'A'),
-          SizedBox(width: 32,),
-          TDAvatar(
-            size: TDAvatarSize.large,
-            type: TDAvatarType.icon,),
-        ],
-      ),
+  Widget _buildLargeAvatar(BuildContext context) {
+    return const Row(
+      // spacing: 32,
+      children: [
+        TDAvatar(
+          size: TDAvatarSize.large,
+          type: TDAvatarType.normal,
+          defaultUrl: 'assets/img/td_avatar_1.png',
+        ),
+        SizedBox(width: 32),
+        TDAvatar(
+          size: TDAvatarSize.large,
+          type: TDAvatarType.customText,
+          text: 'A',
+        ),
+        SizedBox(width: 32),
+        TDAvatar(
+          size: TDAvatarSize.large,
+          type: TDAvatarType.icon,
+        ),
+      ],
     );
   }</pre>
 
 </td-code-block>
                                   
 
-中尺寸 :48px
+中尺寸：48px
             
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildMediumAvatar(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
-        children: const [
-          TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.normal,
-            defaultUrl: 'assets/img/td_avatar_1.png',),
-          SizedBox(width: 48,),
-          TDAvatar(
-              size: TDAvatarSize.medium,
-              type: TDAvatarType.customText,
-              text: 'A'),
-          SizedBox(width: 48,),
-          TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.icon,),
-        ],
-      ),
+  Widget _buildMediumAvatar(BuildContext context) {
+    return const Row(
+      // spacing: 48,
+      children: [
+        TDAvatar(
+          size: TDAvatarSize.medium,
+          type: TDAvatarType.normal,
+          defaultUrl: 'assets/img/td_avatar_1.png',
+        ),
+        SizedBox(width: 48),
+        TDAvatar(
+          size: TDAvatarSize.medium,
+          type: TDAvatarType.customText,
+          text: 'A',
+        ),
+        SizedBox(width: 48),
+        TDAvatar(
+          size: TDAvatarSize.medium,
+          type: TDAvatarType.icon,
+        ),
+      ],
     );
   }</pre>
 
 </td-code-block>
                                   
 
-小尺寸 :40px
+小尺寸：40px
             
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
-  Widget _buildSmallAvatar(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Row(
-        children: const [
-          TDAvatar(
-            size: TDAvatarSize.small,
-            type: TDAvatarType.normal,
-            defaultUrl: 'assets/img/td_avatar_1.png',),
-          SizedBox(width: 56,),
-          TDAvatar(
-              size: TDAvatarSize.small,
-              type: TDAvatarType.customText,
-              text: 'A'),
-          SizedBox(width: 56,),
-          TDAvatar(
-            size: TDAvatarSize.small,
-            type: TDAvatarType.icon,),
-        ],
-      ),
+  Widget _buildSmallAvatar(BuildContext context) {
+    return const Row(
+      // spacing: 56,
+      children: [
+        TDAvatar(
+          size: TDAvatarSize.small,
+          type: TDAvatarType.normal,
+          defaultUrl: 'assets/img/td_avatar_1.png',
+        ),
+        SizedBox(width: 56),
+        TDAvatar(
+          size: TDAvatarSize.small,
+          type: TDAvatarType.customText,
+          text: 'A',
+        ),
+        SizedBox(width: 56),
+        TDAvatar(
+          size: TDAvatarSize.small,
+          type: TDAvatarType.icon,
+        ),
+      ],
     );
   }</pre>
 
@@ -314,24 +316,24 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
-| size | TDAvatarSize | TDAvatarSize.medium | 头像尺寸 |
-| type | TDAvatarType | TDAvatarType.normal | 头像类型 |
-| shape | TDAvatarShape | TDAvatarShape.circle | 头像形状 |
-| text | String? | - | 自定义文字 |
-| radius | double? | - | 自定义圆角 |
-| icon | IconData? | - | 自定义图标 |
-| avatarUrl | String? | - | 头像地址 |
-| avatarSize | double? | - | 自定义头像大小 |
-| avatarDisplayList | List<String>? | - | 带操作\展示的头像列表 |
-| displayText | String? | - | 纯展示类型末尾文字 |
-| onTap |  Function()? | - | 操作点击事件 |
-| defaultUrl | String | '' | 默认图片（本地） |
+| avatarDisplayBorder | double | 2 | 带操作展示的头像描边宽度 |
+| avatarDisplayList | List<String>? | - | 带操作展示的头像列表 |
+| avatarDisplayListAsset | List<String>? | - | 带操作展示的头像列表（本地资源） |
 | avatarDisplayWidget | Widget? | - | 带操作头像自定义操作Widget |
-| avatarDisplayBorder | double | 2 | 带操作\展示的头像描边宽度 |
-| avatarDisplayListAsset | List<String>? | - | 带操作\展示的头像列表 (本地资源) |
+| avatarSize | double? | - | 自定义头像大小 |
+| avatarUrl | String? | - | 头像地址 |
 | backgroundColor | Color? | - | 自定义文案时背景色 |
+| defaultUrl | String | '' | 默认图片（本地） |
+| displayText | String? | - | 纯展示类型末尾文字 |
 | fit | BoxFit? | - | 自定义图片对齐方式 |
+| icon | IconData? | - | 自定义图标 |
+| key |  | - |  |
+| onTap |  Function()? | - | 操作点击事件 |
+| radius | double? | - | 自定义圆角 |
+| shape | TDAvatarShape | TDAvatarShape.circle | 头像形状 |
+| size | TDAvatarSize | TDAvatarSize.medium | 头像尺寸 |
+| text | String? | - | 自定义文字 |
+| type | TDAvatarType | TDAvatarType.normal | 头像类型 |
 
 
   

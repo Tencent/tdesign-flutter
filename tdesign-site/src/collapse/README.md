@@ -174,12 +174,12 @@ Card Style 卡片样式
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| children | List<TDCollapsePanel> | - | 折叠面板列表的子组件 |
-| style | TDCollapseStyle | TDCollapseStyle.block | 折叠面板列表的样式 |
-| expansionCallback | ExpansionPanelCallback? | - | 折叠面板列表的回调函数； |
 | animationDuration | Duration | kThemeAnimationDuration | 折叠面板列表的动画时长 |
+| children | List<TDCollapsePanel> | - | 折叠面板列表的子组件 |
 | elevation | double | 0 | 折叠面板列表的阴影 |
+| expansionCallback | ExpansionPanelCallback? | - | 折叠面板列表的回调函数； |
 | key |  | - |  |
+| style | TDCollapseStyle | TDCollapseStyle.block | 折叠面板列表的样式 |
 
 
 #### 工厂构造方法

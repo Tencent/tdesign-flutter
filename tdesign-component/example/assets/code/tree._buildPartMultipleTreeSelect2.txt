@@ -18,6 +18,7 @@
     return TDTreeSelect(
       options: options,
       defaultValue: values1,
+      style: TDTreeSelectStyle.outline,
       onChange: (val, level) {
         print('$val, $level');
       },

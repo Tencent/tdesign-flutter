@@ -10,7 +10,6 @@
             text: '浅色',
             type: TDButtonType.outline,
             theme: TDButtonTheme.primary,
-               
             onTap: () {
               TDPopover.showPopover(
                 context: _,

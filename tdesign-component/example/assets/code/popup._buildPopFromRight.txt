@@ -7,15 +7,16 @@
       type: TDButtonType.outline,
       size: TDButtonSize.large,
       onTap: () {
-        Navigator.of(context).push(TDSlidePopupRoute(
-            modalBarrierColor: TDTheme.of(context).fontGyColor2,
-            slideTransitionFrom: SlideTransitionFrom.right,
-            builder: (context) {
-              return Container(
-                color: Colors.white,
-                width: 280,
-              );
-            }));
+        Navigator.of(context).push(
+          TDSlidePopupRoute(
+              slideTransitionFrom: SlideTransitionFrom.right,
+              builder: (context) {
+                return Container(
+                  color: TDTheme.of(context).bgColorContainer,
+                  width: 280,
+                );
+              }),
+        );
       },
     );
   }

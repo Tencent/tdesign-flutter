@@ -4,7 +4,7 @@
       contentDirection: TDContentDirection.right,
       selectIds: const ['0'],
       child: Column(
-        children:  [
+        children: [
           TDCheckbox(
             id: '0',
             title: '选项禁用-已选',
@@ -22,7 +22,6 @@
             titleFont: TDTheme.of(context).fontBodySmall,
             subTitleFont: TDTheme.of(context).fontBodyExtraSmall,
           ),
-
           TDCheckbox(
             id: 'index:0',
             title: '多选',

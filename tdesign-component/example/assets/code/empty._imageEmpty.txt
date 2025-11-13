@@ -4,11 +4,15 @@
       type: TDEmptyType.plain,
       emptyText: '描述文字',
       image: Container(
-        width: 120,
-        height: 120,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
-            image: const DecorationImage(image: AssetImage('assets/img/empty.png'))),
+          color: TDTheme.of(context).bgColorComponent,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const TDImage(
+          width: 120,
+          assetUrl: 'assets/img/empty.png',
+          type: TDImageType.fitWidth,
+        ),
       ),
     );
   }

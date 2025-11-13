@@ -317,7 +317,7 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
                 ? checked
                     ? TDTheme.of(context).brandColor7
                     : TDTheme.of(context).textColorPrimary
-                : TDTheme.of(context).textColorDisabled,
+                : TDTheme.of(context).textDisabledColor,
           ),
         ),
       ),

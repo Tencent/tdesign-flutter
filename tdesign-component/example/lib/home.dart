@@ -12,8 +12,7 @@ var _kShowTodoComponent = false;
 
 /// 切换主题的回调
 typedef OnThemeChange = Function(
-  TDThemeData themeData,
-  TDThemeData darkThemeData,
+  TDThemeData themeData
 );
 
 /// 切换语言的回调
@@ -25,17 +24,11 @@ class MyHomePage extends StatefulWidget {
     Key? key,
     required this.title,
     this.onThemeChange,
-    this.locale,
-    this.onLocaleChange,
   }) : super(key: key);
 
   final String title;
 
   final OnThemeChange? onThemeChange;
-
-  final OnLocaleChange? onLocaleChange;
-
-  final Locale? locale;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -72,29 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.only(
                       right: 16,
                     ),
-                    child: TDText(
-                      widget.locale?.languageCode == 'en' ? '中文' : 'English',
-                      textColor: TDTheme.of(context).whiteColor1,
-                    ),
-                  ),
-                  onTap: () {
-                    if (widget.locale?.languageCode == 'en') {
-                      widget.onLocaleChange?.call(const Locale('zh'));
-                    } else {
-                      widget.onLocaleChange?.call(const Locale('en'));
-                    }
-                  },
-                ),
-                GestureDetector(
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.only(
-                      right: 16,
-                    ),
-                    child: TDText(
-                      AppLocalizations.of(context)?.about,
-                      textColor: TDTheme.of(context).whiteColor1,
-                    ),
+                    child: Icon(TDIcons.setting, color: TDTheme.of(context).whiteColor1,),
                   ),
                   onTap: () {
                     focusNode.unfocus();
@@ -122,13 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           text: AppLocalizations.of(context)?.defaultTheme,
                           theme: TDButtonTheme.primary,
                           onTap: () async {
-                            var jsonString = await rootBundle
-                                .loadString('assets/theme.json');
-                            var darkThemeData =
-                                TDThemeData.fromJson('dark', jsonString) ??
-                                    TDThemeData.defaultData(name: 'dark');
                             widget.onThemeChange?.call(
-                                TDThemeData.defaultData(), darkThemeData);
+                                TDThemeData.defaultData());
                           },
                         ),
                       ),
@@ -142,14 +108,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             var jsonString = await rootBundle
                                 .loadString('assets/theme.json');
                             var themeData = TDThemeData.fromJson(
-                                    'greenLight', jsonString) ??
+                                    'green', jsonString, darkName: 'greenDark') ??
                                 TDThemeData.defaultData();
-                            var darkThemeData =
-                                TDThemeData.fromJson('greenDark', jsonString) ??
-                                    TDThemeData.defaultData(name: 'dark');
                             widget.onThemeChange?.call(
                               themeData,
-                              darkThemeData,
                             );
                           },
                         ),
@@ -164,14 +126,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             var jsonString = await rootBundle
                                 .loadString('assets/theme.json');
                             var themeData =
-                                TDThemeData.fromJson('redLight', jsonString) ??
+                                TDThemeData.fromJson('red', jsonString, darkName: 'redDark') ??
                                     TDThemeData.defaultData();
-                            var darkThemeData =
-                                TDThemeData.fromJson('redDark', jsonString) ??
-                                    TDThemeData.defaultData(name: 'dark');
                             widget.onThemeChange?.call(
                               themeData,
-                              darkThemeData,
                             );
                           },
                         ),

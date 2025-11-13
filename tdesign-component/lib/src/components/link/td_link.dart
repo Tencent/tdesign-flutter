@@ -153,7 +153,7 @@ class TDLink extends StatelessWidget {
         TDLinkStyle.danger: theme.errorDisabledColor,
         TDLinkStyle.warning: theme.warningDisabledColor,
         TDLinkStyle.success: theme.successDisabledColor,
-        TDLinkStyle.defaultStyle: theme.textColorDisabled,
+        TDLinkStyle.defaultStyle: theme.textDisabledColor,
       },
     };
 

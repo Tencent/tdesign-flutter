@@ -6,14 +6,14 @@
       child: Column(
         children: [
           TDTabBar(
-              tabs: subList(3),
-              controller: tabController,
-              showIndicator: true,
-              backgroundColor: Colors.white,
-              isScrollable: false,),
+            tabs: subList(3),
+            controller: tabController,
+            showIndicator: true,
+            isScrollable: false,
+          ),
           Container(
             height: 120,
-            color: Colors.white,
+            color: TDTheme.of(context).bgColorContainer,
             child: TDTabBarView(
               children: _getTabViews(),
               controller: tabController,

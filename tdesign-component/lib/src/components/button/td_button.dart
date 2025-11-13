@@ -172,6 +172,13 @@ class _TDButtonState extends State<TDButton> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _updateParams();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     Widget display = Container(
       width: _width,

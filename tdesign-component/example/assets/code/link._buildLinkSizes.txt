@@ -1,14 +1,13 @@
 
   Widget _buildLinkSizes(BuildContext context) {
     return Container(
-        color: TDTheme.of(context).whiteColor1,
+        height: 48,
+        color: TDTheme.of(context).bgColorContainer,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.small),
-            const SizedBox(height: 48, width: 40),
             _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.medium),
-            const SizedBox(height: 48, width: 40),
             _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.large),
           ],
         ));

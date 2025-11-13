@@ -2,8 +2,12 @@
   Widget _verticalIconToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showIconText('带竖向图标',
-            icon: TDIcons.check_circle, direction: IconTextDirection.vertical, context: context);
+        TDToast.showIconText(
+          '带竖向图标',
+          icon: TDIcons.check_circle,
+          direction: IconTextDirection.vertical,
+          context: context,
+        );
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,

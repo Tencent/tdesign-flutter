@@ -121,7 +121,7 @@ class TDActionSheetList extends StatelessWidget {
                       data: IconThemeData(
                         color: item.disabled
                             // 禁用状态下的图标颜色
-                            ? TDTheme.of(context).textColorDisabled
+                            ? TDTheme.of(context).textDisabledColor
                             : (item.textStyle?.color ??
                                 // 正常状态下的图标颜色
                                 TDTheme.of(context).textColorPrimary),
@@ -139,7 +139,7 @@ class TDActionSheetList extends StatelessWidget {
                     item.label,
                     font: TDTheme.of(context).fontBodyLarge,
                     textColor: item.disabled
-                        ? TDTheme.of(context).textColorDisabled // 禁用状态下的文本颜色
+                        ? TDTheme.of(context).textDisabledColor // 禁用状态下的文本颜色
                         : TDTheme.of(context).textColorPrimary, // 正常状态下的文本颜色
                     style: item.textStyle,
                   ),

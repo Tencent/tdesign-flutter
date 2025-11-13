@@ -1,9 +1,5 @@
 
   Widget _actionImageViewer(BuildContext context) {
-    var delImages = [
-      'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
-      'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
-    ];
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -13,7 +9,7 @@
       onTap: () {
         TDImageViewer.showImageViewer(
           context: context,
-          images: delImages,
+          images: images,
           showIndex: true,
           deleteBtn: true,
         );

@@ -7,11 +7,12 @@
       descriptionWidget: TDRadioGroup(
         selectId: '0',
         direction: Axis.horizontal,
-        directionalTdRadios: const [TDRadio(
-          id: '0',
-          title: '单选标题0',
-          showDivider: false,
-        ),
+        directionalTdRadios: const [
+          TDRadio(
+            id: '0',
+            title: '单选标题0',
+            showDivider: false,
+          ),
           TDRadio(
             id: '1',
             title: '单选标题1',

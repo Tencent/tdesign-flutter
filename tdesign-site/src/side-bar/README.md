@@ -35,63 +35,63 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildAnchorSideBar(BuildContext context) {
-    // 锚点用法
-    final list = <SideItemProps>[];
-    final pages = <Widget>[];
+    var demoHeight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        titleBarHeight -
+        testButtonHeight;
 
-    for (var i = 0; i < 20; i++) {
-      list.add(SideItemProps(
-        index: i,
-        label: '选项',
-        value: i,
-      ));
-      pages.add(getAnchorDemo(i));
-    }
-
-    pages.add(Container(
-      height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
-    ));
-
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
-      count: '8',
-    );
-
-    var demoHeight = MediaQuery.of(context).size.height;
-    _sideBarController.init(list);
-
-    return Row(
+    return Column(
       children: [
-        SizedBox(
-          width: 110,
-          child: TDSideBar(
-            height: demoHeight,
-            style: TDSideBarStyle.normal,
-            value: currentValue,
-            controller: _sideBarController,
-            children: list
-                .map((ele) => TDSideBarItem(
-                    label: ele.label ?? '',
-                    badge: ele.badge,
-                    value: ele.value,
-                    icon: ele.icon))
-                .toList(),
-            onChanged: onChanged,
-            onSelected: onSelected,
+        Container(
+          height: testButtonHeight,
+          padding: const EdgeInsets.all(16),
+          child: TDButton(
+            text: '更新children',
+            onTap: () {
+              setState(() {
+                var children = list
+                    .map((e) => SideItemProps(
+                        index: e.index,
+                        label: '变更${e.index}',
+                        badge: e.badge,
+                        value: e.value,
+                        icon: e.icon))
+                    .toList();
+                _sideBarController.children = children;
+                setState(() {});
+              });
+            },
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
-          child: SingleChildScrollView(
-            controller: _demoScroller,
-            child: Column(
-              children: pages,
-            ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 110,
+                child: TDSideBar(
+                  style: TDSideBarStyle.normal,
+                  value: currentValue,
+                  controller: _sideBarController,
+                  onChanged: onChanged,
+                  onSelected: onSelected,
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                    controller: _demoScroller,
+                    child: Container(
+                      color: TDTheme.of(context).bgColorContainer,
+                      child: Column(
+                        children: [
+                          ...pages,
+                          Container(height: demoHeight - itemHeight)
+                        ],
+                      ),
+                    )),
+              )
+            ],
           ),
-        ))
+        )
       ],
     );
   }</pre>
@@ -111,7 +111,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     for (var i = 0; i < 100; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项 ${i}',
         value: i,
       ));
       pages.add(getPageDemo(i));
@@ -130,14 +130,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       }
     }
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
@@ -152,15 +149,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: PageView(
             controller: _pageController,
             scrollDirection: Axis.vertical,
             children: pages,
             physics: const NeverScrollableScrollPhysics(),
           ),
-        ))
+        )
       ],
     );
   }</pre>
@@ -173,63 +168,63 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildAnchorSideBar(BuildContext context) {
-    // 锚点用法
-    final list = <SideItemProps>[];
-    final pages = <Widget>[];
+    var demoHeight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        titleBarHeight -
+        testButtonHeight;
 
-    for (var i = 0; i < 20; i++) {
-      list.add(SideItemProps(
-        index: i,
-        label: '选项',
-        value: i,
-      ));
-      pages.add(getAnchorDemo(i));
-    }
-
-    pages.add(Container(
-      height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
-    ));
-
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
-      count: '8',
-    );
-
-    var demoHeight = MediaQuery.of(context).size.height;
-    _sideBarController.init(list);
-
-    return Row(
+    return Column(
       children: [
-        SizedBox(
-          width: 110,
-          child: TDSideBar(
-            height: demoHeight,
-            style: TDSideBarStyle.normal,
-            value: currentValue,
-            controller: _sideBarController,
-            children: list
-                .map((ele) => TDSideBarItem(
-                    label: ele.label ?? '',
-                    badge: ele.badge,
-                    value: ele.value,
-                    icon: ele.icon))
-                .toList(),
-            onChanged: onChanged,
-            onSelected: onSelected,
+        Container(
+          height: testButtonHeight,
+          padding: const EdgeInsets.all(16),
+          child: TDButton(
+            text: '更新children',
+            onTap: () {
+              setState(() {
+                var children = list
+                    .map((e) => SideItemProps(
+                        index: e.index,
+                        label: '变更${e.index}',
+                        badge: e.badge,
+                        value: e.value,
+                        icon: e.icon))
+                    .toList();
+                _sideBarController.children = children;
+                setState(() {});
+              });
+            },
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
-          child: SingleChildScrollView(
-            controller: _demoScroller,
-            child: Column(
-              children: pages,
-            ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 110,
+                child: TDSideBar(
+                  style: TDSideBarStyle.normal,
+                  value: currentValue,
+                  controller: _sideBarController,
+                  onChanged: onChanged,
+                  onSelected: onSelected,
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                    controller: _demoScroller,
+                    child: Container(
+                      color: TDTheme.of(context).bgColorContainer,
+                      child: Column(
+                        children: [
+                          ...pages,
+                          Container(height: demoHeight - itemHeight)
+                        ],
+                      ),
+                    )),
+              )
+            ],
           ),
-        ))
+        )
       ],
     );
   }</pre>
@@ -249,7 +244,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     for (var i = 0; i < 100; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项 ${i}',
         value: i,
       ));
       pages.add(getPageDemo(i));
@@ -268,14 +263,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       }
     }
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
@@ -290,15 +282,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: PageView(
             controller: _pageController,
             scrollDirection: Axis.vertical,
             children: pages,
             physics: const NeverScrollableScrollPhysics(),
           ),
-        ))
+        )
       ],
     );
   }</pre>
@@ -316,14 +306,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     final pages = <Widget>[];
 
     for (var i = 0; i < 20; i++) {
-      list.add(
-          SideItemProps(index: i, label: '选项', value: i, icon: TDIcons.app));
+      list.add(SideItemProps(
+        index: i,
+        label: '选项${i}',
+        value: i,
+        icon: TDIcons.app,
+      ));
       pages.add(getAnchorDemo(i));
     }
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
     ));
 
     list[1].badge = const TDBadge(TDBadgeType.redPoint);
@@ -332,14 +326,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       count: '8',
     );
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
@@ -355,15 +346,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: SingleChildScrollView(
             controller: _demoScroller,
             child: Column(
               children: pages,
             ),
           ),
-        ))
+        )
       ],
     );
   }</pre>
@@ -386,7 +375,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     for (var i = 0; i < 20; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项${i}',
         value: i,
       ));
       pages.add(getAnchorDemo(i));
@@ -394,7 +383,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
     ));
 
     list[1].badge = const TDBadge(TDBadgeType.redPoint);
@@ -403,14 +392,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       count: '8',
     );
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.outline,
             value: currentValue,
             controller: _sideBarController,
@@ -426,15 +412,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: SingleChildScrollView(
             controller: _demoScroller,
             child: Column(
               children: pages,
             ),
           ),
-        ))
+        )
       ],
     );
   }</pre>
@@ -454,8 +438,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     for (var i = 0; i < 100; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项 $i',
         value: i,
+        textStyle: TextStyle(color: TDTheme.of(context).brandLightColor),
       ));
       pages.add(getPageDemo(i));
     }
@@ -474,14 +459,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       }
     }
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
@@ -493,23 +475,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     textStyle: ele.textStyle,
                     icon: ele.icon))
                 .toList(),
-            selectedTextStyle:TextStyle(color: Colors.red),
+            selectedTextStyle: const TextStyle(color: Colors.red),
             onSelected: setCurrentValue,
-            contentPadding:EdgeInsets.only(left: 16, top: 16,bottom: 16),
+            contentPadding:
+                const EdgeInsets.only(left: 16, top: 16, bottom: 16),
             selectedBgColor: Colors.blue,
             unSelectedBgColor: Colors.yellow,
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: PageView(
             controller: _pageController,
             scrollDirection: Axis.vertical,
             children: pages,
             physics: const NeverScrollableScrollPhysics(),
           ),
-        ))
+        )
       ],
     );
   }</pre>
@@ -529,7 +510,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     for (var i = 0; i < 20; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项${i}',
         value: i,
       ));
       pages.add(getAnchorDemo(i));
@@ -537,7 +518,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
     pages.add(Container(
       height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: TDTheme.of(context).bgColorContainer),
     ));
 
     list[1].badge = const TDBadge(TDBadgeType.redPoint);
@@ -546,14 +527,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       count: '8',
     );
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.outline,
             value: currentValue,
             controller: _sideBarController,
@@ -569,15 +547,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: SingleChildScrollView(
             controller: _demoScroller,
             child: Column(
               children: pages,
             ),
           ),
-        ))
+        )
       ],
     );
   }</pre>
@@ -597,8 +573,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     for (var i = 0; i < 100; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项 $i',
         value: i,
+        textStyle: TextStyle(color: TDTheme.of(context).brandLightColor),
       ));
       pages.add(getPageDemo(i));
     }
@@ -617,14 +594,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       }
     }
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
@@ -636,23 +610,22 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
                     textStyle: ele.textStyle,
                     icon: ele.icon))
                 .toList(),
-            selectedTextStyle:TextStyle(color: Colors.red),
+            selectedTextStyle: const TextStyle(color: Colors.red),
             onSelected: setCurrentValue,
-            contentPadding:EdgeInsets.only(left: 16, top: 16,bottom: 16),
+            contentPadding:
+                const EdgeInsets.only(left: 16, top: 16, bottom: 16),
             selectedBgColor: Colors.blue,
             unSelectedBgColor: Colors.yellow,
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: PageView(
             controller: _pageController,
             scrollDirection: Axis.vertical,
             children: pages,
             physics: const NeverScrollableScrollPhysics(),
           ),
-        ))
+        )
       ],
     );
   }</pre>
@@ -662,43 +635,43 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDSideBar
+### TDSideBarItem
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
-| value | int? | - | 选项值 |
-| defaultValue | int? | - | 默认值 |
-| selectedColor | Color? | - | 选中值后颜色 |
-| children | List<TDSideBarItem> | const [] | 单项 |
-| onChanged | ValueChanged<int>? | - | 选中值发生变化（Controller控制） |
-| onSelected | ValueChanged<int>? | - | 选中值发生变化（点击事件） |
-| height | double? | - | 高度 |
-| controller | TDSideBarController? | - | 控制器 |
-| contentPadding | EdgeInsetsGeometry? | - | 自定义文本框内边距 |
-| selectedTextStyle | TextStyle? | - | 选中样式 |
-| style | TDSideBarStyle | TDSideBarStyle.normal | 样式 |
-| loading | bool? | - | 加载效果 |
-| loadingWidget | Widget? | - | 自定义加载动画 |
-| selectedBgColor | Color? | - | 选择的背景颜色 |
-| unSelectedBgColor | Color? | - | 未选择的背景颜色 |
-| unSelectedColor | Color? | - | 未选中颜色 |
-
-```
-```
- ### TDSideBarItem
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
 | badge | TDBadge? | - | 徽标 |
 | disabled | bool | false | 是否禁用 |
 | icon | IconData? | - | 图标 |
-| textStyle | TextStyle? | - | 标签样式 |
+| key |  | - |  |
 | label | String | '' | 标签 |
+| textStyle | TextStyle? | - | 标签样式 |
 | value | int | -1 | 值 |
+
+```
+```
+ ### TDSideBar
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| children | List<TDSideBarItem> | const [] | 单项 |
+| contentPadding | EdgeInsetsGeometry? | - | 自定义文本框内边距 |
+| controller | TDSideBarController? | - | 控制器 |
+| defaultValue | int? | - | 默认值 |
+| height | double? | - | 高度 |
+| key |  | - |  |
+| loading | bool? | - | 加载效果 |
+| loadingWidget | Widget? | - | 自定义加载动画 |
+| onChanged | ValueChanged<int>? | - | 选中值发生变化（Controller控制） |
+| onSelected | ValueChanged<int>? | - | 选中值发生变化（点击事件） |
+| selectedBgColor | Color? | - | 选择的背景颜色 |
+| selectedColor | Color? | - | 选中值后颜色 |
+| selectedTextStyle | TextStyle? | - | 选中样式 |
+| style | TDSideBarStyle | TDSideBarStyle.normal | 样式 |
+| unSelectedBgColor | Color? | - | 未选择的背景颜色 |
+| unSelectedColor | Color? | - | 未选中颜色 |
+| value | int? | - | 选项值 |
 
 
   
