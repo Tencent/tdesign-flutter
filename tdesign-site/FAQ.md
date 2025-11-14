@@ -17,9 +17,9 @@ TDesign Flutter 从 `0.2.0` 版本开始，正常情况下，每月初发一个�
 - 在应用使用中切换主题颜色，示例代码请参考 example 的 `main.dart` 和 `home.dart`：https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/main.dart
 - 转换完整代码：https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/shell/theme/css2JsonTheme.dart
 
-## 暗色模式
+## 深色模式
 
-TDesign Flutter 目前未内置暗色模式，请使用“自定义主题”方式自己适配。
+可参考[深色模式](https://tdesign.tencent.com/flutter/dark-mode)
 
 ## 文字居中
 
