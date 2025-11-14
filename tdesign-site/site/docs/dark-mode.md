@@ -119,8 +119,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // MaterialApp中设置theme,darkTheme,themeMode三个属性如下，如果有自定义主题属性，可以通过copyWith()方法修改。
-    // 注：主题切换需要业务自己实现，比如使用Provider,具体可参考tdesign-flutter/tdesign-component/example/lib/component_test/dark_test.dart
+    /// MaterialApp 中设置 theme、darkTheme、themeMode 三个属性
+    /// 如下所示，如果有自定义主题属性，可以通过 copyWith() 方法修改。
+    /// 注：主题切换需要业务自己实现，比如使用 Provider
+    /// 具体可参考 tdesign-flutter/tdesign-component/example/lib/component_test/dark_test.dart
     return MaterialApp(
       title: '深色模式切换测试',
 
@@ -138,7 +140,6 @@ class App extends StatelessWidget {
         cupertinoOverrideTheme: const CupertinoThemeData().copyWith(
           barBackgroundColor: themeData.dark?.grayColor13.withOpacity(0.5),
         ),
-
         /// ... 更多重载主题
       ),
       themeMode: themeModeProvider.themeMode,
@@ -179,6 +180,8 @@ return MaterialApp(
 你也可以根据自己的业务需求，使用其他状态管理方式。
 
 1. 新建 `ThemeModeProvider` 类，并继承 `ChangeNotifier`，添加主题模式属性和切换主题模式的方法。并使用 `SharedPreferencesAsync` 持久化主题模式。
+
+注：旧版本的 `shared_preferences` 包请使用 `SharedPreferences.getInstance();`，具体请参考 [shared_preferences](https://pub.dev/packages/shared_preferences) 文档。
 
 ```dart
 import 'package:flutter/material.dart';
