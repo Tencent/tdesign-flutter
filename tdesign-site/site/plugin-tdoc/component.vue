@@ -34,6 +34,8 @@ import { defineComponent } from 'vue';
 import Prismjs from 'prismjs';
 import 'prismjs/components/prism-bash.js';
 import 'prismjs/components/prism-json.js';
+import 'prismjs/components/prism-dart.js';
+import 'prismjs/components/prism-yaml.js';
 
 import QrCode from '@components/qrcode.vue';
 
