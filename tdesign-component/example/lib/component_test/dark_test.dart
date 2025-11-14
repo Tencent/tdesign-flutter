@@ -55,9 +55,7 @@ class App extends StatelessWidget {
             theme: themeData.systemThemeDataLight!.copyWith(
               /// 根据自己的需求用 TD 颜色覆盖 Material/Cupertino 的颜色
               cupertinoOverrideTheme: const CupertinoThemeData().copyWith(
-                barBackgroundColor: themeData.bgColorContainer.withValues(
-                  alpha: 0.5,
-                ),
+                barBackgroundColor: themeData.bgColorContainer.withOpacity(0.5),
               ),
               /// ... 更多重载主题
             ),
@@ -65,9 +63,7 @@ class App extends StatelessWidget {
             /// 深色模式
             darkTheme: themeData.systemThemeDataDark?.copyWith(
               cupertinoOverrideTheme: const CupertinoThemeData().copyWith(
-                barBackgroundColor: themeData.dark?.grayColor13.withValues(
-                  alpha: 0.5,
-                ),
+                barBackgroundColor: themeData.dark?.grayColor13.withOpacity(0.5),
               ),
 
               /// ... 更多重载主题
