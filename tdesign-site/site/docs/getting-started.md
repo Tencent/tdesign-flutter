@@ -77,7 +77,7 @@ TDTheme.defaultData().fontBodyLarge
 
 ### 主题生成器
 如果你不想自定义太多颜色，但是想要拥有好看的自定义主题，“主题生成器”是个不错的选择。
-* 注： 0.2.6版本开始，主题生成器已支持“深色模式”，具体可参考[深色模式](https://tdesign.tencent.com/flutter/dark-mode) *
+* 注：[0.2.6](https://tdesign.tencent.com/flutter/changelog#%F0%9F%8C%88-0-2-6-2025-11-14) 版本开始，主题生成器已支持“深色模式”，具体可参考[深色模式](https://tdesign.tencent.com/flutter/dark-mode)。
 
 1. 进入[TDesign官网](https://tdesign.tencent.com/vue/custom-theme)，点击下方的主题生成器，然后再右边生成器里选择想要的颜色，点击下载。
 
