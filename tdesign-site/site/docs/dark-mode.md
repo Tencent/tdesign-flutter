@@ -27,7 +27,7 @@ TDFlutter 的深色模式是基于上述 flutter 官方文档对 [ThemeData](htt
 
 ### 深色主题配置
 
-```jsonc
+```json
 {
   "defaultDark": {
         "ref": {
@@ -83,7 +83,7 @@ TDFlutter 的深色模式是基于上述 flutter 官方文档对 [ThemeData](htt
             "brandColor7": "#2667d4",
             "brandColor8": "#4582e6",
             "brandColor9": "#699ef5",
-            "brandColor10": "#96bbf8",
+            "brandColor10": "#96bbf8"
     }
   }
 }
