@@ -5,6 +5,31 @@ toc: false
 docClass: timeline
 ---
 
+## 🌈 0.2.6 `2025-11-14`
+### 🚀 Features
+- `TDNoticeBar `: 新增`content`属性，废弃并兼容原有的context属性 @runoob-coder ([#744](https://github.com/Tencent/tdesign-flutter/pull/744))
+- `TDButton`: 添加渐变颜色背景 @jflin19990707 ([#773](https://github.com/Tencent/tdesign-flutter/pull/773))
+- `TDToast`: TDToast支持展示多个 @jflin19990707 ([#780](https://github.com/Tencent/tdesign-flutter/pull/780))
+- `TDUpload`: 增加自定义上传监听 @leenc123 ([#775](https://github.com/Tencent/tdesign-flutter/pull/775))
+- `TDTable`: 增加自定义表尾属性 @leenc123 ([#776](https://github.com/Tencent/tdesign-flutter/pull/776))
+
+### 🐞 Bug Fixes
+- `TDMultiCascader`: 修复initialIndexes 参数不生效 @epoll-j ([#752](https://github.com/Tencent/tdesign-flutter/pull/752))
+- `TDDialog`: 按钮文案溢出问题 @jflin19990707 ([#772](https://github.com/Tencent/tdesign-flutter/pull/772))
+- `TDDateTimePicker`: 日期时分秒的英文配置改为缩写 @jflin19990707 ([#770](https://github.com/Tencent/tdesign-flutter/pull/770))
+- `TDCell`: TDCell的note过长时溢出问题 @jflin19990707 ([#769](https://github.com/Tencent/tdesign-flutter/pull/769))
+- `TDCell`: 修复单元格内 icon 与文本的对齐问题 @runoob-coder ([#789](https://github.com/Tencent/tdesign-flutter/pull/789))
+- `TDProgress `: 修复进度条改变时的样式问题  @runoob-coder ([#744](https://github.com/Tencent/tdesign-flutter/pull/744))
+
+### 📝 Documentation
+- `docs`: 优化文档格式和内容 @runoob-coder ([#744](https://github.com/Tencent/tdesign-flutter/pull/744))
+
+### 🚧 Others
+- 组件全面适配深色模式，优化调整组件样式（实验版） @runoob-coder ([#744](https://github.com/Tencent/tdesign-flutter/pull/744))
+- `demo`: 优化调整demo示例项目及代码演示，升级 Android 构建配置和依赖项以兼容在flutter `3.16.9`至最新版（`3.35.5`）下运行，调整web预览iframe样式去除顶部边距 @runoob-coder ([#744](https://github.com/Tencent/tdesign-flutter/pull/744))
+- `web`: 覆盖web依赖项，解决与flutter_localizations的版本冲突问题，兼容flutter之前版本 @runoob-coder ([#744](https://github.com/Tencent/tdesign-flutter/pull/744))
+
+
 
 ## 🌈 0.2.5 `2025-09-12` 
 ### 🐞 Bug Fixes
