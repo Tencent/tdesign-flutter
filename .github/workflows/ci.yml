@@ -23,6 +23,7 @@ jobs:
           flutter-version: ${{ matrix.flutter-version }}
           channel: stable
           aop-registry: true
+          cache: false
 
       - name: Get tdesign-flutter-generator
         uses: actions/checkout@v4
@@ -56,6 +57,7 @@ jobs:
           flutter-version: ${{ matrix.flutter-version }}
           channel: stable
           aop-registry: true
+          cache: false
 
       - name: Get tdesign-flutter-generator
         uses: actions/checkout@v4
@@ -88,6 +90,7 @@ jobs:
           flutter-version: ${{ matrix.flutter-version }}
           channel: stable
           aop-registry: true
+          cache: false
 
       - name: Get tdesign-flutter-generator
         uses: actions/checkout@v4
