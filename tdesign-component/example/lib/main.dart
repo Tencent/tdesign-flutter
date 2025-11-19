@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ import 'home.dart';
 import 'l10n/app_localizations.dart';
 import 'provider/locale_provider.dart';
 import 'provider/theme_mode_provider.dart';
+import 'util/web_theme_listener.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,6 +84,17 @@ class _MyAppState extends State<MyApp> {
       ],
       child: Consumer2<ThemeModeProvider, LocaleProvider>(
         builder: (context, themeModeProvider, localeProvider, child) {
+          // 在 Web 平台设置 postMessage 监听
+          if (PlatformUtil.isWeb) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              // 仅在 Web 平台执行
+              if (!kIsWeb) {
+                return;
+              }
+              setupThemeModeListener(themeModeProvider);
+            });
+          }
+
           return MaterialApp(
             title: 'TDesign Flutter Example',
             theme: _themeData.systemThemeDataLight,

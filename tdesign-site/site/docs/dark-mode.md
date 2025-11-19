@@ -13,87 +13,77 @@ spline: explain
 
 ## 使用之前
 
-使用之前，请先阅读 flutter 官方文档：[使用 Themes 统一颜色和字体风格](https://docs.flutter.cn/cookbook/design/themes)。
+使用之前，请先阅读 flutter 官方文档：[使用 Themes 统一颜色和字体风格](https://docs.flutter.cn/cookbook/design/themes/)。
 
 TDFlutter 的深色模式是基于上述 flutter 官方文档对 [ThemeData](https://api.flutter-io.cn/flutter/material/ThemeData-class.html) 进行自定义配置和重载主题实现的。
 
-具体代码请参考 [深色模式切换](https://github.com/Tencent/tdesign-flutter/pull/768/commits/c5bf979a4b54c119e196ced2f6006deb69339fde)。
+具体代码请参考 [深色模式切换](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/component_test/dark_test.dart)。
  
 ## 主题配置
 
 本示例中我们要配置两套主题，浅色和深色。（你也可以根据自己的业务需求，配置更多主题）
 
-具体请参考 [自定义主题](./getting-started#自定义主题)。
+具体请参考 [自定义主题](https://tdesign.tencent.com/flutter/getting-started#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98)。
 
 ### 深色主题配置
 
-```jsonc
+```json
 {
-  "darkTheme": {
-    // 重点在于 ref 配置
+  "defaultDark": {
     "ref": {
-      "brandLightColor": "brandColor1",
-      "brandFocusColor": "brandColor1",
-      "brandDisabledColor": "brandColor3",
-      "brandHoverColor": "brandColor5",
       "brandNormalColor": "brandColor8",
-      "brandActiveColor": "brandColor2",
       "warningNormalColor": "warningColor5",
-      "warningHoverColor": "warningColor4",
+      "errorNormalColor": "errorColor6",
+      "successNormalColor": "successColor5",
+      "brandFocusColor": "brandColor1",
+      "brandActiveColor": "brandColor9",
+      "brandDisabledColor": "brandColor3",
+      "brandLightColor": "brandColor1",
+      "brandColorLightActive": "brandColor2",
       "warningFocusColor": "warningColor2",
-      "warningActiveColor": "warningColor6",
+      "warningActiveColor": "warningColor4",
       "warningDisabledColor": "warningColor3",
       "warningLightColor": "warningColor1",
-      "errorNormalColor": "errorColor6",
-      "errorHoverColor": "errorColor5",
+      "warningColorLightActive": "warningColor2",
       "errorFocusColor": "errorColor2",
-      "errorActiveColor": "errorColor7",
+      "errorActiveColor": "errorColor5",
       "errorDisabledColor": "errorColor3",
       "errorLightColor": "errorColor1",
-      "successNormalColor": "successColor5",
-      "successHoverColor": "successColor4",
+      "errorColorLightActive": "errorColor2",
       "successFocusColor": "successColor2",
-      "successActiveColor": "successColor6",
+      "successActiveColor": "successColor4",
       "successDisabledColor": "successColor3",
       "successLightColor": "successColor1",
-      "brandColorLightHover": "brandColor2",
-      "warningColorLightHover": "warningColor2",
-      "errorColorLightHover": "errorColor2",
-      "successColorLightHover": "successColor2",
+      "successColorLightActive": "successColor2",
       "bgColorPage": "grayColor14",
       "bgColorContainer": "grayColor13",
-      "bgColorContainerHover": "grayColor12",
-      "bgColorContainerActive": "grayColor10",
-      "bgColorContainerSelect": "grayColor9",
       "bgColorSecondaryContainer": "grayColor12",
-      "bgColorSecondaryContainerHover": "grayColor11",
-      "bgColorSecondaryContainerActive": "grayColor9",
       "bgColorComponent": "grayColor11",
-      "bgColorComponentHover": "grayColor10",
-      "bgColorComponentActive": "grayColor9",
+      "bgColorContainerActive": "grayColor12",
+      "bgColorSecondaryContainerActive": "grayColor11",
+      "bgColorComponentActive": "grayColor10",
       "bgColorComponentDisabled": "grayColor12",
-      "componentStrokeColor": "grayColor11",
-      "componentBorderColor": "grayColor9",
       "textColorPrimary": "fontWhColor1",
       "textColorSecondary": "fontWhColor2",
       "textColorPlaceholder": "fontWhColor3",
-      "textColorDisabled": "fontWhColor4",
+      "textDisabledColor": "fontWhColor4",
       "textColorAnti": "fontWhColor1",
       "textColorBrand": "brandColor8",
-      "textColorLink": "brandColor8"
+      "textColorLink": "brandColor8",
+      "componentStrokeColor": "grayColor11",
+      "componentBorderColor": "grayColor9"
     },
-    // 自己定义的颜色配置
     "color": {
-      "brandColor1": "#20d3a15c",
-      "brandColor2": "#4a2d00",
-      "brandColor3": "#6b4606",
-      "brandColor4": "#8e6425",
-      "brandColor5": "#b78846",
-      "brandColor6": "#d3a15c",
-      "brandColor7": "#efba73",
-      "brandColor8": "#ffd192",
-      "brandColor9": "#ffe6c7",
-      "brandColor10": "#fff5ea"
+      "brandColor1": "#1b2f51",
+      "brandColor2": "#173463",
+      "brandColor3": "#143975",
+      "brandColor4": "#103d88",
+      "brandColor5": "#0d429a",
+      "brandColor6": "#054bbe",
+      "brandColor7": "#2667d4",
+      "brandColor8": "#4582e6",
+      "brandColor9": "#699ef5",
+      "brandColor10": "#96bbf8"
     }
   }
 }
@@ -111,14 +101,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   var themeJsonString = await rootBundle.loadString('assets/theme.json');
-  // 开启多套主题功能
+  /// 开启多套主题功能
   TDTheme.needMultiTheme(true);
-  // 默认浅色主题（根据你的主题配置文件选择）
-  themeData = TDThemeData.fromJson('light', themeJsonString) ??
+  /// 默认浅色主题,xxxDark为深色主题
+  themeData = TDThemeData.fromJson('red', themeJsonString, darkName: 'redDark') ??
       TDTheme.defaultData();
-  // 深色模式（根据你的主题配置文件选择）
-  darkThemeData = TDThemeData.fromJson('dark', themeJsonString) ??
-      TDThemeData.defaultData(name: 'dark');
 
   runApp(const App());
 }
@@ -132,52 +119,30 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// MaterialApp 中设置 theme、darkTheme、themeMode 三个属性
+    /// 如下所示，如果有自定义主题属性，可以通过 copyWith() 方法修改。
+    /// 注：主题切换需要业务自己实现，比如使用 Provider
+    /// 具体可参考 tdesign-flutter/tdesign-component/example/lib/component_test/dark_test.dart
     return MaterialApp(
       title: '深色模式切换测试',
-      // 默认浅色模式
-      theme: ThemeData(
-        // 添加 TD 自定义主题配置
-        extensions: [themeData],
-        // 根据自己的需求用 TD 颜色覆盖 Material/Cupertino 的颜色
-        colorScheme: ColorScheme.light(
-          primary: themeData.brandNormalColor,
-        ),
-        scaffoldBackgroundColor: themeData.bgColorPage,
-        iconTheme: const IconThemeData().copyWith(
-          color: themeData.brandNormalColor,
-        ),
+
+      /// 默认浅色模式
+      theme: themeData.systemThemeDataLight!.copyWith(
+        /// 根据自己的需求用 TD 颜色覆盖 Material/Cupertino 的颜色
         cupertinoOverrideTheme: const CupertinoThemeData().copyWith(
-          barBackgroundColor: themeData.bgColorContainer.withValues(
-            alpha: 0.5,
-          ),
+          barBackgroundColor: themeData.bgColorContainer.withOpacity(0.5),
         ),
-        // ... 更多重载主题
+        /// ... 更多重载主题
       ),
-      // 深色模式
-      darkTheme: ThemeData(
-        // 添加 TD 自定义主题配置
-        extensions: [darkThemeData],
-        // 根据自己的需求用 TD 颜色覆盖 Material/Cupertino 的颜色
-        colorScheme: ColorScheme.dark(
-          primary: darkThemeData.brandNormalColor,
-          secondary: darkThemeData.brandNormalColor,
-        ),
-        scaffoldBackgroundColor: darkThemeData.bgColorPage,
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData()
-            .copyWith(backgroundColor: darkThemeData.grayColor13),
-        appBarTheme: const AppBarTheme().copyWith(
-          backgroundColor: darkThemeData.grayColor13,
-        ),
-        iconTheme: const IconThemeData().copyWith(
-          color: darkThemeData.brandNormalColor,
-        ),
+
+      /// 深色模式
+      darkTheme: themeData.systemThemeDataDark?.copyWith(
         cupertinoOverrideTheme: const CupertinoThemeData().copyWith(
-          barBackgroundColor: darkThemeData.grayColor13.withValues(
-            alpha: 0.5,
-          ),
+          barBackgroundColor: themeData.dark?.grayColor13.withOpacity(0.5),
         ),
-        // ... 更多重载主题
+        /// ... 更多重载主题
       ),
+      themeMode: themeModeProvider.themeMode,
     );
   }
 }
@@ -193,11 +158,11 @@ class App extends StatelessWidget {
 return MaterialApp(
   title: '深色模式切换测试',
   // 默认浅色模式（已忽略细节）
-  theme: ThemeData(...),
+  theme: _themeData.systemThemeDataLight,
   // 深色模式（已忽略细节）
-  darkTheme: ThemeData(...),
+  darkTheme: _themeData.systemThemeDataDark,
   // MaterialApp 主题模式默认跟随系统
-  themeMode: themeMode: ThemeMode.system,
+  themeMode: ThemeMode.system,
 );
 ```
 
@@ -209,12 +174,14 @@ return MaterialApp(
 
 ```yaml
   provider: ^6.1.5+1
-  shared_preferences: ^2.5.3
+  shared_preferences: ^2.2.3
 ```
 
 你也可以根据自己的业务需求，使用其他状态管理方式。
 
 1. 新建 `ThemeModeProvider` 类，并继承 `ChangeNotifier`，添加主题模式属性和切换主题模式的方法。并使用 `SharedPreferencesAsync` 持久化主题模式。
+
+注：旧版本的 `shared_preferences` 包请使用 `SharedPreferences.getInstance();`，具体请参考 [shared_preferences](https://pub.dev/packages/shared_preferences) 文档。
 
 ```dart
 import 'package:flutter/material.dart';
@@ -279,9 +246,9 @@ class App extends StatelessWidget {
           return MaterialApp(
             title: '深色模式切换测试',
             // 默认浅色模式（已忽略细节）
-            theme: ThemeData(...),
+            theme: _themeData.systemThemeDataLight,
             // 深色模式（已忽略细节）
-            darkTheme: ThemeData(...),
+            darkTheme: _themeData.systemThemeDataDark,
             // 使用状态管理提供的主题模式
             themeMode: themeModeProvider.themeMode,
             // 主题设置页面

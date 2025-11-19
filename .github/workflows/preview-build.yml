@@ -39,7 +39,7 @@ jobs:
           SKIP_JDK_VERSION_CHECK: true
 
       - name: Set up Flutter
-        uses: TDesignOteam/workflows/setup-flutter@main
+        uses: TDesignOteam/workflows/actions/setup-flutter@main
         with:
           flutter-version: 3.32.0
           channel: stable
