@@ -24,12 +24,14 @@ class TDCalendarBody extends StatelessWidget {
     required this.monthTitleHeight,
     required this.verticalGap,
     required this.animateTo,
+    this.anchorDate
   }) : super(key: key);
 
   final int? maxDate;
   final int? minDate;
   final CalendarType type;
   final List<DateTime>? value;
+  final DateTime? anchorDate;
   final int firstDayOfWeek;
   final Widget Function(
     TDate? date,
@@ -129,20 +131,23 @@ class TDCalendarBody extends StatelessWidget {
 
   void _scrollToItem(ScrollController scrollController, List<DateTime> months,
       Map<int, double> monthHeight) {
-    if (value == null || value!.isEmpty) {
-      return;
+    DateTime? scrollToDate = anchorDate;
+    if (scrollToDate == null) {
+      if (value == null || value!.isEmpty) {
+        return;
+      }
+      scrollToDate = value!.reduce((a, b) => a.isBefore(b) ? a : b);
     }
-    final scrollDate = value!.reduce((a, b) => a.isBefore(b) ? a : b);
     var lastMonthDay = DateTime(months.last.year, months.last.month + 1);
     lastMonthDay = lastMonthDay.add(const Duration(days: -1));
-    if (months.first.isAfter(scrollDate) || lastMonthDay.isBefore(scrollDate)) {
+    if (months.first.isAfter(scrollToDate) || lastMonthDay.isBefore(scrollToDate)) {
       return;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var height = 0.0;
       for (var i = 0; i < months.length; i++) {
         final item = months[i];
-        if (item.year == scrollDate.year && item.month == scrollDate.month) {
+        if (item.year == scrollToDate!.year && item.month == scrollToDate!.month) {
           break;
         }
         height += (_getMonthHeight(months, i, monthHeight) ?? 0);
