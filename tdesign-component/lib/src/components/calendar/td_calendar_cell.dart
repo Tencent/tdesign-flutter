@@ -140,9 +140,9 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
         clipBehavior: Clip.none,
         children: [
           Container(
+            width: double.infinity,
             height: widget.height,
             decoration: decoration,
-            padding: EdgeInsets.all(widget.padding),
             child: content, // 使用自定义内容
           ),
           if (widget.colIndex < 6)
