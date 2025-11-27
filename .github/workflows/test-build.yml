@@ -38,7 +38,7 @@ jobs:
         run: flutter pub get --verbose
 
       - name: key properties
-        working-directory: ./tdesign-component/example/adroid
+        working-directory: ./tdesign-component/example/android
         run: |
           cat > key.properties << EOF
           storePassword=tdflutter0987
