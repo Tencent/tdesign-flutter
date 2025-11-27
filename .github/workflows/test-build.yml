@@ -37,10 +37,23 @@ jobs:
         working-directory: ./tdesign-component/example
         run: flutter pub get --verbose
 
+      - name: key properties
+        working-directory: ./tdesign-component/example/adroid
+        run: |
+          cat > key.properties << EOF
+          storePassword=tdflutter0987
+          keyPassword=tdflutter0987
+          keyAlias=tdflutter_key
+          storeFile=../keystore
+          EOF
+          
+          echo "✅ key.properties 文件已生成！内容如下："
+          cat key.properties
+
       - name: flutter build
         working-directory: ./tdesign-component/example
         run: |
-            flutter build apk -t ./lib/main.dart --debug  --no-sound-null-safety --disable-service-auth-codes --obfuscate --split-debug-info=build/app/debug
+            flutter build apk -t ./lib/main.dart --release --verbose
 
   build-ios:
     runs-on: macos-latest
