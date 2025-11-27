@@ -48,9 +48,9 @@ jobs:
         working-directory: ./tdesign-component/example/android
         run: |
           cat > key.properties << EOF
-          storePassword=tdflutter0987
-          keyPassword=tdflutter0987
-          keyAlias=tdflutter_key
+          storePassword=tdesign-flutter
+          keyPassword=tdesign-flutter
+          keyAlias=tdesign-flutter
           storeFile=../keystore
           EOF
           
