@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup Flutter
-        uses: TDesignOteam/workflows/actions/setup-flutter@test
+        uses: TDesignOteam/workflows/actions/setup-flutter@main
         with:
           flutter-version: ${{ matrix.flutter-version }}
           aop-registry: true
@@ -67,7 +67,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup Flutter
-        uses: TDesignOteam/workflows/actions/setup-flutter@test
+        uses: TDesignOteam/workflows/actions/setup-flutter@main
         with:
           flutter-version: ${{ matrix.flutter-version }}
           aop-registry: true
@@ -103,7 +103,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup Flutter
-        uses: TDesignOteam/workflows/actions/setup-flutter@test
+        uses: TDesignOteam/workflows/actions/setup-flutter@main
         with:
           flutter-version: ${{ matrix.flutter-version }}
           aop-registry: true
