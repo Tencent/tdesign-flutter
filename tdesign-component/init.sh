@@ -4,10 +4,10 @@
 # FLUTTER_SDK_PATH=~/tools/flutter
 
 # 设置基础目录（脚本所在目录）
-BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BASE_DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 # 检查 Flutter SDK 路径
-if [[ -n "$FLUTTER_SDK_PATH" ]]; then
+if [ -n "$FLUTTER_SDK_PATH" ]; then
   FLUTTER_CMD="$FLUTTER_SDK_PATH/bin/flutter"
   echo "使用自定义Flutter路径: $FLUTTER_CMD"
 else
@@ -17,7 +17,7 @@ fi
 
 # 获取Flutter版本号（安全处理错误）
 FLUTTER_VERSION=$($FLUTTER_CMD --version 2>/dev/null | awk '/Flutter/{print $2}')
-if [[ -z "$FLUTTER_VERSION" ]]; then
+if [ -z "$FLUTTER_VERSION" ]; then
   echo "❌ 错误：无法获取Flutter版本号" >&2
   exit 1
 fi
@@ -26,7 +26,7 @@ echo "检测到Flutter版本: $FLUTTER_VERSION"
 # 版本比较函数（使用sort -V替代BASH_REMATCH）
 version_ge() {
   # 原理：通过版本排序后检查目标版本是否为最大值
-  [[ "$(printf "%s\n" "$1" "3.32.0" | sort -V -r | head -n1)" == "$1" ]]
+  [ "$(printf "%s\n" "$1" "3.32.0" | sort -V -r | head -n1)" = "$1" ]
 }
 
 # 执行对应版本的copy.sh
@@ -37,9 +37,10 @@ else
   echo "ℹ️ 版本 < 3.32.0，执行低版本脚本"
   COPY_SCRIPT="$BASE_DIR/example/shell/flutter_versions/3.16.9"
 fi
+echo "COPY_SCRIPT:$COPY_SCRIPT"
 
 # 执行copy脚本
-if [[ -f "$COPY_SCRIPT/copy.sh" ]]; then
+if [ -f "$COPY_SCRIPT/copy.sh" ]; then
   cd "$COPY_SCRIPT"
   echo "执行: $COPY_SCRIPT"
   bash "copy.sh"
