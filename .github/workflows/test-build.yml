@@ -2,8 +2,10 @@ name: test-build
 
 on:
   pull_request:
-    branches: [develop, main]
+    branches: [develop]
     types: [opened, synchronize, reopened]
+  push:
+    branches: [develop]
 
 jobs:
   build-apk:
@@ -24,6 +26,7 @@ jobs:
           flutter-version: ${{ matrix.flutter-version }}
           aop-registry: true
           cache: true
+
       - name: tdesign-adaptation
         run: sh ./tdesign-component/init.sh
 
@@ -108,6 +111,7 @@ jobs:
           flutter-version: ${{ matrix.flutter-version }}
           aop-registry: true
           cache: true
+
       - name: tdesign-adaptation
         run: sh ./tdesign-component/init.sh
 
