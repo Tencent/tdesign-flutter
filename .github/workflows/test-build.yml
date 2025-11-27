@@ -88,7 +88,7 @@ jobs:
 
       - name: flutter build
         working-directory: ./tdesign-component/example
-        run: flutter build ios -t ./lib/main.dart --release --verbose
+        run: flutter build ios -t ./lib/main.dart --no-codesign --release --verbose
 
   build-web:
     runs-on: ubuntu-latest
