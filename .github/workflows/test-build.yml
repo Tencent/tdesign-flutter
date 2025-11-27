@@ -40,7 +40,7 @@ jobs:
       - name: flutter build
         working-directory: ./tdesign-component/example
         run: |
-            export GRADLE_OPTS="-Xmx4g" # 分配4G堆内存
+            export GRADLE_OPTS="-Xmx8g" #
             flutter build apk -t ./lib/main.dart --debug
 
 
