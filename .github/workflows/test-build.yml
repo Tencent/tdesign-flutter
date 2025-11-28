@@ -16,14 +16,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-          flutter-version:
-            - 3.16.9
-            - 3.32.0
-            - 3.x
           platform: 
             - apk
             - ios 
             - web
+          flutter-version:
+            - 3.16.9
+            - 3.32.0
+            - 3.x
           include:
             - platform: apk
               os: ubuntu-latest
