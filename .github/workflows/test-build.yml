@@ -12,15 +12,30 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-apk:
-    runs-on: ubuntu-latest
+  build:
     strategy:
       fail-fast: false
       matrix:
-        flutter-version:
-          - 3.16.9
-          - 3.32.0
-          - 3.x
+          flutter-version:
+            - 3.16.9
+            - 3.32.0
+            - 3.x
+          platform: 
+            - apk
+            - ios 
+            - web
+          include:
+            - platform: apk
+              os: ubuntu-latest
+              build: flutter build apk -t ./lib/main.dart --release --verbose
+            - platform: ios
+              os: macos-latest
+              build: flutter build ios -t ./lib/main.dart --no-codesign --release --verbose
+            - platform: web
+              os: ubuntu-latest 
+              build: flutter build web -t ./lib/main.dart --release --verbose
+
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
 
@@ -46,76 +61,4 @@ jobs:
 
       - name: flutter build
         working-directory: ./tdesign-component/example
-        run: flutter build apk -t ./lib/main.dart --release --verbose
-
-  build-ios:
-    runs-on: macos-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        flutter-version:
-          - 3.16.9
-          - 3.32.0
-          - 3.x
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Setup Flutter
-        uses: TDesignOteam/workflows/actions/setup-flutter@main
-        with:
-          flutter-version: ${{ matrix.flutter-version }}
-          aop-registry: true
-          cache: true
-
-      - name: tdesign-adaptation
-        run: sh ./tdesign-component/init.sh
-
-      - name: Get tdesign-flutter-generator
-        uses: actions/checkout@v6
-        with:
-          repository: TDesignOteam/tdesign-flutter-generator
-          path: ./example/tdesign-flutter-generator
-
-      - name: flutter pub get
-        working-directory: ./tdesign-component/example
-        run: flutter pub get --verbose
-
-      - name: flutter build
-        working-directory: ./tdesign-component/example
-        run: flutter build ios -t ./lib/main.dart --no-codesign --release --verbose
-
-  build-web:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        flutter-version:
-          - 3.16.9
-          - 3.32.0
-          - 3.x
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Setup Flutter
-        uses: TDesignOteam/workflows/actions/setup-flutter@main
-        with:
-          flutter-version: ${{ matrix.flutter-version }}
-          aop-registry: true
-          cache: true
-
-      - name: tdesign-adaptation
-        run: sh ./tdesign-component/init.sh
-
-      - name: Get tdesign-flutter-generator
-        uses: actions/checkout@v6
-        with:
-          repository: TDesignOteam/tdesign-flutter-generator
-          path: ./example/tdesign-flutter-generator
-
-      - name: flutter pub get
-        working-directory: ./tdesign-component/example
-        run: flutter pub get --verbose
-
-      - name: flutter build
-        working-directory: ./tdesign-component/example
-        run: flutter build web -t ./lib/main.dart --release --verbose
+        run: ${{ matrix.build }}
