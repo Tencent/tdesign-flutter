@@ -35,7 +35,7 @@ jobs:
         run: sh ./tdesign-component/init.sh
 
       - name: Get tdesign-flutter-generator
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: TDesignOteam/tdesign-flutter-generator
           path: ./example/tdesign-flutter-generator
@@ -43,19 +43,6 @@ jobs:
       - name: flutter pub get
         working-directory: ./tdesign-component/example
         run: flutter pub get --verbose
-
-      - name: key properties
-        working-directory: ./tdesign-component/example/android
-        run: |
-          cat > key.properties << EOF
-          storePassword=tdesign-flutter
-          keyPassword=tdesign-flutter
-          keyAlias=tdesign-flutter
-          storeFile=../keystore
-          EOF
-          
-          echo "✅ key.properties 文件已生成！内容如下："
-          cat key.properties
 
       - name: flutter build
         working-directory: ./tdesign-component/example
@@ -71,7 +58,7 @@ jobs:
           - 3.32.0
           - 3.x
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup Flutter
         uses: TDesignOteam/workflows/actions/setup-flutter@main
@@ -84,7 +71,7 @@ jobs:
         run: sh ./tdesign-component/init.sh
 
       - name: Get tdesign-flutter-generator
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: TDesignOteam/tdesign-flutter-generator
           path: ./example/tdesign-flutter-generator
@@ -107,7 +94,7 @@ jobs:
           - 3.32.0
           - 3.x
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup Flutter
         uses: TDesignOteam/workflows/actions/setup-flutter@main
@@ -120,7 +107,7 @@ jobs:
         run: sh ./tdesign-component/init.sh
 
       - name: Get tdesign-flutter-generator
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: TDesignOteam/tdesign-flutter-generator
           path: ./example/tdesign-flutter-generator

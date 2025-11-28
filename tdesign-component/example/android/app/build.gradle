@@ -69,10 +69,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias'] ? keystoreProperties['keyAlias'] : 'tdflutter_key'
+            keyPassword keystoreProperties['keyPassword'] ? keystoreProperties['keyPassword'] : 'tdflutter0987'
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : file('../keystore')
+            storePassword keystoreProperties['storePassword'] ? keystoreProperties['storePassword'] : 'tdflutter0987'
         }
     }
 
