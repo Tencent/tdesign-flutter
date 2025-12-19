@@ -58,6 +58,7 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
   double _maxHeight = 0;
   double _minHeight = 0;
   double _currentHeight = 0;
+  double _lastMeasuredChildHeight = -1;
   bool _isFullscreen = false;
   bool _isAnimating = false;
   bool _isDragging = false;
@@ -68,7 +69,7 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
     _controller = AnimationController(
       duration: const Duration(milliseconds: 400),
       vsync: this,
-    )..addListener(_updateHeight);
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) => _measureChildHeight());
   }
 
@@ -80,7 +81,7 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
   void _measureChildHeight() {
     // 获取子组件渲染对象
     final context = _childKey.currentContext;
-    if (context == null) {
+    if (context == null || !mounted) {
       return;
     }
     final renderBox = context.findRenderObject() as RenderBox?;
@@ -90,29 +91,56 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
 
     final screenHeight = MediaQuery.of(context).size.height;
     final childHeight = renderBox.size.height;
-    final headerHeight = widget.draggable ? _headerHeight : _headerHeight;
-    final baseHeight = _dragHandleHeight + headerHeight + childHeight;
+
+    // 如果高度没有变化，则不再继续处理，防止无限重绘
+    if ((childHeight - _lastMeasuredChildHeight).abs() < 0.1) {
+      return;
+    }
+
+    final headerHeight = _TDPopupBaseState._headerHeight;
+    final baseHeight = headerHeight + childHeight;
 
     // 动态计算最大最小高度
     final maxHeightByRatio = screenHeight * widget.maxHeightRatio;
     final minHeightByRatio = screenHeight * widget.minHeightRatio;
 
     // 内容高度和比例约束
-    _maxHeight = min(baseHeight, maxHeightByRatio);
-    _minHeight = max(baseHeight * 0.5, minHeightByRatio);
-    if (_minHeight > _maxHeight) {
-      _minHeight = _maxHeight;
+    final nextMaxHeight = min(baseHeight, maxHeightByRatio);
+    var nextMinHeight = max(baseHeight * 0.5, minHeightByRatio);
+    if (nextMinHeight > nextMaxHeight) {
+      nextMinHeight = nextMaxHeight;
     }
 
     // 初始化当前高度
-    _currentHeight = baseHeight.clamp(_minHeight, _maxHeight);
+    final nextCurrentHeight = baseHeight.clamp(nextMinHeight, nextMaxHeight);
     // 同步动画控制器
-    _controller.value = (_currentHeight - _minHeight) / (_maxHeight - _minHeight).clamp(0.1, 1.0);
+    final nextControllerValue = (nextCurrentHeight - nextMinHeight) /
+        (nextMaxHeight - nextMinHeight).clamp(0.1, 1.0);
+
+    // 仅在数据发生变化时才更新
+    final isMoving = _isDragging || _isAnimating || _controller.isAnimating;
+    
+    if ((nextMaxHeight - _maxHeight).abs() > 0.1 ||
+        (nextMinHeight - _minHeight).abs() > 0.1 ||
+        (!isMoving && (nextCurrentHeight - _currentHeight).abs() > 0.1) ||
+        (!isMoving && (nextControllerValue - _controller.value).abs() > 0.01)) {
+      
+      _lastMeasuredChildHeight = childHeight;
+      
+      setState(() {
+        _maxHeight = nextMaxHeight;
+        _minHeight = nextMinHeight;
+        _currentHeight = nextCurrentHeight;
+        if (!isMoving) {
+          _controller.value = nextControllerValue;
+        }
+      });
+    }
   }
 
-  void _updateHeight() => setState(() {
-        _currentHeight = _minHeight + (_maxHeight - _minHeight) * _controller.value;
-      });
+  void _updateHeight() {
+    // 该方法已不再作为监听器使用
+  }
 
   void _toggleFullscreen(bool fullscreen) {
     if (_isAnimating || _isFullscreen == fullscreen) {
@@ -126,11 +154,12 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
           : MediaQuery.of(context).size.height * widget.maxHeightRatio;
     });
 
+    _isAnimating = true;
     _controller.animateTo(
       fullscreen ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 350),
       curve: Curves.fastOutSlowIn,
-    );
+    ).whenComplete(() => _isAnimating = false);
   }
 
   void _animateTo(double height) {
@@ -185,25 +214,28 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
 
     return AnimatedBuilder(
       animation: _controller,
-      builder: (context, _) => RepaintBoundary(
-        child: Container(
-          height: _currentHeight,
-          decoration: BoxDecoration(
-            color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
-            borderRadius: _isFullscreen
-                ? null
-                : BorderRadius.vertical(
-                    top: Radius.circular(widget.radius ?? TDTheme.of(context).radiusExtraLarge)),
-          ),
-          child: Column(children: [
-            _buildDragHandle(),
-            buildHeader(context),
-            SizedBox(
-              child: _buildContent(),
+      builder: (context, _) {
+        final currentDisplayHeight = _minHeight + (_maxHeight - _minHeight) * _controller.value;
+        return RepaintBoundary(
+          child: Container(
+            height: currentDisplayHeight,
+            decoration: BoxDecoration(
+              color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+              borderRadius: _isFullscreen
+                  ? null
+                  : BorderRadius.vertical(
+                      top: Radius.circular(widget.radius ?? TDTheme.of(context).radiusExtraLarge)),
             ),
-          ]),
-        ),
-      ),
+            child: Column(children: [
+              _buildDragHandle(),
+              buildHeader(context),
+              SizedBox(
+                child: _buildContent(),
+              ),
+            ]),
+          ),
+        );
+      },
     );
   }
 

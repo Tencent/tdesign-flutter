@@ -94,9 +94,6 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
   /// 键盘焦点对象的高度
   var _focusHeight = 0.0;
 
-  /// 键盘出现后bottom的偏移量
-  var _lastBottom = 0.0;
-
   // 实现转场动画
   @override
   Widget buildTransitions(
@@ -196,7 +193,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
     var focusNode = FocusManager.instance.primaryFocus;
     if (focusNode != null && focusNode.context != null) {
       var renderObject = focusNode.context!.findRenderObject();
-      if (renderObject is RenderPointerListener) {
+      if (renderObject is RenderBox) {
         _focusY = renderObject.localToGlobal(Offset.zero).dy;
         _focusHeight = renderObject.size.height;
       }
@@ -217,12 +214,7 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
       bottom = mediaQuery.viewInsets.bottom;
     } else {
       if ((_focusY + mediaQuery.viewInsets.bottom + _focusHeight) > mediaQuery.size.height) {
-        bottom = -(mediaQuery.size.height - (_focusY + mediaQuery.viewInsets.bottom + _focusHeight + 10));
-        _lastBottom = bottom;
-      } else {
-        if (_lastBottom > 0.0) {
-          bottom = max((_lastBottom -= 5), 0).toDouble();
-        }
+        bottom = (_focusY + mediaQuery.viewInsets.bottom + _focusHeight + 10) - mediaQuery.size.height;
       }
     }
 
