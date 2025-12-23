@@ -81,9 +81,13 @@ TDTheme.defaultData().fontBodyLarge
 
 1. 进入[TDesign官网](https://tdesign.tencent.com/vue/custom-theme)，点击下方的主题生成器，然后再右边生成器里选择想要的颜色，点击下载。
 
-![img.png](/flutter/assets/theme_generator.png)
 
-![img.png](/flutter/assets/select_color.png)
+相关操作可以参考下方视频：
+
+<video controls width="100%">
+    <source src="https://tdesign.gtimg.com/site/theme/demo-cn.mp4" type="video/mp4" />
+</video>
+
 
 2. 此时你得到是一个 `theme.css` 文件，可以将该文件放到 `tdesign-component/example/shell/theme/` 文件夹下，把该文件夹下的 `css2JsonTheme.dart` 修改为你自己的文件名、主题名和输出路径，即可得到一个 `theme.json` 文件
 
