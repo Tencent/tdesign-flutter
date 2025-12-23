@@ -57,6 +57,7 @@ class TDDropdownItem<T> extends StatefulWidget {
     this.disabled = false,
     this.label,
     this.arrowIcon,
+    this.arrowColor,
     this.multiple = false,
     this.options = const [],
     this.builder,
@@ -80,6 +81,9 @@ class TDDropdownItem<T> extends StatefulWidget {
 
   /// 自定义箭头图标
   final IconData? arrowIcon;
+
+  /// 自定义箭头颜色
+  final Color? arrowColor;
 
   /// 是否多选
   final bool? multiple;
