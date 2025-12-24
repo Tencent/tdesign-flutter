@@ -10,11 +10,11 @@
 .svn/
 
 
-# Site
+# Site（ *.md 文档通过 hook 自动复制同步）
 tdesign-site/node_modules/
 tdesign-site/site/docs/getting-started.md
 
-# ComPonent
+# Component（ *.md 文档通过 hook 自动复制同步）
 tdesign-component/README.md
 tdesign-component/README_zh_CN.md
 
