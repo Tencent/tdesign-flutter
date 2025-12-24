@@ -262,6 +262,12 @@ class _TDButtonPageState extends State<TDButtonPage> {
             builder: (context) {
               return CodeWrapper(builder: _buildGradientButton);
             }),
+        ExampleItem(
+            ignoreCode: true,
+            desc: '测试',
+            builder: (context) {
+              return CodeWrapper(builder: _buildTestButton);
+            }),
       ],
     );
   }
@@ -739,6 +745,28 @@ class _TDButtonPageState extends State<TDButtonPage> {
           gradient: LinearGradient(
               colors: [Colors.red, Colors.blue], begin: Alignment.centerRight, end: Alignment.centerLeft),
         )
+      ],
+    );
+  }
+
+  @Demo(group: 'button')
+  Widget _buildTestButton(BuildContext context) {
+    return const Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      alignment: WrapAlignment.center,
+      children: [
+        TDButton(
+          text: '填充按钮',
+          icon: TDIcons.app,
+          size: TDButtonSize.large,
+          type: TDButtonType.fill,
+          shape: TDButtonShape.rectangle,
+          theme: TDButtonTheme.primary,
+          iconPosition: TDButtonIconPosition.right,
+          gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+          test: true,
+        ),
       ],
     );
   }

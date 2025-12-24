@@ -44,6 +44,7 @@ class TDButton extends StatefulWidget {
     this.padding,
     this.iconPosition = TDButtonIconPosition.left,
     this.gradient,
+    this.test,
   }) : super(key: key);
 
   /// 自控件
@@ -117,6 +118,9 @@ class TDButton extends StatefulWidget {
 
   /// 渐变背景色，优先级高于backgroundColor
   final Gradient? gradient;
+
+  /// 测试字段
+  final bool? test;
 
   @override
   State<StatefulWidget> createState() => _TDButtonState();
