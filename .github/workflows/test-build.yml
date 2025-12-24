@@ -57,8 +57,8 @@ jobs:
 
       - name: flutter pub get
         working-directory: ./tdesign-component/example
-        run: flutter pub get ${{ runner.debug == '1' && '--verbose' || '' }}
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
       - name: flutter build
         working-directory: ./tdesign-component/example
-        run: ${{ matrix.build }} ${{ runner.debug == '1' && '--verbose' || '' }}
+        run: ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}
