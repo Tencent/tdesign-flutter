@@ -9,7 +9,14 @@
 .history
 .svn/
 
+
+# Site
 tdesign-site/node_modules/
+tdesign-site/site/docs/getting-started.md
+
+# ComPonent
+tdesign-component/README.md
+tdesign-component/README_zh_CN.md
 
 # IntelliJ related
 *.iml
@@ -80,3 +87,5 @@ build/
 /tdesign-component/local_dependency_override.yaml
 /tdesign-component/pubspec_overrides.yaml
 /tdesign-component/example/pubspec_overrides.yaml
+
+
