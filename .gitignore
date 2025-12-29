@@ -10,6 +10,7 @@
 .svn/
 
 tdesign-site/node_modules/
+tdesign-site/_site/
 
 # IntelliJ related
 *.iml
