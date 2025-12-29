@@ -5,7 +5,7 @@
     "lib": ["es6", "dom", "ES2016.Array.Include"],
     "rootDir": ".",
     "outDir": "dist",
-    "types": ["miniprogram-api-typings", "node"],
+    "types": [ "node"],
     "skipLibCheck": true,
     "declaration": true,
     "baseUrl": ".",

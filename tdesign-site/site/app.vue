@@ -6,11 +6,13 @@
     <td-doc-aside ref="tdDocAside" title="Flutter"></td-doc-aside>
 
     <router-view :style="contentStyle" @loaded="contentLoaded" :docType="docType" />
+    <td-theme-generator />
   </td-doc-layout>
 </template>
 
 <script>
 import siteConfig from './site.config';
+import '@tdesign/theme-generator';
 
 import { defineComponent } from 'vue';
 
