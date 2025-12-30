@@ -2,7 +2,7 @@ name: PREVIEW_BUILD
 
 on:
   pull_request:
-    branches: [develop, main]
+    branches: [develop, main, zfly_test]
     types: [opened, synchronize, reopened]
 
 jobs:
