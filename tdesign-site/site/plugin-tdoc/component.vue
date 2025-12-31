@@ -63,7 +63,10 @@ export default defineComponent({
     },
     liveUrl() {
       // return `/miniprogram-live/m2w/program/miniprogram/#!pages/${this.name}/${this.name}.html`;
-      var path = `/flutter/example/#${this.name}`;
+      // 开发模式下使用 /example/，生产模式下使用 /flutter/example/
+      const isProduction = import.meta.env.PROD;
+      const basePath = isProduction ? '/flutter/example/' : '/example/';
+      const path = `${basePath}#${this.name}`;
       return path;
     },
     qrcode() {

@@ -58,7 +58,6 @@ export default defineComponent({
     this.$refs.tdHeader.framework = "flutter";
     this.$refs.tdDocAside.routerList = routerList;
     this.$refs.tdDocAside.onchange = ({ detail }) => {
-      console.log("detail: " + JSON.stringify(detail));
       if (this.$route.path === detail) return;
       this.loaded = false;
       this.$router.push({ path: detail });
@@ -156,7 +155,7 @@ export default defineComponent({
       // 使用工具函数生成 Flutter 主题配置
       const themeJson = generateFlutterThemeFromParts(light, dark, extra);
 
-      console.log("Flutter 主题 JSON:", JSON.stringify(themeJson, null, 2));
+      // console.log("Flutter 主题 JSON:", JSON.stringify(themeJson, null, 2));
     },
   },
 });

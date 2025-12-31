@@ -1,5 +1,6 @@
 import * as path from 'path';
-import { defineConfig } from 'vite';
+import * as fs from 'fs';
+import { defineConfig, Plugin } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import rollupResolve from '@rollup/plugin-node-resolve';
@@ -9,6 +10,27 @@ const publicPathMap: Record<string, string> = {
   preview: '/',
   production: '/flutter/',
 };
+
+// 插件：为 /example/ 路径提供 index.html 默认文件
+function serveExampleIndexPlugin(): Plugin {
+  return {
+    name: 'serve-example-index',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        // 处理 /example/ 或 /example 请求，返回 index.html
+        if (req.url === '/example' || req.url === '/example/' || req.url?.startsWith('/example/#')) {
+          const indexPath = path.join(__dirname, 'public', 'example', 'index.html');
+          if (fs.existsSync(indexPath)) {
+            res.setHeader('Content-Type', 'text/html');
+            res.end(fs.readFileSync(indexPath));
+            return;
+          }
+        }
+        next();
+      });
+    },
+  };
+}
 
 // https://vitejs.dev/config/
 export default ({ mode }: any) => {
@@ -31,6 +53,7 @@ export default ({ mode }: any) => {
       open: '/',
       https: false,
     },
+    publicDir: path.resolve(__dirname, 'public'),
     build: {
       outDir: '../_site',
       rollupOptions: {
@@ -45,6 +68,7 @@ export default ({ mode }: any) => {
       },
     },
     plugins: [
+      serveExampleIndexPlugin(),
       vue({
         template: {
           compilerOptions: {

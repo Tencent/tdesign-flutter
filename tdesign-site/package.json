@@ -1,6 +1,7 @@
 {
   "name": "tdesign-flutter-site",
   "description": "TDesign Flutter documentation site",
+  "type": "module",
   "private": true,
   "keywords": [
     "tdesign",
@@ -19,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "@tdesign/site-components": "^0.17.5",
-    "@tdesign/theme-generator": "link:D:\\mycode\\tdesign\\packages\\theme-generator",
+    "@tdesign/theme-generator": "1.2.1",
     "prismjs": "^1.30.0",
     "tdesign-icons-view": "^0.5.0",
     "vue": "^3.2.4",

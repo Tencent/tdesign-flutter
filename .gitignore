@@ -11,6 +11,7 @@
 
 tdesign-site/node_modules/
 tdesign-site/_site/
+tdesign-site/site/public/example/
 
 # IntelliJ related
 *.iml
