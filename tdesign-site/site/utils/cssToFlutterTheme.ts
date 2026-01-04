@@ -6,6 +6,14 @@
 export interface FlutterTheme {
   ref: Record<string, string>;
   color: Record<string, string>;
+  radius?: Record<string, number>;
+  margin?: Record<string, number>;
+  shadow?: Record<string, Array<{
+    color: string;
+    blurRadius: number;
+    spreadRadius: number;
+    offset: { x: number; y: number };
+  }>>;
 }
 
 export interface ThemeOutput {
@@ -160,10 +168,181 @@ export function parseCssToFlutterTheme(cssContent: string): FlutterTheme {
   // 移除已处理的 key
   removeKeys.forEach((key) => delete filterMap[key]);
 
+  // 解析圆角
+  const radiusMap = parseRadius(jsonMap);
+
+  // 解析间距
+  const marginMap = parseMargin(jsonMap);
+
+  // 解析阴影
+  const shadowMap = parseShadow(jsonMap);
+
   return {
     ref: refMap,
     color: filterMap,
+    ...(Object.keys(radiusMap).length > 0 && { radius: radiusMap }),
+    ...(Object.keys(marginMap).length > 0 && { margin: marginMap }),
+    ...(Object.keys(shadowMap).length > 0 && { shadow: shadowMap }),
   };
+}
+
+/**
+ * 解析圆角变量
+ * --td-radius-small: 3px -> radiusSmall: 3
+ */
+function parseRadius(jsonMap: Record<string, string>): Record<string, number> {
+  const radiusMap: Record<string, number> = {};
+
+  Object.entries(jsonMap).forEach(([key, value]) => {
+    if (key.startsWith("--td-radius-")) {
+      const name = convertToCamelCase(key);
+      const numValue = parseFloat(value);
+      if (!isNaN(numValue)) {
+        radiusMap[name] = numValue;
+      }
+    }
+  });
+
+  return radiusMap;
+}
+
+/**
+ * 解析间距变量
+ * --td-comp-margin-s: 8px -> compMarginS: 8
+ */
+function parseMargin(jsonMap: Record<string, string>): Record<string, number> {
+  const marginMap: Record<string, number> = {};
+
+  Object.entries(jsonMap).forEach(([key, value]) => {
+    if (
+      key.startsWith("--td-comp-margin") ||
+      key.startsWith("--td-comp-padding") ||
+      key.startsWith("--td-pop-padding") ||
+      key.startsWith("--td-size-")
+    ) {
+      const name = convertToCamelCase(key);
+      // 处理 var() 引用
+      let numValue: number;
+      if (value.startsWith("var(")) {
+        // 尝试从其他变量获取值
+        const refKey = value.replace(/var\(|\)/g, "");
+        const refValue = jsonMap[refKey];
+        numValue = refValue ? parseFloat(refValue) : 0;
+      } else {
+        numValue = parseFloat(value);
+      }
+      if (!isNaN(numValue)) {
+        marginMap[name] = numValue;
+      }
+    }
+  });
+
+  return marginMap;
+}
+
+/**
+ * 解析阴影变量
+ * --td-shadow-1: 0 1px 10px rgba(0, 0, 0, 5%), ...
+ */
+function parseShadow(jsonMap: Record<string, string>): Record<string, Array<{
+  color: string;
+  blurRadius: number;
+  spreadRadius: number;
+  offset: { x: number; y: number };
+}>> {
+  const shadowMap: Record<string, Array<{
+    color: string;
+    blurRadius: number;
+    spreadRadius: number;
+    offset: { x: number; y: number };
+  }>> = {};
+
+  Object.entries(jsonMap).forEach(([key, value]) => {
+    // 只处理 --td-shadow-1, --td-shadow-2, --td-shadow-3
+    if (key.match(/^--td-shadow-[1-4]$/)) {
+      const name = convertToCamelCase(key);
+      const shadows = parseShadowValue(value);
+      if (shadows.length > 0) {
+        shadowMap[name] = shadows;
+      }
+    }
+  });
+
+  return shadowMap;
+}
+
+/**
+ * 解析单个阴影值
+ * "0 1px 10px rgba(0, 0, 0, 5%), 0 4px 5px rgba(0, 0, 0, 8%)"
+ */
+function parseShadowValue(value: string): Array<{
+  color: string;
+  blurRadius: number;
+  spreadRadius: number;
+  offset: { x: number; y: number };
+}> {
+  const shadows: Array<{
+    color: string;
+    blurRadius: number;
+    spreadRadius: number;
+    offset: { x: number; y: number };
+  }> = [];
+
+  // 按逗号分割多个阴影（但要注意 rgba 中的逗号）
+  const shadowParts = value.split(/,(?![^(]*\))/);
+
+  shadowParts.forEach((part) => {
+    const trimmed = part.trim();
+    if (!trimmed || trimmed.startsWith("inset")) return;
+
+    // 匹配: offsetX offsetY blurRadius [spreadRadius] color
+    // 例如: 0 1px 10px rgba(0, 0, 0, 5%)
+    // 或: 0 4px 5px 2px rgba(0, 0, 0, 8%)
+    const match = trimmed.match(
+      /^(-?[\d.]+(?:px)?)\s+(-?[\d.]+(?:px)?)\s+([\d.]+(?:px)?)\s*(?:([\d.]+(?:px)?)\s+)?(rgba?\([^)]+\)|#[\da-fA-F]+)/
+    );
+
+    if (match) {
+      const offsetX = parseFloat(match[1]);
+      const offsetY = parseFloat(match[2]);
+      const blurRadius = parseFloat(match[3]);
+      const spreadRadius = match[4] ? parseFloat(match[4]) : 0;
+      const colorStr = match[5];
+
+      // 转换颜色为 Flutter 格式
+      let color = "#00000000";
+      if (colorStr.startsWith("rgba")) {
+        const rgbaMatch = colorStr.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+%?)\)/);
+        if (rgbaMatch) {
+          const r = parseInt(rgbaMatch[1]);
+          const g = parseInt(rgbaMatch[2]);
+          const b = parseInt(rgbaMatch[3]);
+          let a = rgbaMatch[4];
+          // 处理百分比
+          const alpha = a.endsWith("%") ? parseFloat(a) / 100 : parseFloat(a);
+          const alphaInt = Math.round(alpha * 255);
+          color = (
+            "#" +
+            alphaInt.toString(16).padStart(2, "0") +
+            r.toString(16).padStart(2, "0") +
+            g.toString(16).padStart(2, "0") +
+            b.toString(16).padStart(2, "0")
+          ).toUpperCase();
+        }
+      } else if (colorStr.startsWith("#")) {
+        color = colorStr.toUpperCase();
+      }
+
+      shadows.push({
+        color,
+        blurRadius,
+        spreadRadius,
+        offset: { x: offsetX, y: offsetY },
+      });
+    }
+  });
+
+  return shadows;
 }
 
 /**

@@ -101,12 +101,8 @@ export default defineComponent({
           this.handleThemeChange(styleId, styleElement.textContent);
 
           // 创建 MutationObserver 监听变化
-          const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-              if (mutation.type === "childList" || mutation.type === "characterData") {
-                this.handleThemeChange(styleId, styleElement.textContent);
-              }
-            });
+          const observer = new MutationObserver(() => {
+            this.handleThemeChange(styleId, styleElement.textContent);
           });
 
           // 配置观察选项
@@ -156,6 +152,24 @@ export default defineComponent({
       const themeJson = generateFlutterThemeFromParts(light, dark, extra);
 
       // console.log("Flutter 主题 JSON:", JSON.stringify(themeJson, null, 2));
+
+      // 将主题 JSON 发送给所有 Flutter iframe
+      this.sendThemeToFlutterIframes(themeJson);
+    },
+    sendThemeToFlutterIframes(themeJson) {
+      // 查找所有 Flutter iframe (在 component.vue 中)
+      const iframes = document.querySelectorAll('iframe[src*="/example/"]');
+      iframes.forEach((iframe) => {
+        if (iframe.contentWindow) {
+          iframe.contentWindow.postMessage(
+            {
+              type: 'flutter-theme-update',
+              theme: themeJson,
+            },
+            '*'
+          );
+        }
+      });
     },
   },
 });

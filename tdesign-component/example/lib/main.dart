@@ -54,6 +54,14 @@ class _MyAppState extends State<MyApp> {
     print('_darkThemeData.bgColorPage： ${_themeData.bgColorPage}，_themeData.dark?.bgColorPage: ${_themeData.dark?.bgColorPage}');
   }
 
+  /// 处理主题更新 (来自 postMessage)
+  void _handleThemeUpdate(TDThemeData newTheme) {
+    setState(() {
+      _themeData = newTheme;
+    });
+    print('🎨 Flutter: 主题已更新');
+  }
+
   @override
   Widget build(BuildContext context) {
     // 使用多套主题
@@ -91,7 +99,10 @@ class _MyAppState extends State<MyApp> {
               if (!kIsWeb) {
                 return;
               }
-              setupThemeModeListener(themeModeProvider);
+              setupThemeModeListener(
+                themeModeProvider,
+                onThemeUpdate: _handleThemeUpdate,
+              );
             });
           }
 

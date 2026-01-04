@@ -46,7 +46,7 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
       vite:
-        specifier: ^6.3.7
+        specifier: ^6.4.1
         version: 6.4.1(@types/node@25.0.3)(less@4.5.1)
       vite-plugin-tdoc:
         specifier: ^2.0.4

@@ -51,7 +51,6 @@ export default ({ mode }: any) => {
       host: '127.0.0.1',
       port: 19000,
       open: '/',
-      https: false,
     },
     publicDir: path.resolve(__dirname, 'public'),
     build: {

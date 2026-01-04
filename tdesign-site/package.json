@@ -33,7 +33,7 @@
     "glob": "^13.0.0",
     "gray-matter": "^4.0.3",
     "typescript": "^5.7.2",
-    "vite": "^6.3.7",
+    "vite": "^6.4.1",
     "vite-plugin-tdoc": "^2.0.4"
   }
 }
