@@ -90,15 +90,6 @@ jobs:
           repository: TDesignOteam/tdesign-flutter-generator
           path: ./tdesign-component/example/tdesign-flutter-generator
 
-      - name: Ensure git symlink exists
-        run: |
-          # 确保 /usr/bin/git 存在（AOP 工具硬编码了这个路径）
-          if [ ! -f /usr/bin/git ]; then
-            GIT_PATH=$(which git)
-            echo "Creating symlink: /usr/bin/git -> $GIT_PATH"
-            sudo ln -s "$GIT_PATH" /usr/bin/git
-          fi
-
       - name: Build Flutter apk
         run: |
           cd $GITHUB_WORKSPACE/tdesign-component/example
@@ -106,6 +97,15 @@ jobs:
           flutter clean
           flutter doctor -v
           flutter devices
+          # 确保 /usr/bin/git 存在（AOP 工具硬编码了这个路径）
+          if [ ! -f /usr/bin/git ]; then
+            GIT_PATH=$(which git)
+            echo "Creating symlink: /usr/bin/git -> $GIT_PATH"
+            sudo ln -s "$GIT_PATH" /usr/bin/git
+          fi
+          echo "Verifying git location:"
+          which git
+          ls -la /usr/bin/git || echo "/usr/bin/git not found"
           # Clone AOP registry after flutter clean (因为 clean 会删除它)
           git clone https://github.com/TDesignOteam/tdesign-flutter-aop-registry.git aop_registry
           flutter pub get --verbose
