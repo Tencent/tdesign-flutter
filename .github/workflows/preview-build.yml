@@ -101,6 +101,17 @@ jobs:
           flutter clean
           flutter doctor -v
           flutter devices
+          # 调试 git
+          echo "=== Git diagnostics ==="
+          which git
+          ls -la /usr/bin/git
+          /usr/bin/git --version
+          ldd /usr/bin/git || echo "ldd failed"
+          # 测试 git clone 是否正常工作
+          echo "=== Testing git clone ==="
+          /usr/bin/git clone https://github.com/TDesignOteam/tdesign-flutter-aop-registry.git aop_registry
+          echo "=== aop_registry contents ==="
+          ls -la aop_registry
           flutter pub get --verbose
                     # Generate keystore for signing
           cd ${{ github.workspace }}/tdesign-component/example/android/app
