@@ -93,6 +93,7 @@ jobs:
       - name: Build Flutter apk
         run: |
           cd $GITHUB_WORKSPACE/tdesign-component/example
+          ls
           flutter clean
           flutter doctor -v
           flutter devices
