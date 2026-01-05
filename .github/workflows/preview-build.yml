@@ -97,17 +97,17 @@ jobs:
           flutter clean
           flutter doctor -v
           flutter devices
-          # 确保 /usr/bin/git 存在（AOP 工具硬编码了这个路径）
-          if [ ! -f /usr/bin/git ]; then
-            GIT_PATH=$(which git)
-            echo "Creating symlink: /usr/bin/git -> $GIT_PATH"
-            sudo ln -s "$GIT_PATH" /usr/bin/git
-          fi
-          echo "Verifying git location:"
+          # 调试 git
+          echo "=== Git diagnostics ==="
           which git
-          ls -la /usr/bin/git || echo "/usr/bin/git not found"
-          # Clone AOP registry after flutter clean (因为 clean 会删除它)
-          git clone https://github.com/TDesignOteam/tdesign-flutter-aop-registry.git aop_registry
+          ls -la /usr/bin/git
+          /usr/bin/git --version
+          ldd /usr/bin/git || echo "ldd failed"
+          # 测试 git clone 是否正常工作
+          echo "=== Testing git clone ==="
+          /usr/bin/git clone https://github.com/TDesignOteam/tdesign-flutter-aop-registry.git aop_registry
+          echo "=== aop_registry contents ==="
+          ls -la aop_registry
           flutter pub get --verbose
                     # Generate keystore for signing
           cd ${{ github.workspace }}/tdesign-component/example/android/app
