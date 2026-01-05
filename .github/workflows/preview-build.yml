@@ -94,6 +94,10 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/tdesign-component/example
           ls
+          
+          # Configure Git to use GITHUB_TOKEN for authentication
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          
           flutter clean
           flutter doctor -v
           flutter devices
