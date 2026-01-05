@@ -90,6 +90,11 @@ jobs:
           repository: TDesignOteam/tdesign-flutter-generator
           path: ./tdesign-component/example/tdesign-flutter-generator
 
+      - name: Clone AOP registry
+        run: |
+          cd $GITHUB_WORKSPACE/tdesign-component/example
+          git clone https://github.com/TDesignOteam/tdesign-flutter-aop-registry.git aop_registry
+
       - name: Build Flutter apk
         run: |
           cd $GITHUB_WORKSPACE/tdesign-component/example
