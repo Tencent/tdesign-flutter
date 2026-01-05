@@ -92,6 +92,12 @@ jobs:
 
       - name: Clone AOP registry
         run: |
+          # 确保 /usr/bin/git 存在（AOP 工具硬编码了这个路径）
+          if [ ! -f /usr/bin/git ]; then
+            GIT_PATH=$(which git)
+            echo "Creating symlink: /usr/bin/git -> $GIT_PATH"
+            sudo ln -s "$GIT_PATH" /usr/bin/git
+          fi
           cd $GITHUB_WORKSPACE/tdesign-component/example
           git clone https://github.com/TDesignOteam/tdesign-flutter-aop-registry.git aop_registry
 
