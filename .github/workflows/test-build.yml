@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Setup Flutter
-        uses: TDesignOteam/workflows/actions/setup-flutter@main
+        uses: TDesignOteam/workflows/actions/setup-flutter@aop
         with:
           flutter-version: ${{ matrix.flutter-version }}
           cache: true
