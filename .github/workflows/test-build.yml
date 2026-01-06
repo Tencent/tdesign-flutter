@@ -49,6 +49,7 @@ jobs:
 
       - name: debug
         run: |
+          pwd
           ls -al ./tdesign-component/example
 
       - name: tdesign-adaptation
