@@ -43,7 +43,6 @@ jobs:
         uses: TDesignOteam/workflows/actions/setup-flutter@main
         with:
           flutter-version: ${{ matrix.flutter-version }}
-          aop-registry: true
           cache: true
 
       - name: tdesign-adaptation
