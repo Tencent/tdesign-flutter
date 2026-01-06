@@ -47,6 +47,10 @@ jobs:
           aop-registry: true
           aop-project-path: ./tdesign-component/example
 
+      - name: debug
+        run: |
+          ls -l ./tdesign-component/example
+
       - name: tdesign-adaptation
         run: sh ./tdesign-component/init.sh
 
