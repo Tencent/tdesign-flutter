@@ -49,7 +49,7 @@ jobs:
 
       - name: debug
         run: |
-          ls -l ./tdesign-component/example
+          ls -al ./tdesign-component/example
 
       - name: tdesign-adaptation
         run: sh ./tdesign-component/init.sh
