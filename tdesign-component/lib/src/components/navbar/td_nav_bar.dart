@@ -11,6 +11,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.titleWidget,
     this.title,
     this.titleColor,
+    this.backIconColor,
     this.titleFont,
     this.titleFontFamily,
     this.titleFontWeight = FontWeight.w500,
@@ -29,6 +30,9 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.boxShadow,
     this.flexibleSpace,
   }) : super(key: key);
+
+  /// 左边返回图标颜色
+  final Color? backIconColor;
 
   /// 左边操作项
   final List<TDNavBarItem>? leftBarItems;
@@ -139,9 +143,11 @@ class _TDNavBarState extends State<TDNavBar> {
   }
 
   Widget get backButton {
+    var iconColor = widget.backIconColor ?? TDTheme.of(context).textColorPrimary;
     return TDNavBarItem(
       icon: TDIcons.chevron_left,
       iconSize: 28.0,
+      iconColor: iconColor,
       action: () {
         widget.onBack?.call();
         Navigator.maybePop(context);
