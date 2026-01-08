@@ -45,6 +45,84 @@ jobs:
           channel: stable
           aop-registry: true
 
+      - name: Verify Flutter bin/cache directory
+        run: |
+          echo "=== 验证 Flutter bin/cache 目录 ==="
+          
+          # 使用多种方法获取 Flutter SDK 路径
+          FLUTTER_ROOT=""
+          
+          # 方法1: 使用 which 命令找到 flutter 可执行文件路径
+          FLUTTER_BIN=$(which flutter 2>/dev/null)
+          if [ -n "$FLUTTER_BIN" ]; then
+            # 从 flutter 可执行文件路径推导出 Flutter SDK 根目录
+            FLUTTER_ROOT=$(dirname "$(dirname "$FLUTTER_BIN")")
+            echo "通过 which 命令获取到 Flutter 路径: $FLUTTER_ROOT"
+          fi
+          
+          # 方法2: 如果方法1失败，尝试使用环境变量
+          if [ -z "$FLUTTER_ROOT" ] && [ -n "$FLUTTER_HOME" ]; then
+            FLUTTER_ROOT="$FLUTTER_HOME"
+            echo "通过 FLUTTER_HOME 环境变量获取到 Flutter 路径: $FLUTTER_ROOT"
+          fi
+          
+          # 方法3: 尝试使用 flutter config (避免 --machine 参数)
+          if [ -z "$FLUTTER_ROOT" ]; then
+            FLUTTER_ROOT=$(flutter config 2>/dev/null | grep 'flutter-root' | cut -d'=' -f2 | xargs 2>/dev/null)
+            if [ -n "$FLUTTER_ROOT" ]; then
+              echo "通过 flutter config 获取到 Flutter 路径: $FLUTTER_ROOT"
+            fi
+          fi
+          
+          # 验证获取到的路径
+          if [ -n "$FLUTTER_ROOT" ] && [ -d "$FLUTTER_ROOT" ]; then
+            echo "Flutter SDK Root: $FLUTTER_ROOT"
+            
+            # 验证 bin/cache 目录是否存在
+            CACHE_DIR="$FLUTTER_ROOT/bin/cache"
+            if [ -d "$CACHE_DIR" ]; then
+              echo "✅ bin/cache 目录存在: $CACHE_DIR"
+              echo "目录大小: $(du -sh "$CACHE_DIR" 2>/dev/null | cut -f1)"
+            else
+              echo "❌ bin/cache 目录不存在: $CACHE_DIR"
+              
+              # 输出 bin 目录下的内容
+              BIN_DIR="$FLUTTER_ROOT/bin"
+              if [ -d "$BIN_DIR" ]; then
+                echo ""
+                echo "📁 bin 目录内容:"
+                ls -la "$BIN_DIR" || true
+                echo ""
+                echo "📊 bin 目录统计:"
+                echo "  - 总文件数: $(find "$BIN_DIR" -maxdepth 1 -type f | wc -l)"
+                echo "  - 总目录数: $(find "$BIN_DIR" -maxdepth 1 -type d | wc -l)"
+                echo "  - 子目录列表:"
+                find "$BIN_DIR" -maxdepth 1 -type d ! -path "$BIN_DIR" -exec basename {} \; 2>/dev/null | sort || echo "    无子目录"
+                echo "  - 文件列表:"
+                find "$BIN_DIR" -maxdepth 1 -type f -exec basename {} \; 2>/dev/null | sort || echo "    无文件"
+              else
+                echo "❌ bin 目录也不存在: $BIN_DIR"
+              fi
+              
+              exit 1
+            fi
+          else
+            echo "❌ 无法获取有效的 Flutter SDK 路径"
+            echo "尝试的路径: $FLUTTER_ROOT"
+            
+            # 显示调试信息
+            echo ""
+            echo "🔍 调试信息:"
+            echo "PATH 环境变量中的 flutter:"
+            which flutter 2>/dev/null || echo "  flutter 命令未找到"
+            echo "FLUTTER_HOME 环境变量:"
+            echo "  ${FLUTTER_HOME:-未设置}"
+            echo "当前工作目录:"
+            pwd
+            
+            exit 1
+          fi
+
       - name: Extract version from pubspec.yaml and set env
         id: version
         run: |
