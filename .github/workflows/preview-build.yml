@@ -45,61 +45,46 @@ jobs:
           channel: stable
           aop-registry: true
 
-      - name: Verify Flutter installation and output paths
+      - name: Verify Flutter bin/cache directory
         run: |
-          echo "=== Flutter 安装验证和路径信息 ==="
+          echo "=== 验证 Flutter bin/cache 目录 ==="
           
-          # 验证 Flutter 安装
-          flutter --version
-          flutter doctor -v
-          
-          # Flutter SDK 路径信息
+          # 获取 Flutter SDK 路径
           FLUTTER_ROOT=$(flutter --version --machine | jq -r '.flutterRoot' 2>/dev/null || flutter config | grep 'flutter-root' | cut -d'=' -f2 | xargs)
+          
           if [ -n "$FLUTTER_ROOT" ]; then
-            echo ""
             echo "Flutter SDK Root: $FLUTTER_ROOT"
-            echo "Flutter bin 路径: $FLUTTER_ROOT/bin"
-            echo "Flutter bin/cache 路径: $FLUTTER_ROOT/bin/cache"
             
-            # 列出 bin 目录下的所有文件
-            echo ""
-            echo "=== $FLUTTER_ROOT/bin 目录内容 ==="
-            if [ -d "$FLUTTER_ROOT/bin" ]; then
-              ls -la "$FLUTTER_ROOT/bin" || true
-              echo ""
-              echo "bin 目录文件统计:"
-              echo "  总文件数: $(find "$FLUTTER_ROOT/bin" -maxdepth 1 -type f | wc -l)"
-              echo "  总目录数: $(find "$FLUTTER_ROOT/bin" -maxdepth 1 -type d | wc -l)"
-              echo "  可执行文件:"
-              find "$FLUTTER_ROOT/bin" -maxdepth 1 -type f -executable -exec basename {} \; 2>/dev/null | sort || true
+            # 验证 bin/cache 目录是否存在
+            CACHE_DIR="$FLUTTER_ROOT/bin/cache"
+            if [ -d "$CACHE_DIR" ]; then
+              echo "✅ bin/cache 目录存在: $CACHE_DIR"
+              echo "目录大小: $(du -sh "$CACHE_DIR" 2>/dev/null | cut -f1)"
             else
-              echo "警告: bin 目录不存在于 $FLUTTER_ROOT"
-            fi
-            
-            # 检查并列出 bin/cache 目录内容
-            echo ""
-            echo "=== $FLUTTER_ROOT/bin/cache 目录内容 ==="
-            if [ -d "$FLUTTER_ROOT/bin/cache" ]; then
-              ls -la "$FLUTTER_ROOT/bin/cache" || true
+              echo "❌ bin/cache 目录不存在: $CACHE_DIR"
               
-              # 列出主要的缓存目录
-              echo ""
-              echo "主要缓存目录大小:"
-              for cache_dir in artifacts dart-sdk downloads; do
-                if [ -d "$FLUTTER_ROOT/bin/cache/$cache_dir" ]; then
-                  echo "  - $cache_dir: $FLUTTER_ROOT/bin/cache/$cache_dir"
-                  du -sh "$FLUTTER_ROOT/bin/cache/$cache_dir" 2>/dev/null || true
-                fi
-              done
-            else
-              echo "警告: bin/cache 目录不存在于 $FLUTTER_ROOT"
+              # 输出 bin 目录下的内容
+              BIN_DIR="$FLUTTER_ROOT/bin"
+              if [ -d "$BIN_DIR" ]; then
+                echo ""
+                echo "📁 bin 目录内容:"
+                ls -la "$BIN_DIR" || true
+                echo ""
+                echo "📊 bin 目录统计:"
+                echo "  - 总文件数: $(find "$BIN_DIR" -maxdepth 1 -type f | wc -l)"
+                echo "  - 总目录数: $(find "$BIN_DIR" -maxdepth 1 -type d | wc -l)"
+                echo "  - 子目录列表:"
+                find "$BIN_DIR" -maxdepth 1 -type d ! -path "$BIN_DIR" -exec basename {} \; 2>/dev/null | sort || echo "    无子目录"
+                echo "  - 文件列表:"
+                find "$BIN_DIR" -maxdepth 1 -type f -exec basename {} \; 2>/dev/null | sort || echo "    无文件"
+              else
+                echo "❌ bin 目录也不存在: $BIN_DIR"
+              fi
+              
+              exit 1
             fi
-            
-            # 保存路径信息供后续步骤使用
-            echo "FLUTTER_ROOT=$FLUTTER_ROOT" >> $GITHUB_ENV
-            echo "FLUTTER_BIN_CACHE=$FLUTTER_ROOT/bin/cache" >> $GITHUB_ENV
           else
-            echo "错误: 无法获取 Flutter SDK 路径"
+            echo "❌ 无法获取 Flutter SDK 路径"
             exit 1
           fi
 
