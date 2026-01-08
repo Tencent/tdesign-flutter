@@ -45,6 +45,64 @@ jobs:
           channel: stable
           aop-registry: true
 
+      - name: Verify Flutter installation and output paths
+        run: |
+          echo "=== Flutter 安装验证和路径信息 ==="
+          
+          # 验证 Flutter 安装
+          flutter --version
+          flutter doctor -v
+          
+          # Flutter SDK 路径信息
+          FLUTTER_ROOT=$(flutter --version --machine | jq -r '.flutterRoot' 2>/dev/null || flutter config | grep 'flutter-root' | cut -d'=' -f2 | xargs)
+          if [ -n "$FLUTTER_ROOT" ]; then
+            echo ""
+            echo "Flutter SDK Root: $FLUTTER_ROOT"
+            echo "Flutter bin 路径: $FLUTTER_ROOT/bin"
+            echo "Flutter bin/cache 路径: $FLUTTER_ROOT/bin/cache"
+            
+            # 列出 bin 目录下的所有文件
+            echo ""
+            echo "=== $FLUTTER_ROOT/bin 目录内容 ==="
+            if [ -d "$FLUTTER_ROOT/bin" ]; then
+              ls -la "$FLUTTER_ROOT/bin" || true
+              echo ""
+              echo "bin 目录文件统计:"
+              echo "  总文件数: $(find "$FLUTTER_ROOT/bin" -maxdepth 1 -type f | wc -l)"
+              echo "  总目录数: $(find "$FLUTTER_ROOT/bin" -maxdepth 1 -type d | wc -l)"
+              echo "  可执行文件:"
+              find "$FLUTTER_ROOT/bin" -maxdepth 1 -type f -executable -exec basename {} \; 2>/dev/null | sort || true
+            else
+              echo "警告: bin 目录不存在于 $FLUTTER_ROOT"
+            fi
+            
+            # 检查并列出 bin/cache 目录内容
+            echo ""
+            echo "=== $FLUTTER_ROOT/bin/cache 目录内容 ==="
+            if [ -d "$FLUTTER_ROOT/bin/cache" ]; then
+              ls -la "$FLUTTER_ROOT/bin/cache" || true
+              
+              # 列出主要的缓存目录
+              echo ""
+              echo "主要缓存目录大小:"
+              for cache_dir in artifacts dart-sdk downloads; do
+                if [ -d "$FLUTTER_ROOT/bin/cache/$cache_dir" ]; then
+                  echo "  - $cache_dir: $FLUTTER_ROOT/bin/cache/$cache_dir"
+                  du -sh "$FLUTTER_ROOT/bin/cache/$cache_dir" 2>/dev/null || true
+                fi
+              done
+            else
+              echo "警告: bin/cache 目录不存在于 $FLUTTER_ROOT"
+            fi
+            
+            # 保存路径信息供后续步骤使用
+            echo "FLUTTER_ROOT=$FLUTTER_ROOT" >> $GITHUB_ENV
+            echo "FLUTTER_BIN_CACHE=$FLUTTER_ROOT/bin/cache" >> $GITHUB_ENV
+          else
+            echo "错误: 无法获取 Flutter SDK 路径"
+            exit 1
+          fi
+
       - name: Extract version from pubspec.yaml and set env
         id: version
         run: |
@@ -162,6 +220,63 @@ jobs:
           name: tdesign-flutter-apk
           path: ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/tdesign-flutter-*.apk
           compression-level: 0
+
+      - name: Output build artifacts download paths
+        run: |
+          echo "=== 构建产物下载路径信息 ==="
+          
+          # 项目构建产物路径
+          PROJECT_BUILD_DIR="${{ github.workspace }}/tdesign-component/example/build"
+          echo "项目构建目录: $PROJECT_BUILD_DIR"
+          
+          if [ -d "$PROJECT_BUILD_DIR" ]; then
+            echo "构建产物目录结构:"
+            find "$PROJECT_BUILD_DIR" -type f -name "*.apk" -o -name "*.aab" -o -name "*.ipa" | head -10
+            
+            # APK 文件路径
+            APK_DIR="$PROJECT_BUILD_DIR/app/outputs/flutter-apk"
+            if [ -d "$APK_DIR" ]; then
+              echo "APK 文件路径: $APK_DIR"
+              ls -la "$APK_DIR"/*.apk 2>/dev/null || echo "未找到 APK 文件"
+            fi
+            
+            # Web 构建产物路径
+            WEB_DIR="$PROJECT_BUILD_DIR/web"
+            if [ -d "$WEB_DIR" ]; then
+              echo "Web 构建产物路径: $WEB_DIR"
+              du -sh "$WEB_DIR" 2>/dev/null || true
+            fi
+          else
+            echo "构建目录不存在: $PROJECT_BUILD_DIR"
+          fi
+          
+          # GitHub Actions Artifacts 下载信息
+          echo ""
+          echo "=== GitHub Actions Artifacts 下载信息 ==="
+          echo "Run ID: ${{ github.run_id }}"
+          echo "APK Artifact 下载链接: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "Web Artifact 下载链接: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          
+          # 输出到文件以便后续步骤使用
+          cat > flutter-paths.txt << EOF
+          FLUTTER_ROOT=$FLUTTER_ROOT
+          FLUTTER_BIN_CACHE=$FLUTTER_BIN_CACHE
+          PROJECT_BUILD_DIR=$PROJECT_BUILD_DIR
+          APK_PATH=$APK_DIR
+          WEB_PATH=$WEB_DIR
+          GITHUB_RUN_ID=${{ github.run_id }}
+          DOWNLOAD_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          EOF
+          
+          echo "路径信息已保存到 flutter-paths.txt"
+          cat flutter-paths.txt
+
+      - name: Upload Flutter paths info
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-paths-info
+          path: flutter-paths.txt
+          retention-days: 5
 
       - name: demo tools build api md
         run: |
