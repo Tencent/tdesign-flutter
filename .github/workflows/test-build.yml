@@ -40,17 +40,12 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Setup Flutter
-        uses: TDesignOteam/workflows/actions/setup-flutter@aop
+        uses: TDesignOteam/workflows/actions/setup-flutter@main
         with:
           flutter-version: ${{ matrix.flutter-version }}
           cache: true
           aop-registry: true
           aop-project-path: ./tdesign-component/example
-
-      - name: debug
-        run: |
-          pwd
-          ls -al ./tdesign-component/example
 
       - name: tdesign-adaptation
         run: sh ./tdesign-component/init.sh
