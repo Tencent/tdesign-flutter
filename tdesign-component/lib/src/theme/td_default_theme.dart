@@ -120,7 +120,10 @@ class TDDefaultTheme {
             "bgColorContainer": "#ffffff",
             "bgColorContainerSelect": "#ffffff",
             "bgColorSpecialComponent": "#ffffff",
-            "textColorAnti": "#ffffff"
+            "textColorAnti": "#ffffff",
+            "defaultBtnBgColor": "#E8E8E8",
+            "defaultBtnTextColor": "#000000",
+            "primaryBtnTextColor": "#FFFFFF"
         },
         "font": {
             "fontDisplayLarge": {
@@ -454,7 +457,10 @@ class TDDefaultTheme {
             "fontGyColor2": "#99000000",
             "fontGyColor3": "#66000000",
             "fontGyColor4": "#42000000",
-            "textColorAnti": "#ffffff"
+            "textColorAnti": "#ffffff",
+            "defaultBtnBgColor": "#5E5E5E",
+            "defaultBtnTextColor": "#000000",
+            "primaryBtnTextColor": "#000000"
         },
         "font": {
             "fontDisplayLarge": {

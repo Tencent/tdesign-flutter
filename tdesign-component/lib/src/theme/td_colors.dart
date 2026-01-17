@@ -332,4 +332,15 @@ extension TDColors on TDThemeData {
   Color get textColorBrand => colorMap['textColorBrand'] ?? brandNormalColor;
 
   Color get textColorLink => colorMap['textColorLink'] ?? brandNormalColor;
+
+  /// DefaultTheme 按钮专用颜色--------------------------------------------
+
+  /// 默认按钮背景色：日间模式深色(#E8E8E8)，暗黑模式更亮(#5E5E5E)
+  Color get defaultBtnBgColor => colorMap['defaultBtnBgColor'] ?? grayColor3;
+
+  /// 默认按钮文字色：日间模式白色，暗黑模式黑色
+  Color get defaultBtnTextColor => colorMap['defaultBtnTextColor'] ?? fontGyColor1;
+
+  /// Primary 按钮文字色：日间模式白色，暗黑模式黑色
+  Color get primaryBtnTextColor => colorMap['primaryBtnTextColor'] ?? whiteColor1;
 }
