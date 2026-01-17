@@ -55,16 +55,16 @@ class TDDefaultTheme {
             "componentBorderColor": "grayColor4"
         },
         "color": {
-            "brandColor1": "#f2f3ff",
-            "brandColor2": "#d9e1ff",
-            "brandColor3": "#b5c7ff",
-            "brandColor4": "#8eabff",
-            "brandColor5": "#618dff",
-            "brandColor6": "#366ef4",
-            "brandColor7": "#0052d9",
-            "brandColor8": "#003cab",
-            "brandColor9": "#002a7c",
-            "brandColor10": "#001a57",
+            "brandColor1": "#F5F5F5",
+            "brandColor2": "#E0E0E0",
+            "brandColor3": "#BDBDBD",
+            "brandColor4": "#9E9E9E",
+            "brandColor5": "#757575",
+            "brandColor6": "#616161",
+            "brandColor7": "#424242",
+            "brandColor8": "#212121",
+            "brandColor9": "#1A1A1A",
+            "brandColor10": "#000000",
             "warningColor1": "#fff1e9",
             "warningColor2": "#ffd9c2",
             "warningColor3": "#ffb98c",
@@ -392,16 +392,16 @@ class TDDefaultTheme {
             "componentBorderColor": "grayColor9"
         },
         "color": {
-            "brandColor1": "#1b2f51",
-            "brandColor2": "#173463",
-            "brandColor3": "#143975",
-            "brandColor4": "#103d88",
-            "brandColor5": "#0d429a",
-            "brandColor6": "#054bbe",
-            "brandColor7": "#2667d4",
-            "brandColor8": "#4582e6",
-            "brandColor9": "#699ef5",
-            "brandColor10": "#96bbf8",
+            "brandColor1": "#1A1A1A",
+            "brandColor2": "#2A2A2A",
+            "brandColor3": "#3A3A3A",
+            "brandColor4": "#4A4A4A",
+            "brandColor5": "#6A6A6A",
+            "brandColor6": "#8A8A8A",
+            "brandColor7": "#A0A0A0",
+            "brandColor8": "#B0B0B0",
+            "brandColor9": "#CFCFCF",
+            "brandColor10": "#E5E5E5",
             "warningColor1": "#4f2a1d",
             "warningColor2": "#582f21",
             "warningColor3": "#733c23",
@@ -571,7 +571,7 @@ class TDDefaultTheme {
         "shadow": {
             "shadowsBase": [
                 {
-                    "color": "#0D000000",
+                    "color": "#1A000000",
                     "blurRadius": 10,
                     "spreadRadius": 1,
                     "offset": {
@@ -580,7 +580,7 @@ class TDDefaultTheme {
                     }
                 },
                 {
-                    "color": "#14000000",
+                    "color": "#1F000000",
                     "blurRadius": 5,
                     "spreadRadius": 1,
                     "offset": {
@@ -589,7 +589,7 @@ class TDDefaultTheme {
                     }
                 },
                 {
-                    "color": "#1F000000",
+                    "color": "#29000000",
                     "blurRadius": 4,
                     "spreadRadius": -1,
                     "offset": {
@@ -600,7 +600,7 @@ class TDDefaultTheme {
             ],
             "shadowsMiddle": [
                 {
-                    "color": "#0D000000",
+                    "color": "#1A000000",
                     "blurRadius": 14,
                     "spreadRadius": 2,
                     "offset": {
@@ -609,7 +609,7 @@ class TDDefaultTheme {
                     }
                 },
                 {
-                    "color": "#0F000000",
+                    "color": "#1F000000",
                     "blurRadius": 10,
                     "spreadRadius": 1,
                     "offset": {
@@ -618,7 +618,7 @@ class TDDefaultTheme {
                     }
                 },
                 {
-                    "color": "#1A000000",
+                    "color": "#24000000",
                     "blurRadius": 5,
                     "spreadRadius": -3,
                     "offset": {
@@ -629,7 +629,7 @@ class TDDefaultTheme {
             ],
             "shadowsTop": [
                 {
-                    "color": "#0D000000",
+                    "color": "#1A000000",
                     "blurRadius": 30,
                     "spreadRadius": 5,
                     "offset": {
@@ -638,7 +638,7 @@ class TDDefaultTheme {
                     }
                 },
                 {
-                    "color": "#0A000000",
+                    "color": "#14000000",
                     "blurRadius": 24,
                     "spreadRadius": 2,
                     "offset": {
@@ -647,7 +647,7 @@ class TDDefaultTheme {
                     }
                 },
                 {
-                    "color": "#14000000",
+                    "color": "#1F000000",
                     "blurRadius": 10,
                     "spreadRadius": -5,
                     "offset": {
