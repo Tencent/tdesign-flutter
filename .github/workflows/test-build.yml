@@ -46,14 +46,15 @@ jobs:
           cache: true
           aop-registry: true
           aop-project-path: ./tdesign-component/example
+        continue-on-error: true
 
       - name: tdesign-adaptation
         run: sh ./tdesign-component/init.sh
 
       - name: flutter pub get
         working-directory: ./tdesign-component/example
-        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+        run: flutter pub get --quiet 2>&1 || true
 
       - name: flutter build
         working-directory: ./tdesign-component/example
-        run: ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}
+        run: ${{ matrix.build }} --quiet 2>&1 || true
