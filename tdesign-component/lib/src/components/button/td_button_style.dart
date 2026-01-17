@@ -31,7 +31,7 @@ class TDButtonStyle {
     switch (theme) {
       case TDButtonTheme.primary:
         textColor = TDTheme.of(context).primaryBtnTextColor;
-        backgroundColor = _getFillBrandColor(context, status);
+        backgroundColor = _getBrandColor(context, status);
         break;
       case TDButtonTheme.danger:
         textColor = TDTheme.of(context).textColorAnti;
@@ -152,16 +152,6 @@ class TDButtonStyle {
     }
   }
 
-  Color _getFillBrandColor(BuildContext context, TDButtonStatus status) {
-    switch (status) {
-      case TDButtonStatus.defaultState:
-        return TDTheme.of(context).defaultBtnBgColor;
-      case TDButtonStatus.active:
-        return TDTheme.of(context).brandClickColor;
-      case TDButtonStatus.disable:
-        return TDTheme.of(context).brandDisabledColor;
-    }
-  }
 
   Color _getLightColor(BuildContext context, TDButtonStatus status) {
     switch (status) {
