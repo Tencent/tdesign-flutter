@@ -9,7 +9,6 @@ jobs:
   tdesign-flutter-site:
     runs-on: ubuntu-latest
     steps:
-
       - name: Configure Git to not use symlinks
         run: git config --global core.symlinks false
 
@@ -18,12 +17,11 @@ jobs:
           submodules: recursive
           lfs: true
 
-
       - name: Set Node version
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
           cache-dependency-path: tdesign-site/package-lock.json
 
       - uses: actions/setup-java@v5
@@ -44,14 +42,16 @@ jobs:
           flutter-version: 3.32.0
           channel: stable
           aop-registry: true
+          aop-project-path: ./tdesign-component/example
+        continue-on-error: true
 
       - name: Verify Flutter bin/cache directory
         run: |
           echo "=== 验证 Flutter bin/cache 目录 ==="
-          
+
           # 使用多种方法获取 Flutter SDK 路径
           FLUTTER_ROOT=""
-          
+
           # 方法1: 使用 which 命令找到 flutter 可执行文件路径
           FLUTTER_BIN=$(which flutter 2>/dev/null)
           if [ -n "$FLUTTER_BIN" ]; then
@@ -59,13 +59,13 @@ jobs:
             FLUTTER_ROOT=$(dirname "$(dirname "$FLUTTER_BIN")")
             echo "通过 which 命令获取到 Flutter 路径: $FLUTTER_ROOT"
           fi
-          
+
           # 方法2: 如果方法1失败，尝试使用环境变量
           if [ -z "$FLUTTER_ROOT" ] && [ -n "$FLUTTER_HOME" ]; then
             FLUTTER_ROOT="$FLUTTER_HOME"
             echo "通过 FLUTTER_HOME 环境变量获取到 Flutter 路径: $FLUTTER_ROOT"
           fi
-          
+
           # 方法3: 尝试使用 flutter config (避免 --machine 参数)
           if [ -z "$FLUTTER_ROOT" ]; then
             FLUTTER_ROOT=$(flutter config 2>/dev/null | grep 'flutter-root' | cut -d'=' -f2 | xargs 2>/dev/null)
@@ -73,7 +73,7 @@ jobs:
               echo "通过 flutter config 获取到 Flutter 路径: $FLUTTER_ROOT"
             fi
           fi
-          
+
           # 验证获取到的路径
           if [ -n "$FLUTTER_ROOT" ] && [ -d "$FLUTTER_ROOT" ]; then
             echo "Flutter SDK Root: $FLUTTER_ROOT"
@@ -172,10 +172,10 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/tdesign-component/example
           ls
-          
+
           # Configure Git to use GITHUB_TOKEN for authentication
           git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
-          
+
           flutter clean
           flutter doctor -v
           flutter devices
@@ -193,7 +193,7 @@ jobs:
           flutter pub get --verbose
                     # Generate keystore for signing
           cd ${{ github.workspace }}/tdesign-component/example/android/app
-          
+
           # Use simple fixed passwords instead of random ones
           STORE_PASSWORD="tdesign123456"
           KEY_PASSWORD="tdesign123456"
@@ -215,7 +215,7 @@ jobs:
           echo "keyPassword=$KEY_PASSWORD" >> key.properties
           echo "keyAlias=tdesign_flutter_debug_key" >> key.properties
           echo "storeFile=keystore.jks" >> key.properties
-          
+
           # Verify keystore file existence and properties file
           echo "Verifying keystore setup:"
           ls -la ${{ github.workspace }}/tdesign-component/example/android/app/keystore.jks || echo "Keystore file not found!"
@@ -268,7 +268,7 @@ jobs:
           fi
           chmod +x ./bin/api_tool_linux
           sh all_build.sh
-      
+
       - name: Build site
         working-directory: ./tdesign-site
         run: |
