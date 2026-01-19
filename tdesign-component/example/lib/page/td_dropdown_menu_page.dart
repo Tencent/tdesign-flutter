@@ -28,6 +28,7 @@ class TDDropdownMenuPage extends StatelessWidget {
         ExampleItem(desc: '最大高度限制', builder: _buildHeight),
         ExampleItem(desc: '可横向滚动菜单', builder: _buildOverflow),
         ExampleItem(desc: '可横向滚动菜单（自定义禁用、选中颜色）', builder: _buildCustomOverflow),
+        ExampleItem(desc: '自定义箭头颜色', builder: _buildArrowColor),
       ],
     );
   }
@@ -442,6 +443,29 @@ TDDropdownMenu _buildCustomOverflow(BuildContext context) {
               selectedColor: Colors.red),
           TDDropdownItemOption(
               label: '价格从高到低', value: 'price', selectedColor: Colors.green),
+        ],
+      ),
+    ],
+  );
+}
+
+@Demo(group: 'dropdownMenu')
+TDDropdownMenu _buildArrowColor(BuildContext context) {
+  return TDDropdownMenu(
+    direction: TDDropdownMenuDirection.up,
+    arrowColor: Colors.red,
+    items: [
+      TDDropdownItem(
+        label: '菜单级箭头颜色(红)',
+        options: [
+          TDDropdownItemOption(label: '选项1', value: '1'),
+        ],
+      ),
+      TDDropdownItem(
+        label: 'Item级箭头颜色(蓝)',
+        arrowColor: Colors.blue,
+        options: [
+          TDDropdownItemOption(label: '选项1', value: '1'),
         ],
       ),
     ],
