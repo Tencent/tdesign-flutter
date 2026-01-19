@@ -81,9 +81,62 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
+
+异步加载(问题1)
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildAsyncTreeSelect(BuildContext context) {
+    return TDTreeSelect(
+      options: asyncOptions,
+      defaultValue: asyncValues,
+      onChange: (val, level) {
+        print('Async change: $val, level: $level');
+        if (level == 1 && val.isNotEmpty) {
+          var firstVal = val[0];
+          var index = asyncOptions.indexWhere((element) => element.value == firstVal);
+          if (index != -1 && asyncOptions[index].children.isEmpty) {
+             // 模拟异步加载
+             Future.delayed(const Duration(seconds: 1), () {
+               if(mounted) {
+                 setState(() {
+                   asyncOptions[index].children = [
+                     TDSelectOption(label: '异步加载二级-1', value: 101),
+                     TDSelectOption(label: '异步加载二级-2', value: 102),
+                   ];
+                 });
+               }
+             });
+          }
+        }
+      },
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+String类型ID(问题3)
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _buildStringValueTreeSelect(BuildContext context) {
+    return TDTreeSelect(
+      options: stringOptions,
+      defaultValue: stringValues,
+      onChange: (val, level) {
+        print('String ID change: $val, level: $level');
+      },
+    );
+  }</pre>
+
+</td-code-block>
+                                  
 ### 1 组件状态
 
-三级树形选择
+三级树形选择(长文字问题2)
             
 <td-code-block panel="Dart">
 
@@ -94,7 +147,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       options.add(TDSelectOption(
         label: '${i == 1 ? '超长一级选项名称超长一级选项名称' : '选项$i'}',
         value: i,
-        maxLines: 10,
+        maxLines: 2,
         //columnWidth: i == 1 ? 106 : null,
         children: [],
       ));
@@ -143,7 +196,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | label | String | - | 标签 |
 | maxLines | int | 1 | 最大显示行数 |
 | multiple | bool | false | 当前子项支持多选 |
-| value | int | - | 值 |
+| value | dynamic | - | 值 |
 
 ```
 ```

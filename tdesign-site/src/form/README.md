@@ -711,14 +711,34 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDFormValidation
+### TDFormItem
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| errorMessage | String | - | 错误提示信息 |
-| type | TDFormItemType | - | 校验对象的类型 |
-| validate | String? Function(dynamic) | - | 校验方法 |
+| additionInfo | String? | - | TDInput的辅助信息 |
+| backgroundColor | Color? | - | 背景色 |
+| child | Widget? | - | 表单子组件 |
+| contentAlign | TextAlign? | - | 表单显示内容对齐方式： |
+| formItemNotifier |  | - |  |
+| formRules | List<TDFormValidation>? | - | 整个表单的校验规则 |
+| help | String? | - | TDInput 默认显示文字 |
+| hintText | null | '' | 提示内容 |
+| indicator | bool? | - | TDTextarea 的属性，指示器 |
+| itemRule | List? | - | 表单项验证规则 |
+| key |  | - |  |
+| label | String? | - | 表单项标签左侧展示的内容 |
+| labelAlign | TextAlign? | - | TODO: item 标签对齐方式 |
+| labelWidget | Widget? | - | 自定义标签 |
+| labelWidth | double? | - | 标签宽度，如果提供则覆盖Form的labelWidth |
+| name | String? | - | 表单字段名称 |
+| radios |  | - |  |
+| requiredMark | bool? | true | 是否显示必填标记（*） |
+| select | String | '' | 选择器 适用于日期选择器等 |
+| selectFn | Function? | - | 选择器方法 适用于日期选择器等 |
+| showErrorMessage | bool | true | 是否显示错误信息 |
+| tipAlign | TextAlign? | - | 组件提示内容对齐方式 |
+| type | TDFormItemType | - | 表格单元需要使用的组件类型 |
 
 ```
 ```
@@ -750,34 +770,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDFormItem
+ ### TDFormValidation
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| additionInfo | String? | - | TDInput的辅助信息 |
-| backgroundColor | Color? | - | 背景色 |
-| child | Widget? | - | 表单子组件 |
-| contentAlign | TextAlign? | - | 表单显示内容对齐方式： |
-| formItemNotifier |  | - |  |
-| formRules | List<TDFormValidation>? | - | 整个表单的校验规则 |
-| help | String? | - | TDInput 默认显示文字 |
-| hintText | null | '' | 提示内容 |
-| indicator | bool? | - | TDTextarea 的属性，指示器 |
-| itemRule | List? | - | 表单项验证规则 |
-| key |  | - |  |
-| label | String? | - | 表单项标签左侧展示的内容 |
-| labelAlign | TextAlign? | - | TODO: item 标签对齐方式 |
-| labelWidget | Widget? | - | 自定义标签 |
-| labelWidth | double? | - | 标签宽度，如果提供则覆盖Form的labelWidth |
-| name | String? | - | 表单字段名称 |
-| radios |  | - |  |
-| requiredMark | bool? | true | 是否显示必填标记（*） |
-| select | String | '' | 选择器 适用于日期选择器等 |
-| selectFn | Function? | - | 选择器方法 适用于日期选择器等 |
-| showErrorMessage | bool | true | 是否显示错误信息 |
-| tipAlign | TextAlign? | - | 组件提示内容对齐方式 |
-| type | TDFormItemType | - | 表格单元需要使用的组件类型 |
+| errorMessage | String | - | 错误提示信息 |
+| type | TDFormItemType | - | 校验对象的类型 |
+| validate | String? Function(dynamic) | - | 校验方法 |
 
 
   

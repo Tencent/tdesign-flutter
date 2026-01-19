@@ -5,7 +5,7 @@
       options.add(TDSelectOption(
         label: '${i == 1 ? '超长一级选项名称超长一级选项名称' : '选项$i'}',
         value: i,
-        maxLines: 10,
+        maxLines: 2,
         //columnWidth: i == 1 ? 106 : null,
         children: [],
       ));

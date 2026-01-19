@@ -5,6 +5,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 背景颜色 |
+| backIconColor | Color? | - | 左边返回图标颜色 |
 | belowTitleWidget | Widget? | - | belowTitleWidget navbar 下方的 widget |
 | border | TDNavBarItemBorder? | - | 边框 |
 | boxShadow | List<BoxShadow>? | - | 底部阴影 |

@@ -1,40 +1,5 @@
 ## API
-### TDCellStyle
-#### 简介
-单元格组件样式
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| arrowColor | Color? | - | 箭头颜色 |
-| backgroundColor | Color? | - | 默认状态背景颜色 |
-| borderedColor | Color? | - | 单元格边框颜色 |
-| cardBorderRadius | BorderRadius? | - | 卡片模式边框圆角 |
-| cardPadding | EdgeInsets? | - | 卡片模式内边距 |
-| clickBackgroundColor | Color? | - | 点击状态背景颜色 |
-| context | BuildContext? | - | 传递context，会生成默认样式 |
-| descriptionStyle | TextStyle? | - | 内容描述文字样式 |
-| groupBorderedColor | Color? | - | 单元格组边框颜色 |
-| groupTitleStyle | TextStyle? | - | 单元组标题文字样式 |
-| leftIconColor | Color? | - | 左侧图标颜色 |
-| noteStyle | TextStyle? | - | 说明文字样式 |
-| padding | EdgeInsets? | - | 单元格内边距 |
-| requiredStyle | TextStyle? | - | 必填星号文字样式 |
-| rightIconColor | Color? | - | 右侧图标颜色 |
-| titleBackgroundColor | Color? | - | 单元格组标题背景颜色 |
-| titlePadding | EdgeInsets? | - | 单元格组标题内边距 |
-| titleStyle | TextStyle? | - | 标题文字样式 |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TDCellStyle.cellStyle  | 生成单元格默认样式 |
-
-```
-```
- ### TDCell
+### TDCell
 #### 简介
 单元格组件
 #### 默认构造方法
@@ -89,3 +54,38 @@
 | theme | TDCellGroupTheme? | TDCellGroupTheme.defaultTheme | 单元格组风格。可选项：default/card |
 | title | String? | - | 单元格组标题 |
 | titleWidget | Widget? | - | 单元格组标题组件 |
+
+```
+```
+ ### TDCellStyle
+#### 简介
+单元格组件样式
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| arrowColor | Color? | - | 箭头颜色 |
+| backgroundColor | Color? | - | 默认状态背景颜色 |
+| borderedColor | Color? | - | 单元格边框颜色 |
+| cardBorderRadius | BorderRadius? | - | 卡片模式边框圆角 |
+| cardPadding | EdgeInsets? | - | 卡片模式内边距 |
+| clickBackgroundColor | Color? | - | 点击状态背景颜色 |
+| context | BuildContext? | - | 传递context，会生成默认样式 |
+| descriptionStyle | TextStyle? | - | 内容描述文字样式 |
+| groupBorderedColor | Color? | - | 单元格组边框颜色 |
+| groupTitleStyle | TextStyle? | - | 单元组标题文字样式 |
+| leftIconColor | Color? | - | 左侧图标颜色 |
+| noteStyle | TextStyle? | - | 说明文字样式 |
+| padding | EdgeInsets? | - | 单元格内边距 |
+| requiredStyle | TextStyle? | - | 必填星号文字样式 |
+| rightIconColor | Color? | - | 右侧图标颜色 |
+| titleBackgroundColor | Color? | - | 单元格组标题背景颜色 |
+| titlePadding | EdgeInsets? | - | 单元格组标题内边距 |
+| titleStyle | TextStyle? | - | 标题文字样式 |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TDCellStyle.cellStyle  | 生成单元格默认样式 |

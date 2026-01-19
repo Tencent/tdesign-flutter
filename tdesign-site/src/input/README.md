@@ -583,6 +583,107 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 </td-code-block>
                                   
 
+自适应高度输入框
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _autoHeightInput(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          leftLabel: '地址',
+          controller: controller[27],
+          hintText: '请输入地址，高度自适应',
+          maxLines: null,
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller[27].clear();
+            setState(() {});
+          },
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _specialTypeNumber(BuildContext context) {
+    return TDInput(
+      type: TDInputType.special,
+      controller: controller[16],
+      leftLabel: '数量',
+      hintText: '填写个数',
+      textAlign: TextAlign.end,
+      rightWidget: TDText('个', textColor: TDTheme.of(context).textColorPrimary),
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _specialTypePasswordWithPaste(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          type: TDInputType.normal,
+          controller: controller[27],
+          obscureText: true,
+          enableInteractiveSelection: true,
+          leftLabel: '密码复制粘贴',
+          hintText: '此密码框允许长按复制粘贴',
+          contextMenuBuilder: (context, editableTextState) {
+            final List<ContextMenuButtonItem> buttonItems =
+                editableTextState.contextMenuButtonItems;
+            if (!buttonItems.any((item) => item.type == ContextMenuButtonType.copy)) {
+              buttonItems.insert(0, ContextMenuButtonItem(
+                onPressed: () {
+                  final selection = editableTextState.textEditingValue.selection;
+                  final text = editableTextState.textEditingValue.text;
+                  if (selection.isValid && !selection.isCollapsed) {
+                    final selectedText = text.substring(selection.start, selection.end);
+                    Clipboard.setData(ClipboardData(text: selectedText));
+                  } else {
+                    // 如果没有选中文本，则复制全部
+                    Clipboard.setData(ClipboardData(text: text));
+                  }
+                  editableTextState.hideToolbar();
+                },
+                type: ContextMenuButtonType.copy,
+              ));
+            }
+            return AdaptiveTextSelectionToolbar.buttonItems(
+              anchors: editableTextState.contextMenuAnchors,
+              buttonItems: buttonItems,
+            );
+          },
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
 
       
 <td-code-block panel="Dart">
@@ -929,9 +1030,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | clearIconSize | double? | - | 清除按钮图标大小 |
 | contentAlignment | TextAlign | TextAlign.start | 内容对齐方向 |
 | contentPadding | EdgeInsetsGeometry? | - | textInput内边距 |
+| contextMenuBuilder | EditableTextContextMenuBuilder? | - | 自定义上下文菜单构建器 |
 | controller | TextEditingController? | - | controller 用户获取或者赋值输入内容 |
 | cursorColor | Color? | - | 游标颜色 |
 | decoration | Decoration? | - | 输入框样式 |
+| enableInteractiveSelection | bool? | - | 是否启用交互式选择 |
 | focusNode | FocusNode? | - | 获取或者取消焦点使用 |
 | hintText | String? | - | 提示文案 |
 | hintTextStyle | TextStyle? | - | 提示文本颜色，默认为文本颜色 |
@@ -948,7 +1051,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | leftLabelSpace | double? | - | 输入框左侧文案间距 |
 | leftLabelStyle | TextStyle? | - | 左侧标签样式 设置该值是若出现像素溢出，请设置letterSpacing: 0 |
 | maxLength | int? | 500 | 最大字数限制 |
-| maxLines | int | 1 | 最大输入行数 |
+| maxLines | int? | 1 | 最大输入行数 |
 | needClear | bool | true | 是否需要右侧按钮变为删除 |
 | obscureText | bool | false | 是否隐藏输入的文字，一般用在密码输入框中 |
 | onBtnTap | GestureTapCallback? | - | 右侧按钮点击 |
@@ -961,6 +1064,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | required | bool? | - | 是否必填标志（红色*） |
 | rightBtn | Widget? | - | 右侧按钮 |
 | rightWidget | Widget? | - | 右侧自定义组件 特殊类型时生效 |
+| selectionControls | TextSelectionControls? | - | 自定义选择控制器 |
 | showBottomDivider | bool | true | 是否展示底部分割线 |
 | size | TDInputSize | TDInputSize.large | 输入框规格 |
 | spacer | TDInputSpacer | - | 组件各模块间间距 |

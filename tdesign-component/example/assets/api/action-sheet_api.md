@@ -7,6 +7,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | badge | TDBadge? | - | 角标 |
+| description | String? | - | 描述信息 |
 | disabled | bool | false | 是否禁用 |
 | group | String? | - | 分组，用于带描述多行滚动宫格 |
 | icon | Widget? | - | 图标 |

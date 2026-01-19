@@ -95,6 +95,52 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 </td-code-block>
                                   
 
+横向多选框-换行
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _horizontalCheckboxWrap(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      selectIds: const ['0', '1'],
+      direction: Axis.horizontal,
+      rowCount: 2,
+      directionalTdCheckboxes: const [
+        TDCheckbox(
+          id: '0',
+          title: '多选标题0',
+          style: TDCheckboxStyle.circle,
+          insetSpacing: 12,
+          showDivider: false,
+        ),
+        TDCheckbox(
+          id: '1',
+          title: '多选标题1',
+          style: TDCheckboxStyle.circle,
+          insetSpacing: 12,
+          showDivider: false,
+        ),
+        TDCheckbox(
+          id: '2',
+          title: '多选标题2',
+          style: TDCheckboxStyle.circle,
+          insetSpacing: 12,
+          showDivider: false,
+        ),
+        TDCheckbox(
+          id: '3',
+          title: '多选标题3',
+          style: TDCheckboxStyle.circle,
+          insetSpacing: 12,
+          showDivider: false,
+        ),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
 带全选多选框
             
 <td-code-block panel="Dart">

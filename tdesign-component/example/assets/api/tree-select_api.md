@@ -9,7 +9,7 @@
 | label | String | - | 标签 |
 | maxLines | int | 1 | 最大显示行数 |
 | multiple | bool | false | 当前子项支持多选 |
-| value | int | - | 值 |
+| value | dynamic | - | 值 |
 
 ```
 ```
