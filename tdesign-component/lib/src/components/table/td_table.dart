@@ -248,7 +248,7 @@ class TDTableState extends State<TDTable> {
     if ((col.selection ?? false) && col.cellBuilder == null) {
       var checkBox;
       // 行选择框
-      if (_notEmptyData()) {
+      if (_notEmptyData() && !isHeader) {
         var enable = col.selectable?.call(index, widget.data?[index]) ?? true;
         checkBox = TDCheckbox(
           id: 'index:$index',
@@ -635,7 +635,7 @@ class TDTableState extends State<TDTable> {
       var cells = <Widget>[];
       for (var j = 0; j < titles[i].length; j++) {
         var col = cols[i];
-        var cell = _getCell(col, j == 0, j == 0 ? '' : widget.data?[j - 1], i,
+        var cell = _getCell(col, j == 0, j == 0 ? '' : widget.data?[j - 1], j - 1,
             i == titles.length - 1);
         cells.add(SizedBox(width: col.width ?? cellWidth, child: cell));
       }
