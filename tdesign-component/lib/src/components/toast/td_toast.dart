@@ -356,7 +356,7 @@ class TDToast {
       );
     }
 
-    overlayState?.insert(overlayEntry);
+    overlayState.insert(overlayEntry);
 
     Timer? timer;
     Timer? disposeTimer;
@@ -419,14 +419,15 @@ class _TDIconTextToast extends StatelessWidget {
                 color: config.iconColor ?? theme.whiteColor1,
               ),
               const SizedBox(width: 8),
-              TDText(
+              Flexible(
+                  child: TDText(
                 text ?? '',
                 font: config.textStyle != null ? null : theme.fontBodyMedium,
                 style: config.textStyle,
-                maxLines: 1,
+                maxLines: maxLines ?? 1,
                 overflow: TextOverflow.ellipsis,
                 textColor: config.textStyle?.color ?? theme.whiteColor1,
-              )
+              ))
             ],
           )),
     );
