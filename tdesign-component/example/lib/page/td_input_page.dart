@@ -26,7 +26,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
 
   @override
   void initState() {
-    for (var i = 0; i < 28; i++) {
+    for (var i = 0; i < 30; i++) {
       controller.add(TextEditingController());
     }
     super.initState();
@@ -82,9 +82,11 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
               ExampleItem(builder: _specialTypeVerifyCode),
               ExampleItem(builder: _specialTypePhoneNumber),
               ExampleItem(builder: _specialTypePrice),
-          ExampleItem(builder: _specialTypeNumber),
-          ExampleItem(builder: _specialTypePasswordWithPaste),
-          ExampleItem(builder: (context) {
+              ExampleItem(builder: _specialTypeNumber),
+              ExampleItem(desc: '自适应高度输入框', builder: _autoHeightInput),
+              ExampleItem(builder: _specialTypeNumber),
+              ExampleItem(builder: _specialTypePasswordWithPaste),
+              ExampleItem(builder: (context) {
                 return Container();
               }),
             ],
@@ -968,6 +970,30 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           ),
         ],
       ),
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _autoHeightInput(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          leftLabel: '地址',
+          controller: controller[27],
+          hintText: '请输入地址，高度自适应',
+          maxLines: null,
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller[27].clear();
+            setState(() {});
+          },
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
     );
   }
 

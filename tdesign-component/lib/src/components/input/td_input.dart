@@ -122,7 +122,7 @@ class TDInput extends StatelessWidget {
   final TextEditingController? controller;
 
   /// 最大输入行数
-  final int maxLines;
+  final int? maxLines;
 
   /// 获取或者取消焦点使用
   final FocusNode? focusNode;
