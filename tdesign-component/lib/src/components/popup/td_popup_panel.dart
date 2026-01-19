@@ -58,6 +58,11 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
   double _maxHeight = 0;
   double _minHeight = 0;
   double _currentHeight = 0;
+  double _lastChildHeight = 0;
+  double _lastScreenHeight = 0;
+  double? _lastMaxHeightRatio;
+  double? _lastMinHeightRatio;
+  bool? _lastDraggable;
   bool _isFullscreen = false;
   bool _isAnimating = false;
   bool _isDragging = false;
@@ -93,6 +98,21 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
 
     final screenHeight = MediaQuery.of(context).size.height;
     final childHeight = renderBox.size.height;
+
+    // 如果高度和相关配置没有变化，则不重新计算
+    if (_lastChildHeight == childHeight &&
+        _lastScreenHeight == screenHeight &&
+        _lastMaxHeightRatio == widget.maxHeightRatio &&
+        _lastMinHeightRatio == widget.minHeightRatio &&
+        _lastDraggable == widget.draggable) {
+      return;
+    }
+    _lastChildHeight = childHeight;
+    _lastScreenHeight = screenHeight;
+    _lastMaxHeightRatio = widget.maxHeightRatio;
+    _lastMinHeightRatio = widget.minHeightRatio;
+    _lastDraggable = widget.draggable;
+
     final headerHeight = widget.draggable ? _headerHeight : _headerHeight;
     final baseHeight = _dragHandleHeight + headerHeight + childHeight;
 
@@ -110,8 +130,12 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
     // 初始化当前高度
     _currentHeight = baseHeight.clamp(_minHeight, _maxHeight);
     // 同步动画控制器
-    _controller.value = (_currentHeight - _minHeight) /
-        (_maxHeight - _minHeight).clamp(0.1, 1.0);
+    final newValue = ((_currentHeight - _minHeight) /
+            (_maxHeight - _minHeight).clamp(0.1, 1.0))
+        .clamp(0.0, 1.0);
+    if ((_controller.value - newValue).abs() > 0.001) {
+      _controller.value = newValue;
+    }
   }
 
   void _updateHeight() => setState(() {
