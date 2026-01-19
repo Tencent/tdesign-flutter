@@ -24,6 +24,7 @@ class TDCalendarBody extends StatelessWidget {
     required this.monthTitleHeight,
     required this.verticalGap,
     required this.animateTo,
+    this.onMonthChange,
     this.anchorDate
   }) : super(key: key);
 
@@ -52,15 +53,37 @@ class TDCalendarBody extends StatelessWidget {
   final double verticalGap;
   final double cellHeight;
   final bool animateTo;
+  final ValueChanged<DateTime>? onMonthChange;
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
+    final scrollController = TrackingScrollController();
     final min = _getDefDate(minDate);
     final max = _getDefDate(maxDate, 6);
     final months = _monthsBetween(min, max);
     final data = <DateTime, List<TDate?>>{};
     final monthHeight = <int, double>{};
+    DateTime? _lastPrintMonth;
+    scrollController.addListener(() {
+      // 根据滚动位置判断当前是几月
+      var currentOffset = 0.0;
+      for (var i = 0; i < months.length; i++) {
+        final mh = _getMonthHeight(months, i, monthHeight);
+        if (scrollController.offset >= currentOffset &&
+            scrollController.offset < currentOffset + mh) {
+          //只返回下一个月
+          DateTime currentMonth = months[i + 1];
+          // 缓存上一次打印的月份，只有变更时才打印
+          if (_lastPrintMonth == null ||
+              !_lastPrintMonth!.isAtSameMomentAs(currentMonth)) {
+            _lastPrintMonth = currentMonth;
+            onMonthChange?.call(currentMonth);
+          }
+          break;
+        }
+        currentOffset += mh;
+      }
+    });
     _scrollToItem(scrollController, months, monthHeight);
     return ListView.builder(
       padding: EdgeInsets.all(bodyPadding),

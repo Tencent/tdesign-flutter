@@ -48,6 +48,7 @@ class TDCalendar extends StatefulWidget {
     this.isTimeUnit = true,
     this.animateTo = false,
     this.cellWidget,
+    this.onMonthChange,
     this.anchorDate
   }) : super(key: key);
 
@@ -116,6 +117,9 @@ class TDCalendar extends StatefulWidget {
     String week,
   )? onHeaderClick;
 
+  /// 月份变化时触发
+  final ValueChanged<DateTime>? onMonthChange;
+
   /// 是否使用安全区域，默认true
   final bool? useSafeArea;
 
@@ -172,7 +176,6 @@ class _TDCalendarState extends State<TDCalendar> {
   late TDCalendarInherited? inherited;
   late TDCalendarStyle _style;
   final List<DatePickerModel> timePickerModelList = [];
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -248,6 +251,7 @@ class _TDCalendarState extends State<TDCalendar> {
               monthTitleHeight: widget.monthTitleHeight ?? 22,
               monthTitleBuilder: widget.monthTitleBuilder,
               animateTo: widget.animateTo ?? false,
+              onMonthChange: widget.onMonthChange,
               builder: (date, dateList, data, rowIndex, colIndex) {
                 return TDCalendarCell(
                   height: widget.cellHeight ?? 60,
