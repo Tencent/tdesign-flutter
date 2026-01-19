@@ -11,9 +11,7 @@ class TDTextPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // debugPaintBaselinesEnabled = true;
     return ExamplePage(
-      padding: const EdgeInsets.all(8),
       title: tdTitle(context),
       exampleCodeGroup: 'text',
       children: [
@@ -32,25 +30,29 @@ class TDTextPage extends StatelessWidget {
           ExampleItem(
               desc: '中文居中:（带有英文可能不居中）', builder: _buildVerticalCenterText),
           ExampleItem(desc: '自定义内部padding:', builder: _buildCustomPaddingText),
+          ExampleItem(desc: '删除线:', builder: _buildTextThrough),
         ]),
       ],
       test: [
         ExampleItem(
             desc: '中文居中-系统字体',
-            builder: (context){
-          return Container(
-            color: TDTheme.of(context).brandFocusColor,
-            child: Text(exampleTxt),
-          );
-        }),
+            builder: (context) {
+              return Container(
+                color: TDTheme.of(context).brandFocusColor,
+                child: Text(exampleTxt),
+              );
+            }),
         ExampleItem(
             desc: '中文居中-TD字体',
-            builder: (context){
-          return Container(
-            color: TDTheme.of(context).brandFocusColor,
-            child: TDText(exampleTxt, forceVerticalCenter: true,),
-          );
-        }),
+            builder: (context) {
+              return Container(
+                color: TDTheme.of(context).brandFocusColor,
+                child: TDText(
+                  exampleTxt,
+                  forceVerticalCenter: true,
+                ),
+              );
+            }),
       ],
     );
   }
@@ -150,6 +152,11 @@ class TDTextPage extends StatelessWidget {
       paddingConfig: CustomTextPaddingConfig(),
       child: const CustomPaddingText(),
     );
+  }
+
+  @Demo(group: 'text')
+  Widget _buildTextThrough(BuildContext context) {
+    return TDText(exampleTxt, isTextThrough: true);
   }
 }
 

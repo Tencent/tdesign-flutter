@@ -1,0 +1,10 @@
+
+Widget _buildTestContent(BuildContext context) {
+  return const TDCell(
+    title: '这是标题，非常长的标题',
+    note: '这是一个很长很长的note字段，测试长内容，你说这内容长不长！',
+    noteMaxLine: 2,
+    noteMaxWidth: 200,
+    arrow: true,
+  );
+}

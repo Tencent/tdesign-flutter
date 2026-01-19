@@ -17,14 +17,15 @@ class SideItemProps {
   TDBadge? badge;
   TextStyle? textStyle;
 
-  SideItemProps(
-      {required this.value,
-      required this.index,
-      this.disabled,
-      this.icon,
-      this.label,
-      this.badge,
-      this.textStyle});
+  SideItemProps({
+    required this.value,
+    required this.index,
+    this.disabled,
+    this.icon,
+    this.label,
+    this.badge,
+    this.textStyle,
+  });
 }
 
 class TDSideBar extends StatefulWidget {
@@ -45,6 +46,7 @@ class TDSideBar extends StatefulWidget {
     this.loadingWidget,
     this.selectedBgColor,
     this.unSelectedBgColor,
+    this.unSelectedColor,
   }) : super(key: key);
 
   /// 选项值
@@ -64,6 +66,9 @@ class TDSideBar extends StatefulWidget {
 
   /// 选中值后颜色
   final Color? selectedColor;
+
+  /// 未选中颜色
+  final Color? unSelectedColor;
 
   /// 选中样式
   final TextStyle? selectedTextStyle;
@@ -193,26 +198,26 @@ class _TDSideBarState extends State<TDSideBar> {
           .asMap()
           .entries
           .map((entry) => SideItemProps(
-            index: entry.key,
-            disabled: entry.value.disabled,
-            value: entry.value.value,
-            icon: entry.value.icon,
-            label: entry.value.label,
-            textStyle: entry.value.textStyle,
-            badge: entry.value.badge))
+              index: entry.key,
+              disabled: entry.value.disabled,
+              value: entry.value.value,
+              icon: entry.value.icon,
+              label: entry.value.label,
+              textStyle: entry.value.textStyle,
+              badge: entry.value.badge))
           .toList();
-    } else if(widget.children.isNotEmpty) {
+    } else if (widget.children.isNotEmpty) {
       displayChildren = widget.children
           .asMap()
           .entries
           .map((entry) => SideItemProps(
-            index: entry.key,
-            disabled: entry.value.disabled,
-            value: entry.value.value,
-            icon: entry.value.icon,
-            label: entry.value.label,
-            textStyle: entry.value.textStyle,
-            badge: entry.value.badge))
+              index: entry.key,
+              disabled: entry.value.disabled,
+              value: entry.value.value,
+              icon: entry.value.icon,
+              label: entry.value.label,
+              textStyle: entry.value.textStyle,
+              badge: entry.value.badge))
           .toList();
     } else {
       displayChildren = [];
@@ -240,15 +245,16 @@ class _TDSideBarState extends State<TDSideBar> {
 
   @override
   Widget build(BuildContext context) {
-    if(_loading) {
+    if (_loading) {
       widget.controller?.loading = true;
-      if(widget.loadingWidget != null) {
+      if (widget.loadingWidget != null) {
         return widget.loadingWidget!;
       }
       return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: const Align(
-          child: TDLoading(icon: TDLoadingIcon.circle, size: TDLoadingSize.large),
+          child:
+              TDLoading(icon: TDLoadingIcon.circle, size: TDLoadingSize.large),
         ),
       );
     }
@@ -258,7 +264,6 @@ class _TDSideBarState extends State<TDSideBar> {
             minWidth: 106,
             maxHeight: MediaQuery.of(context).size.height -
                 MediaQuery.of(context).padding.top),
-
         child: SizedBox(
             height: widget.height ?? MediaQuery.of(context).size.height,
             child: MediaQuery.removePadding(
@@ -281,15 +286,18 @@ class _TDSideBarState extends State<TDSideBar> {
                         badge: ele.badge,
                         textStyle: ele.textStyle,
                         selected: currentIndex == ele.index,
-                        selectedColor:widget.selectedColor,
-                        selectedTextStyle:widget.selectedTextStyle,
-                        contentPadding:widget.contentPadding,
+                        selectedColor: widget.selectedColor,
+                        unSelectedColor: widget.unSelectedColor,
+                        selectedTextStyle: widget.selectedTextStyle,
+                        contentPadding: widget.contentPadding,
                         topAdjacent: currentIndex != null &&
                             currentIndex! + 1 == ele.index,
                         bottomAdjacent: currentIndex != null &&
                             currentIndex! - 1 == ele.index,
-                        selectedBgColor: widget.selectedBgColor,
-                          unSelectedBgColor: widget.unSelectedBgColor,
+                        selectedBgColor: widget.selectedBgColor ??
+                            TDTheme.of(context).bgColorContainer,
+                        unSelectedBgColor: widget.unSelectedBgColor ??
+                            TDTheme.of(context).bgColorSecondaryContainer,
                         onTap: () {
                           if (!(ele.disabled ?? false)) {
                             onSelect(ele, isController: false);
@@ -297,5 +305,11 @@ class _TDSideBarState extends State<TDSideBar> {
                         },
                       );
                     }))));
+  }
+
+  @override
+  void didUpdateWidget(covariant TDSideBar oldWidget) {
+    getDisplayChildren();
+    super.didUpdateWidget(oldWidget);
   }
 }

@@ -7,7 +7,7 @@
     for (var i = 0; i < 100; i++) {
       list.add(SideItemProps(
         index: i,
-        label: '选项',
+        label: '选项 ${i}',
         value: i,
       ));
       pages.add(getPageDemo(i));
@@ -26,14 +26,11 @@
       }
     }
 
-    var demoHeight = MediaQuery.of(context).size.height;
-
     return Row(
       children: [
         SizedBox(
           width: 110,
           child: TDSideBar(
-            height: demoHeight,
             style: TDSideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
@@ -48,15 +45,13 @@
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
           child: PageView(
             controller: _pageController,
             scrollDirection: Axis.vertical,
             children: pages,
             physics: const NeverScrollableScrollPhysics(),
           ),
-        ))
+        )
       ],
     );
   }

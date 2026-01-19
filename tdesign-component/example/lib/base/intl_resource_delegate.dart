@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import '../l10n/app_localizations.dart';
 
 /// 国际化资源代理
 class IntlResourceDelegate extends TDResourceDelegate {
@@ -161,4 +162,8 @@ class IntlResourceDelegate extends TDResourceDelegate {
 
   @override
   String get top => AppLocalizations.of(context)!.top;
+
+  @override
+  String get emptyData => AppLocalizations.of(context)!.emptyData;
+
 }

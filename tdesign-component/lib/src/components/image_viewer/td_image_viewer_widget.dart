@@ -128,13 +128,14 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
   @override
   void initState() {
     super.initState();
-    if(widget.images.isEmpty) {
+    if (widget.images.isEmpty) {
       throw FlutterError('images must not be empty');
     }
-    if((widget.defaultIndex ?? 0) > widget.images.length - 1) {
+    if ((widget.defaultIndex ?? 0) > widget.images.length - 1) {
       throw FlutterError('defaultIndex must be less than images.length');
     }
-    if(widget.labels != null && widget.images.length != widget.labels!.length) {
+    if (widget.labels != null &&
+        widget.images.length != widget.labels!.length) {
       throw FlutterError('labels.length must be equals images.length');
     }
     _index = (widget.defaultIndex ?? 0) + 1;
@@ -172,6 +173,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
             loadingWidget: Container(
               width: size.width,
               height: size.height,
+              // todo
               color: TDTheme.of(context).fontGyColor1,
               child: Center(
                 child: TDLoading(
@@ -197,38 +199,42 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
   }
 
   Widget _getPageTitle() {
-    if(widget.labels != null) {
+    if (widget.labels != null) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Visibility(
             visible: (widget.labels![_index - 1]) != '',
-            child: Text(widget.labels![_index - 1],
+            child: Text(
+              widget.labels![_index - 1],
               textAlign: TextAlign.center,
-              style: widget.labelStyle ?? TextStyle(color: TDTheme.of(context).whiteColor1),
+              style: widget.labelStyle ??
+                  TextStyle(color: TDTheme.of(context).textColorAnti),
             ),
           ),
           Visibility(
             visible: widget.showIndex ?? false,
-            child: Text('$_index / ${widget.images.length}',
+            child: Text(
+              '$_index / ${widget.images.length}',
               textAlign: TextAlign.center,
-              style: widget.indexStyle ?? TextStyle(color: TDTheme.of(context).brandClickColor, fontSize: 10),
+              style: widget.indexStyle ??
+                  TextStyle(
+                      color: TDTheme.of(context).brandClickColor, fontSize: 10),
             ),
           )
         ],
       );
     }
     return Text(
-      (widget.showIndex ?? false)
-          ? '$_index / ${widget.images.length}'
-          : '',
+      (widget.showIndex ?? false) ? '$_index / ${widget.images.length}' : '',
       textAlign: TextAlign.center,
-      style: widget.indexStyle ?? TextStyle(color: TDTheme.of(context).whiteColor1),
+      style: widget.indexStyle ??
+          TextStyle(color: TDTheme.of(context).textColorAnti),
     );
   }
 
   Widget _getLeft() {
-    if(widget.leftItemBuilder != null) {
+    if (widget.leftItemBuilder != null) {
       return widget.leftItemBuilder!(context, _index - 1);
     }
     return GestureDetector(
@@ -241,33 +247,34 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
       },
       child: Icon(
         TDIcons.close,
-        color: widget.iconColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.iconColor ?? TDTheme.of(context).textColorAnti,
       ),
     );
   }
 
   Widget _getRight() {
-    if(widget.rightItemBuilder != null) {
+    if (widget.rightItemBuilder != null) {
       return widget.rightItemBuilder!(context, _index - 1);
     }
     return Visibility(
       visible: widget.deleteBtn ?? false,
       child: GestureDetector(
         onTap: () {
-          if(widget.images.length == 1 && !(widget.ignoreDeleteError ?? false)) {
+          if (widget.images.length == 1 &&
+              !(widget.ignoreDeleteError ?? false)) {
             throw FlutterError('images must not be empty');
           }
           widget.images.removeAt(_index - 1);
           widget.onDelete?.call(_index - 1);
           setState(() {
-            if(_index > 1) {
+            if (_index > 1) {
               _index--;
             }
           });
         },
         child: Icon(
           TDIcons.delete,
-          color: widget.iconColor ?? TDTheme.of(context).whiteColor1,
+          color: widget.iconColor ?? TDTheme.of(context).textColorAnti,
         ),
       ),
     );
@@ -275,7 +282,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var media =  MediaQuery.of(context);
+    var media = MediaQuery.of(context);
     var safeAreaHeight = media.padding.top;
     return Stack(
       children: [
@@ -285,6 +292,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
           left: 0,
           right: 0,
           child: Container(
+            // todo
             color: widget.bgColor ?? TDTheme.of(context).fontGyColor1,
           ),
         ),
@@ -319,7 +327,8 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
         ),
         SafeArea(
           child: Container(
-            color: widget.navBarBgColor ?? const Color(0x66000000),
+            color: widget.navBarBgColor ??
+                TDTheme.of(context).textColorPlaceholder,
             height: 44,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(

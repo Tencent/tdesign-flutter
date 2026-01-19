@@ -17,10 +17,10 @@ class TDConfirmDialog extends StatelessWidget {
   const TDConfirmDialog({
     Key? key,
     this.action,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor,
     this.radius = 12.0,
     this.title,
-    this.titleColor = const Color(0xE6000000),
+    this.titleColor,
     this.titleAlignment,
     this.contentWidget,
     this.content,
@@ -32,13 +32,15 @@ class TDConfirmDialog extends StatelessWidget {
     this.showCloseButton,
     this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
     this.buttonWidget,
+    this.width,
+    this.buttonStyleCustom,
   }) : super(key: key);
 
   /// 标题
   final String? title;
 
   /// 标题颜色
-  final Color titleColor;
+  final Color? titleColor;
 
   /// 标题对齐模式
   final AlignmentGeometry? titleAlignment;
@@ -65,7 +67,7 @@ class TDConfirmDialog extends StatelessWidget {
   final Function()? action;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// 按钮样式
   final TDDialogButtonStyle buttonStyle;
@@ -81,6 +83,11 @@ class TDConfirmDialog extends StatelessWidget {
 
   /// 自定义按钮
   final Widget? buttonWidget;
+
+  /// 按钮自定义样式属性，背景色、边框...
+  final TDButtonStyle? buttonStyleCustom;
+
+  final double? width;
 
   Widget _buildButton(BuildContext context) {
     if (buttonWidget != null) {
@@ -98,6 +105,7 @@ class TDConfirmDialog extends StatelessWidget {
             buttonType: TDButtonType.text,
             buttonTheme: TDButtonTheme.primary,
             height: 56,
+            buttonStyle: buttonStyleCustom,
             onPressed: () {
               if (action != null) {
                 action!();
@@ -115,6 +123,7 @@ class TDConfirmDialog extends StatelessWidget {
           buttonText: buttonText ?? context.resource.knew,
           buttonTextColor: buttonTextColor,
           buttonTheme: TDButtonTheme.primary,
+          buttonStyle: buttonStyleCustom,
           onPressed: () {
             if (action != null) {
               action!();
@@ -135,37 +144,32 @@ class TDConfirmDialog extends StatelessWidget {
     return TDDialogScaffold(
         showCloseButton: showCloseButton,
         backgroundColor: backgroundColor,
+        width: width,
         radius: radius,
-        body: LayoutBuilder(
-            builder: (context, constraints) {
-              return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // 内容区域添加弹性约束 https://api.flutter.dev/flutter/widgets/Flexible-class.html
-                    Flexible(
-                      // 滚动支持
-                        child: SingleChildScrollView(
-                          physics: const ClampingScrollPhysics(),
-                          child: TDDialogInfoWidget(
-                            title: title,
-                            titleColor: titleColor,
-                            titleAlignment: titleAlignment,
-                            contentWidget: contentWidget,
-                            content: content,
-                            contentColor: contentColor,
-                            // 当contentMaxHeight未设置时，使用屏幕的60%作为最大高度，并允许滚动
-                            contentMaxHeight: contentMaxHeight > 0
-                                ? contentMaxHeight
-                                : constraints.maxHeight * 0.6,
-                            padding: padding,
-                          ),
-                        ),
-                    ),
-                    _buildButton(context),
-                  ]
-              );
-            }
-        )
-    );
+        body: LayoutBuilder(builder: (context, constraints) {
+          return Column(mainAxisSize: MainAxisSize.min, children: [
+            // 内容区域添加弹性约束 https://api.flutter.dev/flutter/widgets/Flexible-class.html
+            Flexible(
+              // 滚动支持
+              child: SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                child: TDDialogInfoWidget(
+                  title: title,
+                  titleColor: titleColor,
+                  titleAlignment: titleAlignment,
+                  contentWidget: contentWidget,
+                  content: content,
+                  contentColor: contentColor,
+                  // 当contentMaxHeight未设置时，使用屏幕的60%作为最大高度，并允许滚动
+                  contentMaxHeight: contentMaxHeight > 0
+                      ? contentMaxHeight
+                      : constraints.maxHeight * 0.6,
+                  padding: padding,
+                ),
+              ),
+            ),
+            _buildButton(context),
+          ]);
+        }));
   }
 }

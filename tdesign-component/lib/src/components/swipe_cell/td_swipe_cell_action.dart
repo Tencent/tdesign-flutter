@@ -71,13 +71,14 @@ class TDSwipeCellAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = TDTheme.of(context).fontMarkMedium ?? Font(size: 14, lineHeight: 22, fontWeight: FontWeight.w600);
+    final fontSize = TDTheme.of(context).fontMarkMedium ??
+        Font(size: 14, lineHeight: 22, fontWeight: FontWeight.w600);
     final children = <Widget>[
       if (icon != null)
         Icon(
           icon,
           size: iconSize ?? 18,
-          color: labelStyle?.color ?? TDTheme.of(context).fontWhColor1,
+          color: labelStyle?.color ?? TDTheme.of(context).textColorAnti,
         ),
       if (icon != null && label != null) SizedBox(width: spacing ?? 2),
       if (label != null)
@@ -86,7 +87,7 @@ class TDSwipeCellAction extends StatelessWidget {
             label,
             forceVerticalCenter: true,
             font: fontSize,
-            textColor: TDTheme.of(context).fontWhColor1,
+            textColor: TDTheme.of(context).textColorAnti,
             style: labelStyle,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,

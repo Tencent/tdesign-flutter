@@ -33,8 +33,9 @@ class TDRadiusPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).brandNormalColor,
-          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusSmall)),
+        color: TDTheme.of(context).brandNormalColor,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusSmall),
+      ),
     );
   }
 
@@ -44,9 +45,9 @@ class TDRadiusPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).brandNormalColor,
-          borderRadius:
-              BorderRadius.circular(TDTheme.of(context).radiusDefault)),
+        color: TDTheme.of(context).brandNormalColor,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+      ),
     );
   }
 
@@ -56,8 +57,9 @@ class TDRadiusPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).brandNormalColor,
-          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge)),
+        color: TDTheme.of(context).brandNormalColor,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusLarge),
+      ),
     );
   }
 
@@ -67,9 +69,10 @@ class TDRadiusPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).brandNormalColor,
-          borderRadius:
-              BorderRadius.circular(TDTheme.of(context).radiusExtraLarge)),
+        color: TDTheme.of(context).brandNormalColor,
+        borderRadius:
+            BorderRadius.circular(TDTheme.of(context).radiusExtraLarge),
+      ),
     );
   }
 
@@ -80,21 +83,22 @@ class TDRadiusPage extends StatelessWidget {
       width: 100,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).brandNormalColor,
-          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusRound)),
+        color: TDTheme.of(context).brandNormalColor,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusRound),
+      ),
     );
   }
 
   @Demo(group: 'radius')
   Widget _buildRadiusCircle(BuildContext context) {
-    //  圆形与胶囊型一致，如果长款一致即是圆形
+    //  圆形与胶囊型一致，如果长宽一致即是圆形
     return Container(
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-          color: TDTheme.of(context).brandNormalColor,
-          borderRadius:
-              BorderRadius.circular(TDTheme.of(context).radiusCircle)),
+        color: TDTheme.of(context).brandNormalColor,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
+      ),
     );
   }
 }

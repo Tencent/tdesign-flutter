@@ -42,6 +42,8 @@
 ./bin/api_tool_linux generate --folder ../lib/src/components/checkbox --name TDCheckbox,TDCheckboxGroup --folder-name checkbox --output ../example/assets/api/ --only-api
 # date_picker
 ./bin/api_tool_linux generate --folder ../lib/src/components/picker --name TDPicker,TDDatePicker --folder-name date-time-picker --output ../example/assets/api/ --only-api
+# form
+./bin/api_tool_linux generate --folder ../lib/src/components/form --name TDForm,TDFormItem,TDFormItemType,TDFormValidation --folder-name form --output ../example/assets/api/ --only-api
 # input
 ./bin/api_tool_linux generate --file ../lib/src/components/input/td_input.dart --name TDInput, TDInputSpacer --folder-name input --output ../example/assets/api/ --only-api
 # picker
@@ -100,7 +102,7 @@
 # swiper
 ./bin/api_tool_linux generate --folder ../lib/src/components/swiper --name TDSwiperPagination,TDPageTransformer --folder-name swiper --output ../example/assets/api/ --only-api --get-comments
 # table
-./bin/api_tool_linux generate --folder ../lib/src/components/table --name TDTable --folder-name table --output ../example/assets/api/ --only-api
+./bin/api_tool_linux generate --folder ../lib/src/components/table --name TDTable,TDTableCol,TDTableEmpty --folder-name table --output ../example/assets/api/ --only-api
 # tag
 ./bin/api_tool_linux generate --folder ../lib/src/components/tag --name TDTag,TDSelectTag,TDTagStyle --folder-name tag --output ../example/assets/api/ --only-api
 
@@ -112,7 +114,7 @@
 # dialog
 ./bin/api_tool_linux generate --folder ../lib/src/components/dialog --name TDAlertDialog,TDConfirmDialog,TDDialogButtonOptions,TDDialogButtonStyle,TDDialogScaffold,TDDialogTitle,TDDialogContent,TDDialogInfoWidget,HorizontalNormalButtons,HorizontalTextButtons,TDDialogButton,TDDialogImagePosition,TDImageDialog,TDInputDialog --folder-name dialog --output ../example/assets/api/ --only-api
 # dropdown_menu
-./bin/api_tool_linux generate --folder ../lib/src/components/dropdown_menu --name TDDropdownMenu,TDDropdownMenuDirection,TDDropdownItem,TDDropdownItemOption --folder-name dropdown-menu --output ../example/assets/api/ --only-api --get-comments
+./bin/api_tool_linux generate --folder ../lib/src/components/dropdown_menu --name TDDropdownMenu,TDDropdownMenuDirection,TDDropdownItem,TDDropdownItemOption,TDDropdownItemController --folder-name dropdown-menu --output ../example/assets/api/ --only-api --get-comments
 # loading
 ./bin/api_tool_linux generate --file ../lib/src/components/loading/td_loading.dart --name TDLoading --folder-name loading --output ../example/assets/api/ --only-api
 # message

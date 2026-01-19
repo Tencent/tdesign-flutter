@@ -8,20 +8,15 @@
         extentRatio: 120 / screenWidth,
         children: [
           TDSwipeCellAction(
-            flex: 60,
-            backgroundColor: TDTheme.of(context).warningColor4,
+            backgroundColor: TDTheme.of(context).warningNormalColor,
             label: '编辑',
           ),
           TDSwipeCellAction(
-            flex: 60,
-            backgroundColor: TDTheme.of(context).errorColor6,
+            backgroundColor: TDTheme.of(context).errorNormalColor,
             label: '删除',
           ),
         ],
       ),
-      cell: const TDCell(
-        title: '左滑操作',
-        note: '辅助信息',
-      ),
+      cell: const TDCell(title: '左滑双操作', note: '辅助信息'),
     );
   }

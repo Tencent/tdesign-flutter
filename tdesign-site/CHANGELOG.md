@@ -5,6 +5,101 @@ toc: false
 docClass: timeline
 ---
 
+## 🌈 0.2.6 `2025-11-14`
+### 🚀 Features
+- `TDNoticeBar `: 新增`content`属性，废弃并兼容原有的context属性 @runoob-coder ([#744](https://github.com/Tencent/tdesign-flutter/pull/744))
+- `TDButton`: 添加渐变颜色背景 @jflin19990707 ([#773](https://github.com/Tencent/tdesign-flutter/pull/773))
+- `TDToast`: TDToast支持展示多个 @jflin19990707 ([#780](https://github.com/Tencent/tdesign-flutter/pull/780))
+- `TDUpload`: 增加自定义上传监听 @leenc123 ([#775](https://github.com/Tencent/tdesign-flutter/pull/775))
+- `TDTable`: 增加自定义表尾属性 @leenc123 ([#776](https://github.com/Tencent/tdesign-flutter/pull/776))
+
+### 🐞 Bug Fixes
+- `TDMultiCascader`: 修复initialIndexes 参数不生效 @epoll-j ([#752](https://github.com/Tencent/tdesign-flutter/pull/752))
+- `TDDialog`: 按钮文案溢出问题 @jflin19990707 ([#772](https://github.com/Tencent/tdesign-flutter/pull/772))
+- `TDDateTimePicker`: 日期时分秒的英文配置改为缩写 @jflin19990707 ([#770](https://github.com/Tencent/tdesign-flutter/pull/770))
+- `TDCell`: TDCell的note过长时溢出问题 @jflin19990707 ([#769](https://github.com/Tencent/tdesign-flutter/pull/769))
+- `TDCell`: 修复单元格内 icon 与文本的对齐问题 @runoob-coder ([#789](https://github.com/Tencent/tdesign-flutter/pull/789))
+- `TDProgress `: 修复进度条改变时的样式问题  @runoob-coder ([#744](https://github.com/Tencent/tdesign-flutter/pull/744))
+
+### 📝 Documentation
+- `docs`: 优化文档格式和内容 @runoob-coder ([#744](https://github.com/Tencent/tdesign-flutter/pull/744))
+
+### 🚧 Others
+- 组件全面适配深色模式，优化调整组件样式（实验版） @runoob-coder ([#744](https://github.com/Tencent/tdesign-flutter/pull/744))
+- `demo`: 优化调整demo示例项目及代码演示，升级 Android 构建配置和依赖项以兼容在flutter `3.16.9`至最新版（`3.35.5`）下运行，调整web预览iframe样式去除顶部边距 @runoob-coder ([#744](https://github.com/Tencent/tdesign-flutter/pull/744))
+- `web`: 覆盖web依赖项，解决与flutter_localizations的版本冲突问题，兼容flutter之前版本 @runoob-coder ([#744](https://github.com/Tencent/tdesign-flutter/pull/744))
+
+
+
+## 🌈 0.2.5 `2025-09-12` 
+### 🐞 Bug Fixes
+- `TDPopover`: 添加圆角属性自定义 @jflin19990707 ([#727](https://github.com/Tencent/tdesign-flutter/pull/727))
+- `TDForm`: 增加表单自定义背景颜色属性，按钮部分可为空 @jflin19990707 ([#730](https://github.com/Tencent/tdesign-flutter/pull/730))
+- `TDConfirmDialog`: 弹窗支持自定义宽度，按钮增加自定义样式属性 @jflin19990707 ([#724](https://github.com/Tencent/tdesign-flutter/pull/724))
+- `TDPicker`: 支持初始化和后续动态加载适量数据，修复卡顿问题@123dw-bot([#728](https://github.com/Tencent/tdesign-flutter/pull/728))
+-  `TDSideBar`增加自定义未选中颜色 @jflin19990707 ([#723](https://github.com/Tencent/tdesign-flutter/pull/723))
+### 🚧 Others
+- docs: 优化仓库大小 @RSS1102
+
+
+## 🌈 0.2.4 `2025-08-14` 
+### 🚀 Features
+- `TDUpload`: 支持设置多图间距和对其方式 @cyjaysong ([#677](https://github.com/Tencent/tdesign-flutter/pull/677))
+- `TDTreeSelect`: 新增自定义宽度和最大行数字段，修复第二级宽度固定，长文本溢出问题 @123dw-bot ([#694](https://github.com/Tencent/tdesign-flutter/pull/694))
+- `TDDropdownMenu`: 增加TDDropdownItemController，允许外部重置和更改下拉选项 @Luozf12345 ([#697](https://github.com/Tencent/tdesign-flutter/pull/697))
+- `TDStepper`:Stepper增加controller参数，可用于实时修改value @Luozf12345 ([#699](https://github.com/Tencent/tdesign-flutter/pull/699))
+
+### 🐞 Bug Fixes
+- `TDIndexes`: 修复自定义索引无法响应点击事件 @epoll-j ([#692](https://github.com/Tencent/tdesign-flutter/pull/692))
+- `TDPopup`: 修复close方法触发两次bug @epoll-j ([#690](https://github.com/Tencent/tdesign-flutter/pull/690))
+- `TDSideBar`:修复TDSideBar组件初始化后children无法更新的问题 @Luozf12345 ([#698](https://github.com/Tencent/tdesign-flutter/pull/698))
+
+### 🚧 Others
+- `其他`:恢复对flutter SDK 3.32版本的默认适配
+
+
+## 🌈 0.2.3 `2025-07-09` 
+### 🚀 Features
+- `TDPicker`: 支持切换时优先保持级联的选项值 @epoll-j ([#666](https://github.com/Tencent/tdesign-flutter/pull/666))
+- `TDTable`: 支持行默认选中 @ccXxx1aoBai ([#665](https://github.com/Tencent/tdesign-flutter/pull/665))
+- `TDCalendar`: 增加自定义日期单元格功能 @epoll-j ([#667](https://github.com/Tencent/tdesign-flutter/pull/667))
+- `TDForm`: 增加Form 表单组件 @shizhe2018 @SimonWuZY ([#620](https://github.com/Tencent/tdesign-flutter/pull/620))
+- `TDTable`: TDTableCol属性配置分离，空数据配置分离 @ccXxx1aoBai ([#665](https://github.com/Tencent/tdesign-flutter/pull/665))
+### 🐞 Bug Fixes
+- `TDTable`: 解决表头未选中图标显示问题，禁用状态下全选选中状态问题 @ccXxx1aoBai ([#665](https://github.com/Tencent/tdesign-flutter/pull/665))
+- `TDTable`: 表格空数据问题 @ccXxx1aoBai ([#671](https://github.com/Tencent/tdesign-flutter/pull/671))
+- `TDDialog`: 弹窗遮挡键盘问题 @jflin19990707 ([#669](https://github.com/Tencent/tdesign-flutter/pull/669))
+- `TDCollapse`: collapse demo页面名称修改 @jflin19990707 ([#670](https://github.com/Tencent/tdesign-flutter/pull/670))
+- `TDDropdownMenu`: 嵌套路由场景 弹窗位置计算错误 @hcanyz ([#648](https://github.com/Tencent/tdesign-flutter/pull/648))
+
+## 🌈 0.2.2 `2025-06-13`
+
+### 🚀 Features
+
+- `TDTable`: 支持表格行选择、自定义行高 @ccXxx1aoBai ([#594](https://github.com/Tencent/tdesign-flutter/pull/594))
+- `TDTreeSelect`: 支持局部多选 @epoll-j ([#587](https://github.com/Tencent/tdesign-flutter/pull/587))
+- `TDCell`: 支持自定义高度，底部分割线 @ccXxx1aoBai ([#611](https://github.com/Tencent/tdesign-flutter/pull/611))
+- `TDNoticeBar`: 支持自定义文字行数 @ccXxx1aoBai ([#611](https://github.com/Tencent/tdesign-flutter/pull/611))
+- `TDBottomTabBar`: TDButtonBottomTabBar 中的 onTap 支持重复点击 @epoll-j @RSS1102([#586](https://github.com/Tencent/tdesign-flutter/pull/586))
+- `TDBottomTabBar`: 实现点击水波纹效果 @RSS1102 ([#626](https://github.com/Tencent/tdesign-flutter/pull/626))
+- `TDAvatar` 增加自定义BoxFit参数 @shizhe2018 ([#633](https://github.com/Tencent/tdesign-flutter/pull/633))
+
+### 🐞 Bug Fixes
+
+- `TDDatePicker`: 修复时间选择器分钟级时间数据展示问题- 优化小时、分钟、秒的选择范围计算逻辑 @epoll-j ([#585](https://github.com/Tencent/tdesign-flutter/pull/585))
+- `TDSearchBar`: 支持设置onTapOutside回调 @cyjaysong ([#608](https://github.com/Tencent/tdesign-flutter/pull/608))
+- `TDDropdownMenu`:  支持修改选中icon颜色 @jflin19990707 ([#631](https://github.com/Tencent/tdesign-flutter/pull/631))
+- `TDTabBar`: fix:TDBottomTabBarBasicType.iconText模式下，text icon 冲突问题 @jflin19990707 ([#628](https://github.com/Tencent/tdesign-flutter/pull/628))
+- `TDEmpty`: 支持操作按钮自定义样式 @jflin19990707 ([#624](https://github.com/Tencent/tdesign-flutter/pull/624))
+- `TDToast`: toast支持自定义文案 @jflin19990707 ([#625](https://github.com/Tencent/tdesign-flutter/pull/625))
+- `TDPopup`: 修改_measureChildHeight方法用于修复child无法修改弹窗高度 @Jzow ([#591](https://github.com/Tencent/tdesign-flutter/pull/591))
+- `TDCascader` 修改查询data数据为空状态处理 @shizhe2018 ([#635](https://github.com/Tencent/tdesign-flutter/pull/635))
+
+### 🚧 Others
+
+- [其他]适配flutter 3.32版本 @Luozf12345 ([#636](https://github.com/Tencent/tdesign-flutter/pull/636))
+
+
 
 ## 🌈 0.2.0 `2025-05-08`
 ### 🚀 Features

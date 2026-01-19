@@ -1,0 +1,3 @@
+dependency_overrides:
+  tdesign_flutter_adaptation: 3.16.0
+  image_picker: 1.0.8

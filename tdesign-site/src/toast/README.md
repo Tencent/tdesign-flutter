@@ -70,8 +70,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _horizontalIconToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showIconText('带横向图标',
-            icon: TDIcons.check_circle, context: context);
+        TDToast.showIconText(
+          '带横向图标',
+          icon: TDIcons.check_circle,
+          context: context,
+        );
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -92,10 +95,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _verticalIconToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showIconText('带竖向图标',
-            icon: TDIcons.check_circle,
-            direction: IconTextDirection.vertical,
-            context: context);
+        TDToast.showIconText(
+          '带竖向图标',
+          icon: TDIcons.check_circle,
+          direction: IconTextDirection.vertical,
+          context: context,
+        );
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -117,6 +122,35 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
     return TDButton(
       onTap: () {
         TDToast.showLoading(context: context);
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '加载状态',
+    );
+  }</pre>
+
+</td-code-block>
+                                  
+
+加载状态自定义
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _loadingCustomToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showLoading(
+          context: context,
+          customWidget: Container(
+            width: 50,
+            height: 20,
+            child: const TDText('自定义加载'),
+            color: TDTheme.of(context).brandColor1,
+          ),
+        );
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -168,6 +202,36 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
+
+自定义纯文字
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _textCustomToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showText(
+          '自定义纯文字',
+          context: context,
+          customWidget: Container(
+            width: 50,
+            height: 20,
+            child: const TDText('自定义纯文字'),
+            color: TDTheme.of(context).brandClickColor,
+          ),
+        );
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '纯文字',
+    );
+  }</pre>
+
+</td-code-block>
+                                  
 ### 1 组件状态
 
 成功提示
@@ -178,7 +242,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _successToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showSuccess('成功文案',context: context);
+        TDToast.showSuccess('成功文案', context: context);
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -199,8 +263,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _successVerticalToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showSuccess('成功文案',
-            direction: IconTextDirection.vertical, context: context);
+        TDToast.showSuccess(
+          '成功文案',
+          direction: IconTextDirection.vertical,
+          context: context,
+        );
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -221,8 +288,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _warningToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showWarning('警告文案',
-            direction: IconTextDirection.horizontal, context: context);
+        TDToast.showWarning(
+          '警告文案',
+          direction: IconTextDirection.horizontal,
+          context: context,
+        );
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -243,8 +313,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _warningVerticalToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showWarning('警告文案',
-            direction: IconTextDirection.vertical, context: context);
+        TDToast.showWarning(
+          '警告文案',
+          direction: IconTextDirection.vertical,
+          context: context,
+        );
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -265,8 +338,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _failToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showFail('失败文案',
-            direction: IconTextDirection.horizontal, context: context);
+        TDToast.showFail(
+          '失败文案',
+          direction: IconTextDirection.horizontal,
+          context: context,
+        );
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -287,8 +363,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _failVerticalToast(BuildContext context) {
     return TDButton(
       onTap: () {
-        TDToast.showFail('失败文案',
-            direction: IconTextDirection.vertical, context: context);
+        TDToast.showFail(
+          '失败文案',
+          direction: IconTextDirection.vertical,
+          context: context,
+        );
       },
       size: TDButtonSize.large,
       type: TDButtonType.outline,
@@ -309,14 +388,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| showText |  |   required String? text,  required BuildContext context,  Duration duration,  int? maxLines,  BoxConstraints? constraints,  bool? preventTap,  Color? backgroundColor, | 普通文本Toast |
-| showIconText |  |   required String? text,  IconData? icon,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines, | 带图标的Toast |
-| showSuccess |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines, | 成功提示Toast |
-| showWarning |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines, | 警告Toast |
-| showFail |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines, | 失败提示Toast |
-| showLoading |  |   required BuildContext context,  String? text,  Duration duration,  bool? preventTap,  Color? backgroundColor, | 带文案的加载Toast |
-| showLoadingWithoutText |  |   required BuildContext context,  String? text,  Duration duration,  bool? preventTap,  Color? backgroundColor, | 不带文案的加载Toast |
-| dismissLoading |  |  | 关闭加载Toast |
+| dismissAll |  |  | 关闭所有Toast |
+| dismissLoading |  |  | 关闭加载Toast（向后兼容） |
+| dismissToast |  |   required String toastId, | 关闭指定的Toast |
+| showFail |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 失败提示Toast |
+| showIconText |  |   required String? text,  IconData? icon,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 带图标的Toast |
+| showLoading |  |   required BuildContext context,  String? text,  Duration duration,  bool? preventTap,  Widget? customWidget,  Color? backgroundColor,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 带文案的加载Toast |
+| showLoadingWithoutText |  |   required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  double? iconSize,  Color? iconColor,  String? toastId, | 不带文案的加载Toast |
+| showSuccess |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 成功提示Toast |
+| showText |  |   required String? text,  required BuildContext context,  Duration duration,  int? maxLines,  BoxConstraints? constraints,  bool? preventTap,  Widget? customWidget,  Color? backgroundColor,  TextStyle? textStyle,  String? toastId, | 普通文本Toast |
+| showWarning |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 警告Toast |
 
 
   

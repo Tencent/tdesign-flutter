@@ -1,12 +1,12 @@
 
   Widget _buildCellSkeleton(BuildContext context) {
-    var rowColsAvatar = TDSkeleton(theme: TDSkeletonTheme.avatar);
-    var rowColsImage = TDSkeleton.fromRowCol(
+    final rowColsAvatar = TDSkeleton(theme: TDSkeletonTheme.avatar);
+    final rowColsImage = TDSkeleton.fromRowCol(
       rowCol: TDSkeletonRowCol(objects: const [
-        [TDSkeletonRowColObj.rect(width: 48, height: 48, flex: null)]
+        [TDSkeletonRowColObj.rect(width: 48, height: 48)]
       ]),
     );
-    var rowColsContent = TDSkeleton.fromRowCol(
+    final rowColsContent = TDSkeleton.fromRowCol(
       rowCol: TDSkeletonRowCol(
         objects: const [
           [TDSkeletonRowColObj(), TDSkeletonRowColObj.spacer(flex: 1)],
@@ -16,8 +16,10 @@
     );
 
     return Column(
+      // spacing: 16,
       children: [
         Row(
+          // spacing: 12,
           children: [
             rowColsAvatar,
             const SizedBox(width: 12),
@@ -26,6 +28,7 @@
         ),
         const SizedBox(height: 16),
         Row(
+          // spacing: 12,
           children: [
             rowColsImage,
             const SizedBox(width: 12),

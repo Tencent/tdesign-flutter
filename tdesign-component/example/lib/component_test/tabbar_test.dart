@@ -2,7 +2,6 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter/src/util/string_util.dart';
 // import 'package:xjy_study/utils/color_util.dart';
 
 class StudyDetail extends StatefulWidget {
@@ -51,10 +50,10 @@ class _StudyDetailState extends State with SingleTickerProviderStateMixin {
       ),
       body: ExtendedNestedScrollView(
         onlyOneScrollInBody: true,
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
-            SliverToBoxAdapter(
+            const SliverToBoxAdapter(
               child: _CourseItemDetail(),
             )
           ];
@@ -115,7 +114,7 @@ class _CourseItemDetail extends StatelessWidget {
                 height: 16.h,
                 alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(horizontal: 6.w),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(4)),
                     gradient: LinearGradient(colors: [
                       Color(0xFFFFB442),

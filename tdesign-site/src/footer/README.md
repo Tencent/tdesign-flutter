@@ -41,22 +41,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildSingleLinkFooter(BuildContext context) {
-    // 示例链接列表
-    final singleLink = <TDLink>[
-      TDLink(
-        label: '底部链接',
-        style: TDLinkStyle.primary,
-        // type: TDLinkType.withSuffixIcon,
-        uri: Uri.parse('https://example.com'),
-        linkClick: (link) {
-          print('点击了链接 $link');
-        },
-      ),
-    ];
-
     return TDFooter(
       TDFooterType.link,
-      links: singleLink,
+      links: [
+        TDLink(
+          label: '底部链接',
+          style: TDLinkStyle.primary,
+          type: TDLinkType.withSuffixIcon,
+          uri: Uri.parse('https://example.com'),
+          linkClick: (link) {
+            print('点击了链接 $link');
+          },
+        ),
+      ],
       text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
   }</pre>
@@ -70,33 +67,27 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildLinksFooter(BuildContext context) {
-    final links = <TDLink>[
-      TDLink(
-        label: '底部链接1',
-        style: TDLinkStyle.primary,
-        uri: Uri.parse('https://example.com'),
-        linkClick: (link) {
-          print('点击了链接1 $link');
-        },
-      ),
-      TDLink(
-        label: '底部链接2',
-        style: TDLinkStyle.primary,
-        uri: Uri.parse('https://example.com'),
-        linkClick: (link) {
-          print('点击了链接2 $link');
-        },
-      ),
-    ];
-    return Column(
-      children: [
-        const SizedBox(height: 12),
-        TDFooter(
-          TDFooterType.link,
-          links: links,
-          text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
-        )
+    return TDFooter(
+      TDFooterType.link,
+      links: [
+        TDLink(
+          label: '底部链接1',
+          style: TDLinkStyle.primary,
+          uri: Uri.parse('https://example.com'),
+          linkClick: (link) {
+            print('点击了链接1 $link');
+          },
+        ),
+        TDLink(
+          label: '底部链接2',
+          style: TDLinkStyle.primary,
+          uri: Uri.parse('https://example.com'),
+          linkClick: (link) {
+            print('点击了链接2 $link');
+          },
+        ),
       ],
+      text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     );
   }</pre>
 
@@ -109,11 +100,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _buildBrandFooter(BuildContext context) {
-    return TDFooter(
+    return const TDFooter(
       TDFooterType.brand,
       logo: 'assets/img/td_brand.png',
       width: 204,
-      height: 48,
     );
   }</pre>
 
@@ -127,13 +117,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| type | TDFooterType | type | 样式 |
+| height | double? | - | 自定义图片高 |
 | key |  | - |  |
+| links | List<TDLink> | const [] | 链接 |
 | logo | String? | - | 品牌图片 |
 | text | String | '' | 文字 |
-| links | List<TDLink> | const [] | 链接 |
+| type | TDFooterType | type | 样式 |
 | width | double? | - | 自定义图片宽 |
-| height | double? | - | 自定义图片高 |
 
 
   

@@ -1,26 +1,51 @@
 ## API
-### TDPopupBottomDisplayPanel
+### TDSlidePopupRoute
+#### 简介
+从屏幕的某个方向滑动弹出的Dialog框的路由，比如从顶部、底部、左、右滑出页面
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| barrierClick | VoidCallback? | - | 蒙层点击事件，仅在[modalBarrierFull]为false时触发 |
+| barrierLabel |  | - |  |
+| builder | WidgetBuilder | - | 控件构建器 |
+| close | VoidCallback? | - | 关闭前事件 |
+| focusMove | bool | false | 是否有输入框获取焦点时整体平移避免输入框被遮挡 |
+| isDismissible | bool | true | 点击蒙层能否关闭 |
+| modalBarrierColor | Color? | Colors.black54 | 蒙层颜色 |
+| modalBarrierFull | bool | false | 是否全屏显示蒙层 |
+| modalHeight | double? | - | 弹出框高度 |
+| modalLeft | double? | 0 | 弹出框左侧距离 |
+| modalTop | double? | 0 | 弹出框顶部距离 |
+| modalWidth | double? | - | 弹出框宽度 |
+| open | VoidCallback? | - | 打开前事件 |
+| opened | VoidCallback? | - | 打开后事件 |
+| slideTransitionFrom | SlideTransitionFrom | SlideTransitionFrom.bottom | 设置从屏幕的哪个方向滑出 |
+
+```
+```
+ ### TDPopupBottomDisplayPanel
 #### 简介
 右上角带关闭的底部浮层面板
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
+| backgroundColor |  | - |  |
 | child |  | - |  |
+| closeClick | PopupClick? | - | 关闭按钮点击回调 |
+| closeColor | Color? | - | 关闭按钮颜色 |
+| closeSize | double? | - | 关闭按钮图标尺寸 |
+| draggable |  | - |  |
+| hideClose | bool | false | 是否隐藏关闭按钮 |
+| key |  | - |  |
+| maxHeightRatio |  | - |  |
+| minHeightRatio |  | - |  |
+| radius |  | - |  |
 | title |  | - |  |
 | titleColor |  | - |  |
 | titleFontSize | double? | - | 标题字体大小 |
 | titleLeft | bool | false | 标题是否靠左 |
-| hideClose | bool | false | 是否隐藏关闭按钮 |
-| closeColor | Color? | - | 关闭按钮颜色 |
-| closeSize | double? | - | 关闭按钮图标尺寸 |
-| closeClick | PopupClick? | - | 关闭按钮点击回调 |
-| backgroundColor |  | - |  |
-| radius |  | - |  |
-| draggable |  | - |  |
-| maxHeightRatio |  | - |  |
-| minHeightRatio |  | - |  |
 
 ```
 ```
@@ -31,24 +56,24 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
+| backgroundColor |  | - |  |
 | child |  | - |  |
-| title |  | - |  |
-| titleColor |  | - |  |
+| draggable |  | - |  |
+| key |  | - |  |
+| leftClick | PopupClick? | - | 左边文本点击回调 |
 | leftText | String? | - | 左边文本 |
 | leftTextColor | Color? | - | 左边文本颜色 |
-| leftClick | PopupClick? | - | 左边文本点击回调 |
-| rightText | String? | - | 右边文本 |
-| rightTextColor | Color? | - | 右边文本颜色 |
-| rightClick | PopupClick? | - | 右边文本点击回调 |
-| titleFontSize | double? | - | 标题字体大小 |
 | leftTextFontSize | double? | - | 左边文本字体大小 |
-| rightTextFontSize | double? | - | 右边文本字体大小 |
-| backgroundColor |  | - |  |
-| radius |  | - |  |
-| draggable |  | - |  |
 | maxHeightRatio |  | - |  |
 | minHeightRatio |  | - |  |
+| radius |  | - |  |
+| rightClick | PopupClick? | - | 右边文本点击回调 |
+| rightText | String? | - | 右边文本 |
+| rightTextColor | Color? | - | 右边文本颜色 |
+| rightTextFontSize | double? | - | 右边文本字体大小 |
+| title |  | - |  |
+| titleColor |  | - |  |
+| titleFontSize | double? | - | 标题字体大小 |
 
 ```
 ```
@@ -59,36 +84,11 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
-| child | Widget | - | 子控件 |
-| closeUnderBottom | bool | false | 关闭按钮是否在视图框下方 |
-| closeColor | Color? | - | 关闭按钮颜色 |
-| closeClick | PopupClick? | - | 关闭按钮点击回调 |
 | backgroundColor | Color? | - | 背景颜色 |
-| radius | double? | - | 圆角 |
+| child | Widget | - | 子控件 |
+| closeClick | PopupClick? | - | 关闭按钮点击回调 |
+| closeColor | Color? | - | 关闭按钮颜色 |
 | closeSize | double? | - | 关闭按钮图标尺寸 |
-
-```
-```
- ### TDSlidePopupRoute
-#### 简介
-从屏幕的某个方向滑动弹出的Dialog框的路由，比如从顶部、底部、左、右滑出页面
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| builder | WidgetBuilder | - | 控件构建器 |
-| barrierLabel |  | - |  |
-| modalBarrierColor | Color? | Colors.black54 | 蒙层颜色 |
-| isDismissible | bool | true | 点击蒙层能否关闭 |
-| modalBarrierFull | bool | false | 是否全屏显示蒙层 |
-| slideTransitionFrom | SlideTransitionFrom | SlideTransitionFrom.bottom | 设置从屏幕的哪个方向滑出 |
-| modalWidth | double? | - | 弹出框宽度 |
-| modalHeight | double? | - | 弹出框高度 |
-| modalTop | double? | 0 | 弹出框顶部距离 |
-| modalLeft | double? | 0 | 弹出框左侧距离 |
-| open | VoidCallback? | - | 打开前事件 |
-| opened | VoidCallback? | - | 打开后事件 |
-| close | VoidCallback? | - | 关闭前事件 |
-| barrierClick | VoidCallback? | - | 蒙层点击事件，仅在[modalBarrierFull]为false时触发 |
-| focusMove | bool | false | 是否有输入框获取焦点时整体平移避免输入框被遮挡 |
+| closeUnderBottom | bool | false | 关闭按钮是否在视图框下方 |
+| key |  | - |  |
+| radius | double? | - | 圆角 |

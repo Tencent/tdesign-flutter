@@ -3,6 +3,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../annotation/demo.dart';
 import '../base/example_widget.dart';
+
 class TDFabPage extends StatefulWidget {
   const TDFabPage({Key? key}) : super(key: key);
 
@@ -159,20 +160,16 @@ class _TDFabPageState extends State<TDFabPage> {
                 padding: const EdgeInsets.only(right: 30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  // spacing: 24,
                   children: [
                     SizedBox(
                       height: 48,
-                      child: Column(
-                        children: [fab['component']],
-                      ),
+                      child: Column(children: [fab['component']]),
                     ),
-                    const SizedBox(
-                      height: 24,
-                    ),
+                    const SizedBox(height: 24),
                     TDText(
                       fab['desc'],
-                      style: TextStyle(
-                          fontSize: 14, color: Colors.black.withOpacity(0.4)),
+                      style: const TextStyle(fontSize: 14),
                     )
                   ],
                 ),

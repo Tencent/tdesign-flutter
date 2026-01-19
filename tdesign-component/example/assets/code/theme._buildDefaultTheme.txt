@@ -2,12 +2,12 @@
   Widget _buildDefaultTheme(BuildContext context) {
     // 通过TDTheme.of(context).xxx使用公共主题属性
     return Container(
-      margin: EdgeInsets.all(TDTheme.of(context).spacer8), // 间隔
+      margin: EdgeInsets.all(TDTheme.of(context).spacer8),
+      padding: EdgeInsets.all(TDTheme.of(context).spacer8),
       decoration: BoxDecoration(
-        color: TDTheme.of(context).grayColor1, // 颜色
-        borderRadius:
-            BorderRadius.circular(TDTheme.of(context).radiusDefault), // 圆角
-        boxShadow: TDTheme.of(context).shadowsBase, // 阴影
+        color: TDTheme.of(context).bgColorSecondaryContainer,
+        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusDefault),
+        boxShadow: TDTheme.of(context).shadowsBase,
       ),
       child: TDText(
         '使用外层默认主题',

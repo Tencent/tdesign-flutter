@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
 
-
 /// 骨架屏样式
 class TDSkeletonRowColStyle {
   const TDSkeletonRowColStyle({
@@ -16,7 +15,6 @@ class TDSkeletonRowColStyle {
   static double _defaultRowSpacing(BuildContext context) =>
       TDTheme.of(context).spacer16;
 }
-
 
 /// 骨架屏行列框架
 class TDSkeletonRowCol {
@@ -34,7 +32,7 @@ class TDSkeletonRowCol {
   /// 视觉高度
   double visualHeight(BuildContext context) {
     var rowSpacing = style.rowSpacing(context);
-    assert (rowSpacing >= 0); 
+    assert(rowSpacing >= 0);
     if (rowSpacing < 0) {
       rowSpacing = 0;
     }
@@ -79,7 +77,7 @@ class TDSkeletonRowColObjStyle {
 
   /// 默认背景颜色
   static Color _defaultBackground(BuildContext context) =>
-      TDTheme.of(context).grayColor1;
+      TDTheme.of(context).bgColorComponent;
 
   /// 透明背景颜色
   static Color _transparentBackground(BuildContext context) =>
@@ -97,7 +95,6 @@ class TDSkeletonRowColObjStyle {
   static double _textBorderRadius(BuildContext context) =>
       TDTheme.of(context).radiusSmall;
 }
-
 
 /// 骨架屏元素
 class TDSkeletonRowColObj {

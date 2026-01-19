@@ -4,7 +4,6 @@ import '../../../tdesign_flutter.dart';
 typedef TDBarItemAction = void Function();
 
 class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
-
   const TDNavBar({
     Key? key,
     this.leftBarItems,
@@ -20,7 +19,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.backgroundColor,
     this.titleMargin = 16,
     this.padding,
-    this.height = 44,
+    this.height = 48,
     this.screenAdaptation = true,
     this.useDefaultBack = true,
     this.onBack,
@@ -33,35 +32,47 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
 
   /// 左边操作项
   final List<TDNavBarItem>? leftBarItems;
+
   /// 右边操作项
   final List<TDNavBarItem>? rightBarItems;
-  /// 标题控件，优先级高于title文案
+
+  /// 标题控件，优先级高于 title 文案
   final Widget? titleWidget;
+
   /// 标题文案
   final String? title;
+
   /// 标题颜色
   final Color? titleColor;
+
   /// 标题字体尺寸
   final Font? titleFont;
+
   /// 标题字体粗细
   final FontWeight? titleFontWeight;
+
   /// 标题字体样式
   final FontFamily? titleFontFamily;
+
   /// 标题是否居中
   final bool centerTitle;
+
   /// 透明度
   final double opacity;
+
   /// 背景颜色
   final Color? backgroundColor;
+
   /// 内部填充
   final EdgeInsetsGeometry? padding;
 
   /// 中间文案左右两边间距
   final double titleMargin;
+
   /// 高度
   final double height;
 
-  /// 是否进行屏幕适配，默认true
+  /// 是否进行屏幕适配，默认 true
   final bool screenAdaptation;
 
   /// 是否使用默认的返回
@@ -76,7 +87,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
   /// 边框
   final TDNavBarItemBorder? border;
 
-  /// belowTitleWidget navbar 下方的widget
+  /// belowTitleWidget navbar 下方的 widget
   final Widget? belowTitleWidget;
 
   /// 底部阴影
@@ -95,7 +106,7 @@ class TDNavBar extends StatefulWidget implements PreferredSizeWidget {
 class _TDNavBarState extends State<TDNavBar> {
   Widget _addBorder(List<Widget> items) {
     var border = widget.border ?? TDNavBarItemBorder();
-    var borderColor = border.color ?? TDTheme.of(context).grayColor3;
+    var borderColor = border.color ?? TDTheme.of(context).componentStrokeColor;
     var children = <Widget>[];
     for (var i = 0; i < items.length; i++) {
       children.add(items[i]);
@@ -129,7 +140,8 @@ class _TDNavBarState extends State<TDNavBar> {
 
   Widget get backButton {
     return TDNavBarItem(
-      icon: Icons.chevron_left,
+      icon: TDIcons.chevron_left,
+      iconSize: 28.0,
       action: () {
         widget.onBack?.call();
         Navigator.maybePop(context);
@@ -138,8 +150,7 @@ class _TDNavBarState extends State<TDNavBar> {
   }
 
   Widget _buildTitleBarItems(bool isLeft) {
-    var barItems =
-        (isLeft ? widget.leftBarItems : widget.rightBarItems) ?? [];
+    var barItems = (isLeft ? widget.leftBarItems : widget.rightBarItems) ?? [];
     var children = barItems
         .map(
           (e) => e.toWidget(context, isLeft: isLeft),
@@ -148,8 +159,7 @@ class _TDNavBarState extends State<TDNavBar> {
 
     return Row(
       children: [
-        if (isLeft && widget.useDefaultBack)
-          backButton,
+        if (isLeft && widget.useDefaultBack) backButton,
         if (children.isNotEmpty)
           widget.useBorderStyle
               ? _addBorder(children)
@@ -163,7 +173,7 @@ class _TDNavBarState extends State<TDNavBar> {
   }
 
   TextStyle _getTitleStyle(BuildContext context) {
-    var titleColor = widget.titleColor ?? TDTheme.of(context).fontGyColor1;
+    var titleColor = widget.titleColor ?? TDTheme.of(context).textColorPrimary;
 
     var titleFont = widget.titleFont ?? TDTheme.of(context).fontBodyLarge;
 
@@ -193,8 +203,8 @@ class _TDNavBarState extends State<TDNavBar> {
         );
   }
 
-  Widget _getNavbarChild(){
-     final Widget toolbar = NavigationToolbar(
+  Widget _getNavbarChild() {
+    final Widget toolbar = NavigationToolbar(
       leading: _buildTitleBarItems(true),
       middle: _getTitleWidget(context),
       trailing: _buildTitleBarItems(false),
@@ -204,9 +214,7 @@ class _TDNavBarState extends State<TDNavBar> {
     if (widget.belowTitleWidget == null) {
       return toolbar;
     }
-    var children = <Widget>[
-      Expanded(child: toolbar)
-    ];
+    var children = <Widget>[Expanded(child: toolbar)];
     children.add(widget.belowTitleWidget as Widget);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,12 +224,14 @@ class _TDNavBarState extends State<TDNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    var bcc = widget.backgroundColor ?? TDTheme.of(context).whiteColor1;
-    if (bcc != Colors.transparent) {
-      bcc = bcc.withOpacity(widget.opacity);
+    var _backgroundColor =
+        widget.backgroundColor ?? TDTheme.of(context).bgColorContainer;
+    if (_backgroundColor != Colors.transparent) {
+      _backgroundColor = _backgroundColor.withOpacity(widget.opacity);
     }
 
-    var paddingTop = widget.screenAdaptation ? MediaQuery.of(context).padding.top : 0.0;
+    var paddingTop =
+        widget.screenAdaptation ? MediaQuery.of(context).padding.top : 0.0;
     var padding = widget.padding ??
         EdgeInsets.symmetric(
           horizontal: TDTheme.of(context).spacer16,
@@ -231,11 +241,10 @@ class _TDNavBarState extends State<TDNavBar> {
         height: widget.height + paddingTop,
         padding: padding.add(EdgeInsets.only(top: paddingTop)),
         decoration: BoxDecoration(
-          color: bcc,
+          color: _backgroundColor,
           boxShadow: widget.boxShadow,
         ),
-        child: _getNavbarChild()
-    );
+        child: _getNavbarChild());
     if (widget.flexibleSpace != null) {
       appBar = Stack(
         fit: StackFit.passthrough,
@@ -253,15 +262,20 @@ class _TDNavBarState extends State<TDNavBar> {
 class TDNavBarItem {
   /// 图标
   IconData? icon;
+
   /// 图标颜色
   Color? iconColor;
+
   /// 操作回调
   TDBarItemAction? action;
+
   /// 图标尺寸
   double? iconSize;
+
   /// 内部填充
   EdgeInsetsGeometry? padding;
-  /// 图标组件，优先级高与icon
+
+  /// 图标组件，优先级高于 icon
   Widget? iconWidget;
 
   TDNavBarItem({
@@ -273,12 +287,15 @@ class TDNavBarItem {
     this.iconWidget,
   });
 
-  Widget toWidget(BuildContext context,{bool isLeft = true}) => GestureDetector(
+  Widget toWidget(BuildContext context, {bool isLeft = true}) =>
+      GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: action,
         child: Padding(
-          padding:
-          padding ?? (isLeft ? EdgeInsets.only(right: TDTheme.of(context).spacer8) : EdgeInsets.only(left: TDTheme.of(context).spacer8)),
+          padding: padding ??
+              (isLeft
+                  ? EdgeInsets.only(right: TDTheme.of(context).spacer8)
+                  : EdgeInsets.only(left: TDTheme.of(context).spacer8)),
           child: iconWidget ??
               Icon(
                 icon,

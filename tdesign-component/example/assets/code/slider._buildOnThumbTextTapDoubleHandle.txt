@@ -10,11 +10,13 @@
 
     return Column(
       mainAxisSize: MainAxisSize.min,
+      // spacing: 10,
       children: [
         ValueListenableBuilder<DisplayRangeData>(
           valueListenable: displayRangeDataNotifier,
           builder: (context, data, child) {
             return Row(
+              // spacing: 10,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Position: ${data.currentPosition}'),
@@ -31,7 +33,11 @@
         const SizedBox(height: 10),
         TDRangeSlider(
           sliderThemeData: TDSliderThemeData(
-              context: context, min: 0, max: 100, showThumbValue: true),
+            context: context,
+            min: 0,
+            max: 100,
+            showThumbValue: true,
+          ),
           leftLabel: '0',
           rightLabel: '100',
           value: const RangeValues(10, 60),

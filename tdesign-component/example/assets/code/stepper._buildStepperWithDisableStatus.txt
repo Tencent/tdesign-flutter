@@ -5,5 +5,13 @@
         theme: TDStepperTheme.filled,
         disabled: true,
       ),
+      const TDStepper(
+        theme: TDStepperTheme.outline,
+        disabled: true,
+      ),
+      const TDStepper(
+        theme: TDStepperTheme.normal,
+        disabled: true,
+      ),
     ]);
   }

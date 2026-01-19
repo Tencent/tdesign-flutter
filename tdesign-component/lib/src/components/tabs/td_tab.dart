@@ -5,11 +5,13 @@ import '../../../tdesign_flutter.dart';
 enum TDTabSize { large, small }
 
 enum TDTabOutlineType {
-  // 填充样式
+  /// 填充样式
   filled,
-  // 胶囊样式
+
+  /// 胶囊样式
   capsule,
-  // 卡片
+
+  /// 卡片
   card
 }
 
@@ -49,24 +51,31 @@ class TDTab extends Tab {
   /// 选项卡尺寸
   final TDTabSize size;
 
-  ///选项卡样式
+  /// 选项卡样式
   final TDTabOutlineType outlineType;
 
   @override
-  const TDTab(
-      {Key? key,
-      this.text,
-      this.child,
-      this.icon,
-      this.badge,
-      this.height,
-      this.contentHeight,
-      this.textMargin,
-      this.size = TDTabSize.small,
-      this.outlineType = TDTabOutlineType.filled,
-      this.enable = true,
-      this.iconMargin = const EdgeInsets.only(bottom: 4.0, right: 4.0)})
-      : super(key: key, text: text, child: child, icon: icon, height: height, iconMargin: iconMargin);
+  const TDTab({
+    Key? key,
+    this.text,
+    this.child,
+    this.icon,
+    this.badge,
+    this.height,
+    this.contentHeight,
+    this.textMargin,
+    this.size = TDTabSize.small,
+    this.outlineType = TDTabOutlineType.filled,
+    this.enable = true,
+    this.iconMargin = const EdgeInsets.only(bottom: 4.0, right: 4.0),
+  }) : super(
+          key: key,
+          text: text,
+          child: child,
+          icon: icon,
+          height: height,
+          iconMargin: iconMargin,
+        );
 
   final double _kTabHeight = 48.0;
   final double _kTextAndIconTabHeight = 72.0;
@@ -109,13 +118,14 @@ class TDTab extends Tab {
         ],
       );
     }
-    var isCapsuleOutlineType = outlineType == TDTabOutlineType.capsule;
 
     return IgnorePointer(
       ignoring: !enable,
       child: Container(
         alignment: Alignment.center,
-        margin: isCapsuleOutlineType ? const EdgeInsets.symmetric(horizontal: 16) : null,
+        margin: outlineType == TDTabOutlineType.capsule
+            ? const EdgeInsets.symmetric(horizontal: 16)
+            : null,
         height: height ?? calculatedHeight,
         child: Center(
           widthFactor: 1.0,
@@ -129,7 +139,9 @@ class TDTab extends Tab {
     if (child != null) {
       return DefaultTextStyle(
         child: child!,
-        style: DefaultTextStyle.of(context).style.copyWith(fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14),
+        style: DefaultTextStyle.of(context)
+            .style
+            .copyWith(fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14),
       );
     }
     return Text(

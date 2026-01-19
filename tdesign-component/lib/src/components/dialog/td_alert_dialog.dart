@@ -20,10 +20,10 @@ class TDAlertDialog extends StatelessWidget {
   /// [leftBtn]和[rightBtn]不传style参数会应用默认样式，左侧弱按钮，右侧强按钮
   const TDAlertDialog({
     Key? key,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor,
     this.radius = 12.0,
     this.title,
-    this.titleColor = const Color(0xE6000000),
+    this.titleColor,
     this.content,
     this.contentColor,
     this.titleAlignment,
@@ -49,10 +49,10 @@ class TDAlertDialog extends StatelessWidget {
   const TDAlertDialog.vertical({
     Key? key,
     required List<TDDialogButtonOptions> buttons,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor,
     this.radius = 12.0,
     this.title,
-    this.titleColor = Colors.black,
+    this.titleColor,
     this.titleAlignment,
     this.contentWidget,
     this.content,
@@ -71,7 +71,7 @@ class TDAlertDialog extends StatelessWidget {
         super(key: key);
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// 圆角
   final double radius;
@@ -80,7 +80,7 @@ class TDAlertDialog extends StatelessWidget {
   final String? title;
 
   /// 标题颜色
-  final Color titleColor;
+  final Color? titleColor;
 
   /// 标题对齐模式
   final AlignmentGeometry? titleAlignment;
@@ -155,15 +155,19 @@ class TDAlertDialog extends StatelessWidget {
   }
 
   Widget _horizontalButtons(BuildContext context) {
-    if(buttonWidget != null) {
+    if (buttonWidget != null) {
       return buttonWidget!;
     }
     final left = leftBtn ??
         TDDialogButtonOptions(
-            title: context.resource.cancel, theme: TDButtonTheme.light, action: leftBtnAction);
+            title: context.resource.cancel,
+            theme: TDButtonTheme.light,
+            action: leftBtnAction);
     final right = rightBtn ??
         TDDialogButtonOptions(
-            title: context.resource.confirm, theme: TDButtonTheme.primary, action: rightBtnAction);
+            title: context.resource.confirm,
+            theme: TDButtonTheme.primary,
+            action: rightBtnAction);
     return _buttonStyle == TDDialogButtonStyle.text
         ? HorizontalTextButtons(leftBtn: left, rightBtn: right)
         : HorizontalNormalButtons(
@@ -185,7 +189,7 @@ class TDAlertDialog extends StatelessWidget {
         buttonTheme: value.theme,
         buttonType: value.type,
         onPressed: () {
-          if(value.action != null){
+          if (value.action != null) {
             value.action!();
           } else {
             Navigator.pop(context);
@@ -199,8 +203,7 @@ class TDAlertDialog extends StatelessWidget {
     });
 
     return Container(
-      padding:
-          const EdgeInsets.only(left: 24, right: 24, bottom: 24),
+      padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
       child: Column(
         children: widgets,
       ),

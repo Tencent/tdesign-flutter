@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import './td_progress_circular.dart';
+
 import '../../../tdesign_flutter.dart';
+import './td_progress_circular.dart';
 
 enum TDProgressType { linear, circular, micro, button }
 
@@ -13,13 +14,20 @@ abstract class TDLabelWidget extends Widget {
 }
 
 class TDTextLabel extends Text implements TDLabelWidget {
-  const TDTextLabel(String data, {Key? key, TextStyle? style})
-      : super(data, key: key, style: style);
+  const TDTextLabel(
+    String data, {
+    Key? key,
+    TextStyle? style,
+  }) : super(data, key: key, style: style);
 }
 
 class TDIconLabel extends Icon implements TDLabelWidget {
-  const TDIconLabel(IconData icon, {Key? key, double? size, Color? color})
-      : super(icon, key: key, size: size, color: color);
+  const TDIconLabel(
+    IconData icon, {
+    Key? key,
+    double? size,
+    Color? color,
+  }) : super(icon, key: key, size: size, color: color);
 }
 
 class TDProgress extends StatelessWidget {
@@ -51,7 +59,7 @@ class TDProgress extends StatelessWidget {
   /// 进度条类型
   final TDProgressType type;
 
-  /// 进度值 (0.0 到 1.0 之间的正数)
+  /// 进度值（0.0 到 1.0 之间的正数）
   final double? value;
 
   /// 进度条标签
@@ -63,7 +71,7 @@ class TDProgress extends StatelessWidget {
   /// 标签显示位置
   final TDProgressLabelPosition progressLabelPosition;
 
-  /// 进度条粗细 (正数)
+  /// 进度条粗细（正数）
   final double? strokeWidth;
 
   /// 进度条颜色
@@ -75,7 +83,7 @@ class TDProgress extends StatelessWidget {
   /// 条形进度条末端形状
   final BorderRadiusGeometry? linearBorderRadius;
 
-  /// 环形进度条半径 (正数)
+  /// 环形进度条半径（正数）
   final double? circleRadius;
 
   /// 是否显示标签
@@ -96,7 +104,7 @@ class TDProgress extends StatelessWidget {
   /// 长按事件
   final VoidCallback? onLongPress;
 
-  /// 动画持续时间 (正整数，单位为毫秒)
+  /// 动画持续时间（正整数，单位为毫秒）
   final int? animationDuration;
 
   static double? _validateProgress(double? value) =>
@@ -122,10 +130,11 @@ class TDProgress extends StatelessWidget {
       strokeWidth: strokeWidth ?? defaultValues.strokeWidth,
       color: color,
       backgroundColor: backgroundColor ?? defaultValues.backgroundColor,
-      linearBorderRadius: linearBorderRadius ?? defaultValues.linearBorderRadius,
+      linearBorderRadius:
+          linearBorderRadius ?? defaultValues.linearBorderRadius,
       circleRadius: circleRadius ?? defaultValues.circleRadius,
       showLabel: showLabel,
-      customProgressLabel:customProgressLabel,
+      customProgressLabel: customProgressLabel,
       labelWidgetWidth: labelWidgetWidth,
       labelWidgetAlignment: labelWidgetAlignment,
       onTap: onTap,
@@ -140,21 +149,21 @@ class TDProgress extends StatelessWidget {
       case TDProgressType.linear:
         return _DefaultValues(
           strokeWidth: 20.0,
-          backgroundColor: TDTheme.of(context).grayColor3,
+          backgroundColor: TDTheme.of(context).bgColorComponent,
           linearBorderRadius: BorderRadius.circular(20),
           circleRadius: 0,
         );
       case TDProgressType.circular:
         return _DefaultValues(
           strokeWidth: 5.0,
-          backgroundColor: TDTheme.of(context).grayColor2,
+          backgroundColor: TDTheme.of(context).bgColorComponent,
           linearBorderRadius: BorderRadius.circular(20),
           circleRadius: 100.0,
         );
       case TDProgressType.micro:
         return _DefaultValues(
           strokeWidth: 2.0,
-          backgroundColor: TDTheme.of(context).grayColor2,
+          backgroundColor: TDTheme.of(context).bgColorComponent,
           linearBorderRadius: BorderRadius.circular(20),
           circleRadius: 25.0,
         );
@@ -252,6 +261,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
       _updateAnimation(oldWidgetValue: oldWidget.value);
+      _updateEffectiveLabel();
     }
     if (oldWidget.color != widget.color ||
         oldWidget.progressStatus != widget.progressStatus) {
@@ -358,9 +368,8 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
         if (widget.value != null &&
             widget.progressLabelPosition == TDProgressLabelPosition.inside) {
           return _buildInsideLabel(maxWidth);
-        } else {
-          return _buildOutsideLabel(maxWidth);
         }
+        return _buildOutsideLabel(maxWidth);
       },
     );
   }
@@ -370,15 +379,18 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
       animation: _animation,
       builder: (context, child) {
         final progressWidth = _animation.value * maxWidth;
-        return Stack(
-          children: [
-            _buildBackgroundContainer(),
-            if (widget.value! > 0.1)
-              _buildProgressContainerWithLabel(progressWidth)
-            else
-              _buildProgressContainerWithLabelOutside(progressWidth),
-          ],
-        );
+        return ClipRRect(
+            borderRadius:
+                BorderRadius.circular(TDTheme.of(context).radiusRound),
+            child: Stack(
+              children: [
+                _buildBackgroundContainer(),
+                if (widget.value! > 0.1)
+                  _buildProgressContainerWithLabel(progressWidth)
+                else
+                  _buildProgressContainerWithLabelOutside(progressWidth),
+              ],
+            ));
       },
     );
   }
@@ -387,46 +399,48 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
-        final progressWidth = _animation.value * maxWidth;
         return Row(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // spacing: TDTheme.of(context).spacer8,
+          textDirection:
+              widget.progressLabelPosition == TDProgressLabelPosition.right
+                  ? TextDirection.rtl
+                  : TextDirection.ltr,
           children: [
-            if (widget.progressLabelPosition == TDProgressLabelPosition.left)
-              Container(
-                padding: const EdgeInsets.only(right: 8.0),
-                alignment:widget.labelWidgetAlignment??Alignment.centerRight,
-                constraints: BoxConstraints(
-                  minWidth:widget.labelWidgetWidth??(maxWidth*0.1>70?maxWidth*0.04
-                      :maxWidth*0.1),
-                ),
-                child:widget.customProgressLabel??
-                    _buildLabelWidget(TDTheme.of(context).fontGyColor1),
-              ),
-            Expanded(
-                child: Stack(
-              children: [
-                _buildBackgroundContainer(),
-                Container(
-                  height: widget.strokeWidth,
-                  width: progressWidth,
-                  decoration: BoxDecoration(
-                    color: _effectiveColor,
-                    borderRadius: widget.linearBorderRadius,
-                  ),
-                )
-              ],
-            )),
-            if (widget.progressLabelPosition == TDProgressLabelPosition.right)
             Container(
-              padding: const EdgeInsets.only(left: 8.0),
-              alignment:widget.labelWidgetAlignment??Alignment.centerLeft,
-              constraints: BoxConstraints(
-                minWidth:widget.labelWidgetWidth??(maxWidth*0.1>70?maxWidth*0.04
-                    :maxWidth*0.1),
-              ),
-              child:widget.customProgressLabel??
-                  _buildLabelWidget(TDTheme.of(context).fontGyColor1),
-            )
+              alignment: widget.labelWidgetAlignment ??
+                  (widget.progressLabelPosition == TDProgressLabelPosition.left
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft),
+              constraints:
+                  BoxConstraints(minWidth: widget.labelWidgetWidth ?? 0),
+              child: widget.customProgressLabel ??
+                  _buildLabelWidget(TDTheme.of(context).textColorPrimary),
+            ),
+            SizedBox(width: TDTheme.of(context).spacer8),
+            Expanded(
+              child: ClipRRect(
+                  borderRadius:
+                      BorderRadius.circular(TDTheme.of(context).radiusRound),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Stack(
+                        children: [
+                          _buildBackgroundContainer(),
+                          Container(
+                            height: widget.strokeWidth,
+                            width: constraints.maxWidth * _animation.value,
+                            decoration: BoxDecoration(
+                              color: _effectiveColor,
+                              borderRadius: widget.linearBorderRadius,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  )),
+            ),
           ],
         );
       },
@@ -455,8 +469,8 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
           ? Align(
               alignment: Alignment.centerRight,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: _buildLabelWidget(TDTheme.of(context).fontWhColor1),
+                padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                child: _buildLabelWidget(TDTheme.of(context).textColorAnti),
               ),
             )
           : null,
@@ -473,22 +487,26 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
           decoration: BoxDecoration(
             color: _effectiveColor,
             borderRadius: BorderRadius.only(
-              topLeft: widget.linearBorderRadius.resolve(TextDirection.ltr).topLeft,
-              bottomLeft:
-                  widget.linearBorderRadius.resolve(TextDirection.ltr).bottomLeft,
-              topRight: Radius.circular(
-                  widget.linearBorderRadius.resolve(TextDirection.ltr).topRight.x /
-                      2),
-              bottomRight: Radius.circular(
-                  widget.linearBorderRadius.resolve(TextDirection.ltr).bottomRight.x /
-                      2),
+              topLeft:
+                  widget.linearBorderRadius.resolve(TextDirection.ltr).topLeft,
+              bottomLeft: widget.linearBorderRadius
+                  .resolve(TextDirection.ltr)
+                  .bottomLeft,
+              topRight: Radius.circular(widget.linearBorderRadius
+                  .resolve(TextDirection.ltr)
+                  .topRight
+                  .x),
+              bottomRight: Radius.circular(widget.linearBorderRadius
+                  .resolve(TextDirection.ltr)
+                  .bottomRight
+                  .x),
             ),
           ),
         ),
         if (widget.showLabel)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: _buildLabelWidget(TDTheme.of(context).fontGyColor1),
+            child: _buildLabelWidget(TDTheme.of(context).textColorPrimary),
           ),
       ],
     );
@@ -508,8 +526,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
           fontSize = widget.strokeWidth * 0.6;
           iconSize = widget.strokeWidth;
         }
-        fontWeight =
-            _animation.value <= 0.1 ? FontWeight.bold : FontWeight.normal;
+        fontWeight = FontWeight.normal;
         break;
       case TDProgressType.circular:
         iconSize = widget.circleRadius * 0.4;
@@ -563,7 +580,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
               ),
             ),
             if (widget.showLabel)
-              _buildLabelWidget(TDTheme.of(widget.context).fontGyColor1),
+              _buildLabelWidget(TDTheme.of(widget.context).textColorPrimary),
           ],
         );
       },
@@ -582,7 +599,8 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
                 children: [
                   _buildMicroOutline(),
                   if (widget.showLabel)
-                    _buildLabelWidget(TDTheme.of(widget.context).fontGyColor1),
+                    _buildLabelWidget(
+                        TDTheme.of(widget.context).textColorPrimary),
                 ],
               ));
         });

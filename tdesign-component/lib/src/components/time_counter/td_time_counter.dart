@@ -80,7 +80,8 @@ class TDTimeCounter extends StatefulWidget {
   _TDTimeCounterState createState() => _TDTimeCounterState();
 }
 
-class _TDTimeCounterState extends State<TDTimeCounter> with SingleTickerProviderStateMixin {
+class _TDTimeCounterState extends State<TDTimeCounter>
+    with SingleTickerProviderStateMixin {
   late TDTimeCounterStyle _style;
   late Map<String, String> timeUnitMap;
   Ticker? _ticker;
@@ -144,9 +145,11 @@ class _TDTimeCounterState extends State<TDTimeCounter> with SingleTickerProvider
           widget.direction == TDTimeCounterDirection.up && _time < _maxTime) {
         setState(() {
           if (widget.direction == TDTimeCounterDirection.down) {
-            _time = max(_time - (elapsed.inMilliseconds - _tempMilliseconds), 0);
+            _time =
+                max(_time - (elapsed.inMilliseconds - _tempMilliseconds), 0);
           } else {
-            _time = min(_time + (elapsed.inMilliseconds - _tempMilliseconds), _maxTime);
+            _time = min(
+                _time + (elapsed.inMilliseconds - _tempMilliseconds), _maxTime);
           }
         });
         _tempMilliseconds = elapsed.inMilliseconds;
@@ -211,7 +214,8 @@ class _TDTimeCounterState extends State<TDTimeCounter> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     if (widget.content == 'default') {
-      return Row(mainAxisSize: MainAxisSize.min, children: _buildTimeWidget(context));
+      return Row(
+          mainAxisSize: MainAxisSize.min, children: _buildTimeWidget(context));
     }
     if (widget.content is Function) {
       return widget.content(_time);
@@ -220,7 +224,9 @@ class _TDTimeCounterState extends State<TDTimeCounter> with SingleTickerProvider
   }
 
   List<Widget> _buildTimeWidget(BuildContext context) {
-    final format = widget.millisecond ? '${widget.format.replaceAll(RegExp(r':S+$'), '')}:SSS' : widget.format;
+    final format = widget.millisecond
+        ? '${widget.format.replaceAll(RegExp(r':S+$'), '')}:SSS'
+        : widget.format;
     final matches = _timeReg.allMatches(format);
     final timeMap = _getTimeMap(matches.map((e) => e.group(0) ?? '').toList());
     return matches
@@ -228,7 +234,9 @@ class _TDTimeCounterState extends State<TDTimeCounter> with SingleTickerProvider
           final timeType = match.group(0) ?? '';
           return _buildTextWidget(
             timeMap[timeType] ?? '0',
-            widget.splitWithUnit ? timeUnitMap[timeType[0]] ?? '' : _getMark(format, timeType),
+            widget.splitWithUnit
+                ? timeUnitMap[timeType[0]] ?? ''
+                : _getMark(format, timeType),
           );
         })
         .expand((element) => element)

@@ -10,12 +10,13 @@ class TDActionSheetItem {
     this.textStyle,
     this.icon,
     this.badge,
+    this.description,
     this.disabled = false,
     this.iconSize,
     this.group,
   });
 
-  /// 标提
+  /// 标题
   final String label;
 
   /// 标题样式
@@ -37,5 +38,8 @@ class TDActionSheetItem {
   /// 当[TDActionSheet.theme]等于[TDActionSheetTheme.group]时有效
   /// 有效时，如果该值未配置整个[TDActionSheetItem]会被忽略，即不会展示
   final String? group;
+
+  /// 描述信息
+  final String? description;
 }
 

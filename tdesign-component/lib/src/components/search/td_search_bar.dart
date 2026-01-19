@@ -7,16 +7,22 @@ import '../../util/context_extension.dart';
 /// 搜索框的样式
 ///
 enum TDSearchStyle {
-  square, // 方形
-  round, // 圆形
+  /// 方形
+  square,
+
+  /// 圆形
+  round,
 }
 
 ///
 /// 搜索框对齐方式
 ///
 enum TDSearchAlignment {
-  left, // 默认头部对齐
-  center, // 居中
+  /// 默认头部对齐
+  left,
+
+  /// 居中
+  center,
 }
 
 typedef TDSearchBarEvent = void Function(String value);
@@ -32,15 +38,16 @@ class TDSearchBar extends StatefulWidget {
     this.onTextChanged,
     this.onSubmitted,
     this.onEditComplete,
+    this.onTapOutside,
     this.onInputClick,
     this.autoHeight = false,
-    this.padding = const EdgeInsets.fromLTRB(16, 8, 16, 8),
+    this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     this.autoFocus = false,
     this.mediumStyle = false,
     this.cursorHeight,
     this.needCancel = false,
     this.controller,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor,
     this.action = '',
     this.onActionClick,
     this.onClearClick,
@@ -77,7 +84,6 @@ class TDSearchBar extends StatefulWidget {
   /// 光标的高
   final double? cursorHeight;
 
-
   /// 是否需要取消按钮
   final bool needCancel;
 
@@ -93,11 +99,15 @@ class TDSearchBar extends StatefulWidget {
   /// 编辑完成回调
   final TDSearchBarCallBack? onEditComplete;
 
+  /// 点击输入框外部回调
+  final TapRegionCallback? onTapOutside;
+
   /// 自定义操作文字
   final String action;
 
   /// 输入框点击事件
   final GestureTapCallback? onInputClick;
+
   /// 自定义操作回调
   final TDSearchBarEvent? onActionClick;
 
@@ -105,7 +115,7 @@ class TDSearchBar extends StatefulWidget {
   final TDSearchBarClearEvent? onClearClick;
 
   /// 自定义焦点
-  final  FocusNode? focusNode;
+  final FocusNode? focusNode;
 
   /// 键盘动作类型
   final TextInputAction? inputAction;
@@ -115,6 +125,7 @@ class TDSearchBar extends StatefulWidget {
 
   /// 是否只读
   final bool? readOnly;
+
   @override
   State<StatefulWidget> createState() => _TDSearchBarState();
 }
@@ -127,15 +138,16 @@ class _TDSearchBarState extends State<TDSearchBar>
 
   bool clearBtnHide = true;
   bool cancelBtnHide = true;
+
   @override
   void initState() {
     super.initState();
-    if(widget.controller==null){
+    if (widget.controller == null) {
       controller.addListener(() {
         var clearVisible = controller.text.isNotEmpty;
         _updateClearBtnVisible(clearVisible);
       });
-    }else{
+    } else {
       widget.controller?.addListener(() {
         var clearVisible = widget.controller?.text.isNotEmpty;
         _updateClearBtnVisible(clearVisible!);
@@ -165,12 +177,12 @@ class _TDSearchBarState extends State<TDSearchBar>
     });
   }
 
-  void _cleanInputText(){
-    if(!(widget.onClearClick?.call(controller.text) ?? false)){
+  void _cleanInputText() {
+    if (!(widget.onClearClick?.call(controller.text) ?? false)) {
       // 如果外部没处理,则走默认清除逻辑
-      if(widget.controller==null){
+      if (widget.controller == null) {
         controller.clear();
-      }else{
+      } else {
         widget.controller?.clear();
       }
     }
@@ -182,10 +194,11 @@ class _TDSearchBarState extends State<TDSearchBar>
         : TDTheme.of(context).fontBodyLarge;
   }
 
-  Widget actionBtn(BuildContext context, String? text, {String? action, TDSearchBarEvent? onActionClick} ){
+  Widget actionBtn(BuildContext context, String? text,
+      {String? action, TDSearchBarEvent? onActionClick}) {
     return GestureDetector(
-      onTap: (){
-        onActionClick!(text??'');
+      onTap: () {
+        onActionClick!(text ?? '');
       },
       child: Container(
         padding: const EdgeInsets.only(left: 16),
@@ -202,7 +215,7 @@ class _TDSearchBarState extends State<TDSearchBar>
     return Container(
       padding: widget.padding,
       height: widget.autoHeight ? double.infinity : 56,
-      color: widget.backgroundColor,
+      color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
       child: Stack(alignment: AlignmentDirectional.center, children: [
         Row(
           children: [
@@ -211,7 +224,7 @@ class _TDSearchBarState extends State<TDSearchBar>
               child: Container(
                 height: double.infinity,
                 decoration: BoxDecoration(
-                    color: TDTheme.of(context).grayColor1,
+                    color: TDTheme.of(context).bgColorSecondaryContainer,
                     borderRadius: BorderRadius.circular(
                         widget.style == TDSearchStyle.square ? 4 : 28)),
                 child: Row(
@@ -223,50 +236,52 @@ class _TDSearchBarState extends State<TDSearchBar>
                     Icon(
                       TDIcons.search,
                       size: widget.mediumStyle ? 20 : 24,
-                      color: TDTheme.of(context).fontGyColor3,
+                      color: TDTheme.of(context).textColorPlaceholder,
                     ),
                     const Padding(padding: EdgeInsets.only(left: 3)),
                     Expanded(
                       flex: 1,
                       child: Container(
-                        margin: const EdgeInsets.only(bottom: 1),// 为了适配TextField与Text的差异，后续需要做通用适配
+                        margin: const EdgeInsets.only(bottom: 1),
+                        // 为了适配TextField与Text的差异，后续需要做通用适配
                         child: TextField(
-
                           key: _textFieldKey,
-                          controller: widget.controller??controller,
+                          controller: widget.controller ?? controller,
                           autofocus: widget.autoFocus,
                           cursorColor: TDTheme.of(context).brandNormalColor,
-                          cursorWidth: 1,
-                          cursorHeight:widget.cursorHeight,
-                          textAlign: widget.alignment == TDSearchAlignment.center
-                              ? TextAlign.center
-                              : TextAlign.left,
+                          cursorHeight: widget.cursorHeight,
+                          textAlign:
+                              widget.alignment == TDSearchAlignment.center
+                                  ? TextAlign.center
+                                  : TextAlign.left,
                           focusNode: focusNode,
                           onTap: widget.onInputClick,
                           onChanged: widget.onTextChanged,
                           onSubmitted: widget.onSubmitted,
                           onEditingComplete: widget.onEditComplete,
+                          onTapOutside: widget.onTapOutside,
                           style: TextStyle(
                               textBaseline: TextBaseline.ideographic,
                               fontSize: getSize(context)?.size,
-                              color: TDTheme.of(context).fontGyColor1),
+                              color: TDTheme.of(context).textColorPrimary),
                           decoration: InputDecoration(
                             hintText: widget.placeHolder,
                             hintStyle: TextStyle(
-                                fontSize: getSize(context)?.size,
-                                color: TDTheme.of(context).fontGyColor3,
+                              fontSize: getSize(context)?.size,
+                              color: TDTheme.of(context).textColorPlaceholder,
                               textBaseline: TextBaseline.ideographic,
-                              overflow: TextOverflow.ellipsis,),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                             hintMaxLines: 1,
                             border: InputBorder.none,
                             isCollapsed: true,
-                            filled: true,
-                            fillColor: TDTheme.of(context).grayColor1,
+                            // filled: true,
+                            // fillColor: TDTheme.of(context).bgColorSecondaryContainer,
                           ),
                           maxLines: 1,
                           textInputAction: widget.inputAction,
-                          readOnly:widget.readOnly??false,
-                            enabled:widget.enabled,
+                          readOnly: widget.readOnly ?? false,
+                          enabled: widget.enabled,
                           cursorOpacityAnimates: false,
                         ),
                       ),
@@ -284,7 +299,7 @@ class _TDSearchBarState extends State<TDSearchBar>
                           child: Icon(
                             TDIcons.close_circle_filled,
                             size: widget.mediumStyle ? 17 : 21,
-                            color: TDTheme.of(context).fontGyColor3,
+                            color: TDTheme.of(context).textColorPlaceholder,
                           )),
                     ),
                     const Padding(padding: EdgeInsets.only(right: 9)),
@@ -294,34 +309,33 @@ class _TDSearchBarState extends State<TDSearchBar>
             ),
             widget.action.isNotEmpty
                 ? actionBtn(
-              context,
-              controller.text,
-              action: widget.action,
-              onActionClick: widget.onActionClick ?? (String text) {},
-            )
+                    context,
+                    controller.text,
+                    action: widget.action,
+                    onActionClick: widget.onActionClick ?? (String text) {},
+                  )
                 : Offstage(
-              offstage: cancelBtnHide || !widget.needCancel,
-              child: GestureDetector(
-                onTap: () {
-                  _cleanInputText();
-                  if (widget.onTextChanged != null) {
-                    widget.onTextChanged!('');
-                  }
-                  focusNode.unfocus();
-                },
-                child: Container(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: Text(context.resource.cancel,
-                      style: TextStyle(
-                          fontSize: getSize(context)?.size,
-                          color: TDTheme.of(context).brandNormalColor)),
-                ),
-              ),
-            ),
+                    offstage: cancelBtnHide || !widget.needCancel,
+                    child: GestureDetector(
+                      onTap: () {
+                        _cleanInputText();
+                        if (widget.onTextChanged != null) {
+                          widget.onTextChanged!('');
+                        }
+                        focusNode.unfocus();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Text(context.resource.cancel,
+                            style: TextStyle(
+                                fontSize: getSize(context)?.size,
+                                color: TDTheme.of(context).brandNormalColor)),
+                      ),
+                    ),
+                  ),
           ],
         ),
       ]),
     );
   }
-
 }

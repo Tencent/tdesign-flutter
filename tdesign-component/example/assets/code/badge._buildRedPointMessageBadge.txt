@@ -1,24 +1,21 @@
 
   Widget _buildRedPointMessageBadge(BuildContext context) {
-    return Container(
+    return SizedBox(
+      width: 40,
+      height: 24,
+      child: Stack(
         alignment: Alignment.bottomLeft,
-        margin: const EdgeInsets.only(left: 16, right: 16),
-        child: SizedBox(
-          width: 40,
-          height: 24,
-          child: Stack(
-            alignment: Alignment.bottomLeft,
-            children: [
-              TDText(
-                '消息',
-                font: TDTheme.of(context).fontBodyLarge,
-              ),
-              const Positioned(
-                child: TDBadge(TDBadgeType.redPoint),
-                right: 0,
-                top: 0,
-              )
-            ],
+        children: [
+          TDText(
+            '消息',
+            font: TDTheme.of(context).fontBodyLarge,
           ),
-        ));
+          const Positioned(
+            child: TDBadge(TDBadgeType.redPoint),
+            right: 0,
+            top: 0,
+          )
+        ],
+      ),
+    );
   }

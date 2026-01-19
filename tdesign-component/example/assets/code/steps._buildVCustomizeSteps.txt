@@ -1,20 +1,18 @@
 
   Widget _buildVCustomizeSteps(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: TDSteps(
-              steps: vCustomizeStepsListData,
-              direction: TDStepsDirection.vertical,
-              simple: true,
-              activeIndex: 3,
-              verticalSelect: true,
-            ),
-          )
-        ],
-      ),
+    return TDSteps(
+      steps: [
+        TDStepsItemData(title: 'Selected'),
+        TDStepsItemData(title: 'Selected'),
+        TDStepsItemData(title: 'Selected'),
+        TDStepsItemData(title: 'Please Selected'),
+      ],
+      // 垂直方向
+      direction: TDStepsDirection.vertical,
+      // 简略模式
+      simple: true,
+      activeIndex: 3,
+      // 步骤条垂直自定义步骤条选择模式
+      verticalSelect: true,
     );
   }

@@ -23,10 +23,12 @@ enum TDDropdownMenuDirection {
 }
 
 /// 下拉菜单构建器
-typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(BuildContext context);
+typedef TDDropdownItemBuilder = List<TDDropdownItem> Function(
+    BuildContext context);
 
 /// 自定义标签内容
-typedef LabelBuilder = Widget Function(BuildContext context, String label, bool isOpened, int index);
+typedef LabelBuilder = Widget Function(
+    BuildContext context, String label, bool isOpened, int index);
 
 /// 下拉菜单
 class TDDropdownMenu extends StatefulWidget {
@@ -40,6 +42,7 @@ class TDDropdownMenu extends StatefulWidget {
     this.showOverlay = true,
     this.isScrollable = false,
     this.arrowIcon,
+    this.arrowColor,
     this.labelBuilder,
     this.onMenuOpened,
     this.onMenuClosed,
@@ -70,6 +73,9 @@ class TDDropdownMenu extends StatefulWidget {
   /// 自定义箭头图标
   final IconData? arrowIcon;
 
+  /// 自定义箭头颜色
+  final Color? arrowColor;
+
   /// 自定义标签内容
   final LabelBuilder? labelBuilder;
 
@@ -98,7 +104,8 @@ class TDDropdownMenu extends StatefulWidget {
   _TDDropdownMenuState createState() => _TDDropdownMenuState();
 }
 
-class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStateMixin {
+class _TDDropdownMenuState extends State<TDDropdownMenu>
+    with TickerProviderStateMixin {
   List<TDDropdownItem>? _items;
   List<AnimationController>? _iconControllers;
   late List<Animation<double>> _iconAnimations;
@@ -122,7 +129,8 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
   @override
   void didUpdateWidget(TDDropdownMenu oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.builder != oldWidget.builder || widget.items != oldWidget.items) {
+    if (widget.builder != oldWidget.builder ||
+        widget.items != oldWidget.items) {
       _init();
     }
   }
@@ -159,11 +167,11 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
       width: widget.width ?? double.infinity,
       decoration: widget.decoration ??
           BoxDecoration(
-            color: TDTheme.of(context).whiteColor1,
+            color: TDTheme.of(context).bgColorContainer,
             border: Border(
               bottom: BorderSide(
-                color: TDTheme.of(context).grayColor3,
-                width: 1,
+                color: TDTheme.of(context).componentStrokeColor,
+                width: 0.5,
               ),
             ),
           ),
@@ -185,13 +193,23 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
     _iconControllers = List.generate(
         _items?.length ?? 0,
         (index) => AnimationController(
-              duration: Duration(milliseconds: (widget.duration ?? 200).toInt()),
+              duration:
+                  Duration(milliseconds: (widget.duration ?? 200).toInt()),
               vsync: this,
             ));
-    _iconAnimations = _iconControllers?.map((e) => Tween<double>(begin: 0, end: 0.5).animate(e)).toList() ?? [];
+    _iconAnimations = _iconControllers
+            ?.map((e) => Tween<double>(begin: 0, end: 0.5).animate(e))
+            .toList() ??
+        [];
   }
 
   Widget _tabBarContent(int index) {
+    final color = _disabled(index)
+        ? TDTheme.of(context).textDisabledColor
+        : _isOpened[index]
+            ? TDTheme.of(context).brandNormalColor
+            : TDTheme.of(context).textColorPrimary;
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () async {
@@ -202,46 +220,42 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
       },
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: _items![index].tabBarAlign ?? widget.tabBarAlign ?? MainAxisAlignment.center,
-        children: [Flexible(child: _getText(index)), _getIcon(index)],
+        mainAxisAlignment: _items![index].tabBarAlign ??
+            widget.tabBarAlign ??
+            MainAxisAlignment.center,
+        children: [
+          Flexible(child: _getText(index, color)),
+          _getIcon(index, color)
+        ],
       ),
     );
   }
 
-  Widget _getText(int index) {
+  Widget _getText(int index, Color color) {
     final label = _items![index].getLabel();
     if (widget.labelBuilder != null) {
       return widget.labelBuilder!(context, label, _isOpened[index], index);
     }
-    var textColor = _disabled(index)
-        ? TDTheme.of(context).fontGyColor4
-        : _isOpened[index]
-            ? TDTheme.of(context).brandColor7
-            : TDTheme.of(context).fontGyColor1;
     return TDText(
       label,
       font: TDTheme.of(context).fontBodyMedium,
-      textColor: textColor,
+      textColor: color,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
   }
 
-  Widget _getIcon(int index) {
+  Widget _getIcon(int index, Color color) {
     var arrowIcon = _items![index].arrowIcon ??
         widget.arrowIcon ??
-        (widget.direction == TDDropdownMenuDirection.up ? TDIcons.caret_up_small : TDIcons.caret_down_small);
+        (widget.direction == TDDropdownMenuDirection.up
+            ? TDIcons.caret_up_small
+            : TDIcons.caret_down_small);
     return RotationTransition(
       turns: _iconAnimations[index],
-      child: Icon(
-        arrowIcon,
-        size: 24,
-        color: _disabled(index)
-            ? TDTheme.of(context).fontGyColor4
-            : _isOpened[index]
-                ? TDTheme.of(context).brandColor7
-                : null,
-      ),
+      child: Icon(arrowIcon,
+          size: 20,
+          color: _items![index].arrowColor ?? widget.arrowColor ?? color),
     );
   }
 
@@ -249,8 +263,16 @@ class _TDDropdownMenuState extends State<TDDropdownMenu> with TickerProviderStat
     return _items![index].disabled == true;
   }
 
+  Future<void> openMenu(int index) async {
+    await _openMenu(index);
+  }
+
+  Future<void> closeMenu() async {
+    await _closeMenu();
+  }
+
   /// 打开菜单
-  void _openMenu(int index) async {
+  Future<void> _openMenu(int index) async {
     /// 如果已经打开了，则关闭
     if (_isOpened.contains(true)) {
       await Navigator.maybePop(context);

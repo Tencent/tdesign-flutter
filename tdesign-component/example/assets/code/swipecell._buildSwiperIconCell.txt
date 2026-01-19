@@ -2,91 +2,72 @@
   Widget _buildSwiperIconCell(BuildContext context) {
     // 屏幕宽度
     var screenWidth = MediaQuery.of(context).size.width;
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 3,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return TDSwipeCell(
-            groupTag: 'test',
-            right: TDSwipeCellPanel(
-              extentRatio: (80 + 80) / screenWidth,
-              children: [
-                TDSwipeCellAction(
-                  flex: 80,
-                  backgroundColor: TDTheme.of(context).warningColor4,
-                  icon: TDIcons.edit,
-                  label: '编辑',
-                ),
-                TDSwipeCellAction(
-                  flex: 80,
-                  backgroundColor: TDTheme.of(context).errorColor6,
-                  icon: TDIcons.delete,
-                  label: '删除',
-                ),
-              ],
-            ),
-            cell: const TDCell(
-              title: '左滑操作',
-              note: '辅助信息',
-            ),
-          );
-        } else if (index == 1) {
-          return TDSwipeCell(
-            groupTag: 'test',
-            right: TDSwipeCellPanel(
-              extentRatio: 120 / screenWidth,
-              children: [
-                TDSwipeCellAction(
-                  flex: 60,
-                  backgroundColor: TDTheme.of(context).warningColor4,
-                  icon: TDIcons.edit,
-                ),
-                TDSwipeCellAction(
-                  flex: 60,
-                  backgroundColor: TDTheme.of(context).errorColor6,
-                  icon: TDIcons.delete,
-                ),
-              ],
-            ),
-            cell: const TDCell(
-              title: '左滑操作',
-              note: '辅助信息',
-            ),
-          );
-        } else {
-          return TDSwipeCell(
-            groupTag: 'test',
-            right: TDSwipeCellPanel(
-              extentRatio: 120 / screenWidth,
-              children: [
-                TDSwipeCellAction(
-                  flex: 60,
-                  backgroundColor: TDTheme.of(context).warningColor4,
-                  direction: Axis.vertical,
-                  icon: TDIcons.edit,
-                  label: '编辑',
-                ),
-                TDSwipeCellAction(
-                  flex: 60,
-                  backgroundColor: TDTheme.of(context).errorColor6,
-                  direction: Axis.vertical,
-                  icon: TDIcons.delete,
-                  label: '删除',
-                ),
-              ],
-            ),
-            cell: const TDCell(
-              title: '左滑操作',
-              note: '辅助信息',
-              description: '一段很长很长的内容文字',
-            ),
-          );
-        }
-      },
-      separatorBuilder: (context, index) {
-        return const SizedBox(height: 24);
-      },
+
+    return Column(
+      // spacing: 16,
+      children: [
+        TDSwipeCell(
+          groupTag: 'test',
+          right: TDSwipeCellPanel(
+            extentRatio: 160 / screenWidth,
+            children: [
+              TDSwipeCellAction(
+                backgroundColor: TDTheme.of(context).warningNormalColor,
+                icon: TDIcons.edit,
+                label: '编辑',
+              ),
+              TDSwipeCellAction(
+                backgroundColor: TDTheme.of(context).errorNormalColor,
+                icon: TDIcons.delete,
+                label: '删除',
+              ),
+            ],
+          ),
+          cell: const TDCell(title: '左滑操作', note: '图标+文字（横向）'),
+        ),
+        const SizedBox(height: 16),
+        TDSwipeCell(
+          groupTag: 'test',
+          right: TDSwipeCellPanel(
+            extentRatio: 120 / screenWidth,
+            children: [
+              TDSwipeCellAction(
+                backgroundColor: TDTheme.of(context).warningNormalColor,
+                icon: TDIcons.edit,
+              ),
+              TDSwipeCellAction(
+                backgroundColor: TDTheme.of(context).errorNormalColor,
+                icon: TDIcons.delete,
+              ),
+            ],
+          ),
+          cell: const TDCell(title: '左滑操作', note: '仅图标'),
+        ),
+        const SizedBox(height: 16),
+        TDSwipeCell(
+          groupTag: 'test',
+          right: TDSwipeCellPanel(
+            extentRatio: 120 / screenWidth,
+            children: [
+              TDSwipeCellAction(
+                flex: 60,
+                backgroundColor: TDTheme.of(context).warningNormalColor,
+                direction: Axis.vertical,
+                icon: TDIcons.edit,
+                label: '编辑',
+              ),
+              TDSwipeCellAction(
+                flex: 60,
+                backgroundColor: TDTheme.of(context).errorNormalColor,
+                direction: Axis.vertical,
+                icon: TDIcons.delete,
+                label: '删除',
+              ),
+            ],
+          ),
+          cell: const TDCell(
+              title: '左滑操作', note: '图标+文字（纵向）', description: '一段很长很长的内容文字'),
+        )
+      ],
     );
   }

@@ -18,13 +18,22 @@ class TDCalendarCell extends StatefulWidget {
     required this.rowIndex,
     required this.colIndex,
     required this.dateList,
+    this.cellWidget,
   }) : super(key: key);
 
   final TDate? tdate;
   final CalendarFormat? format;
   final CalendarType type;
-  final void Function(int value, DateSelectType type, TDate tdate)? onCellClick;
-  final void Function(int value, DateSelectType type, TDate tdate)? onCellLongPress;
+  final void Function(
+    int value,
+    DateSelectType type,
+    TDate tdate,
+  )? onCellClick;
+  final void Function(
+    int value,
+    DateSelectType type,
+    TDate tdate,
+  )? onCellLongPress;
   final void Function(List<int> value)? onChange;
   final double height;
   final Map<DateTime, List<TDate?>> data;
@@ -32,6 +41,11 @@ class TDCalendarCell extends StatefulWidget {
   final int rowIndex;
   final int colIndex;
   final List<TDate?> dateList;
+  final Widget? Function(
+    BuildContext context,
+    TDate tdate,
+    DateSelectType selectType,
+  )? cellWidget;
 
   @override
   _TDCalendarCellState createState() => _TDCalendarCellState();
@@ -40,6 +54,7 @@ class TDCalendarCell extends StatefulWidget {
 class _TDCalendarCellState extends State<TDCalendarCell> {
   var isToday = false;
   var positionOffset = 0;
+
   @override
   void initState() {
     super.initState();
@@ -72,22 +87,11 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
     final cellStyle = TDCalendarStyle.cellStyle(context, widget.tdate!._type);
     final decoration = tdate.decoration ?? cellStyle.cellDecoration;
     final positionColor = _getColor(cellStyle, decoration);
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: _cellTap,
-      onLongPress: () {
-        final selectType = widget.tdate!._type;
-        final curDate = widget.tdate!._milliseconds;
-        widget.onCellLongPress?.call(curDate, selectType, widget.tdate!);
-      },
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-            height: widget.height,
-            decoration: decoration,
-            padding: EdgeInsets.all(widget.padding),
-            child: Column(
+
+    // 新增自定义cell内容判断逻辑
+    final content =
+        widget.cellWidget?.call(context, tdate, widget.tdate!._type) ??
+            Column(
               children: [
                 Expanded(
                   flex: 2,
@@ -105,7 +109,9 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
                     child: TDText(
                       forceVerticalCenter: true,
                       widget.tdate!.date.day.toString(),
-                      style: (isToday ? cellStyle.todayStyle : null) ?? tdate.style ?? cellStyle.cellStyle,
+                      style: (isToday ? cellStyle.todayStyle : null) ??
+                          tdate.style ??
+                          cellStyle.cellStyle,
                     ),
                   ),
                 ),
@@ -120,7 +126,24 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
                       ),
                 ),
               ],
-            ),
+            );
+
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: _cellTap,
+      onLongPress: () {
+        final selectType = widget.tdate!._type;
+        final curDate = widget.tdate!._milliseconds;
+        widget.onCellLongPress?.call(curDate, selectType, widget.tdate!);
+      },
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            width: double.infinity,
+            height: widget.height,
+            decoration: decoration,
+            child: content, // 使用自定义内容
           ),
           if (widget.colIndex < 6)
             Positioned(
@@ -146,7 +169,8 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
     }
     switch (widget.type) {
       case CalendarType.single:
-        final date = list.find((item) => item?._type == DateSelectType.selected);
+        final date =
+            list.find((item) => item?._type == DateSelectType.selected);
         date?._setType(DateSelectType.empty);
         widget.tdate!._setType(DateSelectType.selected);
         if (date?._milliseconds != curDate) {
@@ -154,7 +178,9 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
         }
         break;
       case CalendarType.multiple:
-        final date = list.where((item) => item?._type == DateSelectType.selected).toList();
+        final date = list
+            .where((item) => item?._type == DateSelectType.selected)
+            .toList();
         final value = date.map((item) => item!._milliseconds).toList();
         if (date.find((item) => item?._milliseconds == curDate) != null) {
           widget.tdate!._setType(DateSelectType.empty);
@@ -174,7 +200,9 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
             (start != null && end == null && startTimes! >= curDate)) {
           start?._setType(DateSelectType.empty);
           end?._setType(DateSelectType.empty);
-          final centres = list.where((item) => item?._type == DateSelectType.centre).toList();
+          final centres = list
+              .where((item) => item?._type == DateSelectType.centre)
+              .toList();
           centres.forEach((item) => item!._setType(DateSelectType.empty));
           widget.tdate!._setType(DateSelectType.start);
           widget.onChange?.call([curDate]);
@@ -182,7 +210,8 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
           start._setType(DateSelectType.start);
           widget.tdate!._setType(DateSelectType.end);
           var startIndex = list.indexOf(start) + 1;
-          while (list[startIndex] == null || list[startIndex]!._milliseconds < curDate) {
+          while (list[startIndex] == null ||
+              list[startIndex]!._milliseconds < curDate) {
             list[startIndex]?._setType(DateSelectType.centre);
             startIndex++;
           }
@@ -226,7 +255,8 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
 
   bool _isToday() {
     final today = DateTime.now();
-    return widget.tdate?._milliseconds == DateTime(today.year, today.month, today.day).millisecondsSinceEpoch;
+    return widget.tdate?._milliseconds ==
+        DateTime(today.year, today.month, today.day).millisecondsSinceEpoch;
   }
 }
 
@@ -279,7 +309,8 @@ class TDate {
   /// 是否是当月最后一天
   final bool isLastDayOfMonth;
 
-  int get _milliseconds => DateTime(date.year, date.month, date.day).millisecondsSinceEpoch;
+  int get _milliseconds =>
+      DateTime(date.year, date.month, date.day).millisecondsSinceEpoch;
 
   DateSelectType get _type => typeNotifier.value;
 
@@ -290,6 +321,7 @@ class TDate {
 
 class DateSelectTypeNotifier extends ChangeNotifier {
   DateSelectType value = DateSelectType.empty;
+
   DateSelectTypeNotifier(DateSelectType selectType) {
     value = selectType;
   }

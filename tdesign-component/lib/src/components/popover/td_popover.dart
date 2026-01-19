@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../tdesign_flutter.dart';
 
 class TDPopover {
-
   static Future showPopover({
     required BuildContext context,
     String? content,
@@ -20,6 +19,7 @@ class TDPopover {
     Color? overlayColor = Colors.transparent,
     OnTap? onTap,
     OnLongTap? onLongTap,
+    BorderRadius? radius,
   }) {
     return showDialog(
       barrierDismissible: closeOnClickOutside,
@@ -40,6 +40,7 @@ class TDPopover {
         height: height,
         onTap: onTap,
         onLongTap: onLongTap,
+        radius: radius,
       ),
     );
   }

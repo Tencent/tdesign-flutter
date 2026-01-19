@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import '../about.dart';
+
 import '../config.dart';
-import '../home.dart';
+import '../setting.dart';
 import 'api_widget.dart';
 import 'example_base.dart';
-import 'example_widget.dart';
 
 class TDExampleRoute {
   static final Map<String, ExamplePageModel> pageModelList = {};
@@ -23,9 +22,9 @@ class TDExampleRoute {
     });
     // 添加关于页路由
     pageModelList[aboutPath] = ExamplePageModel(
-        text: '关于',
-        name: 'AboutPage',
-        pageBuilder: (context, model) => const AboutPage());
+        text: '设置',
+        name: 'settingPage',
+        pageBuilder: (context, model) => const SettingPage());
   }
 
   static void add(ExamplePageModel model) {

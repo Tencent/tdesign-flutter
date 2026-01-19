@@ -3,18 +3,9 @@ import '../../../tdesign_flutter.dart';
 
 enum TDAvatarSize { large, medium, small }
 
-enum TDAvatarType {
-  icon,
-  normal,
-  customText,
-  display,
-  operation
-}
+enum TDAvatarType { icon, normal, customText, display, operation }
 
-enum TDAvatarShape {
-  circle,
-  square
-}
+enum TDAvatarShape { circle, square }
 
 /// 用于头像显示
 class TDAvatar extends StatelessWidget {
@@ -36,6 +27,7 @@ class TDAvatar extends StatelessWidget {
     this.avatarDisplayBorder = 2,
     this.avatarDisplayListAsset,
     this.backgroundColor,
+    this.fit,
   }) : super(key: key);
 
   /// 头像地址
@@ -65,13 +57,13 @@ class TDAvatar extends StatelessWidget {
   /// 默认图片（本地）
   final String defaultUrl;
 
-  /// 带操作\展示的头像列表
+  /// 带操作展示的头像列表
   final List<String>? avatarDisplayList;
 
-  /// 带操作\展示的头像列表 (本地资源)
+  /// 带操作展示的头像列表（本地资源）
   final List<String>? avatarDisplayListAsset;
 
-  /// 带操作\展示的头像描边宽度
+  /// 带操作展示的头像描边宽度
   final double avatarDisplayBorder;
 
   /// 带操作头像自定义操作Widget
@@ -85,6 +77,9 @@ class TDAvatar extends StatelessWidget {
 
   /// 自定义文案时背景色
   final Color? backgroundColor;
+
+  /// 自定义图片对齐方式
+  final BoxFit? fit;
 
   double _getAvatarWidth() {
     double width;
@@ -156,11 +151,15 @@ class TDAvatar extends StatelessWidget {
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-              color: backgroundColor ?? TDTheme.of(context).brandColor2,
+              color: backgroundColor ?? TDTheme.of(context).brandFocusColor,
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
             ),
             child: Center(
-                child: Icon(icon ?? TDIcons.user, size: _getIconWidth(), color: TDTheme.of(context).brandNormalColor)),
+                child: Icon(
+              icon ?? TDIcons.user,
+              size: _getIconWidth(),
+              color: TDTheme.of(context).brandNormalColor,
+            )),
           ),
           onTap: onTap,
         );
@@ -170,13 +169,13 @@ class TDAvatar extends StatelessWidget {
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-                color: backgroundColor ?? TDTheme.of(context).brandColor2,
+                color: backgroundColor ?? TDTheme.of(context).brandFocusColor,
                 borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
                 image: avatarUrl != null
                     ? DecorationImage(image: NetworkImage(avatarUrl!))
                     : defaultUrl != ''
-                    ? DecorationImage(image: AssetImage(defaultUrl))
-                    : null),
+                        ? DecorationImage(image: AssetImage(defaultUrl))
+                        : null),
           ),
           onTap: onTap,
         );
@@ -241,23 +240,24 @@ class TDAvatar extends StatelessWidget {
           list.add(Positioned(
               left: left,
               child: GestureDetector(
-                onTap: () {
-                  if (onTap != null) {
-                    onTap!();
-                  }
-                },
+                onTap: onTap,
                 child: Container(
                     child: Center(
-                      child: Icon(TDIcons.user_add, size: _getIconWidth(), color: TDTheme.of(context).brandNormalColor),
+                      child: Icon(TDIcons.user_add,
+                          size: _getIconWidth(),
+                          color: TDTheme.of(context).brandNormalColor),
                     ),
                     width: _getAvatarWidth(),
                     height: _getAvatarWidth(),
                     clipBehavior: Clip.hardEdge,
                     decoration: ShapeDecoration(
-                      color: TDTheme.of(context).brandColor2,
+                      color: TDTheme.of(context).brandFocusColor,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
-                          side: BorderSide(color: Colors.white, width: avatarDisplayBorder)),
+                          borderRadius: BorderRadius.circular(
+                              _getAvatarWidth() - _getDisplayPadding()),
+                          side: BorderSide(
+                              color: Colors.transparent,
+                              width: avatarDisplayBorder)),
                     )),
               )));
         } else {
@@ -269,9 +269,14 @@ class TDAvatar extends StatelessWidget {
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
-                          side: BorderSide(color: Colors.white, width: avatarDisplayBorder)),
-                      image: DecorationImage(image: NetworkImage(avatarDisplayList![i]), fit: BoxFit.cover)))));
+                          borderRadius: BorderRadius.circular(
+                              _getAvatarWidth() - _getDisplayPadding()),
+                          side: BorderSide(
+                              color: TDTheme.of(context).bgColorContainer,
+                              width: avatarDisplayBorder)),
+                      image: DecorationImage(
+                          image: NetworkImage(avatarDisplayList![i]),
+                          fit: fit ?? BoxFit.cover)))));
         }
       }
     } else if (avatarDisplayListAsset != null) {
@@ -282,24 +287,25 @@ class TDAvatar extends StatelessWidget {
           list.add(Positioned(
               left: left,
               child: GestureDetector(
-                onTap: () {
-                  if (onTap != null) {
-                    onTap!();
-                  }
-                },
+                onTap: onTap,
                 child: Container(
                     child: Center(
                       child: avatarDisplayWidget ??
-                          Icon(TDIcons.user_add, size: _getIconWidth(), color: TDTheme.of(context).brandNormalColor),
+                          Icon(TDIcons.user_add,
+                              size: _getIconWidth(),
+                              color: TDTheme.of(context).brandNormalColor),
                     ),
                     width: _getAvatarWidth(),
                     height: _getAvatarWidth(),
                     clipBehavior: Clip.hardEdge,
                     decoration: ShapeDecoration(
-                      color: TDTheme.of(context).brandColor2,
+                      color: TDTheme.of(context).brandFocusColor,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
-                          side: BorderSide(color: Colors.white, width: avatarDisplayBorder)),
+                          borderRadius: BorderRadius.circular(
+                              _getAvatarWidth() - _getDisplayPadding()),
+                          side: BorderSide(
+                              color: TDTheme.of(context).bgColorContainer,
+                              width: avatarDisplayBorder)),
                     )),
               )));
         } else {
@@ -311,9 +317,14 @@ class TDAvatar extends StatelessWidget {
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
-                          side: BorderSide(color: Colors.white, width: avatarDisplayBorder)),
-                      image: DecorationImage(image: AssetImage(avatarDisplayListAsset![i]), fit: BoxFit.fill)))));
+                          borderRadius: BorderRadius.circular(
+                              _getAvatarWidth() - _getDisplayPadding()),
+                          side: BorderSide(
+                              color: TDTheme.of(context).bgColorContainer,
+                              width: avatarDisplayBorder)),
+                      image: DecorationImage(
+                          image: AssetImage(avatarDisplayListAsset![i]),
+                          fit: fit ?? BoxFit.fill)))));
         }
       }
     }
@@ -356,10 +367,13 @@ class TDAvatar extends StatelessWidget {
                   height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
-                    color: TDTheme.of(context).brandColor2,
+                    color: TDTheme.of(context).brandFocusColor,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
-                        side: BorderSide(color: Colors.white, width: avatarDisplayBorder)),
+                        borderRadius: BorderRadius.circular(
+                            _getAvatarWidth() - _getDisplayPadding()),
+                        side: BorderSide(
+                            color: TDTheme.of(context).bgColorContainer,
+                            width: avatarDisplayBorder)),
                   ))));
         } else {
           list.add(Positioned(
@@ -370,9 +384,14 @@ class TDAvatar extends StatelessWidget {
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
-                          side: BorderSide(color: Colors.white, width: avatarDisplayBorder)),
-                      image: DecorationImage(image: NetworkImage(avatarDisplayList![i]), fit: BoxFit.cover)))));
+                          borderRadius: BorderRadius.circular(
+                              _getAvatarWidth() - _getDisplayPadding()),
+                          side: BorderSide(
+                              color: TDTheme.of(context).bgColorContainer,
+                              width: avatarDisplayBorder)),
+                      image: DecorationImage(
+                          image: NetworkImage(avatarDisplayList![i]),
+                          fit: fit ?? BoxFit.cover)))));
         }
       }
     } else if (avatarDisplayListAsset != null) {
@@ -397,10 +416,13 @@ class TDAvatar extends StatelessWidget {
                   height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
-                    color: TDTheme.of(context).brandColor2,
+                    color: TDTheme.of(context).brandFocusColor,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
-                        side: BorderSide(color: Colors.white, width: avatarDisplayBorder)),
+                        borderRadius: BorderRadius.circular(
+                            _getAvatarWidth() - _getDisplayPadding()),
+                        side: BorderSide(
+                            color: TDTheme.of(context).bgColorContainer,
+                            width: avatarDisplayBorder)),
                   ))));
         } else {
           list.add(Positioned(
@@ -411,9 +433,14 @@ class TDAvatar extends StatelessWidget {
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(_getAvatarWidth() - _getDisplayPadding()),
-                          side: BorderSide(color: Colors.white, width: avatarDisplayBorder)),
-                      image: DecorationImage(image: AssetImage(avatarDisplayListAsset![i]), fit: BoxFit.cover)))));
+                          borderRadius: BorderRadius.circular(
+                              _getAvatarWidth() - _getDisplayPadding()),
+                          side: BorderSide(
+                              color: TDTheme.of(context).bgColorContainer,
+                              width: avatarDisplayBorder)),
+                      image: DecorationImage(
+                          image: AssetImage(avatarDisplayListAsset![i]),
+                          fit: fit ?? BoxFit.cover)))));
         }
       }
     }

@@ -15,31 +15,33 @@ class TDRadio extends TDCheckbox {
   /// 单选框按钮样式
   final TDRadioStyle radioStyle;
 
-  const TDRadio(
-      {String? id,
-      Key? key,
-      String? title,
-      Font? titleFont,
-      String? subTitle,
-      Font? subTitleFont,
-      bool enable = true,
-      int subTitleMaxLine = 1,
-      int titleMaxLine = 1,
-      Color? selectColor,
-      Color? disableColor,
-      ContentBuilder? customContentBuilder,
-      double? spacing,
-      bool? cardMode,
-      bool? showDivider,
-      TDCheckBoxSize size = TDCheckBoxSize.small,
-      this.radioStyle = TDRadioStyle.circle,
-      TDContentDirection contentDirection = TDContentDirection.right,
-      IconBuilder? customIconBuilder,
-      Color? titleColor,
-      Color? subTitleColor,
-      Color? backgroundColor,
-      double? checkBoxLeftSpace})
-      : super(
+  const TDRadio({
+    String? id,
+    Key? key,
+    String? title,
+    Font? titleFont,
+    String? subTitle,
+    Font? subTitleFont,
+    bool enable = true,
+    int subTitleMaxLine = 1,
+    int titleMaxLine = 1,
+    Color? selectColor,
+    Color? disableColor,
+    ContentBuilder? customContentBuilder,
+    double? spacing,
+    bool? cardMode,
+    bool? showDivider,
+    TDCheckBoxSize size = TDCheckBoxSize.small,
+    this.radioStyle = TDRadioStyle.circle,
+    TDContentDirection contentDirection = TDContentDirection.right,
+    IconBuilder? customIconBuilder,
+    Color? titleColor,
+    Color? subTitleColor,
+    Color? backgroundColor,
+    double? checkBoxLeftSpace,
+    double? insetSpacing,
+    EdgeInsetsGeometry? customSpace,
+  }) : super(
             id: id,
             key: key,
             title: title,
@@ -61,10 +63,13 @@ class TDRadio extends TDCheckbox {
             titleColor: titleColor,
             subTitleColor: subTitleColor,
             backgroundColor: backgroundColor,
-            checkBoxLeftSpace: checkBoxLeftSpace);
+            checkBoxLeftSpace: checkBoxLeftSpace,
+            insetSpacing: insetSpacing,
+            customSpace: customSpace);
 
   @override
-  Widget buildDefaultIcon(BuildContext context, TDCheckboxGroupState? groupState, bool isSelected) {
+  Widget buildDefaultIcon(
+      BuildContext context, TDCheckboxGroupState? groupState, bool isSelected) {
     if (cardMode == true) {
       return Container();
     }
@@ -78,7 +83,7 @@ class TDRadio extends TDCheckbox {
     var size = 24.0;
     final theme = TDTheme.of(context);
 
-    // 由于镂空圆没有现成icon，因而自己画一个`
+    // 由于镂空圆没有现成icon，因而自己画一个
     if (style == TDRadioStyle.hollowCircle) {
       return SizedBox(
         width: size,
@@ -99,7 +104,8 @@ class TDRadio extends TDCheckbox {
         iconData = isSelected ? TDIcons.check : null;
         break;
       case TDRadioStyle.square:
-        iconData = isSelected ? TDIcons.check_rectangle_filled : TDIcons.rectangle;
+        iconData =
+            isSelected ? TDIcons.check_rectangle_filled : TDIcons.rectangle;
         break;
       default:
         iconData = isSelected ? TDIcons.check_circle_filled : TDIcons.circle;
@@ -109,10 +115,12 @@ class TDRadio extends TDCheckbox {
       return Icon(iconData,
           size: size,
           color: !enable
-              ? (isSelected ? (disableColor ?? theme.brandDisabledColor) : theme.grayColor4)
+              ? (isSelected
+                  ? (disableColor ?? theme.brandDisabledColor)
+                  : theme.componentStrokeColor)
               : isSelected
                   ? selectColor ?? theme.brandNormalColor
-                  : theme.grayColor4);
+                  : theme.componentStrokeColor);
     } else {
       return SizedBox(
         width: size,
@@ -185,44 +193,51 @@ class TDRadioGroup extends TDCheckboxGroup {
   ///每行几列
   final int rowCount;
 
-  TDRadioGroup({
-    Key? key,
-    Widget? child, // 使用child 则请勿设置direction
-    Axis? direction, // direction 对 directionalTdRadios 起作用
-    List<TDRadio>? directionalTdRadios,
-    String? selectId, // 默认选择项的id
-    bool? passThrough, // 非通栏单选样式 用于使用child 或 direction == Axis.vertical 场景
-    bool cardMode = false,
-    this.strictMode = true,
-    this.radioCheckStyle,
-    int? titleMaxLine, // item的行数
-    IconBuilder? customIconBuilder,
-    ContentBuilder? customContentBuilder,
-    double? spacing, // icon和文字距离
-    this.rowCount=1,
-    TDContentDirection? contentDirection,
-    OnRadioGroupChange? onRadioGroupChange, // 切换监听
-    this.showDivider = false,
-    this.divider,
-  })  : assert(() {
+  TDRadioGroup(
+      {Key? key,
+      Widget? child, // 使用child 则请勿设置direction
+      Axis? direction, // direction 对 directionalTdRadios 起作用
+      List<TDRadio>? directionalTdRadios,
+      String? selectId, // 默认选择项的id
+      bool? passThrough, // 非通栏单选样式 用于使用child 或 direction == Axis.vertical 场景
+      bool cardMode = false,
+      this.strictMode = true,
+      this.radioCheckStyle,
+      int? titleMaxLine, // item的行数
+      IconBuilder? customIconBuilder,
+      ContentBuilder? customContentBuilder,
+      double? spacing, // icon和文字距离
+      this.rowCount = 1,
+      TDContentDirection? contentDirection,
+      OnRadioGroupChange? onRadioGroupChange, // 切换监听
+      this.showDivider = false,
+      this.divider,
+
+      /// 可以通过控制器操作勾选状态
+      TDCheckboxGroupController? controller})
+      : assert(() {
           // 使用direction属性则必须配合directionalTdRadios，child字段无效
           if (direction != null && directionalTdRadios == null) {
-            throw FlutterError('[TDRadioGroup] direction and directionalTdRadios must set at the same time');
+            throw FlutterError(
+                '[TDRadioGroup] direction and directionalTdRadios must set at the same time');
           }
           // 未使用direction则必须设置child
           if (direction == null && child == null) {
-            throw FlutterError('[TDRadioGroup] direction means use child as the exact one, but child is null');
+            throw FlutterError(
+                '[TDRadioGroup] direction means use child as the exact one, but child is null');
           }
           // 横向单选框 每个选项有字数限制
           if (direction == Axis.horizontal && directionalTdRadios != null) {
             directionalTdRadios.forEach((element) {
               if (element.subTitle != null) {
-                throw FlutterError('horizontal radios style should not have subTilte, '
+                throw FlutterError(
+                    'horizontal radios style should not have subTilte, '
                     'because there left no room for it');
               }
             });
             var maxWordCount = 2;
-            var tips = '[TDRadioGroup] radio title please not exceed $maxWordCount words.\n'
+            var tips =
+                '[TDRadioGroup] radio title please not exceed $maxWordCount words.\n'
                 '2tabs: 7words maximum\n'
                 '3tabs: 4words maximum\n'
                 '4tabs: 2words maximum';
@@ -248,11 +263,13 @@ class TDRadioGroup extends TDCheckboxGroup {
               // if use cardMode at TDRadioGroup, then every TDRadio should
               // set it's own carMode to true.
               if (element.cardMode == false) {
-                throw FlutterError('if use cardMode at TDRadioGroup, then every '
+                throw FlutterError(
+                    'if use cardMode at TDRadioGroup, then every '
                     'TDRadio should set it\'s own carMode to true.');
               }
               if (element.subTitle != null && direction == Axis.horizontal) {
-                throw FlutterError('horizontal card style should not have subTilte, '
+                throw FlutterError(
+                    'horizontal card style should not have subTilte, '
                     'because there left no room for it');
               }
             });
@@ -261,7 +278,9 @@ class TDRadioGroup extends TDCheckboxGroup {
         }()),
         super(
           child: Container(
-            clipBehavior: (passThrough ?? false) && direction != Axis.horizontal ? Clip.hardEdge : Clip.none,
+            clipBehavior: (passThrough ?? false) && direction != Axis.horizontal
+                ? Clip.hardEdge
+                : Clip.none,
             decoration: (passThrough ?? false) && direction != Axis.horizontal
                 ? BoxDecoration(borderRadius: BorderRadius.circular(10))
                 : null,
@@ -277,7 +296,9 @@ class TDRadioGroup extends TDCheckboxGroup {
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           return Container(
-                            margin: cardMode ? const EdgeInsets.symmetric(horizontal: 16) : null,
+                            margin: cardMode
+                                ? const EdgeInsets.symmetric(horizontal: 16)
+                                : null,
                             height: cardMode ? 82 : null,
                             child: directionalTdRadios[index],
                           );
@@ -293,48 +314,83 @@ class TDRadioGroup extends TDCheckboxGroup {
                         },
                       )
                     : Container(
-                        margin: cardMode ? const EdgeInsets.symmetric(horizontal: 16) : null,
-                        height: cardMode ? (directionalTdRadios!.length/rowCount).ceil()*(56+10) : null,
-                        // height: 56,
+                        margin: cardMode
+                            ? const EdgeInsets.symmetric(horizontal: 16)
+                            : null,
+                        height: cardMode
+                            ? (directionalTdRadios!.length / rowCount).ceil() *
+                                (56 + 10)
+                            : null,
                         alignment: cardMode ? Alignment.topLeft : null,
-                        child: cardMode&&rowCount!=null
-                            ?
-                               GridView.builder(
-                                    itemCount: directionalTdRadios!.length,
-                                    gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisSpacing: 10.0,
-                                      mainAxisSpacing: 10.0,
-                                      crossAxisCount: rowCount,//一行的 Widget 数量
-                                      mainAxisExtent:56,
-                                    ),
-                                    itemBuilder: (BuildContext context,int index){
-                                      return Container(
-                                                width: 160.scale,
-                                                height: 56,
-                                                child: directionalTdRadios![index],
-                                              );
-                                    }
-                                )
-                            : Column(
-                                children: [
-                                  Row(
+                        child: cardMode
+                            ? GridView.builder(
+                                itemCount: directionalTdRadios!.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisSpacing: 10.0,
+                                  mainAxisSpacing: 10.0,
+                                  crossAxisCount: rowCount, //一行的 Widget 数量
+                                  mainAxisExtent: 56,
+                                ),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return SizedBox(
+                                    width: 160.scale,
+                                    height: 56,
+                                    child: directionalTdRadios[index],
+                                  );
+                                })
+                            : rowCount > 1
+                                ? Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    children: directionalTdRadios!.map((e) => Expanded(child: e)).toList(),
+                                    children: List.generate(
+                                        (directionalTdRadios!.length / rowCount)
+                                            .ceil(), (index) {
+                                      var start = index * rowCount;
+                                      var end = (index + 1) * rowCount;
+                                      if (end > directionalTdRadios.length) {
+                                        end = directionalTdRadios.length;
+                                      }
+                                      var subList = directionalTdRadios
+                                          .sublist(start, end);
+                                      return Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ...subList
+                                              .map((e) => Expanded(child: e)),
+                                          if (subList.length < rowCount)
+                                            ...List.generate(
+                                                rowCount - subList.length,
+                                                (index) => const Expanded(
+                                                    child: SizedBox()))
+                                        ],
+                                      );
+                                    }))
+                                : Column(
+                                    children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: directionalTdRadios!
+                                            .map((e) => Expanded(child: e))
+                                            .toList(),
+                                      ),
+                                      if (showDivider)
+                                        divider ??
+                                            const TDDivider(
+                                              margin: EdgeInsets.only(left: 16),
+                                            )
+                                    ],
                                   ),
-                                  if (showDivider)
-                                    divider ??
-                                        const TDDivider(
-                                          margin: EdgeInsets.only(left: 16),
-                                        )
-                                ],
-                              ),
                       )),
           ),
           key: key,
           onChangeGroup: (ids) {
             onRadioGroupChange?.call(ids.isNotEmpty ? ids[0] : null);
           },
-          controller: null,
+          controller: controller,
           checkedIds: selectId != null ? [selectId] : null,
           maxChecked: 1,
           titleMaxLine: titleMaxLine,

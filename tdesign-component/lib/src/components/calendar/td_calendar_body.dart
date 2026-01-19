@@ -24,44 +24,80 @@ class TDCalendarBody extends StatelessWidget {
     required this.monthTitleHeight,
     required this.verticalGap,
     required this.animateTo,
+    this.onMonthChange,
+    this.anchorDate
   }) : super(key: key);
 
   final int? maxDate;
   final int? minDate;
   final CalendarType type;
   final List<DateTime>? value;
+  final DateTime? anchorDate;
   final int firstDayOfWeek;
   final Widget Function(
-      TDate? date, List<TDate?> dateList, Map<DateTime, List<TDate?>> data, int rowIndex, int colIndex) builder;
+    TDate? date,
+    List<TDate?> dateList,
+    Map<DateTime, List<TDate?>> data,
+    int rowIndex,
+    int colIndex,
+  ) builder;
   final double bodyPadding;
   final String displayFormat;
   final List<String> monthNames;
   final TextStyle? monthTitleStyle;
-  final Widget Function(BuildContext context, DateTime monthDate)? monthTitleBuilder;
+  final Widget Function(
+    BuildContext context,
+    DateTime monthDate,
+  )? monthTitleBuilder;
   final double monthTitleHeight;
   final double verticalGap;
   final double cellHeight;
   final bool animateTo;
+  final ValueChanged<DateTime>? onMonthChange;
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
+    final scrollController = TrackingScrollController();
     final min = _getDefDate(minDate);
     final max = _getDefDate(maxDate, 6);
     final months = _monthsBetween(min, max);
     final data = <DateTime, List<TDate?>>{};
     final monthHeight = <int, double>{};
+    DateTime? _lastPrintMonth;
+    scrollController.addListener(() {
+      // 根据滚动位置判断当前是几月
+      var currentOffset = 0.0;
+      for (var i = 0; i < months.length; i++) {
+        final mh = _getMonthHeight(months, i, monthHeight);
+        if (scrollController.offset >= currentOffset &&
+            scrollController.offset < currentOffset + mh) {
+          //只返回下一个月
+          DateTime currentMonth = months[i + 1];
+          // 缓存上一次打印的月份，只有变更时才打印
+          if (_lastPrintMonth == null ||
+              !_lastPrintMonth!.isAtSameMomentAs(currentMonth)) {
+            _lastPrintMonth = currentMonth;
+            onMonthChange?.call(currentMonth);
+          }
+          break;
+        }
+        currentOffset += mh;
+      }
+    });
     _scrollToItem(scrollController, months, monthHeight);
     return ListView.builder(
       padding: EdgeInsets.all(bodyPadding),
       controller: scrollController,
       itemCount: months.length,
-      itemExtentBuilder: (index, dimensions) => _getMonthHeight(months, index, monthHeight),
+      itemExtentBuilder: (index, dimensions) =>
+          _getMonthHeight(months, index, monthHeight),
       itemBuilder: (context, index) {
         final monthDate = months[index];
         final monthYear = monthDate.year.toString() + context.resource.year;
         final monthMonth = monthNames[monthDate.month - 1];
-        final monthDateText = displayFormat.replaceFirst('year', monthYear).replaceFirst('month', monthMonth);
+        final monthDateText = displayFormat
+            .replaceFirst('year', monthYear)
+            .replaceFirst('month', monthMonth);
         late List<TDate?> monthData;
         if (data.containsKey(monthDate)) {
           monthData = data[monthDate]!;
@@ -82,28 +118,30 @@ class TDCalendarBody extends StatelessWidget {
           children: [
             SizedBox(
               height: monthTitleHeight,
-              child: monthTitleBuilder?.call(context, monthDate) ?? TDText(monthDateText, style: monthTitleStyle),
+              child: monthTitleBuilder?.call(context, monthDate) ??
+                  TDText(monthDateText, style: monthTitleStyle),
             ),
             ...List.generate(
               (monthData.length / 7).ceil(),
               (rowIndex) => [
                 SizedBox(height: verticalGap),
                 Row(
-                  children: List.generate(
-                    7,
-                    (colIndex) => [
+                  children: [
+                    for (int colIndex = 0; colIndex < 7; colIndex++) ...[
                       if (colIndex != 0) SizedBox(width: verticalGap / 2),
                       Expanded(
                         child: builder(
-                          monthData[rowIndex * 7 + colIndex],
+                          (rowIndex * 7 + colIndex < monthData.length)
+                              ? monthData[rowIndex * 7 + colIndex]
+                              : null,
                           monthData,
                           data,
                           rowIndex,
                           colIndex,
                         ),
                       ),
-                    ],
-                  ).expand((element) => element).toList(),
+                    ]
+                  ],
                 ),
               ],
             ).expand((element) => element).toList(),
@@ -114,21 +152,25 @@ class TDCalendarBody extends StatelessWidget {
     );
   }
 
-  void _scrollToItem(ScrollController scrollController, List<DateTime> months, Map<int, double> monthHeight) {
-    if (value == null || value!.isEmpty) {
-      return;
+  void _scrollToItem(ScrollController scrollController, List<DateTime> months,
+      Map<int, double> monthHeight) {
+    DateTime? scrollToDate = anchorDate;
+    if (scrollToDate == null) {
+      if (value == null || value!.isEmpty) {
+        return;
+      }
+      scrollToDate = value!.reduce((a, b) => a.isBefore(b) ? a : b);
     }
-    final scrollDate = value!.reduce((a, b) => a.isBefore(b) ? a : b);
     var lastMonthDay = DateTime(months.last.year, months.last.month + 1);
     lastMonthDay = lastMonthDay.add(const Duration(days: -1));
-    if (months.first.isAfter(scrollDate) || lastMonthDay.isBefore(scrollDate)) {
+    if (months.first.isAfter(scrollToDate) || lastMonthDay.isBefore(scrollToDate)) {
       return;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var height = 0.0;
       for (var i = 0; i < months.length; i++) {
         final item = months[i];
-        if (item.year == scrollDate.year && item.month == scrollDate.month) {
+        if (item.year == scrollToDate!.year && item.month == scrollToDate!.month) {
           break;
         }
         height += (_getMonthHeight(months, i, monthHeight) ?? 0);
@@ -149,7 +191,9 @@ class TDCalendarBody extends StatelessWidget {
   }
 
   DateTime _getDefDate(int? date, [int? addMonth]) {
-    final now = date == null ? DateTime.now() : DateTime.fromMillisecondsSinceEpoch(date);
+    final now = date == null
+        ? DateTime.now()
+        : DateTime.fromMillisecondsSinceEpoch(date);
     if (addMonth == null) {
       return DateTime(now.year, now.month, now.day);
     }
@@ -168,8 +212,10 @@ class TDCalendarBody extends StatelessWidget {
   }
 
   List<TDate?> _getDaysInMonth(DateTime curDate, DateTime min, DateTime max) {
-    final daysInMonth = List<TDate?>.generate(_getPreOffset(curDate), (index) => null);
-    final daysInMonthCount = DateTime(curDate.year, curDate.month + 1, 0).day; // 获取下个月的第一天的前一天，即当前月的最后一天
+    final daysInMonth =
+        List<TDate?>.generate(_getPreOffset(curDate), (index) => null);
+    final daysInMonthCount = DateTime(curDate.year, curDate.month + 1, 0)
+        .day; // 获取下个月的第一天的前一天，即当前月的最后一天
     for (var day = 1; day <= daysInMonthCount; day++) {
       final date = DateTime(curDate.year, curDate.month, day);
       var selectType = DateSelectType.empty;
@@ -220,7 +266,8 @@ class TDCalendarBody extends StatelessWidget {
   }
 
   /// 获取月份高度，带缓存
-  double _getMonthHeight(List<DateTime> months, int index, Map<int, double> monthHeight) {
+  double _getMonthHeight(
+      List<DateTime> months, int index, Map<int, double> monthHeight) {
     if (months.getOrNull(index) == null) {
       return 1;
     }
@@ -232,8 +279,9 @@ class TDCalendarBody extends StatelessWidget {
     final preOffset = _getPreOffset(item);
     final daysInMonthCount = DateTime(item.year, item.month + 1, 0).day;
     final daysInMonth = preOffset + daysInMonthCount;
-    final height =
-        monthTitleHeight + (daysInMonth / 7).ceil() * (verticalGap + cellHeight) + (isLast ? 0 : bodyPadding);
+    final height = monthTitleHeight +
+        (daysInMonth / 7).ceil() * (verticalGap + cellHeight) +
+        (isLast ? 0 : bodyPadding);
     monthHeight[index] = height;
     return height;
   }

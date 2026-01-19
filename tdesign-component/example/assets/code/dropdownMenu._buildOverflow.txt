@@ -16,7 +16,7 @@ TDDropdownMenu _buildOverflow(BuildContext context) {
           label: '最大高度限制',
           multiple: true,
           maxHeight: 200,
-          tabBarWidth: 200,
+          tabBarWidth: 150,
           options: [
             TDDropdownItemOption(label: '选项1', value: '1', selected: true),
             TDDropdownItemOption(label: '选项2', value: '2', selected: true),
@@ -40,7 +40,8 @@ TDDropdownMenu _buildOverflow(BuildContext context) {
           tabBarWidth: 200,
           tabBarAlign: MainAxisAlignment.start,
           options: [
-            TDDropdownItemOption(label: '选项1选项1选项1选项1选项1选项1选项1', value: '1', selected: true),
+            TDDropdownItemOption(
+                label: '选项1选项1选项1选项1选项1选项1选项1', value: '1', selected: true),
             TDDropdownItemOption(label: '选项2', value: '2'),
           ],
         ),

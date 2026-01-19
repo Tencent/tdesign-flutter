@@ -53,256 +53,141 @@ class TDSwitchPageState extends State<TDSwitchPage> {
     return current;
   }
 
-  Widget demoRow(
-    BuildContext context,
-    String? title, {
-    String? desc,
-    bool on = true,
-    bool enable = true,
-    Color? trackOnColor,
-    Color? trackOffColor,
-    Color? thumbContentOnColor,
-    Color? thumbContentOffColor,
-    TDSwitchSize? size,
-    TDSwitchType? type,
-  }) {
-    final theme = TDTheme.of(context);
-    Widget current = Row(
-      children: [
-        Expanded(
-            child: TDText(
-          title,
-          textColor: theme.fontGyColor1,
-        )),
-        TDText(
-          desc ?? '',
-          textColor: theme.grayColor6,
-        ),
-        SizedBox(
-          child: _buildSwitch(
-              on: on,
-              enable: enable,
-              trackOnColor: trackOnColor,
-              trackOffColor: trackOffColor,
-              thumbContentOnColor: thumbContentOnColor,
-              thumbContentOffColor: thumbContentOffColor,
-              size: size,
-              type: type),
-        )
-      ],
-    );
-    current = Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: SizedBox(
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: current,
-          ),
-          color: Colors.white,
-        ),
-        height: 56,
-      ),
-    );
-    return current;
-  }
-
-  /// 每一项的封装
-  @Demo(group: 'switch')
-  Widget _buildItem(BuildContext context, Widget switchItem,
-      {String? title, String? desc}) {
-    final theme = TDTheme.of(context);
-    Widget current = Row(
-      children: [
-        Expanded(
-            child: TDText(
-          title ?? '',
-          textColor: theme.fontGyColor1,
-        )),
-        TDText(
-          desc ?? '',
-          textColor: theme.grayColor6,
-        ),
-        SizedBox(child: switchItem)
-      ],
-    );
-    current = Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: SizedBox(
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: current,
-          ),
-          color: Colors.white,
-        ),
-        height: 56,
-      ),
-    );
-    return Column(mainAxisSize: MainAxisSize.min, children: [current]);
-  }
-
   @Demo(group: 'switch')
   Widget _buildSwitchWithBase(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(),
+    return const TDCell(
       title: '基础开关',
+      noteWidget: TDSwitch(),
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithText(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(isOn: true, type: TDSwitchType.text),
+    return const TDCell(
       title: '带文字开关',
+      noteWidget: TDSwitch(
+        isOn: true,
+        type: TDSwitchType.text,
+      ),
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithIcon(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(isOn: true, type: TDSwitchType.icon),
+    return const TDCell(
       title: '带图标开关',
+      noteWidget: TDSwitch(
+        isOn: true,
+        type: TDSwitchType.icon,
+      ),
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithColor(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(isOn: true, trackOnColor: Colors.green),
+    return const TDCell(
       title: '自定义颜色开关',
+      noteWidget: TDSwitch(
+        isOn: true,
+        trackOnColor: Colors.green,
+      ),
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithLoadingOff(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
+    return const TDCell(
+      title: '加载状态',
+      noteWidget: TDSwitch(
         isOn: false,
         type: TDSwitchType.loading,
       ),
-      title: '加载状态',
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithLoadingOn(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
+    return const TDCell(
+      title: '加载状态',
+      noteWidget: TDSwitch(
         isOn: true,
         type: TDSwitchType.loading,
       ),
-      title: '加载状态',
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithDisableOff(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
+    return const TDCell(
+      title: '禁用状态',
+      noteWidget: TDSwitch(
         enable: false,
         isOn: false,
       ),
-      title: '禁用状态',
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithDisableOn(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
+    return const TDCell(
+      title: '禁用状态',
+      noteWidget: TDSwitch(
         enable: false,
         isOn: true,
       ),
-      title: '禁用状态',
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithSizeLarge(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
-        isOn: true,
-        size: TDSwitchSize.large,
-      ),
+    return const TDCell(
       title: '大尺寸32',
+      noteWidget: TDSwitch(
+        size: TDSwitchSize.large,
+        isOn: true,
+      ),
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithSizeMed(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
-        isOn: true,
-        size: TDSwitchSize.medium,
-      ),
+    return const TDCell(
       title: '中尺寸28',
+      noteWidget: TDSwitch(
+        size: TDSwitchSize.medium,
+        isOn: true,
+      ),
     );
   }
 
   @Demo(group: 'switch')
   Widget _buildSwitchWithSizeSmall(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
-        isOn: true,
-        size: TDSwitchSize.small,
-      ),
+    return const TDCell(
       title: '小尺寸24',
-    );
-  }
-
-  @Demo(group: 'switch')
-  Widget _buildSwitch({
-    bool on = true,
-    bool enable = true,
-    Color? trackOnColor,
-    Color? trackOffColor,
-    Color? thumbContentOnColor,
-    Color? thumbContentOffColor,
-    TDSwitchSize? size,
-    TDSwitchType? type,
-  }) {
-    return TDSwitch(
-      isOn: on,
-      trackOnColor: trackOnColor,
-      trackOffColor: trackOffColor,
-      thumbContentOnColor: thumbContentOnColor,
-      thumbContentOffColor: thumbContentOffColor,
-      enable: enable,
-      size: size,
-      type: type,
+      noteWidget: TDSwitch(
+        size: TDSwitchSize.small,
+        isOn: true,
+      ),
     );
   }
 
   @Demo(group: 'switch')
   Widget _customText(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
+    return const TDCell(
+      title: '基础开关',
+      noteWidget: TDSwitch(
         type: TDSwitchType.text,
         openText: '1111',
         closeText: '—',
       ),
-      title: '基础开关',
     );
   }
 
   @Demo(group: 'switch')
   Widget _customTextFont(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(
+    return const TDCell(
+      title: '基础开关',
+      noteWidget: TDSwitch(
         type: TDSwitchType.text,
         openText: '开',
         closeText: '关',
@@ -311,7 +196,6 @@ class TDSwitchPageState extends State<TDSwitchPage> {
         thumbContentOnFont: TextStyle(fontSize: 18),
         thumbContentOffFont: TextStyle(fontSize: 12),
       ),
-      title: '基础开关',
     );
   }
 }

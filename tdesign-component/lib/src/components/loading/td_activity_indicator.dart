@@ -6,6 +6,8 @@ import '../../../tdesign_flutter.dart';
 
 const double _kDefaultIndicatorRadius = 10.0;
 
+/// todo 建议使用 CupertinoActivityIndicator
+///
 /// An iOS-style activity indicator that spins clockwise.
 ///
 /// {@youtube 560 315 https://www.youtube.com/watch?v=AENVH-ZqKDQ}
@@ -97,7 +99,7 @@ class _TDCupertinoActivityIndicatorState
       child: CustomPaint(
         painter: _CupertinoActivityIndicatorPainter(
           position: _controller,
-          activeColor: widget.activeColor ?? const Color(0xB4807E7E),
+          activeColor: widget.activeColor ?? TDTheme.of(context).textColorPlaceholder,
           radius: widget.radius,
           progress: widget.progress,
         ),

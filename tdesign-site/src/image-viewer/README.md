@@ -47,10 +47,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   <pre slot="Dart" lang="javascript">
   Widget _actionImageViewer(BuildContext context) {
-    var delImages = [
-      'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
-      'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
-    ];
     return TDButton(
       type: TDButtonType.ghost,
       theme: TDButtonTheme.primary,
@@ -60,7 +56,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       onTap: () {
         TDImageViewer.showImageViewer(
           context: context,
-          images: delImages,
+          images: images,
           showIndex: true,
           deleteBtn: true,
         );
@@ -78,31 +74,31 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
-| closeBtn | bool? | - | 是否展示关闭按钮 |
-| deleteBtn | bool? | - | 是否显示删除操作 |
-| images | List<dynamic> | - | 图片数组 |
-| labels | List<String>? | - | 图片描述 |
-| showIndex | bool? | - | 是否显示页码 |
-| loop | bool? | - | 图片是否循环 |
 | autoplay | bool? | - | 图片轮播是否自动播放 |
-| duration | int? | - | 自动播放间隔 |
 | bgColor | Color? | - | 背景色 |
-| navBarBgColor | Color? | - | 导航栏背景色 |
-| iconColor | Color? | - | 图标颜色 |
-| labelStyle | TextStyle? | - | label文字样式 |
-| indexStyle | TextStyle? | - | 页码样式 |
+| closeBtn | bool? | - | 是否展示关闭按钮 |
 | defaultIndex | int? | - | 默认预览图片所在的下标 |
-| onIndexChange | OnIndexChange? | - | 预览图片切换回调 |
-| width | double? | - | 图片宽度 |
+| deleteBtn | bool? | - | 是否显示删除操作 |
+| duration | int? | - | 自动播放间隔 |
 | height | double? | - | 图片高度 |
+| iconColor | Color? | - | 图标颜色 |
+| ignoreDeleteError | bool? | false | 是否忽略单张图片删除错误提示 |
+| images | List<dynamic> | - | 图片数组 |
+| indexStyle | TextStyle? | - | 页码样式 |
+| key |  | - |  |
+| labels | List<String>? | - | 图片描述 |
+| labelStyle | TextStyle? | - | label文字样式 |
+| leftItemBuilder | LeftItemBuilder? | - | 左侧自定义操作 |
+| loop | bool? | - | 图片是否循环 |
+| navBarBgColor | Color? | - | 导航栏背景色 |
 | onClose | OnClose? | - | 关闭点击 |
 | onDelete | OnDelete? | - | 删除点击 |
-| ignoreDeleteError | bool? | false | 是否忽略单张图片删除错误提示 |
-| onTap | OnImageTap? | - | 点击图片 |
+| onIndexChange | OnIndexChange? | - | 预览图片切换回调 |
 | onLongPress | OnLongPress? | - | 长按图片 |
-| leftItemBuilder | LeftItemBuilder? | - | 左侧自定义操作 |
+| onTap | OnImageTap? | - | 点击图片 |
 | rightItemBuilder | RightItemBuilder? | - | 右侧自定义操作 |
+| showIndex | bool? | - | 是否显示页码 |
+| width | double? | - | 图片宽度 |
 
 ```
 ```

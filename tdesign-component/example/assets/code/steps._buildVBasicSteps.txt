@@ -1,18 +1,14 @@
 
   Widget _buildVBasicSteps(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: TDSteps(
-              steps: vBasicStepsListData,
-              direction: TDStepsDirection.vertical,
-              activeIndex: 1,
-            ),
-          )
-        ],
-      ),
+    return TDSteps(
+      steps: [
+        TDStepsItemData(title: 'Finish', content: 'Customize content'),
+        TDStepsItemData(title: 'Process', content: 'Customize content'),
+        TDStepsItemData(title: 'Default', content: 'Customize content'),
+        TDStepsItemData(title: 'Default', content: 'Customize content'),
+      ],
+      // 垂直方向
+      direction: TDStepsDirection.vertical,
+      activeIndex: 1,
     );
   }

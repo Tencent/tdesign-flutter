@@ -3,14 +3,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
 
-class TDResultPage extends StatefulWidget {
-  const TDResultPage({Key? key}) : super(key: key);
+class TDResultPage extends StatelessWidget {
+  const TDResultPage({super.key});
 
-  @override
-  State<TDResultPage> createState() => _TDResultPageState();
-}
-
-class _TDResultPageState extends State<TDResultPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -25,8 +20,7 @@ class _TDResultPageState extends State<TDResultPage> {
               desc: '带描述的结果',
               ignoreCode: true,
               builder: _buildResultWithDescription),
-          ExampleItem(
-              desc: '自定义结果', ignoreCode: true, builder: _buildCustomResult),
+          ExampleItem(desc: '自定义结果', builder: _buildCustomResultContent),
           ExampleItem(
               desc: '页面示例', ignoreCode: true, builder: _buildPageExample),
         ]),
@@ -36,60 +30,39 @@ class _TDResultPageState extends State<TDResultPage> {
 
   Widget _buildBasicResult(BuildContext context) {
     return Column(
+      // spacing: 32,
       children: [
-        CodeWrapper(
-          builder: _buildBasicResultSuccess,
-        ),
-        const SizedBox(height: 48),
-        CodeWrapper(
-          builder: _buildBasicResultError,
-        ),
-        const SizedBox(height: 48),
-        CodeWrapper(
-          builder: _buildBasicResultWarning,
-        ),
-        const SizedBox(height: 48),
-        CodeWrapper(
-          builder: _buildBasicResultDefault,
-        ),
+        CodeWrapper(builder: _buildBasicResultSuccess),
+        const SizedBox(height: 32),
+        CodeWrapper(builder: _buildBasicResultError),
+        const SizedBox(height: 32),
+        CodeWrapper(builder: _buildBasicResultWarning),
+        const SizedBox(height: 32),
+        CodeWrapper(builder: _buildBasicResultDefault),
       ],
     );
   }
 
   Widget _buildResultWithDescription(BuildContext context) {
     return Column(
+      // spacing: 32,
       children: [
-        CodeWrapper(
-          builder: _buildResultWithDescriptionSuccess,
-        ),
-        const SizedBox(height: 48),
-        CodeWrapper(
-          builder: _buildResultWithDescriptionError,
-        ),
-        const SizedBox(height: 48),
-        CodeWrapper(
-          builder: _buildResultWithDescriptionWarning,
-        ),
-        const SizedBox(height: 48),
-        CodeWrapper(
-          builder: _buildResultWithDescriptionDefault,
-        ),
+        CodeWrapper(builder: _buildResultWithDescriptionSuccess),
+        const SizedBox(height: 32),
+        CodeWrapper(builder: _buildResultWithDescriptionError),
+        const SizedBox(height: 32),
+        CodeWrapper(builder: _buildResultWithDescriptionWarning),
+        const SizedBox(height: 32),
+        CodeWrapper(builder: _buildResultWithDescriptionDefault),
       ],
-    );
-  }
-
-  Widget _buildCustomResult(BuildContext context) {
-    return CodeWrapper(
-      builder: _buildCustomResultContent,
     );
   }
 
   Widget _buildPageExample(BuildContext context) {
     return TDButton(
-      text: '页面示例',
+      text: '页面示例跳转',
       theme: TDButtonTheme.primary,
       size: TDButtonSize.large,
-      type: TDButtonType.outline,
       isBlock: true,
       onTap: () {
         Navigator.push(
@@ -100,8 +73,9 @@ class _TDResultPageState extends State<TDResultPage> {
                 title: const Text('Result 结果'),
               ),
               body: Column(
+                // spacing: 48,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const SizedBox(height: 48),
                   const TDResult(
                     title: '成功状态',
                     theme: TDResultTheme.success,
@@ -112,11 +86,8 @@ class _TDResultPageState extends State<TDResultPage> {
                     text: '返回',
                     theme: TDButtonTheme.primary,
                     size: TDButtonSize.large,
-                    type: TDButtonType.outline,
                     isBlock: true,
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
+                    onTap: () => Navigator.pop(context),
                   ),
                 ],
               ),

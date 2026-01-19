@@ -8,14 +8,11 @@
         extentRatio: 60 / screenWidth,
         children: [
           TDSwipeCellAction(
-            backgroundColor: TDTheme.of(context).brandColor7,
+            backgroundColor: TDTheme.of(context).brandNormalColor,
             label: '选择',
           ),
         ],
       ),
-      cell: const TDCell(
-        title: '右滑操作',
-        note: '辅助信息',
-      ),
+      cell: const TDCell(title: '右滑操作', note: '辅助信息'),
     );
   }

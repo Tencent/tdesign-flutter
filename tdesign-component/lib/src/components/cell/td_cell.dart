@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../theme/td_spacers.dart';
-import '../../theme/td_theme.dart';
-import '../icon/td_icons.dart';
-import '../swipe_cell/td_swipe_cell_inherited.dart';
-import '../text/td_text.dart';
+import '../../../tdesign_flutter.dart';
 import 'td_cell_inherited.dart';
-import 'td_cell_style.dart';
 
 typedef TDCellClick = void Function(TDCell cell);
 
@@ -29,6 +24,8 @@ class TDCell extends StatefulWidget {
     this.leftIconWidget,
     this.note,
     this.noteWidget,
+    this.noteMaxWidth,
+    this.noteMaxLine = 1,
     this.required = false,
     this.title,
     this.titleWidget,
@@ -39,6 +36,8 @@ class TDCell extends StatefulWidget {
     this.rightIconWidget,
     this.disabled = false,
     this.imageCircle = 50,
+    this.showBottomBorder = false,
+    this.height,
   }) : super(key: key);
 
   /// 内容的对齐方式，默认居中对齐。可选项：top/middle/bottom
@@ -83,6 +82,12 @@ class TDCell extends StatefulWidget {
   /// 说明文字组件
   final Widget? noteWidget;
 
+  /// 说明文字组件 最大宽度，超过部分显示省略号，防止文字溢出
+  final double? noteMaxWidth;
+
+  /// 说明文字组件 最大行数
+  final int noteMaxLine;
+
   /// 是否显示表单必填星号
   final bool? required;
 
@@ -110,6 +115,12 @@ class TDCell extends StatefulWidget {
   /// 禁用
   final bool? disabled;
 
+  /// 是否显示下边框（建议TDCellGroup组件下false，避免与bordered重叠）
+  final bool? showBottomBorder;
+
+  /// 高度
+  final double? height;
+
   @override
   _TDCellState createState() => _TDCellState();
 }
@@ -117,58 +128,78 @@ class TDCell extends StatefulWidget {
 class _TDCellState extends State<TDCell> {
   var _status = 'default';
 
+  bool get disabled {
+    return widget.disabled ?? false;
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    var style = widget.style ?? TDCellInherited.of(context)?.style ?? TDCellStyle.cellStyle(context);
-    var crossAxisAlignment = _getAlign();
+    final theme = TDTheme.of(context);
+    final style = widget.style ??
+        TDCellInherited.of(context)?.style ??
+        TDCellStyle.cellStyle(context);
+    final crossAxisAlignment = _getAlign();
+    final color = _status == 'default'
+        ? style.backgroundColor
+        : style.clickBackgroundColor;
+    final border = (widget.showBottomBorder ?? false)
+        ? Border(
+      bottom: BorderSide(
+        width: 0.5,
+        color: style.borderedColor ?? theme.componentStrokeColor,
+      ),
+    )
+        : null;
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        if (widget.onClick != null && !(widget.disabled ?? false)) {
+        if (widget.onClick != null && !disabled) {
           widget.onClick!(widget);
         }
         TDSwipeCellInherited.of(context)?.cellClick();
       },
-      onLongPress: widget.onLongPress != null ? () {
-        if (!(widget.disabled ?? false)) {
-          widget.onLongPress!(widget);
-        }
-      } : null,
-      onTapDown: (details) {
-        _setStatus('active', 0);
-      },
-      onTapUp: (details) {
-        _setStatus('default', 100);
-      },
-      onTapCancel: () {
-        _setStatus('default', 0);
-      },
+      onLongPress: widget.onLongPress != null && !disabled
+          ? () => widget.onLongPress!(widget)
+          : null,
+      onTapDown: (_) => _setStatus('active', 0),
+      onTapUp: (_) => _setStatus('default', 100),
+      onTapCancel: () => _setStatus('default', 0),
       child: Container(
-        color: _status == 'default' ? style.backgroundColor : style.clickBackgroundColor,
+        height: widget.height,
         padding: style.padding,
+        decoration: BoxDecoration(color: color, border: border),
         child: Row(
           crossAxisAlignment: crossAxisAlignment,
           children: [
-            ..._getImage(),
+            ..._buildImage(),
             Expanded(
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: crossAxisAlignment,
                 children: [
-                  if (widget.leftIcon != null || widget.leftIconWidget != null) ...[
-                    widget.leftIconWidget ?? Icon(widget.leftIcon, size: 24, color: style.leftIconColor),
-                    SizedBox(width: TDTheme.of(context).spacer12),
+                  if (widget.leftIcon != null ||
+                      widget.leftIconWidget != null) ...[
+                    widget.leftIconWidget ??
+                        Icon(widget.leftIcon,
+                            size: 24, color: style.leftIconColor),
+                    SizedBox(width: theme.spacer12),
                   ],
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      // spacing: theme.spacer4,
                       children: [
                         Row(
                           children: [
                             if (widget.titleWidget != null)
                               Flexible(child: widget.titleWidget!)
                             else if (widget.title?.isNotEmpty == true)
-                              Flexible(child: TDText(widget.title!, style: style.titleStyle)),
-                            if (widget.required ?? false) TDText(' *', style: style.requiredStyle),
+                              Flexible(
+                                  child: TDText(widget.title!,
+                                      style: style.titleStyle)),
+                            if (widget.required ?? false)
+                              TDText(' *', style: style.requiredStyle),
                           ],
                         ),
                         if ((widget.titleWidget != null || widget.title != null) &&
@@ -176,8 +207,9 @@ class _TDCellState extends State<TDCell> {
                           SizedBox(height: TDTheme.of(context).spacer4),
                         if (widget.descriptionWidget != null)
                           widget.descriptionWidget!
-                        else if (widget.description?.isNotEmpty == true)
-                          TDText(widget.description!, style: style.descriptionStyle),
+                        else if (widget.description?.isNotEmpty ?? false)
+                          TDText(widget.description!,
+                              style: style.descriptionStyle),
                       ],
                     ),
                   ),
@@ -185,18 +217,29 @@ class _TDCellState extends State<TDCell> {
               ),
             ),
             Wrap(
-              spacing: TDTheme.of(context).spacer4,
+              spacing: theme.spacer4,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 if (widget.noteWidget != null)
                   widget.noteWidget!
-                else if (widget.note?.isNotEmpty == true)
-                  TDText(widget.note!, style: style.noteStyle),
+                else if (widget.note?.isNotEmpty ?? false)
+                  ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxWidth: widget.noteMaxWidth ??
+                              MediaQuery.of(context).size.width - 84),
+                      child: TDText(
+                        widget.note!,
+                        style: style.noteStyle,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: widget.noteMaxLine,
+                      )),
                 if (widget.rightIconWidget != null)
                   widget.rightIconWidget!
                 else if (widget.rightIcon != null)
                   Icon(widget.rightIcon, size: 24, color: style.rightIconColor),
-                if (widget.arrow ?? false) Icon(TDIcons.chevron_right, size: 24, color: style.arrowColor),
+                if (widget.arrow ?? false)
+                  Icon(TDIcons.chevron_right,
+                      size: 24, color: style.arrowColor),
               ],
             ),
           ],
@@ -219,7 +262,7 @@ class _TDCellState extends State<TDCell> {
   }
 
   void _setStatus(String status, int milliseconds) {
-    if ((widget.disabled ?? false) || !(widget.hover ?? true)) {
+    if (disabled || !(widget.hover ?? true)) {
       return;
     }
     if (milliseconds == 0) {
@@ -235,26 +278,28 @@ class _TDCellState extends State<TDCell> {
     });
   }
 
-  List<Widget> _getImage() {
-    var imageSize = widget.imageSize ?? 48;
-    var list = <Widget>[];
+  List<Widget> _buildImage() {
+    final imageSize = widget.imageSize ?? 48;
+    final imageWidgets = <Widget>[];
+
     if (widget.imageWidget != null) {
-      list.add(widget.imageWidget!);
+      imageWidgets.add(widget.imageWidget!);
     } else if (widget.image != null) {
-        list.add(ClipRRect(
-          borderRadius: BorderRadius.circular(widget.imageCircle ?? 50),
-          child: Image(
-            image: widget.image!,
-            width: imageSize,
-            height: imageSize,
-            fit: BoxFit.cover,
-          ),
-        ));
+      imageWidgets.add(ClipRRect(
+        borderRadius: BorderRadius.circular(widget.imageCircle ?? 50),
+        child: Image(
+          image: widget.image!,
+          width: imageSize,
+          height: imageSize,
+          fit: BoxFit.cover,
+        ),
+      ));
     }
-    if (list.isEmpty) {
-      return list;
+
+    if (imageWidgets.isNotEmpty) {
+      imageWidgets.add(SizedBox(width: TDTheme.of(context).spacer12));
     }
-    list.add(SizedBox(width: TDTheme.of(context).spacer12));
-    return list;
+
+    return imageWidgets;
   }
 }

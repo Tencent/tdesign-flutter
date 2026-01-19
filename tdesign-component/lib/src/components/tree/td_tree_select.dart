@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../../tdesign_flutter.dart';
@@ -5,17 +7,32 @@ import '../../../tdesign_flutter.dart';
 typedef TDTreeSelectChangeEvent = void Function(List<dynamic>, int level);
 
 class TDSelectOption {
-  TDSelectOption(
-      {required this.label, required this.value, this.children = const []});
+  TDSelectOption({
+    required this.label,
+    required this.value,
+    this.children = const [],
+    this.multiple = false,
+    this.maxLines = 1,
+    this.columnWidth,
+  }) : assert(maxLines > 0, 'maxLines must be greater than 0');
 
   /// 标签
   final String label;
 
   /// 值
-  final int value;
+  final dynamic value;
 
   /// 子选项
   List<TDSelectOption> children;
+
+  /// 当前子项支持多选
+  final bool multiple;
+
+  /// 最大显示行数
+  final int maxLines;
+
+  /// 自定义宽度，允许用户指定每个选项的宽度
+  final double? columnWidth;
 }
 
 enum TDTreeSelectStyle {
@@ -24,15 +41,15 @@ enum TDTreeSelectStyle {
 }
 
 class TDTreeSelect extends StatefulWidget {
-  const TDTreeSelect(
-      {Key? key,
-      this.options = const [],
-      this.defaultValue = const [],
-      this.onChange,
-      this.multiple = false,
-      this.style = TDTreeSelectStyle.normal,
-      this.height = 336})
-      : super(key: key);
+  const TDTreeSelect({
+    Key? key,
+    this.options = const [],
+    this.defaultValue = const [],
+    this.onChange,
+    this.multiple = false,
+    this.style = TDTreeSelectStyle.normal,
+    this.height = 336,
+  }) : super(key: key);
 
   /// 展示的选项列表
   final List<TDSelectOption> options;
@@ -61,18 +78,24 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
   ScrollController controller3 = ScrollController();
 
   List<dynamic> values = [];
+
   int get currentLevel => values.length + 1;
-  int? get firstValue => values.isNotEmpty ? values[0] : null;
+
+  dynamic get firstValue => values.isNotEmpty ? values[0] : null;
+
   dynamic get secondValue => values.length >= 2 ? values[1] : null;
+
   dynamic get thirdValue => values.length >= 3 ? values[2] : null;
 
   List<TDSelectOption> get firstOptions => widget.options;
+
   List<TDSelectOption> get secondOptions => maxLevel() <= 1 || values.isEmpty
       ? []
       : firstOptions
           .firstWhere((opt) => opt.value == firstValue,
               orElse: () => TDSelectOption(value: -1, label: '', children: []))
           .children;
+
   List<TDSelectOption> get thirdOptions => maxLevel() <= 2 || currentLevel < 3
       ? []
       : secondOptions
@@ -86,7 +109,25 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
 
     values = List.from(widget.defaultValue);
     if (values.isEmpty && widget.options.isNotEmpty) {
-      values.add(widget.options[0].value);
+      final option = widget.options[0];
+      values.add(
+          (widget.multiple || option.multiple) ? [option.value] : option.value);
+    }
+  }
+
+  @override
+  void dispose() {
+    controller2.dispose();
+    controller3.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(TDTreeSelect oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 外部传入的 defaultValue 发生变化时，更新 values
+    if (widget.defaultValue != oldWidget.defaultValue) {
+      values = List.from(widget.defaultValue);
     }
   }
 
@@ -94,7 +135,6 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
     if (widget.options.isEmpty) {
       return 1;
     }
-
     var secondLevelOptions = widget.options
         .where((element) => element.children.isNotEmpty)
         .map((ele) => ele.children)
@@ -111,96 +151,161 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
 
   @override
   Widget build(BuildContext context) {
+    return Container(
+        color: TDTheme.of(context).bgColorContainer,
+        height: widget.height,
+        child: Row(
+          children: [
+            /// 一级菜单
+            Container(
+              width: _getLevelWidth(widget.options, 1) ?? 106,
+              color: TDTheme.of(context).bgColorSecondaryContainer,
+              child: ListView.builder(
+                itemCount: widget.options.length,
+                itemBuilder: (context, index) {
+                  final option = widget.options[index];
+                  final isSelected = firstValue == option.value;
+
+                  return GestureDetector(
+                    onTap: () {
+                      // todo 点击一级菜单时直接重置整个 values 数组可能导致二级或三级选择的数据丢失
+                      setState(() {
+                        if (values.isEmpty) {
+                          values.add(option.value);
+                        } else {
+                          values = [option.value];
+                          if (controller2.hasClients) {
+                            controller2.jumpTo(0);
+                          }
+                        }
+                        widget.onChange?.call(values, 1);
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? TDTheme.of(context).bgColorContainer
+                            : null,
+                        border: isSelected &&
+                                widget.style == TDTreeSelectStyle.outline
+                            ? Border(
+                                left: BorderSide(
+                                  color: TDTheme.of(context).brandNormalColor,
+                                  width: 3,
+                                ),
+                              )
+                            : null,
+
+                        /// todo 上下 borderRadius
+                        borderRadius: BorderRadius.only(
+
+                            /// 选中的上一个
+                            /*topRight: Radius.circular(
+                              topAdjacent ? TDTheme.of(context).radiusLarge : 0),*/
+
+                            /// 选中的下一个
+                            /* bottomRight: Radius.circular(
+                              bottomAdjacent ? TDTheme.of(context).radiusLarge : 0),*/
+                            ),
+                      ),
+                      child: Text(
+                        option.label,
+                        maxLines: option.maxLines,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize:
+                              TDTheme.of(context).fontBodyLarge?.size ?? 16,
+                          color: isSelected
+                              ? TDTheme.of(context).brandNormalColor
+                              : TDTheme.of(context).textColorPrimary,
+                          fontWeight:
+                              isSelected ? FontWeight.w600 : FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            /// 右侧 二、三级菜单
+            Expanded(child: _buildRightParts(context))
+          ],
+        ));
+  }
+
+  Widget _buildRightParts(BuildContext context) {
+    // 判断是否应该显示三级菜单
+    final showThirdLevel = values.length >= 2 &&
+        secondOptions
+            .any((opt) => opt.value == secondValue && opt.children.isNotEmpty);
+
     return Row(
       children: [
-        SizedBox(
-          width: 106,
-          child: TDSideBar(
-            height: widget.height,
-            value: firstValue,
-            style: widget.style == TDTreeSelectStyle.outline
-                ? TDSideBarStyle.outline
-                : TDSideBarStyle.normal,
-            children: widget.options
-                .map((ele) => TDSideBarItem(
-                      value: ele.value,
-                      label: ele.label,
-                    ))
-                .toList(),
-            onSelected: (value) {
-              setState(() {
-                if (values.isEmpty) {
-                  values.add(value);
-                } else {
-                  values = [value];
-                  if (controller2.hasClients) {
-                    controller2.jumpTo(0);
-                  }
-                }
-
-                if (widget.onChange != null) {
-                  widget.onChange!(values, 1);
-                }
-              });
-            },
-          ),
-        ),
-        Expanded(
-            child: Container(
-          height: widget.height,
-          decoration: const BoxDecoration(color: Colors.white),
-          child: _buildRightParts(context),
-        ))
+        showThirdLevel
+            ? SizedBox(
+                width: _getLevelWidth(secondOptions, 2) ?? 103,
+                child: _buildNextColumn(context, level: 2, lastColumn: false),
+              )
+            : Expanded(
+                child: _buildNextColumn(context, level: 2),
+              ),
+        if (showThirdLevel)
+          // 三级菜单
+          _getLevelWidth(thirdOptions, 3) != null
+              ? SizedBox(
+                  width: _getLevelWidth(thirdOptions, 3),
+                  child: _buildNextColumn(context, level: 3),
+                )
+              : Expanded(
+                  child: _buildNextColumn(context, level: 3),
+                ),
       ],
     );
   }
 
-  Widget _buildRightParts(BuildContext context) {
-    return Visibility(
-        visible: maxLevel() >= 2,
-        child: maxLevel() == 2
-            ? Container(
-                child: _buildNextColumn(context, level: 2),
-              )
-            : Row(
-                children: [
-                  SizedBox(
-                    width: 103,
-                    child:
-                        _buildNextColumn(context, level: 2, lastColumn: false),
-                  ),
-                  Expanded(child: _buildNextColumn(context, level: 3))
-                ],
-              ));
+  double? _getLevelWidth(List<TDSelectOption> options, int level) {
+    for (final option in options) {
+      if (option.columnWidth != null) {
+        return option.columnWidth;
+      }
+    }
+    return null;
   }
 
   Widget _buildNextColumn(BuildContext context,
       {int level = 2, bool lastColumn = true}) {
     var displayOptions = level == 2 ? secondOptions : thirdOptions;
-    return MediaQuery.removePadding(
-        context: context,
-        removeTop: true,
-        removeBottom: true,
-        child: ListView.builder(
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          removeBottom: true,
+          child: ListView.builder(
             controller: level == 2 ? controller2 : controller3,
-            itemExtent: 56,
             itemCount: displayOptions.length,
             itemBuilder: (BuildContext ctx, int index) {
               var currentValue = displayOptions[index].value;
-              // 判断是否被选中
+              final isMultiple = widget.multiple
+                  ? widget.multiple
+                  : displayOptions[index].multiple;
+              final maxLines = displayOptions[index].maxLines;
               var selected = false;
-              if (widget.multiple) {
+              if (isMultiple) {
                 if (level == 2) {
                   if (maxLevel() == 2) {
                     selected = secondValue != null
-                        ? (secondValue as List<int>).contains(currentValue)
+                        ? (secondValue as List<dynamic>).contains(currentValue)
                         : false;
                   } else {
                     selected = secondValue == currentValue;
                   }
                 } else {
                   selected = thirdValue != null
-                      ? (thirdValue as List<int>).contains(currentValue)
+                      ? (thirdValue as List<dynamic>).contains(currentValue)
                       : false;
                 }
               } else {
@@ -208,25 +313,30 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                     (level == 2 ? secondValue : thirdValue) == currentValue;
               }
 
-              return GestureDetector(
+              return Container(
+                constraints: BoxConstraints(
+                  minHeight: 56,
+                  maxWidth: constraints.maxWidth,
+                ),
+                child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
+                    /// todo 逻辑过于冗余，待优化
                     setState(() {
                       if (level == 2) {
                         switch (values.length) {
                           case 1:
-                            values.add(widget.multiple
-                                ? [currentValue]
-                                : currentValue);
+                            values.add(
+                                isMultiple ? [currentValue] : currentValue);
                             break;
                           case 2:
-                            if (widget.multiple) {
-                              var hasContains = (values[1] as List<int>)
+                            if (isMultiple) {
+                              var hasContains = (values[1] as List<dynamic>)
                                   .contains(currentValue);
                               if (hasContains) {
-                                (values[1] as List<int>).remove(currentValue);
+                                (values[1] as List<dynamic>).remove(currentValue);
                               } else {
-                                (values[1] as List<int>).add(currentValue);
+                                (values[1] as List<dynamic>).add(currentValue);
                               }
                             } else {
                               values[1] = currentValue;
@@ -246,66 +356,76 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                         switch (values.length) {
                           case 1:
                           case 2:
-                            values.add(widget.multiple
-                                ? [currentValue]
-                                : currentValue);
+                            values.add(
+                                isMultiple ? [currentValue] : currentValue);
                             break;
                           default:
-                            if (widget.multiple) {
-                              var hasContains = (values[2] as List<int>)
+                            if (isMultiple) {
+                              var hasContains = (values[2] as List<dynamic>)
                                   .contains(currentValue);
                               if (hasContains) {
-                                (values[2] as List<int>).remove(currentValue);
+                                (values[2] as List<dynamic>).remove(currentValue);
                               } else {
-                                (values[2] as List<int>).add(currentValue);
+                                (values[2] as List<dynamic>).add(currentValue);
                               }
                             } else {
                               values[2] = currentValue;
                             }
                         }
                       }
-
-                      if (widget.onChange != null) {
-                        widget.onChange!(values, level);
-                      }
+                      widget.onChange?.call(values, level);
                     });
                   },
-                  child: SizedBox(
-                    height: 56,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: constraints.maxWidth,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 16, left: 16, bottom: 16),
-                          child: TDText(
-                            displayOptions[index].label,
-                            textColor: (!lastColumn && selected)
-                                ?  TDTheme.of(context).brandNormalColor
-                                : const Color.fromRGBO(0, 0, 0, 0.9),
-                            style: TextStyle(
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 16, left: 16, bottom: 16),
+                            child: Text(
+                              displayOptions[index].label,
+                              maxLines: maxLines,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
                                 fontSize: 16,
+                                color: (!lastColumn && selected)
+                                    ? TDTheme.of(context).brandNormalColor
+                                    : TDTheme.of(context).textColorPrimary,
                                 fontWeight: (!lastColumn && selected)
                                     ? FontWeight.w600
-                                    : FontWeight.w400),
+                                    : FontWeight.w400,
+                              ),
+                            ),
                           ),
                         ),
                         Visibility(
-                            visible: lastColumn && selected,
-                            child: SizedBox(
-                              width: 56,
-                              height: 56,
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Icon(
-                                  TDIcons.check,
-                                  color: TDTheme.of(context).brandNormalColor,
-                                ),
+                          visible: lastColumn && selected,
+                          child: SizedBox(
+                            width: 56,
+                            height: 56,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Icon(
+                                TDIcons.check,
+                                color: TDTheme.of(context).brandNormalColor,
                               ),
-                            ))
+                            ),
+                          ),
+                        )
                       ],
                     ),
-                  ));
-            }));
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }

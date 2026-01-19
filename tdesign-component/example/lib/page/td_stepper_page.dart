@@ -24,23 +24,26 @@ class _TDStepperPageState extends State<TDStepperPage> {
         }
       },
       child: ExamplePage(
-          title: tdTitle(),
-          desc: '用于数量的增减。',
-          exampleCodeGroup: 'stepper',
-          children: [
-            ExampleModule(title: '组件类型', children: [
-              ExampleItem(desc: '基础步进器', builder: _buildStepperWithBase),
-            ]),
-            ExampleModule(title: '组件状态', children: [
-              ExampleItem(
-                  desc: '最大最小状态', builder: _buildStepperWithMaxMinStatus),
-              ExampleItem(desc: '禁用状态', builder: _buildStepperWithDisableStatus)
-            ]),
-            ExampleModule(title: '组件样式', children: [
-              ExampleItem(desc: '步进器样式', builder: _buildStepperWithTheme),
-              ExampleItem(desc: '步进器尺寸', builder: _buildStepperWithSize)
-            ]),
+        title: tdTitle(),
+        desc: '用于数量的增减。',
+        exampleCodeGroup: 'stepper',
+        children: [
+          ExampleModule(title: '组件类型', children: [
+            ExampleItem(desc: '基础步进器', builder: _buildStepperWithBase),
           ]),
+          ExampleModule(title: '组件状态', children: [
+            ExampleItem(desc: '最大最小状态', builder: _buildStepperWithMaxMinStatus),
+            ExampleItem(desc: '禁用状态', builder: _buildStepperWithDisableStatus)
+          ]),
+          ExampleModule(title: '组件样式', children: [
+            ExampleItem(desc: '步进器样式', builder: _buildStepperWithTheme),
+            ExampleItem(desc: '步进器尺寸', builder: _buildStepperWithSize)
+          ]),
+        ],
+        test: [
+          ExampleItem(desc: '自定义stepValue', builder: _customStepperValue),
+        ],
+      ),
     );
   }
 
@@ -66,6 +69,14 @@ class _TDStepperPageState extends State<TDStepperPage> {
     return _buildRow(context, [
       const TDStepper(
         theme: TDStepperTheme.filled,
+        disabled: true,
+      ),
+      const TDStepper(
+        theme: TDStepperTheme.outline,
+        disabled: true,
+      ),
+      const TDStepper(
+        theme: TDStepperTheme.normal,
         disabled: true,
       ),
     ]);
@@ -98,7 +109,7 @@ class _TDStepperPageState extends State<TDStepperPage> {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.whiteColor1,
+        color: theme.bgColorContainer,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -111,6 +122,30 @@ class _TDStepperPageState extends State<TDStepperPage> {
                   ))
               .toList(),
         ),
+      ),
+    );
+  }
+
+  var controller = TDStepperController()..value = 1;
+
+  @Demo(group: 'stepper')
+  Widget _customStepperValue(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          TDStepper(
+            theme: TDStepperTheme.filled,
+            controller: controller,
+          ),
+          TDButton(
+            text: 'value * 2',
+            onTap: () {
+              controller.value *= 2;
+            },
+          )
+        ],
       ),
     );
   }

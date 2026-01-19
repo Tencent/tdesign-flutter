@@ -32,8 +32,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
       options.add(TDSelectOption(label: '选项$i', value: i, children: []));
 
       for (var j = 1; j <= 10; j++) {
-        options[i - 1].children.add(
-            TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []));
+        options[i - 1].children.add(TDSelectOption(
+              label: '选项$i.$j',
+              value: i * 10 + j,
+              children: [],
+            ));
       }
     }
 
@@ -87,21 +90,35 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _buildThirdTreeSelect(BuildContext context) {
     var options = <TDSelectOption>[];
+    for (var i = 1; i <= 3; i++) {
+      options.add(TDSelectOption(
+        label: '${i == 1 ? '超长一级选项名称超长一级选项名称' : '选项$i'}',
+        value: i,
+        maxLines: 10,
+        //columnWidth: i == 1 ? 106 : null,
+        children: [],
+      ));
 
-    for (var i = 1; i <= 10; i++) {
-      options.add(TDSelectOption(label: '选项$i', value: i, children: []));
+      for (var j = 1; j <= 3; j++) {
+        options[i - 1].children.add(TDSelectOption(
+              label: '${j == 1 ? '特别长的二级选项特别长的二级选项特别长的二级选项' : '选项$i.$j'}',
+              value: i * 10 + j,
+              maxLines: 2,
+              columnWidth: j == 1 ? 180 : null,
+              children: [],
+            ));
 
-      for (var j = 1; j <= 10; j++) {
-        options[i - 1].children.add(
-            TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []));
-
-        for (var k = 1; k <= 10; k++) {
-          options[i - 1].children[j - 1].children.add(
-              TDSelectOption(label: '选项$i.$j.$k', value: i * 100 + j * 10 + k));
+        for (var k = 1; k <= 3; k++) {
+          options[i - 1].children[j - 1].children.add(TDSelectOption(
+                label:
+                    '${k == 1 ? '非常长的三级选项名称非常长的三级选项名称非常长的三级选项名称' : '选项$i.$j.$k'}',
+                value: i * 100 + j * 10 + k,
+                maxLines: 2,
+                //columnWidth: k == 1 ? 102 : null,
+              ));
         }
       }
     }
-
     return TDTreeSelect(
       options: options,
       defaultValue: values3,
@@ -121,9 +138,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| label | String | - | 标签 |
-| value | int | - | 值 |
 | children | List<TDSelectOption> | const [] | 子选项 |
+| columnWidth | double? | - | 自定义宽度，允许用户指定每个选项的宽度 |
+| label | String | - | 标签 |
+| maxLines | int | 1 | 最大显示行数 |
+| multiple | bool | false | 当前子项支持多选 |
+| value | int | - | 值 |
 
 ```
 ```
@@ -132,13 +152,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| key |  | - |  |
-| options | List<TDSelectOption> | const [] | 展示的选项列表 |
 | defaultValue | List<dynamic> | const [] | 初始值，对应options中的value值 |
-| onChange | TDTreeSelectChangeEvent? | - | 选中值发生变化 |
-| multiple | bool | false | 支持多选 |
-| style | TDTreeSelectStyle | TDTreeSelectStyle.normal | 一级菜单样式 |
 | height | double | 336 | 高度 |
+| key |  | - |  |
+| multiple | bool | false | 支持多选 |
+| onChange | TDTreeSelectChangeEvent? | - | 选中值发生变化 |
+| options | List<TDSelectOption> | const [] | 展示的选项列表 |
+| style | TDTreeSelectStyle | TDTreeSelectStyle.normal | 一级菜单样式 |
 
 
   

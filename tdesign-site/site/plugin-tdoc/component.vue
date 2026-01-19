@@ -1,17 +1,18 @@
 <template>
   <td-doc-content ref="tdDocContent" platform="mobile" page-status="hidden">
-    <td-doc-header v-if="info.tdDocHeader" platform="mobile" slot="doc-header" ref="tdDocHeader"></td-doc-header>
+    <td-doc-header v-if="info.tdDocHeader" platform="mobile" slot="doc-header" ref="tdDocHeader" changelog="false"></td-doc-header>
     <template v-if="info.isComponent">
       <td-doc-tabs ref="tdDocTabs" :tab="tab"></td-doc-tabs>
       <div class="td-doc-main" v-show="tab === 'demo'">
         <div name="DEMO" v-html="info.demoMd"></div>
         <td-doc-phone headless>
           <iframe
+            ref="demoIframe"
             :src="liveUrl"
             frameborder="0"
             width="100%"
             height="100%"
-            style="box-sizing: border-box; border-radius: 0 0 6px 6px; overflow: hidden; border-top: 8px solid #f8f8f8"
+            style="box-sizing: border-box; border-radius: 0 0 6px 6px; overflow: hidden;"
           ></iframe>
           <div>注：web示例仅供参考，预览实际效果请阅读<a href="/flutter/getting-started">快速开始</a></div>
         </td-doc-phone>
@@ -33,6 +34,8 @@ import { defineComponent } from 'vue';
 import Prismjs from 'prismjs';
 import 'prismjs/components/prism-bash.js';
 import 'prismjs/components/prism-json.js';
+import 'prismjs/components/prism-dart.js';
+import 'prismjs/components/prism-yaml.js';
 
 import QrCode from '@components/qrcode.vue';
 
@@ -73,7 +76,7 @@ export default defineComponent({
 
   mounted() {
     const { info } = this;
-    const { tdDocContent, tdDocHeader, tdDocTabs } = this.$refs;
+    const { tdDocContent, tdDocHeader, tdDocTabs, demoIframe } = this.$refs;
 
     if (info.isComponent) {
       tdDocTabs.onchange = ({ detail: currentTab }) => (this.tab = currentTab);
@@ -86,6 +89,81 @@ export default defineComponent({
     this.$emit('loaded', () => {
       tdDocContent.pageStatus = 'show';
     });
+
+    // 监听暗色模式变化并通知 iframe
+    if (demoIframe) {
+      this.setupThemeModeListener(demoIframe);
+    }
+  },
+
+  beforeUnmount() {
+    // 清理监听器
+    const observer = (this as any).themeObserver;
+    if (observer) {
+      observer.disconnect();
+      (this as any).themeObserver = null;
+    }
+  },
+
+  data() {
+    return {
+      themeObserver: null as MutationObserver | null,
+    };
+  },
+
+  methods: {
+    setupThemeModeListener(iframe: HTMLIFrameElement) {
+      // 获取当前主题模式
+      const getThemeMode = () => {
+        const root = document.documentElement;
+        return root.getAttribute('theme-mode') === 'dark' ? 'dark' : 'light';
+      };
+
+      // 发送主题模式到 iframe
+      const sendThemeMode = () => {
+        if (iframe && iframe.contentWindow) {
+          const themeMode = getThemeMode();
+          iframe.contentWindow.postMessage(
+            {
+              type: 'theme-mode-change',
+              themeMode: themeMode,
+            },
+            '*'
+          );
+        }
+      };
+
+      // 初始发送一次
+      iframe.addEventListener('load', () => {
+        sendThemeMode();
+      });
+
+      // 如果 iframe 已经加载，立即发送
+      if (iframe.contentWindow) {
+        sendThemeMode();
+      }
+
+      // 使用 MutationObserver 监听根元素的 theme-mode 属性变化
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (
+            mutation.type === 'attributes' &&
+            mutation.attributeName === 'theme-mode'
+          ) {
+            sendThemeMode();
+          }
+        });
+      });
+
+      // 保存 observer 引用以便清理
+      (this as any).themeObserver = observer;
+
+      // 开始观察根元素的属性变化
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['theme-mode'],
+      });
+    },
   },
 });
 </script>
