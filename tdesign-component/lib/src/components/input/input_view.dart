@@ -73,6 +73,15 @@ class TDInputView extends StatelessWidget {
   /// 点击输入框外部区域回调
   final TapRegionCallback? onTapOutside;
 
+  /// 自定义选择控制器
+  final TextSelectionControls? selectionControls;
+
+  /// 自定义上下文菜单构建器
+  final EditableTextContextMenuBuilder? contextMenuBuilder;
+
+  /// 是否启用交互式选择
+  final bool? enableInteractiveSelection;
+
   const TDInputView(
       {Key? key,
       required this.textStyle,
@@ -98,7 +107,10 @@ class TDInputView extends StatelessWidget {
       this.textAlign,
       this.controller,
       this.inputAction,
-      this.onTapOutside})
+      this.onTapOutside,
+      this.selectionControls,
+      this.contextMenuBuilder,
+      this.enableInteractiveSelection})
       : super(
           key: key,
         );
@@ -112,6 +124,7 @@ class TDInputView extends StatelessWidget {
       textInputAction: inputAction,
       autofocus: autofocus,
       obscureText: obscureText,
+      enableInteractiveSelection: enableInteractiveSelection,
       onEditingComplete: onEditingComplete,
       onSubmitted: onSubmitted,
       controller: controller,
@@ -122,6 +135,8 @@ class TDInputView extends StatelessWidget {
       minLines: minLines,
       maxLength: maxLength,
       onTapOutside: onTapOutside,
+      selectionControls: selectionControls,
+      contextMenuBuilder: contextMenuBuilder,
       style: textStyle,
       textAlign: textAlign ?? TextAlign.start,
       buildCounter: _buildCounter,

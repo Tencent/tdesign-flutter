@@ -16,24 +16,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-          platform: 
-            - apk
-            - ios 
-            - web
-          flutter-version:
-            - 3.16.9
-            - 3.32.0
-            - 3.x
-          include:
-            - platform: apk
-              os: ubuntu-latest
-              build: flutter build apk -t ./lib/main.dart --release --verbose
-            - platform: ios
-              os: macos-latest
-              build: flutter build ios -t ./lib/main.dart --no-codesign --release --verbose
-            - platform: web
-              os: ubuntu-latest 
-              build: flutter build web -t ./lib/main.dart --release --verbose
+        platform:
+          - apk
+          - ios
+          - web
+        flutter-version:
+          - 3.16.9
+          - 3.32.0
+          - 3.x
+        include:
+          - platform: apk
+            os: ubuntu-latest
+            build: flutter build apk -t ./lib/main.dart --release
+          - platform: ios
+            os: macos-latest
+            build: flutter build ios -t ./lib/main.dart --no-codesign --release
+          - platform: web
+            os: ubuntu-latest
+            build: flutter build web -t ./lib/main.dart --release
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -43,22 +43,17 @@ jobs:
         uses: TDesignOteam/workflows/actions/setup-flutter@main
         with:
           flutter-version: ${{ matrix.flutter-version }}
-          aop-registry: true
           cache: true
+          aop-registry: true
+          aop-project-path: ./tdesign-component/example
 
       - name: tdesign-adaptation
         run: sh ./tdesign-component/init.sh
 
-      - name: Get tdesign-flutter-generator
-        uses: actions/checkout@v6
-        with:
-          repository: TDesignOteam/tdesign-flutter-generator
-          path: ./example/tdesign-flutter-generator
-
       - name: flutter pub get
         working-directory: ./tdesign-component/example
-        run: flutter pub get --verbose
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
       - name: flutter build
         working-directory: ./tdesign-component/example
-        run: ${{ matrix.build }}
+        run: ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}

@@ -38,7 +38,26 @@ class TDToastPage extends StatelessWidget {
       test: [
         ExampleItem(desc: '禁止滚动+点击', builder: _preventTapToast),
         ExampleItem(desc: '自定义宽度+行数', builder: _customMultipleToast),
+        ExampleItem(desc: 'Long Text Success Toast', builder: _longTextSuccessToast),
       ],
+    );
+  }
+
+  @Demo(group: 'toast')
+  Widget _longTextSuccessToast(BuildContext context) {
+    return TDButton(
+      onTap: () {
+        TDToast.showSuccess(
+          '这是一个非常长的成功提示文案，用来测试文字溢出的问题。这是一个非常长的成功提示文案，用来测试文字溢出的问题。',
+          context: context,
+          maxLines: 10,
+        );
+      },
+      size: TDButtonSize.large,
+      type: TDButtonType.outline,
+      theme: TDButtonTheme.primary,
+      isBlock: true,
+      text: '长文本成功提示',
     );
   }
 

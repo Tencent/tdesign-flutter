@@ -322,7 +322,7 @@ class TDRadioGroup extends TDCheckboxGroup {
                                 (56 + 10)
                             : null,
                         alignment: cardMode ? Alignment.topLeft : null,
-                        child: cardMode && rowCount != null
+                        child: cardMode
                             ? GridView.builder(
                                 itemCount: directionalTdRadios!.length,
                                 gridDelegate:
@@ -339,23 +339,51 @@ class TDRadioGroup extends TDCheckboxGroup {
                                     child: directionalTdRadios[index],
                                   );
                                 })
-                            : Column(
-                                children: [
-                                  Row(
+                            : rowCount > 1
+                                ? Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: directionalTdRadios!
-                                        .map((e) => Expanded(child: e))
-                                        .toList(),
+                                    children: List.generate(
+                                        (directionalTdRadios!.length / rowCount)
+                                            .ceil(), (index) {
+                                      var start = index * rowCount;
+                                      var end = (index + 1) * rowCount;
+                                      if (end > directionalTdRadios.length) {
+                                        end = directionalTdRadios.length;
+                                      }
+                                      var subList = directionalTdRadios
+                                          .sublist(start, end);
+                                      return Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ...subList
+                                              .map((e) => Expanded(child: e)),
+                                          if (subList.length < rowCount)
+                                            ...List.generate(
+                                                rowCount - subList.length,
+                                                (index) => const Expanded(
+                                                    child: SizedBox()))
+                                        ],
+                                      );
+                                    }))
+                                : Column(
+                                    children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: directionalTdRadios!
+                                            .map((e) => Expanded(child: e))
+                                            .toList(),
+                                      ),
+                                      if (showDivider)
+                                        divider ??
+                                            const TDDivider(
+                                              margin: EdgeInsets.only(left: 16),
+                                            )
+                                    ],
                                   ),
-                                  if (showDivider)
-                                    divider ??
-                                        const TDDivider(
-                                          margin: EdgeInsets.only(left: 16),
-                                        )
-                                ],
-                              ),
                       )),
           ),
           key: key,

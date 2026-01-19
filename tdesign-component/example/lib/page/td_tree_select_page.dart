@@ -23,6 +23,37 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
   ];
   List<dynamic> values3 = [1, 11, 111];
 
+  // 异步加载的数据
+  List<TDSelectOption> asyncOptions = [];
+  List<dynamic> asyncValues = [1];
+
+  // String类型ID的数据
+  List<TDSelectOption> stringOptions = [];
+  List<dynamic> stringValues = ['guid_1', 'guid_1_1'];
+
+  @override
+  void initState() {
+    super.initState();
+    // 初始化异步数据
+    asyncOptions = [
+      TDSelectOption(label: '异步加载一级', value: 1, children: []),
+      TDSelectOption(label: '静态数据一级', value: 2, children: [
+        TDSelectOption(label: '静态数据二级', value: 21),
+      ]),
+    ];
+
+    // 初始化String ID数据
+    stringOptions = [
+      TDSelectOption(label: 'String ID 1', value: 'guid_1', children: [
+        TDSelectOption(label: 'Child 1-1', value: 'guid_1_1'),
+        TDSelectOption(label: 'Child 1-2', value: 'guid_1_2'),
+      ]),
+      TDSelectOption(label: 'String ID 2', value: 'guid_2', children: [
+        TDSelectOption(label: 'Child 2-1', value: 'guid_2_1'),
+      ]),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -35,12 +66,14 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
           children: [
             ExampleItem(desc: '基础树形选择', builder: _buildDefaultTreeSelect),
             ExampleItem(desc: '多选树形选择', builder: _buildMultipleTreeSelect),
+            ExampleItem(desc: '异步加载(问题1)', builder: _buildAsyncTreeSelect),
+            ExampleItem(desc: 'String类型ID(问题3)', builder: _buildStringValueTreeSelect),
           ],
         ),
         ExampleModule(
           title: '组件状态',
           children: [
-            ExampleItem(desc: '三级树形选择', builder: _buildThirdTreeSelect),
+            ExampleItem(desc: '三级树形选择(长文字问题2)', builder: _buildThirdTreeSelect),
           ],
         ),
       ],
@@ -48,6 +81,45 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
         ExampleItem(desc: '局部多选', builder: _buildPartMultipleTreeSelect),
         ExampleItem(desc: '局部多选', builder: _buildPartMultipleTreeSelect2),
       ],
+    );
+  }
+
+  @Demo(group: 'tree')
+  Widget _buildAsyncTreeSelect(BuildContext context) {
+    return TDTreeSelect(
+      options: asyncOptions,
+      defaultValue: asyncValues,
+      onChange: (val, level) {
+        print('Async change: $val, level: $level');
+        if (level == 1 && val.isNotEmpty) {
+          var firstVal = val[0];
+          var index = asyncOptions.indexWhere((element) => element.value == firstVal);
+          if (index != -1 && asyncOptions[index].children.isEmpty) {
+             // 模拟异步加载
+             Future.delayed(const Duration(seconds: 1), () {
+               if(mounted) {
+                 setState(() {
+                   asyncOptions[index].children = [
+                     TDSelectOption(label: '异步加载二级-1', value: 101),
+                     TDSelectOption(label: '异步加载二级-2', value: 102),
+                   ];
+                 });
+               }
+             });
+          }
+        }
+      },
+    );
+  }
+
+  @Demo(group: 'tree')
+  Widget _buildStringValueTreeSelect(BuildContext context) {
+    return TDTreeSelect(
+      options: stringOptions,
+      defaultValue: stringValues,
+      onChange: (val, level) {
+        print('String ID change: $val, level: $level');
+      },
     );
   }
 
@@ -106,7 +178,7 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
       options.add(TDSelectOption(
         label: '${i == 1 ? '超长一级选项名称超长一级选项名称' : '选项$i'}',
         value: i,
-        maxLines: 10,
+        maxLines: 2,
         //columnWidth: i == 1 ? 106 : null,
         children: [],
       ));
