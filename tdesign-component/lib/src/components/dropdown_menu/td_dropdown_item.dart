@@ -322,6 +322,8 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
                     ? TDTheme.of(context).brandColor7
                     : TDTheme.of(context).textColorPrimary
                 : TDTheme.of(context).textDisabledColor,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ),
