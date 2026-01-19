@@ -9,7 +9,6 @@ jobs:
   tdesign-flutter-site:
     runs-on: ubuntu-latest
     steps:
-
       - name: Configure Git to not use symlinks
         run: git config --global core.symlinks false
 
@@ -18,12 +17,11 @@ jobs:
           submodules: recursive
           lfs: true
 
-
       - name: Set Node version
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
           cache-dependency-path: tdesign-site/package-lock.json
 
       - uses: actions/setup-java@v5
@@ -43,85 +41,9 @@ jobs:
         with:
           flutter-version: 3.32.0
           channel: stable
+          cache: true
           aop-registry: true
-
-      - name: Verify Flutter bin/cache directory
-        run: |
-          echo "=== 验证 Flutter bin/cache 目录 ==="
-          
-          # 使用多种方法获取 Flutter SDK 路径
-          FLUTTER_ROOT=""
-          
-          # 方法1: 使用 which 命令找到 flutter 可执行文件路径
-          FLUTTER_BIN=$(which flutter 2>/dev/null)
-          if [ -n "$FLUTTER_BIN" ]; then
-            # 从 flutter 可执行文件路径推导出 Flutter SDK 根目录
-            FLUTTER_ROOT=$(dirname "$(dirname "$FLUTTER_BIN")")
-            echo "通过 which 命令获取到 Flutter 路径: $FLUTTER_ROOT"
-          fi
-          
-          # 方法2: 如果方法1失败，尝试使用环境变量
-          if [ -z "$FLUTTER_ROOT" ] && [ -n "$FLUTTER_HOME" ]; then
-            FLUTTER_ROOT="$FLUTTER_HOME"
-            echo "通过 FLUTTER_HOME 环境变量获取到 Flutter 路径: $FLUTTER_ROOT"
-          fi
-          
-          # 方法3: 尝试使用 flutter config (避免 --machine 参数)
-          if [ -z "$FLUTTER_ROOT" ]; then
-            FLUTTER_ROOT=$(flutter config 2>/dev/null | grep 'flutter-root' | cut -d'=' -f2 | xargs 2>/dev/null)
-            if [ -n "$FLUTTER_ROOT" ]; then
-              echo "通过 flutter config 获取到 Flutter 路径: $FLUTTER_ROOT"
-            fi
-          fi
-          
-          # 验证获取到的路径
-          if [ -n "$FLUTTER_ROOT" ] && [ -d "$FLUTTER_ROOT" ]; then
-            echo "Flutter SDK Root: $FLUTTER_ROOT"
-            
-            # 验证 bin/cache 目录是否存在
-            CACHE_DIR="$FLUTTER_ROOT/bin/cache"
-            if [ -d "$CACHE_DIR" ]; then
-              echo "✅ bin/cache 目录存在: $CACHE_DIR"
-              echo "目录大小: $(du -sh "$CACHE_DIR" 2>/dev/null | cut -f1)"
-            else
-              echo "❌ bin/cache 目录不存在: $CACHE_DIR"
-              
-              # 输出 bin 目录下的内容
-              BIN_DIR="$FLUTTER_ROOT/bin"
-              if [ -d "$BIN_DIR" ]; then
-                echo ""
-                echo "📁 bin 目录内容:"
-                ls -la "$BIN_DIR" || true
-                echo ""
-                echo "📊 bin 目录统计:"
-                echo "  - 总文件数: $(find "$BIN_DIR" -maxdepth 1 -type f | wc -l)"
-                echo "  - 总目录数: $(find "$BIN_DIR" -maxdepth 1 -type d | wc -l)"
-                echo "  - 子目录列表:"
-                find "$BIN_DIR" -maxdepth 1 -type d ! -path "$BIN_DIR" -exec basename {} \; 2>/dev/null | sort || echo "    无子目录"
-                echo "  - 文件列表:"
-                find "$BIN_DIR" -maxdepth 1 -type f -exec basename {} \; 2>/dev/null | sort || echo "    无文件"
-              else
-                echo "❌ bin 目录也不存在: $BIN_DIR"
-              fi
-              
-              exit 1
-            fi
-          else
-            echo "❌ 无法获取有效的 Flutter SDK 路径"
-            echo "尝试的路径: $FLUTTER_ROOT"
-            
-            # 显示调试信息
-            echo ""
-            echo "🔍 调试信息:"
-            echo "PATH 环境变量中的 flutter:"
-            which flutter 2>/dev/null || echo "  flutter 命令未找到"
-            echo "FLUTTER_HOME 环境变量:"
-            echo "  ${FLUTTER_HOME:-未设置}"
-            echo "当前工作目录:"
-            pwd
-            
-            exit 1
-          fi
+          aop-project-path: ./tdesign-component/example
 
       - name: Extract version from pubspec.yaml and set env
         id: version
@@ -162,11 +84,6 @@ jobs:
           name: build-env
           path: build-env.txt
           retention-days: 5
-      - name: Get tdesign-flutter-generator
-        uses: actions/checkout@v4
-        with:
-          repository: TDesignOteam/tdesign-flutter-generator
-          path: ./example/tdesign-flutter-generator
 
       - name: Build Flutter apk
         run: |
@@ -177,7 +94,7 @@ jobs:
           flutter pub get --verbose
                     # Generate keystore for signing
           cd ${{ github.workspace }}/tdesign-component/example/android/app
-          
+
           # Use simple fixed passwords instead of random ones
           STORE_PASSWORD="tdesign123456"
           KEY_PASSWORD="tdesign123456"
@@ -199,7 +116,7 @@ jobs:
           echo "keyPassword=$KEY_PASSWORD" >> key.properties
           echo "keyAlias=tdesign_flutter_debug_key" >> key.properties
           echo "storeFile=keystore.jks" >> key.properties
-          
+
           # Verify keystore file existence and properties file
           echo "Verifying keystore setup:"
           ls -la ${{ github.workspace }}/tdesign-component/example/android/app/keystore.jks || echo "Keystore file not found!"
@@ -244,11 +161,11 @@ jobs:
       - name: Output build artifacts download paths
         run: |
           echo "=== 构建产物下载路径信息 ==="
-          
+
           # 项目构建产物路径
           PROJECT_BUILD_DIR="${{ github.workspace }}/tdesign-component/example/build"
           echo "项目构建目录: $PROJECT_BUILD_DIR"
-          
+
           if [ -d "$PROJECT_BUILD_DIR" ]; then
             echo "构建产物目录结构:"
             find "$PROJECT_BUILD_DIR" -type f -name "*.apk" -o -name "*.aab" -o -name "*.ipa" | head -10
@@ -269,14 +186,14 @@ jobs:
           else
             echo "构建目录不存在: $PROJECT_BUILD_DIR"
           fi
-          
+
           # GitHub Actions Artifacts 下载信息
           echo ""
           echo "=== GitHub Actions Artifacts 下载信息 ==="
           echo "Run ID: ${{ github.run_id }}"
           echo "APK Artifact 下载链接: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "Web Artifact 下载链接: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          
+
           # 输出到文件以便后续步骤使用
           cat > flutter-paths.txt << EOF
           FLUTTER_ROOT=$FLUTTER_ROOT
@@ -287,7 +204,7 @@ jobs:
           GITHUB_RUN_ID=${{ github.run_id }}
           DOWNLOAD_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           EOF
-          
+
           echo "路径信息已保存到 flutter-paths.txt"
           cat flutter-paths.txt
 
@@ -309,7 +226,7 @@ jobs:
           fi
           chmod +x ./bin/api_tool_linux
           sh all_build.sh
-      
+
       - name: Build site
         working-directory: ./tdesign-site
         run: |
