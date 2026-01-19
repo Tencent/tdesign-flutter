@@ -20,7 +20,7 @@ class TDSelectOption {
   final String label;
 
   /// 值
-  final int value;
+  final dynamic value;
 
   /// 子选项
   List<TDSelectOption> children;
@@ -81,7 +81,7 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
 
   int get currentLevel => values.length + 1;
 
-  int? get firstValue => values.isNotEmpty ? values[0] : null;
+  dynamic get firstValue => values.isNotEmpty ? values[0] : null;
 
   dynamic get secondValue => values.length >= 2 ? values[1] : null;
 
@@ -120,6 +120,15 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
     controller2.dispose();
     controller3.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(TDTreeSelect oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 外部传入的 defaultValue 发生变化时，更新 values
+    if (widget.defaultValue != oldWidget.defaultValue) {
+      values = List.from(widget.defaultValue);
+    }
   }
 
   int maxLevel() {
@@ -289,14 +298,14 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                 if (level == 2) {
                   if (maxLevel() == 2) {
                     selected = secondValue != null
-                        ? (secondValue as List<int>).contains(currentValue)
+                        ? (secondValue as List<dynamic>).contains(currentValue)
                         : false;
                   } else {
                     selected = secondValue == currentValue;
                   }
                 } else {
                   selected = thirdValue != null
-                      ? (thirdValue as List<int>).contains(currentValue)
+                      ? (thirdValue as List<dynamic>).contains(currentValue)
                       : false;
                 }
               } else {
@@ -322,12 +331,12 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                             break;
                           case 2:
                             if (isMultiple) {
-                              var hasContains = (values[1] as List<int>)
+                              var hasContains = (values[1] as List<dynamic>)
                                   .contains(currentValue);
                               if (hasContains) {
-                                (values[1] as List<int>).remove(currentValue);
+                                (values[1] as List<dynamic>).remove(currentValue);
                               } else {
-                                (values[1] as List<int>).add(currentValue);
+                                (values[1] as List<dynamic>).add(currentValue);
                               }
                             } else {
                               values[1] = currentValue;
@@ -352,12 +361,12 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                             break;
                           default:
                             if (isMultiple) {
-                              var hasContains = (values[2] as List<int>)
+                              var hasContains = (values[2] as List<dynamic>)
                                   .contains(currentValue);
                               if (hasContains) {
-                                (values[2] as List<int>).remove(currentValue);
+                                (values[2] as List<dynamic>).remove(currentValue);
                               } else {
-                                (values[2] as List<int>).add(currentValue);
+                                (values[2] as List<dynamic>).add(currentValue);
                               }
                             } else {
                               values[2] = currentValue;
@@ -374,7 +383,7 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Flexible(
+                        Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 top: 16, left: 16, bottom: 16),
