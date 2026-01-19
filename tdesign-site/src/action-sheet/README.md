@@ -139,6 +139,28 @@ Widget _buildBadgeListActionSheet(BuildContext context) {
 }</pre>
 
 </td-code-block>
+
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+Widget _buildItemDescriptionListActionSheet(BuildContext context) {
+  return TDButton(
+    text: '带Cell描述常规列表',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDActionSheet(
+        context,
+        visible: true,
+        items: _nums.map((e) => TDActionSheetItem(label: '选项$e',description: '描述$e')).toList(),
+      );
+    },
+  );
+}</pre>
+
+</td-code-block>
                 
 
 宫格型动作面板
@@ -868,15 +890,16 @@ Widget _buildIconListLeftActionSheet(BuildContext context) {
 动作面板项目
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| badge | TDBadge? | - | 角标 |
-| disabled | bool | false | 是否禁用 |
+| 参数 | 类型      | 默认值 | 说明     |
+| --- |---------| --- |--------|
+| badge | TDBadge? | - | 角标     |
+| disabled | bool    | false | 是否禁用   |
 | group | String? | - | 分组，用于带描述多行滚动宫格 |
 | icon | Widget? | - | 图标 |
 | iconSize | double? | - | 图标大小 |
 | label | String | - | 标题 |
 | textStyle | TextStyle? | - | 标题样式 |
+| description | String? | - |  描述信息  |
 
 ```
 ```

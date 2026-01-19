@@ -289,6 +289,9 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
 
   String? _initData_5;
   String? _initData_6;
+  
+  // For TDDropdownItem example (issue #705 fix verification)
+  String _selectedDept = '请选择部门';
 
   @override
   Widget build(BuildContext context) {
@@ -313,6 +316,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
           ExampleItem(desc: '垂直级联选择器-部门', builder: _buildTestVerticalCompanyCascader),
           ExampleItem(desc: '选择任意项', builder: _buildSelectAnyItemCascader),
           ExampleItem(desc: '使用initialIndexes设置默认值', builder: _buildWithInitialIndexes),
+          ExampleItem(desc: '在TDDropdownItem中使用(修复#705)', builder: _buildInDropdownItem),
         ],
       ),
     );
@@ -609,6 +613,40 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
             Navigator.of(context).pop();
           },
         );
+      },
+    );
+  }
+
+  @Demo(group: 'cascader')
+  Widget _buildInDropdownItem(BuildContext context) {
+    return TDDropdownMenu(
+      direction: TDDropdownMenuDirection.up,
+      builder: (context) {
+        return [
+          TDDropdownItem(
+            label: _selectedDept,
+            builder: (context, itemState, popupState) {
+              return TDMultiCascader(
+                title: '选择部门',
+                cascaderHeight: 400,
+                data: _data_3,
+                initialData: _initData_3,
+                theme: 'step',
+                onChange: (List<MultiCascaderListModel> selectData) {
+                  setState(() {
+                    var result = [];
+                    var len = selectData.length;
+                    _initData_3 = selectData[len - 1].value!;
+                    selectData.forEach((element) {
+                      result.add(element.label);
+                    });
+                    _selectedDept = result.join(' / ');
+                  });
+                },
+              );
+            },
+          ),
+        ];
       },
     );
   }
