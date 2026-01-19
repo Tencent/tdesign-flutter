@@ -76,6 +76,8 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
         ExampleItem(desc: '外部设置tabbar的选中项', builder: _setCurrentIndexToTabBar),
         ExampleItem(desc: 'onTap支持重复触发', builder: _allowMultipleTaps),
         ExampleItem(desc: '支持水波纹效果', builder: _needInkWellTabBar),
+        ExampleItem(desc: 'tabbar切换线性滑动效果', builder: _indicatorLinearAnimationTabBar),
+        ExampleItem(desc: 'tabbar切换弹性动画效果', builder: _indicatorElasticAnimationTabBar),
       ],
     );
   }
@@ -101,6 +103,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
   Widget _textTypeTabBar3tabs(BuildContext context) {
     return TDBottomTabBar(
       TDBottomTabBarBasicType.text,
+      indicatorAnimation: TDBottomTabBarIndicatorAnimation.elastic,
       useVerticalDivider: false,
       navigationTabs: List.generate(3, (index) {
         final label = '标签${index + 1}';
@@ -675,6 +678,70 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
             unselectedIcon: _unSelectedIcon,
             onTap: () {
               onTapTab(context, '标签2');
+            },
+          ),
+        ]);
+  }
+
+  @Demo(group: 'bottomTabBar')
+  Widget _indicatorLinearAnimationTabBar(BuildContext context) {
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        indicatorAnimation: TDBottomTabBarIndicatorAnimation.linear,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签1',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签2',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签3',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签3');
+            },
+          ),
+        ]);
+  }
+
+  @Demo(group: 'bottomTabBar')
+  Widget _indicatorElasticAnimationTabBar(BuildContext context) {
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        indicatorAnimation: TDBottomTabBarIndicatorAnimation.elastic,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签1',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签2',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签3',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签3');
             },
           ),
         ]);
