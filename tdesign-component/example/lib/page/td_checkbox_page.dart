@@ -39,6 +39,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '纵向多选框', builder: _verticalCheckbox),
           ExampleItem(desc: '横向多选框', builder: _horizontalCheckbox),
+          ExampleItem(desc: '横向多选框-换行', builder: _horizontalCheckboxWrap),
           ExampleItem(desc: '带全选多选框', builder: _checkAllSelected)
         ]),
         ExampleModule(title: '组件状态', children: [
@@ -115,6 +116,45 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
         TDCheckbox(
           id: '2',
           title: '上限四字',
+          style: TDCheckboxStyle.circle,
+          insetSpacing: 12,
+          showDivider: false,
+        ),
+      ],
+    );
+  }
+
+  @Demo(group: 'checkbox')
+  Widget _horizontalCheckboxWrap(BuildContext context) {
+    return TDCheckboxGroupContainer(
+      selectIds: const ['0', '1'],
+      direction: Axis.horizontal,
+      rowCount: 2,
+      directionalTdCheckboxes: const [
+        TDCheckbox(
+          id: '0',
+          title: '多选标题0',
+          style: TDCheckboxStyle.circle,
+          insetSpacing: 12,
+          showDivider: false,
+        ),
+        TDCheckbox(
+          id: '1',
+          title: '多选标题1',
+          style: TDCheckboxStyle.circle,
+          insetSpacing: 12,
+          showDivider: false,
+        ),
+        TDCheckbox(
+          id: '2',
+          title: '多选标题2',
+          style: TDCheckboxStyle.circle,
+          insetSpacing: 12,
+          showDivider: false,
+        ),
+        TDCheckbox(
+          id: '3',
+          title: '多选标题3',
           style: TDCheckboxStyle.circle,
           insetSpacing: 12,
           showDivider: false,

@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../base/example_widget.dart';
@@ -24,7 +26,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
 
   @override
   void initState() {
-    for (var i = 0; i < 28; i++) {
+    for (var i = 0; i < 30; i++) {
       controller.add(TextEditingController());
     }
     super.initState();
@@ -81,6 +83,9 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
               ExampleItem(builder: _specialTypePhoneNumber),
               ExampleItem(builder: _specialTypePrice),
               ExampleItem(builder: _specialTypeNumber),
+              ExampleItem(desc: '自适应高度输入框', builder: _autoHeightInput),
+              ExampleItem(builder: _specialTypeNumber),
+              ExampleItem(builder: _specialTypePasswordWithPaste),
               ExampleItem(builder: (context) {
                 return Container();
               }),
@@ -440,6 +445,50 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
             });
           },
           needClear: false,
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+      ],
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _specialTypePasswordWithPaste(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          type: TDInputType.normal,
+          controller: controller[27],
+          obscureText: true,
+          enableInteractiveSelection: true,
+          leftLabel: '密码复制粘贴',
+          hintText: '此密码框允许长按复制粘贴',
+          contextMenuBuilder: (context, editableTextState) {
+            final List<ContextMenuButtonItem> buttonItems =
+                editableTextState.contextMenuButtonItems;
+            if (!buttonItems.any((item) => item.type == ContextMenuButtonType.copy)) {
+              buttonItems.insert(0, ContextMenuButtonItem(
+                onPressed: () {
+                  final selection = editableTextState.textEditingValue.selection;
+                  final text = editableTextState.textEditingValue.text;
+                  if (selection.isValid && !selection.isCollapsed) {
+                    final selectedText = text.substring(selection.start, selection.end);
+                    Clipboard.setData(ClipboardData(text: selectedText));
+                  } else {
+                    // 如果没有选中文本，则复制全部
+                    Clipboard.setData(ClipboardData(text: text));
+                  }
+                  editableTextState.hideToolbar();
+                },
+                type: ContextMenuButtonType.copy,
+              ));
+            }
+            return AdaptiveTextSelectionToolbar.buttonItems(
+              anchors: editableTextState.contextMenuAnchors,
+              buttonItems: buttonItems,
+            );
+          },
         ),
         const SizedBox(
           height: 16,
@@ -921,6 +970,30 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
           ),
         ],
       ),
+    );
+  }
+
+  @Demo(group: 'input')
+  Widget _autoHeightInput(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          leftLabel: '地址',
+          controller: controller[27],
+          hintText: '请输入地址，高度自适应',
+          maxLines: null,
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller[27].clear();
+            setState(() {});
+          },
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
     );
   }
 

@@ -49,6 +49,7 @@ class TDCalendar extends StatefulWidget {
     this.animateTo = false,
     this.cellWidget,
     this.onMonthChange,
+    this.anchorDate
   }) : super(key: key);
 
   /// 第一天从星期几开始，默认 0 = 周日
@@ -86,6 +87,9 @@ class TDCalendar extends StatefulWidget {
 
   /// 宽度
   final double? width;
+
+  ///锚点日期
+  final DateTime? anchorDate;
 
   /// 自定义样式
   final TDCalendarStyle? style;
@@ -235,6 +239,7 @@ class _TDCalendarState extends State<TDCalendar> {
               type: widget.type ?? CalendarType.single,
               firstDayOfWeek: widget.firstDayOfWeek ?? 0,
               maxDate: widget.maxDate,
+              anchorDate: widget.anchorDate,
               minDate: widget.minDate,
               value: widget._value,
               bodyPadding: _style.bodyPadding ?? TDTheme.of(context).spacer16,
