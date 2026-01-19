@@ -71,6 +71,9 @@ class TDInput extends StatelessWidget {
     TDInputSpacer? spacer,
     this.cardStyleBottomText,
     this.onTapOutside,
+    this.selectionControls,
+    this.contextMenuBuilder,
+    this.enableInteractiveSelection,
   }) : spacer = spacer ?? TDInputSpacer.generateDefault();
 
   /// 输入框宽度(TDCardStyle时必须设置该参数)
@@ -220,11 +223,17 @@ class TDInput extends StatelessWidget {
   /// 组件各模块间间距
   final TDInputSpacer spacer;
 
-  /// 左侧内容所占区域宽度
-  double _leftLabelWidth = 0;
-
   /// 点击输入框外部区域回调
   final TapRegionCallback? onTapOutside;
+
+  /// 自定义选择控制器
+  final TextSelectionControls? selectionControls;
+
+  /// 自定义上下文菜单构建器
+  final EditableTextContextMenuBuilder? contextMenuBuilder;
+
+  /// 是否启用交互式选择
+  final bool? enableInteractiveSelection;
 
   /// 获取输入框规格
   double getInputPadding() {
@@ -274,24 +283,24 @@ class TDInput extends StatelessWidget {
   }
 
   Widget buildInputView(BuildContext context) {
-    _leftLabelWidth = _calculateLeftInfoWidth(context);
+    var leftLabelWidth = _calculateLeftInfoWidth(context);
     switch (type) {
       case TDInputType.normal:
-        return buildNormalInput(context);
+        return buildNormalInput(context, leftLabelWidth);
       case TDInputType.twoLine:
-        return buildTwoLineInput(context);
+        return buildTwoLineInput(context, leftLabelWidth);
       case TDInputType.special:
-        return buildSpecialInput(context);
+        return buildSpecialInput(context, leftLabelWidth);
       case TDInputType.longText:
         return buildLongTextInput(context);
       case TDInputType.normalMaxTwoLine:
-        return buildNormalInput(context);
+        return buildNormalInput(context, leftLabelWidth);
       case TDInputType.cardStyle:
-        return buildCardStyleInput(context);
+        return buildCardStyleInput(context, leftLabelWidth);
     }
   }
 
-  double _getBottomDividerMarginLeft() {
+  double _getBottomDividerMarginLeft(double leftLabelWidth) {
     switch (type) {
       case TDInputType.normal:
       case TDInputType.twoLine:
@@ -310,7 +319,7 @@ class TDInput extends StatelessWidget {
     }
   }
 
-  Widget buildNormalInput(BuildContext context) {
+  Widget buildNormalInput(BuildContext context, double leftLabelWidth) {
     var cardStyleDecoration = _getCardStylePreDecoration(context);
     var hasLeftWidget =
         leftLabel != null || leftIcon != null || (required ?? false);
@@ -335,7 +344,7 @@ class TDInput extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: _leftLabelWidth,
+                width: leftLabelWidth,
                 child: GestureDetector(
                   child: Row(
                     children: [
@@ -349,8 +358,6 @@ class TDInput extends StatelessWidget {
                       Visibility(
                         visible: leftLabel != null,
                         child: Container(
-                          constraints:
-                              BoxConstraints(maxWidth: _leftLabelWidth),
                           padding: EdgeInsets.only(
                               left: leftIcon != null
                                   ? (spacer.iconLabelSpace ?? 4)
@@ -430,6 +437,9 @@ class TDInput extends StatelessWidget {
                                   additionInfo != '' ? 4 : getInputPadding(),
                               top: getInputPadding()),
                       inputAction: inputAction,
+                      selectionControls: selectionControls,
+                      contextMenuBuilder: contextMenuBuilder,
+                      enableInteractiveSelection: enableInteractiveSelection,
                     ),
                     Visibility(
                       child: Container(
@@ -511,7 +521,7 @@ class TDInput extends StatelessWidget {
             visible: type != TDInputType.cardStyle,
             child: TDDivider(
               margin: EdgeInsets.only(
-                left: _getBottomDividerMarginLeft(),
+                left: _getBottomDividerMarginLeft(leftLabelWidth),
               ),
             ),
           ),
@@ -558,7 +568,7 @@ class TDInput extends StatelessWidget {
     return cardStyleDecoration;
   }
 
-  Widget buildTwoLineInput(BuildContext context) {
+  Widget buildTwoLineInput(BuildContext context, double leftLabelWidth) {
     return Container(
       alignment: Alignment.centerLeft,
       color: decoration != null
@@ -580,7 +590,7 @@ class TDInput extends StatelessWidget {
                         child: Container(
                           constraints: BoxConstraints(
                               maxWidth:
-                                  _leftLabelWidth + (leftLabelSpace ?? 12)),
+                                  leftLabelWidth + (leftLabelSpace ?? 12)),
                           padding: EdgeInsets.only(
                               left: leftLabelSpace ?? 12.0, top: 10.0),
                           child: Column(
@@ -662,6 +672,9 @@ class TDInput extends StatelessWidget {
                                   : 8,
                             ),
                         inputAction: inputAction,
+                        selectionControls: selectionControls,
+                        contextMenuBuilder: contextMenuBuilder,
+                        enableInteractiveSelection: enableInteractiveSelection,
                       ),
                     ),
                     Visibility(
@@ -709,7 +722,7 @@ class TDInput extends StatelessWidget {
           if (showBottomDivider)
             TDDivider(
               margin: EdgeInsets.only(
-                left: _getBottomDividerMarginLeft(),
+                left: _getBottomDividerMarginLeft(leftLabelWidth),
               ),
             ),
         ],
@@ -746,7 +759,7 @@ class TDInput extends StatelessWidget {
                 if (showBottomDivider)
                   TDDivider(
                     margin: EdgeInsets.only(
-                      left: _getBottomDividerMarginLeft(),
+                      left: _getBottomDividerMarginLeft(0),
                     ),
                   ),
               ],
@@ -780,6 +793,9 @@ class TDInput extends StatelessWidget {
                   const EdgeInsets.only(
                       left: 16, right: 16, top: 12, bottom: 12),
               inputAction: inputAction,
+              selectionControls: selectionControls,
+              contextMenuBuilder: contextMenuBuilder,
+              enableInteractiveSelection: enableInteractiveSelection,
             ),
           ),
           Container(
@@ -796,7 +812,7 @@ class TDInput extends StatelessWidget {
     );
   }
 
-  Widget buildSpecialInput(BuildContext context) {
+  Widget buildSpecialInput(BuildContext context, double leftLabelWidth) {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
@@ -818,7 +834,7 @@ class TDInput extends StatelessWidget {
                       bottom: getInputPadding()),
                   child: leftInfoWidth != null
                       ? SizedBox(
-                          width: _leftLabelWidth,
+                          width: leftLabelWidth,
                           child: TDText(
                             leftLabel,
                             maxLines: 1,
@@ -871,6 +887,9 @@ class TDInput extends StatelessWidget {
                             bottom: getInputPadding(),
                             top: getInputPadding()),
                     inputAction: inputAction,
+                    selectionControls: selectionControls,
+                    contextMenuBuilder: contextMenuBuilder,
+                    enableInteractiveSelection: enableInteractiveSelection,
                   ),
                 ),
               ),
@@ -891,7 +910,7 @@ class TDInput extends StatelessWidget {
           Visibility(
             child: TDDivider(
               margin: EdgeInsets.only(
-                left: _getBottomDividerMarginLeft(),
+                left: _getBottomDividerMarginLeft(leftLabelWidth),
               ),
             ),
           ),
@@ -919,7 +938,7 @@ class TDInput extends StatelessWidget {
     );
   }
 
-  Widget buildCardStyleInput(BuildContext context) {
+  Widget buildCardStyleInput(BuildContext context, double leftLabelWidth) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -939,7 +958,7 @@ class TDInput extends StatelessWidget {
             ],
           ),
         ),
-        buildNormalInput(context),
+        buildNormalInput(context, leftLabelWidth),
         Visibility(
           visible: cardStyleBottomText != null,
           child: Column(
