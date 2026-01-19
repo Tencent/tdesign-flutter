@@ -301,6 +301,7 @@ class TDCheckboxGroupContainer extends TDCheckboxGroup {
     TDContentDirection? contentDirection,
     OnCheckBoxGroupChange? onCheckBoxGroupChange,
     VoidCallback? onOverloadChecked,
+    int? rowCount,
   })  : assert(() {
     // 使用direction属性则必须配合directionalTdCheckboxes，child字段无效
     if (direction != null && directionalTdCheckboxes == null) {
@@ -327,13 +328,17 @@ class TDCheckboxGroupContainer extends TDCheckboxGroup {
           '2tabs: 7words maximum\n'
           '3tabs: 4words maximum\n'
           '4tabs: 2words maximum';
-      if (directionalTdCheckboxes.length == 2) {
+      var length = directionalTdCheckboxes.length;
+      if (rowCount != null && rowCount > 1) {
+        length = rowCount;
+      }
+      if (length == 2) {
         maxWordCount = 7;
       }
-      if (directionalTdCheckboxes.length == 3) {
+      if (length == 3) {
         maxWordCount = 4;
       }
-      if (directionalTdCheckboxes.length == 4) {
+      if (length == 4) {
         maxWordCount = 2;
       }
       directionalTdCheckboxes.forEach((checkbox) {
@@ -417,12 +422,38 @@ class TDCheckboxGroupContainer extends TDCheckboxGroup {
                 );
               }).toList(),
             )
-                : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: directionalTdCheckboxes!
-                  .map((e) => Expanded(child: e))
-                  .toList(),
-            ),
+                : rowCount != null && rowCount > 1
+                    ? Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(
+                            (directionalTdCheckboxes!.length / rowCount).ceil(),
+                            (index) {
+                          var start = index * rowCount;
+                          var end = (index + 1) * rowCount;
+                          if (end > directionalTdCheckboxes.length) {
+                            end = directionalTdCheckboxes.length;
+                          }
+                          var subList =
+                              directionalTdCheckboxes.sublist(start, end);
+                          return Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ...subList.map((e) => Expanded(child: e)),
+                              if (subList.length < rowCount)
+                                ...List.generate(
+                                    rowCount - subList.length,
+                                    (index) =>
+                                        const Expanded(child: SizedBox()))
+                            ],
+                          );
+                        }))
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: directionalTdCheckboxes!
+                            .map((e) => Expanded(child: e))
+                            .toList(),
+                      ),
           )),
         ),
         key: key,
