@@ -42,6 +42,7 @@ class TDDropdownMenu extends StatefulWidget {
     this.showOverlay = true,
     this.isScrollable = false,
     this.arrowIcon,
+    this.arrowColor,
     this.labelBuilder,
     this.onMenuOpened,
     this.onMenuClosed,
@@ -71,6 +72,9 @@ class TDDropdownMenu extends StatefulWidget {
 
   /// 自定义箭头图标
   final IconData? arrowIcon;
+
+  /// 自定义箭头颜色
+  final Color? arrowColor;
 
   /// 自定义标签内容
   final LabelBuilder? labelBuilder;
@@ -249,7 +253,9 @@ class _TDDropdownMenuState extends State<TDDropdownMenu>
             : TDIcons.caret_down_small);
     return RotationTransition(
       turns: _iconAnimations[index],
-      child: Icon(arrowIcon, size: 20, color: color),
+      child: Icon(arrowIcon,
+          size: 20,
+          color: _items![index].arrowColor ?? widget.arrowColor ?? color),
     );
   }
 

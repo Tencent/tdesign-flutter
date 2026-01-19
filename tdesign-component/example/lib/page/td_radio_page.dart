@@ -31,6 +31,7 @@ class TDRadioPageState extends State<TDRadioPage> {
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '纵向单选框', builder: _verticalRadios),
           ExampleItem(desc: '横向单选框', builder: _horizontalRadios),
+          ExampleItem(desc: '横向单选框-换行', builder: _horizontalRadiosWrap),
         ]),
         ExampleModule(title: '组件状态', children: [
           ExampleItem(desc: '单选框状态', builder: _radioStatus),
@@ -105,6 +106,23 @@ class TDRadioPageState extends State<TDRadioPage> {
           radioStyle: TDRadioStyle.circle,
           showDivider: false,
         ),
+      ],
+    );
+  }
+
+  @Demo(group: 'radio')
+  Widget _horizontalRadiosWrap(BuildContext context) {
+    return TDRadioGroup(
+      selectId: '0',
+      direction: Axis.horizontal,
+      rowCount: 4,
+      directionalTdRadios: const [
+        TDRadio(id: '0', title: '单0'),
+        TDRadio(id: '1', title: '单1'),
+        TDRadio(id: '3', title: '单2'),
+        TDRadio(id: '4', title: '单3'),
+        TDRadio(id: '5', title: '单4'),
+        TDRadio(id: '6', title: '单5'),
       ],
     );
   }
