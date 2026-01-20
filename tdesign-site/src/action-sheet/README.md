@@ -139,7 +139,9 @@ Widget _buildBadgeListActionSheet(BuildContext context) {
 }</pre>
 
 </td-code-block>
+                
 
+          
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="javascript">
@@ -890,16 +892,16 @@ Widget _buildIconListLeftActionSheet(BuildContext context) {
 动作面板项目
 #### 默认构造方法
 
-| 参数 | 类型      | 默认值 | 说明     |
-| --- |---------| --- |--------|
-| badge | TDBadge? | - | 角标     |
-| disabled | bool    | false | 是否禁用   |
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| badge | TDBadge? | - | 角标 |
+| description | String? | - | 描述信息 |
+| disabled | bool | false | 是否禁用 |
 | group | String? | - | 分组，用于带描述多行滚动宫格 |
 | icon | Widget? | - | 图标 |
 | iconSize | double? | - | 图标大小 |
 | label | String | - | 标题 |
 | textStyle | TextStyle? | - | 标题样式 |
-| description | String? | - |  描述信息  |
 
 ```
 ```

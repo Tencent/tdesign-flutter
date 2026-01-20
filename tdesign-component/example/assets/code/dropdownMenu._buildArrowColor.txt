@@ -1,0 +1,22 @@
+
+TDDropdownMenu _buildArrowColor(BuildContext context) {
+  return TDDropdownMenu(
+    direction: TDDropdownMenuDirection.up,
+    arrowColor: Colors.red,
+    items: [
+      TDDropdownItem(
+        label: '菜单级箭头颜色(红)',
+        options: [
+          TDDropdownItemOption(label: '选项1', value: '1'),
+        ],
+      ),
+      TDDropdownItem(
+        label: 'Item级箭头颜色(蓝)',
+        arrowColor: Colors.blue,
+        options: [
+          TDDropdownItemOption(label: '选项1', value: '1'),
+        ],
+      ),
+    ],
+  );
+}

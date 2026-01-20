@@ -1,29 +1,5 @@
 ## API
-### TDButtonStyle
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| frameColor | Color? | - | 边框颜色 |
-| frameWidth | double? | - | 边框宽度 |
-| gradient | Gradient? | - | 渐变背景色 |
-| radius | BorderRadiusGeometry? | - | 自定义圆角 |
-| textColor | Color? | - | 文字颜色 |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TDButtonStyle.generateFillStyleByTheme  | 生成不同主题的填充按钮样式 |
-| TDButtonStyle.generateGhostStyleByTheme  | 生成不同主题的幽灵按钮样式 |
-| TDButtonStyle.generateOutlineStyleByTheme  | 生成不同主题的描边按钮样式 |
-| TDButtonStyle.generateTextStyleByTheme  | 生成不同主题的文本按钮样式 |
-
-```
-```
- ### TDButton
+### TDButton
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -53,3 +29,27 @@
 | theme | TDButtonTheme? | - | 主题 |
 | type | TDButtonType | TDButtonType.fill | 类型：填充，描边，文字 |
 | width | double? | - | 自定义宽度 |
+
+```
+```
+ ### TDButtonStyle
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景颜色 |
+| frameColor | Color? | - | 边框颜色 |
+| frameWidth | double? | - | 边框宽度 |
+| gradient | Gradient? | - | 渐变背景色 |
+| radius | BorderRadiusGeometry? | - | 自定义圆角 |
+| textColor | Color? | - | 文字颜色 |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TDButtonStyle.generateFillStyleByTheme  | 生成不同主题的填充按钮样式 |
+| TDButtonStyle.generateGhostStyleByTheme  | 生成不同主题的幽灵按钮样式 |
+| TDButtonStyle.generateOutlineStyleByTheme  | 生成不同主题的描边按钮样式 |
+| TDButtonStyle.generateTextStyleByTheme  | 生成不同主题的文本按钮样式 |
