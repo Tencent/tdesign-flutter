@@ -86,6 +86,8 @@ build/
 
 /tdesign-component/local_dependency_override.yaml
 /tdesign-component/pubspec_overrides.yaml
+/tdesign-component/pubspec.lock
 /tdesign-component/example/pubspec_overrides.yaml
 /tdesign-component/example/aop_tools
 /tdesign-component/example/tdesign-flutter-generator
+/tdesign-component/example/pubspec.lock
