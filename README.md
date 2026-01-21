@@ -58,7 +58,7 @@ Add the following to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  tdesign_flutter: ^0.2.6
+  tdesign_flutter: ^0.2.7
 ```
 
 ### Import

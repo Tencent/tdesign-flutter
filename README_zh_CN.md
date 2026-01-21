@@ -58,7 +58,7 @@ flutter: ">=3.16.0"
 
 ```yaml
 dependencies:
-  tdesign_flutter: ^0.2.6
+  tdesign_flutter: ^0.2.7
 ```
 
 ### 引入
