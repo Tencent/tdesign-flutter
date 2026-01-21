@@ -10,13 +10,8 @@
 .svn/
 
 
-# Site（ *.md 文档通过 hook 自动复制同步）
+# Site
 tdesign-site/node_modules/
-tdesign-site/site/docs/getting-started.md
-
-# Component（ *.md 文档通过 hook 自动复制同步）
-tdesign-component/README.md
-tdesign-component/README_zh_CN.md
 
 # IntelliJ related
 *.iml
