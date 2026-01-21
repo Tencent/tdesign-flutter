@@ -93,7 +93,7 @@ Icon(TDIcons.activity)
 
 ## 🎨 Custom Theme
 
-TDesign Flutter provides flexible theming capabilities with three approaches:
+TDesign Flutter provides two flexible theming approaches:
 
 ### Method 1: JSON Configuration
 
@@ -272,10 +272,10 @@ Create [GitHub Issues](https://github.com/Tencent/tdesign-flutter/issues) or sca
 
 TDesign Flutter depends on the following component libraries. We appreciate the authors for their open-source contributions:
 
-- [easy_refresh](https://pub-web.flutter-io.cn/packages/easy_refresh)
-- [flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)
-- [flutter_slidable](https://pub-web.flutter-io.cn/packages/flutter_slidable)
-- [image_picker](https://pub-web.flutter-io.cn/packages/image_picker)
+- [easy_refresh](https://pub.dev/packages/easy_refresh)
+- [flutter_swiper](https://pub.dev/packages/flutter_swiper)
+- [flutter_slidable](https://pub.dev/packages/flutter_slidable)
+- [image_picker](https://pub.dev/packages/image_picker)
 
 ## 📄 License
 

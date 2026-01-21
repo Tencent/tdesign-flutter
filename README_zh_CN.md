@@ -272,10 +272,10 @@ TDesign 还提供其他平台和框架的组件库：
 
 TDesign Flutter 依赖以下组件库，感谢作者的开源贡献：
 
-- [easy_refresh](https://pub-web.flutter-io.cn/packages/easy_refresh)
-- [flutter_swiper](https://pub-web.flutter-io.cn/packages/flutter_swiper)
-- [flutter_slidable](https://pub-web.flutter-io.cn/packages/flutter_slidable)
-- [image_picker](https://pub-web.flutter-io.cn/packages/image_picker)
+- [easy_refresh](https://pub.dev/packages/easy_refresh)
+- [flutter_swiper](https://pub.dev/packages/flutter_swiper)
+- [flutter_slidable](https://pub.dev/packages/flutter_slidable)
+- [image_picker](https://pub.dev/packages/image_picker)
 
 ## 📄 开源协议
 
