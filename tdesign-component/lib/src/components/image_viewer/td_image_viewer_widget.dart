@@ -124,6 +124,7 @@ class TDImageViewerWidget extends StatefulWidget {
 
 class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
   int _index = 1;
+  var swiperController = SwiperController();
 
   @override
   void initState() {
@@ -267,6 +268,9 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
           widget.images.removeAt(_index - 1);
           widget.onDelete?.call(_index - 1);
           setState(() {
+            // // if(_index == widget.images.length){
+            // // }
+            // swiperController.previous();
             if (_index > 1) {
               _index--;
             }
@@ -302,6 +306,8 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
           left: 0,
           right: 0,
           child: Swiper(
+            key: ValueKey(widget.images.length),
+            controller: swiperController,
             index: _index - 1,
             loop: widget.loop ?? true,
             autoplay: widget.autoplay ?? false,

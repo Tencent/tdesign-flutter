@@ -253,7 +253,7 @@ class TDPopupPage extends StatelessWidget {
                 // spacing: 16,
                 children: [
                   TDButton(
-                    text: '底部弹出层-键盘弹默认遮挡',
+                    text: '底部弹出层-键盘弹出默认遮挡',
                     isBlock: true,
                     theme: TDButtonTheme.primary,
                     type: TDButtonType.outline,
