@@ -29,6 +29,10 @@ dev_dependencies:
   flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
+  tdesign_flutter_tools:
+    git:
+      url: https://github.com/TDesignOteam/tdesign-flutter-tools.git
+      ref: main
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -47,7 +51,6 @@ flutter:
     - family: TCloudNumber
       fonts:
         - asset: assets/tdesign/TCloudNumberVF.ttf
-
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
