@@ -93,7 +93,7 @@ Icon(TDIcons.activity)
 
 ## 🎨 自定义主题
 
-TDesign Flutter 提供三种灵活的主题定制方式：
+TDesign Flutter 提供两种灵活的主题定制方式：
 
 ### 方式一：JSON 配置
 

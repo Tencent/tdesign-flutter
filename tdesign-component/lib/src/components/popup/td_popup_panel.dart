@@ -129,13 +129,16 @@ abstract class _TDPopupBaseState<T extends TDPopupBasePanel> extends State<T>
 
     // 初始化当前高度
     _currentHeight = baseHeight.clamp(_minHeight, _maxHeight);
+    // // 同步动画控制器 如果不赋值，会导致“键盘弹出默认遮挡”用例无法展示
+    // final newValue = ((_currentHeight - _minHeight) /
+    //         (_maxHeight - _minHeight).clamp(0.1, 1.0))
+    //     .clamp(0.0, 1.0);
+    // if ((_controller.value - newValue).abs() > 0.001) {
+    //   _controller.value = newValue;
+    // }
     // 同步动画控制器
-    final newValue = ((_currentHeight - _minHeight) /
-            (_maxHeight - _minHeight).clamp(0.1, 1.0))
-        .clamp(0.0, 1.0);
-    if ((_controller.value - newValue).abs() > 0.001) {
-      _controller.value = newValue;
-    }
+    _controller.value = (_currentHeight - _minHeight) /
+        (_maxHeight - _minHeight).clamp(0.1, 1.0);
   }
 
   void _updateHeight() => setState(() {
