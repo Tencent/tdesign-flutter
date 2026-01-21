@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/td_colors.dart';
+import '../../theme/td_fonts.dart';
 import '../../theme/td_theme.dart';
 import 'td_notice_bar.dart';
 
@@ -74,8 +75,8 @@ class TDNoticeBarStyle {
     textStyle = textStyle ??
         TextStyle(
           color: TDTheme.of(context).textColorPrimary,
-          fontSize: 14,
-          height: 1,
+          fontSize: TDTheme.of(context).fontBodyMedium?.size,
+          height: TDTheme.of(context).fontBodyMedium?.height,
           fontWeight: FontWeight.normal,
           fontStyle: FontStyle.normal,
         );
