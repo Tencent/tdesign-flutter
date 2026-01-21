@@ -13,7 +13,8 @@ TDesign风格的Swiper指示器样式，与flutter_swiper的Swiper结合使用
 
 ```
 ```
- ### TDPageTransformer
+
+### TDPageTransformer
 #### 简介
 TD默认PageTransformer
 #### 默认构造方法

@@ -11,7 +11,8 @@
 
 ```
 ```
- ### TDBottomTabBarTabConfig
+
+### TDBottomTabBarTabConfig
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -29,7 +30,8 @@
 
 ```
 ```
- ### TDBottomTabBar
+
+### TDBottomTabBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -59,7 +61,8 @@
 
 ```
 ```
- ### TDBottomTabBarPopUpBtnConfig
+
+### TDBottomTabBarPopUpBtnConfig
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -70,7 +73,8 @@
 
 ```
 ```
- ### TDBottomTabBarPopUpShapeConfig
+
+### TDBottomTabBarPopUpShapeConfig
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -84,7 +88,8 @@
 
 ```
 ```
- ### PopUpMenuItem
+
+### PopUpMenuItem
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
