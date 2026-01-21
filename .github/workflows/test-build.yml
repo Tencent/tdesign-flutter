@@ -50,6 +50,10 @@ jobs:
       - name: tdesign-adaptation
         run: sh ./tdesign-component/init.sh
 
+      - name: generate api md
+        working-directory: ./tdesign-component
+        run: sh ./demo_tool/all_build.sh
+
       - name: flutter pub get
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}

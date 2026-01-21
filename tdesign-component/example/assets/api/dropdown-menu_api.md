@@ -4,7 +4,8 @@
 下拉菜单控制器
 ```
 ```
- ### TDDropdownItem
+
+### TDDropdownItem
 #### 简介
 下拉菜单内容
 #### 默认构造方法
@@ -32,7 +33,8 @@
 
 ```
 ```
- ### TDDropdownItemOption
+
+### TDDropdownItemOption
 #### 简介
 选项数据
 #### 默认构造方法
@@ -49,7 +51,8 @@
 
 ```
 ```
- ### TDDropdownMenu
+
+### TDDropdownMenu
 #### 简介
 下拉菜单
 #### 默认构造方法

@@ -24,7 +24,8 @@
 
 ```
 ```
- ### TDDialogButtonOptions
+
+### TDDialogButtonOptions
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -41,7 +42,8 @@
 
 ```
 ```
- ### TDImageDialog
+
+### TDImageDialog
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -65,7 +67,8 @@
 
 ```
 ```
- ### TDAlertDialog
+
+### TDAlertDialog
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -100,7 +103,8 @@
 
 ```
 ```
- ### TDConfirmDialog
+
+### TDConfirmDialog
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -127,7 +131,8 @@
 
 ```
 ```
- ### TDDialogScaffold
+
+### TDDialogScaffold
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -141,7 +146,8 @@
 
 ```
 ```
- ### TDDialogTitle
+
+### TDDialogTitle
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -152,7 +158,8 @@
 
 ```
 ```
- ### TDDialogContent
+
+### TDDialogContent
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -163,7 +170,8 @@
 
 ```
 ```
- ### TDDialogInfoWidget
+
+### TDDialogInfoWidget
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -180,7 +188,8 @@
 
 ```
 ```
- ### HorizontalNormalButtons
+
+### HorizontalNormalButtons
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -191,7 +200,8 @@
 
 ```
 ```
- ### HorizontalTextButtons
+
+### HorizontalTextButtons
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -202,7 +212,8 @@
 
 ```
 ```
- ### TDDialogButton
+
+### TDDialogButton
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
