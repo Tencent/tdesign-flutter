@@ -48,6 +48,8 @@ class TDCalendar extends StatefulWidget {
     this.isTimeUnit = true,
     this.animateTo = false,
     this.cellWidget,
+    this.onMonthChange,
+    this.anchorDate
   }) : super(key: key);
 
   /// 第一天从星期几开始，默认 0 = 周日
@@ -86,6 +88,9 @@ class TDCalendar extends StatefulWidget {
   /// 宽度
   final double? width;
 
+  ///锚点日期
+  final DateTime? anchorDate;
+
   /// 自定义样式
   final TDCalendarStyle? style;
 
@@ -111,6 +116,9 @@ class TDCalendar extends StatefulWidget {
     int index,
     String week,
   )? onHeaderClick;
+
+  /// 月份变化时触发
+  final ValueChanged<DateTime>? onMonthChange;
 
   /// 是否使用安全区域，默认true
   final bool? useSafeArea;
@@ -168,7 +176,6 @@ class _TDCalendarState extends State<TDCalendar> {
   late TDCalendarInherited? inherited;
   late TDCalendarStyle _style;
   final List<DatePickerModel> timePickerModelList = [];
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -232,6 +239,7 @@ class _TDCalendarState extends State<TDCalendar> {
               type: widget.type ?? CalendarType.single,
               firstDayOfWeek: widget.firstDayOfWeek ?? 0,
               maxDate: widget.maxDate,
+              anchorDate: widget.anchorDate,
               minDate: widget.minDate,
               value: widget._value,
               bodyPadding: _style.bodyPadding ?? TDTheme.of(context).spacer16,
@@ -243,6 +251,7 @@ class _TDCalendarState extends State<TDCalendar> {
               monthTitleHeight: widget.monthTitleHeight ?? 22,
               monthTitleBuilder: widget.monthTitleBuilder,
               animateTo: widget.animateTo ?? false,
+              onMonthChange: widget.onMonthChange,
               builder: (date, dateList, data, rowIndex, colIndex) {
                 return TDCalendarCell(
                   height: widget.cellHeight ?? 60,

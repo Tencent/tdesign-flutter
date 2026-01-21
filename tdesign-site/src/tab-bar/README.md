@@ -52,6 +52,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   Widget _textTypeTabBar3tabs(BuildContext context) {
     return TDBottomTabBar(
       TDBottomTabBarBasicType.text,
+      indicatorAnimation: TDBottomTabBarIndicatorAnimation.elastic,
       useVerticalDivider: false,
       navigationTabs: List.generate(3, (index) {
         final label = '标签${index + 1}';
@@ -605,6 +606,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| animationCurve | Curve | Curves.easeInOutCubic | 动画曲线 |
+| animationDuration | Duration | const Duration(milliseconds: 300) | 动画时长 |
 | backgroundColor | Color? | - | 背景颜色 （可选） |
 | barHeight | double? | _kDefaultTabBarHeight | tab高度 |
 | basicType | TDBottomTabBarBasicType | basicType | 基本样式（纯文本、纯图标、图标+文本） |
@@ -614,6 +617,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | dividerColor | Color? | - | 分割线颜色（可选） |
 | dividerHeight | double? | - | 分割线高度（可选） |
 | dividerThickness | double? | - | 分割线厚度（可选） |
+| indicatorAnimation | TDBottomTabBarIndicatorAnimation | TDBottomTabBarIndicatorAnimation.none | 指示器动画类型 |
 | key |  | - |  |
 | navigationTabs | List<TDBottomTabBarTabConfig> | - | tabs配置 |
 | needInkWell | bool | false | 是否需要水波纹效果 |

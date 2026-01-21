@@ -1,0 +1,42 @@
+name: autofix.ci
+on:
+  pull_request:
+    branches: [develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Flutter
+        uses: TDesignOteam/workflows/actions/setup-flutter@main
+        with:
+          flutter-version: 3.32.0
+          cache: true
+          aop-registry: true
+          aop-project-path: ./tdesign-component/example
+
+      - name: tdesign-adaptation
+        run: sh ./tdesign-component/init.sh
+
+      - name: generate api md
+        working-directory: ./tdesign-component
+        run: sh ./demo_tool/all_build.sh
+
+      - name: flutter pub get
+        working-directory: ./tdesign-component/example
+        run: flutter pub get
+
+      - name: flutter build
+        working-directory: ./tdesign-component/example
+        run: flutter build apk -t ./lib/main.dart --release
+
+      - uses: autofix-ci/action@v1

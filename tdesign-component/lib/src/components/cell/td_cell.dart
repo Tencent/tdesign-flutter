@@ -132,8 +132,7 @@ class _TDCellState extends State<TDCell> {
     return widget.disabled ?? false;
   }
 
-  /// todo 像素溢出问题待优化
-  /// @see https://github.com/Tencent/tdesign-flutter/issues/751
+
   @override
   Widget build(BuildContext context) {
     final theme = TDTheme.of(context);

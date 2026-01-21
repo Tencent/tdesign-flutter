@@ -1,0 +1,27 @@
+
+  Widget _buildAsyncTreeSelect(BuildContext context) {
+    return TDTreeSelect(
+      options: asyncOptions,
+      defaultValue: asyncValues,
+      onChange: (val, level) {
+        print('Async change: $val, level: $level');
+        if (level == 1 && val.isNotEmpty) {
+          var firstVal = val[0];
+          var index = asyncOptions.indexWhere((element) => element.value == firstVal);
+          if (index != -1 && asyncOptions[index].children.isEmpty) {
+             // 模拟异步加载
+             Future.delayed(const Duration(seconds: 1), () {
+               if(mounted) {
+                 setState(() {
+                   asyncOptions[index].children = [
+                     TDSelectOption(label: '异步加载二级-1', value: 101),
+                     TDSelectOption(label: '异步加载二级-2', value: 102),
+                   ];
+                 });
+               }
+             });
+          }
+        }
+      },
+    );
+  }

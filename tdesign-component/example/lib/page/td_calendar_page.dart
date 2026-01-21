@@ -216,6 +216,44 @@ Widget _buildSimple(BuildContext context) {
               );
             },
           ),
+          TDCell(
+            title: '添加锚点',
+            arrow: true,
+            note: '${date.year}-${date.month}-${date.day}',
+            onClick: (cell) {
+              TDCalendarPopup(
+                context,
+                visible: true,
+                onConfirm: (value) {
+                  print('onConfirm：$value');
+                  selected.value = value;
+                },
+                onClose: () {
+                  print('onClose');
+                },
+                child: TDCalendar(
+                  title: '请选择日期',
+                  minDate: DateTime(2022, 1, 1).millisecondsSinceEpoch,
+                  maxDate: DateTime(2028, 2, 15).millisecondsSinceEpoch,
+                  anchorDate: DateTime(2026, 5),
+                  value: value,
+                  height: size.height * 0.6 + 176,
+                  onCellClick: (value, type, tdate) {
+                    print('onCellClick: $value');
+                  },
+                  onCellLongPress: (value, type, tdate) {
+                    print('onCellLongPress: $value');
+                  },
+                  onHeaderClick: (index, week) {
+                    print('onHeaderClick: $week');
+                  },
+                  onChange: (value) {
+                    print('onChange: $value');
+                  },
+                ),
+              );
+            },
+          ),
         ],
       );
     },
@@ -401,6 +439,7 @@ Widget _buildCustomCell(BuildContext context) {
                 child: TDCalendar(
                     title: '请选择日期',
                     value: value,
+                    cellHeight: 80,
                     height: size.height * 0.6 + 176,
                     onCellClick: (value, type, tdate) {
                       print('onCellClick: $value');
@@ -415,22 +454,61 @@ Widget _buildCustomCell(BuildContext context) {
                       print('onChange: $value');
                     },
                     cellWidget: (context, tdate, selectType) {
+                      final today = DateTime.now();
+                      //当前日期的自定义实现
+                      if (tdate.date.millisecondsSinceEpoch ==
+                              DateTime(today.year, today.month, today.day)
+                                  .millisecondsSinceEpoch &&
+                          selectType != DateSelectType.selected) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: TDTheme.of(context).brandColor4,
+                            borderRadius: BorderRadius.all(Radius.circular(6)),
+                          ),
+                          constraints: const BoxConstraints(
+                              minWidth: 0, // 最小宽度为0
+                              maxWidth: double.infinity, // 最大宽度无限
+                              minHeight: 0, // 最小高度为0
+                              maxHeight: double.infinity),
+                          child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('今天',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
+                            ],
+                          ),
+                        );
+                      }
                       if (selectType == DateSelectType.selected) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('${tdate.date.day}',
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white)),
-                            const Text('文案文案',
-                                style: TextStyle(
-                                    fontSize: 6, color: Colors.white)),
-                            const Text('自定义',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.white)),
-                          ],
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: TDTheme.of(context).successColor8,
+                            borderRadius: BorderRadius.all(Radius.circular(6)),
+                          ),
+                          constraints: const BoxConstraints(
+                              minWidth: 0, // 最小宽度为0
+                              maxWidth: double.infinity, // 最大宽度无限
+                              minHeight: 0, // 最小高度为0
+                              maxHeight: double.infinity),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('${tdate.date.day}',
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
+                              const Text('文案文案',
+                                  style: TextStyle(
+                                      fontSize: 6, color: Colors.white)),
+                              const Text('自定义',
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.white)),
+                            ],
+                          ),
                         );
                       }
                       return Column(

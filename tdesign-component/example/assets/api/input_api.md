@@ -15,9 +15,11 @@
 | clearIconSize | double? | - | 清除按钮图标大小 |
 | contentAlignment | TextAlign | TextAlign.start | 内容对齐方向 |
 | contentPadding | EdgeInsetsGeometry? | - | textInput内边距 |
+| contextMenuBuilder | EditableTextContextMenuBuilder? | - | 自定义上下文菜单构建器 |
 | controller | TextEditingController? | - | controller 用户获取或者赋值输入内容 |
 | cursorColor | Color? | - | 游标颜色 |
 | decoration | Decoration? | - | 输入框样式 |
+| enableInteractiveSelection | bool? | - | 是否启用交互式选择 |
 | focusNode | FocusNode? | - | 获取或者取消焦点使用 |
 | hintText | String? | - | 提示文案 |
 | hintTextStyle | TextStyle? | - | 提示文本颜色，默认为文本颜色 |
@@ -34,7 +36,7 @@
 | leftLabelSpace | double? | - | 输入框左侧文案间距 |
 | leftLabelStyle | TextStyle? | - | 左侧标签样式 设置该值是若出现像素溢出，请设置letterSpacing: 0 |
 | maxLength | int? | 500 | 最大字数限制 |
-| maxLines | int | 1 | 最大输入行数 |
+| maxLines | int? | 1 | 最大输入行数 |
 | needClear | bool | true | 是否需要右侧按钮变为删除 |
 | obscureText | bool | false | 是否隐藏输入的文字，一般用在密码输入框中 |
 | onBtnTap | GestureTapCallback? | - | 右侧按钮点击 |
@@ -47,6 +49,7 @@
 | required | bool? | - | 是否必填标志（红色*） |
 | rightBtn | Widget? | - | 右侧按钮 |
 | rightWidget | Widget? | - | 右侧自定义组件 特殊类型时生效 |
+| selectionControls | TextSelectionControls? | - | 自定义选择控制器 |
 | showBottomDivider | bool | true | 是否展示底部分割线 |
 | size | TDInputSize | TDInputSize.large | 输入框规格 |
 | spacer | TDInputSpacer | - | 组件各模块间间距 |
