@@ -37,7 +37,9 @@
 
 **Android**：扫描二维码下载预览应用
 
-<img width="200" src="https://tdesign.tencent.com/flutter/assets/qrcode/td_apk_qrcode.png" />
+<img width="200" src="https://tdesign.tencent.com/flutter/assets/qrcode/td_apk_qrcode_0_2_7.png" />
+
+下载链接：[https://oteam-tdesign-1258344706.cos.ap-guangzhou.tencentcos.cn/flutter/tdesign-flutter-0.2.7-314.apk](https://oteam-tdesign-1258344706.cos.ap-guangzhou.tencentcos.cn/flutter/tdesign-flutter-0.2.7-314.apk)
 
 **iOS**：运行项目预览
 
