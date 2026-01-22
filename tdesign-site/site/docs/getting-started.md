@@ -19,8 +19,6 @@
   </a>
 </p>
 
-[English](./README.md) | 简体中文
-
 **TDesign Flutter** 是基于腾讯设计体系的跨平台 UI 组件库，使用 Flutter 框架开发，可快速构建美观、一致的移动端/Web 应用，提供丰富的预制组件和主题定制能力，支持 iOS、Android、Web 多端运行。
 
 ## 🎉 特性
