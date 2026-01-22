@@ -25,7 +25,6 @@
     "lint": "eslint '{src,example}/**/*.{js,ts}'",
     "format": "prettier {src,example,script}/**/*.{js,ts,wxss,less,wxml,html,json,md,wxs} --write",
     "copy:readme": "node script/copy-readme.js",
-    "presite": "npm run copy:readme",
     "site": "cd site && vite build",
     "presite:dev": "npm run copy:readme",
     "site:dev": "cd site && vite",
