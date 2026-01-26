@@ -25,7 +25,8 @@
 
 ```
 ```
- ### TDNoticeBarStyle
+
+### TDNoticeBarStyle
 #### 简介
 公告栏样式
 #### 默认构造方法

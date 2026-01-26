@@ -144,6 +144,7 @@ class _TDMultiCascaderState extends State<TDMultiCascader>
 
     return Container(
       width: maxWidth,
+      height: widget.cascaderHeight,
       decoration: BoxDecoration(
         color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
         borderRadius: BorderRadius.only(

@@ -57,6 +57,7 @@ class TDDropdownItem<T> extends StatefulWidget {
     this.disabled = false,
     this.label,
     this.arrowIcon,
+    this.arrowColor,
     this.multiple = false,
     this.options = const [],
     this.builder,
@@ -80,6 +81,9 @@ class TDDropdownItem<T> extends StatefulWidget {
 
   /// 自定义箭头图标
   final IconData? arrowIcon;
+
+  /// 自定义箭头颜色
+  final Color? arrowColor;
 
   /// 是否多选
   final bool? multiple;
@@ -177,6 +181,9 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
             ? double.infinity
             : max<double>(
                 popupState.maxContentHeight - TDDropdownItem.operateHeight, 0);
+    var selectIds = _getSelected(widget.options)
+        .map((e) => e!.value)
+        .toList();
     return Column(
       children: [
         Container(
@@ -186,38 +193,35 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
                 minHeight: widget.minContentHeight ?? 0.0,
                 maxHeight: maxContentHeight),
             child: SingleChildScrollView(
-              child: Column(
-                children: List.generate(groupChunk.length, (index) {
-                  var entry = groupChunk.entries.elementAt(index);
-                  var chunks = entry.value;
-                  var selectIds = _getSelected(widget.options)
-                      .map((e) => e!.value)
-                      .toList();
-                  return Column(
-                    children: [
-                      groupChunk.length == 1 && entry.key == '__default__'
-                          ? const SizedBox.shrink()
-                          : Container(
-                              width: double.infinity,
-                              padding: EdgeInsets.only(
-                                  left: paddingNum,
-                                  top: paddingNum,
-                                  right: paddingNum),
-                              color: TDTheme.of(context).bgColorContainer,
-                              child: TDText(entry.key == '__default__'
-                                  ? context.resource.other
-                                  : entry.key),
-                            ),
-                      Container(
-                        padding: EdgeInsets.all(paddingNum),
-                        color: TDTheme.of(context).bgColorContainer,
-                        child: TDCheckboxGroupContainer(
-                          selectIds: isMultiple
-                              ? selectIds
-                              : selectIds.isEmpty
-                                  ? []
-                                  : [selectIds[0]],
-                          onCheckBoxGroupChange: _handleSelectChange,
+              child: TDCheckboxGroupContainer(
+                selectIds: isMultiple
+                    ? selectIds
+                    : selectIds.isEmpty
+                        ? []
+                        : [selectIds[0]],
+                onCheckBoxGroupChange: _handleSelectChange,
+                child: Column(
+                  children: List.generate(groupChunk.length, (index) {
+                    var entry = groupChunk.entries.elementAt(index);
+                    var chunks = entry.value;
+                    return Column(
+                      children: [
+                        groupChunk.length == 1 && entry.key == '__default__'
+                            ? const SizedBox.shrink()
+                            : Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.only(
+                                    left: paddingNum,
+                                    top: paddingNum,
+                                    right: paddingNum),
+                                color: TDTheme.of(context).bgColorContainer,
+                                child: TDText(entry.key == '__default__'
+                                    ? context.resource.other
+                                    : entry.key),
+                              ),
+                        Container(
+                          padding: EdgeInsets.all(paddingNum),
+                          color: TDTheme.of(context).bgColorContainer,
                           child: Column(
                             children: List.generate(chunks.length, (ri) {
                               var num = _num(chunks[ri], widget.optionsColumns);
@@ -238,10 +242,10 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
                             }),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                }),
+                      ],
+                    );
+                  }),
+                ),
               ),
             ),
           ),
@@ -318,6 +322,8 @@ class _TDDropdownItemState extends State<TDDropdownItem> {
                     ? TDTheme.of(context).brandColor7
                     : TDTheme.of(context).textColorPrimary
                 : TDTheme.of(context).textDisabledColor,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ),

@@ -91,6 +91,8 @@ class TDActionSheetPage extends StatelessWidget {
                   CodeWrapper(builder: _buildIconListActionSheet),
                   SizedBox(height: 16),
                   CodeWrapper(builder: _buildBadgeListActionSheet),
+                  SizedBox(height: 16),
+                  CodeWrapper(builder: _buildItemDescriptionListActionSheet),
                 ],
               );
             },
@@ -249,6 +251,24 @@ Widget _buildBadgeListActionSheet(BuildContext context) {
             badge: const TDBadge(TDBadgeType.message, count: '99+'),
           ),
         ],
+      );
+    },
+  );
+}
+
+@Demo(group: 'action_sheet')
+Widget _buildItemDescriptionListActionSheet(BuildContext context) {
+  return TDButton(
+    text: '带Cell描述常规列表',
+    isBlock: true,
+    type: TDButtonType.outline,
+    theme: TDButtonTheme.primary,
+    size: TDButtonSize.large,
+    onTap: () {
+      TDActionSheet(
+        context,
+        visible: true,
+        items: _nums.map((e) => TDActionSheetItem(label: '选项$e',description: '描述$e')).toList(),
       );
     },
   );

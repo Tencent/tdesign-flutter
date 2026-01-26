@@ -9,6 +9,8 @@
 .history
 .svn/
 
+
+# Site
 tdesign-site/node_modules/
 tdesign-site/_site/
 tdesign-site/site/public/example/
@@ -81,6 +83,8 @@ build/
 
 /tdesign-component/local_dependency_override.yaml
 /tdesign-component/pubspec_overrides.yaml
+/tdesign-component/pubspec.lock
 /tdesign-component/example/pubspec_overrides.yaml
 /tdesign-component/example/aop_tools
 /tdesign-component/example/tdesign-flutter-generator
+/tdesign-component/example/pubspec.lock

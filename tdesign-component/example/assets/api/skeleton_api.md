@@ -1,24 +1,5 @@
 ## API
-### TDSkeleton
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| animation | TDSkeletonAnimation? | - | 动画效果 |
-| delay | int | 0 | 延迟显示加载时间 |
-| key |  | - |  |
-| theme |  | TDSkeletonTheme.text |  |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TDSkeleton.fromRowCol  | 从行列框架创建骨架屏 |
-
-```
-```
- ### TDSkeletonRowColStyle
+### TDSkeletonRowColStyle
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -27,7 +8,8 @@
 
 ```
 ```
- ### TDSkeletonRowCol
+
+### TDSkeletonRowCol
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -37,7 +19,8 @@
 
 ```
 ```
- ### TDSkeletonRowColObjStyle
+
+### TDSkeletonRowColObjStyle
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -57,7 +40,8 @@
 
 ```
 ```
- ### TDSkeletonRowColObj
+
+### TDSkeletonRowColObj
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -77,3 +61,23 @@
 | TDSkeletonRowColObj.rect  | 矩形 |
 | TDSkeletonRowColObj.spacer  | 空白占位符 |
 | TDSkeletonRowColObj.text  | 文本 |
+
+```
+```
+
+### TDSkeleton
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| animation | TDSkeletonAnimation? | - | 动画效果 |
+| delay | int | 0 | 延迟显示加载时间 |
+| key |  | - |  |
+| theme |  | TDSkeletonTheme.text |  |
+
+
+#### 工厂构造方法
+
+| 名称  | 说明 |
+| --- |  --- |
+| TDSkeleton.fromRowCol  | 从行列框架创建骨架屏 |

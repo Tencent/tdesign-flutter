@@ -53,6 +53,17 @@ enum TDBottomTabBarOutlineType {
   capsule
 }
 
+enum TDBottomTabBarIndicatorAnimation {
+  /// 无动画，瞬间切换
+  none,
+
+  /// 线性滑动：指示器匀速从一个 tab 滑到另一个
+  linear,
+
+  /// 弹性动画：指示器先拉伸后收缩
+  elastic,
+}
+
 /// 飘新配置
 class BadgeConfig {
   BadgeConfig({
@@ -150,6 +161,9 @@ class TDBottomTabBar extends StatefulWidget {
     this.centerDistance,
     this.currentIndex,
     this.needInkWell = false,
+    this.indicatorAnimation = TDBottomTabBarIndicatorAnimation.none,
+    this.animationDuration = const Duration(milliseconds: 300),
+    this.animationCurve = Curves.easeInOutCubic,
   })  : assert(() {
           if (navigationTabs.isEmpty) {
             throw FlutterError('[TDBottomTabBar] please set at least one tab!');
@@ -245,76 +259,126 @@ class TDBottomTabBar extends StatefulWidget {
   /// 是否需要水波纹效果
   final bool needInkWell;
 
+  /// 指示器动画类型
+  final TDBottomTabBarIndicatorAnimation indicatorAnimation;
+
+  /// 动画时长
+  final Duration animationDuration;
+
+  /// 动画曲线
+  final Curve animationCurve;
+
   @override
   State<TDBottomTabBar> createState() => _TDBottomTabBarState();
 }
 
-class _TDBottomTabBarState extends State<TDBottomTabBar> {
+class _TDBottomTabBarState extends State<TDBottomTabBar>
+    with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
+  late AnimationController _animationController;
+  Animation<double>? _animation;
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.currentIndex ?? 0;
+
+    // 初始化动画控制器
+    _animationController = AnimationController(
+      duration: widget.animationDuration,
+      vsync: this,
+    );
+
+    // 初始化动画（初始位置）
+    _animation = Tween<double>(
+      begin: _selectedIndex.toDouble(),
+      end: _selectedIndex.toDouble(),
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: widget.animationCurve,
+    ));
   }
 
   @override
   void didUpdateWidget(covariant TDBottomTabBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _selectedIndex = widget.currentIndex ?? _selectedIndex;
+    if (widget.currentIndex != null && widget.currentIndex != _selectedIndex) {
+      _animateToIndex(widget.currentIndex!);
+    }
+
+    // 更新动画时长和曲线
+    if (oldWidget.animationDuration != widget.animationDuration) {
+      _animationController.duration = widget.animationDuration;
+    }
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var isCapsuleOutlineType =
         widget.outlineType == TDBottomTabBarOutlineType.capsule;
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        /// -2 是为了增加边框
-        var maxWidth =
-            double.parse(constraints.biggest.width.toStringAsFixed(1)) - 2;
 
-        /// 胶囊样式 比正常样式宽度要小32
-        if (isCapsuleOutlineType) {
-          maxWidth -= 32;
-        }
-        var itemWidth = maxWidth / widget.navigationTabs.length;
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (BuildContext context, Widget? child) {
+        return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            /// -2 是为了增加边框
+            var maxWidth =
+                double.parse(constraints.biggest.width.toStringAsFixed(1)) - 2;
 
-        Widget result = Container(
-            height: widget.barHeight ?? _kDefaultTabBarHeight,
-            alignment: Alignment.center,
-            margin: isCapsuleOutlineType
-                ? const EdgeInsets.symmetric(horizontal: 16)
-                : null,
-            decoration: BoxDecoration(
-                color: widget.backgroundColor ??
-                    TDTheme.of(context).bgColorContainer,
-                borderRadius: isCapsuleOutlineType
-                    ? BorderRadius.circular(TDTheme.of(context).radiusCircle)
+            /// 胶囊样式 比正常样式宽度要小32
+            if (isCapsuleOutlineType) {
+              maxWidth -= 32;
+            }
+            var itemWidth = maxWidth / widget.navigationTabs.length;
+
+            Widget result = Container(
+                height: widget.barHeight ?? _kDefaultTabBarHeight,
+                alignment: Alignment.center,
+                margin: isCapsuleOutlineType
+                    ? const EdgeInsets.symmetric(horizontal: 16)
                     : null,
-                border: widget.showTopBorder! && !isCapsuleOutlineType
-                    ? Border(
+                decoration: BoxDecoration(
+                    color: widget.backgroundColor ??
+                        TDTheme.of(context).bgColorContainer,
+                    borderRadius: isCapsuleOutlineType
+                        ? BorderRadius.circular(TDTheme.of(context).radiusCircle)
+                        : null,
+                    border: widget.showTopBorder! && !isCapsuleOutlineType
+                        ? Border(
                         top: widget.topBorder ??
                             BorderSide(
                                 color: TDTheme.of(context).componentStrokeColor,
                                 width: 0.5))
-                    : null,
-                boxShadow: isCapsuleOutlineType
-                    ? TDTheme.of(context).shadowsTop
-                    : null),
-            child: Stack(alignment: Alignment.center, children: [
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children:
+                        : null,
+                    boxShadow: isCapsuleOutlineType
+                        ? TDTheme.of(context).shadowsTop
+                        : null),
+                child: Stack(alignment: Alignment.center, children: [
+                  // 动画指示器（在底层）
+                  _buildAnimatedIndicator(context, itemWidth),
+                  // Tab 项（在上层）
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children:
                       List.generate(widget.navigationTabs.length, (index) {
-                    return _item(index, itemWidth);
-                  })),
-              _verticalDivider(),
-            ]));
-        if (widget.useSafeArea) {
-          result = SafeArea(child: result);
-        }
-        return result;
+                        return _item(index, itemWidth);
+                      })),
+                  // 分割线（在最上层）
+                  _verticalDivider(),
+                ]));
+            if (widget.useSafeArea) {
+              result = SafeArea(child: result);
+            }
+            return result;
+          },
+        );
       },
     );
   }
@@ -326,9 +390,133 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
         widget.navigationTabs[index].onTap?.call();
       }
       if (_selectedIndex != index) {
-        _selectedIndex = index;
+        _animateToIndex(index);
       }
     });
+  }
+
+  /// 动画切换到指定索引
+  void _animateToIndex(int index) {
+    final oldIndex = _selectedIndex;
+    _selectedIndex = index;
+
+    if (widget.indicatorAnimation == TDBottomTabBarIndicatorAnimation.none) {
+      // 无动画，直接切换
+      return;
+    }
+
+    // 创建新的动画
+    _animation = Tween<double>(
+      begin: oldIndex.toDouble(),
+      end: index.toDouble(),
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: widget.animationCurve,
+    ));
+
+    // 播放动画
+    _animationController.forward(from: 0.0);
+  }
+
+  /// 构建动画指示器
+  Widget _buildAnimatedIndicator(BuildContext context, double itemWidth) {
+    // 只有 label 样式才显示背景指示器
+    if (widget.componentType != TDBottomTabBarComponentType.label) {
+      return const SizedBox.shrink();
+    }
+
+    // 无动画模式不显示（由各个 item 自己渲染）
+    if (widget.indicatorAnimation == TDBottomTabBarIndicatorAnimation.none) {
+      return const SizedBox.shrink();
+    }
+
+    final animValue = _animation?.value ?? _selectedIndex.toDouble();
+
+    switch (widget.indicatorAnimation) {
+      case TDBottomTabBarIndicatorAnimation.linear:
+        return _buildLinearIndicator(context, itemWidth, animValue);
+      case TDBottomTabBarIndicatorAnimation.elastic:
+        return _buildElasticIndicator(context, itemWidth, animValue);
+      case TDBottomTabBarIndicatorAnimation.none:
+        return const SizedBox.shrink();
+    }
+  }
+
+  /// 线性滑动指示器
+  Widget _buildLinearIndicator(
+      BuildContext context, double itemWidth, double animValue) {
+    final horizontalPadding = widget.navigationTabs.length > 3 ? 8.0 : 12.0;
+    final indicatorWidth = itemWidth - horizontalPadding * 2;
+
+    // 计算指示器位置
+    final left = animValue * itemWidth + horizontalPadding;
+
+    // 计算高度
+    final height = widget.basicType == TDBottomTabBarBasicType.text ||
+        widget.basicType == TDBottomTabBarBasicType.expansionPanel
+        ? 32.0
+        : null;
+
+    return Positioned(
+      left: left,
+      child: Container(
+        width: indicatorWidth,
+        height: height,
+        decoration: BoxDecoration(
+          color: widget.selectedBgColor ?? TDTheme.of(context).brandLightColor,
+          borderRadius: const BorderRadius.all(Radius.circular(24)),
+        ),
+      ),
+    );
+  }
+
+  /// 弹性拉伸指示器
+  Widget _buildElasticIndicator(
+      BuildContext context, double itemWidth, double animValue) {
+    final horizontalPadding = widget.navigationTabs.length > 3 ? 8.0 : 12.0;
+
+    // 计算起始和目标索引
+    final fromIndex = animValue.floor();
+    final toIndex = animValue.ceil();
+    final progress = animValue - fromIndex;
+
+    // 弹性曲线：前半段快速拉伸，后半段缓慢收缩
+    double width;
+    double left;
+
+    if (progress < 0.5) {
+      // 前半段：从起点向终点拉伸
+      final stretchProgress = progress * 2; // 0 -> 1
+      width = (itemWidth - horizontalPadding * 2) *
+          (1 + stretchProgress * (toIndex - fromIndex));
+      left = fromIndex * itemWidth + horizontalPadding;
+    } else {
+      // 后半段：从终点收缩到正常宽度
+      final shrinkProgress = (progress - 0.5) * 2; // 0 -> 1
+      width = (itemWidth - horizontalPadding * 2) *
+          (1 + (1 - shrinkProgress) * (toIndex - fromIndex));
+      left = fromIndex * itemWidth +
+          horizontalPadding +
+          shrinkProgress * (toIndex - fromIndex) * itemWidth;
+    }
+
+    // 计算高度
+    final height = widget.basicType == TDBottomTabBarBasicType.text ||
+        widget.basicType == TDBottomTabBarBasicType.expansionPanel
+        ? 32.0
+        : null;
+
+    return Positioned(
+      left: left,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: widget.selectedBgColor ?? TDTheme.of(context).brandLightColor,
+          borderRadius: const BorderRadius.all(Radius.circular(24)),
+        ),
+      ),
+    );
   }
 
   Widget _item(int index, double itemWidth) {
@@ -355,6 +543,8 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
           unselectedBgColor: widget.unselectedBgColor,
           centerDistance: widget.centerDistance ?? 0,
           needInkWell: widget.needInkWell,
+          showItemBackground:
+          widget.indicatorAnimation == TDBottomTabBarIndicatorAnimation.none,
           onTap: () {
             _onTap(index);
           },
@@ -403,6 +593,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
     required this.centerDistance,
     this.onLongPress,
     this.needInkWell = false,
+    this.showItemBackground = true,
   }) : super(key: key);
 
   /// tab基本类型
@@ -447,6 +638,9 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
   /// 是否需要水波纹效果
   final bool needInkWell;
 
+  /// 是否显示 item 自身的背景（无动画模式下为 true，有动画模式下为 false）
+  final bool showItemBackground;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -462,7 +656,9 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
           alignment: Alignment.center,
           clipBehavior: Clip.none,
           children: [
-            if (isSelected || unselectedBgColor != null)
+            // 只在无动画模式下显示 item 自身的背景
+            if (showItemBackground &&
+                (isSelected || unselectedBgColor != null))
               Visibility(
                 visible: componentType == TDBottomTabBarComponentType.label,
                 child: Container(

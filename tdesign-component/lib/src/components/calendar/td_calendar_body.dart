@@ -24,12 +24,15 @@ class TDCalendarBody extends StatelessWidget {
     required this.monthTitleHeight,
     required this.verticalGap,
     required this.animateTo,
+    this.onMonthChange,
+    this.anchorDate
   }) : super(key: key);
 
   final int? maxDate;
   final int? minDate;
   final CalendarType type;
   final List<DateTime>? value;
+  final DateTime? anchorDate;
   final int firstDayOfWeek;
   final Widget Function(
     TDate? date,
@@ -50,15 +53,37 @@ class TDCalendarBody extends StatelessWidget {
   final double verticalGap;
   final double cellHeight;
   final bool animateTo;
+  final ValueChanged<DateTime>? onMonthChange;
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
+    final scrollController = TrackingScrollController();
     final min = _getDefDate(minDate);
     final max = _getDefDate(maxDate, 6);
     final months = _monthsBetween(min, max);
     final data = <DateTime, List<TDate?>>{};
     final monthHeight = <int, double>{};
+    DateTime? _lastPrintMonth;
+    scrollController.addListener(() {
+      // 根据滚动位置判断当前是几月
+      var currentOffset = 0.0;
+      for (var i = 0; i < months.length; i++) {
+        final mh = _getMonthHeight(months, i, monthHeight);
+        if (scrollController.offset >= currentOffset &&
+            scrollController.offset < currentOffset + mh) {
+          //只返回下一个月
+          DateTime currentMonth = months[i + 1];
+          // 缓存上一次打印的月份，只有变更时才打印
+          if (_lastPrintMonth == null ||
+              !_lastPrintMonth!.isAtSameMomentAs(currentMonth)) {
+            _lastPrintMonth = currentMonth;
+            onMonthChange?.call(currentMonth);
+          }
+          break;
+        }
+        currentOffset += mh;
+      }
+    });
     _scrollToItem(scrollController, months, monthHeight);
     return ListView.builder(
       padding: EdgeInsets.all(bodyPadding),
@@ -129,20 +154,23 @@ class TDCalendarBody extends StatelessWidget {
 
   void _scrollToItem(ScrollController scrollController, List<DateTime> months,
       Map<int, double> monthHeight) {
-    if (value == null || value!.isEmpty) {
-      return;
+    DateTime? scrollToDate = anchorDate;
+    if (scrollToDate == null) {
+      if (value == null || value!.isEmpty) {
+        return;
+      }
+      scrollToDate = value!.reduce((a, b) => a.isBefore(b) ? a : b);
     }
-    final scrollDate = value!.reduce((a, b) => a.isBefore(b) ? a : b);
     var lastMonthDay = DateTime(months.last.year, months.last.month + 1);
     lastMonthDay = lastMonthDay.add(const Duration(days: -1));
-    if (months.first.isAfter(scrollDate) || lastMonthDay.isBefore(scrollDate)) {
+    if (months.first.isAfter(scrollToDate) || lastMonthDay.isBefore(scrollToDate)) {
       return;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var height = 0.0;
       for (var i = 0; i < months.length; i++) {
         final item = months[i];
-        if (item.year == scrollDate.year && item.month == scrollDate.month) {
+        if (item.year == scrollToDate!.year && item.month == scrollToDate!.month) {
           break;
         }
         height += (_getMonthHeight(months, i, monthHeight) ?? 0);

@@ -1,25 +1,18 @@
 ## API
-### TDTab
+### TDTabBarView
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| badge | TDBadge? | - | 图标 |
-| child | Widget? | - | 子widget |
-| contentHeight | double? | - | 中间内容高度 |
-| enable | bool | true | 是否可用，默认true |
-| height | double? | - | tab高度 |
-| icon | Widget? | - | 图标 |
-| iconMargin | EdgeInsetsGeometry | const EdgeInsets.only(bottom: 4.0, right: 4.0) | 图标间距 |
+| children | List<Widget> | - | 子widget列表 |
+| controller | TabController? | - | 控制器 |
+| isSlideSwitch | bool | false | 是否可以滑动切换 |
 | key |  | - |  |
-| outlineType | TDTabOutlineType | TDTabOutlineType.filled | 选项卡样式 |
-| size | TDTabSize | TDTabSize.small | 选项卡尺寸 |
-| text | String? | - | 文字内容 |
-| textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |
 
 ```
 ```
- ### TDTabBar
+
+### TDTabBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -54,12 +47,21 @@
 
 ```
 ```
- ### TDTabBarView
+
+### TDTab
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| children | List<Widget> | - | 子widget列表 |
-| controller | TabController? | - | 控制器 |
-| isSlideSwitch | bool | false | 是否可以滑动切换 |
+| badge | TDBadge? | - | 图标 |
+| child | Widget? | - | 子widget |
+| contentHeight | double? | - | 中间内容高度 |
+| enable | bool | true | 是否可用，默认true |
+| height | double? | - | tab高度 |
+| icon | Widget? | - | 图标 |
+| iconMargin | EdgeInsetsGeometry | const EdgeInsets.only(bottom: 4.0, right: 4.0) | 图标间距 |
 | key |  | - |  |
+| outlineType | TDTabOutlineType | TDTabOutlineType.filled | 选项卡样式 |
+| size | TDTabSize | TDTabSize.small | 选项卡尺寸 |
+| text | String? | - | 文字内容 |
+| textMargin | EdgeInsetsGeometry? | - | 中间内容宽度 |

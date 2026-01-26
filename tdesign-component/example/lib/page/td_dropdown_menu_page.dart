@@ -28,6 +28,7 @@ class TDDropdownMenuPage extends StatelessWidget {
         ExampleItem(desc: '最大高度限制', builder: _buildHeight),
         ExampleItem(desc: '可横向滚动菜单', builder: _buildOverflow),
         ExampleItem(desc: '可横向滚动菜单（自定义禁用、选中颜色）', builder: _buildCustomOverflow),
+        ExampleItem(desc: '自定义箭头颜色', builder: _buildArrowColor),
       ],
     );
   }
@@ -224,8 +225,10 @@ TDDropdownMenu _buildGroup(BuildContext context) {
             TDDropdownItemOption(label: '选项6', value: '6', group: '角色'),
             TDDropdownItemOption(label: '选项7', value: '7', group: '角色'),
             TDDropdownItemOption(label: '选项8', value: '8', group: '角色'),
-            TDDropdownItemOption(
-                label: '禁用选项', value: '9', disabled: true, group: '角色'),
+            TDDropdownItemOption(label: '选项9', value: '9', group: '能力'),
+            TDDropdownItemOption(label: '选项10', value: '10', group: '能力'),
+            TDDropdownItemOption(label: '选项11', value: '11', group: '能力'),
+            TDDropdownItemOption(label: '选项12', value: '12', group: '能力'),
           ],
           onChange: (value) {
             print('选择：$value');
@@ -260,8 +263,10 @@ TDDropdownMenu _buildHidden(BuildContext context) {
             TDDropdownItemOption(label: '选项6', value: '6', group: '角色'),
             TDDropdownItemOption(label: '选项7', value: '7', group: '角色'),
             TDDropdownItemOption(label: '选项8', value: '8', group: '角色'),
-            TDDropdownItemOption(
-                label: '禁用选项', value: '9', disabled: true, group: '角色'),
+            TDDropdownItemOption(label: '选项9', value: '9', group: '能力'),
+            TDDropdownItemOption(label: '选项10', value: '10', group: '能力'),
+            TDDropdownItemOption(label: '选项11', value: '11', group: '能力'),
+            TDDropdownItemOption(label: '选项12', value: '12', group: '能力'),
           ],
           onChange: (value) {
             print('选择：$value');
@@ -438,6 +443,29 @@ TDDropdownMenu _buildCustomOverflow(BuildContext context) {
               selectedColor: Colors.red),
           TDDropdownItemOption(
               label: '价格从高到低', value: 'price', selectedColor: Colors.green),
+        ],
+      ),
+    ],
+  );
+}
+
+@Demo(group: 'dropdownMenu')
+TDDropdownMenu _buildArrowColor(BuildContext context) {
+  return TDDropdownMenu(
+    direction: TDDropdownMenuDirection.up,
+    arrowColor: Colors.red,
+    items: [
+      TDDropdownItem(
+        label: '菜单级箭头颜色(红)',
+        options: [
+          TDDropdownItemOption(label: '选项1', value: '1'),
+        ],
+      ),
+      TDDropdownItem(
+        label: 'Item级箭头颜色(蓝)',
+        arrowColor: Colors.blue,
+        options: [
+          TDDropdownItemOption(label: '选项1', value: '1'),
         ],
       ),
     ],

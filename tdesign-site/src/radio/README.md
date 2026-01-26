@@ -86,6 +86,30 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 </td-code-block>
                                   
+
+横向单选框-换行
+            
+<td-code-block panel="Dart">
+
+  <pre slot="Dart" lang="javascript">
+  Widget _horizontalRadiosWrap(BuildContext context) {
+    return TDRadioGroup(
+      selectId: '0',
+      direction: Axis.horizontal,
+      rowCount: 4,
+      directionalTdRadios: const [
+        TDRadio(id: '0', title: '单0'),
+        TDRadio(id: '1', title: '单1'),
+        TDRadio(id: '3', title: '单2'),
+        TDRadio(id: '4', title: '单3'),
+        TDRadio(id: '5', title: '单4'),
+        TDRadio(id: '6', title: '单5'),
+      ],
+    );
+  }</pre>
+
+</td-code-block>
+                                  
 ### 1 组件状态
 
 单选框状态
