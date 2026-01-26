@@ -1,0 +1,61 @@
+# 该 workflow 会在 PR 合并到 release/版本号 分支时，自动关闭所有 label 为该版本号的 issue
+name: Close issues with release label
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  close_issues:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.base.ref, 'release/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: 提取版本号
+        id: extract_version
+        run: |
+          ref=${{ github.event.pull_request.base.ref }}
+          version=${ref#release/}
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: 查找并关闭所有 label 为版本号的 issue
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const version = '${{ steps.extract_version.outputs.version }}';
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            let closedCount = 0;
+
+            try {
+              // 搜索所有 open 且 label 为版本号的 issue
+              // per_page: 100 是 GitHub API 的最大值
+              const issues = await github.paginate(github.rest.issues.listForRepo, {
+                owner,
+                repo,
+                state: 'open',
+                labels: version,
+                per_page: 100
+              });
+
+              for (const issue of issues) {
+                // 跳过 PR
+                if (issue.pull_request) continue;
+
+                await github.rest.issues.update({
+                  owner,
+                  repo,
+                  issue_number: issue.number,
+                  state: 'closed'
+                });
+                console.log(`Closed issue #${issue.number}`);
+                closedCount++;
+              }
+
+              console.log(`✅ 成功关闭 ${closedCount} 个 label 为 "${version}" 的 issue`);
+            } catch (error) {
+              console.error(`❌ 关闭 issue 时发生错误: ${error.message}`);
+              throw error;
+            }
+
