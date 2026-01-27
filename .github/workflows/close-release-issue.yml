@@ -1,69 +1,42 @@
-# 该 workflow 会在 PR 合并到 release/版本号 分支时，自动关闭所有 label 为该版本号的 issue
+# 该 workflow 会在 PR 合并到 develop 分支时，自动关闭所有 label 为版本号的 issue
 name: Close issues with release label
 
 on:
-    pull_request:
-        types:
-            - closed
+  pull_request:
+    types: [closed]
+    # 只有发布的时候才进行该 workflow
+    paths:
+      - 'tdesign-component/**/pubspec.yaml'
 
 jobs:
-    close_issues:
-        if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop' && startsWith(github.event.pull_request.head.ref, 'release/') }}
-        runs-on: ubuntu-latest
-        steps:
-            - name: 提取版本号（从 head.ref 提取）
-              id: extract_version
-              run: |
-                  ref=${{ github.event.pull_request.head.ref }}
-                  version=${ref#release/}
-                  echo "version=$version" >> $GITHUB_OUTPUT
+  close_issues:
+    # 只有当 PR 被合并且目标分支是 develop 且来源分支是 release/* 格式时才执行
+    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop' && startsWith(github.event.pull_request.head.ref, 'release/') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 提取版本号（从 head.ref 提取）
+        id: extract_version
+        run: echo "version=${GITHUB_HEAD_REF#release/}" >> $GITHUB_OUTPUT
 
-            - name: 查找并关闭所有 label 为版本号的 issue
-              uses: actions/github-script@v7
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-                  script: |
-                      const version = '${{ steps.extract_version.outputs.version }}';
-                      const owner = context.repo.owner;
-                      const repo = context.repo.repo;
-                      let closedCount = 0;
-                      try {
-                        // 搜索所有 open 且 label 为版本号的 issue
-                        const issues = await github.paginate(github.rest.issues.listForRepo, {
-                          owner,
-                          repo,
-                          state: 'open',
-                          labels: version,
-                          per_page: 100
-                        });
+      - name: 关闭对应版本的 issues
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const version = '${{ steps.extract_version.outputs.version }}';
+            const { owner, repo } = context.repo;
+            const releaseUrl = `https://github.com/${owner}/${repo}/releases/tag/${version}`;
 
-                        for (const issue of issues) {
-                          // 跳过 PR
-                          if (issue.pull_request) continue;
-                          // 关闭 issue
-                          await github.rest.issues.update({
-                            owner,
-                            repo,
-                            issue_number: issue.number,
-                            state: 'closed'
-                          });
-                          const releaseUrl = `https://github.com/${owner}/${repo}/releases/tag/${version}`;
-                          await github.rest.issues.createComment({
-                            owner,
-                            repo,
-                            issue_number: issue.number,
-                            body: `该 issue 已经在 [${version} 版本](${releaseUrl}) 被修复。`
-                          });
-                          closedCount++;
-                          console.log(`✅ 已关闭 issue #${issue.number}`);
-                        }
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner, repo, state: 'open', labels: version, per_page: 100
+            });
 
-                        if (closedCount > 0) {
-                          console.log(`✅ 成功关闭 ${closedCount} 个 label 为 "${version}" 的 issue`);
-                        } else {
-                          console.log(`没有需要关闭的 label 为 "${version}" 的 issue`);
-                        }
-                      } catch (error) {
-                        console.error(`❌ 关闭 issue 时发生错误: ${error.message}`);
-                        throw error;
-                      }
+            for (const issue of issues) {
+              if (!issue.pull_request) {
+                await github.rest.issues.update({ owner, repo, issue_number: issue.number, state: 'closed' });
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: issue.number,
+                  body: `该 issue 已在 [${version} 版本](${releaseUrl}) 中处理。`
+                });
+              }
+            }
