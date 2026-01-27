@@ -143,7 +143,6 @@ export default defineComponent({
       findAndObserve();
     },
     handleThemeChange(styleId, cssContent) {
-
       // 更新对应的样式内容
       if (styleId === "custom-theme") {
         this.themeStyles.light = cssContent;
@@ -153,98 +152,128 @@ export default defineComponent({
         this.themeStyles.extra = cssContent;
       }
 
-      // 输出组合后的主题
+      // 触发主题更新
       this.onThemeUpdated();
     },
     // 本地缓存主题到 localStorage
-  cacheThemeLocally(themeJson) {
-    try {
-      const cacheData = {
-        theme: themeJson,
-        timestamp: Date.now()
-      };
-      localStorage.setItem(this.themeCacheKey, JSON.stringify(cacheData));
-      console.log('Theme cached successfully');
-    } catch (error) {
-      console.warn('Failed to cache theme locally:', error);
-    }
-  },
-  // 从本地加载缓存的主题
-  loadThemeFromLocal() {
-    try {
-      const cached = localStorage.getItem(this.themeCacheKey);
-      if (cached) {
-        const cacheData = JSON.parse(cached);
-        if (cacheData.theme) {
-          console.log('Theme loaded from cache');
-          return cacheData.theme;
-        }
-      }
-    } catch (error) {
-      console.warn('Failed to load cached theme:', error);
-      localStorage.removeItem(this.themeCacheKey);
-    }
-    return null;
-  },
-  onThemeUpdated() {
-    const { light, dark, extra } = this.themeStyles;
-
-    // 添加防抖机制，避免频繁更新
-    if (this.themeUpdateTimeout) {
-      clearTimeout(this.themeUpdateTimeout);
-    }
-    
-    this.themeUpdateTimeout = setTimeout(() => {
-      // 使用工具函数生成 Flutter 主题配置
-      const themeJson = generateFlutterThemeFromParts(light, dark, extra);
-
-      // 检查主题是否有实际变化，避免不必要的缓存和发送
-      const lastThemeJson = JSON.stringify(this.lastThemeJson);
-      const currentThemeJson = JSON.stringify(themeJson);
-      
-      if (lastThemeJson !== currentThemeJson) {
-        this.lastThemeJson = themeJson;
-        
-        // 缓存到 localStorage
-        this.cacheThemeLocally(themeJson);
-
-        // 将主题 JSON 发送给所有 Flutter iframe
-        this.sendThemeToFlutterIframes(themeJson);
-      }
-    }, 300); // 300ms防抖延迟
-  },
-  sendThemeToFlutterIframes(themeJson = null) {
-    // 如果没有传入 themeJson，尝试从本地加载
-    if (!themeJson) {
-      themeJson = this.loadThemeFromLocal();
-    }
-    
-    if (!themeJson) {
-      console.log('No theme data available to send');
-      return;
-    }
-    
-    // 查找所有 Flutter iframe (在 component.vue 中)
-    const iframes = document.querySelectorAll('iframe[src*="/example/"]');
-    
-    iframes.forEach((iframe) => {
+    cacheThemeLocally(themeJson) {
       try {
-        if (iframe.contentWindow && iframe.contentWindow.postMessage) {
-          iframe.contentWindow.postMessage(
-            {
-              type: 'flutter-theme-update',
-              theme: themeJson
-            },
-            '*'
-          );
+        const cacheData = {
+          theme: themeJson,
+          timestamp: Date.now()
+        };
+        localStorage.setItem(this.themeCacheKey, JSON.stringify(cacheData));
+        console.log('Theme cached successfully');
+      } catch (error) {
+        console.warn('Failed to cache theme locally:', error);
+      }
+    },
+    // 从本地加载缓存的主题
+    loadThemeFromLocal() {
+      try {
+        const cached = localStorage.getItem(this.themeCacheKey);
+        if (cached) {
+          const cacheData = JSON.parse(cached);
+          if (cacheData.theme) {
+            console.log('Theme loaded from cache');
+            return cacheData.theme;
+          }
         }
       } catch (error) {
-        console.error('Error sending theme to iframe:', error);
+        console.warn('Failed to load cached theme:', error);
+        localStorage.removeItem(this.themeCacheKey);
       }
-    });
-    
-    console.log('Theme sent to all iframes');
-  },
+      return null;
+    },
+    onThemeUpdated() {
+      const { light, dark, extra } = this.themeStyles;
+
+      // 添加防抖机制，避免频繁更新
+      if (this.themeUpdateTimeout) {
+        clearTimeout(this.themeUpdateTimeout);
+      }
+      
+      this.themeUpdateTimeout = setTimeout(() => {
+        // 使用工具函数生成 Flutter 主题配置
+        const themeJson = generateFlutterThemeFromParts(light, dark, extra);
+
+        // 检查主题是否有实际变化，避免不必要的缓存和发送
+        const lastThemeJson = JSON.stringify(this.lastThemeJson);
+        const currentThemeJson = JSON.stringify(themeJson);
+        
+        if (lastThemeJson !== currentThemeJson) {
+          this.lastThemeJson = themeJson;
+          
+          // 缓存到 localStorage
+          this.cacheThemeLocally(themeJson);
+
+          // 将主题 JSON 发送给所有 Flutter iframe
+          this.sendThemeToFlutterIframes(themeJson);
+        }
+      }, 300); // 300ms防抖延迟
+    },
+    sendThemeToFlutterIframes(themeJson = null) {
+      // 如果没有传入 themeJson，尝试从本地加载
+      if (!themeJson) {
+        themeJson = this.loadThemeFromLocal();
+      }
+      
+      if (!themeJson) {
+        console.log('No theme data available to send');
+        return;
+      }
+      
+      // 查找所有 Flutter iframe (在 component.vue 中)
+      const iframes = document.querySelectorAll('iframe[src*="/example/"]');
+      
+      iframes.forEach((iframe) => {
+        try {
+          if (iframe.contentWindow && iframe.contentWindow.postMessage) {
+            iframe.contentWindow.postMessage(
+              {
+                type: 'flutter-theme-update',
+                theme: themeJson
+              },
+              '*'
+            );
+          }
+        } catch (error) {
+          console.error('Error sending theme to iframe:', error);
+        }
+      });
+      
+      console.log('Theme sent to all iframes');
+    },
+    sendThemeToFlutterIframes() {
+      // 从本地加载缓存的主题
+      const themeJson = this.loadThemeFromLocal();
+      
+      if (!themeJson) {
+        console.log('No theme data available to send');
+        return;
+      }
+      
+      // 查找所有 Flutter iframe (在 component.vue 中)
+      const iframes = document.querySelectorAll('iframe[src*="/example/"]');
+      
+      iframes.forEach((iframe) => {
+        try {
+          if (iframe.contentWindow && iframe.contentWindow.postMessage) {
+            iframe.contentWindow.postMessage(
+              {
+                type: 'flutter-theme-update',
+                theme: themeJson
+              },
+              '*'
+            );
+          }
+        } catch (error) {
+          console.error('Error sending theme to iframe:', error);
+        }
+      });
+      
+      console.log('Theme sent to all iframes');
+    }
   },
 });
 </script>

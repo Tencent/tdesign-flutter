@@ -53,12 +53,40 @@ void _handleThemeUpdate(dynamic themeData) {
 
   try {
     // 构建 theme.json 格式
+    // TDThemeData.fromJson 期望的格式:
+    // {
+    //   "custom": {
+    //     "color": {...},
+    //     "ref": {...},
+    //     "font": {...},
+    //     "radius": {...},
+    //     "shadow": {...},
+    //     "margin": {...}
+    //   },
+    //   "customDark": {
+    //     "color": {...},
+    //     "ref": {...},
+    //     "font": {...},
+    //     "radius": {...},
+    //     "shadow": {...},
+    //     "margin": {...}
+    //   }
+    // }
     final themeJson = {
       'custom': themeData['light'],
       'customDark': themeData['dark'],
     };
 
     final jsonString = jsonEncode(themeJson);
+    
+    // 调试输出
+    print('🎨 Flutter: 收到主题更新消息');
+    print('📊 Light主题颜色数量: ${themeData['light']?['color']?.length ?? 0}');
+    print('📊 Dark主题颜色数量: ${themeData['dark']?['color']?.length ?? 0}');
+    print('📊 Light主题引用数量: ${themeData['light']?['ref']?.length ?? 0}');
+    print('📊 Dark主题引用数量: ${themeData['dark']?['ref']?.length ?? 0}');
+    print('📊 Light主题字体数量: ${themeData['light']?['font']?.length ?? 0}');
+    print('📊 Dark主题字体数量: ${themeData['dark']?['font']?.length ?? 0}');
 
     // 解析为 TDThemeData
     final newTheme = TDThemeData.fromJson('custom', jsonString);
@@ -66,12 +94,20 @@ void _handleThemeUpdate(dynamic themeData) {
     // 触发回调 (检查非空)
     if (newTheme != null) {
       _onThemeUpdate?.call(newTheme);
-      print('✅ Flutter: 收到并应用新主题配置');
+      print('✅ Flutter: 成功应用新主题配置');
+      
+      // 调试输出新主题信息
+      print('🎯 新主题名称: ${newTheme.name}');
+      print('🎯 Light主题颜色数量: ${newTheme.colorMap.length}');
+      print('🎯 Dark主题颜色数量: ${newTheme.dark?.colorMap.length ?? 0}');
+      print('🎯 引用映射数量: ${newTheme.refMap.length}');
     } else {
       print('⚠️ Flutter: 主题解析返回 null');
+      print('❌ 请检查JSON格式是否正确，特别是颜色值格式');
     }
   } catch (e) {
     print('❌ Flutter: 主题解析失败: $e');
+    print('❌ 错误详情: ${e.toString()}');
   }
 }
 

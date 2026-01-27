@@ -106,6 +106,13 @@ export default defineComponent({
       observer.disconnect();
       (this as any).themeObserver = null;
     }
+    
+    // 清理消息监听器
+    const messageListener = (this as any).messageListener;
+    if (messageListener) {
+      window.removeEventListener('message', messageListener);
+      (this as any).messageListener = null;
+    }
   },
 
   data() {
@@ -135,6 +142,26 @@ export default defineComponent({
           );
         }
       };
+
+      // 监听来自父窗口的主题更新消息
+      const handleParentMessage = (event) => {
+        if (event.data && event.data.type === 'flutter-theme-update') {
+          // 将主题更新消息转发给 iframe
+          if (iframe && iframe.contentWindow) {
+            iframe.contentWindow.postMessage(
+              {
+                type: 'flutter-theme-update',
+                theme: event.data.theme,
+              },
+              '*'
+            );
+            console.log('Theme update forwarded to iframe');
+          }
+        }
+      };
+
+      // 添加消息监听器
+      window.addEventListener('message', handleParentMessage);
 
       // 初始发送一次
       iframe.addEventListener('load', () => {
@@ -166,6 +193,9 @@ export default defineComponent({
         attributes: true,
         attributeFilter: ['theme-mode'],
       });
+
+      // 保存消息监听器引用以便清理
+      (this as any).messageListener = handleParentMessage;
     },
   },
 });
