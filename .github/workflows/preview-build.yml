@@ -6,44 +6,65 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  tdesign-flutter-site:
+  setup:
     runs-on: ubuntu-latest
-    # Skip workflow if commit message contains [skip ci] or [ci skip]
     if: "!contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[ci skip]')"
-    permissions:
-      contents: write
-      pull-requests: write
+    outputs:
+      component_version: ${{ steps.version.outputs.component_version }}
+      unique_id: ${{ steps.version.outputs.unique_id }}
+      timestamp: ${{ steps.version.outputs.timestamp }}
     steps:
-      - name: Configure Git to not use symlinks
+      - name: 配置 Git
         run: git config --global core.symlinks false
 
-      - uses: actions/checkout@v4
+      - name: 检出代码
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           lfs: true
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Set Node version
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-          cache-dependency-path: tdesign-site/package-lock.json
+      - name: 提取版本信息
+        id: version
+        run: |
+          # 从组件库读取版本号，用于 APK 命名和内部版本显示
+          COMPONENT_VERSION=$(grep "^version:" tdesign-component/pubspec.yaml | awk '{print $2}')
+          # 生成唯一标识：纯时间戳（秒级），编译时间长不会重复
+          UNIQUE_ID=$(date +%Y%m%d%H%M%S)
+          # 编译时间戳，用于记录构建时间
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          # 读取 PR 编号（用于 Surge 部署域名）
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          BUILD_NUMBER="${{ github.run_id }}"
 
-      - uses: actions/setup-java@v5
-        with:
-          distribution: "jetbrains"
-          java-version: "17"
+          echo "component_version=$COMPONENT_VERSION" >> $GITHUB_OUTPUT
+          echo "unique_id=$UNIQUE_ID" >> $GITHUB_OUTPUT
+          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          cmdline-tools-version: "12"
-        env:
-          SKIP_JDK_VERSION_CHECK: true
+          echo "版本: $COMPONENT_VERSION"
+          echo "唯一标识: $UNIQUE_ID"
 
-      - name: Set up Flutter
+      - name: 生成构建环境变量文件
+        # 供 preview-publish.yml 读取，用于 Surge 部署
+        run: |
+          echo "VERSION=${{ steps.version.outputs.component_version }}" > build-env.txt
+          echo "UNIQUE_ID=${{ steps.version.outputs.unique_id }}" >> build-env.txt
+          echo "BUILD_NUMBER=${{ github.run_id }}" >> build-env.txt
+          echo "TIMESTAMP=${{ steps.version.outputs.timestamp }}" >> build-env.txt
+          echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> build-env.txt
+          echo "GIT_SHA=${{ github.sha }}" >> build-env.txt
+
+          cat build-env.txt
+
+      - name: 上传构建环境变量
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-env
+          path: build-env.txt
+          retention-days: 7
+
+      - name: 安装 Flutter
         uses: TDesignOteam/workflows/actions/setup-flutter@main
         with:
           flutter-version: 3.32.0
@@ -52,238 +73,184 @@ jobs:
           aop-registry: true
           aop-project-path: ./tdesign-component/example
 
-      - name: Extract version from pubspec.yaml and set env
-        id: version
+      - name: 预构建 AOP 产物
+        # 触发 AOP 代码生成（@Demo 注解），生成 assets/code/*.txt 文件
+        # 这些文件会被 widget_test.dart 读取，生成 Markdown 文档
         run: |
-          # 从pubspec.yaml中提取版本号
-          VERSION=$(grep "version:" tdesign-component/pubspec.yaml | sed 's/version: //g' | xargs)
-          echo "Version from pubspec.yaml: $VERSION"
-          # 分解版本号为主版本号、特性版本号和修正版本号
-          MAJOR=$(echo $VERSION | cut -d. -f1)
-          MINOR=$(echo $VERSION | cut -d. -f2)
-          FIX=$(echo $VERSION | cut -d. -f3)
-          # 输出变量以便后续步骤使用
-          echo "major_version=$MAJOR" >> $GITHUB_OUTPUT
-          echo "minor_version=$MINOR" >> $GITHUB_OUTPUT
-          echo "fix_version=$FIX" >> $GITHUB_OUTPUT
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          cd tdesign-component/example
+          flutter pub get
+          flutter build apk --debug --dart-define=isCI=false || true
+          flutter build web --dart-define=isCI=false || true
 
-      - name: Create build environment file
-        run: |
-          # 创建包含所有构建环境变量的文件
-          cat > build-env.txt << EOF
-          MAJOR_VERSION=${{ steps.version.outputs.major_version }}
-          MINOR_VERSION=${{ steps.version.outputs.minor_version }}
-          FIX_VERSION=${{ steps.version.outputs.fix_version }}
-          VERSION=${{ steps.version.outputs.version }}
-          BUILD_NUMBER=${{ github.run_number }}
-          DEVOPS_UUID=${{ github.run_id }}
-          GIT_VERSION=${{ github.sha }}
-          PR_NUMBER=${{ github.event.number }}
-          SHA=${{ github.sha }}
-          EOF
-          echo "=== Build environment file created ==="
-          cat build-env.txt
-
-      - name: Upload build environment
-        uses: actions/upload-artifact@v4
+      - name: 缓存 AOP 产物
+        # 缓存 AOP 生成的代码和文档资源，供 build-apk 和 build-web 复用
+        uses: actions/cache/save@v4
         with:
-          name: build-env
-          path: build-env.txt
-          retention-days: 5
+          path: |
+            ${{ github.workspace }}/tdesign-component/example/.dart_tool
+            ${{ github.workspace }}/tdesign-component/example/build
+            ${{ github.workspace }}/tdesign-component/example/assets/code
+          key: aop-cache-${{ github.run_id }}
 
-      - name: Build Flutter apk
+  build-apk:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          lfs: true
+          fetch-depth: 0
+
+      - name: 恢复 AOP 缓存
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ${{ github.workspace }}/tdesign-component/example/.dart_tool
+            ${{ github.workspace }}/tdesign-component/example/build
+            ${{ github.workspace }}/tdesign-component/example/assets/code
+          key: aop-cache-${{ github.run_id }}
+
+      - name: 安装 Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: "jetbrains"
+          java-version: "17"
+
+      - name: 安装 Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: "12"
+        env:
+          SKIP_JDK_VERSION_CHECK: true
+
+      - name: 安装 Flutter
+        uses: TDesignOteam/workflows/actions/setup-flutter@main
+        with:
+          flutter-version: 3.32.0
+          channel: stable
+          cache: true
+          aop-registry: true
+          aop-project-path: ./tdesign-component/example
+
+      - name: 写入版本和时间到 assets
+        # 将版本号和编译时间写入 assets 文件，应用运行时读取显示在"关于我们"页面
         run: |
-          cd $GITHUB_WORKSPACE/tdesign-component/example
+          echo "${{ needs.setup.outputs.component_version }}" > tdesign-component/example/assets/version
+          # 将时间戳转换为毫秒级（Flutter DateTime 需要）
+          TIMESTAMP="${{ needs.setup.outputs.timestamp }}"
+          YEAR=${TIMESTAMP:0:4}
+          MONTH=${TIMESTAMP:4:2}
+          DAY=${TIMESTAMP:6:2}
+          HOUR=${TIMESTAMP:8:2}
+          MINUTE=${TIMESTAMP:10:2}
+          SECOND=${TIMESTAMP:12:14}
+          EPOCH=$(date -d "$YEAR-$MONTH-$DAY $HOUR:$MINUTE:$SECOND" +%s%3N)
+          echo "$EPOCH" > tdesign-component/example/assets/publish_time
+
+      - name: 构建 APK
+        run: |
+          cd tdesign-component/example
           flutter clean
-          flutter doctor -v
-          flutter devices
-          flutter pub get --verbose
-                    # Generate keystore for signing
-          cd ${{ github.workspace }}/tdesign-component/example/android/app
-
-          # Use simple fixed passwords instead of random ones
-          STORE_PASSWORD="tdesign123456"
-          KEY_PASSWORD="tdesign123456"
-          keytool -genkeypair \
-            -alias tdesign_flutter_debug_key \
-            -keypass "$KEY_PASSWORD" \
-            -keystore keystore.jks \
-            -storepass "$STORE_PASSWORD" \
-            -dname "CN=TDesign Flutter Test,O=TDesign,C=CN" \
-            -keyalg RSA \
-            -keysize 2048 \
-            -validity 365
-            
-          # Ensure the keystore file has the correct permissions
+          flutter pub get
+          # 生成签名密钥，用于 APK 签名
+          cd android/app
+          STORE_PASSWORD="tdesign123456" KEY_PASSWORD="tdesign123456"
+          keytool -genkeypair -alias tdesign_flutter_debug_key -keypass "$KEY_PASSWORD" -keystore keystore.jks \
+            -storepass "$STORE_PASSWORD" -dname "CN=TDesign Flutter Test,O=TDesign,C=CN" -keyalg RSA -keysize 2048 -validity 365
           chmod 644 keystore.jks
-          # Create key.properties in android directory (where build.gradle expects it)
-          cd ${{ github.workspace }}/tdesign-component/example/android
-          echo "storePassword=$STORE_PASSWORD" > key.properties
-          echo "keyPassword=$KEY_PASSWORD" >> key.properties
-          echo "keyAlias=tdesign_flutter_debug_key" >> key.properties
-          echo "storeFile=keystore.jks" >> key.properties
-
-          # Verify keystore file existence and properties file
-          echo "Verifying keystore setup:"
-          ls -la ${{ github.workspace }}/tdesign-component/example/android/app/keystore.jks || echo "Keystore file not found!"
-          echo "Key.properties content (without passwords):"
-          cat key.properties | grep -v "Password"
-          cat android/local.properties || echo "File not found"
-          echo "使用以下环境变量构建:"
-          echo "MajorVersion: ${{ steps.version.outputs.major_version }}"
-          echo "MinorVersion: ${{ steps.version.outputs.minor_version }}"
-          echo "FixVersion: ${{ steps.version.outputs.fix_version }}"
-          echo "BuildNo: ${{ github.run_number }}"
-          echo "devopsUUID: ${{ github.run_id }}"
-          echo "gitVersion: ${{ github.sha }}"
-          # 使用环境变量构建
-          flutter build apk --release \
-            --dart-define=isCI=true \
-            --dart-define=VersionCode=${{ github.run_number }} \
+          cd ../..
+          echo -e "storePassword=$STORE_PASSWORD\nkeyPassword=$KEY_PASSWORD\nkeyAlias=tdesign_flutter_debug_key\nstoreFile=keystore.jks" > android/key.properties
+          # 使用 dart-define 注入版本信息到 APK
+          flutter build apk --release --dart-define=isCI=true \
+            --dart-define=VersionCode=${{ github.run_id }} \
             --dart-define=devopsUUID=${{ github.run_id }} \
-            --dart-define=MajorVersion=${{ steps.version.outputs.major_version }} \
-            --dart-define=MinorVersion=${{ steps.version.outputs.minor_version }} \
-            --dart-define=FixVersion=${{ steps.version.outputs.fix_version }} \
-            --dart-define=BuildNo=${{ github.run_number }} \
+            --dart-define=ComponentVersion=${{ needs.setup.outputs.component_version }} \
+            --dart-define=BuildNo=${{ github.run_id }} \
+            --dart-define=Timestamp=${{ needs.setup.outputs.timestamp }} \
+            --dart-define=UniqueID=${{ needs.setup.outputs.unique_id }} \
             --dart-define=isPublish=false \
             --dart-define=isBeta=false \
             --dart-define=gitVersion=${{ github.sha }}
-      - name: Rename APK with version
+
+      - name: 重命名 APK
+        # APK 文件名格式：tdesign-flutter-{version}-{unique_id}.apk
+        # 例如：tdesign-flutter-0.2.7-20250127123456.apk
         run: |
-          VERSION="${{ steps.version.outputs.major_version }}.${{ steps.version.outputs.minor_version }}.${{ steps.version.outputs.fix_version }}"
-          BUILD="${{ github.run_number }}"
-          # 直接在构建输出目录重命名APK
-          cd ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/
-          mv app-release.apk tdesign-flutter-${VERSION}-${BUILD}.apk
-          echo "APK renamed to: tdesign-flutter-${VERSION}-${BUILD}.apk"
-          ls -la tdesign-flutter-${VERSION}-${BUILD}.apk
-      - name: Upload APK artifact
+          VERSION="${{ needs.setup.outputs.component_version }}-${{ needs.setup.outputs.unique_id }}"
+          mv tdesign-component/example/build/app/outputs/flutter-apk/app-release.apk tdesign-flutter-$VERSION.apk
+
+      - name: 上传 APK
         uses: actions/upload-artifact@v4
         with:
           name: tdesign-flutter-apk
-          path: ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/tdesign-flutter-*.apk
-          compression-level: 0
+          path: tdesign-flutter-*.apk
+          compression-level: 0 # 不压缩，避免 APKSigner 解压失败
 
-      - name: Output build artifacts download paths
-        run: |
-          echo "=== 构建产物下载路径信息 ==="
-
-          # 项目构建产物路径
-          PROJECT_BUILD_DIR="${{ github.workspace }}/tdesign-component/example/build"
-          echo "项目构建目录: $PROJECT_BUILD_DIR"
-
-          if [ -d "$PROJECT_BUILD_DIR" ]; then
-            echo "构建产物目录结构:"
-            find "$PROJECT_BUILD_DIR" -type f -name "*.apk" -o -name "*.aab" -o -name "*.ipa" | head -10
-            
-            # APK 文件路径
-            APK_DIR="$PROJECT_BUILD_DIR/app/outputs/flutter-apk"
-            if [ -d "$APK_DIR" ]; then
-              echo "APK 文件路径: $APK_DIR"
-              ls -la "$APK_DIR"/*.apk 2>/dev/null || echo "未找到 APK 文件"
-            fi
-            
-            # Web 构建产物路径
-            WEB_DIR="$PROJECT_BUILD_DIR/web"
-            if [ -d "$WEB_DIR" ]; then
-              echo "Web 构建产物路径: $WEB_DIR"
-              du -sh "$WEB_DIR" 2>/dev/null || true
-            fi
-          else
-            echo "构建目录不存在: $PROJECT_BUILD_DIR"
-          fi
-
-          # GitHub Actions Artifacts 下载信息
-          echo ""
-          echo "=== GitHub Actions Artifacts 下载信息 ==="
-          echo "Run ID: ${{ github.run_id }}"
-          echo "APK Artifact 下载链接: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          echo "Web Artifact 下载链接: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-
-          # 输出到文件以便后续步骤使用
-          cat > flutter-paths.txt << EOF
-          FLUTTER_ROOT=$FLUTTER_ROOT
-          FLUTTER_BIN_CACHE=$FLUTTER_BIN_CACHE
-          PROJECT_BUILD_DIR=$PROJECT_BUILD_DIR
-          APK_PATH=$APK_DIR
-          WEB_PATH=$WEB_DIR
-          GITHUB_RUN_ID=${{ github.run_id }}
-          DOWNLOAD_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          EOF
-
-          echo "路径信息已保存到 flutter-paths.txt"
-          cat flutter-paths.txt
-
-      - name: Upload Flutter paths info
-        uses: actions/upload-artifact@v4
+  build-web:
+    runs-on: ubuntu-latest
+    needs: setup
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
         with:
-          name: flutter-paths-info
-          path: flutter-paths.txt
-          retention-days: 5
+          submodules: recursive
+          lfs: true
+          fetch-depth: 0
 
-      - name: Generate web documentation from demo code
+      - name: 恢复 AOP 缓存
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ${{ github.workspace }}/tdesign-component/example/.dart_tool
+            ${{ github.workspace }}/tdesign-component/example/build
+            ${{ github.workspace }}/tdesign-component/example/assets/code
+          key: aop-cache-${{ github.run_id }}
+
+      - name: 安装 Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: tdesign-site/package-lock.json
+
+      - name: 安装 Flutter
+        uses: TDesignOteam/workflows/actions/setup-flutter@main
+        with:
+          flutter-version: 3.32.0
+          channel: stable
+          cache: true
+          aop-registry: true
+          aop-project-path: ./tdesign-component/example
+
+      - name: 生成文档
+        # 运行 widget 测试，根据 @Demo 注解生成 Markdown 文档
+        # 文档会输出到 tdesign-site/src/ 目录
         run: |
-          echo "=== Generating web documentation by running widget tests ==="
+          cd tdesign-component/example
+          flutter test test/widget_test.dart --reporter expanded || true
+
+      - name: 构建站点
+        # 构建文档站点 + Flutter Web 应用，适配 Surge 静态托管
+        # Surge 平台要求：无需 404/200 文件，SPA 路由由 _redirects 文件控制
+        run: |
+          cd tdesign-site && npm install --unsafe-perm && npm run site
           cd $GITHUB_WORKSPACE/tdesign-component/example
-          # Run the widget test which generates markdown documentation
-          # The test script will copy API and demo code to site directory
-          flutter test test/widget_test.dart --reporter expanded || {
-            echo "⚠ Widget test completed with warnings (this is expected)"
-            echo "Documentation should have been generated"
-          }
-          # Verify documentation was generated
-          echo "=== Checking generated documentation ==="
-          if [ -d "assets" ]; then
-            echo "✓ Assets directory exists"
-            find assets -name "*.md" -type f | head -10 || echo "No markdown files found"
-          else
-            echo "⚠ Assets directory not found"
-          fi
-
-      - name: Build site
-        working-directory: ./tdesign-site
-        run: |
-          npm install --unsafe-perm
-          npm run site
-
-      - name: Build site Demo
-        working-directory: ./tdesign-component/example
-        run: |
           flutter build web -t ./lib/main.dart --base-href /flutter/example/ --source-maps
-          echo "=== Files in tdesign-site ==="
-          ls -la tdesign-site/ || echo "Directory not found"
-          echo "=== Files in tdesign-component ==="
-          ls -la tdesign-component/ || echo "Directory not found"
-          # Ensure output directory exists at workspace root and copy built artifacts
-          cd $GITHUB_WORKSPACE
-          mkdir -p tdesign-flutter-web/flutter/example/
-          cp -r tdesign-site/_site/* tdesign-flutter-web/ || echo "tdesign-site/_site/ not found or empty"
-          rm -rf tdesign-flutter-web/assets || echo "tdesign-site/_site/assets not found or empty"
-          # 重写 index.html 内容: 插入 <base href="/">（如果不存在），并把资源引用从绝对路径 /flutter/... 改为相对路径 flutter/...
-          for f in \
-            "$GITHUB_WORKSPACE/tdesign-flutter-web/index.html"; do
-            if [ -f "$f" ]; then
-              echo "Rewriting $f"
-              # 如果没有 base 标签，则在 X-UA-Compatible 后面插入
-              if ! grep -q '<base href="/">' "$f"; then
-                sed -i 's|<meta http-equiv="X-UA-Compatible" content="ie=edge">|<meta http-equiv="X-UA-Compatible" content="ie=edge">\n  <base href="/">|' "$f" || true
-              fi
-              # 把 src="/flutter/..." 和 href="/flutter/..." 改为不带前导斜杠
-              sed -i "s|src=\"/flutter/|src=\"flutter/|g; s|href=\"/flutter/|href=\"flutter/|g; s|src='/flutter/|src='flutter/|g; s|href='/flutter/|href='flutter/|g" "$f" || true
-            else
-              echo "$f not found, skipping"
-            fi
-          done
-          cp -v tdesign-site/_site/index.html tdesign-flutter-web/404.html || echo "tdesign-site/_site/index.html not found or empty"
-          cp -v tdesign-site/_site/index.html tdesign-flutter-web/200.html || echo "tdesign-site/_site/index.html not found or empty"
-          cp -r tdesign-site/_site/assets tdesign-flutter-web/flutter/assets || echo "tdesign-site/_site not found or empty"
-          cp -r tdesign-component/example/build/web/* tdesign-flutter-web/flutter/example/ || echo "example build web output not found"
-          # 在仓库根写入 CNAME，用于静态托管重写规则
-          echo '/* /index.html 200' > "$GITHUB_WORKSPACE/CNAME" || true
-          echo "Wrote $GITHUB_WORKSPACE/CNAME"
-      - uses: actions/upload-artifact@v4
+          mkdir -p $GITHUB_WORKSPACE/tdesign-flutter-web/flutter/example
+          cp -r $GITHUB_WORKSPACE/tdesign-site/_site/* $GITHUB_WORKSPACE/tdesign-flutter-web/
+          cp -r $GITHUB_WORKSPACE/tdesign-site/_site/assets $GITHUB_WORKSPACE/tdesign-flutter-web/flutter/assets
+          cp -r $GITHUB_WORKSPACE/tdesign-component/example/build/web/* $GITHUB_WORKSPACE/tdesign-flutter-web/flutter/example/
+          # Surge 平台使用 _redirects 文件配置路由重定向
+          echo "/* /index.html 200" > $GITHUB_WORKSPACE/tdesign-flutter-web/_redirects
+
+      - name: 上传 Web
+        uses: actions/upload-artifact@v4
         with:
           name: tdesign-flutter-web
           path: ${{ github.workspace }}/tdesign-flutter-web
-          retention-days: 5
+          retention-days: 15
