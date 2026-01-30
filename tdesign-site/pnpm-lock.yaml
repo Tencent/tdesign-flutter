@@ -37,8 +37,8 @@ importers:
         specifier: ^13.0.5
         version: 13.3.0(rollup@2.77.3)
       '@tdesign/site-components':
-        specifier: ^0.17.3
-        version: 0.17.4
+        specifier: ^0.18.1
+        version: 0.18.1
       '@types/jest':
         specifier: ^27.0.3
         version: 27.5.2
@@ -1251,8 +1251,8 @@ packages:
       postcss: '>=7.0.0'
       postcss-syntax: '>=0.36.2'
 
-  '@tdesign/site-components@0.17.4':
-    resolution: {integrity: sha512-zHuv3QlFc0WxZPc0p6WgdATeiHt5kC1M4pc//SOpmYWvnlaHL4oq9BAOZ+r8w87QV1pXlrviMr4NEMvJlHZWEA==}
+  '@tdesign/site-components@0.18.1':
+    resolution: {integrity: sha512-Jn+i9eHLhWPC/M237TTbCIRx9K0QSPPISP9QZKGGW+4SjY308Sg9rdUlBroLvMBn/BvulpEyfLfSA/Nf/j8YKw==}
 
   '@tootallnate/once@1.1.2':
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
@@ -8083,7 +8083,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@tdesign/site-components@0.17.4':
+  '@tdesign/site-components@0.18.1':
     dependencies:
       '@popperjs/core': 2.11.8
       hybrids: 8.2.2
@@ -11349,7 +11349,7 @@ snapshots:
       jest-environment-jsdom: 26.6.2
       jest-environment-node: 26.6.2
       jest-get-type: 26.3.0
-      jest-jasmine2: 26.6.3(ts-node@10.9.2(@types/node@25.0.3)(typescript@4.7.4))
+      jest-jasmine2: 26.6.3
       jest-regex-util: 26.0.0
       jest-resolve: 26.6.2
       jest-util: 26.6.2
@@ -11449,7 +11449,7 @@ snapshots:
       typescript: 4.7.4
       xmlbuilder: 15.0.0
 
-  jest-jasmine2@26.6.3(ts-node@10.9.2(@types/node@25.0.3)(typescript@4.7.4)):
+  jest-jasmine2@26.6.3:
     dependencies:
       '@babel/traverse': 7.28.5
       '@jest/environment': 26.6.2
@@ -11470,11 +11470,7 @@ snapshots:
       pretty-format: 26.6.2
       throat: 5.0.0
     transitivePeerDependencies:
-      - bufferutil
-      - canvas
       - supports-color
-      - ts-node
-      - utf-8-validate
 
   jest-leak-detector@26.6.2:
     dependencies:
