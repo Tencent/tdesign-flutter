@@ -244,7 +244,7 @@ jobs:
       - name: Build site
         working-directory: ./tdesign-site
         run: |
-          npm install --unsafe-perm
+          pnpm install --frozen-lockfile
           npm run site
 
       - name: Build site Demo
