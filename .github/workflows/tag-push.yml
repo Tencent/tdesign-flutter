@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.ref_type == 'tag'
     steps:
-      - uses: TDesignOteam/workflows/actions/close-release-issue@rss1102/flutter/issue-close
+      - uses: TDesignOteam/workflows/actions/close-release-issue@main
         with:
           version: ${{ github.ref_name }}
           label: ${{ github.ref_name }}
