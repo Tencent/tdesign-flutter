@@ -22,3 +22,14 @@ jobs:
           git fetch origin
           git merge origin/develop
           git push origin main
+
+
+  close-release-issue:
+    runs-on: ubuntu-latest
+    if: github.event.ref_type == 'tag'
+    steps:
+      - uses: TDesignOteam/workflows/actions/close-release-issue@rss1102/flutter/issue-close
+        with:
+          version: ${{ github.ref_name }}
+          label: ${{ github.ref_name }}
+          token: ${{ secrets.PERSONAL_TOKEN }}
