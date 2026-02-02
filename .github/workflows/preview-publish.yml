@@ -31,47 +31,34 @@ jobs:
             echo "Loaded: $key=$value"
           done < build-env.txt
 
-      - name: download tdesign-flutter-apk artifact
+      - name: download tdesign-flutter-site artifact
         uses: dawidd6/action-download-artifact@v6
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           run_id: ${{ github.event.workflow_run.id }}
-          name: tdesign-flutter-apk
-          path: tdesign-flutter-apk
+          name: tdesign-flutter-site
+          path: tdesign-flutter-site
 
-      - name: download tdesign-flutter-web artifact
-        uses: dawidd6/action-download-artifact@v6
-        with:
-          workflow: ${{ github.event.workflow_run.workflow_id }}
-          run_id: ${{ github.event.workflow_run.id }}
-          name: tdesign-flutter-web
-          path: tdesign-flutter-web
-
-      - name: Move APK to web directory
-        run: |
-          # 将 APK 文件移动到 web 目录以便通过 surge 访问
-          mv tdesign-flutter-apk/*.apk tdesign-flutter-web/ || echo "No APK file found"
-          ls -la tdesign-flutter-web/*.apk || echo "*.apk not found"
-
-      - name: Upload surge service and generate preview URL
+      - name: Deploy to Surge and generate preview URL
         id: deploy
         run: |
           repository=${{github.repository}}
           project_name=${repository#*/}
           export DEPLOY_DOMAIN=https://preview-pr-${{ steps.build_env.outputs.PR_NUMBER }}-$project_name.surge.sh
-          npx surge --project ./tdesign-flutter-web --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
-          echo the preview URL is $DEPLOY_DOMAIN
+          npx surge --project ./tdesign-flutter-site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+          echo "Preview URL: $DEPLOY_DOMAIN"
           echo "url=$DEPLOY_DOMAIN" >> $GITHUB_OUTPUT
 
       - name: generate APK download URL
         id: apk_url
         run: |
-          # 使用环境变量构建APK文件名和下载链接
-          APK_FILENAME="tdesign-flutter-${{ steps.build_env.outputs.VERSION }}-${{ steps.build_env.outputs.BUILD_NUMBER }}.apk"
-          APK_URL="${{ steps.deploy.outputs.url }}/$APK_FILENAME"
+          # APK 通过 GitHub Actions Artifact 下载，不需要移动到 Surge 目录
+          APK_FILENAME="tdesign-flutter-${{ steps.build_env.outputs.VERSION }}-${{ steps.build_env.outputs.UNIQUE_ID }}.apk"
+          # 使用 GitHub Artifact 下载链接（保留 15 天）
+          APK_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}"
           echo "apk_filename=$APK_FILENAME" >> $GITHUB_OUTPUT
-          echo "apk_url=$APK_URL" >> $GITHUB_OUTPUT
-          echo "APK download URL: $APK_URL"
+          echo "apk_download_page=$APK_URL" >> $GITHUB_OUTPUT
+          echo "APK 下载页面: $APK_URL"
 
       - name: update status comment
         uses: actions-cool/maintain-one-comment@v3
@@ -80,8 +67,11 @@ jobs:
           body: |
             <a href="${{steps.deploy.outputs.url}}"><img height="96" alt="完成" src="https://user-images.githubusercontent.com/15634204/150816437-9f5bb788-cd67-4cbc-9897-b82d74e9aa65.png" /></a>
 
+            ## 🌐 预览地址
+            [Site Preview](${{ steps.deploy.outputs.url }})
+
             ## 📱 APK 下载
-             [${{ steps.apk_url.outputs.apk_filename }}](${{ steps.apk_url.outputs.apk_url }})
+            [${{ steps.apk_url.outputs.apk_filename }} - 下载](${{ steps.apk_url.outputs.apk_download_page }})
 
 
             <!-- AUTO_PREVIEW_HOOK -->
@@ -126,7 +116,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
+            [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{ github.event.workflow_run.id }})
             <!-- AUTO_PREVIEW_HOOK -->
           number: ${{ steps.build_env.outputs.PR_NUMBER }}
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"

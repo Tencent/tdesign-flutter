@@ -241,16 +241,22 @@ jobs:
           cd tdesign-site && npm install --unsafe-perm && npm run site
           cd $GITHUB_WORKSPACE/tdesign-component/example
           flutter build web -t ./lib/main.dart --base-href /flutter/example/ --source-maps
-          mkdir -p $GITHUB_WORKSPACE/tdesign-flutter-web/flutter/example
-          cp -r $GITHUB_WORKSPACE/tdesign-site/_site/* $GITHUB_WORKSPACE/tdesign-flutter-web/
-          cp -r $GITHUB_WORKSPACE/tdesign-site/_site/assets $GITHUB_WORKSPACE/tdesign-flutter-web/flutter/assets
-          cp -r $GITHUB_WORKSPACE/tdesign-component/example/build/web/* $GITHUB_WORKSPACE/tdesign-flutter-web/flutter/example/
+          mkdir -p $GITHUB_WORKSPACE/tdesign-flutter-site/flutter/example
+          cp -r $GITHUB_WORKSPACE/tdesign-site/_site/* $GITHUB_WORKSPACE/tdesign-flutter-site/
+          cp -r $GITHUB_WORKSPACE/tdesign-site/_site/assets $GITHUB_WORKSPACE/tdesign-flutter-site/flutter/assets
+          cp -r $GITHUB_WORKSPACE/tdesign-component/example/build/web/* $GITHUB_WORKSPACE/tdesign-flutter-site/flutter/example/
           # Surge 平台使用 _redirects 文件配置路由重定向
-          echo "/* /index.html 200" > $GITHUB_WORKSPACE/tdesign-flutter-web/_redirects
+          echo "/* /index.html 200" > $GITHUB_WORKSPACE/tdesign-flutter-site/_redirects
 
       - name: 上传 Web
         uses: actions/upload-artifact@v4
         with:
-          name: tdesign-flutter-web
-          path: ${{ github.workspace }}/tdesign-flutter-web
-          retention-days: 15
+          name: tdesign-flutter-site
+          path: ${{ github.workspace }}/tdesign-flutter-site
+          retention-days: 7
+
+      - name: 输出构建信息
+        run: |
+          echo "✅ 构建完成"
+          echo "📦 Artifact 名称: tdesign-flutter-site"
+          echo "📦 Artifact 名称: tdesign-flutter-apk"
