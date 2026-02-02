@@ -617,9 +617,11 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
     );
   }
 
+  var resetDropdownMenuValue = 0;
   @Demo(group: 'cascader')
   Widget _buildInDropdownItem(BuildContext context) {
     return TDDropdownMenu(
+      key: ValueKey(resetDropdownMenuValue),
       direction: TDDropdownMenuDirection.up,
       builder: (context) {
         return [
@@ -641,7 +643,14 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
                       result.add(element.label);
                     });
                     _selectedDept = result.join(' / ');
+                    resetDropdownMenuValue++;
                   });
+                },
+                onClose: (){
+                  setState(() {
+                    resetDropdownMenuValue++;
+                  });
+                  Navigator.maybePop(context);
                 },
               );
             },
