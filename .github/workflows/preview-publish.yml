@@ -41,7 +41,18 @@ jobs:
           run_id: ${{ github.event.workflow_run.id }}
           name: tdesign-flutter-site
           path: tdesign-flutter-site
+
+      - name: download tdesign-flutter-apk artifact
+        uses: dawidd6/action-download-artifact@v6
+        continue-on-error: true
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: tdesign-flutter-apk
+          path: tdesign-flutter-apk
+
       - name: Check APK artifact exists
+        id: check_apk
         run: |
           if [ ! -f tdesign-flutter-apk/*.apk ]; then
             echo "APK artifact not found, skipping APK download link"
@@ -64,7 +75,7 @@ jobs:
         run: |
           # APK 通过 GitHub Actions Artifact 下载，不需要移动到 Surge 目录
           APK_FILENAME="tdesign-flutter-${{ steps.build_env.outputs.VERSION }}-${{ steps.build_env.outputs.UNIQUE_ID }}.apk"
-          # 使用 GitHub Artifact 下载链接（保留 15 天）
+          # 使用 GitHub Artifact 下载链接（保留 14 天）
           APK_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}"
           echo "apk_filename=$APK_FILENAME" >> $GITHUB_OUTPUT
           echo "apk_download_page=$APK_URL" >> $GITHUB_OUTPUT
@@ -81,7 +92,7 @@ jobs:
             [Site Preview](${{ steps.deploy.outputs.url }})
 
             ## 📱 APK 下载
-            ${{ steps.apk_url.outputs.apk_filename != 'APK not available' && format('[{} - 下载]({})', steps.apk_url.outputs.apk_filename, steps.apk_url.outputs.apk_download_page) || 'APK 构建失败或不可用' }}
+            ${{ steps.apk_url.outputs.apk_filename != 'APK not available' && format('[{0} - 下载]({1})', steps.apk_url.outputs.apk_filename, steps.apk_url.outputs.apk_download_page) || 'APK 构建失败或不可用' }}
 
 
             <!-- AUTO_PREVIEW_HOOK -->
@@ -101,32 +112,37 @@ jobs:
 
   preview-failed:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     if: >
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'failure'
     steps:
-      - name: download build artifacts
-        uses: dawidd6/action-download-artifact@v6
+      - name: Get PR number
+        id: pr
+        uses: actions/github-script@v7
         with:
-          workflow: ${{ github.event.workflow_run.workflow_id }}
-          run_id: ${{ github.event.workflow_run.id }}
-          name: build-env
-
-      - name: load build env variables
-        id: build_env
-        run: |
-          # 从文件中读取环境变量并设置为输出
-          while IFS='=' read -r key value; do
-            echo "$key=$value" >> $GITHUB_OUTPUT
-            echo "Loaded: $key=$value"
-          done < build-env.txt
+          script: |
+            const pulls = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.payload.workflow_run.head_repository.owner.login}:${context.payload.workflow_run.head_branch}`,
+              state: 'open'
+            });
+            if (pulls.data.length > 0) {
+              return pulls.data[0].number;
+            }
+            return null;
+          result-encoding: string
 
       - name: The job failed
+        if: steps.pr.outputs.result != 'null'
         uses: actions-cool/maintain-one-comment@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{ github.event.workflow_run.id }})
             <!-- AUTO_PREVIEW_HOOK -->
-          number: ${{ steps.build_env.outputs.PR_NUMBER }}
+          number: ${{ steps.pr.outputs.result }}
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"

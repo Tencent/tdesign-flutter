@@ -8,7 +8,8 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[ci skip]')"
+    timeout-minutes: 30
+    if: "!contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
     outputs:
       component_version: ${{ steps.version.outputs.component_version }}
       unique_id: ${{ steps.version.outputs.unique_id }}
@@ -23,7 +24,7 @@ jobs:
           submodules: recursive
           lfs: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: 提取版本信息
         id: version
@@ -76,11 +77,12 @@ jobs:
       - name: 预构建 AOP 产物
         # 触发 AOP 代码生成（@Demo 注解），生成 assets/code/*.txt 文件
         # 这些文件会被 widget_test.dart 读取，生成 Markdown 文档
+        continue-on-error: true
         run: |
           cd tdesign-component/example
           flutter pub get
-          flutter build apk --debug --dart-define=isCI=false || true
-          flutter build web --dart-define=isCI=false || true
+          flutter build apk --debug --dart-define=isCI=false
+          flutter build web --dart-define=isCI=false
 
       - name: 缓存 AOP 产物
         # 缓存 AOP 生成的代码和文档资源，供 build-apk 和 build-web 复用
@@ -94,6 +96,7 @@ jobs:
 
   build-apk:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     needs: setup
     steps:
       - name: 检出代码
@@ -145,7 +148,7 @@ jobs:
           DAY=${TIMESTAMP:6:2}
           HOUR=${TIMESTAMP:8:2}
           MINUTE=${TIMESTAMP:10:2}
-          SECOND=${TIMESTAMP:12:14}
+          SECOND=${TIMESTAMP:12:2}
           EPOCH=$(date -d "$YEAR-$MONTH-$DAY $HOUR:$MINUTE:$SECOND" +%s%3N)
           echo "$EPOCH" > tdesign-component/example/assets/publish_time
 
@@ -191,10 +194,8 @@ jobs:
 
   build-web:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     needs: setup
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
@@ -212,15 +213,16 @@ jobs:
             ${{ github.workspace }}/tdesign-component/example/assets/code
           key: aop-cache-${{ github.run_id }}
 
-      - name: 安装 Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
       - name: 安装 pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
+
+      - name: 安装 Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: 'pnpm'
 
       - name: 安装 Flutter
         uses: TDesignOteam/workflows/actions/setup-flutter@main
@@ -236,7 +238,7 @@ jobs:
         # 文档会输出到 tdesign-site/src/ 目录
         run: |
           cd tdesign-component/example
-          flutter test test/widget_test.dart --reporter expanded || true
+          flutter test test/widget_test.dart --reporter expanded
 
       - name: 构建站点
         # 构建文档站点 + Flutter Web 应用，适配 Surge 静态托管
