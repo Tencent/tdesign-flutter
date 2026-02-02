@@ -41,7 +41,14 @@ jobs:
           run_id: ${{ github.event.workflow_run.id }}
           name: tdesign-flutter-site
           path: tdesign-flutter-site
-
+      - name: Check APK artifact exists
+        run: |
+          if [ ! -f tdesign-flutter-apk/*.apk ]; then
+            echo "APK artifact not found, skipping APK download link"
+            echo "apk_filename=APK not available" >> $GITHUB_OUTPUT
+            echo "apk_download_page=" >> $GITHUB_OUTPUT
+            exit 0
+          fi
       - name: Deploy to Surge and generate preview URL
         id: deploy
         run: |
@@ -74,7 +81,7 @@ jobs:
             [Site Preview](${{ steps.deploy.outputs.url }})
 
             ## 📱 APK 下载
-            [${{ steps.apk_url.outputs.apk_filename }} - 下载](${{ steps.apk_url.outputs.apk_download_page }})
+            ${{ steps.apk_url.outputs.apk_filename != 'APK not available' && format('[{} - 下载]({})', steps.apk_url.outputs.apk_filename, steps.apk_url.outputs.apk_download_page) || 'APK 构建失败或不可用' }}
 
 
             <!-- AUTO_PREVIEW_HOOK -->

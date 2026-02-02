@@ -62,7 +62,7 @@ jobs:
         with:
           name: build-env
           path: build-env.txt
-          retention-days: 7
+          retention-days: 14
 
       - name: 安装 Flutter
         uses: TDesignOteam/workflows/actions/setup-flutter@main
@@ -187,6 +187,7 @@ jobs:
           name: tdesign-flutter-apk
           path: tdesign-flutter-*.apk
           compression-level: 0 # 不压缩，避免 APKSigner 解压失败
+          retention-days: 14
 
   build-web:
     runs-on: ubuntu-latest
@@ -215,7 +216,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - name: 安装 Flutter
         uses: TDesignOteam/workflows/actions/setup-flutter@main
@@ -237,7 +242,7 @@ jobs:
         # 构建文档站点 + Flutter Web 应用，适配 Surge 静态托管
         # Surge 平台要求：无需 404/200 文件，SPA 路由由 _redirects 文件控制
         run: |
-          cd tdesign-site && npm install --unsafe-perm && npm run site
+          cd tdesign-site && pnpm install && pnpm run site
           cd $GITHUB_WORKSPACE/tdesign-component/example
           flutter build web -t ./lib/main.dart --base-href /flutter/example/ --source-maps
           mkdir -p $GITHUB_WORKSPACE/tdesign-flutter-site/flutter/example
@@ -252,7 +257,7 @@ jobs:
         with:
           name: tdesign-flutter-site
           path: ${{ github.workspace }}/tdesign-flutter-site
-          retention-days: 7
+          retention-days: 14
 
       - name: 输出构建信息
         run: |
