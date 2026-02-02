@@ -8,9 +8,6 @@ on:
       - "tdesign-component/pubspec.yaml"
   issue_comment:
     types: [edited]
-  push:
-    tags:
-      - "*"
 
 jobs:
   generator:
