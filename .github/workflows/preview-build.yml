@@ -262,14 +262,37 @@ jobs:
         # Surge 平台要求：无需 404/200 文件，SPA 路由由 _redirects 文件控制
         run: |
           cd tdesign-site && pnpm install && pnpm run site
+          
+          # 验证站点构建产物
+          if [ ! -d "$GITHUB_WORKSPACE/tdesign-site/_site" ]; then
+            echo "❌ 站点构建失败：_site 目录不存在"
+            exit 1
+          fi
+          echo "✅ 站点构建成功，_site 目录内容："
+          ls -la $GITHUB_WORKSPACE/tdesign-site/_site/
+          
           cd $GITHUB_WORKSPACE/tdesign-component/example
           flutter build web -t ./lib/main.dart --base-href /flutter/example/ --source-maps
+          
+          # 验证 Flutter Web 构建产物
+          if [ ! -d "$GITHUB_WORKSPACE/tdesign-component/example/build/web" ]; then
+            echo "❌ Flutter Web 构建失败：build/web 目录不存在"
+            exit 1
+          fi
+          echo "✅ Flutter Web 构建成功"
+          
           mkdir -p $GITHUB_WORKSPACE/tdesign-flutter-site/flutter/example
           cp -r $GITHUB_WORKSPACE/tdesign-site/_site/* $GITHUB_WORKSPACE/tdesign-flutter-site/
           cp -r $GITHUB_WORKSPACE/tdesign-site/_site/assets $GITHUB_WORKSPACE/tdesign-flutter-site/flutter/assets
           cp -r $GITHUB_WORKSPACE/tdesign-component/example/build/web/* $GITHUB_WORKSPACE/tdesign-flutter-site/flutter/example/
           # Surge 平台使用 _redirects 文件配置路由重定向
           echo "/* /index.html 200" > $GITHUB_WORKSPACE/tdesign-flutter-site/_redirects
+          
+          # 验证最终产物目录
+          echo "✅ 最终产物目录内容："
+          ls -la $GITHUB_WORKSPACE/tdesign-flutter-site/
+          echo "📁 flutter/example 目录内容："
+          ls -la $GITHUB_WORKSPACE/tdesign-flutter-site/flutter/example/ || echo "flutter/example 目录为空"
 
       - name: 上传 Web
         uses: actions/upload-artifact@v4
