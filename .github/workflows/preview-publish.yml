@@ -51,15 +51,28 @@ jobs:
           name: tdesign-flutter-apk
           path: tdesign-flutter-apk
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       - name: Check APK artifact exists
         id: check_apk
         run: |
-          if [ ! -f tdesign-flutter-apk/*.apk ]; then
-            echo "APK artifact not found, skipping APK download link"
+          if ls tdesign-flutter-apk/*.apk 1> /dev/null 2>&1; then
+            echo "apk_exists=true" >> $GITHUB_OUTPUT
+            APK_FILENAME="tdesign-flutter-${{ steps.build_env.outputs.VERSION }}-${{ steps.build_env.outputs.UNIQUE_ID }}.apk"
+            APK_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}"
+            echo "apk_filename=$APK_FILENAME" >> $GITHUB_OUTPUT
+            echo "apk_download_page=$APK_URL" >> $GITHUB_OUTPUT
+            echo "✅ APK 找到: $APK_FILENAME"
+          else
+            echo "apk_exists=false" >> $GITHUB_OUTPUT
             echo "apk_filename=APK not available" >> $GITHUB_OUTPUT
             echo "apk_download_page=" >> $GITHUB_OUTPUT
-            exit 0
+            echo "⚠️ APK artifact not found"
           fi
+
       - name: Deploy to Surge and generate preview URL
         id: deploy
         run: |
@@ -69,17 +82,6 @@ jobs:
           npx surge --project ./tdesign-flutter-site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
           echo "Preview URL: $DEPLOY_DOMAIN"
           echo "url=$DEPLOY_DOMAIN" >> $GITHUB_OUTPUT
-
-      - name: generate APK download URL
-        id: apk_url
-        run: |
-          # APK 通过 GitHub Actions Artifact 下载，不需要移动到 Surge 目录
-          APK_FILENAME="tdesign-flutter-${{ steps.build_env.outputs.VERSION }}-${{ steps.build_env.outputs.UNIQUE_ID }}.apk"
-          # 使用 GitHub Artifact 下载链接（保留 14 天）
-          APK_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}"
-          echo "apk_filename=$APK_FILENAME" >> $GITHUB_OUTPUT
-          echo "apk_download_page=$APK_URL" >> $GITHUB_OUTPUT
-          echo "APK 下载页面: $APK_URL"
 
       - name: update status comment
         uses: actions-cool/maintain-one-comment@v3
@@ -92,7 +94,7 @@ jobs:
             [Site Preview](${{ steps.deploy.outputs.url }})
 
             ## 📱 APK 下载
-            ${{ steps.apk_url.outputs.apk_filename != 'APK not available' && format('[{0} - 下载]({1})', steps.apk_url.outputs.apk_filename, steps.apk_url.outputs.apk_download_page) || 'APK 构建失败或不可用' }}
+            ${{ steps.check_apk.outputs.apk_exists == 'true' && format('[{0} - 下载]({1})', steps.check_apk.outputs.apk_filename, steps.check_apk.outputs.apk_download_page) || 'APK 构建失败或不可用' }}
 
 
             <!-- AUTO_PREVIEW_HOOK -->
@@ -119,8 +121,31 @@ jobs:
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'failure'
     steps:
+      - name: download build artifacts
+        id: download
+        uses: dawidd6/action-download-artifact@v6
+        continue-on-error: true
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: build-env
+
       - name: Get PR number
         id: pr
+        run: |
+          if [ -f build-env.txt ]; then
+            PR_NUMBER=$(grep "^PR_NUMBER=" build-env.txt | cut -d'=' -f2)
+            echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
+            echo "found=true" >> $GITHUB_OUTPUT
+            echo "✅ PR number from build-env: $PR_NUMBER"
+          else
+            echo "found=false" >> $GITHUB_OUTPUT
+            echo "⚠️ build-env.txt not found, trying API fallback"
+          fi
+
+      - name: Get PR number (API fallback)
+        if: steps.pr.outputs.found != 'true'
+        id: pr_api
         uses: actions/github-script@v7
         with:
           script: |
@@ -137,12 +162,12 @@ jobs:
           result-encoding: string
 
       - name: The job failed
-        if: steps.pr.outputs.result != 'null'
+        if: steps.pr.outputs.found == 'true' || steps.pr_api.outputs.result != 'null'
         uses: actions-cool/maintain-one-comment@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{ github.event.workflow_run.id }})
             <!-- AUTO_PREVIEW_HOOK -->
-          number: ${{ steps.pr.outputs.result }}
+          number: ${{ steps.pr.outputs.found == 'true' && steps.pr.outputs.number || steps.pr_api.outputs.result }}
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"

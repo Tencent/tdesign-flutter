@@ -5,6 +5,11 @@ on:
     branches: [develop, main]
     types: [opened, synchronize, reopened]
 
+# 同一 PR 只保留最新构建，取消进行中的旧构建
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -47,7 +52,7 @@ jobs:
           echo "唯一标识: $UNIQUE_ID"
 
       - name: 生成构建环境变量文件
-        # 供 preview-publish.yml 读取，用于 Surge 部署
+        # 供 preview-publish.yml 读取，用于评论和 Surge 部署
         run: |
           echo "VERSION=${{ steps.version.outputs.component_version }}" > build-env.txt
           echo "UNIQUE_ID=${{ steps.version.outputs.unique_id }}" >> build-env.txt
@@ -56,6 +61,7 @@ jobs:
           echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> build-env.txt
           echo "GIT_SHA=${{ github.sha }}" >> build-env.txt
 
+          echo "✅ 构建环境变量生成成功："
           cat build-env.txt
 
       - name: 上传构建环境变量
@@ -76,22 +82,29 @@ jobs:
 
       - name: 预构建 AOP 产物
         # 触发 AOP 代码生成（@Demo 注解），生成 assets/code/*.txt 文件
-        # 这些文件会被 widget_test.dart 读取，生成 Markdown 文档
-        continue-on-error: true
+        # 只需要 debug apk 触发 AOP，无需构建 web（节省 3-5 分钟）
+        id: aop_build
         run: |
           cd tdesign-component/example
           flutter pub get
-          flutter build apk --debug --dart-define=isCI=false
-          flutter build web --dart-define=isCI=false
+          flutter build apk --debug --dart-define=isCI=false || true
+          
+          # 验证 AOP 产物
+          if [ -d "assets/code" ] && [ "$(ls -A assets/code 2>/dev/null)" ]; then
+            echo "✅ AOP 代码生成成功，共 $(ls assets/code | wc -l) 个文件"
+            echo "aop_success=true" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️ AOP 代码目录为空，后续构建可能受影响"
+            echo "aop_success=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: 缓存 AOP 产物
-        # 缓存 AOP 生成的代码和文档资源，供 build-apk 和 build-web 复用
+        # 只缓存 AOP 生成的代码，不缓存 build 目录（release 构建会重新生成）
         uses: actions/cache/save@v4
         with:
           path: |
-            ${{ github.workspace }}/tdesign-component/example/.dart_tool
-            ${{ github.workspace }}/tdesign-component/example/build
             ${{ github.workspace }}/tdesign-component/example/assets/code
+            ${{ github.workspace }}/tdesign-component/example/.dart_tool
           key: aop-cache-${{ github.run_id }}
 
   build-apk:
@@ -110,9 +123,8 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-            ${{ github.workspace }}/tdesign-component/example/.dart_tool
-            ${{ github.workspace }}/tdesign-component/example/build
             ${{ github.workspace }}/tdesign-component/example/assets/code
+            ${{ github.workspace }}/tdesign-component/example/.dart_tool
           key: aop-cache-${{ github.run_id }}
 
       - name: 安装 Java 17
@@ -155,7 +167,7 @@ jobs:
       - name: 构建 APK
         run: |
           cd tdesign-component/example
-          flutter clean
+          # 不执行 flutter clean，复用 AOP 缓存加速构建
           flutter pub get
           # 生成签名密钥，用于 APK 签名
           cd android/app
@@ -208,9 +220,8 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-            ${{ github.workspace }}/tdesign-component/example/.dart_tool
-            ${{ github.workspace }}/tdesign-component/example/build
             ${{ github.workspace }}/tdesign-component/example/assets/code
+            ${{ github.workspace }}/tdesign-component/example/.dart_tool
           key: aop-cache-${{ github.run_id }}
 
       - name: 安装 pnpm
