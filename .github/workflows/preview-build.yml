@@ -222,7 +222,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: 'pnpm'
 
       - name: 安装 Flutter
         uses: TDesignOteam/workflows/actions/setup-flutter@main
