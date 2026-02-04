@@ -36,13 +36,10 @@ jobs:
         run: |
           # 从组件库读取版本号，用于 APK 命名和内部版本显示
           COMPONENT_VERSION=$(grep "^version:" tdesign-component/pubspec.yaml | awk '{print $2}')
-          # 生成唯一标识：纯时间戳（秒级），编译时间长不会重复
-          UNIQUE_ID=$(date +%Y%m%d%H%M%S)
+          # 生成唯一标识：PR编号-时间戳（秒级），确保唯一性
+          UNIQUE_ID="${{ github.event.pull_request.number }}-$(date +%Y%m%d%H%M%S)"
           # 编译时间戳，用于记录构建时间
           TIMESTAMP=$(date +%Y%m%d%H%M%S)
-          # 读取 PR 编号（用于 Surge 部署域名）
-          PR_NUMBER="${{ github.event.pull_request.number }}"
-          BUILD_NUMBER="${{ github.run_id }}"
 
           echo "component_version=$COMPONENT_VERSION" >> $GITHUB_OUTPUT
           echo "unique_id=$UNIQUE_ID" >> $GITHUB_OUTPUT
@@ -171,7 +168,8 @@ jobs:
           flutter pub get
           # 生成签名密钥，用于 APK 签名
           cd android/app
-          STORE_PASSWORD="tdesign123456" KEY_PASSWORD="tdesign123456"
+          STORE_PASSWORD="tdesign123456"
+          KEY_PASSWORD="tdesign123456"
           keytool -genkeypair -alias tdesign_flutter_debug_key -keypass "$KEY_PASSWORD" -keystore keystore.jks \
             -storepass "$STORE_PASSWORD" -dname "CN=TDesign Flutter Test,O=TDesign,C=CN" -keyalg RSA -keysize 2048 -validity 365
           chmod 644 keystore.jks
@@ -190,8 +188,8 @@ jobs:
             --dart-define=gitVersion=${{ github.sha }}
 
       - name: 重命名 APK
-        # APK 文件名格式：tdesign-flutter-{version}-{unique_id}.apk
-        # 例如：tdesign-flutter-0.2.7-20250127123456.apk
+        # APK 文件名格式：tdesign-flutter-{version}-{pr}-{timestamp}.apk
+        # 例如：tdesign-flutter-0.2.7-123-20250204123456.apk
         run: |
           VERSION="${{ needs.setup.outputs.component_version }}-${{ needs.setup.outputs.unique_id }}"
           mv tdesign-component/example/build/app/outputs/flutter-apk/app-release.apk tdesign-flutter-$VERSION.apk
@@ -225,7 +223,7 @@ jobs:
           key: aop-cache-${{ github.run_id }}
 
       - name: 安装 pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
           version: 9
 
