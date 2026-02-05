@@ -27,7 +27,7 @@ jobs:
         include:
           - platform: apk
             os: ubuntu-latest
-            build: flutter build apk -t ./lib/main.dart --release
+            build: flutter build apk -t ./lib/main.dart --release --target-platform android-arm64,android-arm
           - platform: ios
             os: macos-latest
             build: flutter build ios -t ./lib/main.dart --no-codesign --release
