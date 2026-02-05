@@ -62,6 +62,8 @@ jobs:
           path: tdesign-flutter-apk
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id }}
+          pattern: "tdesign-flutter-*.apk"
+          merge-multiple: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -70,18 +72,29 @@ jobs:
 
       - name: Check APK artifact exists
         id: check_apk
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           if ls tdesign-flutter-apk/*.apk 1> /dev/null 2>&1; then
             echo "apk_exists=true" >> $GITHUB_OUTPUT
             APK_FILENAME="tdesign-flutter-${{ steps.build_env.outputs.VERSION }}-${{ steps.build_env.outputs.UNIQUE_ID }}.apk"
-            APK_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}"
+            # 获取 artifact 信息以获取 artifact ID
+            ARTIFACT_JSON=$(gh api \
+              /repos/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}/artifacts \
+              --jq '.artifacts[] | select(.name == "tdesign-flutter-apk")')
+            ARTIFACT_ID=$(echo "$ARTIFACT_JSON" | jq -r '.id')
+            # 使用 GitHub artifact 的直接下载 URL 格式
+            # 格式: https://github.com/{owner}/{repo}/actions/runs/{run-id}/artifacts/{artifact-id}
+            APK_DOWNLOAD_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}/artifacts/$ARTIFACT_ID"
             echo "apk_filename=$APK_FILENAME" >> $GITHUB_OUTPUT
-            echo "apk_download_page=$APK_URL" >> $GITHUB_OUTPUT
+            echo "apk_download_url=$APK_DOWNLOAD_URL" >> $GITHUB_OUTPUT
             echo "✅ APK 找到: $APK_FILENAME"
+            echo "📦 Artifact ID: $ARTIFACT_ID"
+            echo "🔗 下载链接: $APK_DOWNLOAD_URL"
           else
             echo "apk_exists=false" >> $GITHUB_OUTPUT
             echo "apk_filename=APK not available" >> $GITHUB_OUTPUT
-            echo "apk_download_page=" >> $GITHUB_OUTPUT
+            echo "apk_download_url=" >> $GITHUB_OUTPUT
             echo "⚠️ APK artifact not found"
           fi
 
@@ -102,11 +115,9 @@ jobs:
           body: |
             <a href="${{steps.deploy.outputs.url}}"><img height="96" alt="完成" src="https://user-images.githubusercontent.com/15634204/150816437-9f5bb788-cd67-4cbc-9897-b82d74e9aa65.png" /></a>
 
-            ## 🌐 预览地址
-            [Site Preview](${{ steps.deploy.outputs.url }})
-
             ## 📱 APK 下载
-            ${{ steps.check_apk.outputs.apk_exists == 'true' && format('[{0} - 下载]({1})', steps.check_apk.outputs.apk_filename, steps.check_apk.outputs.apk_download_page) || 'APK 构建失败或不可用' }}
+            📦 APK (zip): ${{ steps.check_apk.outputs.apk_exists == 'true' && format('[{0}.zip]({1})', steps.check_apk.outputs.apk_filename, steps.check_apk.outputs.apk_download_url) || 'APK 构建失败或不可用' }}
+            ${{ steps.check_apk.outputs.apk_exists == 'true' && '⚠️ 下载后需解压获得 APK 文件' || '' }}
 
 
             <!-- AUTO_PREVIEW_HOOK -->

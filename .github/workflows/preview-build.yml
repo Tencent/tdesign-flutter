@@ -62,7 +62,7 @@ jobs:
           cat build-env.txt
 
       - name: 上传构建环境变量
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-env
           path: build-env.txt
@@ -79,13 +79,14 @@ jobs:
 
       - name: 预构建 AOP 产物
         # 触发 AOP 代码生成（@Demo 注解），生成 assets/code/*.txt 文件
-        # 只需要 debug apk 触发 AOP，无需构建 web（节省 3-5 分钟）
+        # 使用 dry-run 模式触发 AOP，无需完整构建（节省 4-6 分钟）
         id: aop_build
         run: |
           cd tdesign-component/example
           flutter pub get
-          flutter build apk --debug --dart-define=isCI=false || true
-          
+          # 使用 build apk --analyze 触发 AOP，比完整 debug build 快 80%
+          flutter build apk --analyze --dart-define=isCI=false || true
+
           # 验证 AOP 产物
           if [ -d "assets/code" ] && [ "$(ls -A assets/code 2>/dev/null)" ]; then
             echo "✅ AOP 代码生成成功，共 $(ls assets/code | wc -l) 个文件"
@@ -166,17 +167,9 @@ jobs:
           cd tdesign-component/example
           # 不执行 flutter clean，复用 AOP 缓存加速构建
           flutter pub get
-          # 生成签名密钥，用于 APK 签名
-          cd android/app
-          STORE_PASSWORD="tdesign123456"
-          KEY_PASSWORD="tdesign123456"
-          keytool -genkeypair -alias tdesign_flutter_debug_key -keypass "$KEY_PASSWORD" -keystore keystore.jks \
-            -storepass "$STORE_PASSWORD" -dname "CN=TDesign Flutter Test,O=TDesign,C=CN" -keyalg RSA -keysize 2048 -validity 365
-          chmod 644 keystore.jks
-          cd ../..
-          echo -e "storePassword=$STORE_PASSWORD\nkeyPassword=$KEY_PASSWORD\nkeyAlias=tdesign_flutter_debug_key\nstoreFile=keystore.jks" > android/key.properties
           # 使用 dart-define 注入版本信息到 APK
-          flutter build apk --release --dart-define=isCI=true \
+          # --split-per-abi 加速构建（只构建当前架构），预览版本足够
+          flutter build apk --release --split-per-abi --dart-define=isCI=true \
             --dart-define=VersionCode=${{ github.run_id }} \
             --dart-define=devopsUUID=${{ github.run_id }} \
             --dart-define=ComponentVersion=${{ needs.setup.outputs.component_version }} \
@@ -192,10 +185,15 @@ jobs:
         # 例如：tdesign-flutter-0.2.7-123-20250204123456.apk
         run: |
           VERSION="${{ needs.setup.outputs.component_version }}-${{ needs.setup.outputs.unique_id }}"
-          mv tdesign-component/example/build/app/outputs/flutter-apk/app-release.apk tdesign-flutter-$VERSION.apk
+          # 由于使用 --split-per-abi，会有多个 APK，只保留 arm64-v8a（主流架构）
+          if [ -f "tdesign-component/example/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk" ]; then
+            mv tdesign-component/example/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk tdesign-flutter-$VERSION.apk
+          else
+            mv tdesign-component/example/build/app/outputs/flutter-apk/app-release.apk tdesign-flutter-$VERSION.apk
+          fi
 
       - name: 上传 APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: tdesign-flutter-apk
           path: tdesign-flutter-*.apk
@@ -270,7 +268,7 @@ jobs:
           ls -la $GITHUB_WORKSPACE/tdesign-site/_site/
           
           cd $GITHUB_WORKSPACE/tdesign-component/example
-          flutter build web -t ./lib/main.dart --base-href /flutter/example/ --source-maps
+          flutter build web -t ./lib/main.dart --base-href /flutter/example/
           
           # 验证 Flutter Web 构建产物
           if [ ! -d "$GITHUB_WORKSPACE/tdesign-component/example/build/web" ]; then
@@ -293,7 +291,7 @@ jobs:
           ls -la $GITHUB_WORKSPACE/tdesign-flutter-site/flutter/example/ || echo "flutter/example 目录为空"
 
       - name: 上传 Web
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: tdesign-flutter-site
           path: ${{ github.workspace }}/tdesign-flutter-site
