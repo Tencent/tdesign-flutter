@@ -27,7 +27,7 @@ jobs:
         include:
           - platform: apk
             os: ubuntu-latest
-            build: flutter build apk -t ./lib/main.dart --no-tree-shake-icons --no-analyze --dart-define=FLUTTER_BUILD_PARALLEL=true
+            build: flutter build apk -t ./lib/main.dart --no-tree-shake-icons --no-analyze
           - platform: ios
             os: macos-latest
             build: flutter build ios -t ./lib/main.dart --no-codesign --release
