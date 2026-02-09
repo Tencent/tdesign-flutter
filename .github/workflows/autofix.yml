@@ -37,10 +37,10 @@ jobs:
 
       - name: flutter build
         working-directory: ./tdesign-component/example
-        run: flutter build apk -t ./lib/main.dart --release --target-platform android-arm64
+        run: flutter build apk -t ./lib/main.dart --release --target-platform android-arm64 --no-tree-shake-icons
 
       - name: generate web documentation from demo code
         working-directory: ./tdesign-component/example
-        run: flutter test/widget_test.dart
+        run: flutter test test/widget_test.dart
 
       - uses: autofix-ci/action@v1
