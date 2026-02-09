@@ -281,7 +281,11 @@ class TDNavBarItem {
   /// 内部填充
   EdgeInsetsGeometry? padding;
 
+  /// 自定义组件，优先级高于 icon，可以是任意 Widget
+  Widget? customWidget;
+
   /// 图标组件，优先级高于 icon
+  @Deprecated('Use customWidget instead')
   Widget? iconWidget;
 
   TDNavBarItem({
@@ -290,6 +294,8 @@ class TDNavBarItem {
     this.action,
     this.iconSize = 24.0,
     this.padding,
+    this.customWidget,
+    @Deprecated('Use customWidget instead')
     this.iconWidget,
   });
 
@@ -302,7 +308,7 @@ class TDNavBarItem {
               (isLeft
                   ? EdgeInsets.only(right: TDTheme.of(context).spacer8)
                   : EdgeInsets.only(left: TDTheme.of(context).spacer8)),
-          child: iconWidget ??
+          child: customWidget ?? iconWidget ??
               Icon(
                 icon,
                 size: iconSize,
