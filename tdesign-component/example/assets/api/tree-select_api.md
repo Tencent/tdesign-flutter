@@ -9,11 +9,12 @@
 | label | String | - | 标签 |
 | maxLines | int | 1 | 最大显示行数 |
 | multiple | bool | false | 当前子项支持多选 |
-| value | int | - | 值 |
+| value | dynamic | - | 值 |
 
 ```
 ```
- ### TDTreeSelect
+
+### TDTreeSelect
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

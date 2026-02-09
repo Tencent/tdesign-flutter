@@ -1,0 +1,41 @@
+
+  Widget _buildInDropdownItem(BuildContext context) {
+    return TDDropdownMenu(
+      key: ValueKey(resetDropdownMenuValue),
+      direction: TDDropdownMenuDirection.up,
+      builder: (context) {
+        return [
+          TDDropdownItem(
+            label: _selectedDept,
+            builder: (context, itemState, popupState) {
+              return TDMultiCascader(
+                title: '选择部门',
+                cascaderHeight: 400,
+                data: _data_3,
+                initialData: _initData_3,
+                theme: 'step',
+                onChange: (List<MultiCascaderListModel> selectData) {
+                  setState(() {
+                    var result = [];
+                    var len = selectData.length;
+                    _initData_3 = selectData[len - 1].value!;
+                    selectData.forEach((element) {
+                      result.add(element.label);
+                    });
+                    _selectedDept = result.join(' / ');
+                    resetDropdownMenuValue++;
+                  });
+                },
+                onClose: (){
+                  setState(() {
+                    resetDropdownMenuValue++;
+                  });
+                  Navigator.maybePop(context);
+                },
+              );
+            },
+          ),
+        ];
+      },
+    );
+  }

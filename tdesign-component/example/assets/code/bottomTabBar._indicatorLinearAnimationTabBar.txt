@@ -1,0 +1,31 @@
+
+  Widget _indicatorLinearAnimationTabBar(BuildContext context) {
+    return TDBottomTabBar(TDBottomTabBarBasicType.text,
+        indicatorAnimation: TDBottomTabBarIndicatorAnimation.linear,
+        navigationTabs: [
+          TDBottomTabBarTabConfig(
+            tabText: '标签1',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签1');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签2',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签2');
+            },
+          ),
+          TDBottomTabBarTabConfig(
+            tabText: '标签3',
+            selectedIcon: _selectedIcon,
+            unselectedIcon: _unSelectedIcon,
+            onTap: () {
+              onTapTab(context, '标签3');
+            },
+          ),
+        ]);
+  }

@@ -1,0 +1,23 @@
+
+  Widget _autoHeightInput(BuildContext context) {
+    return Column(
+      children: [
+        TDInput(
+          leftLabel: '地址',
+          controller: controller[27],
+          hintText: '请输入地址，高度自适应',
+          maxLines: null,
+          onChanged: (text) {
+            setState(() {});
+          },
+          onClearTap: () {
+            controller[27].clear();
+            setState(() {});
+          },
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }

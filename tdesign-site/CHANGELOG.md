@@ -5,6 +5,31 @@ toc: false
 docClass: timeline
 ---
 
+## 🌈 0.2.7 `2026-01-21` 
+### 🚀 Features 
+
+- `TDInput`: TDInput密文模式下支持粘贴 @jflin19990707 ([#827](https://github.com/Tencent/tdesign-flutter/pull/827))
+- `TDDropdownMenu`: TDDropdownMenu的arrowIcon颜色可自定义 @jflin19990707 ([#831](https://github.com/Tencent/tdesign-flutter/pull/831))
+- `TDInput`: TDInput高度自适应 @jflin19990707 ([#840](https://github.com/Tencent/tdesign-flutter/pull/840))
+- `TDCalendar`: 允许月历控件在拖动后返回当前月份,用于延迟加载月份改变数据 @rxnh8256 ([#816](https://github.com/Tencent/tdesign-flutter/pull/816))
+- `TDActionSheetItem`: 支持设置cell描述信息的能力 @leenc123 ([#811](https://github.com/Tencent/tdesign-flutter/pull/811))
+- `TDBottomTabBar`: tabbar新增indicatorAnimation动画属性 @journeyding ([#848](https://github.com/Tencent/tdesign-flutter/pull/848))
+
+### 🐞 Bug Fixes
+- `TDPopup`: 底部弹出popup重绘问题 @jflin19990707 ([#826](https://github.com/Tencent/tdesign-flutter/pull/826))
+- `TDropdownMenu`: TDropdownMenu分组菜单多选模式下的返回值bug @jflin19990707 ([#828](https://github.com/Tencent/tdesign-flutter/pull/828))
+- `TDTable`: TDTable中TDTableCol的索引BUG @jflin19990707 ([#830](https://github.com/Tencent/tdesign-flutter/pull/830))
+- `TDTreeSelect`: 树形选择器异步数据更新后能重新渲染；二级菜单文字过长处理一下；TDSelectOption中的value改为dynamic类型 @jflin19990707 ([#834](https://github.com/Tencent/tdesign-flutter/pull/834))
+- `TDToast`: TDToast过长溢出问题 @jflin19990707 ([#839](https://github.com/Tencent/tdesign-flutter/pull/839))
+- `TDDropdownItem`: TDDropdownItem不兼容TDMultiCascader @jflin19990707 ([#846](https://github.com/Tencent/tdesign-flutter/pull/846))
+- `TDCalendar`: 自定义日期单元格组件移除padding，使之沾满并覆盖默认选中样式从而实现自定义选中以及当前日期的样式问题,并增加日期锚点属性来实现自动滚动到锚点位置 @leenc123 ([#808](https://github.com/Tencent/tdesign-flutter/pull/808))
+- `DropdownMenu`: 修复 item 的 label 过长时导致显示不完全的 bug @edram ([#823](https://github.com/Tencent/tdesign-flutter/pull/823))
+- `TDRadio`、`TDCheckbox`: 单选框、多选框多列展示问题 @jflin19990707 ([#841](https://github.com/Tencent/tdesign-flutter/pull/841))
+- `TDNavBar`: 优化标题栏返回图标 支持暗黑模式 @sinianbao ([#844](https://github.com/Tencent/tdesign-flutter/pull/844))
+
+### 🚧 Others
+- docs: 更新主题生成器文档，添加视频演示链接 @RSS1102 ([#833](https://github.com/Tencent/tdesign-flutter/pull/833))
+
 ## 🌈 0.2.6 `2025-11-14`
 ### 🚀 Features
 - `TDNoticeBar `: 新增`content`属性，废弃并兼容原有的context属性 @runoob-coder ([#744](https://github.com/Tencent/tdesign-flutter/pull/744))

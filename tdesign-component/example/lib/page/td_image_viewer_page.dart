@@ -9,10 +9,10 @@ final List<TDActionSheetItem> actionSheetItems = [
   TDActionSheetItem(label: '删除图片', icon: const Icon(TDIcons.delete)),
 ];
 
-final List<String> images = [
-  'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
-  'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
-];
+List<String> get images => [
+      'https://tdesign.gtimg.com/mobile/demos/swiper1.png',
+      'https://tdesign.gtimg.com/mobile/demos/swiper2.png',
+    ];
 
 class TDImageViewerPage extends StatefulWidget {
   const TDImageViewerPage({Key? key}) : super(key: key);

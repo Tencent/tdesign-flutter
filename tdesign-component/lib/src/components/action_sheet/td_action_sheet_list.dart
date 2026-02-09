@@ -102,7 +102,9 @@ class TDActionSheetList extends StatelessWidget {
                     Navigator.maybePop(context); // 关闭当前页面
                   },
             child: Container(
-              height: 56,
+              height: item.description == null || item.description!.isEmpty
+                  ? 56
+                  : 78,
               padding: EdgeInsets.symmetric(
                   horizontal: TDTheme.of(context).spacer16),
               decoration: BoxDecoration(
@@ -113,42 +115,64 @@ class TDActionSheetList extends StatelessWidget {
                   ),
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: getMainAxisAlignment(align),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (item.icon != null) ...[
-                    IconTheme(
-                      data: IconThemeData(
-                        color: item.disabled
-                            // 禁用状态下的图标颜色
-                            ? TDTheme.of(context).textDisabledColor
-                            : (item.textStyle?.color ??
-                                // 正常状态下的图标颜色
-                                TDTheme.of(context).textColorPrimary),
-                        size: item.textStyle?.fontSize,
+                  Row(
+                    mainAxisAlignment: getMainAxisAlignment(align),
+                    children: [
+                      if (item.icon != null) ...[
+                        IconTheme(
+                          data: IconThemeData(
+                            color: item.disabled
+                                // 禁用状态下的图标颜色
+                                ? TDTheme.of(context).textDisabledColor
+                                : (item.textStyle?.color ??
+                                    // 正常状态下的图标颜色
+                                    TDTheme.of(context).textColorPrimary),
+                            size: item.textStyle?.fontSize,
+                          ),
+                          child: SizedBox(
+                            width: item.iconSize ?? 24,
+                            height: item.iconSize ?? 24,
+                            child: item.icon!,
+                          ),
+                        ),
+                        SizedBox(width: TDTheme.of(context).spacer8),
+                      ],
+                      TDText(
+                        item.label,
+                        font: TDTheme.of(context).fontBodyLarge,
+                        textColor: item.disabled
+                            ? TDTheme.of(context)
+                                .textDisabledColor // 禁用状态下的文本颜色
+                            : TDTheme.of(context)
+                                .textColorPrimary, // 正常状态下的文本颜色
+                        style: item.textStyle,
                       ),
-                      child: SizedBox(
-                        width: item.iconSize ?? 24,
-                        height: item.iconSize ?? 24,
-                        child: item.icon!,
-                      ),
-                    ),
-                    SizedBox(width: TDTheme.of(context).spacer8),
-                  ],
-                  TDText(
-                    item.label,
-                    font: TDTheme.of(context).fontBodyLarge,
-                    textColor: item.disabled
-                        ? TDTheme.of(context).textDisabledColor // 禁用状态下的文本颜色
-                        : TDTheme.of(context).textColorPrimary, // 正常状态下的文本颜色
-                    style: item.textStyle,
-                  ),
 
-                  /// todo 徽标应位于右上角，而不是右边紧挨着，请参考宫格徽标实现
-                  if (item.badge != null) ...[
-                    SizedBox(width: TDTheme.of(context).spacer8),
-                    item.badge!,
-                  ],
+                      /// todo 徽标应位于右上角，而不是右边紧挨着，请参考宫格徽标实现
+                      if (item.badge != null) ...[
+                        SizedBox(width: TDTheme.of(context).spacer8),
+                        item.badge!,
+                      ],
+                    ],
+                  ),
+                  if (item.description != null &&
+                      item.description!.isNotEmpty) ...[
+                    SizedBox(height: TDTheme.of(context).spacer4),
+                    Row(
+                        mainAxisAlignment: getMainAxisAlignment(align),
+                        children: [
+                          Flexible(
+                              child: TDText(item.description,
+                                  font: TDTheme.of(context).fontBodyMedium,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textColor:
+                                      TDTheme.of(context).textDisabledColor))
+                        ])
+                  ]
                 ],
               ),
             ),

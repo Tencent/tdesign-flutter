@@ -125,8 +125,8 @@ Widget _customNoticeBar(BuildContext context) {
     content: '这是一条普通的通知信息',
     prefixIcon: TDIcons.notification,
     suffixIcon: TDIcons.chevron_right,
-    style:
-        TDNoticeBarStyle(backgroundColor: TDTheme.of(context).bgColorComponent),
+    style: TDNoticeBarStyle.generateTheme(context, theme: TDNoticeBarTheme.info)
+      ..backgroundColor = TDTheme.of(context).bgColorComponent,
   );
 }
 
