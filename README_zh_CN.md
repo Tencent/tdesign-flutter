@@ -18,7 +18,7 @@
 
 简体中文 | [English](README.md)
 
-腾讯 TDesign Flutter 技术栈组件库，适合在移动端项目中使用。
+腾讯TDesign Flutter技术栈组件库，适合在移动端项目中使用。
 
 # 🎉 特性
 
