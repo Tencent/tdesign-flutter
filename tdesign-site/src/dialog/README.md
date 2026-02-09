@@ -728,7 +728,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDDialogButtonOptions
+
+### TDDialogButtonOptions
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -745,7 +746,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDImageDialog
+
+### TDImageDialog
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -769,7 +771,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDAlertDialog
+
+### TDAlertDialog
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -804,7 +807,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDConfirmDialog
+
+### TDConfirmDialog
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -831,7 +835,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDDialogScaffold
+
+### TDDialogScaffold
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -845,7 +850,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDDialogTitle
+
+### TDDialogTitle
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -856,7 +862,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDDialogContent
+
+### TDDialogContent
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -867,7 +874,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDDialogInfoWidget
+
+### TDDialogInfoWidget
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -884,7 +892,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### HorizontalNormalButtons
+
+### HorizontalNormalButtons
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -895,7 +904,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### HorizontalTextButtons
+
+### HorizontalTextButtons
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -906,7 +916,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDDialogButton
+
+### TDDialogButton
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

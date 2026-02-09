@@ -650,7 +650,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDSideBar
+
+### TDSideBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
