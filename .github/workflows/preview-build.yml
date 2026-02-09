@@ -5,234 +5,58 @@ on:
     branches: [develop, main]
     types: [opened, synchronize, reopened]
 
-# 同一 PR 只保留最新构建，取消进行中的旧构建
-concurrency:
-  group: preview-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
   setup:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     if: "!contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
     outputs:
-      component_version: ${{ steps.version.outputs.component_version }}
-      unique_id: ${{ steps.version.outputs.unique_id }}
-      timestamp: ${{ steps.version.outputs.timestamp }}
+      major_version: ${{ steps.version.outputs.major_version }}
+      minor_version: ${{ steps.version.outputs.minor_version }}
+      fix_version: ${{ steps.version.outputs.fix_version }}
+      version: ${{ steps.version.outputs.version }}
+      build_number: ${{ github.run_number }}
+      pr_number: ${{ github.event.number }}
+      run_id: ${{ github.run_id }}
+      sha: ${{ github.sha }}
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - name: 配置 Git
+      - name: Configure Git to not use symlinks
         run: git config --global core.symlinks false
 
-      - name: 检出代码
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
           lfs: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 1
+          fetch-depth: 0
 
-      - name: 提取版本信息
-        id: version
-        run: |
-          # 从组件库读取版本号，用于 APK 命名和内部版本显示
-          COMPONENT_VERSION=$(grep "^version:" tdesign-component/pubspec.yaml | awk '{print $2}')
-          # 生成唯一标识：PR编号-时间戳（秒级），确保唯一性
-          UNIQUE_ID="${{ github.event.pull_request.number }}-$(date +%Y%m%d%H%M%S)"
-          # 编译时间戳，用于记录构建时间
-          TIMESTAMP=$(date +%Y%m%d%H%M%S)
-
-          echo "component_version=$COMPONENT_VERSION" >> $GITHUB_OUTPUT
-          echo "unique_id=$UNIQUE_ID" >> $GITHUB_OUTPUT
-          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
-
-          echo "版本: $COMPONENT_VERSION"
-          echo "唯一标识: $UNIQUE_ID"
-
-      - name: 生成构建环境变量文件
-        # 供 preview-publish.yml 读取，用于评论和 Surge 部署
-        run: |
-          echo "VERSION=${{ steps.version.outputs.component_version }}" > build-env.txt
-          echo "UNIQUE_ID=${{ steps.version.outputs.unique_id }}" >> build-env.txt
-          echo "BUILD_NUMBER=${{ github.run_id }}" >> build-env.txt
-          echo "TIMESTAMP=${{ steps.version.outputs.timestamp }}" >> build-env.txt
-          echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> build-env.txt
-          echo "GIT_SHA=${{ github.sha }}" >> build-env.txt
-
-          echo "✅ 构建环境变量生成成功："
-          cat build-env.txt
-
-      - name: 上传构建环境变量
-        uses: actions/upload-artifact@v7
-        with:
-          name: build-env
-          path: build-env.txt
-          retention-days: 14
-
-      - name: 安装 Flutter
-        uses: TDesignOteam/workflows/actions/setup-flutter@main
-        with:
-          flutter-version: 3.32.0
-          channel: stable
-          cache: true
-          aop-registry: true
-          aop-project-path: ./tdesign-component/example
-
-      - name: 预构建 AOP 产物
-        # 触发 AOP 代码生成（@Demo 注解），生成 assets/code/*.txt 文件
-        # 使用 dry-run 模式触发 AOP，无需完整构建（节省 4-6 分钟）
-        id: aop_build
-        run: |
-          cd tdesign-component/example
-          flutter pub get
-          # 使用 build apk --analyze 触发 AOP，比完整 debug build 快 80%
-          flutter build apk --analyze --dart-define=isCI=false || true
-
-          # 验证 AOP 产物
-          if [ -d "assets/code" ] && [ "$(ls -A assets/code 2>/dev/null)" ]; then
-            echo "✅ AOP 代码生成成功，共 $(ls assets/code | wc -l) 个文件"
-            echo "aop_success=true" >> $GITHUB_OUTPUT
-          else
-            echo "⚠️ AOP 代码目录为空，后续构建可能受影响"
-            echo "aop_success=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: 缓存 AOP 产物
-        # 只缓存 AOP 生成的代码，不缓存 build 目录（release 构建会重新生成）
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            ${{ github.workspace }}/tdesign-component/example/assets/code
-            ${{ github.workspace }}/tdesign-component/example/.dart_tool
-          key: aop-cache-${{ github.run_id }}
-
-  build-apk:
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    needs: setup
-    steps:
-      - name: 检出代码
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          lfs: true
-          fetch-depth: 1
-
-      - name: 恢复 AOP 缓存
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            ${{ github.workspace }}/tdesign-component/example/assets/code
-            ${{ github.workspace }}/tdesign-component/example/.dart_tool
-          key: aop-cache-${{ github.run_id }}
-
-      - name: 安装 Java 17
-        uses: actions/setup-java@v5
-        with:
-          distribution: "jetbrains"
-          java-version: "17"
-
-      - name: 安装 Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          cmdline-tools-version: "12"
-        env:
-          SKIP_JDK_VERSION_CHECK: true
-
-      - name: 安装 Flutter
-        uses: TDesignOteam/workflows/actions/setup-flutter@main
-        with:
-          flutter-version: 3.32.0
-          channel: stable
-          cache: true
-          aop-registry: true
-          aop-project-path: ./tdesign-component/example
-
-      - name: 写入版本和时间到 assets
-        # 将版本号和编译时间写入 assets 文件，应用运行时读取显示在"关于我们"页面
-        run: |
-          echo "${{ needs.setup.outputs.component_version }}" > tdesign-component/example/assets/version
-          # 将时间戳转换为毫秒级（Flutter DateTime 需要）
-          TIMESTAMP="${{ needs.setup.outputs.timestamp }}"
-          YEAR=${TIMESTAMP:0:4}
-          MONTH=${TIMESTAMP:4:2}
-          DAY=${TIMESTAMP:6:2}
-          HOUR=${TIMESTAMP:8:2}
-          MINUTE=${TIMESTAMP:10:2}
-          SECOND=${TIMESTAMP:12:2}
-          EPOCH=$(date -d "$YEAR-$MONTH-$DAY $HOUR:$MINUTE:$SECOND" +%s%3N)
-          echo "$EPOCH" > tdesign-component/example/assets/publish_time
-
-      - name: 构建 APK
-        run: |
-          cd tdesign-component/example
-          # 不执行 flutter clean，复用 AOP 缓存加速构建
-          flutter pub get
-          # 使用 dart-define 注入版本信息到 APK
-          # --split-per-abi 加速构建（只构建当前架构），预览版本足够
-          flutter build apk --release --split-per-abi --dart-define=isCI=true \
-            --dart-define=VersionCode=${{ github.run_id }} \
-            --dart-define=devopsUUID=${{ github.run_id }} \
-            --dart-define=ComponentVersion=${{ needs.setup.outputs.component_version }} \
-            --dart-define=BuildNo=${{ github.run_id }} \
-            --dart-define=Timestamp=${{ needs.setup.outputs.timestamp }} \
-            --dart-define=UniqueID=${{ needs.setup.outputs.unique_id }} \
-            --dart-define=isPublish=false \
-            --dart-define=isBeta=false \
-            --dart-define=gitVersion=${{ github.sha }}
-
-      - name: 重命名 APK
-        # APK 文件名格式：tdesign-flutter-{version}-{pr}-{timestamp}.apk
-        # 例如：tdesign-flutter-0.2.7-123-20250204123456.apk
-        run: |
-          VERSION="${{ needs.setup.outputs.component_version }}-${{ needs.setup.outputs.unique_id }}"
-          # 由于使用 --split-per-abi，会有多个 APK，只保留 arm64-v8a（主流架构）
-          if [ -f "tdesign-component/example/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk" ]; then
-            mv tdesign-component/example/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk tdesign-flutter-$VERSION.apk
-          else
-            mv tdesign-component/example/build/app/outputs/flutter-apk/app-release.apk tdesign-flutter-$VERSION.apk
-          fi
-
-      - name: 上传 APK
-        uses: actions/upload-artifact@v7
-        with:
-          name: tdesign-flutter-apk
-          path: tdesign-flutter-*.apk
-          compression-level: 0 # 不压缩，避免 APKSigner 解压失败
-          retention-days: 14
-
-  build-web:
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    needs: setup
-    steps:
-      - name: 检出代码
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          lfs: true
-          fetch-depth: 1
-
-      - name: 恢复 AOP 缓存
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            ${{ github.workspace }}/tdesign-component/example/assets/code
-            ${{ github.workspace }}/tdesign-component/example/.dart_tool
-          key: aop-cache-${{ github.run_id }}
-
-      - name: 安装 pnpm
-        uses: pnpm/action-setup@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
         with:
           version: 9
 
-      - name: 安装 Node.js 20
+      - name: Set Node version
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "pnpm"
           cache-dependency-path: "tdesign-site/pnpm-lock.yaml"
 
-      - name: 安装 Flutter
+      - uses: actions/setup-java@v5
+        with:
+          distribution: "jetbrains"
+          java-version: "17"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: "12"
+        env:
+          SKIP_JDK_VERSION_CHECK: true
+
+      - name: Set up Flutter
         uses: TDesignOteam/workflows/actions/setup-flutter@main
         with:
           flutter-version: 3.32.0
@@ -241,64 +65,210 @@ jobs:
           aop-registry: true
           aop-project-path: ./tdesign-component/example
 
-      - name: 生成文档
-        # 运行 widget 测试，根据 @Demo 注解生成 Markdown 文档
-        # 文档会输出到 tdesign-site/src/ 目录
-        continue-on-error: true
+      - name: Extract version from pubspec.yaml
+        id: version
         run: |
-          cd tdesign-component/example
-          flutter test test/widget_test.dart --reporter expanded || {
-            echo "⚠ Widget test completed with warnings (this is expected)"
-            echo "Documentation should have been generated"
-            exit 0
-          }
+          # 从pubspec.yaml中提取版本号
+          VERSION=$(grep "version:" tdesign-component/pubspec.yaml | sed 's/version: //g' | xargs)
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          MINOR=$(echo $VERSION | cut -d. -f2)
+          FIX=$(echo $VERSION | cut -d. -f3)
+          echo "major_version=$MAJOR" >> $GITHUB_OUTPUT
+          echo "minor_version=$MINOR" >> $GITHUB_OUTPUT
+          echo "fix_version=$FIX" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: 构建站点
-        # 构建文档站点 + Flutter Web 应用，适配 Surge 静态托管
-        # Surge 平台要求：无需 404/200 文件，SPA 路由由 _redirects 文件控制
+      - name: Create build env file
         run: |
-          cd tdesign-site && pnpm install && pnpm run site
-          
-          # 验证站点构建产物
-          if [ ! -d "$GITHUB_WORKSPACE/tdesign-site/_site" ]; then
-            echo "❌ 站点构建失败：_site 目录不存在"
-            exit 1
-          fi
-          echo "✅ 站点构建成功，_site 目录内容："
-          ls -la $GITHUB_WORKSPACE/tdesign-site/_site/
-          
-          cd $GITHUB_WORKSPACE/tdesign-component/example
-          flutter build web -t ./lib/main.dart --base-href /flutter/example/
-          
-          # 验证 Flutter Web 构建产物
-          if [ ! -d "$GITHUB_WORKSPACE/tdesign-component/example/build/web" ]; then
-            echo "❌ Flutter Web 构建失败：build/web 目录不存在"
-            exit 1
-          fi
-          echo "✅ Flutter Web 构建成功"
-          
-          mkdir -p $GITHUB_WORKSPACE/tdesign-flutter-site/flutter/example
-          cp -r $GITHUB_WORKSPACE/tdesign-site/_site/* $GITHUB_WORKSPACE/tdesign-flutter-site/
-          cp -r $GITHUB_WORKSPACE/tdesign-site/_site/assets $GITHUB_WORKSPACE/tdesign-flutter-site/flutter/assets
-          cp -r $GITHUB_WORKSPACE/tdesign-component/example/build/web/* $GITHUB_WORKSPACE/tdesign-flutter-site/flutter/example/
-          # Surge 平台使用 _redirects 文件配置路由重定向
-          echo "/* /index.html 200" > $GITHUB_WORKSPACE/tdesign-flutter-site/_redirects
-          
-          # 验证最终产物目录
-          echo "✅ 最终产物目录内容："
-          ls -la $GITHUB_WORKSPACE/tdesign-flutter-site/
-          echo "📁 flutter/example 目录内容："
-          ls -la $GITHUB_WORKSPACE/tdesign-flutter-site/flutter/example/ || echo "flutter/example 目录为空"
+          cat > build-env.txt << EOF
+          MAJOR_VERSION=${{ steps.version.outputs.major_version }}
+          MINOR_VERSION=${{ steps.version.outputs.minor_version }}
+          FIX_VERSION=${{ steps.version.outputs.fix_version }}
+          VERSION=${{ steps.version.outputs.version }}
+          BUILD_NUMBER=${{ github.run_number }}
+          PR_NUMBER=${{ github.event.number }}
+          RUN_ID=${{ github.run_id }}
+          SHA=${{ github.sha }}
+          EOF
 
-      - name: 上传 Web
-        uses: actions/upload-artifact@v7
+      - name: Upload build environment
+        uses: actions/upload-artifact@v4
         with:
-          name: tdesign-flutter-site
-          path: ${{ github.workspace }}/tdesign-flutter-site
-          retention-days: 14
+          name: build-env
+          path: build-env.txt
+          retention-days: 5
 
-      - name: 输出构建信息
+  build-apk:
+    needs: setup
+    if: "!cancelled()"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          lfs: true
+
+      - name: Set up Flutter
+        uses: TDesignOteam/workflows/actions/setup-flutter@main
+        with:
+          flutter-version: 3.32.0
+          channel: stable
+          cache: true
+          aop-registry: true
+          aop-project-path: ./tdesign-component/example
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: "jetbrains"
+          java-version: "17"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: "12"
+        env:
+          SKIP_JDK_VERSION_CHECK: true
+
+      - name: Update assets files
         run: |
-          echo "✅ 构建完成"
-          echo "📦 Artifact 名称: tdesign-flutter-site"
-          echo "📦 Artifact 名称: tdesign-flutter-apk"
+          VERSION="${{ needs.setup.outputs.major_version }}.${{ needs.setup.outputs.minor_version }}.${{ needs.setup.outputs.fix_version }}"
+          echo "$VERSION" > $GITHUB_WORKSPACE/tdesign-component/example/assets/version
+          echo "$(date +%s%3N)" > $GITHUB_WORKSPACE/tdesign-component/example/assets/publish_time
+          cat $GITHUB_WORKSPACE/tdesign-component/example/assets/version
+          cat $GITHUB_WORKSPACE/tdesign-component/example/assets/publish_time
+
+      - name: Build Flutter apk
+        run: |
+          cd $GITHUB_WORKSPACE/tdesign-component/example
+          flutter clean
+          flutter pub get
+
+          cd ${{ github.workspace }}/tdesign-component/example/android/app
+          STORE_PASSWORD="tdesign123456"
+          KEY_PASSWORD="tdesign123456"
+          keytool -genkeypair \
+            -alias tdesign_flutter_debug_key \
+            -keypass "$KEY_PASSWORD" \
+            -keystore keystore.jks \
+            -storepass "$STORE_PASSWORD" \
+            -dname "CN=TDesign Flutter Test,O=TDesign,C=CN" \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 365
+
+          chmod 644 keystore.jks
+          cd ${{ github.workspace }}/tdesign-component/example/android
+          echo "storePassword=$STORE_PASSWORD" > key.properties
+          echo "keyPassword=$KEY_PASSWORD" >> key.properties
+          echo "keyAlias=tdesign_flutter_debug_key" >> key.properties
+          echo "storeFile=keystore.jks" >> key.properties
+
+          flutter build apk --release \
+            --dart-define=isCI=true \
+            --dart-define=VersionCode=${{ needs.setup.outputs.build_number }} \
+            --dart-define=devopsUUID=${{ needs.setup.outputs.run_id }} \
+            --dart-define=MajorVersion=${{ needs.setup.outputs.major_version }} \
+            --dart-define=MinorVersion=${{ needs.setup.outputs.minor_version }} \
+            --dart-define=FixVersion=${{ needs.setup.outputs.fix_version }} \
+            --dart-define=BuildNo=${{ needs.setup.outputs.build_number }} \
+            --dart-define=isPublish=false \
+            --dart-define=isBeta=false \
+            --dart-define=gitVersion=${{ needs.setup.outputs.sha }}
+
+      - name: Rename and upload APK
+        run: |
+          VERSION="${{ needs.setup.outputs.major_version }}.${{ needs.setup.outputs.minor_version }}.${{ needs.setup.outputs.fix_version }}"
+          BUILD="${{ needs.setup.outputs.build_number }}"
+          cd ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/
+          mv app-release.apk tdesign-flutter-${VERSION}-${BUILD}.apk
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tdesign-flutter-apk
+          path: ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/tdesign-flutter-*.apk
+          compression-level: 0
+
+  build-site:
+    needs: setup
+    if: "!cancelled()"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          lfs: true
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Set Node version
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: "tdesign-site/pnpm-lock.yaml"
+
+      - name: Set up Flutter
+        uses: TDesignOteam/workflows/actions/setup-flutter@main
+        with:
+          flutter-version: 3.32.0
+          channel: stable
+          cache: true
+          aop-registry: true
+          aop-project-path: ./tdesign-component/example
+
+      - name: Generate web documentation
+        run: |
+          cd $GITHUB_WORKSPACE/tdesign-component/example
+          flutter test test/widget_test.dart --reporter expanded || true
+
+      - name: Build site
+        working-directory: ./tdesign-site
+        run: |
+          pnpm install --frozen-lockfile
+          npm run site
+
+      - name: Update assets files for web
+        run: |
+          VERSION="${{ needs.setup.outputs.major_version }}.${{ needs.setup.outputs.minor_version }}.${{ needs.setup.outputs.fix_version }}"
+          echo "$VERSION" > $GITHUB_WORKSPACE/tdesign-component/example/assets/version
+          echo "$(date +%s%3N)" > $GITHUB_WORKSPACE/tdesign-component/example/assets/publish_time
+          cat $GITHUB_WORKSPACE/tdesign-component/example/assets/version
+          cat $GITHUB_WORKSPACE/tdesign-component/example/assets/publish_time
+
+      - name: Build site demo
+        working-directory: ./tdesign-component/example
+        run: |
+          flutter build web -t ./lib/main.dart --base-href /flutter/example/ --source-maps
+
+      - name: Prepare web output
+        run: |
+          cd $GITHUB_WORKSPACE
+          mkdir -p tdesign-flutter-web/flutter/example/
+          cp -r tdesign-site/_site/* tdesign-flutter-web/
+          rm -rf tdesign-flutter-web/assets
+
+          # Rewrite index.html
+          sed -i 's|<meta http-equiv="X-UA-Compatible" content="ie=edge">|<meta http-equiv="X-UA-Compatible" content="ie=edge">\n  <base href="/">|' tdesign-flutter-web/index.html || true
+          sed -i "s|src=\"/flutter/|src=\"flutter/|g; s|href=\"/flutter/|href=\"flutter/|g; s|src='/flutter/|src='flutter/|g; s|href='/flutter/|href='flutter/|g" tdesign-flutter-web/index.html || true
+
+          cp -v tdesign-site/_site/index.html tdesign-flutter-web/404.html || true
+          cp -v tdesign-site/_site/index.html tdesign-flutter-web/200.html || true
+          cp -r tdesign-site/_site/assets tdesign-flutter-web/flutter/assets || true
+          cp -r tdesign-component/example/build/web/* tdesign-flutter-web/flutter/example/ || true
+          echo '/* /index.html 200' > "$GITHUB_WORKSPACE/CNAME"
+
+      - name: Upload web artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tdesign-flutter-web
+          path: ${{ github.workspace }}/tdesign-flutter-web
+          retention-days: 5

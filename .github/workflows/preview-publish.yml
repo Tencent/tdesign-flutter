@@ -11,20 +11,16 @@ on:
 jobs:
   preview-success-web:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-      actions: read
     if: >
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
     steps:
       - name: download build artifacts
-        uses: actions/download-artifact@v7
+        uses: dawidd6/action-download-artifact@v6
         with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          run_id: ${{ github.event.workflow_run.id }}
           name: build-env
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: ${{ github.event.workflow_run.id }}
 
       - name: load build env variables
         id: build_env
@@ -35,78 +31,47 @@ jobs:
             echo "Loaded: $key=$value"
           done < build-env.txt
 
-      - name: download tdesign-flutter-site artifact
-        id: download_site
-        uses: actions/download-artifact@v7
-        with:
-          name: tdesign-flutter-site
-          path: tdesign-flutter-site
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: ${{ github.event.workflow_run.id }}
-
-      - name: verify site artifact
-        run: |
-          if [ -d "tdesign-flutter-site" ] && [ "$(ls -A tdesign-flutter-site 2>/dev/null)" ]; then
-            echo "✅ Site artifact 下载成功"
-            ls -la tdesign-flutter-site/
-          else
-            echo "❌ Site artifact 为空或不存在"
-            exit 1
-          fi
-
       - name: download tdesign-flutter-apk artifact
-        uses: actions/download-artifact@v7
-        continue-on-error: true
+        uses: dawidd6/action-download-artifact@v6
         with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          run_id: ${{ github.event.workflow_run.id }}
           name: tdesign-flutter-apk
           path: tdesign-flutter-apk
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: ${{ github.event.workflow_run.id }}
-          pattern: "tdesign-flutter-*.apk"
-          merge-multiple: false
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: download tdesign-flutter-web artifact
+        uses: dawidd6/action-download-artifact@v6
         with:
-          node-version: "20"
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: tdesign-flutter-web
+          path: tdesign-flutter-web
 
-      - name: Check APK artifact exists
-        id: check_apk
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Move APK to web directory
         run: |
-          if ls tdesign-flutter-apk/*.apk 1> /dev/null 2>&1; then
-            echo "apk_exists=true" >> $GITHUB_OUTPUT
-            APK_FILENAME="tdesign-flutter-${{ steps.build_env.outputs.VERSION }}-${{ steps.build_env.outputs.UNIQUE_ID }}.apk"
-            # 获取 artifact 信息以获取 artifact ID
-            ARTIFACT_JSON=$(gh api \
-              /repos/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}/artifacts \
-              --jq '.artifacts[] | select(.name == "tdesign-flutter-apk")')
-            ARTIFACT_ID=$(echo "$ARTIFACT_JSON" | jq -r '.id')
-            # 使用 GitHub artifact 的直接下载 URL 格式
-            # 格式: https://github.com/{owner}/{repo}/actions/runs/{run-id}/artifacts/{artifact-id}
-            APK_DOWNLOAD_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}/artifacts/$ARTIFACT_ID"
-            echo "apk_filename=$APK_FILENAME" >> $GITHUB_OUTPUT
-            echo "apk_download_url=$APK_DOWNLOAD_URL" >> $GITHUB_OUTPUT
-            echo "✅ APK 找到: $APK_FILENAME"
-            echo "📦 Artifact ID: $ARTIFACT_ID"
-            echo "🔗 下载链接: $APK_DOWNLOAD_URL"
-          else
-            echo "apk_exists=false" >> $GITHUB_OUTPUT
-            echo "apk_filename=APK not available" >> $GITHUB_OUTPUT
-            echo "apk_download_url=" >> $GITHUB_OUTPUT
-            echo "⚠️ APK artifact not found"
-          fi
+          # 将 APK 文件移动到 web 目录以便通过 surge 访问
+          mv tdesign-flutter-apk/*.apk tdesign-flutter-web/ || echo "No APK file found"
+          ls -la tdesign-flutter-web/*.apk || echo "*.apk not found"
 
-      - name: Deploy to Surge and generate preview URL
+      - name: Upload surge service and generate preview URL
         id: deploy
         run: |
           repository=${{github.repository}}
           project_name=${repository#*/}
           export DEPLOY_DOMAIN=https://preview-pr-${{ steps.build_env.outputs.PR_NUMBER }}-$project_name.surge.sh
-          npx surge --project ./tdesign-flutter-site --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
-          echo "Preview URL: $DEPLOY_DOMAIN"
+          npx surge --project ./tdesign-flutter-web --domain $DEPLOY_DOMAIN --token ${{ secrets.TDESIGN_SURGE_TOKEN }}
+          echo the preview URL is $DEPLOY_DOMAIN
           echo "url=$DEPLOY_DOMAIN" >> $GITHUB_OUTPUT
+
+      - name: generate APK download URL
+        id: apk_url
+        run: |
+          # 使用环境变量构建APK文件名和下载链接
+          APK_FILENAME="tdesign-flutter-${{ steps.build_env.outputs.VERSION }}-${{ steps.build_env.outputs.BUILD_NUMBER }}.apk"
+          APK_URL="${{ steps.deploy.outputs.url }}/$APK_FILENAME"
+          echo "apk_filename=$APK_FILENAME" >> $GITHUB_OUTPUT
+          echo "apk_url=$APK_URL" >> $GITHUB_OUTPUT
+          echo "APK download URL: $APK_URL"
 
       - name: update status comment
         uses: actions-cool/maintain-one-comment@v3
@@ -116,8 +81,7 @@ jobs:
             <a href="${{steps.deploy.outputs.url}}"><img height="96" alt="完成" src="https://user-images.githubusercontent.com/15634204/150816437-9f5bb788-cd67-4cbc-9897-b82d74e9aa65.png" /></a>
 
             ## 📱 APK 下载
-            📦 APK (zip): ${{ steps.check_apk.outputs.apk_exists == 'true' && format('[{0}.zip]({1})', steps.check_apk.outputs.apk_filename, steps.check_apk.outputs.apk_download_url) || 'APK 构建失败或不可用' }}
-            ${{ steps.check_apk.outputs.apk_exists == 'true' && '⚠️ 下载后需解压获得 APK 文件' || '' }}
+             [${{ steps.apk_url.outputs.apk_filename }}](${{ steps.apk_url.outputs.apk_url }})
 
 
             <!-- AUTO_PREVIEW_HOOK -->
@@ -137,61 +101,32 @@ jobs:
 
   preview-failed:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-      actions: read
     if: >
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'failure'
     steps:
       - name: download build artifacts
-        id: download
-        uses: actions/download-artifact@v7
-        continue-on-error: true
+        uses: dawidd6/action-download-artifact@v6
         with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          run_id: ${{ github.event.workflow_run.id }}
           name: build-env
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: ${{ github.event.workflow_run.id }}
 
-      - name: Get PR number
-        id: pr
+      - name: load build env variables
+        id: build_env
         run: |
-          if [ -f build-env.txt ]; then
-            PR_NUMBER=$(grep "^PR_NUMBER=" build-env.txt | cut -d'=' -f2)
-            echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
-            echo "found=true" >> $GITHUB_OUTPUT
-            echo "✅ PR number from build-env: $PR_NUMBER"
-          else
-            echo "found=false" >> $GITHUB_OUTPUT
-            echo "⚠️ build-env.txt not found, trying API fallback"
-          fi
-
-      - name: Get PR number (API fallback)
-        if: steps.pr.outputs.found != 'true'
-        id: pr_api
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const pulls = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              head: `${context.payload.workflow_run.head_repository.owner.login}:${context.payload.workflow_run.head_branch}`,
-              state: 'open'
-            });
-            if (pulls.data.length > 0) {
-              return pulls.data[0].number;
-            }
-            return null;
-          result-encoding: string
+          # 从文件中读取环境变量并设置为输出
+          while IFS='=' read -r key value; do
+            echo "$key=$value" >> $GITHUB_OUTPUT
+            echo "Loaded: $key=$value"
+          done < build-env.txt
 
       - name: The job failed
-        if: steps.pr.outputs.found == 'true' || steps.pr_api.outputs.result != 'null'
         uses: actions-cool/maintain-one-comment@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{ github.event.workflow_run.id }})
+            [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
             <!-- AUTO_PREVIEW_HOOK -->
-          number: ${{ steps.pr.outputs.found == 'true' && steps.pr.outputs.number || steps.pr_api.outputs.result }}
+          number: ${{ steps.build_env.outputs.PR_NUMBER }}
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"
