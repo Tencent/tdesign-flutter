@@ -37,6 +37,10 @@ jobs:
 
       - name: flutter build
         working-directory: ./tdesign-component/example
-        run: flutter build apk -t ./lib/main.dart --release
+        run: flutter build apk -t ./lib/main.dart --release --target-platform android-arm64
+
+      - name: generate web documentation from demo code
+        working-directory: ./tdesign-component/example
+        run: flutter test/widget_test.dart
 
       - uses: autofix-ci/action@v1
