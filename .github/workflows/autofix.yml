@@ -41,6 +41,6 @@ jobs:
 
       - name: generate web documentation from demo code
         working-directory: ./tdesign-component/example
-        run: flutter test test/widget_test.dart
+        run: flutter test test/widget_test.dart --reporter expanded
 
       - uses: autofix-ci/action@v1
