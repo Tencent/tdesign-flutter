@@ -49,6 +49,7 @@ class TDTreeSelect extends StatefulWidget {
     this.multiple = false,
     this.style = TDTreeSelectStyle.normal,
     this.height = 336,
+    this.outwardCornerRadius = 9,
   }) : super(key: key);
 
   /// 展示的选项列表
@@ -68,6 +69,9 @@ class TDTreeSelect extends StatefulWidget {
 
   /// 一级菜单样式
   final TDTreeSelectStyle style;
+
+  /// 一级菜单选中项的外弯折圆角半径，默认为 9
+  final double outwardCornerRadius;
 
   @override
   State<TDTreeSelect> createState() => _TDTreeSelectState();
@@ -229,7 +233,7 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                             top: 0,
                             right: 0,
                             child: CustomPaint(
-                              size: const Size(9, 9),
+                              size: Size(widget.outwardCornerRadius, widget.outwardCornerRadius),
                               painter: _OutwardCornerPainter(
                                 color:
                                     TDTheme.of(context).bgColorContainer,
@@ -243,7 +247,7 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                             bottom: 0,
                             right: 0,
                             child: CustomPaint(
-                              size: const Size(9, 9),
+                              size: Size(widget.outwardCornerRadius, widget.outwardCornerRadius),
                               painter: _OutwardCornerPainter(
                                 color:
                                     TDTheme.of(context).bgColorContainer,
