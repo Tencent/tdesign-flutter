@@ -24,7 +24,7 @@ jobs:
           - 3.16.9
           - 3.32.0
           # - 3.x
-          - 3.41.0
+          - 3.38.10
         include:
           - platform: apk
             os: ubuntu-latest
