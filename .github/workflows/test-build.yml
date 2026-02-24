@@ -23,7 +23,8 @@ jobs:
         flutter-version:
           - 3.16.9
           - 3.32.0
-          - 3.x
+          # - 3.x
+          - 3.41.1
         include:
           - platform: apk
             os: ubuntu-latest
