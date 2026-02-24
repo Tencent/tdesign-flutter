@@ -73,6 +73,14 @@ jobs:
           echo "fix_version=$FIX" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Update assets files
+        run: |
+          VERSION="${{ steps.version.outputs.major_version }}.${{ steps.version.outputs.minor_version }}.${{ steps.version.outputs.fix_version }}"
+          echo "$VERSION" > $GITHUB_WORKSPACE/tdesign-component/example/assets/version
+          echo "$(date +%s%3N)" > $GITHUB_WORKSPACE/tdesign-component/example/assets/publish_time
+          cat $GITHUB_WORKSPACE/tdesign-component/example/assets/version
+          cat $GITHUB_WORKSPACE/tdesign-component/example/assets/publish_time
+
       - name: Create build environment file
         run: |
           # 创建包含所有构建环境变量的文件
