@@ -49,6 +49,7 @@ class TDTreeSelect extends StatefulWidget {
     this.multiple = false,
     this.style = TDTreeSelectStyle.normal,
     this.height = 336,
+    this.outwardCornerRadius = 9,
   }) : super(key: key);
 
   /// 展示的选项列表
@@ -68,6 +69,9 @@ class TDTreeSelect extends StatefulWidget {
 
   /// 一级菜单样式
   final TDTreeSelectStyle style;
+
+  /// 一级菜单选中项的外弯折圆角半径，默认为 9
+  final double outwardCornerRadius;
 
   @override
   State<TDTreeSelect> createState() => _TDTreeSelectState();
@@ -165,6 +169,12 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                 itemBuilder: (context, index) {
                   final option = widget.options[index];
                   final isSelected = firstValue == option.value;
+                  // 判断上一个和下一个选项是否被选中
+                  final isPrevSelected = index > 0 &&
+                      firstValue == widget.options[index - 1].value;
+                  final isNextSelected =
+                      index < widget.options.length - 1 &&
+                          firstValue == widget.options[index + 1].value;
 
                   return GestureDetector(
                     onTap: () {
@@ -181,48 +191,71 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                         widget.onChange?.call(values, 1);
                       });
                     },
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? TDTheme.of(context).bgColorContainer
-                            : null,
-                        border: isSelected &&
-                                widget.style == TDTreeSelectStyle.outline
-                            ? Border(
-                                left: BorderSide(
-                                  color: TDTheme.of(context).brandNormalColor,
-                                  width: 3,
-                                ),
-                              )
-                            : null,
-
-                        /// todo 上下 borderRadius
-                        borderRadius: BorderRadius.only(
-
-                            /// 选中的上一个
-                            /*topRight: Radius.circular(
-                              topAdjacent ? TDTheme.of(context).radiusLarge : 0),*/
-
-                            /// 选中的下一个
-                            /* bottomRight: Radius.circular(
-                              bottomAdjacent ? TDTheme.of(context).radiusLarge : 0),*/
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? TDTheme.of(context).bgColorContainer
+                                : null,
+                            border: isSelected &&
+                                    widget.style == TDTreeSelectStyle.outline
+                                ? Border(
+                                    left: BorderSide(
+                                      color:
+                                          TDTheme.of(context).brandNormalColor,
+                                      width: 3,
+                                    ),
+                                  )
+                                : null,
+                          ),
+                          child: Text(
+                            option.label,
+                            maxLines: option.maxLines,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize:
+                                  TDTheme.of(context).fontBodyLarge?.size ?? 16,
+                              color: isSelected
+                                  ? TDTheme.of(context).brandNormalColor
+                                  : TDTheme.of(context).textColorPrimary,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
                             ),
-                      ),
-                      child: Text(
-                        option.label,
-                        maxLines: option.maxLines,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize:
-                              TDTheme.of(context).fontBodyLarge?.size ?? 16,
-                          color: isSelected
-                              ? TDTheme.of(context).brandNormalColor
-                              : TDTheme.of(context).textColorPrimary,
-                          fontWeight:
-                              isSelected ? FontWeight.w600 : FontWeight.normal,
+                          ),
                         ),
-                      ),
+                        // 未选中项：如果上一个是选中项，在右上角画向外弯折圆角
+                        if (!isSelected && isPrevSelected)
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: CustomPaint(
+                              size: Size(widget.outwardCornerRadius, widget.outwardCornerRadius),
+                              painter: _OutwardCornerPainter(
+                                color:
+                                    TDTheme.of(context).bgColorContainer,
+                                corner: _Corner.topRight,
+                              ),
+                            ),
+                          ),
+                        // 未选中项：如果下一个是选中项，在右下角画向外弯折圆角
+                        if (!isSelected && isNextSelected)
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: CustomPaint(
+                              size: Size(widget.outwardCornerRadius, widget.outwardCornerRadius),
+                              painter: _OutwardCornerPainter(
+                                color:
+                                    TDTheme.of(context).bgColorContainer,
+                                corner: _Corner.bottomRight,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   );
                 },
@@ -427,5 +460,64 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
         );
       },
     );
+  }
+}
+
+/// 向外弯折圆角的位置枚举
+enum _Corner {
+  topRight,
+  bottomRight,
+}
+
+/// 自定义画笔：绘制向外弯折的圆角效果
+/// 原理：在选中项的右上角/右下角绘制一个填充色的矩形，然后用白色圆弧挖出一个反向圆角
+class _OutwardCornerPainter extends CustomPainter {
+  final Color color;
+  final _Corner corner;
+
+  _OutwardCornerPainter({required this.color, required this.corner});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    final path = Path();
+    final r = size.width;
+
+    switch (corner) {
+      case _Corner.topRight:
+        // 从右上角开始，画一个矩形区域，然后用圆弧挖出向外弯折的效果
+        path.moveTo(0, 0);
+        path.lineTo(r, 0);
+        path.lineTo(r, r);
+        path.arcToPoint(
+          Offset(0, 0),
+          radius: Radius.circular(r),
+          clockwise: false,
+        );
+        path.close();
+        break;
+      case _Corner.bottomRight:
+        // 从右下角开始，画一个矩形区域，然后用圆弧挖出向外弯折的效果
+        path.moveTo(r, 0);
+        path.lineTo(r, r);
+        path.lineTo(0, r);
+        path.arcToPoint(
+          Offset(r, 0),
+          radius: Radius.circular(r),
+          clockwise: false,
+        );
+        path.close();
+        break;
+    }
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _OutwardCornerPainter oldDelegate) {
+    return oldDelegate.color != color || oldDelegate.corner != corner;
   }
 }
