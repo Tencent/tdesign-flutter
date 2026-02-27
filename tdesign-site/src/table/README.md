@@ -294,17 +294,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 ```
 
-### TDTableEmpty
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| assetUrl | String? | - | 空状态图片 |
-| text | String? | - | 空状态文字 |
-
-```
-```
-
 ### TDTableCol
 #### 默认构造方法
 
@@ -322,6 +311,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | sortable | bool? | false | 是否可排序 |
 | title | String? | - | 表头标题 |
 | width | double? | - | 列宽 |
+
+```
+```
+
+### TDTableEmpty
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| assetUrl | String? | - | 空状态图片 |
+| text | String? | - | 空状态文字 |
 
 
   

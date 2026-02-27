@@ -308,19 +308,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 
 ## API
-### TDTabBarView
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| children | List<Widget> | - | 子widget列表 |
-| controller | TabController? | - | 控制器 |
-| isSlideSwitch | bool | false | 是否可以滑动切换 |
-| key |  | - |  |
-
-```
-```
-
 ### TDTabBar
 #### 默认构造方法
 
@@ -353,6 +340,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | unselectedLabelColor | Color? | - | tabBar未选标签颜色 |
 | unselectedLabelStyle | TextStyle? | - | unselectedLabel字体 |
 | width | double? | - | tabBar宽度 |
+
+```
+```
+
+### TDTabBarView
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| children | List<Widget> | - | 子widget列表 |
+| controller | TabController? | - | 控制器 |
+| isSlideSwitch | bool | false | 是否可以滑动切换 |
+| key |  | - |  |
 
 ```
 ```

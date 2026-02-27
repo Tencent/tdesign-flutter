@@ -333,7 +333,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | icon | IconData? | - | 图标 |
 | iconColor | Color? | - | 图标颜色 |
 | iconSize | double? | 24.0 | 图标尺寸 |
-| ~~iconWidget~~ | Widget? | - | 已废弃，请使用 customWidget 代替 |
+| iconWidget | Widget? | - | 图标组件，优先级高于 icon |
 | padding | EdgeInsetsGeometry? | - |  |
 
 
