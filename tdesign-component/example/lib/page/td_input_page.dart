@@ -641,6 +641,7 @@ class _TDInputViewPageState extends State<TDInputViewPage> {
         color: TDTheme.of(context).textColorPrimary,
       ),
       maxLines: 2,
+      minLines: 1,
     );
   }
 
