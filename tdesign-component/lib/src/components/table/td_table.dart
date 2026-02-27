@@ -99,6 +99,9 @@ class TDTableState extends State<TDTable> {
   late TDTableCol _selectableCol;
   late List<bool> _checkedList;
   final _scrollController = ScrollController();
+  final _headerHScrollController = ScrollController();
+  final _dataHScrollController = ScrollController();
+  bool _isSyncingScroll = false;
 
   /// 获取单元格对齐方式
   Alignment _getVerticalAlign(TDTableColAlign x) {
@@ -458,6 +461,20 @@ class TDTableState extends State<TDTable> {
     _scrollController.addListener(() {
       widget.onScroll?.call(_scrollController);
     });
+    _headerHScrollController.addListener(() {
+      if (!_isSyncingScroll) {
+        _isSyncingScroll = true;
+        _dataHScrollController.jumpTo(_headerHScrollController.offset);
+        _isSyncingScroll = false;
+      }
+    });
+    _dataHScrollController.addListener(() {
+      if (!_isSyncingScroll) {
+        _isSyncingScroll = true;
+        _headerHScrollController.jumpTo(_dataHScrollController.offset);
+        _isSyncingScroll = false;
+      }
+    });
     _initCols();
   }
 
@@ -465,6 +482,14 @@ class TDTableState extends State<TDTable> {
   void didUpdateWidget(covariant TDTable oldWidget) {
     super.didUpdateWidget(oldWidget);
     _initCols();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _headerHScrollController.dispose();
+    _dataHScrollController.dispose();
+    super.dispose();
   }
 
   void _initCols() {
@@ -491,6 +516,49 @@ class TDTableState extends State<TDTable> {
     }
   }
 
+  /// 生成固定列的表头单元格
+  List<Widget> _getFixedHeaderCells(
+      List<TDTableCol> cols, double cellWidth) {
+    var headers = <Widget>[];
+    for (var i = 0; i < cols.length; i++) {
+      var col = cols[i];
+      var cell = _getCell(col, true, null, 0, i == cols.length - 1);
+      headers.add(SizedBox(width: col.width ?? cellWidth, child: cell));
+    }
+    return headers;
+  }
+
+  /// 生成固定列的单行数据单元格（按列返回一行中各列的Widget）
+  List<Widget> _getFixedRowCells(
+      List<TDTableCol> cols, double cellWidth, int rowIndex) {
+    var cells = <Widget>[];
+    for (var i = 0; i < cols.length; i++) {
+      var col = cols[i];
+      var cell = _getCell(
+          col, false, widget.data?[rowIndex], rowIndex, i == cols.length - 1);
+      cells.add(SizedBox(width: col.width ?? cellWidth, child: cell));
+    }
+    return cells;
+  }
+
+  /// 生成固定列的数据单元格（按列组织，每列一个Column，无height时使用）
+  List<Widget> _getFixedDataCols(
+      List<TDTableCol> cols, double cellWidth) {
+    var colWidgets = <Widget>[];
+    for (var i = 0; i < cols.length; i++) {
+      var col = cols[i];
+      var cells = <Widget>[];
+      for (var j = 0; j < (widget.data?.length ?? 0); j++) {
+        var cell = _getCell(
+            col, false, widget.data?[j], j, i == cols.length - 1);
+        cells.add(SizedBox(width: col.width ?? cellWidth, child: cell));
+      }
+      colWidgets
+          .add(Column(mainAxisSize: MainAxisSize.min, children: cells));
+    }
+    return colWidgets;
+  }
+
   /// 生成固定列表格
   Widget _getFixedTable(BuildContext context) {
     // 对列进行分类
@@ -498,23 +566,9 @@ class TDTableState extends State<TDTable> {
     var fixedNonCol = _getCol(TDTableColFixed.none);
     var fixedRightCol = _getCol(TDTableColFixed.right);
 
-    // 获取竖向单元格内容
-    var fixedLeftTitle = _getCellsText(fixedLeftCol);
-    var fixedNonTitle = _getCellsText(fixedNonCol);
-    var fixedRightTitle = _getCellsText(fixedRightCol);
-
     // 计算单元格宽度（单元格默认平分）
     var width = widget.width ?? MediaQuery.of(context).size.width;
     var cellWidth = width / widget.columns.length;
-
-    // 生成左侧固定列
-    var fixedLeftCols =
-        _getVerticalCell(fixedLeftCol, fixedLeftTitle, cellWidth);
-    // 生成非固定列
-    var fixedNonCols = _getVerticalCell(fixedNonCol, fixedNonTitle, cellWidth);
-    // 生成右侧固定列
-    var fixedRightCols =
-        _getVerticalCell(fixedRightCol, fixedRightTitle, cellWidth);
 
     // 固定列宽度
     var fixedCellsWidth = 0.0;
@@ -528,63 +582,50 @@ class TDTableState extends State<TDTable> {
     // 计算非固定列宽度
     var fixedNonCellsWidth = 0.0;
     for (var col in fixedNonCol) {
-      // 存在用户自定义宽度  否则使用默认宽度
       fixedNonCellsWidth += col.width ?? cellWidth;
     }
 
-    // 非固定列宽度超过剩余宽度 需要开启滚动
-    if ((width - fixedCellsWidth) < fixedNonCellsWidth) {
-      var content = [Row(children: fixedNonCols), _buildEmpty()];
-      if (widget.loading ?? false) {
-        content = [
-          Row(children: fixedNonCols),
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32),
-              child: widget.loadingWidget ??
-                  const TDLoading(size: TDLoadingSize.large),
+    // 是否需要横向滚动
+    var needHorizontalScroll =
+        (width - fixedCellsWidth) < fixedNonCellsWidth;
+
+    // 生成表头
+    var headerLeftCells = _getFixedHeaderCells(fixedLeftCol, cellWidth);
+    var headerNonCells = _getFixedHeaderCells(fixedNonCol, cellWidth);
+    var headerRightCells = _getFixedHeaderCells(fixedRightCol, cellWidth);
+
+    // 构建表头行
+    Widget headerRow;
+    if (needHorizontalScroll) {
+      headerRow = Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ...headerLeftCells,
+          SizedBox(
+            width: width - fixedCellsWidth,
+            child: SingleChildScrollView(
+              controller: _headerHScrollController,
+              scrollDirection: Axis.horizontal,
+              child: Row(children: headerNonCells),
             ),
           ),
-        ];
-      }
-      return Container(
-        width: width,
-        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(children: [...fixedLeftCols]),
-            SizedBox(
-              width: width - fixedCellsWidth,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Column(children: content),
-              ),
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [...fixedRightCols],
-            )
-          ],
-        ),
+          ...headerRightCells,
+        ],
+      );
+    } else {
+      headerRow = Row(
+        children: [
+          ...headerLeftCells,
+          ...headerNonCells,
+          ...headerRightCells,
+        ],
       );
     }
-    var child = Container(
-      width: width,
-      color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
-      child: Row(
-        children: [
-          ...fixedLeftCols,
-          ...fixedNonCols,
-          ...fixedRightCols,
-        ],
-      ),
-    );
-    var placeholder = _buildEmpty();
+
+    // 构建数据体
+    Widget dataBody;
     if (widget.loading ?? false) {
-      placeholder = Align(
+      dataBody = Align(
         alignment: Alignment.center,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
@@ -592,10 +633,83 @@ class TDTableState extends State<TDTable> {
               const TDLoading(size: TDLoadingSize.large),
         ),
       );
+    } else if (widget.data == null || widget.data!.isEmpty) {
+      dataBody = _buildEmpty();
+    } else {
+      // 按列组织数据（每列一个Column），然后整体做纵向滚动
+      var dataLeftCols = _getFixedDataCols(fixedLeftCol, cellWidth);
+      var dataNonCols = _getFixedDataCols(fixedNonCol, cellWidth);
+      var dataRightCols = _getFixedDataCols(fixedRightCol, cellWidth);
+
+      Widget dataRow;
+      if (needHorizontalScroll) {
+        dataRow = Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ...dataLeftCols,
+            SizedBox(
+              width: width - fixedCellsWidth,
+              child: SingleChildScrollView(
+                controller: _dataHScrollController,
+                scrollDirection: Axis.horizontal,
+                child: Row(children: dataNonCols),
+              ),
+            ),
+            ...dataRightCols,
+          ],
+        );
+      } else {
+        dataRow = Row(
+          children: [
+            ...dataLeftCols,
+            ...dataNonCols,
+            ...dataRightCols,
+          ],
+        );
+      }
+
+      if (widget.height != null) {
+        // 有height时，整个数据区域做纵向滚动
+        dataBody = SingleChildScrollView(
+          controller: _scrollController,
+          physics: const BouncingScrollPhysics(),
+          child: dataRow,
+        );
+      } else {
+        dataBody = dataRow;
+      }
     }
+
+    // 组装最终表格
+    if (widget.height != null) {
+      return Container(
+        width: width,
+        color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (widget.showHeader == true) headerRow,
+            SizedBox(
+              height: widget.height,
+              child: dataBody,
+            ),
+          ],
+        ),
+      );
+    }
+
+    // 无height时，表头+数据体直接展示
     return Container(
+      width: width,
       color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
-      child: Column(children: [child, placeholder]),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.showHeader == true) headerRow,
+          dataBody,
+        ],
+      ),
     );
   }
 
@@ -625,42 +739,6 @@ class TDTableState extends State<TDTable> {
       return TDImage(imgUrl: url);
     }
     return TDImage(assetUrl: url);
-  }
-
-  /// 竖向生成单元格
-  List<Widget> _getVerticalCell(
-      List<TDTableCol> cols, List<List<String>> titles, double cellWidth) {
-    var rows = <Widget>[];
-    for (var i = 0; i < titles.length; i++) {
-      var cells = <Widget>[];
-      for (var j = 0; j < titles[i].length; j++) {
-        var col = cols[i];
-        var cell = _getCell(col, j == 0, j == 0 ? '' : widget.data?[j - 1], j - 1,
-            i == titles.length - 1);
-        cells.add(SizedBox(width: col.width ?? cellWidth, child: cell));
-      }
-      rows.add(Column(children: cells));
-    }
-    return rows;
-  }
-
-  /// 获取每列单元格内容
-  List<List<String>> _getCellsText(List<TDTableCol> cols) {
-    var list = <List<String>>[];
-    for (var col in cols) {
-      var titles = <String>[];
-      titles.add(col.title ?? '');
-      if (widget.loading == false) {
-        var dataList = <String>[];
-        for (var i = 0; i < (widget.data?.length ?? 0); i++) {
-          var data = widget.data![i];
-          dataList.add(data[col.colKey] ?? '');
-        }
-        titles..addAll(dataList);
-      }
-      list.add(titles);
-    }
-    return list;
   }
 
   /// 半选图标
