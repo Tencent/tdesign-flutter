@@ -144,13 +144,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _fixedFirstColTable(BuildContext context) {
     return TDTable(
+      bordered: true,
+      height: 240,
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4', fixed: TDTableColFixed.left),
+        TDTableCol(title: '固定列', colKey: 'title1', fixed: TDTableColFixed.left, width: 100),
+        TDTableCol(title: '标题二', colKey: 'title2', width: 160),
+        TDTableCol(title: '标题三', colKey: 'title3', width: 160),
+        TDTableCol(title: '标题四', colKey: 'title4', width: 160),
+        TDTableCol(title: '标题五', colKey: 'title5', width: 160),
+        TDTableCol(title: '标题六', colKey: 'title6', width: 160),
       ],
-      data: _getData(10),
+      data: _getFixedColData(15),
     );
   }</pre>
 
@@ -164,14 +168,19 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
   <pre slot="Dart" lang="javascript">
   Widget _fixedEndColTable(BuildContext context) {
     return TDTable(
+      bordered: true,
+      height: 240,
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
+        TDTableCol(title: '标题一', colKey: 'title1', width: 160),
+        TDTableCol(title: '标题二', colKey: 'title2', width: 160),
+        TDTableCol(title: '标题三', colKey: 'title3', width: 160),
+        TDTableCol(title: '标题四', colKey: 'title5', width: 160),
+        TDTableCol(title: '标题五', colKey: 'title6', width: 160),
         TDTableCol(
-          title: '标题',
+          title: '操作',
           colKey: 'title4',
           fixed: TDTableColFixed.right,
+          width: 100,
           cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -195,7 +204,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
           },
         ),
       ],
-      data: _getData(10),
+      data: _getFixedColData(15),
     );
   }</pre>
 
