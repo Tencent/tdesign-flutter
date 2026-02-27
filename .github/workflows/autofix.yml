@@ -37,7 +37,7 @@ jobs:
 
       - name: flutter build
         working-directory: ./tdesign-component/example
-        run: flutter build apk -t ./lib/main.dart --release --target-platform android-arm64 --no-tree-shake-icons
+        run: flutter build apk -t ./lib/main.dart --release
 
       - name: generate web documentation from demo code
         working-directory: ./tdesign-component/example
