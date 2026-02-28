@@ -200,7 +200,8 @@ String类型ID(问题3)
 
 ```
 ```
- ### TDTreeSelect
+
+### TDTreeSelect
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -211,7 +212,7 @@ String类型ID(问题3)
 | multiple | bool | false | 支持多选 |
 | onChange | TDTreeSelectChangeEvent? | - | 选中值发生变化 |
 | options | List<TDSelectOption> | const [] | 展示的选项列表 |
-| outwardCornerRadius | double | 9 | 一级菜单选中项的外弯折圆角半径 |
+| outwardCornerRadius | double | 9 | 一级菜单选中项的外弯折圆角半径，默认为 9 |
 | style | TDTreeSelectStyle | TDTreeSelectStyle.normal | 一级菜单样式 |
 
 
