@@ -47,4 +47,7 @@ jobs:
             echo "Documentation should have been generated"
           }
 
+      - name: Sync README files
+        run: node scripts/sync-readme.mjs
+
       - uses: autofix-ci/action@v1
