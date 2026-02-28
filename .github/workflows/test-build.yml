@@ -3,9 +3,16 @@ name: test-build
 on:
   pull_request:
     branches: [develop]
-    types: [opened, synchronize, reopened]
+    paths-ignore:
+      - "tdesign-site/**"
+      - "tdesign-adaptation/**"
+      - "*.md"
   push:
     branches: [develop]
+    paths-ignore:
+      - "tdesign-site/**"
+      - "tdesign-adaptation/**"
+      - "*.md"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
