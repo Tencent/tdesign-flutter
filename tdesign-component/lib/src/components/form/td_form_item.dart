@@ -234,7 +234,7 @@ class _TDFormItemState extends State<TDFormItem> {
 
   /// 遍历校验规则并执行
   String? validate() {
-    String? value = widget.formItemNotifier?.formVal;
+    dynamic value = widget.formItemNotifier?.formVal;
     String name = widget.name!;
     if (name == null) {
       return null;
@@ -622,9 +622,9 @@ class _TDFormItemState extends State<TDFormItem> {
 
 class FormItemNotifier with ChangeNotifier {
   bool isDisposed = false;
-  String _formVal = '';
+  dynamic _formVal = '';
 
-  String get formVal => _formVal;
+  dynamic get formVal => _formVal;
 
   upDataForm(val) {
     _formVal = val;
