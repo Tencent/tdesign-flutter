@@ -14,11 +14,22 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-          token: ${{ secrets.PERSONAL_TOKEN }}
+          token: ${{ secrets.TDESIGN_BOT_TOKEN }}
       - run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "tdesign@tencent.com"
+          git config --local user.name "tdesign-bot"
           git status
           git fetch origin
           git merge origin/develop
           git push origin main
+
+
+  close-release-issue:
+    runs-on: ubuntu-latest
+    if: github.event.ref_type == 'tag'
+    steps:
+      - uses: TDesignOteam/workflows/actions/close-release-issue@main
+        with:
+          version: ${{ github.ref_name }}
+          label: ${{ github.ref_name }}
+          token: ${{ secrets.TDESIGN_BOT_TOKEN }}

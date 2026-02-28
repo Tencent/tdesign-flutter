@@ -29,6 +29,21 @@ class TDTablePage extends StatelessWidget {
     return data;
   }
 
+  List<dynamic> _getFixedColData(int count) {
+    var data = <dynamic>[];
+    for (var i = 0; i < count; i++) {
+      data.add({
+        'title1': '内容$i',
+        'title2': '内容',
+        'title3': '内容',
+        'title4': '内容',
+        'title5': '内容',
+        'title6': '内容',
+      });
+    }
+    return data;
+  }
+
   List<dynamic> _getData2() {
     var data = <dynamic>[
       {
@@ -178,27 +193,36 @@ class TDTablePage extends StatelessWidget {
   @Demo(group: 'table')
   Widget _fixedFirstColTable(BuildContext context) {
     return TDTable(
+      bordered: true,
+      height: 240,
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4', fixed: TDTableColFixed.left),
+        TDTableCol(title: '固定列', colKey: 'title1', fixed: TDTableColFixed.left, width: 100),
+        TDTableCol(title: '标题二', colKey: 'title2', width: 160),
+        TDTableCol(title: '标题三', colKey: 'title3', width: 160),
+        TDTableCol(title: '标题四', colKey: 'title4', width: 160),
+        TDTableCol(title: '标题五', colKey: 'title5', width: 160),
+        TDTableCol(title: '标题六', colKey: 'title6', width: 160),
       ],
-      data: _getData(10),
+      data: _getFixedColData(15),
     );
   }
 
   @Demo(group: 'table')
   Widget _fixedEndColTable(BuildContext context) {
     return TDTable(
+      bordered: true,
+      height: 240,
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
+        TDTableCol(title: '标题一', colKey: 'title1', width: 160),
+        TDTableCol(title: '标题二', colKey: 'title2', width: 160),
+        TDTableCol(title: '标题三', colKey: 'title3', width: 160),
+        TDTableCol(title: '标题四', colKey: 'title5', width: 160),
+        TDTableCol(title: '标题五', colKey: 'title6', width: 160),
         TDTableCol(
-          title: '标题',
+          title: '操作',
           colKey: 'title4',
           fixed: TDTableColFixed.right,
+          width: 100,
           cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -222,7 +246,7 @@ class TDTablePage extends StatelessWidget {
           },
         ),
       ],
-      data: _getData(10),
+      data: _getFixedColData(15),
     );
   }
 

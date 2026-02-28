@@ -24,12 +24,17 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
       - name: Set Node version
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: tdesign-site/package-lock.json
+          cache: "pnpm"
+          cache-dependency-path: "tdesign-site/pnpm-lock.yaml"
 
       - uses: actions/setup-java@v5
         with:
@@ -67,6 +72,14 @@ jobs:
           echo "minor_version=$MINOR" >> $GITHUB_OUTPUT
           echo "fix_version=$FIX" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Update assets files
+        run: |
+          VERSION="${{ steps.version.outputs.major_version }}.${{ steps.version.outputs.minor_version }}.${{ steps.version.outputs.fix_version }}"
+          echo "$VERSION" > $GITHUB_WORKSPACE/tdesign-component/example/assets/version
+          echo "$(date +%s%3N)" > $GITHUB_WORKSPACE/tdesign-component/example/assets/publish_time
+          cat $GITHUB_WORKSPACE/tdesign-component/example/assets/version
+          cat $GITHUB_WORKSPACE/tdesign-component/example/assets/publish_time
 
       - name: Create build environment file
         run: |
@@ -244,7 +257,7 @@ jobs:
       - name: Build site
         working-directory: ./tdesign-site
         run: |
-          npm install --unsafe-perm
+          pnpm install --frozen-lockfile
           npm run site
 
       - name: Build site Demo

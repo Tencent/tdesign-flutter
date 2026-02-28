@@ -29,7 +29,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag: ${{ steps.tag-action.outputs.version }}  
+          tag: ${{ steps.tag-action.outputs.version }}
       - name: Add comment
         uses: peter-evans/create-or-update-comment@v1
         with:
@@ -86,8 +86,8 @@ jobs:
       - uses: TDesignOteam/tdesign-tag-action@main
         id: tag-action
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}  
-          version_file: ./tdesign-component/pubspec.yaml  
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version_file: ./tdesign-component/pubspec.yaml
       - name: tag and push if needed
         run: |
           echo "${{ steps.tag-action.outputs.version }}"
@@ -95,4 +95,3 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git tag ${{ steps.tag-action.outputs.version }}
           git push origin ${{ steps.tag-action.outputs.version }}
-          echo "pushed tag ${{ steps.tag-action.outputs.version }}"
