@@ -196,7 +196,8 @@ Widget _buildCard(BuildContext context) {
 
 ```
 ```
- ### TDCellGroup
+
+### TDCellGroup
 #### 简介
 单元格组组件
 #### 默认构造方法
@@ -216,7 +217,8 @@ Widget _buildCard(BuildContext context) {
 
 ```
 ```
- ### TDCellStyle
+
+### TDCellStyle
 #### 简介
 单元格组件样式
 #### 默认构造方法

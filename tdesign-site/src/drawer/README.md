@@ -314,7 +314,8 @@ Widget _buildBottomSimple(BuildContext context) {
 
 ```
 ```
- ### TDDrawerWidget
+
+### TDDrawerWidget
 #### 简介
 抽屉内容组件
  可用于 Scaffold 中的 drawer 属性
@@ -338,7 +339,8 @@ Widget _buildBottomSimple(BuildContext context) {
 
 ```
 ```
- ### TDDrawerItem
+
+### TDDrawerItem
 #### 简介
 抽屉里的列表项
 #### 默认构造方法

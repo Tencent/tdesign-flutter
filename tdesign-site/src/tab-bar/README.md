@@ -583,7 +583,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDBottomTabBarTabConfig
+
+### TDBottomTabBarTabConfig
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -601,7 +602,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDBottomTabBar
+
+### TDBottomTabBar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -631,7 +633,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDBottomTabBarPopUpBtnConfig
+
+### TDBottomTabBarPopUpBtnConfig
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -642,7 +645,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### TDBottomTabBarPopUpShapeConfig
+
+### TDBottomTabBarPopUpShapeConfig
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -656,7 +660,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```
 ```
- ### PopUpMenuItem
+
+### PopUpMenuItem
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
