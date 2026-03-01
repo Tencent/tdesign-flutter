@@ -85,13 +85,13 @@ class TDAvatar extends StatelessWidget {
     double width;
     switch (size) {
       case TDAvatarSize.large:
-        width = 64;
-        break;
-      case TDAvatarSize.medium:
         width = 48;
         break;
+      case TDAvatarSize.medium:
+        width = 36;
+        break;
       case TDAvatarSize.small:
-        width = 40;
+        width = 24;
         break;
     }
     return avatarSize ?? width;
