@@ -37,7 +37,7 @@
 
 <img width="200" src="https://tdesign.tencent.com/flutter/assets/qrcode/td_apk_qrcode_0_2_7.png" />
 
-下载链接：[https://oteam-tdesign-1258344706.cos.ap-guangzhou.tencentcos.cn/flutter/tdesign-flutter-0.2.7-314.apk](https://oteam-tdesign-1258344706.cos.ap-guangzhou.tencentcos.cn/flutter/tdesign-flutter-0.2.7-314.apk)
+下载链接：[https://oteam-tdesign-1258344706.cos.ap-guangzhou.tencentcos.cn/flutter/tdesign-flutter-example.apk](https://tdesign.gtimg.com/flutter/tdesign_flutter_example.apk)
 
 **iOS**：运行项目预览
 
