@@ -3,9 +3,16 @@ name: test-build
 on:
   pull_request:
     branches: [develop]
-    types: [opened, synchronize, reopened]
+    paths-ignore:
+      - "tdesign-site/**"
+      - "tdesign-adaptation/**"
+      - "*.md"
   push:
     branches: [develop]
+    paths-ignore:
+      - "tdesign-site/**"
+      - "tdesign-adaptation/**"
+      - "*.md"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -23,7 +30,8 @@ jobs:
         flutter-version:
           - 3.16.9
           - 3.32.0
-          - 3.x
+          # 当前对于 3.4x.x 版本，AOP 有问题先忽略
+          # - 3.x
         include:
           - platform: apk
             os: ubuntu-latest

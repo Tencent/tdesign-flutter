@@ -19,6 +19,8 @@
   </a>
 </p>
 
+
+
 **TDesign Flutter** 是基于腾讯设计体系的跨平台 UI 组件库，使用 Flutter 框架开发，可快速构建美观、一致的移动端/Web 应用，提供丰富的预制组件和主题定制能力，支持 iOS、Android、Web 多端运行。
 
 ## 🎉 特性
@@ -33,7 +35,9 @@
 
 **Android**：扫描二维码下载预览应用
 
-<img width="200" src="https://tdesign.tencent.com//flutter/assets/qrcode/td_apk_qrcode_0_2_7.png" />
+<img width="200" src="https://tdesign.tencent.com/flutter/assets/qrcode/td_apk_qrcode_0_2_7.png" />
+
+下载链接：[tdesign-flutter-0.2.7-314.apk](https://oteam-tdesign-1258344706.cos.ap-guangzhou.tencentcos.cn/flutter/tdesign-flutter-0.2.7-314.apk)
 
 **iOS**：运行项目预览
 

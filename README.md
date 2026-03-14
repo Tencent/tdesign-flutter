@@ -37,7 +37,7 @@ English | [简体中文](./README_zh_CN.md)
 
 <img width="200" src="https://tdesign.tencent.com/flutter/assets/qrcode/td_apk_qrcode_0_2_7.png" />
 
-Download link: [https://oteam-tdesign-1258344706.cos.ap-guangzhou.tencentcos.cn/flutter/tdesign-flutter-example.apk](https://tdesign.gtimg.com/flutter/tdesign_flutter_example.apk)
+Download link: [tdesign-flutter-example.apk](https://tdesign.gtimg.com/flutter/tdesign_flutter_example.apk)
 
 **iOS**: Run the project to preview
 
@@ -245,14 +245,14 @@ For more usage examples, refer to [example/lib/page/](https://github.com/Tencent
 
 TDesign provides component libraries for other platforms and frameworks:
 
-| Platform | Repository |
-|----------|------------|
-| Vue 2.x | [tdesign-vue](https://github.com/Tencent/tdesign-vue) |
-| Vue 3.x | [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next) |
-| React | [tdesign-react](https://github.com/Tencent/tdesign-react) |
-| Vue 3.x Mobile | [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue) |
-| React Mobile | [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) |
-| WeChat Miniprogram | [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram) |
+| Platform           | Repository                                                              |
+| ------------------ | ----------------------------------------------------------------------- |
+| Vue 2.x            | [tdesign-vue](https://github.com/Tencent/tdesign-vue)                   |
+| Vue 3.x            | [tdesign-vue-next](https://github.com/Tencent/tdesign-vue-next)         |
+| React              | [tdesign-react](https://github.com/Tencent/tdesign-react)               |
+| Vue 3.x Mobile     | [tdesign-mobile-vue](https://github.com/Tencent/tdesign-mobile-vue)     |
+| React Mobile       | [tdesign-mobile-react](https://github.com/Tencent/tdesign-mobile-react) |
+| WeChat Miniprogram | [tdesign-miniprogram](https://github.com/Tencent/tdesign-miniprogram)   |
 
 ## 🤝 Contributing
 
