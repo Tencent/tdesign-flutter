@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../lunar_data_source_example.dart';
 
 /// 农历日历示例页面
 /// 
@@ -13,8 +14,9 @@ class TDCalendarLunarExample extends StatefulWidget {
 
 class _TDCalendarLunarExampleState extends State<TDCalendarLunarExample> {
   TDCalendarDateType _dateType = TDCalendarDateType.solar;
-  bool _showLunarInfo = false;
+  bool _showLunarInfo = true; // 默认显示农历信息
   List<int> _selectedDates = [];
+  final _dataSource = LunarDataSourceExample();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class _TDCalendarLunarExampleState extends State<TDCalendarLunarExample> {
           Expanded(
             child: TDCalendar(
               dateType: _dateType,
-              dataSource: _SimpleLunarDataSource(),
+              dataSource: _dataSource,
               showLunarInfo: _showLunarInfo,
               value: _selectedDates,
               onChange: (dates) {
@@ -138,91 +140,5 @@ class _TDCalendarLunarExampleState extends State<TDCalendarLunarExample> {
         ],
       ),
     );
-  }
-}
-
-/// 简单的农历数据源实现（仅用于演示）
-/// 
-/// 实际项目中建议使用专业的农历转换库，如 lunar
-class _SimpleLunarDataSource extends TDCalendarDataSource {
-  // 简化的农历数据（仅用于演示）
-  // 实际应使用完整的农历算法或查表法
-  final Map<String, TDLunarInfo> _mockData = {
-    '2025-03-21': TDLunarInfo(
-      year: 2025,
-      month: 2,
-      day: 22,
-      yearText: '二〇二五',
-      monthText: '二月',
-      dayText: '廿二',
-    ),
-    '2025-04-05': TDLunarInfo(
-      year: 2025,
-      month: 3,
-      day: 7,
-      yearText: '二〇二五',
-      monthText: '三月',
-      dayText: '初七',
-    ),
-    // 更多日期数据...
-  };
-
-  @override
-  TDLunarInfo? getLunarInfo(DateTime solarDate) {
-    final key = '${solarDate.year}-${solarDate.month.toString().padLeft(2, '0')}-${solarDate.day.toString().padLeft(2, '0')}';
-    
-    // 从 mock 数据获取，实际应使用算法转换
-    if (_mockData.containsKey(key)) {
-      return _mockData[key];
-    }
-
-    // 返回一个默认值用于演示
-    return TDLunarInfo(
-      year: solarDate.year,
-      month: (solarDate.month + 1) % 12 + 1,
-      day: (solarDate.day + 5) % 30 + 1,
-      yearText: _convertToChineseNumber(solarDate.year),
-      monthText: _getLunarMonthName((solarDate.month + 1) % 12 + 1),
-      dayText: _getLunarDayName((solarDate.day + 5) % 30 + 1),
-    );
-  }
-
-  @override
-  String formatDate(
-    DateTime date,
-    TDCalendarDateType type, [
-    TDLunarInfo? lunarInfo,
-  ]) {
-    if (type == TDCalendarDateType.solar) {
-      return '${date.year}年${date.month}月${date.day}日';
-    } else {
-      if (lunarInfo != null) {
-        return '${lunarInfo.yearText}年 ${lunarInfo.monthText}${lunarInfo.dayText}';
-      }
-      return '${date.year}年${date.month}月${date.day}日';
-    }
-  }
-
-  String _convertToChineseNumber(int number) {
-    const digits = ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
-    return number
-        .toString()
-        .split('')
-        .map((d) => digits[int.parse(d)])
-        .join();
-  }
-
-  String _getLunarMonthName(int month) {
-    const months = ['正月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '冬月', '腊月'];
-    return months[(month - 1) % 12];
-  }
-
-  String _getLunarDayName(int day) {
-    const days = [
-      '初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
-      '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
-      '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'
-    ];
-    return days[(day - 1) % 30];
   }
 }
