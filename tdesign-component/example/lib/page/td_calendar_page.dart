@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/demo.dart';
+import '../lunar_data_source_example.dart';
 
 class TDCalendarPage extends StatelessWidget {
   const TDCalendarPage({super.key});
@@ -45,6 +46,14 @@ class TDCalendarPage extends StatelessWidget {
             center: false,
             builder: (BuildContext context) {
               return const CodeWrapper(builder: _buildBlock);
+            },
+          ),
+          ExampleItem(
+            desc: '农历日历',
+            ignoreCode: true,
+            center: false,
+            builder: (BuildContext context) {
+              return const CodeWrapper(builder: _buildLunar);
             },
           ),
         ]),
@@ -526,6 +535,105 @@ Widget _buildCustomCell(BuildContext context) {
             },
           ),
         ],
+      );
+    },
+  );
+}
+
+@Demo(group: 'calendar')
+Widget _buildLunar(BuildContext context) {
+  final dataSource = LunarDataSourceExample();
+  
+  return TDCell(
+    title: '农历日历',
+    arrow: true,
+    note: '显示农历、节气、节日',
+    onClick: (cell) {
+      TDCalendarPopup(
+        context,
+        visible: true,
+        confirmBtn: const Text('确定'),
+        child: TDCalendar(
+          title: '农历日历演示',
+          showLunarInfo: true,
+          dataSource: dataSource,
+          onChange: (value) {
+            // 点击日期时显示完整的农历信息
+            final date = DateTime.fromMillisecondsSinceEpoch(value[0]);
+            final lunarInfo = dataSource.getLunarInfo(date);
+            final solarTerm = dataSource.getSolarTerm(date);
+            final festival = dataSource.getFestival(date, lunarInfo);
+            final holidayInfo = dataSource.getHolidayInfo(date);
+            
+            // 构建提示信息
+            final buffer = StringBuffer();
+            buffer.write('阳历：${date.year}年${date.month}月${date.day}日');
+            
+            if (lunarInfo != null) {
+              buffer.write('\n农历：${lunarInfo.monthText}${lunarInfo.dayText}');
+            }
+            
+            if (solarTerm != null && solarTerm.isNotEmpty) {
+              buffer.write('\n节气：$solarTerm');
+            }
+            
+            if (festival != null && festival.isNotEmpty) {
+              buffer.write('\n节日：$festival');
+            }
+            
+            if (holidayInfo != null) {
+              final type = holidayInfo['type'] == 'holiday' ? '假期' : '调休';
+              buffer.write('\n$type：${holidayInfo['name']}');
+            }
+            
+            // 显示提示
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(buffer.toString()),
+                duration: const Duration(seconds: 3),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+            
+            print('选中日期：$value - ${buffer.toString().replaceAll('\n', ' ')}');
+          },
+        ),
+        onConfirm: (value) {
+          final date = DateTime.fromMillisecondsSinceEpoch(value[0]);
+          final lunarInfo = dataSource.getLunarInfo(date);
+          final solarTerm = dataSource.getSolarTerm(date);
+          final festival = dataSource.getFestival(date, lunarInfo);
+          
+          // 构建确认信息
+          final buffer = StringBuffer();
+          buffer.write('已选择：${date.year}年${date.month}月${date.day}日');
+          
+          if (lunarInfo != null) {
+            buffer.write('\n农历：${lunarInfo.monthText}${lunarInfo.dayText}');
+          }
+          
+          if (solarTerm != null && solarTerm.isNotEmpty) {
+            buffer.write(' ($solarTerm)');
+          }
+          
+          if (festival != null && festival.isNotEmpty) {
+            buffer.write(' [$festival]');
+          }
+          
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(buffer.toString()),
+              duration: const Duration(seconds: 3),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.green,
+            ),
+          );
+        },
+        onClose: () {
+          print('关闭农历日历');
+        },
       );
     },
   );
