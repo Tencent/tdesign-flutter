@@ -1,22 +1,4 @@
 ## API
-### TDCalendarPopup
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
-| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
-| child | TDCalendar? | - | 日历控件 |
-| confirmBtn | Widget? | - | 自定义确认按钮 |
-| context | BuildContext | context | 上下文 |
-| onClose | VoidCallback? | - | 关闭时触发 |
-| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
-| top | double? | - | 距离顶部的距离 |
-| visible | bool? | - | 默认是否显示日历 |
-
-```
-```
-
 ### TDCalendarStyle
 #### 默认构造方法
 
@@ -54,6 +36,8 @@
 | animateTo | bool? | false | 动画滚动到指定位置 |
 | cellHeight | double? | 60 | 日期高度 |
 | cellWidget | Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? | - | 自定义日期单元格组件 |
+| dataSource | TDCalendarDataSource? | - | 外部数据源，用于提供农历转换等功能 |
+| dateType | TDCalendarDateType | TDCalendarDateType.solar | 日历类型：阳历或农历 |
 | displayFormat | String? | 'year month' | 年月显示格式，`year`表示年，`month`表示月，如`year month`表示年在前、月在后、中间隔一个空格 |
 | firstDayOfWeek | int? | 0 | 第一天从星期几开始，默认 0 = 周日 |
 | format | CalendarFormat? | - | 用于格式化日期的函数，可定义日期前后的显示内容和日期样式 |
@@ -71,6 +55,7 @@
 | onMonthChange | ValueChanged<DateTime>? | - | 月份变化时触发 |
 | pickerHeight | double? | 178 | 时间选择器List的视窗高度 |
 | pickerItemCount | int? | 3 | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
+| showLunarInfo | bool | false | 阳历模式下是否显示农历信息作为副标题 |
 | style | TDCalendarStyle? | - | 自定义样式 |
 | timePickerModel | List<DatePickerModel>? | - | 自定义时间选择器 |
 | title | String? | - | 标题 |
@@ -80,3 +65,42 @@
 | useTimePicker | bool? | false | 是否显示时间选择器 |
 | value | List<int>? | - | 当前选择的日期（fromMillisecondsSinceEpoch），不传则默认今天，当 type = single 时数组长度为1 |
 | width | double? | - | 宽度 |
+
+```
+```
+
+### TDCalendarPopup
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
+| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
+| child | TDCalendar? | - | 日历控件 |
+| confirmBtn | Widget? | - | 自定义确认按钮 |
+| context | BuildContext | context | 上下文 |
+| onClose | VoidCallback? | - | 关闭时触发 |
+| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
+| top | double? | - | 距离顶部的距离 |
+| visible | bool? | - | 默认是否显示日历 |
+
+```
+```
+
+### TDLunarInfo
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| day | int | - | 农历日期（数字，1-30） |
+| dayText | String | - | 日期文本（如：初七） |
+| isLeapMonth | bool | false | 是否是闰月 |
+| month | int | - | 农历月份（数字，1-12） |
+| monthText | String | - | 月份文本（如：三月、闰三月） |
+| year | int | - | 农历年份（数字） |
+| yearText | String | - | 年份文本（如：二〇二五） |
+
+```
+```
+
+### TDCalendarDataSource

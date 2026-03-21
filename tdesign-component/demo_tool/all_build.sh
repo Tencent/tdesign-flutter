@@ -40,7 +40,7 @@ dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/compo
 
 # 输入
 # calendar
-dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/calendar" --name TDCalendar,TDCalendarPopup,TDCalendarStyle --folder-name calendar --output "$PARENT_DIR/example/assets/api/" --only-api
+dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/calendar" --name TDCalendar,TDCalendarPopup,TDCalendarStyle,TDCalendarDataSource,TDLunarInfo,TDCalendarDateType --folder-name calendar --output "$PARENT_DIR/example/assets/api/" --only-api
 # cascader
 dart run tdesign_flutter_tools:main generate --folder "$PARENT_DIR/lib/src/components/cascader" --name TDMultiCascader --folder-name cascader --output "$PARENT_DIR/example/assets/api/" --only-api
 
