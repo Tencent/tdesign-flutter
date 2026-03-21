@@ -40,6 +40,21 @@ abstract class TDCalendarDataSource {
   /// 返回节日名称，如"春节"、"中秋节"等，无节日则返回 null
   String? getFestival(DateTime date, [TDLunarInfo? lunarInfo]) => null;
 
+  /// 获取假期信息（可选实现）
+  /// 
+  /// [date] 阳历日期
+  /// 
+  /// 返回假期类型和名称：
+  /// - 'holiday': 法定节假日/公共假期（如"国庆节"）
+  /// - 'workday': 调休工作日（如"补班"）
+  /// - null: 正常日期
+  /// 
+  /// 示例返回值：
+  /// - {'type': 'holiday', 'name': '国庆节'}
+  /// - {'type': 'workday', 'name': '补班'}
+  /// - null
+  Map<String, String>? getHolidayInfo(DateTime date) => null;
+
   /// 格式化年份文本
   /// 
   /// [year] 年份

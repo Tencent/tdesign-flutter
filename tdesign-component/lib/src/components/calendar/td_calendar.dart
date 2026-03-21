@@ -261,7 +261,7 @@ class _TDCalendarState extends State<TDCalendar> {
               monthNames: monthNames,
               monthTitleStyle: _style.monthTitleStyle,
               verticalGap: verticalGap,
-              cellHeight: widget.cellHeight ?? 60,
+              cellHeight: _getEffectiveCellHeight(),
               monthTitleHeight: widget.monthTitleHeight ?? 22,
               monthTitleBuilder: widget.monthTitleBuilder,
               animateTo: widget.animateTo ?? false,
@@ -270,7 +270,7 @@ class _TDCalendarState extends State<TDCalendar> {
               dataSource: widget.dataSource,
               builder: (date, dateList, data, rowIndex, colIndex) {
                 return TDCalendarCell(
-                  height: widget.cellHeight ?? 60,
+                  height: _getEffectiveCellHeight(),
                   tdate: date,
                   format: widget.format,
                   type: widget.type ?? CalendarType.single,
@@ -418,5 +418,15 @@ class _TDCalendarState extends State<TDCalendar> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       inherited!.selected.value = _getValue(widget.value ?? []);
     });
+  }
+
+  /// 获取有效的单元格高度
+  /// 当显示农历信息时，需要更大的高度以容纳额外的文本
+  double _getEffectiveCellHeight() {
+    if (widget.cellHeight != null) {
+      return widget.cellHeight!;
+    }
+    // 显示农历信息时使用更大的默认高度（80px 完全避免溢出）
+    return widget.showLunarInfo ? 80 : 60;
   }
 }

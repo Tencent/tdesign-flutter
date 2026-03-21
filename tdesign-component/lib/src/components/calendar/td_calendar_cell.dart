@@ -108,11 +108,13 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          Container(
-            width: double.infinity,
-            height: widget.height,
-            decoration: decoration,
-            child: content, // 使用自定义内容
+          ClipRect(
+            child: Container(
+              width: double.infinity,
+              height: widget.height,
+              decoration: decoration,
+              child: content, // 使用自定义内容
+            ),
           ),
           if (widget.colIndex < 6)
             Positioned(
@@ -240,29 +242,43 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
       mainText = tdate.lunarInfo!.dayText;
       subText = widget.tdate!.date.day.toString();
     } else if (widget.dateType == TDCalendarDateType.solar &&
-        widget.showLunarInfo &&
-        tdate.lunarInfo != null) {
-      // 阳历模式+显示农历：主文本显示阳历，副文本显示农历
+        widget.showLunarInfo) {
+      // 阳历模式+显示农历信息
       mainText = widget.tdate!.date.day.toString();
-      subText = tdate.lunarInfo!.dayText;
+      
+      // 优先级：节日 > 节气 > 农历日期
+      if (tdate.festival != null && tdate.festival!.isNotEmpty) {
+        // 显示节日
+        subText = tdate.festival;
+      } else if (tdate.solarTerm != null && tdate.solarTerm!.isNotEmpty) {
+        // 显示节气
+        subText = tdate.solarTerm;
+      } else if (tdate.lunarInfo != null) {
+        // 显示农历日期
+        subText = tdate.lunarInfo!.dayText;
+      }
     }
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        // prefix 区域 - 不强制高度
+        if (tdate.prefix != null || tdate.prefixWidget != null)
+          SizedBox(
+            height: 12,
+            child: tdate.prefixWidget ??
+                TDText(
+                  tdate.prefix ?? '',
+                  style: tdate.prefixStyle ?? cellStyle.cellPrefixStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+          ),
+        // 主内容区域 - 自适应高度
         Expanded(
-          flex: 2,
-          child: tdate.prefixWidget ??
-              TDText(
-                tdate.prefix ?? '',
-                style: tdate.prefixStyle ?? cellStyle.cellPrefixStyle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-        ),
-        Expanded(
-          flex: 3,
           child: Center(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TDText(
@@ -273,26 +289,31 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
                       cellStyle.cellStyle,
                 ),
                 if (subText != null)
-                  TDText(
-                    subText,
-                    style: cellStyle.cellSuffixStyle?.copyWith(fontSize: 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: TDText(
+                      subText,
+                      style: cellStyle.cellSuffixStyle?.copyWith(fontSize: 9),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
               ],
             ),
           ),
         ),
-        Expanded(
-          flex: 2,
-          child: tdate.suffixWidget ??
-              TDText(
-                tdate.suffix ?? '',
-                style: tdate.suffixStyle ?? cellStyle.cellSuffixStyle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-        ),
+        // suffix 区域 - 不强制高度
+        if (tdate.suffix != null || tdate.suffixWidget != null)
+          SizedBox(
+            height: 12,
+            child: tdate.suffixWidget ??
+                TDText(
+                  tdate.suffix ?? '',
+                  style: tdate.suffixStyle ?? cellStyle.cellSuffixStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+          ),
       ],
     );
   }
@@ -313,6 +334,9 @@ class TDate {
     this.decoration,
     required this.isLastDayOfMonth,
     this.lunarInfo,
+    this.solarTerm,
+    this.festival,
+    this.holidayInfo,
   });
 
   /// 时间对象
@@ -350,6 +374,17 @@ class TDate {
 
   /// 农历信息
   final TDLunarInfo? lunarInfo;
+
+  /// 节气信息（如"春分"、"立夏"）
+  final String? solarTerm;
+
+  /// 节日信息（如"春节"、"中秋节"）
+  final String? festival;
+
+  /// 假期信息（包含类型和名称）
+  /// type: 'holiday' 或 'workday'
+  /// name: 假期名称
+  final Map<String, String>? holidayInfo;
 
   int get _milliseconds =>
       DateTime(date.year, date.month, date.day).millisecondsSinceEpoch;
