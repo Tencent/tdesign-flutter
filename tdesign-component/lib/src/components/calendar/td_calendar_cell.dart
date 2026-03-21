@@ -230,7 +230,7 @@ class _TDCalendarCellState extends State<TDCalendarCell> {
 
   /// 构建默认单元格内容
   Widget _buildDefaultCell(
-      BuildContext context, TDate tdate, CellStyle cellStyle) {
+      BuildContext context, TDate tdate, TDCalendarStyle cellStyle) {
     // 根据 dateType 和 showLunarInfo 决定显示内容
     String mainText = widget.tdate!.date.day.toString();
     String? subText;
