@@ -113,15 +113,38 @@ class _TDCalendarLunarTestState extends State<TDCalendarLunarTest> {
                   if (dates.isNotEmpty) {
                     final date = DateTime.fromMillisecondsSinceEpoch(dates[0]);
                     final lunarInfo = _dataSource.getLunarInfo(date);
+                    final solarTerm = _dataSource.getSolarTerm(date);
+                    final festival = _dataSource.getFestival(date);
+                    final holidayInfo = _dataSource.getHolidayInfo(date);
+                    
+                    // 构建消息
+                    final buffer = StringBuffer();
+                    buffer.write('选中日期：\n');
+                    buffer.write('阳历：${date.year}年${date.month}月${date.day}日\n');
+                    
+                    if (lunarInfo != null) {
+                      buffer.write('农历：${lunarInfo.yearText}年${lunarInfo.monthText}${lunarInfo.dayText}');
+                    }
+                    
+                    // 显示节气
+                    if (solarTerm != null && solarTerm.isNotEmpty) {
+                      buffer.write('\n节气：$solarTerm');
+                    }
+                    
+                    // 显示节日
+                    if (festival != null && festival.isNotEmpty) {
+                      buffer.write('\n节日：$festival');
+                    }
+                    
+                    // 显示假期信息
+                    if (holidayInfo != null && holidayInfo.isNotEmpty) {
+                      buffer.write('\n假期：$holidayInfo');
+                    }
                     
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                          '选中日期：\n'
-                          '阳历：${date.year}年${date.month}月${date.day}日\n'
-                          '农历：${lunarInfo?.yearText ?? ""}年${lunarInfo?.monthText ?? ""}${lunarInfo?.dayText ?? ""}',
-                        ),
-                        duration: const Duration(seconds: 2),
+                        content: Text(buffer.toString()),
+                        duration: const Duration(seconds: 3),
                       ),
                     );
                   }
