@@ -1,4 +1,38 @@
 ## API
+### TDLunarInfo
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| day | int | - | 农历日期（数字，1-30） |
+| dayText | String | - | 日期文本（如：初七） |
+| isLeapMonth | bool | false | 是否是闰月 |
+| month | int | - | 农历月份（数字，1-12） |
+| monthText | String | - | 月份文本（如：三月、闰三月） |
+| year | int | - | 农历年份（数字） |
+| yearText | String | - | 年份文本（如：二〇二五） |
+
+```
+```
+
+### TDCalendarPopup
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
+| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
+| child | TDCalendar? | - | 日历控件 |
+| confirmBtn | Widget? | - | 自定义确认按钮 |
+| context | BuildContext | context | 上下文 |
+| onClose | VoidCallback? | - | 关闭时触发 |
+| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
+| top | double? | - | 距离顶部的距离 |
+| visible | bool? | - | 默认是否显示日历 |
+
+```
+```
+
 ### TDCalendarStyle
 #### 默认构造方法
 
@@ -65,40 +99,6 @@
 | useTimePicker | bool? | false | 是否显示时间选择器 |
 | value | List<int>? | - | 当前选择的日期（fromMillisecondsSinceEpoch），不传则默认今天，当 type = single 时数组长度为1 |
 | width | double? | - | 宽度 |
-
-```
-```
-
-### TDCalendarPopup
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
-| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
-| child | TDCalendar? | - | 日历控件 |
-| confirmBtn | Widget? | - | 自定义确认按钮 |
-| context | BuildContext | context | 上下文 |
-| onClose | VoidCallback? | - | 关闭时触发 |
-| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
-| top | double? | - | 距离顶部的距离 |
-| visible | bool? | - | 默认是否显示日历 |
-
-```
-```
-
-### TDLunarInfo
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| day | int | - | 农历日期（数字，1-30） |
-| dayText | String | - | 日期文本（如：初七） |
-| isLeapMonth | bool | false | 是否是闰月 |
-| month | int | - | 农历月份（数字，1-12） |
-| monthText | String | - | 月份文本（如：三月、闰三月） |
-| year | int | - | 农历年份（数字） |
-| yearText | String | - | 年份文本（如：二〇二五） |
 
 ```
 ```
