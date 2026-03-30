@@ -205,6 +205,23 @@ Widget _buildOther(BuildContext context) {
 
 
 ## API
+### TDIndexesAnchor
+#### 简介
+索引锚点
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| activeIndex | ValueNotifier<String> | - | 选中索引 |
+| builderAnchor | Widget? Function(BuildContext context, String index, bool isPinnedToTop)? | - | 索引锚点构建 |
+| capsuleTheme | bool | - | 是否为胶囊式样式 |
+| key |  | - |  |
+| sticky | bool | - | 索引是否吸顶 |
+| text | String | - | 锚点文本 |
+
+```
+```
+
 ### TDIndexes
 #### 简介
 索引
@@ -225,23 +242,6 @@ Widget _buildOther(BuildContext context) {
 | scrollController | ScrollController? | - | 滚动控制器 |
 | sticky | bool? | true | 锚点是否吸顶 |
 | stickyOffset | double? | 0 | 锚点吸顶时与顶部的距离 |
-
-```
-```
-
-### TDIndexesAnchor
-#### 简介
-索引锚点
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| activeIndex | ValueNotifier<String> | - | 选中索引 |
-| builderAnchor | Widget? Function(BuildContext context, String index, bool isPinnedToTop)? | - | 索引锚点构建 |
-| capsuleTheme | bool | - | 是否为胶囊式样式 |
-| key |  | - |  |
-| sticky | bool | - | 索引是否吸顶 |
-| text | String | - | 锚点文本 |
 
 ```
 ```

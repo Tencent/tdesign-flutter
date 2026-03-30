@@ -35,6 +35,9 @@ dependencies:
   #轮播图组件
   flutter_swiper_null_safety: ^1.0.2
   intl: any
+  
+  # 农历支持
+  lunar: ^1.7.8
 
 
   # The following adds the Cupertino Icons font to your application.

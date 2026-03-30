@@ -887,6 +887,25 @@ Widget _buildIconListLeftActionSheet(BuildContext context) {
 
 
 ## API
+### TDActionSheetItem
+#### 简介
+动作面板项目
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| badge | TDBadge? | - | 角标 |
+| description | String? | - | 描述信息 |
+| disabled | bool | false | 是否禁用 |
+| group | String? | - | 分组，用于带描述多行滚动宫格 |
+| icon | Widget? | - | 图标 |
+| iconSize | double? | - | 图标大小 |
+| label | String | - | 标题 |
+| textStyle | TextStyle? | - | 标题样式 |
+
+```
+```
+
 ### TDActionSheet
 #### 简介
 动作面板
@@ -923,25 +942,6 @@ Widget _buildIconListLeftActionSheet(BuildContext context) {
 | showGridActionSheet |  |   required BuildContext context,  required List<TDActionSheetItem> items,  TDActionSheetAlign align,  String? cancelText,  bool showCancel,  TDActionSheetItemCallback? onSelected,  bool showOverlay,  bool closeOnOverlayClick,  int count,  int rows,  double itemHeight,  double itemMinWidth,  bool scrollable,  bool showPagination,  VoidCallback? onCancel,  String? description,  VoidCallback? onClose,  bool useSafeArea, | 显示宫格类型面板 |
 | showGroupActionSheet |  |   required BuildContext context,  required List<TDActionSheetItem> items,  TDActionSheetAlign align,  String? cancelText,  bool showCancel,  TDActionSheetItemCallback? onSelected,  bool showOverlay,  bool closeOnOverlayClick,  double itemHeight,  double itemMinWidth,  VoidCallback? onCancel,  VoidCallback? onClose,  bool useSafeArea, | 显示分组类型面板 |
 | showListActionSheet |  |   required BuildContext context,  required List<TDActionSheetItem> items,  TDActionSheetAlign align,  String? cancelText,  bool showCancel,  VoidCallback? onCancel,  TDActionSheetItemCallback? onSelected,  bool showOverlay,  bool closeOnOverlayClick,  VoidCallback? onClose,  bool useSafeArea, | 显示列表类型面板 |
-
-```
-```
-
-### TDActionSheetItem
-#### 简介
-动作面板项目
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| badge | TDBadge? | - | 角标 |
-| description | String? | - | 描述信息 |
-| disabled | bool | false | 是否禁用 |
-| group | String? | - | 分组，用于带描述多行滚动宫格 |
-| icon | Widget? | - | 图标 |
-| iconSize | double? | - | 图标大小 |
-| label | String | - | 标题 |
-| textStyle | TextStyle? | - | 标题样式 |
 
 
   
