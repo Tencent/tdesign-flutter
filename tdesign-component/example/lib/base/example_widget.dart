@@ -238,7 +238,8 @@ class _ExamplePageState extends State<ExamplePage> {
     if (PlatformUtil.isWeb && !Navigator.canPop(context)) {
       return Container();
     }
-    if (showAction && !PlatformUtil.isWeb) {
+    if (showAction) {
+      // Web 端和移动端都显示 API 按钮
       rightBarItems.add(TDNavBarItem(
           icon: TDIcons.info_circle,
           action: () {

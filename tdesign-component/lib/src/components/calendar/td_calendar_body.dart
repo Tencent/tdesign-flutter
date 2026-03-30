@@ -25,7 +25,9 @@ class TDCalendarBody extends StatelessWidget {
     required this.verticalGap,
     required this.animateTo,
     this.onMonthChange,
-    this.anchorDate
+    this.anchorDate,
+    this.dateType = TDCalendarDateType.solar,
+    this.dataSource,
   }) : super(key: key);
 
   final int? maxDate;
@@ -54,6 +56,8 @@ class TDCalendarBody extends StatelessWidget {
   final double cellHeight;
   final bool animateTo;
   final ValueChanged<DateTime>? onMonthChange;
+  final TDCalendarDateType dateType;
+  final TDCalendarDataSource? dataSource;
 
   @override
   Widget build(BuildContext context) {
@@ -243,10 +247,25 @@ class TDCalendarBody extends StatelessWidget {
           }
         }
       }
+      // 获取农历信息
+      TDLunarInfo? lunarInfo;
+      String? solarTerm;
+      String? festival;
+      Map<String, String>? holidayInfo;
+      if (dataSource != null) {
+        lunarInfo = dataSource!.getLunarInfo(date);
+        solarTerm = dataSource!.getSolarTerm(date);
+        festival = dataSource!.getFestival(date, lunarInfo);
+        holidayInfo = dataSource!.getHolidayInfo(date);
+      }
       daysInMonth.add(TDate(
         date: date,
         typeNotifier: DateSelectTypeNotifier(selectType),
         isLastDayOfMonth: daysInMonthCount == day,
+        lunarInfo: lunarInfo,
+        solarTerm: solarTerm,
+        festival: festival,
+        holidayInfo: holidayInfo,
       ));
     }
     var sufOffset = 7 - daysInMonth.length % 7;
