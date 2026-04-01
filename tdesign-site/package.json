@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "@tdesign/site-components": "^0.17.5",
-    "@tdesign/theme-generator": "1.2.1",
+    "@tdesign/theme-generator": "~1.2.3",
     "prismjs": "^1.30.0",
     "tdesign-icons-view": "^0.5.0",
     "vue": "^3.2.4",
@@ -35,5 +35,6 @@
     "typescript": "^5.7.2",
     "vite": "^6.4.1",
     "vite-plugin-tdoc": "^2.0.4"
-  }
+  },
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
 }
