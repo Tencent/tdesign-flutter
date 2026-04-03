@@ -14,6 +14,7 @@
 import siteConfig from "./site.config";
 import "@tdesign/theme-generator";
 import { generateFlutterThemeFromParts } from "./utils/cssToFlutterTheme";
+import { config, logger } from "./utils/config";
 
 import { defineComponent } from "vue";
 
@@ -45,8 +46,6 @@ export default defineComponent({
         dark: "",    // custom-theme-dark
         extra: "",   // custom-theme-extra (共用)
       },
-      // 主题缓存相关
-      themeCacheKey: 'tdesign-flutter-theme-cache',
     };
   },
 
@@ -162,26 +161,35 @@ export default defineComponent({
           theme: themeJson,
           timestamp: Date.now()
         };
-        localStorage.setItem(this.themeCacheKey, JSON.stringify(cacheData));
-        console.log('Theme cached successfully');
+        localStorage.setItem(config.themeCacheKey, JSON.stringify(cacheData));
+        logger.debug('Theme cached successfully');
       } catch (error) {
-        console.warn('Failed to cache theme locally:', error);
+        logger.warn('Failed to cache theme locally:', error);
       }
     },
     // 从本地加载缓存的主题
     loadThemeFromLocal() {
       try {
-        const cached = localStorage.getItem(this.themeCacheKey);
+        const cached = localStorage.getItem(config.themeCacheKey);
         if (cached) {
           const cacheData = JSON.parse(cached);
+          
+          // 检查缓存是否过期
+          const cacheAge = Date.now() - cacheData.timestamp;
+          if (cacheAge > config.themeCacheMaxAge) {
+            logger.info('Theme cache expired, removing...');
+            localStorage.removeItem(config.themeCacheKey);
+            return null;
+          }
+          
           if (cacheData.theme) {
-            console.log('Theme loaded from cache');
+            logger.debug('Theme loaded from cache');
             return cacheData.theme;
           }
         }
       } catch (error) {
-        console.warn('Failed to load cached theme:', error);
-        localStorage.removeItem(this.themeCacheKey);
+        logger.warn('Failed to load cached theme:', error);
+        localStorage.removeItem(config.themeCacheKey);
       }
       return null;
     },
@@ -210,7 +218,7 @@ export default defineComponent({
           // 将主题 JSON 发送给所有 Flutter iframe
           this.sendThemeToFlutterIframes(themeJson);
         }
-      }, 300); // 300ms防抖延迟
+      }, config.debounceDelay);
     },
     sendThemeToFlutterIframes(themeJson = null) {
       // 如果没有传入 themeJson，尝试从本地加载
@@ -219,7 +227,7 @@ export default defineComponent({
       }
       
       if (!themeJson) {
-        console.log('No theme data available to send');
+        logger.info('No theme data available to send');
         return;
       }
       
@@ -234,45 +242,15 @@ export default defineComponent({
                 type: 'flutter-theme-update',
                 theme: themeJson
               },
-              '*'
+              config.postMessageOrigin // 使用配置的 origin，而不是硬编码的 '*'
             );
           }
         } catch (error) {
-          console.error('Error sending theme to iframe:', error);
+          logger.error('Error sending theme to iframe:', error);
         }
       });
       
-      console.log('Theme sent to all iframes');
-    },
-    sendThemeToFlutterIframes() {
-      // 从本地加载缓存的主题
-      const themeJson = this.loadThemeFromLocal();
-      
-      if (!themeJson) {
-        console.log('No theme data available to send');
-        return;
-      }
-      
-      // 查找所有 Flutter iframe (在 component.vue 中)
-      const iframes = document.querySelectorAll('iframe[src*="/example/"]');
-      
-      iframes.forEach((iframe) => {
-        try {
-          if (iframe.contentWindow && iframe.contentWindow.postMessage) {
-            iframe.contentWindow.postMessage(
-              {
-                type: 'flutter-theme-update',
-                theme: themeJson
-              },
-              '*'
-            );
-          }
-        } catch (error) {
-          console.error('Error sending theme to iframe:', error);
-        }
-      });
-      
-      console.log('Theme sent to all iframes');
+      logger.debug('Theme sent to all iframes');
     }
   },
 });

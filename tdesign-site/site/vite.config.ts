@@ -61,7 +61,8 @@ export default ({ mode }: any) => {
         },
         plugins: [
           rollupResolve({
-            moduleDirectories: [path.resolve(__dirname, 'node_modules')],
+            // moduleDirectories 应该只包含目录名称，不是绝对路径
+            moduleDirectories: ['node_modules'],
           }),
         ],
       },

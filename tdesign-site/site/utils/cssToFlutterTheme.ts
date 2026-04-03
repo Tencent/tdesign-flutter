@@ -3,11 +3,13 @@
  * 参考: tdesign-component/example/shell/theme/css2JsonTheme.dart
  */
 
+import { logger } from './config';
+
 export interface FlutterTheme {
   ref: Record<string, string>;
   color: Record<string, string>;
   radius?: Record<string, number>;
-  margin?: Record<string, number>;
+  margin?: Record<string, number>;  // Flutter parseThemeData 读取的是 "margin" 字段
   shadow?: Record<string, Array<{
     color: string;
     blurRadius: number;
@@ -24,22 +26,33 @@ export interface ThemeOutput {
 
 /**
  * 解析 CSS 内容为键值对
+ * 
+ * style 标签内容格式通常为:
+ * :root { --td-xxx: value; ... }
+ * 或直接是 --td-xxx: value; ... 
  */
 function convertCssToJson(cssContent: string): Record<string, string> {
   const jsonMap: Record<string, string> = {};
-  const lines = cssContent.split("\n");
-
-  lines.forEach((line) => {
-    const trimmedLine = line.trim();
-    if (trimmedLine && !trimmedLine.startsWith("//") && !trimmedLine.startsWith("/*")) {
-      // 匹配 CSS 变量: --td-xxx: value;
-      const match = trimmedLine.match(/^(--[\w-]+)\s*:\s*(.+?);?\s*$/);
-      if (match) {
-        jsonMap[match[1]] = match[2];
-      }
+  
+  if (!cssContent || typeof cssContent !== 'string') {
+    return jsonMap;
+  }
+  
+  // 用正则全局匹配所有 CSS 变量定义，不依赖逐行解析
+  // 这样不管 CSS 是否被 :root {} 包裹都能正确解析
+  const varRegex = /(--td-[\w-]+)\s*:\s*([^;]+);/g;
+  let match;
+  
+  while ((match = varRegex.exec(cssContent)) !== null) {
+    const key = match[1].trim();
+    const value = match[2].trim();
+    if (key && value) {
+      jsonMap[key] = value;
     }
-  });
-
+  }
+  
+  logger.debug(`解析 CSS 变量: 共 ${Object.keys(jsonMap).length} 个`);
+  
   return jsonMap;
 }
 
@@ -124,15 +137,15 @@ function convertToFlutterTokenName(input: string): string {
     'grayColor13': 'grayColor13',
     'grayColor14': 'grayColor14',
     
-    // 字体颜色映射
-    'fontWhColor1': 'fontWhColor1',
-    'fontWhColor2': 'fontWhColor2',
-    'fontWhColor3': 'fontWhColor3',
-    'fontWhColor4': 'fontWhColor4',
-    'fontGyColor1': 'fontGyColor1',
-    'fontGyColor2': 'fontGyColor2',
-    'fontGyColor3': 'fontGyColor3',
-    'fontGyColor4': 'fontGyColor4',
+    // 字体颜色映射 (CSS: --td-font-white-* → Flutter: fontWhColor*)
+    'fontWhite1': 'fontWhColor1',
+    'fontWhite2': 'fontWhColor2',
+    'fontWhite3': 'fontWhColor3',
+    'fontWhite4': 'fontWhColor4',
+    'fontGray1': 'fontGyColor1',
+    'fontGray2': 'fontGyColor2',
+    'fontGray3': 'fontGyColor3',
+    'fontGray4': 'fontGyColor4',
     
     // 背景色映射
     'bgColorPage': 'bgColorPage',
@@ -149,9 +162,9 @@ function convertToFlutterTokenName(input: string): string {
     'textColorLink': 'textColorLink',
     'textColorAnti': 'textColorAnti',
     
-    // 组件颜色映射
-    'componentStrokeColor': 'componentStrokeColor',
-    'componentBorderColor': 'componentBorderColor',
+    // 组件颜色映射 (CSS: --td-component-stroke → Flutter: componentStrokeColor)
+    'componentStroke': 'componentStrokeColor',
+    'componentBorder': 'componentBorderColor',
   };
 
   // 如果存在映射关系，使用映射后的名称
@@ -227,6 +240,9 @@ function buildFlutterRefMappings(jsonMap: Record<string, string>): Record<string
   refMap['textDisabledColor'] = 'fontGyColor4';
   refMap['textColorBrand'] = 'brandColor7';
   refMap['textColorLink'] = 'brandColor8';
+  // 组件颜色引用映射
+  refMap['componentStrokeColor'] = 'grayColor3';
+  refMap['componentBorderColor'] = 'grayColor4';
   
   return refMap;
 }
@@ -251,12 +267,12 @@ export function parseCssToFlutterTheme(cssContent: string): FlutterTheme {
         key.startsWith("--td-font-gray")
     );
 
-    // 添加字体大小相关的CSS变量处理
+    // 添加字体大小相关的CSS变量处理（排除颜色变量和字体复合属性）
     const isFontSize = key.startsWith("--td-font-size-") || 
-                      key.startsWith("--td-font-") ||
-                      key.startsWith("--td-text-");
+                      key.startsWith("--td-line-height-");
 
-    if (shouldInclude || isFontSize) {
+    // 排除已被颜色处理的变量
+    if (shouldInclude) {
       // 使用新的Flutter端期望的token名称格式
       const newKey = convertToFlutterTokenName(key);
 
@@ -285,7 +301,7 @@ export function parseCssToFlutterTheme(cssContent: string): FlutterTheme {
             parseInt(b).toString(16).padStart(2, "0");
           filterMap[newKey] = hexColor.toUpperCase();
         } catch (e) {
-          console.error("颜色转换错误:", valueStr, e);
+          logger.error("颜色转换错误:", valueStr, e);
           filterMap[newKey] = "#FFFFFFFF";
         }
       } else if (isFontSize) {
@@ -340,7 +356,7 @@ export function parseCssToFlutterTheme(cssContent: string): FlutterTheme {
   const radiusMap = parseRadius(jsonMap);
 
   // 解析间距
-  const marginMap = parseMargin(jsonMap);
+  const spacerMap = parseMargin(jsonMap);
 
   // 解析阴影
   const shadowMap = parseShadow(jsonMap);
@@ -352,7 +368,7 @@ export function parseCssToFlutterTheme(cssContent: string): FlutterTheme {
     ref: refMap,
     color: filterMap,
     ...(Object.keys(radiusMap).length > 0 && { radius: radiusMap }),
-    ...(Object.keys(marginMap).length > 0 && { margin: marginMap }),
+    ...(Object.keys(spacerMap).length > 0 && { margin: spacerMap }),
     ...(Object.keys(shadowMap).length > 0 && { shadow: shadowMap }),
     ...(Object.keys(fontMap).length > 0 && { font: fontMap }),
   };
@@ -380,23 +396,52 @@ function parseRadius(jsonMap: Record<string, string>): Record<string, number> {
 
 /**
  * 解析间距变量
- * --td-comp-margin-s: 8px -> compMarginS: 8
+ * 
+ * TDesign CSS 变量是按倍数命名：
+ *   --td-spacer: 8px (基础值)
+ *   --td-spacer-1: 8px (1倍)
+ *   --td-spacer-2: 16px (2倍)
+ * 
+ * Flutter spacerMap 是按像素值命名：
+ *   spacer4: 4, spacer8: 8, spacer16: 16, ...
+ * 
+ * 所以需要解析实际像素值，然后用像素值作为 key
+ * 
+ * 注意：Flutter parseThemeData 读取的是 JSON 中的 "margin" 字段
  */
 function parseMargin(jsonMap: Record<string, string>): Record<string, number> {
-  const marginMap: Record<string, number> = {};
+  const spacerMap: Record<string, number> = {};
 
   Object.entries(jsonMap).forEach(([key, value]) => {
+    // 匹配 --td-spacer 系列变量
+    if (key.startsWith("--td-spacer")) {
+      // 解析实际像素值
+      let numValue: number;
+      if (value.startsWith("var(")) {
+        const refKey = value.replace(/var\(|\)/g, "");
+        const refValue = jsonMap[refKey];
+        numValue = refValue ? parseFloat(refValue) : 0;
+      } else {
+        numValue = parseFloat(value);
+      }
+      
+      if (!isNaN(numValue) && numValue > 0) {
+        // 用像素值作为 key，匹配 Flutter 的命名：spacer4, spacer8, spacer16...
+        const flutterKey = `spacer${Math.round(numValue)}`;
+        spacerMap[flutterKey] = numValue;
+        logger.debug(`解析间距: ${key} = ${value} → ${flutterKey}: ${numValue}`);
+      }
+    }
+    
+    // 同时处理 --td-comp-margin, --td-comp-padding 等
     if (
       key.startsWith("--td-comp-margin") ||
       key.startsWith("--td-comp-padding") ||
-      key.startsWith("--td-pop-padding") ||
-      key.startsWith("--td-size-")
+      key.startsWith("--td-pop-padding")
     ) {
       const name = convertToFlutterTokenName(key);
-      // 处理 var() 引用
       let numValue: number;
       if (value.startsWith("var(")) {
-        // 尝试从其他变量获取值
         const refKey = value.replace(/var\(|\)/g, "");
         const refValue = jsonMap[refKey];
         numValue = refValue ? parseFloat(refValue) : 0;
@@ -404,17 +449,22 @@ function parseMargin(jsonMap: Record<string, string>): Record<string, number> {
         numValue = parseFloat(value);
       }
       if (!isNaN(numValue)) {
-        marginMap[name] = numValue;
+        spacerMap[name] = numValue;
       }
     }
   });
 
-  return marginMap;
+  return spacerMap;
 }
 
 /**
  * 解析阴影变量
  * --td-shadow-1: 0 1px 10px rgba(0, 0, 0, 5%), ...
+ * 
+ * 映射关系：
+ * --td-shadow-1 → shadowsBase (基础投影)
+ * --td-shadow-2 → shadowsMiddle (中层投影)
+ * --td-shadow-3 → shadowsTop (上层投影)
  */
 function parseShadow(jsonMap: Record<string, string>): Record<string, Array<{
   color: string;
@@ -429,13 +479,22 @@ function parseShadow(jsonMap: Record<string, string>): Record<string, Array<{
     offset: { x: number; y: number };
   }>> = {};
 
+  // CSS 变量到 Flutter key 的映射
+  const shadowMapping: Record<string, string> = {
+    '--td-shadow-1': 'shadowsBase',
+    '--td-shadow-2': 'shadowsMiddle',
+    '--td-shadow-3': 'shadowsTop',
+    '--td-shadow-4': 'shadowsTop', // shadow-4 也映射到 shadowsTop
+  };
+
   Object.entries(jsonMap).forEach(([key, value]) => {
-    // 只处理 --td-shadow-1, --td-shadow-2, --td-shadow-3
-    if (key.match(/^--td-shadow-[1-4]$/)) {
-      const name = convertToFlutterTokenName(key);
+    // 检查是否是阴影变量
+    if (shadowMapping[key]) {
+      const flutterKey = shadowMapping[key];
       const shadows = parseShadowValue(value);
       if (shadows.length > 0) {
-        shadowMap[name] = shadows;
+        shadowMap[flutterKey] = shadows;
+        logger.debug(`解析阴影: ${key} → ${flutterKey}`, shadows);
       }
     }
   });
@@ -526,9 +585,9 @@ function parseFont(jsonMap: Record<string, string>): Record<string, { size: numb
   const fontMap: Record<string, { size: number; lineHeight: number }> = {};
 
   Object.entries(jsonMap).forEach(([key, value]) => {
-    // 处理字体大小相关的CSS变量
+    // 只处理字体大小相关的CSS变量
     if (key.startsWith("--td-font-size-") || 
-        key.startsWith("--td-text-")) {
+        key.startsWith("--td-line-height-")) {
       
       const name = convertToFlutterTokenName(key);
       
@@ -547,18 +606,12 @@ function parseFont(jsonMap: Record<string, string>): Record<string, { size: numb
         // 安全验证：确保字体大小在合理范围内（最大限制为64px）
         const safeFontSize = Math.min(Math.max(fontSize, 8), 64);
         if (fontSize < 8 || fontSize > 64) {
-          console.warn(`字体大小超出合理范围，已调整为${safeFontSize}px: ${key} = ${fontSize}px`);
+          logger.warn(`字体大小超出合理范围，已调整为${safeFontSize}px: ${key} = ${fontSize}px`);
         }
         // 根据字体大小计算对应的行高
         const lineHeight = calculateLineHeight(safeFontSize);
         fontMap[name] = { size: safeFontSize, lineHeight: lineHeight };
       }
-    }
-    
-    // 处理字体权重相关的CSS变量（如--td-font-mark-small，这些是字体权重，不是字体大小）
-    else if (key.startsWith("--td-font-") && !key.startsWith("--td-font-size-")) {
-      // 这些是字体权重变量，不应该被解析为字体大小
-      console.log(`跳过字体权重变量: ${key} = ${value}`);
     }
   });
 
@@ -659,33 +712,13 @@ export function generateFlutterThemeFromParts(
   // 生成主题配置
   const themeOutput = generateFlutterTheme(lightCss, darkCss);
   
-  // 调试：输出生成的JSON结构
-  console.log('=== CSS转Flutter主题调试信息 ===');
-  console.log('Light主题颜色数量:', Object.keys(themeOutput.light.color).length);
-  console.log('Light主题引用数量:', Object.keys(themeOutput.light.ref).length);
-  console.log('Dark主题颜色数量:', Object.keys(themeOutput.dark.color).length);
-  console.log('Dark主题引用数量:', Object.keys(themeOutput.dark.ref).length);
-  
-  // 检查是否有异常的字体值（超过合理范围）
-  const checkLargeFonts = (theme: FlutterTheme, themeName: string) => {
-    if (theme.font) {
-      Object.entries(theme.font).forEach(([key, value]) => {
-        // 只警告真正异常的字体大小（超过64px或小于8px）
-        if (value.size > 64) {
-          console.warn(`🚨 ${themeName} 发现异常大的字体: ${key} = ${value.size}px（已限制为64px）`);
-        } else if (value.size < 8) {
-          console.warn(`🚨 ${themeName} 发现异常小的字体: ${key} = ${value.size}px（已限制为8px）`);
-        }
-      });
-    }
-  };
-  
-  checkLargeFonts(themeOutput.light, 'Light主题');
-  checkLargeFonts(themeOutput.dark, 'Dark主题');
-  
-  console.log('=== 生成的JSON结构示例 ===');
-  console.log('Light主题示例颜色:', Object.keys(themeOutput.light.color).slice(0, 5));
-  console.log('Dark主题示例颜色:', Object.keys(themeOutput.dark.color).slice(0, 5));
+  logger.debug('CSS → Flutter 主题生成完成', {
+    lightColors: Object.keys(themeOutput.light.color).length,
+    darkColors: Object.keys(themeOutput.dark.color).length,
+    hasRadius: !!themeOutput.light.radius,
+    hasShadow: !!themeOutput.light.shadow,
+    hasFont: !!themeOutput.light.font,
+  });
   
   return themeOutput;
 }
