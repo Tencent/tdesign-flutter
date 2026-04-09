@@ -164,7 +164,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 从父类拷贝
-  TThemeData copyWithTDThemeData(
+  TThemeData copyWithTThemeData(
     String name, {
     Map<String, Color>? colorMap,
     Map<String, Font>? fontMap,
